@@ -9,6 +9,8 @@ import {
 } from "node:fs"
 import { tmpdir } from "node:os"
 import { join, resolve } from "node:path"
+import { createConsentAssetFixture } from "./semantic-fixture-assets.ts"
+import { installAccountPreviewBuiltinAssets } from "../../src/server/api/account-preview-builtins.ts"
 import {
   buildMcpOptions,
   createEphemeralOAuthKeys,
@@ -41,6 +43,11 @@ mkdirSync(configRoot, { recursive: true })
 
 process.env.CONFIG_PATH = configRoot
 process.env.TADAZZ_ACCOUNTS_ENABLED = "true"
+process.env.TADAZZ_INLINE_GAME_PREVIEW_ENABLED = "true"
+process.env.TADAZZ_APPLICATION_PREVIEW_DIR = join(
+  siteDistDir,
+  "tadazz-application-runtime",
+)
 process.env.JWT_SECRET = `pw-fixture-jwt-${"q".repeat(48)}`
 process.env.RESEND_API_KEY = "test-not-a-real-api-key"
 process.env.TADAZZ_AUTH_EMAIL_FROM = "Tadazz QA <auth@example.invalid>"
@@ -62,20 +69,31 @@ persistMail()
 const tls = createLoopbackTlsCertificate()
 const keys = createEphemeralOAuthKeys()
 const expectedOrigin = `https://127.0.0.1:${requestedPort}`
+const assetFixture = createConsentAssetFixture(siteDistDir)
+const builtinAssets = assetFixture.authoring.semantic?.assets
+
+if (!builtinAssets) {
+  throw new Error("Reviewed Studio asset policy missing")
+}
+
+installAccountPreviewBuiltinAssets(builtinAssets)
 const nativeHostMod = await import("../../src/mcp-app/native-host/index.ts")
 const host = await nativeHostMod.createNativeConsentHost({
   enabled: true,
   configRoot,
   siteDistDir,
   initializeNativeRuntime: true,
-  mcp: buildMcpOptions({
-    origin: expectedOrigin,
-    keys,
-    redirectUris: [
-      `${expectedOrigin}/oauth/callback`,
-      "https://chatgpt.com/connector_platform_oauth_redirect",
-    ],
-  }),
+  mcp: {
+    ...buildMcpOptions({
+      origin: expectedOrigin,
+      keys,
+      redirectUris: [
+        `${expectedOrigin}/oauth/callback`,
+        "https://chatgpt.com/connector_platform_oauth_redirect",
+      ],
+    }),
+    authoring: assetFixture.authoring,
+  },
 })
 const httpServer = await nativeHostMod.listenNativeConsentHost(host, {
   host: "127.0.0.1",

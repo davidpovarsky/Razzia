@@ -1,6 +1,6 @@
 import { canonicalJson } from "../contracts/canonical.ts"
 import { authoredJson, draftData, locale } from "../contracts/schemas.ts"
-import { normalizeDraft } from "./authoring.ts"
+import { normalizeStoredDraft } from "./authoring.ts"
 import type { Dependencies, VerifiedPrincipal } from "./dependencies.ts"
 import { ToolError, unavailable } from "./errors.ts"
 
@@ -15,7 +15,10 @@ export function checkedDraft(raw: unknown, deps: Dependencies) {
   if (!deps.authoring) throw unavailable()
   try {
     const record = storedDraft.parse(raw)
-    const checked = normalizeDraft(record.authoredShowJson, deps.authoring)
+    const checked = normalizeStoredDraft(
+      record.authoredShowJson,
+      deps.authoring,
+    )
     if (
       checked.authoredShowJson !== record.authoredShowJson ||
       canonicalJson(checked.summary) !== canonicalJson(record.summary)

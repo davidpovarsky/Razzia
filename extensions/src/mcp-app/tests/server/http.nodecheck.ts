@@ -1,5 +1,6 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
+import { assertCurrentToolDiscovery } from "./discovery-fixture.ts"
 import {
   Client,
   StreamableHTTPClientTransport,
@@ -86,12 +87,12 @@ function setup(overrides: Dependencies = {}, responseTimeoutMs?: number) {
   return { app, a, b, tokens, request, connect }
 }
 const list = { jsonrpc: "2.0", id: 1, method: "tools/list", params: {} }
-test("official HTTP client discovers eight strict tools without a missing UI artifact", async () => {
+test("official HTTP client discovers fourteen strict tools without a missing UI artifact", async () => {
   const h = setup()
   const client = await h.connect()
   try {
     const tools = await client.listTools()
-    assert.equal(tools.tools.length, 8)
+    assertCurrentToolDiscovery(tools.tools)
     assert.equal(
       tools.tools.filter(
         (t) => (t._meta?.ui as { resourceUri?: string })?.resourceUri,

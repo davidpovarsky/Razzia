@@ -4,17 +4,19 @@ import {
   mkdirSync,
   mkdtempSync,
   realpathSync,
+  readFileSync,
   rmSync,
   symlinkSync,
   writeFileSync,
 } from "node:fs"
 import { tmpdir } from "node:os"
-import { join } from "node:path"
+import { dirname, join } from "node:path"
 import { test } from "node:test"
 import { readProductionFullShowArtifacts } from "../../src/mcp-app/native-host/production-artifacts.ts"
 import { getNativeShowLibrary } from "../../src/core/show-library/native-library.ts"
 import { preparePreviewUiResource } from "../../src/mcp-app/server/preview-resource.ts"
 import type { VerifiedPrincipal } from "../../src/mcp-app/server/dependencies.ts"
+import { REVIEWED_BUILTIN_ASSETS } from "../../src/mcp-app/native-host/reviewed-builtin-assets.ts"
 
 const hash = (value: string) => createHash("sha256").update(value).digest("hex")
 const principal: VerifiedPrincipal = {
@@ -194,3 +196,72 @@ test(
     )
   },
 )
+
+test("reviewed media needs exact deployed bytes, theme, purpose and live file identity", async (t) => {
+  const f = fixture()
+  t.after(f.cleanup)
+  const asset = REVIEWED_BUILTIN_ASSETS.find(
+    (entry) => entry.purpose === "answer-image",
+  )
+  assert(asset)
+  const bytes = readFileSync(
+    new URL("../../../packages/web/public" + asset.url, import.meta.url),
+  )
+  assert.equal(createHash("sha256").update(bytes).digest("hex"), asset.sha256)
+  assert.equal(bytes.byteLength, asset.bytes)
+  const deployedPath = join(dirname(f.assetPath), asset.url.slice(1))
+  mkdirSync(dirname(deployedPath), { recursive: true })
+  writeFileSync(deployedPath, bytes)
+  f.manifest.publicAssets.push({
+    path: "packages/web/public" + asset.url,
+    sha256: asset.sha256,
+    bytes: asset.bytes,
+  })
+  const result = readProductionFullShowArtifacts(f.seal())
+  const theme = { id: asset.families[0], version: "1.0.0" }
+  const context = {
+    theme,
+    purpose: "answer-image" as const,
+    operation: "preview" as const,
+  }
+  const url = "https://tadazz.com" + asset.url
+  const ref = { assetId: asset.assetId, sha256: asset.sha256, theme }
+  assert.equal(result.builtinAssets.resolveAsset(ref, context)?.publicUrl, url)
+  assert.equal(
+    result.builtinAssets.resolveStoredUrl(url, context)?.publicUrl,
+    url,
+  )
+  assert.equal(
+    result.builtinAssets.resolveStoredUrl(url, {
+      ...context,
+      purpose: "audio",
+    }),
+    undefined,
+  )
+  assert.equal(
+    result.builtinAssets.resolveStoredUrl(url, {
+      ...context,
+      operation: "export",
+    }),
+    undefined,
+  )
+  await result.assertAssets(principal, theme, [url])
+  assert.throws(() =>
+    result.assertAssets(
+      { ...principal, active: false } as unknown as VerifiedPrincipal,
+      theme,
+      [url],
+    ),
+  )
+  assert.throws(() =>
+    result.assertAssets(
+      { ...principal, accountsEnabled: false } as unknown as VerifiedPrincipal,
+      theme,
+      [url],
+    ),
+  )
+  writeFileSync(deployedPath, "replacement")
+  assert.equal(result.builtinAssets.resolveAsset(ref, context), undefined)
+  assert.equal(result.builtinAssets.resolveStoredUrl(url, context), undefined)
+  assert.throws(() => result.assertAssets(principal, theme, [url]))
+})

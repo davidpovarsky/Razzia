@@ -518,6 +518,9 @@ export function createRemoteMcpApp(options: RemoteMcpOptions) {
             },
             prevalidationLimit: async () => !request.signal.aborted,
             ...(deps.drafts ? { drafts: work.wrap(deps.drafts) } : {}),
+            ...(deps.semanticDrafts
+              ? { semanticDrafts: work.wrap(deps.semanticDrafts) }
+              : {}),
             ...(deps.catalog ? { catalog: work.wrap(deps.catalog) } : {}),
             ...(deps.preview ? { preview: work.wrap(deps.preview) } : {}),
             ...(deps.previewCandidateV2

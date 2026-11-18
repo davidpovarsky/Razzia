@@ -5,6 +5,7 @@ import {
   expect,
   test,
   type Page,
+  type TestInfo,
   type Response as PwResponse,
 } from "@playwright/test"
 import { nativeSaveConsentText } from "../../src/components/native-save-consent/strings"
@@ -19,6 +20,21 @@ import {
   createPinnedCaFetch,
   createPkcePair,
 } from "./crypto-helpers"
+
+import {
+  deriveAuthoredShowPreviewIdentityMap,
+  getPreviewIdentityId,
+} from "../../src/core/show-library/identity"
+import { tadaShowV1Schema } from "../../src/core/show-authoring-schema"
+import { compileFullShowPreviewTimeline } from "../../src/core/show-library/full-show-preview-timeline"
+import { nativeBundleToAuthoredShow } from "../../src/core/show-authoring-convert"
+import { quizExtrasV2Schema } from "../../src/core/studio-timeline-schema"
+import {
+  semanticAssetsResultSchema,
+  semanticMutationResultSchema,
+  type SemanticPatch,
+} from "../../src/mcp-app/contracts/semantic-edit"
+import { createConsentAssetFixture } from "./semantic-fixture-assets"
 
 interface FixtureMeta {
   readonly origin: string
@@ -315,6 +331,292 @@ async function connectMcpSession(options: {
   return { client, transport }
 }
 
+async function editDraftBeforeConsent(
+  client: Awaited<ReturnType<typeof connectMcpSession>>["client"],
+  draftId: string,
+  title: string,
+) {
+  const readDraft = async () => {
+    const result = (
+      await client.callTool({
+        name: "get_game_draft",
+        arguments: { contractVersion: "0.1.0", draftId },
+      })
+    ).structuredContent as ToolOutcome
+    expect(result.ok).toBe(true)
+    const json = result.data?.authoredShowJson
+
+    if (typeof json !== "string") {
+      throw new Error("Owner draft JSON missing")
+    }
+
+    return tadaShowV1Schema.parse(JSON.parse(json))
+  }
+  const before = await readDraft()
+  const publicQuestionId = getPreviewIdentityId(
+    deriveAuthoredShowPreviewIdentityMap(before),
+    "questions",
+    "q3",
+  )
+  const discover = async (purpose: "background" | "answer-image") => {
+    const result = (
+      await client.callTool({
+        name: "list_editing_assets",
+        arguments: {
+          contractVersion: "0.1.0",
+          draftId,
+          expectedRevision: 1,
+          purpose,
+          locale: "en",
+        },
+      })
+    ).structuredContent as ToolOutcome
+    expect(result.ok).toBe(true)
+
+    return semanticAssetsResultSchema.parse(result.data).assets
+  }
+  const [backgrounds, pictures] = await Promise.all([
+    discover("background"),
+    discover("answer-image"),
+  ])
+  const background = backgrounds.find(
+    (asset) =>
+      asset.publicUrl === "https://tadazz.com/tadazz-show/v4/question-bg.webp",
+  )
+
+  if (!background || pictures.length !== 5) {
+    throw new Error("Reviewed five-picture/background catalog missing")
+  }
+
+  const questionText =
+    "Edited third question with five reviewed picture answers"
+  const edits: SemanticPatch[] = [
+    { kind: "set-title", title },
+    { kind: "set-question-text", publicQuestionId, text: questionText },
+    { kind: "set-background", asset: background.ref },
+    { kind: "set-voting-volume", volume: 0.25 },
+    {
+      kind: "set-answer-pictures",
+      publicQuestionId,
+      pictures: pictures.map((asset, index) => ({
+        answerNumber: index + 1,
+        asset: asset.ref,
+        alt: asset.alt ?? asset.label,
+        display: "both",
+      })),
+    },
+  ]
+  let revision = 1
+  for (const patch of edits) {
+    const result = (
+      await client.callTool({
+        name: "apply_game_edit",
+        arguments: {
+          contractVersion: "0.1.0",
+          draftId,
+          expectedRevision: revision,
+          idempotencyKey: randomBytes(18).toString("base64url"),
+          patch,
+        },
+      })
+    ).structuredContent as ToolOutcome
+    expect(result.ok, JSON.stringify(result.error)).toBe(true)
+    const changed = semanticMutationResultSchema.parse(result.data)
+    expect(changed.revision).toBe(revision + 1)
+    ;({ revision } = changed)
+  }
+  const authoredShow = await readDraft()
+  expect(authoredShow.title).toBe(title)
+  for (const [index, card] of before.cards.entries()) {
+    if (index !== 2) {
+      expect(authoredShow.cards[index]).toEqual(card)
+    }
+  }
+
+  return {
+    revision,
+    authoredShow,
+    questionText,
+    pictures,
+    backgroundUrl: background.publicUrl,
+  }
+}
+
+async function verifySavedStudioPreview(
+  page: Page,
+  value: {
+    readonly quizId: string
+    readonly title: string
+    readonly restored: ReturnType<typeof tadaShowV1Schema.parse>
+    readonly edited: Awaited<ReturnType<typeof editDraftBeforeConsent>>
+  },
+  testInfo: TestInfo,
+) {
+  const card = page.locator(`[data-game-id="${value.quizId}"]`)
+  await expect(
+    card.getByRole("heading", { name: value.title, exact: true }),
+  ).toBeVisible()
+  const responsePromise = page.waitForResponse(
+    (response) =>
+      new URL(response.url()).pathname ===
+        `/api/extensions/preview/quizzes/${value.quizId}` &&
+      response.request().method() === "GET",
+  )
+  await card
+    .getByRole("button", { name: `Preview: ${value.title}`, exact: true })
+    .click()
+  const response = await responsePromise
+  expect(response.status()).toBe(200)
+  const source = (await response.json()) as {
+    source: { kind: string; quizId: string; immutableRevision: string }
+    show: unknown
+    sampleData: boolean
+  }
+  expect(source.source).toMatchObject({
+    kind: "account-owned",
+    quizId: value.quizId,
+  })
+  expect(source.source.immutableRevision).toMatch(/^[a-f0-9]{64}$/u)
+  expect(source.sampleData).toBe(true)
+  const projected = tadaShowV1Schema.parse(source.show)
+  const question = projected.cards
+    .filter((item) => item.kind === "quiz" || item.kind === "survey")
+    .at(2)
+
+  if (!question) {
+    throw new Error("Saved third question missing from actual Studio preview")
+  }
+
+  expect(projected.title).toBe(value.title)
+  expect(question.question).toBe(value.edited.questionText)
+  expect(projected.defaults?.showTheme?.id).toBe(
+    value.restored.defaults?.showTheme?.id,
+  )
+  expect(
+    projected.defaults?.showTheme?.overrides.audio?.answersMusic?.volume,
+  ).toBe(0.25)
+  expect(projected.defaults?.tadazzBackground?.staticUrl).toBe(
+    value.edited.backgroundUrl,
+  )
+  expect(
+    question.answers.map((answer) => ({
+      url: answer.imageUrl,
+      alt: answer.alt,
+      display: answer.display,
+    })),
+  ).toEqual(
+    value.edited.pictures.map((asset) => ({
+      url: asset.publicUrl,
+      alt: asset.alt ?? asset.label,
+      display: "both",
+    })),
+  )
+  const stage = card.locator(
+    ".game-preview-stage [data-native-application-preview]",
+  )
+  await expect(stage).toHaveAttribute("data-preview-ready", "true", {
+    timeout: 30_000,
+  })
+  const chapters = compileFullShowPreviewTimeline(projected)
+  const target = chapters.findIndex(
+    (chapter) =>
+      chapter.authoredKey === question.key && chapter.phase === "answerCards",
+  )
+  expect(target).toBeGreaterThanOrEqual(0)
+  const slider = card.getByRole("slider", { name: "Chapters", exact: true })
+  await expect(slider).toHaveAttribute("max", String(chapters.length - 1))
+  await slider.press("Home")
+  await expect(slider).toHaveValue("0")
+  for (let index = 1; index <= target; index += 1) {
+    await expect(slider).toHaveAttribute("aria-busy", "false")
+    await slider.press("ArrowRight")
+    await expect(slider).toHaveValue(String(index))
+  }
+  await expect(slider).toHaveAttribute("aria-busy", "false")
+  await expect(stage).toHaveAttribute("data-preview-ready", "true")
+  await expect(
+    stage.getByTestId("tadazz-question-panel").locator(".q-text"),
+  ).toHaveText(value.edited.questionText)
+  const images = stage.locator("img.answer-image")
+  await expect(images).toHaveCount(5)
+  const imageProof = []
+  for (const [index, asset] of value.edited.pictures.entries()) {
+    const image = images.nth(index)
+    await expect(image).toBeVisible()
+    await expect(image).toHaveAttribute("alt", asset.alt ?? asset.label)
+    await expect
+      .poll(() =>
+        image.evaluate(
+          (element) =>
+            element instanceof HTMLImageElement &&
+            element.complete &&
+            element.naturalWidth > 0,
+        ),
+      )
+      .toBe(true)
+    const observed = await image.evaluate((element) => {
+      if (!(element instanceof HTMLImageElement)) {
+        throw new Error("Native answer is not an image")
+      }
+
+      return {
+        src: element.currentSrc,
+        width: element.naturalWidth,
+        height: element.naturalHeight,
+        alt: element.alt,
+      }
+    })
+    expect(observed.src).toBe(asset.publicUrl)
+    imageProof.push({ ...observed, sha256: asset.ref.sha256 })
+  }
+  const backdrop = stage.getByTestId("tadazz-backdrop")
+  await expect(backdrop).toBeVisible()
+  await expect
+    .poll(() =>
+      backdrop.evaluate((element) => getComputedStyle(element).backgroundImage),
+    )
+    .toContain(value.edited.backgroundUrl)
+  await expect(
+    card.getByRole("button", { name: "Enable sound", exact: true }),
+  ).toBeVisible()
+  await testInfo.attach("saved-studio-native-stage.png", {
+    body: await card.screenshot(),
+    contentType: "image/png",
+  })
+  await testInfo.attach("saved-studio-native-stage.json", {
+    body: Buffer.from(
+      JSON.stringify(
+        {
+          proof: "actual-account-owned-native-studio-preview",
+          quizId: value.quizId,
+          savedMcpRevision: value.edited.revision,
+          immutableSourceRevision: source.source.immutableRevision,
+          theme: projected.defaults?.showTheme?.id,
+          chapterIndex: target,
+          chapter: chapters[target]?.phase,
+          questionText: question.question,
+          images: imageProof,
+          background: projected.defaults?.tadazzBackground?.staticUrl,
+          votingVolume:
+            projected.defaults?.showTheme?.overrides.audio?.answersMusic
+              ?.volume,
+          audioStarted: false,
+          liveRoomStarted: false,
+          rendererInjected: false,
+          studioTitleObserved: true,
+        },
+        null,
+        2,
+      ),
+    ),
+    contentType: "application/json",
+  })
+  await card.getByRole("button", { name: "Close preview", exact: true }).click()
+  await expect(card.locator(".game-preview-overlay")).toBeHidden()
+
+  return source.source.immutableRevision
+}
+
 test.describe("phase 3 native consent Studio integration", () => {
   test("authenticated browser flow -> OAuth consent -> MCP draft -> native save consent -> retry -> Studio & editor reopen", async ({
     browser,
@@ -326,7 +628,34 @@ test.describe("phase 3 native consent Studio integration", () => {
     const emailA = `alice-pw-${tag}@example.invalid`
     const emailB = `bob-pw-${tag}@example.invalid`
     const password = "Passphrase-Playwright-1234"
-    const showTitle = `Playwright Show ${tag}`
+    const showTitle = `Playwright Edited Show ${tag}`
+    const initialShow = buildDraftShow(`Playwright Initial Show ${tag}`)
+    const [, , thirdQuestion] = initialShow.cards
+    thirdQuestion.answers = ["Alpha", "Beta", "Gamma", "Delta", "Epsilon"].map(
+      (text) => ({ text }),
+    )
+    const siteDist = process.env.TADAZZ_SITE_DIST_DIR
+
+    if (!siteDist) {
+      throw new Error("Built site required for reviewed media QA")
+    }
+
+    const assets = createConsentAssetFixture(siteDist)
+    await page.route("https://tadazz.com/**", async (route) => {
+      const asset = assets.readBrowserAsset(route.request().url())
+
+      if (!asset) {
+        await route.abort()
+
+        return
+      }
+
+      await route.fulfill({
+        status: 200,
+        contentType: asset.contentType,
+        body: asset.body,
+      })
+    })
     const nativeTokenA = await signupVerifyAndLoginUi({
       page,
       mailFile: meta.mailFile,
@@ -362,13 +691,22 @@ test.describe("phase 3 native consent Studio integration", () => {
       const draft = (
         await mcp.client.callTool({
           name: "create_game_draft",
-          arguments: buildCreateDraftInput(showTitle),
+          arguments: {
+            ...buildCreateDraftInput(showTitle),
+            authoredShowJson: JSON.stringify(initialShow),
+          },
         })
       ).structuredContent as ToolOutcome
 
       expect(draft.ok).toBe(true)
 
       const draftId = draft.data?.draftId as string
+      const editedSnapshot = await editDraftBeforeConsent(
+        mcp.client,
+        draftId,
+        showTitle,
+      )
+      const { revision } = editedSnapshot
       const saveKey = randomBytes(18).toString("base64url")
       const challenge = (
         await mcp.client.callTool({
@@ -376,7 +714,7 @@ test.describe("phase 3 native consent Studio integration", () => {
           arguments: {
             contractVersion: "0.1.0",
             draftId,
-            expectedRevision: 1,
+            expectedRevision: revision,
             intent: "createNew",
             idempotencyKey: saveKey,
           },
@@ -435,7 +773,7 @@ test.describe("phase 3 native consent Studio integration", () => {
           emailA,
         )
         await expect(page.getByTestId("native-save-revision")).toContainText(
-          "1",
+          String(revision),
         )
         await expect(page.getByTestId("native-save-summary")).toContainText(
           showTitle,
@@ -483,28 +821,154 @@ test.describe("phase 3 native consent Studio integration", () => {
             arguments: {
               contractVersion: "0.1.0",
               draftId,
-              expectedRevision: 1,
+              expectedRevision: revision,
               intent: "createNew",
               idempotencyKey: saveKey,
             },
           })
         ).structuredContent as ToolOutcome
 
-        expect(retried.ok).toBe(true)
+        expect(retried.ok, JSON.stringify(retried.error)).toBe(true)
         expect(JSON.stringify(retried)).not.toContain(nativeTokenA)
 
         const quizId = retried.data?.quizId as string
 
         expect(quizId).toMatch(/^[A-Za-z0-9_-]{21}$/u)
+        expect(retried.data?.savedRevision).toBe(revision)
+        expect(retried.data?.revision).toBe(revision)
+        const headers = { Authorization: `Bearer ${nativeTokenA}` }
+        const [baseResponse, extrasResponse] = await Promise.all([
+          tlsFetch(`${meta.origin}/api/quizz/${quizId}`, { headers }),
+          tlsFetch(`${meta.origin}/api/extensions/quizzes/${quizId}`, {
+            headers,
+          }),
+        ])
+        expect(baseResponse.status).toBe(200)
+        expect(extrasResponse.status).toBe(200)
+        const nativeQuiz: unknown = await baseResponse.json()
+        const nativeExtras = (await extrasResponse.json()) as {
+          exists: boolean
+          extras: unknown
+        }
+        expect(nativeExtras.exists).toBe(true)
+        const extras = quizExtrasV2Schema.parse(nativeExtras.extras)
+        const restored = tadaShowV1Schema.parse(
+          nativeBundleToAuthoredShow({ quizz: nativeQuiz, extras }),
+        )
+        const restoredQuestions = restored.cards.filter(
+          (card) => card.kind === "quiz" || card.kind === "survey",
+        )
+        expect(restored.title).toBe(showTitle)
+        expect(restoredQuestions).toHaveLength(5)
+        expect(restoredQuestions[2]?.question).toBe(editedSnapshot.questionText)
+        expect(restored.defaults?.tadazzBackground).toEqual(
+          editedSnapshot.authoredShow.defaults?.tadazzBackground,
+        )
+        expect(restored.defaults?.tadazzBackground?.staticUrl).toBe(
+          editedSnapshot.backgroundUrl,
+        )
+        expect(
+          restored.defaults?.showTheme?.overrides.audio?.answersMusic?.volume,
+        ).toBe(0.25)
+        expect(
+          restoredQuestions[2]?.answers.map((answer) => ({
+            imageUrl: answer.imageUrl,
+            alt: answer.alt,
+            display: answer.display,
+          })),
+        ).toEqual(
+          editedSnapshot.pictures.map((asset) => ({
+            imageUrl: asset.publicUrl,
+            alt: asset.alt ?? asset.label,
+            display: "both",
+          })),
+        )
+        await testInfo.attach("semantic-saved-snapshot.json", {
+          body: Buffer.from(
+            JSON.stringify(
+              {
+                revision,
+                quizId,
+                title: restored.title,
+                question: restoredQuestions[2],
+                background: restored.defaults?.tadazzBackground,
+                voting:
+                  restored.defaults?.showTheme?.overrides.audio?.answersMusic,
+              },
+              null,
+              2,
+            ),
+          ),
+          contentType: "application/json",
+        })
 
         await page.goto("/studio/games")
         await expect(
           page.getByRole("heading", { name: showTitle, exact: true }),
         ).toBeVisible()
+        const previewRevision = await verifySavedStudioPreview(
+          page,
+          {
+            quizId,
+            title: showTitle,
+            restored,
+            edited: editedSnapshot,
+          },
+          testInfo,
+        )
+        const previewAfter = await tlsFetch(
+          `${meta.origin}/api/extensions/preview/quizzes/${quizId}`,
+          { headers },
+        )
+        expect(previewAfter.status).toBe(200)
+        const previewAfterBody = (await previewAfter.json()) as {
+          source: { immutableRevision: string }
+        }
+        expect(previewAfterBody.source.immutableRevision).toBe(previewRevision)
         await page.goto(`/manager/quizz/${quizId}`)
         expect(editorDocHeaders["x-frame-options"]).toBeUndefined()
         expect(editorDocHeaders["cache-control"]).toBeUndefined()
         await expect(page.getByTestId("editor-save-btn")).toBeVisible()
+        await expect(page.locator('input[name="subject"]')).toHaveValue(
+          showTitle,
+        )
+        await page.getByTestId("editor-question-card-2").click()
+        await expect(
+          page.locator('input[name="questions.2.question"]'),
+        ).toHaveValue(editedSnapshot.questionText)
+        for (const [index, asset] of editedSnapshot.pictures.entries()) {
+          const picture = page.getByTestId(`answer-image-preview-${index}`)
+          await expect(picture).toHaveAttribute("src", asset.publicUrl)
+          await expect
+            .poll(() =>
+              picture.evaluate(
+                (element) =>
+                  element instanceof HTMLImageElement &&
+                  element.complete &&
+                  element.naturalWidth > 0,
+              ),
+            )
+            .toBe(true)
+          await expect(
+            page.getByTestId(`answer-alt-input-${index}`),
+          ).toHaveValue(asset.alt ?? asset.label)
+        }
+        await testInfo.attach("reopened-five-picture-editor.png", {
+          body: await page.screenshot({ fullPage: true }),
+          contentType: "image/png",
+        })
+        await page.getByTestId("studio-tab-settings").click()
+        const themeSettings = page.getByTestId("show-theme-settings")
+        const votingAudio = themeSettings.getByTestId(
+          "theme-audio-answersMusic",
+        )
+        await themeSettings
+          .locator("details")
+          .filter({ has: votingAudio })
+          .locator("summary")
+          .click()
+        await expect(votingAudio.getByRole("slider")).toBeVisible()
+        await expect(votingAudio.getByRole("slider")).toHaveValue("0.25")
 
         const contextB = await browser.newContext({ ignoreHTTPSErrors: true })
 

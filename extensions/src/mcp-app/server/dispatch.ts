@@ -12,7 +12,12 @@ import {
   outputs,
   type ToolName,
 } from "../contracts/tools.ts"
-import { normalizeDraft } from "./authoring.ts"
+import { normalizeDraft, normalizeStoredDraft } from "./authoring.ts"
+import { preserveSemanticState, readSemanticShow } from "./semantic-state.ts"
+import {
+  deriveAuthoredShowPreviewIdentityMap,
+  getPreviewIdentityId,
+} from "../../core/show-library/identity.ts"
 import { renderPreview } from "./preview.ts"
 import type {
   Dependencies,
@@ -34,6 +39,19 @@ function publicDraft(record: DraftRecord) {
     revision: record.revision,
     summary: record.summary,
   }
+}
+
+/** Model-only address directory in authored order, never sorted identity-key order. */
+function modelQuestionRefs(record: DraftRecord) {
+  const show = readSemanticShow(record.authoredShowJson)
+  const identities = deriveAuthoredShowPreviewIdentityMap(show)
+
+  return show.cards
+    .filter((card) => card.kind === "quiz" || card.kind === "survey")
+    .map((card, index) => ({
+      questionNumber: index + 1,
+      publicQuestionId: getPreviewIdentityId(identities, "questions", card.key),
+    }))
 }
 
 export async function dispatch(
@@ -81,6 +99,7 @@ export async function dispatch(
 
         if (
           !deps.preview &&
+          !deps.fullShowPreviewV3 &&
           listed.items.some((item) => item.previewAvailable)
         ) {
           throw new ToolError("INTERNAL")
@@ -131,7 +150,9 @@ export async function dispatch(
 
       case "get_game_draft_summary": {
         const a = inputs[name].parse(raw)
-        data = publicDraft(await readDraft(deps, p, a.draftId))
+        data = deps.semanticDrafts
+          ? await deps.semanticDrafts.state(p, a)
+          : publicDraft(await readDraft(deps, p, a.draftId, a.expectedRevision))
 
         break
       }
@@ -147,7 +168,42 @@ export async function dispatch(
         data = {
           ...publicDraft(record),
           authoredShowJson: record.authoredShowJson,
+          questionRefs: modelQuestionRefs(record),
         }
+
+        break
+      }
+
+      case "apply_game_edit": {
+        if (!deps.semanticDrafts) {
+          throw unavailable()
+        }
+
+        data = await deps.semanticDrafts.patch(p, inputs[name].parse(raw), {
+          correlationId,
+        })
+
+        break
+      }
+
+      case "undo_game_edit": {
+        if (!deps.semanticDrafts) {
+          throw unavailable()
+        }
+
+        data = await deps.semanticDrafts.undo(p, inputs[name].parse(raw), {
+          correlationId,
+        })
+
+        break
+      }
+
+      case "list_editing_assets": {
+        if (!deps.semanticDrafts) {
+          throw unavailable()
+        }
+
+        data = await deps.semanticDrafts.assets(p, inputs[name].parse(raw))
 
         break
       }
@@ -177,10 +233,22 @@ export async function dispatch(
           deps,
         )
 
+        const expected = deps.authoring.semantic
+          ? normalizeStoredDraft(
+              preserveSemanticState(
+                record.authoredShowJson,
+                normalized.authoredShowJson,
+                deps.authoring,
+              ),
+              deps.authoring,
+            )
+          : normalized
+
         if (
           record.draftId !== a.draftId ||
           record.revision !== a.expectedRevision + 1 ||
-          record.authoredShowJson !== normalized.authoredShowJson
+          record.authoredShowJson !== expected.authoredShowJson ||
+          hashJson(record.summary) !== hashJson(expected.summary)
         ) {
           throw new ToolError("INTERNAL")
         }
@@ -191,6 +259,17 @@ export async function dispatch(
       }
 
       case "update_game_title": {
+        if (deps.semanticDrafts) {
+          const { title, ...input } = inputs[name].parse(raw)
+          data = await deps.semanticDrafts.patch(
+            p,
+            { ...input, patch: { kind: "set-title", title } },
+            { correlationId },
+          )
+
+          break
+        }
+
         if (!deps.drafts || !deps.authoring) {
           throw unavailable()
         }
@@ -394,7 +473,13 @@ export async function dispatch(
 
     const result: CallToolResult = {
       content: [
-        { type: "text", text: JSON.stringify({ ok: true, tool: name }) },
+        {
+          type: "text",
+          text:
+            name === "preview_show"
+              ? `Native demo data is ready for draft ${dataSchemas.preview_show.parse(data).draftId}, revision ${dataSchemas.preview_show.parse(data).revision}: ${dataSchemas.preview_show.parse(data).title}. There are ${dataSchemas.preview_show.parse(data).chapterCount} chapters. An MCP App capable host can display the selected chapter. If this host has no interactive view, continue with get_game_draft_summary and apply_game_edit in chat. To save the same revision, use save_game and approve the first-party Tadazz consent page; export_game requires separate asset export rights.`
+              : JSON.stringify({ ok: true, tool: name }),
+        },
       ],
       structuredContent,
       ...(meta ? { _meta: meta } : {}),

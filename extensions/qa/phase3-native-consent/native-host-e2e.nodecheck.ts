@@ -4,6 +4,8 @@ import { mkdtempSync, realpathSync, rmSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { describe, it } from "node:test"
+import { App } from "../../src/mcp-app/node_modules/@modelcontextprotocol/ext-apps/dist/src/app.js"
+import { AppBridge } from "../../src/mcp-app/node_modules/@modelcontextprotocol/ext-apps/dist/src/app-bridge.js"
 import {
   ALL_MCP_SCOPES,
   buildCreateDraftInput,
@@ -24,6 +26,44 @@ interface ToolOutcome {
     readonly consentRequestId?: string
     readonly consentUrl?: string
   }
+}
+
+/** Official app protocol over an isolated message transport; OAuth stays in the host. */
+async function connectAppSaveClient(
+  client: ConstructorParameters<typeof AppBridge>[0],
+) {
+  const app = new App(
+    { name: "native-consent-save-app-qa", version: "1.0.0" },
+    {},
+    { autoResize: false, webMcpBridge: false, strict: true },
+  )
+  const bridge = new AppBridge(
+    client,
+    { name: "native-consent-host-qa", version: "1.0.0" },
+    { serverTools: {} },
+  )
+  type Transport = NonNullable<Parameters<App["connect"]>[0]>
+  const appTransport: Transport = {
+    start: async () => {},
+    send: async (message) => {
+      queueMicrotask(() => hostTransport.onmessage?.(structuredClone(message)))
+    },
+    close: async () => {
+      appTransport.onclose?.()
+    },
+  }
+  const hostTransport: Transport = {
+    start: async () => {},
+    send: async (message) => {
+      queueMicrotask(() => appTransport.onmessage?.(structuredClone(message)))
+    },
+    close: async () => {
+      hostTransport.onclose?.()
+    },
+  }
+  await bridge.connect(hostTransport)
+  await app.connect(appTransport)
+  return { app, bridge }
 }
 
 async function listUserQuizzes(options: {
@@ -66,7 +106,7 @@ function assertNoLeakedSecrets(options: {
 }
 
 describe("native-host end-to-end consent integration", () => {
-  it("runs real accounts, PKCE OAuth, MCP save consent, security denials, and C1 gate", async () => {
+  it("runs real accounts, PKCE OAuth, official app save consent, security denials, and C1 gate", async () => {
     const root = realpathSync(mkdtempSync(join(tmpdir(), "tadazz-native-e2e-")))
     const jwtSecret = `test-e2e-jwt-${"s".repeat(48)}`
     const previousEnv = {
@@ -209,6 +249,7 @@ describe("native-host end-to-end consent integration", () => {
         }
 
         const connA = await connectMcp(grantFullA.accessToken)
+        const { app, bridge } = await connectAppSaveClient(connA.client)
 
         try {
           const draft1 = (
@@ -223,7 +264,7 @@ describe("native-host end-to-end consent integration", () => {
           const draftId1 = draft1.data?.draftId as string
           const key1 = randomBytes(18).toString("base64url")
           const challenge1 = (
-            await connA.client.callTool({
+            await app.callServerTool({
               name: "save_game",
               arguments: {
                 contractVersion: "0.1.0",
@@ -245,6 +286,25 @@ describe("native-host end-to-end consent integration", () => {
           assert.equal(challenge1.error.code, "CONSENT_REQUIRED")
 
           const requestId1 = challenge1.error.consentRequestId ?? ""
+          const pendingReplay = (
+            await app.callServerTool({
+              name: "save_game",
+              arguments: {
+                contractVersion: "0.1.0",
+                draftId: draftId1,
+                expectedRevision: 1,
+                intent: "createNew",
+                idempotencyKey: key1,
+              },
+            })
+          ).structuredContent as ToolOutcome
+          assert.equal(pendingReplay.ok, false)
+          assert.equal(pendingReplay.error?.code, "CONSENT_REQUIRED")
+          assert.equal(pendingReplay.error?.consentRequestId, requestId1)
+          assert.equal(
+            pendingReplay.error?.consentUrl,
+            challenge1.error.consentUrl,
+          )
 
           assert.equal(requestId1.length, 54)
           assert.equal(
@@ -395,7 +455,7 @@ describe("native-host end-to-end consent integration", () => {
           ).structuredContent as ToolOutcome
           const keyCancel = randomBytes(18).toString("base64url")
           const challengeCancel = (
-            await connA.client.callTool({
+            await app.callServerTool({
               name: "save_game",
               arguments: {
                 contractVersion: "0.1.0",
@@ -410,7 +470,7 @@ describe("native-host end-to-end consent integration", () => {
           assert.equal(challengeCancel.error?.code, "CONSENT_REQUIRED")
 
           const retryWithoutApprove = (
-            await connA.client.callTool({
+            await app.callServerTool({
               name: "save_game",
               arguments: {
                 contractVersion: "0.1.0",
@@ -434,7 +494,7 @@ describe("native-host end-to-end consent integration", () => {
           const draftDriftId = draftDrift.data?.draftId as string
           const keyDrift = randomBytes(18).toString("base64url")
           const challengeDrift = (
-            await connA.client.callTool({
+            await app.callServerTool({
               name: "save_game",
               arguments: {
                 contractVersion: "0.1.0",
@@ -469,7 +529,7 @@ describe("native-host end-to-end consent integration", () => {
           assert.equal(updatedDrift.data?.revision, 2)
 
           const retryDrift = (
-            await connA.client.callTool({
+            await app.callServerTool({
               name: "save_game",
               arguments: {
                 contractVersion: "0.1.0",
@@ -492,7 +552,7 @@ describe("native-host end-to-end consent integration", () => {
           )
 
           const reusedKey = (
-            await connA.client.callTool({
+            await app.callServerTool({
               name: "save_game",
               arguments: {
                 contractVersion: "0.1.0",
@@ -508,7 +568,7 @@ describe("native-host end-to-end consent integration", () => {
           assert.equal(reusedKey.error?.code, "REQUEST_KEY_REUSED")
 
           const finalSave = (
-            await connA.client.callTool({
+            await app.callServerTool({
               name: "save_game",
               arguments: {
                 contractVersion: "0.1.0",
@@ -555,7 +615,7 @@ describe("native-host end-to-end consent integration", () => {
             assert.equal(getB.status, 404)
 
             const idempotentReplay = (
-              await connA.client.callTool({
+              await app.callServerTool({
                 name: "save_game",
                 arguments: {
                   contractVersion: "0.1.0",
@@ -571,7 +631,7 @@ describe("native-host end-to-end consent integration", () => {
             assert.equal(idempotentReplay.data?.quizId, savedQuizId)
 
             const freshKeyReplay = (
-              await connA.client.callTool({
+              await app.callServerTool({
                 name: "save_game",
                 arguments: {
                   contractVersion: "0.1.0",
@@ -600,6 +660,8 @@ describe("native-host end-to-end consent integration", () => {
             )
           }
         } finally {
+          await app.close()
+          await bridge.close()
           await connA.transport.close()
         }
       } finally {

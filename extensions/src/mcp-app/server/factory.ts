@@ -122,7 +122,8 @@ function registeredServer(
       annotations: {
         readOnlyHint: !mutations.has(name),
         destructiveHint: false,
-        idempotentHint: name !== "update_game_title",
+        idempotentHint:
+          name !== "update_game_title" || Boolean(deps.semanticDrafts),
         openWorldHint: false,
       },
       _meta: {
@@ -225,7 +226,7 @@ function registeredServer(
         {
           uri: uri.href,
           mimeType: "text/markdown",
-          text: "# Tadazz authored-show v1\nUse format tada-show/version 1; unique stable card keys; 1-based answer indices; empty settings; no theme/audio edits or arbitrary media URLs. Existing authored-schema refinements and preflight are authoritative. Preview is a demo with no live room. Durable account save/download and real preview adapters may be unavailable.\n",
+          text: "# Tadazz authored-show v1\nUse format tada-show/version 1; unique stable card keys; 1-based answer indices; empty settings; no arbitrary media URLs or raw theme/audio overrides. Use apply_game_edit for bounded native theme/audio/background/picture edits and list_editing_assets for exact authorized asset references. Existing authored-schema refinements and preflight are authoritative. Preview is a demo with no live room. Durable account save/download and real preview adapters may be unavailable.\n",
         },
       ],
     }),

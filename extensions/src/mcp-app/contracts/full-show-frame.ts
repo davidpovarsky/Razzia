@@ -5,7 +5,10 @@ import {
   fullShowInventoryV3Schema,
   fullShowSelectionInputV3Schema,
 } from "./full-show-selection.ts"
-import { SHOW_THEME_SLOTS } from "../../core/show-themes/selection.ts"
+import {
+  SHOW_THEME_SLOTS,
+  SHOW_THEME_AUDIO_EVENTS,
+} from "../../core/show-themes/selection.ts"
 import { nativePreviewVisualSettingsV2Schema } from "../../core/show-library/native-preview-renderer-v2-schema.ts"
 import { digest } from "./schemas.ts"
 
@@ -67,10 +70,45 @@ export const fullShowSceneV3Schema = z.strictObject({
   showPercentages: z.boolean().optional(),
 })
 
+const audioSelection = z.strictObject({
+  variantId: z
+    .string()
+    .min(1)
+    .max(160)
+    .regex(/^[a-zA-Z0-9._-]+$/u)
+    .optional(),
+  mediaUrl: url.optional(),
+  muted: z.boolean().optional(),
+  volume: z.number().min(0).max(1).optional(),
+})
+
+export const fullShowPresentationV3Schema = z.strictObject({
+  background: z
+    .strictObject({
+      url,
+      fit: z.enum(["contain", "cover"]),
+    })
+    .optional(),
+  answerVisuals: z
+    .array(
+      z.strictObject({
+        answerId: z.string().min(1).max(256),
+        display: z.enum(["image", "both"]),
+        url,
+        alt: z.string().min(1).max(500),
+      }),
+    )
+    .max(5)
+    .default([]),
+})
+
 export const fullShowThemeV3Schema = z.strictObject({
   id: z.enum(["tadazz-classic", "razzia-original"]),
   version: z.literal("1.0.0"),
   definitionSha256: digest,
+  audio: z
+    .partialRecord(z.enum(SHOW_THEME_AUDIO_EVENTS), audioSelection)
+    .default({}),
   rendererId: z.enum(["tadazz-classic-stage", "razzia-native-stage"]),
   slots: z.record(
     z.enum(SHOW_THEME_SLOTS),
@@ -100,12 +138,29 @@ export const fullShowFrameV3Schema = z
     rendererBuildId: digest,
     theme: fullShowThemeV3Schema,
     content,
+    presentation: fullShowPresentationV3Schema.default({ answerVisuals: [] }),
   })
   .superRefine((value, ctx) => {
     const chapter = value.inventory.chapters.find(
       (c) => c.id === value.inventory.selectedChapterId,
     )
     const item = value.content
+    const visuals = value.presentation.answerVisuals
+
+    if (
+      visuals.length &&
+      (item.kind !== "question" ||
+        item.frame.phase === "question" ||
+        new Set(visuals.map((v) => v.answerId)).size !== visuals.length ||
+        visuals.some(
+          (v) => !item.frame.choices.some((c) => c.id === v.answerId),
+        ))
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        message: "full-show:answer-visual-association",
+      })
+    }
 
     if (
       !chapter ||

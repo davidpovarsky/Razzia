@@ -10,7 +10,9 @@ import { freeze } from "../../core/show-library/primitives.ts"
 import { canonicalJson } from "../contracts/canonical.ts"
 import type { FirstPartyCatalogOptions } from "../first-party/oauth-catalog.ts"
 import type { FirstPartyExportPolicy } from "../first-party/oauth-export.ts"
-import { normalizeDraft } from "../server/authoring.ts"
+import { normalizeStoredDraft } from "../server/authoring.ts"
+import { snapshotSemanticPolicy } from "../server/semantic-state.ts"
+import type { SemanticAuthoringPolicy } from "../contracts/semantic-edit.ts"
 import type { AuthoringPolicy } from "../server/dependencies.ts"
 
 function immutableStrings(values: ReadonlySet<string>): ReadonlySet<string> {
@@ -41,8 +43,9 @@ function immutableStrings(values: ReadonlySet<string>): ReadonlySet<string> {
   return facade
 }
 
-// This release exports the account's authored JSON, never a theme package or
-// bundled/customer asset bytes. The issuer independently checks live ownership,
+// These two formats serialize the account's JSON and explicitly approved public
+// URL references; they do not copy theme packages or asset bytes. The issuer
+// independently checks live ownership,
 // grant, scopes and the exact immutable snapshot before and after this policy.
 export function createTextDraftExportPolicy(
   authoring: AuthoringPolicy,
@@ -50,6 +53,9 @@ export function createTextDraftExportPolicy(
 ): FirstPartyExportPolicy {
   const stableAuthoring: AuthoringPolicy = Object.freeze({
     allowedPublicAssetUrls: immutableStrings(authoring.allowedPublicAssetUrls),
+    ...(authoring.semantic
+      ? { semantic: snapshotSemanticPolicy(authoring.semantic) }
+      : {}),
     ...(authoring.trustedDefaults === undefined
       ? {}
       : {
@@ -80,9 +86,10 @@ export function createTextDraftExportPolicy(
           return false
         }
 
-        const normalized = normalizeDraft(
+        const normalized = normalizeStoredDraft(
           draft.authoredShowJson,
           stableAuthoring,
+          "json-reference-export",
         )
 
         return (
@@ -101,11 +108,15 @@ export function createTextDraftExportPolicy(
 
 export async function createProductionMcpCapabilities(options: {
   readonly clientIds: ReadonlySet<string>
+  readonly semantic?: SemanticAuthoringPolicy
 }) {
   // The existing authoring validator denies arbitrary media/URLs/settings. A
-  // preview's built-in assets do not grant model-authored or export asset rights.
+  // preview's built-in assets do not grant arbitrary raw URL or binary export rights.
   const authoring: AuthoringPolicy = Object.freeze({
     allowedPublicAssetUrls: immutableStrings(new Set<string>()),
+    ...(options.semantic
+      ? { semantic: snapshotSemanticPolicy(options.semantic) }
+      : {}),
   })
   const translator = createInstance()
   await translator.init({

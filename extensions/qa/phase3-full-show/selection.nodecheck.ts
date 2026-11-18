@@ -1,5 +1,11 @@
 // oxlint-disable init-declarations -- Node before hook initializes the actual issuer and fixture; no fallback authority.
 import assert from "node:assert/strict"
+import { z } from "zod"
+import { readFileSync, lstatSync } from "node:fs"
+import { createHash } from "node:crypto"
+import { resolve } from "node:path"
+import { fileURLToPath } from "node:url"
+import { createBuiltinAssetResolver } from "../../src/mcp-app/native-host/builtin-asset-policy.ts"
 import { createFullShowPreviewPortV3 } from "../../src/mcp-app/server/full-show-frame.ts"
 import {
   fullShowFrameV3Schema,
@@ -7,6 +13,8 @@ import {
   FULL_SHOW_RESOURCE_V3,
 } from "../../src/mcp-app/contracts/full-show-frame.ts"
 import { createFullShowConsumerV3 } from "../../src/mcp-app/client/full-show-frame.ts"
+import { createFullShowPlayback } from "../../src/mcp-app/client/full-show-playback.ts"
+import { fullShowVotingVolume } from "../../src/mcp-app/client/full-show-audio.ts"
 import { tadaShowV1Schema } from "../../src/core/show-authoring-schema.ts"
 import { after, before, test } from "node:test"
 import { createFirstPartyOAuth } from "../../src/mcp-app/first-party/oauth.ts"
@@ -492,6 +500,98 @@ const fullPort = (
     { drafts: repository, authoring: policy },
     { rendererBuildId, assertAssets },
   )
+test("native demo transport pauses elapsed time, resumes continuously and explicitly replays question and scene epochs", async () => {
+  const record = await created()
+  const runtime = fullPort()
+  const scene = await runtime.render(a, selection(record))
+  const votingId = scene.inventory.chapters.find(
+    (chapter) => chapter.kind === "voting",
+  )?.id
+  assert(votingId)
+  const voting = await runtime.render(a, {
+    ...selection(record),
+    chapterId: votingId,
+  })
+  let now = 0
+  const owner = createFullShowPlayback(() => now)
+  const first = owner.select(scene)
+  now = 1200
+  assert.equal(owner.snapshot().clock.elapsedMs, 1200)
+  owner.pause()
+  now = 11200
+  assert.equal(owner.snapshot().clock.elapsedMs, 1200)
+  owner.resume()
+  now += 1000
+  assert.equal(owner.snapshot().clock.elapsedMs, 2200)
+  const replayedScene = owner.select(scene, 1)
+  assert.equal(replayedScene.clock.elapsedMs, 0)
+  assert(replayedScene.clock.epoch > first.clock.epoch)
+  const active = owner.select(voting, 1)
+  assert.equal(active.clock.elapsedMs, 0)
+  assert(active.clock.deadlineMs !== null && active.clock.deadlineMs > 0)
+  now += 600
+  const same = owner.select(
+    {
+      ...voting,
+      inventory: {
+        ...voting.inventory,
+        revision: voting.inventory.revision + 1,
+      },
+    },
+    1,
+  )
+  assert.equal(
+    same.clock.elapsedMs,
+    600,
+    "An acknowledged volume edit must not restart playback",
+  )
+  assert.equal(same.audioEpoch, active.audioEpoch)
+  owner.pause()
+  const replayedQuestion = owner.select(voting, 2)
+  assert.equal(replayedQuestion.clock.elapsedMs, 0)
+  assert.equal(replayedQuestion.clock.paused, true)
+  assert.equal(replayedQuestion.audioEpoch, active.audioEpoch + 1)
+  assert(replayedQuestion.clock.epoch > active.clock.epoch)
+  const adjacent = owner.select(scene, 2)
+  assert.equal(
+    adjacent.clock.paused,
+    true,
+    "Adjacent chapter selection preserves user pause",
+  )
+  owner.select(null)
+  now += 5000
+  assert.equal(owner.snapshot().clock.elapsedMs, 0)
+})
+test("volume editor uses the effective native theme default and explicit override for both families", async () => {
+  const projected = await semanticProjectionFixture()
+  let { revision } = projected.record
+  for (const id of ["tadazz-classic", "razzia-original"] as const) {
+    const updated = await projected.commands.patch(
+      a,
+      {
+        contractVersion: "0.1.0",
+        draftId: projected.record.draftId,
+        expectedRevision: revision,
+        idempotencyKey: key(),
+        patch: { kind: "select-theme", theme: { id, version: "1.0.0" } },
+      },
+      { correlationId: key() },
+    )
+    ;({ revision } = updated)
+    const frame = await projected.preview.render(a, {
+      ...selection(projected.record),
+      expectedRevision: revision,
+    })
+    assert.equal(fullShowVotingVolume(frame), 0.35)
+    assert.equal(
+      fullShowVotingVolume({
+        ...frame,
+        theme: { ...frame.theme, audio: { answersMusic: { volume: 0.2 } } },
+      }),
+      0.2,
+    )
+  }
+})
 test("V3 emits only the selected native chapter and reveals correct answers only in results", async () => {
   const record = await created()
   const runtime = fullPort()
@@ -727,4 +827,201 @@ test("revoking the actual underlying first-party session invalidates an already 
   f.accounts.revokeAccountSession(f.sessions[1].sid)
   await assert.rejects(() => port.assertCurrent(b, prepared))
   await assert.rejects(() => port.getHostSource(b, prepared))
+})
+
+async function semanticProjectionFixture() {
+  const root = fileURLToPath(new URL("../../../", import.meta.url))
+  const manifest = z
+    .object({
+      publicAssets: z.array(
+        z.object({
+          path: z.string(),
+          sha256: z.string(),
+          bytes: z.number().int().nonnegative(),
+        }),
+      ),
+    })
+    .parse(
+      JSON.parse(
+        readFileSync(
+          new URL(
+            "../../src/mcp-app/widget/dist/full-show-artifact.json",
+            import.meta.url,
+          ),
+          "utf8",
+        ),
+      ),
+    )
+  const assets = createBuiltinAssetResolver({
+    origin: "https://tadazz.com",
+    publicAssets: manifest.publicAssets,
+    verifyCurrentAsset(entry) {
+      const file = resolve(root, entry.path)
+      const stat = lstatSync(file)
+
+      if (!stat.isFile() || stat.isSymbolicLink()) {
+        return false
+      }
+
+      const bytes = readFileSync(file)
+
+      return (
+        bytes.length === entry.bytes &&
+        createHash("sha256").update(bytes).digest("hex") === entry.sha256
+      )
+    },
+  })
+  const authoring = { ...policy, semantic: { assets } }
+  const drafts = issuer.draftRepository(authoring)
+  const commands = issuer.semanticDraftRepository(authoring)
+  const data = authored()
+  data.cards = data.cards.map((card) =>
+    "answers" in card
+      ? {
+          ...card,
+          answers: ["A", "B", "C", "D", "E"].map((text) => ({ text })),
+        }
+      : card,
+  )
+  const normalized = normalizeDraft(JSON.stringify(data), authoring)
+  const record = await drafts.create(a, normalized, mutation(normalized))
+  const admitted: string[][] = []
+  const preview = createFullShowPreviewPortV3(
+    { drafts, authoring },
+    {
+      rendererBuildId,
+      assertAssets: (_principal, _theme, urls) => {
+        admitted.push([...urls])
+
+        return Promise.resolve()
+      },
+    },
+  )
+  const initial = await preview.render(a, selection(record))
+  const question = initial.inventory.chapters.find(
+    (chapter) => chapter.questionOrdinal === 3 && chapter.kind === "question",
+  )
+  const answers = initial.inventory.chapters.find(
+    (chapter) =>
+      chapter.questionOrdinal === 3 && chapter.kind === "answerCards",
+  )
+  assert(question && answers)
+  const selected = await preview.render(a, {
+    ...selection(record),
+    chapterId: question.id,
+  })
+  assert.equal(selected.content.kind, "question")
+  const choices = await commands.assets(a, {
+    contractVersion: "0.1.0",
+    draftId: record.draftId,
+    expectedRevision: 1,
+    purpose: "answer-image",
+    locale: "en",
+  })
+  assert.equal(choices.assets.length, 5)
+  await commands.patch(
+    a,
+    {
+      contractVersion: "0.1.0",
+      draftId: record.draftId,
+      expectedRevision: 1,
+      idempotencyKey: key(),
+      patch: {
+        kind: "set-answer-pictures",
+        publicQuestionId: selected.content.frame.question.id,
+        pictures: choices.assets.map((choice, index) => ({
+          answerNumber: index + 1,
+          asset: choice.ref,
+          alt: choice.alt || choice.label,
+          display: "both" as const,
+        })),
+      },
+    },
+    { correlationId: key() },
+  )
+
+  return {
+    authoring,
+    drafts,
+    commands,
+    record: { ...record, revision: 2 },
+    preview,
+    question,
+    answers,
+    assets,
+    admitted,
+  }
+}
+test("semantic five-picture projection uses current answer frame only and actual approved public bytes", async () => {
+  const projected = await semanticProjectionFixture()
+  projected.admitted.length = 0
+  const question = await projected.preview.render(a, {
+    ...selection(projected.record),
+    chapterId: projected.question.id,
+  })
+  assert.deepEqual(question.presentation.answerVisuals, [])
+  assert.deepEqual(projected.admitted, [[]])
+  const answers = await projected.preview.render(a, {
+    ...selection(projected.record),
+    chapterId: projected.answers.id,
+  })
+  assert.equal(answers.presentation.answerVisuals.length, 5)
+  assert.equal(projected.admitted[1].length, 5)
+  assert.doesNotMatch(
+    JSON.stringify(answers),
+    /PRIVATE_NOTE_|FUTURE_QUESTION_[0134]|authoredShowJson|accountId|grantId/u,
+  )
+})
+test("semantic selected media cannot fall back to generic URL allowlist when preview purpose is denied", async () => {
+  const projected = await semanticProjectionFixture()
+  let invoked = false
+  const authoring = {
+    ...projected.authoring,
+    allowedPublicAssetUrls: new Set(
+      projected.assets
+        .listAssets(
+          {
+            theme: { id: "tadazz-classic", version: "1.0.0" },
+            purpose: "answer-image",
+            operation: "store",
+          },
+          "en",
+        )
+        .map((asset) => asset.publicUrl),
+    ),
+    semantic: {
+      assets: {
+        ...projected.assets,
+        resolveStoredUrl: (
+          url: string,
+          assetContext: import("../../src/mcp-app/contracts/semantic-edit.ts").SemanticAssetContext,
+        ) =>
+          assetContext.operation === "preview"
+            ? undefined
+            : projected.assets.resolveStoredUrl(url, assetContext),
+      },
+    },
+  }
+  const preview = createFullShowPreviewPortV3(
+    { drafts: projected.drafts, authoring },
+    {
+      rendererBuildId,
+      assertAssets: () => {
+        invoked = true
+
+        return Promise.resolve()
+      },
+    },
+  )
+  await assert.rejects(() =>
+    preview.render(a, {
+      ...selection(projected.record),
+      chapterId: projected.answers.id,
+    }),
+  )
+  assert.equal(
+    invoked,
+    false,
+    "Denied media must stop before the asynchronous asset reader",
+  )
 })

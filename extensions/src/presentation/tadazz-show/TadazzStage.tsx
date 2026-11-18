@@ -46,6 +46,8 @@ export const TADAZZ_LOGO_URL = TADAZZ_PRODUCT_LOGO_URL
 export const TADAZZ_BACKDROP_URL = "/tadazz-show/motion/backdrop.webp"
 
 export interface StageOption {
+  /** Explicit image-only captions preserve their accessible image alternative. */
+  display?: "image" | "both"
   label: string
   /** Real answer image URL (answerVisuals[answerIndex]); omitted for text answers. */
   image?: string

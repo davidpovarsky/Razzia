@@ -9,6 +9,7 @@ const scenario = query.get("scenario") ?? ""
 const calls: string[] = []
 let tamper = false
 let held = false
+let dropMutationAck = false
 const pending = new Set<() => void>()
 const frame = document.createElement("iframe")
 frame.setAttribute("sandbox", "allow-scripts")
@@ -67,6 +68,10 @@ bridge.oncalltool = async ({ name, arguments: args }) => {
     await request("/qa/call", { name, arguments: args }),
   )
 
+  if (dropMutationAck && name === "apply_game_edit") {
+    dropMutationAck = false
+    throw new Error("Synthetic lost acknowledgement after durable commit")
+  }
   if (name === "preview_show") {
     if (held) {
       await new Promise<void>((resolve) => {
@@ -122,6 +127,9 @@ void bridge
 Object.assign(window, {
   __host: {
     calls: () => calls.slice(),
+    dropMutationAck: () => {
+      dropMutationAck = true
+    },
     tamper: (value: boolean) => {
       tamper = value
     },

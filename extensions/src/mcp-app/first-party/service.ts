@@ -232,6 +232,28 @@ function assertTimeoutMs(value: number | undefined): number {
 function cloneAuthoringPolicy(policy: AuthoringPolicy): AuthoringPolicy {
   return {
     allowedPublicAssetUrls: new Set(policy.allowedPublicAssetUrls),
+    ...(policy.semantic
+      ? {
+          semantic: Object.freeze({
+            ...(policy.semantic.assets
+              ? {
+                  assets: Object.freeze({
+                    resolveAsset: policy.semantic.assets.resolveAsset.bind(
+                      policy.semantic.assets,
+                    ),
+                    resolveStoredUrl:
+                      policy.semantic.assets.resolveStoredUrl.bind(
+                        policy.semantic.assets,
+                      ),
+                    listAssets: policy.semantic.assets.listAssets.bind(
+                      policy.semantic.assets,
+                    ),
+                  }),
+                }
+              : {}),
+          }),
+        }
+      : {}),
     ...(policy.trustedDefaults === undefined
       ? {}
       : { trustedDefaults: structuredClone(policy.trustedDefaults) }),
@@ -746,6 +768,9 @@ export async function createProtectedMcpService(
 
   const unscopedTracker = new RequestWorkTracker()
   const rawDrafts = oauth.draftRepository(authoring)
+  const rawSemanticDrafts = authoring.semantic
+    ? oauth.semanticDraftRepository(authoring)
+    : undefined
   const rawFullShowPreviewV3 = options.fullShowPreviewV3?.(rawDrafts)
   const rawPreviewCandidateV2 =
     typeof options.previewCandidateV2 === "function"
@@ -767,6 +792,11 @@ export async function createProtectedMcpService(
   const dependencies: Omit<Dependencies, "authorize" | "prevalidationLimit"> = {
     authoring,
     drafts: wrapTrackedObject(rawDrafts, unscopedTracker),
+    ...(rawSemanticDrafts
+      ? {
+          semanticDrafts: wrapTrackedObject(rawSemanticDrafts, unscopedTracker),
+        }
+      : {}),
     rateLimit: trackedRateLimit,
     ...(rawCatalog
       ? { catalog: wrapTrackedObject(rawCatalog, unscopedTracker) }

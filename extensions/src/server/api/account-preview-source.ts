@@ -18,6 +18,10 @@ import { nativeBundleToAuthoredShow } from "../../core/show-authoring-convert"
 import { sanitizeAuthoredShowForPreview } from "../../core/show-library/sanitized-authored-preview"
 import { compileFullShowPreviewTimeline } from "../../core/show-library/full-show-preview-timeline"
 import type { StorageInjections } from "../storage/sidecar"
+import {
+  readAccountPreviewBuiltinAssets,
+  type AccountPreviewBuiltinAuthority,
+} from "./account-preview-builtins"
 
 const hash = (value: string | Uint8Array) =>
   createHash("sha256").update(value).digest("hex")
@@ -192,15 +196,19 @@ export function projectAccountPreviewContent(
 export function readAccountPreviewSource(
   injections: Pick<StorageInjections, "getPath">,
   id: string,
+  builtinAuthority?: AccountPreviewBuiltinAuthority,
 ) {
   const result = projectAccountPreviewContent(injections, id)
   const { show } = result
+  const builtinAssets = readAccountPreviewBuiltinAssets(show, builtinAuthority)
+  const admittedPublicUrls = new Set(builtinAssets.map((asset) => asset.url))
   const urls = new Set<string>()
   const visit = (value: unknown, key = "") => {
     if (
       typeof value === "string" &&
       /url$/iu.test(key) &&
-      /^https?:/iu.test(value)
+      /^https?:/iu.test(value) &&
+      !admittedPublicUrls.has(value)
     ) {
       throw new PreviewSourceError(422)
     }
@@ -219,7 +227,19 @@ export function readAccountPreviewSource(
   }
   visit(show)
 
-  return { ...result, assets: readAccountPreviewAssets(injections, [...urls]) }
+  const assets = [
+    ...readAccountPreviewAssets(injections, [...urls]),
+    ...builtinAssets,
+  ]
+
+  if (
+    assets.length > 256 ||
+    assets.reduce((total, asset) => total + asset.bytes, 0) > 200_000_000
+  ) {
+    throw new PreviewSourceError(422)
+  }
+
+  return { ...result, assets }
 }
 
 /** The existing tenant directory is the ownership boundary; no URL or path fetch. */

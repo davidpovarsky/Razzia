@@ -183,6 +183,8 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
       grants.catalog(catalogOptions, assertIssued),
     draftRepository: (policy: AuthoringPolicy) =>
       grants.drafts(policy, assertIssued),
+    semanticDraftRepository: (policy: AuthoringPolicy) =>
+      grants.drafts(policy, assertIssued).semantic,
     exports: options.exportPolicy
       ? grants.exports(options.exportPolicy, assertIssued)
       : undefined,

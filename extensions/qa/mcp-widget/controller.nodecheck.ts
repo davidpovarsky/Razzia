@@ -38,6 +38,12 @@ const draft = (revision = 1, draftId = id) =>
     revision,
     summary,
     authoredShowJson: '{"title":"Original"}',
+    questionRefs: [
+      {
+        questionNumber: 1,
+        publicQuestionId: `preview-question-${"a".repeat(64)}`,
+      },
+    ],
   })
 const ack = (revision = 2, draftId = id) =>
   result({ draftId, revision, summary })

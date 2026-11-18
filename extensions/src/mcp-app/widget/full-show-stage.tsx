@@ -1,3 +1,4 @@
+import { FullShowAudioV3 } from "./full-show-audio.tsx"
 import { useLayoutEffect, useMemo, useRef } from "react"
 import { I18nextProvider } from "react-i18next"
 import { builtDefinitions } from "virtual:tadazz-native-v2-definitions"
@@ -12,8 +13,6 @@ import {
   ShowThemeScope,
   showThemeStyle,
 } from "../../presentation/show-themes/context.tsx"
-import { NativePreviewStage } from "../../presentation/show-library-preview/NativePreviewStage.tsx"
-import { NativeRazziaPreviewV2 } from "../../presentation/show-library-preview/NativeRazziaPreviewV2.tsx"
 import { ScenePresenter } from "../../presentation/scene-presenter.tsx"
 import { TadazzV4StageAdapter } from "../../presentation/tadazz-show/TadazzV4StageAdapter.tsx"
 import type { TadazzStageHandle } from "../../presentation/tadazz-show/TadazzStage.tsx"
@@ -24,7 +23,11 @@ import {
 } from "../../presentation/tadazz-show/show-director.ts"
 import { previewNativeLabels } from "../../presentation/show-library-preview/i18n.ts"
 import { StageFitContainer } from "../../presentation/stage-fit.tsx"
-import { hashJson } from "../contracts/canonical.ts"
+import type { FullShowPlaybackSnapshot } from "../client/full-show-playback.ts"
+import {
+  FullShowDemoQuestionV3,
+  type FullShowDemoLabels,
+} from "./full-show-demo-question.tsx"
 
 function resolved(input: FullShowFrameV3) {
   const expected = builtDefinitions.find(
@@ -56,7 +59,7 @@ function resolved(input: FullShowFrameV3) {
     selection: {
       id: input.theme.id,
       version: input.theme.version,
-      overrides: { slots: input.theme.slots },
+      overrides: { slots: input.theme.slots, audio: input.theme.audio },
     },
   })
 
@@ -93,12 +96,16 @@ function NativeScene({
   input,
   theme,
   onUnavailable,
+  playback,
 }: {
   input: FullShowFrameV3
   theme: ReturnType<typeof resolved>
   onUnavailable: () => void
+  playback: FullShowPlaybackSnapshot
 }) {
   const stage = useRef<TadazzStageHandle>(null)
+  const paused = useRef(playback.clock.paused)
+  paused.current = playback.clock.paused
   const scene = useMemo(() => sceneValue(input), [input])
   const labels = useMemo(
     () => previewNativeLabels(input.inventory.context.locale),
@@ -126,25 +133,39 @@ function NativeScene({
       handle,
       input.inventory.context.reducedMotion ? collapseForResume(plan) : plan,
       () => current,
-    ).catch(() => {
-      if (current) {
-        onUnavailable()
-      }
-    })
+    )
+      .then(() => {
+        if (current && paused.current) {
+          handle.pauseAnimations?.()
+        }
+      })
+      .catch(() => {
+        if (current) {
+          onUnavailable()
+        }
+      })
 
     return () => {
       current = false
       handle.finishAnimations()
     }
   }, [classic, plan, onUnavailable])
+  useLayoutEffect(() => {
+    if (playback.clock.paused) {
+      stage.current?.pauseAnimations?.()
+    } else {
+      stage.current?.resumeAnimations?.()
+    }
+  }, [playback.clock.paused])
   const surface = (
     <ScenePresenter
       scene={scene}
       tadazzEnabled={classic}
       isManager={input.inventory.context.role === "manager"}
       labels={labels.sceneLabels}
-      epoch={input.inventory.selectedChapterId}
-      controlledPaused={false}
+      epoch={`${input.inventory.selectedChapterId}:${playback.clock.epoch}`}
+      controlledTimeMs={playback.clock.elapsedMs}
+      controlledPaused={playback.clock.paused}
     />
   )
 
@@ -157,6 +178,8 @@ function NativeScene({
           v4Labels={labels.v4Labels}
           reducedMotion={input.inventory.context.reducedMotion}
           interactive={false}
+          backdropUrl={input.presentation.background?.url}
+          backdropFit={input.presentation.background?.fit}
           customScreen={
             plan.some((step) => step.op === "custom") ? surface : undefined
           }
@@ -172,20 +195,38 @@ function NativeScene({
 export function FullShowNativeStageV3({
   value,
   onUnavailable,
+  soundEnabled = false,
+  onSoundEnabled = () => undefined,
+  playback,
+  audioControlsTarget,
+  demoControlsTarget,
+  onDemoReveal,
+  demoLabels,
 }: {
   value: FullShowFrameV3
   onUnavailable: () => void
+  soundEnabled?: boolean
+  onSoundEnabled?: (enabled: boolean) => void
+  playback: FullShowPlaybackSnapshot
+  audioControlsTarget: HTMLDivElement | null
+  demoControlsTarget?: HTMLDivElement | null
+  onDemoReveal?: () => void
+  demoLabels?: FullShowDemoLabels
 }) {
   const input = useMemo(() => fullShowFrameV3Schema.parse(value), [value])
   const theme = useMemo(() => resolved(input), [input])
   const { content } = input
-  const key = `${input.inventory.selectedChapterId}:${input.inventory.revision}`
+  const key = `${input.inventory.selectedChapterId}:${input.inventory.revision}:${playback.clock.epoch}`
 
   return (
     <ShowThemeScope theme={theme}>
       <div
         data-full-show-stage={content.kind}
+        data-full-show-theme={input.theme.id}
         data-full-show-chapter={input.inventory.selectedChapterId}
+        data-playback-elapsed={Math.round(playback.clock.elapsedMs)}
+        data-playback-epoch={playback.clock.epoch}
+        data-playback-paused={playback.clock.paused}
         style={{
           ...showThemeStyle(theme),
           width: "100%",
@@ -194,54 +235,34 @@ export function FullShowNativeStageV3({
           overflow: "hidden",
         }}
       >
-        {/* Native renderer discrimination keeps scene/question payloads separate. */}
-        {/* oxlint-disable-next-line no-nested-ternary -- Preserve strict discriminated native component props. */}
         {content.kind === "question" ? (
-          theme.definition.rendererId === "tadazz-classic-stage" ? (
-            <NativePreviewStage
-              key={key}
-              frame={content.frame}
-              locale={input.inventory.context.locale}
-              reducedMotion={input.inventory.context.reducedMotion}
-              fitRevision={0}
-              resolvedTheme={theme}
-              onUnavailable={onUnavailable}
-            />
-          ) : (
-            <NativeRazziaPreviewV2
-              key={key}
-              theme={theme}
-              input={{
-                inputVersion: 2,
-                frame: content.frame,
-                locale: input.inventory.context.locale,
-                reducedMotion: input.inventory.context.reducedMotion,
-                themeBinding: {
-                  format: "tadazz-native-preview-theme",
-                  schemaVersion: 2,
-                  portVersion: 3,
-                  identityRuleVersion: 2,
-                  questionId: content.frame.question.id,
-                  role: content.frame.role,
-                  draftRevision: content.frame.revision,
-                  theme: { id: input.theme.id, version: input.theme.version },
-                  rendererId: input.theme.rendererId,
-                  definitionSha256: input.theme.definitionSha256,
-                  compositionDocumentSha256: hashJson(input.theme),
-                  slots: input.theme.slots,
-                  settings: content.visualSettings,
-                },
-              }}
-            />
-          )
+          <FullShowDemoQuestionV3
+            key={`${input.inventory.draftId}:${input.inventory.revision}:${content.frame.question.id}:${playback.audioEpoch}`}
+            input={input}
+            theme={theme}
+            playback={playback}
+            onUnavailable={onUnavailable}
+            controlsTarget={demoControlsTarget}
+            onReveal={onDemoReveal}
+            labels={demoLabels}
+          />
         ) : (
           <NativeScene
             key={key}
             input={input}
             theme={theme}
             onUnavailable={onUnavailable}
+            playback={playback}
           />
         )}
+        <FullShowAudioV3
+          value={input}
+          enabled={soundEnabled}
+          onEnabled={onSoundEnabled}
+          paused={playback.clock.paused}
+          replayEpoch={playback.audioEpoch}
+          controlsTarget={audioControlsTarget}
+        />
       </div>
     </ShowThemeScope>
   )

@@ -1,12 +1,13 @@
 import assert from "node:assert/strict"
 import test from "node:test"
 import { harness } from "./fixtures.ts"
+import { assertCurrentToolDiscovery } from "./discovery-fixture.ts"
 
 test("real SDK discovery keeps UI absent without an actual reviewed artifact", async () => {
   const h = await harness()
   try {
     const listing = await h.client.listTools()
-    assert.equal(listing.tools.length, 8)
+    assertCurrentToolDiscovery(listing.tools)
     const linked = listing.tools.filter(
       (tool) =>
         tool._meta?.ui &&

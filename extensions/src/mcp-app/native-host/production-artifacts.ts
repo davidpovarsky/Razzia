@@ -15,6 +15,8 @@ import { getNativeShowLibrary } from "../../core/show-library/native-library.ts"
 import { freeze } from "../../core/show-library/primitives.ts"
 import { canonicalJson } from "../contracts/canonical.ts"
 import { ToolError } from "../server/errors.ts"
+import { createBuiltinAssetResolver } from "./builtin-asset-policy.ts"
+import type { SemanticAssetResolver } from "../contracts/semantic-edit.ts"
 import type { FullShowRuntimePolicyV3 } from "../server/full-show-frame.ts"
 import type { PreviewUiResource } from "../server/preview-resource.ts"
 
@@ -148,6 +150,7 @@ export function readProductionFullShowArtifacts(options: {
   rendererBuildId: string
   resource: PreviewUiResource
   assertAssets: FullShowRuntimePolicyV3["assertAssets"]
+  builtinAssets: SemanticAssetResolver
 } {
   try {
     const url = new URL(options.origin)
@@ -250,6 +253,21 @@ export function readProductionFullShowArtifacts(options: {
         return false
       }
     }
+    const publicPins = new Map(
+      manifest.publicAssets.map((asset) => [asset.path, asset]),
+    )
+    const builtinAssets = createBuiltinAssetResolver({
+      origin: options.origin,
+      publicAssets: manifest.publicAssets,
+      verifyCurrentAsset(asset) {
+        const pin = publicPins.get(asset.path)
+        return (
+          pin?.sha256 === asset.sha256 &&
+          pin.bytes === asset.bytes &&
+          canServe()
+        )
+      },
+    })
     const families = new Set(
       getNativeShowLibrary().families.map(
         (family) => `${family.ref.id}@${family.ref.version}`,
@@ -262,9 +280,22 @@ export function readProductionFullShowArtifacts(options: {
     ) => {
       if (
         !canServe() ||
+        !principal.active ||
+        !principal.accountsEnabled ||
         principal.expiresAt <= Date.now() ||
         !families.has(`${theme.id}@${theme.version}`) ||
-        urls.length !== 0
+        urls.length > 64 ||
+        urls.some(
+          (url) =>
+            !(["background", "answer-image", "audio"] as const).some(
+              (purpose) =>
+                builtinAssets.resolveStoredUrl(url, {
+                  theme,
+                  purpose,
+                  operation: "preview",
+                }),
+            ),
+        )
       ) {
         throw new ToolError("PREVIEW_UNAVAILABLE")
       }
@@ -281,6 +312,7 @@ export function readProductionFullShowArtifacts(options: {
         canServe,
       },
       assertAssets,
+      builtinAssets,
     }
   } catch {
     throw rejected()

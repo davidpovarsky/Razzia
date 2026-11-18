@@ -204,6 +204,8 @@ export interface AudioCuePlayerProps {
   hasCompetingMedia?: boolean
   paused?: boolean
   autoPlay?: boolean
+  /** Opt-in first-gesture gate; existing native callers retain their defaults. */
+  initiallyPaused?: boolean
   renderControls?: (state: AudioControlState) => ReactNode
   showControls?: boolean
   controlLabels?: {
@@ -282,6 +284,7 @@ export const AudioCuePlayer = ({
   hasCompetingMedia = false,
   paused = false,
   autoPlay = true,
+  initiallyPaused = false,
   showControls = false,
   renderControls,
   controlLabels = {
@@ -410,7 +413,7 @@ export const AudioCuePlayer = ({
   const sharedPreferences = useContext(AudioPreferencesContext)
   const [localMuted, setLocalMuted] = useState(false)
   const [localVolume, setLocalVolume] = useState(1)
-  const [localPaused, setLocalPaused] = useState(false)
+  const [localPaused, setLocalPaused] = useState(initiallyPaused)
   const muted = sharedPreferences?.muted ?? localMuted
   const setMuted = sharedPreferences?.setMuted ?? setLocalMuted
   const masterVolume = sharedPreferences?.volume ?? localVolume
@@ -733,11 +736,21 @@ export const AudioCuePlayer = ({
       return
     }
 
-    const a = new Audio()
-    const b = new Audio()
-    const sfx = new Audio()
-    const createEffectAudio = (url: string | undefined) =>
-      url ? new Audio(url) : new Audio()
+    const createEffectAudio = (url?: string) => {
+      const audio = new Audio()
+      // The opt-in widget gate keeps silent phase browsing from decoding media.
+      // unlock() still starts this same prepared element inside the user's gesture.
+      audio.preload = initiallyPaused ? "none" : "auto"
+
+      if (url) {
+        audio.src = url
+      }
+
+      return audio
+    }
+    const a = createEffectAudio()
+    const b = createEffectAudio()
+    const sfx = createEffectAudio()
     const reveal = createEffectAudio(
       theme ? resolveThemeEffect(theme, "survey-reveal")?.url : REVEAL,
     )
@@ -750,14 +763,7 @@ export const AudioCuePlayer = ({
     const spotlight = createEffectAudio(
       theme ? resolveThemeEffect(theme, "top-pick-reveal")?.url : CONFIRM,
     )
-    const tick = new Audio()
-    a.preload = "auto"
-    b.preload = "auto"
-    sfx.preload = "auto"
-    reveal.preload = "auto"
-    timerEnd.preload = "auto"
-    spotlight.preload = "auto"
-    tick.preload = "auto"
+    const tick = createEffectAudio()
     backgroundsRef.current = [a, b]
     sfxRef.current = sfx
     revealRef.current = reveal

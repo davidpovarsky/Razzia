@@ -16,6 +16,7 @@ import {
   previewSteps,
   validatePreviewFrame,
   type PreviewFrame,
+  type NativePreviewPresentation,
 } from "./stage-scene-adapter"
 import { previewVotingDeadline } from "./preview-clock"
 
@@ -28,6 +29,9 @@ export function NativePreviewStage({
   onUnavailable,
   onStageHandle,
   resolvedTheme,
+  presentation,
+  continuousPlayback = false,
+  onDemoSelect,
 }: {
   frame: PreviewFrame
   locale: PreviewLocale
@@ -36,6 +40,9 @@ export function NativePreviewStage({
   onUnavailable: () => void
   onStageHandle?: (handle: TadazzStageHandle | null) => void
   resolvedTheme?: ResolvedShowTheme
+  presentation?: NativePreviewPresentation
+  continuousPlayback?: boolean
+  onDemoSelect?: (index: number) => void
 }) {
   const stage = useRef<TadazzStageHandle>(null)
   const observed = useRef(onStageHandle)
@@ -51,6 +58,8 @@ export function NativePreviewStage({
   const previous = useRef<ShowScene | null>(null)
   const request = useRef(0)
   const lastKey = useRef("")
+  const lastSelection = useRef("")
+  const lastPaused = useRef(frame.clock.paused)
   const latest = useRef(frame)
   const pausedBootstrap = useRef(false)
   const [hidden, setHidden] = useState(false)
@@ -97,6 +106,33 @@ export function NativePreviewStage({
     if (!handle || !transition) return
     try {
       validatePreviewFrame(frame)
+      const selectionKey = `${frame.epoch}:${frame.question.id}:${frame.phase}`
+
+      if (continuousPlayback && selectionKey === lastSelection.current) {
+        if (lastPaused.current !== frame.clock.paused) {
+          lastPaused.current = frame.clock.paused
+
+          if (frame.clock.paused) {
+            handle.pauseAnimations?.()
+          } else {
+            if (frame.phase === "voting") {
+              const deadline = previewVotingDeadline(frame.clock, Date.now())
+
+              void handle
+                .openVoting(frame.seconds, deadline?.wallDeadlineMs)
+                .catch(onUnavailable)
+            }
+
+            handle.resumeAnimations?.()
+          }
+        }
+
+        return
+      }
+
+      lastSelection.current = selectionKey
+      lastPaused.current = frame.clock.paused
+
       const key = `${frame.epoch}:${frame.question.id}:${frame.phase}:${frame.clock.paused}`
       if (key === lastKey.current) return // elapsed ticks only update latest.current
       lastKey.current = key
@@ -115,13 +151,20 @@ export function NativePreviewStage({
         // replay a full-game wipe while the previous card remains on stage.
         // Reuse the existing native current-phase reconstruction and real clock.
         const planned =
-          next.clock.paused || handle.questionKey !== next.question.id
-            ? pausedPreviewSteps(next, Date.now())
+          next.clock.paused ||
+          (handle.questionKey !== next.question.id &&
+            !(
+              continuousPlayback &&
+              next.phase === "question" &&
+              !reducedMotion
+            ))
+            ? pausedPreviewSteps(next, Date.now(), presentation)
             : previewSteps(
                 next,
                 previous.current,
                 { mode: handle.mode, questionKey: handle.questionKey },
                 Date.now(),
+                presentation,
               )
         previous.current = planned.scene
         if (!next.clock.paused) {
@@ -181,7 +224,7 @@ export function NativePreviewStage({
       setHidden(true)
       onUnavailable()
     }
-  }, [frame, onUnavailable])
+  }, [frame, onUnavailable, presentation, continuousPlayback, reducedMotion])
 
   return (
     <ShowThemeScope theme={theme}>
@@ -200,10 +243,15 @@ export function NativePreviewStage({
           ref={attachStage}
           labels={labels.labels}
           v4Labels={labels.v4Labels}
-          reducedMotion={reducedMotion || frame.clock.paused}
+          reducedMotion={
+            reducedMotion || (!continuousPlayback && frame.clock.paused)
+          }
           fitRevision={fitRevision}
-          interactive={false}
-          multiSelect={frame.question.type === "multi"}
+          interactive={Boolean(onDemoSelect)}
+          multiSelect={onDemoSelect ? false : frame.question.type === "multi"}
+          onSelectOption={onDemoSelect}
+          backdropUrl={presentation?.background?.url}
+          backdropFit={presentation?.background?.fit}
         />
       </div>
     </ShowThemeScope>

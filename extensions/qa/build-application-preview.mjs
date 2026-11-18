@@ -5,8 +5,32 @@ import { createHash } from "node:crypto"
 import { readFile, mkdir, writeFile, stat, readdir } from "node:fs/promises"
 import { fileURLToPath, pathToFileURL } from "node:url"
 import path from "node:path"
+const args = process.argv.slice(2)
+
+if (args.length > 1 || (args.length === 1 && args[0] !== "--verify-manifest")) {
+  throw new Error(
+    "Use no arguments to generate pins or --verify-manifest to reproduce committed pins",
+  )
+}
+
+const verifyManifest = args[0] === "--verify-manifest"
 const root = fileURLToPath(new URL("../../", import.meta.url))
 const directory = path.join(root, "extensions/dist/application-preview")
+const manifestPath = path.join(
+  root,
+  "extensions/src/core/show-library/application-preview-build.json",
+)
+const previousManifest = await readFile(manifestPath)
+
+if (
+  verifyManifest &&
+  JSON.parse(previousManifest.toString("utf8")).available !== true
+) {
+  throw new Error(
+    "Committed native preview manifest must already be built before verification",
+  )
+}
+
 await mkdir(directory, { recursive: true })
 const result = await build({
   absWorkingDir: root,
@@ -194,6 +218,19 @@ const source = await Promise.all(
       sha256: hash(await readFile(path.resolve(root, name))),
     })),
 )
+
+if (
+  source.some(
+    (entry) =>
+      entry.path ===
+      "extensions/src/core/show-library/application-preview-build.json",
+  )
+) {
+  throw new Error(
+    "Native renderer imported its generated admission manifest; resolve the actual source cycle",
+  )
+}
+
 const sourceThemes = await Promise.all(
   ["classic", "razzia"].map(async (name) =>
     JSON.parse(
@@ -280,11 +317,36 @@ await writeFile(
   path.join(directory, "registry.json"),
   JSON.stringify(registry, null, 2),
 )
+const manifestBytes = Buffer.from(`${JSON.stringify(output, null, 2)}\n`)
+
+if (verifyManifest) {
+  if (!previousManifest.equals(manifestBytes)) {
+    throw new Error(
+      "Native preview build does not reproduce the committed manifest",
+    )
+  }
+  if (!(await readFile(manifestPath)).equals(previousManifest)) {
+    throw new Error("Native preview manifest changed during verification")
+  }
+} else {
+  await writeFile(manifestPath, manifestBytes)
+}
+
+const verification = {
+  format: "tadazz-application-preview-verification",
+  mode: verifyManifest ? "verify-manifest" : "generate-manifest",
+  verifiedManifest: verifyManifest,
+  manifestSha256: hash(manifestBytes),
+  artifactSha256: hash(await readFile(path.join(directory, "artifact.json"))),
+  registrySha256: hash(await readFile(path.join(directory, "registry.json"))),
+  files,
+  inputFiles: source.length,
+  generatedSourceChanged: !previousManifest.equals(manifestBytes),
+  liveAuthorityInputs: authorityInputs,
+  productionChanged: false,
+}
 await writeFile(
-  path.join(
-    root,
-    "extensions/src/core/show-library/application-preview-build.json",
-  ),
-  `${JSON.stringify(output, null, 2)}\n`,
+  path.join(directory, "verification.json"),
+  `${JSON.stringify(verification, null, 2)}\n`,
 )
-console.log(JSON.stringify({ ...output, inputFiles: source.length }, null, 2))
+console.log(JSON.stringify({ ...output, verification }, null, 2))

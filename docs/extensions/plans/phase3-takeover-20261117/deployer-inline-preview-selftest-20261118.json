@@ -1,0 +1,15 @@
+{
+  "sourceSha256": "e6e541cfce552688b7eb47ea746dd808ab5e822356836715e1ebbf00c17e4cec",
+  "execution": "actual Linux Python via SSH; synthetic temporary fixture only",
+  "selfTest": "PASS",
+  "productionTouched": false,
+  "checks": [
+    "env-preserved-with-only-four-overrides",
+    "duplicate-env-rejected",
+    "customer-temp-rejected",
+    "private-archive-restore-hashes-modes-sqlite-wal",
+    "same-size-tampered-restore-rejected",
+    "private-tree-symlink-rejected",
+    "rollback-before-and-after-create-preserves-live-data-and-containers"
+  ]
+}

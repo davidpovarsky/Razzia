@@ -36,6 +36,66 @@ export default defineConfig({
   },
   plugins: [
     {
+      name: "widget-photo-card-native-import-boundary",
+      enforce: "pre",
+      resolveId(id, importer) {
+        const normalized = (value: string) => value.replaceAll("\\", "/")
+        const original = normalized(
+          fileURLToPath(
+            new URL(
+              "../../../../packages/web/src/features/game/components/PhotoCardGrid.tsx",
+              import.meta.url,
+            ),
+          ),
+        )
+        const barrel = normalized(
+          fileURLToPath(new URL("../../presentation", import.meta.url)),
+        )
+
+        // Vite's existing alias can expand this exact source specifier before
+        // the pre-resolver runs. Both forms refer to the same native barrel.
+        if (
+          importer &&
+          normalized(importer.split("?")[0]) === original &&
+          realpathSync(importer.split("?")[0]) === realpathSync(original) &&
+          (id === "@razzia/extensions/presentation" ||
+            normalized(id) === barrel)
+        ) {
+          return fileURLToPath(
+            new URL("./native-photo-card-port.ts", import.meta.url),
+          )
+        }
+
+        // Native constants.ts re-exports labels but also eagerly imports all game rooms.
+        // Preserve the exact original labels through their side-effect-free leaf.
+        const constants = normalized(
+          fileURLToPath(
+            new URL(
+              "../../../../packages/web/src/features/game/utils/constants",
+              import.meta.url,
+            ),
+          ),
+        )
+
+        if (
+          importer &&
+          normalized(importer.split("?")[0]) === original &&
+          realpathSync(importer.split("?")[0]) === realpathSync(original) &&
+          (id === "@razzia/web/features/game/utils/constants" ||
+            normalized(id) === constants)
+        ) {
+          return fileURLToPath(
+            new URL(
+              "../../../../packages/web/src/features/game/utils/answer-style.ts",
+              import.meta.url,
+            ),
+          )
+        }
+
+        return null
+      },
+    },
+    {
       name: "widget-physical-input-receipt",
       configResolved(config) {
         if (config.build.lib && typeof config.build.lib.entry === "string") {

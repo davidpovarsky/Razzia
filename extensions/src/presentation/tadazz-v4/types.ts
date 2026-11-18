@@ -46,6 +46,7 @@ export const TADAZZ_V4_SHOW_SCENES = new Set<TadazzV4Scene>([
 export const TADAZZ_V4_ASSET_BASE = "/tadazz-show/v4/"
 
 export interface TadazzV4Answer {
+  display?: "image" | "both"
   title: string
   imageUrl?: string | null
   alt?: string

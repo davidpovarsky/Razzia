@@ -45,6 +45,7 @@ ENV_OVERRIDES = {
     "CONFIG_PATH": "/app/config",
     "SOCKET_PORT": "3001",
     "TADAZZ_MCP_SERVICE_ENABLED": "true",
+    "TADAZZ_INLINE_GAME_PREVIEW_ENABLED": "true",
 }
 MAX_TREE_BYTES = 16 * 1024**3
 MAX_FILES = 200000
@@ -813,7 +814,7 @@ def self_test():
     payload = replacement_payload(original, {"Id": "sha256:" + "a" * 64}, "b" * 40, "test")
     require(env_map(payload["Env"]) == {"SECRET": "private-value", "PATH": "/bin", **ENV_OVERRIDES}, "SELFTEST_ENV_PRESERVATION")
     require(original["Config"]["Env"][1] == "SOCKET_PORT=9999", "SELFTEST_ORIGINAL_MUTATED")
-    checks.append("env-preserved-with-only-three-overrides")
+    checks.append("env-preserved-with-only-four-overrides")
     try:
         env_map(["X=a", "X=b"])
         raise AssertionError("duplicate accepted")

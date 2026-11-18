@@ -42,7 +42,7 @@ import {
 } from "./application-composition"
 import { RazziaApplicationStage } from "./razzia-application-stage"
 import type { PreviewPhase } from "../../core/show-library/primitives"
-import { resolveEffectiveCardBackground } from "../../core/card-appearance"
+import { resolveTadazzStageBackground } from "../../core/tadazz-appearance"
 import type { ShowThemeSlotId } from "../../core/show-themes/selection"
 import { AudioCuePlayer } from "../audio-cue-player"
 import { resolveTadazzAudioPolicy } from "../tadazz-audio-policy"
@@ -124,18 +124,19 @@ export function ApplicationPreviewStage({
         leaderboard: "leaderboard",
       } as Record<string, ShowThemeSlotId>
     )[phase] ?? "question"
-  const authoredBackground = resolveEffectiveCardBackground(
-    frame.stagePhase ? undefined : card?.background,
-  )
+  const authoredBackground = resolveTadazzStageBackground({
+    settings: frame.show.defaults?.tadazzBackground,
+    cardBackground: frame.stagePhase ? undefined : card?.background,
+    reducedMotion: frame.reducedMotion,
+  })
   const scopedBackground =
     theme.scopeOverrides.roles?.[frame.role]?.slots?.[slot]?.mediaUrl ??
     theme.scopeOverrides.slots?.[slot]?.mediaUrl
   const themeBackground = theme.slots[slot]
-  // Identical precedence to the live TadazzShowView: authored card backdrop
-  // survives a family change; an explicit scoped slot override wins.
+  // Keep explicit scoped theme overrides first, then the native card/show
+  // resolver. An absent show-wide setting preserves the original fallback.
   const backdrop =
-    (authoredBackground.mode !== "card" || scopedBackground) &&
-    themeBackground.mediaUrl
+    (!authoredBackground.url || scopedBackground) && themeBackground.mediaUrl
       ? { url: themeBackground.mediaUrl, fit: themeBackground.fit }
       : authoredBackground
   const key = `${frame.clock.epoch}:${frame.chapterIndex}:${frame.appearanceRevision}`

@@ -7,11 +7,16 @@ import {
   cpSync,
   writeFileSync,
   existsSync,
+  realpathSync,
 } from "node:fs"
 import { createHash } from "node:crypto"
-import { join, resolve } from "node:path"
+import { isAbsolute, join, relative, resolve, sep } from "node:path"
 import webConfig from "../packages/web/vite.config"
 
+const repoRoot = realpathSync(fileURLToPath(new URL("../", import.meta.url)))
+const extensionsSource = realpathSync(
+  fileURLToPath(new URL("./src", import.meta.url)),
+)
 const assets = fileURLToPath(new URL("./site-assets", import.meta.url))
 const web = fileURLToPath(new URL("../packages/web", import.meta.url))
 const entry = fileURLToPath(
@@ -114,6 +119,58 @@ const siteComposition = (): Plugin => {
         }
       })
     },
+    generateBundle() {
+      // Source comes from this checkout; external physical modules must be
+      // third-party dependencies, never another workspace's @razzia package.
+      let localSourceCount = 0
+      for (const id of this.getModuleIds()) {
+        if (id.startsWith("\0")) {
+          continue
+        }
+
+        const [filename] = id.split("?")
+        let candidate = filename
+
+        if (filename.startsWith("file://")) {
+          candidate = fileURLToPath(filename)
+        } else if (filename.startsWith("/@fs/")) {
+          candidate = filename.slice(5)
+        }
+
+        if (!existsSync(candidate)) {
+          continue
+        }
+
+        const physical = realpathSync(candidate)
+        const fromRoot = relative(repoRoot, physical)
+        const local =
+          !isAbsolute(fromRoot) &&
+          fromRoot !== ".." &&
+          !fromRoot.startsWith(`..${sep}`)
+
+        if (local) {
+          localSourceCount += 1
+
+          continue
+        }
+
+        const segments = physical.replaceAll("\\", "/").split("/")
+        const dependency =
+          segments.includes("node_modules") &&
+          !segments.includes("@razzia") &&
+          !segments.some((part) => part.startsWith("@razzia+"))
+
+        if (!dependency) {
+          throw new Error(
+            "Site build resolved physical source outside the selected checkout and dependency store",
+          )
+        }
+      }
+
+      if (localSourceCount === 0) {
+        throw new Error("Site build did not verify local source")
+      }
+    },
     closeBundle() {
       const target = resolve(outputDirectory, "tadazz-design-reference")
       mkdirSync(target, { recursive: true })
@@ -164,6 +221,7 @@ const siteComposition = (): Plugin => {
 export default defineConfig(
   mergeConfig(webConfig, {
     root: web,
+    resolve: { alias: { "@razzia/extensions": extensionsSource } },
     plugins: enabled
       ? [
           siteComposition(),

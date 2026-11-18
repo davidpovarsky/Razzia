@@ -7,7 +7,11 @@ import {
 } from "../contracts/schemas.ts"
 import { dataSchemas, inputs } from "../contracts/tools.ts"
 
-export type Draft = z.infer<typeof dataSchemas.get_game_draft>
+// Whole-draft update acknowledgements do not carry model-only question references.
+export type Draft = Omit<
+  z.infer<typeof dataSchemas.get_game_draft>,
+  "questionRefs"
+>
 
 export type Preview = z.infer<typeof dataSchemas.preview_game>
 

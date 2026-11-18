@@ -24,7 +24,7 @@ import {
 } from "./harness.ts"
 
 test(
-  "real TLS Nginx preserves protected JSON routes and consent policy before SPA fallback",
+  "real TLS Nginx preserves protected routes and excludes capability URLs from access and error logs",
   { skip: process.platform !== "linux", timeout: 20000 },
   async () => {
     const root = mkdtempSync(join(tmpdir(), "tadazz-proxy-qa-"))
@@ -78,10 +78,10 @@ test(
       `user root;
 worker_processes 1;
 pid ${root}/nginx.pid;
-error_log stderr notice;
+error_log ${root}/error.log notice;
 events { worker_connections 64; }
 http {
- access_log off;
+ access_log ${root}/access.log combined;
  client_body_temp_path ${root}/body;
  proxy_temp_path ${root}/proxy;
  fastcgi_temp_path ${root}/fastcgi;
@@ -95,6 +95,7 @@ http {
   ssl_certificate_key ${root}/tls.key;
   root ${publicRoot};
   include ${routes};
+  location /qa-log-control/ { proxy_pass http://tadazz_native_mcp; }
   location / { try_files $uri /index.html; }
  }
 }
@@ -102,6 +103,7 @@ http {
     )
     let nginx: ChildProcess | null = null
     let nginxLog = ""
+    let backendStopped = false
 
     try {
       const child = spawn(
@@ -238,6 +240,72 @@ http {
       assert.equal(editor.headers.get("x-frame-options"), null)
       assert.equal(editor.headers.get("cache-control"), null)
       assert.match(await editor.text(), /static fallback only/u)
+
+      // These markers are deliberately synthetic, never a production token or
+      // customer URL. The unprotected controls prove that logging is active;
+      // a missing marker alone must not pass when the fixture logger is broken.
+      const protectedMarker = "qa-private-capability-marker"
+      const accessControl = "qa-visible-access-control"
+      const errorControl = "qa-visible-upstream-error-control"
+      const ordinary = await request(`${origin}/manager/${accessControl}`)
+      assert.equal(ordinary.status, 200)
+      await ordinary.text()
+      const protectedTargets = [
+        `/oauth/downloads/${protectedMarker}`,
+        `/studio/oauth-consent?oauth_request=${protectedMarker}`,
+        `/studio/native-save-consent/${protectedMarker.padEnd(54, "a")}`,
+      ]
+      for (const path of protectedTargets) {
+        const response = await request(origin + path, {
+          headers: { Referer: `${origin}/${protectedMarker}` },
+        })
+        assert.equal(
+          response.status,
+          path.startsWith("/oauth/downloads/") ? 404 : 200,
+        )
+        await response.text()
+      }
+      await backend.close()
+      backendStopped = true
+      for (const path of protectedTargets) {
+        const response = await request(origin + path, {
+          headers: { Referer: `${origin}/${protectedMarker}` },
+        })
+        assert.equal(response.status, 502)
+        await response.text()
+      }
+      const refused = await request(`${origin}/qa-log-control/${errorControl}`)
+      assert.equal(refused.status, 502)
+      await refused.text()
+      const accessLog = readFileSync(join(root, "access.log"), "utf8")
+      const errorLog = readFileSync(join(root, "error.log"), "utf8")
+      assert(
+        accessLog.includes(accessControl),
+        "ordinary access log control missing",
+      )
+      assert(
+        errorLog.includes(errorControl),
+        "upstream error log control missing",
+      )
+      for (const text of [accessLog, errorLog, nginxLog]) {
+        assert(
+          !text.includes(protectedMarker),
+          "protected request target leaked to a proxy log",
+        )
+      }
+      process.stdout.write(
+        `TADAZZ_PROXY_PRIVACY_PROOF ${JSON.stringify({
+          version: 1,
+          passed: true,
+          ordinaryAccessControl: true,
+          ordinaryUpstreamErrorControl: true,
+          sensitiveAccessLogAbsent: true,
+          sensitiveErrorLogAbsent: true,
+          protectedSuccess: true,
+          protectedDenial: true,
+          protectedUpstreamFailure: true,
+        })}\n`,
+      )
     } finally {
       if (nginx?.pid && nginx.exitCode === null) {
         const child = nginx
@@ -254,7 +322,10 @@ http {
         }
       }
 
-      await backend.close()
+      if (!backendStopped) {
+        await backend.close()
+      }
+
       db.closeAccountDb()
       for (const [key, value] of Object.entries(previous)) {
         if (value === undefined) {

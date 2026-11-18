@@ -4,6 +4,10 @@ import { showThemeRegistry } from "../show-themes/registry"
 import { deriveAuthoredShowPreviewIdentityMap } from "./identity"
 import { assertBoundedJson, freeze } from "./primitives"
 import { canonicalJson } from "./digest"
+import {
+  assertReviewedPreviewBindings,
+  isReviewedPreviewAssetUrl,
+} from "./reviewed-preview-assets"
 
 const sourceSchema = z.strictObject({
   source: z.discriminatedUnion("kind", [
@@ -22,7 +26,14 @@ const sourceSchema = z.strictObject({
   assets: z
     .array(
       z.strictObject({
-        url: z.string().regex(/^\/media\/[A-Za-z0-9_-]+\.[a-z0-9]+$/u),
+        url: z
+          .string()
+          .max(2048)
+          .refine(
+            (value) =>
+              /^\/media\/[A-Za-z0-9_-]+\.[a-z0-9]+$/u.test(value) ||
+              isReviewedPreviewAssetUrl(value),
+          ),
         bytes: z.number().int().positive().max(100_000_000),
         sha256: z.string().regex(/^[a-f0-9]{64}$/u),
       }),
@@ -85,6 +96,8 @@ export function normalizeApplicationPreviewDraft(
   ) {
     throw new Error("Invalid account preview assets")
   }
+
+  assertReviewedPreviewBindings(source.show, source.assets)
 
   const permitted = new Set([
     ...source.assets.map((asset) => asset.url),

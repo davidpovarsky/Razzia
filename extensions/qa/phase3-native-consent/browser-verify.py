@@ -77,17 +77,36 @@ def web_hashes():
         files[path.relative_to(root).as_posix()]={'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'bytes':size}
     assert 'index.html' in files and files
     return files
+def widget_hashes():
+    root=source/'extensions/src/mcp-app/widget/dist'
+    assert root.is_dir() and not root.is_symlink(), 'Built widget artifact required by consent asset catalog'
+    files={}
+    for name in ('full-show-artifact.json','full-show.html','full-show-entry-inputs.json'):
+        path=root/name
+        assert path.is_file() and not path.is_symlink()
+        data=path.read_bytes()
+        assert 0 < len(data) <= 4*1024*1024
+        files[name]={'sha256':hashlib.sha256(data).hexdigest(),'bytes':len(data)}
+    manifest=json.loads((root/'full-show-artifact.json').read_text())
+    assert files['full-show.html']=={'sha256':manifest['sha256'],'bytes':manifest['bytes']}
+    for pin in manifest['publicAssets']:
+        assert c['manifest'].get(pin['path'])==pin['sha256']
+        assert web_before.get(pin['path'].removeprefix('packages/web/public/'))=={'sha256':pin['sha256'],'bytes':pin['bytes']}
+    return files
 try:
     before=hashes()
     assert before==c["manifest"],"Fresh browser source differs from committed input"
     web_before=web_hashes()
+    widget_before=widget_hashes()
     argv=["docker","exec","-w","/source","-e","TMPDIR=/tmp","-e","HOME=/tmp","-e","PLAYWRIGHT_BROWSERS_PATH=/root/.cache/ms-playwright","-e","TSX_DISABLE_CACHE=1","-e","NODE_OPTIONS=--max-old-space-size=1024","-e","TADAZZ_SITE_DIST_DIR=/source/packages/web/dist","-e","TADAZZ_QA_RUN_DIR=/evidence/browser-server","-e","TADAZZ_QA_OWNED_RUN_DIR=1",container,"nice","-n","19","taskset","-c","0","timeout","-k","5","360","node","/cleanup/extensions/node_modules/@playwright/test/cli.js","test","--config","extensions/qa/phase3-native-consent/native-consent.playwright.config.ts","--output=/evidence/test-results","--reporter=list"]
     started=time.time()
     result=subprocess.run(argv,capture_output=True,text=True,timeout=375)
     after=hashes()
     web_after=web_hashes()
+    widget_after=widget_hashes()
     receipt={"sha":c["sha"],"container":container,"network":"none","sourceReadOnly":True,"sourceFileCount":len(before),"allSourceHashesVerifiedBeforeAfter":before==after==c["manifest"],"sdkCacheFileCount":len(expected_deps),"sdkCacheHashesVerifiedBeforeAfter":dependency_hashes(deps)==expected_deps,"sdkCacheManifestSha256":hashlib.sha256(json.dumps(expected_deps,sort_keys=True).encode()).hexdigest(),"command":argv,"exit":result.returncode,"seconds":round(time.time()-started,3),"stdout":result.stdout,"stderr":result.stderr,"evidenceHostDirectory":str(owned),"customerMountAccessed":False,"productionChanged":False}
     receipt.update({'sourceRun':c['sourceRun'],'webArtifacts':web_before,'webArtifactsUnchanged':web_before==web_after})
+    receipt.update({'widgetArtifacts':widget_before,'widgetArtifactsUnchanged':widget_before==widget_after,'widgetManifestSha256':widget_before['full-show-artifact.json']['sha256'],'widgetHtmlSha256':widget_before['full-show.html']['sha256']})
     print(json.dumps(receipt,indent=2))
 finally:
     subprocess.run(["docker","stop","--time","10",container],capture_output=True,check=True)
@@ -102,4 +121,4 @@ if result.returncode:
 receipt=json.loads(result.stdout)
 (evidence / "receipt.json").write_text(json.dumps(receipt,indent=2)+"\n",encoding="utf8",newline="\n")
 print(json.dumps({"sha":receipt["sha"],"evidence":str(evidence),"exit":receipt["exit"],"seconds":receipt["seconds"],"allSourceHashesVerifiedBeforeAfter":receipt["allSourceHashesVerifiedBeforeAfter"]},indent=2))
-raise SystemExit(0 if receipt["exit"]==0 and receipt["allSourceHashesVerifiedBeforeAfter"] and receipt["sdkCacheHashesVerifiedBeforeAfter"] and receipt['webArtifactsUnchanged'] else 1)
+raise SystemExit(0 if receipt["exit"]==0 and receipt["allSourceHashesVerifiedBeforeAfter"] and receipt["sdkCacheHashesVerifiedBeforeAfter"] and receipt['webArtifactsUnchanged'] and receipt['widgetArtifactsUnchanged'] else 1)

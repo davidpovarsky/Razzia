@@ -2,6 +2,16 @@
 @import "@fontsource-variable/rubik/wght.css";
 @source "./**/*.{ts,tsx}";
 
+[data-full-show-stage][data-playback-paused="true"],
+[data-full-show-stage][data-playback-paused="true"] * {
+  animation-play-state: paused !important;
+}
+
+.native-razzia-preview-v2[data-transport-paused="true"] [data-tada-entrance],
+.native-razzia-preview-v2[data-transport-paused="true"] [data-tada-underline] {
+  animation-play-state: paused !important;
+}
+
 :root {
   font-family: var(--font-display);
   color: var(--color-foreground);
@@ -55,4 +65,108 @@ textarea {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+.widget-toolbar,
+.widget-control-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.65rem;
+}
+.widget-toolbar button,
+.widget-editor button,
+.widget-control-row button {
+  border: 1px solid var(--color-primary, #6d28d9);
+  border-radius: 0.65rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.85rem;
+  background: var(--color-primary, #6d28d9);
+  color: var(--color-primary-foreground, white);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.widget-shell button:disabled,
+.widget-audio button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.widget-toolbar label,
+.widget-editor label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+}
+.widget-toolbar input[type="checkbox"] {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+.widget-editor input,
+.widget-editor select,
+.widget-editor textarea,
+.widget-toolbar select {
+  border: 1px solid var(--color-gray-400, #a8a29e);
+  border-radius: 0.5rem;
+  min-height: 2.5rem;
+  background: var(--color-background, white);
+  color: var(--color-foreground, #18181b);
+  padding: 0.4rem 0.6rem;
+  font: inherit;
+  max-width: 100%;
+}
+.widget-editor textarea {
+  min-height: 4.5rem;
+  min-width: min(28rem, 78vw);
+}
+.widget-editor input:not([type="number"]) {
+  min-width: min(24rem, 78vw);
+}
+.widget-editor input[type="number"] {
+  width: 7rem;
+}
+.widget-editor {
+  display: grid;
+  gap: 0.8rem;
+}
+.widget-editor details {
+  border: 1px solid var(--color-gray-300, #d4d4d8);
+  border-radius: 0.75rem;
+  padding: 0.8rem;
+}
+.widget-editor summary {
+  cursor: pointer;
+  font-weight: 600;
+  min-height: 2rem;
+}
+.widget-editor details > * + * {
+  margin-top: 0.8rem;
+}
+.widget-picture-options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.6rem;
+  border: 0;
+  padding: 0;
+}
+.widget-picture-options legend {
+  margin-bottom: 0.5rem;
+}
+.widget-help {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  opacity: 0.85;
+}
+.widget-toolbar output {
+  align-self: center;
+  min-width: 4rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.widget-audio .widget-toolbar button {
+  font-size: 0.85rem;
+  min-height: 2.25rem;
+  box-shadow: 0 2px 12px #0004;
 }

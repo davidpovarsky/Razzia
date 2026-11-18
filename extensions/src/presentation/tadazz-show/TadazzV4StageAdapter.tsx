@@ -50,6 +50,7 @@ function toV4Answers(options: StageOption[]): TadazzV4Answer[] {
     title: opt.label,
     imageUrl: opt.image,
     alt: opt.alt || opt.label,
+    display: opt.display,
   }))
 }
 function isPhotoQuestion(q: StageQuestion): boolean {

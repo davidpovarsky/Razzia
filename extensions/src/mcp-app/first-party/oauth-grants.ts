@@ -20,7 +20,10 @@ import type {
   NormalizedDraft,
   VerifiedPrincipal,
 } from "../server/dependencies.ts"
-import { normalizeDraft } from "../server/authoring.ts"
+import { normalizeDraft, normalizeStoredDraft } from "../server/authoring.ts"
+import { preserveSemanticState } from "../server/semantic-state.ts"
+import type { SemanticDraftPort } from "../server/semantic-drafts.ts"
+import { createSemanticDraftPort } from "./oauth-semantic-drafts.ts"
 import { checkedDraft } from "../server/drafts.ts"
 import { canonicalJson, hashJson, utf8Bytes } from "../contracts/canonical.ts"
 import { inputs } from "../contracts/tools.ts"
@@ -917,7 +920,7 @@ export class FirstPartyOAuthGrants {
   drafts(
     policy: AuthoringPolicy,
     assertIssued: (p: VerifiedPrincipal) => void,
-  ): DraftRepository {
+  ): DraftRepository & { semantic: SemanticDraftPort } {
     const checked = (value: unknown) =>
       checkedDraft(value, { authoring: policy })
     const authority = (
@@ -955,6 +958,36 @@ export class FirstPartyOAuthGrants {
         summary: JSON.parse(row.summary),
         ...(row.locale === null ? {} : { locale: row.locale }),
       })
+    }
+    const write = (
+      db: DatabaseSync,
+      p: VerifiedPrincipal,
+      change: { current: DraftRecord; next: NormalizedDraft },
+    ): DraftRecord => {
+      const { current, next } = change
+      const result = checked({
+        ...current,
+        ...next,
+        revision: current.revision + 1,
+      })
+      const changed = db
+        .prepare(
+          "UPDATE drafts SET revision=?,authored=?,summary=? WHERE owner=? AND id=? AND revision=?",
+        )
+        .run(
+          result.revision,
+          result.authoredShowJson,
+          canonicalJson(result.summary),
+          p.accountId,
+          current.draftId,
+          current.revision,
+        )
+
+      if (changed.changes !== 1) {
+        throw new ToolError("REVISION_CONFLICT")
+      }
+
+      return result
     }
     const mutate = (
       p: VerifiedPrincipal,
@@ -1013,24 +1046,16 @@ export class FirstPartyOAuthGrants {
             throw new ToolError("REVISION_CONFLICT", {
               currentRevision: current.revision,
             })
-          result = checked({
-            ...current,
-            ...normalized,
-            revision: current.revision + 1,
-          })
-          const changed = db
-            .prepare(
-              "UPDATE drafts SET revision=?,authored=?,summary=? WHERE owner=? AND id=? AND revision=?",
-            )
-            .run(
-              result.revision,
-              result.authoredShowJson,
-              canonicalJson(result.summary),
-              p.accountId,
-              selected.id,
-              selected.revision,
-            )
-          if (changed.changes !== 1) throw new ToolError("REVISION_CONFLICT")
+
+          const preserved = normalizeStoredDraft(
+            preserveSemanticState(
+              current.authoredShowJson,
+              normalized.authoredShowJson,
+              policy,
+            ),
+            policy,
+          )
+          result = write(db, p, { current, next: preserved })
         } else {
           const count = db.prepare("SELECT count(*) AS n FROM drafts").get()?.n
           if (typeof count !== "number" || count >= 100)
@@ -1078,7 +1103,27 @@ export class FirstPartyOAuthGrants {
         )
       }
     }
+    const semantic = createSemanticDraftPort({
+      authoring: policy,
+      run: (p, scopes, callback) =>
+        safe(() => {
+          assertIssued(p)
+
+          return this.transaction(p.accountId, false, (db) => {
+            authority(db, p, scopes)
+            const result = callback(db)
+            authority(db, p, scopes)
+
+            return result
+          })
+        }),
+      read,
+      write,
+      audit: (db, p, entry) =>
+        this.audit(db, p.grantId, entry.kind, entry.mutation),
+    })
     return {
+      semantic,
       create: async (p, draft, mutation) =>
         safe(() => mutate(p, "create", draft, mutation)),
       replace: async (p, id, revision, draft, mutation) =>

@@ -1,0 +1,38 @@
+{
+  "kind": "caddy-runtime-log-privacy",
+  "version": 1,
+  "startedAt": "2026-11-18T06:30:47.577762+00:00",
+  "success": true,
+  "requestRoutingChanged": false,
+  "customerDataChanged": false,
+  "credentialsPrinted": false,
+  "rawLogsRead": false,
+  "reloadPerformed": true,
+  "backup": "/var/tmp/tadazz-caddy-privacy-candidate-20261118-73642f/Caddyfile.before",
+  "beforeSha256": "d4c77ac56bfe8d66e51707718de3dfd6c7da77a878929c7137dcd9cccf47e055",
+  "afterSha256": "101381b7b10b99f72573584de230498119639e6c26ec8bf8439aeed4a534ba24",
+  "binarySha256": "6da742da7bb1a73f89c01a1e098aaa5df3ba0f4dab4cbf229b614ea5d4030a3c",
+  "onlyAdaptedChange": "/logging/logs/default/encoder",
+  "encoder": {
+    "format": "filter",
+    "wrap": {
+      "format": "json"
+    },
+    "fields": {
+      "request>uri": {
+        "filter": "delete"
+      },
+      "request>headers>Referer": {
+        "filter": "delete"
+      }
+    }
+  },
+  "persistentSourceVerified": true,
+  "activeConfigVerified": true,
+  "sourceMode": "0o644",
+  "sourceOwnerPreserved": true,
+  "serviceUserValidationPassed": true,
+  "publicAndLoopbackHealthPassed": true,
+  "appAndPhoneGatewayUnchanged": true,
+  "finishedAt": "2026-11-18T06:30:47.925353+00:00"
+}

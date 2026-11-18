@@ -7,6 +7,8 @@ import { canonicalJson, finiteJson, utf8Bytes } from "../contracts/canonical.ts"
 import { LIMITS, summarySchema } from "../contracts/schemas.ts"
 import type { AuthoringPolicy, NormalizedDraft } from "./dependencies.ts"
 import { ToolError } from "./errors.ts"
+import { storedSemanticAdmission } from "./semantic-state.ts"
+import type { SemanticAssetOperation } from "../contracts/semantic-edit.ts"
 
 const forbidden = new Set([
   "extraJson",
@@ -28,13 +30,18 @@ const forbidden = new Set([
   "audioEvents",
   "showTheme",
 ])
-// oxlint-disable-next-line max-params -- Existing recursive policy tracks the field name and bounded depth separately.
 function policyCheck(
   value: unknown,
   policy: AuthoringPolicy,
-  key = "",
-  depth = 0,
+  context: {
+    key: string
+    depth: number
+    path: readonly string[]
+    storedUrls: ReadonlyMap<string, string>
+  },
 ): void {
+  const { key, depth } = context
+
   if (depth > 40) {
     throw new ToolError("VALIDATION_FAILED")
   }
@@ -46,7 +53,12 @@ function policyCheck(
       throw new ToolError("VALIDATION_FAILED")
     }
 
-    if (urlField && value && !policy.allowedPublicAssetUrls.has(value)) {
+    if (
+      urlField &&
+      value &&
+      !policy.allowedPublicAssetUrls.has(value) &&
+      context.storedUrls.get(JSON.stringify(context.path)) !== value
+    ) {
       throw new ToolError("VALIDATION_FAILED")
     }
 
@@ -81,7 +93,12 @@ function policyCheck(
       throw new ToolError("VALIDATION_FAILED")
     }
 
-    policyCheck(child, policy, k, depth + 1)
+    policyCheck(child, policy, {
+      ...context,
+      key: k,
+      depth: depth + 1,
+      path: [...context.path, k],
+    })
   }
 }
 // Schema defaults must not introduce fields that the same policy rejects on
@@ -124,9 +141,10 @@ function omitGeneratedForbiddenFields(
   )
 }
 
-export function normalizeDraft(
+function normalize(
   raw: string,
   policy: AuthoringPolicy,
+  storedOperation?: SemanticAssetOperation,
 ): NormalizedDraft {
   try {
     if (raw.length > LIMITS.authored || utf8Bytes(raw) > LIMITS.authored) {
@@ -135,6 +153,11 @@ export function normalizeDraft(
 
     const input: unknown = JSON.parse(raw)
     finiteJson(input)
+    const stored =
+      storedOperation !== undefined && policy.semantic !== undefined
+    const storedUrls = stored
+      ? storedSemanticAdmission(input, policy, storedOperation)
+      : new Map<string, string>()
     const show = tadaShowV1Schema.parse(input)
 
     if (
@@ -155,6 +178,7 @@ export function normalizeDraft(
 
     // Defaults are trusted template inheritance, not a theme/audio mutation input.
     if (
+      !stored &&
       show.defaults !== undefined &&
       canonicalJson(show.defaults) !==
         canonicalJson(policy.trustedDefaults ?? {})
@@ -162,10 +186,11 @@ export function normalizeDraft(
       throw new ToolError("VALIDATION_FAILED")
     }
 
-    policyCheck(input, policy)
+    policyCheck(input, policy, { key: "", depth: 0, path: [], storedUrls })
     const normalized = tadaShowV1Schema.parse({
       ...show,
-      ...(policy.trustedDefaults === undefined
+      ...(policy.trustedDefaults === undefined ||
+      (stored && show.defaults !== undefined)
         ? {}
         : { defaults: policy.trustedDefaults }),
     })
@@ -216,4 +241,21 @@ export function normalizeDraft(
 
     throw new ToolError("VALIDATION_FAILED")
   }
+}
+
+/** Strict model-authored JSON admission, including for existing enhanced drafts. */
+export function normalizeDraft(
+  raw: string,
+  policy: AuthoringPolicy,
+): NormalizedDraft {
+  return normalize(raw, policy)
+}
+
+/** Strict server-owned canonical state; callers must obtain it from actual authority. */
+export function normalizeStoredDraft(
+  raw: string,
+  policy: AuthoringPolicy,
+  operation: SemanticAssetOperation = "store",
+): NormalizedDraft {
+  return normalize(raw, policy, operation)
 }

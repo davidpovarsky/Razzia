@@ -1,4 +1,5 @@
 // Host-only projection. Current display data is explicitly selected; source never crosses the boundary.
+import { resolveTadazzStageBackground } from "../../core/tadazz-appearance.ts"
 import { createFullShowSelectionPortV3 } from "./full-show-selection.ts"
 import {
   fullShowFrameV3Schema,
@@ -12,7 +13,7 @@ import { resolveShowTheme } from "../../core/show-themes/resolve.ts"
 import { SHOW_THEME_SLOTS } from "../../core/show-themes/selection.ts"
 import {
   resolveCardStageAnimations,
-  questionDecorationSchema,
+  resolveQuestionDecoration,
 } from "../../core/card-appearance.ts"
 import { canonicalJson, utf8Bytes } from "../contracts/canonical.ts"
 import { LIMITS } from "../contracts/schemas.ts"
@@ -88,6 +89,7 @@ export function createFullShowPreviewPortV3(
       const binding = {
         ...family.ref,
         definitionSha256: family.definitionSha256,
+        audio: theme.audioSelections,
         rendererId: family.definition.rendererId,
         slots: Object.fromEntries(
           SHOW_THEME_SLOTS.map((slot) => [
@@ -97,15 +99,57 @@ export function createFullShowPreviewPortV3(
         ),
       }
       const media: string[] = []
+      const admitSemantic = (
+        url: string,
+        purpose: "audio" | "background" | "answer-image",
+      ) => {
+        const approved =
+          dependencies.authoring?.semantic?.assets?.resolveStoredUrl(url, {
+            theme: family.ref,
+            operation: "preview",
+            purpose,
+          })
+
+        if (
+          !approved ||
+          approved.publicUrl !== url ||
+          approved.ref.theme.id !== family.ref.id ||
+          approved.ref.theme.version !== family.ref.version
+        ) {
+          throw new ToolError("PREVIEW_UNAVAILABLE")
+        }
+
+        media.push(url)
+      }
       const { card } = source
+      for (const choice of Object.values(theme.audioSelections)) {
+        if (choice.mediaUrl) {
+          admitSemantic(choice.mediaUrl, "audio")
+        }
+      }
+      const backdrop = resolveTadazzStageBackground({
+        settings: source.defaults.tadazzBackground,
+        cardBackground: card.background,
+        reducedMotion: input.context.reducedMotion,
+      })
+      const presentation: FullShowFrameV3["presentation"] = {
+        answerVisuals: [],
+        ...(backdrop.url
+          ? { background: { url: backdrop.url, fit: backdrop.fit } }
+          : {}),
+      }
+
+      if (backdrop.url) {
+        admitSemantic(backdrop.url, "background")
+      }
+
       let content: FullShowFrameV3["content"] | null = null
 
       if (card.kind === "quiz" || card.kind === "survey") {
         if (
           card.questionType === "estimation" ||
           card.answers.length > 5 ||
-          card.media ||
-          card.answers.some((a) => a.imageUrl)
+          card.media
         ) {
           throw new ToolError("PREVIEW_UNAVAILABLE")
         }
@@ -121,6 +165,32 @@ export function createFullShowPreviewPortV3(
           id: `${questionId}-answer-${index}`,
           label: answer.text,
         }))
+
+        if (chapter.kind !== "question") {
+          presentation.answerVisuals = card.answers.flatMap((answer, index) => {
+            if (!answer.imageUrl || answer.display === "text") {
+              return []
+            }
+
+            const choice = choices[index]
+
+            if (!answer.alt) {
+              throw new ToolError("PREVIEW_UNAVAILABLE")
+            }
+
+            admitSemantic(answer.imageUrl, "answer-image")
+
+            return [
+              {
+                answerId: choice.id,
+                display: answer.display,
+                url: answer.imageUrl,
+                alt: answer.alt,
+              },
+            ]
+          })
+        }
+
         content = {
           kind: "question",
           frame: {
@@ -164,8 +234,13 @@ export function createFullShowPreviewPortV3(
             seconds: card.timeSeconds > 0 ? card.timeSeconds : null,
           },
           visualSettings: {
-            stageAnimations: resolveCardStageAnimations({}),
-            questionDecoration: questionDecorationSchema.parse({}),
+            stageAnimations: resolveCardStageAnimations({
+              stageAnimations: card.stageAnimations,
+              questionEntrance: card.questionEntrance,
+            }),
+            questionDecoration: resolveQuestionDecoration({
+              cardDecoration: card.questionDecoration,
+            }),
           },
         }
       } else {
@@ -220,7 +295,7 @@ export function createFullShowPreviewPortV3(
         }
       }
 
-      await policy.assertAssets(p, family.ref, media)
+      await policy.assertAssets(p, family.ref, [...new Set(media)])
       await selection.assertCurrent(p, prepared)
       const frame = fullShowFrameV3Schema.parse({
         frameVersion: 3,
@@ -228,6 +303,7 @@ export function createFullShowPreviewPortV3(
         rendererBuildId: policy.rendererBuildId,
         theme: binding,
         content,
+        presentation,
       })
 
       if (utf8Bytes(canonicalJson(frame)) > LIMITS.preview) {

@@ -244,6 +244,10 @@ export function AnswerSlotV4({
           <figcaption
             className="answer-title"
             style={(() => {
+              if (answer.display === "image") {
+                return { display: "none" }
+              }
+
               if (displayTitle.length > 28) {
                 return {
                   fontSize: 21,
@@ -258,7 +262,9 @@ export function AnswerSlotV4({
 
               return undefined
             })()}
-            data-has-caption={displayTitle ? "true" : "false"}
+            data-has-caption={
+              answer.display !== "image" && displayTitle ? "true" : "false"
+            }
             dir="auto"
           >
             {displayTitle || (

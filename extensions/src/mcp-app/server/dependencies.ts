@@ -1,3 +1,5 @@
+import type { SemanticDraftPort } from "./semantic-drafts.ts"
+import type { SemanticAuthoringPolicy } from "../contracts/semantic-edit.ts"
 import type { MessageExtraInfo } from "@modelcontextprotocol/server"
 import type { z } from "zod"
 import type {
@@ -68,6 +70,7 @@ export interface DraftRepository {
 }
 
 export interface AuthoringPolicy {
+  readonly semantic?: SemanticAuthoringPolicy
   trustedDefaults?: unknown
   allowedPublicAssetUrls: ReadonlySet<string>
 }
@@ -98,6 +101,7 @@ export interface Dependencies {
     tool: ToolName | undefined,
   ) => Promise<boolean>
   drafts?: DraftRepository
+  semanticDrafts?: SemanticDraftPort
   authoring?: AuthoringPolicy
   catalog?: Catalog
   /** Optional data-only V2 development seam. Never an accepted V1 renderer. */

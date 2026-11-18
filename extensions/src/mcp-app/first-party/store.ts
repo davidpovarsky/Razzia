@@ -6,7 +6,11 @@ import { z as schema } from "zod"
 import { canonicalJson, hashJson } from "../contracts/canonical.ts"
 import { inputs } from "../contracts/tools.ts"
 import { digest, opaqueId, revision } from "../contracts/schemas.ts"
-import { normalizeDraft } from "../server/authoring.ts"
+import { normalizeDraft, normalizeStoredDraft } from "../server/authoring.ts"
+import {
+  preserveSemanticState,
+  snapshotSemanticPolicy,
+} from "../server/semantic-state.ts"
 import { checkedDraft } from "../server/drafts.ts"
 import type { AuthoringPolicy, DraftRecord } from "../server/dependencies.ts"
 import { ToolError } from "../server/errors.ts"
@@ -47,6 +51,9 @@ export class FirstPartyDraftStore {
     this.paths = new OwnedStorePath(auth)
     this.policy = {
       allowedPublicAssetUrls: new Set(policy.allowedPublicAssetUrls),
+      ...(policy.semantic
+        ? { semantic: snapshotSemanticPolicy(policy.semantic) }
+        : {}),
       ...(policy.trustedDefaults === undefined
         ? {}
         : { trustedDefaults: structuredClone(policy.trustedDefaults) }),
@@ -249,9 +256,18 @@ export class FirstPartyDraftStore {
         throw new ToolError("REVISION_CONFLICT", {
           currentRevision: current.revision,
         })
+
+      const preserved = normalizeStoredDraft(
+        preserveSemanticState(
+          current.authoredShowJson,
+          normalized.authoredShowJson,
+          this.policy,
+        ),
+        this.policy,
+      )
       const result = this.checked({
         ...current,
-        ...normalized,
+        ...preserved,
         revision: current.revision + 1,
       })
       const changed = db

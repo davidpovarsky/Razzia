@@ -32,14 +32,21 @@ async function start() {
     import("../server/full-show-frame.ts"),
   ])
   const { origin } = new URL(crypto.config.issuer)
-  const capabilities = await createProductionMcpCapabilities({
-    clientIds: new Set(crypto.clients.map((client) => client.clientId)),
-  })
   const preview = readProductionFullShowArtifacts({
     artifactDirectory: "/app/mcp",
     manifestSha256: __TADAZZ_FULL_SHOW_MANIFEST_SHA256__,
     publicDirectory: "/app/web",
     origin,
+  })
+  if (process.env.TADAZZ_INLINE_GAME_PREVIEW_ENABLED === "true") {
+    const { installAccountPreviewBuiltinAssets } =
+      await import("../../server/api/account-preview-builtins.ts")
+    installAccountPreviewBuiltinAssets(preview.builtinAssets)
+  }
+
+  const capabilities = await createProductionMcpCapabilities({
+    clientIds: new Set(crypto.clients.map((client) => client.clientId)),
+    semantic: { assets: preview.builtinAssets },
   })
   const host = await createNativeConsentHost({
     enabled: true,

@@ -1,3 +1,4 @@
+import { runLayoutDiagnostic } from "./layout-diagnostic.mjs"
 import { execFileSync } from "node:child_process"
 // Real issuer + repository + MCP SDK + AppBridge, isolated browsers and public asset bytes.
 // No production accounts, hosts, files or privileges are used by this harness.
@@ -26,11 +27,74 @@ import {
   StreamableHTTPClientTransport,
 } from "../phase3-mcp-service/mcp-client.ts"
 import { createFullShowPreviewPortV3 } from "../../src/mcp-app/server/full-show-frame.ts"
-import { FULL_SHOW_RESOURCE_V3 } from "../../src/mcp-app/contracts/full-show-frame.ts"
+import {
+  FULL_SHOW_RESOURCE_V3,
+  FULL_SHOW_META_V3,
+} from "../../src/mcp-app/contracts/full-show-frame.ts"
+import {
+  createNativeResultParityFixtures,
+  createAdditionalNativeSceneFixtures,
+} from "./native-parity-fixtures.ts"
+import { createBuiltinAssetResolver } from "../../src/mcp-app/native-host/builtin-asset-policy.ts"
+import { previewNativeLabels } from "../../src/presentation/show-library-preview/i18n.ts"
+import {
+  resources as widgetLabels,
+  locales as widgetLocales,
+} from "../../src/mcp-app/widget/i18n.ts"
 import { normalizeDraft } from "../../src/mcp-app/server/authoring.ts"
 import { hashJson } from "../../src/mcp-app/contracts/canonical.ts"
 import { tadaShowV1Schema } from "../../src/core/show-authoring-schema.ts"
 
+const expectedLocaleText = {
+  en: {
+    previous: "Previous chapter",
+    editing: "Edit this draft",
+  },
+  fr: {
+    previous: "Chapitre précédent",
+    editing: "Modifier ce brouillon",
+  },
+  de: {
+    previous: "Vorheriges Kapitel",
+    editing: "Diesen Entwurf bearbeiten",
+  },
+  es: {
+    previous: "Capítulo anterior",
+    editing: "Editar este borrador",
+  },
+  it: {
+    previous: "Capitolo precedente",
+    editing: "Modifica questa bozza",
+  },
+  ja: {
+    previous: "前の章",
+    editing: "この下書きを編集",
+  },
+  tr: {
+    previous: "Önceki bölüm",
+    editing: "Bu taslağı düzenle",
+  },
+  vi: {
+    previous: "Chương trước",
+    editing: "Chỉnh sửa bản nháp này",
+  },
+}
+const expectedTransportText = {
+  en: ["Pause show", "Aspect ratio"],
+  fr: ["Mettre en pause", "Format d\u2019image"],
+  de: ["Show pausieren", "Seitenverh\u00e4ltnis"],
+  es: ["Pausar espect\u00e1culo", "Relaci\u00f3n de aspecto"],
+  it: ["Metti in pausa", "Formato immagine"],
+  ja: [
+    "\u30b7\u30e7\u30fc\u3092\u4e00\u6642\u505c\u6b62",
+    "\u753b\u9762\u6bd4\u7387",
+  ],
+  tr: ["G\u00f6steriyi duraklat", "En boy oran\u0131"],
+  vi: [
+    "T\u1ea1m d\u1eebng ch\u01b0\u01a1ng tr\u00ecnh",
+    "T\u1ef7 l\u1ec7 khung h\u00ecnh",
+  ],
+}
 const root = fileURLToPath(new URL("../../../", import.meta.url))
 const require = createRequire(new URL("../../package.json", import.meta.url))
 const { build } = require("esbuild")
@@ -93,6 +157,21 @@ const mime = new Map([
   [".mp4", "video/mp4"],
   [".webm", "video/webm"],
 ])
+const semanticAssets = createBuiltinAssetResolver({
+  origin: "https://tadazz.com",
+  publicAssets: manifest.publicAssets,
+  verifyCurrentAsset(entry) {
+    try {
+      const file = path.join(root, entry.path),
+        stat = fs.lstatSync(file)
+      if (!stat.isFile() || stat.isSymbolicLink()) return false
+      const bytes = fs.readFileSync(file)
+      return bytes.length === entry.bytes && digest(bytes) === entry.sha256
+    } catch {
+      return false
+    }
+  },
+})
 const bundled = await build({
   entryPoints: [fileURLToPath(new URL("./browser-host.ts", import.meta.url))],
   bundle: true,
@@ -124,7 +203,7 @@ const issuer = await createFirstPartyOAuth({
 const grant = await authorizePkceGrant({
   origin,
   nativeToken: f.sessions[0].token,
-  scopes: ["tadazz.drafts.read", "tadazz.drafts.write"],
+  scopes: ["tadazz.drafts.read", "tadazz.drafts.write", "tadazz.catalog.read"],
   verifyConsentHead: false,
   fetchImpl: (input, init) => {
     const request = new Request(input, init)
@@ -136,6 +215,8 @@ const grant = await authorizePkceGrant({
 const principal = await issuer.verifyAccessToken(grant.accessToken)
 const scenarios = new Map()
 const entries = []
+const observations = []
+const rendererFixtures = []
 const errors = []
 const calls = []
 const resources = []
@@ -143,6 +224,28 @@ const engines = []
 const outboundDenied = []
 let sourceHashesUnchanged = false
 const network = []
+const requestFailures = []
+function writeProgress(active) {
+  fs.writeFileSync(
+    path.join(evidence, "progress.json"),
+    JSON.stringify(
+      {
+        active,
+        at: new Date().toISOString(),
+        entries,
+        observations,
+        rendererFixtures,
+        calls,
+        errors,
+        resources,
+        requestFailures,
+        requests: network,
+      },
+      null,
+      2,
+    ),
+  )
+}
 let browser = null
 const server = createServer((req, res) => {
   void (async () => {
@@ -195,11 +298,39 @@ const server = createServer((req, res) => {
     }
 
     if (url.pathname === "/qa/initial" && req.method === "GET") {
+      if (scenario.rendererFixture) {
+        const frame = scenario.rendererFixture.frame
+        const result = structuredClone(scenario.lastPreviewResult)
+        result._meta[FULL_SHOW_META_V3] = frame
+        Object.assign(result.structuredContent.data, {
+          draftId: frame.inventory.draftId,
+          revision: frame.inventory.revision,
+          title: frame.inventory.title,
+          selectedChapterId: frame.inventory.selectedChapterId,
+          chapterCount: frame.inventory.chapters.length,
+          frameDigest: hashJson(frame),
+        })
+        const selection = {
+          ...scenario.selection,
+          expectedRevision: frame.inventory.revision,
+          chapterId: frame.inventory.selectedChapterId,
+          context: frame.inventory.context,
+        }
+        res.setHeader("Content-Type", "application/json")
+        res.end(JSON.stringify({ selection, result }))
+        return
+      }
+      const current = await scenario.repository.get(
+        principal,
+        scenario.record.draftId,
+      )
+      scenario.selection.expectedRevision = current.revision
       const result = await scenario.client.callTool({
         name: "preview_show",
         arguments: scenario.selection,
       })
       assert.notEqual(result.isError, true)
+      scenario.lastPreviewResult = result
       res.setHeader("Content-Type", "application/json")
       res.end(JSON.stringify({ selection: scenario.selection, result }))
 
@@ -221,15 +352,24 @@ const server = createServer((req, res) => {
           "preview_show",
           "get_game_draft_summary",
           "update_game_title",
+          "apply_game_edit",
+          "undo_game_edit",
+          "list_editing_assets",
+          "list_themes",
         ].includes(call.name),
       )
       const result = await scenario.client.callTool(call)
+      if (call.name === "preview_show" && result.isError !== true)
+        scenario.lastPreviewResult = result
       calls.push({
         name: call.name,
         inputRevision: call.arguments?.expectedRevision,
+        inputDigest: hashJson(call.arguments),
+        patchKind: call.arguments?.patch?.kind,
         result: result.structuredContent,
         isError: result.isError,
       })
+      writeProgress("HTTP " + call.name)
       assert.doesNotMatch(
         JSON.stringify(result),
         /PRIVATE_NOTE_|private-opening|authoredShowJson|accountId|grantId/u,
@@ -262,6 +402,7 @@ async function scenarioFor(theme, engine) {
         ...card,
         note: `PRIVATE_NOTE_${i}`,
         question: `SELECTED_QUESTION_${i}`,
+        answers: ["A", "B", "C", "D", "E"].map((text) => ({ text })),
       })),
       {
         key: "private-transition",
@@ -275,7 +416,11 @@ async function scenarioFor(theme, engine) {
     ...authored,
     defaults: { showTheme: { id: theme, version: "1.0.0" } },
   }).defaults
-  const authoring = { ...policy, trustedDefaults }
+  const authoring = {
+    ...policy,
+    trustedDefaults,
+    semantic: { assets: semanticAssets },
+  }
   const repository = issuer.draftRepository(authoring)
   const normalized = normalizeDraft(JSON.stringify(authored), authoring)
   const idempotencyKey = key()
@@ -294,8 +439,21 @@ async function scenarioFor(theme, engine) {
       rendererBuildId: manifest.rendererBuildId,
       assertAssets(p, requestedTheme, urls) {
         assert.equal(p.accountId, principal.accountId)
-        assert.equal(requestedTheme.id, theme)
-        assert.deepEqual(urls, [])
+        assert(
+          ["tadazz-classic", "razzia-original"].includes(requestedTheme.id),
+        )
+        for (const url of urls) {
+          assert(
+            ["background", "answer-image", "audio"].some((purpose) =>
+              semanticAssets.resolveStoredUrl(url, {
+                theme: requestedTheme,
+                purpose,
+                operation: "preview",
+              }),
+            ),
+          )
+          assert(assets.has(new URL(url).pathname))
+        }
         assert.equal(assets.size, manifest.publicAssets.length)
 
         return Promise.resolve()
@@ -307,6 +465,12 @@ async function scenarioFor(theme, engine) {
     dependencies: {
       authoring,
       drafts: repository,
+      semanticDrafts: issuer.semanticDraftRepository(authoring),
+      catalog: issuer.catalog({
+        locale: () => "en",
+        translate: (key, language) =>
+          String(previewNativeLabels(language).i18n.t(key)),
+      }),
       rateLimit: () => Promise.resolve(true),
       fullShowPreviewV3: preview,
       fullShowUiResourceV3: {
@@ -319,11 +483,16 @@ async function scenarioFor(theme, engine) {
       },
     },
   })
+  let nextHttpSlot = 0
   const client = new Client({ name: "native-v3-browser-qa", version: "3" })
   await client.connect(
     new StreamableHTTPClientTransport(new URL(`${origin}/mcp`), {
       authProvider: { token: () => Promise.resolve(grant.accessToken) },
-      fetch: (input, init) => {
+      fetch: async (input, init) => {
+        // Respect the real anonymous 120/minute ingress budget; do not weaken it for QA.
+        const wait = Math.max(0, nextHttpSlot - Date.now())
+        nextHttpSlot = Math.max(nextHttpSlot, Date.now()) + 520
+        if (wait) await new Promise((resolve) => setTimeout(resolve, wait))
         const request = new Request(input, init)
         request.headers.set("host", new URL(origin).host)
 
@@ -353,22 +522,35 @@ async function scenarioFor(theme, engine) {
   const first = await preview.render(principal, selectedInput)
   const id = key()
   const scenario = {
+    id,
     client,
     instance,
     repository,
+    authoring,
     record,
     selection,
     chapters: first.inventory.chapters,
   }
   scenarios.set(id, scenario)
 
-  return { id, ...scenario }
+  return scenario
 }
 async function run(name, operation) {
   const start = Date.now()
+  writeProgress(name)
+  console.log("START " + name)
+  let timeout
 
   try {
-    await operation()
+    await Promise.race([
+      operation(),
+      new Promise((_, reject) => {
+        timeout = setTimeout(
+          () => reject(new Error("QA_CHECK_TIMEOUT: " + name)),
+          120000,
+        )
+      }),
+    ])
     entries.push({ name, status: "PASS", ms: Date.now() - start })
   } catch (error) {
     entries.push({
@@ -379,6 +561,10 @@ async function run(name, operation) {
       ms: Date.now() - start,
     })
     console.error(`${name}: ${error.message}`)
+    if (error.message.startsWith("QA_CHECK_TIMEOUT")) throw error
+  } finally {
+    clearTimeout(timeout)
+    writeProgress(null)
   }
 }
 let base = ""
@@ -398,13 +584,28 @@ try {
     )
     const browserVersion = browser.version()
     engines.push({ name: engine, version: browserVersion })
-    for (const theme of ["tadazz-classic", "razzia-original"]) {
+    for (const theme of (
+      process.env.TADAZZ_FULL_SHOW_THEMES ?? "tadazz-classic,razzia-original"
+    ).split(",")) {
+      assert(["tadazz-classic", "razzia-original"].includes(theme))
       const scenario = await scenarioFor(theme, engine)
       const context = await browser.newContext({
         viewport: { width: 1280, height: 1200 },
         reducedMotion: "reduce",
       })
       await context.addInitScript(() => {
+        window.__nativeAudio = []
+        window.__nativePlayCalls = []
+        const originalPlay = HTMLMediaElement.prototype.play
+        HTMLMediaElement.prototype.play = function (...args) {
+          if (!window.__nativeAudio.includes(this))
+            window.__nativeAudio.push(this)
+          window.__nativePlayCalls.push({
+            index: window.__nativeAudio.indexOf(this),
+            userGesture: navigator.userActivation?.isActive ?? null,
+          })
+          return originalPlay.apply(this, args)
+        }
         window.__cspViolations = []
         document.addEventListener("securitypolicyviolation", (event) =>
           window.__cspViolations.push({
@@ -418,6 +619,15 @@ try {
       page.setDefaultTimeout(10000)
       const caseErrors = []
       page.on("pageerror", (error) => caseErrors.push(error.message))
+      page.on("requestfailed", (request) => {
+        requestFailures.push({
+          engine,
+          theme,
+          failed: true,
+          url: request.url(),
+          error: request.failure()?.errorText,
+        })
+      })
       page.on("request", (request) => {
         if (
           !request.url().startsWith(base) &&
@@ -467,6 +677,25 @@ try {
           body: data,
         })
       })
+      if (process.env.TADAZZ_FULL_SHOW_DIAGNOSTIC === "layout") {
+        await run(
+          `${engine} / ${theme} development viewport diagnostic`,
+          async () => {
+            observations.push(
+              await runLayoutDiagnostic({
+                scenario,
+                page,
+                base,
+                evidence,
+                theme,
+                engine,
+              }),
+            )
+          },
+        )
+        await context.close()
+        continue
+      }
       await run(
         `${engine} / ${
           theme
@@ -479,7 +708,7 @@ try {
           for (const [index, chapter] of scenario.chapters.entries()) {
             if (index) {
               await iframe
-                .getByRole("button", { name: "Next card", exact: true })
+                .getByRole("button", { name: "Next chapter", exact: true })
                 .click()
             }
 
@@ -533,7 +762,7 @@ try {
           }
           assert.equal(
             await iframe
-              .getByRole("button", { name: "Next card", exact: true })
+              .getByRole("button", { name: "Next chapter", exact: true })
               .isDisabled(),
             true,
           )
@@ -557,9 +786,7 @@ try {
           await iframe
             .getByLabel("Draft title", { exact: true })
             .fill(`Edited title ${theme}`)
-          await iframe
-            .getByRole("button", { name: "Apply draft edit", exact: true })
-            .click()
+          await iframe.getByTestId("full-show-apply-title").click()
           await iframe
             .getByRole("heading", {
               name: `Edited title ${theme}`,
@@ -581,13 +808,1114 @@ try {
           await iframe.locator("[data-full-show-chapter]").waitFor()
           const uiCalls = await page.evaluate(() => window.__host.calls())
           assert(
-            uiCalls.includes("update_game_title") &&
+            uiCalls.includes("apply_game_edit") &&
               uiCalls.includes("get_game_draft_summary"),
           )
           assert(
             !uiCalls.includes("get_game_draft") &&
               !uiCalls.includes("update_game_draft"),
           )
+        },
+      )
+
+      await run(
+        `${engine} / ${theme} semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation`,
+        async () => {
+          const iframe = page.frameLocator("iframe")
+          const currentRecord = () =>
+            scenario.repository.get(principal, scenario.record.draftId)
+          const revision = async () => (await currentRecord()).revision
+          const waitRevision = async (value) => {
+            await iframe
+              .getByTestId("full-show-revision")
+              .filter({ hasText: new RegExp("^Revision " + value + "$") })
+              .waitFor()
+            await iframe
+              .getByTestId("full-show-replay")
+              .waitFor({ state: "visible" })
+          }
+          const go = async (kind, ordinal) => {
+            const target = scenario.chapters.find(
+              (chapter) =>
+                chapter.kind === kind && chapter.questionOrdinal === ordinal,
+            )
+            assert(target)
+            let selected = await iframe
+              .locator("[data-full-show-chapter]")
+              .getAttribute("data-full-show-chapter")
+            let currentIndex = scenario.chapters.findIndex(
+              (chapter) => chapter.id === selected,
+            )
+            for (
+              let count = 0;
+              count < scenario.chapters.length && selected !== target.id;
+              count += 1
+            ) {
+              await iframe
+                .getByTestId(
+                  currentIndex < target.index
+                    ? "full-show-next"
+                    : "full-show-previous",
+                )
+                .click()
+              currentIndex += currentIndex < target.index ? 1 : -1
+              await iframe
+                .locator(
+                  `[data-full-show-chapter="${scenario.chapters[currentIndex].id}"]`,
+                )
+                .waitFor()
+              selected = scenario.chapters[currentIndex].id
+            }
+            assert.equal(selected, target.id)
+          }
+          const loadAssets = async () => {
+            const details = iframe.locator(".widget-editor details")
+            if (!(await details.getAttribute("open"))) {
+              if (!(await details.evaluate((element) => element.open)))
+                await details.locator("summary").click()
+            }
+            await iframe.getByTestId("full-show-load-assets").click()
+            await iframe.getByTestId("full-show-background").waitFor()
+          }
+          const verifyDemoSelection = async (pictures) => {
+            await go("answerCards", 3)
+            const before = await currentRecord()
+            const beforeCalls = await page.evaluate(() => window.__host.calls())
+            const choice =
+              theme === "tadazz-classic"
+                ? iframe.getByTestId("tadazz-card-0")
+                : iframe.getByTestId(
+                    pictures ? "photo-card-choice-0" : "native-razzia-answer-0",
+                  )
+            await choice.focus()
+            await choice.press("Enter")
+            await iframe
+              .locator(
+                '[data-testid="full-show-demo-controls"][data-demo-selected-index="0"]',
+              )
+              .waitFor()
+            if (theme === "tadazz-classic" || !pictures)
+              assert.equal(await choice.getAttribute("aria-pressed"), "true")
+            else
+              assert.equal(await choice.locator("svg.lucide-check").count(), 1)
+            assert.deepEqual(
+              await page.evaluate(() => window.__host.calls()),
+              beforeCalls,
+              "Choosing a demo answer must not invoke any server tool",
+            )
+            const resultChapter = scenario.chapters.find(
+              (item) => item.kind === "results" && item.questionOrdinal === 3,
+            )
+            assert(resultChapter)
+            await iframe.getByTestId("full-show-demo-reveal").click()
+            await iframe
+              .locator(`[data-full-show-chapter="${resultChapter.id}"]`)
+              .waitFor()
+            await iframe.getByTestId("full-show-demo-result").waitFor()
+            const actualResult =
+              scenario.lastPreviewResult._meta[FULL_SHOW_META_V3].content.frame
+            assert.equal(actualResult.phase, "results")
+            assert(
+              actualResult.results.every(
+                (item) => item.count === 0 && item.percent === 0,
+              ),
+              "Local selection must not fabricate vote totals",
+            )
+            const chosen = actualResult.results.find(
+              (item) => item.answerId === actualResult.choices[0].id,
+            )
+            assert(chosen)
+            const expectedOutcome =
+              chosen.correct === undefined
+                ? "survey"
+                : chosen.correct
+                  ? "correct"
+                  : "incorrect"
+            assert.equal(
+              await iframe
+                .getByTestId("full-show-demo-result")
+                .getAttribute("data-demo-result"),
+              expectedOutcome,
+            )
+            assert(
+              (
+                await iframe.getByTestId("full-show-demo-result").innerText()
+              ).trim().length > 0,
+            )
+            const after = await currentRecord()
+            assert.equal(after.revision, before.revision)
+            assert.equal(after.authoredShowJson, before.authoredShowJson)
+            const callsAfter = await page.evaluate(() => window.__host.calls())
+            assert.deepEqual(callsAfter.slice(beforeCalls.length), [
+              "preview_show",
+            ])
+            await iframe.getByTestId("full-show-replay").click()
+            await iframe
+              .locator(
+                '[data-testid="full-show-demo-controls"][data-demo-selected-index=""]',
+              )
+              .waitFor()
+            assert.equal(
+              await iframe.getByTestId("full-show-demo-result").count(),
+              0,
+            )
+            await go("answerCards", 3)
+            await choice.click()
+            await iframe
+              .locator(
+                '[data-testid="full-show-demo-controls"][data-demo-selected-index="0"]',
+              )
+              .waitFor()
+            await go("question", 4)
+            await iframe
+              .locator(
+                '[data-testid="full-show-demo-controls"][data-demo-selected-index=""]',
+              )
+              .waitFor()
+            await go("answerCards", 3)
+            await iframe
+              .locator(
+                '[data-testid="full-show-demo-controls"][data-demo-selected-index=""]',
+              )
+              .waitFor()
+            observations.push({
+              engine,
+              theme,
+              check: "local demo answer selection and authorized reveal",
+              surface: pictures ? "five-pictures" : "text",
+              keyboard: "Enter on original native card",
+              noVoteMutation: true,
+              revisionPreserved: true,
+              revision: after.revision,
+              sourceDraftSha256: digest(before.authoredShowJson),
+              resultCounts: actualResult.results.map((item) => item.count),
+              chosenOutcome: expectedOutcome,
+              resetAfterReplay: true,
+              resetAfterQuestionChange: true,
+            })
+          }
+          await verifyDemoSelection(false)
+          await go("question", 3)
+          await iframe
+            .getByTestId("full-show-question-text")
+            .fill("ACK_VERIFIED_QUESTION_THREE")
+          await page.evaluate(() => window.__host.dropMutationAck())
+          await iframe.getByTestId("full-show-apply-question").click()
+          await iframe.getByTestId("full-show-retry-edit").waitFor()
+          await iframe
+            .getByRole("status")
+            .filter({ hasText: "draft changed elsewhere" })
+            .waitFor()
+          const afterLostAck = await revision()
+          observations.push({
+            engine,
+            theme,
+            check: "lost ACK durable revision",
+            revision: afterLostAck,
+          })
+          assert.equal(afterLostAck, 3)
+          await iframe.getByTestId("full-show-retry-edit").click()
+          await waitRevision(afterLostAck)
+          assert.equal(
+            await revision(),
+            afterLostAck,
+            "Retry must replay the durable operation",
+          )
+          assert.equal(
+            JSON.parse((await currentRecord()).authoredShowJson).cards.find(
+              (card) => card.key === "q3",
+            ).question,
+            "ACK_VERIFIED_QUESTION_THREE",
+          )
+          await page.reload()
+          await page.locator("html[data-host-ready=true]").waitFor()
+          await waitRevision(afterLostAck)
+          await iframe.getByTestId("full-show-undo").click()
+          await waitRevision(afterLostAck + 1)
+          observations.push({
+            engine,
+            theme,
+            check: "reconnect undo creates next revision",
+            revision: afterLostAck + 1,
+          })
+          assert.equal(
+            JSON.parse((await currentRecord()).authoredShowJson).cards.find(
+              (card) => card.key === "q3",
+            ).question,
+            "SELECTED_QUESTION_2",
+          )
+          await go("question", 3)
+          await iframe
+            .getByTestId("full-show-question-text")
+            .fill("FINAL_QUESTION_THREE")
+          await iframe.getByTestId("full-show-apply-question").click()
+          await waitRevision(5)
+          await go("answerCards", 3)
+          await loadAssets()
+          const discovered = await issuer
+            .semanticDraftRepository(scenario.authoring)
+            .assets(principal, {
+              contractVersion: "0.1.0",
+              draftId: scenario.record.draftId,
+              expectedRevision: 5,
+              purpose: "background",
+              locale: "en",
+            })
+          const purple = discovered.assets.find((asset) =>
+            asset.publicUrl.endsWith("/v4/question-bg.webp"),
+          )
+          assert(purple)
+          await iframe
+            .getByTestId("full-show-background")
+            .selectOption(purple.ref.assetId)
+          await iframe.getByTestId("full-show-apply-background").click()
+          await waitRevision(6)
+          await loadAssets()
+          const imageChoices = await issuer
+            .semanticDraftRepository(scenario.authoring)
+            .assets(principal, {
+              contractVersion: "0.1.0",
+              draftId: scenario.record.draftId,
+              expectedRevision: 6,
+              purpose: "answer-image",
+              locale: "en",
+            })
+          assert.equal(imageChoices.assets.length, 5)
+          for (let index = 0; index < 5; index += 1) {
+            await iframe
+              .getByTestId("full-show-picture-" + (index + 1))
+              .selectOption(imageChoices.assets[index].ref.assetId)
+          }
+          await iframe.getByTestId("full-show-apply-pictures").click()
+          await waitRevision(7)
+          const assertImages = async () => {
+            const stage = iframe.locator("[data-full-show-chapter]")
+            const images = stage.locator('img[src*="/v4/cards/"]')
+            await images.nth(4).waitFor({ state: "visible" })
+            for (let imageIndex = 0; imageIndex < 5; imageIndex += 1) {
+              await images.nth(imageIndex).scrollIntoViewIfNeeded()
+            }
+            await images.first().scrollIntoViewIfNeeded()
+            assert.equal(await images.count(), 5)
+            const deadline = Date.now() + 8000
+            let loaded = []
+            do {
+              loaded = await images.evaluateAll((nodes) =>
+                nodes.map((image) => ({
+                  src: image.src,
+                  complete: image.complete,
+                  width: image.naturalWidth,
+                  alt: image.alt,
+                })),
+              )
+              if (
+                loaded.length === 5 &&
+                loaded.every(
+                  (image) => image.complete && image.width > 0 && image.alt,
+                )
+              )
+                break
+              await page.waitForTimeout(100)
+            } while (Date.now() < deadline)
+            assert(
+              loaded.length === 5 &&
+                loaded.every(
+                  (image) => image.complete && image.width > 0 && image.alt,
+                ),
+              "Native image loading failed: " + JSON.stringify(loaded),
+            )
+            const backgrounds = await stage.evaluate((element) =>
+              [...element.querySelectorAll("*")].map(
+                (node) => getComputedStyle(node).backgroundImage,
+              ),
+            )
+            assert(
+              backgrounds.some((value) =>
+                value.includes("/v4/question-bg.webp"),
+              ),
+              "Purple native background must be visible",
+            )
+          }
+          await assertImages()
+          await verifyDemoSelection(true)
+          await iframe.locator(".widget-native-stage").screenshot({
+            path: path.join(evidence, `${engine}-${theme}-five-pictures.png`),
+          })
+          const mediaBeforeTheme = JSON.parse(
+            (await currentRecord()).authoredShowJson,
+          )
+          const original = JSON.parse(scenario.record.authoredShowJson)
+          assert.deepEqual(
+            mediaBeforeTheme.cards.filter((card) => card.key !== "q3"),
+            original.cards.filter((card) => card.key !== "q3"),
+          )
+          const otherTheme =
+            theme === "tadazz-classic" ? "razzia-original" : "tadazz-classic"
+          for (const [offset, selectedTheme] of [otherTheme, theme].entries()) {
+            await loadAssets()
+            await iframe
+              .getByTestId("full-show-theme")
+              .selectOption(selectedTheme + ":1.0.0")
+            await iframe.getByTestId("full-show-apply-theme").click()
+            await waitRevision(8 + offset)
+            await iframe
+              .locator(`[data-full-show-theme="${selectedTheme}"]`)
+              .waitFor()
+            await assertImages()
+            const actual = JSON.parse((await currentRecord()).authoredShowJson)
+            assert.deepEqual(actual.cards, mediaBeforeTheme.cards)
+            assert.deepEqual(
+              actual.defaults.tadazzBackground,
+              mediaBeforeTheme.defaults.tadazzBackground,
+            )
+          }
+          observations.push({
+            engine,
+            theme,
+            check:
+              "Q3, purple background, five native pictures and both theme switches",
+            revision: 9,
+            pictureCount: 5,
+            sourceContentPreserved: true,
+          })
+          scenario.paritySource = structuredClone(
+            scenario.lastPreviewResult._meta[FULL_SHOW_META_V3],
+          )
+          scenario.semanticRevision = 9
+          scenario.go = go
+          scenario.loadAssets = loadAssets
+        },
+      )
+      await run(
+        `${engine} / ${theme} eight localized interfaces and non-reduced native motion`,
+        async () => {
+          const iframe = page.frameLocator("iframe")
+          for (const locale of widgetLocales) {
+            await iframe.getByTestId("full-show-language").selectOption(locale)
+            await iframe
+              .getByTestId("full-show-next")
+              .filter({ hasText: widgetLabels[locale].widget.nextChapter })
+              .waitFor()
+            assert.equal(
+              await iframe.getByTestId("full-show-language").inputValue(),
+              locale,
+            )
+            assert.equal(
+              await iframe.getByTestId("full-show-widget").getAttribute("dir"),
+              "ltr",
+            )
+            assert.equal(
+              await iframe.getByTestId("full-show-previous").innerText(),
+              expectedLocaleText[locale].previous,
+            )
+            assert.equal(
+              await iframe.locator(".widget-editor").getAttribute("aria-label"),
+              expectedLocaleText[locale].editing,
+            )
+            assert.equal(
+              await iframe.getByTestId("full-show-pause").innerText(),
+              expectedTransportText[locale][0],
+            )
+            assert.equal(
+              await iframe
+                .getByTestId("full-show-aspect")
+                .evaluate((element) =>
+                  element.labels?.[0]?.firstChild?.textContent?.trim(),
+                ),
+              expectedTransportText[locale][1],
+            )
+            if (locale === "fr" || locale === "ja")
+              await iframe.locator(".widget-editor").screenshot({
+                path: path.join(
+                  evidence,
+                  engine + "-" + theme + "-" + locale + "-controls.png",
+                ),
+              })
+            assert.equal(
+              await iframe.locator(".widget-editor summary").innerText(),
+              widgetLabels[locale].widget.appearanceAndSound,
+            )
+          }
+          await iframe.getByTestId("full-show-language").selectOption("en")
+          await iframe
+            .getByTestId("full-show-next")
+            .filter({ hasText: "Next chapter" })
+            .waitFor()
+          if (theme === "tadazz-classic") {
+            await scenario.go("opening", null)
+            await page.emulateMedia({ reducedMotion: "no-preference" })
+            await iframe.getByTestId("full-show-reduce-motion").click()
+            await iframe
+              .locator('[data-testid="full-show-reduce-motion"]:not(:checked)')
+              .waitFor()
+            await iframe.getByTestId("full-show-replay").click()
+            const stage = iframe.locator("[data-full-show-chapter]")
+            const first = await stage.screenshot({ animations: "allow" })
+            await page.waitForTimeout(180)
+            const second = await stage.screenshot({ animations: "allow" })
+            assert.notEqual(
+              digest(first),
+              digest(second),
+              "Native animated stage must change pixels with reduced motion off",
+            )
+            fs.writeFileSync(
+              path.join(evidence, `${engine}-${theme}-motion-a.png`),
+              first,
+            )
+            fs.writeFileSync(
+              path.join(evidence, `${engine}-${theme}-motion-b.png`),
+              second,
+            )
+            await iframe.getByTestId("full-show-reduce-motion").click()
+            await iframe
+              .locator('[data-testid="full-show-reduce-motion"]:checked')
+              .waitFor()
+            await page.emulateMedia({ reducedMotion: "reduce" })
+          }
+        },
+      )
+      await run(
+        `${engine} / ${theme} native audio gesture, acknowledged music and volume, persistent playback`,
+        async () => {
+          const iframe = page.frameLocator("iframe")
+          const currentRecord = () =>
+            scenario.repository.get(principal, scenario.record.draftId)
+          await scenario.go("voting", 3)
+          await iframe.locator(".widget-native-stage").screenshot({
+            path: path.join(
+              evidence,
+              engine + "-" + theme + "-five-pictures-voting.png",
+            ),
+          })
+          const widgetFrame = page
+            .frames()
+            .find((value) => value.url().endsWith("/widget"))
+          assert(widgetFrame)
+          assert(
+            await widgetFrame.evaluate(() =>
+              window.__nativeAudio.every((element) => element.paused),
+            ),
+            "No native audio may start before the gesture",
+          )
+          await iframe.getByTestId("full-show-enable-audio").click()
+          await iframe
+            .locator('[data-testid="full-show-audio"][data-audio-playing=true]')
+            .waitFor({ state: "attached" })
+          await page.waitForTimeout(350)
+          const before = await widgetFrame.evaluate(() =>
+            window.__nativeAudio
+              .map((element, index) => ({
+                index,
+                src: element.currentSrc || element.src,
+                paused: element.paused,
+                time: element.currentTime,
+                volume: element.volume,
+              }))
+              .filter((value) => !value.paused && value.time > 0),
+          )
+          assert(before.length > 0, "Real native media time must advance")
+          await iframe.getByTestId("full-show-voting-volume").fill("20")
+          await iframe.getByTestId("full-show-apply-volume").click()
+          await iframe
+            .getByTestId("full-show-revision")
+            .filter({ hasText: "Revision 10" })
+            .waitFor()
+          await page.waitForTimeout(200)
+          const after = await widgetFrame.evaluate(() =>
+            window.__nativeAudio
+              .map((element, index) => ({
+                index,
+                src: element.currentSrc || element.src,
+                paused: element.paused,
+                time: element.currentTime,
+                volume: element.volume,
+              }))
+              .filter((value) => !value.paused && value.time > 0),
+          )
+          assert(
+            after.some((value) =>
+              before.some(
+                (previous) =>
+                  value.index === previous.index &&
+                  value.time > previous.time &&
+                  value.volume < previous.volume,
+              ),
+            ),
+            "Volume ACK must update the persistent native element without rewinding",
+          )
+          observations.push({
+            engine,
+            theme,
+            check: "native media playback before and after volume ACK",
+            before,
+            after,
+          })
+          const volumeDraft = JSON.parse(
+            (await currentRecord()).authoredShowJson,
+          )
+          assert.equal(
+            volumeDraft.defaults.showTheme.overrides.audio.answersMusic.volume,
+            0.2,
+          )
+          await scenario.loadAssets()
+          const music = await issuer
+            .semanticDraftRepository(scenario.authoring)
+            .assets(principal, {
+              contractVersion: "0.1.0",
+              draftId: scenario.record.draftId,
+              expectedRevision: 10,
+              purpose: "audio",
+              locale: "en",
+            })
+          const choice = music.assets.find((value) =>
+            value.publicUrl.endsWith("/sounds/answersMusic.mp3"),
+          )
+          assert(choice)
+          await iframe
+            .getByTestId("full-show-music")
+            .selectOption(choice.ref.assetId)
+          await iframe.getByTestId("full-show-apply-music").click()
+          await iframe
+            .getByTestId("full-show-revision")
+            .filter({ hasText: "Revision 11" })
+            .waitFor()
+          const selectedMusic = JSON.parse(
+            (await currentRecord()).authoredShowJson,
+          )
+          assert.equal(
+            selectedMusic.defaults.showTheme.overrides.audio.answersMusic
+              .mediaUrl,
+            choice.publicUrl,
+          )
+          assert.equal(
+            selectedMusic.defaults.showTheme.overrides.audio.answersMusic
+              .volume,
+            0.2,
+          )
+          if (await iframe.getByTestId("full-show-enable-audio").isVisible())
+            await iframe.getByTestId("full-show-enable-audio").click()
+          await iframe
+            .locator('[data-testid="full-show-audio"][data-audio-playing=true]')
+            .waitFor({ state: "attached" })
+          await page.waitForTimeout(250)
+          assert(
+            await widgetFrame.evaluate(
+              (expected) =>
+                window.__nativeAudio.some(
+                  (element) =>
+                    !element.paused &&
+                    (element.currentSrc || element.src) === expected &&
+                    element.currentTime > 0,
+                ),
+              choice.publicUrl,
+            ),
+          )
+          await iframe.getByTestId("full-show-mute-audio").click()
+          assert(
+            await widgetFrame.evaluate(() =>
+              window.__nativeAudio.every((element) => element.paused),
+            ),
+          )
+          await iframe.getByTestId("full-show-enable-audio").click()
+          await iframe
+            .locator('[data-testid="full-show-audio"][data-audio-playing=true]')
+            .waitFor({ state: "attached" })
+          scenario.audioObserved = true
+        },
+      )
+
+      await run(
+        `${engine} / ${theme} native pause, resume, replay and adjacent skip`,
+        async () => {
+          const iframe = page.frameLocator("iframe")
+          const stage = iframe.locator("[data-full-show-chapter]")
+          const widgetFrame = page
+            .frames()
+            .find((value) => value.url().endsWith("/widget"))
+          assert(widgetFrame && scenario.audioObserved)
+          const media = () =>
+            widgetFrame.evaluate(() =>
+              window.__nativeAudio.map((element, index) => ({
+                index,
+                time: element.currentTime,
+                paused: element.paused,
+                src: element.currentSrc || element.src,
+              })),
+            )
+          await iframe.getByTestId("full-show-pause").focus()
+          await iframe.getByTestId("full-show-pause").press("Space")
+          await iframe.locator('[data-playback-paused="true"]').waitFor()
+          await page.waitForTimeout(100)
+          const pausedTime = Number(
+            await stage.getAttribute("data-playback-elapsed"),
+          )
+          const before = await media()
+          assert(before.length && before.every((value) => value.paused))
+          const nativeClock =
+            theme === "tadazz-classic"
+              ? iframe.getByTestId("tadazz-timer")
+              : iframe.getByTestId("native-razzia-clock")
+          const clockText = await nativeClock.innerText()
+          await page.waitForTimeout(450)
+          const stopped = await media()
+          assert.equal(
+            Number(await stage.getAttribute("data-playback-elapsed")),
+            pausedTime,
+          )
+          assert.equal(await nativeClock.innerText(), clockText)
+          assert(
+            stopped.every(
+              (value) =>
+                value.paused &&
+                Math.abs(value.time - before[value.index].time) < 0.04,
+            ),
+            "Paused native media must not advance",
+          )
+          await iframe.getByTestId("full-show-pause").press("Enter")
+          await iframe.locator('[data-playback-paused="false"]').waitFor()
+          await page.waitForTimeout(400)
+          const resumed = await media()
+          assert(
+            Number(await stage.getAttribute("data-playback-elapsed")) >
+              pausedTime + 200,
+          )
+          assert(
+            resumed.some(
+              (value) =>
+                !value.paused && value.time > stopped[value.index].time + 0.15,
+            ),
+            "The same native media must resume continuously",
+          )
+          const replayed = []
+          for (const [kind, ordinal] of [
+            ["question", 3],
+            ["opening", null],
+          ]) {
+            await scenario.go(kind, ordinal)
+            const beforeEpoch = await stage.getAttribute("data-playback-epoch")
+            const node = await stage
+              .locator(":scope > div")
+              .first()
+              .elementHandle()
+            assert(node)
+            await iframe.getByTestId("full-show-replay").click()
+            await iframe
+              .locator(
+                `[data-full-show-chapter]:not([data-playback-epoch="${beforeEpoch}"])`,
+              )
+              .waitFor()
+            assert.equal(
+              await node.evaluate((element) => element.isConnected),
+              false,
+              "Replay must remount the native question or scene",
+            )
+            assert(
+              Number(await stage.getAttribute("data-playback-elapsed")) < 1000,
+            )
+            assert((await stage.innerText()).trim().length > 0)
+            replayed.push({
+              kind,
+              previousEpoch: Number(beforeEpoch),
+              epoch: Number(await stage.getAttribute("data-playback-epoch")),
+            })
+            await node.dispose()
+          }
+          const firstId = await stage.getAttribute("data-full-show-chapter")
+          await iframe.getByTestId("full-show-next").focus()
+          await iframe.getByTestId("full-show-next").press("Enter")
+          await iframe
+            .locator(`[data-full-show-chapter="${scenario.chapters[1].id}"]`)
+            .waitFor()
+          await iframe.getByTestId("full-show-previous").focus()
+          await iframe.getByTestId("full-show-previous").press("Space")
+          await iframe
+            .locator(`[data-full-show-chapter="${firstId}"]`)
+            .waitFor()
+          observations.push({
+            engine,
+            theme,
+            check: "native pause, resume, replay and adjacent skip",
+            pausedTime,
+            clockText,
+            before,
+            stopped,
+            resumed,
+            replayed,
+            adjacentSkip: true,
+            singleNativeDemoClock: true,
+          })
+        },
+      )
+      await run(
+        `${engine} / ${theme} responsive 16:9 and 4:3 keyboard controls`,
+        async () => {
+          const iframe = page.frameLocator("iframe")
+          await scenario.go("answerCards", 3)
+          const geometry = []
+          for (const width of [390, 1366]) {
+            await page.setViewportSize({ width, height: 1200 })
+            for (const aspect of ["16 / 9", "4 / 3"]) {
+              await iframe.getByTestId("full-show-aspect").selectOption(aspect)
+              await page.waitForTimeout(950)
+              if (theme === "razzia-original")
+                await iframe
+                  .locator(
+                    '[data-testid="native-stage-viewport"][data-fit-ready="true"]',
+                  )
+                  .waitFor()
+              const outer = await iframe
+                .getByTestId("full-show-native-surface")
+                .boundingBox()
+              const inner = await iframe
+                .locator("[data-full-show-chapter]")
+                .boundingBox()
+              assert(outer && inner && inner.width > 250 && inner.height > 140)
+              const expected = aspect === "16 / 9" ? 16 / 9 : 4 / 3
+              assert(Math.abs(outer.width / outer.height - expected) < 0.02)
+              assert(
+                Math.abs(inner.width - outer.width) < 2 &&
+                  Math.abs(inner.height - outer.height) < 2,
+              )
+              const viewport = await iframe
+                .getByTestId("full-show-widget")
+                .evaluate(() => ({
+                  width: innerWidth,
+                  scroll: document.documentElement.scrollWidth,
+                }))
+              assert(
+                viewport.scroll <= viewport.width + 1,
+                "Widget must not overflow horizontally",
+              )
+              const images = await iframe
+                .locator('[data-full-show-chapter] img[src*="/v4/cards/"]')
+                .count()
+              assert.equal(images, 5)
+              const composition = await iframe
+                .locator("[data-full-show-chapter]")
+                .evaluate((stage) => {
+                  const viewport = stage.getBoundingClientRect()
+                  const bounds = (node) => {
+                    const rect = node.getBoundingClientRect()
+                    return {
+                      id:
+                        node.getAttribute("data-testid") ??
+                        node.getAttribute("data-v4-choice"),
+                      x: rect.x,
+                      y: rect.y,
+                      width: rect.width,
+                      height: rect.height,
+                      inside:
+                        rect.width > 0 &&
+                        rect.height > 0 &&
+                        rect.left >= viewport.left - 1 &&
+                        rect.top >= viewport.top - 1 &&
+                        rect.right <= viewport.right + 1 &&
+                        rect.bottom <= viewport.bottom + 1,
+                    }
+                  }
+                  return {
+                    cards: [
+                      ...stage.querySelectorAll(
+                        '[data-testid^="photo-card-choice-"], [data-v4-choice]',
+                      ),
+                    ].map(bounds),
+                    images: [
+                      ...stage.querySelectorAll('img[src*="/v4/cards/"]'),
+                    ].map(bounds),
+                  }
+                })
+              assert.equal(composition.cards.length, 5)
+              assert.equal(composition.images.length, 5)
+              assert(
+                composition.cards.every((item) => item.inside) &&
+                  composition.images.every((item) => item.inside),
+                "Every native card and image must fit the actual canvas: " +
+                  JSON.stringify(composition),
+              )
+              const audioControl = iframe.locator(
+                '[data-testid="full-show-enable-audio"], [data-testid="full-show-mute-audio"]',
+              )
+              const audioBounds = await audioControl.boundingBox()
+              assert(
+                audioBounds &&
+                  (audioBounds.y + audioBounds.height <= outer.y + 1 ||
+                    audioBounds.y >= outer.y + outer.height - 1 ||
+                    audioBounds.x + audioBounds.width <= outer.x + 1 ||
+                    audioBounds.x >= outer.x + outer.width - 1),
+                "Audio control must be outside the native composition",
+              )
+              geometry.push({
+                width,
+                aspect,
+                outer,
+                inner,
+                viewport,
+                imageCount: images,
+                composition,
+                audioControl: audioBounds,
+              })
+              if (width === 390)
+                await iframe
+                  .getByTestId("full-show-native-surface")
+                  .screenshot({
+                    path: path.join(
+                      evidence,
+                      `${engine}-${theme}-390-${aspect === "16 / 9" ? "169" : "43"}.png`,
+                    ),
+                  })
+            }
+          }
+          await iframe.getByTestId("full-show-pause").focus()
+          assert(
+            await iframe
+              .getByTestId("full-show-pause")
+              .evaluate((element) => document.activeElement === element),
+          )
+          await iframe.getByTestId("full-show-pause").press("Space")
+          await iframe.locator('[data-playback-paused="true"]').waitFor()
+          await iframe.getByTestId("full-show-pause").press("Enter")
+          await iframe.locator('[data-playback-paused="false"]').waitFor()
+          await iframe.getByTestId("full-show-pause").press("Tab")
+          assert(
+            await iframe
+              .getByTestId("full-show-widget")
+              .evaluate(
+                (element) =>
+                  element.contains(document.activeElement) &&
+                  document.activeElement?.tagName === "BUTTON",
+              ),
+          )
+          const unlabeled = await iframe
+            .locator("button")
+            .evaluateAll(
+              (nodes) =>
+                nodes.filter(
+                  (button) =>
+                    !button.textContent?.trim() &&
+                    !button.getAttribute("aria-label"),
+                ).length,
+            )
+          assert.equal(unlabeled, 0)
+          await page.setViewportSize({ width: 1280, height: 1200 })
+          await iframe.getByTestId("full-show-aspect").selectOption("16 / 9")
+          observations.push({
+            engine,
+            theme,
+            check: "responsive 16:9 and 4:3 keyboard controls",
+            geometry,
+            keyboard: "Space/Enter/Tab-focus semantics on native controls",
+            unlabeledButtons: unlabeled,
+          })
+        },
+      )
+      await run(
+        `${engine} / ${theme} zero-vote, tie and picture result parity with preserved media and motion`,
+        async () => {
+          assert(scenario.paritySource)
+          const fixtures = [
+            ...createNativeResultParityFixtures(scenario.paritySource),
+            ...createAdditionalNativeSceneFixtures(scenario.paritySource),
+          ]
+          for (const fixture of fixtures) {
+            scenario.rendererFixture = fixture
+            const witness = {
+              engine,
+              family: theme,
+              ...fixture,
+              observed: { status: "FAIL" },
+            }
+            delete witness.frame
+            rendererFixtures.push(witness)
+            await page.emulateMedia({
+              reducedMotion: fixture.frame.inventory.context.reducedMotion
+                ? "reduce"
+                : "no-preference",
+            })
+            await page.reload()
+            await page.locator("html[data-host-ready=true]").waitFor()
+            const iframe = page.frameLocator("iframe")
+            const stage = iframe.locator(
+              `[data-full-show-chapter="${fixture.frame.inventory.selectedChapterId}"]`,
+            )
+            await stage.waitFor()
+            const expected = fixture.expected
+            let observed = {}
+            if (expected.imageUrls) {
+              const images = stage.locator('img[src*="/v4/cards/"]')
+              await images.nth(4).waitFor({ state: "visible" })
+              for (let imageIndex = 0; imageIndex < 5; imageIndex += 1) {
+                await images.nth(imageIndex).scrollIntoViewIfNeeded()
+              }
+              await images.first().scrollIntoViewIfNeeded()
+              const deadline = Date.now() + 8000
+              let actual = []
+              do {
+                actual = await images.evaluateAll((nodes) =>
+                  nodes.map((image) => ({
+                    src: image.src,
+                    alt: image.alt,
+                    loaded: image.complete && image.naturalWidth > 0,
+                  })),
+                )
+                if (
+                  actual.length === 5 &&
+                  actual.every((image) => image.loaded)
+                )
+                  break
+                await page.waitForTimeout(100)
+              } while (Date.now() < deadline)
+              assert.equal(actual.length, 5)
+              assert(
+                actual.every((image) => image.loaded),
+                "Fixture native image failed: " + JSON.stringify(actual),
+              )
+              assert.deepEqual(
+                actual.map((image) => image.src),
+                expected.imageUrls,
+              )
+              assert.deepEqual(
+                actual.map((image) => image.alt),
+                expected.imageAlts,
+              )
+              if (theme === "tadazz-classic") {
+                const numbers = stage.locator(".tz-result-number")
+                await numbers.nth(4).waitFor()
+                assert.deepEqual(
+                  await numbers.evaluateAll((nodes) =>
+                    nodes.map((node) =>
+                      Number(node.getAttribute("data-target-percentage")),
+                    ),
+                  ),
+                  expected.percentages,
+                )
+                const winners = await stage
+                  .locator("[data-v4-choice].is-favourite")
+                  .evaluateAll((nodes) =>
+                    nodes.map((node) =>
+                      Number(node.getAttribute("data-v4-choice")),
+                    ),
+                  )
+                assert.deepEqual(winners, expected.winnerIndices)
+                if (expected.imageOnly)
+                  assert(
+                    await stage
+                      .locator(".answer-title")
+                      .evaluateAll((nodes) =>
+                        nodes.every(
+                          (node) => getComputedStyle(node).display === "none",
+                        ),
+                      ),
+                  )
+                observed = {
+                  images: actual,
+                  percentages: expected.percentages,
+                  winnerIndices: winners,
+                  countSource:
+                    "native adapter receives exact fixture counts; original V4 presents percentages",
+                }
+              } else {
+                const results = []
+                for (let index = 0; index < 5; index += 1) {
+                  const answer = stage.getByTestId("photo-card-choice-" + index)
+                  const overlay = await answer
+                    .getByTestId("photo-card-overlay-" + index)
+                    .innerText()
+                  assert(overlay.includes(expected.percentages[index] + "%"))
+                  const countText = await answer.innerText()
+                  assert.match(
+                    countText,
+                    new RegExp(
+                      "\\b" + expected.counts[index] + "\\s+votes?\\b",
+                      "u",
+                    ),
+                  )
+                  const bar = await answer
+                    .getByTestId("photo-card-bar-" + index)
+                    .evaluate((node) => node.style.width)
+                  assert.equal(bar, expected.percentages[index] + "%")
+                  if (expected.imageOnly) {
+                    assert.equal(
+                      await answer
+                        .getByTestId("photo-card-caption-" + index)
+                        .count(),
+                      0,
+                    )
+                    assert((await answer.locator(".sr-only").count()) > 0)
+                  }
+                  results.push({
+                    index,
+                    percentage: expected.percentages[index],
+                    count: expected.counts[index],
+                    nativeOverlay: overlay,
+                    bar,
+                  })
+                }
+                const winners = await stage
+                  .locator(
+                    '[data-testid^="photo-card-choice-"][data-winner="true"]',
+                  )
+                  .evaluateAll((nodes) =>
+                    nodes.map((node) =>
+                      Number(node.getAttribute("data-answer-index")),
+                    ),
+                  )
+                assert.deepEqual(winners, expected.winnerIndices)
+                assert.equal(
+                  await stage.getByTestId("zero-votes-notice").count(),
+                  expected.isZeroVotes ? 1 : 0,
+                )
+                const badges = await stage
+                  .getByTestId("card-winner-badge")
+                  .allTextContents()
+                assert.equal(badges.length, expected.winnerIndices.length)
+                if (expected.isTie)
+                  assert(badges.every((text) => text.trim() === "Co-leader"))
+                observed = {
+                  images: actual,
+                  results,
+                  winnerIndices: winners,
+                  winnerBadges: badges,
+                  zeroVotesNotice: expected.isZeroVotes,
+                  winnerPresentation:
+                    "Original PhotoCardGrid rankings, native vote bars and zero-vote/co-leader presentation",
+                }
+              }
+              if (
+                fixture.id === "tie-five-pictures" ||
+                fixture.id === "image-only-five-pictures"
+              )
+                await stage.screenshot({
+                  path: path.join(
+                    evidence,
+                    `${engine}-${theme}-${fixture.id}.png`,
+                  ),
+                })
+            } else {
+              const text = await stage.innerText()
+              assert(text.trim().length > 0)
+              assert(
+                text.includes(expected.sceneTitle),
+                "Exact scene fixture title must render",
+              )
+              assert.doesNotMatch(text, /SELECTED_QUESTION_|PRIVATE_NOTE_/u)
+              observed = {
+                sceneKind: expected.sceneKind,
+                scenePreset: expected.scenePreset,
+                visibleTitle: expected.sceneTitle,
+                emptySceneData: true,
+              }
+            }
+            witness.observed = { status: "PASS", ...observed }
+            writeProgress("renderer fixture " + fixture.id)
+          }
+          scenario.rendererFixture = null
+          await page.emulateMedia({ reducedMotion: "reduce" })
+          await page.reload()
+          await page.locator("html[data-host-ready=true]").waitFor()
+          await page
+            .frameLocator("iframe")
+            .locator("[data-full-show-chapter]")
+            .waitFor()
         },
       )
       await run(
@@ -606,6 +1934,16 @@ try {
             await iframe.locator("[data-full-show-chapter]").count(),
             0,
           )
+          const widgetFrame = page
+            .frames()
+            .find((value) => value.url().endsWith("/widget"))
+          if (widgetFrame)
+            assert(
+              await widgetFrame.evaluate(() =>
+                window.__nativeAudio.every((element) => element.paused),
+              ),
+              "Rejected frame must stop native media",
+            )
           await page.evaluate(() => window.__host.tamper(false))
           await iframe
             .getByRole("button", { name: "Refresh draft", exact: true })
@@ -735,6 +2073,12 @@ try {
             [
               "native opening, five phases, transitions and closing",
               "title edit CAS and summary refresh through AppBridge",
+              "semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+              "eight localized interfaces and non-reduced native motion",
+              "native audio gesture, acknowledged music and volume, persistent playback",
+              "native pause, resume, replay and adjacent skip",
+              "responsive 16:9 and 4:3 keyboard controls",
+              "zero-vote, tie and picture result parity with preserved media and motion",
               "tamper, cancellation and tool-context teardown",
               "CSP, native media resources and browser errors",
             ].map((check) => `${engine} / ${theme} ${check}`),
@@ -747,9 +2091,12 @@ try {
         rendererBuildId: manifest.rendererBuildId,
         artifactSha256: manifest.sha256,
         entries,
+        observations,
+        rendererFixtures,
         calls,
         errors,
         resources,
+        requestFailures,
         requests: network,
       },
       null,

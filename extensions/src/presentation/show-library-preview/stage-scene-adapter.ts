@@ -13,15 +13,27 @@ import {
 } from "../../core/show-library/native-preview-frame-schema"
 
 /** Shared payload-only ABI; host association is established before this boundary. */
+export interface NativePreviewPresentation {
+  background?: { url: string; fit: "contain" | "cover" }
+  answerVisuals: ReadonlyArray<{
+    answerId: string
+    url: string
+    alt: string
+    display: "image" | "both"
+  }>
+}
+
 export type PreviewFrame = NativePreviewFrameV1
 export function validatePreviewFrame(value: PreviewFrame): void {
   nativePreviewFrameV1Schema.parse(value)
 }
+// oxlint-disable-next-line max-params -- Preserve the existing positional native API with optional admitted presentation.
 export function previewSteps(
   frame: PreviewFrame,
   previous: ShowScene | null,
   stage: StageSnapshot,
   wallNow: number,
+  presentation?: NativePreviewPresentation,
 ): { steps: StageStep[]; scene: ShowScene | null } {
   validatePreviewFrame(frame)
   const q: StageQuestion = {
@@ -32,7 +44,22 @@ export function previewSteps(
     options:
       frame.phase === "question"
         ? []
-        : frame.choices.map((choice) => ({ label: choice.label })),
+        : frame.choices.map((choice) => {
+            const visual = presentation?.answerVisuals.find(
+              (v) => v.answerId === choice.id,
+            )
+
+            return {
+              label: choice.label,
+              ...(visual
+                ? {
+                    image: visual.url,
+                    alt: visual.alt,
+                    display: visual.display,
+                  }
+                : {}),
+            }
+          }),
   }
   if (frame.phase === "answerCards")
     return { steps: [{ op: "presentOptions", question: q }], scene: previous }
@@ -87,6 +114,7 @@ export function previewSteps(
 export function pausedPreviewSteps(
   frame: PreviewFrame,
   wallNow: number,
+  presentation?: NativePreviewPresentation,
 ): { steps: StageStep[]; scene: ShowScene | null } {
   if (frame.phase === "answerCards" || frame.phase === "voteLocked") {
     const cards = previewSteps(
@@ -94,6 +122,7 @@ export function pausedPreviewSteps(
       null,
       { mode: "idle", questionKey: null },
       wallNow,
+      presentation,
     )
     const step = cards.steps[0]
     if (!step || step.op !== "presentOptions")
@@ -114,6 +143,7 @@ export function pausedPreviewSteps(
     null,
     { mode: "idle", questionKey: null },
     wallNow,
+    presentation,
   )
   return { steps: collapseForResume(planned.steps), scene: planned.scene }
 }
