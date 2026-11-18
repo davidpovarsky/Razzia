@@ -21,6 +21,7 @@ import { useStudioEditor } from "./studio-editor-context"
 import { StudioSelect } from "./studio-select"
 import { ThemeAudioOptions } from "./theme-audio-options"
 import { ShowThemePreview } from "./show-theme-preview"
+import { OpenThemeBuilderLink } from "@razzia/extensions/presentation"
 import {
   OpenThemeBuilderLink,
   PublishedCompositionSelect,

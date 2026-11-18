@@ -1,0 +1,7 @@
+extensions/src/components/theme-builder/StudioThemeBuilder.tsx
+extensions/qa/theme-builder/account-boundary-fixture.tsx
+extensions/qa/theme-builder/account-boundary-playwright.config.ts
+extensions/qa/theme-builder/account-boundary-server.mjs
+extensions/qa/theme-builder/account-boundary.html
+extensions/qa/theme-builder/account-boundary.spec.ts
+extensions/qa/theme-builder/account-boundary.vite.config.ts

@@ -1,0 +1,70 @@
+{
+  "producerCommit": "686a9491251834d8897125d1940108a732dbb0bb",
+  "producerEvidenceCommit": "c4a7383c5f2713c81a0563b6269c3af31efedbd8",
+  "sourceObservationSha256": "f986b1bed9f165c80d2255a7369962dd02ea8ea3d411338fac30875de73555cb",
+  "priorObservationSha256": "8504353872d2be5a6fc507de3887e33e91d68d452fca353965c50426fd0e9844",
+  "existingFontRecords": [
+    {
+      "package": "@fontsource-variable/rubik@5.3.0",
+      "packagePath": "files/rubik-arabic-wght-normal.woff2",
+      "bytes": 32468,
+      "sha256": "f5052e4870bf211fc22df5b85e791a292a77b9baef8cef1dc5a8e62a783ea1e0",
+      "sha512": "01e28ea3672bc7e613ff045734bd050be2416291d2280dbe03d39d9e280f76f8c0ac3256dababe59d405ea619407a5ea428c487f962c1aaafa5ea0f7cbe44e78",
+      "mime": "font/woff2",
+      "registeredByThisObservation": false
+    },
+    {
+      "package": "@fontsource-variable/rubik@5.3.0",
+      "packagePath": "files/rubik-cyrillic-ext-wght-normal.woff2",
+      "bytes": 12388,
+      "sha256": "35e30483bb79be6fd8de0fec4e038fda9e637fc7337f6ff61418c7d08077878b",
+      "sha512": "6c6ceb21e883d79959b24d056d4c012d5f6d73c04107c73144f4af80c0f7f51a3ef972488fc220471c66cb19d013fac63420e1d4b07dfd53b1d705c2dfd7fe97",
+      "mime": "font/woff2",
+      "registeredByThisObservation": false
+    },
+    {
+      "package": "@fontsource-variable/rubik@5.3.0",
+      "packagePath": "files/rubik-cyrillic-wght-normal.woff2",
+      "bytes": 15112,
+      "sha256": "bdb2b33ab916e9e7b42edb61f8aea5f5dd83ad773d6ee4e9b55665daf8954ce8",
+      "sha512": "eaf0c89dc8626bb2d8fd79b1d6650ed2b29db6025aaed84b42f42e3f1c93ec00467a8fcc66091c3df10a48ea04024d569aaf473d9066fa188a1c88c0eda6b569",
+      "mime": "font/woff2",
+      "registeredByThisObservation": false
+    },
+    {
+      "package": "@fontsource-variable/rubik@5.3.0",
+      "packagePath": "files/rubik-hebrew-wght-normal.woff2",
+      "bytes": 9348,
+      "sha256": "197b6dbe5c6bec7276c59b02d70a16ee6acd44322fc2f8d0226c07f8d57976c2",
+      "sha512": "2b9d0ff78a278fd534d91e9416209fe0ba3fd35147faf7be5bbb9a8d0a64582dde7a979ce7d6226a9ecb8ab318661035edbbc86da3e9acfa71bbd79f8784a876",
+      "mime": "font/woff2",
+      "registeredByThisObservation": false
+    },
+    {
+      "package": "@fontsource-variable/rubik@5.3.0",
+      "packagePath": "files/rubik-latin-ext-wght-normal.woff2",
+      "bytes": 19400,
+      "sha256": "09472f217ad1ebb61a7669cf532f9f2f80685e07652ee862fde9a79665aef479",
+      "sha512": "52e6f47791b7cb5ada8f75267bb2eb5abe3f6a6f5192e79cc95ae89d9003a066f6655a8c080adea163961d1498bcaf98260b347b202ce1615b0041e46e68a72c",
+      "mime": "font/woff2",
+      "registeredByThisObservation": false
+    },
+    {
+      "package": "@fontsource-variable/rubik@5.3.0",
+      "packagePath": "files/rubik-latin-wght-normal.woff2",
+      "bytes": 35348,
+      "sha256": "691cd1d9b4c0cdf31a1dcf04259c86f92c85e69f6622abab7964d81e36890691",
+      "sha512": "d9e53ee3bcdede0965db0fe62de1b5b78d59bad2bc2fbf1ae3ef9152e5883cffdb694a36fffd00ebcc71aaff2c4b58630c808781e966231ce4fc103b62df002a",
+      "mime": "font/woff2",
+      "registeredByThisObservation": false
+    }
+  ],
+  "existingCss": [
+    {
+      "packagePath": "wght.css",
+      "bytes": 2581,
+      "sha256": "5c5ce7a83a10034b877db7b8f1080abbbf84329beb192163dbbf02419c442f8b"
+    }
+  ],
+  "meaning": "Private host binding only. Prior D package/license/CAFS observations reused; no new package, registration, rights grant, schema, theme ID or renderer build."
+}

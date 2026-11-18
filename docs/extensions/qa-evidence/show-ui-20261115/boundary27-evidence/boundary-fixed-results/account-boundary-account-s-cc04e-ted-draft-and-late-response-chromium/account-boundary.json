@@ -1,0 +1,27 @@
+{
+  "mode": "edited",
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/api/themes/builder/tenant-a/documents",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/themes/builder/tenant-a/documents/private-tenant-a",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/themes/builder/tenant-b/documents",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/themes/builder/tenant-b/documents/private-tenant-b",
+      "body": null
+    }
+  ],
+  "errors": [],
+  "limits": "Actual E component, synthetic native token and intercepted API; root login/RBAC/persistence/StrictMode development replay not established."
+}

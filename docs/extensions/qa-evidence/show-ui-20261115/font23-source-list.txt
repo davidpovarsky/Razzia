@@ -1,0 +1,8 @@
+docs/extensions/qa-evidence/show-ui-20261115/qa-fixture-server.ts
+docs/extensions/qa-evidence/show-ui-20261115/qa-browser.mjs
+docs/extensions/qa-evidence/show-ui-20261115/qa-browser-v2.mjs
+docs/extensions/qa-evidence/show-ui-20261115/qa-rubik-resources.ts
+docs/extensions/qa-evidence/show-ui-20261115/qa-native-font.config.ts
+docs/extensions/qa-evidence/show-ui-20261115/qa-native-font.spec.ts
+docs/extensions/qa-evidence/show-ui-20261115/prepare-font23.mjs
+docs/extensions/qa-evidence/show-ui-20261115/verify-font-host-policy.mjs

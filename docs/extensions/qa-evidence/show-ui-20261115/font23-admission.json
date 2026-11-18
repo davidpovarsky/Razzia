@@ -1,0 +1,22 @@
+{
+  "claim": {
+    "role": "show_ui",
+    "thread_id": "01a1dfa9-d401-77f3-a539-82c918b393f4",
+    "claim_id": "show-ui-E-font23-20261115",
+    "cpu": 0.25,
+    "memory_mib": 2048,
+    "job": "D concrete private Rubik loader gap: unchanged native21 renderer, exact cached CSS/6WOFF2, 6 focused both-engine font tests and startup tamper check",
+    "terminal": false,
+    "claimed_utc": "2026-11-15T21:18:49.0594830Z",
+    "parent_authorization": "Existing Lane E scope and manager concrete font-loader followup; existing90MiB allocation",
+    "disk_projection_bytes": 393216
+  },
+  "currentOwnerBytes": 93904896,
+  "actualFree": 2524897280,
+  "allRemainingGrowth": 120467456,
+  "unassignedPoolBytes": 6291456,
+  "diskFloor": 2147483648,
+  "marginBytes": 67108864,
+  "sourceTarBytes": 41984,
+  "estimate": "39KB source + ~49KB tar + allocated rounding/flat retained hardlinks + ~100KB Docker and receipts <=384KiB; fonts and retained archive only tmpfs; no installs/copies to cloud disk"
+}

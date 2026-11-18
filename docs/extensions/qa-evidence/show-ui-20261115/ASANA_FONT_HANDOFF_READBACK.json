@@ -1,0 +1,48 @@
+{
+  "observedUtc": "2026-11-15T21:32:43.420Z",
+  "source": "4fd7c72d8234afeacd298b9a4df05bcd9c16ab63",
+  "evidence": "d9f22e89103f69c5ffe17f7cef9cadb8ac97c35c",
+  "checks": [
+    {
+      "task": "1220486196056865",
+      "completed": false,
+      "sourceAndEvidenceVerified": true,
+      "failureAndCoverageLimitsVerified": true
+    },
+    {
+      "task": "1220486371643814",
+      "completed": false,
+      "sourceAndEvidenceVerified": true,
+      "failureAndCoverageLimitsVerified": true
+    },
+    {
+      "task": "1220486398573830",
+      "completed": false,
+      "sourceAndEvidenceVerified": true,
+      "failureAndCoverageLimitsVerified": true
+    }
+  ],
+  "handoffParent": "1220547779792791",
+  "fontExistingTopic": "1220548100130126",
+  "fontReply": "1220548101384727",
+  "fontReplyReadBack": true,
+  "pendingNativeSave": {
+    "gid": "1220548038356495",
+    "name": "[HANDOFF] E — Native Save consent UI root integration",
+    "completed": false,
+    "parent": {
+      "gid": "1220547779792791"
+    },
+    "notesVerified": true
+  },
+  "pendingOAuthLogin": {
+    "gid": "1220548010998730",
+    "name": "[HANDOFF] E — OAuth pending-login route and StrictMode proof",
+    "completed": false,
+    "parent": {
+      "gid": "1220547779792791"
+    },
+    "notesVerified": true
+  },
+  "directManagerMessageSent": false
+}

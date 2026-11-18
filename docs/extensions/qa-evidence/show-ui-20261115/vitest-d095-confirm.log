@@ -1,0 +1,14 @@
+
+ RUN  v5.0.3 /work/extensions
+
+ ✓ src/presentation/show-library-preview/preview-candidate.test.ts (12 tests) 306ms
+
+ Test Files  1 passed (1)
+      Tests  12 passed (12)
+   Start at  09:26:39
+   Duration  6.19s (transform 68%, import 25%, tests 6%, worker 2%)
+
+  Transform  transforming modules took 3.75s · 68% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             on CI this only helps when the cache directory is persisted between runs
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns

@@ -1,0 +1,2 @@
+qa/theme-builder/account-boundary.spec.ts(50,97): error TS2339: Property 'value' does not exist on type 'HTMLElement | SVGElement'.
+  Property 'value' does not exist on type 'HTMLElement'.

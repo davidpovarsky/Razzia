@@ -1,0 +1,18 @@
+{
+  "id": "6786fae9f366845622f08be36f1e8955768c973981fc3e8b0f02fe340adf956a",
+  "name": "/tadazz-show-ui-E-font23",
+  "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 1,
+    "Error": "",
+    "StartedAt": "2026-11-15T21:19:08.788722619Z",
+    "FinishedAt": "2026-11-15T21:28:52.881312013Z"
+  }
+}

@@ -1,0 +1,456 @@
+{
+  "owned_new_allocated_bytes": 94322688,
+  "disk_available": 2522492928,
+  "method": "allocated blocks plus directory blocks; inode dedup; only links outside owned roots excluded as shared retained bytes; own reused hardlinks counted once; owned E Docker metadata plus SizeRw logical proxy included; no deletions",
+  "paths": [
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-webkit-diagnostic2",
+      "new_allocated_blocks_bytes": 16384
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-account-latest.py",
+      "new_allocated_blocks_bytes": 4096
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-authoring-packet2",
+      "new_allocated_blocks_bytes": 147456
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-native21",
+      "new_allocated_blocks_bytes": 40960
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-account-v3.py",
+      "new_allocated_blocks_bytes": 4096
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-authoring-view4",
+      "new_allocated_blocks_bytes": 618496
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-authoring-packet5",
+      "new_allocated_blocks_bytes": 299008
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-authoring-view3",
+      "new_allocated_blocks_bytes": 561152
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-authoring-packet6",
+      "new_allocated_blocks_bytes": 364544
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-authoring-view5",
+      "new_allocated_blocks_bytes": 692224
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-webkit-diagnostic5",
+      "new_allocated_blocks_bytes": 16384
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-boundary27",
+      "new_allocated_blocks_bytes": 212992
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-315d-overlay",
+      "new_allocated_blocks_bytes": 65536
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-account-v2.py",
+      "new_allocated_blocks_bytes": 4096
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-native20",
+      "new_allocated_blocks_bytes": 36864
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-authoring-view2",
+      "new_allocated_blocks_bytes": 471040
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-webkit-diagnostic3",
+      "new_allocated_blocks_bytes": 16384
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-authoring-view7",
+      "new_allocated_blocks_bytes": 835584
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-consent19",
+      "new_allocated_blocks_bytes": 49152
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-format12",
+      "new_allocated_blocks_bytes": 94208
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-authoring-packet7",
+      "new_allocated_blocks_bytes": 368640
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-authoring-packet1",
+      "new_allocated_blocks_bytes": 147456
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-native18",
+      "new_allocated_blocks_bytes": 40960
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-followup14",
+      "new_allocated_blocks_bytes": 143360
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-authoring-packet4",
+      "new_allocated_blocks_bytes": 229376
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-format13",
+      "new_allocated_blocks_bytes": 126976
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-authoring-view1",
+      "new_allocated_blocks_bytes": 471040
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-successor9",
+      "new_allocated_blocks_bytes": 794624
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-native-save22",
+      "new_allocated_blocks_bytes": 1331200
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-webkit-view8",
+      "new_allocated_blocks_bytes": 479232
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11",
+      "new_allocated_blocks_bytes": 532480
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-315d-r6-overlay",
+      "new_allocated_blocks_bytes": 32768
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-webkit-fix8",
+      "new_allocated_blocks_bytes": 81920
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-native17",
+      "new_allocated_blocks_bytes": 184320
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-successor-view9",
+      "new_allocated_blocks_bytes": 937984
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-font23",
+      "new_allocated_blocks_bytes": 139264
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-webkit-diagnostic",
+      "new_allocated_blocks_bytes": 16384
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-authoring-view6",
+      "new_allocated_blocks_bytes": 839680
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-native16",
+      "new_allocated_blocks_bytes": 184320
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-webkit-diagnostic4",
+      "new_allocated_blocks_bytes": 16384
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance11",
+      "new_allocated_blocks_bytes": 507904
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-authoring-packet3",
+      "new_allocated_blocks_bytes": 204800
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-format10",
+      "new_allocated_blocks_bytes": 1138688
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-native15",
+      "new_allocated_blocks_bytes": 40960
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-E-ui4-evidence.tgz",
+      "new_allocated_blocks_bytes": 2191360
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-E-webkit-diagnostic2",
+      "new_allocated_blocks_bytes": 32768
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-E-315d-diagnostics",
+      "new_allocated_blocks_bytes": 12288
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-E-authoring-run5",
+      "new_allocated_blocks_bytes": 6557696
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-E-315d-diagnostics-r4",
+      "new_allocated_blocks_bytes": 24576
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-E-webkit-diagnostic5",
+      "new_allocated_blocks_bytes": 81920
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-E-authoring-run6",
+      "new_allocated_blocks_bytes": 9134080
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-E-authoring-run3",
+      "new_allocated_blocks_bytes": 36864
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-E-authoring-run7",
+      "new_allocated_blocks_bytes": 20504576
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-E-authoring-run2",
+      "new_allocated_blocks_bytes": 36864
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-E-315d-diagnostics-r5",
+      "new_allocated_blocks_bytes": 606208
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-E-315d-diagnostics-r3",
+      "new_allocated_blocks_bytes": 24576
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-E-webkit-diagnostic3",
+      "new_allocated_blocks_bytes": 57344
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-E-run6-evidence.tgz",
+      "new_allocated_blocks_bytes": 823296
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-E-315d-diagnostics-r6",
+      "new_allocated_blocks_bytes": 3362816
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-E-format4.tgz",
+      "new_allocated_blocks_bytes": 49152
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-E-authoring-run4",
+      "new_allocated_blocks_bytes": 5013504
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-E-successor9",
+      "new_allocated_blocks_bytes": 11444224
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-E-webkit-fix8",
+      "new_allocated_blocks_bytes": 15667200
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-E-315d-diagnostics-r2",
+      "new_allocated_blocks_bytes": 12288
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-E-webkit-diagnostic",
+      "new_allocated_blocks_bytes": 24576
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-E-authoring-run1",
+      "new_allocated_blocks_bytes": 28672
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-E-webkit-diagnostic4",
+      "new_allocated_blocks_bytes": 73728
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-E-run5-evidence.tgz",
+      "new_allocated_blocks_bytes": 2424832
+    }
+  ],
+  "docker_metadata": [
+    {
+      "container": "/tadazz-show-ui-E-boundary27",
+      "metadata_allocated_bytes": 61440,
+      "size_rw_logical_proxy": 24576
+    },
+    {
+      "container": "/tadazz-show-ui-E-font23",
+      "metadata_allocated_bytes": 57344,
+      "size_rw_logical_proxy": 24576
+    },
+    {
+      "container": "/tadazz-show-ui-E-native-save22",
+      "metadata_allocated_bytes": 61440,
+      "size_rw_logical_proxy": 24576
+    },
+    {
+      "container": "/tadazz-show-ui-E-native21",
+      "metadata_allocated_bytes": 57344,
+      "size_rw_logical_proxy": 24576
+    },
+    {
+      "container": "/tadazz-show-ui-E-native20",
+      "metadata_allocated_bytes": 57344,
+      "size_rw_logical_proxy": 24576
+    },
+    {
+      "container": "/tadazz-show-ui-E-consent19",
+      "metadata_allocated_bytes": 57344,
+      "size_rw_logical_proxy": 24576
+    },
+    {
+      "container": "/tadazz-show-ui-E-native18",
+      "metadata_allocated_bytes": 57344,
+      "size_rw_logical_proxy": 24576
+    },
+    {
+      "container": "/tadazz-show-ui-E-native17",
+      "metadata_allocated_bytes": 57344,
+      "size_rw_logical_proxy": 24576
+    },
+    {
+      "container": "/tadazz-show-ui-E-native16",
+      "metadata_allocated_bytes": 57344,
+      "size_rw_logical_proxy": 24576
+    },
+    {
+      "container": "/tadazz-show-ui-E-native15",
+      "metadata_allocated_bytes": 57344,
+      "size_rw_logical_proxy": 24576
+    },
+    {
+      "container": "/tadazz-show-ui-E-followup14",
+      "metadata_allocated_bytes": 53248,
+      "size_rw_logical_proxy": 24576
+    },
+    {
+      "container": "/tadazz-show-ui-E-acceptance11",
+      "metadata_allocated_bytes": 53248,
+      "size_rw_logical_proxy": 24576
+    },
+    {
+      "container": "/tadazz-show-ui-E-format13",
+      "metadata_allocated_bytes": 53248,
+      "size_rw_logical_proxy": 28672
+    },
+    {
+      "container": "/tadazz-show-ui-E-format12",
+      "metadata_allocated_bytes": 53248,
+      "size_rw_logical_proxy": 28672
+    },
+    {
+      "container": "/tadazz-show-ui-E-format10",
+      "metadata_allocated_bytes": 53248,
+      "size_rw_logical_proxy": 28672
+    },
+    {
+      "container": "/tadazz-show-ui-E-successor9",
+      "metadata_allocated_bytes": 45056,
+      "size_rw_logical_proxy": 24576
+    },
+    {
+      "container": "/tadazz-show-ui-E-webkit-diagnostic5",
+      "metadata_allocated_bytes": 49152,
+      "size_rw_logical_proxy": 28672
+    },
+    {
+      "container": "/tadazz-show-ui-E-webkit-diagnostic4",
+      "metadata_allocated_bytes": 53248,
+      "size_rw_logical_proxy": 28672
+    },
+    {
+      "container": "/tadazz-show-ui-E-webkit-diagnostic3",
+      "metadata_allocated_bytes": 53248,
+      "size_rw_logical_proxy": 28672
+    },
+    {
+      "container": "/tadazz-show-ui-E-webkit-fix8",
+      "metadata_allocated_bytes": 45056,
+      "size_rw_logical_proxy": 24576
+    },
+    {
+      "container": "/tadazz-show-ui-E-webkit-diagnostic2",
+      "metadata_allocated_bytes": 53248,
+      "size_rw_logical_proxy": 24576
+    },
+    {
+      "container": "/tadazz-show-ui-E-webkit-diagnostic",
+      "metadata_allocated_bytes": 53248,
+      "size_rw_logical_proxy": 24576
+    },
+    {
+      "container": "/tadazz-show-ui-E-authoring-run7",
+      "metadata_allocated_bytes": 45056,
+      "size_rw_logical_proxy": 20480
+    },
+    {
+      "container": "/tadazz-show-ui-E-authoring-run6",
+      "metadata_allocated_bytes": 40960,
+      "size_rw_logical_proxy": 16384
+    },
+    {
+      "container": "/tadazz-show-ui-E-authoring-run5",
+      "metadata_allocated_bytes": 40960,
+      "size_rw_logical_proxy": 12288
+    },
+    {
+      "container": "/tadazz-show-ui-E-authoring-run4",
+      "metadata_allocated_bytes": 40960,
+      "size_rw_logical_proxy": 12288
+    },
+    {
+      "container": "/tadazz-show-ui-E-authoring-run3",
+      "metadata_allocated_bytes": 40960,
+      "size_rw_logical_proxy": 12288
+    },
+    {
+      "container": "/tadazz-show-ui-E-authoring-run2",
+      "metadata_allocated_bytes": 40960,
+      "size_rw_logical_proxy": 12288
+    },
+    {
+      "container": "/tadazz-show-ui-E-authoring-run1",
+      "metadata_allocated_bytes": 40960,
+      "size_rw_logical_proxy": 12288
+    },
+    {
+      "container": "/tadazz-show-ui-E-315d-diagnostics-r6",
+      "metadata_allocated_bytes": 45056,
+      "size_rw_logical_proxy": 20480
+    },
+    {
+      "container": "/tadazz-show-ui-E-315d-diagnostics-r5",
+      "metadata_allocated_bytes": 45056,
+      "size_rw_logical_proxy": 20480
+    },
+    {
+      "container": "/tadazz-show-ui-E-315d-diagnostics-r4",
+      "metadata_allocated_bytes": 45056,
+      "size_rw_logical_proxy": 20480
+    },
+    {
+      "container": "/tadazz-show-ui-E-315d-diagnostics-r3",
+      "metadata_allocated_bytes": 45056,
+      "size_rw_logical_proxy": 20480
+    },
+    {
+      "container": "/tadazz-show-ui-E-315d-diagnostics-r2",
+      "metadata_allocated_bytes": 49152,
+      "size_rw_logical_proxy": 20480
+    },
+    {
+      "container": "/tadazz-show-ui-E-315d-diagnostics",
+      "metadata_allocated_bytes": 49152,
+      "size_rw_logical_proxy": 20480
+    }
+  ]
+}

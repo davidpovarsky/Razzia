@@ -1,0 +1,304 @@
+{
+  "cssSha256": "5c5ce7a83a10034b877db7b8f1080abbbf84329beb192163dbbf02419c442f8b",
+  "proof": [
+    {
+      "browser": "chromium",
+      "locales": [
+        {
+          "locale": "en",
+          "notCoveredByUpstreamCss": [],
+          "nativePlatformFonts": [
+            {
+              "familyName": "Rubik Light",
+              "postScriptName": "Rubik-Light",
+              "isCustomFont": true,
+              "glyphCount": 29
+            }
+          ],
+          "decodedByteAliasRasterEqual": true,
+          "sameCloneMetricsDelta": 0,
+          "originalRangeMetricsDelta": 0
+        },
+        {
+          "locale": "fr",
+          "notCoveredByUpstreamCss": [],
+          "nativePlatformFonts": [
+            {
+              "familyName": "Rubik Light",
+              "postScriptName": "Rubik-Light",
+              "isCustomFont": true,
+              "glyphCount": 32
+            }
+          ],
+          "decodedByteAliasRasterEqual": true,
+          "sameCloneMetricsDelta": 0,
+          "originalRangeMetricsDelta": 0
+        },
+        {
+          "locale": "de",
+          "notCoveredByUpstreamCss": [],
+          "nativePlatformFonts": [
+            {
+              "familyName": "Rubik Light",
+              "postScriptName": "Rubik-Light",
+              "isCustomFont": true,
+              "glyphCount": 30
+            }
+          ],
+          "decodedByteAliasRasterEqual": true,
+          "sameCloneMetricsDelta": 0,
+          "originalRangeMetricsDelta": 0
+        },
+        {
+          "locale": "es",
+          "notCoveredByUpstreamCss": [],
+          "nativePlatformFonts": [
+            {
+              "familyName": "Rubik Light",
+              "postScriptName": "Rubik-Light",
+              "isCustomFont": true,
+              "glyphCount": 22
+            }
+          ],
+          "decodedByteAliasRasterEqual": true,
+          "sameCloneMetricsDelta": 0,
+          "originalRangeMetricsDelta": 0
+        },
+        {
+          "locale": "it",
+          "notCoveredByUpstreamCss": [],
+          "nativePlatformFonts": [
+            {
+              "familyName": "Rubik Light",
+              "postScriptName": "Rubik-Light",
+              "isCustomFont": true,
+              "glyphCount": 26
+            }
+          ],
+          "decodedByteAliasRasterEqual": true,
+          "sameCloneMetricsDelta": 0,
+          "originalRangeMetricsDelta": 0
+        },
+        {
+          "locale": "ja",
+          "notCoveredByUpstreamCss": [
+            {
+              "character": "ど",
+              "codePoint": "U+3069"
+            },
+            {
+              "character": "の",
+              "codePoint": "U+306E"
+            },
+            {
+              "character": "色",
+              "codePoint": "U+8272"
+            },
+            {
+              "character": "が",
+              "codePoint": "U+304C"
+            },
+            {
+              "character": "好",
+              "codePoint": "U+597D"
+            },
+            {
+              "character": "き",
+              "codePoint": "U+304D"
+            },
+            {
+              "character": "で",
+              "codePoint": "U+3067"
+            },
+            {
+              "character": "す",
+              "codePoint": "U+3059"
+            },
+            {
+              "character": "か",
+              "codePoint": "U+304B"
+            },
+            {
+              "character": "？",
+              "codePoint": "U+FF1F"
+            }
+          ],
+          "nativePlatformFonts": [
+            {
+              "familyName": "WenQuanYi Zen Hei",
+              "postScriptName": "WenQuanYiZenHei",
+              "isCustomFont": false,
+              "glyphCount": 10
+            },
+            {
+              "familyName": "Rubik Light",
+              "postScriptName": "Rubik-Light",
+              "isCustomFont": true,
+              "glyphCount": 2
+            }
+          ],
+          "decodedByteAliasRasterEqual": true,
+          "sameCloneMetricsDelta": 0,
+          "originalRangeMetricsDelta": 0
+        },
+        {
+          "locale": "tr",
+          "notCoveredByUpstreamCss": [],
+          "nativePlatformFonts": [
+            {
+              "familyName": "Rubik Light",
+              "postScriptName": "Rubik-Light",
+              "isCustomFont": true,
+              "glyphCount": 31
+            }
+          ],
+          "decodedByteAliasRasterEqual": true,
+          "sameCloneMetricsDelta": 0,
+          "originalRangeMetricsDelta": 0
+        },
+        {
+          "locale": "vi",
+          "notCoveredByUpstreamCss": [
+            {
+              "character": "ạ",
+              "codePoint": "U+1EA1"
+            }
+          ],
+          "nativePlatformFonts": [
+            {
+              "familyName": "DejaVu Sans",
+              "postScriptName": "DejaVuSans",
+              "isCustomFont": false,
+              "glyphCount": 1
+            },
+            {
+              "familyName": "Rubik Light",
+              "postScriptName": "Rubik-Light",
+              "isCustomFont": true,
+              "glyphCount": 19
+            }
+          ],
+          "decodedByteAliasRasterEqual": true,
+          "sameCloneMetricsDelta": 0,
+          "originalRangeMetricsDelta": 0
+        }
+      ]
+    },
+    {
+      "browser": "webkit",
+      "locales": [
+        {
+          "locale": "en",
+          "notCoveredByUpstreamCss": [],
+          "nativePlatformFonts": null,
+          "decodedByteAliasRasterEqual": true,
+          "sameCloneMetricsDelta": 0,
+          "originalRangeMetricsDelta": 0.465301513671875
+        },
+        {
+          "locale": "fr",
+          "notCoveredByUpstreamCss": [],
+          "nativePlatformFonts": null,
+          "decodedByteAliasRasterEqual": true,
+          "sameCloneMetricsDelta": 0,
+          "originalRangeMetricsDelta": 0.355224609375
+        },
+        {
+          "locale": "de",
+          "notCoveredByUpstreamCss": [],
+          "nativePlatformFonts": null,
+          "decodedByteAliasRasterEqual": true,
+          "sameCloneMetricsDelta": 0,
+          "originalRangeMetricsDelta": 0.4693603515625
+        },
+        {
+          "locale": "es",
+          "notCoveredByUpstreamCss": [],
+          "nativePlatformFonts": null,
+          "decodedByteAliasRasterEqual": true,
+          "sameCloneMetricsDelta": 0,
+          "originalRangeMetricsDelta": 0.82421875
+        },
+        {
+          "locale": "it",
+          "notCoveredByUpstreamCss": [],
+          "nativePlatformFonts": null,
+          "decodedByteAliasRasterEqual": true,
+          "sameCloneMetricsDelta": 0,
+          "originalRangeMetricsDelta": 0.706298828125
+        },
+        {
+          "locale": "ja",
+          "notCoveredByUpstreamCss": [
+            {
+              "character": "ど",
+              "codePoint": "U+3069"
+            },
+            {
+              "character": "の",
+              "codePoint": "U+306E"
+            },
+            {
+              "character": "色",
+              "codePoint": "U+8272"
+            },
+            {
+              "character": "が",
+              "codePoint": "U+304C"
+            },
+            {
+              "character": "好",
+              "codePoint": "U+597D"
+            },
+            {
+              "character": "き",
+              "codePoint": "U+304D"
+            },
+            {
+              "character": "で",
+              "codePoint": "U+3067"
+            },
+            {
+              "character": "す",
+              "codePoint": "U+3059"
+            },
+            {
+              "character": "か",
+              "codePoint": "U+304B"
+            },
+            {
+              "character": "？",
+              "codePoint": "U+FF1F"
+            }
+          ],
+          "nativePlatformFonts": null,
+          "decodedByteAliasRasterEqual": true,
+          "sameCloneMetricsDelta": 0,
+          "originalRangeMetricsDelta": 0.3067626953125
+        },
+        {
+          "locale": "tr",
+          "notCoveredByUpstreamCss": [],
+          "nativePlatformFonts": null,
+          "decodedByteAliasRasterEqual": true,
+          "sameCloneMetricsDelta": 0,
+          "originalRangeMetricsDelta": 0.6041259765625
+        },
+        {
+          "locale": "vi",
+          "notCoveredByUpstreamCss": [
+            {
+              "character": "ạ",
+              "codePoint": "U+1EA1"
+            }
+          ],
+          "nativePlatformFonts": null,
+          "decodedByteAliasRasterEqual": true,
+          "sameCloneMetricsDelta": 0,
+          "originalRangeMetricsDelta": 0.80712890625
+        }
+      ]
+    }
+  ],
+  "limits": "The unchanged upstream six-face CSS excludes Japanese CJK/fullwidth punctuation and Vietnamese U+1EA1. Chromium reports actual custom/OS glyph counts; attribution of its single Vietnamese fallback glyph to U+1EA1 is an inference joining those counts to CSS coverage. WebKit proves decode, same-clone metrics and exact composite raster/alias behavior; its exact platform fallback family was not observed. No system font was installed and no coverage range was altered."
+}
