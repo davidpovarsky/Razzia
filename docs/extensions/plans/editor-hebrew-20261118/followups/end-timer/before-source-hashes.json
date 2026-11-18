@@ -1,0 +1,4 @@
+{
+  "extensions/src/server/game/pausable-countdown.ts": "cfccd1a0d997b38e979077dec9d1562d0763e0f05c5ee67302dd2567258eaf89",
+  "packages/socket/src/services/game/round-manager.ts": "c126dfe11f2b1a48b8414033da312ce065c4ab85e6f0001ffdc93dff336b000c"
+}

@@ -483,8 +483,8 @@ describe("WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Dat
         false,
       )
       expect(res?.success).toBe(true)
-      await vi.advanceTimersByTimeAsync(SECOND_MS)
       expect(round.isCurrentlyAcceptingAnswers).toBe(false)
+      await Promise.resolve()
       expect(round.currentStepName).toBe("reveal")
 
       // Alice received points immediately
