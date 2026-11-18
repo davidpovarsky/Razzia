@@ -1,7 +1,7 @@
 {
   "format": "tadazz-asana-status-readback",
   "version": 1,
-  "captured_at": "2026-11-18T11:48:18Z",
+  "captured_at": "2026-11-18T12:02:35Z",
   "applicationRevision": "e30133c7dfb03412cfb898705f1115d206548668",
   "operatorRevision": "21ef71e4e5e803aa55a6ba60a4c5d1a17c94c100",
   "operatorRevisionScope": "post-cutover tooling; not attributed to the earlier external deployment",
@@ -14,7 +14,8 @@
     "MCP05",
     "MCP08",
     "HQM1",
-    "HQM2"
+    "HQM2",
+    "MCP11"
   ],
   "alreadyCompleted": [
     "MCP01"
@@ -71,9 +72,11 @@
   },
   "summary": {
     "taskCount": 16,
-    "completed": 8,
-    "open": 8,
-    "allReadbacksVerified": true,
+    "completed": 9,
+    "open": 7,
+    "allReadbacksVerified": false,
+    "latestTaskReadbackVerifiedCount": 14,
+    "latestAddendumReadbackPendingCount": 2,
     "parentCompleted": false,
     "entireProjectCompleted": false
   },
@@ -87,10 +90,29 @@
       "modified_at": "2026-11-18T11:47:52.632Z",
       "permalink": "https://app.asana.com/1/1219597879016953/project/1219846276680200/task/1220539632193783",
       "criteriaBrief": "Master cross-host experience and approved release; stays open until actual ChatGPT/Claude account flows meet acceptance.",
-      "statusBrief": "OPEN. Production e301 and all isolated gates verified. Actual ChatGPT/Claude account experience remains blocked; project is not fully complete.",
-      "readbackVerified": true,
-      "readbackKind": "exact_write_readback_with_prior_notes_preserved",
-      "notesSHA256": "13caca97ed73043e6a5cbfdcd0cefa6431ac7e7cdee28ada1eb345229f2b7e3d"
+      "statusBrief": "OPEN. Production e301, component gates and final handoff are verified; MCP11 is complete for handoff only. Actual ChatGPT/Claude account E2E and MCP10 RTL applicability/testing remain. Final parent addendum write was API-confirmed, but its independent readback failed with a temporary network_error.",
+      "readbackVerified": false,
+      "readbackKind": "Latest addendum update acknowledged by Asana; independent post-write get_task unavailable due to temporary network_error. Last independently confirmed state/metadata retained.",
+      "notesSHA256": "13caca97ed73043e6a5cbfdcd0cefa6431ac7e7cdee28ada1eb345229f2b7e3d",
+      "priorVerifiedReadback": {
+        "completed": false,
+        "completed_at": null,
+        "modified_at": "2026-11-18T11:47:52.632Z",
+        "notesSHA256": "13caca97ed73043e6a5cbfdcd0cefa6431ac7e7cdee28ada1eb345229f2b7e3d"
+      },
+      "modified_atScope": "last independently retrieved value before final addendum; latest modified_at unavailable",
+      "notesSHA256Scope": "last independently retrieved notes before final addendum; not the current-content hash",
+      "latestAddendumWrite": {
+        "apiAcknowledged": true,
+        "apiSummary": "Updated 1 of 1 tasks.",
+        "requestedCompleted": false,
+        "submittedNotesSHA256": "8a733b2596bcb03152fd49034c5e11ca6c5288838643fefb018a615d67d2e208",
+        "submittedHashIsNotReadback": true,
+        "postWriteReadbackVerified": false,
+        "postWriteReadbackError": "network_error: The Asana API is temporarily unavailable.",
+        "readOnlyRetries": 1,
+        "duplicateWritePerformed": false
+      }
     },
     {
       "label": "MCP01",
@@ -224,27 +246,27 @@
       "name": "MCP-10 | QA אוטומטי + אינטראקטיבי בשתי הפלטפורמות, אבטחה וביצועים",
       "completed": false,
       "completed_at": null,
-      "modified_at": "2026-11-18T11:46:23.123Z",
+      "modified_at": "2026-11-18T11:57:18.149Z",
       "permalink": "https://app.asana.com/1/1219597879016953/project/1219846276680200/task/1220539638965463",
-      "criteriaBrief": "Real cross-host E2E plus exact scoped QA, performance, audit/freeze and device/provider status; no unsupported pass claims.",
-      "statusBrief": "OPEN/BLOCKED. Actual host E2E missing; audit has findings and historical freeze remains FAIL23. Physical-device/provider/CI omissions retained.",
+      "criteriaBrief": "Actual cross-host E2E, RTL and all eight supported locale bundles, plus scoped QA/performance and documented audit/freeze outcomes; iPad only where eligible and CI only if configured/verified.",
+      "statusBrief": "OPEN/BLOCKED. Actual ChatGPT/Claude E2E is still required. RTL is explicitly NOT_RUN; eight tested locales are LTR. Physical iPad is conditional on eligibility; external CI only if configured/verified; provider NOT_RUN is not a new PSTN requirement. Audit findings and historical freeze FAIL23 remain documented.",
       "readbackVerified": true,
-      "readbackKind": "exact_write_readback_with_prior_notes_preserved",
-      "notesSHA256": "53b3dba8bbaf15ff50a4866896371e777ad0bc0720bd655c182f72a5d2f144de"
+      "readbackKind": "exact post-write get_task including notes and completed state",
+      "notesSHA256": "f8a985b11b08c4badcf5234db89331f9c6a77c54e7a928541da3ba6b18fbd924"
     },
     {
       "label": "MCP11",
       "taskID": "1220539769107140",
       "name": "MCP-11 | תיעוד, handoff, staging, versioning ו־release gate",
-      "completed": false,
-      "completed_at": null,
-      "modified_at": "2026-11-18T11:47:40.466Z",
+      "completed": true,
+      "completed_at": "2026-11-18T11:52:52.284Z",
+      "modified_at": "2026-11-18T11:52:52.365Z",
       "permalink": "https://app.asana.com/1/1219597879016953/project/1219846276680200/task/1220539769107140",
       "criteriaBrief": "Final documentation/handoff, source and receipt ledger, independent review, explicit signoff, rollback/revoke; accepts actual both-host test OR documented host-specific blocker.",
-      "statusBrief": "OPEN/PENDING_FINAL_REPORT. Awaiting reviewed final report commit/push/readback. Both real host-specific blockers documented; possible later handoff-only closure.",
+      "statusBrief": "COMPLETED for documented handoff only under the original documented-host-blocker alternative. Exact report e11e444 is committed/pushed and bytes verified. This does not assert installed-host acceptance, a clean dependency audit, RTL acceptance or project completion.",
       "readbackVerified": true,
-      "readbackKind": "exact_write_readback_with_prior_notes_preserved",
-      "notesSHA256": "e31889731e82ee0f1c087e97b5844096cb6c4af11e538cd7467423a0907f26e3"
+      "readbackKind": "exact post-write get_task including notes and completed state",
+      "notesSHA256": "d279d31be0957e3b1287ed67f07e1215271a72a1b99be6d2a5d1fdfecc5358f2"
     },
     {
       "label": "HQM1",
@@ -297,10 +319,87 @@
       "modified_at": "2026-11-18T11:47:05.585Z",
       "permalink": "https://app.asana.com/1/1219597879016953/project/1220541896326618/task/1220541917275282",
       "criteriaBrief": "Aggregates MCP09/10/11; remains open while connected-host installation and E2E remain blocked.",
-      "statusBrief": "OPEN because MCP09/10 require actual connected-account E2E; MCP11 handoff exception does not close them.",
-      "readbackVerified": true,
-      "readbackKind": "exact_write_readback_with_prior_notes_preserved",
-      "notesSHA256": "e7ef97db6b61852151ed8b07a441bc3f1dfe6bd4ff965f44b7c81e953966239d"
+      "statusBrief": "OPEN because MCP09/10 still require actual connected-account installation/E2E and MCP10 retains RTL NOT_RUN. MCP11's handoff-only completion does not close this lane. Final addendum write was API-confirmed, but its independent readback failed with a temporary network_error.",
+      "readbackVerified": false,
+      "readbackKind": "Latest addendum update acknowledged by Asana; independent post-write get_task unavailable due to temporary network_error. Last independently confirmed state/metadata retained.",
+      "notesSHA256": "e7ef97db6b61852151ed8b07a441bc3f1dfe6bd4ff965f44b7c81e953966239d",
+      "priorVerifiedReadback": {
+        "completed": false,
+        "completed_at": null,
+        "modified_at": "2026-11-18T11:47:05.585Z",
+        "notesSHA256": "e7ef97db6b61852151ed8b07a441bc3f1dfe6bd4ff965f44b7c81e953966239d"
+      },
+      "modified_atScope": "last independently retrieved value before final addendum; latest modified_at unavailable",
+      "notesSHA256Scope": "last independently retrieved notes before final addendum; not the current-content hash",
+      "latestAddendumWrite": {
+        "apiAcknowledged": true,
+        "apiSummary": "Updated 1 of 1 tasks.",
+        "requestedCompleted": false,
+        "submittedNotesSHA256": "d4ef4ecdef833ee8910a5ac6e3130f3a13dc6e7465a2071a85089ee317a88a46",
+        "submittedHashIsNotReadback": true,
+        "postWriteReadbackVerified": false,
+        "postWriteReadbackError": "network_error: The Asana API is temporarily unavailable.",
+        "readOnlyRetries": 0,
+        "duplicateWritePerformed": false
+      }
     }
-  ]
+  ],
+  "finalHandoffReport": {
+    "commit": "e11e444a4eef01aea82b99c0cc121bca1178dfaa",
+    "path": "docs/extensions/plans/phase3-takeover-20261117/production-handoff-20261118/TADAZZ_PRODUCTION_HANDOFF_2026-11-18.md",
+    "sha256": "6aca5ad1f13f7983d938726d03dd94186386da3842bec6979b23d1a1d1f740c0",
+    "bytes": 41853,
+    "url": "https://github.com/davidpovarsky/Razzia/blob/e11e444a4eef01aea82b99c0cc121bca1178dfaa/docs/extensions/plans/phase3-takeover-20261117/production-handoff-20261118/TADAZZ_PRODUCTION_HANDOFF_2026-11-18.md",
+    "commitPushVerifiedBy": "root",
+    "bytesReadbackVerified": true
+  },
+  "scopeCaveats": {
+    "rtl": {
+      "status": "NOT_RUN",
+      "testedLocales": [
+        "en",
+        "fr",
+        "de",
+        "es",
+        "it",
+        "ja",
+        "tr",
+        "vi"
+      ],
+      "testedLocaleDirection": "LTR",
+      "implementationDirectionHookPresent": true,
+      "rtlBrowserAssertionPresent": false,
+      "remaining": "MCP10 remains open for RTL applicability/testing; eight LTR locale tests do not establish RTL acceptance."
+    },
+    "physicalIpad": {
+      "status": "NOT_RUN",
+      "criterion": "where eligible",
+      "remaining": "Determine eligibility and test, or document a justified N/A; WebKit is not physical-device Safari evidence."
+    },
+    "externalCI": {
+      "status": "NOT_RUN",
+      "criterion": "only if set up and verified",
+      "additionalCIImplementationRequiredByCriterion": false
+    },
+    "provider": {
+      "status": "NOT_RUN",
+      "additionalPSTNOrLiveRoomRequirement": false
+    },
+    "hostPermissionsAloneCompleteAcceptance": false
+  },
+  "writeAudit": {
+    "scope": "Final component closure and handoff pass only; excludes earlier progress checkpoints in this conversation.",
+    "successfulUpdateCalls": 19,
+    "failedUpdateCalls": 1,
+    "totalUpdateAttempts": 20,
+    "independentExactPostWriteReadbacks": 17,
+    "latestAddendumReadbackFailures": [
+      "parent",
+      "HQM4"
+    ],
+    "failedUpdateRetriedOnce": "MCP10; fresh read proved unchanged before retry; retry succeeded and was read back exactly.",
+    "finalAddendumNetworkFailureDisposition": "Parent and HQM4 updates were acknowledged once; independent readbacks failed. No duplicate mutations or further retries. Last confirmed states and notes hashes retained with explicit scope.",
+    "commentsPosted": 0,
+    "historyPreservation": "All independently verified writes preserved prior notes verbatim. Parent/HQM4 submissions also retained the old notes verbatim, but persisted full-text equality has not been independently verified."
+  }
 }

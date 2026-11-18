@@ -791,7 +791,11 @@
     "installedClaudeWidgetObserved": false,
     "globalLintClean": false,
     "globalFreezeClean": false,
-    "dependencyAuditClean": false
+    "dependencyAuditClean": false,
+    "rtlVerified": false,
+    "physicalIPadVerified": false,
+    "externalCiVerified": false,
+    "dedicatedProviderTestsVerified": false
   },
   "qaResults": {
     "hostAndWeb": {
@@ -880,5 +884,127 @@
       ]
     },
     "publication": "Sanitized receipt summaries and original file hashes are included. Original QA receipts remain at their recorded Windows/Linux locations."
+  },
+  "asanaFinalStatus": {
+    "file": "asana-status-readback.json",
+    "sha256": "2d1ab2d53a93f1c4023c19d36edb6fd26117db316d17b08576de4c7a730020a2",
+    "capturedAtUtc": "2026-11-18T12:02:35Z",
+    "closedThisPass": [
+      "MCP02",
+      "MCP03",
+      "MCP04",
+      "MCP05",
+      "MCP08",
+      "HQM1",
+      "HQM2",
+      "MCP11"
+    ],
+    "alreadyCompleted": [
+      "MCP01"
+    ],
+    "summary": {
+      "taskCount": 16,
+      "completed": 9,
+      "open": 7,
+      "allReadbacksVerified": false,
+      "latestTaskReadbackVerifiedCount": 14,
+      "latestAddendumReadbackPendingCount": 2,
+      "parentCompleted": false,
+      "entireProjectCompleted": false
+    }
+  },
+  "finalLiveReadback": {
+    "file": "final-live-readback.json",
+    "sha256": "8d662dfb27f8c95afcb3ed43ec542e54a93261b2c272209df61a68bea38da013",
+    "result": {
+      "authenticatedHostTest": false,
+      "format": "tadazz-final-live-identity-readback",
+      "identities": {
+        "applicationContainer": "24b725ed6bffa1df8396d23272c1e7b068b57e8f1388a37f409da44e2df64d1c",
+        "applicationImage": "sha256:5c1f6bd344a9fcf7099f67ff7544e7858bccba79e672bdab079ca275a287d930",
+        "applicationRestartCount": 0,
+        "applicationRunning": true,
+        "applicationSourceLabelMatches": true,
+        "changedEnvironmentNames": [
+          "CONFIG_PATH",
+          "SOCKET_PORT",
+          "TADAZZ_INLINE_GAME_PREVIEW_ENABLED",
+          "TADAZZ_MCP_SERVICE_ENABLED"
+        ],
+        "expectedIdentityMatches": true,
+        "gatewayContainer": "c29ea46f10ff6da76428b2f296ff1468c512ec9e2af76eba552d7a144766b202",
+        "gatewayRunning": true,
+        "hostConfigRawEqual": true,
+        "mountsEqual": true,
+        "oldContainer": "dd1401638311a15212e52dcf0153b759003feb83fbce89c6b2756c9ff6732891",
+        "oldRetainedStopped": true
+      },
+      "longTermReliabilityProven": false,
+      "mutationsPerformed": false,
+      "observedAtUtc": "2026-11-18T11:59:03.264780+00:00",
+      "passed": true,
+      "probes": [
+        {
+          "bodyBytes": 15,
+          "bodySha256": "a29ee2b15c494311c52521766e44af56a3ad2248e7a8ab465e5206463c13d288",
+          "contentType": "application/json",
+          "expectedStatus": 200,
+          "jsonObject": true,
+          "passed": true,
+          "path": "/api/health",
+          "status": 200
+        },
+        {
+          "bodyBytes": 171,
+          "bodySha256": "b9c8b54002b9a972d4d4c525d5150e06e1c86b15fcbb61bf507d364dd5b1a022",
+          "contentType": "application/json",
+          "expectedStatus": 200,
+          "jsonObject": true,
+          "passed": true,
+          "path": "/.well-known/oauth-protected-resource",
+          "status": 200
+        },
+        {
+          "bodyBytes": 630,
+          "bodySha256": "afa9cdb932bc17c938009d79f0480d1e6f37379cf6f9004aef9c848130cf4cd8",
+          "contentType": "application/json",
+          "expectedStatus": 200,
+          "jsonObject": true,
+          "passed": true,
+          "path": "/.well-known/oauth-authorization-server/oauth",
+          "status": 200
+        },
+        {
+          "bodyBytes": 161,
+          "bodySha256": "64df829c71b81b0781f81515ce0a0903e412e41c7a6d3c083d81a43740912bfc",
+          "contentType": "application/json",
+          "expectedPublicKeyMatches": true,
+          "expectedStatus": 200,
+          "jsonObject": true,
+          "passed": true,
+          "path": "/oauth/jwks.json",
+          "status": 200
+        },
+        {
+          "bodyBytes": 38,
+          "bodySha256": "7a34850b1cb0f22840279f30d919dd2467727708b5d30a9c2b28a44211b404a0",
+          "contentType": "application/json",
+          "expectedStatus": 401,
+          "jsonObject": true,
+          "oauthChallengePresent": true,
+          "passed": true,
+          "path": "/mcp",
+          "status": 401
+        }
+      ],
+      "purpose": "Final handoff identity check after a parallel cutover; no deployment or QA suite rerun.",
+      "revision": "e30133c7dfb03412cfb898705f1115d206548668"
+    }
+  },
+  "qaScopeClarifications": {
+    "rtl": "NOT_RUN; applicability and verification remain under MCP10; eight existing locales do not prove RTL/bidi",
+    "ipad": "physical device test where eligible; determine eligibility after host availability and test or document N/A",
+    "externalCi": "no PASS claimed; original criterion applies only if configured and verified",
+    "provider": "no dedicated provider PASS claimed; no new mandatory PSTN/provider scenario inferred"
   }
 }

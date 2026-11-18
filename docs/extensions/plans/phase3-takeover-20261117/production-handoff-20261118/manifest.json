@@ -5,13 +5,13 @@
   "files": [
     {
       "name": "TADAZZ_PRODUCTION_HANDOFF_2026-11-18.md",
-      "bytes": 41853,
-      "sha256": "6aca5ad1f13f7983d938726d03dd94186386da3842bec6979b23d1a1d1f740c0"
+      "bytes": 44133,
+      "sha256": "3b5759ba2b326ca9cd4e2f9a1decae7cd5214077d74f7a438b72cd977cc2c59e"
     },
     {
       "name": "release-evidence-summary.json",
-      "bytes": 37658,
-      "sha256": "2a0f964293b465cc450c86a4ffb35fc6e4de698fbf4f31532ab3e5f980a7e34d"
+      "bytes": 42272,
+      "sha256": "4411f4622bcd976b7a223794939194439c716f719eb24971030d86a3a86c4bd7"
     },
     {
       "name": "backup-and-provenance-review.json",
@@ -25,13 +25,18 @@
     },
     {
       "name": "asana-status-readback.json",
-      "bytes": 16229,
-      "sha256": "5285dc12ba459511749fb89a8b31fe3c83af6c33ce158cddcf57457def08951e"
+      "bytes": 21877,
+      "sha256": "2d1ab2d53a93f1c4023c19d36edb6fd26117db316d17b08576de4c7a730020a2"
     },
     {
       "name": "claude-plan-limit.jpg",
       "bytes": 13976,
       "sha256": "065765ce345befeef4ccdf519800f80f545691ab72f81a38f7059d7051a54175"
+    },
+    {
+      "name": "final-live-readback.json",
+      "bytes": 2824,
+      "sha256": "8d662dfb27f8c95afcb3ed43ec542e54a93261b2c272209df61a68bea38da013"
     }
   ]
 }
