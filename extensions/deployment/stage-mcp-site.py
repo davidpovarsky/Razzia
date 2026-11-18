@@ -464,8 +464,8 @@ def verify_host_control_observations(inner):
         need(isinstance(value, dict) and set(value) == {
             "contractVersion", "draftId", "expectedRevision", "idempotencyKey", "intent"
         } and value["contractVersion"] == "0.1.0" and value["intent"] == "createNew" and
-             type(value["expectedRevision"]) is int and value["expectedRevision"] > 0 and
-             all(isinstance(value[key], str) and re.fullmatch(r"[A-Za-z0-9_-]{16,128}", value[key])
+             type(value["expectedRevision"]) is int and 1 <= value["expectedRevision"] <= 2_147_483_647 and
+             all(isinstance(value[key], str) and re.fullmatch(r"[A-Za-z0-9_-]{22,64}", value[key])
                  for key in ("draftId", "idempotencyKey")), "HOST_CONTROL_SAVE_REQUEST_INVALID")
         need(item.get("openedLinks") == [ORIGIN + "/studio/native-save-consent/" + "S" * 54,
                                         ORIGIN + "/manager/quizz/" + "Q" * 21] and
@@ -995,8 +995,8 @@ def self_test_semantic_gates():
     ]
     inner["observations"] += [
         {"engine": engine, "theme": family, "proof": "synthetic-host-ui-control-fixture",
-         "saveRequests": [{"contractVersion": "0.1.0", "draftId": "synthetic-draft-id-0001",
-                           "expectedRevision": 6, "idempotencyKey": "synthetic-save-key-0001", "intent": "createNew"}
+         "saveRequests": [{"contractVersion": "0.1.0", "draftId": "synthetic-draft-id-000001",
+                           "expectedRevision": 6, "idempotencyKey": "synthetic-save-key-000001", "intent": "createNew"}
                           for _ in range(3)],
          "openedLinks": [ORIGIN + "/studio/native-save-consent/" + "S" * 54,
                          ORIGIN + "/manager/quizz/" + "Q" * 21],
@@ -1023,7 +1023,7 @@ def self_test_semantic_gates():
             witnessed.append("demo-answer-" + failure)
         else:
             raise AssertionError("Invalid demo answer proof accepted: " + failure)
-    for failure in ("missing", "changed-retry", "unsafe-link"):
+    for failure in ("missing", "changed-retry", "unsafe-link", "malformed-request"):
         value = json.loads(json.dumps(full))
         observations = value["fullShow"]["observations"]
         target = next(item for item in observations if item.get("proof") == "synthetic-host-ui-control-fixture")
@@ -1031,6 +1031,10 @@ def self_test_semantic_gates():
             observations.remove(target)
         elif failure == "changed-retry":
             target["saveRequests"][2]["idempotencyKey"] = "different-synthetic-key"
+        elif failure == "malformed-request":
+            for request in target["saveRequests"]:
+                request["draftId"] = "a" * 21
+                request["expectedRevision"] = 2_147_483_648
         else:
             target["openedLinks"][1] = "https://example.invalid/foreign"
         try:
