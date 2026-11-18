@@ -1,0 +1,13 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-inline-preview-20261115/extensions
+
+
+ Test Files  4 passed (4)
+      Tests  35 passed (35)
+   Start at  23:51:20
+   Duration  33.90s (import 51%, transform 43%, tests 3%, worker 2%)
+
+  Transform  transforming modules took 6.35s · 43% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns
+

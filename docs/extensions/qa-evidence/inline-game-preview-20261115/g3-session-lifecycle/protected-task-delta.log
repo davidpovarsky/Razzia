@@ -1,0 +1,12 @@
+{
+  "gate": "INLINE_PROTECTED_TASK_DELTA",
+  "status": "PASS",
+  "base": "470804357c7e65b3ebe1d60cc6850ab164d8147a",
+  "head": "b7a8fd4eb16a5d1da1cee71ed148fd431dab7966",
+  "checks": {
+    "working": "",
+    "index": "",
+    "untracked": ""
+  },
+  "historicalTdsGuard": "Separate: unchanged historical mismatch is not a PASS; see INLINE_TDS_BASELINE_REVIEW_20261116.json"
+}
