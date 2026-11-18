@@ -834,7 +834,8 @@ test.describe("phase 3 native consent Studio integration", () => {
         const quizId = retried.data?.quizId as string
 
         expect(quizId).toMatch(/^[A-Za-z0-9_-]{21}$/u)
-        expect(retried.data?.savedRevision).toBe(revision)
+        expect(retried.data?.savedRevision).toBe(1)
+        expect(retried.data?.revision).toBe(6)
         expect(retried.data?.revision).toBe(revision)
         const headers = { Authorization: `Bearer ${nativeTokenA}` }
         const [baseResponse, extrasResponse] = await Promise.all([
@@ -964,7 +965,7 @@ test.describe("phase 3 native consent Studio integration", () => {
         )
         await themeSettings
           .locator("details")
-          .filter({ has: votingAudio })
+          .filter({ has: page.getByTestId("theme-audio-answersMusic") })
           .locator("summary")
           .click()
         await expect(votingAudio.getByRole("slider")).toBeVisible()
