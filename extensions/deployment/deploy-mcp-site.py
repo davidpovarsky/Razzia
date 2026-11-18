@@ -187,7 +187,19 @@ def game_count_evidence(original):
     query = urllib.parse.urlencode({"stdout": 1, "stderr": 1, "timestamps": 1, "since": int(started.timestamp()), "tail": "all"})
     raw = docker_bytes("GET", "/containers/" + original["Id"] + "/logs?" + query, limit=MAX_LOG_BYTES)
     logs = decode_logs(raw, bool(original["Config"].get("Tty")))
-    require("Socket server is running" in logs or "Server is running" in logs or "Tadazz protected native host listening on loopback" in logs, "LOG_STARTUP_NOT_RETAINED")
+    # Original native entrypoint uses this exact wording; match the timestamped
+    # line from the pinned production container, not an arbitrary log substring.
+    native_startup = False
+    for line in logs.splitlines():
+        match = re.fullmatch(r"([0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\.[0-9]{1,9})?(?:Z|[+-][0-9]{2}:[0-9]{2})) Server running on port 3001", line)
+        if match:
+            try:
+                startup_at = dt.datetime.fromisoformat(match.group(1).replace("Z", "+00:00"))
+            except ValueError:
+                continue
+            if startup_at >= started:
+                native_startup = True
+    require(native_startup or "Socket server is running" in logs or "Server is running" in logs or "Tadazz protected native host listening on loopback" in logs, "LOG_STARTUP_NOT_RETAINED")
     witnesses = []
     for line in logs.splitlines():
         match = re.search(r"(?:Total games:|Remaining games:)\s*(\d+)", line)
@@ -859,9 +871,85 @@ def deploy(args, stage, config, original, image, others):
     return 0 if report["success"] else 1
 
 
+def game_count_self_tests():
+    """Only synthetic framed log bytes; never contact Docker or a live service."""
+    checks = []
+    original = {"Id": "a" * 64, "Config": {"Tty": False},
+                "State": {"StartedAt": "2026-11-12T03:38:48.157101207Z"}}
+    startup = "2026-11-12T03:38:49.826768702Z Server running on port 3001\n"
+    zero = "2026-11-12T12:01:30.941422185Z Removed 1 empty game(s). Remaining games: 0\n"
+    positive = "2026-11-12T12:02:30.941422185Z Game synthetic added. Total games: 1\n"
+    saved_reader = globals()["docker_bytes"]
+
+    def framed(value):
+        payload = value.encode()
+        return b"\x01\x00\x00\x00" + struct.pack(">I", len(payload)) + payload
+
+    def probe(raw, expected_failure=None):
+        def only_logs(method, path, body=None, limit=None):
+            parsed = urllib.parse.urlsplit(path)
+            query = urllib.parse.parse_qs(parsed.query)
+            require(method == "GET" and body is None and
+                    parsed.path == "/containers/" + original["Id"] + "/logs" and
+                    query == {"stdout": ["1"], "stderr": ["1"], "timestamps": ["1"],
+                              "since": [str(int(dt.datetime.fromisoformat(original["State"]["StartedAt"].replace("Z", "+00:00")).timestamp()))],
+                              "tail": ["all"]} and limit == MAX_LOG_BYTES,
+                    "SELFTEST_ROOM_LOG_REQUEST_CHANGED")
+            return raw
+        globals()["docker_bytes"] = only_logs
+        try:
+            result = game_count_evidence(original)
+        except GateError as error:
+            require(expected_failure == str(error), "SELFTEST_ROOM_GATE_WRONG_FAILURE")
+            return None
+        require(expected_failure is None, "SELFTEST_ROOM_GATE_ACCEPTED_UNSAFE_LOG")
+        return result
+
+    try:
+        result = probe(framed(startup + zero))
+        require(result["count"] == 0 and
+                result["source"] == "complete-retained-container-log-events" and
+                result["lastCountAt"] == zero.split(" ", 1)[0] and
+                result["checkStopRaceEliminated"] is False,
+                "SELFTEST_NATIVE_STARTUP_ZERO")
+        checks.append("native-exact-startup-complete-log-zero-preserves-age-and-race-limit")
+        result = probe(framed(startup))
+        require(result["source"] == "retained-startup-empty-registry-no-subsequent-game-events" and
+                result["count"] == 0, "SELFTEST_NATIVE_STARTUP_EMPTY")
+        checks.append("native-startup-only-retains-existing-empty-registry-rule")
+        probe(framed(zero), "LOG_STARTUP_NOT_RETAINED")
+        checks.append("room-zero-without-startup-rejected")
+        for false_marker in (startup.replace("port 3001", "port 3000"),
+                             startup.replace(" Server running", " Untrusted prefix Server running")):
+            probe(framed(false_marker + zero), "LOG_STARTUP_NOT_RETAINED")
+        checks.append("unmatched-or-embedded-native-startup-rejected")
+        for invalid_startup in ("garbage Server running on port 3001\n",
+                                "2026-99-99T03:38:49Z Server running on port 3001\n"):
+            probe(framed(invalid_startup), "LOG_STARTUP_NOT_RETAINED")
+        checks.append("native-startup-invalid-timestamp-only-rejected")
+        probe(framed(startup.replace("2026-11-12T03:38:49", "2026-11-11T03:38:49")),
+              "LOG_STARTUP_NOT_RETAINED")
+        checks.append("native-startup-before-current-container-only-rejected")
+        probe(framed(startup + zero + positive), "ACTIVE_ROOMS_PRESENT")
+        checks.append("room-nonzero-after-native-startup-rejected")
+        probe(framed(startup + zero)[:-1], "LOG_FRAME_TRUNCATED")
+        checks.append("truncated-room-log-frame-rejected")
+        probe(framed(startup + zero.replace("2026-11-12T12:01:30", "2026-11-11T12:01:30")),
+              "ROOM_LOG_PRECEDES_START")
+        checks.append("room-count-before-current-start-rejected")
+        for legacy in ("Socket server is running", "Server is running",
+                       "Tadazz protected native host listening on loopback"):
+            result = probe(framed("2026-11-12T03:38:49.826768702Z " + legacy + "\n" + zero))
+            require(result["count"] == 0, "SELFTEST_LEGACY_STARTUP_REJECTED")
+        checks.append("existing-startup-recognizers-preserved")
+    finally:
+        globals()["docker_bytes"] = saved_reader
+    return checks
+
+
 def self_test():
     """Synthetic, no Docker/network/customer access; retained only in temp dir."""
-    checks = []
+    checks = game_count_self_tests()
     original = {"Config": {"Env": ["SECRET=private-value", "SOCKET_PORT=9999", "PATH=/bin"], "Labels": {"existing": "yes"}}, "HostConfig": {"NetworkMode": "bridge"}}
     payload = replacement_payload(original, {"Id": "sha256:" + "a" * 64}, "b" * 40, "test")
     require(env_map(payload["Env"]) == {"SECRET": "private-value", "PATH": "/bin", **ENV_OVERRIDES}, "SELFTEST_ENV_PRESERVATION")

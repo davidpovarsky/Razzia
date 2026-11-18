@@ -550,7 +550,7 @@ async function scenarioFor(theme, engine) {
 
   return scenario
 }
-async function run(name, operation) {
+async function run(name, operation, budgetMs = 120000) {
   const start = Date.now()
   writeProgress(name)
   console.log("START " + name)
@@ -563,17 +563,18 @@ async function run(name, operation) {
       new Promise((_, reject) => {
         timeout = setTimeout(
           () => reject(new Error("QA_CHECK_TIMEOUT: " + name)),
-          120000,
+          budgetMs,
         )
       }),
     ])
-    entries.push({ name, status: "PASS", ms: Date.now() - start })
+    entries.push({ name, status: "PASS", budgetMs, ms: Date.now() - start })
   } catch (error) {
     entries.push({
       name,
       status: "FAIL",
       error: String(error),
       stack: error.stack?.slice(0, 3500),
+      budgetMs,
       ms: Date.now() - start,
     })
     console.error(`${name}: ${error.message}`)
@@ -1234,6 +1235,7 @@ try {
           scenario.go = go
           scenario.loadAssets = loadAssets
         },
+        300000,
       )
       await run(
         `${engine} / ${theme} eight localized interfaces and non-reduced native motion`,
@@ -1993,17 +1995,182 @@ try {
                     ),
                   })
               } else {
-                const text = await stage.innerText()
-                assert(text.trim().length > 0)
-                assert(
-                  text.includes(expected.sceneTitle),
-                  "Exact scene fixture title must render",
+                const labels = previewNativeLabels(
+                  fixture.frame.inventory.context.locale,
                 )
+                const kind = expected.sceneKind
+                const classic = theme === "tadazz-classic"
+                let surface
+                let title
+                let expectedNativeTitle = expected.sceneTitle
+                let nativeScene = null
+                let titleContract = "authored-scene-title"
+                const emptyCounts = {}
+                let emptyText = null
+                let countdown = null
+
+                if (classic && kind === "leaderboard") {
+                  surface = stage.locator('[data-v4-scene="leaderboard"]')
+                  const list = surface.getByTestId("tadazz-leaderboard-screen")
+                  await list.waitFor({ state: "attached" })
+                  assert.equal(
+                    await list.getAttribute("data-total-entries"),
+                    "0",
+                  )
+                  title = list.getByRole("heading", { level: 2 })
+                  expectedNativeTitle = labels.v4Labels.teamLeaderboard
+                  nativeScene = "leaderboard"
+                  titleContract = "native-family-heading"
+                  emptyCounts.teamRows = await list.locator(".team-row").count()
+                  assert.equal(emptyCounts.teamRows, 0)
+                } else if (classic && fixture.id === "animation-spotlight") {
+                  surface = stage.locator('[data-v4-scene="top-pick"]')
+                  title = surface.locator(".spotlight-top")
+                  expectedNativeTitle = labels.v4Labels.mostChosenAnswer
+                  nativeScene = "top-pick"
+                  titleContract = "native-family-heading"
+                  const empty = surface.getByTestId("tadazz-top-pick-name")
+                  await empty.waitFor({ state: "visible" })
+                  emptyText = (await empty.innerText()).trim()
+                  assert.equal(emptyText, labels.v4Labels.noVotes)
+                  emptyCounts.portraits = await surface
+                    .locator(".spotlight-portrait")
+                    .count()
+                  emptyCounts.answerCards = await surface
+                    .locator('[data-testid^="tadazz-card-"]')
+                    .count()
+                  assert.equal(emptyCounts.portraits, 0)
+                  assert.equal(emptyCounts.answerCards, 0)
+                } else if (classic && fixture.id === "animation-interlude") {
+                  surface = stage.locator('[data-v4-scene="interlude"]')
+                  title = surface
+                    .getByTestId("tadazz-screen-interlude")
+                    .locator(".interlude-title")
+                  nativeScene = "interlude"
+                } else {
+                  const presenter =
+                    '[data-testid="studio-scene-presenter"][data-kind="' +
+                    kind +
+                    '"]'
+                  surface = classic
+                    ? stage
+                        .locator(
+                          '[data-testid="tadazz-custom-screen"].is-visible',
+                        )
+                        .locator(presenter)
+                    : stage.locator(presenter)
+                  await surface.waitFor({ state: "visible" })
+                  title = surface.getByRole("heading", { level: 2 })
+                  if (kind === "leaderboard") {
+                    const expectedEmptyText =
+                      labels.sceneLabels.noScores ?? "No scores recorded yet."
+                    const empty = surface.getByText(expectedEmptyText, {
+                      exact: true,
+                    })
+                    await empty.waitFor({ state: "visible" })
+                    emptyText = (await empty.innerText()).trim()
+                    assert.equal(emptyText, expectedEmptyText)
+                    emptyCounts.leaderboardRows = await surface
+                      .getByTestId("leaderboard-scene-row")
+                      .count()
+                    assert.equal(emptyCounts.leaderboardRows, 0)
+                  } else if (kind === "interimResults") {
+                    const expectedEmptyText =
+                      labels.sceneLabels.noInterimResults ??
+                      "No completed results yet."
+                    const empty = surface.getByText(expectedEmptyText, {
+                      exact: true,
+                    })
+                    await empty.waitFor({ state: "visible" })
+                    emptyText = (await empty.innerText()).trim()
+                    assert.equal(emptyText, expectedEmptyText)
+                    emptyCounts.interimRows = await surface
+                      .getByTestId("interim-option-row")
+                      .count()
+                    emptyCounts.totalVotePanels = await surface
+                      .getByTestId("total-votes")
+                      .count()
+                    assert.equal(emptyCounts.interimRows, 0)
+                    assert.equal(emptyCounts.totalVotePanels, 0)
+                  } else if (kind === "answerRecap") {
+                    const empty = surface.getByTestId("recap-empty-state")
+                    await empty.waitFor({ state: "visible" })
+                    emptyText = (await empty.innerText()).trim()
+                    assert.equal(
+                      emptyText,
+                      labels.sceneLabels.noInterimResults ??
+                        "No completed questions to recap yet.",
+                    )
+                    emptyCounts.recapQuestions = await surface
+                      .getByTestId("recap-question-card")
+                      .count()
+                    emptyCounts.recapAnswers = await surface
+                      .getByTestId("recap-winning-option")
+                      .count()
+                    assert.equal(emptyCounts.recapQuestions, 0)
+                    assert.equal(emptyCounts.recapAnswers, 0)
+                  } else if (kind === "countdown") {
+                    await surface
+                      .getByTestId("scene-countdown-circle")
+                      .waitFor()
+                    countdown = await surface.evaluate((node) => ({
+                      displayed: node
+                        .querySelector('[data-testid="scene-countdown-circle"]')
+                        .textContent.trim(),
+                      remaining: node.getAttribute("data-remaining"),
+                    }))
+                    assert.match(countdown.displayed, /^[0-3]$/u)
+                    assert.equal(countdown.remaining, countdown.displayed)
+                  } else if (kind === "animation") {
+                    const preset = surface.getByTestId(
+                      "scene-animation-preset-" + expected.scenePreset,
+                    )
+                    await preset
+                      .locator(
+                        '[data-tada-scene-anim="' + expected.scenePreset + '"]',
+                      )
+                      .waitFor()
+                    emptyCounts.answerChoices = await surface
+                      .locator("[data-v4-choice]")
+                      .count()
+                    assert.equal(emptyCounts.answerChoices, 0)
+                    for (const testId of [
+                      "leaderboard-scene-row",
+                      "interim-option-row",
+                      "recap-question-card",
+                    ]) {
+                      emptyCounts[testId] = await surface
+                        .getByTestId(testId)
+                        .count()
+                      assert.equal(emptyCounts[testId], 0)
+                    }
+                  } else {
+                    assert.fail("Unexpected additional native scene kind")
+                  }
+                }
+                // Await the actual native component's title, not only the outer
+                // chapter wrapper. Classic intentionally owns two scene headings.
+                await title.waitFor({ state: "visible" })
+                const visibleTitle = (await title.innerText()).trim()
+                assert.equal(visibleTitle, expectedNativeTitle)
+                const text = await stage.innerText()
                 assert.doesNotMatch(text, /SELECTED_QUESTION_|PRIVATE_NOTE_/u)
+                assert.doesNotMatch(
+                  await stage.textContent(),
+                  /SELECTED_QUESTION_|PRIVATE_NOTE_/u,
+                )
                 observed = {
-                  sceneKind: expected.sceneKind,
+                  sceneKind: kind,
                   scenePreset: expected.scenePreset,
-                  visibleTitle: expected.sceneTitle,
+                  nativeScene,
+                  titleContract,
+                  visibleTitle,
+                  expectedNativeTitle,
+                  authoredTitleRendered: text.includes(expected.sceneTitle),
+                  emptyText,
+                  emptyCounts,
+                  countdown,
+                  nativeText: (await surface.innerText()).trim(),
                   emptySceneData: true,
                 }
               }

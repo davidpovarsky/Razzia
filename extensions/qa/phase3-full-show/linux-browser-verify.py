@@ -2,8 +2,8 @@
 
 Reuses the existing local image and read-only source/dependency/browser caches.
 No network, published ports, customer mount, installs, old restart or deletion.
-The 900s browser ceiling covers four base scenarios (one measured at ~83s), plus bounded
-native transport, responsive and eleven renderer fixtures per engine/family.
+The 1800s ceiling bounds all 40 checks and 44 renderer fixtures on one CPU. The 9fa
+run took 544.83s for 23 checks; the complete compound semantic case measured 147.562s.
 """
 import json
 import pathlib
@@ -75,9 +75,9 @@ try:
     assert hashlib.sha256((widget/"full-show.html").read_bytes()).hexdigest()==artifact["sha256"]
     for item in artifact["physicalSources"]+artifact["publicAssets"]:
         assert item["path"] in c["manifest"] and c["manifest"][item["path"]]==item["sha256"]
-    argv=["docker","exec","-w","/source","-e","TMPDIR=/tmp","-e","HOME=/tmp","-e","PLAYWRIGHT_BROWSERS_PATH=/root/.cache/ms-playwright","-e","TSX_DISABLE_CACHE=1","-e","NODE_OPTIONS=--max-old-space-size=1024","-e","TADAZZ_FULL_SHOW_EVIDENCE=/evidence/full-show","-e","TADAZZ_FULL_SHOW_SOURCE_SHA="+c["sha"],"-e","TADAZZ_FULL_SHOW_BROWSERS=chromium,webkit",container,"nice","-n","19","taskset","-c","0","timeout","-k","5","900","node","/cleanup/extensions/node_modules/tsx/dist/cli.mjs","--tsconfig","tsconfig.json","extensions/qa/phase3-full-show/browser-verify.mjs"]
+    argv=["docker","exec","-w","/source","-e","TMPDIR=/tmp","-e","HOME=/tmp","-e","PLAYWRIGHT_BROWSERS_PATH=/root/.cache/ms-playwright","-e","TSX_DISABLE_CACHE=1","-e","NODE_OPTIONS=--max-old-space-size=1024","-e","TADAZZ_FULL_SHOW_EVIDENCE=/evidence/full-show","-e","TADAZZ_FULL_SHOW_SOURCE_SHA="+c["sha"],"-e","TADAZZ_FULL_SHOW_BROWSERS=chromium,webkit",container,"nice","-n","19","taskset","-c","0","timeout","-k","5","1800","node","/cleanup/extensions/node_modules/tsx/dist/cli.mjs","--tsconfig","tsconfig.json","extensions/qa/phase3-full-show/browser-verify.mjs"]
     started=time.time()
-    result=subprocess.run(argv,capture_output=True,text=True,timeout=915)
+    result=subprocess.run(argv,capture_output=True,text=True,timeout=1815)
     after=hashes()
     widget_after=widget_hashes()
     inner_path=owned/"full-show/receipt.json"
@@ -95,7 +95,7 @@ finally:
     subprocess.run(["docker","stop","--time","10",container],capture_output=True,check=True)
 '''
 remote = REMOTE.replace("c=CONFIG", "c=" + repr(config))
-result = subprocess.run(["ssh", "-i", str(pathlib.Path.home()/".ssh/tadazz_oracle_2026"), "-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=yes", "ubuntu@132.145.25.168", "sudo -n python3 -"], input=remote, capture_output=True, text=True, encoding="utf8", timeout=960)
+result = subprocess.run(["ssh", "-i", str(pathlib.Path.home()/".ssh/tadazz_oracle_2026"), "-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=yes", "ubuntu@132.145.25.168", "sudo -n python3 -"], input=remote, capture_output=True, text=True, encoding="utf8", timeout=1860)
 (evidence / "controller.stdout.log").write_text(result.stdout, encoding="utf8", newline="\n")
 (evidence / "controller.stderr.log").write_text(result.stderr, encoding="utf8", newline="\n")
 if result.returncode:
