@@ -11,6 +11,15 @@ export const asset = (name: string) =>
 
 export const catalogue = [
   {
+    id: "guessoff",
+    title: "The Great Guess-off",
+    category: "Trivia",
+    time: "5–10 min",
+    desc: "Our free five-question show: family fun, picture trivia, audience polls, leaderboard and a grand winner reveal.",
+    visual: "z",
+    gradient: "linear-gradient(135deg,#0d295a,#59249a 48%,#ef48df)",
+  },
+  {
     id: "crowd",
     title: "The Crowd Decides",
     category: "Survey",
@@ -142,14 +151,24 @@ export function GameCard({
 
   return (
     <HoverDevTiltCard suspended={active}>
-      <GamePreviewSurface
-        selection={{ kind: "published-demo", catalogueId: game.id }}
-        label={t("View {{name}}", { name: t(game.title) })}
-        onOpen={open}
-        onActiveChange={setActive}
-      >
-        <Cover game={game} />
-      </GamePreviewSurface>
+      {game.id === "guessoff" ? (
+        <SiteButton
+          className="tz-guessoff-cover-button"
+          onClick={preview}
+          aria-label={t("View {{name}}", { name: t(game.title) })}
+        >
+          <Cover game={game} />
+        </SiteButton>
+      ) : (
+        <GamePreviewSurface
+          selection={{ kind: "published-demo", catalogueId: game.id }}
+          label={t("View {{name}}", { name: t(game.title) })}
+          onOpen={open}
+          onActiveChange={setActive}
+        >
+          <Cover game={game} />
+        </GamePreviewSurface>
+      )}
       <div className="game-card-body">
         <h3>{t(game.title)}</h3>
         <p>{t(game.desc)}</p>
