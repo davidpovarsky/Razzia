@@ -23,6 +23,7 @@ import {
   createEphemeralOAuthKeys,
 } from "../phase3-native-consent/harness.ts"
 import { authorizePkceGrant } from "../phase3-native-consent/oauth-flow.ts"
+import { createRefreshingPkceSession } from "../phase3-native-consent/oauth-refresh-session.ts"
 import {
   Client,
   StreamableHTTPClientTransport,
@@ -201,19 +202,27 @@ const issuer = await createFirstPartyOAuth({
   nativeSave: undefined,
   configRoot: f.root,
 })
+const oauthFetch = (input, init) => {
+  const request = new Request(input, init)
+  request.headers.set("host", new URL(origin).host)
+
+  return issuer.fetch(request)
+}
 const grant = await authorizePkceGrant({
   origin,
   nativeToken: f.sessions[0].token,
   scopes: ["tadazz.drafts.read", "tadazz.drafts.write", "tadazz.catalog.read"],
   verifyConsentHead: false,
-  fetchImpl: (input, init) => {
-    const request = new Request(input, init)
-    request.headers.set("host", new URL(origin).host)
-
-    return issuer.fetch(request)
-  },
+  fetchImpl: oauthFetch,
 })
-const principal = await issuer.verifyAccessToken(grant.accessToken)
+const qaSession = await createRefreshingPkceSession({
+  origin,
+  clientId: "tadazz-chatgpt-client",
+  grant,
+  fetchImpl: oauthFetch,
+  verifyAccessToken: issuer.verifyAccessToken,
+})
+const accountId = (await qaSession.principal()).accountId
 const scenarios = new Map()
 const entries = []
 const observations = []
@@ -233,6 +242,7 @@ function writeProgress(active) {
       {
         active,
         at: new Date().toISOString(),
+        oauthSession: qaSession.evidence(),
         entries,
         observations,
         rendererFixtures,
@@ -322,7 +332,7 @@ const server = createServer((req, res) => {
         return
       }
       const current = await scenario.repository.get(
-        principal,
+        await qaSession.principal(),
         scenario.record.draftId,
       )
       scenario.selection.expectedRevision = current.revision
@@ -425,21 +435,25 @@ async function scenarioFor(theme, engine) {
   const repository = issuer.draftRepository(authoring)
   const normalized = normalizeDraft(JSON.stringify(authored), authoring)
   const idempotencyKey = key()
-  const record = await repository.create(principal, normalized, {
-    idempotencyKey,
-    correlationId: key(),
-    inputDigest: hashJson({
-      contractVersion: "0.1.0",
-      authoredShowJson: normalized.authoredShowJson,
+  const record = await repository.create(
+    await qaSession.principal(),
+    normalized,
+    {
       idempotencyKey,
-    }),
-  })
+      correlationId: key(),
+      inputDigest: hashJson({
+        contractVersion: "0.1.0",
+        authoredShowJson: normalized.authoredShowJson,
+        idempotencyKey,
+      }),
+    },
+  )
   const preview = createFullShowPreviewPortV3(
     { drafts: repository, authoring },
     {
       rendererBuildId: manifest.rendererBuildId,
       assertAssets(p, requestedTheme, urls) {
-        assert.equal(p.accountId, principal.accountId)
+        assert.equal(p.accountId, accountId)
         assert(
           ["tadazz-classic", "razzia-original"].includes(requestedTheme.id),
         )
@@ -488,7 +502,7 @@ async function scenarioFor(theme, engine) {
   const client = new Client({ name: "native-v3-browser-qa", version: "3" })
   await client.connect(
     new StreamableHTTPClientTransport(new URL(`${origin}/mcp`), {
-      authProvider: { token: () => Promise.resolve(grant.accessToken) },
+      authProvider: { token: qaSession.token },
       fetch: async (input, init) => {
         // Respect the real anonymous 120/minute ingress budget; do not weaken it for QA.
         const wait = Math.max(0, nextHttpSlot - Date.now())
@@ -520,7 +534,7 @@ async function scenarioFor(theme, engine) {
     },
   }
   const { contractVersion: _version, ...selectedInput } = selection
-  const first = await preview.render(principal, selectedInput)
+  const first = await preview.render(await qaSession.principal(), selectedInput)
   const id = key()
   const scenario = {
     id,
@@ -543,6 +557,7 @@ async function run(name, operation) {
   let timeout
 
   try {
+    await qaSession.principal()
     await Promise.race([
       operation(),
       new Promise((_, reject) => {
@@ -715,8 +730,11 @@ try {
                 engine,
                 theme,
                 evidence,
-                readRecord: () =>
-                  scenario.repository.get(principal, scenario.record.draftId),
+                readRecord: async () =>
+                  scenario.repository.get(
+                    await qaSession.principal(),
+                    scenario.record.draftId,
+                  ),
               }),
             )
           },
@@ -795,7 +813,7 @@ try {
             true,
           )
           const current = await scenario.repository.get(
-            principal,
+            await qaSession.principal(),
             scenario.record.draftId,
           )
           assert.equal(current.revision, 1)
@@ -822,7 +840,7 @@ try {
             })
             .waitFor()
           const current = await scenario.repository.get(
-            principal,
+            await qaSession.principal(),
             scenario.record.draftId,
           )
           assert.equal(current.revision, 2)
@@ -850,8 +868,11 @@ try {
         `${engine} / ${theme} semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation`,
         async () => {
           const iframe = page.frameLocator("iframe")
-          const currentRecord = () =>
-            scenario.repository.get(principal, scenario.record.draftId)
+          const currentRecord = async () =>
+            scenario.repository.get(
+              await qaSession.principal(),
+              scenario.record.draftId,
+            )
           const revision = async () => (await currentRecord()).revision
           const waitRevision = async (value) => {
             await iframe
@@ -1082,7 +1103,7 @@ try {
           await loadAssets()
           const discovered = await issuer
             .semanticDraftRepository(scenario.authoring)
-            .assets(principal, {
+            .assets(await qaSession.principal(), {
               contractVersion: "0.1.0",
               draftId: scenario.record.draftId,
               expectedRevision: 5,
@@ -1101,7 +1122,7 @@ try {
           await loadAssets()
           const imageChoices = await issuer
             .semanticDraftRepository(scenario.authoring)
-            .assets(principal, {
+            .assets(await qaSession.principal(), {
               contractVersion: "0.1.0",
               draftId: scenario.record.draftId,
               expectedRevision: 6,
@@ -1306,8 +1327,11 @@ try {
         `${engine} / ${theme} native audio gesture, acknowledged music and volume, persistent playback`,
         async () => {
           const iframe = page.frameLocator("iframe")
-          const currentRecord = () =>
-            scenario.repository.get(principal, scenario.record.draftId)
+          const currentRecord = async () =>
+            scenario.repository.get(
+              await qaSession.principal(),
+              scenario.record.draftId,
+            )
           await scenario.go("voting", 3)
           await iframe.locator(".widget-native-stage").screenshot({
             path: path.join(
@@ -1388,7 +1412,7 @@ try {
           await scenario.loadAssets()
           const music = await issuer
             .semanticDraftRepository(scenario.authoring)
-            .assets(principal, {
+            .assets(await qaSession.principal(), {
               contractVersion: "0.1.0",
               draftId: scenario.record.draftId,
               expectedRevision: 10,
@@ -1733,8 +1757,11 @@ try {
             engine,
             theme,
             evidence,
-            readRecord: () =>
-              scenario.repository.get(principal, scenario.record.draftId),
+            readRecord: async () =>
+              scenario.repository.get(
+                await qaSession.principal(),
+                scenario.record.draftId,
+              ),
           })
           observations.push(hostControls)
           observations.push({
@@ -1755,200 +1782,238 @@ try {
             ...createNativeResultParityFixtures(scenario.paritySource),
             ...createAdditionalNativeSceneFixtures(scenario.paritySource),
           ]
-          for (const fixture of fixtures) {
-            scenario.rendererFixture = fixture
-            const witness = {
-              engine,
-              family: theme,
-              ...fixture,
-              observed: { status: "FAIL" },
-            }
-            delete witness.frame
-            rendererFixtures.push(witness)
-            await page.emulateMedia({
-              reducedMotion: fixture.frame.inventory.context.reducedMotion
-                ? "reduce"
-                : "no-preference",
-            })
-            await page.reload()
-            await page.locator("html[data-host-ready=true]").waitFor()
-            const iframe = page.frameLocator("iframe")
-            const stage = iframe.locator(
-              `[data-full-show-chapter="${fixture.frame.inventory.selectedChapterId}"]`,
-            )
-            await stage.waitFor()
-            const expected = fixture.expected
-            let observed = {}
-            if (expected.imageUrls) {
-              const images = stage.locator('img[src*="/v4/cards/"]')
-              await images.nth(4).waitFor({ state: "visible" })
-              for (let imageIndex = 0; imageIndex < 5; imageIndex += 1) {
-                await images.nth(imageIndex).scrollIntoViewIfNeeded()
+          try {
+            for (const fixture of fixtures) {
+              scenario.rendererFixture = fixture
+              const witness = {
+                engine,
+                family: theme,
+                ...fixture,
+                observed: { status: "FAIL" },
               }
-              await images.first().scrollIntoViewIfNeeded()
-              const deadline = Date.now() + 8000
-              let actual = []
-              do {
-                actual = await images.evaluateAll((nodes) =>
-                  nodes.map((image) => ({
-                    src: image.src,
-                    alt: image.alt,
-                    loaded: image.complete && image.naturalWidth > 0,
-                  })),
+              delete witness.frame
+              rendererFixtures.push(witness)
+              await page.emulateMedia({
+                reducedMotion: fixture.frame.inventory.context.reducedMotion
+                  ? "reduce"
+                  : "no-preference",
+              })
+              await page.reload()
+              await page.locator("html[data-host-ready=true]").waitFor()
+              const iframe = page.frameLocator("iframe")
+              const stage = iframe.locator(
+                `[data-full-show-chapter="${fixture.frame.inventory.selectedChapterId}"]`,
+              )
+              await stage.waitFor()
+              const expected = fixture.expected
+              let observed = {}
+              if (expected.imageUrls) {
+                // Classic reconstructs question cards before mounting the result
+                // scene. Its native play() replaces those earlier image nodes.
+                const resultSurface =
+                  theme === "tadazz-classic"
+                    ? stage.locator('[data-v4-scene="survey-results"]')
+                    : stage
+                await resultSurface.waitFor({ state: "visible" })
+                const nativeReducedMotion =
+                  theme === "tadazz-classic"
+                    ? await resultSurface.getAttribute("data-reduced-motion")
+                    : null
+                if (theme === "tadazz-classic")
+                  assert.equal(
+                    nativeReducedMotion,
+                    String(fixture.frame.inventory.context.reducedMotion),
+                    "The native scene must retain the fixture's motion setting",
+                  )
+                const images = resultSurface.locator('img[src*="/v4/cards/"]')
+                await images.nth(4).waitFor({ state: "visible" })
+                // Prime lazy images while genuine motion continues. Resolve each
+                // node afresh; scrolling need not wait for animation stability.
+                for (let imageIndex = 0; imageIndex < 5; imageIndex += 1) {
+                  await images.nth(imageIndex).evaluate((image) =>
+                    image.scrollIntoView({
+                      block: "nearest",
+                      inline: "nearest",
+                      behavior: "instant",
+                    }),
+                  )
+                }
+                await images.first().evaluate((image) =>
+                  image.scrollIntoView({
+                    block: "nearest",
+                    inline: "nearest",
+                    behavior: "instant",
+                  }),
                 )
-                if (
-                  actual.length === 5 &&
-                  actual.every((image) => image.loaded)
+                const deadline = Date.now() + 8000
+                let actual = []
+                do {
+                  actual = await images.evaluateAll((nodes) =>
+                    nodes.map((image) => ({
+                      src: image.src,
+                      alt: image.alt,
+                      loaded: image.complete && image.naturalWidth > 0,
+                    })),
+                  )
+                  if (
+                    actual.length === 5 &&
+                    actual.every((image) => image.loaded)
+                  )
+                    break
+                  await page.waitForTimeout(100)
+                } while (Date.now() < deadline)
+                assert.equal(actual.length, 5)
+                assert(
+                  actual.every((image) => image.loaded),
+                  "Fixture native image failed: " + JSON.stringify(actual),
                 )
-                  break
-                await page.waitForTimeout(100)
-              } while (Date.now() < deadline)
-              assert.equal(actual.length, 5)
-              assert(
-                actual.every((image) => image.loaded),
-                "Fixture native image failed: " + JSON.stringify(actual),
-              )
-              assert.deepEqual(
-                actual.map((image) => image.src),
-                expected.imageUrls,
-              )
-              assert.deepEqual(
-                actual.map((image) => image.alt),
-                expected.imageAlts,
-              )
-              if (theme === "tadazz-classic") {
-                const numbers = stage.locator(".tz-result-number")
-                await numbers.nth(4).waitFor()
                 assert.deepEqual(
-                  await numbers.evaluateAll((nodes) =>
-                    nodes.map((node) =>
-                      Number(node.getAttribute("data-target-percentage")),
-                    ),
-                  ),
-                  expected.percentages,
+                  actual.map((image) => image.src),
+                  expected.imageUrls,
                 )
-                const winners = await stage
-                  .locator("[data-v4-choice].is-favourite")
-                  .evaluateAll((nodes) =>
-                    nodes.map((node) =>
-                      Number(node.getAttribute("data-v4-choice")),
-                    ),
-                  )
-                assert.deepEqual(winners, expected.winnerIndices)
-                if (expected.imageOnly)
-                  assert(
-                    await stage
-                      .locator(".answer-title")
-                      .evaluateAll((nodes) =>
-                        nodes.every(
-                          (node) => getComputedStyle(node).display === "none",
-                        ),
+                assert.deepEqual(
+                  actual.map((image) => image.alt),
+                  expected.imageAlts,
+                )
+                if (theme === "tadazz-classic") {
+                  const numbers = stage.locator(".tz-result-number")
+                  await numbers.nth(4).waitFor()
+                  assert.deepEqual(
+                    await numbers.evaluateAll((nodes) =>
+                      nodes.map((node) =>
+                        Number(node.getAttribute("data-target-percentage")),
                       ),
-                  )
-                observed = {
-                  images: actual,
-                  percentages: expected.percentages,
-                  winnerIndices: winners,
-                  countSource:
-                    "native adapter receives exact fixture counts; original V4 presents percentages",
-                }
-              } else {
-                const results = []
-                for (let index = 0; index < 5; index += 1) {
-                  const answer = stage.getByTestId("photo-card-choice-" + index)
-                  const overlay = await answer
-                    .getByTestId("photo-card-overlay-" + index)
-                    .innerText()
-                  assert(overlay.includes(expected.percentages[index] + "%"))
-                  const countText = await answer.innerText()
-                  assert.match(
-                    countText,
-                    new RegExp(
-                      "\\b" + expected.counts[index] + "\\s+votes?\\b",
-                      "u",
                     ),
+                    expected.percentages,
                   )
-                  const bar = await answer
-                    .getByTestId("photo-card-bar-" + index)
-                    .evaluate((node) => node.style.width)
-                  assert.equal(bar, expected.percentages[index] + "%")
-                  if (expected.imageOnly) {
-                    assert.equal(
-                      await answer
-                        .getByTestId("photo-card-caption-" + index)
-                        .count(),
-                      0,
+                  const winners = await stage
+                    .locator("[data-v4-choice].is-favourite")
+                    .evaluateAll((nodes) =>
+                      nodes.map((node) =>
+                        Number(node.getAttribute("data-v4-choice")),
+                      ),
                     )
-                    assert((await answer.locator(".sr-only").count()) > 0)
+                  assert.deepEqual(winners, expected.winnerIndices)
+                  if (expected.imageOnly)
+                    assert(
+                      await stage
+                        .locator(".answer-title")
+                        .evaluateAll((nodes) =>
+                          nodes.every(
+                            (node) => getComputedStyle(node).display === "none",
+                          ),
+                        ),
+                    )
+                  observed = {
+                    images: actual,
+                    nativeScene: "survey-results",
+                    nativeReducedMotion,
+                    percentages: expected.percentages,
+                    winnerIndices: winners,
+                    countSource:
+                      "native adapter receives exact fixture counts; original V4 presents percentages",
                   }
-                  results.push({
-                    index,
-                    percentage: expected.percentages[index],
-                    count: expected.counts[index],
-                    nativeOverlay: overlay,
-                    bar,
-                  })
+                } else {
+                  const results = []
+                  for (let index = 0; index < 5; index += 1) {
+                    const answer = stage.getByTestId(
+                      "photo-card-choice-" + index,
+                    )
+                    const overlay = await answer
+                      .getByTestId("photo-card-overlay-" + index)
+                      .innerText()
+                    assert(overlay.includes(expected.percentages[index] + "%"))
+                    const countText = await answer.innerText()
+                    assert.match(
+                      countText,
+                      new RegExp(
+                        "\\b" + expected.counts[index] + "\\s+votes?\\b",
+                        "u",
+                      ),
+                    )
+                    const bar = await answer
+                      .getByTestId("photo-card-bar-" + index)
+                      .evaluate((node) => node.style.width)
+                    assert.equal(bar, expected.percentages[index] + "%")
+                    if (expected.imageOnly) {
+                      assert.equal(
+                        await answer
+                          .getByTestId("photo-card-caption-" + index)
+                          .count(),
+                        0,
+                      )
+                      assert((await answer.locator(".sr-only").count()) > 0)
+                    }
+                    results.push({
+                      index,
+                      percentage: expected.percentages[index],
+                      count: expected.counts[index],
+                      nativeOverlay: overlay,
+                      bar,
+                    })
+                  }
+                  const winners = await stage
+                    .locator(
+                      '[data-testid^="photo-card-choice-"][data-winner="true"]',
+                    )
+                    .evaluateAll((nodes) =>
+                      nodes.map((node) =>
+                        Number(node.getAttribute("data-answer-index")),
+                      ),
+                    )
+                  assert.deepEqual(winners, expected.winnerIndices)
+                  assert.equal(
+                    await stage.getByTestId("zero-votes-notice").count(),
+                    expected.isZeroVotes ? 1 : 0,
+                  )
+                  const badges = await stage
+                    .getByTestId("card-winner-badge")
+                    .allTextContents()
+                  assert.equal(badges.length, expected.winnerIndices.length)
+                  if (expected.isTie)
+                    assert(badges.every((text) => text.trim() === "Co-leader"))
+                  observed = {
+                    images: actual,
+                    results,
+                    winnerIndices: winners,
+                    winnerBadges: badges,
+                    zeroVotesNotice: expected.isZeroVotes,
+                    winnerPresentation:
+                      "Original PhotoCardGrid rankings, native vote bars and zero-vote/co-leader presentation",
+                  }
                 }
-                const winners = await stage
-                  .locator(
-                    '[data-testid^="photo-card-choice-"][data-winner="true"]',
-                  )
-                  .evaluateAll((nodes) =>
-                    nodes.map((node) =>
-                      Number(node.getAttribute("data-answer-index")),
-                    ),
-                  )
-                assert.deepEqual(winners, expected.winnerIndices)
-                assert.equal(
-                  await stage.getByTestId("zero-votes-notice").count(),
-                  expected.isZeroVotes ? 1 : 0,
+                if (
+                  fixture.id === "tie-five-pictures" ||
+                  fixture.id === "image-only-five-pictures"
                 )
-                const badges = await stage
-                  .getByTestId("card-winner-badge")
-                  .allTextContents()
-                assert.equal(badges.length, expected.winnerIndices.length)
-                if (expected.isTie)
-                  assert(badges.every((text) => text.trim() === "Co-leader"))
+                  await stage.screenshot({
+                    path: path.join(
+                      evidence,
+                      `${engine}-${theme}-${fixture.id}.png`,
+                    ),
+                  })
+              } else {
+                const text = await stage.innerText()
+                assert(text.trim().length > 0)
+                assert(
+                  text.includes(expected.sceneTitle),
+                  "Exact scene fixture title must render",
+                )
+                assert.doesNotMatch(text, /SELECTED_QUESTION_|PRIVATE_NOTE_/u)
                 observed = {
-                  images: actual,
-                  results,
-                  winnerIndices: winners,
-                  winnerBadges: badges,
-                  zeroVotesNotice: expected.isZeroVotes,
-                  winnerPresentation:
-                    "Original PhotoCardGrid rankings, native vote bars and zero-vote/co-leader presentation",
+                  sceneKind: expected.sceneKind,
+                  scenePreset: expected.scenePreset,
+                  visibleTitle: expected.sceneTitle,
+                  emptySceneData: true,
                 }
               }
-              if (
-                fixture.id === "tie-five-pictures" ||
-                fixture.id === "image-only-five-pictures"
-              )
-                await stage.screenshot({
-                  path: path.join(
-                    evidence,
-                    `${engine}-${theme}-${fixture.id}.png`,
-                  ),
-                })
-            } else {
-              const text = await stage.innerText()
-              assert(text.trim().length > 0)
-              assert(
-                text.includes(expected.sceneTitle),
-                "Exact scene fixture title must render",
-              )
-              assert.doesNotMatch(text, /SELECTED_QUESTION_|PRIVATE_NOTE_/u)
-              observed = {
-                sceneKind: expected.sceneKind,
-                scenePreset: expected.scenePreset,
-                visibleTitle: expected.sceneTitle,
-                emptySceneData: true,
-              }
+              witness.observed = { status: "PASS", ...observed }
+              writeProgress("renderer fixture " + fixture.id)
             }
-            witness.observed = { status: "PASS", ...observed }
-            writeProgress("renderer fixture " + fixture.id)
+          } finally {
+            scenario.rendererFixture = null
+            await page.emulateMedia({ reducedMotion: "reduce" })
           }
-          scenario.rendererFixture = null
-          await page.emulateMedia({ reducedMotion: "reduce" })
           await page.reload()
           await page.locator("html[data-host-ready=true]").waitFor()
           await page
@@ -2097,6 +2162,7 @@ try {
         sourceHashesUnchanged,
         productionChanged: false,
         customerMountAccessed: false,
+        oauthSession: qaSession.evidence(),
         network: "none",
         transport:
           "Loopback HTTP plus exact hash-verified public-asset interception; no outbound network",

@@ -1,5 +1,6 @@
 import assert from "node:assert/strict"
 import { randomBytes } from "node:crypto"
+import { z } from "zod"
 import { CONSENT_SECURITY_HEADERS } from "../../src/mcp-app/native-host/index.ts"
 import { createPkcePair } from "./harness.ts"
 
@@ -12,9 +13,19 @@ export interface NativeAccountSession {
 
 export interface PkceGrantSession {
   readonly accessToken: string
+  readonly refreshToken: string
+  readonly expiresIn: number
   readonly grantId: string
   readonly ticket: string
 }
+
+export const oauthTokenResponseSchema = z.strictObject({
+  access_token: z.string().min(40),
+  refresh_token: z.string().min(40),
+  token_type: z.literal("Bearer"),
+  expires_in: z.number().int().positive().max(300),
+  scope: z.string(),
+})
 
 export async function registerAndLoginAccount(options: {
   readonly origin: string
@@ -197,10 +208,12 @@ export async function authorizePkceGrant(options: {
 
   assert.equal(tokenRes.status, 200)
 
-  const tokenJson = (await tokenRes.json()) as { readonly access_token: string }
+  const tokenJson = oauthTokenResponseSchema.parse(await tokenRes.json())
 
   return {
     accessToken: tokenJson.access_token,
+    refreshToken: tokenJson.refresh_token,
+    expiresIn: tokenJson.expires_in,
     grantId: approveJson.grantId,
     ticket,
   }
