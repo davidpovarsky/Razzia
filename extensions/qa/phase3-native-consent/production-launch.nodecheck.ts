@@ -1,6 +1,7 @@
 import assert from "node:assert/strict"
 import { spawn, type ChildProcess } from "node:child_process"
 import { once } from "node:events"
+import { request as nodeRequest } from "node:http"
 import {
   chmodSync,
   existsSync,
@@ -141,10 +142,37 @@ async function ready(p: ReturnType<typeof child>, port: number) {
   throw Error(`Launcher did not become healthy: ${p.stderr()}`)
 }
 const request = (port: number, path: string, method = "GET") =>
-  fetch(`http://127.0.0.1:${port}${path}`, {
-    method,
-    headers: { host: new URL(origin).host },
-    signal: AbortSignal.timeout(3000),
+  new Promise<Response>((resolve, reject) => {
+    // Undici fetch replaces caller-supplied Host with the loopback transport
+    // host. Use a raw HTTP request to exercise the production Host boundary.
+    const req = nodeRequest(
+      `http://127.0.0.1:${port}${path}`,
+      { method, headers: { Host: new URL(origin).host } },
+      (res) => {
+        const chunks: Buffer[] = []
+        res.on("data", (chunk: Buffer) => chunks.push(chunk))
+        res.once("error", reject)
+        res.once("end", () => {
+          const headers = new Headers()
+
+          for (const [name, value] of Object.entries(res.headers)) {
+            if (value !== undefined) {
+              headers.set(name, Array.isArray(value) ? value.join(", ") : value)
+            }
+          }
+
+          resolve(
+            new Response(method === "HEAD" ? null : Buffer.concat(chunks), {
+              status: res.statusCode ?? 500,
+              headers,
+            }),
+          )
+        })
+      },
+    )
+    req.setTimeout(3000, () => req.destroy(new Error("REQUEST_TIMEOUT")))
+    req.once("error", reject)
+    req.end()
   })
 test(
   "actual production artifact starts protected loopback APIs and retains issuer keys across restart",
