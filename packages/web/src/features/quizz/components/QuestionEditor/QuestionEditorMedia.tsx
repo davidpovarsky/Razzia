@@ -88,23 +88,23 @@ const QuestionEditorMedia = () => {
   }
 
   return (
-    <div className="relative z-10 flex flex-1 flex-col items-center justify-center gap-3 p-4">
+    <div className="relative z-10 flex min-w-0 flex-col items-center justify-center gap-3 p-4">
       <QuestionMedia
         media={currentQuestion.media}
-        alt="Question Media"
+        alt={currentQuestion.question || t("quizz:question.addMediaHint")}
         autoPlay={false}
       />
 
       {!questionMedia?.type && (
-        <Card className="my-auto flex max-h-100 w-full max-w-xl flex-1 flex-col items-center justify-center gap-2">
-          <ImageOff className="stroke-accent-foreground size-16" />
+        <Card className="flex w-full max-w-xl flex-col items-center justify-center gap-2">
+          <ImageOff className="stroke-accent-foreground size-8" />
           <p className="text-accent-foreground text-center text-sm">
             {t("quizz:question.addMediaHint")}
           </p>
           <div className="flex flex-wrap justify-center gap-2">
             <label
               aria-disabled={isUploading}
-              className="bg-primary flex cursor-pointer items-center gap-1.5 rounded-lg p-2 text-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] aria-disabled:cursor-wait aria-disabled:opacity-50"
+              className="bg-primary focus-within:ring-primary flex cursor-pointer items-center gap-1.5 rounded-lg p-2 text-lg font-semibold text-white focus-within:ring-2 focus-within:ring-offset-2 hover:brightness-[1.05] active:brightness-[0.95] aria-disabled:cursor-wait aria-disabled:opacity-50"
             >
               {isUploading ? (
                 <Loader className="size-6 text-white" />
@@ -115,12 +115,14 @@ const QuestionEditorMedia = () => {
               <input
                 type="file"
                 accept={UPLOAD_ACCEPT}
-                className="hidden"
+                className="sr-only"
+                aria-label={t("quizz:media.upload")}
                 disabled={isUploading}
                 onChange={handleUploadMedia}
               />
             </label>
             <Button
+              type="button"
               onClick={handleOpenLibrary}
               className="bg-accent text-accent-foreground"
             >
@@ -138,6 +140,7 @@ const QuestionEditorMedia = () => {
           </p>
 
           <button
+            type="button"
             onClick={handleToggleUrl}
             aria-expanded={isUrlOpen}
             className="text-accent-foreground hover:text-foreground mt-2 flex items-center gap-1 text-sm font-semibold"
@@ -154,6 +157,9 @@ const QuestionEditorMedia = () => {
               <Input
                 variant="sm"
                 className="w-full"
+                dir="ltr"
+                type="url"
+                aria-label={t("quizz:question.mediaUrlPlaceholder")}
                 placeholder={t("quizz:question.mediaUrlPlaceholder")}
                 value={questionMedia?.url ?? ""}
                 onChange={handleChangeMedia}
@@ -161,6 +167,7 @@ const QuestionEditorMedia = () => {
               <div className="flex flex-wrap justify-center gap-2">
                 {MEDIA_TYPE_BUTTONS.map(({ type, icon: Icon }) => (
                   <Button
+                    type="button"
                     key={type}
                     size="sm"
                     onClick={hadnleChangeMediaType(type)}
@@ -180,8 +187,9 @@ const QuestionEditorMedia = () => {
       <MediaLibrary open={isLibraryOpen} onOpenChange={setIsLibraryOpen} />
 
       {questionMedia?.type && (
-        <div className="absolute bottom-4">
+        <div className="flex w-full justify-center">
           <Button
+            type="button"
             className="bg-accent text-foreground hover:bg-accent rounded-sm px-4 py-2 font-semibold transition-colors"
             onClick={handleRemoveMedia}
           >

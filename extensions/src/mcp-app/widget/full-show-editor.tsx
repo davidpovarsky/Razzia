@@ -1,3 +1,4 @@
+import NativeButton from "../../../../packages/web/src/components/Button"
 import { useEffect, useState } from "react"
 import type { App } from "@modelcontextprotocol/ext-apps"
 import { useTranslation } from "react-i18next"
@@ -209,14 +210,16 @@ export function FullShowEditorV3({
             onChange={(event) => setTitle(event.target.value)}
           />
         </label>
-        <button
+        <NativeButton
+          classNameContent="contents"
+          data-control-source="razzia"
           type="button"
           data-testid="full-show-apply-title"
           disabled={locked || !title.trim() || title === frame.inventory.title}
           onClick={() => void onApply({ kind: "set-title", title })}
         >
           {t("apply")}
-        </button>
+        </NativeButton>
       </div>
       {currentQuestion && (
         <div className="widget-control-row">
@@ -229,7 +232,9 @@ export function FullShowEditorV3({
               onChange={(event) => setQuestion(event.target.value)}
             />
           </label>
-          <button
+          <NativeButton
+            classNameContent="contents"
+            data-control-source="razzia"
             type="button"
             data-testid="full-show-apply-question"
             disabled={
@@ -246,7 +251,7 @@ export function FullShowEditorV3({
             }
           >
             {t("apply")}
-          </button>
+          </NativeButton>
         </div>
       )}
       <details>
@@ -269,23 +274,27 @@ export function FullShowEditorV3({
               }
             />
           </label>
-          <button
+          <NativeButton
+            classNameContent="contents"
+            data-control-source="razzia"
             type="button"
             data-testid="full-show-apply-volume"
             disabled={locked || !Number.isFinite(volume)}
             onClick={() => void onApply({ kind: "set-voting-volume", volume })}
           >
             {t("apply")}
-          </button>
+          </NativeButton>
         </div>
-        <button
+        <NativeButton
+          classNameContent="contents"
+          data-control-source="razzia"
           type="button"
           data-testid="full-show-load-assets"
           disabled={locked}
           onClick={() => void loadAssets()}
         >
           {loading ? t("loading") : t("loadAssets")}
-        </button>
+        </NativeButton>
         {failed && <p role="status">{t("unavailable")}</p>}
         {assets && (
           <>
@@ -301,7 +310,9 @@ export function FullShowEditorV3({
                   {options(assets.background)}
                 </select>
               </label>
-              <button
+              <NativeButton
+                classNameContent="contents"
+                data-control-source="razzia"
                 type="button"
                 data-testid="full-show-apply-background"
                 disabled={locked || !background}
@@ -314,7 +325,7 @@ export function FullShowEditorV3({
                 }}
               >
                 {t("apply")}
-              </button>
+              </NativeButton>
             </div>
             <div className="widget-control-row">
               <label>
@@ -328,7 +339,9 @@ export function FullShowEditorV3({
                   {options(assets.audio)}
                 </select>
               </label>
-              <button
+              <NativeButton
+                classNameContent="contents"
+                data-control-source="razzia"
                 type="button"
                 data-testid="full-show-apply-music"
                 disabled={locked || !music}
@@ -341,7 +354,7 @@ export function FullShowEditorV3({
                 }}
               >
                 {t("apply")}
-              </button>
+              </NativeButton>
             </div>
             <div className="widget-control-row">
               <label>
@@ -362,7 +375,9 @@ export function FullShowEditorV3({
                   ))}
                 </select>
               </label>
-              <button
+              <NativeButton
+                classNameContent="contents"
+                data-control-source="razzia"
                 type="button"
                 data-testid="full-show-apply-theme"
                 disabled={locked || !selectedTheme}
@@ -381,7 +396,7 @@ export function FullShowEditorV3({
                 }}
               >
                 {t("apply")}
-              </button>
+              </NativeButton>
             </div>
             {currentQuestion && currentQuestion.choices.length > 0 && (
               <fieldset className="widget-picture-options">
@@ -404,14 +419,16 @@ export function FullShowEditorV3({
                     </select>
                   </label>
                 ))}
-                <button
+                <NativeButton
+                  classNameContent="contents"
+                  data-control-source="razzia"
                   type="button"
                   data-testid="full-show-apply-pictures"
                   disabled={locked || !Object.values(pictures).some(Boolean)}
                   onClick={() => void applyPictures()}
                 >
                   {t("apply")}
-                </button>
+                </NativeButton>
               </fieldset>
             )}
           </>

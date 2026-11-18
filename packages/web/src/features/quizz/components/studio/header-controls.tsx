@@ -1,3 +1,4 @@
+import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 import NativeButton from "@razzia/web/components/Button"
 import type { TimelineItemKind } from "@razzia/extensions/core"
 import { getTimelineKindOptions } from "@razzia/extensions/editor"
@@ -13,14 +14,16 @@ export function StudioHeaderNavigation() {
   const { t } = useTranslation()
 
   return (
-    <div className="bg-accent/80 flex h-8 max-w-full shrink-0 scrollbar-none items-center overflow-x-auto rounded-lg p-0.5">
+    <div className="bg-accent/80 order-3 grid w-full max-w-full shrink-0 grid-cols-2 items-center gap-0.5 rounded-lg p-0.5 sm:order-none sm:flex sm:h-8 sm:w-auto sm:gap-0">
       <NativeButton
         size="sm"
         type="button"
         data-testid="studio-tab-questions"
+        aria-pressed={activeTab === "questions"}
+        aria-controls="studio-content"
         onClick={() => setActiveTab("questions")}
         className={clsx(
-          "flex h-full shrink-0 items-center gap-1 rounded-md bg-transparent px-2.5 text-xs font-semibold transition-colors sm:gap-1.5 sm:px-3",
+          "flex h-8 min-w-0 items-center justify-center gap-1 rounded-md bg-transparent px-2.5 text-xs font-semibold transition-colors sm:h-full sm:shrink-0 sm:gap-1.5 sm:px-3",
           activeTab === "questions"
             ? "bg-background text-foreground shadow-xs"
             : "text-muted-foreground hover:text-foreground",
@@ -32,9 +35,11 @@ export function StudioHeaderNavigation() {
         size="sm"
         type="button"
         data-testid="studio-tab-participants"
+        aria-pressed={activeTab === "participants"}
+        aria-controls="studio-content"
         onClick={() => setActiveTab("participants")}
         className={clsx(
-          "flex h-full shrink-0 items-center gap-1 rounded-md bg-transparent px-2.5 text-xs font-semibold transition-colors sm:gap-1.5 sm:px-3",
+          "flex h-8 min-w-0 items-center justify-center gap-1 rounded-md bg-transparent px-2.5 text-xs font-semibold transition-colors sm:h-full sm:shrink-0 sm:gap-1.5 sm:px-3",
           activeTab === "participants"
             ? "bg-background text-foreground shadow-xs"
             : "text-muted-foreground hover:text-foreground",
@@ -47,9 +52,11 @@ export function StudioHeaderNavigation() {
         size="sm"
         type="button"
         data-testid="studio-tab-settings"
+        aria-pressed={activeTab === "settings"}
+        aria-controls="studio-content"
         onClick={() => setActiveTab("settings")}
         className={clsx(
-          "flex h-full shrink-0 items-center gap-1 rounded-md bg-transparent px-2.5 text-xs font-semibold transition-colors sm:gap-1.5 sm:px-3",
+          "flex h-8 min-w-0 items-center justify-center gap-1 rounded-md bg-transparent px-2.5 text-xs font-semibold transition-colors sm:h-full sm:shrink-0 sm:gap-1.5 sm:px-3",
           activeTab === "settings"
             ? "bg-background text-foreground shadow-xs"
             : "text-muted-foreground hover:text-foreground",
@@ -62,9 +69,11 @@ export function StudioHeaderNavigation() {
         size="sm"
         type="button"
         data-testid="studio-tab-launch"
+        aria-pressed={activeTab === "launch"}
+        aria-controls="studio-content"
         onClick={() => setActiveTab("launch")}
         className={clsx(
-          "flex h-full shrink-0 items-center gap-1 rounded-md bg-transparent px-2.5 text-xs font-semibold transition-colors sm:gap-1.5 sm:px-3",
+          "flex h-8 min-w-0 items-center justify-center gap-1 rounded-md bg-transparent px-2.5 text-xs font-semibold transition-colors sm:h-full sm:shrink-0 sm:gap-1.5 sm:px-3",
           activeTab === "launch"
             ? "bg-primary text-white shadow-xs"
             : "text-muted-foreground hover:text-foreground",
@@ -78,38 +87,49 @@ export function StudioHeaderNavigation() {
 }
 
 export function StudioCardKindBar() {
-  const { activeTab, selectedKind, changeSelectedCardKind } = useStudioEditor()
+  const { extrasStatus } = useQuizzEditor()
+  const {
+    activeTab,
+    selectedKind,
+    selectedTimelineItem,
+    changeSelectedCardKind,
+  } = useStudioEditor()
   const { t } = useTranslation()
   const timelineKinds = getTimelineKindOptions(t)
 
   return (
     <>
       {" "}
-      {activeTab === "questions" && (
-        <div
-          data-testid="studio-card-type-bar"
-          className="bg-muted/30 border-border/40 flex h-11 w-full items-center justify-between border-t px-4"
-        >
-          <div className="min-w-0 flex-1 scrollbar-none overflow-x-auto py-1">
-            <ToggleGroup
-              value={selectedKind}
-              onChange={(next) =>
-                changeSelectedCardKind(next as TimelineItemKind)
-              }
-              items={timelineKinds}
-            />
-          </div>
+      {activeTab === "questions" &&
+        extrasStatus === "ready" &&
+        selectedTimelineItem && (
+          <div
+            data-testid="studio-card-type-bar"
+            className="bg-muted/30 border-border/40 flex h-11 w-full items-center justify-between border-t px-4"
+          >
+            <div className="min-w-0 flex-1 scrollbar-none overflow-x-auto py-1">
+              <ToggleGroup
+                value={selectedKind}
+                onChange={(next) =>
+                  changeSelectedCardKind(next as TimelineItemKind)
+                }
+                items={timelineKinds}
+              />
+            </div>
 
-          <div className="text-muted-foreground hidden shrink-0 items-center gap-1.5 pl-3 text-xs sm:flex">
-            <span className="font-medium">
-              {t("extensions:studio.cardKindLabel", "Card Type")}:
-            </span>
-            <span className="text-foreground font-semibold capitalize">
-              {selectedKind}
-            </span>
+            <div className="text-muted-foreground hidden shrink-0 items-center gap-1.5 ps-3 text-xs sm:flex">
+              <span className="font-medium">
+                {t("extensions:studio.cardKindLabel", "Card Type")}:
+              </span>
+              <span className="text-foreground font-semibold capitalize">
+                {
+                  timelineKinds.find((item) => item.value === selectedKind)
+                    ?.label
+                }
+              </span>
+            </div>
           </div>
-        </div>
-      )}
+        )}
     </>
   )
 }

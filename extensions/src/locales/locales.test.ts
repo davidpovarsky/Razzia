@@ -22,8 +22,9 @@ const flatten = (obj: Record<string, unknown>, prefix = ""): FlatDict => {
 describe("extensions/locales parity", () => {
   const referenceKeys = Object.keys(flatten(EXTENSION_LOCALES.en)).sort()
 
-  it("has exactly 8 supported languages", () => {
-    expect(SUPPORTED_EXTENSION_LANGUAGES).toHaveLength(8)
+  it("preserves the eight existing languages and adds Hebrew", () => {
+    expect(SUPPORTED_EXTENSION_LANGUAGES).toHaveLength(9)
+    expect(SUPPORTED_EXTENSION_LANGUAGES).toContain("he")
     expect(Object.keys(EXTENSION_LOCALES).sort()).toEqual(
       [...SUPPORTED_EXTENSION_LANGUAGES].sort(),
     )

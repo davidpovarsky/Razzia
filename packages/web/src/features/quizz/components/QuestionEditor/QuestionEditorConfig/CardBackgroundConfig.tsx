@@ -129,6 +129,7 @@ const LegacyCardBackgroundConfig = ({
             size="sm"
             type="button"
             data-testid="card-bg-mode-default"
+            aria-pressed={!hasCustom}
             onClick={() => updateBackground(undefined)}
             className={clsx(
               "flex-1 rounded-md px-2.5 py-1.5 text-xs font-semibold transition",
@@ -143,6 +144,7 @@ const LegacyCardBackgroundConfig = ({
             size="sm"
             type="button"
             data-testid="card-bg-mode-custom"
+            aria-pressed={hasCustom}
             onClick={() => {
               if (!hasCustom) {
                 setLibraryOpen(true)
@@ -159,48 +161,53 @@ const LegacyCardBackgroundConfig = ({
           </Button>
         </div>
 
-        <div className="flex items-center gap-2">
-          <Button
-            type="button"
-            size="sm"
-            data-testid="card-bg-choose-btn"
-            onClick={() => setLibraryOpen(true)}
-            className="bg-accent text-accent-foreground flex flex-1 items-center justify-center gap-1.5 text-xs font-semibold"
-          >
-            <ImageIcon className="size-3.5" />
-            <span>
-              {t("extensions:cardBackground.chooseImage", "Choose Background")}
-            </span>
-          </Button>
-          {hasCustom && (
+        {hasCustom && (
+          <div className="flex items-center gap-2">
             <Button
-              size="sm"
               type="button"
-              data-testid="card-bg-remove-btn"
-              onClick={() => updateBackground(undefined)}
-              title={t(
-                "extensions:cardBackground.removeFromCard",
-                "Remove from Card",
-              )}
-              className="bg-accent text-muted-foreground flex h-8 items-center gap-1 rounded-lg px-2.5 text-xs font-semibold transition hover:text-red-500"
+              size="sm"
+              data-testid="card-bg-choose-btn"
+              onClick={() => setLibraryOpen(true)}
+              className="bg-accent text-accent-foreground flex flex-1 items-center justify-center gap-1.5 text-xs font-semibold"
             >
-              <Trash2 className="size-3.5" />
+              <ImageIcon className="size-3.5" />
               <span>
                 {t(
-                  "extensions:cardBackground.removeFromCard",
-                  "Remove from Card",
+                  "extensions:cardBackground.chooseImage",
+                  "Choose Background",
                 )}
               </span>
             </Button>
-          )}
-        </div>
+            {hasCustom && (
+              <Button
+                size="sm"
+                type="button"
+                data-testid="card-bg-remove-btn"
+                onClick={() => updateBackground(undefined)}
+                title={t(
+                  "extensions:cardBackground.removeFromCard",
+                  "Remove from Card",
+                )}
+                className="bg-accent text-muted-foreground flex h-8 items-center gap-1 rounded-lg px-2.5 text-xs font-semibold transition hover:text-red-500"
+              >
+                <Trash2 className="size-3.5" />
+                <span>
+                  {t(
+                    "extensions:cardBackground.removeFromCard",
+                    "Remove from Card",
+                  )}
+                </span>
+              </Button>
+            )}
+          </div>
+        )}
 
         {hasCustom && activeBackground?.url && (
           <>
             <div className="border-accent relative aspect-video w-full overflow-hidden rounded-xl border bg-black/40">
               <img
                 src={activeBackground.url}
-                alt="Card Background Preview"
+                alt=""
                 data-testid="card-bg-preview"
                 className={clsx(
                   "h-full w-full",

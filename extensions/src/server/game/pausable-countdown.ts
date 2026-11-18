@@ -4,6 +4,11 @@ export interface CountdownPorts {
   onTick(seconds: number): void
 }
 
+interface DeferredCountdownCompletion {
+  timer: NodeJS.Timeout
+  resolve: () => void
+}
+
 /** Server-owned countdown that can be paused without resolving its waiter. */
 export class PausableCountdown {
   private readonly ports: CountdownPorts
@@ -14,6 +19,7 @@ export class PausableCountdown {
   private deadline: number | null = null
   private interval: NodeJS.Timeout | null = null
   private resolveActive: (() => void) | null = null
+  private deferredAbort: DeferredCountdownCompletion | null = null
 
   constructor(ports: CountdownPorts) {
     this.ports = ports
@@ -48,6 +54,9 @@ export class PausableCountdown {
       return Promise.resolve()
     }
 
+    // A previous run keeps its legacy completion schedule; immediate controls
+    // belong only to the newly started countdown.
+    this.deferredAbort = null
     this.active = true
     this.paused = false
     this.currentRemaining = seconds
@@ -116,7 +125,34 @@ export class PausableCountdown {
     this.resolveActive = null
 
     if (resolve) {
-      setTimeout(resolve, this.ports.tickMs)
+      const deferred: DeferredCountdownCompletion = {
+        resolve,
+        timer: setTimeout(() => {
+          if (this.deferredAbort === deferred) {
+            this.deferredAbort = null
+          }
+
+          resolve()
+        }, this.ports.tickMs),
+      }
+      this.deferredAbort = deferred
+    }
+  }
+
+  /** End the current waiter now, including an abort queued by all-answered. */
+  abortImmediately(): void {
+    if (this.active) {
+      this.finish()
+
+      return
+    }
+
+    const deferred = this.deferredAbort
+    this.deferredAbort = null
+
+    if (deferred) {
+      clearTimeout(deferred.timer)
+      deferred.resolve()
     }
   }
 

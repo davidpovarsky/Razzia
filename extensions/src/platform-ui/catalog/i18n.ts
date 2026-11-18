@@ -10,6 +10,7 @@ export const CATALOG_LOCALES = [
   "ja",
   "tr",
   "vi",
+  "he",
 ] as const
 
 // Read existing resources; the internal catalog never writes shared namespaces.

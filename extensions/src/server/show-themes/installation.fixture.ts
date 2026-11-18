@@ -117,6 +117,7 @@ export function createInstallationFixture(
   definition.localizations = {} as NonNullable<typeof definition.localizations>
   const names = {
     en: "Test theme",
+    he: "ערכת נושא לבדיקה",
     fr: "Thème de test",
     de: "Testthema",
     es: "Tema de prueba",

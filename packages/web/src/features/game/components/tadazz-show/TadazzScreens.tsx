@@ -3,12 +3,13 @@ import { EVENTS } from "@razzia/common/constants"
 import {
   TADAZZ_BACKDROP_URL,
   NativeClassicLobbyPanel,
-  type SceneDescriptor,
   TADAZZ_LOGO_URL,
   useRoomJoin,
+  TadazzMessageScreen,
+  TadazzCountdownScreen,
 } from "@razzia/extensions/presentation"
 import type { Player } from "@razzia/common/types/game"
-import type { ActiveSceneData, Interlude } from "@razzia/extensions/core"
+import type { Interlude } from "@razzia/extensions/core"
 
 import {
   useEvent,
@@ -16,10 +17,17 @@ import {
 } from "@razzia/web/features/game/contexts/socket-context"
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
 import { SFX } from "@razzia/web/features/game/utils/constants"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import useSound from "use-sound"
 import { useTadazzShellText } from "./useTadazzLabels"
+
+export {
+  TadazzMessageScreen,
+  TadazzCountdownScreen,
+  TadazzRecapScreen,
+  TadazzSceneTitleScreen,
+} from "@razzia/extensions/presentation"
 
 // All screens render inside the canonical `.tz-screen` slot of the 1920×1080
 // stage and only use canonical tokens (see tadazz-show-adaptations.css).
@@ -113,31 +121,6 @@ export function TadazzLobbyScreen({
       onKick={kick}
       tx={tx}
     />
-  )
-}
-
-export function TadazzMessageScreen({
-  eyebrow,
-  headline,
-  sub,
-}: {
-  eyebrow?: string
-  headline?: string
-  sub?: string
-}) {
-  return (
-    <div className="tz-x-center" data-testid="tadazz-screen-message">
-      {eyebrow && <div className="tz-x-sub">{eyebrow}</div>}
-      {headline && <div className="tz-x-headline">{headline}</div>}
-      {sub && (
-        <div
-          className="tz-x-sub"
-          style={{ letterSpacing: ".14em", fontSize: 28 }}
-        >
-          {sub}
-        </div>
-      )}
-    </div>
   )
 }
 
@@ -274,111 +257,6 @@ export function TadazzPlayerFinishedScreen({
         {tx("pointsShort", "{{points}} pts", { points })}
       </div>
     </div>
-  )
-}
-
-/** Countdown driven by the authoritative server start time. */
-export function TadazzCountdownScreen({
-  title,
-  startedAt,
-  seconds,
-}: {
-  title?: string
-  startedAt?: number
-  seconds: number
-}) {
-  const compute = () =>
-    Math.max(
-      0,
-      Math.ceil(seconds - (Date.now() - (startedAt ?? Date.now())) / 1000),
-    )
-  const [left, setLeft] = useState(compute)
-  useEffect(() => {
-    const id = setInterval(() => setLeft(compute()), 250)
-
-    return () => clearInterval(id)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [startedAt, seconds])
-
-  return (
-    <div className="tz-x-center" data-testid="tadazz-screen-countdown">
-      {title && <div className="tz-x-sub">{title}</div>}
-      <div className="tz-x-big">{left}</div>
-    </div>
-  )
-}
-
-export function TadazzRecapScreen({
-  title,
-  recap,
-}: {
-  title?: string
-  recap: NonNullable<ActiveSceneData["answerRecap"]>
-}) {
-  const tx = useTadazzShellText()
-  const items = recap.items.slice(
-    0,
-    Math.max(1, Math.min(6, recap.maxItemsPerPage || 4)),
-  )
-
-  return (
-    <div className="tz-x-fill" data-testid="tadazz-screen-recap">
-      <div className="tz-x-eyebrow">
-        {tx("recapEyebrow", "THE AUDIENCE HAS SPOKEN")}
-      </div>
-      <div className="tz-x-title" style={{ fontSize: 72 }}>
-        {title || tx("recapTitle", "ANSWER RECAP")}
-      </div>
-      <div className="tz-x-underline" />
-      <div className="tz-recap-rows">
-        {items.length === 0 && (
-          <div className="tz-x-sub" style={{ textAlign: "center" }}>
-            {tx("noResponses", "No responses recorded yet.")}
-          </div>
-        )}
-        {items.map((item) => {
-          const option =
-            (recap.mode === "correctAnswer"
-              ? item.correctOptions?.[0]
-              : undefined) ?? item.winningOptions[0]
-
-          return (
-            <div key={item.questionId} className="tz-leader-row tz-recap-row">
-              <div className="tz-rank">{item.questionNumber}</div>
-              <div className="tz-team-name">
-                <div
-                  style={{ fontSize: 22, color: "#d1b1ff", fontWeight: 800 }}
-                >
-                  {item.questionText}
-                </div>
-                <div>
-                  {option
-                    ? option.label
-                    : tx("noResponses", "No responses recorded yet.")}
-                </div>
-              </div>
-              {option?.imageUrl && (
-                <img src={option.imageUrl} alt={option.alt || option.label} />
-              )}
-              {option && recap.showPercentages && (
-                <div className="tz-team-score">
-                  {Math.round(option.percentage)}%
-                </div>
-              )}
-            </div>
-          )
-        })}
-      </div>
-    </div>
-  )
-}
-
-export function TadazzSceneTitleScreen({ scene }: { scene: SceneDescriptor }) {
-  return (
-    <TadazzMessageScreen
-      headline={scene.title}
-      sub={scene.subtitle ?? scene.description}
-    />
   )
 }
 

@@ -1,6 +1,10 @@
 import { z } from "zod"
 import { isSafeMediaUrl, safeMediaUrlSchema } from "./media"
-import type { CardBackgroundOverride } from "./card-appearance"
+import {
+  resolveEffectiveCardBackground,
+  type BackgroundPosition,
+  type CardBackgroundOverride,
+} from "./card-appearance"
 
 /** Entirely opt-in. Absence of settings preserves the original Razzia background. */
 export const tadazzShowBackgroundSchema = z
@@ -29,6 +33,8 @@ export interface TadazzBackdropState {
   animate: boolean
   intensity: number
   fit: "cover" | "contain"
+  position: BackgroundPosition
+  overlayOpacity: number
 }
 
 /** Order is critical: cinematic full-screen > per-card background > show opt-in > legacy. */
@@ -46,6 +52,8 @@ export function resolveTadazzStageBackground(input: {
     source: "original",
     url: originalUrl,
     fit: "cover",
+    position: "center",
+    overlayOpacity: 0,
     intensity: 0,
     animate: false,
   }
@@ -54,11 +62,15 @@ export function resolveTadazzStageBackground(input: {
     return { ...original, source: "cinema", url: undefined }
   }
 
-  if (cardBackground?.url && isSafeMediaUrl(cardBackground.url)) {
+  const effectiveCard = resolveEffectiveCardBackground(cardBackground)
+
+  if (effectiveCard.mode === "card" && effectiveCard.url) {
     return {
       source: "card",
-      url: cardBackground.url,
-      fit: cardBackground.fit,
+      url: effectiveCard.url,
+      fit: effectiveCard.fit,
+      position: effectiveCard.position,
+      overlayOpacity: effectiveCard.overlayOpacity,
       intensity: 0,
       animate: false,
     }
@@ -74,6 +86,8 @@ export function resolveTadazzStageBackground(input: {
           source: "static",
           url: settings.staticUrl,
           fit: settings.fit,
+          position: "center",
+          overlayOpacity: 0,
           intensity: 0,
           animate: false,
         }
@@ -88,6 +102,8 @@ export function resolveTadazzStageBackground(input: {
     source: "tadazz",
     url: tadazzImageUrl,
     fit: settings.fit,
+    position: "center",
+    overlayOpacity: 0,
     intensity: settings.intensity,
     animate: !input.reducedMotion && !settings.paused && settings.intensity > 0,
   }

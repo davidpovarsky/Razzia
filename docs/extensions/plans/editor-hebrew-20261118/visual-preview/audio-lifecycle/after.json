@@ -1,0 +1,25 @@
+{
+  "ok": true,
+  "sourceSha256": "5cc4c3aa67b53dd673f9391aabd24a7406454c9a09dc623f16d76693525f839b",
+  "checks": [
+    "Mount does not create or autoplay audio",
+    "Switch stops and rewinds the previous cue",
+    "Queued stale ended/error/rejected play cannot clear the new cue owner",
+    "Stopped cue callbacks are detached",
+    "Same cue click stops and detaches owned audio",
+    "Current ended event clears only its own playback",
+    "Closing/unmount stops audio and ignores a late rejected play"
+  ],
+  "errors": [],
+  "network": [
+    {
+      "console": "WebSocket connection to 'ws://127.0.0.1:3180/?token=JJhO4WRtLJGh' failed: Error in connection establishment: net::ERR_BLOCKED_BY_LOCAL_NETWORK_ACCESS_CHECKS"
+    },
+    {
+      "console": "WebSocket connection to 'ws://127.0.0.1:3180/?token=JJhO4WRtLJGh' failed: Error in connection establishment: net::ERR_BLOCKED_BY_LOCAL_NETWORK_ACCESS_CHECKS"
+    },
+    {
+      "console": "[vite] failed to connect to websocket.\nyour current setup:\n  (browser) 127.0.0.1:3180/ <--[HTTP]--> 127.0.0.1:3180/ (server)\n  (browser) 127.0.0.1:3180/ <--[WebSocket (failing)]--> 127.0.0.1:3180/ (server)\nCheck out your Vite / network configuration and https://vite.dev/config/server-options.html#server-hmr ."
+    }
+  ]
+}

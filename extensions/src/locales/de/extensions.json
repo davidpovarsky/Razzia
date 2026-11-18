@@ -127,7 +127,8 @@
     "answerVisualDesc": "Bilder und Barrierefreiheitsbeschriftungen für Antwortoptionen konfigurieren.",
     "revealDesc": "Animierte Aufdeckung des Fragenbildes während der Fragenanzeige.",
     "triggerMode": "Auslöser",
-    "audience": "Zielgruppe"
+    "audience": "Zielgruppe",
+    "optionLabel": "Option {{index}}"
   },
   "interludes": {
     "interludeTitle": "Zwischenspiel",
@@ -242,7 +243,12 @@
     "correct": "Richtig",
     "incorrect": "Falsch",
     "answered": "geantwortet",
-    "answeredRatio": "{{responders}} / {{eligible}} geantwortet"
+    "answeredRatio": "{{responders}} / {{eligible}} geantwortet",
+    "leader": "Führend",
+    "coLeader": "Gemeinsam führend",
+    "votes_one": "{{count}} Stimme",
+    "votes_other": "{{count}} Stimmen",
+    "votes_two": "{{count}} Stimmen"
   },
   "editor": {
     "toggle": "Quiz-Erweiterungen",
@@ -252,7 +258,13 @@
     "choiceNum": "Option {{num}}",
     "seconds": "Sekunden",
     "effect": "Effekt",
-    "duration": "Dauer"
+    "duration": "Dauer",
+    "answerTypeChangeTitle": "Antwortmodus ändern?",
+    "answerTypeChangeDescription": "Der Wechsel zwischen Antwortauswahl und Zahlenschätzung ersetzt die Antworten und ihre Einstellungen auf dieser Karte.",
+    "confirmAnswerTypeChange": "Modus ändern",
+    "unsavedExitTitle": "Ohne Speichern verlassen?",
+    "unsavedExitDescription": "Deine Änderungen an Fragen, Szenen und Show-Einstellungen wurden noch nicht gespeichert.",
+    "discardAndExit": "Ohne Speichern verlassen"
   },
   "preview": {
     "badge": "Editor-Vorschau",
@@ -318,7 +330,31 @@
     "statusNotJoined": "Nicht beigetreten",
     "answeredYes": "Beantwortet",
     "answeredNo": "Wartet",
-    "noPhone": "—"
+    "noPhone": "—",
+    "noSearchResults": "Keine Teilnehmer entsprechen deiner Suche.",
+    "errors": {
+      "corruptCsvUnclosedQuote": "Die CSV-Datei enthält ein nicht geschlossenes Anführungszeichen. Prüfe die Datei und versuche es erneut.",
+      "corruptXlsxFile": "Die Excel-Datei ist beschädigt oder nicht lesbar.",
+      "xlsxTooLarge": "Die entpackte Excel-Datei überschreitet das Limit von 25 MB.",
+      "unsupportedXlsxCompression": "Diese Excel-Datei verwendet ein nicht unterstütztes Kompressionsformat.",
+      "fileTooLarge": "Die Datei überschreitet das Limit von 5 MB.",
+      "corruptXlsxMissingSheet": "Die Excel-Datei enthält kein lesbares Arbeitsblatt.",
+      "emptyImportFile": "Die Datei enthält keine Teilnehmerzeilen.",
+      "invalidImportHeaders": "Die Datei muss Spalten für Name und Telefonnummer enthalten.",
+      "tooManyImportRows": "Importiere höchstens 2.000 Teilnehmer auf einmal.",
+      "formulaNotAllowed": "Tabellenformeln sind nicht erlaubt.",
+      "missingParticipantName": "Gib einen Teilnehmernamen ein.",
+      "participantNameTooLong": "Der Teilnehmername darf höchstens 40 Zeichen lang sein.",
+      "missingPhoneNumber": "Gib eine Telefonnummer ein.",
+      "scientificNotationPhone": "Die Telefonnummer ist in wissenschaftlicher Schreibweise gespeichert. Formatiere die Spalte als Text.",
+      "invalidPhoneNumber": "Gib eine gültige vollständige Telefonnummer ein, z. B. +972501234567 oder 050-123-4567.",
+      "duplicatePhoneInImport": "Diese Telefonnummer kommt in der Datei mehrfach vor.",
+      "duplicatePhoneInRoster": "Diese Telefonnummer ist bereits in der Teilnehmerliste.",
+      "unsupportedFileFormat": "Es werden nur Excel-Dateien (.xlsx) und CSV-Dateien (.csv) unterstützt.",
+      "corruptImportFile": "Die Datei konnte nicht gelesen werden. Prüfe das Format und versuche es erneut.",
+      "duplicateParticipantPhone": "Die Telefonnummer {{phone}} ist bereits {{name}} zugeordnet.",
+      "importReadFailed": "Die Importdatei konnte nicht gelesen werden."
+    }
   },
   "timeline": {
     "quiz": "Quiz",
@@ -339,7 +375,10 @@
     "groupResults": "Ergebnisse",
     "deleteConfirmTitle": "Frage in Szene umwandeln?",
     "deleteConfirmDesc": "Durch das Umwandeln dieser Frage wird ihr Inhalt durch die gewählte Szene ersetzt.",
-    "cannotDeleteLastQuestion": "Die Show muss mindestens eine Frage oder Umfrage enthalten."
+    "cannotDeleteLastQuestion": "Die Show muss mindestens eine Frage oder Umfrage enthalten.",
+    "duplicateCard": "Karte duplizieren",
+    "deleteCard": "Szenenkarte löschen",
+    "deleteCardConfirm": "Diese Szenenkarte aus dem Ablauf löschen?"
   },
   "studio": {
     "tabs": {
@@ -479,7 +518,7 @@
       "recapModeLabel": "Hervorhebungsmodus",
       "recapModeMostSelected": "Meistgewählte Antwort (Publikumswahl)",
       "recapModeCorrectAnswer": "Offiziell richtige Antwort (für Quiz)",
-      "recapMaxItemsPerPage": "Fragen pro Seite (1–8)",
+      "recapMaxItemsPerPage": "Fragen pro Seite (1–{{max}})",
       "recapShowCounts": "Stimmenanzahl anzeigen",
       "recapShowPercentages": "Prozentwerte anzeigen",
       "recapBadgeMostSelected": "Meistgewählt",
@@ -544,8 +583,22 @@
         "warnOpaqueBg": "Das Lottie-Asset enthält offenbar einen undurchsichtigen Vollbild-Hintergrund.",
         "warnStartAfterScene": "Die Startzeit des Overlays überschreitet die konfigurierte Szenendauer.",
         "warnVideoBaseWithoutVideo": "Overlay nutzt Videozeit ohne Vordergrundvideo; Rückfall auf Szenenuhr.",
-        "warnLoopOnMediaEnd": "Endlos-Video mit „Bei Medienende“ endet nie natürlich; Rückfall auf Szenendauer."
-      }
+        "warnLoopOnMediaEnd": "Endlos-Video mit „Bei Medienende“ endet nie natürlich; Rückfall auf Szenendauer.",
+        "limitReached": "Die maximale Anzahl von {{max}} Animationsebenen ist erreicht."
+      },
+      "welcomeTitle": "Willkommen zur Show",
+      "mediaError": "Medium konnte nicht geladen werden",
+      "cardNameLabel": "Kartenname",
+      "cardNameHint": "Wird im Ablauf verwendet. Die Vorlage dieses Themas legt den Titel auf der Bühne fest.",
+      "lottieInvalidFile": "Bitte eine gültige Lottie-JSON-Datei auswählen.",
+      "lottieUploaded": "Animation hochgeladen."
+    },
+    "accessibility": {
+      "dragInstructions": "Drücke die Leertaste, um eine Karte aufzunehmen, die Pfeiltasten zum Verschieben, die Leertaste oder Eingabetaste zum Ablegen und Escape zum Abbrechen.",
+      "dragStart": "Karte {{position}} aufgenommen.",
+      "dragOver": "Karte auf Position {{position}} verschoben.",
+      "dragEnd": "Karte auf Position {{position}} abgelegt.",
+      "dragCancel": "Sortierung abgebrochen."
     }
   },
   "showImport": {
@@ -737,7 +790,9 @@
       "storyUnfolds": "DIE GESCHICHTE ENTFALTET SICH...",
       "storyNow": "UND JETZT...",
       "storyTitle": "DIE GESCHICHTE",
-      "storyRound": "RUNDE"
+      "storyRound": "RUNDE",
+      "questionLabel": "FRAGE",
+      "choiceLabel": "Auswahl"
     },
     "seating": {
       "call": "ANRUFEN UND MITMACHEN",
@@ -848,5 +903,74 @@
       "z-wipe": "Übergang"
     },
     "installationPreview": "Private Themenvorschau zur Prüfung und Freigabe."
+  },
+  "editorPreview": {
+    "title": "Live-Vorschau",
+    "description": "Aktualisiert sich beim Bearbeiten. Speichern oder ein laufendes Spiel sind nicht nötig.",
+    "question": "Frage",
+    "answers": "Antworten",
+    "results": "Ergebnisse",
+    "aspectRatio": "Seitenverhältnis der Vorschau",
+    "showImage": "Bild aufdecken",
+    "resetImage": "Bild zurücksetzen",
+    "replay": "Animation erneut abspielen",
+    "emptyQuestion": "Hier erscheint deine Frage",
+    "emptyAnswer": "Antwort {{number}}",
+    "noResponses": "Nur Vorschau — es wurden keine Antworten erfasst.",
+    "hide": "Vorschau ausblenden",
+    "show": "Vorschau anzeigen",
+    "draftIncomplete": "Die Vorschau zeigt deinen Entwurf auch dann, wenn einige Felder noch unvollständig sind.",
+    "stageView": "Bühnenvorschau",
+    "editLayers": "Ebenen bearbeiten",
+    "lottieUnavailable": "Die Lottie-Vorschau ist nicht verfügbar. Prüfe die ausgewählte Animation."
+  },
+  "fullShow": {
+    "roleMain": "Hauptfigur",
+    "roleSecond": "Zweite Figur",
+    "roleEra": "Epoche",
+    "roleCrisis": "Krise",
+    "roleEnding": "Ende",
+    "awaitingVote": "Abstimmung ausstehend",
+    "directoryTitle": "Findet eure Tischvertretung",
+    "phoneVoting": "Abstimmung per Telefon",
+    "numberPending": "Nummer folgt",
+    "tables": "Tische",
+    "namePending": "Name folgt",
+    "tableStatus": "Tisch {{table}}: {{name}}, {{status}}",
+    "connected": "Verbunden",
+    "waiting": "Wartend",
+    "phoneTitle": "Einfach anrufen. Dann wählen.",
+    "keypadVoting": "Abstimmung über die Telefontasten",
+    "phoneEyebrow": "Keine Apps. Keine Smartphones.",
+    "phoneSubtitle": "Eure Tischvertretung stimmt über die Tasten eines gewöhnlichen Telefons ab.",
+    "phoneReady": "TADAZZ! ist bereit",
+    "dialIn": "Jetzt anrufen",
+    "stepDialTitle": "Wählt die Veranstaltungsnummer",
+    "stepDialDescription": "Die Moderation zeigt die Nummer an oder sagt sie durch.",
+    "stepListenTitle": "Hört euch die Frage an",
+    "stepListenDescription": "Besprecht eure Wahl am Tisch.",
+    "stepPressTitle": "Drückt 1, 2, 3, 4 oder 5",
+    "stepPressDescription": "Eine Stimme pro Tisch über die Telefontasten.",
+    "readinessTitle": "Die Tische leuchten auf",
+    "liveConnections": "Live-Verbindungen",
+    "readinessEyebrow": "Der Saal verbindet sich",
+    "readinessSubtitle": "Für jede verbundene Tischvertretung leuchtet ein Licht auf.",
+    "table": "Tisch",
+    "connectedTables": "Verbundene Tische",
+    "previewData": "Vorschaudaten — nicht live",
+    "progressTitle": "Eure Welt nimmt Gestalt an",
+    "piecesCollected": "{{count}} von {{total}} Geschichtenbausteinen gesammelt",
+    "progressSubtitle": "Jedes gewählte Bild wird Teil der Geschichte.",
+    "piecesReady": "Geschichtenbausteine bereit",
+    "tieTitle": "Das Publikum ist gespalten",
+    "equalVotes": "Gleich viele Stimmen",
+    "votes": "{{count}} Stimmen",
+    "tieInstruction": "Die Moderation wählt das Bild für die Geschichte.",
+    "companyArtwork": "Welten erschaffen",
+    "openingArtwork": "Vorschau auf die große Eröffnung",
+    "openingTitle": "Die Geschichte beginnt mit euch",
+    "openingSubtitle": "Ein Live-Erlebnis, das das Publikum gestaltet",
+    "firstStory": "Die erste Geschichte",
+    "newWorld": "Eine völlig neue Welt"
   }
 }

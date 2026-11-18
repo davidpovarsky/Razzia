@@ -107,58 +107,64 @@ export function ThemeAudioOptions({
           </p>
         )}
         <div className="flex flex-wrap items-center gap-2">
-          <Button
-            type="button"
-            size="sm"
-            disabled={!url || muted}
-            onClick={() => {
-              stop()
-              setError(false)
-              const player = new Audio(url)
-              player.volume = value?.volume ?? variant.volume
-              player.onended = () => setPreviewing(false)
-              audio.current = player
-              const { current } = generation
-              void player
-                .play()
-                .then(() => {
-                  if (current === generation.current) {
-                    setPreviewing(true)
-                  } else {
-                    player.pause()
-                  }
-                })
-                .catch(() => {
-                  if (current === generation.current) {
-                    setError(true)
-                  }
-                })
-            }}
-          >
-            {t("extensions:themes.preview")}
-          </Button>
-          {previewing && (
-            <Button type="button" size="sm" onClick={stop}>
-              {t("extensions:themes.stop")}
-            </Button>
+          {!muted && url && (
+            <>
+              <Button
+                type="button"
+                size="sm"
+                disabled={previewing}
+                onClick={() => {
+                  stop()
+                  setError(false)
+                  const player = new Audio(url)
+                  player.volume = value?.volume ?? variant.volume
+                  player.onended = () => setPreviewing(false)
+                  audio.current = player
+                  const { current } = generation
+                  void player
+                    .play()
+                    .then(() => {
+                      if (current === generation.current) {
+                        setPreviewing(true)
+                      } else {
+                        player.pause()
+                      }
+                    })
+                    .catch(() => {
+                      if (current === generation.current) {
+                        setError(true)
+                      }
+                    })
+                }}
+              >
+                {t("extensions:themes.preview")}
+              </Button>
+              {previewing && (
+                <Button type="button" size="sm" onClick={stop}>
+                  {t("extensions:themes.stop")}
+                </Button>
+              )}
+            </>
           )}
           {spec.customMedia && (
             <Button type="button" size="sm" onClick={() => setPicker(true)}>
               {t("extensions:themes.customMedia")}
             </Button>
           )}
-          <Input
-            type="range"
-            aria-label={t("extensions:audio.volume")}
-            min="0"
-            max="1"
-            step="0.05"
-            value={value?.volume ?? variant.volume}
-            onChange={(changeEvent) =>
-              onChange({ ...value, volume: Number(changeEvent.target.value) })
-            }
-            className="max-w-32"
-          />
+          {!muted && url && (
+            <Input
+              type="range"
+              aria-label={t("extensions:audio.volume")}
+              min="0"
+              max="1"
+              step="0.05"
+              value={value?.volume ?? variant.volume}
+              onChange={(changeEvent) =>
+                onChange({ ...value, volume: Number(changeEvent.target.value) })
+              }
+              className="max-w-32"
+            />
+          )}
         </div>
         {value?.mediaUrl && (
           <p className="text-muted-foreground truncate text-xs">

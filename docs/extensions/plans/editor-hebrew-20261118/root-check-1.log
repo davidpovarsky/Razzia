@@ -1,0 +1,175 @@
+
+  x eslint(no-duplicate-imports): '@razzia/extensions/core' import is duplicated
+   ,-[packages/web/src/features/quizz/components/studio/theme-scope-controls.tsx:2:34]
+ 1 | import { themeSlotForSceneKind } from "@razzia/extensions/presentation"
+ 2 | import type { SceneConfig } from "@razzia/extensions/core"
+   :                                  ^^^^^^^^^^^^|^^^^^^^^^^^^
+   :                                              `-- Can be merged with this import
+ 3 | import { useState } from "react"
+   `----
+    ,-[packages/web/src/features/quizz/components/studio/theme-scope-controls.tsx:16:8]
+ 15 |   showThemeText,
+ 16 | } from "@razzia/extensions/core"
+    :        ^^^^^^^^^^^^|^^^^^^^^^^^^
+    :                    `-- This import is duplicated
+ 17 | import Button from "@razzia/web/components/Button"
+    `----
+  help: Merge the duplicated import into a single import statement
+
+  x eslint(no-nested-ternary): Do not nest ternary expressions.
+     ,-[packages/web/src/features/quizz/components/studio/theme-scope-controls.tsx:159:5]
+ 158 |       const audioEvents: ShowThemeAudioEvent[] =
+ 159 | ,->     kind === "question"
+ 160 | |         ? ["showQuestion", "answersMusic", "revealResults"]
+ 161 | |         : sceneKind
+ 162 | |           ? (sceneAudioEvents[sceneKind] ?? [])
+ 163 | `->         : []
+ 164 |       const reset = () => {
+     `----
+  help: Refactor nested ternary expressions into if-else statements for better readability.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[packages/web/src/features/quizz/components/studio/theme-scope-controls.tsx:177:56]
+ 176 |       : backgroundSlots.some((key) => local.slots?.[key] !== undefined)
+ 177 |   if (section === "audio" && audioEvents.length === 0) return null
+     :                                                        ^^^^^^^^^^^
+ 178 |
+     `----
+  help: Replace `return null` with `{return null}`.
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+     ,-[packages/web/src/features/quizz/components/studio/theme-scope-controls.tsx:177:3]
+ 176 |       : backgroundSlots.some((key) => local.slots?.[key] !== undefined)
+ 177 |   if (section === "audio" && audioEvents.length === 0) return null
+     :   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 178 |
+     `----
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/index.tsx:46:56]
+ 45 |       setExtras((previous) => {
+ 46 |         if (!previous?.perQuestion[currentQuestionId]) return previous
+    :                                                        ^^^^^^^^^^^^^^^
+ 47 |         const { answerVisuals: _answerVisuals, ...rest } =
+    `----
+  help: Replace `return previous` with `{return previous}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+    ,-[packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/index.tsx:59:36]
+ 58 |   const handleTypeChange = (nextType: QuestionType) => {
+ 59 |     if (nextType === questionType) return
+    :                                    ^^^^^^
+ 60 |     const replacesAnswers =
+    `----
+  help: Replace `return` with `{return}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/index.tsx:113:22]
+ 112 |         onOpenChange={(open) => {
+ 113 |           if (!open) setPendingType(null)
+     :                      ^^^^^^^^^^^^^^^^^^^^
+ 114 |         }}
+     `----
+  help: Replace `setPendingType(null)` with `{setPendingType(null)}`.
+
+  x eslint(curly): Expected { after 'if' condition.
+     ,-[packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/index.tsx:120:13]
+ 119 |           if (pendingType?.questionId === currentQuestionId)
+ 120 |             applyTypeChange(pendingType.type)
+     :             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 121 |         }}
+     `----
+  help: Replace `applyTypeChange(pendingType.type)` with `{applyTypeChange(pendingType.type)}`.
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+    ,-[packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/index.tsx:44:5]
+ 43 |     })
+ 44 |     if (nextType === "estimation" && currentQuestionId) {
+    :     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 45 |       setExtras((previous) => {
+    `----
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+    ,-[packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/index.tsx:47:9]
+ 46 |         if (!previous?.perQuestion[currentQuestionId]) return previous
+ 47 |         const { answerVisuals: _answerVisuals, ...rest } =
+    :         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 48 |           previous.perQuestion[currentQuestionId]
+    `----
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+    ,-[packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/index.tsx:49:9]
+ 48 |           previous.perQuestion[currentQuestionId]
+ 49 |         return {
+    :         ^^^^^^^^
+ 50 |           ...previous,
+    `----
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+    ,-[packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/index.tsx:55:5]
+ 54 |     }
+ 55 |     setPendingType(null)
+    :     ^^^^^^^^^^^^^^^^^^^^
+ 56 |   }
+    `----
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+    ,-[packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/index.tsx:60:5]
+ 59 |     if (nextType === questionType) return
+ 60 |     const replacesAnswers =
+    :     ^^^^^^^^^^^^^^^^^^^^^^^
+ 61 |       nextType === "estimation" || questionType === "estimation"
+    `----
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+    ,-[packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/index.tsx:68:5]
+ 67 |           JSON.stringify(QUESTION_REGISTRY.estimation.defaultOptions))
+ 68 |     if (replacesAnswers && hasAnswerContent) {
+    :     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 69 |       setPendingType({ questionId: currentQuestionId, type: nextType })
+    `----
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+    ,-[packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/index.tsx:70:7]
+ 69 |       setPendingType({ questionId: currentQuestionId, type: nextType })
+ 70 |       return
+    :       ^^^^^^
+ 71 |     }
+    `----
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+    ,-[packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/index.tsx:72:5]
+ 71 |     }
+ 72 |     applyTypeChange(nextType)
+    :     ^^^^^^^^^^^^^^^^^^^^^^^^^
+ 73 |   }
+    `----
+
+  x typescript(TS2322): Type 'string | undefined' is not assignable to type 'string'.
+     ,-[packages/web/src/features/quizz/components/studio/header-controls.tsx:108:15]
+ 107 |             <ToggleGroup
+ 108 |               value={
+     :               ^^^^^
+ 109 |                 timelineKinds.find((item) => item.value === selectedKind)?.label
+     `----
+
+  x typescript(no-unnecessary-condition): Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined.
+     ,-[packages/web/src/features/quizz/components/QuestionEditor/AnswerVisualControls.tsx:107:26]
+ 106 |                   data-testid={`answer-alt-input-${i}`}
+ 107 |                   value={visual.alt ?? ""}
+     :                          ^^^^^^^^^^
+ 108 |                   onChange={(event) => handleAltChange(i, event.target.value)}
+     `----
+  help: The checked value has type `string`.
+
+  x typescript(no-unnecessary-condition): Unnecessary optional chain on a non-nullish value.
+    ,-[packages/web/src/features/quizz/components/QuizzEditorSidebar.tsx:65:11]
+ 64 |         } else {
+ 65 |           listeners?.onKeyDown?.(event)
+    :           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 66 |         }
+    `----
+  help: The checked value has type `Function`. Remove the optional chain; the value cannot be `null` or `undefined`.
+
+Found 0 warnings and 19 errors.
+Finished in 4.2s on 17 files with 233 rules using 12 threads.

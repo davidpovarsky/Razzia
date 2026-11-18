@@ -1,0 +1,120 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "kind": "countdown",
+      "width": 1440,
+      "language": "he",
+      "dir": "rtl",
+      "native": "tadazz-screen-countdown",
+      "inner": {
+        "x": 435.5555419921875,
+        "y": 367.25,
+        "width": 664.888916015625,
+        "height": 374
+      },
+      "stage": {
+        "x": 435.5555419921875,
+        "y": 367.25,
+        "width": 664.888916015625,
+        "height": 374
+      }
+    },
+    {
+      "kind": "countdown",
+      "width": 390,
+      "language": "he",
+      "dir": "rtl",
+      "native": "tadazz-screen-countdown",
+      "inner": {
+        "x": 15.444442749023438,
+        "y": 518.9375,
+        "width": 359.11109924316406,
+        "height": 202
+      },
+      "stage": {
+        "x": 15.444442749023438,
+        "y": 518.9375,
+        "width": 359.11109924316406,
+        "height": 202
+      }
+    },
+    {
+      "kind": "countdown",
+      "width": 320,
+      "language": "he",
+      "dir": "rtl",
+      "native": "tadazz-screen-countdown",
+      "inner": {
+        "x": 15.111114501953125,
+        "y": 518.75,
+        "width": 289.77777099609375,
+        "height": 163
+      },
+      "stage": {
+        "x": 15.111114501953125,
+        "y": 518.75,
+        "width": 289.77777099609375,
+        "height": 163
+      }
+    },
+    {
+      "kind": "answerRecap",
+      "width": 1440,
+      "language": "he",
+      "dir": "rtl",
+      "native": "tadazz-screen-recap",
+      "inner": {
+        "x": 435.5555419921875,
+        "y": 390.5,
+        "width": 664.888916015625,
+        "height": 374
+      },
+      "stage": {
+        "x": 435.5555419921875,
+        "y": 390.5,
+        "width": 664.888916015625,
+        "height": 374
+      }
+    },
+    {
+      "kind": "answerRecap",
+      "width": 390,
+      "language": "he",
+      "dir": "rtl",
+      "native": "tadazz-screen-recap",
+      "inner": {
+        "x": 15.444442749023438,
+        "y": 482.9375,
+        "width": 359.11109924316406,
+        "height": 202
+      },
+      "stage": {
+        "x": 15.444442749023438,
+        "y": 482.9375,
+        "width": 359.11109924316406,
+        "height": 202
+      }
+    },
+    {
+      "kind": "answerRecap",
+      "width": 320,
+      "language": "he",
+      "dir": "rtl",
+      "native": "tadazz-screen-recap",
+      "inner": {
+        "x": 15.111114501953125,
+        "y": 482.75,
+        "width": 289.77777099609375,
+        "height": 163
+      },
+      "stage": {
+        "x": 15.111114501953125,
+        "y": 482.75,
+        "width": 289.77777099609375,
+        "height": 163
+      }
+    }
+  ],
+  "errors": []
+}

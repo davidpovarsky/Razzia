@@ -1,0 +1,343 @@
+{
+  "errors": [],
+  "observed": {
+    "text": "Questions\nParticipants\nSettings\nLaunch\nExit\nSave\nQuiz\nSurvey\nMedia\nAnimation\nTransition\nOpening\nClosing\nCountdown\nLeaderboard\nInterim Results\nAnswer Recap\nCard Type:\nQuiz\n1\n\nNo question yet\n\nQuiz\nAdd card\n\nAdd an image, video or audio to your question\n\nUpload\n\nMedia library\n\nImages, audio or video, up to 100 MB\n\nAdd from a URL\n2 answers\n1\nText Only\nImage Only\nText and Image\n2\nText Only\nImage Only\nText and Image\nLive preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nYour question will appear here\n1\n\nAnswer 1\n\n2\n\nAnswer 2\n\nThe preview shows your draft while some fields are incomplete.\nReplay animation\nAnswer mode\nSingle choice\nMultiple choice\nEstimation\nCategory\n\nConsecutive questions with the same category form a round. The leaderboard is only shown when the category changes.\n\nSCORING\nMax points\n(PTS)\n\nMaximum points awarded for a correct answer\n\nPenalty\n\nPoints deducted for a wrong answer (total cannot go below 0)\n\nTIMINGS\nQuestion display\n(sec)\n\nDuration before answers appear\n\nAnswer time\n(sec)\n\nTime players have to answer\n\nBACKGROUND\n\nChoices belong to the active theme. Card settings override show settings.\n\nInherited from show\n\nChoose media\nAUDIO\n\nChoices belong to the active theme. Card settings override show settings.\n\nQuestion entrance\nInherited from show\nPreview\nChoose media\nVoting music\nInherited from show\nPreview\nChoose media\nResult reveal\nInherited from show\nPreview\nChoose media\nMOTION\n\nChoices belong to the active theme. Card settings override show settings.\n\nMotion and timing are defined by this theme.",
+    "inputs": [
+      {
+        "tag": "INPUT",
+        "name": "subject",
+        "type": "text",
+        "placeholder": "Quizz title...",
+        "value": "Untitled quiz"
+      },
+      {
+        "tag": "INPUT",
+        "name": "questions.0.question",
+        "type": "text",
+        "placeholder": "Start typing your question...",
+        "value": ""
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "type": "file",
+        "placeholder": null,
+        "value": ""
+      },
+      {
+        "tag": "TEXTAREA",
+        "name": "",
+        "type": "textarea",
+        "placeholder": "Add an explanation shown when the answer is revealed",
+        "value": ""
+      },
+      {
+        "tag": "INPUT",
+        "name": "questions.0.answers.0",
+        "type": "text",
+        "testid": "answer-text-0",
+        "placeholder": "Add an answer...",
+        "value": ""
+      },
+      {
+        "tag": "INPUT",
+        "name": "questions.0.answers.1",
+        "type": "text",
+        "testid": "answer-text-1",
+        "placeholder": "Add an answer...",
+        "value": ""
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "type": "text",
+        "placeholder": "e.g. Geography",
+        "value": ""
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "type": "number",
+        "placeholder": null,
+        "value": "1000"
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "type": "number",
+        "placeholder": null,
+        "value": "5"
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "type": "number",
+        "placeholder": null,
+        "value": "20"
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "type": "range",
+        "placeholder": null,
+        "value": "0.7"
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "type": "range",
+        "placeholder": null,
+        "value": "0.35"
+      },
+      {
+        "tag": "INPUT",
+        "name": "",
+        "type": "range",
+        "placeholder": null,
+        "value": "0.7"
+      }
+    ],
+    "ids": [
+      {
+        "id": "studio-tab-questions",
+        "text": "Questions"
+      },
+      {
+        "id": "studio-tab-participants",
+        "text": "Participants"
+      },
+      {
+        "id": "studio-tab-settings",
+        "text": "Settings"
+      },
+      {
+        "id": "studio-tab-launch",
+        "text": "Launch"
+      },
+      {
+        "id": "editor-exit-btn",
+        "text": "Exit"
+      },
+      {
+        "id": "editor-save-btn",
+        "text": "Save"
+      },
+      {
+        "id": "studio-card-type-bar",
+        "text": "QuizSurveyMediaAnimationTransitionOpeningClosingCountdownLeaderboardInterim ResultsAnswer RecapCard Type:Quiz"
+      },
+      {
+        "id": "toggle-kind-quiz",
+        "text": "Quiz"
+      },
+      {
+        "id": "toggle-kind-survey",
+        "text": "Survey"
+      },
+      {
+        "id": "toggle-group-divider-media",
+        "text": ""
+      },
+      {
+        "id": "toggle-kind-media",
+        "text": "Media"
+      },
+      {
+        "id": "toggle-group-divider-effects",
+        "text": ""
+      },
+      {
+        "id": "toggle-kind-animation",
+        "text": "Animation"
+      },
+      {
+        "id": "toggle-kind-transition",
+        "text": "Transition"
+      },
+      {
+        "id": "toggle-group-divider-show",
+        "text": ""
+      },
+      {
+        "id": "toggle-kind-opening",
+        "text": "Opening"
+      },
+      {
+        "id": "toggle-kind-closing",
+        "text": "Closing"
+      },
+      {
+        "id": "toggle-kind-countdown",
+        "text": "Countdown"
+      },
+      {
+        "id": "toggle-group-divider-results",
+        "text": ""
+      },
+      {
+        "id": "toggle-kind-leaderboard",
+        "text": "Leaderboard"
+      },
+      {
+        "id": "toggle-kind-interimResults",
+        "text": "Interim Results"
+      },
+      {
+        "id": "toggle-kind-answerRecap",
+        "text": "Answer Recap"
+      },
+      {
+        "id": "editor-timeline",
+        "text": "1No question yet\n    To pick up a draggable item, press the space bar.\n    While dragging, use the arrow keys to move the item.\n    Press space again to drop the item in its new position, or press esc"
+      },
+      {
+        "id": "editor-question-card-0",
+        "text": "1No question yet"
+      },
+      {
+        "id": "studio-card-kind-select",
+        "text": "Quiz"
+      },
+      {
+        "id": "studio-add-card-btn",
+        "text": "Add card"
+      },
+      {
+        "id": "answer-text-0",
+        "text": ""
+      },
+      {
+        "id": "answer-visual-controls-0",
+        "text": "Text OnlyImage OnlyText and Image"
+      },
+      {
+        "id": "answer-display-mode-0",
+        "text": "Text OnlyImage OnlyText and Image"
+      },
+      {
+        "id": "answer-mode-0-text",
+        "text": "Text Only"
+      },
+      {
+        "id": "answer-mode-0-image",
+        "text": "Image Only"
+      },
+      {
+        "id": "answer-mode-0-both",
+        "text": "Text and Image"
+      },
+      {
+        "id": "answer-text-1",
+        "text": ""
+      },
+      {
+        "id": "answer-visual-controls-1",
+        "text": "Text OnlyImage OnlyText and Image"
+      },
+      {
+        "id": "answer-display-mode-1",
+        "text": "Text OnlyImage OnlyText and Image"
+      },
+      {
+        "id": "answer-mode-1-text",
+        "text": "Text Only"
+      },
+      {
+        "id": "answer-mode-1-image",
+        "text": "Image Only"
+      },
+      {
+        "id": "answer-mode-1-both",
+        "text": "Text and Image"
+      },
+      {
+        "id": "question-live-preview",
+        "text": "Live previewHide previewUpdates as you edit. No save or live game is needed.QuestionAnswersResults16:94:3Your question will appear here 1Answer 1  2Answer 2 The preview shows your draft while some fie"
+      },
+      {
+        "id": "question-preview-phase-question",
+        "text": "Question"
+      },
+      {
+        "id": "question-preview-phase-answers",
+        "text": "Answers"
+      },
+      {
+        "id": "question-preview-phase-results",
+        "text": "Results"
+      },
+      {
+        "id": "question-preview-aspect-16-9",
+        "text": "16:9"
+      },
+      {
+        "id": "question-preview-aspect-4-3",
+        "text": "4:3"
+      },
+      {
+        "id": "question-preview-native-stage",
+        "text": "Your question will appear here 1Answer 1  2Answer 2 The preview shows your draft while some fields are incomplete."
+      },
+      {
+        "id": "editor-preview-viewport",
+        "text": "Your question will appear here 1Answer 1  2Answer 2 The preview shows your draft while some fields are incomplete."
+      },
+      {
+        "id": "stage-fit-container",
+        "text": "Your question will appear here 1Answer 1  2Answer 2 The preview shows your draft while some fields are incomplete."
+      },
+      {
+        "id": "native-game-surface",
+        "text": "Your question will appear here 1Answer 1  2Answer 2 "
+      },
+      {
+        "id": "product-logo",
+        "text": ""
+      },
+      {
+        "id": "question-preview-title",
+        "text": "Your question will appear here"
+      },
+      {
+        "id": "answer-badge-0",
+        "text": "1"
+      },
+      {
+        "id": "answer-badge-1",
+        "text": "2"
+      },
+      {
+        "id": "question-preview-replay",
+        "text": "Replay animation"
+      },
+      {
+        "id": "question-config",
+        "text": "Answer modeSingle choiceMultiple choiceEstimationCategoryConsecutive questions with the same category form a round. The leaderboard is only shown when the category changes.ScoringMax points(PTS)Maximu"
+      },
+      {
+        "id": "answer-type-single",
+        "text": "Single choice"
+      },
+      {
+        "id": "answer-type-multi",
+        "text": "Multiple choice"
+      },
+      {
+        "id": "answer-type-estimation",
+        "text": "Estimation"
+      },
+      {
+        "id": "theme-audio-showQuestion",
+        "text": "Question entranceInherited from showPreviewChoose media"
+      },
+      {
+        "id": "theme-audio-answersMusic",
+        "text": "Voting musicInherited from showPreviewChoose media"
+      },
+      {
+        "id": "theme-audio-revealResults",
+        "text": "Result revealInherited from showPreviewChoose media"
+      }
+    ]
+  }
+}

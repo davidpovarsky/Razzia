@@ -1,7 +1,17 @@
 import { createInstance } from "i18next"
 import type { PreviewLocale } from "../../presentation/show-library-preview/i18n"
 
-const languages = ["en", "fr", "de", "es", "it", "ja", "tr", "vi"] as const
+const languages = [
+  "en",
+  "fr",
+  "de",
+  "es",
+  "it",
+  "ja",
+  "tr",
+  "vi",
+  "he",
+] as const
 
 // Dedicated namespace: no changes to branding or existing editor dictionaries.
 export const builderStrings = {
@@ -14,6 +24,7 @@ export const builderStrings = {
     "ゲームのプレビュー",
     "Oyun önizlemesi",
     "Xem trước trò chơi",
+    "תצוגה מקדימה של המשחק",
   ],
   listen: [
     "Listen",
@@ -24,6 +35,7 @@ export const builderStrings = {
     "試聴",
     "Dinle",
     "Nghe thử",
+    "האזנה",
   ],
   stopAudio: [
     "Stop audio",
@@ -34,6 +46,7 @@ export const builderStrings = {
     "音声を停止",
     "Sesi durdur",
     "Dừng âm thanh",
+    "עצירת האודיו",
   ],
   allCards: [
     "All cards",
@@ -44,6 +57,7 @@ export const builderStrings = {
     "すべてのカード",
     "Tüm kartlar",
     "Tất cả thẻ",
+    "כל הכרטיסים",
   ],
   cardScope: [
     "Card scope",
@@ -54,6 +68,7 @@ export const builderStrings = {
     "カードの適用範囲",
     "Kart kapsamı",
     "Phạm vi thẻ",
+    "תחולה על כרטיסים",
   ],
   draftPreview: [
     "Preview of your current draft",
@@ -64,6 +79,7 @@ export const builderStrings = {
     "現在の下書きのプレビュー",
     "Geçerli taslağın önizlemesi",
     "Xem trước bản nháp hiện tại",
+    "תצוגה מקדימה של הטיוטה הנוכחית",
   ],
   publishedTheme: [
     "Published theme",
@@ -74,6 +90,7 @@ export const builderStrings = {
     "公開済みテーマ",
     "Yayınlanmış tema",
     "Chủ đề đã xuất bản",
+    "ערכת נושא שפורסמה",
   ],
   pinnedVersion: [
     "Saved theme version",
@@ -84,6 +101,7 @@ export const builderStrings = {
     "保存されたテーマのバージョン",
     "Kaydedilmiş tema sürümü",
     "Phiên bản chủ đề đã lưu",
+    "גרסת ערכת הנושא השמורה",
   ],
   publication: [
     "Publication",
@@ -94,6 +112,7 @@ export const builderStrings = {
     "公開",
     "Yayın",
     "Xuất bản",
+    "פרסום",
   ],
   publicationVersion: [
     "Publication version",
@@ -104,6 +123,7 @@ export const builderStrings = {
     "公開バージョン",
     "Yayın sürümü",
     "Phiên bản xuất bản",
+    "גרסה לפרסום",
   ],
   rollbackVersion: [
     "Rollback version",
@@ -114,6 +134,7 @@ export const builderStrings = {
     "戻すバージョン",
     "Geri dönülecek sürüm",
     "Phiên bản hoàn nguyên",
+    "גרסה לשחזור",
   ],
   published: [
     "Published",
@@ -124,6 +145,7 @@ export const builderStrings = {
     "公開済み",
     "Yayınlandı",
     "Đã xuất bản",
+    "פורסם",
   ],
   unpublished: [
     "Not published",
@@ -134,6 +156,7 @@ export const builderStrings = {
     "未公開",
     "Yayınlanmadı",
     "Chưa xuất bản",
+    "טרם פורסם",
   ],
   archive: [
     "Archive",
@@ -144,6 +167,7 @@ export const builderStrings = {
     "アーカイブ",
     "Arşivle",
     "Lưu trữ",
+    "העברה לארכיון",
   ],
   archived: [
     "Archived",
@@ -154,6 +178,7 @@ export const builderStrings = {
     "アーカイブ済み",
     "Arşivlendi",
     "Đã lưu trữ",
+    "בארכיון",
   ],
   unarchive: [
     "Restore from archive",
@@ -164,6 +189,7 @@ export const builderStrings = {
     "アーカイブから復元",
     "Arşivden geri yükle",
     "Khôi phục từ lưu trữ",
+    "שחזור מהארכיון",
   ],
   workspace: [
     "Workspace",
@@ -174,6 +200,7 @@ export const builderStrings = {
     "ワークスペース",
     "Çalışma alanı",
     "Không gian làm việc",
+    "סביבת עבודה",
   ],
   personalWorkspace: [
     "My themes",
@@ -184,6 +211,7 @@ export const builderStrings = {
     "自分のテーマ",
     "Temalarım",
     "Chủ đề của tôi",
+    "ערכות הנושא שלי",
   ],
   mediaTarget: [
     "Media destination",
@@ -194,6 +222,7 @@ export const builderStrings = {
     "メディアの配置先",
     "Medya hedefi",
     "Đích tài nguyên",
+    "יעד המדיה",
   ],
   uploadMedia: [
     "Upload media",
@@ -204,6 +233,7 @@ export const builderStrings = {
     "メディアをアップロード",
     "Medya yükle",
     "Tải tài nguyên lên",
+    "העלאת מדיה",
   ],
   originalLayout: [
     "Razzia Original",
@@ -214,6 +244,7 @@ export const builderStrings = {
     "Razzia オリジナル",
     "Özgün Razzia",
     "Razzia gốc",
+    "Razzia המקורי",
   ],
   cinematicLayout: [
     "Cinematic stage",
@@ -224,6 +255,7 @@ export const builderStrings = {
     "シネマティックステージ",
     "Sinematik sahne",
     "Sân khấu điện ảnh",
+    "במה קולנועית",
   ],
   stageComponent: [
     "Native stage",
@@ -234,6 +266,7 @@ export const builderStrings = {
     "オリジナルのステージ",
     "Özgün sahne",
     "Sân khấu gốc",
+    "במת המשחק המקורית",
   ],
   showTitleComponent: [
     "Show title",
@@ -244,6 +277,7 @@ export const builderStrings = {
     "ショーのタイトル",
     "Gösteri başlığı",
     "Tiêu đề chương trình",
+    "כותרת המופע",
   ],
   brandComponent: [
     "Brand logo",
@@ -254,6 +288,7 @@ export const builderStrings = {
     "ブランドロゴ",
     "Marka logosu",
     "Biểu trưng thương hiệu",
+    "לוגו המותג",
   ],
   previewGame: [
     "Preview game",
@@ -264,6 +299,7 @@ export const builderStrings = {
     "プレビューするゲーム",
     "Önizleme oyunu",
     "Trò chơi xem trước",
+    "משחק לתצוגה מקדימה",
   ],
   noTemplates: [
     "No approved component templates are attached to this draft.",
@@ -274,6 +310,7 @@ export const builderStrings = {
     "この下書きには承認済みのコンポーネントテンプレートがありません。",
     "Bu taslağa onaylı bileşen şablonları eklenmemiş.",
     "Bản nháp này chưa có mẫu thành phần được phê duyệt.",
+    "לא צורפו לטיוטה הזו תבניות רכיבים מאושרות.",
   ],
   saveVersion: [
     "Save version",
@@ -284,6 +321,7 @@ export const builderStrings = {
     "バージョンを保存",
     "Sürümü kaydet",
     "Lưu phiên bản",
+    "שמירת גרסה",
   ],
   version: [
     "Version",
@@ -294,6 +332,7 @@ export const builderStrings = {
     "バージョン",
     "Sürüm",
     "Phiên bản",
+    "גרסה",
   ],
   restoreVersion: [
     "Restore version",
@@ -304,6 +343,7 @@ export const builderStrings = {
     "バージョンを復元",
     "Sürümü geri yükle",
     "Khôi phục phiên bản",
+    "שחזור גרסה",
   ],
   authoringVersion: [
     "Authoring version saved. Runtime publication requires review.",
@@ -314,6 +354,7 @@ export const builderStrings = {
     "編集バージョンを保存しました。公開には審査が必要です。",
     "Düzenleme sürümü kaydedildi. Yayın için inceleme gerekir.",
     "Đã lưu phiên bản biên soạn. Xuất bản cần được xét duyệt.",
+    "גרסת העריכה נשמרה. פרסום להפעלה דורש בדיקה.",
   ],
   title: [
     "Theme Builder",
@@ -324,6 +365,7 @@ export const builderStrings = {
     "テーマビルダー",
     "Tema Oluşturucu",
     "Trình tạo chủ đề",
+    "עורך ערכות הנושא",
   ],
   name: [
     "Theme name",
@@ -334,6 +376,7 @@ export const builderStrings = {
     "テーマ名",
     "Tema adı",
     "Tên chủ đề",
+    "שם ערכת הנושא",
   ],
   library: [
     "Library",
@@ -344,6 +387,7 @@ export const builderStrings = {
     "ライブラリ",
     "Kitaplık",
     "Thư viện",
+    "ספרייה",
   ],
   screens: [
     "Screens",
@@ -354,6 +398,7 @@ export const builderStrings = {
     "画面",
     "Ekranlar",
     "Màn hình",
+    "מסכים",
   ],
   components: [
     "Components",
@@ -364,6 +409,7 @@ export const builderStrings = {
     "コンポーネント",
     "Bileşenler",
     "Thành phần",
+    "רכיבים",
   ],
   motion: [
     "Effects",
@@ -374,6 +420,7 @@ export const builderStrings = {
     "エフェクト",
     "Efektler",
     "Hiệu ứng",
+    "אפקטים",
   ],
   assets: [
     "Assets",
@@ -384,6 +431,7 @@ export const builderStrings = {
     "アセット",
     "Varlıklar",
     "Tài nguyên",
+    "נכסים",
   ],
   audio: [
     "Audio",
@@ -394,6 +442,7 @@ export const builderStrings = {
     "オーディオ",
     "Ses",
     "Âm thanh",
+    "אודיו",
   ],
   tree: [
     "Component tree",
@@ -404,6 +453,7 @@ export const builderStrings = {
     "コンポーネントツリー",
     "Bileşen ağacı",
     "Cây thành phần",
+    "עץ הרכיבים",
   ],
   properties: [
     "Properties",
@@ -414,6 +464,7 @@ export const builderStrings = {
     "プロパティ",
     "Özellikler",
     "Thuộc tính",
+    "מאפיינים",
   ],
   layout: [
     "Layout plan",
@@ -424,6 +475,7 @@ export const builderStrings = {
     "レイアウト設計",
     "Yerleşim planı",
     "Sơ đồ bố cục",
+    "מבנה הפריסה",
   ],
   create: [
     "Create blank",
@@ -434,6 +486,7 @@ export const builderStrings = {
     "空白で作成",
     "Boş oluştur",
     "Tạo trống",
+    "יצירת ערכה ריקה",
   ],
   duplicate: [
     "Duplicate",
@@ -444,6 +497,7 @@ export const builderStrings = {
     "複製",
     "Çoğalt",
     "Nhân bản",
+    "שכפול",
   ],
   save: [
     "Save draft",
@@ -454,6 +508,7 @@ export const builderStrings = {
     "下書きを保存",
     "Taslağı kaydet",
     "Lưu bản nháp",
+    "שמירת טיוטה",
   ],
   saved: [
     "Draft saved",
@@ -464,6 +519,7 @@ export const builderStrings = {
     "下書きを保存しました",
     "Taslak kaydedildi",
     "Đã lưu bản nháp",
+    "הטיוטה נשמרה",
   ],
   unsaved: [
     "Unsaved changes",
@@ -474,6 +530,7 @@ export const builderStrings = {
     "未保存の変更",
     "Kaydedilmemiş değişiklikler",
     "Thay đổi chưa lưu",
+    "שינויים שלא נשמרו",
   ],
   undo: [
     "Undo",
@@ -484,6 +541,7 @@ export const builderStrings = {
     "元に戻す",
     "Geri al",
     "Hoàn tác",
+    "ביטול הפעולה האחרונה",
   ],
   redo: [
     "Redo",
@@ -494,6 +552,7 @@ export const builderStrings = {
     "やり直す",
     "Yinele",
     "Làm lại",
+    "ביצוע מחדש",
   ],
   revert: [
     "Revert to saved",
@@ -504,6 +563,7 @@ export const builderStrings = {
     "保存済みに戻す",
     "Kaydedilene dön",
     "Khôi phục bản đã lưu",
+    "חזרה לגרסה השמורה",
   ],
   validate: [
     "Validate",
@@ -514,6 +574,7 @@ export const builderStrings = {
     "検証",
     "Doğrula",
     "Xác thực",
+    "בדיקת תקינות",
   ],
   valid: [
     "Draft structure is valid. Publishing still requires review.",
@@ -524,6 +585,7 @@ export const builderStrings = {
     "下書きの構造は有効です。公開には審査が必要です。",
     "Taslak yapısı geçerli. Yayınlama için inceleme gerekir.",
     "Cấu trúc hợp lệ. Cần xét duyệt trước khi xuất bản.",
+    "מבנה הטיוטה תקין. הפרסום עדיין דורש בדיקה.",
   ],
   publish: [
     "Publish",
@@ -534,6 +596,7 @@ export const builderStrings = {
     "公開",
     "Yayınla",
     "Xuất bản",
+    "פרסום",
   ],
   rollback: [
     "Rollback",
@@ -544,6 +607,7 @@ export const builderStrings = {
     "以前の版に戻す",
     "Önceki sürüme dön",
     "Khôi phục phiên bản",
+    "חזרה לגרסה קודמת",
   ],
   inherited: [
     "Inherited",
@@ -554,6 +618,7 @@ export const builderStrings = {
     "継承",
     "Devralınan",
     "Kế thừa",
+    "לפי הגדרות ברירת המחדל",
   ],
   reset: [
     "Reset to inherited",
@@ -564,6 +629,7 @@ export const builderStrings = {
     "継承に戻す",
     "Devralınana sıfırla",
     "Đặt lại về kế thừa",
+    "איפוס לברירת המחדל",
   ],
   mute: [
     "Mute",
@@ -574,6 +640,7 @@ export const builderStrings = {
     "ミュート",
     "Sessiz",
     "Tắt tiếng",
+    "השתקה",
   ],
   role: [
     "Role scope",
@@ -584,6 +651,7 @@ export const builderStrings = {
     "役割の範囲",
     "Rol kapsamı",
     "Phạm vi vai trò",
+    "תפקיד לצפייה",
   ],
   all: [
     "All roles",
@@ -594,6 +662,7 @@ export const builderStrings = {
     "すべての役割",
     "Tüm roller",
     "Tất cả vai trò",
+    "כל התפקידים",
   ],
   remove: [
     "Remove",
@@ -604,6 +673,7 @@ export const builderStrings = {
     "削除",
     "Kaldır",
     "Xóa",
+    "הסרה",
   ],
   up: [
     "Move up",
@@ -614,6 +684,7 @@ export const builderStrings = {
     "上に移動",
     "Yukarı taşı",
     "Di chuyển lên",
+    "הזזה למעלה",
   ],
   down: [
     "Move down",
@@ -624,6 +695,7 @@ export const builderStrings = {
     "下に移動",
     "Aşağı taşı",
     "Di chuyển xuống",
+    "הזזה למטה",
   ],
   add: [
     "Add component",
@@ -634,6 +706,7 @@ export const builderStrings = {
     "コンポーネントを追加",
     "Bileşen ekle",
     "Thêm thành phần",
+    "הוספת רכיב",
   ],
   error: [
     "The change could not be applied. Your draft is preserved.",
@@ -644,6 +717,7 @@ export const builderStrings = {
     "変更を適用できませんでした。下書きは保持されています。",
     "Değişiklik uygulanamadı. Taslağınız korundu.",
     "Không thể áp dụng thay đổi. Bản nháp vẫn được giữ.",
+    "לא ניתן להחיל את השינוי. הטיוטה שלכם נשמרה.",
   ],
   conflict: [
     "A newer draft was saved elsewhere. Your local changes are preserved.",
@@ -654,6 +728,7 @@ export const builderStrings = {
     "別の場所で新しい下書きが保存されました。ローカルの変更は保持されています。",
     "Başka yerde daha yeni bir taslak kaydedildi. Yerel değişiklikleriniz korundu.",
     "Một bản nháp mới hơn đã được lưu ở nơi khác. Thay đổi cục bộ vẫn được giữ.",
+    "טיוטה חדשה יותר נשמרה במקום אחר. השינויים המקומיים שלכם נשמרו.",
   ],
   empty: [
     "Choose an available theme draft to begin.",
@@ -664,6 +739,7 @@ export const builderStrings = {
     "利用可能なテーマの下書きを選択してください。",
     "Başlamak için kullanılabilir bir tema taslağı seçin.",
     "Chọn bản nháp chủ đề có sẵn để bắt đầu.",
+    "בחרו טיוטת ערכת נושא זמינה כדי להתחיל.",
   ],
   unavailable: [
     "Publishing and live preview require an approved renderer and package.",
@@ -674,6 +750,7 @@ export const builderStrings = {
     "公開とライブプレビューには承認済みのレンダラーとパッケージが必要です。",
     "Yayınlama ve canlı önizleme için onaylı görüntüleyici ve paket gerekir.",
     "Xuất bản và xem trước cần bộ hiển thị và gói đã được phê duyệt.",
+    "פרסום ותצוגה מקדימה חיה דורשים מנוע תצוגה וחבילה מאושרים.",
   ],
   readonly: [
     "You can view this theme. Author permission is required to edit.",
@@ -684,6 +761,7 @@ export const builderStrings = {
     "このテーマは閲覧専用です。編集には作成者権限が必要です。",
     "Bu temayı görüntüleyebilirsiniz. Düzenlemek için yazar izni gerekir.",
     "Bạn có thể xem chủ đề. Cần quyền tác giả để chỉnh sửa.",
+    "אפשר לצפות בערכת הנושא. העריכה דורשת הרשאת יוצר.",
   ],
   discard: [
     "Discard unsaved changes?",
@@ -694,6 +772,7 @@ export const builderStrings = {
     "未保存の変更を破棄しますか？",
     "Kaydedilmemiş değişiklikler silinsin mi?",
     "Bỏ thay đổi chưa lưu?",
+    "לוותר על השינויים שלא נשמרו?",
   ],
   cancel: [
     "Cancel",
@@ -704,6 +783,7 @@ export const builderStrings = {
     "キャンセル",
     "İptal",
     "Hủy",
+    "ביטול",
   ],
   confirm: [
     "Continue",
@@ -714,6 +794,7 @@ export const builderStrings = {
     "続行",
     "Devam et",
     "Tiếp tục",
+    "המשך",
   ],
   shared: [
     "Shared theme draft",
@@ -724,6 +805,7 @@ export const builderStrings = {
     "共有テーマの下書き",
     "Paylaşılan tema taslağı",
     "Bản nháp chủ đề dùng chung",
+    "טיוטת ערכת נושא משותפת",
   ],
   local: [
     "This game only",
@@ -734,6 +816,7 @@ export const builderStrings = {
     "このゲームのみ",
     "Yalnızca bu oyun",
     "Chỉ trò chơi này",
+    "במשחק הזה בלבד",
   ],
   alignment: [
     "Alignment",
@@ -744,6 +827,7 @@ export const builderStrings = {
     "配置",
     "Hizalama",
     "Căn chỉnh",
+    "יישור",
   ],
   gap: [
     "Spacing",
@@ -754,6 +838,7 @@ export const builderStrings = {
     "間隔",
     "Aralık",
     "Khoảng cách",
+    "מרווח",
   ],
   fit: [
     "Image fit",
@@ -764,8 +849,19 @@ export const builderStrings = {
     "画像の表示方法",
     "Görsel uyumu",
     "Cách hiển thị ảnh",
+    "התאמת תמונה",
   ],
-  flow: ["Flow", "Flux", "Fluss", "Flujo", "Flusso", "フロー", "Akış", "Luồng"],
+  flow: [
+    "Flow",
+    "Flux",
+    "Fluss",
+    "Flujo",
+    "Flusso",
+    "フロー",
+    "Akış",
+    "Luồng",
+    "רצף",
+  ],
   grid: [
     "Grid",
     "Grille",
@@ -775,6 +871,7 @@ export const builderStrings = {
     "グリッド",
     "Izgara",
     "Lưới",
+    "רשת",
   ],
   "safe-overlay": [
     "Safe overlay",
@@ -785,6 +882,7 @@ export const builderStrings = {
     "安全な重ね合わせ",
     "Güvenli katman",
     "Lớp phủ an toàn",
+    "שכבת כיסוי בטוחה",
   ],
   start: [
     "Start",
@@ -795,6 +893,7 @@ export const builderStrings = {
     "始端",
     "Başlangıç",
     "Đầu",
+    "התחלה",
   ],
   center: [
     "Centre",
@@ -805,8 +904,9 @@ export const builderStrings = {
     "中央",
     "Orta",
     "Giữa",
+    "מרכז",
   ],
-  end: ["End", "Fin", "Ende", "Final", "Fine", "終端", "Son", "Cuối"],
+  end: ["End", "Fin", "Ende", "Final", "Fine", "終端", "Son", "Cuối", "סוף"],
   none: [
     "None",
     "Aucun",
@@ -816,6 +916,7 @@ export const builderStrings = {
     "なし",
     "Yok",
     "Không",
+    "ללא",
   ],
   small: [
     "Small",
@@ -826,6 +927,7 @@ export const builderStrings = {
     "小",
     "Küçük",
     "Nhỏ",
+    "קטן",
   ],
   medium: [
     "Medium",
@@ -836,8 +938,19 @@ export const builderStrings = {
     "中",
     "Orta",
     "Vừa",
+    "בינוני",
   ],
-  large: ["Large", "Grand", "Groß", "Grande", "Grande", "大", "Büyük", "Lớn"],
+  large: [
+    "Large",
+    "Grand",
+    "Groß",
+    "Grande",
+    "Grande",
+    "大",
+    "Büyük",
+    "Lớn",
+    "גדול",
+  ],
   contain: [
     "Contain",
     "Contenir",
@@ -847,6 +960,7 @@ export const builderStrings = {
     "全体を表示",
     "Sığdır",
     "Vừa khung",
+    "התאמה בתוך המסגרת",
   ],
   cover: [
     "Cover",
@@ -857,6 +971,7 @@ export const builderStrings = {
     "全面を覆う",
     "Kapla",
     "Phủ kín",
+    "מילוי המסגרת",
   ],
   select: [
     "Select",
@@ -867,6 +982,7 @@ export const builderStrings = {
     "選択",
     "Seç",
     "Chọn",
+    "בחירה",
   ],
   loading: [
     "Loading themes…",
@@ -877,6 +993,7 @@ export const builderStrings = {
     "テーマを読み込み中…",
     "Temalar yükleniyor…",
     "Đang tải chủ đề…",
+    "טוען ערכות נושא…",
   ],
   back: [
     "Back to Studio",
@@ -887,6 +1004,7 @@ export const builderStrings = {
     "Studio に戻る",
     "Studio’ya dön",
     "Quay lại Studio",
+    "חזרה לסטודיו",
   ],
   player: [
     "Player",
@@ -897,10 +1015,21 @@ export const builderStrings = {
     "プレイヤー",
     "Oyuncu",
     "Người chơi",
+    "שחקן",
   ],
 } satisfies Record<
   string,
-  readonly [string, string, string, string, string, string, string, string]
+  readonly [
+    string,
+    string,
+    string,
+    string,
+    string,
+    string,
+    string,
+    string,
+    string,
+  ]
 >
 
 export type BuilderTextKey = keyof typeof builderStrings

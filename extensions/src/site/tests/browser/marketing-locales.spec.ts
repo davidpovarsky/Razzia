@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test"
 import { readFileSync } from "node:fs"
 
-for (const language of ["en", "fr", "de", "es", "it", "ja", "tr", "vi"]) {
+for (const language of ["en", "fr", "de", "es", "it", "ja", "tr", "vi", "he"]) {
   test(`${language} home headings and translated catalogue search agree`, async ({
     page,
   }) => {
@@ -20,7 +20,10 @@ for (const language of ["en", "fr", "de", "es", "it", "ja", "tr", "vi"]) {
       ).toBeVisible()
     }
     await expect(page.locator("html")).toHaveAttribute("lang", language)
-    await expect(page.locator("html")).toHaveAttribute("dir", "ltr")
+    await expect(page.locator("html")).toHaveAttribute(
+      "dir",
+      language === "he" ? "rtl" : "ltr",
+    )
     await page.goto(`/?view=store&lng=${language}`)
     const search = page.getByRole("searchbox", {
       name: dictionary["Search games"],

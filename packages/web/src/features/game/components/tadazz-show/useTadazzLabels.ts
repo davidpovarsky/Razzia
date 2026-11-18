@@ -47,7 +47,7 @@ export function useTadazzStageLabels(): TadazzStageLabels {
       points: (score: number) =>
         t(`${K}.points`, {
           defaultValue: "{{score}} POINTS",
-          score: score.toLocaleString("en-US"),
+          score: score.toLocaleString(i18n.resolvedLanguage ?? i18n.language),
         }),
       roundLabel: ({ round, number, totalQuestions }) => {
         const n = String(number || 1).padStart(2, "0")
@@ -97,6 +97,16 @@ export function useTadazzV4Labels(): Partial<TadazzV4Labels> {
       storyNow: tx("storyNow"),
       storyTitle: tx("storyTitle"),
       storyRound: tx("storyRound"),
+      questionLabel: tx("questionLabel"),
+      choiceLabel: tx("choiceLabel"),
+      audienceResults: t(`${K}.audienceResults`, d.audienceResults),
+      audienceFavourite: t(`${K}.audienceFavourite`, d.audienceFavourite),
+      jointAudienceFavourite: t(
+        `${K}.jointAudienceFavourite`,
+        d.jointAudienceFavourite,
+      ),
+      correctAnswer: t(`${K}.correctAnswer`, d.correctAnswer),
+      votingOpen: t(`${K}.votingOpen`, d.votingOpen),
       focus: tx("focus"),
       chooseOne: tx("chooseOne"),
       votesLocked: tx("votesLocked"),

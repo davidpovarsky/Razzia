@@ -5,6 +5,7 @@ import {
   type DotLottie,
 } from "@lottiefiles/dotlottie-react"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { validateLottieJson, type LottieFitMode } from "../core/lottie"
 
 let wasmConfigured = false
@@ -221,6 +222,7 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
   renderDevicePixelRatio,
   frameUpdateIntervalMs = 0,
 }) => {
+  const { t } = useTranslation()
   const effectiveData = data ?? animationData
   const resolvedTestId = dataTestId ?? testId ?? "lottie-player"
   const clampedSpeed = Math.max(0.25, Math.min(3, speed))
@@ -286,8 +288,9 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
     }
   }, [inlineValidation])
 
-  // Reset completion state when source or inline data changes
+  // A corrected source must also recover from a previous load failure.
   useEffect(() => {
+    setRuntimeError(null)
     setHasCompletedOnce(false)
     setCurrentFrame(0)
     setIsEngineReady(false)
@@ -541,7 +544,10 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
           "flex items-center justify-center rounded-xl border border-amber-400/30 bg-amber-500/10 p-3 text-xs text-amber-200"
         }
       >
-        Lottie preview unavailable
+        {t(
+          "extensions:editorPreview.lottieUnavailable",
+          "Lottie preview unavailable. Check the selected animation.",
+        )}
       </div>
     )
   }

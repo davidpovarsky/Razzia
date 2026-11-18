@@ -16,7 +16,8 @@ import {
 } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 import { ApiError, api, unwrap } from "@razzia/web/lib/api"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useNavigate } from "@tanstack/react-router"
+import { useBlocker, useNavigate } from "@tanstack/react-router"
+import { useRef, type BaseSyntheticEvent } from "react"
 import { useFormContext } from "react-hook-form"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
@@ -29,18 +30,30 @@ export function useCompositeQuizzSave() {
     setCurrentIndex,
     extras,
     setExtras,
+    acceptExtrasBaseline,
+    isExtrasDirty,
+    extrasStatus,
     conflict,
     setConflict,
   } = useQuizzEditor()
-  const { handleSubmit, control, getValues, reset } = useFormContext<
-    QuizzFormValues,
-    unknown,
-    QuizzValidated
-  >()
+  const {
+    handleSubmit,
+    control,
+    getValues,
+    reset,
+    formState: { isSubmitting, isDirty },
+  } = useFormContext<QuizzFormValues, unknown, QuizzValidated>()
   const { timeline, selectTimelineItem, setActiveTab } = useStudioEditor()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const { t } = useTranslation()
+  const allowNavigation = useRef(false)
+  const hasUnsavedChanges = isDirty || isExtrasDirty
+  const navigationBlocker = useBlocker({
+    shouldBlockFn: () => hasUnsavedChanges && !allowNavigation.current,
+    enableBeforeUnload: () => hasUnsavedChanges && !allowNavigation.current,
+    withResolver: true,
+  })
 
   const handleExit = () => {
     navigate({ to: "/manager/config" })
@@ -55,133 +68,147 @@ export function useCompositeQuizzSave() {
   const onSaved = (messageKey: string) => {
     queryClient.invalidateQueries({ queryKey: quizzKeys.all })
     toast.success(t(messageKey))
+    allowNavigation.current = true
     handleExit()
   }
 
-  const { mutate: create } = useMutation({
+  const { mutate: create, isPending: isCreating } = useMutation({
     mutationFn: createQuizz,
     onSuccess: () => onSaved("quizz:quizzSaved"),
     onError,
   })
 
-  const { mutate: update } = useMutation({
+  const { mutate: update, isPending: isUpdating } = useMutation({
     mutationFn: updateQuizz,
     onSuccess: () => onSaved("quizz:quizzUpdated"),
     onError,
   })
 
-  const handleSave = handleSubmit(
-    async (values) => {
-      if (extras && quizzId) {
-        try {
-          const baseDigest = computeCanonicalBaseDigest(values)
-          const client = new CompositeApiClient({
-            getAuthToken: () => localStorage.getItem("token"),
-          })
-          const res = await client.saveQuizComposite(quizzId, {
-            expectedRevision: extras.revision,
-            quizz: values,
-            extras: {
-              ...extras,
-              baseDigest,
-              questionIds,
-            },
-          })
-          setExtras((prev) =>
-            prev
-              ? {
-                  ...prev,
-                  revision: res.revision,
-                  baseDigest: res.baseDigest,
-                }
-              : null,
+  const handleSave = (event?: BaseSyntheticEvent) =>
+    handleSubmit(
+      async (values) => {
+        if (extrasStatus !== "ready") {
+          toast.error(
+            t(
+              extrasStatus === "loading"
+                ? "common:loading"
+                : "extensions:errors.loadQuizFailed",
+            ),
           )
-          onSaved("quizz:quizzUpdated")
 
           return
-        } catch (err: unknown) {
-          if (err instanceof RevisionConflictError) {
-            setConflict({
-              serverRevision: err.currentRevision,
-              expectedRevision: err.expectedRevision,
+        }
+
+        if (extras && quizzId) {
+          try {
+            const baseDigest = computeCanonicalBaseDigest(values)
+            const client = new CompositeApiClient({
+              getAuthToken: () => localStorage.getItem("token"),
             })
+            const res = await client.saveQuizComposite(quizzId, {
+              expectedRevision: extras.revision,
+              quizz: values,
+              extras: {
+                ...extras,
+                baseDigest,
+                questionIds,
+              },
+            })
+            setExtras((prev) =>
+              prev
+                ? {
+                    ...prev,
+                    revision: res.revision,
+                    baseDigest: res.baseDigest,
+                  }
+                : null,
+            )
+            onSaved("quizz:quizzUpdated")
+
+            return
+          } catch (err: unknown) {
+            if (err instanceof RevisionConflictError) {
+              setConflict({
+                serverRevision: err.currentRevision,
+                expectedRevision: err.expectedRevision,
+              })
+
+              return
+            }
+
+            onError(err as Error)
 
             return
           }
+        }
 
-          onError(err as Error)
+        if (extras && !quizzId) {
+          try {
+            const baseDigest = computeCanonicalBaseDigest(values)
+            const client = new CompositeApiClient({
+              getAuthToken: () => localStorage.getItem("token"),
+            })
+            const res = await client.createQuizComposite({
+              quizz: values,
+              extras: {
+                ...extras,
+                quizId: extras.quizId || "temp-new",
+                baseDigest,
+                questionIds,
+              },
+            })
+            setExtras((prev) =>
+              prev
+                ? {
+                    ...prev,
+                    quizId: res.quizId,
+                    revision: res.revision,
+                    baseDigest: res.baseDigest,
+                  }
+                : null,
+            )
+            onSaved("quizz:quizzSaved")
+
+            return
+          } catch (err: unknown) {
+            onError(err as Error)
+
+            return
+          }
+        }
+
+        if (quizzId) {
+          update({ id: quizzId, json: values })
 
           return
         }
-      }
 
-      if (extras && !quizzId) {
-        try {
-          const baseDigest = computeCanonicalBaseDigest(values)
-          const client = new CompositeApiClient({
-            getAuthToken: () => localStorage.getItem("token"),
-          })
-          const res = await client.createQuizComposite({
-            quizz: values,
-            extras: {
-              ...extras,
-              quizId: extras.quizId || "temp-new",
-              baseDigest,
-              questionIds,
-            },
-          })
-          setExtras((prev) =>
-            prev
-              ? {
-                  ...prev,
-                  quizId: res.quizId,
-                  revision: res.revision,
-                  baseDigest: res.baseDigest,
-                }
-              : null,
+        create(values)
+      },
+      (invalid) => {
+        if (!Array.isArray(invalid.questions)) {
+          return
+        }
+
+        const index = invalid.questions.findIndex(Boolean)
+
+        if (index >= 0) {
+          setActiveTab("questions")
+
+          const item = timeline.find(
+            (entry) =>
+              entry.kind === "question" &&
+              entry.questionId === questionIds[index],
           )
-          onSaved("quizz:quizzSaved")
 
-          return
-        } catch (err: unknown) {
-          onError(err as Error)
-
-          return
+          if (item) {
+            selectTimelineItem(item.id)
+          } else {
+            setCurrentIndex(index)
+          }
         }
-      }
-
-      if (quizzId) {
-        update({ id: quizzId, json: values })
-
-        return
-      }
-
-      create(values)
-    },
-    (invalid) => {
-      if (!Array.isArray(invalid.questions)) {
-        return
-      }
-
-      const index = invalid.questions.findIndex(Boolean)
-
-      if (index >= 0) {
-        setActiveTab("questions")
-
-        const item = timeline.find(
-          (entry) =>
-            entry.kind === "question" &&
-            entry.questionId === questionIds[index],
-        )
-
-        if (item) {
-          selectTimelineItem(item.id)
-        } else {
-          setCurrentIndex(index)
-        }
-      }
-    },
-  )
+      },
+    )(event)
 
   const handleReloadConflict = async () => {
     if (!quizzId) {
@@ -205,6 +232,7 @@ export function useCompositeQuizzSave() {
 
       if (res.exists && res.extras) {
         setExtras(res.extras)
+        acceptExtrasBaseline(res.extras)
       }
 
       setConflict(null)
@@ -260,6 +288,14 @@ export function useCompositeQuizzSave() {
 
   return {
     control,
+    isSaving: isSubmitting || isCreating || isUpdating,
+    canSave: extrasStatus === "ready",
+    navigationBlocked: navigationBlocker.status === "blocked",
+    cancelNavigation: () => navigationBlocker.reset?.(),
+    confirmNavigation: () => {
+      allowNavigation.current = true
+      navigationBlocker.proceed?.()
+    },
     conflict,
     setConflict,
     handleExit,

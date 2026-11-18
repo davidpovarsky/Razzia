@@ -93,21 +93,33 @@ export const SHOW_THEME_LOCALES = [
   "ja",
   "tr",
   "vi",
+  "he",
 ] as const
 
-const localizations = z.record(
-  z.enum(SHOW_THEME_LOCALES),
-  z
-    .record(
-      z
-        .string()
-        .min(1)
-        .max(160)
-        .regex(/^[a-zA-Z0-9_.:-]+$/u),
-      z.string().min(1).max(1000),
-    )
-    .refine((value) => Object.keys(value).length <= 1200),
-)
+const localizedLabels = z
+  .record(
+    z
+      .string()
+      .min(1)
+      .max(160)
+      .regex(/^[a-zA-Z0-9_.:-]+$/u),
+    z.string().min(1).max(1000),
+  )
+  .refine((value) => Object.keys(value).length <= 1200)
+
+// Existing installed themes retain their eight-language contract. Hebrew is
+// additive, so an old valid manifest remains valid and falls back to English.
+const localizations = z.strictObject({
+  en: localizedLabels,
+  fr: localizedLabels,
+  de: localizedLabels,
+  es: localizedLabels,
+  it: localizedLabels,
+  ja: localizedLabels,
+  tr: localizedLabels,
+  vi: localizedLabels,
+  he: localizedLabels.optional(),
+})
 
 export const showThemeDefinitionSchema = z
   .strictObject({
@@ -221,8 +233,14 @@ export const showThemeDefinitionSchema = z
         ),
       ]
       for (const locale of SHOW_THEME_LOCALES) {
+        const labels = theme.localizations[locale]
+
+        if (!labels) {
+          continue
+        }
+
         for (const key of keys) {
-          if (!theme.localizations[locale][key]) {
+          if (!labels[key]) {
             ctx.addIssue({
               code: "custom",
               message: "Missing localized theme label",
@@ -452,7 +470,7 @@ export function showThemeText(
   const locale = language.split("-")[0] as (typeof SHOW_THEME_LOCALES)[number]
 
   return (
-    // oxlint-disable-next-line typescript/no-unnecessary-condition -- Browser locale strings may be outside the eight supported manifest keys.
+    // oxlint-disable-next-line typescript/no-unnecessary-condition -- Browser locale strings may be outside the supported manifest keys.
     definition.localizations?.[locale]?.[key] ??
     definition.localizations?.en[key] ??
     fallback(key)

@@ -94,7 +94,7 @@ export const nativePreviewFrameV1Schema = z
 
 export const nativePreviewRendererInputV1Schema = z.strictObject({
   frame: nativePreviewFrameV1Schema,
-  locale: z.enum(["en", "fr", "de", "es", "it", "ja", "tr", "vi"]),
+  locale: z.enum(["en", "fr", "de", "es", "it", "ja", "tr", "vi", "he"]),
   reducedMotion: z.boolean(),
 })
 

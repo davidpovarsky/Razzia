@@ -126,16 +126,16 @@ export function ShowThemeSettings() {
           return (
             <div
               key={`${definition.id}@${definition.version}`}
-              className="border-accent flex flex-wrap items-center gap-4 rounded-xl border p-4"
+              className="border-accent flex flex-col items-stretch gap-4 rounded-xl border p-4 sm:flex-row sm:flex-wrap sm:items-center"
               data-testid={`show-theme-${definition.id}`}
             >
               <img
                 src={poster?.url}
                 alt=""
-                className="aspect-video w-36 rounded-lg object-cover"
+                className="aspect-video w-full shrink-0 rounded-lg object-cover sm:w-36"
                 loading="lazy"
               />
-              <div className="flex min-w-0 flex-1 flex-col gap-1">
+              <div className="flex min-w-0 flex-1 flex-col gap-1 sm:min-w-40">
                 <p className="text-foreground font-semibold">
                   {showThemeText(
                     definition,

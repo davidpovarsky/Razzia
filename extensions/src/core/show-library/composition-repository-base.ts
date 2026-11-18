@@ -110,10 +110,13 @@ function draft<Document>(
 
 /** Persists through an injected existing storage owner; no filesystem, lock or clock. */
 export class CompositionRepositoryBase<Document> {
-  constructor(
-    private readonly storage: CompositionStorage<Document>,
-    private readonly codec: Codec<Document>,
-  ) {}
+  private readonly storage: CompositionStorage<Document>
+  private readonly codec: Codec<Document>
+
+  constructor(storage: CompositionStorage<Document>, codec: Codec<Document>) {
+    this.storage = storage
+    this.codec = codec
+  }
 
   async read(
     input: CompositionDraftKey,

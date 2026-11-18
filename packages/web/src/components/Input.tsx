@@ -9,10 +9,15 @@ const Input = ({
   className,
   type = "text",
   variant = "md",
+  dir,
   ...otherProps
 }: Props) => (
   <input
     type={type}
+    dir={
+      dir ??
+      (["number", "tel", "email", "url"].includes(type) ? "ltr" : undefined)
+    }
     className={clsx(
       "focus:border-primary border-accent text-foreground rounded-lg border-2 font-semibold focus:outline-none",
       variant === "md" && "p-2 text-lg",

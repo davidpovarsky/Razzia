@@ -4,6 +4,7 @@ import "@razzia/web/index.css"
 import "./locales"
 import { applyBranding, loadBranding } from "@razzia/web/branding"
 import Button from "@razzia/web/components/Button"
+import { ApplicationDirection } from "@razzia/web/components/ApplicationDirection"
 import Toaster from "@razzia/web/components/Toaster"
 import { PlatformControlsProvider } from "@razzia/extensions/presentation/platform-controls"
 import { socketClient } from "@razzia/web/features/game/contexts/socket-context"
@@ -217,9 +218,11 @@ if (nativeEntry) {
 
 createRoot(root).render(
   <StrictMode>
-    <PlatformControlsProvider Button={Button}>
-      <RouterProvider router={router} />
-      <Toaster />
-    </PlatformControlsProvider>
+    <ApplicationDirection>
+      <PlatformControlsProvider Button={Button}>
+        <RouterProvider router={router} />
+        <Toaster />
+      </PlatformControlsProvider>
+    </ApplicationDirection>
   </StrictMode>,
 )

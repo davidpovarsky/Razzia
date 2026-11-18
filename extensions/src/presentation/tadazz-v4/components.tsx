@@ -36,6 +36,7 @@ export function StageIdentityV4({
   assetBase: string
 }) {
   const theme = useOptionalShowTheme()
+  const tx = labelsFor(data)
 
   if (scene === "z-wipe" || scene === "interlude") {
     return null
@@ -46,7 +47,7 @@ export function StageIdentityV4({
   const detail =
     data.showQuestionNumber === false
       ? ""
-      : ` · QUESTION ${id2(number)}${data.totalQuestions ? ` / ${data.totalQuestions}` : ""}`
+      : ` · ${tx.questionLabel} ${id2(number)}${data.totalQuestions ? ` / ${data.totalQuestions}` : ""}`
 
   return (
     <>
@@ -61,7 +62,7 @@ export function StageIdentityV4({
         />
       </div>
       <div className="stage-round-pill">
-        ROUND {id2(round)}
+        {tx.storyRound} {id2(round)}
         {detail}
       </div>
     </>
@@ -168,7 +169,7 @@ export function AnswerSlotV4({
         label?: string
       }
     ).label ||
-    (recap ? `Choice ${index + 1}` : "")
+    (recap ? `${tx.choiceLabel} ${index + 1}` : "")
   const slotClasses = [
     "choice-slot",
     "tz-card",
@@ -667,12 +668,22 @@ export function RoundRecapV4({ data }: { data: TadazzV4Data }) {
 
 export function InterludeV4({ data }: { data: TadazzV4Data }) {
   const tx = labelsFor(data)
+  const titleLength = data.title?.length ?? 0
+  let titleFontSize: number | undefined = undefined
+
+  if (titleLength > 80) {
+    titleFontSize = 100
+  } else if (titleLength > 50) {
+    titleFontSize = 128
+  }
 
   return (
     <div className="interlude-panel" data-testid="tadazz-screen-interlude">
       <div className="interlude-ray" />
       <div className="interlude-mini">{tx.upNext}</div>
-      <div className="interlude-title">{data.title ?? ""}</div>
+      <div className="interlude-title" style={{ fontSize: titleFontSize }}>
+        {data.title ?? ""}
+      </div>
       <div className="interlude-rule" />
       {data.subtitle && <div className="interlude-sub">{data.subtitle}</div>}
     </div>
@@ -818,10 +829,18 @@ export function StageBackdropV4({
       className="stage-bg"
       data-testid="tadazz-backdrop"
       style={{
-        backgroundImage: [...new Set([url, defaultUrl])]
-          .map((value) => `url("${value.replaceAll('"', "%22")}")`)
+        backgroundImage: [
+          data.backgroundOverlayOpacity && data.backgroundOverlayOpacity > 0
+            ? `linear-gradient(rgba(0, 0, 0, ${data.backgroundOverlayOpacity}), rgba(0, 0, 0, ${data.backgroundOverlayOpacity}))`
+            : undefined,
+          ...[...new Set([url, defaultUrl])].map(
+            (value) => `url("${value.replaceAll('"', "%22")}")`,
+          ),
+        ]
+          .filter(Boolean)
           .join(", "),
         backgroundSize: data.backgroundFit ?? "cover",
+        backgroundPosition: data.backgroundPosition ?? "center",
       }}
     />
   )

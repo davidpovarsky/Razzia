@@ -1,0 +1,31 @@
+{
+  "ok": true,
+  "checks": [
+    "Hebrew/Latin mixed answer values retain correct first-strong direction and numbers",
+    "RTL answer display mode ArrowLeft moves to next physical left option; ArrowRight returns",
+    "Image pickers only appear in image/both modes at desktop390320; text-only hides them",
+    "Survey estimation hides correct-answer and margin; numeric input mode selector works",
+    "Nine scene kinds render translated preview and editor; four representative kinds inspected at1440/390/320",
+    "Translated scene duplicate/delete actions are visible and usable on320px; cancel preserves card"
+  ],
+  "screenshotCount": 79,
+  "errors": [],
+  "failures": [
+    {
+      "status": 404,
+      "url": "http://127.0.0.1:3180/branding/theme.json"
+    },
+    {
+      "status": 404,
+      "url": "http://127.0.0.1:3180/branding/theme.json"
+    },
+    {
+      "status": 404,
+      "url": "http://127.0.0.1:3180/api/themes/catalog"
+    },
+    {
+      "status": 404,
+      "url": "http://127.0.0.1:3180/api/themes/catalog"
+    }
+  ]
+}

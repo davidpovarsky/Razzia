@@ -1,3 +1,4 @@
+import NativeButton from "../../../../packages/web/src/components/Button"
 import { restoreNativeCspConfiguration } from "../../presentation/show-library-preview/renderer-csp-admission.ts"
 import { App } from "@modelcontextprotocol/ext-apps"
 import { createRoot, type Root } from "react-dom/client"
@@ -532,6 +533,7 @@ function FullShowWidget() {
       className="widget-shell"
       data-testid="full-show-widget"
       dir={i18n.dir()}
+      lang={i18n.language}
     >
       <header>
         <h1 className="text-xl font-bold">
@@ -571,7 +573,9 @@ function FullShowWidget() {
             onSoundEnabled={setSoundEnabled}
           />
           <nav className="widget-toolbar" aria-label={t("title")}>
-            <button
+            <NativeButton
+              classNameContent="contents"
+              data-control-source="razzia"
               type="button"
               data-testid="full-show-previous"
               disabled={!canCall || busy || index <= 0}
@@ -582,11 +586,13 @@ function FullShowWidget() {
               }
             >
               {t("previousChapter")}
-            </button>
+            </NativeButton>
             <output data-testid="full-show-position">
               {index + 1} / {frame.inventory.chapters.length}
             </output>
-            <button
+            <NativeButton
+              classNameContent="contents"
+              data-control-source="razzia"
               type="button"
               data-testid="full-show-next"
               disabled={
@@ -599,8 +605,10 @@ function FullShowWidget() {
               }
             >
               {t("nextChapter")}
-            </button>
-            <button
+            </NativeButton>
+            <NativeButton
+              classNameContent="contents"
+              data-control-source="razzia"
               type="button"
               data-testid="full-show-replay"
               disabled={!canCall || busy}
@@ -612,8 +620,10 @@ function FullShowWidget() {
               }
             >
               {t("replay")}
-            </button>
-            <button
+            </NativeButton>
+            <NativeButton
+              classNameContent="contents"
+              data-control-source="razzia"
               type="button"
               data-testid="full-show-pause"
               disabled={busy}
@@ -626,9 +636,11 @@ function FullShowWidget() {
               }
             >
               {t(playback.clock.paused ? "resumeShow" : "pauseShow")}
-            </button>
+            </NativeButton>
             {canExpand && (
-              <button
+              <NativeButton
+                classNameContent="contents"
+                data-control-source="razzia"
                 type="button"
                 data-testid="full-show-expand"
                 disabled={busy}
@@ -640,7 +652,7 @@ function FullShowWidget() {
                 }}
               >
                 {t("expand")}
-              </button>
+              </NativeButton>
             )}
             <label>
               {t("aspectRatio")}
@@ -710,14 +722,16 @@ function FullShowWidget() {
             <p data-testid="full-show-revision">
               {t("revision", { revision: frame.inventory.revision })}
             </p>
-            <button
+            <NativeButton
+              classNameContent="contents"
+              data-control-source="razzia"
               type="button"
               data-testid="full-show-undo"
               disabled={!canCall || busy || !undoId}
               onClick={() => void undo()}
             >
               {t("undo")}
-            </button>
+            </NativeButton>
           </div>
           {busy && <p role="status">{t("loading")}</p>}
         </>
@@ -725,23 +739,27 @@ function FullShowWidget() {
         <p role="status">{t(current.status)}</p>
       )}
       <div className="widget-control-row">
-        <button
+        <NativeButton
+          classNameContent="contents"
+          data-control-source="razzia"
           type="button"
           data-testid="full-show-refresh"
           disabled={!canCall || busy || !current.selected}
           onClick={() => void refresh()}
         >
           {t("refresh")}
-        </button>
+        </NativeButton>
         {pendingMutation && (
-          <button
+          <NativeButton
+            classNameContent="contents"
+            data-control-source="razzia"
             type="button"
             data-testid="full-show-retry-edit"
             disabled={!canCall || busy}
             onClick={() => void execute(pendingMutation)}
           >
             {t("retryEdit")}
-          </button>
+          </NativeButton>
         )}
       </div>
       {current.selected && (

@@ -25,7 +25,7 @@ export const StudioLaunchPage = () => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { updateManager } = useManagerStore()
-  const { quizzId, extras } = useQuizzEditor()
+  const { quizzId, extras, isExtrasDirty, extrasStatus } = useQuizzEditor()
   const { timeline, scenes } = useStudioEditor()
   const {
     formState: { isDirty },
@@ -42,7 +42,9 @@ export const StudioLaunchPage = () => {
   const missingMedia = mediaItems.some((m) => {
     const s = scenes[m.sceneId]
 
-    return "mediaUrl" in s && !s.mediaUrl
+    // Indexed legacy snapshots may reference a missing scene.
+    // oxlint-disable-next-line typescript/no-unnecessary-condition -- Guard untrusted persisted timeline references.
+    return !s || !("mediaUrl" in s) || !s.mediaUrl?.trim()
   })
 
   const hasQuestions = questionItems.length > 0
@@ -50,8 +52,14 @@ export const StudioLaunchPage = () => {
     ? extras.roster.participants.length
     : 0
 
+  const hasUnsavedChanges = isDirty || isExtrasDirty
   const isNew = !quizzId
-  const isReadyToLaunch = !isNew && hasQuestions && !isDirty && !missingMedia
+  const isReadyToLaunch =
+    !isNew &&
+    hasQuestions &&
+    !hasUnsavedChanges &&
+    !missingMedia &&
+    extrasStatus === "ready"
 
   const { mutate: launch, isPending } = useMutation({
     mutationFn: createGame,
@@ -77,6 +85,10 @@ export const StudioLaunchPage = () => {
   })
 
   const handleLaunch = () => {
+    if (extrasStatus !== "ready") {
+      return
+    }
+
     if (!quizzId) {
       toast.error(
         t(
@@ -88,7 +100,7 @@ export const StudioLaunchPage = () => {
       return
     }
 
-    if (isDirty) {
+    if (hasUnsavedChanges) {
       toast.error(
         t(
           "extensions:studio.launch.unsavedWarning",
@@ -140,6 +152,13 @@ export const StudioLaunchPage = () => {
         </div>
 
         {/* Readiness Warnings */}
+        {extrasStatus !== "ready" && (
+          <p role="status" className="text-muted-foreground text-sm">
+            {extrasStatus === "error"
+              ? t("extensions:errors.loadQuizFailed")
+              : t("common:loading")}
+          </p>
+        )}
         {isNew && (
           <div className="flex items-center gap-3 rounded-lg border border-yellow-500/40 bg-yellow-500/10 p-4 text-sm font-semibold text-yellow-700">
             <AlertTriangle className="size-5 shrink-0" />
@@ -152,7 +171,7 @@ export const StudioLaunchPage = () => {
           </div>
         )}
 
-        {isDirty && !isNew && (
+        {hasUnsavedChanges && !isNew && (
           <div className="flex items-center gap-3 rounded-lg border border-yellow-500/40 bg-yellow-500/10 p-4 text-sm font-semibold text-yellow-700">
             <AlertTriangle className="size-5 shrink-0" />
             <span>
@@ -269,6 +288,7 @@ export const StudioLaunchPage = () => {
           <Button
             type="button"
             size="lg"
+            data-testid="studio-launch-btn"
             disabled={!isReadyToLaunch || isPending}
             onClick={handleLaunch}
             className="bg-primary flex items-center gap-2 rounded-xl px-8 py-6 text-lg font-bold text-white shadow-md hover:opacity-90 disabled:opacity-50"

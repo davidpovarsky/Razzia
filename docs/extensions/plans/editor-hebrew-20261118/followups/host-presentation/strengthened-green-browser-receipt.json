@@ -1,0 +1,68 @@
+{
+  "gameId": "01a1ef41-fa8b-7053-a45f-b15e4ddd159c",
+  "gameSocketConnections": 1,
+  "gameSocketConnectionsBeforePresentation": 1,
+  "cleanupMs": 7200,
+  "cleanupPages": [
+    [
+      "http://127.0.0.1:3190/party/01a1ef41-fa8b-7053-a45f-b15e4ddd159c"
+    ],
+    [
+      "http://127.0.0.1:3190/display/01a1ef41-fa8b-7053-a45f-b15e4ddd159c"
+    ]
+  ],
+  "browserErrors": [],
+  "commands": [
+    {
+      "action": "NEXT_SCREEN",
+      "requestId": "host-present-NEXT_SCREEN-0-1-1795015503403-vbpq8",
+      "epoch": 0
+    },
+    {
+      "action": "PAUSE_GAME",
+      "requestId": "host-present-PAUSE_GAME-1-6-1795015516913-8h6pa",
+      "epoch": 1
+    },
+    {
+      "action": "RESUME_GAME",
+      "requestId": "host-present-RESUME_GAME-1-7-1795015519003-oabok",
+      "epoch": 1
+    },
+    {
+      "action": "END_ANSWER_TIMER",
+      "requestId": "host-present-END_ANSWER_TIMER-1-9-1795015519614-9zrp3",
+      "epoch": 1
+    }
+  ],
+  "authoritativePause": {
+    "paused": true,
+    "remainingMs": 27952,
+    "epoch": 1
+  },
+  "pausedTimer": "28",
+  "viewports": [
+    [
+      1920,
+      1080
+    ],
+    [
+      1366,
+      768
+    ],
+    [
+      1280,
+      720
+    ],
+    [
+      1024,
+      768
+    ]
+  ],
+  "playerViewport": {
+    "width": 390,
+    "height": 844
+  },
+  "actualFullscreen": true,
+  "submittedBrowserVote": true,
+  "shortcutContract": "Owner-requested November8 matching double press within500ms"
+}

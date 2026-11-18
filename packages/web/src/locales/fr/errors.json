@@ -75,5 +75,8 @@
     "notFound": "Média introuvable",
     "tooLarge": "Le fichier est trop volumineux",
     "uploadFailed": "Échec de l'import du fichier"
+  },
+  "server": {
+    "internal": "Le serveur a rencontré une erreur, réessayez"
   }
 }

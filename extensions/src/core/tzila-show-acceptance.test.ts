@@ -257,14 +257,21 @@ describe("Tzila Five-Option Picture Polls Acceptance Suite (A01 - A18)", () => {
       "bg-[var(--color-answer-5)] text-white",
     )
 
-    // Verify packages/web/src/features/game/utils/constants.ts file content
+    // The live game re-exports the same isolated styles used by native previews.
+    const webStylesPath = path.resolve(
+      __dirname,
+      "../../../packages/web/src/features/game/utils/answer-style.ts",
+    )
+    const webContent = fs.readFileSync(webStylesPath, "utf-8")
+    expect(webContent).toContain('"bg-[var(--color-answer-5)] text-white"')
+    expect(webContent).toContain('"5"')
     const webConstantsPath = path.resolve(
       __dirname,
       "../../../packages/web/src/features/game/utils/constants.ts",
     )
-    const webContent = fs.readFileSync(webConstantsPath, "utf-8")
-    expect(webContent).toContain('"bg-[var(--color-answer-5)] text-white"')
-    expect(webContent).toContain('"5"')
+    expect(fs.readFileSync(webConstantsPath, "utf-8")).toContain(
+      'export { ANSWERS_COLORS, ANSWERS_LABELS } from "./answer-style"',
+    )
 
     // Verify packages/web/src/index.css theme definition
     const cssPath = path.resolve(

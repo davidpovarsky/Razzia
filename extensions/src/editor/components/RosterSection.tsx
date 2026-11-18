@@ -25,7 +25,13 @@ import {
   X,
   AlertCircle,
 } from "lucide-react"
-import { useRef, useState } from "react"
+import { useId, useRef, useState } from "react"
+
+interface RosterFormError {
+  key: string
+  fallback: string
+  values?: Record<string, string>
+}
 
 interface Props {
   extras: QuizExtrasV1
@@ -53,6 +59,7 @@ function triggerDownload(
 }
 
 export const RosterSection = ({ extras, onChange, tr }: Props) => {
+  const formId = useId()
   const roster = extras.roster ?? createDefaultRosterExtras()
   const participants: RosterParticipant[] = roster.participants
   const { phoneInviteOnly } = roster
@@ -60,13 +67,24 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
   const [nameInput, setNameInput] = useState("")
   const [phoneInput, setPhoneInput] = useState("")
   const [editingId, setEditingId] = useState<string | null>(null)
-  const [formError, setFormError] = useState<string | null>(null)
+  const [formError, setFormError] = useState<RosterFormError | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
   const [importPreview, setImportPreview] = useState<RosterImportResult | null>(
     null,
   )
 
   const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const importErrorText = (key: string | undefined, fallback: string) =>
+    tr(
+      `roster.errors.${key?.replace("errors:extensions.", "") ?? "corruptImportFile"}`,
+      fallback,
+    )
+  const translatedFormError = formError
+    ? Object.entries(formError.values ?? {}).reduce(
+        (message, [key, value]) => message.replaceAll(`{{${key}}}`, value),
+        tr(`roster.errors.${formError.key}`, formError.fallback),
+      )
+    : null
 
   const updateRoster = (
     nextParticipants: RosterParticipant[],
@@ -89,8 +107,20 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
     setFormError(null)
     const trimmedName = nameInput.trim()
 
-    if (!trimmedName || trimmedName.length > 40) {
-      setFormError("Player name is required (1–40 characters)")
+    if (!trimmedName) {
+      setFormError({
+        key: "missingParticipantName",
+        fallback: "Enter a participant name.",
+      })
+
+      return
+    }
+
+    if (trimmedName.length > 40) {
+      setFormError({
+        key: "participantNameTooLong",
+        fallback: "The participant name must be 40 characters or fewer.",
+      })
 
       return
     }
@@ -102,9 +132,11 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
       normalizedPhone = normalizePhoneE164(trimmedPhone)
 
       if (!normalizedPhone) {
-        setFormError(
-          "Invalid phone number. Use full format like +972501234567, 050-123-4567, or +442079460999",
-        )
+        setFormError({
+          key: "invalidPhoneNumber",
+          fallback:
+            "Enter a valid full phone number, such as +972501234567 or 050-123-4567.",
+        })
 
         return
       }
@@ -115,9 +147,14 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
       )
 
       if (duplicate) {
-        setFormError(
-          `Duplicate phone number ${normalizedPhone} (already assigned to ${duplicate.displayName})`,
-        )
+        setFormError({
+          key: "duplicateParticipantPhone",
+          fallback: "Phone number {{phone}} is already assigned to {{name}}.",
+          values: {
+            phone: `\u2066${normalizedPhone}\u2069`,
+            name: `\u2068${duplicate.displayName}\u2069`,
+          },
+        })
 
         return
       }
@@ -190,7 +227,10 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
       )
       setImportPreview(parsed)
     } catch {
-      setFormError("Failed to read import file")
+      setFormError({
+        key: "importReadFailed",
+        fallback: "The import file could not be read.",
+      })
     } finally {
       if (fileInputRef.current) {
         fileInputRef.current.value = ""
@@ -352,6 +392,7 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
         </div>
         <input
           type="checkbox"
+          aria-label={tr("roster.phoneInviteOnly", "Phone Invite Only")}
           checked={phoneInviteOnly}
           onChange={(e) => handleToggleInviteOnly(e.target.checked)}
           className="accent-primary size-5 cursor-pointer rounded"
@@ -370,7 +411,7 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
               <h4 className="text-sm font-bold text-neutral-900 dark:text-neutral-100">
                 {tr("roster.previewTitle", "Import Preview")} —{" "}
                 <span className="font-mono text-xs">
-                  {importPreview.filename}
+                  <bdi>{importPreview.filename}</bdi>
                 </span>
               </h4>
               {importPreview.fatalError ? (
@@ -379,7 +420,10 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
                   data-testid="roster-import-fatal-error"
                 >
                   <AlertCircle className="size-4" />
-                  {importPreview.fatalError}
+                  {importErrorText(
+                    importPreview.errors[0]?.reasonKey,
+                    importPreview.fatalError,
+                  )}
                 </p>
               ) : (
                 <p
@@ -409,7 +453,7 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
 
           {importPreview.rows.length > 0 && (
             <div className="max-h-60 overflow-y-auto rounded-lg border border-neutral-200 dark:border-neutral-800">
-              <table className="w-full text-left text-xs">
+              <table className="w-full text-start text-xs">
                 <thead className="sticky top-0 bg-neutral-100 font-bold text-neutral-700 dark:bg-neutral-800 dark:text-neutral-200">
                   <tr>
                     <th className="px-3 py-2">#</th>
@@ -439,7 +483,7 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
                         {row.rowNumber}
                       </td>
                       <td className="px-3 py-1.5 font-semibold">
-                        {row.displayName || "—"}
+                        <bdi>{row.displayName || "—"}</bdi>
                       </td>
                       <td className="px-3 py-1.5 font-mono" dir="ltr">
                         {row.phoneE164 ?? (row.phoneRaw || "—")}
@@ -456,7 +500,10 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
                             data-testid={`import-row-error-${row.rowNumber}`}
                           >
                             <AlertCircle className="size-3.5" />
-                            {row.error}
+                            {importErrorText(
+                              row.errorKey,
+                              row.error ?? "The file could not be read.",
+                            )}
                           </span>
                         )}
                       </td>
@@ -497,13 +544,19 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
 
       {/* Add / Edit Participant Form */}
       <div className="border-border bg-card/60 flex flex-col gap-3 rounded-xl border p-4">
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-12">
-          <div className="sm:col-span-5">
-            <label className="mb-1 block text-xs font-bold text-neutral-600 dark:text-neutral-300">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-12">
+          <div className="lg:col-span-5">
+            <label
+              htmlFor={`${formId}-name`}
+              className="mb-1 block text-xs font-bold text-neutral-600 dark:text-neutral-300"
+            >
               {tr("roster.nameLabel", "Player Name")}
             </label>
             <input
+              id={`${formId}-name`}
               type="text"
+              autoComplete="name"
+              dir="auto"
               value={nameInput}
               onChange={(e) => setNameInput(e.target.value)}
               placeholder={tr(
@@ -515,12 +568,17 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
             />
           </div>
 
-          <div className="sm:col-span-5">
-            <label className="mb-1 block text-xs font-bold text-neutral-600 dark:text-neutral-300">
+          <div className="lg:col-span-5">
+            <label
+              htmlFor={`${formId}-phone`}
+              className="mb-1 block text-xs font-bold text-neutral-600 dark:text-neutral-300"
+            >
               {tr("roster.phoneLabel", "Phone Number")}
             </label>
             <input
-              type="text"
+              id={`${formId}-phone`}
+              type="tel"
+              autoComplete="tel"
               dir="ltr"
               value={phoneInput}
               onChange={(e) => setPhoneInput(e.target.value)}
@@ -533,7 +591,7 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
             />
           </div>
 
-          <div className="flex items-end gap-2 sm:col-span-2">
+          <div className="flex items-end gap-2 sm:col-span-2 lg:col-span-2">
             <PlatformButton
               size="sm"
               type="button"
@@ -560,12 +618,13 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
           </div>
         </div>
 
-        {formError && (
+        {translatedFormError && (
           <p
+            role="alert"
             className="text-xs font-bold text-red-600 dark:text-red-400"
             data-testid="roster-form-error"
           >
-            {formError}
+            {translatedFormError}
           </p>
         )}
       </div>
@@ -574,22 +633,27 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between gap-3">
           <div className="relative flex-1">
-            <Search className="absolute top-2.5 left-3 size-3.5 text-neutral-400" />
+            <Search className="absolute start-3 top-2.5 size-3.5 text-neutral-400" />
             <input
               type="text"
               value={searchQuery}
+              aria-label={tr(
+                "roster.searchPlaceholder",
+                "Search by name or phone number...",
+              )}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={tr(
                 "roster.searchPlaceholder",
                 "Search by name or phone number...",
               )}
-              className="border-border bg-background text-foreground w-full rounded-lg border py-1.5 pr-3 pl-8 text-xs focus:outline-none"
+              className="border-border bg-background text-foreground w-full rounded-lg border py-1.5 ps-8 pe-3 text-xs focus:outline-none"
               data-testid="roster-search-input"
             />
           </div>
           <span
             className="text-xs font-bold text-neutral-500"
             data-testid="roster-count-badge"
+            dir="ltr"
           >
             {filteredParticipants.length} / {participants.length}
           </span>
@@ -600,15 +664,20 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
             className="border-border rounded-xl border border-dashed p-6 text-center text-xs text-neutral-500"
             data-testid="roster-empty-state"
           >
-            {tr(
-              "roster.emptyRoster",
-              "No participants registered yet. Add manually or import an Excel (.xlsx) or CSV file.",
-            )}
+            {participants.length > 0
+              ? tr(
+                  "roster.noSearchResults",
+                  "No participants match your search.",
+                )
+              : tr(
+                  "roster.emptyRoster",
+                  "No participants registered yet. Add manually or import an Excel (.xlsx) or CSV file.",
+                )}
           </div>
         ) : (
           <div className="max-h-72 overflow-y-auto rounded-xl border border-neutral-200 dark:border-neutral-800">
             <table
-              className="w-full text-left text-xs"
+              className="w-full text-start text-xs"
               data-testid="roster-participants-table"
             >
               <thead className="sticky top-0 bg-neutral-100 font-bold text-neutral-700 dark:bg-neutral-800 dark:text-neutral-200">
@@ -619,7 +688,9 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
                   <th className="px-3 py-2.5">
                     {tr("roster.colPhone", "Phone Number")}
                   </th>
-                  <th className="px-3 py-2.5 text-right">Actions</th>
+                  <th className="px-3 py-2.5 text-end">
+                    {tr("roster.colActions", "Actions")}
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
@@ -630,7 +701,7 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
                     className="bg-white hover:bg-neutral-50 dark:bg-neutral-900 dark:hover:bg-neutral-800/60"
                   >
                     <td className="px-3 py-2 font-bold text-neutral-900 dark:text-neutral-100">
-                      {participant.displayName}
+                      <bdi>{participant.displayName}</bdi>
                     </td>
                     <td
                       className="px-3 py-2 font-mono text-neutral-700 dark:text-neutral-300"
@@ -644,7 +715,7 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
                         {formatFullPhoneDisplay(participant.phoneE164)}
                       </span>
                     </td>
-                    <td className="px-3 py-2 text-right">
+                    <td className="px-3 py-2 text-end">
                       <div className="inline-flex items-center gap-1">
                         <PlatformButton
                           size="sm"
@@ -652,6 +723,10 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
                           onClick={() => handleStartEdit(participant)}
                           className="hover:bg-accent rounded p-1 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400"
                           title={tr(
+                            "roster.editParticipant",
+                            "Edit Participant",
+                          )}
+                          aria-label={tr(
                             "roster.editParticipant",
                             "Edit Participant",
                           )}
@@ -667,6 +742,7 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
                           }
                           className="hover:bg-accent rounded p-1 text-red-500 hover:text-red-700"
                           title={tr("roster.remove", "Remove")}
+                          aria-label={tr("roster.remove", "Remove")}
                           data-testid={`roster-remove-${participant.rosterPlayerId}`}
                         >
                           <Trash2 className="size-3.5" />

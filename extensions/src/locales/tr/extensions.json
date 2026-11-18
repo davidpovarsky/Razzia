@@ -127,7 +127,8 @@
     "answerVisualDesc": "Cevap seçenekleri için görselleri ve erişilebilirlik etiketlerini yapılandırın.",
     "revealDesc": "Soru gösterimi sırasında soru görselinin açılmasını canlandırın.",
     "triggerMode": "Tetikleyici",
-    "audience": "Hedef Kitle"
+    "audience": "Hedef Kitle",
+    "optionLabel": "Seçenek {{index}}"
   },
   "interludes": {
     "interludeTitle": "Ara Ekran Slaytı",
@@ -242,7 +243,12 @@
     "correct": "Doğru",
     "incorrect": "Yanlış",
     "answered": "yanıtladı",
-    "answeredRatio": "{{responders}} / {{eligible}} yanıtladı"
+    "answeredRatio": "{{responders}} / {{eligible}} yanıtladı",
+    "leader": "Lider",
+    "coLeader": "Ortak lider",
+    "votes_one": "{{count}} oy",
+    "votes_other": "{{count}} oy",
+    "votes_two": "{{count}} oy"
   },
   "editor": {
     "toggle": "Test Geliştirmeleri",
@@ -252,7 +258,13 @@
     "choiceNum": "Seçenek {{num}}",
     "seconds": "saniye",
     "effect": "Efekt",
-    "duration": "Süre"
+    "duration": "Süre",
+    "answerTypeChangeTitle": "Yanıt modu değiştirilsin mi?",
+    "answerTypeChangeDescription": "Seçenekli yanıttan sayısal tahmine geçiş, bu kartın yanıtlarını ve ayarlarını değiştirir.",
+    "confirmAnswerTypeChange": "Modu değiştir",
+    "unsavedExitTitle": "Kaydetmeden çıkılsın mı?",
+    "unsavedExitDescription": "Soru, sahne ve gösteri ayarlarında yaptığınız değişiklikler kaydedilmedi.",
+    "discardAndExit": "Kaydetmeden çık"
   },
   "preview": {
     "badge": "Düzenleyici Önizlemesi",
@@ -318,7 +330,31 @@
     "statusNotJoined": "Katılmadı",
     "answeredYes": "Yanıtladı",
     "answeredNo": "Bekliyor",
-    "noPhone": "—"
+    "noPhone": "—",
+    "noSearchResults": "Aramanızla eşleşen katılımcı yok.",
+    "errors": {
+      "corruptCsvUnclosedQuote": "CSV dosyasında kapatılmamış bir tırnak işareti var. Dosyayı kontrol edip yeniden deneyin.",
+      "corruptXlsxFile": "Excel dosyası bozuk veya okunamıyor.",
+      "xlsxTooLarge": "Açılmış Excel dosyası 25 MB sınırını aşıyor.",
+      "unsupportedXlsxCompression": "Bu Excel dosyası desteklenmeyen bir sıkıştırma biçimi kullanıyor.",
+      "fileTooLarge": "Dosya 5 MB sınırını aşıyor.",
+      "corruptXlsxMissingSheet": "Excel dosyasında okunabilir bir çalışma sayfası yok.",
+      "emptyImportFile": "Dosyada katılımcı satırı yok.",
+      "invalidImportHeaders": "Dosya ad ve telefon sütunlarını içermelidir.",
+      "tooManyImportRows": "Tek seferde en fazla 2.000 katılımcı içe aktarın.",
+      "formulaNotAllowed": "Elektronik tablo formüllerine izin verilmez.",
+      "missingParticipantName": "Katılımcının adını girin.",
+      "participantNameTooLong": "Katılımcı adı en fazla 40 karakter olabilir.",
+      "missingPhoneNumber": "Bir telefon numarası girin.",
+      "scientificNotationPhone": "Telefon numarası bilimsel gösterimle kaydedilmiş. Sütunu metin olarak biçimlendirin.",
+      "invalidPhoneNumber": "+972501234567 veya 050-123-4567 gibi geçerli ve tam bir telefon numarası girin.",
+      "duplicatePhoneInImport": "Bu telefon numarası dosyada birden fazla kez yer alıyor.",
+      "duplicatePhoneInRoster": "Bu telefon numarası zaten katılımcı listesinde.",
+      "unsupportedFileFormat": "Yalnızca Excel (.xlsx) ve CSV (.csv) dosyaları desteklenir.",
+      "corruptImportFile": "Dosya okunamadı. Biçimini kontrol edip yeniden deneyin.",
+      "duplicateParticipantPhone": "{{phone}} numarası zaten {{name}} adlı katılımcıya atanmış.",
+      "importReadFailed": "İçe aktarılacak dosya okunamadı."
+    }
   },
   "timeline": {
     "quiz": "Test",
@@ -339,7 +375,10 @@
     "groupResults": "Sonuçlar",
     "deleteConfirmTitle": "Soru sahneye dönüştürülsün mü?",
     "deleteConfirmDesc": "Bu soruyu dönüştürmek, soru içeriğini seçilen sahneyle değiştirecektir.",
-    "cannotDeleteLastQuestion": "Gösteri en az bir soru veya anket içermelidir."
+    "cannotDeleteLastQuestion": "Gösteri en az bir soru veya anket içermelidir.",
+    "duplicateCard": "Kartı çoğalt",
+    "deleteCard": "Sahne kartını sil",
+    "deleteCardConfirm": "Bu sahne kartı zaman çizelgesinden silinsin mi?"
   },
   "studio": {
     "tabs": {
@@ -479,7 +518,7 @@
       "recapModeLabel": "Vurgulama Modu",
       "recapModeMostSelected": "En Çok Seçilen Yanıt (Popüler Oy)",
       "recapModeCorrectAnswer": "Resmi Doğru Yanıt (Testler İçin)",
-      "recapMaxItemsPerPage": "Sayfa Başına Soru (1–8)",
+      "recapMaxItemsPerPage": "Sayfa Başına Soru (1–{{max}})",
       "recapShowCounts": "Oy Sayılarını Göster",
       "recapShowPercentages": "Yüzdeleri Göster",
       "recapBadgeMostSelected": "En Çok Seçilen",
@@ -544,8 +583,22 @@
         "warnOpaqueBg": "Lottie dosyası tam ekran opak bir arka plan içeriyor gibi görünüyor ve videoyu kapatabilir.",
         "warnStartAfterScene": "Katman başlangıç zamanı sahne süresini aşıyor.",
         "warnVideoBaseWithoutVideo": "Katman video saatini kullanıyor ancak ön plan videosu yok; sahne saatine dönülüyor.",
-        "warnLoopOnMediaEnd": "Döngülü video ile 'Medya Bittiğinde' ilerleme doğal olarak bitmez; sahne süresine dönülüyor."
-      }
+        "warnLoopOnMediaEnd": "Döngülü video ile 'Medya Bittiğinde' ilerleme doğal olarak bitmez; sahne süresine dönülüyor.",
+        "limitReached": "En fazla {{max}} animasyon katmanı eklenebilir."
+      },
+      "welcomeTitle": "Gösteriye hoş geldiniz",
+      "mediaError": "Medya dosyası yüklenemedi",
+      "cardNameLabel": "Kart adı",
+      "cardNameHint": "Zaman çizelgesinde kullanılır. Bu temanın hazır ayarı sahnedeki başlığı belirler.",
+      "lottieInvalidFile": "Geçerli bir Lottie JSON dosyası seçin.",
+      "lottieUploaded": "Animasyon yüklendi."
+    },
+    "accessibility": {
+      "dragInstructions": "Kartı almak için Boşluk, taşımak için ok tuşları, bırakmak için Boşluk veya Enter, iptal etmek için Escape tuşuna basın.",
+      "dragStart": "{{position}}. kart alındı.",
+      "dragOver": "Kart {{position}}. konuma taşındı.",
+      "dragEnd": "Kart {{position}}. konuma bırakıldı.",
+      "dragCancel": "Yeniden sıralama iptal edildi."
     }
   },
   "showImport": {
@@ -737,7 +790,9 @@
       "storyUnfolds": "HİKÂYE ŞEKİLLENİYOR...",
       "storyNow": "VE ŞİMDİ...",
       "storyTitle": "HİKÂYE",
-      "storyRound": "TUR"
+      "storyRound": "TUR",
+      "questionLabel": "SORU",
+      "choiceLabel": "Seçenek"
     },
     "seating": {
       "call": "KATILMAK İÇİN ARA",
@@ -848,5 +903,74 @@
       "z-wipe": "Geçiş"
     },
     "installationPreview": "İnceleme ve onay için özel tema önizlemesi."
+  },
+  "editorPreview": {
+    "title": "Canlı önizleme",
+    "description": "Düzenlerken güncellenir. Kaydetmek veya oyun başlatmak gerekmez.",
+    "question": "Soru",
+    "answers": "Yanıtlar",
+    "results": "Sonuçlar",
+    "aspectRatio": "Önizleme en boy oranı",
+    "showImage": "Görseli göster",
+    "resetImage": "Görseli sıfırla",
+    "replay": "Animasyonu tekrar oynat",
+    "emptyQuestion": "Sorunuz burada görünecek",
+    "emptyAnswer": "Yanıt {{number}}",
+    "noResponses": "Yalnızca önizleme — henüz yanıt toplanmadı.",
+    "hide": "Önizlemeyi gizle",
+    "show": "Önizlemeyi göster",
+    "draftIncomplete": "Bazı alanlar eksik olsa da önizleme taslağınızı gösterir.",
+    "stageView": "Sahne önizlemesi",
+    "editLayers": "Katmanları düzenle",
+    "lottieUnavailable": "Lottie önizlemesi kullanılamıyor. Seçilen animasyonu kontrol edin."
+  },
+  "fullShow": {
+    "roleMain": "Ana karakter",
+    "roleSecond": "İkinci karakter",
+    "roleEra": "Dönem",
+    "roleCrisis": "Kriz",
+    "roleEnding": "Son",
+    "awaitingVote": "Oylama bekleniyor",
+    "directoryTitle": "Masanızın temsilcisini bulun",
+    "phoneVoting": "Telefonla oylama",
+    "numberPending": "Numara daha sonra eklenecek",
+    "tables": "Masalar",
+    "namePending": "İsim daha sonra eklenecek",
+    "tableStatus": "Masa {{table}}: {{name}}, {{status}}",
+    "connected": "Bağlı",
+    "waiting": "Bekliyor",
+    "phoneTitle": "Arayın. Sonra seçin.",
+    "keypadVoting": "Telefon tuşlarıyla oylama",
+    "phoneEyebrow": "Uygulama yok. Akıllı telefon gerekmiyor.",
+    "phoneSubtitle": "Masa temsilciniz normal bir telefonun tuşlarıyla oy verir.",
+    "phoneReady": "TADAZZ! hazır",
+    "dialIn": "Şimdi arayın",
+    "stepDialTitle": "Etkinlik numarasını arayın",
+    "stepDialDescription": "Sunucu numarayı ekranda gösterecek veya duyuracak.",
+    "stepListenTitle": "Soruyu dinleyin",
+    "stepListenDescription": "Seçiminizi masanızdaki kişilerle konuşun.",
+    "stepPressTitle": "1, 2, 3, 4 veya 5 tuşuna basın",
+    "stepPressDescription": "Telefon tuşlarını kullanarak her masa bir oy verir.",
+    "readinessTitle": "Masaların ışıkları yanıyor",
+    "liveConnections": "Canlı bağlantılar",
+    "readinessEyebrow": "Salon bağlantı kuruyor",
+    "readinessSubtitle": "Bağlanan her masa temsilcisi için bir ışık yanar.",
+    "table": "Masa",
+    "connectedTables": "Bağlı masalar",
+    "previewData": "Önizleme verileri — canlı değil",
+    "progressTitle": "Dünyanız şekilleniyor",
+    "piecesCollected": "{{total}} hikâye parçasından {{count}} tanesi toplandı",
+    "progressSubtitle": "Seçilen her resim hikâyenin bir parçası olur.",
+    "piecesReady": "Hikâye parçaları hazır",
+    "tieTitle": "Seyirci ikiye bölündü",
+    "equalVotes": "Oylar eşit",
+    "votes": "{{count}} oy",
+    "tieInstruction": "Sunucu, hikâyeye hangi resmin gireceğini seçsin.",
+    "companyArtwork": "Dünyalar yaratmak",
+    "openingArtwork": "Büyük açılış tanıtımı",
+    "openingTitle": "Hikâye sizinle başlıyor",
+    "openingSubtitle": "Seyircinin oluşturduğu canlı bir deneyim",
+    "firstStory": "İlk hikâye",
+    "newWorld": "Yepyeni bir dünya"
   }
 }

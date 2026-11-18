@@ -5,6 +5,7 @@ import {
 import {
   DndContext,
   PointerSensor,
+  KeyboardSensor,
   closestCenter,
   useSensor,
   useSensors,
@@ -18,6 +19,7 @@ import {
   SortableContext,
   useSortable,
   verticalListSortingStrategy,
+  sortableKeyboardCoordinates,
 } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import QuizzEditorCard from "@razzia/web/features/quizz/components/QuizzEditorCard"
@@ -28,6 +30,7 @@ import {
 import clsx from "clsx"
 import { useRef } from "react"
 import { useFormContext } from "react-hook-form"
+import { useTranslation } from "react-i18next"
 
 const SortableItem = ({
   id,
@@ -55,6 +58,18 @@ const SortableItem = ({
       style={{ transform: CSS.Transform.toString(transform), transition }}
       {...attributes}
       {...listeners}
+      onKeyDown={(event) => {
+        if (
+          event.target === event.currentTarget &&
+          event.key === "Enter" &&
+          !isDragging
+        ) {
+          event.preventDefault()
+          onClick()
+        } else {
+          listeners?.onKeyDown(event)
+        }
+      }}
       className={clsx(isDragging && "shadow-lg")}
     >
       <QuizzEditorCard
@@ -72,6 +87,7 @@ const SortableItem = ({
 }
 
 const QuizzEditorSidebar = () => {
+  const { t } = useTranslation()
   const {
     questions,
     questionIds,
@@ -94,6 +110,9 @@ const QuizzEditorSidebar = () => {
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
   )
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -116,8 +135,35 @@ const QuizzEditorSidebar = () => {
   const sortableIds = timelineControls.ids ?? questionIds
 
   return (
-    <aside className="bg-background z-10 m-2 flex max-h-56 w-[calc(100%-1rem)] shrink-0 flex-col gap-2 overflow-y-auto rounded-xl p-2.5 shadow-sm lg:m-3 lg:max-h-none lg:w-64 lg:p-3 xl:w-72">
+    <aside
+      data-testid="editor-timeline"
+      className="bg-background z-10 m-2 flex max-h-56 w-[calc(100%-1rem)] shrink-0 flex-col gap-2 overflow-y-auto rounded-xl p-2.5 shadow-sm lg:m-3 lg:max-h-none lg:w-64 lg:p-3 xl:w-72"
+    >
       <DndContext
+        accessibility={{
+          screenReaderInstructions: {
+            draggable: t("extensions:studio.accessibility.dragInstructions"),
+          },
+          announcements: {
+            onDragStart: ({ active }) =>
+              t("extensions:studio.accessibility.dragStart", {
+                position: sortableIds.indexOf(String(active.id)) + 1,
+              }),
+            onDragOver: ({ over }) =>
+              over
+                ? t("extensions:studio.accessibility.dragOver", {
+                    position: sortableIds.indexOf(String(over.id)) + 1,
+                  })
+                : undefined,
+            onDragEnd: ({ over }) =>
+              over
+                ? t("extensions:studio.accessibility.dragEnd", {
+                    position: sortableIds.indexOf(String(over.id)) + 1,
+                  })
+                : t("extensions:studio.accessibility.dragCancel"),
+            onDragCancel: () => t("extensions:studio.accessibility.dragCancel"),
+          },
+        }}
         sensors={sensors}
         collisionDetection={closestCenter}
         modifiers={[restrictToVerticalAxis, restrictToFirstScrollableAncestor]}
@@ -125,6 +171,9 @@ const QuizzEditorSidebar = () => {
           isDragging.current = true
         }}
         onDragEnd={handleDragEnd}
+        onDragCancel={() => {
+          isDragging.current = false
+        }}
       >
         <SortableContext
           items={sortableIds}

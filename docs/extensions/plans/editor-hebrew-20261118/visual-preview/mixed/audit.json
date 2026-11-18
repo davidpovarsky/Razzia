@@ -1,0 +1,252 @@
+{
+  "checks": [
+    {
+      "name": "tadazz-classic current valid question beside estimation; both",
+      "state": {
+        "text": "Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nROUND 01 · QUESTION 01 / 3\nNEXT QUESTION\nWhich colour is the sky?\nBlue\nAUDIENCE FAVOURITE\n01\n2\nGreen\nAUDIENCE FAVOURITE\n02\n3\nRed\nAUDIENCE FAVOURITE\n03\n4\nYellow\nAUDIENCE FAVOURITE\n04\n5\nPurple\nAUDIENCE FAVOURITE\n05\nVOTING OPEN\nReplay animation",
+        "theme": "tadazz-classic",
+        "number": "1",
+        "total": "3",
+        "images": [
+          {
+            "src": "/tadazz-show/second-library/teaser-screen-source.jpg",
+            "alt": "Creating Worlds",
+            "naturalWidth": 2048
+          },
+          {
+            "src": "/tadazz-show/v4/tadazz-brand-logo.png",
+            "alt": "TADAZZ!",
+            "naturalWidth": 1983
+          },
+          {
+            "src": "/media/editor-proof-7rCI7nu6.png",
+            "alt": "A blue sky image",
+            "naturalWidth": 1
+          },
+          {
+            "src": "/tadazz-show/v4/tadazz-brand-logo.png",
+            "alt": "TADAZZ!",
+            "naturalWidth": 1983
+          },
+          {
+            "src": "/tadazz-show/v4/tadazz-brand-logo.png",
+            "alt": "TADAZZ!",
+            "naturalWidth": 1983
+          }
+        ]
+      }
+    },
+    {
+      "name": "tadazz-classic current valid question beside estimation; image",
+      "state": {
+        "text": "Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nROUND 01 · QUESTION 01 / 3\nNEXT QUESTION\nWhich colour is the sky?\nAUDIENCE FAVOURITE\n01\n2\nGreen\nAUDIENCE FAVOURITE\n02\n3\nRed\nAUDIENCE FAVOURITE\n03\n4\nYellow\nAUDIENCE FAVOURITE\n04\n5\nPurple\nAUDIENCE FAVOURITE\n05\nVOTING OPEN\nReplay animation",
+        "theme": "tadazz-classic",
+        "number": "1",
+        "total": "3",
+        "images": [
+          {
+            "src": "/tadazz-show/second-library/teaser-screen-source.jpg",
+            "alt": "Creating Worlds",
+            "naturalWidth": 2048
+          },
+          {
+            "src": "/tadazz-show/v4/tadazz-brand-logo.png",
+            "alt": "TADAZZ!",
+            "naturalWidth": 1983
+          },
+          {
+            "src": "/media/editor-proof-7rCI7nu6.png",
+            "alt": "A blue sky image",
+            "naturalWidth": 1
+          },
+          {
+            "src": "/tadazz-show/v4/tadazz-brand-logo.png",
+            "alt": "TADAZZ!",
+            "naturalWidth": 1983
+          },
+          {
+            "src": "/tadazz-show/v4/tadazz-brand-logo.png",
+            "alt": "TADAZZ!",
+            "naturalWidth": 1983
+          }
+        ]
+      }
+    },
+    {
+      "name": "tadazz-classic current valid question beside estimation; text",
+      "state": {
+        "text": "Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nROUND 01 · QUESTION 01 / 3\nNEXT QUESTION\nWhich colour is the sky?\n1\nBlue\nAUDIENCE FAVOURITE\n01\n2\nGreen\nAUDIENCE FAVOURITE\n02\n3\nRed\nAUDIENCE FAVOURITE\n03\n4\nYellow\nAUDIENCE FAVOURITE\n04\n5\nPurple\nAUDIENCE FAVOURITE\n05\nVOTING OPEN\nReplay animation",
+        "theme": "tadazz-classic",
+        "number": "1",
+        "total": "3",
+        "images": [
+          {
+            "src": "/tadazz-show/second-library/teaser-screen-source.jpg",
+            "alt": "Creating Worlds",
+            "naturalWidth": 2048
+          },
+          {
+            "src": "/tadazz-show/v4/tadazz-brand-logo.png",
+            "alt": "TADAZZ!",
+            "naturalWidth": 1983
+          },
+          {
+            "src": "/tadazz-show/v4/tadazz-brand-logo.png",
+            "alt": "TADAZZ!",
+            "naturalWidth": 1983
+          },
+          {
+            "src": "/tadazz-show/v4/tadazz-brand-logo.png",
+            "alt": "TADAZZ!",
+            "naturalWidth": 1983
+          }
+        ]
+      }
+    },
+    {
+      "name": "tadazz-classic multi exact",
+      "state": {
+        "text": "Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nROUND 01 · QUESTION 02 / 3\nNEXT QUESTION\nChoose the primary colours\n1\nRed\nAUDIENCE FAVOURITE\n01\n2\nBlue\nAUDIENCE FAVOURITE\n02\nVOTING OPEN\nReplay animation",
+        "theme": "tadazz-classic",
+        "number": "2",
+        "total": "3",
+        "images": [
+          {
+            "src": "/tadazz-show/second-library/teaser-screen-source.jpg",
+            "alt": "Creating Worlds",
+            "naturalWidth": 2048
+          },
+          {
+            "src": "/tadazz-show/v4/tadazz-brand-logo.png",
+            "alt": "TADAZZ!",
+            "naturalWidth": 1983
+          },
+          {
+            "src": "/tadazz-show/v4/tadazz-brand-logo.png",
+            "alt": "TADAZZ!",
+            "naturalWidth": 1983
+          },
+          {
+            "src": "/tadazz-show/v4/tadazz-brand-logo.png",
+            "alt": "TADAZZ!",
+            "naturalWidth": 1983
+          }
+        ]
+      }
+    },
+    {
+      "name": "tadazz-classic estimation native primitive question",
+      "renderer": "native-estimation-fallback",
+      "text": "Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nEstimate the number\nReplay animation"
+    },
+    {
+      "name": "tadazz-classic estimation native primitive answers",
+      "renderer": "native-estimation-fallback",
+      "text": "Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nEstimate the number\n0\n200\nReplay animation"
+    },
+    {
+      "name": "tadazz-classic estimation native primitive results",
+      "renderer": "native-estimation-fallback",
+      "text": "Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\n0\n110 – 130\n0\n200\n120\nReplay animation\n\nPreview only — no responses have been collected."
+    },
+    {
+      "name": "tadazz-classic exact recap preserves all3 prior native questions",
+      "recap": "THE AUDIENCE HAS SPOKEN\nANSWER RECAP\n1\nWhich colour is the sky?\nNo responses recorded yet.\n2\nChoose the primary colours\nNo responses recorded yet.\n3\nEstimate the number\nNo responses recorded yet.\n8 sec\n•\nAutomatic (on timer end)"
+    },
+    {
+      "name": "razzia-original current valid question beside estimation; both",
+      "state": {
+        "text": "Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nWhich colour is the sky?\n1\n\nBlue\n\n2\n\nGreen\n\n3\n\nRed\n\n4\n\nYellow\n\n5\n\nPurple\n\nReplay animation",
+        "theme": "razzia-original",
+        "number": "1",
+        "total": "3",
+        "images": [
+          {
+            "src": "/tadazz-show/v4/tadazz-brand-logo.png",
+            "alt": "TADAZZ!",
+            "naturalWidth": 1983
+          },
+          {
+            "src": "/media/editor-proof-7rCI7nu6.png",
+            "alt": "A blue sky image",
+            "naturalWidth": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "razzia-original current valid question beside estimation; image",
+      "state": {
+        "text": "Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nWhich colour is the sky?\n1\nBlue\n2\n\nGreen\n\n3\n\nRed\n\n4\n\nYellow\n\n5\n\nPurple\n\nReplay animation",
+        "theme": "razzia-original",
+        "number": "1",
+        "total": "3",
+        "images": [
+          {
+            "src": "/tadazz-show/v4/tadazz-brand-logo.png",
+            "alt": "TADAZZ!",
+            "naturalWidth": 1983
+          },
+          {
+            "src": "/media/editor-proof-7rCI7nu6.png",
+            "alt": "A blue sky image",
+            "naturalWidth": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "razzia-original current valid question beside estimation; text",
+      "state": {
+        "text": "Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nWhich colour is the sky?\n1\n\nBlue\n\n2\n\nGreen\n\n3\n\nRed\n\n4\n\nYellow\n\n5\n\nPurple\n\nReplay animation",
+        "theme": "razzia-original",
+        "number": "1",
+        "total": "3",
+        "images": [
+          {
+            "src": "/tadazz-show/v4/tadazz-brand-logo.png",
+            "alt": "TADAZZ!",
+            "naturalWidth": 1983
+          }
+        ]
+      }
+    },
+    {
+      "name": "razzia-original multi exact",
+      "state": {
+        "text": "Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nChoose the primary colours\n1\n\nRed\n\n2\n\nBlue\n\nReplay animation",
+        "theme": "razzia-original",
+        "number": "2",
+        "total": "3",
+        "images": [
+          {
+            "src": "/tadazz-show/v4/tadazz-brand-logo.png",
+            "alt": "TADAZZ!",
+            "naturalWidth": 1983
+          }
+        ]
+      }
+    },
+    {
+      "name": "razzia-original estimation native primitive question",
+      "renderer": "native-estimation-fallback",
+      "text": "Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nEstimate the number\nReplay animation"
+    },
+    {
+      "name": "razzia-original estimation native primitive answers",
+      "renderer": "native-estimation-fallback",
+      "text": "Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nEstimate the number\n0\n200\nReplay animation"
+    },
+    {
+      "name": "razzia-original estimation native primitive results",
+      "renderer": "native-estimation-fallback",
+      "text": "Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\n0\n110 – 130\n0\n200\n120\nReplay animation\n\nPreview only — no responses have been collected."
+    },
+    {
+      "name": "razzia-original exact recap preserves all3 prior native questions",
+      "recap": "Answer Recap\nQuestion 1\nNO RESPONSES\n\nWhich colour is the sky?\n\nNo responses recorded yet.\nQuestion 2\nNO RESPONSES\n\nChoose the primary colours\n\nNo responses recorded yet.\nQuestion 3\nNO RESPONSES\n\nEstimate the number\n\nNo responses recorded yet.\n8 sec\n100%\n\nAutomatic (on timer end)\n\n8 sec\n•\nAutomatic (on timer end)"
+    }
+  ],
+  "failures": [],
+  "errors": []
+}

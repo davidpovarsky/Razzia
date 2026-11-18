@@ -39,7 +39,7 @@ const frame = (): PreviewFrame => ({
 })
 
 describe("silent preview candidate", () => {
-  it("initializes all eight isolated locales synchronously", () => {
+  it("initializes all nine isolated locales synchronously", () => {
     for (const locale of [
       "en",
       "fr",
@@ -49,6 +49,7 @@ describe("silent preview candidate", () => {
       "ja",
       "tr",
       "vi",
+      "he",
     ] as PreviewLocale[]) {
       expect(previewText(locale)("unavailable")).not.toBe("unavailable")
       expect(previewNativeLabels(locale).v4Labels.noVotes).not.toBe(

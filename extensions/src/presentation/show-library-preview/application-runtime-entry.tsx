@@ -9,9 +9,14 @@ import {
 } from "../../core/show-library/application-preview-schema"
 import { ApplicationPreviewStage } from "./application-preview-stage"
 import "../legacy-effects.css"
+import "@fontsource-variable/rubik/wght.css"
+import { acquireNativePreviewFonts } from "./native-fonts"
 
 // Only immutable application CSS is shared. No frame, source, grant or root is retained.
-let compiledStyle: { css: string; sheet: CSSStyleSheet } | undefined = undefined
+const compiledStyles = new WeakMap<
+  Document,
+  { css: string; sheet: CSSStyleSheet }
+>()
 
 /** This exact self-contained first-party artifact is loaded by a digest-pinned host. */
 export function mount(
@@ -19,28 +24,35 @@ export function mount(
   css: string,
   onUnavailable: () => void,
 ) {
+  const { ownerDocument } = element
+  const owner = ownerDocument.defaultView
+  const fonts = acquireNativePreviewFonts(ownerDocument, css)
   const shadow = element.shadowRoot ?? element.attachShadow({ mode: "open" })
   const previousSheets = shadow.adoptedStyleSheets
   let style: HTMLStyleElement | undefined = undefined
 
   if (
-    typeof CSSStyleSheet !== "undefined" &&
-    typeof CSSStyleSheet.prototype.replaceSync === "function" &&
+    typeof owner?.CSSStyleSheet === "function" &&
+    typeof owner.CSSStyleSheet.prototype.replaceSync === "function" &&
     "adoptedStyleSheets" in shadow
   ) {
+    let compiledStyle = compiledStyles.get(ownerDocument)
+
     if (compiledStyle?.css !== css) {
-      const sheet = new CSSStyleSheet()
+      const sheet = new owner.CSSStyleSheet()
       sheet.replaceSync(css)
       compiledStyle = { css, sheet }
+      compiledStyles.set(ownerDocument, compiledStyle)
     }
 
     shadow.adoptedStyleSheets = [...previousSheets, compiledStyle.sheet]
   } else {
-    style = document.createElement("style")
+    style = ownerDocument.createElement("style")
     style.textContent = css
   }
 
-  const target = document.createElement("div")
+  const target = ownerDocument.createElement("div")
+  target.className = "font-display"
   target.style.cssText =
     "width:100%;height:100%;position:relative;overflow:hidden"
 
@@ -117,25 +129,50 @@ export function mount(
           pending.delete(resolve)
           resolve()
         }
-        flushSync(() =>
-          root.render(
-            <ApplicationPreviewStage
-              frame={frame}
-              onCommitted={done}
-              onUnavailable={() => {
-                if (!disposed && ticket === generation) {
-                  onUnavailable()
-                }
+        void fonts.ready.then(
+          () => {
+            if (disposed || ticket !== generation) {
+              done()
 
-                done()
-              }}
-            />,
-          ),
+              return
+            }
+
+            try {
+              flushSync(() =>
+                root.render(
+                  <ApplicationPreviewStage
+                    frame={frame}
+                    onCommitted={done}
+                    onUnavailable={() => {
+                      if (!disposed && ticket === generation) {
+                        onUnavailable()
+                      }
+
+                      done()
+                    }}
+                  />,
+                ),
+              )
+
+              if (sameChapter) {
+                queueMicrotask(done)
+              }
+            } catch {
+              if (ticket === generation) {
+                onUnavailable()
+              }
+
+              done()
+            }
+          },
+          () => {
+            if (!disposed && ticket === generation) {
+              onUnavailable()
+            }
+
+            done()
+          },
         )
-
-        if (sameChapter) {
-          queueMicrotask(done)
-        }
       })
     },
     mediaElement: () => shadow.querySelector<HTMLMediaElement>("video, audio"),
@@ -156,6 +193,7 @@ export function mount(
       }
 
       root.unmount()
+      fonts.dispose()
       shadow.replaceChildren()
     },
   }

@@ -1,3 +1,4 @@
+import NativeButton from "../../../../packages/web/src/components/Button"
 import { I18nextProvider } from "react-i18next"
 import { NativeClassicLobbyPanel } from "./native-room-panel"
 import { NativeClassicPlayerResult } from "./native-player-result"
@@ -22,7 +23,9 @@ import {
   showThemeStyle,
   themeAdapterAsset,
 } from "../show-themes/context"
-import { ScenePresenter } from "../scene-presenter"
+import type { ScenePresenterProps } from "../scene-presenter"
+import { NativeClassicScene } from "./native-classic-scene"
+import { themeSlotForSceneKind } from "../show-themes/scene"
 import { TadazzV4StageAdapter } from "../tadazz-show/TadazzV4StageAdapter"
 import type {
   StageQuestion,
@@ -54,10 +57,14 @@ import { NativeQuestionMedia } from "../tadazz-show/native-question-media"
 //
 export function ApplicationPreviewStage({
   frame,
+  questionPosition,
+  activeSceneData,
   onCommitted,
   onUnavailable,
 }: {
   frame: ApplicationPreviewFrame
+  questionPosition?: { number: number; total: number }
+  activeSceneData?: ScenePresenterProps["activeSceneData"]
   onCommitted: () => void
   onUnavailable: () => void
 }) {
@@ -111,19 +118,21 @@ export function ApplicationPreviewStage({
     (rootComponent !== "native.cinematic-stage" &&
       theme.definition.rendererId === "razzia-native-stage")
   const slot: ShowThemeSlotId =
-    (
-      {
-        lobby: "lobby",
-        personalResult: "personalResult",
-        results: "resultsReveal",
-        voteLocked: "voteLock",
-        opening: "opening",
-        closing: "closing",
-        answerCards: "answerCards",
-        voting: "voting",
-        leaderboard: "leaderboard",
-      } as Record<string, ShowThemeSlotId>
-    )[phase] ?? "question"
+    !frame.stagePhase && card && card.kind !== "quiz" && card.kind !== "survey"
+      ? themeSlotForSceneKind(card.kind)
+      : ((
+          {
+            lobby: "lobby",
+            personalResult: "personalResult",
+            results: "resultsReveal",
+            voteLocked: "voteLock",
+            opening: "opening",
+            closing: "closing",
+            answerCards: "answerCards",
+            voting: "voting",
+            leaderboard: "leaderboard",
+          } as Record<string, ShowThemeSlotId>
+        )[phase] ?? "question")
   const authoredBackground = resolveTadazzStageBackground({
     settings: frame.show.defaults?.tadazzBackground,
     cardBackground: frame.stagePhase ? undefined : card?.background,
@@ -137,7 +146,12 @@ export function ApplicationPreviewStage({
   // resolver. An absent show-wide setting preserves the original fallback.
   const backdrop =
     (!authoredBackground.url || scopedBackground) && themeBackground.mediaUrl
-      ? { url: themeBackground.mediaUrl, fit: themeBackground.fit }
+      ? {
+          url: themeBackground.mediaUrl,
+          fit: themeBackground.fit,
+          position: "center" as const,
+          overlayOpacity: 0,
+        }
       : authoredBackground
   const key = `${frame.clock.epoch}:${frame.chapterIndex}:${frame.appearanceRevision}`
   const [committed, setCommitted] = useState("")
@@ -270,20 +284,25 @@ export function ApplicationPreviewStage({
       const question: StageQuestion = {
         key: card.key,
         question: card.question,
-        number: frame.show.cards
-          .slice(0, chapter.cardIndex + 1)
-          .filter((c) => c.kind === "quiz" || c.kind === "survey").length,
-        totalQuestions: frame.show.cards.filter(
-          (c) => c.kind === "quiz" || c.kind === "survey",
-        ).length,
+        number:
+          questionPosition?.number ??
+          frame.show.cards
+            .slice(0, chapter.cardIndex + 1)
+            .filter((c) => c.kind === "quiz" || c.kind === "survey").length,
+        totalQuestions:
+          questionPosition?.total ??
+          frame.show.cards.filter(
+            (c) => c.kind === "quiz" || c.kind === "survey",
+          ).length,
         note: frame.role === "manager" ? card.note : undefined,
         options:
           chapter.phase === "question"
             ? []
             : card.answers.map((a) => ({
                 label: a.text,
-                image: a.imageUrl,
+                image: a.display === "text" ? undefined : a.imageUrl,
                 alt: a.alt,
+                display: a.display === "text" ? undefined : a.display,
               })),
         ...(card.media?.type === "image" &&
         (!card.reveal || card.reveal.effect === "none")
@@ -396,7 +415,17 @@ export function ApplicationPreviewStage({
       handle.finishAnimations()
     }
     // Elapsed display updates stay with the single preview clock and existing native timer.
-  }, [key, bundle, card, chapter, frame.role, frame.locale, theme, original])
+  }, [
+    key,
+    bundle,
+    card,
+    chapter,
+    frame.role,
+    frame.locale,
+    theme,
+    original,
+    questionPosition,
+  ])
   useLayoutEffect(() => {
     const handle = stage.current
 
@@ -472,6 +501,13 @@ export function ApplicationPreviewStage({
       <ShowThemeScope theme={theme}>
         <div
           data-preview-locale={frame.locale}
+          data-preview-theme={theme.definition.id}
+          data-preview-theme-slot={slot}
+          data-preview-question-number={questionPosition?.number}
+          data-preview-question-total={questionPosition?.total}
+          data-preview-engine={
+            original ? "razzia-native-stage" : "tadazz-classic-stage"
+          }
           data-preview-reduced-motion={String(frame.reducedMotion)}
           data-preview-audio-event={audition?.event}
           data-preview-audio-silent={
@@ -509,6 +545,7 @@ export function ApplicationPreviewStage({
                   chapter={chapter}
                   theme={theme}
                   scene={safeConfig}
+                  activeSceneData={activeSceneData}
                   backdropUrl={
                     backdrop.url ??
                     theme.definition.assets.find(
@@ -517,6 +554,8 @@ export function ApplicationPreviewStage({
                     themeAdapterAsset(theme, "questionBackdrop")
                   }
                   backdropFit={rootFit ?? backdrop.fit}
+                  backdropPosition={backdrop.position}
+                  backdropOverlayOpacity={backdrop.overlayOpacity}
                   onCommitted={() => {
                     setCommitted(key)
                     callbacks.current.onCommitted()
@@ -532,6 +571,8 @@ export function ApplicationPreviewStage({
                   interactive={false}
                   backdropUrl={backdrop.url}
                   backdropFit={rootFit ?? backdrop.fit}
+                  backdropPosition={backdrop.position}
+                  backdropOverlayOpacity={backdrop.overlayOpacity}
                   underlay={
                     questionMedia?.type === "audio" ? undefined : nativeMedia
                   }
@@ -539,14 +580,12 @@ export function ApplicationPreviewStage({
                     auxiliary ??
                     (safeConfig &&
                     scenePlan.some((step) => step.op === "custom") ? (
-                      <ScenePresenter
+                      <NativeClassicScene
                         scene={safeConfig}
-                        labels={labels.sceneLabels}
-                        tadazzEnabled
-                        isManager={frame.role === "manager"}
-                        epoch={key}
-                        controlledTimeMs={frame.clock.elapsedMs}
-                        controlledPaused={frame.clock.paused}
+                        activeSceneData={activeSceneData}
+                        epoch={frame.clock.epoch}
+                        elapsedMs={frame.clock.elapsedMs}
+                        paused={frame.clock.paused}
                       />
                     ) : undefined)
                   }
@@ -590,7 +629,9 @@ export function ApplicationPreviewStage({
             showControls
             renderControls={(controls) =>
               controls.blocked && frame.soundEnabled ? (
-                <button
+                <NativeButton
+                  classNameContent="contents"
+                  data-control-source="razzia"
                   type="button"
                   data-testid="preview-unlock-audio"
                   onClick={controls.unlock}
@@ -606,7 +647,7 @@ export function ApplicationPreviewStage({
                   }}
                 >
                   {labels.i18n.t("audio.enableSound", { ns: "extensions" })}
-                </button>
+                </NativeButton>
               ) : null
             }
           />

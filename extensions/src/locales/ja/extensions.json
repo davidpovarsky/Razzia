@@ -127,7 +127,8 @@
     "answerVisualDesc": "回答の選択肢ごとに画像とアクセシビリティラベルを設定します。",
     "revealDesc": "質問表示中に質問画像の公開アニメーションを実行します。",
     "triggerMode": "トリガー",
-    "audience": "対象者"
+    "audience": "対象者",
+    "optionLabel": "選択肢 {{index}}"
   },
   "interludes": {
     "interludeTitle": "幕間スライド",
@@ -242,7 +243,12 @@
     "correct": "正解",
     "incorrect": "不正解",
     "answered": "回答済み",
-    "answeredRatio": "{{responders}} / {{eligible}} 回答済み"
+    "answeredRatio": "{{responders}} / {{eligible}} 回答済み",
+    "leader": "トップ",
+    "coLeader": "同率トップ",
+    "votes_one": "{{count}}票",
+    "votes_other": "{{count}}票",
+    "votes_two": "{{count}}票"
   },
   "editor": {
     "toggle": "クイズの拡張機能",
@@ -252,7 +258,13 @@
     "choiceNum": "選択肢 {{num}}",
     "seconds": "秒",
     "effect": "エフェクト",
-    "duration": "再生時間"
+    "duration": "再生時間",
+    "answerTypeChangeTitle": "回答モードを変更しますか？",
+    "answerTypeChangeDescription": "選択式と数値の推定を切り替えると、このカードの回答と設定が置き換わります。",
+    "confirmAnswerTypeChange": "モードを変更",
+    "unsavedExitTitle": "保存せずに終了しますか？",
+    "unsavedExitDescription": "質問、シーン、ショー設定の変更は保存されていません。",
+    "discardAndExit": "保存せずに終了"
   },
   "preview": {
     "badge": "エディタープレビュー",
@@ -318,7 +330,31 @@
     "statusNotJoined": "未参加",
     "answeredYes": "回答済",
     "answeredNo": "待機中",
-    "noPhone": "—"
+    "noPhone": "—",
+    "noSearchResults": "検索条件に一致する参加者はいません。",
+    "errors": {
+      "corruptCsvUnclosedQuote": "CSVファイルに閉じられていない引用符があります。ファイルを確認して、もう一度お試しください。",
+      "corruptXlsxFile": "Excelファイルが破損しているか、読み取れません。",
+      "xlsxTooLarge": "展開後のExcelファイルが上限の25 MBを超えています。",
+      "unsupportedXlsxCompression": "このExcelファイルの圧縮形式には対応していません。",
+      "fileTooLarge": "ファイルが上限の5 MBを超えています。",
+      "corruptXlsxMissingSheet": "Excelファイルに読み取り可能なワークシートがありません。",
+      "emptyImportFile": "ファイルに参加者の行がありません。",
+      "invalidImportHeaders": "ファイルには名前と電話番号の列が必要です。",
+      "tooManyImportRows": "一度に読み込める参加者は2,000人までです。",
+      "formulaNotAllowed": "表計算の数式は使用できません。",
+      "missingParticipantName": "参加者の名前を入力してください。",
+      "participantNameTooLong": "参加者の名前は40文字以内で入力してください。",
+      "missingPhoneNumber": "電話番号を入力してください。",
+      "scientificNotationPhone": "電話番号が指数表記になっています。列の表示形式を文字列にしてください。",
+      "invalidPhoneNumber": "+972501234567や050-123-4567など、有効な電話番号を省略せずに入力してください。",
+      "duplicatePhoneInImport": "この電話番号はファイル内で重複しています。",
+      "duplicatePhoneInRoster": "この電話番号は参加者名簿に登録済みです。",
+      "unsupportedFileFormat": "Excel（.xlsx）とCSV（.csv）ファイルにのみ対応しています。",
+      "corruptImportFile": "ファイルを読み取れませんでした。形式を確認して、もう一度お試しください。",
+      "duplicateParticipantPhone": "電話番号 {{phone}} はすでに {{name}} に割り当てられています。",
+      "importReadFailed": "読み込み用のファイルを読み取れませんでした。"
+    }
   },
   "timeline": {
     "quiz": "クイズ",
@@ -339,7 +375,10 @@
     "groupResults": "結果",
     "deleteConfirmTitle": "問題をシーンに変換しますか？",
     "deleteConfirmDesc": "この質問を変換すると、質問内容が選択したシーンに置き換わります。",
-    "cannotDeleteLastQuestion": "ショーには少なくとも1つの問題またはアンケートが必要です。"
+    "cannotDeleteLastQuestion": "ショーには少なくとも1つの問題またはアンケートが必要です。",
+    "duplicateCard": "カードを複製",
+    "deleteCard": "シーンカードを削除",
+    "deleteCardConfirm": "このシーンカードをタイムラインから削除しますか？"
   },
   "studio": {
     "tabs": {
@@ -479,7 +518,7 @@
       "recapModeLabel": "ハイライト表示モード",
       "recapModeMostSelected": "最多得票の回答（人気投票）",
       "recapModeCorrectAnswer": "正解の回答（クイズ用）",
-      "recapMaxItemsPerPage": "1ページあたりの質問数 (1–8)",
+      "recapMaxItemsPerPage": "1ページあたりの質問数 (1–{{max}})",
       "recapShowCounts": "投票数を表示",
       "recapShowPercentages": "割合（%）を表示",
       "recapBadgeMostSelected": "最多得票",
@@ -544,8 +583,22 @@
         "warnOpaqueBg": "このLottieアセットには全面の不透明背景が含まれており、背面の映像を隠す可能性があります。",
         "warnStartAfterScene": "オーバーレイの開始時間がシーンの再生時間を超えています。",
         "warnVideoBaseWithoutVideo": "ビデオ時間基準が選択されていますが前面ビデオがないため、シーン時計にフォールバックします。",
-        "warnLoopOnMediaEnd": "ループ再生ビデオと「メディア終了時」進行の組み合わせは自然終了しないため、シーン時間で進行します。"
-      }
+        "warnLoopOnMediaEnd": "ループ再生ビデオと「メディア終了時」進行の組み合わせは自然終了しないため、シーン時間で進行します。",
+        "limitReached": "アニメーションレイヤーの上限（{{max}}）に達しました。"
+      },
+      "welcomeTitle": "ショーへようこそ",
+      "mediaError": "メディアを読み込めませんでした",
+      "cardNameLabel": "カード名",
+      "cardNameHint": "タイムラインで使用します。ステージ上のタイトルは、このテーマのプリセットによって決まります。",
+      "lottieInvalidFile": "有効なLottie JSONファイルを選択してください。",
+      "lottieUploaded": "アニメーションをアップロードしました。"
+    },
+    "accessibility": {
+      "dragInstructions": "スペースキーでカードを持ち上げ、矢印キーで移動します。スペースキーまたは Enter キーで配置し、Escape キーでキャンセルします。",
+      "dragStart": "カード {{position}} を持ち上げました。",
+      "dragOver": "カードを位置 {{position}} に移動しました。",
+      "dragEnd": "カードを位置 {{position}} に配置しました。",
+      "dragCancel": "並べ替えをキャンセルしました。"
     }
   },
   "showImport": {
@@ -737,7 +790,9 @@
       "storyUnfolds": "物語が広がる…",
       "storyNow": "さあ、いよいよ…",
       "storyTitle": "物語",
-      "storyRound": "ラウンド"
+      "storyRound": "ラウンド",
+      "questionLabel": "質問",
+      "choiceLabel": "選択肢"
     },
     "seating": {
       "call": "電話で参加",
@@ -848,5 +903,74 @@
       "z-wipe": "トランジション"
     },
     "installationPreview": "レビューと承認のための非公開テーマプレビューです。"
+  },
+  "editorPreview": {
+    "title": "ライブプレビュー",
+    "description": "編集中に更新されます。保存やゲームの開始は不要です。",
+    "question": "質問",
+    "answers": "回答",
+    "results": "結果",
+    "aspectRatio": "プレビューの縦横比",
+    "showImage": "画像を表示",
+    "resetImage": "画像をリセット",
+    "replay": "アニメーションを再生",
+    "emptyQuestion": "ここに質問が表示されます",
+    "emptyAnswer": "回答 {{number}}",
+    "noResponses": "プレビューのみ — 回答は収集されていません。",
+    "hide": "プレビューを非表示",
+    "show": "プレビューを表示",
+    "draftIncomplete": "一部の項目が未入力でも、プレビューには下書きが表示されます。",
+    "stageView": "ステージプレビュー",
+    "editLayers": "レイヤーを編集",
+    "lottieUnavailable": "Lottieのプレビューを表示できません。選択したアニメーションを確認してください。"
+  },
+  "fullShow": {
+    "roleMain": "主人公",
+    "roleSecond": "第二の登場人物",
+    "roleEra": "時代",
+    "roleCrisis": "危機",
+    "roleEnding": "結末",
+    "awaitingVote": "投票を待っています",
+    "directoryTitle": "自分のテーブルの代表者を確認",
+    "phoneVoting": "電話で投票",
+    "numberPending": "番号は後ほど表示されます",
+    "tables": "テーブル",
+    "namePending": "名前は未登録です",
+    "tableStatus": "テーブル {{table}}：{{name}}、{{status}}",
+    "connected": "接続済み",
+    "waiting": "待機中",
+    "phoneTitle": "電話をかけて、選ぶだけ。",
+    "keypadVoting": "電話のキーで投票",
+    "phoneEyebrow": "アプリもスマートフォンも不要。",
+    "phoneSubtitle": "テーブルの代表者が普通の電話のキーで投票します。",
+    "phoneReady": "TADAZZ! の準備ができました",
+    "dialIn": "電話をかけてください",
+    "stepDialTitle": "イベントの番号に電話",
+    "stepDialDescription": "司会者が番号を表示または案内します。",
+    "stepListenTitle": "問題を聞く",
+    "stepListenDescription": "テーブルの皆さんで答えを相談してください。",
+    "stepPressTitle": "1、2、3、4、5のいずれかを押す",
+    "stepPressDescription": "電話のキーを使い、各テーブルで1票を投じます。",
+    "readinessTitle": "テーブルのライトが点灯",
+    "liveConnections": "接続状況",
+    "readinessEyebrow": "会場がつながっています",
+    "readinessSubtitle": "テーブルの代表者が接続するとライトが点灯します。",
+    "table": "テーブル",
+    "connectedTables": "接続済みのテーブル",
+    "previewData": "プレビューデータ — ライブ接続ではありません",
+    "progressTitle": "皆さんの世界が形になっていく",
+    "piecesCollected": "物語の要素 {{total}} 個中 {{count}} 個を獲得",
+    "progressSubtitle": "選ばれた画像が物語の一部になります。",
+    "piecesReady": "物語の要素がそろいました",
+    "tieTitle": "観客の意見は真っ二つ",
+    "equalVotes": "同票",
+    "votes": "{{count}} 票",
+    "tieInstruction": "司会者は物語に使う画像を選んでください。",
+    "companyArtwork": "世界をつくる",
+    "openingArtwork": "グランドオープニングの予告",
+    "openingTitle": "物語は皆さんから始まる",
+    "openingSubtitle": "観客がつくるライブ体験",
+    "firstStory": "最初の物語",
+    "newWorld": "まったく新しい世界"
   }
 }

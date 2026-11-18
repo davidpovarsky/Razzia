@@ -1,0 +1,1225 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions
+
+ ✓ src/presentation/platform-controls.test.ts (2 tests) 4087ms
+   ✓ native platform control contract (2)
+     ✓ prevents feature code from introducing its own raw button implementation 4070ms
+ ✓ src/server/show-themes/installation.test.ts (5 tests) 3642ms
+   ✓ durable theme installation (5)
+     ✓ runs actual bytes through validation, independent approval, staging, publishing, restart and rollback 815ms
+     ✓ denies other tenants, self-approval, unpublished rollback and forged asset digests 523ms
+     ✓ rejects imported code-backed themes until an exact committed build AND platform review exist 798ms
+     ✓ fails closed after persisted signature, manifest or media tampering 587ms
+     ✓ supports review rejection and CAS draft revision, rejects stale approval and every contributor's self-review 915ms
+stdout | src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Gate 3: concurrent cross-family recovery (staged V2 save + media-delete) restores deterministically without data loss
+[StartupRecovery] Recovered 1 quiz journals and 1 media delete journals
+
+ ✓ src/server/media-library.test.ts (19 tests) 4660ms
+   ✓ Gate C: Persistent Media Catalog & Reference-Safe Deletion (19)
+     ✓ blocks deletion when media is referenced by another show or card, and allows deletion when unreferenced or explicitly detached 860ms
+     ✓ write-failure injection: rolls back all show and sidecar files to previous state on error 403ms
+     ✓ Gate A4 (1 & 9): physical media deletion integration - deletes media binary atomically on success and rolls back on failure 431ms
+     ✓ Gate A4 (4 & 5): deterministic fault injection during write and rollback failure preservation 544ms
+     ✓ Bug B: point-of-no-return ordering - crash after committed marker cleans up forward without rolling back 303ms
+     ✓ Gate 3: concurrent cross-family recovery (staged V2 save + media-delete) restores deterministically without data loss 494ms
+     ✓ Gate 2 & 3: serves self-hosted dotlottie WASM, uploads .lottie/JSON animations, lists lottieAssets in catalog, and enforces reference-safe deletion on overlayAnimations 454ms
+ ✓ src/server/show-themes/builder-routes.test.ts (10 tests) 1890ms
+   ✓ existing installer Theme Builder persistence (10)
+     ✓ retains version media after removing the current binding and archiving the head 312ms
+     ✓ publishes only with the existing publish grant and keeps immutable pins through rollback/archive/reopen 411ms
+stdout | src/server/real-telephony-e2e.test.ts
+Game cleanup task started
+
+stdout | src/telephony/telephony.test.ts > PHONE06: 100 Synthetic Concurrent Participants Load Test > handles 100 concurrent participants with zero failures and measures p50/p95 latency
+=== PHONE06 100 CONCURRENT PARTICIPANTS METRICS ===
+Join total time: 209.86 ms
+Answer total time: 14.72 ms
+Participants: 100
+Failures: 0 (0.00%)
+Latency min: 5.76 ms
+Latency mean: 9.58 ms
+Latency p50: 9.62 ms
+Latency p95: 12.99 ms
+Latency p99: 14.22 ms
+==================================================
+
+ ✓ src/telephony/telephony.test.ts (28 tests) 395ms
+ ✓ src/server/storage.test.ts (22 tests) 1201ms
+stdout | src/server/storage/startup-recovery.test.ts > restores full tenant V2 and native basename through bound-root adapters with the account flag OFF
+[StartupRecovery] Recovered 1 quiz journals and 0 media delete journals
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 1-5 & 8-9: Full real-transport game lifecycle with manager, web player, and telephony participant
+New game created: 911848 subject: Real Telephony Acceptance Quiz
+Game 01a1eee2-e906-711e-8f45-bcb00a2958bb added. Total games: 1
+Game 01a1eee2-e906-711e-8f45-bcb00a2958bb marked as empty. Total empty games: 1
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 1-5 & 8-9: Full real-transport game lifecycle with manager, web player, and telephony participant
+A user connected: socketId: ZWV9bgpY79Mk_1EtAAAA, clientId: 01a1eee2-e886-7471-9ee5-24bc362cd329
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 1-5 & 8-9: Full real-transport game lifecycle with manager, web player, and telephony participant
+Game 01a1eee2-e906-711e-8f45-bcb00a2958bb reactivated. Remaining empty games: 0
+Manager reconnected to game 911848
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 1-5 & 8-9: Full real-transport game lifecycle with manager, web player, and telephony participant
+A user connected: socketId: _CCFCeh9U3CtNii3AAAB, clientId: 01a1eee2-e99d-72b7-9ab2-d9273356f1b9
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 1-5 & 8-9: Full real-transport game lifecycle with manager, web player, and telephony participant
+A user connected: socketId: FX9s66o2DoSqyGlDAAAC, clientId: 01a1eee2-ea11-77b3-8a01-07a1b8983e0c
+
+stdout | src/server/storage/startup-recovery.test.ts > finishes committed tenant Media cleanup through explicit roots after the accounts flag changes
+[StartupRecovery] Recovered 0 quiz journals and 1 media delete journals
+
+stdout | src/server/p0-telephony-roster.test.ts
+Game cleanup task started
+
+ ✓ src/server/api/theme-media-references.test.ts (1 test) 1590ms
+   ✓ turning the installer OFF cannot release retained account media 1574ms
+ ✓ src/server/storage/journal-recovery.test.ts (14 tests) 1285ms
+ ✓ src/server/storage/startup-recovery.test.ts (26 tests | 1 skipped) 8523ms
+   ✓ blocks unresolved tenant quiz-save before listen, including accounts OFF 474ms
+   ✓ blocks unresolved tenant media-delete before listen, including accounts OFF 337ms
+   ✓ selects all exact disabled and unverified owner IDs independent of the current flag 454ms
+   ✓ accepts native WAL reset with retained older-generation tail frames without source writes 447ms
+   ✓ rejects invalid/duplicate/conflicting owner rows {"ids":["00000000-0000-4000-8000-0000000000A1","00000000-0000-4000-8000-0000000000A1"]} before recovery 307ms
+   ✓ checks the complete owner list before touching a valid earlier root 435ms
+   ✓ replays clean known roots twice without ambient native CRUD or account changes 595ms
+   ✓ restores full tenant V2 and native basename through bound-root adapters with the account flag OFF 848ms
+   ✓ finishes committed tenant Media cleanup through explicit roots after the accounts flag changes 1200ms
+   ✓ retries a changed live source and publishes only the revalidated owner set 418ms
+   ✓ retries a WAL/SHM disappearance and accepts the complete closed source without creating source sidecars 321ms
+stdout | src/server/p0-telephony-roster.test.ts > P0 Telephony, Roster, Redial & Host Presence E2E (Real Hono + Real Socket.IO) > enforces phoneInviteOnly, auto-recognizes saved callers by phone, and never leaks phone numbers to player sockets
+New game created: 830124 subject: P0 Roster & Phone Redial Quiz
+Game 01a1eee2-efa6-71e1-805f-3d751cf8124e added. Total games: 1
+Game 01a1eee2-efa6-71e1-805f-3d751cf8124e marked as empty. Total empty games: 1
+
+stdout | src/server/p0-telephony-roster.test.ts > P0 Telephony, Roster, Redial & Host Presence E2E (Real Hono + Real Socket.IO) > enforces phoneInviteOnly, auto-recognizes saved callers by phone, and never leaks phone numbers to player sockets
+A user connected: socketId: o2G8XQ5eLOzC5W0yAAAA, clientId: 01a1eee2-eff6-77b0-98e0-084cfd209a5b
+
+stdout | src/server/p0-telephony-roster.test.ts > P0 Telephony, Roster, Redial & Host Presence E2E (Real Hono + Real Socket.IO) > enforces phoneInviteOnly, auto-recognizes saved callers by phone, and never leaks phone numbers to player sockets
+Game 01a1eee2-efa6-71e1-805f-3d751cf8124e removed. Total games: 0
+
+stdout | src/server/p0-telephony-roster.test.ts > P0 Telephony, Roster, Redial & Host Presence E2E (Real Hono + Real Socket.IO) > handles 100 registered phone participants, 15 disconnecting (85 / 100), and all 15 redialing with NEW CallId & auth session (100 / 100) preserving exact rosterPlayerId and scores across 2 questions
+A user disconnected : o2G8XQ5eLOzC5W0yAAAA
+
+stdout | src/server/p0-telephony-roster.test.ts > P0 Telephony, Roster, Redial & Host Presence E2E (Real Hono + Real Socket.IO) > handles 100 registered phone participants, 15 disconnecting (85 / 100), and all 15 redialing with NEW CallId & auth session (100 / 100) preserving exact rosterPlayerId and scores across 2 questions
+New game created: 679003 subject: P0 Roster & Phone Redial Quiz
+Game 01a1eee2-f075-7546-b155-73685b95393b added. Total games: 1
+Game 01a1eee2-f075-7546-b155-73685b95393b marked as empty. Total empty games: 1
+
+ ✓ src/core/card-appearance.test.ts (10 tests) 255ms
+stdout | src/server/p0-telephony-roster.test.ts > P0 Telephony, Roster, Redial & Host Presence E2E (Real Hono + Real Socket.IO) > handles 100 registered phone participants, 15 disconnecting (85 / 100), and all 15 redialing with NEW CallId & auth session (100 / 100) preserving exact rosterPlayerId and scores across 2 questions
+Game 01a1eee2-f075-7546-b155-73685b95393b removed. Total games: 0
+
+stdout | src/server/p0-telephony-roster.test.ts > P0 Telephony, Roster, Redial & Host Presence E2E (Real Hono + Real Socket.IO)
+Game cleanup task stopped
+Registry cleaned up
+
+ ✓ src/server/p0-telephony-roster.test.ts (2 tests) 1754ms
+   ✓ P0 Telephony, Roster, Redial & Host Presence E2E (Real Hono + Real Socket.IO) (2)
+     ✓ enforces phoneInviteOnly, auto-recognizes saved callers by phone, and never leaks phone numbers to player sockets 321ms
+     ✓ handles 100 registered phone participants, 15 disconnecting (85 / 100), and all 15 redialing with NEW CallId & auth session (100 / 100) preserving exact rosterPlayerId and scores across 2 questions 1344ms
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 6: Negative & Edge Case Security Verification
+A user disconnected : _CCFCeh9U3CtNii3AAAB
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 6: Negative & Edge Case Security Verification
+A user disconnected : ZWV9bgpY79Mk_1EtAAAA
+Manager disconnected from game 911848
+Game 01a1eee2-e906-711e-8f45-bcb00a2958bb marked as empty. Total empty games: 1
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 6: Negative & Edge Case Security Verification
+New game created: 086601 subject: Real Telephony Acceptance Quiz
+Game 01a1eee2-f6bb-709a-8cf7-5cdbd8afae18 added. Total games: 2
+Game 01a1eee2-f6bb-709a-8cf7-5cdbd8afae18 marked as empty. Total empty games: 2
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 6: Negative & Edge Case Security Verification
+A user connected: socketId: JDY9CSpUIChFQya3AAAD, clientId: 01a1eee2-f6d8-745f-9ac6-0c33c0096d82
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 6: Negative & Edge Case Security Verification
+A user connected: socketId: i04Waf4_vvSkhuHmAAAE, clientId: 01a1eee2-f714-7348-bfe3-60c9383c687b
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 6: Negative & Edge Case Security Verification
+A user disconnected : i04Waf4_vvSkhuHmAAAE
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 6: Negative & Edge Case Security Verification
+A user connected: socketId: PdIl1rOkTdhMORmDAAAF, clientId: 01a1eee2-f714-7348-bfe3-60c9383c687b
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 6: Negative & Edge Case Security Verification
+A user disconnected : PdIl1rOkTdhMORmDAAAF
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 6: Negative & Edge Case Security Verification
+A user connected: socketId: phCMRJolnocUj4_7AAAG, clientId: 01a1eee2-f714-7348-bfe3-60c9383c687b
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 6: Negative & Edge Case Security Verification
+A user disconnected : phCMRJolnocUj4_7AAAG
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 6: Negative & Edge Case Security Verification
+A user connected: socketId: H1v-ky92O7BHY_6iAAAH, clientId: 01a1eee2-f74f-769e-8f17-d1af53a96330
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 7: Real Player Reconnection & State Synchronization
+A user disconnected : H1v-ky92O7BHY_6iAAAH
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 7: Real Player Reconnection & State Synchronization
+New game created: 577463 subject: Real Telephony Acceptance Quiz
+Game 01a1eee2-f781-7549-828e-081984122b53 added. Total games: 3
+Game 01a1eee2-f781-7549-828e-081984122b53 marked as empty. Total empty games: 3
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 7: Real Player Reconnection & State Synchronization
+A user connected: socketId: CDulza7yZcKa-61JAAAI, clientId: 01a1eee2-f776-76d2-acdf-08ac725043bb
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 7: Real Player Reconnection & State Synchronization
+Game 01a1eee2-f781-7549-828e-081984122b53 reactivated. Remaining empty games: 2
+Manager reconnected to game 577463
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 7: Real Player Reconnection & State Synchronization
+A user connected: socketId: Ge2q7kSveusJj3wLAAAJ, clientId: 01a1eee2-f79c-71c0-a896-f7d2f1d49922
+
+ ✓ src/core/show-library/composition-preview-v2.test.ts (15 tests) 403ms
+ ✓ src/server/show-themes/builder-host.test.ts (1 test) 969ms
+   ✓ uses actual verified account auth, tenant assignment, atomic CAS and the existing OFF gate 484ms
+ ✓ src/core/show-workbook.test.ts (19 tests) 284ms
+ ✓ src/core/tzila-show-acceptance.test.ts (11 tests) 467ms
+ ✓ src/core/show-library/application-library.test.ts (5 tests) 547ms
+   ✓ compiled first-party application composition (5)
+     ✓ has both original renderers and two structural layouts without losing system bindings 448ms
+ ✓ src/server/show-themes/authoring.test.ts (5 tests) 950ms
+   ✓ validates actual Classic assets including bounded embedded Lottie rasters 837ms
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 7: Real Player Reconnection & State Synchronization
+A user disconnected : Ge2q7kSveusJj3wLAAAJ
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 7: Real Player Reconnection & State Synchronization
+A user connected: socketId: -fNQM31PnHFy4qlZAAAK, clientId: 01a1eee2-f79c-71c0-a896-f7d2f1d49922
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 7: Real Player Reconnection & State Synchronization
+Player Phone 001 reconnected to game 577463
+
+ ✓ src/server/storage/create-recovery.test.ts (5 tests) 976ms
+   ✓ create/import rollback recovery (5)
+     ✓ replays interrupted create after ID return and journal stage 560ms
+ ✓ src/server/game/studio-show-coordinator.test.ts (13 tests) 108ms
+ ✓ src/core/show-library/compiled-index.test.ts (53 tests) 211ms
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user disconnected : -fNQM31PnHFy4qlZAAAK
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user disconnected : CDulza7yZcKa-61JAAAI
+Manager disconnected from game 577463
+Game 01a1eee2-f781-7549-828e-081984122b53 marked as empty. Total empty games: 3
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+New game created: 033723 subject: Real Telephony Acceptance Quiz
+Game 01a1eee3-0b8c-720c-a53f-e3524698dc88 added. Total games: 4
+Game 01a1eee3-0b8c-720c-a53f-e3524698dc88 marked as empty. Total empty games: 4
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: qHY4k8zj2LxPN-CsAAAL, clientId: 01a1eee3-0b79-71c3-8a5d-a3df1a6f90d0
+
+ ✓ src/server/packages/package-runtime.test.ts (35 tests) 16643ms
+   ✓ portable package trust boundary (35)
+     ✓ reclaims idle draft archives/jobs and permits same-key retry while counting orphan disk usage 844ms
+     ✓ round trips a real theme archive and verifies its full inventory 464ms
+     ✓ round trips a real game archive and verifies its full inventory 4236ms
+     ✓ round trips a real complete archive and verifies its full inventory 4099ms
+     ✓ round trips a real declarative archive and verifies its full inventory 435ms
+     ✓ installs ten five-image questions/audio, persists and reimports in another tenant without manual upload 1567ms
+     ✓ declarative theme needs independent exact review, persists and supports immutable rollback 330ms
+     ✓ prevents replayed idempotency keys changing bytes and retains revisions 430ms
+     ✓ complete packs install two games and one runtime pin atomically 882ms
+     ✓ a failed second game leaves no imported games or installed theme 880ms
+     ✓ explicit game-only selection can use Classic without installing the bundled code 833ms
+     ✓ recovers interrupted installation using only its predeclared new game paths 744ms
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+Game 01a1eee3-0b8c-720c-a53f-e3524698dc88 reactivated. Remaining empty games: 3
+Manager reconnected to game 033723
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: 2mV-zj4m69dWxyKZAAAM, clientId: 01a1eee3-0c02-7389-a43a-c3f1f703d68f
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: HdPfnPVfUF-hpma7AAAN, clientId: 01a1eee3-0c03-7778-962c-779c39de65bc
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: Qe5Jp5kIp6dfMTMJAAAO, clientId: 01a1eee3-0c04-776e-9e93-054d209c5894
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: L5xdtX4h4QAhazvMAAAP, clientId: 01a1eee3-0c05-7525-9268-061d42c2dabf
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: -CaEiLz5-6_5IH2DAAAQ, clientId: 01a1eee3-0c05-7525-9268-08095c94d447
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: JkNrm1bDpGQ7cTstAAAR, clientId: 01a1eee3-0c06-733f-9c73-65853b893586
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: gT-cj4pA6QZ4yUrFAAAT, clientId: 01a1eee3-0c08-73f4-b79e-25f53b7871fe
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: FkbHObmRerpexZwoAAAS, clientId: 01a1eee3-0c07-70af-a1e7-9bf5ee872277
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: s_rzwbgllqOseJKbAAAU, clientId: 01a1eee3-0c08-73f4-b79e-2a253c1ea9f6
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: W0OHSBfiMQP26kbvAAAV, clientId: 01a1eee3-0c09-739b-9e7a-c4d1f97ed097
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: -oCdzbDNkl32gui9AAAW, clientId: 01a1eee3-0c0a-7549-9ae8-178e8c170456
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: pD-eJo2wW8S-vwToAAAX, clientId: 01a1eee3-0c0a-7549-9ae8-1b466dd859a1
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: 5uNukNA0pbA1SUTSAAAY, clientId: 01a1eee3-0c0b-752a-adfb-d8bfe2846191
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: 4jisCquhAE6PgvLKAAAZ, clientId: 01a1eee3-0c0e-7730-81f9-76450e2fd0c9
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: _qhhyYpvxHqM1BrWAAAa, clientId: 01a1eee3-0c0f-76ef-a967-322cdc32b0e3
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: VmX5HMqQjzGaDzpkAAAb, clientId: 01a1eee3-0c12-7328-a03c-e17f5cfb34d6
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: p_JrSBj6jJW75ug1AAAc, clientId: 01a1eee3-0c13-7231-8acf-79e7cbf1d36e
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: q8Y-PqYIcXP7yALsAAAd, clientId: 01a1eee3-0c13-7231-8acf-7ff36a6e811b
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: sZkJc_qJOwG6OAWVAAAe, clientId: 01a1eee3-0c14-7651-9b6b-0343253fa0f9
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: yS8XwR8S-BSyzYvoAAAf, clientId: 01a1eee3-0c15-76fa-ae2c-18a1c6adff29
+
+ ✓ src/presentation/tadazz-v4/full-show-locales.test.ts (11 tests) 583ms
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: yJ35XhGyjpD1gkdkAAAg, clientId: 01a1eee3-0e99-712a-aa9f-ff5dff501ada
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: -BtjpC2Ftt6R9C0dAAAh, clientId: 01a1eee3-0e9a-73ae-bc31-e8fe6c53d22c
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: FtXqI0jIWSeWdcosAAAi, clientId: 01a1eee3-0e9b-73a3-9f81-d4813605f0a9
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: saiS4DK8kOiZtLEEAAAj, clientId: 01a1eee3-0e9b-73a3-9f81-db13242a3a64
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: 5mRUH0qPA5YeVlZvAAAk, clientId: 01a1eee3-0e9c-7009-a4ec-8de0a973a19a
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: r5u2jHarRIIFS5HpAAAl, clientId: 01a1eee3-0e9d-756e-959a-0908c7b5224d
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: tT5YFVwG63BPKoiQAAAm, clientId: 01a1eee3-0e9e-72ce-b9ec-64f81cf0de61
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: k8SUHWa2CtiqfvNRAAAn, clientId: 01a1eee3-0e9f-7310-9baf-67d28a70bea6
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: dRFHH4i1B4MqdlrVAAAo, clientId: 01a1eee3-0ea0-7377-93d8-d75af935907d
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: 5EHcDyyzo7ONmmlfAAAp, clientId: 01a1eee3-0ea4-72f3-bf76-9220b2cc254a
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: oz3595KbO_QmxjiiAAAq, clientId: 01a1eee3-0ea5-73ec-a121-ebaed8b43bd6
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: ZH-chcEXGwRiFTzCAAAr, clientId: 01a1eee3-0ea7-75a3-a7e9-66e748b452ef
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: XN48LvLacP8AZGSuAAAs, clientId: 01a1eee3-0ea8-7055-8da3-c4a9bc5fa3e0
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: CsXaO5P4NNBYzY_-AAAt, clientId: 01a1eee3-0ea9-753a-860e-bede6dc54ee4
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: 667Qv8Xtdjm1hE2sAAAu, clientId: 01a1eee3-0eaa-77aa-b084-172cd8dc9827
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: rha3DMAmrYTnIHL0AAAv, clientId: 01a1eee3-0eab-76f8-8ea7-7204f63641ca
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: iQeWh2A47rK7UMuaAAAw, clientId: 01a1eee3-0eac-728b-84a3-b3d2bfb455f0
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: 0jpWuxTYUtIQdO60AAAx, clientId: 01a1eee3-0ead-739f-91ad-6d43722c5d05
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: 3NiFjIJA1o3GMdoTAAAy, clientId: 01a1eee3-0eae-7365-a4dc-0af2f2faeaa9
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: skoPRVVxKZLaZRsIAAAz, clientId: 01a1eee3-0eaf-7060-a3e3-6cac76f94f04
+
+ ✓ src/components/theme-builder/document.test.ts (7 tests) 451ms
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: 3k8haQBkd-RnuV1fAAA0, clientId: 01a1eee3-1121-75a1-8d45-684d7b8a530a
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: 0evhRx24nXKjFR7PAAA1, clientId: 01a1eee3-1122-7692-933e-b4d959f3a458
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: EBTVFlRrRg6Yeu13AAA2, clientId: 01a1eee3-1123-7458-b488-070043e1f948
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: UT-I-K7jPUKarRScAAA3, clientId: 01a1eee3-1123-7458-b488-0ab869a0c6fd
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: fllLODjMb1Tj4jDIAAA4, clientId: 01a1eee3-1124-704d-b46e-ad10df0e7479
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: 5jlMklGQ6SvbECi_AAA5, clientId: 01a1eee3-1124-704d-b46e-b1b41dbf657c
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: WtbWFJCgBjjvCbzHAAA6, clientId: 01a1eee3-1125-7402-b767-4920015a3512
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: oabjXrvXEki4GF9zAAA7, clientId: 01a1eee3-1126-7281-beec-d4d1c0904654
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: ZMhgmguBU_DJhcIkAAA8, clientId: 01a1eee3-1127-7165-8dd0-ef9f11277380
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: 3JJ5iqNdisvFpF7eAAA9, clientId: 01a1eee3-1128-75f7-b716-d074deb2ef01
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: J1MPWMYHniF6sMNHAAA-, clientId: 01a1eee3-1129-7223-8690-2c1475fb755a
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: MqHA3JDIim-CUI-6AAA_, clientId: 01a1eee3-112a-7283-a2dc-f7ea87d1b839
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: pPH3i-QMTUW7o-pMAABA, clientId: 01a1eee3-112a-7283-a2dc-fa75f7494122
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: vtrKwPJCJS_xw7t-AABB, clientId: 01a1eee3-112b-7432-a944-51edd06b504d
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: j5sFxy4xt6kBkTy-AABC, clientId: 01a1eee3-112b-7432-a944-571902404ee2
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: VNNFcWAG0DMFJ9n3AABD, clientId: 01a1eee3-112c-733d-9bda-89b135732a20
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: wJM2NmzIjZwJQB48AABE, clientId: 01a1eee3-112d-70a9-bf1b-546afb97de85
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: B7pgsmG2_dCbyFh8AABF, clientId: 01a1eee3-112d-70a9-bf1b-5b4c0845b263
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: GUtUnTO1ca-QVKN4AABG, clientId: 01a1eee3-112e-74c0-a4a5-9731c8c06a8b
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: 3MBqQ6CnlZejujMcAABH, clientId: 01a1eee3-112e-74c0-a4a5-995a4c7b6511
+
+ ✓ src/core/show-library/native-preview-frame.test.ts (12 tests) 356ms
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: PoCT-ROOdpmW8NTFAABI, clientId: 01a1eee3-1375-7638-9e84-08998cefef1a
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: -5IVHEqnW2xIiSPgAABJ, clientId: 01a1eee3-1376-707c-84d1-85e5e38f991b
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: mX06mIOZYKKs4whfAABK, clientId: 01a1eee3-1377-765e-be6d-5980377a2f45
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: eh4HVy8aVHCaj5z2AABL, clientId: 01a1eee3-1377-765e-be6d-5dc2608aeb55
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: L2rhfL5crTZ21QMRAABM, clientId: 01a1eee3-1378-70af-b339-9a2d7cfa4372
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: _Ik6QJ22dqRgvfUGAABN, clientId: 01a1eee3-1379-7596-854d-d86ad32abd18
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: 9JduAt27I8bPSm3cAABO, clientId: 01a1eee3-1379-7596-854d-ddd14e919899
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: Ss74K2j2cJF3pBQfAABP, clientId: 01a1eee3-137a-773b-aa13-690a7ee413e4
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: P675NA5qA8FjGPzSAABQ, clientId: 01a1eee3-137c-71e3-b8af-d178b348fddf
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: 8IgoNgQtYtC2UaizAABR, clientId: 01a1eee3-137d-7498-b0c1-a873a549cbdd
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: zOlA3c3TjdhoKeJcAABS, clientId: 01a1eee3-137d-7498-b0c1-af0d67871122
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: tDqnBspfjM25CJnvAABT, clientId: 01a1eee3-137e-77fd-b3fe-3ff497c3e25c
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: LIV1SDZbDwqGdlHGAABU, clientId: 01a1eee3-1380-71ea-9901-287890e4eade
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: AIPbDe5ErJGs7ivzAABV, clientId: 01a1eee3-1381-7359-ab58-fda6d544ecff
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: -PMqYq3USM8GywDgAABW, clientId: 01a1eee3-1382-7383-9210-52b14ac1fbe9
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: ge-E2Wkm9-_7voxMAABX, clientId: 01a1eee3-1383-737e-a8c4-069e3e60a8a9
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: WoyqrY7MtiygiOScAABY, clientId: 01a1eee3-1384-7361-97a2-2fab6478c087
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: KdQUKXS0xY_MPuEiAABZ, clientId: 01a1eee3-1385-74af-99a1-29abdab2b2d2
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: xQgW-BOqiQF9d29MAABa, clientId: 01a1eee3-1386-71a6-861b-eacb3330051f
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: 9mvQYJISpzOeYSJjAABb, clientId: 01a1eee3-1387-711f-a067-d6f92297508b
+
+ ✓ src/server/api/account-preview-source.test.ts (6 tests) 292ms
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: DaWImRQf0AKlnfszAABc, clientId: 01a1eee3-1566-7236-9194-ccbc91d5d016
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: 6AfooafCO45uzIXWAABd, clientId: 01a1eee3-1567-7024-b3d1-8f7dbb6381d1
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: 72Y9W9Rnne0Q01ZmAABe, clientId: 01a1eee3-1568-7289-94fe-7bfb2eef61e0
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: 6hSDkV8IrMyZa9zhAABf, clientId: 01a1eee3-1568-7289-94fe-7f4fe72ecbe2
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: dGLyd_wzplTy8f1bAABg, clientId: 01a1eee3-1569-705e-b95d-cc9524789ea8
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: 5I29kiYpXXTIAZjhAABh, clientId: 01a1eee3-1569-705e-b95d-d03d8f4a00f4
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: wgcPQbtALq6qflx5AABi, clientId: 01a1eee3-156a-73f6-9e18-2a37c11ae9c0
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: q2jSAalJydRkVcGXAABj, clientId: 01a1eee3-156b-76b9-a331-8af83ddd92fe
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: OESck9x60vfx-P67AABk, clientId: 01a1eee3-156e-7334-8de4-0b56c7e9acc1
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: PFrKENbntXhzt8SUAABl, clientId: 01a1eee3-156f-76ad-aa3c-d91f7c4072d3
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: bfKrC9pOQhdM9zjYAABm, clientId: 01a1eee3-156f-76ad-aa3c-ddd5dea5ba12
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: XPRSR6cEG7qs-PSBAABn, clientId: 01a1eee3-1570-77c5-91d1-d6e8b06e51ed
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: nUISAwzxKRrUjakUAABo, clientId: 01a1eee3-1570-77c5-91d1-dae17e7ab7eb
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: rZn8SM9pp2uFa7hoAABp, clientId: 01a1eee3-1571-76b7-b0c6-76311a2a759b
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: qKZuwsifAahokf__AABq, clientId: 01a1eee3-1572-758b-be67-b96e6fad96c9
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: 5_LCcymrN_20XnKFAABr, clientId: 01a1eee3-1573-7267-8019-ed922c3de002
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: xrwGcm0EjibnchnlAABs, clientId: 01a1eee3-1573-7267-8019-f21918df3fb4
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: FkEN0ymw8TbhlCkpAABt, clientId: 01a1eee3-1574-74bd-9d22-5746de1144b0
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: vCHB1OjXEeXY-57YAABu, clientId: 01a1eee3-1574-74bd-9d22-58f454e7bcc6
+
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+A user connected: socketId: VOk56zrx8KkOsl2CAABv, clientId: 01a1eee3-1575-7344-8265-59f7a4cfeb84
+
+ ✓ src/core/show-themes/show-themes.test.ts (22 tests) 246ms
+ ✓ src/server/integration.test.ts (1 test) 362ms
+   ✓ Full Integrated Acceptance: Manager, Web, Teams, Media, Interludes, and 100 Simulated Telephony Participants (1)
+     ✓ orchestrates a full multi-channel quiz lifecycle with all extension extras 354ms
+ ✓ src/core/show-authoring.test.ts (23 tests) 284ms
+ ✓ src/server/billing/entitlements.test.ts (7 tests) 112ms
+ ✓ src/presentation/tadazz-show/motion-spec.test.ts (40 tests) 240ms
+stdout | src/server/gameplay-phase-a.test.ts
+Game cleanup task started
+
+ ✓ src/server/gameplay-phase-a.test.ts (23 tests) 169ms
+ ✓ src/server/storage/import-show-references.test.ts (1 test) 242ms
+ ✓ src/server/storage/package-stage-r2.test.ts (1 test) 234ms
+ ✓ src/presentation/tadazz-show/opening-and-engine.test.ts (8 tests) 91ms
+ ✓ src/server/api/routes.test.ts (5 tests) 181ms
+ ✓ src/server/media-library-recovery.test.ts (26 tests) 24200ms
+   ✓ media-delete deterministic restart snapshots (26)
+     ✓ restarts twice from actual disk snapshot at quarantine-copy 1464ms
+     ✓ restarts twice from actual disk snapshot at staged-journal 1143ms
+     ✓ restarts twice from actual disk snapshot at first-base-write 1209ms
+     ✓ restarts twice from actual disk snapshot at last-sidecar-write 1052ms
+     ✓ restarts twice from actual disk snapshot at binary-delete 999ms
+     ✓ restarts twice from actual disk snapshot at committed-journal 874ms
+     ✓ restarts twice from actual disk snapshot at quarantine-cleanup 886ms
+     ✓ restarts twice from actual disk snapshot at journal-cleanup 904ms
+     ✓ retains staged journal and quarantine after partial restore and retries 1130ms
+     ✓ blocks startup rather than restoring refs when original and quarantine are missing 539ms
+     ✓ preserves committed journal and quarantine on unreadable-show 642ms
+     ✓ preserves committed journal and quarantine on binary-present 880ms
+     ✓ does not treat failed committed-marker rename as a durable commit 836ms
+     ✓ rejects unsafe journal IDs without writing outside authorized paths 489ms
+     ✓ retains staged journal when quarantine cleanup fails and replays safely 1421ms
+     ✓ retains committed journal when quarantine cleanup fails and replays safely 941ms
+     ✓ preserves an insufficient committed empty-shows record and its last copy without mutation 848ms
+     ✓ preserves evidence when a restore rename silently changes valid sidecar content 1348ms
+     ✓ recovers concurrent journal families with real matching base digest 1052ms
+     ✓ transaction committed cleanup retains its journal after quarantine unlink EACCES 554ms
+     ✓ transaction rollback retains evidence after silent base corruption 903ms
+     ✓ transaction rollback retains evidence after silent sidecar corruption 797ms
+     ✓ transaction rollback retains evidence after silent binary corruption 953ms
+     ✓ transaction rollback preserves permission-denied restores without chmod 836ms
+     ✓ transaction rollback reports pending quarantine cleanup and replays 759ms
+     ✓ transaction rollback reports pending journal cleanup and replays 737ms
+ ✓ src/site/tests/client.test.ts (5 tests) 106ms
+ ✓ src/locales/locales.test.ts (10 tests) 253ms
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) > Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server
+=== REAL SERVER TELEPHONY 100 PARTICIPANTS METRICS ===
+Join total time (100 sockets): 3001.93 ms
+Answer submission total time: 1621.85 ms
+Participants: 100
+Server Authoritative Answers Recorded: 0/100
+Server Scored Participants: 100/100 (50 correct: >0 pts, 50 incorrect: 0 pts)
+Client DTMF Latency - min: 19.95ms, mean: 26.20ms, p50: 25.13ms, p95: 31.85ms, p99: 40.67ms
+=====================================================
+
+ ✓ src/core/show-library/identity.test.ts (71 tests) 349ms
+stdout | src/server/real-telephony-e2e.test.ts > GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws)
+A user disconnected : FX9s66o2DoSqyGlDAAAC
+A user disconnected : JDY9CSpUIChFQya3AAAD
+A user disconnected : qHY4k8zj2LxPN-CsAAAL
+Manager disconnected from game 033723
+Game 01a1eee3-0b8c-720c-a53f-e3524698dc88 marked as empty. Total empty games: 4
+A user disconnected : 2mV-zj4m69dWxyKZAAAM
+A user disconnected : HdPfnPVfUF-hpma7AAAN
+A user disconnected : Qe5Jp5kIp6dfMTMJAAAO
+A user disconnected : L5xdtX4h4QAhazvMAAAP
+A user disconnected : -CaEiLz5-6_5IH2DAAAQ
+A user disconnected : JkNrm1bDpGQ7cTstAAAR
+A user disconnected : gT-cj4pA6QZ4yUrFAAAT
+A user disconnected : FkbHObmRerpexZwoAAAS
+A user disconnected : s_rzwbgllqOseJKbAAAU
+A user disconnected : W0OHSBfiMQP26kbvAAAV
+A user disconnected : -oCdzbDNkl32gui9AAAW
+A user disconnected : pD-eJo2wW8S-vwToAAAX
+A user disconnected : 5uNukNA0pbA1SUTSAAAY
+A user disconnected : 4jisCquhAE6PgvLKAAAZ
+A user disconnected : _qhhyYpvxHqM1BrWAAAa
+A user disconnected : VmX5HMqQjzGaDzpkAAAb
+A user disconnected : p_JrSBj6jJW75ug1AAAc
+A user disconnected : q8Y-PqYIcXP7yALsAAAd
+A user disconnected : sZkJc_qJOwG6OAWVAAAe
+A user disconnected : yS8XwR8S-BSyzYvoAAAf
+A user disconnected : yJ35XhGyjpD1gkdkAAAg
+A user disconnected : -BtjpC2Ftt6R9C0dAAAh
+A user disconnected : FtXqI0jIWSeWdcosAAAi
+A user disconnected : saiS4DK8kOiZtLEEAAAj
+A user disconnected : 5mRUH0qPA5YeVlZvAAAk
+A user disconnected : r5u2jHarRIIFS5HpAAAl
+A user disconnected : tT5YFVwG63BPKoiQAAAm
+A user disconnected : k8SUHWa2CtiqfvNRAAAn
+A user disconnected : dRFHH4i1B4MqdlrVAAAo
+A user disconnected : 5EHcDyyzo7ONmmlfAAAp
+A user disconnected : oz3595KbO_QmxjiiAAAq
+A user disconnected : ZH-chcEXGwRiFTzCAAAr
+A user disconnected : XN48LvLacP8AZGSuAAAs
+A user disconnected : CsXaO5P4NNBYzY_-AAAt
+A user disconnected : 667Qv8Xtdjm1hE2sAAAu
+A user disconnected : rha3DMAmrYTnIHL0AAAv
+A user disconnected : iQeWh2A47rK7UMuaAAAw
+A user disconnected : 0jpWuxTYUtIQdO60AAAx
+A user disconnected : 3NiFjIJA1o3GMdoTAAAy
+A user disconnected : skoPRVVxKZLaZRsIAAAz
+A user disconnected : 3k8haQBkd-RnuV1fAAA0
+A user disconnected : 0evhRx24nXKjFR7PAAA1
+A user disconnected : EBTVFlRrRg6Yeu13AAA2
+A user disconnected : UT-I-K7jPUKarRScAAA3
+A user disconnected : fllLODjMb1Tj4jDIAAA4
+A user disconnected : 5jlMklGQ6SvbECi_AAA5
+A user disconnected : WtbWFJCgBjjvCbzHAAA6
+A user disconnected : oabjXrvXEki4GF9zAAA7
+A user disconnected : ZMhgmguBU_DJhcIkAAA8
+A user disconnected : 3JJ5iqNdisvFpF7eAAA9
+A user disconnected : J1MPWMYHniF6sMNHAAA-
+A user disconnected : MqHA3JDIim-CUI-6AAA_
+A user disconnected : pPH3i-QMTUW7o-pMAABA
+A user disconnected : vtrKwPJCJS_xw7t-AABB
+A user disconnected : j5sFxy4xt6kBkTy-AABC
+A user disconnected : VNNFcWAG0DMFJ9n3AABD
+A user disconnected : wJM2NmzIjZwJQB48AABE
+A user disconnected : B7pgsmG2_dCbyFh8AABF
+A user disconnected : GUtUnTO1ca-QVKN4AABG
+A user disconnected : 3MBqQ6CnlZejujMcAABH
+A user disconnected : PoCT-ROOdpmW8NTFAABI
+A user disconnected : -5IVHEqnW2xIiSPgAABJ
+A user disconnected : mX06mIOZYKKs4whfAABK
+A user disconnected : eh4HVy8aVHCaj5z2AABL
+A user disconnected : L2rhfL5crTZ21QMRAABM
+A user disconnected : _Ik6QJ22dqRgvfUGAABN
+A user disconnected : 9JduAt27I8bPSm3cAABO
+A user disconnected : Ss74K2j2cJF3pBQfAABP
+A user disconnected : P675NA5qA8FjGPzSAABQ
+A user disconnected : 8IgoNgQtYtC2UaizAABR
+A user disconnected : zOlA3c3TjdhoKeJcAABS
+A user disconnected : tDqnBspfjM25CJnvAABT
+A user disconnected : LIV1SDZbDwqGdlHGAABU
+A user disconnected : AIPbDe5ErJGs7ivzAABV
+A user disconnected : -PMqYq3USM8GywDgAABW
+A user disconnected : ge-E2Wkm9-_7voxMAABX
+A user disconnected : WoyqrY7MtiygiOScAABY
+A user disconnected : KdQUKXS0xY_MPuEiAABZ
+A user disconnected : xQgW-BOqiQF9d29MAABa
+A user disconnected : 9mvQYJISpzOeYSJjAABb
+A user disconnected : DaWImRQf0AKlnfszAABc
+A user disconnected : 6AfooafCO45uzIXWAABd
+A user disconnected : 72Y9W9Rnne0Q01ZmAABe
+A user disconnected : 6hSDkV8IrMyZa9zhAABf
+A user disconnected : dGLyd_wzplTy8f1bAABg
+A user disconnected : 5I29kiYpXXTIAZjhAABh
+A user disconnected : wgcPQbtALq6qflx5AABi
+A user disconnected : q2jSAalJydRkVcGXAABj
+A user disconnected : OESck9x60vfx-P67AABk
+A user disconnected : PFrKENbntXhzt8SUAABl
+A user disconnected : bfKrC9pOQhdM9zjYAABm
+A user disconnected : XPRSR6cEG7qs-PSBAABn
+A user disconnected : nUISAwzxKRrUjakUAABo
+A user disconnected : rZn8SM9pp2uFa7hoAABp
+A user disconnected : qKZuwsifAahokf__AABq
+A user disconnected : 5_LCcymrN_20XnKFAABr
+A user disconnected : xrwGcm0EjibnchnlAABs
+A user disconnected : FkEN0ymw8TbhlCkpAABt
+A user disconnected : vCHB1OjXEeXY-57YAABu
+A user disconnected : VOk56zrx8KkOsl2CAABv
+Game cleanup task stopped
+Registry cleaned up
+
+ ✓ src/site/tests/inline-game-preview-activation.test.ts (15 tests) 36ms
+ ✓ src/server/real-telephony-e2e.test.ts (4 tests) 17576ms
+   ✓ GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) (4)
+     ✓ Scenario 1-5 & 8-9: Full real-transport game lifecycle with manager, web player, and telephony participant 3676ms
+     ✓ Scenario 7: Real Player Reconnection & State Synchronization 5115ms
+     ✓ Scenario 10: 100 Concurrent Telephone Participants Load Test against Real Server 8153ms
+ ✓ src/core/tadazz-workbook.test.ts (2 tests) 247ms
+ ✓ src/core/show-library/projection-assets.test.ts (24 tests) 230ms
+ ✓ src/core/core.test.ts (25 tests) 123ms
+ ✓ src/presentation/tadazz-v4/full-show.test.ts (19 tests) 238ms
+ ✓ src/components/native-save-consent/client.test.ts (10 tests) 214ms
+ ✓ src/core/show-library/stage-metadata.test.ts (26 tests) 266ms
+ ✓ src/core/show-library/projection.test.ts (35 tests) 233ms
+ ✓ src/site/tests/locales.test.ts (17 tests) 219ms
+ ✓ src/core/show-library/composition-validation.test.ts (9 tests) 123ms
+ ✓ src/editor/editor.test.ts (12 tests) 91ms
+ ✓ src/presentation/presentation.test.ts (26 tests) 165ms
+ ✓ src/server/show-themes/upload-security.test.ts (5 tests) 199ms
+ ✓ src/core/show-library/composition-restore.test.ts (14 tests) 255ms
+ ✓ src/presentation/tadazz-v4/source-parity-export.test.ts (1 test) 196ms
+ ✓ src/core/show-library/preview-port.test.ts (14 tests) 207ms
+ ✓ src/core/show-themes/roundtrip.test.ts (5 tests) 137ms
+ ✓ src/core/show-import-preflight.test.ts (6 tests) 289ms
+ ✓ src/server/billing/checkout.test.ts (7 tests) 154ms
+ ✓ src/locales/hebrew.test.ts (2 tests) 103ms
+ ✓ src/presentation/show-library-preview/preview-candidate.test.ts (12 tests) 143ms
+ ✓ src/site/tests/inline-game-preview-locales.test.ts (9 tests) 70ms
+ ✓ src/presentation/show-library-preview/editor-preview-snapshot.test.ts (7 tests) 138ms
+ ✓ src/core/show-library/registry.test.ts (11 tests) 104ms
+ ✓ src/core/show-library/composition-repository.test.ts (11 tests) 121ms
+ ✓ src/presentation/tadazz-audio-policy.test.ts (11 tests) 108ms
+ ✓ src/components/oauth-consent/client.test.ts (6 tests) 111ms
+ ✓ src/presentation/tadazz-v4/reference-story/seating-presence.test.ts (1 test) 42ms
+ ✓ src/core/show-library/application-preview-input.test.ts (5 tests) 141ms
+ ✓ src/server/billing/paddle/subscriptions.test.ts (3 tests) 117ms
+ ✓ src/presentation/tadazz-show/opening-private-cache.test.ts (1 test) 136ms
+ ✓ src/server/billing/paddle/webhooks.test.ts (6 tests) 74ms
+ ✓ src/core/roster.test.ts (8 tests) 109ms
+ ✓ src/core/show-library/registry-motion-references.test.ts (7 tests) 57ms
+ ✓ src/server/game/roster-native-admission.test.ts (19 tests) 86ms
+ ✓ src/core/studio-timeline.test.ts (9 tests) 101ms
+ ✓ src/core/creating-worlds-show.test.ts (1 test) 89ms
+ ✓ src/core/show-themes/hebrew-compatibility.test.ts (3 tests) 78ms
+ ✓ src/core/show-library/application-composition-pin.test.ts (5 tests) 89ms
+ ✓ src/core/show-library/consumer-contract.test.ts (3 tests) 87ms
+ ✓ src/server/session.test.ts (6 tests) 78ms
+ ✓ src/core/billing/locales.test.ts (9 tests) 49ms
+ ✓ src/core/show-library/native-preview-scopes.test.ts (1 test) 74ms
+ ✓ src/presentation/show-library-preview/native-theme-admission-v2.test.ts (5 tests) 34ms
+ ✓ src/server/game/public-directory.test.ts (5 tests) 58ms
+ ✓ src/server/game/creating-worlds-lobby.test.ts (4 tests) 48ms
+ ✓ src/server/billing/upgrades.test.ts (1 test) 28ms
+ ✓ src/core/lottie.test.ts (12 tests) 75ms
+ ✓ src/core/show-themes/product-brand.test.ts (2 tests) 82ms
+ ✓ src/core/show-library/native-media-library.test.ts (6 tests) 61ms
+ ✓ src/core/show-library/registry-locked.test.ts (8 tests) 45ms
+ ✓ src/presentation/tadazz-answer-cards.test.ts (5 tests) 54ms
+ ✓ src/presentation/show-themes/viewport.test.ts (4 tests) 29ms
+ ✓ src/site/tests/inline-game-preview-contracts.test.ts (3 tests) 27ms
+ ✓ src/presentation/room-join/contract.test.ts (14 tests) 29ms
+ ✓ src/site/tests/delete-boundary.test.ts (1 test) 10ms
+ ✓ src/core/show-library/composition-reset.test.ts (10 tests) 67ms
+ ✓ src/server/game/extraction-contracts.test.ts (7 tests) 61ms
+ ✓ src/server/game/story-tie.test.ts (1 test) 39ms
+ ✓ src/core/studio-timeline-schema.test.ts (4 tests) 37ms
+ ✓ src/core/show-themes/history-audio.test.ts (4 tests) 42ms
+ ✓ src/gameplay/gameplay.test.ts (7 tests) 42ms
+ ✓ src/core/show-library/native-motion-library.test.ts (6 tests) 44ms
+ ✓ src/site/tests/inline-game-preview-session-owner.test.ts (10 tests) 35ms
+ ✓ src/platform-ui/components.test.ts (6 tests) 49ms
+ ✓ src/core/cinematic-overlays.test.ts (7 tests) 36ms
+ ✓ src/presentation/tadazz-show/opening-watermark.test.ts (2 tests) 20ms
+ ✓ src/core/audio-catalog.test.ts (3 tests) 22ms
+ ✓ src/platform-ui/tokens.test.ts (7 tests) 23ms
+ ✓ src/presentation/stage-fit.test.ts (3 tests) 28ms
+ ✓ src/media/media.test.ts (9 tests) 22ms
+ ✓ src/presentation/tadazz-show/presentation-scene.test.ts (31 tests) 41ms
+ ✓ src/core/show-library/full-show-preview-timeline.test.ts (3 tests) 70ms
+ ✓ src/presentation/poll-ranking.test.ts (7 tests) 16ms
+ ✓ src/site/adapters/client-return.test.ts (9 tests) 15ms
+ ✓ src/presentation/tadazz-v4/scenes.test.ts (2 tests) 10ms
+ ✓ src/core/tadazz-studio-defaults.test.ts (3 tests) 43ms
+ ✓ src/server/game/participation.test.ts (1 test) 16ms
+ ✓ src/presentation/show-themes/scene.test.ts (11 tests) 15ms
+ ✓ src/presentation/tadazz-v4/reference-story/story-clock.test.ts (3 tests) 9ms
+ ✓ src/site/tests/inline-game-preview-ownership.test.ts (6 tests) 23ms
+ ✓ src/presentation/tadazz-v4/types.test.ts (8 tests) 18ms
+ ✓ src/presentation/show-themes/timer-events.test.ts (4 tests) 11ms
+ ✓ src/presentation/tadazz-backdrop.test.ts (2 tests) 13ms
+ ✓ src/core/soundtrack-media-references.test.ts (1 test) 13ms
+ ✓ src/site/tests/metadata-policy.test.ts (19 tests) 17ms
+ ✓ src/presentation/reveal-timeline.test.ts (11 tests) 17ms
+ ✓ src/core/tadazz-appearance.test.ts (9 tests) 18ms
+ ✓ src/components/oauth-consent/login-handoff.test.ts (6 tests) 21ms
+ ✓ src/site/tests/inline-game-preview-timeline-input.test.ts (12 tests) 14ms
+ ✓ src/core/show-library/sanitized-authored-preview.test.ts (1 test) 19ms
+ ✓ src/presentation/tadazz-show/scene-preset-editor.test.ts (5 tests) 14ms
+ ✓ src/presentation/tadazz-show/question-identity.test.ts (3 tests) 15ms
+ ✓ src/presentation/tadazz-sfx-policy.test.ts (5 tests) 11ms
+ ✓ src/presentation/tadazz-show/navigation-clock.test.ts (5 tests) 17ms
+ ✓ src/locales/host-additions.test.ts (2 tests) 13ms
+ ✓ src/gameplay/timeline-runner.test.ts (5 tests) 11ms
+ ✓ src/presentation/timer-end-cue.test.ts (6 tests) 11ms
+ ✓ src/site/tests/catalogue-search.test.ts (3 tests) 19ms
+ ↓ src/server/storage/creation-scope.test.ts (4 tests | 4 skipped)
+ ↓ src/server/storage/creation-reservation.test.ts (16 tests | 16 skipped)
+ ↓ src/server/storage/durable-files.test.ts (5 tests | 5 skipped)
+ ↓ src/server/storage/creation-review.test.ts (12 tests | 12 skipped)
+ ✓ src/platform-ui/roster-controls.test.ts (2 tests) 9ms
+ ✓ src/site/tests/naming-compatibility.test.ts (1 test) 8ms
+ ✓ src/server/storage/native-binding.test.ts (9 tests) 45832ms
+   ✓ R1 actual native storage bindings and logical digest (9)
+     ✓ production-equivalent startup preserves native binding: media 10741ms
+     ✓ production-equivalent startup preserves native binding: quiz-base 8700ms
+     ✓ production-equivalent startup preserves native binding: quiz-sidecar 7665ms
+     ✓ production-equivalent startup preserves native binding: media-foreign 10109ms
+     ✓ production-equivalent startup preserves native binding: quiz-foreign 8079ms
+ ✓ src/core/imports.test.ts (3 tests) 10ms
+ ✓ src/core/show-library/original-renderer-contract.test.ts (2 tests) 7ms
+ ✓ src/server/storage/review-binding.test.ts (14 tests) 63116ms
+   ✓ R2 independent review native replay regressions (14)
+     ✓ denies an absent sidecar when backup and target are non-null 6874ms
+     ✓ denies ID-named non-string ID null before either native callback 6135ms
+     ✓ denies ID-named non-string ID 7 before either native callback 6142ms
+     ✓ denies ID-named non-string ID false before either native callback 5442ms
+     ✓ denies ID-named non-string ID {} before either native callback 6144ms
+     ✓ denies ID-named non-string ID [] before either native callback 6810ms
+     ✓ preserves a string foreign ID while restoring the native random-basename record 5899ms
+     ✓ allows absent first-sidecar state explicitly recorded as a null backup 3518ms
+     ✓ preserves native storage ID for wrapper-free backup through the default overload 2460ms
+     ✓ preflights all needed private images before immediate-missing Media rollback 2444ms
+     ✓ preflights all needed private images before immediate-corrupt Media rollback 2499ms
+     ✓ preflights all needed private images before startup-missing Media rollback 2601ms
+     ✓ preflights all needed private images before startup-corrupt Media rollback 2596ms
+     ✓ retries an already restored sibling without its consumed private backup 3547ms
+ ✓ src/server/storage/process-interruption.test.ts (10 tests) 65851ms
+   ✓ real process interruption and fresh-process recovery (10)
+     ✓ interrupts at quarantine-copy without transaction unwind 10106ms
+     ✓ interrupts at staged-journal without transaction unwind 9314ms
+     ✓ interrupts at first-base-write without transaction unwind 7780ms
+     ✓ interrupts at last-sidecar-write without transaction unwind 10130ms
+     ✓ interrupts at binary-delete without transaction unwind 8414ms
+     ✓ interrupts at committed-journal without transaction unwind 4155ms
+     ✓ interrupts at quarantine-cleanup without transaction unwind 3495ms
+     ✓ interrupts at journal-cleanup without transaction unwind 3670ms
+     ✓ interrupts at quiz-base-write without transaction unwind 3537ms
+     ✓ interrupts at quiz-sidecar-write without transaction unwind 5242ms
+ ✓ src/server/storage/native-binding-r2.test.ts (26 tests) 88117ms
+   ✓ R2 recorded physical ownership and logical digest controls (26)
+     ✓ recovers actual native create after ID return and journal stage 11054ms
+     ✓ recovers actual native import after ID return and journal stage 8581ms
+     ✓ recovers a legacy-tagged Media record only with unchanged complete pre-mutation physical proof 8305ms
+     ✓ preserves BOTH siblings and journal on base-inode 11074ms
+     ✓ preserves BOTH siblings and journal on base-content 7590ms
+     ✓ preserves BOTH siblings and journal on base-whitespace 3718ms
+     ✓ preserves BOTH siblings and journal on sidecar-inode 3543ms
+     ✓ preserves BOTH siblings and journal on sidecar-content 3627ms
+     ✓ preserves BOTH siblings and journal on base-symlink 4363ms
+     ✓ preserves BOTH siblings and journal on newer-sidecar 4890ms
+     ✓ preserves BOTH siblings and journal on old-quiz-record 3862ms
+     ✓ preserves BOTH siblings and journal on old-media-record 3749ms
+     ✓ preserves BOTH siblings and journal on legacy-sidecar-as-base 3658ms
+     ✓ preserves BOTH siblings and journal on quiz-base-content 3797ms
+     ✓ preserves BOTH siblings and journal on quiz-sidecar-content 3184ms
+     ✓ does not reattach references when actual rollback binary restoration fails 2355ms
+
+ Test Files  147 passed | 4 skipped (151)
+      Tests  1417 passed | 38 skipped (1455)
+   Start at  15:40:00
+   Duration  90.94s (tests 69%, import 25%, transform 5%)
+
+    Isolate  151 workers spawned · ~456ms startup each (spawn + environment, per file)
+             at least ~5.80s faster with isolate: false — reuses workers across files instead of one per file
+
+stderr | src/server/storage/startup-recovery.test.ts > blocks unresolved tenant quiz-save before listen, including accounts OFF
+[Journal] Malformed JSON in journal synthetic.journal.json: SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at recoverJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/storage/journal.ts:174:22)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1398:24)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/storage/startup-recovery.ts:119:28
+    at Array.map (<anonymous>)
+    at recoverStartupOwnerJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/storage/startup-recovery.ts:116:19)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/storage/startup-recovery.test.ts:150:18
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+
+stderr | src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > fail-closed: blocks deletion when any sidecar file in extensions/quizzes/ is invalid
+[Sidecar] Failed to read sidecar at C:\Users\DAVID\AppData\Local\Temp\razzia-media-lib-M4rV96\extensions\quizzes\show-with-bad-sidecar.json: SyntaxError: Unexpected token 'I', "INVALID SIDECAR JSON" is not valid JSON
+    at JSON.parse (<anonymous>)
+    at readSidecar (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/storage/sidecar.ts:73:25)
+    at loadAllShowsHealth (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:132:20)
+    at executeMediaDeleteTransaction (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:343:18)
+    at checkMediaDeleteSafety (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:842:10)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.test.ts:312:20
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:26
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3321:20
+    at new Promise (<anonymous>)
+
+stderr | src/server/storage/startup-recovery.test.ts > blocks unresolved tenant media-delete before listen, including accounts OFF
+[MediaJournal] Malformed JSON in journal synthetic.journal.json: SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:917:22)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/storage/startup-recovery.ts:119:28
+    at Array.map (<anonymous>)
+    at recoverStartupOwnerJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/storage/startup-recovery.ts:116:19)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/storage/startup-recovery.test.ts:150:18
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+
+stderr | src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > restart recovery: preserves insufficient legacy Media intent without mutating its namespace
+[MediaJournal] Failed reading journal media-crash-media-journal-crash-1.media-journal.json: Error: Missing or inconsistent physical media bindings
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1020:19)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.test.ts:614:24
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:26
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3321:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3316:10)
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3301:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3259:10)
+[MediaJournal] Failed reading journal media-crash-media-journal-crash-1.media-journal.json: Error: Missing or inconsistent physical media bindings
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1020:19)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.test.ts:614:24
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:26
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3321:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3316:10)
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3301:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3259:10)
+
+stderr | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at staged-journal
+[MediaJournal] Failed reading journal media-synthetic.png-01a1eee2-d0d9-7216-9ce4-0acdc59183e0.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1024:19)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1796:33)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+[MediaJournal] Failed reading journal media-synthetic.png-01a1eee2-d0d9-7216-9ce4-0acdc59183e0.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1024:19)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1796:33)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+
+stderr | src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Gate A4 (7): isolated coexistence - composite-save and media-delete journals do not misinterpret or delete each other
+[MediaJournal] Failed reading journal media-coexist-media-delete-uuid.media-journal.json: Error: Missing or inconsistent physical media bindings
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1020:19)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.test.ts:878:27
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:26
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3321:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3316:10)
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3301:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3259:10)
+[MediaJournal] Failed reading journal media-coexist-media-delete-uuid.media-journal.json: Error: Missing or inconsistent physical media bindings
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1020:19)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.test.ts:878:27
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:26
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3321:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3316:10)
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3301:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3259:10)
+
+stderr | src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Bug B negative gap: crash between quarantine unlink and journal unlink does NOT restore dangling references to missing binary
+[MediaJournal] Failed reading journal media-lost-media.png-lost-journal-uuid.media-journal.json: Error: Missing or inconsistent physical media bindings
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1020:19)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.test.ts:990:22
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:26
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3321:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3316:10)
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3301:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3259:10)
+
+stderr | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at first-base-write
+[MediaJournal] Failed reading journal media-synthetic.png-01a1eee2-d52a-72e9-81f9-677f78807207.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1024:19)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1796:33)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+[MediaJournal] Failed reading journal media-synthetic.png-01a1eee2-d52a-72e9-81f9-677f78807207.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1024:19)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1796:33)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+
+stderr | src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Bug B: path traversal and forged paths in journal are rejected without touching files
+[MediaJournal] Invalid or unsafe cleanMediaName in journal traversal.media-journal.json: "../../secret.txt", preserving
+
+stderr | src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Bug B: recoverStartupJournals halts server startup when critical recovery fails
+[MediaJournal] Invalid or unsafe quarantinePath in journal broken-startup.media-journal.json: "C:\Users\DAVID\AppData\Local\Temp\razzia-media-lib-k9ure0\extensions\quizzes\.journal\media-delete\quarantine\nonexistent", preserving
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+[MediaJournal] Invalid or unsafe quarantinePath in journal broken-startup.media-journal.json: "C:\Users\DAVID\AppData\Local\Temp\razzia-media-lib-k9ure0\extensions\quizzes\.journal\media-delete\quarantine\nonexistent", preserving
+
+stderr | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at last-sidecar-write
+[MediaJournal] Failed reading journal media-synthetic.png-01a1eee2-da3d-71be-8061-639802fe8ef2.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1024:19)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1796:33)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+[MediaJournal] Failed reading journal media-synthetic.png-01a1eee2-da3d-71be-8061-639802fe8ef2.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1024:19)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1796:33)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+
+stderr | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at binary-delete
+[MediaJournal] Failed reading journal media-synthetic.png-01a1eee2-de12-70bc-8e08-dde56f42efa9.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1024:19)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1796:33)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+[MediaJournal] Failed reading journal media-synthetic.png-01a1eee2-de12-70bc-8e08-dde56f42efa9.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1024:19)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1796:33)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+
+stderr | src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > Bug A: corrupt non-null backup extras fails closed, PRESERVES journal, does NOT delete sidecar, and reports failure
+[Journal] Non-null backupExtras for quiz quiz-1795009208682-jz2e failed schema parsing; preserving sidecar and journal for manual recovery
+
+stderr | src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > Bug A: rejects bogus kind/version and path traversal quizIds without deleting files
+[Journal] Incompatible journal kind "unknown-alien-kind" in bogus-kind.journal.json, preserving
+[Journal] Invalid or unsafe quizId in journal traversal.journal.json: "../../etc/passwd", preserving
+
+stderr | src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > Bug A: failed base restore preserves journal and reports failure
+[Journal] Failed to recover journal quiz-1795009208921-485y.journal.json: Error: Disk full or permission denied on base quiz update
+    at Object.updateQuizz (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/storage.test.ts:697:15)
+    at recoverJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/storage/journal.ts:348:20)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/storage.test.ts:700:20
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:26
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3321:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3316:10)
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3301:20
+    at new Promise (<anonymous>)
+
+stderr | src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > Bug A: does not blindly restore over a newer concurrent revision
+[Journal] Quiz quiz-1795009208992-vno3 has current sidecar revision 3 > target revision 2; skipping rollback to prevent overwriting newer revision
+
+stderr | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at committed-journal
+[MediaJournal] Failed reading journal media-synthetic.png-01a1eee2-e1e5-773a-9181-6881eae8756f.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1024:19)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1796:33)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+[MediaJournal] Failed reading journal media-synthetic.png-01a1eee2-e1e5-773a-9181-6881eae8756f.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1024:19)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1796:33)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+
+stderr | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at quarantine-cleanup
+[MediaJournal] Failed reading journal media-synthetic.png-01a1eee2-e541-730f-9349-31f1fd2ef326.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1024:19)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1796:33)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+[MediaJournal] Failed reading journal media-synthetic.png-01a1eee2-e541-730f-9349-31f1fd2ef326.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1024:19)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1796:33)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+
+stderr | src/server/storage/create-recovery.test.ts > create/import rollback recovery > retains recovery intent if sidecar cleanup fails after deleting base
+[Sidecar] Failed to read sidecar at C:\Users\DAVID\AppData\Local\Temp\tadazz-recovery-synthetic-GRzKU8\extensions\quizzes\36c125fd-26c8-4259-b6b4-525d6db23175.json: SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at readSidecar (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/storage/sidecar.ts:73:25)
+    at recoverJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/storage/journal.ts:246:30)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/storage/create-recovery.test.ts:104:12
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:26
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3321:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3316:10)
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3301:20
+
+stderr | src/presentation/tadazz-v4/full-show.test.ts > FullShowScenes: React Component Rendering & Visual Parity > renders CompanyOpening with brand badge and event artwork
+react-i18next:: useTranslation: You will need to pass in an i18next instance by using initReactI18next or by passing it via props or context. In monorepo setups, make sure there is only one instance of react-i18next. { code: 'NO_I18NEXT_INSTANCE' }
+
+stderr | src/presentation/presentation.test.ts > PRESENTATION & AUDIO Acceptance Cases & Unit Tests > STUDIO01: ScenePresenter & LottiePlayer Rendering > renders Cumulative Answer Recap scene with winning options, badges, and pagination
+react-i18next:: useTranslation: You will need to pass in an i18next instance by using initReactI18next or by passing it via props or context. In monorepo setups, make sure there is only one instance of react-i18next. { code: 'NO_I18NEXT_INSTANCE' }
+
+stderr | src/presentation/tadazz-v4/source-parity-export.test.ts > Native React Show Source Parity & Visual Evidence Capture > renders all scenes into a standalone HTML harness and captures 1920x1080 evidence
+react-i18next:: useTranslation: You will need to pass in an i18next instance by using initReactI18next or by passing it via props or context. In monorepo setups, make sure there is only one instance of react-i18next. { code: 'NO_I18NEXT_INSTANCE' }
+
+stderr | src/server/storage/review-binding.test.ts > R2 independent review native replay regressions > preflights all needed private images before immediate-missing Media rollback
+[MediaRollback] Ownership changed; preserving both siblings and journal Error: Prepared record changed
+    at preparedPath (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/storage/physical-binding.ts:349:11)
+    at assertPhysicalRestoreGroup (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/storage/physical-binding.ts:333:5)
+    at rollback (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:503:7)
+    at executeMediaDeleteTransaction (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:812:29)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/storage/review-binding.test.ts:320:26
+    at fixtureCase (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/storage/review-binding.test.ts:149:13)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/storage/review-binding.test.ts:294:13
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2869:63
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:26
+
+stderr | src/server/storage/review-binding.test.ts > R2 independent review native replay regressions > preflights all needed private images before immediate-corrupt Media rollback
+[MediaRollback] Ownership changed; preserving both siblings and journal Error: Prepared record changed
+    at preparedPath (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/storage/physical-binding.ts:349:11)
+    at assertPhysicalRestoreGroup (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/storage/physical-binding.ts:333:5)
+    at rollback (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:503:7)
+    at executeMediaDeleteTransaction (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:812:29)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/storage/review-binding.test.ts:320:26
+    at fixtureCase (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/storage/review-binding.test.ts:149:13)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/storage/review-binding.test.ts:294:13
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2869:63
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:26
+
+stderr | src/server/storage/native-binding-r2.test.ts > R2 recorded physical ownership and logical digest controls > does not reattach references when actual rollback binary restoration fails
+[MediaRollback] Failed to restore media from quarantine: Error: EIO actual binary rollback copy failure
+    at Object.<anonymous> (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/storage/native-binding-r2.test.ts:368:19)
+    at Object.copyFileSync (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/spy.DgMTfhrK.js:323:40)
+    at rollback (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:529:14)
+    at executeMediaDeleteTransaction (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/media-library.ts:812:29)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/server/storage/native-binding-r2.test.ts:372:22
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:26
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3321:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3316:10)

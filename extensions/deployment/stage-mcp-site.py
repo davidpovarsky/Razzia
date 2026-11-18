@@ -33,7 +33,7 @@ FULL_SHOW_CHECKS = (
     "native opening, five phases, transitions and closing",
     "title edit CAS and summary refresh through AppBridge",
     "semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
-    "eight localized interfaces and non-reduced native motion",
+    "nine localized interfaces and non-reduced native motion",
     "native audio gesture, acknowledged music and volume, persistent playback",
     "tamper, cancellation and tool-context teardown",
     "CSP, native media resources and browser errors",

@@ -42,6 +42,8 @@ export interface RosterImportResult {
 
 const MAX_IMPORT_BYTES = 5 * 1024 * 1024
 const MAX_IMPORT_ROWS = 2000
+const MAX_INFLATED_BYTES = 25 * 1024 * 1024
+const MAX_WORKBOOK_ENTRIES = 50
 
 const utf8Encoder = new TextEncoder()
 const utf8Decoder = new TextDecoder("utf-8")
@@ -244,7 +246,7 @@ function buildHuffman(lengths: Uint8Array, maxSymbol: number): HuffmanTable {
 
 function inflateRawBytes(
   src: Uint8Array,
-  maxOutputLength = 25 * 1024 * 1024,
+  maxOutputLength = MAX_INFLATED_BYTES,
 ): Uint8Array {
   let bytePos = 0
   let bitBuf = 0
@@ -566,12 +568,13 @@ function extractZipEntries(zipBuf: Uint8Array): Map<string, Uint8Array> {
   const totalEntries = readU16LE(zipBuf, eocdOffset + 10)
   const cdOffset = readU32LE(zipBuf, eocdOffset + 16)
 
-  if (cdOffset >= zipBuf.byteLength) {
+  if (cdOffset >= zipBuf.byteLength || totalEntries > MAX_WORKBOOK_ENTRIES) {
     throw new Error("errors:extensions.corruptXlsxFile")
   }
 
   const entries = new Map<string, Uint8Array>()
   let ptr = cdOffset
+  let cumulativeInflated = 0
 
   for (let i = 0; i < totalEntries; i += 1) {
     if (ptr + 46 > zipBuf.byteLength || readU32LE(zipBuf, ptr) !== 0x02014b50) {
@@ -586,7 +589,7 @@ function extractZipEntries(zipBuf: Uint8Array): Map<string, Uint8Array> {
     const commentLen = readU16LE(zipBuf, ptr + 32)
     const localHeaderOffset = readU32LE(zipBuf, ptr + 42)
 
-    if (uncompressedSize > 25 * 1024 * 1024) {
+    if (uncompressedSize > MAX_INFLATED_BYTES - cumulativeInflated) {
       throw new Error("errors:extensions.xlsxTooLarge")
     }
 
@@ -614,14 +617,28 @@ function extractZipEntries(zipBuf: Uint8Array): Map<string, Uint8Array> {
 
     const compressedData = zipBuf.subarray(dataStart, dataEnd)
 
+    let expanded: Uint8Array = new Uint8Array(0)
+
     if (compressionMethod === 0) {
-      entries.set(fileName, new Uint8Array(compressedData))
+      if (compressedSize !== uncompressedSize) {
+        throw new Error("errors:extensions.corruptXlsxFile")
+      }
+
+      expanded = new Uint8Array(compressedData)
     } else if (compressionMethod === 8) {
-      const inflated = inflateRawBytes(compressedData, 25 * 1024 * 1024)
-      entries.set(fileName, inflated)
+      // Bound actual output by the declared size only after it fits the
+      // remaining archive budget. Forged directory sizes cannot bypass it.
+      expanded = inflateRawBytes(compressedData, uncompressedSize)
     } else {
       throw new Error("errors:extensions.unsupportedXlsxCompression")
     }
+
+    if (expanded.byteLength !== uncompressedSize) {
+      throw new Error("errors:extensions.corruptXlsxFile")
+    }
+
+    cumulativeInflated += expanded.byteLength
+    entries.set(fileName, expanded)
   }
 
   return entries

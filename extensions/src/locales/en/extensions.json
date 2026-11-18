@@ -127,7 +127,8 @@
     "answerVisualDesc": "Configure images and accessibility labels for individual answer choices.",
     "revealDesc": "Animate the presentation question image reveal during question display.",
     "triggerMode": "Trigger",
-    "audience": "Audience"
+    "audience": "Audience",
+    "optionLabel": "Option {{index}}"
   },
   "interludes": {
     "interludeTitle": "Interlude Slide",
@@ -242,7 +243,12 @@
     "correct": "Correct",
     "incorrect": "Incorrect",
     "answered": "answered",
-    "answeredRatio": "{{responders}} / {{eligible}} answered"
+    "answeredRatio": "{{responders}} / {{eligible}} answered",
+    "leader": "Leader",
+    "coLeader": "Co-leader",
+    "votes_one": "{{count}} vote",
+    "votes_other": "{{count}} votes",
+    "votes_two": "{{count}} votes"
   },
   "editor": {
     "toggle": "Quiz Enhancements",
@@ -252,7 +258,13 @@
     "choiceNum": "Choice {{num}}",
     "seconds": "seconds",
     "effect": "Effect",
-    "duration": "Duration"
+    "duration": "Duration",
+    "answerTypeChangeTitle": "Change answer mode?",
+    "answerTypeChangeDescription": "Changing between answer choices and a numeric estimate replaces this card’s answers and their settings.",
+    "confirmAnswerTypeChange": "Change mode",
+    "unsavedExitTitle": "Leave without saving?",
+    "unsavedExitDescription": "Your question, scene and show setting changes have not been saved.",
+    "discardAndExit": "Leave without saving"
   },
   "preview": {
     "badge": "Editor Preview",
@@ -318,7 +330,31 @@
     "statusNotJoined": "Not joined",
     "answeredYes": "Answered",
     "answeredNo": "Waiting",
-    "noPhone": "—"
+    "noPhone": "—",
+    "noSearchResults": "No participants match your search.",
+    "errors": {
+      "corruptCsvUnclosedQuote": "The CSV file has an unclosed quotation mark. Check the file and try again.",
+      "corruptXlsxFile": "The Excel file is damaged or unreadable.",
+      "xlsxTooLarge": "The expanded Excel file exceeds the 25 MB limit.",
+      "unsupportedXlsxCompression": "This Excel file uses an unsupported compression format.",
+      "fileTooLarge": "The file exceeds the 5 MB limit.",
+      "corruptXlsxMissingSheet": "The Excel file does not contain a readable worksheet.",
+      "emptyImportFile": "The file contains no participant rows.",
+      "invalidImportHeaders": "The file must include name and phone columns.",
+      "tooManyImportRows": "Import up to 2,000 participants at a time.",
+      "formulaNotAllowed": "Spreadsheet formulas are not allowed.",
+      "missingParticipantName": "Enter a participant name.",
+      "participantNameTooLong": "The participant name must be 40 characters or fewer.",
+      "missingPhoneNumber": "Enter a phone number.",
+      "scientificNotationPhone": "The phone number uses scientific notation. Format the column as text.",
+      "invalidPhoneNumber": "Enter a valid full phone number, such as +972501234567 or 050-123-4567.",
+      "duplicatePhoneInImport": "This phone number appears more than once in the file.",
+      "duplicatePhoneInRoster": "This phone number is already in the roster.",
+      "unsupportedFileFormat": "Only Excel (.xlsx) and CSV (.csv) files are supported.",
+      "corruptImportFile": "The file could not be read. Check its format and try again.",
+      "duplicateParticipantPhone": "Phone number {{phone}} is already assigned to {{name}}.",
+      "importReadFailed": "The import file could not be read."
+    }
   },
   "timeline": {
     "quiz": "Quiz",
@@ -339,7 +375,10 @@
     "groupResults": "Results",
     "deleteConfirmTitle": "Convert Question to Scene?",
     "deleteConfirmDesc": "Converting this question will replace its question content with the selected scene.",
-    "cannotDeleteLastQuestion": "The show must contain at least one question or survey."
+    "cannotDeleteLastQuestion": "The show must contain at least one question or survey.",
+    "duplicateCard": "Duplicate card",
+    "deleteCard": "Delete scene card",
+    "deleteCardConfirm": "Delete this scene card from the timeline?"
   },
   "studio": {
     "tabs": {
@@ -479,7 +518,7 @@
       "recapModeLabel": "Highlight Mode",
       "recapModeMostSelected": "Most Selected Answer (Popular Vote)",
       "recapModeCorrectAnswer": "Official Correct Answer (for Quizzes)",
-      "recapMaxItemsPerPage": "Questions Per Stage Page (1–8)",
+      "recapMaxItemsPerPage": "Questions Per Stage Page (1–{{max}})",
       "recapShowCounts": "Show Vote Counts",
       "recapShowPercentages": "Show Percentages",
       "recapBadgeMostSelected": "Most Selected",
@@ -544,8 +583,22 @@
         "warnOpaqueBg": "Lottie asset appears to contain a full-frame opaque background layer and may obscure the video.",
         "warnStartAfterScene": "Overlay start time exceeds the configured scene duration.",
         "warnVideoBaseWithoutVideo": "Overlay uses video time base, but this scene has no foreground video; falling back to scene clock.",
-        "warnLoopOnMediaEnd": "Looping foreground video with 'On Media End' advance will never end naturally; falling back to scene duration."
-      }
+        "warnLoopOnMediaEnd": "Looping foreground video with 'On Media End' advance will never end naturally; falling back to scene duration.",
+        "limitReached": "Maximum of {{max}} overlay animations reached."
+      },
+      "welcomeTitle": "Welcome to the Show",
+      "mediaError": "Failed to load media asset",
+      "cardNameLabel": "Card name",
+      "cardNameHint": "Used in the timeline. This theme’s preset defines the title on stage.",
+      "lottieInvalidFile": "Choose a valid Lottie JSON file.",
+      "lottieUploaded": "Animation uploaded."
+    },
+    "accessibility": {
+      "dragInstructions": "Press Space to pick up a card, arrow keys to move, Space or Enter to drop, and Escape to cancel.",
+      "dragStart": "Card {{position}} picked up.",
+      "dragOver": "Card moved to position {{position}}.",
+      "dragEnd": "Card dropped at position {{position}}.",
+      "dragCancel": "Reordering cancelled."
     }
   },
   "showImport": {
@@ -737,7 +790,9 @@
       "storyUnfolds": "THE STORY UNFOLDS...",
       "storyNow": "AND NOW...",
       "storyTitle": "THE STORY",
-      "storyRound": "ROUND"
+      "storyRound": "ROUND",
+      "questionLabel": "QUESTION",
+      "choiceLabel": "Choice"
     },
     "seating": {
       "call": "CALL TO JOIN",
@@ -848,5 +903,74 @@
       "z-wipe": "Transition"
     },
     "installationPreview": "Private theme preview for review and approval."
+  },
+  "editorPreview": {
+    "title": "Live preview",
+    "description": "Updates as you edit. No save or live game is needed.",
+    "question": "Question",
+    "answers": "Answers",
+    "results": "Results",
+    "aspectRatio": "Preview aspect ratio",
+    "showImage": "Reveal image",
+    "resetImage": "Reset image",
+    "replay": "Replay animation",
+    "emptyQuestion": "Your question will appear here",
+    "emptyAnswer": "Answer {{number}}",
+    "noResponses": "Preview only — no responses have been collected.",
+    "hide": "Hide preview",
+    "show": "Show preview",
+    "draftIncomplete": "The preview shows your draft while some fields are incomplete.",
+    "stageView": "Stage preview",
+    "editLayers": "Edit layers",
+    "lottieUnavailable": "Lottie preview unavailable. Check the selected animation."
+  },
+  "fullShow": {
+    "roleMain": "Main Character",
+    "roleSecond": "Second Character",
+    "roleEra": "Era",
+    "roleCrisis": "Crisis",
+    "roleEnding": "Ending",
+    "awaitingVote": "AWAITING THE VOTE",
+    "directoryTitle": "FIND YOUR TABLE REPRESENTATIVE",
+    "phoneVoting": "PHONE VOTING",
+    "numberPending": "NUMBER TO BE ADDED",
+    "tables": "TABLES",
+    "namePending": "Name to be supplied",
+    "tableStatus": "Table {{table}}: {{name}}, {{status}}",
+    "connected": "Connected",
+    "waiting": "Waiting",
+    "phoneTitle": "JUST DIAL. THEN CHOOSE.",
+    "keypadVoting": "KEYPAD VOTING",
+    "phoneEyebrow": "NO APPS. NO SMARTPHONES.",
+    "phoneSubtitle": "Your table representative votes on an ordinary telephone keypad.",
+    "phoneReady": "TADAZZ! IS READY",
+    "dialIn": "DIAL IN",
+    "stepDialTitle": "DIAL THE EVENT NUMBER",
+    "stepDialDescription": "The host will display or announce the number.",
+    "stepListenTitle": "LISTEN FOR THE QUESTION",
+    "stepListenDescription": "Discuss your choice with your table.",
+    "stepPressTitle": "PRESS 1, 2, 3, 4 OR 5",
+    "stepPressDescription": "One vote per table, using the phone keypad.",
+    "readinessTitle": "THE TABLES ARE LIGHTING UP",
+    "liveConnections": "LIVE CONNECTIONS",
+    "readinessEyebrow": "THE ROOM IS COMING ONLINE",
+    "readinessSubtitle": "A light appears for each connected table representative.",
+    "table": "TABLE",
+    "connectedTables": "CONNECTED TABLES",
+    "previewData": "PREVIEW DATA — NOT LIVE",
+    "progressTitle": "YOUR WORLD IS TAKING SHAPE",
+    "piecesCollected": "{{count}} OF {{total}} STORY PIECES COLLECTED",
+    "progressSubtitle": "Every chosen picture becomes part of the story.",
+    "piecesReady": "STORY PIECES READY",
+    "tieTitle": "THE AUDIENCE IS SPLIT",
+    "equalVotes": "EQUAL VOTES",
+    "votes": "{{count}} VOTES",
+    "tieInstruction": "Host, choose which picture goes into the story.",
+    "companyArtwork": "Creating Worlds",
+    "openingArtwork": "Grand Opening Teaser",
+    "openingTitle": "THE STORY STARTS WITH YOU",
+    "openingSubtitle": "A LIVE AUDIENCE-CREATED EXPERIENCE",
+    "firstStory": "THE FIRST STORY",
+    "newWorld": "A WHOLE NEW WORLD"
   }
 }

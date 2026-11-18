@@ -57,6 +57,7 @@ export function NativeSaveConsentPage({
     "ja",
     "tr",
     "vi",
+    "he",
   ].includes(language)
     ? (language as PreviewLocale)
     : "en"

@@ -1,3 +1,4 @@
+import NativeButton from "../../../../packages/web/src/components/Button"
 import { useCallback, useRef, useState } from "react"
 import { createPortal } from "react-dom"
 import type { FullShowFrameV3 } from "../contracts/full-show-frame.ts"
@@ -178,14 +179,16 @@ export function FullShowDemoQuestionV3({
               </span>
             )}
             {frame.phase !== "results" && (
-              <button
+              <NativeButton
+                classNameContent="contents"
+                data-control-source="razzia"
                 type="button"
                 data-testid="full-show-demo-reveal"
                 disabled={!canChoose || selectedIndex === null}
                 onClick={onReveal}
               >
                 {labels.reveal}
-              </button>
+              </NativeButton>
             )}
           </div>,
           controlsTarget,

@@ -102,3 +102,5 @@ export {
 } from "./show-library-preview/native-room-panel"
 
 export { NativeRazziaQuestion } from "./show-library-preview/native-question"
+
+export { LiveEditorStagePreview } from "./show-library-preview/live-editor-stage"

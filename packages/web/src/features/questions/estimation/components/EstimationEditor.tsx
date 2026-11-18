@@ -1,3 +1,4 @@
+import { resolveQuestionPlayMode } from "@razzia/extensions/core"
 import { QUIZZ_MODES } from "@razzia/common/constants"
 import FieldError from "@razzia/web/components/forms/FieldError"
 import Input from "@razzia/web/components/Input"
@@ -56,19 +57,21 @@ const EstimationEditor = () => {
     ),
   }
 
-  if (gameMode === QUIZZ_MODES.SURVEY) {
+  if (
+    resolveQuestionPlayMode(currentQuestion, gameMode) === QUIZZ_MODES.SURVEY
+  ) {
     return (
-      <div className="z-10 rounded-2xl bg-white px-5 py-4 shadow-sm">
+      <div className="bg-background z-10 rounded-2xl px-5 py-4 shadow-sm">
         <EstimationScale options={options} {...bounds} />
       </div>
     )
   }
 
   return (
-    <div className="z-10 mt-12 flex flex-col gap-1">
+    <div className="z-10 mt-4 flex flex-col gap-1">
       <div
         className={clsx(
-          "rounded-2xl bg-white px-5 py-4 shadow-sm",
+          "bg-background rounded-2xl px-5 py-4 shadow-sm",
           fieldState.invalid && "ring-2 ring-red-500",
         )}
       >
@@ -93,7 +96,7 @@ const EstimationEditor = () => {
                   fieldState.invalid ? `${field.name}-error` : undefined
                 }
                 className={clsx(
-                  "w-24 border-transparent bg-white text-center",
+                  "bg-background w-24 border-transparent text-center",
                   fieldState.invalid && "border-red-500",
                 )}
               />

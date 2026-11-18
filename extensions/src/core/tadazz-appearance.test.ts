@@ -19,6 +19,8 @@ describe("Tadazz opt-in stage background", () => {
       source: "original",
       url: original,
       animate: false,
+      position: "center",
+      overlayOpacity: 0,
     })
   })
   it("allows animation only by explicit show selection", () => {
@@ -54,7 +56,7 @@ describe("Tadazz opt-in stage background", () => {
         cardBackground: {
           url: "/media/card.png",
           fit: "contain",
-          position: "center",
+          position: "top",
           overlayOpacity: 0.3,
         },
       }),
@@ -63,6 +65,36 @@ describe("Tadazz opt-in stage background", () => {
       url: "/media/card.png",
       animate: false,
       fit: "contain",
+      position: "top",
+      overlayOpacity: 0.3,
+    })
+  })
+  it("preserves an explicit clear overlay and ignores unsafe card overrides", () => {
+    expect(
+      resolveTadazzStageBackground({
+        cardBackground: {
+          url: "/media/card.png",
+          fit: "cover",
+          position: "right",
+          overlayOpacity: 0,
+        },
+      }),
+    ).toMatchObject({ source: "card", position: "right", overlayOpacity: 0 })
+    expect(
+      resolveTadazzStageBackground({
+        originalUrl: original,
+        cardBackground: {
+          url: "javascript:alert(1)",
+          fit: "contain",
+          position: "left",
+          overlayOpacity: 0.85,
+        },
+      }),
+    ).toMatchObject({
+      source: "original",
+      url: original,
+      position: "center",
+      overlayOpacity: 0,
     })
   })
   it("shows the still Tadazz art for reduced motion", () => {

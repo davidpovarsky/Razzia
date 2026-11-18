@@ -32,8 +32,11 @@ const uuid = (text: string) => {
 }
 
 export class PreviewSourceError extends Error {
-  constructor(readonly status: 404 | 409 | 422) {
+  readonly status: 404 | 409 | 422
+
+  constructor(status: 404 | 409 | 422) {
     super("Preview source unavailable")
+    this.status = status
   }
 }
 

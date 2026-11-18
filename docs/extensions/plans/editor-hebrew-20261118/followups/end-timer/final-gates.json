@@ -1,0 +1,87 @@
+[
+  {
+    "name": "final-focused",
+    "command": [
+      "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+      "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-timer-20261118\\node_modules\\vitest\\vitest.mjs",
+      "run",
+      "src/server/end-answer-timer.test.ts",
+      "src/server/gameplay-phase-a.test.ts",
+      "--maxWorkers=1",
+      "--reporter=verbose",
+      "--reporter=json",
+      "--outputFile=C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-timer-20261118\\docs\\extensions\\plans\\editor-hebrew-20261118\\followups\\end-timer\\final-focused.json"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 6.78
+  },
+  {
+    "name": "final-transport",
+    "command": [
+      "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+      "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-timer-20261118\\node_modules\\vitest\\vitest.mjs",
+      "run",
+      "packages/socket/src/handlers/end-answer-timer.test.ts",
+      "--maxWorkers=1",
+      "--reporter=verbose",
+      "--reporter=json",
+      "--outputFile=C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-timer-20261118\\docs\\extensions\\plans\\editor-hebrew-20261118\\followups\\end-timer\\final-transport.json"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 16.09
+  },
+  {
+    "name": "final-socket-types",
+    "command": [
+      "cmd",
+      "/c",
+      "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-timer-20261118\\node_modules\\.bin\\tsc.cmd",
+      "--noEmit",
+      "--allowImportingTsExtensions",
+      "-p",
+      "packages/socket/tsconfig.json"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 2.25
+  },
+  {
+    "name": "final-focused-lint",
+    "command": [
+      "cmd",
+      "/c",
+      "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-timer-20261118\\node_modules\\.bin\\oxlint.cmd",
+      "extensions/src/server/game/pausable-countdown.ts",
+      "packages/socket/src/services/game/round-manager.ts",
+      "extensions/src/server/end-answer-timer.test.ts",
+      "extensions/src/server/gameplay-phase-a.test.ts",
+      "packages/socket/src/handlers/end-answer-timer.test.ts"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 2.29
+  },
+  {
+    "name": "final-format",
+    "command": [
+      "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+      "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-timer-20261118\\node_modules\\prettier\\bin\\prettier.cjs",
+      "--check",
+      "extensions/src/server/game/pausable-countdown.ts",
+      "packages/socket/src/services/game/round-manager.ts",
+      "extensions/src/server/end-answer-timer.test.ts",
+      "extensions/src/server/gameplay-phase-a.test.ts",
+      "packages/socket/src/handlers/end-answer-timer.test.ts"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 0.88
+  },
+  {
+    "name": "final-diff-check",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exitCode": 0,
+    "durationSeconds": 0.39
+  }
+]

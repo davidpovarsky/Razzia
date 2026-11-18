@@ -1,0 +1,259 @@
+{
+  "ok": true,
+  "iterations": 3,
+  "errors": [],
+  "states": [
+    {
+      "iteration": 1,
+      "states": [
+        {
+          "step": "before",
+          "pressed": null,
+          "order": [
+            "question",
+            "transition"
+          ],
+          "live": []
+        },
+        {
+          "step": "after-space",
+          "pressed": "true",
+          "order": [
+            "question",
+            "transition"
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card moved to position 2."
+            }
+          ]
+        },
+        {
+          "step": "after-space-settled",
+          "pressed": "true",
+          "order": [
+            "question",
+            "transition"
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card moved to position 2."
+            }
+          ]
+        },
+        {
+          "step": "after-arrow-up-immediate",
+          "pressed": "true",
+          "order": [
+            "question",
+            "transition"
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card moved to position 2."
+            }
+          ]
+        },
+        {
+          "step": "after-arrow-up-settled",
+          "pressed": "true",
+          "order": [
+            "question",
+            "transition"
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card moved to position 1."
+            }
+          ]
+        },
+        {
+          "step": "after-enter",
+          "pressed": null,
+          "order": [
+            "transition",
+            "question"
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card dropped at position 1."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "iteration": 2,
+      "states": [
+        {
+          "step": "before",
+          "pressed": null,
+          "order": [
+            "question",
+            "transition"
+          ],
+          "live": []
+        },
+        {
+          "step": "after-space",
+          "pressed": "true",
+          "order": [
+            "question",
+            "transition"
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card moved to position 2."
+            }
+          ]
+        },
+        {
+          "step": "after-space-settled",
+          "pressed": "true",
+          "order": [
+            "question",
+            "transition"
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card moved to position 2."
+            }
+          ]
+        },
+        {
+          "step": "after-arrow-up-immediate",
+          "pressed": "true",
+          "order": [
+            "question",
+            "transition"
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card moved to position 2."
+            }
+          ]
+        },
+        {
+          "step": "after-arrow-up-settled",
+          "pressed": "true",
+          "order": [
+            "question",
+            "transition"
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card moved to position 1."
+            }
+          ]
+        },
+        {
+          "step": "after-enter",
+          "pressed": null,
+          "order": [
+            "transition",
+            "question"
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card dropped at position 1."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "iteration": 3,
+      "states": [
+        {
+          "step": "before",
+          "pressed": null,
+          "order": [
+            "question",
+            "transition"
+          ],
+          "live": []
+        },
+        {
+          "step": "after-space",
+          "pressed": "true",
+          "order": [
+            "question",
+            "transition"
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card moved to position 2."
+            }
+          ]
+        },
+        {
+          "step": "after-space-settled",
+          "pressed": "true",
+          "order": [
+            "question",
+            "transition"
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card moved to position 2."
+            }
+          ]
+        },
+        {
+          "step": "after-arrow-up-immediate",
+          "pressed": "true",
+          "order": [
+            "question",
+            "transition"
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card moved to position 2."
+            }
+          ]
+        },
+        {
+          "step": "after-arrow-up-settled",
+          "pressed": "true",
+          "order": [
+            "question",
+            "transition"
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card moved to position 1."
+            }
+          ]
+        },
+        {
+          "step": "after-enter",
+          "pressed": null,
+          "order": [
+            "transition",
+            "question"
+          ],
+          "live": [
+            {
+              "id": "DndLiveRegion-0",
+              "text": "Card dropped at position 1."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

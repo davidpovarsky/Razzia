@@ -440,7 +440,7 @@ export class RoundManager {
 
     this.voteCompletion = "manual"
     this.acceptingAnswers = false
-    this.opts.cooldown.abort()
+    this.opts.cooldown.abortImmediately()
 
     return true
   }
@@ -942,12 +942,12 @@ export class RoundManager {
 
     this.broadcastVotingQuestion()
     await this.opts.cooldown.start(this.question.time)
-    this.acceptingAnswers = false
 
     if (this.generation !== gen || !this.started) {
       return
     }
 
+    this.acceptingAnswers = false
     this.voteCompletion ??= "elapsed"
     this.runStep(0)
   }

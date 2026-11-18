@@ -1,3 +1,5 @@
+import type { BackgroundPosition } from "../../core/card-appearance"
+
 /** Presentation-only TADAZZ V4 contracts. Does not import game or socket state. */
 export const TADAZZ_V4_SCENES = [
   "question",
@@ -120,6 +122,8 @@ export interface TadazzV4Data {
   /** Overrides only this scene's backdrop; supplied by the game settings. */
   backgroundUrl?: string | null
   backgroundFit?: "cover" | "contain"
+  backgroundPosition?: BackgroundPosition
+  backgroundOverlayOpacity?: number
 }
 
 export interface TadazzV4Labels {
@@ -130,6 +134,8 @@ export interface TadazzV4Labels {
   storyNow: string
   storyTitle: string
   storyRound: string
+  questionLabel: string
+  choiceLabel: string
   nextQuestion: string
   audienceResults: string
   focus: string
@@ -161,6 +167,8 @@ export const TADAZZ_V4_LABELS: TadazzV4Labels = {
   storyNow: "AND NOW...",
   storyTitle: "THE STORY",
   storyRound: "ROUND",
+  questionLabel: "QUESTION",
+  choiceLabel: "Choice",
   nextQuestion: "THE NEXT QUESTION",
   audienceResults: "AUDIENCE RESULTS",
   focus: "THE QUESTION IS ON THE SCREEN",
@@ -177,7 +185,7 @@ export const TADAZZ_V4_LABELS: TadazzV4Labels = {
   teamLeaderboard: "TEAM LEADERBOARD",
   leaderboard: "LEADERBOARD",
   roundRecap: "ROUND RECAP",
-  storyBegin: "LET THE STORY BEGINâ€¦",
+  storyBegin: "LET THE STORY BEGIN…",
   upNext: "UP NEXT",
   lookClosely: "LOOK CLOSELY",
   noVotes: "NO VOTES YET",

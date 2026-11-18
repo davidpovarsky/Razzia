@@ -1,0 +1,100 @@
+{
+  "baseCommit": "c9b2483b8719b4357852f105e91369e4ffb592e8",
+  "verifiedAt": "2026-11-18T14:13:05.712691+00:00",
+  "locale": "he",
+  "direction": "rtl",
+  "keyCounts": {
+    "packages/web/src/locales/he/common.json": 26,
+    "packages/web/src/locales/he/errors.json": 60,
+    "packages/web/src/locales/he/game.json": 46,
+    "packages/web/src/locales/he/manager.json": 38,
+    "packages/web/src/locales/he/quizz.json": 80,
+    "extensions/src/locales/he/extensions.json": 884,
+    "extensions/src/locales/billing.json#he": 52,
+    "extensions/src/locales/packages.json#he": 36,
+    "extensions/src/locales/host-additions.json#he": 2
+  },
+  "ownedCoreHebrewStrings": 1224,
+  "extensionLocaleParity": {
+    "en": {
+      "keys": 884,
+      "missing": [],
+      "extra": [],
+      "placeholderMismatch": []
+    },
+    "fr": {
+      "keys": 884,
+      "missing": [],
+      "extra": [],
+      "placeholderMismatch": []
+    },
+    "de": {
+      "keys": 884,
+      "missing": [],
+      "extra": [],
+      "placeholderMismatch": []
+    },
+    "es": {
+      "keys": 884,
+      "missing": [],
+      "extra": [],
+      "placeholderMismatch": []
+    },
+    "it": {
+      "keys": 884,
+      "missing": [],
+      "extra": [],
+      "placeholderMismatch": []
+    },
+    "ja": {
+      "keys": 884,
+      "missing": [],
+      "extra": [],
+      "placeholderMismatch": []
+    },
+    "tr": {
+      "keys": 884,
+      "missing": [],
+      "extra": [],
+      "placeholderMismatch": []
+    },
+    "vi": {
+      "keys": 884,
+      "missing": [],
+      "extra": [],
+      "placeholderMismatch": []
+    },
+    "he": {
+      "keys": 884,
+      "missing": [],
+      "extra": [],
+      "placeholderMismatch": []
+    }
+  },
+  "additionalAgentOwnedResources": {
+    "site": 238,
+    "inlinePreview": 24,
+    "widget": 70,
+    "themeBuilder": 133,
+    "privatePreviewUi": 15
+  },
+  "browserEvidence": {
+    "visual-he": 79,
+    "visual-he-final": 14,
+    "visual-he-roster": 13,
+    "visual-he-fullshow": 16,
+    "font-proof": 2,
+    "private-font-build": 2
+  },
+  "privateFontLifecycleChecks": 10,
+  "privateFontUnitTests": {
+    "passed": 5,
+    "failed": 0
+  },
+  "privateFontTypedLint": {
+    "warnings": 0,
+    "errors": 0
+  },
+  "phase2Typecheck": "PASS",
+  "releaseVerification": "Root-owned final source identity, Linux native pins, full gates and deployment; not asserted by this local QA receipt."
+}

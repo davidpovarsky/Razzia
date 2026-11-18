@@ -1,0 +1,15 @@
+{
+  "commit": "af1d879431d3461c7f937a6c5f580eee97b073e2",
+  "qaOnlyPostGateChanges": {
+    "paths": [
+      "packages/e2e/editor-preview-critical-runner.py",
+      "packages/e2e/editor-preview-final-runner.py"
+    ],
+    "reason": "Normalize CRLF detected by staged diff-check; derive checkout root and allow TADAZZ_QA_NODE instead of hardcoded author paths; propagate child failures using check=True.",
+    "validation": "Python ast.parse and git diff --cached --check passed; underlying browser scripts and application source unchanged."
+  },
+  "hashes": {
+    "packages/e2e/editor-preview-critical-runner.py": "a597d8fb02b422273c06825d121e5082187794ef9c1b870d8709b17887d3b547",
+    "packages/e2e/editor-preview-final-runner.py": "1f582155034344d76d2cdda66dcefb4c54629b4cf77a1937c478abfe49d2bb49"
+  }
+}

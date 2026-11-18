@@ -1299,6 +1299,12 @@
       "themes.razziaOriginalDescription": "Thành phần trò chơi và bố cục thích ứng Razzia gốc cùng cải tiến TADAZZ.",
       "extensions:themes.default": "Mặc định của chủ đề",
       "extensions:themes.silent": "Im lặng"
+    },
+    "he": {
+      "themes.razziaOriginalName": "Razzia המקורי",
+      "themes.razziaOriginalDescription": "רכיבי המשחק והפריסה המותאמת למסכים של Razzia המקורי, עם הרחבות TADAZZ.",
+      "extensions:themes.default": "ברירת המחדל של הערכה",
+      "extensions:themes.silent": "ללא שמע"
     }
   }
 }

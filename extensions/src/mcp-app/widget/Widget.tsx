@@ -189,6 +189,7 @@ function WidgetContent({
       className="widget-shell font-display"
       data-theme={context?.theme ?? "light"}
       lang={hostLocale(i18n.language)}
+      dir={i18n.dir()}
     >
       <header className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-xl font-bold">{t("title")}</h1>

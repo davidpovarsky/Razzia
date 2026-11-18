@@ -2,6 +2,7 @@
 import { PlatformButton } from "../platform-controls"
 import { ReferenceStoryScene } from "./reference-story/ReferenceStoryScene"
 import type { ReactNode } from "react"
+import { useTranslation } from "react-i18next"
 import type { TadazzV4Data, TadazzV4Answer } from "./types"
 import { themeAdapterAsset, useOptionalShowTheme } from "../show-themes/context"
 
@@ -47,12 +48,25 @@ export interface FullShowInput extends TadazzV4Data {
   groupPage?: number
 }
 
-const DEFAULT_STORY_ROLES = [
-  "Main Character",
-  "Second Character",
-  "Era",
-  "Crisis",
-  "Ending",
+type FullShowText = (
+  key: string,
+  fallback: string,
+  variables?: Record<string, string | number>,
+) => string
+
+function useFullShowText(): FullShowText {
+  const { t } = useTranslation("extensions")
+
+  return (key, fallback, variables) =>
+    t(key, { defaultValue: fallback, ...variables })
+}
+
+const defaultStoryRoles = (text: FullShowText) => [
+  text("fullShow.roleMain", "Main Character"),
+  text("fullShow.roleSecond", "Second Character"),
+  text("fullShow.roleEra", "Era"),
+  text("fullShow.roleCrisis", "Crisis"),
+  text("fullShow.roleEnding", "Ending"),
 ]
 const BRAND_LOGO_SRC = "/tadazz-show/v4/tadazz-brand-logo.png"
 const num = (n: number) => String(Math.max(1, n)).padStart(2, "0")
@@ -128,10 +142,11 @@ export function StoryCards({
   progress?: boolean
   live?: boolean
 }) {
+  const text = useFullShowText()
   const winners = data.winners ?? []
   const count = Math.min(5, Math.max(0, data.completed ?? 0))
   const roles =
-    data.storyRoles?.length === 5 ? data.storyRoles : DEFAULT_STORY_ROLES
+    data.storyRoles?.length === 5 ? data.storyRoles : defaultStoryRoles(text)
 
   return (
     <div
@@ -146,8 +161,10 @@ export function StoryCards({
         const ready =
           Boolean(a?.title || a?.alt || a?.imageUrl) && (!progress || i < count)
         const displayTitle = ready
-          ? a?.title || a?.alt || `Choice ${i + 1}`
-          : "AWAITING THE VOTE"
+          ? a?.title ||
+            a?.alt ||
+            `${data.labels?.choiceLabel ?? text("tadazzShow.v4.choiceLabel", "Choice")} ${i + 1}`
+          : text("fullShow.awaitingVote", "AWAITING THE VOTE")
 
         return (
           <article
@@ -187,6 +204,7 @@ export function StoryCards({
 }
 
 export function Directory({ data }: { data: FullShowInput }) {
+  const text = useFullShowText()
   const connected = new Set(data.connectedTables ?? [])
   const { groupPage } = data
   const focused =
@@ -200,11 +218,23 @@ export function Directory({ data }: { data: FullShowInput }) {
 
   return (
     <>
-      <Head title="FIND YOUR TABLE REPRESENTATIVE" chip="PHONE VOTING" />
+      <Head
+        title={text(
+          "fullShow.directoryTitle",
+          "FIND YOUR TABLE REPRESENTATIVE",
+        )}
+        chip={text("fullShow.phoneVoting", "PHONE VOTING")}
+      />
       <div className="full-directory-dial">
-        <span className="full-directory-dial-label">CALL TO JOIN</span>
-        <span className="full-directory-dial-number">
-          {data.dialNumber?.trim() || "NUMBER TO BE ADDED"}
+        <span className="full-directory-dial-label">
+          {text("tadazzShow.seating.call", "CALL TO JOIN")}
+        </span>
+        <span
+          className="full-directory-dial-number"
+          dir={data.dialNumber?.trim() ? "ltr" : undefined}
+        >
+          {data.dialNumber?.trim() ||
+            text("fullShow.numberPending", "NUMBER TO BE ADDED")}
         </span>
       </div>
       <div
@@ -222,7 +252,10 @@ export function Directory({ data }: { data: FullShowInput }) {
             return (
               <div className="full-directory-col" key={column}>
                 <div className="full-col-title">
-                  TABLES {num(first)}–{num(first + size - 1)}
+                  {text("fullShow.tables", "TABLES")}{" "}
+                  <bdi dir="ltr">
+                    {num(first)}–{num(first + size - 1)}
+                  </bdi>
                 </div>
                 {Array.from(
                   {
@@ -232,7 +265,8 @@ export function Directory({ data }: { data: FullShowInput }) {
                     const table = first + i
                     const name =
                       data.representatives?.find((rep) => rep.table === table)
-                        ?.name || "Name to be supplied"
+                        ?.name ||
+                      text("fullShow.namePending", "Name to be supplied")
                     const joined = connected.has(table)
 
                     return (
@@ -243,7 +277,17 @@ export function Directory({ data }: { data: FullShowInput }) {
                           joined && "connected",
                         )}
                         data-table={table}
-                        aria-label={`Table ${table}: ${name}, ${joined ? "connected" : "waiting"}`}
+                        aria-label={text(
+                          "fullShow.tableStatus",
+                          "Table {{table}}: {{name}}, {{status}}",
+                          {
+                            table,
+                            name,
+                            status: joined
+                              ? text("fullShow.connected", "Connected")
+                              : text("fullShow.waiting", "Waiting"),
+                          },
+                        )}
                       >
                         <span className="full-table-number">{num(table)}</span>
                         <span className="full-rep-name" dir="auto">
@@ -251,7 +295,11 @@ export function Directory({ data }: { data: FullShowInput }) {
                         </span>
                         <span
                           className="full-rep-joined"
-                          aria-label={joined ? "Connected" : "Waiting"}
+                          aria-label={
+                            joined
+                              ? text("fullShow.connected", "Connected")
+                              : text("fullShow.waiting", "Waiting")
+                          }
                         />
                       </div>
                     )
@@ -267,24 +315,33 @@ export function Directory({ data }: { data: FullShowInput }) {
 }
 
 export function PhoneInstructions({ data }: { data: FullShowInput }) {
+  const text = useFullShowText()
   return (
     <>
       <Head
-        title="JUST DIAL. THEN CHOOSE."
-        chip="KEYPAD VOTING"
-        eyebrow="NO APPS. NO SMARTPHONES."
-        subtitle="Your table representative votes on an ordinary telephone keypad."
+        title={text("fullShow.phoneTitle", "JUST DIAL. THEN CHOOSE.")}
+        chip={text("fullShow.keypadVoting", "KEYPAD VOTING")}
+        eyebrow={text("fullShow.phoneEyebrow", "NO APPS. NO SMARTPHONES.")}
+        subtitle={text(
+          "fullShow.phoneSubtitle",
+          "Your table representative votes on an ordinary telephone keypad.",
+        )}
       />
       <div className="full-phone">
         <div className="full-phone-device">
           <div className="full-phone-speaker" />
           <div className="full-phone-display">
-            <div className="full-phone-display-small">TADAZZ! IS READY</div>
-            <div className="full-phone-display-number">
-              {data.dialNumber || "DIAL IN"}
+            <div className="full-phone-display-small">
+              {text("fullShow.phoneReady", "TADAZZ! IS READY")}
+            </div>
+            <div
+              className="full-phone-display-number"
+              dir={data.dialNumber ? "ltr" : undefined}
+            >
+              {data.dialNumber || text("fullShow.dialIn", "DIAL IN")}
             </div>
           </div>
-          <div className="full-phone-keys">
+          <div className="full-phone-keys" dir="ltr">
             {["1", "2", "3", "4", "5", "6", "7", "8", "9", "*", "0", "#"].map(
               (key, i) => (
                 <div
@@ -306,18 +363,27 @@ export function PhoneInstructions({ data }: { data: FullShowInput }) {
         {[
           [
             "01",
-            "DIAL THE EVENT NUMBER",
-            "The host will display or announce the number.",
+            text("fullShow.stepDialTitle", "DIAL THE EVENT NUMBER"),
+            text(
+              "fullShow.stepDialDescription",
+              "The host will display or announce the number.",
+            ),
           ],
           [
             "02",
-            "LISTEN FOR THE QUESTION",
-            "Discuss your choice with your table.",
+            text("fullShow.stepListenTitle", "LISTEN FOR THE QUESTION"),
+            text(
+              "fullShow.stepListenDescription",
+              "Discuss your choice with your table.",
+            ),
           ],
           [
             "03",
-            "PRESS 1, 2, 3, 4 OR 5",
-            "One vote per table, using the phone keypad.",
+            text("fullShow.stepPressTitle", "PRESS 1, 2, 3, 4 OR 5"),
+            text(
+              "fullShow.stepPressDescription",
+              "One vote per table, using the phone keypad.",
+            ),
           ],
         ].map(([n, title, text]) => (
           <div className="full-step" key={n}>
@@ -334,6 +400,7 @@ export function PhoneInstructions({ data }: { data: FullShowInput }) {
 }
 
 export function Readiness({ data }: { data: FullShowInput }) {
+  const text = useFullShowText()
   const connected = new Set(
     (data.connectedTables ?? []).filter((n) => n >= 1 && n <= 40),
   )
@@ -341,10 +408,13 @@ export function Readiness({ data }: { data: FullShowInput }) {
   return (
     <>
       <Head
-        title="THE TABLES ARE LIGHTING UP"
-        chip="LIVE CONNECTIONS"
-        eyebrow="THE ROOM IS COMING ONLINE"
-        subtitle="A light appears for each connected table representative."
+        title={text("fullShow.readinessTitle", "THE TABLES ARE LIGHTING UP")}
+        chip={text("fullShow.liveConnections", "LIVE CONNECTIONS")}
+        eyebrow={text("fullShow.readinessEyebrow", "THE ROOM IS COMING ONLINE")}
+        subtitle={text(
+          "fullShow.readinessSubtitle",
+          "A light appears for each connected table representative.",
+        )}
       />
       <div className="full-readiness-tray">
         <div className="full-table-grid">
@@ -361,7 +431,9 @@ export function Readiness({ data }: { data: FullShowInput }) {
                   connected.has(i + 1) && "connected",
                 )}
               >
-                <span className="full-led-label">TABLE</span>
+                <span className="full-led-label">
+                  {text("fullShow.table", "TABLE")}
+                </span>
                 <span className="full-led-number">{num(i + 1)}</span>
                 <span className="full-led-pip" />
               </div>
@@ -371,7 +443,11 @@ export function Readiness({ data }: { data: FullShowInput }) {
       </div>
       <div className="full-connection-status">
         <div className="full-connected-count">
-          {connected.size} / 40 TABLES CONNECTED
+          {text(
+            "tadazzShow.seating.connected",
+            "{{connected}} / {{total}} TABLES CONNECTED",
+            { connected: connected.size, total: 40 },
+          )}
         </div>
         <div className="full-connection-track">
           <div
@@ -382,7 +458,9 @@ export function Readiness({ data }: { data: FullShowInput }) {
           />
         </div>
         <div className="full-connection-legend">
-          {data.isLive ? "CONNECTED TABLES" : "PREVIEW DATA — NOT LIVE"}
+          {data.isLive
+            ? text("fullShow.connectedTables", "CONNECTED TABLES")
+            : text("fullShow.previewData", "PREVIEW DATA — NOT LIVE")}
         </div>
       </div>
     </>
@@ -390,17 +468,25 @@ export function Readiness({ data }: { data: FullShowInput }) {
 }
 
 export function StoryProgress({ data }: { data: FullShowInput }) {
+  const text = useFullShowText()
   const completed = Math.max(0, Math.min(5, data.completed || 0))
   const roles =
-    data.storyRoles?.length === 5 ? data.storyRoles : DEFAULT_STORY_ROLES
+    data.storyRoles?.length === 5 ? data.storyRoles : defaultStoryRoles(text)
 
   return (
     <>
       <Head
-        title="YOUR WORLD IS TAKING SHAPE"
-        chip={`ROUND ${num(data.round || 1)}`}
-        eyebrow={`${completed} OF 5 STORY PIECES COLLECTED`}
-        subtitle="Every chosen picture becomes part of the story."
+        title={text("fullShow.progressTitle", "YOUR WORLD IS TAKING SHAPE")}
+        chip={`${data.labels?.storyRound ?? text("tadazzShow.v4.storyRound", "ROUND")} ${num(data.round || 1)}`}
+        eyebrow={text(
+          "fullShow.piecesCollected",
+          "{{count}} OF {{total}} STORY PIECES COLLECTED",
+          { count: completed, total: 5 },
+        )}
+        subtitle={text(
+          "fullShow.progressSubtitle",
+          "Every chosen picture becomes part of the story.",
+        )}
       />
       <div className="full-progress-bridge" />
       <div className="full-progress-cards">
@@ -431,7 +517,9 @@ export function StoryProgress({ data }: { data: FullShowInput }) {
                 )}
               </div>
               <div className="full-progress-name" dir="auto">
-                {ready ? answer?.title || answer?.alt : "AWAITING THE VOTE"}
+                {ready
+                  ? answer?.title || answer?.alt
+                  : text("fullShow.awaitingVote", "AWAITING THE VOTE")}
               </div>
               <div className="full-progress-index">{num(i + 1)}</div>
             </div>
@@ -439,14 +527,15 @@ export function StoryProgress({ data }: { data: FullShowInput }) {
         })}
       </div>
       <div className="full-progress-bottom">
-        <span>{completed} / 5</span>
-        <span>STORY PIECES READY</span>
+        <span dir="ltr">{completed} / 5</span>
+        <span>{text("fullShow.piecesReady", "STORY PIECES READY")}</span>
       </div>
     </>
   )
 }
 
 export function Tie({ data }: { data: FullShowInput }) {
+  const text = useFullShowText()
   const picks = data.contestants ?? data.winners?.slice(0, 2) ?? []
   const isResolved =
     data.resolvedIndex !== null && data.resolvedIndex !== undefined
@@ -464,15 +553,18 @@ export function Tie({ data }: { data: FullShowInput }) {
   return (
     <>
       <Head
-        title="THE AUDIENCE IS SPLIT"
-        chip={`ROUND ${num(data.round || 1)}`}
+        title={text("fullShow.tieTitle", "THE AUDIENCE IS SPLIT")}
+        chip={`${data.labels?.storyRound ?? text("tadazzShow.v4.storyRound", "ROUND")} ${num(data.round || 1)}`}
       />
       <div className="full-tie-wrap">
         {[0, 1].map((i) => {
           const pick = picks[i]
           const isChosen = data.resolvedIndex === i
           const isMuted = isResolved && !isChosen
-          const displayTitle = pick?.title || pick?.alt || `Choice ${i + 1}`
+          const displayTitle =
+            pick?.title ||
+            pick?.alt ||
+            `${data.labels?.choiceLabel ?? text("tadazzShow.v4.choiceLabel", "Choice")} ${i + 1}`
 
           return (
             <article
@@ -510,8 +602,10 @@ export function Tie({ data }: { data: FullShowInput }) {
               <h2>{displayTitle}</h2>
               <b>
                 {data.voteCount === null || data.voteCount === undefined
-                  ? "EQUAL VOTES"
-                  : `${data.voteCount} VOTES`}
+                  ? text("fullShow.equalVotes", "EQUAL VOTES")
+                  : text("fullShow.votes", "{{count}} VOTES", {
+                      count: data.voteCount,
+                    })}
               </b>
             </article>
           )
@@ -520,8 +614,11 @@ export function Tie({ data }: { data: FullShowInput }) {
       </div>
       <p className="full-tie-instruction">
         {data.resolvedIndex === null || data.resolvedIndex === undefined
-          ? "Host, choose which picture goes into the story."
-          : `CHOICE SELECTED${chosenTitle}`}
+          ? text(
+              "fullShow.tieInstruction",
+              "Host, choose which picture goes into the story.",
+            )
+          : `${data.labels?.choiceSelected ?? text("tadazzShow.v4.choiceSelected", "CHOICE SELECTED")}${chosenTitle}`}
       </p>
     </>
   )
@@ -576,25 +673,28 @@ export function Finale({ data }: { data: FullShowInput }) {
       <div className="full-final-center">
         <BrandLogo className="full-finale-logo" />
       </div>
-      <img src={leftCurtain} alt="Curtain Left" className="full-curtain left" />
-      <img
-        src={rightCurtain}
-        alt="Curtain Right"
-        className="full-curtain right"
-      />
+      <img src={leftCurtain} alt="" className="full-curtain left" />
+      <img src={rightCurtain} alt="" className="full-curtain right" />
       <div className="full-curtain-seam" />
     </div>
   )
 }
 
 export function CompanyOpening({ data }: { data: FullShowInput }) {
+  const text = useFullShowText()
   const artwork =
     data.eventArtworkUrl ||
     "/tadazz-show/second-library/creating-worlds-intro.png"
 
   return (
     <div className="full-company">
-      <img src={artwork} alt="Creating Worlds" className="full-company-event" />
+      <img
+        src={artwork}
+        alt={
+          data.photoAlt || text("fullShow.companyArtwork", "Creating Worlds")
+        }
+        className="full-company-event"
+      />
       <div className="full-company-glow" />
       <div className="full-company-brand">
         <BrandLogo className="full-company-logo" />
@@ -604,6 +704,7 @@ export function CompanyOpening({ data }: { data: FullShowInput }) {
 }
 
 export function GrandOpening({ data }: { data: FullShowInput }) {
+  const text = useFullShowText()
   const teaserSrc =
     data.eventArtworkUrl ||
     "/tadazz-show/second-library/teaser-screen-source.jpg"
@@ -612,7 +713,10 @@ export function GrandOpening({ data }: { data: FullShowInput }) {
     <div className="full-grand-opening">
       <img
         src={teaserSrc}
-        alt="Grand Opening Teaser"
+        alt={
+          data.photoAlt ||
+          text("fullShow.openingArtwork", "Grand Opening Teaser")
+        }
         className="full-opening-event"
       />
       <div className="full-opening-warm-veil" />
@@ -621,10 +725,15 @@ export function GrandOpening({ data }: { data: FullShowInput }) {
       <div className="full-opening-shock" />
       <BrandLogo className="full-opening-logo" />
       <h2 className="full-opening-tag">
-        {data.title || "THE STORY STARTS WITH YOU"}
+        {data.title ||
+          text("fullShow.openingTitle", "THE STORY STARTS WITH YOU")}
       </h2>
       <p className="full-opening-footnote">
-        {data.subtitle || "A LIVE AUDIENCE-CREATED EXPERIENCE"}
+        {data.subtitle ||
+          text(
+            "fullShow.openingSubtitle",
+            "A LIVE AUDIENCE-CREATED EXPERIENCE",
+          )}
       </p>
     </div>
   )
@@ -632,22 +741,28 @@ export function GrandOpening({ data }: { data: FullShowInput }) {
 
 export function RoundLaunch({
   scene,
+  data,
 }: {
   scene: "round-one" | "round-two"
   data: FullShowInput
 }) {
+  const text = useFullShowText()
   const isRoundOne = scene === "round-one"
+  const roundLabel =
+    data.labels?.storyRound ?? text("tadazzShow.v4.storyRound", "ROUND")
 
   return (
     <div className="full-round-launch">
-      <Head title="" chip={`ROUND ${num(isRoundOne ? 1 : 2)}`} />
+      <Head title="" chip={`${roundLabel} ${num(isRoundOne ? 1 : 2)}`} />
       <div className="full-launch-glow" />
       <div className="full-round-plaque">
         <small className="full-round-mini">
-          {isRoundOne ? "THE FIRST STORY" : "A WHOLE NEW WORLD"}
+          {isRoundOne
+            ? text("fullShow.firstStory", "THE FIRST STORY")
+            : text("fullShow.newWorld", "A WHOLE NEW WORLD")}
         </small>
         <strong className="full-round-number">
-          ROUND {num(isRoundOne ? 1 : 2)}
+          {roundLabel} <bdi dir="ltr">{num(isRoundOne ? 1 : 2)}</bdi>
         </strong>
       </div>
       <div className="full-launch-rule full-round-underline" />

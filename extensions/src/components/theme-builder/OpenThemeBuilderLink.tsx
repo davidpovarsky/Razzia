@@ -7,7 +7,7 @@ export function OpenThemeBuilderLink({ className }: { className?: string }) {
   const { i18n } = useTranslation()
   const language = i18n.language.split("-")[0]
   const locale = (
-    ["en", "fr", "de", "es", "it", "ja", "tr", "vi"].includes(language)
+    ["en", "fr", "de", "es", "it", "ja", "tr", "vi", "he"].includes(language)
       ? language
       : "en"
   ) as PreviewLocale

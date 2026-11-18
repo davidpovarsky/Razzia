@@ -1,4 +1,5 @@
 // oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
+import { useTranslation } from "react-i18next"
 import NativeButton from "@razzia/web/components/Button"
 import type {
   AnswerVisual,
@@ -71,6 +72,13 @@ export const PhotoCardGrid = ({
   stageAnimations,
   animationEpochKey = "static",
 }: PhotoCardGridProps) => {
+  const { t } = useTranslation()
+  const voteLabel = (count: number) =>
+    t("extensions:reveal.votes", {
+      count,
+      defaultValue: count === 1 ? "{{count}} vote" : "{{count}} votes",
+    })
+
   const [imageErrors, setImageErrors] = useState<Record<number, boolean>>({})
   const {
     isUltraCompact,
@@ -280,13 +288,20 @@ export const PhotoCardGrid = ({
                     className="flex items-center gap-1 rounded-full bg-amber-400 px-2 py-0.5 text-[10px] font-black tracking-wider text-black uppercase shadow-lg sm:px-3 sm:text-xs"
                   >
                     <Trophy className="size-3.5 fill-black sm:size-4" />
-                    <span>{rankingTie ? "Co-leader" : "Leader"}</span>
+                    <span>
+                      {t(
+                        rankingTie
+                          ? "extensions:reveal.coLeader"
+                          : "extensions:reveal.leader",
+                        { defaultValue: rankingTie ? "Co-leader" : "Leader" },
+                      )}
+                    </span>
                   </span>
 
                   <div className="flex items-center gap-1 rounded-full bg-black/35 px-2 py-0.5 font-mono text-[10px] font-bold text-white shadow-md sm:text-xs">
                     <span>{winner.percentage}%</span>
                     <span className="text-white/80">
-                      ({winner.count} {winner.count === 1 ? "vote" : "votes"})
+                      ({voteLabel(winner.count)})
                     </span>
                   </div>
                 </div>
@@ -333,7 +348,7 @@ export const PhotoCardGrid = ({
                         {winner.percentage}%
                       </span>
                       <span className="text-[10px] font-semibold text-white/90 sm:text-xs">
-                        ({winner.count} {winner.count === 1 ? "vote" : "votes"})
+                        ({voteLabel(winner.count)})
                       </span>
                     </div>
                   </div>
@@ -424,7 +439,7 @@ export const PhotoCardGrid = ({
                       {label}
                     </span>
                     <span className="rounded-full bg-black/35 px-1.5 py-0.5 font-mono text-[10px] font-bold text-white">
-                      {runner.count} {runner.count === 1 ? "vote" : "votes"}
+                      {voteLabel(runner.count)}
                     </span>
                   </div>
 
@@ -514,7 +529,11 @@ export const PhotoCardGrid = ({
           className="mb-1.5 flex shrink-0 items-center gap-2 rounded-full border border-white/10 bg-black/40 px-3 py-0.5 text-xs font-semibold text-white/70 backdrop-blur-md sm:text-sm"
         >
           <Users className="size-3.5 text-white/50" />
-          <span>No votes yet</span>
+          <span>
+            {t("extensions:tadazzShow.v4.noVotes", {
+              defaultValue: "No votes yet",
+            })}
+          </span>
         </div>
       )}
       <div
@@ -645,7 +664,7 @@ export const PhotoCardGrid = ({
                         </span>
                         {count !== undefined && (
                           <span className="text-[10px] font-semibold text-white/80 sm:text-xs">
-                            ({count} {count === 1 ? "vote" : "votes"})
+                            ({voteLabel(count)})
                           </span>
                         )}
                       </div>

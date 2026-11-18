@@ -1,0 +1,28 @@
+
+Running 6 tests using 1 worker
+
+  x  1 [chromium] › tests\wave1-show-import-acceptance.spec.ts:113:3 › TADA Studio Show Import/Export Acceptance (JSON + Excel) › IMPORT01: Manager import area renders original design tokens, template download, and export affordances at 1024 & 1280 viewports (2.1m)
+  ok 2 [chromium] › tests\wave1-show-import-acceptance.spec.ts:138:3 › TADA Studio Show Import/Export Acceptance (JSON + Excel) › IMPORT02: Import friendly .tada.json with preflight preview, warnings, and editor opening with ordered cards & media (7.4s)
+  ok 3 [chromium] › tests\wave1-show-import-acceptance.spec.ts:187:3 › TADA Studio Show Import/Export Acceptance (JSON + Excel) › IMPORT03: Import multi-sheet Excel (.xlsx), export as Tada Excel (.xlsx), and verify zero writes on cancel (8.6s)
+  ok 4 [chromium] › tests\wave1-show-import-acceptance.spec.ts:237:3 › TADA Studio Show Import/Export Acceptance (JSON + Excel) › IMPORT04: Export as Friendly Tada JSON (.tada.json) and verify unsafe URL error blocking (4.6s)
+  ok 5 [chromium] › tests\wave1-show-import-acceptance.spec.ts:324:3 › TADA Studio Show Import/Export Acceptance (JSON + Excel) › IMPORT05: Import valid show with Hebrew note and per-question interlude, save in editor, reload, export .tada.json and .xlsx, verify byte content (8.5s)
+  ok 6 [chromium] › tests\wave1-show-import-acceptance.spec.ts:499:3 › TADA Studio Show Import/Export Acceptance (JSON + Excel) › IMPORT06: Reject invalid targetKey in JSON/XLSX and malformed interludeJson with zero server writes (4.2s)
+
+
+  1) [chromium] › tests\wave1-show-import-acceptance.spec.ts:113:3 › TADA Studio Show Import/Export Acceptance (JSON + Excel) › IMPORT01: Manager import area renders original design tokens, template download, and export affordances at 1024 & 1280 viewports
+
+    Tearing down "context" exceeded the test timeout of 120000ms.
+
+    Error Context: ..\..\docs\extensions\plans\editor-hebrew-20261118\import-acceptance\test-results\wave1-show-import-acceptan-40e9d-nces-at-1024-1280-viewports-chromium\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ..\..\docs\extensions\plans\editor-hebrew-20261118\import-acceptance\test-results\wave1-show-import-acceptan-40e9d-nces-at-1024-1280-viewports-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ..\..\docs\extensions\plans\editor-hebrew-20261118\import-acceptance\test-results\wave1-show-import-acceptan-40e9d-nces-at-1024-1280-viewports-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › tests\wave1-show-import-acceptance.spec.ts:113:3 › TADA Studio Show Import/Export Acceptance (JSON + Excel) › IMPORT01: Manager import area renders original design tokens, template download, and export affordances at 1024 & 1280 viewports
+  5 passed (2.9m)

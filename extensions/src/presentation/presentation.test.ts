@@ -1,5 +1,7 @@
 import React from "react"
 import { renderToStaticMarkup } from "react-dom/server"
+import { I18nextProvider } from "react-i18next"
+import { previewNativeLabels } from "./show-library-preview/i18n"
 import { describe, expect, it } from "vitest"
 import {
   assignRoundRobin,
@@ -521,82 +523,81 @@ describe("PRESENTATION & AUDIO Acceptance Cases & Unit Tests", () => {
 
   describe("STUDIO01: ScenePresenter & LottiePlayer Rendering", () => {
     it("renders Cumulative Answer Recap scene with winning options, badges, and pagination", () => {
-      const html = renderToStaticMarkup(
-        React.createElement(ScenePresenter, {
-          scene: {
-            id: "11111111-1111-4111-8111-111111111111",
-            kind: "answerRecap",
+      const recap = React.createElement(ScenePresenter, {
+        scene: {
+          id: "11111111-1111-4111-8111-111111111111",
+          kind: "answerRecap",
+          title: "Round 1 Recap",
+          subtitle: "Top community answers",
+          mode: "mostSelected",
+          maxItemsPerPage: 2,
+          showCounts: true,
+          showPercentages: true,
+          durationMs: 8000,
+          advance: "auto",
+        },
+        activeSceneData: {
+          answerRecap: {
+            totalQuestionsInRange: 3,
+            completedQuestionsCount: 3,
             title: "Round 1 Recap",
             subtitle: "Top community answers",
+            startQuestionId: "11111111-1111-4111-8111-111111111111",
+            endQuestionId: "33333333-3333-4333-8333-333333333333",
             mode: "mostSelected",
             maxItemsPerPage: 2,
             showCounts: true,
             showPercentages: true,
-            durationMs: 8000,
-            advance: "auto",
+            items: [
+              {
+                questionId: "11111111-1111-4111-8111-111111111111",
+                questionNumber: 1,
+                questionText: "Best snack?",
+                playMode: "survey",
+                badgeType: "mostSelected",
+                totalResponders: 10,
+                isTie: false,
+                winningOptions: [
+                  {
+                    answerIndex: 0,
+                    label: "Popcorn",
+                    count: 7,
+                    percentage: 70,
+                  },
+                ],
+              },
+              {
+                questionId: "22222222-2222-4222-8222-222222222222",
+                questionNumber: 2,
+                questionText: "2 + 2?",
+                playMode: "quiz",
+                badgeType: "correctAnswer",
+                totalResponders: 10,
+                isTie: false,
+                winningOptions: [
+                  {
+                    answerIndex: 1,
+                    label: "4",
+                    count: 9,
+                    percentage: 90,
+                  },
+                ],
+              },
+              {
+                questionId: "33333333-3333-4333-8333-333333333333",
+                questionNumber: 3,
+                questionText: "Unanswered question?",
+                playMode: "survey",
+                badgeType: "noResponses",
+                totalResponders: 0,
+                isTie: false,
+                winningOptions: [],
+              },
+            ],
           },
-          activeSceneData: {
-            answerRecap: {
-              totalQuestionsInRange: 3,
-              completedQuestionsCount: 3,
-              title: "Round 1 Recap",
-              subtitle: "Top community answers",
-              startQuestionId: "11111111-1111-4111-8111-111111111111",
-              endQuestionId: "33333333-3333-4333-8333-333333333333",
-              mode: "mostSelected",
-              maxItemsPerPage: 2,
-              showCounts: true,
-              showPercentages: true,
-              items: [
-                {
-                  questionId: "11111111-1111-4111-8111-111111111111",
-                  questionNumber: 1,
-                  questionText: "Best snack?",
-                  playMode: "survey",
-                  badgeType: "mostSelected",
-                  totalResponders: 10,
-                  isTie: false,
-                  winningOptions: [
-                    {
-                      answerIndex: 0,
-                      label: "Popcorn",
-                      count: 7,
-                      percentage: 70,
-                    },
-                  ],
-                },
-                {
-                  questionId: "22222222-2222-4222-8222-222222222222",
-                  questionNumber: 2,
-                  questionText: "2 + 2?",
-                  playMode: "quiz",
-                  badgeType: "correctAnswer",
-                  totalResponders: 10,
-                  isTie: false,
-                  winningOptions: [
-                    {
-                      answerIndex: 1,
-                      label: "4",
-                      count: 9,
-                      percentage: 90,
-                    },
-                  ],
-                },
-                {
-                  questionId: "33333333-3333-4333-8333-333333333333",
-                  questionNumber: 3,
-                  questionText: "Unanswered question?",
-                  playMode: "survey",
-                  badgeType: "noResponses",
-                  totalResponders: 0,
-                  isTie: false,
-                  winningOptions: [],
-                },
-              ],
-            },
-          },
-        }),
-      )
+        },
+      })
+      const html = renderToStaticMarkup(recap)
 
       expect(html).toContain('data-testid="scene-answer-recap"')
       expect(html).toContain('data-testid="recap-question-card"')
@@ -606,6 +607,17 @@ describe("PRESENTATION & AUDIO Acceptance Cases & Unit Tests", () => {
       expect(html).toContain("Correct Answer")
       expect(html).toContain('data-testid="recap-pagination-bar"')
       expect(html).toContain("Page 1 of 2")
+      expect(html).toContain("Question 1")
+      expect(html).not.toContain("{{")
+
+      const native = previewNativeLabels("he")
+      const hebrew = renderToStaticMarkup(
+        React.createElement(I18nextProvider, { i18n: native.i18n }, recap),
+      )
+      expect(hebrew).toContain("עמוד 1 מתוך 2")
+      expect(hebrew).toContain("שאלה 1")
+      expect(hebrew).toContain("Best snack?")
+      expect(hebrew).not.toContain("{{")
     })
 
     it("renders audio media scene and full-stage cinema opening scene", () => {

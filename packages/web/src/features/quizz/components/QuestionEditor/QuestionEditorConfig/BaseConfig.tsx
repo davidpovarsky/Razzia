@@ -2,13 +2,7 @@ import { resolveQuestionPlayMode } from "@razzia/extensions/core"
 import { MAX_POINTS, NO_TIME_LIMIT } from "@razzia/common/constants"
 import { type ScoringMode } from "@razzia/common/types/game"
 import { isMultiOptions } from "@razzia/common/questions/options"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@razzia/web/components/Select"
+import ToggleGroup from "@razzia/web/components/ToggleGroup"
 import Switch from "@razzia/web/components/Switch"
 import { QUESTION_REGISTRY } from "@razzia/web/features/questions"
 import ConfigField from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigField"
@@ -63,7 +57,7 @@ const BaseConfig = () => {
             <ConfigField.Label
               icon={<Star className="size-4" />}
               label={t("quizz:question.config.maxPoints")}
-              unit="pts"
+              unit={t("extensions:tadazzShow.v4.points")}
             />
             <ConfigNumberInput
               name="maxPoints"
@@ -80,7 +74,11 @@ const BaseConfig = () => {
             <ConfigField.Label
               icon={<ArrowBigDownDash className="size-4" />}
               label={t("quizz:question.config.penalty")}
-              unit={isPenaltyEnabled ? "pts" : undefined}
+              unit={
+                isPenaltyEnabled
+                  ? t("extensions:tadazzShow.v4.points")
+                  : undefined
+              }
               action={
                 <Switch
                   aria-label={t("quizz:question.config.penalty")}
@@ -108,23 +106,13 @@ const BaseConfig = () => {
                 icon={<ListChecks className="size-4" />}
                 label={t("quizz:question.config.scoringMode")}
               />
-              <Select
+              <ToggleGroup
+                aria-label={t("quizz:question.config.scoringMode")}
                 value={scoringMode}
-                onValueChange={handleScoringModeChange}
-              >
-                <SelectTrigger
-                  aria-label={t("quizz:question.config.scoringMode")}
-                >
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {scoringOptions?.map((opt) => (
-                    <SelectItem key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                onChange={handleScoringModeChange}
+                items={scoringOptions ?? []}
+                className="h-auto flex-wrap [&>button]:min-h-9 [&>button]:flex-1 [&>button]:justify-center [&>button]:px-2 [&>button]:text-xs"
+              />
               <ConfigField.Description>
                 {t(`quizz:question.config.scoringModeHint.${scoringMode}`)}
               </ConfigField.Description>
@@ -138,7 +126,7 @@ const BaseConfig = () => {
           <ConfigField.Label
             icon={<Clock className="size-4" />}
             label={t("quizz:question.config.questionDisplay")}
-            unit="sec"
+            unit={t("common:seconds")}
           />
           <ConfigNumberInput
             name="cooldown"
@@ -155,7 +143,7 @@ const BaseConfig = () => {
           <ConfigField.Label
             icon={<Timer className="size-4" />}
             label={t("quizz:question.config.answerTime")}
-            unit={isTimeLimitEnabled ? "sec" : undefined}
+            unit={isTimeLimitEnabled ? t("common:seconds") : undefined}
             action={
               <Switch
                 aria-label={t("quizz:question.config.answerTime")}

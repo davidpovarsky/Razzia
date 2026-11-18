@@ -1,0 +1,30 @@
+{
+  "cancel": "ביטול",
+  "confirm": "אישור",
+  "connecting": "מתחבר…",
+  "delete": "מחיקה",
+  "exit": "יציאה",
+  "exitFullscreen": "יציאה ממסך מלא",
+  "fullscreen": "מסך מלא",
+  "language": {
+    "de": "Deutsch - גרמנית",
+    "en": "English - אנגלית",
+    "es": "Español - ספרדית",
+    "fr": "Français - צרפתית",
+    "he": "עברית",
+    "it": "Italiano - איטלקית",
+    "ja": "日本語 - יפנית",
+    "tr": "Türkçe - טורקית",
+    "vi": "Tiếng Việt - וייטנאמית"
+  },
+  "loading": "טוען…",
+  "next": "הבא",
+  "save": "שמירה",
+  "seconds": "שנ׳",
+  "skip": "דילוג",
+  "submit": "שליחה",
+  "close": "סגירה",
+  "previous": "הקודם",
+  "changeLanguage": "שינוי שפה",
+  "untitledQuiz": "חידון ללא שם"
+}
