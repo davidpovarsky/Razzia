@@ -7,6 +7,7 @@ import {
 } from "@modelcontextprotocol/client"
 import { createRemoteMcpApp } from "../../server/http.ts"
 import { PREVIEW_RESOURCE } from "../../contracts/schemas.ts"
+import { scopes, toolNames } from "../../contracts/tools.ts"
 import {
   config,
   principal,
@@ -165,7 +166,7 @@ test("HTTP draft CAS preserves tenant boundaries, revoked token denial and safe 
     await b.close()
   }
 })
-test("metadata advertises the exact protected resource and least initial scope without a private token", async () => {
+test("metadata and initial OAuth challenge advertise all 14 tools' scopes", async () => {
   const h = setup()
   const response = await h.app.fetch(
     h.request(
@@ -179,7 +180,25 @@ test("metadata advertises the exact protected resource and least initial scope w
   const metadata = await response.json()
   assert.equal(metadata.resource, config.resource)
   assert.deepEqual(metadata.authorization_servers, [config.issuer])
-  assert.deepEqual(metadata.scopes_supported, ["tadazz.catalog.read"])
+  const expected = [
+    "tadazz.catalog.read",
+    "tadazz.drafts.write",
+    "tadazz.drafts.read",
+    "tadazz.library.write",
+    "tadazz.exports.read",
+  ]
+  assert.equal(toolNames.length, 14)
+  assert.deepEqual(
+    [...new Set(toolNames.flatMap((tool) => scopes[tool]))],
+    expected,
+  )
+  assert.deepEqual(metadata.scopes_supported, expected)
+  const challenge = await h.app.fetch(h.request(list, { authorization: "" }))
+  assert.equal(challenge.status, 401)
+  assert.equal(
+    challenge.headers.get("www-authenticate"),
+    `Bearer resource_metadata="${config.resourceMetadataUrl}", scope="${expected.join(" ")}"`,
+  )
   assert.equal(response.headers.get("cache-control"), "no-store")
 })
 test("origin/host/TLS/query/proxy/session/body and method attacks fail before private tool dispatch", async () => {

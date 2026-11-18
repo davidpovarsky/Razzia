@@ -196,10 +196,11 @@ export function createRemoteMcpApp(options: RemoteMcpOptions) {
 
   const active = new Map<AbortController, Promise<void>>()
   let closed = false
+  // Request all supported permissions at initial OAuth consent; individual tools remain scoped.
+  const scopeList = [...new Set(Object.values(scopes).flat())]
   const challenge = `Bearer resource_metadata="${
     config.resourceMetadataUrl
-  }", scope="tadazz.catalog.read"`
-  const scopeList = [...new Set(Object.values(scopes).flat())]
+  }", scope="${scopeList.join(" ")}"`
 
   return Object.freeze({
     async fetch(input: Request): Promise<Response> {
@@ -321,7 +322,7 @@ export function createRemoteMcpApp(options: RemoteMcpOptions) {
               {
                 resource: config.resource,
                 authorization_servers: [config.issuer],
-                scopes_supported: ["tadazz.catalog.read"],
+                scopes_supported: scopeList,
                 bearer_methods_supported: ["header"],
               },
               { headers: responseHeaders },
