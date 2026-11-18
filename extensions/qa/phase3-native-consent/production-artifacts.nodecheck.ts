@@ -205,7 +205,7 @@ test("reviewed media needs exact deployed bytes, theme, purpose and live file id
   )
   assert(asset)
   const bytes = readFileSync(
-    new URL("../../../packages/web/public" + asset.url, import.meta.url),
+    new URL(`../../../packages/web/public${asset.url}`, import.meta.url),
   )
   assert.equal(createHash("sha256").update(bytes).digest("hex"), asset.sha256)
   assert.equal(bytes.byteLength, asset.bytes)
@@ -213,7 +213,7 @@ test("reviewed media needs exact deployed bytes, theme, purpose and live file id
   mkdirSync(dirname(deployedPath), { recursive: true })
   writeFileSync(deployedPath, bytes)
   f.manifest.publicAssets.push({
-    path: "packages/web/public" + asset.url,
+    path: `packages/web/public${asset.url}`,
     sha256: asset.sha256,
     bytes: asset.bytes,
   })
@@ -224,7 +224,7 @@ test("reviewed media needs exact deployed bytes, theme, purpose and live file id
     purpose: "answer-image" as const,
     operation: "preview" as const,
   }
-  const url = "https://tadazz.com" + asset.url
+  const url = `https://tadazz.com${asset.url}`
   const ref = { assetId: asset.assetId, sha256: asset.sha256, theme }
   assert.equal(result.builtinAssets.resolveAsset(ref, context)?.publicUrl, url)
   assert.equal(

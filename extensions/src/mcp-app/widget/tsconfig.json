@@ -2,6 +2,7 @@
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
     "types": ["node", "vite/client"],
+    "typeRoots": ["../../../node_modules/@types", "../../../node_modules"],
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "resolveJsonModule": true
   },

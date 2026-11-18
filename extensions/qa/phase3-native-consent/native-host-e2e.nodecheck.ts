@@ -44,25 +44,34 @@ async function connectAppSaveClient(
   )
   type Transport = NonNullable<Parameters<App["connect"]>[0]>
   const appTransport: Transport = {
-    start: async () => {},
-    send: async (message) => {
+    start: () => Promise.resolve(),
+    send: (message) => {
       queueMicrotask(() => hostTransport.onmessage?.(structuredClone(message)))
+
+      return Promise.resolve()
     },
-    close: async () => {
+    close: () => {
       appTransport.onclose?.()
+
+      return Promise.resolve()
     },
   }
   const hostTransport: Transport = {
-    start: async () => {},
-    send: async (message) => {
+    start: () => Promise.resolve(),
+    send: (message) => {
       queueMicrotask(() => appTransport.onmessage?.(structuredClone(message)))
+
+      return Promise.resolve()
     },
-    close: async () => {
+    close: () => {
       hostTransport.onclose?.()
+
+      return Promise.resolve()
     },
   }
   await bridge.connect(hostTransport)
   await app.connect(appTransport)
+
   return { app, bridge }
 }
 
@@ -299,10 +308,11 @@ describe("native-host end-to-end consent integration", () => {
             })
           ).structuredContent as ToolOutcome
           assert.equal(pendingReplay.ok, false)
-          assert.equal(pendingReplay.error?.code, "CONSENT_REQUIRED")
-          assert.equal(pendingReplay.error?.consentRequestId, requestId1)
+          assert.ok(pendingReplay.error)
+          assert.equal(pendingReplay.error.code, "CONSENT_REQUIRED")
+          assert.equal(pendingReplay.error.consentRequestId, requestId1)
           assert.equal(
-            pendingReplay.error?.consentUrl,
+            pendingReplay.error.consentUrl,
             challenge1.error.consentUrl,
           )
 

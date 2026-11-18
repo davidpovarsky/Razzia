@@ -263,6 +263,12 @@ elif c["suite"] == "recovery":
 else:
     native = "extensions/qa/phase3-native-consent/"
     prefix[4:4] = ["-e", "TMPDIR=" + fixture]
+    # Selection/media tests consume the exact renderer artifact. Generate its
+    # immutable prerequisites once before those tests, never behind http_ok.
+    application_ok = widget_ok = True
+    if c["suite"] in ("native-launch", "native-consent"):
+        application_ok = check("native-application-preview-build", 240, ["node", "extensions/qa/build-application-preview.mjs", "--verify-manifest"])
+        widget_ok = application_ok and check("native-widget-build", 300, ["node", "extensions/src/mcp-app/widget/build-full-show.mjs"])
     cases = [native + "host-lifetime.nodecheck.ts", native + "consent-routes.nodecheck.ts", native + "native-host-e2e.nodecheck.ts"]
     if c["suite"] == "native-launch":
         cases.extend(native + name for name in ["production-config.nodecheck.ts", "production-capabilities.nodecheck.ts", "production-artifacts.nodecheck.ts"])
@@ -287,19 +293,18 @@ else:
         check("semantic-lint", 120, ["node", "--experimental-strip-types", "/cleanup/node_modules/oxlint/bin/oxlint", "-c", "oxlint.config.ts", *semantic_scope])
         check("semantic-format", 60, ["node", "/cleanup/node_modules/prettier/bin/prettier.cjs", "--check", *semantic_scope])
         check_legacy_lint()
-    if http_ok and c["suite"] in ("native-launch", "native-consent"):
+    build_gates_ok = application_ok and widget_ok and http_ok and all(item["exit"] == 0 for item in checks)
+    backend_ok = True
+    if build_gates_ok and c["suite"] == "native-launch":
         prefix[4:4] = ["-e", "TADAZZ_NATIVE_HOST_DIST_DIR=" + fixture + "/native-host-build"]
-        application_ok = check("native-application-preview-build", 240, ["node", "extensions/qa/build-application-preview.mjs", "--verify-manifest"])
-        widget_ok = application_ok and check("native-widget-build", 300, ["node", "extensions/src/mcp-app/widget/build-full-show.mjs"])
-        if widget_ok and c["suite"] == "native-launch":
-            check("native-launch-build", 90, ["node", "extensions/deployment/build-native-host.mjs"])
-    if http_ok and c["suite"] in ("native-consent", "native-launch"):
+        backend_ok = check("native-launch-build", 90, ["node", "extensions/deployment/build-native-host.mjs"])
+    if build_gates_ok and backend_ok and c["suite"] in ("native-consent", "native-launch"):
         prefix[4:4] = ["-e", "TADAZZ_SITE_ENABLED=true", "-e", "VITE_TADAZZ_INLINE_GAME_PREVIEW=true", "-e", "TADAZZ_INLINE_GAME_PREVIEW_ENABLED=true", "-e", "TADAZZ_REMOTE_QA=1", "-e", "VITE_TADAZZ_OAUTH_ISSUER_PATH=/oauth", "-e", "VITE_TADAZZ_NATIVE_CONSENT_ENABLED=true", "-e", "TADAZZ_SITE_DIST_DIR=" + source + "/packages/web/dist", "-e", "TADAZZ_QA_RUN_DIR=" + fixture + "/browser", "-e", "TADAZZ_QA_OWNED_RUN_DIR=1"]
         # Both launch and consent require the real built site. The native host
         # reads index.html at startup; public assets alone cannot qualify it.
         # These flags remain identical for both suites, without tracked writes.
         site_ok = check("native-site-build", 180, ["node", "/cleanup/packages/web/node_modules/vite/bin/vite.js", "build", "--config", "extensions/site.vite.config.ts", "--configLoader", "runner"])
-        if site_ok and application_ok:
+        if site_ok:
             check("native-application-package", 60, ["node", "extensions/qa/phase2/runtime-package-probe.mjs"])
         # Browser QA runs separately in a fresh bounded container with read-only
         # source and caches. The preserved old container has a full /tmp and

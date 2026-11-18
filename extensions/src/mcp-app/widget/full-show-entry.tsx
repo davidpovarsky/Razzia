@@ -551,9 +551,10 @@ function FullShowWidget() {
               const selected = frame.inventory.chapters[index]
               const results = frame.inventory.chapters.find(
                 (chapter) =>
-                  chapter.cardId === selected?.cardId &&
+                  chapter.cardId === selected.cardId &&
                   chapter.kind === "results",
               )
+
               if (canCall && !busy && results) {
                 void preview(selection(frame, results.id))
               }

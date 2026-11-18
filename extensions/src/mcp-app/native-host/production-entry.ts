@@ -38,6 +38,7 @@ async function start() {
     publicDirectory: "/app/web",
     origin,
   })
+
   if (process.env.TADAZZ_INLINE_GAME_PREVIEW_ENABLED === "true") {
     const { installAccountPreviewBuiltinAssets } =
       await import("../../server/api/account-preview-builtins.ts")

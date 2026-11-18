@@ -23,6 +23,7 @@ import type { PreviewUiResource } from "../server/preview-resource.ts"
 const sha = (bytes: Uint8Array | string) =>
   createHash("sha256").update(bytes).digest("hex")
 const rejected = () => new Error("MCP production preview artifact rejected")
+const enabledFlag = (value: unknown) => value === true
 const safeRelative = (path: string) =>
   path.length <= 1024 &&
   !path.includes("\\") &&
@@ -153,12 +154,12 @@ export function readProductionFullShowArtifacts(options: {
   builtinAssets: SemanticAssetResolver
 } {
   try {
-    const url = new URL(options.origin)
+    const originUrl = new URL(options.origin)
 
     if (
-      url.protocol !== "https:" ||
-      url.origin !== options.origin ||
-      url.hostname.includes("*")
+      originUrl.protocol !== "https:" ||
+      originUrl.origin !== options.origin ||
+      originUrl.hostname.includes("*")
     ) {
       throw rejected()
     }
@@ -261,6 +262,7 @@ export function readProductionFullShowArtifacts(options: {
       publicAssets: manifest.publicAssets,
       verifyCurrentAsset(asset) {
         const pin = publicPins.get(asset.path)
+
         return (
           pin?.sha256 === asset.sha256 &&
           pin.bytes === asset.bytes &&
@@ -280,8 +282,8 @@ export function readProductionFullShowArtifacts(options: {
     ) => {
       if (
         !canServe() ||
-        !principal.active ||
-        !principal.accountsEnabled ||
+        !enabledFlag(principal.active) ||
+        !enabledFlag(principal.accountsEnabled) ||
         principal.expiresAt <= Date.now() ||
         !families.has(`${theme.id}@${theme.version}`) ||
         urls.length > 64 ||
