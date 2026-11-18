@@ -72,6 +72,8 @@ function child(root: string, port: number, enabled: boolean) {
     CONFIG_PATH: root,
     TADAZZ_ACCOUNTS_ENABLED: "true",
     JWT_SECRET: secret,
+    RESEND_API_KEY: "qa-no-network",
+    TADAZZ_AUTH_EMAIL_FROM: "qa@example.invalid",
     SOCKET_PORT: String(port),
     TADAZZ_MCP_SERVICE_ENABLED: enabled ? "true" : "false",
   }
