@@ -625,7 +625,17 @@ export const previewTypographyEnvironmentV2Schema = bounded(
       observations: z
         .array(
           z.strictObject({
-            locale: z.enum(["en", "fr", "de", "es", "it", "ja", "tr", "vi"]),
+            locale: z.enum([
+              "en",
+              "fr",
+              "de",
+              "es",
+              "it",
+              "ja",
+              "tr",
+              "vi",
+              "he",
+            ]),
             computedFamily: text,
             glyphEvidence: licenseRef.nullable(),
             japaneseFallback: z.enum([

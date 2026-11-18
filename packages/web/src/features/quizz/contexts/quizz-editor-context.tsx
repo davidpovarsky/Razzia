@@ -18,6 +18,7 @@ import {
   type PropsWithChildren,
 } from "react"
 import { flushSync } from "react-dom"
+import { useTranslation } from "react-i18next"
 import {
   FormProvider,
   useFieldArray,
@@ -42,6 +43,10 @@ interface QuizzEditorContextType {
   currentQuestionId: string
   isRemoving: boolean
   extras: AnyQuizExtras | null
+  isExtrasDirty: boolean
+  extrasStatus: "loading" | "ready" | "error"
+  retryExtras: () => void
+  acceptExtrasBaseline: (value: AnyQuizExtras | null) => void
   conflict: {
     serverRevision?: number
     expectedRevision?: number | null
@@ -89,11 +94,12 @@ export const QuizzEditorProvider = ({
   children,
   initialData,
 }: QuizzEditorProviderProps) => {
+  const { t } = useTranslation()
   const form = useForm<QuizzFormValues, unknown, QuizzValidated>({
     resolver: zodResolver(quizzValidator),
     defaultValues: {
       gameMode: initialData?.gameMode ?? QUIZZ_MODES.QUIZ,
-      subject: initialData?.subject ?? "Untitled Quizz",
+      subject: initialData?.subject ?? t("common:untitledQuiz"),
       questions: initialData ? initialData.questions : [defaultQuestion()],
     },
   })
@@ -108,6 +114,10 @@ export const QuizzEditorProvider = ({
   const {
     extras,
     setExtras,
+    isExtrasDirty,
+    extrasStatus,
+    retryExtras,
+    acceptExtrasBaseline,
     conflict,
     setConflict,
     questionIds,
@@ -211,6 +221,10 @@ export const QuizzEditorProvider = ({
           currentQuestionId: effectiveQuestionIds[safeIndex] ?? "",
           isRemoving: removingFrom === questions,
           extras,
+          isExtrasDirty,
+          extrasStatus,
+          retryExtras,
+          acceptExtrasBaseline,
           conflict,
           setExtras,
           setConflict,

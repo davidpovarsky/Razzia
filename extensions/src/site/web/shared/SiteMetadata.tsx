@@ -1,15 +1,14 @@
 import { useRouterState } from "@tanstack/react-router"
 import { useTranslation } from "react-i18next"
 import { useEffect } from "react"
-import { siteText as t, siteLanguages } from "../../locales"
+import { siteText as t } from "../../locales"
 import { catalogue } from "../marketing/Catalogue"
 import { resolveSiteMetadata } from "./site-metadata-policy"
 
 /** One metadata owner for site and native routes in the downstream entry. */
 export function SiteMetadata({ tenantName }: { tenantName?: string }) {
   const location = useRouterState({ select: (state) => state.location })
-  const { i18n } = useTranslation("tadazzSite")
-  const language = i18n.resolvedLanguage?.split("-")[0] ?? "en"
+  useTranslation("tadazzSite")
   const metadata = resolveSiteMetadata({
     pathname: location.pathname,
     search: location.searchStr,
@@ -23,29 +22,6 @@ export function SiteMetadata({ tenantName }: { tenantName?: string }) {
   const description = t(
     "Explore the collection. Preview anything. Make a show your own.",
   )
-
-  useEffect(() => {
-    const html = document.documentElement
-    const previousLang = html.lang
-    const previousDir = html.dir
-    html.lang = siteLanguages.includes(
-      language as (typeof siteLanguages)[number],
-    )
-      ? language
-      : "en"
-
-    if (!metadata.native) {
-      html.dir = "ltr"
-    }
-
-    return () => {
-      html.lang = previousLang
-
-      if (!metadata.native) {
-        html.dir = previousDir
-      }
-    }
-  }, [language, metadata.native])
 
   useEffect(() => {
     const oldTitle = document.title

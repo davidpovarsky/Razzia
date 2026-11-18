@@ -2,6 +2,7 @@
 import type { QuizzWithId } from "@razzia/common/types/game"
 import {
   generateQuestionId,
+  createDefaultQuizExtrasV2,
   isQuizExtrasV2,
   type AnyQuizExtras,
 } from "@razzia/extensions/core"
@@ -11,11 +12,27 @@ import {
   removeQuestionFromExtras,
   reorderQuestionsInExtras,
 } from "@razzia/extensions/editor"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 /** Stable identities and sidecar metadata; react-hook-form remains the form authority. */
 export function useQuizzExtras(initialData?: QuizzWithId) {
   const [extras, setExtras] = useState<AnyQuizExtras | null>(null)
+  const [extrasBaseline, setExtrasBaseline] = useState<string | null>(null)
+  const [extrasStatus, setExtrasStatus] = useState<
+    "loading" | "ready" | "error"
+  >(initialData?.id ? "loading" : "ready")
+  const acceptExtrasBaseline = useCallback((value: AnyQuizExtras | null) => {
+    setExtrasBaseline(value ? JSON.stringify(value) : null)
+  }, [])
+  const isExtrasDirty = useMemo(
+    () =>
+      Boolean(
+        extras &&
+        extrasBaseline !== null &&
+        JSON.stringify(extras) !== extrasBaseline,
+      ),
+    [extras, extrasBaseline],
+  )
   const [conflict, setConflict] = useState<{
     serverRevision?: number
     expectedRevision?: number | null
@@ -26,6 +43,13 @@ export function useQuizzExtras(initialData?: QuizzWithId) {
 
     return Array.from({ length: count }, () => generateQuestionId())
   })
+
+  const initialQuestionIds = useRef(questionIds)
+  const [loadAttempt, setLoadAttempt] = useState(0)
+  const retryExtras = useCallback(() => {
+    setExtrasStatus("loading")
+    setLoadAttempt((attempt) => attempt + 1)
+  }, [])
 
   useEffect(() => {
     if (!initialData?.id) {
@@ -43,30 +67,33 @@ export function useQuizzExtras(initialData?: QuizzWithId) {
           return
         }
 
-        if (res.exists && res.extras) {
-          setExtras((prev) => {
-            // Guard: do not overwrite if user has already modified extras locally
-            if (prev) {
-              return prev
-            }
+        const loaded =
+          res.exists && res.extras
+            ? res.extras
+            : createDefaultQuizExtrasV2(
+                initialData.id,
+                initialQuestionIds.current,
+                res.baseDigest,
+              )
+        acceptExtrasBaseline(loaded)
+        setExtras((previous) => previous ?? loaded)
 
-            return res.extras
-          })
+        if (loaded.questionIds.length > 0) {
+          setQuestionIds(loaded.questionIds)
+        }
 
-          if (
-            Array.isArray(res.extras.questionIds) &&
-            res.extras.questionIds.length > 0
-          ) {
-            setQuestionIds(res.extras.questionIds)
-          }
+        setExtrasStatus("ready")
+      })
+      .catch(() => {
+        if (isSubscribed) {
+          setExtrasStatus("error")
         }
       })
-      .catch(() => undefined)
 
     return () => {
       isSubscribed = false
     }
-  }, [initialData?.id])
+  }, [initialData?.id, acceptExtrasBaseline, loadAttempt])
 
   const appendQuestionIdentity = () => {
     const newUuid = generateQuestionId()
@@ -196,6 +223,10 @@ export function useQuizzExtras(initialData?: QuizzWithId) {
   return {
     extras,
     setExtras,
+    isExtrasDirty,
+    extrasStatus,
+    retryExtras,
+    acceptExtrasBaseline,
     conflict,
     setConflict,
     questionIds,

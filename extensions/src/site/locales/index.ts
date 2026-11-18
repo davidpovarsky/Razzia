@@ -11,6 +11,7 @@ export const siteLanguages = [
   "ja",
   "tr",
   "vi",
+  "he",
 ] as const
 
 // Register resources without replacing any upstream namespace.

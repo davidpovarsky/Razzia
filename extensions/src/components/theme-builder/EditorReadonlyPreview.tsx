@@ -28,7 +28,7 @@ export function EditorReadonlyPreview({
   const { i18n } = useTranslation(),
     [language] = i18n.language.split("-")
   const text = builderText(
-    (["en", "fr", "de", "es", "it", "ja", "tr", "vi"].includes(language)
+    (["en", "fr", "de", "es", "it", "ja", "tr", "vi", "he"].includes(language)
       ? language
       : "en") as PreviewLocale,
   )

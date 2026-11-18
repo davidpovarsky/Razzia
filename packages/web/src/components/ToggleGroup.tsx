@@ -16,6 +16,8 @@ interface Props<T extends string> {
   onChange: (_value: T) => void
   iconOnly?: boolean
   className?: string
+  "aria-label"?: string
+  dir?: "ltr" | "rtl"
   itemMetadata?: (
     value: T,
     index: number,
@@ -29,11 +31,15 @@ const ToggleGroup = <T extends string>({
   onChange,
   iconOnly,
   className,
+  "aria-label": ariaLabel,
+  dir,
   itemMetadata,
   beforeItem,
 }: Props<T>) => (
   <RadixToggleGroup.Root
     type="single"
+    aria-label={ariaLabel}
+    dir={dir}
     value={value}
     onValueChange={(next) => {
       if (next) {

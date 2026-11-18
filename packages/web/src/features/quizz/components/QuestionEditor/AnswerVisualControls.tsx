@@ -1,8 +1,8 @@
-import NativeButton from "@razzia/web/components/Button"
-// oxlint-disable typescript/no-unnecessary-condition -- Preserve runtime guards for sparse legacy/authored snapshots at the extension boundary.
 import type { AnswerDisplay, AnswerVisual } from "@razzia/extensions/core"
-import clsx from "clsx"
+import Button from "@razzia/web/components/Button"
+import ToggleGroup from "@razzia/web/components/ToggleGroup"
 import { Image as ImageIcon, Trash2 } from "lucide-react"
+import { useId } from "react"
 import { useTranslation } from "react-i18next"
 
 interface Props {
@@ -23,93 +23,97 @@ export function AnswerVisualControls({
   handleAltChange,
 }: Props) {
   const { t } = useTranslation()
+  const altId = useId()
   const displayMode: AnswerDisplay = visual?.display ?? "text"
+  const usesImage = displayMode !== "text"
   const hasImage = Boolean(visual?.url)
 
   return (
-    <>
-      {" "}
-      {/* Inline Per-Answer Image & Display Mode Controls */}
-      <div
-        data-testid={`answer-visual-controls-${i}`}
-        className="flex flex-wrap items-center justify-between gap-2 border-t border-white/15 pt-2 text-xs text-white"
-      >
-        <div
-          data-testid={`answer-display-mode-${i}`}
-          className="flex items-center gap-1 rounded-lg bg-black/20 p-0.5"
-        >
-          {(["text", "image", "both"] as const).map((mode) => (
-            <NativeButton
-              size="sm"
-              key={mode}
-              type="button"
-              data-testid={`answer-mode-${i}-${mode}`}
-              onClick={() => handleDisplayModeChange(i, mode)}
-              className={clsx(
-                "rounded-md bg-transparent px-2 py-0.5 text-[11px] font-semibold transition",
-                displayMode === mode
-                  ? "bg-white text-black shadow-xs"
-                  : "text-white/80 hover:text-white",
-              )}
-            >
-              {mode === "text" && t("extensions:visuals.displayText", "Text")}
-              {mode === "image" &&
-                t("extensions:visuals.displayImage", "Image")}
-              {mode === "both" && t("extensions:visuals.displayBoth", "Both")}
-            </NativeButton>
-          ))}
-        </div>
-
-        <div className="flex items-center gap-1.5">
-          <NativeButton
-            size="sm"
-            type="button"
-            data-testid={`answer-pick-image-${i}`}
-            onClick={() => setPickingAnswerIdx(i)}
-            className="flex items-center gap-1 rounded-lg bg-black/25 px-2.5 py-1 text-[11px] font-semibold text-white transition hover:bg-black/40"
-          >
-            <ImageIcon className="size-3.5" />
-            <span>
-              {hasImage
-                ? t("extensions:editor.browse", "Change")
-                : t("extensions:visuals.chooseMedia", "Image")}
-            </span>
-          </NativeButton>
-          {hasImage && (
-            <NativeButton
-              size="sm"
-              type="button"
-              data-testid={`answer-remove-image-${i}`}
-              onClick={() => handleRemoveAnswerImage(i)}
-              title={t("extensions:visuals.removeMedia", "Remove Image")}
-              className="flex size-6 items-center justify-center rounded-lg bg-black/25 text-white transition hover:bg-red-500/80"
-            >
-              <Trash2 className="size-3.5" />
-            </NativeButton>
-          )}
-        </div>
+    <div
+      data-testid={`answer-visual-controls-${i}`}
+      className="flex min-w-0 flex-col gap-2 border-t border-white/15 pt-2 text-xs text-white"
+    >
+      <div data-testid={`answer-display-mode-${i}`}>
+        <ToggleGroup
+          aria-label={`${t("extensions:visuals.displayMode")}: ${t("extensions:visuals.optionLabel", { index: i + 1 })}`}
+          value={displayMode}
+          onChange={(mode) => handleDisplayModeChange(i, mode)}
+          items={(
+            [
+              ["text", "displayText"],
+              ["image", "displayImage"],
+              ["both", "displayBoth"],
+            ] as const
+          ).map(([value, key]) => ({
+            value,
+            label: t(`extensions:visuals.${key}`),
+          }))}
+          itemMetadata={(mode) => ({
+            "data-testid": `answer-mode-${i}-${mode}`,
+          })}
+          className="h-auto flex-wrap bg-black/20 [&>button]:min-h-8 [&>button]:min-w-0 [&>button]:flex-1 [&>button]:justify-center [&>button]:px-2 [&>button]:text-xs [&>button]:text-white/80 [&>button[data-state=on]]:bg-white [&>button[data-state=on]]:text-black"
+        />
       </div>
-      {hasImage && visual?.url && (
-        <div className="flex items-center gap-2.5 rounded-xl bg-black/20 p-2">
-          <img
-            src={visual.url}
-            alt={visual.alt || `Option ${i + 1}`}
-            data-testid={`answer-image-preview-${i}`}
-            className="size-12 shrink-0 rounded-lg bg-black/30 object-cover"
-          />
-          <input
-            type="text"
-            data-testid={`answer-alt-input-${i}`}
-            value={visual.alt ?? ""}
-            onChange={(e) => handleAltChange(i, e.target.value)}
-            placeholder={t(
-              "extensions:visuals.altPlaceholder",
-              "Accessible alt text...",
+
+      {usesImage && (
+        <>
+          <div className="flex flex-wrap items-center gap-2">
+            <Button
+              size="sm"
+              type="button"
+              data-testid={`answer-pick-image-${i}`}
+              onClick={() => setPickingAnswerIdx(i)}
+              className="min-w-0 flex-1 bg-black/25 px-2.5 py-1.5 text-xs text-white hover:bg-black/40"
+            >
+              <ImageIcon className="size-4 shrink-0" aria-hidden="true" />
+              {hasImage
+                ? t("extensions:editor.browse")
+                : t("extensions:visuals.chooseMedia")}
+            </Button>
+            {hasImage && (
+              <Button
+                size="sm"
+                type="button"
+                data-testid={`answer-remove-image-${i}`}
+                onClick={() => handleRemoveAnswerImage(i)}
+                aria-label={t("extensions:visuals.removeMedia")}
+                title={t("extensions:visuals.removeMedia")}
+                className="flex size-8 shrink-0 items-center justify-center bg-black/25 p-1.5 text-white hover:bg-red-500/80"
+              >
+                <Trash2 className="size-4" aria-hidden="true" />
+              </Button>
             )}
-            className="min-w-0 flex-1 rounded-md bg-black/20 px-2 py-1 text-xs font-medium text-white placeholder-white/60 outline-none"
-          />
-        </div>
+          </div>
+          {hasImage && visual?.url && (
+            <div className="flex min-w-0 items-start gap-2.5 rounded-lg bg-black/20 p-2">
+              <img
+                src={visual.url}
+                alt={
+                  visual.alt ||
+                  t("extensions:visuals.optionLabel", { index: i + 1 })
+                }
+                data-testid={`answer-image-preview-${i}`}
+                className="size-14 shrink-0 rounded-lg bg-black/30 object-contain"
+              />
+              <div className="flex min-w-0 flex-1 flex-col gap-1">
+                <label htmlFor={altId} className="font-semibold">
+                  {t("extensions:visuals.altText")}
+                </label>
+                <input
+                  id={altId}
+                  type="text"
+                  dir="auto"
+                  data-testid={`answer-alt-input-${i}`}
+                  value={visual.alt}
+                  onChange={(event) => handleAltChange(i, event.target.value)}
+                  placeholder={t("extensions:visuals.altPlaceholder")}
+                  className="w-full min-w-0 rounded-md bg-black/20 px-2 py-1 text-xs font-medium text-white outline-none placeholder:text-white/60 focus-visible:ring-2 focus-visible:ring-white/70"
+                />
+              </div>
+            </div>
+          )}
+        </>
       )}
-    </>
+    </div>
   )
 }

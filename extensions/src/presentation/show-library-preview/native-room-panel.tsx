@@ -92,13 +92,16 @@ export function NativeRazziaRoomPanel({
                 className="fixed top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6"
               >
                 <RoomQrLabels join={join} />
-                <button
+                <NativeButton
+                  classNameContent="contents"
+                  data-control-source="razzia"
+                  type="button"
                   onClick={handleCloseQrCode}
                   aria-label={t("common:close")}
-                  className="hover:bg-muted absolute -top-3 -right-3 rounded-full bg-white p-1.5 shadow-md"
+                  className="hover:bg-muted absolute -end-3 -top-3 rounded-full bg-white p-1.5 shadow-md"
                 >
                   <X className="text-foreground size-6" />
-                </button>
+                </NativeButton>
                 <QRCodeSVG
                   className="size-56 md:size-70 lg:size-95"
                   value={join.qrUrl ?? webUrl}
@@ -262,7 +265,7 @@ export function NativeClassicLobbyPanel({
                   type="button"
                   onClick={() => setQrOpen(false)}
                   aria-label={t("common:close")}
-                  className="hover:bg-muted absolute -top-3 -right-3 rounded-full bg-white p-1.5 shadow-md"
+                  className="hover:bg-muted absolute -end-3 -top-3 rounded-full bg-white p-1.5 shadow-md"
                 >
                   <X className="text-foreground size-6" />
                 </NativeButton>

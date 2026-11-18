@@ -1,0 +1,52 @@
+{
+  "configurationsTitle": "הגדרות",
+  "logout": "התנתקות",
+  "passwordPlaceholder": "סיסמה",
+  "quizz": {
+    "create": "יצירת חידון",
+    "delete": "מחיקת חידון",
+    "deleteConfirm": "למחוק את \"{{name}}\"? לא ניתן לבטל פעולה זו.",
+    "deleted": "החידון נמחק",
+    "export": "ייצוא החידון לקובץ JSON",
+    "import": "ייבוא חידון מקובץ JSON",
+    "none": "עדיין לא נוצרו חידונים",
+    "notFound": "לא נמצאו חידונים",
+    "pleaseCreate": "צרו חידון תחילה",
+    "pleaseSelect": "בחרו חידון",
+    "startGame": "התחלת משחק",
+    "edit": "עריכת חידון"
+  },
+  "result": {
+    "delete": "מחיקת תוצאה",
+    "deleteConfirm": "למחוק את התוצאה של \"{{name}}\"? לא ניתן לבטל פעולה זו.",
+    "deleted": "התוצאה נמחקה",
+    "noAnswer": "ללא תשובה",
+    "none": "עדיין אין תוצאות. לאחר סיום משחק יופיע כאן הדוח",
+    "paginationOf": " מתוך ",
+    "stats": {
+      "correctAnswers": "תשובות נכונות",
+      "playersAnswered": "שחקנים שענו"
+    },
+    "table": {
+      "answered": "נענו",
+      "correct": " נכונות",
+      "correctIncorrect": "נכונות / שגויות",
+      "incorrect": " שגויות",
+      "player": "שחקן",
+      "points": "נקודות"
+    },
+    "playerCount": "{{count}} שחקנים",
+    "timeLimitSuffix": " שניות למענה",
+    "estimation": {
+      "answered": "נענו",
+      "withinMargin": "{{value}} ± {{margin}}",
+      "outsideMargin": "מחוץ לטווח הסטייה",
+      "average": "תשובה ממוצעת: {{value}}"
+    }
+  },
+  "tabs": {
+    "play": "משחק",
+    "quizz": "חידונים",
+    "results": "תוצאות"
+  }
+}

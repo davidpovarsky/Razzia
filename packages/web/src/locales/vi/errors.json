@@ -75,5 +75,8 @@
     "notFound": "Không tìm thấy media",
     "tooLarge": "Tệp quá lớn",
     "uploadFailed": "Tải tệp lên thất bại"
+  },
+  "server": {
+    "internal": "Máy chủ gặp lỗi, vui lòng thử lại"
   }
 }

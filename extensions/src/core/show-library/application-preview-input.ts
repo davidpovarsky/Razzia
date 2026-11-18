@@ -41,7 +41,7 @@ const sourceSchema = z.strictObject({
     .max(256),
 })
 const preferencesSchema = z.strictObject({
-  locale: z.enum(["en", "fr", "de", "es", "it", "ja", "tr", "vi"]),
+  locale: z.enum(["en", "fr", "de", "es", "it", "ja", "tr", "vi", "he"]),
   reducedMotion: z.boolean(),
   role: z.enum(["manager", "spectator"]),
 })

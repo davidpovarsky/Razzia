@@ -48,6 +48,7 @@ import { hashJson } from "../../src/mcp-app/contracts/canonical.ts"
 import { tadaShowV1Schema } from "../../src/core/show-authoring-schema.ts"
 
 const expectedLocaleText = {
+  he: { previous: "השלב הקודם", editing: "עריכת הטיוטה הזו" },
   en: {
     previous: "Previous chapter",
     editing: "Edit this draft",
@@ -82,6 +83,7 @@ const expectedLocaleText = {
   },
 }
 const expectedTransportText = {
+  he: ["השהיית המופע", "יחס ממדים"],
   en: ["Pause show", "Aspect ratio"],
   fr: ["Mettre en pause", "Format d\u2019image"],
   de: ["Show pausieren", "Seitenverh\u00e4ltnis"],
@@ -97,6 +99,11 @@ const expectedTransportText = {
     "T\u1ef7 l\u1ec7 khung h\u00ecnh",
   ],
 }
+assert.equal(widgetLocales.length, 9)
+assert.deepEqual(
+  [...widgetLocales].sort(),
+  Object.keys(expectedLocaleText).sort(),
+)
 const root = fileURLToPath(new URL("../../../", import.meta.url))
 const require = createRequire(new URL("../../package.json", import.meta.url))
 const { build } = require("esbuild")
@@ -1238,7 +1245,7 @@ try {
         300000,
       )
       await run(
-        `${engine} / ${theme} eight localized interfaces and non-reduced native motion`,
+        `${engine} / ${theme} nine localized interfaces and non-reduced native motion`,
         async () => {
           const iframe = page.frameLocator("iframe")
           for (const locale of widgetLocales) {
@@ -1253,7 +1260,17 @@ try {
             )
             assert.equal(
               await iframe.getByTestId("full-show-widget").getAttribute("dir"),
-              "ltr",
+              locale === "he" ? "rtl" : "ltr",
+            )
+            assert.equal(
+              await iframe.getByTestId("full-show-widget").getAttribute("lang"),
+              locale,
+            )
+            assert.equal(
+              await iframe
+                .locator(".widget-editor")
+                .evaluate((element) => getComputedStyle(element).direction),
+              locale === "he" ? "rtl" : "ltr",
             )
             assert.equal(
               await iframe.getByTestId("full-show-previous").innerText(),
@@ -1275,7 +1292,7 @@ try {
                 ),
               expectedTransportText[locale][1],
             )
-            if (locale === "fr" || locale === "ja")
+            if (locale === "fr" || locale === "ja" || locale === "he")
               await iframe.locator(".widget-editor").screenshot({
                 path: path.join(
                   evidence,
@@ -2346,7 +2363,7 @@ try {
               "native opening, five phases, transitions and closing",
               "title edit CAS and summary refresh through AppBridge",
               "semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
-              "eight localized interfaces and non-reduced native motion",
+              "nine localized interfaces and non-reduced native motion",
               "native audio gesture, acknowledged music and volume, persistent playback",
               "native pause, resume, replay and adjacent skip",
               "responsive 16:9 and 4:3 keyboard controls",

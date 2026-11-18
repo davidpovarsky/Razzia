@@ -46,6 +46,7 @@ function AccountThemeBuilder({ accountId }: { accountId: string }) {
     "ja",
     "tr",
     "vi",
+    "he",
   ].includes(language)
     ? (language as PreviewLocale)
     : "en"

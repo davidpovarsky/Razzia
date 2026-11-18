@@ -3,8 +3,10 @@ import type { UploadedMedia } from "@razzia/common/types/game"
 import type { AnswerDisplay, AnswerVisual } from "@razzia/extensions/core"
 import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
 export function useAnswerVisualEditor() {
+  const { t } = useTranslation()
   const {
     currentQuestion,
     currentQuestionId,
@@ -47,7 +49,9 @@ export function useAnswerVisualEditor() {
           : {
               answerIndex: idx,
               display: "text",
-              alt: answers[idx]?.trim() || `Option ${idx + 1}`,
+              alt:
+                answers[idx]?.trim() ||
+                t("extensions:visuals.optionLabel", { index: idx + 1 }),
             }
 
       const nextVisual = updater(baseVisual)
@@ -77,14 +81,20 @@ export function useAnswerVisualEditor() {
   }
 
   const handleSelectAnswerMedia = (item: UploadedMedia) => {
-    if (pickingAnswerIdx === null) {
+    if (
+      pickingAnswerIdx === null ||
+      pickingAnswerIdx >= answers.length ||
+      item.type !== "image"
+    ) {
       return
     }
 
     const idx = pickingAnswerIdx
     const existingText = (answers[idx] ?? "").trim()
     const fallbackLabel =
-      existingText || item.name.replace(/\.[^.]+$/u, "") || `Option ${idx + 1}`
+      existingText ||
+      item.name.replace(/\.[^.]+$/u, "") ||
+      t("extensions:visuals.optionLabel", { index: idx + 1 })
 
     if (!existingText) {
       const nextAnswers = [...answers]
@@ -105,7 +115,9 @@ export function useAnswerVisualEditor() {
     if (mode === "image" && !(answers[idx] ?? "").trim()) {
       const visual = getVisualForAnswer(idx)
       // oxlint-disable-next-line typescript/prefer-nullish-coalescing -- Blank alt text must fall back to the option label.
-      const fallback = visual?.alt?.trim() || `Option ${idx + 1}`
+      const fallback =
+        visual?.alt?.trim() ||
+        t("extensions:visuals.optionLabel", { index: idx + 1 })
       const nextAnswers = [...answers]
       nextAnswers[idx] = fallback
       updateQuestion(currentIndex, { answers: nextAnswers })
@@ -115,12 +127,15 @@ export function useAnswerVisualEditor() {
       ...prev,
       display: mode,
       // oxlint-disable-next-line typescript/prefer-nullish-coalescing -- Blank labels intentionally use the next nonempty candidate.
-      alt: prev.alt?.trim() || answers[idx]?.trim() || `Option ${idx + 1}`,
+      alt:
+        prev.alt?.trim() ||
+        answers[idx]?.trim() ||
+        t("extensions:visuals.optionLabel", { index: idx + 1 }),
     }))
   }
 
   const handleRemoveAnswerImage = (idx: number) => {
-    upsertAnswerVisual(idx, () => null)
+    upsertAnswerVisual(idx, (prev) => ({ ...prev, url: undefined }))
   }
 
   const handleAltChange = (idx: number, nextAlt: string) => {

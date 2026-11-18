@@ -38,7 +38,10 @@ interface SocketCommandRecord {
 const req = createRequire(path.resolve("packages/e2e/package.json"))
 const playwrightModule = req("@playwright/test") as {
   chromium: {
-    launch: (options?: { headless?: boolean }) => Promise<BrowserInstance>
+    launch: (options?: {
+      headless?: boolean
+      channel?: string
+    }) => Promise<BrowserInstance>
   }
 }
 const { chromium } = playwrightModule
@@ -58,7 +61,10 @@ describe("PROTOCOL / SPEC: Synthetic DOM Event & Command Flow Simulation (Non-E2
   let playerPage: BrowserPage | null = null
 
   beforeAll(async () => {
-    browser = await chromium.launch({ headless: true })
+    browser = await chromium.launch({
+      headless: true,
+      channel: process.env.PLAYWRIGHT_CHANNEL || undefined,
+    })
     managerPage = await browser.newPage()
     playerPage = await browser.newPage()
   }, 30000)

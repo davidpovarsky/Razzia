@@ -1,5 +1,6 @@
 import { PlatformButton } from "./platform-controls"
 import React, { useCallback, useState } from "react"
+import { useTranslation } from "react-i18next"
 import type { CinematicOverlayAnimation } from "../core/cinematic-overlays"
 import {
   evaluateOverlayPlaybackState,
@@ -37,6 +38,7 @@ export const CinematicOverlay: React.FC<CinematicOverlayProps> = ({
   onOverlayCompleted,
   legacyPlayerTestId,
 }) => {
+  const { t } = useTranslation("extensions")
   const [intrinsicDurationMs, setIntrinsicDurationMs] = useState<
     number | undefined
   >(undefined)
@@ -83,7 +85,11 @@ export const CinematicOverlay: React.FC<CinematicOverlayProps> = ({
       aria-hidden={interactiveEditorMode ? undefined : "true"}
       aria-label={
         interactiveEditorMode
-          ? overlay.label || `Overlay ${overlay.order + 1}`
+          ? overlay.label ||
+            t("studio.scene.overlays.layerDefaultLabel", {
+              num: overlay.order + 1,
+              defaultValue: "Overlay {{num}}",
+            })
           : undefined
       }
       onClick={
@@ -156,7 +162,7 @@ export const CinematicOverlay: React.FC<CinematicOverlayProps> = ({
       {interactiveEditorMode && isSelected && (
         <span
           data-testid={`cinematic-overlay-handle-${overlay.id}`}
-          className="pointer-events-none absolute -top-5 left-0 rounded bg-amber-400 px-1.5 py-0.5 text-[10px] font-bold text-slate-950 shadow"
+          className="pointer-events-none absolute start-0 -top-5 rounded bg-amber-400 px-1.5 py-0.5 text-[10px] font-bold text-slate-950 shadow"
         >
           {overlay.label || `#${overlay.order + 1}`}{" "}
           {Math.round(overlay.position.x * 100)}%,

@@ -1,6 +1,16 @@
 import i18next from "i18next"
 
-export const locales = ["en", "fr", "de", "es", "it", "ja", "tr", "vi"] as const
+export const locales = [
+  "en",
+  "fr",
+  "de",
+  "es",
+  "it",
+  "ja",
+  "tr",
+  "vi",
+  "he",
+] as const
 
 export type Locale = (typeof locales)[number]
 
@@ -43,8 +53,42 @@ const en = {
     "Saving to your library requires approval in Tadazz. This widget cannot approve it.",
 }
 type Keys = keyof typeof en
-// Same complete namespace in all eight existing product languages.
+// The same complete namespace in every supported product language.
 const rows: Record<Exclude<Locale, "en">, string[]> = {
+  he: [
+    "תצוגה מקדימה של Tadazz",
+    "תצוגה מקדימה / הדגמה — ללא הצבעות של שחקנים אמיתיים",
+    "דוגמה פרטית עם נתונים מדומים · אינה הטיוטה השמורה שלכם",
+    "התצוגה המקדימה אינה זמינה. אפשר לבקש סיכום בטקסט בצ׳אט.",
+    "ממתינים למנחה…",
+    "טוען…",
+    "הטיוטה נטענה",
+    "גרסת הטיוטה אושרה בשרת. היא עדיין לא נשמרה בספרייה שלכם.",
+    "הטיוטה השתנתה במקום אחר. רעננו לפני שתחילו שוב את העריכה.",
+    "הפעולה בוטלה. רעננו כדי לבדוק את המצב בשרת.",
+    "לא ניתן לאמת את התוצאה שהתקבלה מהשרת.",
+    "הבקשה נכשלה. העריכה שלכם נשמרה כאן; רעננו לפני ניסיון חוזר.",
+    "התצוגה המקדימה נסגרה",
+    "רענון הטיוטה",
+    "ביטול",
+    "הכרטיס הקודם",
+    "הכרטיס הבא",
+    "הפעלה מחדש",
+    "שאלה",
+    "תשובות",
+    "תוצאות",
+    "שפה",
+    "ערכת נושא",
+    "הרחבה",
+    "צמצום תנועה",
+    "השמעת אודיו דורשת מדיה מורשית ופעולה של המשתמש; היא אינה זמינה בתצוגה הזו.",
+    "הצבעות מדומות (לתצוגה מקדימה בלבד)",
+    "JSON של הטיוטה",
+    "החלת העריכה בטיוטה",
+    "עריכה שטרם נשלחה",
+    "גרסה {{revision}}",
+    "שמירה בספרייה דורשת אישור ב־Tadazz. אי אפשר לתת את האישור מתוך הרכיב הזה.",
+  ],
   fr: [
     "Aperçu Tadazz",
     "Aperçu / démo — aucun vote de joueur en direct",
@@ -300,6 +344,7 @@ export const resources: Record<string, { widget: Record<string, string> }> =
   )
 
 const candidateLabels: Record<Locale, string> = {
+  he: "תצוגה מקדימה של גרסת פיתוח · הגרסה המופעלת ממתינה לאימות",
   en: "Development candidate preview · executable acceptance pending",
   fr: "Aperçu candidat de développement · validation de l’exécutable en attente",
   de: "Entwicklungsvorschau · Freigabe der ausführbaren Version ausstehend",
@@ -315,6 +360,7 @@ for (const locale of locales) {
   })
 }
 const fieldLabels: Record<Locale, string> = {
+  he: "כותרת הטיוטה",
   en: "Draft title",
   fr: "Titre du brouillon",
   de: "Entwurfstitel",
@@ -328,6 +374,7 @@ for (const locale of locales) {
   resources[locale].widget.edit = fieldLabels[locale]
 }
 const editLabels: Record<Locale, [string, string]> = {
+  he: ["איפוס לטיוטה העדכנית", "ביטול העריכה שאושרה"],
   en: ["Reset to latest draft", "Undo acknowledged edit"],
   fr: ["Revenir au dernier brouillon", "Annuler la modification confirmée"],
   de: [
@@ -363,6 +410,21 @@ const semanticLabelKeys = [
   "retryEdit",
 ] as const
 const semanticLabels: Record<Locale, readonly string[]> = {
+  he: [
+    "עריכת הטיוטה הזו",
+    "טקסט השאלה",
+    "מראה וקול",
+    "אפשר לבחור רק נכסים מובנים שאושרו לערכת הנושא הזו. האודיו יתחיל לאחר לחיצה על הפעלת קול.",
+    "עוצמת מוזיקת ההצבעה (%)",
+    "טעינת נכסים מאושרים",
+    "רקע המופע",
+    "בחירה…",
+    "מוזיקת ההצבעה",
+    "תמונות בתשובות",
+    "תשובה {{number}}",
+    "ללא שינוי",
+    "ניסיון חוזר של אותה עריכה",
+  ],
   en: [
     "Edit this draft",
     "Question text",
@@ -494,6 +556,7 @@ const transportLabels: Record<
   Locale,
   readonly [string, string, string, string]
 > = {
+  he: ["השלב הקודם", "השלב הבא", "השהיית המופע", "המשך המופע"],
   en: ["Previous chapter", "Next chapter", "Pause show", "Resume show"],
   fr: [
     "Chapitre précédent",
@@ -545,6 +608,7 @@ for (const locale of locales) {
 }
 
 const aspectLabels: Record<Locale, string> = {
+  he: "יחס ממדים",
   en: "Aspect ratio",
   fr: "Format d’image",
   de: "Seitenverhältnis",
@@ -578,6 +642,25 @@ const nativeActionLabelKeys = [
   "saveUnsupported",
 ] as const
 const nativeActionLabels: Record<Locale, readonly string[]> = {
+  he: [
+    "שמירה ב־Tadazz",
+    "מבקש לשמור…",
+    "בדקו ואשרו את הגרסה הזו של הטיוטה ב־Tadazz, ואז חזרו לכאן להשלמת השמירה.",
+    "בדיקת השמירה ב־Tadazz",
+    "השלמת השמירה",
+    "נשמר ב־Tadazz (גרסה {{revision}} בספרייה).",
+    "פתיחת המשחק השמור",
+    "השמירה לא אושרה. נסו שוב את אותה בקשה, או רעננו אם חל שינוי סותר.",
+    "האפליקציה המארחת אינה יכולה לפתוח קישורים. העתיקו את הכתובת הזו:",
+    "האפליקציה המארחת לא פתחה את הקישור. נסו שוב.",
+    "בחרו תשובה בהדגמה הזו.",
+    "נבחרה תשובה {{number}} בהדגמה.",
+    "זו התשובה הנכונה בהדגמה.",
+    "זו תשובה שגויה בהדגמה.",
+    "סקר: אין תשובה נכונה.",
+    "האפליקציה המארחת לא הצליחה להרחיב את התצוגה.",
+    "האפליקציה המארחת אינה יכולה לבקש שמירה. בקשו לשמור את הטיוטה בצ׳אט.",
+  ],
   en: [
     "Save in Tadazz",
     "Requesting save\u2026",

@@ -73,7 +73,7 @@ export interface SceneDescriptor {
   lottieSpeed?: number
   overlayAnimations?: unknown[]
   endBehavior?: "holdFrame" | "advanceNext" | "fadeToTitle"
-  background?: { mode?: string; url?: string; fit?: "cover" | "contain" }
+  background?: Partial<CardBackgroundOverride> & { mode?: string }
   stageLayout?: "card" | "cinema"
 }
 
@@ -708,7 +708,7 @@ export function computeShowScene(input: ShowInput): ShowScene {
 /** Per-card / per-scene authored background (card mode) overrides the show backdrop. */
 export function resolveStageBackdrop(
   envelope: ShowEnvelope | null,
-): { url: string; fit: "cover" | "contain" } | null {
+): CardBackgroundOverride | null {
   const extras = envelope?.extras ?? {}
   const scene = extras.currentScene as SceneDescriptor | undefined
   const raw =
@@ -723,6 +723,8 @@ export function resolveStageBackdrop(
   return {
     url: effective.url,
     fit: effective.fit === "contain" ? "contain" : "cover",
+    position: effective.position,
+    overlayOpacity: effective.overlayOpacity,
   }
 }
 

@@ -22,6 +22,7 @@ import {
   it,
   vi,
 } from "vitest"
+const TEST_PILOT_SECRET = "isolated-pilot-phone-test-secret"
 const FIRST_QUESTION_DELAY_MS = 8000
 const NEXT_QUESTION_DELAY_MS = 2000
 let managerToken = ""
@@ -32,17 +33,22 @@ const request = (
     token,
     body,
     headers = {},
+    pilotSecret = TEST_PILOT_SECRET,
   }: {
     method?: string
     token?: string
     body?: unknown
     headers?: Record<string, string>
+    pilotSecret?: string | null
   } = {},
 ) =>
   app.request(`/api${path}`, {
     method,
     headers: {
       "Content-Type": "application/json",
+      ...(path === "/games/pilot-phone" && pilotSecret
+        ? { "x-tada-pilot-secret": pilotSecret }
+        : {}),
       ...(token
         ? {
             Authorization: `Bearer ${token}`,
@@ -59,6 +65,7 @@ beforeAll(async () => {
   managerToken = (await mintToken("manager", SESSION_ROLES.MANAGER)).token
 })
 beforeEach(() => {
+  vi.stubEnv("TADA_PILOT_SECRET", TEST_PILOT_SECRET)
   fs.rmSync(getPath(), {
     recursive: true,
     force: true,
@@ -67,6 +74,7 @@ beforeEach(() => {
   vi.useFakeTimers()
 })
 afterEach(() => {
+  vi.unstubAllEnvs()
   vi.useRealTimers()
   Registry.getInstance()
     .getAllGames()
@@ -105,8 +113,8 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
       body: {
         action: "join_or_poll",
         inviteCode,
-        phone: "+972501234567",
         callId: "call-001",
+        phone: "+972501234567",
       },
     })
     expect(joinRes.status).toBe(StatusCodes.OK)
@@ -123,6 +131,25 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
     expect(joinData.rosterPlayerId).toBeDefined()
     expect(joinData.state.acceptingAnswers).toBe(false)
 
+    // Polling an existing roster identity requires the verified caller phone.
+    for (const phone of [undefined, "+972509999998"]) {
+      const mismatchedCaller = await request("/games/pilot-phone", {
+        method: "POST",
+        body: {
+          action: "join_or_poll",
+          gameId,
+          rosterPlayerId: joinData.rosterPlayerId,
+          callId: "call-001",
+          phone,
+        },
+      })
+      expect(mismatchedCaller.status).toBe(StatusCodes.FORBIDDEN)
+      expect(await json(mismatchedCaller)).toMatchObject({
+        ok: false,
+        reason: "caller_binding_mismatch",
+      })
+    }
+
     // 2. Start game and reach answering
     void game.start(createFakeIo().createSocket("manager"))
     await vi.advanceTimersByTimeAsync(
@@ -137,6 +164,7 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         gameId,
         rosterPlayerId: joinData.rosterPlayerId,
         callId: "call-001",
+        phone: "+972501234567",
       },
     })
     const pollData = await json<{
@@ -160,6 +188,7 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         gameId,
         rosterPlayerId: joinData.rosterPlayerId,
         callId: "call-001",
+        phone: "+972501234567",
         answerIndex: 4,
       },
     })
@@ -237,10 +266,11 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
       body: {
         action: "join_or_poll",
         inviteCode,
-        phone: "+972509999999",
         callId: "call-002",
+        phone: "+972509999999",
       },
     })
+    expect(joinRes.status).toBe(StatusCodes.OK)
     const { rosterPlayerId } = await json<{
       rosterPlayerId: string
     }>(joinRes)
@@ -259,6 +289,7 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         gameId,
         rosterPlayerId,
         callId: "call-002",
+        phone: "+972509999999",
         answerIndex: 5,
       },
     })
@@ -278,6 +309,7 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         gameId,
         rosterPlayerId,
         callId: "call-002",
+        phone: "+972509999999",
         answerIndex: -1,
       },
     })
@@ -291,6 +323,7 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         gameId,
         rosterPlayerId,
         callId: "call-002",
+        phone: "+972509999999",
         answerIndex: 2.7,
       },
     })
@@ -304,6 +337,7 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         gameId,
         rosterPlayerId,
         callId: "call-002",
+        phone: "+972509999999",
         answerIndex: 2,
       },
     })
@@ -321,6 +355,7 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         gameId,
         rosterPlayerId,
         callId: "call-002",
+        phone: "+972509999999",
         answerIndex: 3,
       },
     })
@@ -357,6 +392,7 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         gameId,
         rosterPlayerId,
         callId: "call-002",
+        phone: "+972509999999",
       },
     })
     const q4Data = await json<{
@@ -376,6 +412,7 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         gameId,
         rosterPlayerId,
         callId: "call-002",
+        phone: "+972509999999",
         answerIndex: 4,
       },
     })
@@ -395,6 +432,7 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         gameId,
         rosterPlayerId,
         callId: "call-002",
+        phone: "+972509999999",
         answerIndex: 3,
       },
     })
@@ -430,6 +468,7 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         gameId,
         rosterPlayerId,
         callId: "call-002",
+        phone: "+972509999999",
         answerIndex: 1,
       },
     })
@@ -464,6 +503,7 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
       // Request without secret -> 401
       const noSecretRes = await request("/games/pilot-phone", {
         method: "POST",
+        pilotSecret: null,
         body: {
           action: "join_or_poll",
           inviteCode,
@@ -502,6 +542,19 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         },
       })
       expect(correctSecretRes.status).toBe(StatusCodes.OK)
+
+      // An unset server secret must remain fail-closed, even with a supplied header.
+      delete process.env.TADA_PILOT_SECRET
+      const unconfiguredRes = await request("/games/pilot-phone", {
+        method: "POST",
+        body: {
+          action: "join_or_poll",
+          inviteCode,
+          phone: "+972501111111",
+          callId: "sec-unconfigured",
+        },
+      })
+      expect(unconfiguredRes.status).toBe(StatusCodes.UNAUTHORIZED)
     } finally {
       delete process.env.TADA_PILOT_SECRET
     }
@@ -534,8 +587,8 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
       body: {
         action: "join_or_poll",
         inviteCode,
-        phone: "+972509998888",
         callId: "call-revote-1",
+        phone: "+972509998888",
       },
     })
     const { rosterPlayerId } = await json<{
@@ -558,6 +611,7 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         gameId,
         rosterPlayerId,
         callId: "call-revote-1",
+        phone: "+972509998888",
         answerIndex: 1,
         epoch: initialEpoch,
       },
@@ -595,6 +649,7 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         gameId,
         rosterPlayerId,
         callId: "call-revote-1",
+        phone: "+972509998888",
         answerIndex: 0,
         // Stale!
         epoch: initialEpoch,
@@ -616,6 +671,7 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         gameId,
         rosterPlayerId,
         callId: "call-revote-1",
+        phone: "+972509998888",
         answerIndex: 0,
         epoch: newEpoch,
       },
@@ -635,6 +691,7 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         gameId,
         rosterPlayerId,
         callId: "call-revote-1",
+        phone: "+972509998888",
         answerIndex: 4,
         epoch: newEpoch,
       },

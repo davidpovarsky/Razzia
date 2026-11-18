@@ -11,6 +11,7 @@ import {
   type PreviewPreferences,
 } from "./contracts"
 import type { createPreviewCoordinator } from "./coordinator"
+import { createDeferred } from "./deferred"
 
 export type PreviewConsumerState =
   | { status: "inactive" | "loading" }
@@ -75,7 +76,7 @@ export function createPreviewSessionOwner({
     const { unsubscribe, session } = activation
     activation.unsubscribe = null
     activation.session = null
-    const settled = Promise.withResolvers<undefined>()
+    const settled = createDeferred<undefined>()
     activation.drained = settled.promise
     const cleanup = async () => {
       // Revoke original transitions/audio now, before waiting for an async mount.
@@ -101,7 +102,7 @@ export function createPreviewSessionOwner({
     }
     void cleanup().then(() => settled.resolve(undefined), settled.reject)
 
-    return activation.drained
+    return settled.promise
   }
 
   async function fail(activation: Activation) {

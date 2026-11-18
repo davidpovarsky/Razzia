@@ -1,3 +1,5 @@
+import { createDeferred } from "./deferred"
+
 /** One active inline owner per page. Teardown completes before another stage mounts. */
 export function createPreviewCoordinator() {
   let generation = 0
@@ -20,7 +22,7 @@ export function createPreviewCoordinator() {
     }
 
     previous.abort.abort()
-    const barrier = Promise.withResolvers<undefined>()
+    const barrier = createDeferred<undefined>()
     drained = Promise.all([drained, barrier.promise]).then(() => undefined)
     // Publish the barrier before callbacks: a reentrant claim must also wait.
     void drained.catch(() => {

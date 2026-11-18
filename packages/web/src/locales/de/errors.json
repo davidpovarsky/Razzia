@@ -75,5 +75,8 @@
     "notFound": "Medium nicht gefunden",
     "tooLarge": "Die Datei ist zu groß",
     "uploadFailed": "Hochladen der Datei fehlgeschlagen"
+  },
+  "server": {
+    "internal": "Auf dem Server ist ein Fehler aufgetreten, bitte erneut versuchen"
   }
 }

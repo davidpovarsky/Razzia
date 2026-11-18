@@ -55,7 +55,7 @@ export const usePlatformContext = () => usePlatformTheme().context
 export function PlatformThemeProvider({
   context,
   appearance = "dark",
-  dir = "ltr",
+  dir: providedDir,
   tokenOverrides = EMPTY_OVERRIDES,
   children,
 }: PropsWithChildren<{
@@ -64,6 +64,7 @@ export function PlatformThemeProvider({
   dir?: "ltr" | "rtl"
   tokenOverrides?: TokenOverrides
 }>) {
+  const dir = Direction.useDirection(providedDir)
   const value = useMemo(
     () => ({ context, appearance, dir, tokenOverrides }),
     [context, appearance, dir, tokenOverrides],
@@ -88,13 +89,14 @@ export interface PlatformScopeProps extends HTMLAttributes<HTMLDivElement> {
 export function PlatformScope({
   context,
   appearance = "dark",
-  dir = "ltr",
+  dir: providedDir,
   tokenOverrides,
   className = "",
   style,
   children,
   ...props
 }: PlatformScopeProps) {
+  const dir = Direction.useDirection(providedDir)
   const [target, setTarget] = useState<HTMLDivElement | null>(null)
 
   return (

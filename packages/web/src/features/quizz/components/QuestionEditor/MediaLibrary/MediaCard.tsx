@@ -15,9 +15,10 @@ const MediaCard = ({ media, onSelect, onDelete }: Props) => {
   return (
     <div className="group relative">
       <button
+        type="button"
         onClick={onSelect}
         title={media.name}
-        className="focus-visible:ring-primary w-full overflow-hidden rounded-xl text-left ring-2 ring-transparent transition focus-visible:outline-none"
+        className="focus-visible:ring-primary w-full overflow-hidden rounded-xl text-start ring-2 ring-transparent transition focus-visible:outline-none"
       >
         <div className="relative aspect-square overflow-hidden rounded-xl">
           <MediaThumbnail media={media} />
@@ -37,7 +38,7 @@ const MediaCard = ({ media, onSelect, onDelete }: Props) => {
       <MediaDeleteButton
         media={media}
         onDelete={onDelete}
-        className="bg-background absolute top-2 right-2 shadow-md focus-visible:opacity-100 pointer-fine:opacity-0 pointer-fine:group-hover:opacity-100"
+        className="bg-background absolute end-2 top-2 shadow-md focus-visible:opacity-100 pointer-fine:opacity-0 pointer-fine:group-hover:opacity-100"
       />
     </div>
   )

@@ -1,0 +1,68 @@
+{
+  "answerNoted": "תודה, התשובה נקלטה",
+  "confirm": "אישור",
+  "correct": "כל הכבוד!",
+  "gamePinLabel": "קוד המשחק:",
+  "generatedUsernameNotice": "בעת ההצטרפות יוקצה לכם כינוי אקראי.",
+  "hud": {
+    "answers": "תשובות",
+    "time": "זמן"
+  },
+  "media": {
+    "showImage": "הצגת תמונה",
+    "showVideo": "הצגת וידאו"
+  },
+  "question": {
+    "show": "הצגת השאלה"
+  },
+  "joinInstruction": "מצטרפים למשחק בכתובת",
+  "leaderboard": "טבלת המובילים",
+  "lock": {
+    "lock": "נעילת החדר",
+    "unlock": "פתיחת החדר"
+  },
+  "pinLabel": "קוד המשחק",
+  "playerConnectionLost": "החיבור אבד",
+  "playerReconnecting": "ממתין לחיבור מחדש",
+  "playersJoined": "שחקנים הצטרפו",
+  "questionPrefix": "שאלה מס׳ ",
+  "rank_ordinal_other": "במקום {{count}}",
+  "reconnect": "התחברות מחדש",
+  "reconnectTitle": "הייתם באמצע משחק",
+  "resultBehind": ", אחרי ",
+  "resultTop": "סיימתם ",
+  "settings": {
+    "autoAdvance": {
+      "hint": "מעבר אוטומטי לאחר חשיפת התשובות וטבלת המובילים.",
+      "label": "התקדמות אוטומטית",
+      "leaderboardDelay": "טבלת המובילים",
+      "responsesDelay": "תוצאה"
+    },
+    "generatedUsernames": {
+      "label": "יצירת כינויים",
+      "hint": "השחקנים בוחרים מבין כינויים מוצעים במקום להקליד שם."
+    },
+    "answersOnly": {
+      "label": "תשובות בלבד",
+      "hint": "השחקנים רואים רק את כפתורי התשובות, עם אפשרות לקרוא שוב את השאלה."
+    },
+    "title": "הגדרות המשחק"
+  },
+  "startGame": "התחלה",
+  "summary": {
+    "title": "הסקר הסתיים",
+    "participants": "משתתפים",
+    "questions": "שאלות"
+  },
+  "usernamePlaceholder": "שם המשתמש שלכם",
+  "waitingForAnswers": "ממתינים לתשובות השחקנים",
+  "waitingForPlayers": "ממתינים לשחקנים",
+  "wrong": "לא הפעם",
+  "estimation": {
+    "yourAnswer": "התשובה שלכם",
+    "rangeHint": "בין {{min}} ל־{{max}}"
+  },
+  "showQrCode": "הצגת קוד QR",
+  "streak": "רצף תשובות נכונות",
+  "pinDigit": "ספרה {{position}} בקוד המשחק"
+}

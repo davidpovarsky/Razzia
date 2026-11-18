@@ -17,8 +17,11 @@ export interface VerifiedServiceContext {
 }
 
 export class Denied extends Error {
-  constructor(readonly reason: string) {
+  readonly reason: string
+
+  constructor(reason: string) {
     super(reason)
+    this.reason = reason
   }
 }
 

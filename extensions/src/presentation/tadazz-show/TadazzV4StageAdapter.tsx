@@ -76,6 +76,8 @@ export const TadazzV4StageAdapter = forwardRef<
     v4Labels: v4LabelOverrides,
     backdropUrl,
     backdropFit = "cover",
+    backdropPosition = "center",
+    backdropOverlayOpacity = 0,
     interactive = false,
     multiSelect = false,
     onSelectOption,
@@ -168,6 +170,8 @@ export const TadazzV4StageAdapter = forwardRef<
     onResolveStoryTie,
     backdropUrl,
     backdropFit,
+    backdropPosition,
+    backdropOverlayOpacity,
   })
   interactivePropsRef.current = {
     interactive,
@@ -176,6 +180,8 @@ export const TadazzV4StageAdapter = forwardRef<
     onResolveStoryTie,
     backdropUrl,
     backdropFit,
+    backdropPosition,
+    backdropOverlayOpacity,
   }
   useEffect(() => {
     v4Ref.current?.patchData({
@@ -184,6 +190,8 @@ export const TadazzV4StageAdapter = forwardRef<
       onSelectOption,
       backgroundUrl: backdropUrl,
       backgroundFit: backdropFit,
+      backgroundPosition: backdropPosition,
+      backgroundOverlayOpacity: backdropOverlayOpacity,
       labels: v4Labels,
     })
   }, [
@@ -192,6 +200,8 @@ export const TadazzV4StageAdapter = forwardRef<
     onSelectOption,
     backdropUrl,
     backdropFit,
+    backdropPosition,
+    backdropOverlayOpacity,
     v4Labels,
   ])
   const buildQuestionData = useCallback(
@@ -221,6 +231,8 @@ export const TadazzV4StageAdapter = forwardRef<
         selectedIndex: selectedRef.current[0] ?? null,
         backgroundUrl: p.backdropUrl,
         backgroundFit: p.backdropFit,
+        backgroundPosition: p.backdropPosition,
+        backgroundOverlayOpacity: p.backdropOverlayOpacity,
         labels: v4LabelsRef.current,
         showPercentages: showPercentagesRef.current,
         ...over,
@@ -512,6 +524,8 @@ export const TadazzV4StageAdapter = forwardRef<
           totalQuestions: questionRef.current?.totalQuestions ?? null,
           backgroundUrl: p.backdropUrl,
           backgroundFit: p.backdropFit,
+          backgroundPosition: p.backdropPosition,
+          backgroundOverlayOpacity: p.backdropOverlayOpacity,
           labels: v4LabelsRef.current,
         })
 
@@ -620,6 +634,9 @@ export const TadazzV4StageAdapter = forwardRef<
               : undefined,
           backgroundUrl: data.backgroundUrl ?? p.backdropUrl,
           backgroundFit: data.backgroundFit ?? p.backdropFit,
+          backgroundPosition: data.backgroundPosition ?? p.backdropPosition,
+          backgroundOverlayOpacity:
+            data.backgroundOverlayOpacity ?? p.backdropOverlayOpacity,
           labels: v4LabelsRef.current,
         })
       },
@@ -642,6 +659,8 @@ export const TadazzV4StageAdapter = forwardRef<
           totalQuestions: q?.totalQuestions ?? null,
           backgroundUrl: p.backdropUrl,
           backgroundFit: p.backdropFit,
+          backgroundPosition: p.backdropPosition,
+          backgroundOverlayOpacity: p.backdropOverlayOpacity,
           labels: v4LabelsRef.current,
         })
       },
@@ -656,6 +675,8 @@ export const TadazzV4StageAdapter = forwardRef<
           showQuestionNumber: false,
           backgroundUrl: p.backdropUrl,
           backgroundFit: p.backdropFit,
+          backgroundPosition: p.backdropPosition,
+          backgroundOverlayOpacity: p.backdropOverlayOpacity,
           labels: v4LabelsRef.current,
         })
       },
@@ -668,6 +689,8 @@ export const TadazzV4StageAdapter = forwardRef<
           subtitle,
           backgroundUrl: p.backdropUrl,
           backgroundFit: p.backdropFit,
+          backgroundPosition: p.backdropPosition,
+          backgroundOverlayOpacity: p.backdropOverlayOpacity,
           labels: v4LabelsRef.current,
         })
       },
@@ -811,6 +834,8 @@ export const TadazzV4StageAdapter = forwardRef<
       initialData={{
         backgroundUrl: backdropUrl,
         backgroundFit: backdropFit,
+        backgroundPosition: backdropPosition,
+        backgroundOverlayOpacity: backdropOverlayOpacity,
         labels: v4Labels,
       }}
       reducedMotion={reducedMotion}

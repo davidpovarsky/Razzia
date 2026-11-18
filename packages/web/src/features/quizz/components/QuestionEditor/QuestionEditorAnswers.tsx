@@ -113,6 +113,7 @@ const QuestionEditorAnswers = () => {
               render={({ field, fieldState }) => (
                 <div className="flex flex-col gap-1">
                   <div
+                    data-answer-display={visual?.display ?? "text"}
                     className={clsx(
                       "flex flex-col gap-2.5 rounded-2xl px-4 py-4",
                       ANSWERS_COLORS[i],
@@ -126,6 +127,11 @@ const QuestionEditorAnswers = () => {
                       <div className="flex min-w-0 flex-1 items-center justify-between gap-1.5 drop-shadow-md">
                         <input
                           {...field}
+                          dir="auto"
+                          aria-label={t("extensions:visuals.optionLabel", {
+                            index: i + 1,
+                          })}
+                          data-testid={`answer-text-${i}`}
                           aria-invalid={fieldState.invalid}
                           aria-describedby={
                             fieldState.invalid

@@ -1,3 +1,4 @@
+import type { BackgroundPosition } from "../../core/card-appearance"
 import { PlatformButton } from "../platform-controls"
 import { TADAZZ_PRODUCT_LOGO_URL } from "../../core/product-branding"
 import {
@@ -187,6 +188,8 @@ export interface TadazzStageProps {
   /** Per-card / per-scene background override (authored); defaults to the canonical backdrop. */
   backdropUrl?: string | null
   backdropFit?: "cover" | "contain"
+  backdropPosition?: BackgroundPosition
+  backdropOverlayOpacity?: number
   /** Player role: option cards become buttons while voting is open. */
   interactive?: boolean
   multiSelect?: boolean
@@ -240,6 +243,8 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
       labels: labelOverrides,
       backdropUrl,
       backdropFit = "cover",
+      backdropPosition = "center",
+      backdropOverlayOpacity = 0,
       interactive = false,
       multiSelect = false,
       onSelectOption,
@@ -1108,8 +1113,16 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
       model.statusMode !== "results"
     const backdropStyle: CSSProperties | undefined = backdropUrl
       ? {
-          backgroundImage: `url("${backdropUrl.replace(/"/g, "%22")}")`,
+          backgroundImage: [
+            backdropOverlayOpacity > 0
+              ? `linear-gradient(rgba(0, 0, 0, ${backdropOverlayOpacity}), rgba(0, 0, 0, ${backdropOverlayOpacity}))`
+              : undefined,
+            `url("${backdropUrl.replace(/"/g, "%22")}")`,
+          ]
+            .filter(Boolean)
+            .join(", "),
           backgroundSize: backdropFit,
+          backgroundPosition: backdropPosition,
         }
       : undefined
 
