@@ -448,22 +448,33 @@ test("loopback TCP listener enforces pre-Request header/Host/URL limits and exec
     await abortCheckDone
     abortedReq.destroy()
 
-    const pendingSave = (
-      await client.callTool({
-        name: "save_game",
-        arguments: {
-          contractVersion: "0.1.0",
-          draftId: created.data.draftId,
-          expectedRevision: 1,
-          intent: "createNew",
-          idempotencyKey: key(),
-        },
-      })
-    ).structuredContent as {
+    const pendingSaveResponse = await client.callTool({
+      name: "save_game",
+      arguments: {
+        contractVersion: "0.1.0",
+        draftId: created.data.draftId,
+        expectedRevision: 1,
+        intent: "createNew",
+        idempotencyKey: key(),
+      },
+    })
+    const pendingSave = pendingSaveResponse.structuredContent as {
       ok: boolean
       error: { code: string; consentRequestId: string; consentUrl: string }
     }
     assert.equal(pendingSave.error.code, "CONSENT_REQUIRED")
+    // ChatGPT's error transport may discard structuredContent. The trusted
+    // consent link must also survive in its text-only tool error.
+    const approvalText = pendingSaveResponse.content.find(
+      (item) => item.type === "text",
+    )
+    assert.ok(approvalText && approvalText.type === "text")
+    assert.deepEqual(JSON.parse(approvalText.text), {
+      ok: false,
+      code: "CONSENT_REQUIRED",
+      consentRequestId: pendingSave.error.consentRequestId,
+      consentUrl: pendingSave.error.consentUrl,
+    })
     const reqUrl = new URL(pendingSave.error.consentUrl)
     const id = nativeSaveRequestIdFromPath(reqUrl.pathname)
     assert.equal(id, pendingSave.error.consentRequestId)
