@@ -1,0 +1,92 @@
+{
+  "sourceBase": "af1d879431d3461c7f937a6c5f580eee97b073e2",
+  "boundary": "Actual HostPlayersModal, real React/Radix/application CSS/i18n and CSV parser; synthetic roster and intercepted HTTP, not a real game/backend/privacy acceptance.",
+  "checks": [
+    {
+      "name": "Hebrew modal and unmasked full phone with RTL/LTR isolation",
+      "status": "PASS",
+      "dir": "rtl",
+      "phone": "ltr"
+    },
+    {
+      "name": "Empty name validation translated",
+      "status": "PASS"
+    },
+    {
+      "name": "Invalid phone validation translated",
+      "status": "PASS"
+    },
+    {
+      "name": "Existing form error responds to language changes in all nine locales",
+      "status": "PASS"
+    },
+    {
+      "name": "No-match search has its own localized empty state",
+      "status": "PASS"
+    },
+    {
+      "name": "Actual CSV row errors, headings and summary localized; invalid approval absent",
+      "status": "PASS"
+    },
+    {
+      "name": "Fatal missing-header error translated",
+      "status": "PASS"
+    },
+    {
+      "name": "Valid import preview localized and remains uncommitted until approval",
+      "status": "PASS"
+    },
+    {
+      "name": "Explicit approval issues exactly one intercepted roster update",
+      "status": "PASS"
+    },
+    {
+      "name": "Mobile modal bounds 390",
+      "status": "PASS",
+      "left": 9.75,
+      "right": 380.25,
+      "viewport": 390,
+      "documentWidth": 390,
+      "modalWidth": 369,
+      "modalScroll": 369
+    },
+    {
+      "name": "Mobile modal bounds 320",
+      "status": "PASS",
+      "left": 8,
+      "right": 312,
+      "viewport": 320,
+      "documentWidth": 320,
+      "modalWidth": 302,
+      "modalScroll": 302
+    }
+  ],
+  "screens": [
+    "01-he-desktop.png",
+    "02-he-invalid-phone.png",
+    "03-he-search-empty.png",
+    "04-he-invalid-import.png",
+    "05-he-fatal-import.png",
+    "06-he-valid-import.png",
+    "07-he-mobile-390.png",
+    "07-he-mobile-320.png"
+  ],
+  "pageErrors": [],
+  "apiWrites": [
+    {
+      "method": "PUT",
+      "path": "/api/games/roster-proof/roster/participants",
+      "body": {
+        "participants": [
+          {
+            "rosterPlayerId": "01a1ef30-a590-7216-9328-a90fd560f1f4",
+            "displayName": "דוגמה",
+            "phoneE164": "+12025550102",
+            "phoneRaw": "+12025550102"
+          }
+        ]
+      }
+    }
+  ],
+  "status": "PASS"
+}
