@@ -170,3 +170,183 @@ textarea {
   min-height: 2.25rem;
   box-shadow: 0 2px 12px #0004;
 }
+
+/* The embedded editor uses the same bounded workspace as the native editor. */
+html:has(.widget-workspace-shell),
+body:has(.widget-workspace-shell),
+#tadazz-widget:has(.widget-workspace-shell) {
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+.widget-workspace-shell {
+  box-sizing: border-box;
+  position: relative;
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+  gap: 0;
+}
+.widget-workspace-header {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-width: 0;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-background);
+}
+.widget-heading {
+  min-width: 0;
+}
+.widget-heading h1 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.35;
+  margin: 0;
+}
+.widget-heading p {
+  font-size: 0.7rem;
+  line-height: 1.3;
+  margin: 0.2rem 0 0;
+}
+.widget-header-actions,
+.widget-transport {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+}
+.widget-header-actions {
+  flex-wrap: nowrap;
+  flex: 0 0 auto;
+}
+.widget-header-actions button,
+.widget-transport > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  padding: 0.5rem;
+}
+.widget-header-actions svg,
+.widget-transport > button svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+.widget-editor-workspace {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+}
+.widget-stage-viewport {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.widget-stage-viewport .widget-stage-host {
+  flex: none;
+  max-width: 100%;
+  max-height: 100%;
+}
+.widget-transport {
+  justify-content: center;
+  width: 100%;
+}
+.widget-transport output {
+  min-width: 2.8rem;
+  text-align: center;
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+.widget-transport .widget-demo-controls {
+  flex-basis: 100%;
+  min-width: 0;
+}
+.widget-transport .widget-demo-controls > .widget-toolbar {
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+}
+.widget-transport .widget-demo-controls button {
+  min-height: 2.25rem;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.8rem;
+}
+.widget-display-options {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+.widget-display-options .widget-checkbox-label {
+  flex-direction: row;
+  align-items: center;
+}
+.widget-save-panel {
+  display: grid;
+  gap: 0.75rem;
+}
+.widget-editor-workspace .widget-editor input:not([type="number"]),
+.widget-editor-workspace .widget-editor textarea {
+  min-width: 0;
+  width: 100%;
+}
+.widget-editor-workspace .widget-editor label {
+  min-width: 0;
+  flex: 1 1 100%;
+}
+.widget-editor-workspace .widget-picture-options {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+.widget-editor-workspace .widget-editor details {
+  padding: 0.65rem;
+}
+.widget-revision-controls {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+}
+.widget-empty-state {
+  margin: auto;
+  padding: 1rem;
+  text-align: center;
+}
+.widget-workspace-status {
+  position: absolute;
+  inset-inline: 0;
+  top: 4.5rem;
+  width: fit-content;
+  max-width: calc(100% - 2rem);
+  margin: 0 auto;
+  padding: 0.35rem 0.7rem;
+  border-radius: 0.5rem;
+  background: var(--color-background);
+  box-shadow: 0 2px 10px #0002;
+  font-size: 0.8rem;
+  z-index: 25;
+  pointer-events: none;
+}
+@media (max-width: 420px) {
+  .widget-workspace-header {
+    padding-inline: 0.5rem;
+  }
+  .widget-heading h1 {
+    font-size: 0.9rem;
+  }
+  .widget-transport {
+    gap: 0.15rem;
+  }
+}

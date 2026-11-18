@@ -17,7 +17,12 @@ import {
   type Status,
   type StatusDataMap,
 } from "@razzia/common/types/game/status"
-import { EXTENSION_EVENTS, RAZZIA_THEME_ID } from "@razzia/extensions/core"
+import {
+  EXTENSION_EVENTS,
+  RAZZIA_THEME_ID,
+  readPlatformOpening,
+} from "@razzia/extensions/core"
+import { PlatformGameOpening } from "./PlatformGameOpening"
 import {
   AudioPreferencesScope,
   ShowThemeRenderer,
@@ -333,6 +338,33 @@ const GameWrapperView = ({
       </ViewRoleContext.Provider>
     </ExtensionStateProvider>
   )
+
+  // Product opening lives outside both the native and cinematic theme renderers.
+  // Once the server reaches lobby/running, reconnecting never replays the ident.
+  const platformOpening = readPlatformOpening(
+    extensionState?.extras.presentationLaunch,
+  )
+  if (
+    extensionState &&
+    platformOpening &&
+    effectiveRole !== "player" &&
+    (platformOpening.stage === "standby" || platformOpening.stage === "opening")
+  ) {
+    return (
+      <ExtensionStateProvider value={extensionState}>
+        <ViewRoleContext.Provider value={effectiveRole}>
+          <PlatformGameOpening
+            launch={platformOpening}
+            extensionState={extensionState}
+            manager={Boolean(manager)}
+            isHostPresenting={isHostPresenting}
+            onPresent={beginHostPresentation}
+            onExit={onBack ?? defaultExit}
+          />
+        </ViewRoleContext.Provider>
+      </ExtensionStateProvider>
+    )
+  }
 
   // TADAZZ show (UPSTREAM_TOUCHES 2026-11-05 T1): own the whole stage so the
   // legacy background/state components are never mounted, not even for a frame.

@@ -21,6 +21,9 @@ import {
 } from "@razzia/common/types/game/status"
 import {
   generateRosterPlayerId,
+  createDefaultQuizExtrasV2,
+  computeCanonicalBaseDigest,
+  RAZZIA_THEME_ID,
   type HostPresenceSnapshot,
   type RevealDistributionSnapshot,
   type RosterParticipant,
@@ -141,6 +144,25 @@ class Game {
 
     const quizzId = (quizz as { id?: string }).id
     const sidecar = quizzId ? readSidecar(getPath, quizzId) : null
+    // Persisted native imports also receive platform chrome without migrating or
+    // publishing a sidecar. Their original theme and native round engine remain.
+    const runtimeExtras =
+      sidecar ??
+      (quizzId
+        ? createDefaultQuizExtrasV2(
+            quizzId,
+            quizz.questions.map(() => uuid()),
+            computeCanonicalBaseDigest(quizz),
+          )
+        : null)
+    if (!sidecar && runtimeExtras && "defaults" in runtimeExtras) {
+      runtimeExtras.defaults.showTheme = {
+        id: RAZZIA_THEME_ID,
+        version: "1.0.0",
+        overrides: {},
+        legacyPolicy: "preserve-saved",
+      }
+    }
     const isCreatingWorlds = isCreatingWorldsProgram(sidecar)
     this.isCreatingWorldsShow = isCreatingWorlds
     this.temporaryGuestsAllowed = allowsTemporaryGuests(
@@ -148,24 +170,26 @@ class Game {
       managerClientId,
       process.env,
     )
-    this.extensionSession = sidecar
+    this.extensionSession = runtimeExtras
       ? new ExtensionGameSession(
           this.gameId,
-          sidecar,
+          runtimeExtras,
           installedThemeForSelection(
             managerClientId,
-            "defaults" in sidecar ? sidecar.defaults.showTheme : undefined,
+            "defaults" in runtimeExtras
+              ? runtimeExtras.defaults.showTheme
+              : undefined,
           ),
           publishedCompositionForPin(
             managerClientId,
-            "defaults" in sidecar
-              ? sidecar.defaults.showComposition
+            "defaults" in runtimeExtras
+              ? runtimeExtras.defaults.showComposition
               : undefined,
             quizz.subject,
           ),
         )
       : null
-    this.presentationLaunch = isCreatingWorlds
+    this.presentationLaunch = this.extensionSession
       ? new PresentationLaunch(() => {
           this.extensionSession?.onPresenceChanged()
           this.broadcastExtensionState()
@@ -1131,8 +1155,11 @@ class Game {
   }
 
   async start(socket: Socket) {
-    if (!this.started && this.presentationLaunch?.advance()) {
-      return
+    // Product launch is host-owned, before billing or any game/theme timeline.
+    if (!this.started && this.presentationLaunch) {
+      if (socket.id !== this._manager.id || this.presentationLaunch.advance()) {
+        return
+      }
     }
 
     if (!this.started) {

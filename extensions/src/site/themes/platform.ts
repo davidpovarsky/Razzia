@@ -13,7 +13,13 @@ export const sitePlatformStyle = `
 .tds-scope .site-game-list .game-card{display:grid;grid-template-columns:180px minmax(0,1fr);align-items:start;overflow:hidden}
 .tds-scope .site-games-empty{grid-column:1/-1}
 .tds-scope .list-toolbar .tds-field{min-width:10rem}
-.tds-scope .list-toolbar .tds-select{margin:0}
+.tds-scope .list-toolbar .tds-select{margin:0;height:100%;min-height:var(--tds-button-min-height);border-radius:var(--tds-button-radius);font-size:var(--tds-type-label);font-weight:var(--tds-weight-label)}
+.tds-scope .list-toolbar .button-row{align-items:stretch}
+.tds-scope .site-prepare-fields{display:grid;gap:var(--tds-space-4);max-width:36rem}
+.tds-scope .site-prepare-fields .tds-select{margin:0}
+.tds-scope .site-prepare-fields>.btn{justify-self:start;margin:0}
+.tds-scope .site-contact-form{display:grid;gap:var(--tds-space-5);width:100%;max-width:38rem}
+.tds-scope .site-contact-form>.tds-button{justify-self:start}
 .tds-scope .site-package-tools>details{border:1px solid var(--tds-border);border-radius:var(--tds-radius-card);background:var(--tds-surface);padding:var(--tds-space-4)}
 .tds-scope .site-package-tools summary{color:var(--tds-text);min-height:var(--tds-button-min-height);padding:var(--tds-space-2);cursor:pointer}
 .tds-scope .site-package-tools summary span{display:block;color:var(--tds-muted-text);font-size:var(--tds-type-label);margin-block-start:var(--tds-space-1)}

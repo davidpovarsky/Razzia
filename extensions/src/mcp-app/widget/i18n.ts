@@ -556,42 +556,22 @@ const transportLabels: Record<
   Locale,
   readonly [string, string, string, string]
 > = {
-  he: ["השלב הקודם", "השלב הבא", "השהיית המופע", "המשך המופע"],
-  en: ["Previous chapter", "Next chapter", "Pause show", "Resume show"],
-  fr: [
-    "Chapitre précédent",
-    "Chapitre suivant",
-    "Mettre en pause",
-    "Reprendre",
-  ],
-  de: [
-    "Vorheriges Kapitel",
-    "Nächstes Kapitel",
-    "Show pausieren",
-    "Show fortsetzen",
-  ],
+  he: ["הכרטיס הקודם", "הכרטיס הבא", "השהיית המופע", "המשך המופע"],
+  en: ["Previous card", "Next card", "Pause show", "Resume show"],
+  fr: ["Carte précédente", "Carte suivante", "Mettre en pause", "Reprendre"],
+  de: ["Vorherige Karte", "Nächste Karte", "Show pausieren", "Show fortsetzen"],
   es: [
-    "Capítulo anterior",
-    "Capítulo siguiente",
+    "Tarjeta anterior",
+    "Tarjeta siguiente",
     "Pausar espectáculo",
     "Reanudar espectáculo",
   ],
-  it: [
-    "Capitolo precedente",
-    "Capitolo successivo",
-    "Metti in pausa",
-    "Riprendi",
-  ],
-  ja: ["前の章", "次の章", "ショーを一時停止", "ショーを再開"],
-  tr: [
-    "Önceki bölüm",
-    "Sonraki bölüm",
-    "Gösteriyi duraklat",
-    "Gösteriyi sürdür",
-  ],
+  it: ["Scheda precedente", "Scheda successiva", "Metti in pausa", "Riprendi"],
+  ja: ["前のカード", "次のカード", "ショーを一時停止", "ショーを再開"],
+  tr: ["Önceki kart", "Sonraki kart", "Gösteriyi duraklat", "Gösteriyi sürdür"],
   vi: [
-    "Chương trước",
-    "Chương tiếp theo",
+    "Thẻ trước",
+    "Thẻ tiếp theo",
     "Tạm dừng chương trình",
     "Tiếp tục chương trình",
   ],
@@ -841,3 +821,17 @@ export function hostLocale(value?: string): Locale {
 }
 
 export type TranslationKey = Keys
+
+const closePanelLabels: Record<Locale, string> = {
+  en: "Close panel",
+  he: "סגירת התפריט",
+  fr: "Fermer le panneau",
+  de: "Bereich schließen",
+  es: "Cerrar panel",
+  it: "Chiudi pannello",
+  ja: "パネルを閉じる",
+  tr: "Paneli kapat",
+  vi: "Đóng bảng điều khiển",
+}
+for (const locale of locales)
+  resources[locale].widget.closePanel = closePanelLabels[locale]

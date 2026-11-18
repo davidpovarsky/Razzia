@@ -10,14 +10,9 @@ export const accountStyle = `
 .account-kicker{color:#e7ff37;text-transform:uppercase;font-weight:800;letter-spacing:.1em;font-size:11px}
 .account-card h1{font-size:clamp(32px,5vw,50px);font-weight:900;letter-spacing:-.05em;line-height:1.1;margin:14px 0}
 .account-lead{font-size:15px;color:#cfc1db;line-height:1.6;margin:0 0 26px}
-.account-fields{display:grid;gap:18px}
-.account-fields label{display:grid;gap:8px;font-size:13px;font-weight:750;color:#f7ecff}
-.account-fields input{border:1px solid #58456e;background:#120a24;border-radius:12px;color:#fff;font:inherit;padding:15px 16px;outline:none;width:100%;box-sizing:border-box}
-.account-fields input:focus-visible{border-color:#d6ff26;box-shadow:0 0 0 2px rgba(231,255,55,.2)}
-.account-button{font:inherit;font-weight:850;border:0;border-radius:12px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:15px 19px}
-.account-button.primary{background:#e7ff37;color:#180d28}
-.account-button.secondary{background:none;color:#e7ff37;padding:7px 0}
-.account-button[disabled]{opacity:.6;cursor:wait}
+.account-fields{display:grid;gap:var(--tds-space-5)}
+.account-submit{width:100%}
+.account-links .account-link{padding-inline:0;justify-content:flex-start}
 .account-links{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 20px;margin-top:22px}
 .account-error{color:#ffc5d5;font-size:13px;background:rgba(194,26,75,.2);padding:12px;border-radius:10px}
 .account-notice{color:#e7ff37;font-size:13px;padding:11px 0}

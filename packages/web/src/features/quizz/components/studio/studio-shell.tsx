@@ -11,6 +11,10 @@ import { StudioParticipantsPage } from "./studio-participants-page"
 import { StudioSceneEditor } from "./studio-scene-editor"
 import { StudioSettingsPage } from "./studio-settings-page"
 import { InstalledThemeCatalogProvider } from "./installed-theme-catalog"
+import { EditorWorkspace } from "@razzia/extensions/presentation"
+import { List } from "lucide-react"
+import { EditorGameBackdrop } from "./EditorGameBackdrop"
+import "./editor-workspace-native.css"
 
 const StudioContent = () => {
   const { activeTab, selectedTimelineItem } = useStudioEditor()
@@ -55,32 +59,38 @@ const StudioContent = () => {
     return <StudioLaunchPage />
   }
 
-  // ActiveTab === "questions"
   if (!selectedTimelineItem) {
     return (
-      <div className="flex min-h-0 flex-1 flex-col overflow-x-hidden overflow-y-auto lg:flex-row lg:overflow-hidden">
-        <QuizzEditorSidebar />
-        <div className="text-muted-foreground flex flex-1 items-center justify-center p-8 text-sm font-medium" />
-      </div>
+      <EditorWorkspace
+        ariaLabel={t("extensions:studio.tabs.questions", "Questions")}
+        closeLabel={t("common:close", "Close")}
+        panels={[
+          {
+            id: "timeline",
+            label: t("extensions:studio.tabs.questions", "Questions"),
+            icon: <List size={19} />,
+            side: "left",
+            dock: true,
+            content: <QuizzEditorSidebar />,
+          },
+        ]}
+      >
+        <div />
+      </EditorWorkspace>
     )
   }
-
-  return (
-    <div className="flex min-h-0 flex-1 flex-col overflow-x-hidden overflow-y-auto lg:flex-row lg:overflow-hidden">
-      <QuizzEditorSidebar />
-      {selectedTimelineItem.kind === "question" ? (
-        <QuestionEditor />
-      ) : (
-        <StudioSceneEditor />
-      )}
-    </div>
+  return selectedTimelineItem.kind === "question" ? (
+    <QuestionEditor />
+  ) : (
+    <StudioSceneEditor />
   )
 }
 
 export const StudioShell = () => (
   <InstalledThemeCatalogProvider>
     <StudioEditorProvider>
-      <div className="bg-muted relative flex h-svh max-w-full flex-col overflow-x-hidden">
+      <div className="native-editor-shell bg-muted relative flex max-w-full flex-col">
+        <EditorGameBackdrop />
         <QuizzEditorHeader />
         <div
           id="studio-content"

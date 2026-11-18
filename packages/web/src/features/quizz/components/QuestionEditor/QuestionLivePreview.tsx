@@ -13,7 +13,9 @@ import {
   QuestionUnderline,
   ShowThemeScope,
   showThemeStyle,
+  showViewportStyle,
 } from "@razzia/extensions/presentation"
+import { STATUS } from "@razzia/common/types/game/status"
 import defaultBackground from "@razzia/web/assets/background.png"
 import { getBranding } from "@razzia/web/branding"
 import Button from "@razzia/web/components/Button"
@@ -34,11 +36,16 @@ import { useId, useMemo, useState } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { EditorPreviewViewport } from "./EditorPreviewViewport"
+import { EditorCanvasFrame } from "../studio/EditorCanvasFrame"
 
 type PreviewPhase = "question" | "answers" | "results"
 
 /** Native presentational components only: no save, room, score or socket owner. */
-export function QuestionLivePreview() {
+export function QuestionLivePreview({
+  workspace = false,
+}: {
+  workspace?: boolean
+}) {
   const { t, i18n } = useTranslation()
   const id = useId()
   const {
@@ -86,6 +93,10 @@ export function QuestionLivePreview() {
     originalUrl: getBranding()?.background ?? defaultBackground,
     reducedMotion: true,
   })
+  const fallbackBackground =
+    background.source === "original"
+      ? showViewportStyle(theme, null, STATUS.SHOW_QUESTION)
+      : undefined
   const title =
     question.question ||
     t(
@@ -146,49 +157,233 @@ export function QuestionLivePreview() {
   ])
   const authoredKey = `Q${String(timeline.slice(0, selectedTimelineIndex + 1).filter((item) => item.kind === "question").length).padStart(2, "0")}`
 
+  const stageContent = (
+    <ShowThemeScope theme={theme}>
+      <div
+        data-testid="question-preview-native-stage"
+        data-show-theme={theme.definition.id}
+        style={showThemeStyle(theme)}
+        className="overflow-hidden rounded-xl"
+      >
+        <EditorPreviewViewport
+          aspect={aspect}
+          animate={!reducedMotion && animatedQuestion === question}
+        >
+          <div
+            className="bg-secondary absolute inset-0"
+            style={
+              fallbackBackground ?? {
+                backgroundImage: background.url
+                  ? `url(${JSON.stringify(background.url)})`
+                  : undefined,
+                backgroundSize: background.fit,
+                backgroundPosition:
+                  perQuestion?.background?.position ?? "center",
+              }
+            }
+          />
+          {background.overlayOpacity > 0 && (
+            <div
+              className="pointer-events-none absolute inset-0 bg-black"
+              style={{
+                opacity: background.overlayOpacity,
+              }}
+            />
+          )}
+          <LiveEditorStagePreview
+            source={authoredSource}
+            authoredKey={authoredKey}
+            phase={phase === "answers" ? "answerCards" : phase}
+            locale={i18n.language}
+            timeline={timeline}
+            paused={Boolean(reducedMotion) || animatedQuestion !== question}
+            replay={replay}
+            mediaRevealed={revealed}
+          >
+            <NativeGameSurface theme={theme}>
+              {phase === "question" && (
+                <>
+                  <NativeRazziaQuestion
+                    data={{
+                      question: title,
+                      media: question.media,
+                      cooldown: question.cooldown,
+                    }}
+                    stageAnimations={animations}
+                    questionDecoration={decoration}
+                    epoch={key}
+                    reveal={reveal}
+                    isManuallyRevealed={revealed}
+                    controlledTimeMs={0}
+                    controlledPaused
+                    revealTimeMs={revealTime}
+                  />
+                  {question.media && question.media.type !== "image" && (
+                    <div className="relative z-10 mx-auto flex w-full justify-center">
+                      <QuestionMedia
+                        media={question.media}
+                        autoPlay={false}
+                        alt={title}
+                      />
+                    </div>
+                  )}
+                </>
+              )}
+              {phase === "results" &&
+                (question.type === "estimation" ? (
+                  <QUESTION_PRESENTATIONS.estimation.ResponsesComponent
+                    data={resultData}
+                  />
+                ) : (
+                  <ChoiceResultsView
+                    data={resultData}
+                    extensionState={{
+                      epoch: replay,
+                      questionId: currentQuestionId,
+                      extras: {
+                        stageAnimations: perQuestion?.stageAnimations,
+                        questionEntrance: perQuestion?.questionEntrance,
+                        defaults,
+                      },
+                    }}
+                    reveal={{
+                      answerVisuals: visuals,
+                      isSurvey: survey,
+                      revealDistribution: undefined,
+                      targetPercentages: percentages,
+                      timelineState: calculateRevealState({
+                        timelineKey: key,
+                        targetPercentages: percentages,
+                        reducedMotion: true,
+                        isSurvey: survey,
+                      }),
+                    }}
+                  />
+                ))}
+              {phase === "answers" && (
+                <>
+                  <div className="relative flex min-h-0 flex-1 flex-col items-center justify-center gap-3 px-6 py-3">
+                    <h2
+                      data-testid="question-preview-title"
+                      className="max-w-5xl text-center text-4xl leading-tight font-bold break-words text-white drop-shadow-lg"
+                    >
+                      {title}
+                    </h2>
+                    <QuestionUnderline
+                      decoration={decoration}
+                      controlledTimeMs={0}
+                      controlledPaused
+                      className="flex w-64 items-center justify-center"
+                      playerClassName="h-5 w-full"
+                    />
+                    {question.media && (
+                      <QuestionMedia
+                        media={question.media}
+                        alt={title}
+                        autoPlay={false}
+                        reveal={reveal}
+                        isManuallyRevealed={revealed}
+                        controlledTimeMs={revealTime}
+                        isManager
+                      />
+                    )}
+                  </div>
+                  <Answer
+                    key={currentQuestionId}
+                    answers={answers}
+                    options={question.options}
+                    visuals={visuals}
+                    stageAnimations={animations}
+                    animationEpochKey={key}
+                    onSubmit={() => undefined}
+                    readOnly
+                  />
+                </>
+              )}
+            </NativeGameSurface>
+          </LiveEditorStagePreview>
+        </EditorPreviewViewport>
+      </div>
+    </ShowThemeScope>
+  )
+
   return (
     <section
       data-testid="question-live-preview"
       data-question-id={currentQuestionId}
       data-preview-phase={phase}
-      className="border-accent bg-background relative z-10 flex min-w-0 flex-col gap-3 self-start rounded-xl border p-3 shadow-sm sm:p-4"
-      aria-labelledby={id}
+      className={
+        workspace
+          ? "native-question-preview relative z-10"
+          : "border-accent bg-background relative z-10 flex min-w-0 flex-col gap-3 self-start rounded-xl border p-3 shadow-sm sm:p-4"
+      }
+      aria-labelledby={workspace ? undefined : id}
+      aria-label={
+        workspace
+          ? t("extensions:editorPreview.title", "Live preview")
+          : undefined
+      }
     >
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2
-          id={id}
-          className="text-foreground flex items-center gap-2 text-sm font-bold"
-        >
-          <Eye className="size-4" aria-hidden="true" />
-          {t("extensions:editorPreview.title", "Live preview")}
-        </h2>
-        <Button
-          type="button"
-          size="sm"
-          className="bg-accent text-foreground"
-          aria-expanded={visible}
-          aria-controls={`${id}-content`}
-          onClick={() => setVisible((value) => !value)}
-        >
-          {visible ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
-          {visible
-            ? t("extensions:editorPreview.hide", "Hide preview")
-            : t("extensions:editorPreview.show", "Show preview")}
-        </Button>
-      </div>
-      {visible && (
-        <div id={`${id}-content`} className="flex min-w-0 flex-col gap-3">
-          <p className="text-muted-foreground text-xs">
-            {t(
-              "extensions:editorPreview.description",
-              "Updates as you edit. No save or live game is needed.",
+      {!workspace && (
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2
+            id={id}
+            className="text-foreground flex items-center gap-2 text-sm font-bold"
+          >
+            <Eye className="size-4" aria-hidden="true" />
+            {t("extensions:editorPreview.title", "Live preview")}
+          </h2>
+          <Button
+            type="button"
+            size="sm"
+            className="bg-accent text-foreground"
+            aria-expanded={visible}
+            aria-controls={`${id}-content`}
+            onClick={() => setVisible((value) => !value)}
+          >
+            {visible ? (
+              <EyeOff className="size-4" />
+            ) : (
+              <Eye className="size-4" />
             )}
-          </p>
-          <div className="flex flex-wrap items-center justify-between gap-2">
+            {visible
+              ? t("extensions:editorPreview.hide", "Hide preview")
+              : t("extensions:editorPreview.show", "Show preview")}
+          </Button>
+        </div>
+      )}
+      {(visible || workspace) && (
+        <div
+          id={`${id}-content`}
+          className={
+            workspace
+              ? "native-question-preview-content"
+              : "flex min-w-0 flex-col gap-3"
+          }
+        >
+          {!workspace && (
+            <p className="text-muted-foreground text-xs">
+              {t(
+                "extensions:editorPreview.description",
+                "Updates as you edit. No save or live game is needed.",
+              )}
+            </p>
+          )}
+          <div
+            className={
+              workspace
+                ? "native-question-preview-tools"
+                : "flex flex-wrap items-center justify-between gap-2"
+            }
+          >
             <ToggleGroup
               value={phase}
               onChange={setPhase}
-              className="h-auto min-h-10 max-w-full flex-wrap"
+              className={
+                workspace
+                  ? "h-9 shrink-0"
+                  : "h-auto min-h-10 max-w-full flex-wrap"
+              }
               items={[
                 {
                   value: "question",
@@ -229,154 +424,20 @@ export function QuestionLivePreview() {
               />
             </div>
           </div>
-          <ShowThemeScope theme={theme}>
-            <div
-              data-testid="question-preview-native-stage"
-              data-show-theme={theme.definition.id}
-              style={showThemeStyle(theme)}
-              className="overflow-hidden rounded-xl"
-            >
-              <EditorPreviewViewport
-                aspect={aspect}
-                animate={!reducedMotion && animatedQuestion === question}
-              >
-                <div
-                  className="bg-secondary absolute inset-0"
-                  style={{
-                    backgroundImage: background.url
-                      ? `url(${JSON.stringify(background.url)})`
-                      : undefined,
-                    backgroundSize: background.fit,
-                    backgroundPosition:
-                      perQuestion?.background?.position ?? "center",
-                  }}
-                />
-                {perQuestion?.background?.url && (
-                  <div
-                    className="pointer-events-none absolute inset-0 bg-black"
-                    style={{
-                      opacity: perQuestion.background.overlayOpacity,
-                    }}
-                  />
-                )}
-                <LiveEditorStagePreview
-                  source={authoredSource}
-                  authoredKey={authoredKey}
-                  phase={phase === "answers" ? "answerCards" : phase}
-                  locale={i18n.language}
-                  timeline={timeline}
-                  paused={
-                    Boolean(reducedMotion) || animatedQuestion !== question
-                  }
-                  replay={replay}
-                  mediaRevealed={revealed}
-                >
-                  <NativeGameSurface theme={theme}>
-                    {phase === "question" && (
-                      <>
-                        <NativeRazziaQuestion
-                          data={{
-                            question: title,
-                            media: question.media,
-                            cooldown: question.cooldown,
-                          }}
-                          stageAnimations={animations}
-                          questionDecoration={decoration}
-                          epoch={key}
-                          reveal={reveal}
-                          isManuallyRevealed={revealed}
-                          controlledTimeMs={0}
-                          controlledPaused
-                          revealTimeMs={revealTime}
-                        />
-                        {question.media && question.media.type !== "image" && (
-                          <div className="relative z-10 mx-auto flex w-full justify-center">
-                            <QuestionMedia
-                              media={question.media}
-                              autoPlay={false}
-                              alt={title}
-                            />
-                          </div>
-                        )}
-                      </>
-                    )}
-                    {phase === "results" &&
-                      (question.type === "estimation" ? (
-                        <QUESTION_PRESENTATIONS.estimation.ResponsesComponent
-                          data={resultData}
-                        />
-                      ) : (
-                        <ChoiceResultsView
-                          data={resultData}
-                          extensionState={{
-                            epoch: replay,
-                            questionId: currentQuestionId,
-                            extras: {
-                              stageAnimations: perQuestion?.stageAnimations,
-                              questionEntrance: perQuestion?.questionEntrance,
-                              defaults,
-                            },
-                          }}
-                          reveal={{
-                            answerVisuals: visuals,
-                            isSurvey: survey,
-                            revealDistribution: undefined,
-                            targetPercentages: percentages,
-                            timelineState: calculateRevealState({
-                              timelineKey: key,
-                              targetPercentages: percentages,
-                              reducedMotion: true,
-                              isSurvey: survey,
-                            }),
-                          }}
-                        />
-                      ))}
-                    {phase === "answers" && (
-                      <>
-                        <div className="relative flex min-h-0 flex-1 flex-col items-center justify-center gap-3 px-6 py-3">
-                          <h2
-                            data-testid="question-preview-title"
-                            className="max-w-5xl text-center text-4xl leading-tight font-bold break-words text-white drop-shadow-lg"
-                          >
-                            {title}
-                          </h2>
-                          <QuestionUnderline
-                            decoration={decoration}
-                            controlledTimeMs={0}
-                            controlledPaused
-                            className="flex w-64 items-center justify-center"
-                            playerClassName="h-5 w-full"
-                          />
-                          {question.media && (
-                            <QuestionMedia
-                              media={question.media}
-                              alt={title}
-                              autoPlay={false}
-                              reveal={reveal}
-                              isManuallyRevealed={revealed}
-                              controlledTimeMs={revealTime}
-                              isManager
-                            />
-                          )}
-                        </div>
-                        <Answer
-                          key={currentQuestionId}
-                          answers={answers}
-                          options={question.options}
-                          visuals={visuals}
-                          stageAnimations={animations}
-                          animationEpochKey={key}
-                          onSubmit={() => undefined}
-                          readOnly
-                        />
-                      </>
-                    )}
-                  </NativeGameSurface>
-                </LiveEditorStagePreview>
-              </EditorPreviewViewport>
-            </div>
-          </ShowThemeScope>
-          <div className="flex flex-wrap items-center gap-2">
+          {workspace ? (
+            <EditorCanvasFrame aspect={aspect}>
+              {stageContent}
+            </EditorCanvasFrame>
+          ) : (
+            stageContent
+          )}
+          <div
+            className={
+              workspace
+                ? "native-question-preview-footer"
+                : "flex flex-wrap items-center gap-2"
+            }
+          >
             <Button
               type="button"
               size="sm"

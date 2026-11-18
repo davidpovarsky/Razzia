@@ -1,7 +1,8 @@
 import { SiteLink } from "../shared/SiteLink"
 import { useTranslation } from "react-i18next"
 import { SiteButton } from "../shared/SiteButton"
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
+import { Select } from "@razzia/extensions/platform-ui"
 import { useQuery } from "@tanstack/react-query"
 import type { GameResult } from "@razzia/common/types/game"
 import { STATUS } from "@razzia/common/types/game/status"
@@ -171,23 +172,68 @@ export function Events({
   )
 }
 
-export function Prepare({ games }: { games: QuizMeta[] }) {
+export function Prepare({
+  games,
+  requestedId,
+}: {
+  games: QuizMeta[]
+  requestedId: string
+}) {
   const t = useSiteText()
-  const requested =
-    new URLSearchParams(window.location.search).get("quiz") ?? ""
-  const [selected, setSelected] = useState(
-    games.some((game) => game.id === requested) ? requested : "",
-  )
+  const [selection, setSelection] = useState(requestedId)
+  const selected = games.some((game) => game.id === selection) ? selection : ""
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(false)
+  const pending = useRef<AbortController | null>(null)
+  const opened = useRef<{ quizId: string; gameId: string } | null>(null)
+  const [openedQuizId, setOpenedQuizId] = useState("")
   const { updateManager } = useManagerStore()
+
+  useEffect(() => {
+    const cancelPending = () => {
+      const controller = pending.current
+      pending.current = null
+      controller?.abort()
+    }
+    const onPageHide = () => cancelPending()
+    const onPageShow = (event: PageTransitionEvent) => {
+      if (event.persisted) {
+        // History restores the React tree, including its pre-navigation busy
+        // state. Restore the controls; never POST another room automatically.
+        cancelPending()
+        setBusy(false)
+        setError(false)
+      }
+    }
+    window.addEventListener("pagehide", onPageHide)
+    window.addEventListener("pageshow", onPageShow)
+
+    return () => {
+      cancelPending()
+      window.removeEventListener("pagehide", onPageHide)
+      window.removeEventListener("pageshow", onPageShow)
+    }
+  }, [])
+
   const start = async () => {
-    if (busy || !selected) {
+    if (pending.current || !selected) {
       return
     }
 
+    // A bfcache return or rapid second click reopens the acknowledged room.
+    // Creating another room is never an implicit side effect of restoration.
+    if (opened.current?.quizId === selected) {
+      window.location.assign(
+        `/party/manager/${encodeURIComponent(opened.current.gameId)}`,
+      )
+      return
+    }
+
+    const controller = new AbortController()
+    pending.current = controller
     setBusy(true)
     setError(false)
+    const deadline = window.setTimeout(() => controller.abort(), 20_000)
 
     try {
       const { gameId, inviteCode } = await siteRequest<{
@@ -196,7 +242,17 @@ export function Prepare({ games }: { games: QuizMeta[] }) {
       }>("/api/games", {
         method: "POST",
         body: JSON.stringify({ quizzId: selected }),
+        signal: controller.signal,
       })
+      if (pending.current !== controller || controller.signal.aborted) {
+        return
+      }
+      if (!gameId || !inviteCode) {
+        throw new Error("Missing room response")
+      }
+
+      opened.current = { quizId: selected, gameId }
+      setOpenedQuizId(selected)
       updateManager({
         gameId,
         inviteCode,
@@ -207,8 +263,15 @@ export function Prepare({ games }: { games: QuizMeta[] }) {
       })
       window.location.assign(`/party/manager/${encodeURIComponent(gameId)}`)
     } catch {
-      setError(true)
-      setBusy(false)
+      if (pending.current === controller) {
+        setError(true)
+      }
+    } finally {
+      window.clearTimeout(deadline)
+      if (pending.current === controller) {
+        pending.current = null
+        setBusy(false)
+      }
     }
   }
 
@@ -222,11 +285,14 @@ export function Prepare({ games }: { games: QuizMeta[] }) {
             "Open a real room, then configure participants, audio and presentation in the existing host.",
           )}
         </p>
-        <label>
-          {t("My Games")}
-          <select
+        <div className="site-prepare-fields" aria-busy={busy}>
+          <Select
+            label={t("My Games")}
             value={selected}
-            onChange={(event) => setSelected(event.target.value)}
+            onChange={(event) => {
+              setSelection(event.target.value)
+              setError(false)
+            }}
             disabled={busy}
           >
             <option value="">{t("Choose a game")}</option>
@@ -235,27 +301,33 @@ export function Prepare({ games }: { games: QuizMeta[] }) {
                 {game.subject}
               </option>
             ))}
-          </select>
-        </label>
-        <SiteButton
-          disabled={!selected || busy}
-          className="btn primary"
-          onClick={() => void start()}
-        >
-          {t(busy ? "Please wait…" : "Open show room")}
-        </SiteButton>
-        {error && (
-          <p role="alert">
+          </Select>
+          <SiteButton
+            disabled={!selected || busy}
+            className="btn primary"
+            onClick={() => void start()}
+          >
             {t(
-              "Unable to start. Check your session and capacity, then try again.",
+              busy
+                ? "Please wait…"
+                : openedQuizId === selected
+                  ? "Open host"
+                  : "Open show room",
             )}
-          </p>
-        )}
-        {!games.length && (
-          <SiteLink className="btn ghost" href="/manager/quizz">
-            {t("Create game")}
-          </SiteLink>
-        )}
+          </SiteButton>
+          {error && (
+            <p role="alert">
+              {t(
+                "Unable to start. Check your session and capacity, then try again.",
+              )}
+            </p>
+          )}
+          {!games.length && (
+            <SiteLink className="btn ghost" href="/manager/quizz">
+              {t("Create game")}
+            </SiteLink>
+          )}
+        </div>
       </section>
     </>
   )

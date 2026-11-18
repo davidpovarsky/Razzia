@@ -1,5 +1,9 @@
 import assert from "node:assert/strict"
 import path from "node:path"
+import {
+  closeWorkspaceDrawers,
+  openWorkspacePanel,
+} from "./workspace-controls.mjs"
 
 // Real AppBridge/UI behavior with explicitly synthetic save responses. Native
 // consent/storage authority is proved separately by the real issuer SDK tests.
@@ -15,6 +19,7 @@ export async function verifyHostControls({
   const iframe = page.frameLocator("iframe")
   const before = await readRecord()
   await page.evaluate(() => window.__host.enableSaveFixture())
+  await openWorkspacePanel(page, "save")
   await iframe.getByTestId("full-show-save").click()
   await iframe.getByTestId("full-show-save-consent").waitFor()
   await iframe.getByTestId("full-show-review-save").click()
@@ -27,6 +32,7 @@ export async function verifyHostControls({
   await iframe.getByTestId("full-show-save").click()
   await iframe.getByTestId("full-show-save-complete").waitFor()
   await iframe.getByTestId("full-show-open-saved").click()
+  await closeWorkspaceDrawers(page)
   await iframe.getByTestId("full-show-expand").click()
   const proof = await page.evaluate(() => window.__host.hostControls())
   assert.equal(proof.saveRequests.length, 3)

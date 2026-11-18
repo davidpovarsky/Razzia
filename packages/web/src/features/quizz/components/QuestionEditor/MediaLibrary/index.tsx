@@ -21,7 +21,7 @@ import { useQuery } from "@tanstack/react-query"
 import clsx from "clsx"
 import { X } from "lucide-react"
 import { Dialog } from "radix-ui"
-import { type DragEvent, useState } from "react"
+import { type DragEvent, useRef, useState } from "react"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
 
@@ -42,6 +42,7 @@ const MediaLibrary = ({
   acceptType,
   allowedBuiltinUrls,
 }: Props) => {
+  const returnFocus = useRef<HTMLElement | null>(null)
   const { currentIndex, updateQuestion } = useQuizzEditor()
   const { data, isPending } = useQuery({ ...mediaListQuery(), enabled: open })
   const [search, setSearch] = useState("")
@@ -167,6 +168,19 @@ const MediaLibrary = ({
 
         <Dialog.Content
           aria-describedby={undefined}
+          onOpenAutoFocus={() => {
+            returnFocus.current =
+              document.activeElement instanceof HTMLElement
+                ? document.activeElement
+                : null
+          }}
+          onCloseAutoFocus={(event) => {
+            const opener = returnFocus.current
+            if (opener?.isConnected && !opener.closest("[inert]")) {
+              event.preventDefault()
+              opener.focus({ preventScroll: true })
+            }
+          }}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}

@@ -3,6 +3,7 @@ import { SiteLink } from "../shared/SiteLink"
 import { asset, catalogue, Cover, GameCard, type Game } from "./Catalogue"
 import { corrections } from "../../themes/corrections"
 import { sitePlatformStyle } from "../../themes/platform"
+import { Input, Textarea } from "@razzia/extensions/platform-ui"
 import { Pricing } from "./Pricing"
 import { GreatGuessOffDemo } from "./GreatGuessOffDemo"
 import guessOffStyles from "./great-guessoff.css?inline"
@@ -36,7 +37,13 @@ function selectedCatalogueGame(search: string): Game {
   const params = new URLSearchParams(search)
 
   return (
-    catalogue.find((game) => game.id === (params.get("game") === "guessoff" ? "great-guessoff" : params.get("game"))) ?? catalogue[0]
+    catalogue.find(
+      (game) =>
+        game.id ===
+        (params.get("game") === "guessoff"
+          ? "great-guessoff"
+          : params.get("game")),
+    ) ?? catalogue[0]
   )
 }
 
@@ -597,32 +604,30 @@ export function MarketingSite() {
                     "Enquiry not sent. Contact service is not connected in this preview.",
                   )
                 }}
-                style={{ display: "grid", gap: 16, maxWidth: 600 }}
+                className="site-contact-form"
               >
-                <label>
-                  {t("Event type")}
-                  <input
-                    required
-                    placeholder={t("What are you celebrating or hosting?")}
-                    style={{ display: "block", width: "100%" }}
-                  />
-                </label>
-                <label>
-                  {t("Email address")}
-                  <input
-                    required
-                    type="email"
-                    style={{ display: "block", width: "100%" }}
-                  />
-                </label>
-                <label>
-                  {t("About your event")}
-                  <textarea
-                    rows={4}
-                    style={{ display: "block", width: "100%" }}
-                  />
-                </label>
-                <SiteButton disabled className="btn btn-primary">
+                <Input
+                  label={t("Event type")}
+                  name="eventType"
+                  required
+                  maxLength={160}
+                  placeholder={t("What are you celebrating or hosting?")}
+                />
+                <Input
+                  label={t("Email address")}
+                  name="email"
+                  required
+                  type="email"
+                  autoComplete="email"
+                  maxLength={254}
+                />
+                <Textarea
+                  label={t("About your event")}
+                  name="message"
+                  rows={5}
+                  maxLength={4000}
+                />
+                <SiteButton disabled variant="primary">
                   {t("Contact service unavailable")}
                 </SiteButton>
                 <p className="note">

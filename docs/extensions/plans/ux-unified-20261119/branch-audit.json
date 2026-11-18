@@ -1,0 +1,216 @@
+{
+  "base": "b672eb2e972edcfca143c659acc88fbd2efb23e3",
+  "head": "82e3c15404bd43066f323a8d441f5d398a768e51",
+  "refs": [
+    {
+      "ref": "refs/heads/cez/17edc638",
+      "sha": "6fc790a53056b972b5161ea2e78355c64635c815",
+      "date": "2026-11-17T00:56:29+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/cez/1e96bb6f",
+      "sha": "f6fc33969bd59ca59cc030cd32d9fda4a801be79",
+      "date": "2026-11-17T14:04:22+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/cez/44fdfcc0",
+      "sha": "4a1d92b03d734d96717c26873686c68d6c76735c",
+      "date": "2026-11-17T01:24:40+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/cez/482771e7",
+      "sha": "dd6fd4392d44932fd63a80837abadece416e5ade",
+      "date": "2026-11-17T05:30:10+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/cez/8de82781",
+      "sha": "62a9cbea2846711a8392d695be02f9f82f635536",
+      "date": "2026-11-17T12:02:01+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/cez/999ed90c",
+      "sha": "34cfd464ac0bba432701b87f10f4f8388d665066",
+      "date": "2026-11-17T14:27:04+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/cez/c76cfcf7",
+      "sha": "0c1aa5ed0abcf16e16a6e1ed5d4598127438de02",
+      "date": "2026-11-17T00:17:53+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/cez/df544d57",
+      "sha": "95e892e80a1bb85c1d118d221a5dfcd7d3b74d19",
+      "date": "2026-11-17T00:47:10+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/cez/e0c87b17",
+      "sha": "8e13d00a7c36dd1b130018ca59499acf6fc1fa83",
+      "date": "2026-11-17T00:37:00+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/cez/e17507c7",
+      "sha": "02d752c04a5d9bef1d670d3f613ea9e921f0506a",
+      "date": "2026-11-17T01:38:07+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/cez/fd341b34",
+      "sha": "a7c7c8f531fee3ad32416e8edf0b33ef01886b63",
+      "date": "2026-11-17T12:17:16+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/codex/great-guessoff-demo-final-20261118",
+      "sha": "f9861c630f65d592237f756fb1bf8089cf863fa9",
+      "date": "2026-11-18T21:41:14+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/codex/great-guessoff-live-20261118",
+      "sha": "f2ee7430b4075134362e0458a559c723bae228d4",
+      "date": "2026-11-19T01:14:26+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/codex/great-guessoff-public-demo-20261118",
+      "sha": "eb715d56cc7b64f9a05ecc471c76b384797eee79",
+      "date": "2026-11-18T17:50:15+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-chat-preview-flow-p0-20261118",
+      "sha": "c9b2483b8719b4357852f105e91369e4ffb592e8",
+      "date": "2026-11-18T14:04:43+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-editor-drafts-20261118",
+      "sha": "af1d879431d3461c7f937a6c5f580eee97b073e2",
+      "date": "2026-11-18T16:30:13+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-editor-hebrew-20261118",
+      "sha": "eb715d56cc7b64f9a05ecc471c76b384797eee79",
+      "date": "2026-11-18T17:50:15+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-editor-timer-20261118",
+      "sha": "567a145154b6b6710dea07b9c9524bd90ff1c910",
+      "date": "2026-11-18T17:37:20+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-host-roster-hebrew-20261118",
+      "sha": "af1d879431d3461c7f937a6c5f580eee97b073e2",
+      "date": "2026-11-18T16:30:13+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-host-roster-hebrew-20261118-ready",
+      "sha": "98386b361fbbc5f21ac8a4ce04274e6ccc20fb4b",
+      "date": "2026-11-18T17:58:14+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-integration-all-20261118",
+      "sha": "b672eb2e972edcfca143c659acc88fbd2efb23e3",
+      "date": "2026-11-18T19:18:30+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-mcp-connect-20261118",
+      "sha": "c9b2483b8719b4357852f105e91369e4ffb592e8",
+      "date": "2026-11-18T14:04:43+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-oauth-compat-20261118",
+      "sha": "8b9463ee39c25086aa00afbc3e73a6ea6ae4504f",
+      "date": "2026-11-18T15:37:52+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-phase3-takeover-20261117",
+      "sha": "9db0c9a0ec65b1162e5a32475e317b253265d64d",
+      "date": "2026-11-18T00:24:17+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-save-consent-hotfix-20261118",
+      "sha": "b85975da0dc7970141350078db31427139e6709f",
+      "date": "2026-11-18T19:53:33+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-save-consent-link-20261118",
+      "sha": "eb715d56cc7b64f9a05ecc471c76b384797eee79",
+      "date": "2026-11-18T17:50:15+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-scope-discovery-20261118",
+      "sha": "574def589c620c0380f79281acebf4f13a88739a",
+      "date": "2026-11-18T17:39:21+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-ux-unified-20261119",
+      "sha": "82e3c15404bd43066f323a8d441f5d398a768e51",
+      "date": "2026-11-19T01:24:52+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/great-guessoff-demo-final-20261118",
+      "sha": "f9861c630f65d592237f756fb1bf8089cf863fa9",
+      "date": "2026-11-18T21:41:14+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/great-guessoff-live-20261118",
+      "sha": "f2ee7430b4075134362e0458a559c723bae228d4",
+      "date": "2026-11-19T01:14:26+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/tadazz-editor-hebrew-20261118",
+      "sha": "7ccd71a8cb20c5274c68051cbf0084a49286f9ca",
+      "date": "2026-11-18T21:42:21+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/tadazz-mcp-connect-20261118",
+      "sha": "c9b2483b8719b4357852f105e91369e4ffb592e8",
+      "date": "2026-11-18T14:04:43+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/tadazz-oauth-compat-20261118",
+      "sha": "8b9463ee39c25086aa00afbc3e73a6ea6ae4504f",
+      "date": "2026-11-18T15:37:52+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/tadazz-save-consent-hotfix-20261118",
+      "sha": "b85975da0dc7970141350078db31427139e6709f",
+      "date": "2026-11-18T19:53:33+02:00",
+      "merged": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/tadazz-scope-discovery-20261118",
+      "sha": "574def589c620c0380f79281acebf4f13a88739a",
+      "date": "2026-11-18T17:39:21+02:00",
+      "merged": true
+    }
+  ]
+}

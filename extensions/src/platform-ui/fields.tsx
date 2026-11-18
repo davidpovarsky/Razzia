@@ -1,6 +1,7 @@
 import {
   useId,
   type InputHTMLAttributes,
+  type TextareaHTMLAttributes,
   type SelectHTMLAttributes,
   type ReactNode,
   type ComponentProps,
@@ -19,6 +20,10 @@ interface Details {
 export type InputProps = InputHTMLAttributes<HTMLInputElement> &
   Name &
   Details & { ref?: Ref<HTMLInputElement> }
+
+export type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> &
+  Name &
+  Details & { ref?: Ref<HTMLTextAreaElement> }
 
 export type SelectProps = SelectHTMLAttributes<HTMLSelectElement> &
   Name &
@@ -75,6 +80,35 @@ export function Input({
         {...props}
         id={id}
         className={`tds-input ${className}`}
+        aria-invalid={error ? true : props["aria-invalid"]}
+        aria-describedby={ids}
+      />
+    </FieldFrame>
+  )
+}
+
+export function Textarea({
+  label,
+  description,
+  error,
+  id: provided,
+  className = "",
+  "aria-describedby": described,
+  ...props
+}: TextareaProps) {
+  const generated = useId(),
+    id = provided ?? generated
+  const ids =
+    [described, description && `${id}-description`, error && `${id}-error`]
+      .filter(Boolean)
+      .join(" ") || undefined
+
+  return (
+    <FieldFrame {...{ id, label, description, error }}>
+      <textarea
+        {...props}
+        id={id}
+        className={`tds-input tds-textarea ${className}`}
         aria-invalid={error ? true : props["aria-invalid"]}
         aria-describedby={ids}
       />

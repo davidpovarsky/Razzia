@@ -1,4 +1,17 @@
 import NativeButton from "../../../../packages/web/src/components/Button"
+import {
+  ArrowLeft,
+  ArrowRight,
+  Maximize,
+  Pause,
+  Play,
+  RefreshCw,
+  RotateCcw,
+  Save,
+  SlidersHorizontal,
+  SquarePen,
+} from "lucide-react"
+import { EditorWorkspace } from "../../presentation/editor-workspace"
 import { restoreNativeCspConfiguration } from "../../presentation/show-library-preview/renderer-csp-admission.ts"
 import { App } from "@modelcontextprotocol/ext-apps"
 import { createRoot, type Root } from "react-dom/client"
@@ -15,6 +28,10 @@ import {
   createFullShowPlayback,
   type FullShowPlaybackSnapshot,
 } from "../client/full-show-playback.ts"
+import {
+  fullShowAutomaticChapter,
+  fullShowCardNavigation,
+} from "../client/full-show-navigation.ts"
 import {
   fullShowToolInputV3Schema,
   type FullShowFrameV3,
@@ -233,8 +250,24 @@ function Surface({
   soundEnabled: boolean
   onSoundEnabled: (enabled: boolean) => void
 }) {
+  const viewport = useRef<HTMLDivElement>(null)
   const element = useRef<HTMLDivElement>(null)
   const renderer = useRef<Root | null>(null)
+  const [size, setSize] = useState({ width: 0, height: 0 })
+  useLayoutEffect(() => {
+    const target = viewport.current
+    if (!target) return
+    const ratio = aspect === "4 / 3" ? 4 / 3 : 16 / 9
+    const fit = () => {
+      const width = Math.min(target.clientWidth, target.clientHeight * ratio)
+      setSize({ width, height: width / ratio })
+    }
+    fit()
+    const observer = new ResizeObserver(fit)
+    observer.observe(target)
+
+    return () => observer.disconnect()
+  }, [aspect])
   useEffect(() => {
     const target = element.current
 
@@ -282,12 +315,18 @@ function Surface({
   ])
 
   return (
-    <div
-      ref={element}
-      className="widget-stage-host"
-      style={{ aspectRatio: aspect }}
-      data-testid="full-show-native-surface"
-    />
+    <div ref={viewport} className="widget-stage-viewport">
+      <div
+        ref={element}
+        className="widget-stage-host"
+        style={{
+          ...size,
+          aspectRatio: aspect,
+          visibility: size.width ? "visible" : "hidden",
+        }}
+        data-testid="full-show-native-surface"
+      />
+    </div>
   )
 }
 interface PendingMutation {
@@ -343,6 +382,20 @@ function FullShowWidget() {
     frame?.inventory.chapters.findIndex(
       (c) => c.id === frame.inventory.selectedChapterId,
     ) ?? -1
+  const navigation = frame ? fullShowCardNavigation(frame.inventory) : null
+  const automaticAttempt = useRef("")
+  useEffect(() => {
+    if (!frame || !canCall || busy) return
+    // Read the clock owner after the layout effect selected this frame. A React
+    // render can still carry the preceding phase's sampled elapsed time.
+    const livePlayback = playbackOwner.snapshot()
+    const next = fullShowAutomaticChapter(frame.inventory, livePlayback)
+    if (!next) return
+    const key = `${frame.inventory.draftId}:${frame.inventory.revision}:${frame.inventory.selectedChapterId}:${livePlayback.clock.epoch}:${current.replaySequence}`
+    if (automaticAttempt.current === key) return
+    automaticAttempt.current = key
+    void preview(selection(frame, next.id))
+  }, [frame, canCall, busy, playback, playbackOwner, current.replaySequence])
   useEffect(() => {
     if (!frame) {
       setSoundEnabled(false)
@@ -528,21 +581,286 @@ function FullShowWidget() {
     })
   }
 
+  const displayControls = frame ? (
+    <div className="widget-toolbar widget-display-options">
+      <label>
+        {t("aspectRatio")}
+        <select
+          data-testid="full-show-aspect"
+          value={aspect}
+          onChange={(event) =>
+            setAspect(event.target.value === "4 / 3" ? "4 / 3" : "16 / 9")
+          }
+        >
+          <option value="16 / 9">16:9</option>
+          <option value="4 / 3">4:3</option>
+        </select>
+      </label>
+      <label>
+        {t("language")}
+        <select
+          data-testid="full-show-language"
+          disabled={!canCall || busy}
+          value={frame.inventory.context.locale}
+          onChange={(event) =>
+            void preview({
+              ...selection(frame, frame.inventory.selectedChapterId),
+              context: {
+                ...frame.inventory.context,
+                locale: event.target.value,
+              },
+            })
+          }
+        >
+          {locales.map((locale) => (
+            <option key={locale}>{locale}</option>
+          ))}
+        </select>
+      </label>
+      <label className="widget-checkbox-label">
+        <input
+          data-testid="full-show-reduce-motion"
+          type="checkbox"
+          checked={frame.inventory.context.reducedMotion}
+          disabled={!canCall || busy}
+          onChange={(event) =>
+            void preview({
+              ...selection(frame, frame.inventory.selectedChapterId),
+              context: {
+                ...frame.inventory.context,
+                reducedMotion: event.target.checked,
+              },
+            })
+          }
+        />
+        {t("reduce")}
+      </label>
+      <div ref={setAudioControlsTarget} className="widget-audio-controls" />
+    </div>
+  ) : null
+  const saveControls = (
+    <div className="widget-save-panel">
+      {current.selected && (
+        <FullShowSaveV3
+          key={`${current.selected.draftId}:${current.selected.expectedRevision}`}
+          app={app}
+          draftId={current.selected.draftId}
+          revision={current.selected.expectedRevision}
+          disabled={!frame || busy || closed}
+        />
+      )}
+      {pendingMutation && (
+        <NativeButton
+          classNameContent="contents"
+          data-control-source="razzia"
+          type="button"
+          data-testid="full-show-retry-edit"
+          disabled={!canCall || busy}
+          onClick={() => void execute(pendingMutation)}
+        >
+          {t("retryEdit")}
+        </NativeButton>
+      )}
+      <p className="widget-help">{t("noSave")}</p>
+    </div>
+  )
+  const transport =
+    frame && navigation ? (
+      <nav className="widget-transport" aria-label={t("title")}>
+        <NativeButton
+          classNameContent="contents"
+          data-control-source="razzia"
+          type="button"
+          data-testid="full-show-previous"
+          aria-label={t("previousChapter")}
+          title={t("previousChapter")}
+          disabled={!canCall || busy || !navigation.previous}
+          onClick={() =>
+            navigation.previous &&
+            void preview(selection(frame, navigation.previous.id))
+          }
+        >
+          <ArrowLeft aria-hidden="true" />
+        </NativeButton>
+        <output data-testid="full-show-position">
+          {navigation.index + 1} / {navigation.cards.length}
+        </output>
+        <NativeButton
+          classNameContent="contents"
+          data-control-source="razzia"
+          type="button"
+          data-testid="full-show-next"
+          aria-label={t("nextChapter")}
+          title={t("nextChapter")}
+          disabled={!canCall || busy || !navigation.next}
+          onClick={() =>
+            navigation.next &&
+            void preview(selection(frame, navigation.next.id))
+          }
+        >
+          <ArrowRight aria-hidden="true" />
+        </NativeButton>
+        <NativeButton
+          classNameContent="contents"
+          data-control-source="razzia"
+          type="button"
+          data-testid="full-show-pause"
+          aria-label={t(playback.clock.paused ? "resumeShow" : "pauseShow")}
+          title={t(playback.clock.paused ? "resumeShow" : "pauseShow")}
+          disabled={busy}
+          onClick={() =>
+            setPlayback(
+              playback.clock.paused
+                ? playbackOwner.resume()
+                : playbackOwner.pause(),
+            )
+          }
+        >
+          {playback.clock.paused ? (
+            <Play aria-hidden="true" />
+          ) : (
+            <Pause aria-hidden="true" />
+          )}
+        </NativeButton>
+        <NativeButton
+          classNameContent="contents"
+          data-control-source="razzia"
+          type="button"
+          data-testid="full-show-replay"
+          aria-label={t("replay")}
+          title={t("replay")}
+          disabled={!canCall || busy}
+          onClick={() =>
+            void preview(selection(frame, navigation.current?.id), true)
+          }
+        >
+          <RotateCcw aria-hidden="true" />
+        </NativeButton>
+        <div ref={setDemoControlsTarget} className="widget-demo-controls" />
+      </nav>
+    ) : undefined
+
   return (
     <main
-      className="widget-shell"
+      className="widget-shell widget-workspace-shell"
       data-testid="full-show-widget"
       dir={i18n.dir()}
       lang={i18n.language}
     >
-      <header>
-        <h1 className="text-xl font-bold">
-          {frame?.inventory.title ?? t("title")}
-        </h1>
-        <p>{t("demo")}</p>
+      <header className="widget-workspace-header">
+        <div className="widget-heading">
+          <h1 title={frame?.inventory.title ?? t("title")}>
+            {frame?.inventory.title ?? t("title")}
+          </h1>
+          <p>{t("demo")}</p>
+        </div>
+        <div className="widget-header-actions">
+          <NativeButton
+            classNameContent="contents"
+            data-control-source="razzia"
+            type="button"
+            data-testid="full-show-refresh"
+            aria-label={t("refresh")}
+            title={t("refresh")}
+            disabled={!canCall || busy || !current.selected}
+            onClick={() => void refresh()}
+          >
+            <RefreshCw aria-hidden="true" />
+          </NativeButton>
+          {canExpand && (
+            <NativeButton
+              classNameContent="contents"
+              data-control-source="razzia"
+              type="button"
+              data-testid="full-show-expand"
+              aria-label={t("expand")}
+              title={t("expand")}
+              disabled={busy}
+              onClick={() => {
+                setHostActionFailed(false)
+                void app
+                  .requestDisplayMode({ mode: "fullscreen" })
+                  .catch(() => setHostActionFailed(true))
+              }}
+            >
+              <Maximize aria-hidden="true" />
+            </NativeButton>
+          )}
+        </div>
       </header>
-      {frame ? (
-        <>
+      <EditorWorkspace
+        className="widget-editor-workspace"
+        ariaLabel={t("editing")}
+        closeLabel={t("closePanel")}
+        toolbar={transport}
+        panels={[
+          ...(frame
+            ? [
+                {
+                  id: "edit",
+                  label: t("editing"),
+                  icon: <SquarePen aria-hidden="true" />,
+                  side: "right" as const,
+                  dock: true,
+                  content: (
+                    <div
+                      onFocusCapture={(event) => {
+                        const field = (event.target as HTMLElement).dataset
+                          .testid
+                        // Text editing must stay on this question; live audio
+                        // controls keep the current media element playing.
+                        if (
+                          field === "full-show-title" ||
+                          field === "full-show-question-text"
+                        )
+                          setPlayback(playbackOwner.pause())
+                      }}
+                    >
+                      <FullShowEditorV3
+                        app={app}
+                        frame={frame}
+                        disabled={!canCall || busy}
+                        onApply={apply}
+                      />
+                      <div className="widget-control-row widget-revision-controls">
+                        <p data-testid="full-show-revision">
+                          {t("revision", {
+                            revision: frame.inventory.revision,
+                          })}
+                        </p>
+                        <NativeButton
+                          classNameContent="contents"
+                          data-control-source="razzia"
+                          type="button"
+                          data-testid="full-show-undo"
+                          disabled={!canCall || busy || !undoId}
+                          onClick={() => void undo()}
+                        >
+                          {t("undo")}
+                        </NativeButton>
+                      </div>
+                    </div>
+                  ),
+                },
+                {
+                  id: "display",
+                  label: t("appearanceAndSound"),
+                  icon: <SlidersHorizontal aria-hidden="true" />,
+                  side: "right" as const,
+                  content: displayControls,
+                },
+              ]
+            : []),
+          {
+            id: "save",
+            label: t("saveAction"),
+            icon: <Save aria-hidden="true" />,
+            side: "left" as const,
+            content: saveControls,
+          },
+        ]}
+      >
+        {frame ? (
           <Surface
             frame={frame}
             playback={playback}
@@ -556,10 +874,8 @@ function FullShowWidget() {
                   chapter.cardId === selected.cardId &&
                   chapter.kind === "results",
               )
-
-              if (canCall && !busy && results) {
+              if (canCall && !busy && results)
                 void preview(selection(frame, results.id))
-              }
             }}
             demoLabels={{
               choose: t("demoChoose"),
@@ -572,207 +888,17 @@ function FullShowWidget() {
             soundEnabled={soundEnabled}
             onSoundEnabled={setSoundEnabled}
           />
-          <nav className="widget-toolbar" aria-label={t("title")}>
-            <NativeButton
-              classNameContent="contents"
-              data-control-source="razzia"
-              type="button"
-              data-testid="full-show-previous"
-              disabled={!canCall || busy || index <= 0}
-              onClick={() =>
-                void preview(
-                  selection(frame, frame.inventory.chapters[index - 1]?.id),
-                )
-              }
-            >
-              {t("previousChapter")}
-            </NativeButton>
-            <output data-testid="full-show-position">
-              {index + 1} / {frame.inventory.chapters.length}
-            </output>
-            <NativeButton
-              classNameContent="contents"
-              data-control-source="razzia"
-              type="button"
-              data-testid="full-show-next"
-              disabled={
-                !canCall || busy || index >= frame.inventory.chapters.length - 1
-              }
-              onClick={() =>
-                void preview(
-                  selection(frame, frame.inventory.chapters[index + 1]?.id),
-                )
-              }
-            >
-              {t("nextChapter")}
-            </NativeButton>
-            <NativeButton
-              classNameContent="contents"
-              data-control-source="razzia"
-              type="button"
-              data-testid="full-show-replay"
-              disabled={!canCall || busy}
-              onClick={() =>
-                void preview(
-                  selection(frame, frame.inventory.selectedChapterId),
-                  true,
-                )
-              }
-            >
-              {t("replay")}
-            </NativeButton>
-            <NativeButton
-              classNameContent="contents"
-              data-control-source="razzia"
-              type="button"
-              data-testid="full-show-pause"
-              disabled={busy}
-              onClick={() =>
-                setPlayback(
-                  playback.clock.paused
-                    ? playbackOwner.resume()
-                    : playbackOwner.pause(),
-                )
-              }
-            >
-              {t(playback.clock.paused ? "resumeShow" : "pauseShow")}
-            </NativeButton>
-            {canExpand && (
-              <NativeButton
-                classNameContent="contents"
-                data-control-source="razzia"
-                type="button"
-                data-testid="full-show-expand"
-                disabled={busy}
-                onClick={() => {
-                  setHostActionFailed(false)
-                  void app
-                    .requestDisplayMode({ mode: "fullscreen" })
-                    .catch(() => setHostActionFailed(true))
-                }}
-              >
-                {t("expand")}
-              </NativeButton>
-            )}
-            <label>
-              {t("aspectRatio")}
-              <select
-                data-testid="full-show-aspect"
-                value={aspect}
-                onChange={(event) =>
-                  setAspect(event.target.value === "4 / 3" ? "4 / 3" : "16 / 9")
-                }
-              >
-                <option value="16 / 9">16:9</option>
-                <option value="4 / 3">4:3</option>
-              </select>
-            </label>
-            <label>
-              {t("language")}
-              <select
-                data-testid="full-show-language"
-                disabled={!canCall || busy}
-                value={frame.inventory.context.locale}
-                onChange={(event) =>
-                  void preview({
-                    ...selection(frame, frame.inventory.selectedChapterId),
-                    context: {
-                      ...frame.inventory.context,
-                      locale: event.target.value,
-                    },
-                  })
-                }
-              >
-                {locales.map((locale) => (
-                  <option key={locale}>{locale}</option>
-                ))}
-              </select>
-            </label>
-            <label>
-              <input
-                data-testid="full-show-reduce-motion"
-                type="checkbox"
-                checked={frame.inventory.context.reducedMotion}
-                disabled={!canCall || busy}
-                onChange={(event) =>
-                  void preview({
-                    ...selection(frame, frame.inventory.selectedChapterId),
-                    context: {
-                      ...frame.inventory.context,
-                      reducedMotion: event.target.checked,
-                    },
-                  })
-                }
-              />{" "}
-              {t("reduce")}
-            </label>
-            <div ref={setDemoControlsTarget} className="widget-demo-controls" />
-            <div
-              ref={setAudioControlsTarget}
-              className="widget-audio-controls"
-            />
-          </nav>
-          <FullShowEditorV3
-            app={app}
-            frame={frame}
-            disabled={!canCall || busy}
-            onApply={apply}
-          />
-          <div className="widget-control-row">
-            <p data-testid="full-show-revision">
-              {t("revision", { revision: frame.inventory.revision })}
-            </p>
-            <NativeButton
-              classNameContent="contents"
-              data-control-source="razzia"
-              type="button"
-              data-testid="full-show-undo"
-              disabled={!canCall || busy || !undoId}
-              onClick={() => void undo()}
-            >
-              {t("undo")}
-            </NativeButton>
-          </div>
-          {busy && <p role="status">{t("loading")}</p>}
-        </>
-      ) : (
-        <p role="status">{t(current.status)}</p>
-      )}
-      <div className="widget-control-row">
-        <NativeButton
-          classNameContent="contents"
-          data-control-source="razzia"
-          type="button"
-          data-testid="full-show-refresh"
-          disabled={!canCall || busy || !current.selected}
-          onClick={() => void refresh()}
-        >
-          {t("refresh")}
-        </NativeButton>
-        {pendingMutation && (
-          <NativeButton
-            classNameContent="contents"
-            data-control-source="razzia"
-            type="button"
-            data-testid="full-show-retry-edit"
-            disabled={!canCall || busy}
-            onClick={() => void execute(pendingMutation)}
-          >
-            {t("retryEdit")}
-          </NativeButton>
+        ) : (
+          <p className="widget-empty-state" role="status">
+            {t(current.status)}
+          </p>
         )}
-      </div>
-      {current.selected && (
-        <FullShowSaveV3
-          key={`${current.selected.draftId}:${current.selected.expectedRevision}`}
-          app={app}
-          draftId={current.selected.draftId}
-          revision={current.selected.expectedRevision}
-          disabled={!frame || busy || closed}
-        />
+      </EditorWorkspace>
+      {(busy || hostActionFailed) && (
+        <p className="widget-workspace-status" role="status">
+          {t(hostActionFailed ? "displayModeFailed" : "loading")}
+        </p>
       )}
-      {hostActionFailed && <p role="status">{t("displayModeFailed")}</p>}
-      <p className="widget-help">{t("noSave")}</p>
     </main>
   )
 }

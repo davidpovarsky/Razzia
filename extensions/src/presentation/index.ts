@@ -1,5 +1,7 @@
 export { SeatingPlan } from "./tadazz-v4/reference-story/SeatingPlan"
 
+export * from "./editor-workspace"
+
 export { STORY_ASSETS } from "./tadazz-v4/reference-story/assets"
 
 export * from "./interlude-state"

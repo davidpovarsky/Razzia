@@ -95,7 +95,7 @@ export function MyGames({
               {t("Download template")}
             </SiteButton>
             <Select
-              label={t("Sort")}
+              aria-label={t("Sort")}
               value={sort}
               onChange={(event) => setSort(event.target.value)}
             >

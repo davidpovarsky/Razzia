@@ -17,7 +17,7 @@ export const CATALOG_COMPONENTS = {
     rule: "Use one primary action. Preserve disabled/pending semantics; label icons. Tab or hover to inspect real focus/hover states.",
   },
   fields: {
-    exports: ["Input", "SearchInput", "Select", "Switch"],
+    exports: ["Input", "SearchInput", "Textarea", "Select", "Switch"],
     modules: ["fields.tsx"],
     props:
       "Native field props · label or aria-label · description · error · checked/onCheckedChange",

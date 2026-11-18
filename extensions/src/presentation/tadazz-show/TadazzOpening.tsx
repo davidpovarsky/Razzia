@@ -1,5 +1,6 @@
 import { PlatformButton } from "../platform-controls"
 import { TADAZZ_PRODUCT_LOGO_URL } from "../../core/product-branding"
+import { PLATFORM_OPENING_VIDEO_DURATION_MS } from "../../core/platform-opening"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { LottiePlayer } from "../lottie-player"
 import {
@@ -15,7 +16,8 @@ export const TADAZZ_OPENING_VIDEO_URL =
 export const TADAZZ_OPENING_LOTTIE_URL =
   "/tadazz-show/opening/TADAZZ-Opening-4-5s.json"
 
-export const TADAZZ_OPENING_VIDEO_DURATION_MS = 7933
+export const TADAZZ_OPENING_VIDEO_DURATION_MS =
+  PLATFORM_OPENING_VIDEO_DURATION_MS
 
 export const TADAZZ_EVENT_ARTWORK_DURATION_MS = 2200
 
@@ -70,6 +72,9 @@ export function preloadOpeningAssets(
 }
 
 export interface TadazzOpeningProps {
+  /** Shared server timeline for the product opening; absent in standalone previews. */
+  elapsedMs?: number
+  paused?: boolean
   backdropUrl?: string
   videoUrl?: string
   lottieUrl?: string
@@ -84,6 +89,8 @@ export interface TadazzOpeningProps {
 
 /** Muted visual opening. Music is owned by the presenter-scoped AudioCuePlayer. */
 export function TadazzOpening({
+  elapsedMs,
+  paused = false,
   backdropUrl = TADAZZ_BACKDROP_URL,
   videoUrl = TADAZZ_OPENING_VIDEO_URL,
   lottieUrl = TADAZZ_OPENING_LOTTIE_URL,
@@ -161,7 +168,12 @@ export function TadazzOpening({
   }, [brandEnded, eventArtworkPending, eventArtworkUrl, finish])
 
   useEffect(() => {
-    if (brandEnded || !videoReady || (!lottieReady && !lottieFailed)) {
+    if (
+      paused ||
+      brandEnded ||
+      !videoReady ||
+      (!lottieReady && !lottieFailed)
+    ) {
       return
     }
 
@@ -176,13 +188,28 @@ export function TadazzOpening({
     video.muted = true
     video.volume = 0
     void video.play().catch(() => setVideoFailed(true))
-  }, [brandEnded, videoReady, lottieReady, lottieFailed, videoUrl])
+  }, [paused, brandEnded, videoReady, lottieReady, lottieFailed, videoUrl])
 
   useEffect(() => {
-    if (brandEnded) {
+    const video = videoRef.current
+    if (!video || elapsedMs === undefined || !videoReady) return
+    const seconds = Math.min(elapsedMs, TADAZZ_OPENING_VIDEO_DURATION_MS) / 1000
+    if (Math.abs(video.currentTime - seconds) > 0.35) {
+      video.currentTime = seconds
+    }
+    if (paused || brandEnded) {
+      video.pause()
+    } else if (video.paused && (lottieReady || lottieFailed)) {
+      void video.play().catch(() => setVideoFailed(true))
+    }
+  }, [elapsedMs, paused, brandEnded, videoReady, lottieReady, lottieFailed])
+
+  useEffect(() => {
+    if (paused || brandEnded) {
       return
     }
 
+    // A deliberate pause must not be mistaken for a media loading failure.
     // A missing asset must not trap the show; normal completion follows the MP4.
     const id = setTimeout(() => {
       setVideoFailed(true)
@@ -194,25 +221,25 @@ export function TadazzOpening({
     }
 
     return () => clearTimeout(id)
-  }, [brandEnded, videoPlaying, videoFailed])
+  }, [paused, brandEnded, videoPlaying, videoFailed])
   useEffect(() => {
-    if (brandEnded || !videoFailed) {
+    if (elapsedMs !== undefined || brandEnded || !videoFailed) {
       return
     }
 
     const id = setTimeout(endBrand, TADAZZ_OPENING_VIDEO_DURATION_MS)
 
     return () => clearTimeout(id)
-  }, [brandEnded, videoFailed, endBrand])
+  }, [elapsedMs, brandEnded, videoFailed, endBrand])
   useEffect(() => {
-    if (brandEnded || !videoPlaying) {
+    if (elapsedMs !== undefined || brandEnded || !videoPlaying) {
       return
     }
 
     const id = setTimeout(endBrand, TADAZZ_OPENING_VIDEO_DURATION_MS + 12000)
 
     return () => clearTimeout(id)
-  }, [brandEnded, videoPlaying, endBrand])
+  }, [elapsedMs, brandEnded, videoPlaying, endBrand])
 
   const showLottie =
     brandTransitionActive && Boolean(lottieData) && !lottieFailed
@@ -291,7 +318,8 @@ export function TadazzOpening({
                 data={lottieData}
                 loop={false}
                 autoplay
-                paused={brandEnded || (!videoPlaying && !videoFailed)}
+                paused={paused || brandEnded || (!videoPlaying && !videoFailed)}
+                seekTimeMs={elapsedMs}
                 speed={lottieSpeed}
                 renderDevicePixelRatio={1}
                 frameUpdateIntervalMs={100}

@@ -58,6 +58,8 @@ export * from "./billing"
 
 export * from "./product-branding"
 
+export * from "./platform-opening"
+
 export * from "./packages/index"
 
 export * from "./show-library/application-composition-pin"

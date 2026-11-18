@@ -2,6 +2,7 @@
 import { STATUS, type Status } from "@razzia/common/types/game/status"
 import {
   EXTENSION_EVENTS,
+  readPlatformOpening,
   type ActiveSceneData,
   type ExtensionCommand,
   type ExtensionStateEnvelope,
@@ -261,6 +262,8 @@ export const ManagerControlToolbar = ({
         statusName !== STATUS.SUMMARY
 
   const isLobby = statusName === STATUS.SHOW_ROOM
+  const launch = readPlatformOpening(extensionState?.extras.presentationLaunch)
+  const isPreLobby = launch?.stage === "standby" || launch?.stage === "opening"
   const isFinished =
     statusName === STATUS.FINISHED || statusName === STATUS.SUMMARY
   const canPrevious = canPreviousAuthoritative && !isLobby && !isFinished
@@ -471,7 +474,7 @@ export const ManagerControlToolbar = ({
           </div>
         )}
 
-        {isLobby && (
+        {isLobby && !isPreLobby && (
           <RoomLockButton className="hover:bg-accent shrink-0 rounded-lg bg-white px-3 py-2 font-semibold text-black shadow-md" />
         )}
 
@@ -514,7 +517,7 @@ export const ManagerControlToolbar = ({
         )}
 
         {/* Previous Screen Button (authoritative one-click step back, permanently at upper LEFT) */}
-        {gameId && (
+        {gameId && !isPreLobby && (
           <>
             <Button
               size="sm"
@@ -658,7 +661,7 @@ export const ManagerControlToolbar = ({
           />
         )}
 
-        {!isLobby && !isFinished && (
+        {(launch?.stage === "opening" || (!isLobby && !isFinished)) && (
           <Button
             size="sm"
             onClick={handlePauseToggle}

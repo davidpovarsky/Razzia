@@ -14,7 +14,7 @@ export function StudioHeaderNavigation() {
   const { t } = useTranslation()
 
   return (
-    <div className="bg-accent/80 order-3 grid w-full max-w-full shrink-0 grid-cols-2 items-center gap-0.5 rounded-lg p-0.5 sm:order-none sm:flex sm:h-8 sm:w-auto sm:gap-0">
+    <div className="editor-screen-tabs bg-accent/80 order-3 grid w-full max-w-full shrink-0 grid-cols-2 items-center gap-0.5 rounded-lg p-0.5 sm:order-none sm:flex sm:h-8 sm:w-auto sm:gap-0">
       <NativeButton
         size="sm"
         type="button"
@@ -86,7 +86,11 @@ export function StudioHeaderNavigation() {
   )
 }
 
-export function StudioCardKindBar() {
+export function StudioCardKindBar({
+  embedded = false,
+}: {
+  embedded?: boolean
+}) {
   const { extrasStatus } = useQuizzEditor()
   const {
     activeTab,
@@ -105,6 +109,7 @@ export function StudioCardKindBar() {
         selectedTimelineItem && (
           <div
             data-testid="studio-card-type-bar"
+            data-embedded={embedded}
             className="bg-muted/30 border-border/40 flex h-11 w-full items-center justify-between border-t px-4"
           >
             <div className="min-w-0 flex-1 scrollbar-none overflow-x-auto py-1">
@@ -117,7 +122,12 @@ export function StudioCardKindBar() {
               />
             </div>
 
-            <div className="text-muted-foreground hidden shrink-0 items-center gap-1.5 ps-3 text-xs sm:flex">
+            <div
+              className={clsx(
+                "text-muted-foreground hidden shrink-0 items-center gap-1.5 ps-3 text-xs",
+                !embedded && "sm:flex",
+              )}
+            >
               <span className="font-medium">
                 {t("extensions:studio.cardKindLabel", "Card Type")}:
               </span>

@@ -1,3 +1,4 @@
+import { Input } from "@razzia/extensions/platform-ui"
 import { SiteLink } from "../shared/SiteLink"
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
 import { SiteButton } from "../shared/SiteButton"
@@ -269,55 +270,47 @@ export function AccountGateway() {
               className="account-fields"
               onSubmit={(event) => void submit(event)}
             >
-              <label>
-                {t("Email address")}
-                <input
-                  type="email"
-                  required
-                  maxLength={254}
-                  autoComplete="email"
-                  value={email}
-                  disabled={busy}
-                  onChange={(event) => setEmail(event.target.value)}
-                />
-              </label>
+              <Input
+                label={t("Email address")}
+                type="email"
+                required
+                maxLength={254}
+                autoComplete="email"
+                value={email}
+                disabled={busy}
+                onChange={(event) => setEmail(event.target.value)}
+              />
               {step !== "forgot" && (
-                <label>
-                  {t(step === "reset" ? "New password" : "Password")}
-                  <input
-                    type="password"
-                    required
-                    minLength={12}
-                    maxLength={128}
-                    autoComplete={
-                      step === "login" || step === "verify"
-                        ? "current-password"
-                        : "new-password"
-                    }
-                    value={password}
-                    disabled={busy}
-                    onChange={(event) => setPassword(event.target.value)}
-                  />
-                </label>
+                <Input
+                  label={t(step === "reset" ? "New password" : "Password")}
+                  type="password"
+                  required
+                  minLength={12}
+                  maxLength={128}
+                  autoComplete={
+                    step === "login" || step === "verify"
+                      ? "current-password"
+                      : "new-password"
+                  }
+                  value={password}
+                  disabled={busy}
+                  onChange={(event) => setPassword(event.target.value)}
+                />
               )}
               {(step === "verify" || step === "reset") && (
-                <label>
-                  {t("Six-digit code")}
-                  <input
-                    required
-                    inputMode="numeric"
-                    pattern="[0-9]{6}"
-                    maxLength={6}
-                    autoComplete="one-time-code"
-                    value={code}
-                    disabled={busy}
-                    onChange={(event) =>
-                      setCode(
-                        event.target.value.replace(/\D/gu, "").slice(0, 6),
-                      )
-                    }
-                  />
-                </label>
+                <Input
+                  label={t("Six-digit code")}
+                  required
+                  inputMode="numeric"
+                  pattern="[0-9]{6}"
+                  maxLength={6}
+                  autoComplete="one-time-code"
+                  value={code}
+                  disabled={busy}
+                  onChange={(event) =>
+                    setCode(event.target.value.replace(/\D/gu, "").slice(0, 6))
+                  }
+                />
               )}
               {error && (
                 <p className="account-error" role="alert">
@@ -336,7 +329,8 @@ export function AccountGateway() {
               )}
               <SiteButton
                 type="submit"
-                className="account-button primary"
+                variant="primary"
+                className="account-submit"
                 disabled={busy || available !== true}
               >
                 {t(busy ? "Please wait…" : actions[step])}
@@ -348,21 +342,24 @@ export function AccountGateway() {
                 <>
                   <SiteButton
                     disabled={busy}
-                    className="account-button secondary"
+                    variant="ghost"
+                    className="account-link"
                     onClick={() => switchTo("register")}
                   >
                     {t("Create account")}
                   </SiteButton>
                   <SiteButton
                     disabled={busy}
-                    className="account-button secondary"
+                    variant="ghost"
+                    className="account-link"
                     onClick={() => switchTo("forgot")}
                   >
                     {t("Forgot password?")}
                   </SiteButton>
                   <SiteButton
                     disabled={busy}
-                    className="account-button secondary"
+                    variant="ghost"
+                    className="account-link"
                     onClick={() => switchTo("verify")}
                   >
                     {t("Verify email")}
@@ -372,7 +369,8 @@ export function AccountGateway() {
                 <>
                   <SiteButton
                     disabled={busy}
-                    className="account-button secondary"
+                    variant="ghost"
+                    className="account-link"
                     onClick={() => switchTo("login")}
                   >
                     {t("Back to login")}
@@ -380,7 +378,8 @@ export function AccountGateway() {
                   {step === "verify" && (
                     <SiteButton
                       disabled={busy || !email.trim()}
-                      className="account-button secondary"
+                      variant="ghost"
+                      className="account-link"
                       onClick={() => void resend()}
                     >
                       {t("Resend code")}

@@ -33,7 +33,7 @@ const QuizzEditorHeader = () => {
   return (
     <header className="bg-background border-border z-20 flex w-full max-w-full flex-col overflow-x-hidden border-b shadow-sm">
       {/* Row 1 / Top: Quiz Title + Studio Navigation Tabs + Exit / Save */}
-      <div className="flex min-h-14 w-full flex-wrap items-center justify-between gap-2 px-3 py-1.5 sm:gap-4 sm:px-4">
+      <div className="editor-primary-row flex min-h-14 w-full flex-wrap items-center justify-between gap-2 px-3 py-1.5 sm:gap-4 sm:px-4">
         {/* Title input */}
         <div className="flex min-w-0 shrink-0 items-center gap-2 sm:gap-4">
           <Controller

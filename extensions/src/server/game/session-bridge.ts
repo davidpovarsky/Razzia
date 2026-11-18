@@ -179,9 +179,11 @@ export function createSessionDelegate(
     },
     isAcceptingAnswers: () => ctx.round.isCurrentlyAcceptingAnswers,
     pauseGame: () => {
-      const ok = ctx.showCoordinator?.isSceneActive()
-        ? ctx.showCoordinator.pauseGame()
-        : ctx.round.pauseGame()
+      const ok = ctx.presentationLaunch?.isOpening
+        ? ctx.presentationLaunch.pause()
+        : ctx.showCoordinator?.isSceneActive()
+          ? ctx.showCoordinator.pauseGame()
+          : ctx.round.pauseGame()
 
       if (ok) {
         ctx.broadcastExtensionState()
@@ -190,9 +192,11 @@ export function createSessionDelegate(
       return ok
     },
     resumeGame: () => {
-      const ok = ctx.showCoordinator?.isSceneActive()
-        ? ctx.showCoordinator.resumeGame()
-        : ctx.round.resumeGame()
+      const ok = ctx.presentationLaunch?.isOpening
+        ? ctx.presentationLaunch.resume()
+        : ctx.showCoordinator?.isSceneActive()
+          ? ctx.showCoordinator.resumeGame()
+          : ctx.round.resumeGame()
 
       if (ok) {
         ctx.broadcastExtensionState()
@@ -201,9 +205,11 @@ export function createSessionDelegate(
       return ok
     },
     getPauseSnapshot: () =>
-      ctx.showCoordinator?.isSceneActive()
-        ? ctx.showCoordinator.getPauseSnapshot()
-        : ctx.round.getPauseSnapshot(),
+      ctx.presentationLaunch?.isOpening
+        ? ctx.presentationLaunch.getPauseSnapshot()
+        : ctx.showCoordinator?.isSceneActive()
+          ? ctx.showCoordinator.getPauseSnapshot()
+          : ctx.round.getPauseSnapshot(),
     getLeaderboard: () => {
       const currentLb = ctx.round.currentLeaderboard
       const source = currentLb.length > 0 ? currentLb : ctx.players()

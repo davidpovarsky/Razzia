@@ -184,7 +184,7 @@ export function FullShowDemoQuestionV3({
                 data-control-source="razzia"
                 type="button"
                 data-testid="full-show-demo-reveal"
-                disabled={!canChoose || selectedIndex === null}
+                disabled={!canChoose || (count > 0 && selectedIndex === null)}
                 onClick={onReveal}
               >
                 {labels.reveal}

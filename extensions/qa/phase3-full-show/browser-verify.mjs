@@ -1,3 +1,8 @@
+import {
+  closeWorkspaceDrawers,
+  openWorkspacePanel,
+  verifyWorkspaceControls,
+} from "./workspace-controls.mjs"
 import { runLayoutDiagnostic } from "./layout-diagnostic.mjs"
 import { verifyHostControls } from "./host-controls.mjs"
 import { execFileSync } from "node:child_process"
@@ -48,37 +53,37 @@ import { hashJson } from "../../src/mcp-app/contracts/canonical.ts"
 import { tadaShowV1Schema } from "../../src/core/show-authoring-schema.ts"
 
 const expectedLocaleText = {
-  he: { previous: "השלב הקודם", editing: "עריכת הטיוטה הזו" },
+  he: { previous: "הכרטיס הקודם", editing: "עריכת הטיוטה הזו" },
   en: {
-    previous: "Previous chapter",
+    previous: "Previous card",
     editing: "Edit this draft",
   },
   fr: {
-    previous: "Chapitre précédent",
+    previous: "Carte précédente",
     editing: "Modifier ce brouillon",
   },
   de: {
-    previous: "Vorheriges Kapitel",
+    previous: "Vorherige Karte",
     editing: "Diesen Entwurf bearbeiten",
   },
   es: {
-    previous: "Capítulo anterior",
+    previous: "Tarjeta anterior",
     editing: "Editar este borrador",
   },
   it: {
-    previous: "Capitolo precedente",
+    previous: "Scheda precedente",
     editing: "Modifica questa bozza",
   },
   ja: {
-    previous: "前の章",
+    previous: "前のカード",
     editing: "この下書きを編集",
   },
   tr: {
-    previous: "Önceki bölüm",
+    previous: "Önceki kart",
     editing: "Bu taslağı düzenle",
   },
   vi: {
-    previous: "Chương trước",
+    previous: "Thẻ trước",
     editing: "Chỉnh sửa bản nháp này",
   },
 }
@@ -701,6 +706,44 @@ try {
           body: data,
         })
       })
+      // Explicit native-phase inspections use a fresh, real tool invocation.
+      // The production Next/Previous controls navigate logical cards; their
+      // complete timed-question flow is asserted by verifyWorkspaceControls.
+      const loadNativeChapter = async (chapter) => {
+        assert(chapter)
+        scenario.selection.chapterId = chapter.id
+        await page.goto(`${base}/host?scenario=${scenario.id}`)
+        await page.locator("html[data-host-ready=true]").waitFor()
+        await page
+          .frameLocator("iframe")
+          .locator(`[data-full-show-chapter="${chapter.id}"]`)
+          .waitFor()
+      }
+      if (process.env.TADAZZ_FULL_SHOW_DIAGNOSTIC === "workspace") {
+        await run(
+          `${engine} / ${theme} shared workspace and logical card navigation`,
+          async () => {
+            observations.push(
+              await verifyWorkspaceControls({
+                page,
+                base,
+                scenario,
+                engine,
+                theme,
+                evidence,
+                readRecord: async () =>
+                  scenario.repository.get(
+                    await qaSession.principal(),
+                    scenario.record.draftId,
+                  ),
+              }),
+            )
+            assert.deepEqual(caseErrors, [])
+          },
+        )
+        await context.close()
+        continue
+      }
       if (process.env.TADAZZ_FULL_SHOW_DIAGNOSTIC === "layout") {
         await run(
           `${engine} / ${theme} development viewport diagnostic`,
@@ -755,16 +798,26 @@ try {
           theme
         } native opening, five phases, transitions and closing`,
         async () => {
-          await page.goto(`${base}/host?scenario=${scenario.id}`)
-          await page.locator("html[data-host-ready=true]").waitFor()
+          observations.push(
+            await verifyWorkspaceControls({
+              page,
+              base,
+              scenario,
+              engine,
+              theme,
+              evidence,
+              readRecord: async () =>
+                scenario.repository.get(
+                  await qaSession.principal(),
+                  scenario.record.draftId,
+                ),
+            }),
+          )
+          await page.setViewportSize({ width: 1280, height: 1200 })
           const iframe = page.frameLocator("iframe")
           const stage = iframe.locator("[data-full-show-chapter]")
           for (const [index, chapter] of scenario.chapters.entries()) {
-            if (index) {
-              await iframe
-                .getByRole("button", { name: "Next chapter", exact: true })
-                .click()
-            }
+            await loadNativeChapter(chapter)
 
             await iframe
               .locator(`[data-full-show-chapter="${chapter.id}"]`)
@@ -815,9 +868,7 @@ try {
             }
           }
           assert.equal(
-            await iframe
-              .getByRole("button", { name: "Next chapter", exact: true })
-              .isDisabled(),
+            await iframe.getByTestId("full-show-next").isDisabled(),
             true,
           )
           const current = await scenario.repository.get(
@@ -837,6 +888,7 @@ try {
         } title edit CAS and summary refresh through AppBridge`,
         async () => {
           const iframe = page.frameLocator("iframe")
+          await openWorkspacePanel(page, "edit")
           await iframe
             .getByLabel("Draft title", { exact: true })
             .fill(`Edited title ${theme}`)
@@ -896,36 +948,10 @@ try {
               (chapter) =>
                 chapter.kind === kind && chapter.questionOrdinal === ordinal,
             )
-            assert(target)
-            let selected = await iframe
-              .locator("[data-full-show-chapter]")
-              .getAttribute("data-full-show-chapter")
-            let currentIndex = scenario.chapters.findIndex(
-              (chapter) => chapter.id === selected,
-            )
-            for (
-              let count = 0;
-              count < scenario.chapters.length && selected !== target.id;
-              count += 1
-            ) {
-              await iframe
-                .getByTestId(
-                  currentIndex < target.index
-                    ? "full-show-next"
-                    : "full-show-previous",
-                )
-                .click()
-              currentIndex += currentIndex < target.index ? 1 : -1
-              await iframe
-                .locator(
-                  `[data-full-show-chapter="${scenario.chapters[currentIndex].id}"]`,
-                )
-                .waitFor()
-              selected = scenario.chapters[currentIndex].id
-            }
-            assert.equal(selected, target.id)
+            await loadNativeChapter(target)
           }
           const loadAssets = async () => {
+            await openWorkspacePanel(page, "edit")
             const details = iframe.locator(".widget-editor details")
             if (!(await details.getAttribute("open"))) {
               if (!(await details.evaluate((element) => element.open)))
@@ -1053,11 +1079,13 @@ try {
           }
           await verifyDemoSelection(false)
           await go("question", 3)
+          await openWorkspacePanel(page, "edit")
           await iframe
             .getByTestId("full-show-question-text")
             .fill("ACK_VERIFIED_QUESTION_THREE")
           await page.evaluate(() => window.__host.dropMutationAck())
           await iframe.getByTestId("full-show-apply-question").click()
+          await openWorkspacePanel(page, "save")
           await iframe.getByTestId("full-show-retry-edit").waitFor()
           await iframe
             .getByRole("status")
@@ -1087,6 +1115,7 @@ try {
           await page.reload()
           await page.locator("html[data-host-ready=true]").waitFor()
           await waitRevision(afterLostAck)
+          await openWorkspacePanel(page, "edit")
           await iframe.getByTestId("full-show-undo").click()
           await waitRevision(afterLostAck + 1)
           observations.push({
@@ -1102,6 +1131,7 @@ try {
             "SELECTED_QUESTION_2",
           )
           await go("question", 3)
+          await openWorkspacePanel(page, "edit")
           await iframe
             .getByTestId("full-show-question-text")
             .fill("FINAL_QUESTION_THREE")
@@ -1249,10 +1279,12 @@ try {
         async () => {
           const iframe = page.frameLocator("iframe")
           for (const locale of widgetLocales) {
+            await openWorkspacePanel(page, "display")
             await iframe.getByTestId("full-show-language").selectOption(locale)
             await iframe
-              .getByTestId("full-show-next")
-              .filter({ hasText: widgetLabels[locale].widget.nextChapter })
+              .locator(
+                `[data-testid="full-show-next"][aria-label=${JSON.stringify(widgetLabels[locale].widget.nextChapter)}]`,
+              )
               .waitFor()
             assert.equal(
               await iframe.getByTestId("full-show-language").inputValue(),
@@ -1273,7 +1305,9 @@ try {
               locale === "he" ? "rtl" : "ltr",
             )
             assert.equal(
-              await iframe.getByTestId("full-show-previous").innerText(),
+              await iframe
+                .getByTestId("full-show-previous")
+                .getAttribute("aria-label"),
               expectedLocaleText[locale].previous,
             )
             assert.equal(
@@ -1281,7 +1315,9 @@ try {
               expectedLocaleText[locale].editing,
             )
             assert.equal(
-              await iframe.getByTestId("full-show-pause").innerText(),
+              await iframe
+                .getByTestId("full-show-pause")
+                .getAttribute("aria-label"),
               expectedTransportText[locale][0],
             )
             assert.equal(
@@ -1292,30 +1328,35 @@ try {
                 ),
               expectedTransportText[locale][1],
             )
-            if (locale === "fr" || locale === "ja" || locale === "he")
+            if (locale === "fr" || locale === "ja" || locale === "he") {
+              await closeWorkspaceDrawers(page)
               await iframe.locator(".widget-editor").screenshot({
                 path: path.join(
                   evidence,
                   engine + "-" + theme + "-" + locale + "-controls.png",
                 ),
               })
+            }
             assert.equal(
               await iframe.locator(".widget-editor summary").innerText(),
               widgetLabels[locale].widget.appearanceAndSound,
             )
           }
+          await openWorkspacePanel(page, "display")
           await iframe.getByTestId("full-show-language").selectOption("en")
           await iframe
-            .getByTestId("full-show-next")
-            .filter({ hasText: "Next chapter" })
+            .locator('[data-testid="full-show-next"][aria-label="Next card"]')
             .waitFor()
+          await closeWorkspaceDrawers(page)
           if (theme === "tadazz-classic") {
             await scenario.go("opening", null)
             await page.emulateMedia({ reducedMotion: "no-preference" })
+            await openWorkspacePanel(page, "display")
             await iframe.getByTestId("full-show-reduce-motion").click()
             await iframe
               .locator('[data-testid="full-show-reduce-motion"]:not(:checked)')
               .waitFor()
+            await closeWorkspaceDrawers(page)
             await iframe.getByTestId("full-show-replay").click()
             const stage = iframe.locator("[data-full-show-chapter]")
             const first = await stage.screenshot({ animations: "allow" })
@@ -1334,10 +1375,12 @@ try {
               path.join(evidence, `${engine}-${theme}-motion-b.png`),
               second,
             )
+            await openWorkspacePanel(page, "display")
             await iframe.getByTestId("full-show-reduce-motion").click()
             await iframe
               .locator('[data-testid="full-show-reduce-motion"]:checked')
               .waitFor()
+            await closeWorkspaceDrawers(page)
             await page.emulateMedia({ reducedMotion: "reduce" })
           }
         },
@@ -1368,6 +1411,7 @@ try {
             ),
             "No native audio may start before the gesture",
           )
+          await openWorkspacePanel(page, "display")
           await iframe.getByTestId("full-show-enable-audio").click()
           await iframe
             .locator('[data-testid="full-show-audio"][data-audio-playing=true]')
@@ -1385,7 +1429,15 @@ try {
               .filter((value) => !value.paused && value.time > 0),
           )
           assert(before.length > 0, "Real native media time must advance")
+          await openWorkspacePanel(page, "edit")
           await iframe.getByTestId("full-show-voting-volume").fill("20")
+          assert.equal(
+            await iframe
+              .locator("[data-playback-paused]")
+              .getAttribute("data-playback-paused"),
+            "false",
+            "Focusing a live audio field must not pause playback",
+          )
           await iframe.getByTestId("full-show-apply-volume").click()
           await iframe
             .getByTestId("full-show-revision")
@@ -1463,6 +1515,7 @@ try {
               .volume,
             0.2,
           )
+          await openWorkspacePanel(page, "display")
           if (await iframe.getByTestId("full-show-enable-audio").isVisible())
             await iframe.getByTestId("full-show-enable-audio").click()
           await iframe
@@ -1491,6 +1544,7 @@ try {
           await iframe
             .locator('[data-testid="full-show-audio"][data-audio-playing=true]')
             .waitFor({ state: "attached" })
+          await closeWorkspaceDrawers(page)
           scenario.audioObserved = true
         },
       )
@@ -1626,7 +1680,9 @@ try {
           for (const width of [390, 1366]) {
             await page.setViewportSize({ width, height: 1200 })
             for (const aspect of ["16 / 9", "4 / 3"]) {
+              await openWorkspacePanel(page, "display")
               await iframe.getByTestId("full-show-aspect").selectOption(aspect)
+              await closeWorkspaceDrawers(page)
               await page.waitForTimeout(950)
               if (theme === "razzia-original")
                 await iframe
@@ -1651,11 +1707,17 @@ try {
                 .getByTestId("full-show-widget")
                 .evaluate(() => ({
                   width: innerWidth,
+                  height: innerHeight,
                   scroll: document.documentElement.scrollWidth,
+                  scrollHeight: document.documentElement.scrollHeight,
                 }))
               assert(
                 viewport.scroll <= viewport.width + 1,
                 "Widget must not overflow horizontally",
+              )
+              assert(
+                viewport.scrollHeight <= viewport.height + 1,
+                "The workspace document must not scroll vertically",
               )
               const images = await iframe
                 .locator('[data-full-show-chapter] img[src*="/v4/cards/"]')
@@ -1706,15 +1768,33 @@ try {
               const audioControl = iframe.locator(
                 '[data-testid="full-show-enable-audio"], [data-testid="full-show-mute-audio"]',
               )
+              assert.equal(
+                await audioControl.isVisible(),
+                false,
+                "Audio menu must stay closed outside the native composition",
+              )
+              const displayPanel = await openWorkspacePanel(page, "display")
               const audioBounds = await audioControl.boundingBox()
+              const displayBounds = await displayPanel.boundingBox()
               assert(
                 audioBounds &&
-                  (audioBounds.y + audioBounds.height <= outer.y + 1 ||
-                    audioBounds.y >= outer.y + outer.height - 1 ||
-                    audioBounds.x + audioBounds.width <= outer.x + 1 ||
-                    audioBounds.x >= outer.x + outer.width - 1),
-                "Audio control must be outside the native composition",
+                  displayBounds &&
+                  audioBounds.x >= displayBounds.x - 1 &&
+                  audioBounds.x + audioBounds.width <=
+                    displayBounds.x + displayBounds.width + 1 &&
+                  audioBounds.y >= displayBounds.y - 1 &&
+                  audioBounds.y + audioBounds.height <=
+                    displayBounds.y + displayBounds.height + 1,
+                "Audio control must fit its own display drawer",
               )
+              assert.equal(
+                await audioControl.evaluate((node) =>
+                  Boolean(node.closest('[data-testid="editor-panel-display"]')),
+                ),
+                true,
+              )
+              await closeWorkspaceDrawers(page)
+              assert.equal(await audioControl.isVisible(), false)
               geometry.push({
                 width,
                 aspect,
@@ -1724,6 +1804,8 @@ try {
                 imageCount: images,
                 composition,
                 audioControl: audioBounds,
+                audioDrawer: displayBounds,
+                audioOutsideComposition: true,
               })
               if (width === 390)
                 await iframe
@@ -1768,7 +1850,9 @@ try {
             )
           assert.equal(unlabeled, 0)
           await page.setViewportSize({ width: 1280, height: 1200 })
+          await openWorkspacePanel(page, "display")
           await iframe.getByTestId("full-show-aspect").selectOption("16 / 9")
+          await closeWorkspaceDrawers(page)
           const hostControls = await verifyHostControls({
             page,
             base,
@@ -2344,6 +2428,7 @@ try {
         widgetManifestSha256: digest(manifestBytes),
         widgetHtmlSha256: manifest.sha256,
         sourceHashesUnchanged,
+        diagnosticMode: process.env.TADAZZ_FULL_SHOW_DIAGNOSTIC ?? null,
         productionChanged: false,
         customerMountAccessed: false,
         oauthSession: qaSession.evidence(),

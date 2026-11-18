@@ -37,6 +37,7 @@ export const platformComponentCss = `
 .tds-scope .tds-field{display:grid;gap:var(--tds-space-2);min-width:0}
 .tds-scope .tds-field-label{font-size:var(--tds-type-label);font-weight:var(--tds-weight-label)}
 .tds-scope :is(.tds-input,.tds-select){box-sizing:border-box;width:100%;min-width:0;min-height:var(--tds-input-min-height);padding:var(--tds-space-2) var(--tds-space-3);border:1px solid var(--tds-border);border-radius:var(--tds-input-radius);color:var(--tds-text);background:var(--tds-surface);font:inherit}
+.tds-scope .tds-textarea{resize:vertical;line-height:1.5}
 .tds-scope .tds-input::placeholder{color:var(--tds-muted-text);opacity:1}
 .tds-scope :is(.tds-input,.tds-select)[aria-invalid="true"]{border-color:var(--tds-danger)}
 .tds-scope :is(.tds-input,.tds-select):disabled{opacity:.55;cursor:not-allowed}

@@ -6,7 +6,6 @@ import { EVENTS, MEDIA_TYPES, QUIZZ_MODES } from "@razzia/common/constants"
 import { STATUS, type Status } from "@razzia/common/types/game/status"
 import {
   EXTENSION_EVENTS,
-  themeSlotAsset,
   resolveThemeEffect,
   isCreatingWorldsPreset,
   type CardAudioOverrides,
@@ -22,7 +21,6 @@ import {
   reconcileThemeScene,
   themeSlotForScene,
   CinematicLayerStack,
-  TadazzOpening,
   TadazzStage,
   TadazzV4StageAdapter,
   collapseForResume,
@@ -30,7 +28,6 @@ import {
   isFullShowScene,
   isTadazzV4Active,
   planTransition,
-  preloadOpeningAssets,
   resolveStageBackdrop,
   resolveTadazzAudioPolicy,
   acceptsQuestionMilestone,
@@ -105,7 +102,6 @@ import {
   TadazzRecapScreen,
   TadazzSceneTitleScreen,
   TadazzStartScreen,
-  TadazzStandbyScreen,
   TadazzSummaryScreen,
   TadazzWaitScreen,
 } from "./TadazzScreens"
@@ -140,21 +136,6 @@ export interface TadazzShowViewProps {
   presentationRootRef: (_node: HTMLElement | null) => void
 }
 
-const openingSeenKey = (gameId: string) => `tadazz:opening-seen:${gameId}`
-function openingSeen(gameId: string): boolean {
-  try {
-    return window.sessionStorage.getItem(openingSeenKey(gameId)) === "1"
-  } catch {
-    return false
-  }
-}
-function markOpeningSeen(gameId: string) {
-  try {
-    window.sessionStorage.setItem(openingSeenKey(gameId), "1")
-  } catch {
-    /* Private mode */
-  }
-}
 const prefersReducedMotion = () =>
   typeof window !== "undefined" &&
   typeof window.matchMedia === "function" &&
@@ -389,92 +370,6 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     [],
   )
 
-  // ── Opening (MP4 + Lottie) before the join screen ─────────────────────
-  const openingLottieUrl = themeSlotAsset(theme, "opening", "overlayAssetId")
-  useEffect(() => {
-    if (
-      role !== "player" &&
-      ["lobby", "connecting", "wait"].includes(scene.kind)
-    ) {
-      preloadOpeningAssets({
-        lottieUrl: openingLottieUrl,
-      })
-    }
-  }, [role, openingLottieUrl, scene.kind])
-  const launch = extensionState?.extras.presentationLaunch as
-    | {
-        stage: "standby" | "opening" | "lobby" | "running"
-        startedAt: number | null
-      }
-    | undefined
-  const isStandby = launch?.stage === "standby"
-  const advancePresentation = useCallback(() => {
-    if (role !== "manager" || !extensionState || !isConnected) {
-      return
-    }
-
-    socket.emit(EXTENSION_EVENTS.COMMAND, {
-      v: 1,
-      gameId: extensionState.gameId,
-      requestId: crypto.randomUUID(),
-      action: "NEXT_SCREEN",
-      payload: {
-        epoch: extensionState.epoch,
-        phase: extensionState.phase,
-      },
-    })
-  }, [role, extensionState, isConnected, socket])
-  const [legacyOpeningActive, setOpeningActive] = useState(
-    () => role !== "player" && !reduced && !openingSeen(showGameId),
-  )
-  const openingActive = launch
-    ? role !== "player" && launch.stage === "opening"
-    : legacyOpeningActive
-  const configuredAudio = extensionState?.extras.audio as
-    QuizExtrasV1["audio"] | undefined
-  const hasOpeningSoundtrack =
-    configuredAudio?.soundtrack?.openingIntro?.mode === "media"
-  const [openingMusicDeadline, setOpeningMusicDeadline] = useState<
-    number | null
-  >(() =>
-    role !== "player" &&
-    !reduced &&
-    !openingSeen(showGameId) &&
-    !hasOpeningSoundtrack
-      ? Date.now() + 12000
-      : null,
-  )
-  const [legacyOpeningMusicActive, setOpeningMusicActive] = useState(
-    () => role !== "player" && !reduced && !openingSeen(showGameId),
-  )
-  const openingMusicActive = launch
-    ? role !== "player" && launch.stage === "opening"
-    : legacyOpeningMusicActive
-  useEffect(() => {
-    if (
-      hasOpeningSoundtrack ||
-      !openingMusicActive ||
-      openingMusicDeadline === null
-    ) {
-      return
-    }
-
-    const remaining = Math.max(0, openingMusicDeadline - Date.now())
-    const timer = setTimeout(() => setOpeningMusicActive(false), remaining)
-
-    return () => clearTimeout(timer)
-  }, [hasOpeningSoundtrack, openingMusicActive, openingMusicDeadline])
-  const enableOpeningSound = useCallback(() => {
-    setOpeningMusicActive(true)
-    setOpeningMusicDeadline(hasOpeningSoundtrack ? null : Date.now() + 12000)
-    window.dispatchEvent(new Event("tadazz:audio-unlock"))
-  }, [hasOpeningSoundtrack])
-  const openingEligible =
-    role !== "player" &&
-    (launch?.stage === "opening" ||
-      scene.kind === "lobby" ||
-      ((scene.kind === "connecting" || scene.kind === "wait") &&
-        !questionStates))
   const stageRef = useRef<TadazzStageHandle>(null)
   const showRootRef = useRef<HTMLElement | null>(null)
   const isPaused = Boolean(extensionState?.pause?.paused)
@@ -624,30 +519,6 @@ export function TadazzShowView(props: TadazzShowViewProps) {
       }
     })
   }, [isPaused])
-  const finishOpening = useCallback(() => {
-    markOpeningSeen(showGameId)
-    setOpeningActive(false)
-  }, [showGameId])
-  // Leaving the lobby (host started) ends any opening still on screen.
-  useEffect(() => {
-    if (
-      scene.kind === "lobby" ||
-      scene.kind === "connecting" ||
-      scene.kind === "wait"
-    ) {
-      return
-    }
-
-    if (openingActive) {
-      markOpeningSeen(showGameId)
-      setOpeningActive(false)
-    }
-
-    if (openingMusicActive) {
-      setOpeningMusicActive(false)
-    }
-  }, [openingActive, openingMusicActive, scene.kind, showGameId])
-
   // ── Director: authoritative scene → reference animation methods ────────
   const prevSceneRef = useRef<ShowScene | null>(null)
   const pendingRef = useRef<ShowScene | null>(null)
@@ -1027,10 +898,6 @@ export function TadazzShowView(props: TadazzShowViewProps) {
         return <TadazzConnectingScreen />
 
       case "lobby":
-        if (isStandby) {
-          return <TadazzStandbyScreen />
-        }
-
         return (
           <TadazzLobbyScreen
             inviteCode={
@@ -1300,38 +1167,12 @@ export function TadazzShowView(props: TadazzShowViewProps) {
         typeof descriptor.preset === "string"
           ? descriptor.preset
           : null,
-      openingActive: openingMusicActive,
+      openingActive: false,
     })
-  }, [extensionState?.phase, openingMusicActive, props.statusName, scene])
+  }, [extensionState?.phase, props.statusName, scene])
   let overlay: React.ReactNode = null
 
-  if (openingActive && openingEligible) {
-    overlay = (
-      <TadazzOpening
-        backdropUrl={themeSlotAsset(theme, "opening", "backgroundAssetId")}
-        videoUrl={themeSlotAsset(theme, "opening", "mediaAssetId")}
-        lottieUrl={themeSlotAsset(theme, "opening", "overlayAssetId")}
-        eventArtworkPending={!extensionState}
-        eventArtworkUrl={
-          theme.definition.id === "tadazz-classic" &&
-          (extensionState?.extras.lobbyFullShow ||
-            Boolean(managerState.hostPresence?.players.length))
-            ? "/tadazz-show/second-library/creating-worlds-intro.png"
-            : undefined
-        }
-        onFinished={finishOpening}
-        onSkip={launch?.stage === "opening" ? advancePresentation : undefined}
-        onEnableSound={
-          manager && !isHostPresenting ? enableOpeningSound : undefined
-        }
-        canSkip={manager && !isHostPresenting}
-        labels={{
-          skip: tx("skipOpening", "Skip"),
-          enableSound: tx("enableSound", "Enable sound"),
-        }}
-      />
-    )
-  } else if (scene.kind === "scene" && isCinematicScene(scene.scene)) {
+  if (scene.kind === "scene" && isCinematicScene(scene.scene)) {
     const s = scene.scene
     const kind: CinematicLayerStackProps["sceneKind"] =
       s.kind === "opening" || s.kind === "closing" ? s.kind : "media"
@@ -1586,17 +1427,9 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                 extensionState={extensionState}
                 questionStates={questionStates}
                 onExit={onBack ?? (() => undefined)}
-                onStartGame={(() => {
-                  if (props.statusName === STATUS.SHOW_ROOM) {
-                    if (launch) {
-                      return advancePresentation
-                    }
-
-                    return onNext
-                  }
-
-                  return undefined
-                })()}
+                onStartGame={
+                  props.statusName === STATUS.SHOW_ROOM ? onNext : undefined
+                }
                 onAdvanceFallback={onNext}
                 onPresent={onPresent}
                 countdown={countdown}
@@ -1751,7 +1584,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                 )}
               </PackageStage>
             </NativeCompositionBoundary>
-            {role !== "player" && !isStandby && (
+            {role !== "player" && (
               <LiveParticipation
                 connected={publicConnected}
                 answered={publicAnswered}
@@ -1857,13 +1690,8 @@ export function TadazzShowView(props: TadazzShowViewProps) {
               epoch={extensionState.epoch}
               soundtrackSlot={audioPolicy.slot}
               continuityKey={audioPolicy.continuityKey}
-              paused={isPaused || isStandby}
+              paused={isPaused}
               autoPlay={!manager || roomMediaReady}
-              onEnded={() => {
-                if (audioPolicy.slot === "openingIntro") {
-                  setOpeningMusicActive(false)
-                }
-              }}
               showControls={manager && !isHostPresenting}
               controlLabels={{
                 enable: t("extensions:audio.enableSound", "Enable sound"),

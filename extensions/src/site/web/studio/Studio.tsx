@@ -213,6 +213,10 @@ function StudioWorkspace({ account }: { account: Account }) {
   const t = useSiteText()
   const queryClient = useQueryClient()
   const path = useRouterState({ select: (state) => state.location.pathname })
+  const requestedQuizId = useRouterState({
+    select: (state) =>
+      new URLSearchParams(state.location.searchStr).get("quiz") ?? "",
+  })
   const requested = path.split("/").filter(Boolean).at(1) ?? "dashboard"
   const section = [...navigation.map(([id]) => id), "prepare"].includes(
     requested,
@@ -227,7 +231,10 @@ function StudioWorkspace({ account }: { account: Account }) {
   const quizzes = useQuery({
     queryKey: siteKey(account.id, "games"),
     queryFn: ({ signal }) =>
-      siteRequest<{ quizz: QuizMeta[] }>("/api/quizz", { signal }),
+      siteRequest<{ quizz: QuizMeta[] }>("/api/quizz", {
+        signal: AbortSignal.any([signal, AbortSignal.timeout(20_000)]),
+      }),
+    retry: 1,
     refetchOnWindowFocus: true,
     staleTime: 0,
     enabled: ["dashboard", "games", "prepare"].includes(section),
@@ -600,11 +607,25 @@ function StudioWorkspace({ account }: { account: Account }) {
 
                     if (quizzes.isError) {
                       return (
-                        <p role="alert">{t("Could not load your games")}</p>
+                        <div role="alert">
+                          <p>{t("Could not load your games")}</p>
+                          <SiteButton
+                            className="btn ghost"
+                            onClick={() => void quizzes.refetch()}
+                          >
+                            {t("Retry")}
+                          </SiteButton>
+                        </div>
                       )
                     }
 
-                    return <Prepare games={games} />
+                    return (
+                      <Prepare
+                        key={requestedQuizId}
+                        games={games}
+                        requestedId={requestedQuizId}
+                      />
+                    )
                   })()}
                 {section === "explore" && (
                   <>
