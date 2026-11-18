@@ -30,9 +30,23 @@ source=base/c['sourceRun']/'source'
 build=base/c['sourceRun']/'fixtures/native-host-build'
 assert source.resolve()==source and source.is_dir() and build.resolve()==build
 widget=source/'extensions/src/mcp-app/widget/dist'
-public=source/'packages/web/public'
+web=source/'packages/web/dist'
 assert widget.resolve()==widget and widget.is_dir() and not widget.is_symlink()
-assert public.resolve()==public and public.is_dir() and not public.is_symlink()
+assert web.resolve()==web and web.is_dir() and not web.is_symlink()
+def web_hashes():
+    files={}
+    total=0
+    for path in sorted(web.rglob('*')):
+        assert path.resolve()==path and not path.is_symlink(), 'Web artifact must contain no links'
+        if path.is_dir(): continue
+        assert path.is_file(), 'Web artifact must contain only regular files'
+        size=path.stat().st_size
+        total+=size
+        assert size<=64*1024*1024 and total<=512*1024*1024 and len(files)<10000
+        files[path.relative_to(web).as_posix()]={'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'bytes':size}
+    assert files.get('index.html',{}).get('bytes',0)>0, 'Built site index.html is required by native host startup'
+    return files
+web_before=web_hashes()
 widget_manifest_bytes=(widget/'full-show-artifact.json').read_bytes()
 widget_manifest_sha=hashlib.sha256(widget_manifest_bytes).hexdigest()
 widget_manifest=json.loads(widget_manifest_bytes)
@@ -52,6 +66,9 @@ for group in ('physicalSources','publicAssets'):
         assert c['manifest'].get(entry['path'])==entry['sha256']
         assert (source/entry['path']).stat().st_size==entry['bytes']
 assert {entry['path'] for entry in widget_manifest['publicAssets']}=={p for p in c['manifest'] if p.startswith('packages/web/public/')}
+for entry in widget_manifest['publicAssets']:
+    relative=entry['path'].removeprefix('packages/web/public/')
+    assert web_before.get(relative)=={'sha256':entry['sha256'],'bytes':entry['bytes']}, 'Built site must include every pinned widget public asset'
 artifact=json.loads((build/'artifact.json').read_text())
 compiled=build/'index.cjs'
 assert hashlib.sha256(compiled.read_bytes()).hexdigest()==artifact['sha256']
@@ -69,7 +86,7 @@ internal='/evidence/'+c['sourceRun']+'/source'
 fixture='/evidence/'+c['run']+'/fixtures'
 image='sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346'
 docker=['docker','run','--detach','--pull=never','--init','--read-only','--network','none','--cpus','1','--memory','1g','--memory-swap','1g','--pids-limit','256','--tmpfs','/tmp:rw,nosuid,nodev,size=134217728','--name',c['run'],'--label','codex.thread=01a1e9e9-ad5b-77a3-bafe-bcedce32246a']
-for origin,target,readonly in [(str(source),internal,True),(str(build),'/candidate',True),(str(widget),'/app/mcp',True),(str(public),'/app/web',True),(str(owned),'/evidence/'+c['run'],False),(str(rootfs/'cleanup'),'/cleanup',True),(str(deps),'/tmp/phase3-999ed90c/deps',True)]:
+for origin,target,readonly in [(str(source),internal,True),(str(build),'/candidate',True),(str(widget),'/app/mcp',True),(str(web),'/app/web',True),(str(owned),'/evidence/'+c['run'],False),(str(rootfs/'cleanup'),'/cleanup',True),(str(deps),'/tmp/phase3-999ed90c/deps',True)]:
     docker+=['--mount','type=bind,source='+origin+',target='+target+(',readonly' if readonly else '')]
 docker+=['--entrypoint','/bin/sleep',image,'infinity']
 created=subprocess.run(docker,capture_output=True,text=True)
@@ -80,7 +97,7 @@ try:
     created_facts=json.loads(subprocess.check_output(['docker','inspect',c['run']]))[0]
     mounts={item['Destination']:item for item in created_facts['Mounts']}
     assert created_facts['HostConfig']['NetworkMode']=='none' and not created_facts['HostConfig']['PortBindings']
-    for destination,expected_source in [('/app/mcp',str(widget)),('/app/web',str(public))]:
+    for destination,expected_source in [('/app/mcp',str(widget)),('/app/web',str(web))]:
         assert mounts[destination]['Type']=='bind' and mounts[destination]['Source']==expected_source and not mounts[destination]['RW']
     result=subprocess.run(argv,capture_output=True,text=True,timeout=110)
 finally:
@@ -89,8 +106,10 @@ after={p:hashlib.sha256((source/p).read_bytes()).hexdigest() for p in c['manifes
 assert hashlib.sha256(compiled.read_bytes()).hexdigest()==artifact['sha256']
 assert hashlib.sha256((widget/'full-show-artifact.json').read_bytes()).hexdigest()==widget_manifest_sha
 assert hashlib.sha256((widget/'full-show.html').read_bytes()).hexdigest()==widget_manifest['sha256']
+web_after=web_hashes()
+assert web_after==web_before, 'Built site changed during isolated launch qualification'
 widget_receipt={'manifestSha256':widget_manifest_sha,'htmlSha256':widget_manifest['sha256'],'htmlBytes':len(widget_html),'rendererBuildId':widget_manifest['rendererBuildId'],'publicAssetCount':len(widget_manifest['publicAssets']),'physicalSourceCount':len(widget_manifest['physicalSources']),'readOnlyMountsVerified':True,'hashesUnchanged':True}
-print(json.dumps({'sha':c['sha'],'sourceFileCount':len(before),'allSourceHashesVerifiedBeforeAfter':before==after==c['manifest'],'runnerImage':image,'network':'none','artifact':artifact,'widgetArtifact':widget_receipt,'artifactHashUnchanged':True,'command':argv,'exit':result.returncode,'seconds':round(time.time()-started,3),'stdout':result.stdout,'stderr':result.stderr,'productionChanged':False,'customerDataAccessed':False,'privateHostInstalled':False},indent=2))
+print(json.dumps({'sha':c['sha'],'sourceFileCount':len(before),'allSourceHashesVerifiedBeforeAfter':before==after==c['manifest'],'runnerImage':image,'network':'none','artifact':artifact,'widgetArtifact':widget_receipt,'webArtifacts':web_before,'webArtifactsUnchanged':web_after==web_before,'artifactHashUnchanged':True,'command':argv,'exit':result.returncode,'seconds':round(time.time()-started,3),'stdout':result.stdout,'stderr':result.stderr,'productionChanged':False,'customerDataAccessed':False,'privateHostInstalled':False},indent=2))
 '''
 result = subprocess.run(["ssh","-i",str(pathlib.Path.home()/".ssh/tadazz_oracle_2026"),"-o","BatchMode=yes","-o","StrictHostKeyChecking=yes","ubuntu@132.145.25.168","sudo -n python3 -"],input=REMOTE.replace("c=CONFIG","c="+repr(config)),capture_output=True,text=True,encoding="utf8",timeout=145)
 (evidence/"controller.stdout.log").write_text(result.stdout,encoding="utf8",newline="\n")

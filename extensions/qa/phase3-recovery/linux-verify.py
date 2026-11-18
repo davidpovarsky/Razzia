@@ -222,10 +222,11 @@ else:
         widget_ok = check("native-widget-build", 300, ["node", "extensions/src/mcp-app/widget/build-full-show.mjs"])
         if widget_ok:
             check("native-launch-build", 90, ["node", "extensions/deployment/build-native-host.mjs"])
-    if http_ok and c["suite"] == "native-consent":
+    if http_ok and c["suite"] in ("native-consent", "native-launch"):
         prefix[4:4] = ["-e", "TADAZZ_SITE_ENABLED=true", "-e", "VITE_TADAZZ_OAUTH_ISSUER_PATH=/oauth", "-e", "VITE_TADAZZ_NATIVE_CONSENT_ENABLED=true", "-e", "TADAZZ_SITE_DIST_DIR=" + source + "/packages/web/dist", "-e", "TADAZZ_QA_RUN_DIR=" + fixture + "/browser", "-e", "TADAZZ_QA_OWNED_RUN_DIR=1"]
-        # Consent/browser qualification does not manufacture a full-show pin or
-        # rewrite the tracked preview-build manifest. Full-show is a later gate.
+        # Both launch and consent require the real built site. The native host
+        # reads index.html at startup; public assets alone cannot qualify it.
+        # These flags remain identical for both suites, without tracked writes.
         site_ok = check("native-site-build", 180, ["node", "/cleanup/packages/web/node_modules/vite/bin/vite.js", "build", "--config", "extensions/site.vite.config.ts"])
         # Browser QA runs separately in a fresh bounded container with read-only
         # source and caches. The preserved old container has a full /tmp and
@@ -236,7 +237,7 @@ print(json.dumps({"sha": c["sha"], "suite": c["suite"], "run": c["run"], "source
 '''
 configuration = {"sha": SHA, "suite": SUITE, "run": RUN, "reuse": REUSE, "manifest": manifest}
 script = REMOTE.replace("c = CONFIG", "c = " + repr(configuration))
-result = subprocess.run([*SSH, "sudo -n python3 -"], input=script, text=True, encoding="utf8", capture_output=True, timeout=650)
+result = subprocess.run([*SSH, "sudo -n python3 -"], input=script, text=True, encoding="utf8", capture_output=True, timeout=850 if SUITE == "native-launch" else 650)
 (EVIDENCE / "controller.stdout.log").write_text(result.stdout, encoding="utf8")
 (EVIDENCE / "controller.stderr.log").write_text(result.stderr, encoding="utf8")
 if result.returncode != 0:
@@ -248,6 +249,8 @@ receipt = json.loads(result.stdout)
 print(json.dumps({"sha": SHA, "evidence": str(EVIDENCE), "sourceFilesVerified": receipt["sourceFileCount"], "checks": [{"label": item["label"], "exit": item["exit"], "seconds": item["seconds"]} for item in receipt["checks"]]}, indent=2))
 required_gate = SUITE if SUITE.startswith("full-show-") else "ext4-full8" if SUITE == "recovery" else "native-http" if SUITE == "native-proxy" else "native-launch-build" if SUITE == "native-launch" else "native-site-build"
 passed = receipt["allHashesVerifiedBeforeAfter"] and all(item["exit"] == 0 for item in receipt["checks"]) and any(item["label"] == required_gate for item in receipt["checks"])
+if SUITE == "native-launch":
+    passed = passed and any(item["label"] == "native-site-build" and item["exit"] == 0 for item in receipt["checks"])
 if passed and SUITE == "native-consent":
     browser = ROOT / "extensions/qa/phase3-native-consent/browser-verify.py"
     sys.exit(subprocess.run([sys.executable, str(browser), RUN], cwd=ROOT).returncode)
