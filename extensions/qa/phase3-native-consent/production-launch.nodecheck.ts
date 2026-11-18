@@ -67,7 +67,7 @@ function child(root: string, port: number, enabled: boolean) {
   const processEnv: NodeJS.ProcessEnv = {
     PATH: process.env.PATH,
     HOME: root,
-    TMPDIR: root,
+    TMPDIR: dirname(root),
     NODE_ENV: "production",
     CONFIG_PATH: root,
     TADAZZ_ACCOUNTS_ENABLED: "true",
