@@ -1,0 +1,103 @@
+{
+  "target": {
+    "text": "שאלות",
+    "family": "\"Rubik Variable\", sans-serif",
+    "font": "600 12px / 16px \"Rubik Variable\", sans-serif",
+    "size": "12px",
+    "weight": "600"
+  },
+  "fontCheck": true,
+  "actualGlyphFonts": {
+    "fonts": [],
+    "nodes": [
+      {
+        "nodeId": 57,
+        "fonts": []
+      }
+    ]
+  },
+  "fontNetwork": [
+    {
+      "url": "http://127.0.0.1:3180/@fs/C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/@fontsource-variable+rubik@5.3.0/node_modules/@fontsource-variable/rubik/files/rubik-latin-wght-normal.woff2",
+      "status": 200,
+      "contentType": "font/woff2",
+      "bodyBytes": 35348
+    },
+    {
+      "url": "http://127.0.0.1:3180/@fs/C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/@fontsource-variable+rubik@5.3.0/node_modules/@fontsource-variable/rubik/files/rubik-hebrew-wght-normal.woff2",
+      "status": 200,
+      "contentType": "font/woff2",
+      "bodyBytes": 9348
+    },
+    {
+      "url": "http://127.0.0.1:3180/@fs/C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/@fontsource-variable+rubik@5.3.0/node_modules/@fontsource-variable/rubik/files/rubik-latin-wght-normal.woff2",
+      "status": 304,
+      "bodyBytes": null
+    },
+    {
+      "url": "http://127.0.0.1:3180/@fs/C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/@fontsource-variable+rubik@5.3.0/node_modules/@fontsource-variable/rubik/files/rubik-hebrew-wght-normal.woff2",
+      "status": 304,
+      "bodyBytes": null
+    }
+  ],
+  "matchingLoadedFaces": [
+    {
+      "family": "Rubik Variable",
+      "status": "loaded",
+      "weight": "300 900",
+      "unicodeRange": "U+307-308, U+590-5FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F"
+    }
+  ],
+  "resources": []
+}
+{
+  "ok": true,
+  "target": {
+    "text": "שאלות",
+    "family": "\"Rubik Variable\", sans-serif",
+    "font": "600 12px / 16px \"Rubik Variable\", sans-serif",
+    "size": "12px",
+    "weight": "600"
+  },
+  "actualGlyphFonts": {
+    "fonts": [],
+    "nodes": [
+      {
+        "nodeId": 57,
+        "fonts": []
+      }
+    ]
+  },
+  "decodedFontResponses": [
+    {
+      "url": "http://127.0.0.1:3180/@fs/C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/@fontsource-variable+rubik@5.3.0/node_modules/@fontsource-variable/rubik/files/rubik-latin-wght-normal.woff2",
+      "status": 200,
+      "contentType": "font/woff2",
+      "bodyBytes": 35348
+    },
+    {
+      "url": "http://127.0.0.1:3180/@fs/C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/@fontsource-variable+rubik@5.3.0/node_modules/@fontsource-variable/rubik/files/rubik-hebrew-wght-normal.woff2",
+      "status": 200,
+      "contentType": "font/woff2",
+      "bodyBytes": 9348
+    },
+    {
+      "url": "http://127.0.0.1:3180/@fs/C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/@fontsource-variable+rubik@5.3.0/node_modules/@fontsource-variable/rubik/files/rubik-latin-wght-normal.woff2",
+      "status": 304,
+      "bodyBytes": null
+    },
+    {
+      "url": "http://127.0.0.1:3180/@fs/C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/node_modules/.pnpm/@fontsource-variable+rubik@5.3.0/node_modules/@fontsource-variable/rubik/files/rubik-hebrew-wght-normal.woff2",
+      "status": 304,
+      "bodyBytes": null
+    }
+  ],
+  "loadedMatchingFaces": [
+    {
+      "family": "Rubik Variable",
+      "status": "loaded",
+      "weight": "300 900",
+      "unicodeRange": "U+307-308, U+590-5FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F"
+    }
+  ]
+}

@@ -1,0 +1,490 @@
+{
+  "startedAt": "2026-11-18T14:10:41.272Z",
+  "scope": "Actual temporary native renderer artifact in isolated iframe documents and ShadowRoots; parent has no font stylesheet. Release digest admission is a separate root gate.",
+  "csp": "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src data:; connect-src 'self'; frame-src 'self'; media-src 'self'; base-uri 'none'; object-src 'none'",
+  "cssSha256": "91d23320b35de4d81c17e20e21b6874574d8e2304d2f3157dda0aa232f6207e9",
+  "embeddedFontFaces": 6,
+  "embeddedWoff2Sources": 6,
+  "checks": {
+    "parentBefore": [],
+    "original": {
+      "faces": [
+        {
+          "family": "\"Rubik Variable\"",
+          "status": "loaded",
+          "weight": "300 900",
+          "style": "normal",
+          "unicodeRange": "U+600-6FF, U+750-77F, U+870-88E, U+890-891, U+897-8E1, U+8E3-8FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC4, U+10EFC-10EFF, U+1EE00-1EE03, U+1EE05-1EE1F, U+1EE21-1EE22, U+1EE24, U+1EE27, U+1EE29-1EE32, U+1EE34-1EE37, U+1EE39, U+1EE3B, U+1EE42, U+1EE47, U+1EE49, U+1EE4B, U+1EE4D-1EE4F, U+1EE51-1EE52, U+1EE54, U+1EE57, U+1EE59, U+1EE5B, U+1EE5D, U+1EE5F, U+1EE61-1EE62, U+1EE64, U+1EE67-1EE6A, U+1EE6C-1EE72, U+1EE74-1EE77, U+1EE79-1EE7C, U+1EE7E, U+1EE80-1EE89, U+1EE8B-1EE9B, U+1EEA1-1EEA3, U+1EEA5-1EEA9, U+1EEAB-1EEBB, U+1EEF0-1EEF1"
+        },
+        {
+          "family": "\"Rubik Variable\"",
+          "status": "loaded",
+          "weight": "300 900",
+          "style": "normal",
+          "unicodeRange": "U+460-52F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F"
+        },
+        {
+          "family": "\"Rubik Variable\"",
+          "status": "loaded",
+          "weight": "300 900",
+          "style": "normal",
+          "unicodeRange": "U+301, U+400-45F, U+490-491, U+4B0-4B1, U+2116"
+        },
+        {
+          "family": "\"Rubik Variable\"",
+          "status": "loaded",
+          "weight": "300 900",
+          "style": "normal",
+          "unicodeRange": "U+307-308, U+590-5FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F"
+        },
+        {
+          "family": "\"Rubik Variable\"",
+          "status": "loaded",
+          "weight": "300 900",
+          "style": "normal",
+          "unicodeRange": "U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF"
+        },
+        {
+          "family": "\"Rubik Variable\"",
+          "status": "loaded",
+          "weight": "300 900",
+          "style": "normal",
+          "unicodeRange": "U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD"
+        }
+      ],
+      "fontsReady": "loaded",
+      "checkHebrew": true,
+      "text": "מה התשובה הנכונה לשאלה QA מספר 12?",
+      "textFonts": [
+        {
+          "tag": "H2",
+          "text": "מה התשובה הנכונה לשאלה QA מספר 12?",
+          "family": "\"Rubik Variable\", sans-serif",
+          "weight": "700",
+          "direction": "rtl"
+        }
+      ],
+      "styleParserCount": 0
+    },
+    "duplicate": {
+      "faces": [
+        {
+          "family": "\"Rubik Variable\"",
+          "status": "loaded",
+          "weight": "300 900",
+          "style": "normal",
+          "unicodeRange": "U+600-6FF, U+750-77F, U+870-88E, U+890-891, U+897-8E1, U+8E3-8FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC4, U+10EFC-10EFF, U+1EE00-1EE03, U+1EE05-1EE1F, U+1EE21-1EE22, U+1EE24, U+1EE27, U+1EE29-1EE32, U+1EE34-1EE37, U+1EE39, U+1EE3B, U+1EE42, U+1EE47, U+1EE49, U+1EE4B, U+1EE4D-1EE4F, U+1EE51-1EE52, U+1EE54, U+1EE57, U+1EE59, U+1EE5B, U+1EE5D, U+1EE5F, U+1EE61-1EE62, U+1EE64, U+1EE67-1EE6A, U+1EE6C-1EE72, U+1EE74-1EE77, U+1EE79-1EE7C, U+1EE7E, U+1EE80-1EE89, U+1EE8B-1EE9B, U+1EEA1-1EEA3, U+1EEA5-1EEA9, U+1EEAB-1EEBB, U+1EEF0-1EEF1"
+        },
+        {
+          "family": "\"Rubik Variable\"",
+          "status": "loaded",
+          "weight": "300 900",
+          "style": "normal",
+          "unicodeRange": "U+460-52F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F"
+        },
+        {
+          "family": "\"Rubik Variable\"",
+          "status": "loaded",
+          "weight": "300 900",
+          "style": "normal",
+          "unicodeRange": "U+301, U+400-45F, U+490-491, U+4B0-4B1, U+2116"
+        },
+        {
+          "family": "\"Rubik Variable\"",
+          "status": "loaded",
+          "weight": "300 900",
+          "style": "normal",
+          "unicodeRange": "U+307-308, U+590-5FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F"
+        },
+        {
+          "family": "\"Rubik Variable\"",
+          "status": "loaded",
+          "weight": "300 900",
+          "style": "normal",
+          "unicodeRange": "U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF"
+        },
+        {
+          "family": "\"Rubik Variable\"",
+          "status": "loaded",
+          "weight": "300 900",
+          "style": "normal",
+          "unicodeRange": "U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD"
+        }
+      ],
+      "fontsReady": "loaded",
+      "checkHebrew": true,
+      "text": "מה התשובה הנכונה לשאלה QA מספר 12?",
+      "textFonts": [
+        {
+          "tag": "H2",
+          "text": "מה התשובה הנכונה לשאלה QA מספר 12?",
+          "family": "\"Rubik Variable\", sans-serif",
+          "weight": "700",
+          "direction": "rtl"
+        }
+      ],
+      "styleParserCount": 0
+    },
+    "otherDocument": {
+      "faces": [
+        {
+          "family": "\"Rubik Variable\"",
+          "status": "loaded",
+          "weight": "300 900",
+          "style": "normal",
+          "unicodeRange": "U+600-6FF, U+750-77F, U+870-88E, U+890-891, U+897-8E1, U+8E3-8FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC4, U+10EFC-10EFF, U+1EE00-1EE03, U+1EE05-1EE1F, U+1EE21-1EE22, U+1EE24, U+1EE27, U+1EE29-1EE32, U+1EE34-1EE37, U+1EE39, U+1EE3B, U+1EE42, U+1EE47, U+1EE49, U+1EE4B, U+1EE4D-1EE4F, U+1EE51-1EE52, U+1EE54, U+1EE57, U+1EE59, U+1EE5B, U+1EE5D, U+1EE5F, U+1EE61-1EE62, U+1EE64, U+1EE67-1EE6A, U+1EE6C-1EE72, U+1EE74-1EE77, U+1EE79-1EE7C, U+1EE7E, U+1EE80-1EE89, U+1EE8B-1EE9B, U+1EEA1-1EEA3, U+1EEA5-1EEA9, U+1EEAB-1EEBB, U+1EEF0-1EEF1"
+        },
+        {
+          "family": "\"Rubik Variable\"",
+          "status": "loaded",
+          "weight": "300 900",
+          "style": "normal",
+          "unicodeRange": "U+460-52F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F"
+        },
+        {
+          "family": "\"Rubik Variable\"",
+          "status": "loaded",
+          "weight": "300 900",
+          "style": "normal",
+          "unicodeRange": "U+301, U+400-45F, U+490-491, U+4B0-4B1, U+2116"
+        },
+        {
+          "family": "\"Rubik Variable\"",
+          "status": "loaded",
+          "weight": "300 900",
+          "style": "normal",
+          "unicodeRange": "U+307-308, U+590-5FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F"
+        },
+        {
+          "family": "\"Rubik Variable\"",
+          "status": "loaded",
+          "weight": "300 900",
+          "style": "normal",
+          "unicodeRange": "U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF"
+        },
+        {
+          "family": "\"Rubik Variable\"",
+          "status": "loaded",
+          "weight": "300 900",
+          "style": "normal",
+          "unicodeRange": "U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD"
+        }
+      ],
+      "fontsReady": "loaded",
+      "checkHebrew": true,
+      "text": "מה התשובה הנכונה לשאלה QA מספר 12?",
+      "textFonts": [
+        {
+          "tag": "H2",
+          "text": "מה התשובה הנכונה לשאלה QA מספר 12?",
+          "family": "\"Rubik Variable\", sans-serif",
+          "weight": "700",
+          "direction": "rtl"
+        }
+      ],
+      "styleParserCount": 0
+    },
+    "afterFirstDispose": [
+      {
+        "family": "\"Rubik Variable\"",
+        "status": "loaded",
+        "weight": "300 900",
+        "style": "normal",
+        "unicodeRange": "U+600-6FF, U+750-77F, U+870-88E, U+890-891, U+897-8E1, U+8E3-8FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC4, U+10EFC-10EFF, U+1EE00-1EE03, U+1EE05-1EE1F, U+1EE21-1EE22, U+1EE24, U+1EE27, U+1EE29-1EE32, U+1EE34-1EE37, U+1EE39, U+1EE3B, U+1EE42, U+1EE47, U+1EE49, U+1EE4B, U+1EE4D-1EE4F, U+1EE51-1EE52, U+1EE54, U+1EE57, U+1EE59, U+1EE5B, U+1EE5D, U+1EE5F, U+1EE61-1EE62, U+1EE64, U+1EE67-1EE6A, U+1EE6C-1EE72, U+1EE74-1EE77, U+1EE79-1EE7C, U+1EE7E, U+1EE80-1EE89, U+1EE8B-1EE9B, U+1EEA1-1EEA3, U+1EEA5-1EEA9, U+1EEAB-1EEBB, U+1EEF0-1EEF1"
+      },
+      {
+        "family": "\"Rubik Variable\"",
+        "status": "loaded",
+        "weight": "300 900",
+        "style": "normal",
+        "unicodeRange": "U+460-52F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F"
+      },
+      {
+        "family": "\"Rubik Variable\"",
+        "status": "loaded",
+        "weight": "300 900",
+        "style": "normal",
+        "unicodeRange": "U+301, U+400-45F, U+490-491, U+4B0-4B1, U+2116"
+      },
+      {
+        "family": "\"Rubik Variable\"",
+        "status": "loaded",
+        "weight": "300 900",
+        "style": "normal",
+        "unicodeRange": "U+307-308, U+590-5FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F"
+      },
+      {
+        "family": "\"Rubik Variable\"",
+        "status": "loaded",
+        "weight": "300 900",
+        "style": "normal",
+        "unicodeRange": "U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF"
+      },
+      {
+        "family": "\"Rubik Variable\"",
+        "status": "loaded",
+        "weight": "300 900",
+        "style": "normal",
+        "unicodeRange": "U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD"
+      }
+    ],
+    "afterLastDispose": [],
+    "otherStillOwned": [
+      {
+        "family": "\"Rubik Variable\"",
+        "status": "loaded",
+        "weight": "300 900",
+        "style": "normal",
+        "unicodeRange": "U+600-6FF, U+750-77F, U+870-88E, U+890-891, U+897-8E1, U+8E3-8FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC4, U+10EFC-10EFF, U+1EE00-1EE03, U+1EE05-1EE1F, U+1EE21-1EE22, U+1EE24, U+1EE27, U+1EE29-1EE32, U+1EE34-1EE37, U+1EE39, U+1EE3B, U+1EE42, U+1EE47, U+1EE49, U+1EE4B, U+1EE4D-1EE4F, U+1EE51-1EE52, U+1EE54, U+1EE57, U+1EE59, U+1EE5B, U+1EE5D, U+1EE5F, U+1EE61-1EE62, U+1EE64, U+1EE67-1EE6A, U+1EE6C-1EE72, U+1EE74-1EE77, U+1EE79-1EE7C, U+1EE7E, U+1EE80-1EE89, U+1EE8B-1EE9B, U+1EEA1-1EEA3, U+1EEA5-1EEA9, U+1EEAB-1EEBB, U+1EEF0-1EEF1"
+      },
+      {
+        "family": "\"Rubik Variable\"",
+        "status": "loaded",
+        "weight": "300 900",
+        "style": "normal",
+        "unicodeRange": "U+460-52F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F"
+      },
+      {
+        "family": "\"Rubik Variable\"",
+        "status": "loaded",
+        "weight": "300 900",
+        "style": "normal",
+        "unicodeRange": "U+301, U+400-45F, U+490-491, U+4B0-4B1, U+2116"
+      },
+      {
+        "family": "\"Rubik Variable\"",
+        "status": "loaded",
+        "weight": "300 900",
+        "style": "normal",
+        "unicodeRange": "U+307-308, U+590-5FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F"
+      },
+      {
+        "family": "\"Rubik Variable\"",
+        "status": "loaded",
+        "weight": "300 900",
+        "style": "normal",
+        "unicodeRange": "U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF"
+      },
+      {
+        "family": "\"Rubik Variable\"",
+        "status": "loaded",
+        "weight": "300 900",
+        "style": "normal",
+        "unicodeRange": "U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD"
+      }
+    ],
+    "disposedBeforeReady": {
+      "faces": [],
+      "fontsReady": "loaded",
+      "checkHebrew": true,
+      "text": "",
+      "textFonts": [],
+      "styleParserCount": 0
+    },
+    "fallback": {
+      "faces": [
+        {
+          "family": "\"Rubik Variable\"",
+          "status": "loaded",
+          "weight": "300 900",
+          "style": "normal",
+          "unicodeRange": "U+600-6FF, U+750-77F, U+870-88E, U+890-891, U+897-8E1, U+8E3-8FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC4, U+10EFC-10EFF, U+1EE00-1EE03, U+1EE05-1EE1F, U+1EE21-1EE22, U+1EE24, U+1EE27, U+1EE29-1EE32, U+1EE34-1EE37, U+1EE39, U+1EE3B, U+1EE42, U+1EE47, U+1EE49, U+1EE4B, U+1EE4D-1EE4F, U+1EE51-1EE52, U+1EE54, U+1EE57, U+1EE59, U+1EE5B, U+1EE5D, U+1EE5F, U+1EE61-1EE62, U+1EE64, U+1EE67-1EE6A, U+1EE6C-1EE72, U+1EE74-1EE77, U+1EE79-1EE7C, U+1EE7E, U+1EE80-1EE89, U+1EE8B-1EE9B, U+1EEA1-1EEA3, U+1EEA5-1EEA9, U+1EEAB-1EEBB, U+1EEF0-1EEF1"
+        },
+        {
+          "family": "\"Rubik Variable\"",
+          "status": "loaded",
+          "weight": "300 900",
+          "style": "normal",
+          "unicodeRange": "U+460-52F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F"
+        },
+        {
+          "family": "\"Rubik Variable\"",
+          "status": "loaded",
+          "weight": "300 900",
+          "style": "normal",
+          "unicodeRange": "U+301, U+400-45F, U+490-491, U+4B0-4B1, U+2116"
+        },
+        {
+          "family": "\"Rubik Variable\"",
+          "status": "loaded",
+          "weight": "300 900",
+          "style": "normal",
+          "unicodeRange": "U+307-308, U+590-5FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F"
+        },
+        {
+          "family": "\"Rubik Variable\"",
+          "status": "loaded",
+          "weight": "300 900",
+          "style": "normal",
+          "unicodeRange": "U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF"
+        },
+        {
+          "family": "\"Rubik Variable\"",
+          "status": "loaded",
+          "weight": "300 900",
+          "style": "normal",
+          "unicodeRange": "U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD"
+        }
+      ],
+      "fontsReady": "loaded",
+      "checkHebrew": true,
+      "text": "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) format(\"woff2-variations\");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}\nמה התשובה הנכונה לשאלה QA מספר 12?",
+      "textFonts": [
+        {
+          "tag": "H2",
+          "text": "מה התשובה הנכונה לשאלה QA מספר 12?",
+          "family": "\"Rubik Variable\", sans-serif",
+          "weight": "700",
+          "direction": "rtl"
+        }
+      ],
+      "styleParserCount": 0
+    },
+    "final": {
+      "parent": [],
+      "first": {
+        "faces": [],
+        "violations": [],
+        "failures": []
+      },
+      "second": {
+        "faces": [],
+        "violations": [],
+        "failures": []
+      }
+    }
+  },
+  "errors": [],
+  "requests": [
+    {
+      "url": "http://127.0.0.1:59621/",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/frame.html",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/frame.html",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/frame-harness.mjs",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/frame-harness.mjs",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/renderer.mjs",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/renderer.mjs",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/renderer.css",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/renderer.css",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/frame.json",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/frame.json",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/tadazz-show/razzia-original/background.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/tadazz-show/v4/tadazz-brand-logo.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/sounds/tadazz-confirm-20261108.mp3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/sounds/tadazz-timer-end-368edc1d9522.mp3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/sounds/results.mp3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/sounds/tadazz-silky-transition-20261108.mp3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/sounds/results.mp3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/sounds/tadazz-timer-end-368edc1d9522.mp3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/sounds/tadazz-confirm-20261108.mp3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/sounds/tadazz-silky-transition-20261108.mp3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/tadazz-show/v4/tadazz-brand-logo.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/tadazz-show/razzia-original/background.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/sounds/tadazz-confirm-20261108.mp3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/sounds/results.mp3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/sounds/tadazz-timer-end-368edc1d9522.mp3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/sounds/tadazz-silky-transition-20261108.mp3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/tadazz-show/v4/tadazz-brand-logo.png",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/sounds/tadazz-timer-end-368edc1d9522.mp3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/sounds/results.mp3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/sounds/tadazz-confirm-20261108.mp3",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:59621/sounds/tadazz-silky-transition-20261108.mp3",
+      "status": 200
+    }
+  ],
+  "passed": true,
+  "finishedAt": "2026-11-18T14:10:42.927Z"
+}

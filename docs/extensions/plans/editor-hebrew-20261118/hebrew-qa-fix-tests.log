@@ -1,0 +1,13 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118[39m
+
+[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m[33m[39m[32m·[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m48 passed[39m[22m[90m (48)[39m
+[2m   Start at [22m 15:01:20
+[2m   Duration [22m 11.90s[2m (import 60%, transform 39%, tests 1%)[22m
+
+[2m  Transform [22m [30m[46m web [49m[39m [33mtransforming modules took 4.57s[39m[2m · 39% of tracked time, re-done on every run[22m
+[2m            [22m [2mpersist transforms across runs with [22m[33mfsModuleCache: true[39m
+[2m            [22m [2mlearn more: https://vitest.dev/guide/improving-performance#caching-between-reruns[22m

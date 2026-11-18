@@ -1,0 +1,69 @@
+{
+  "initial": "/media/overlay-animation.json",
+  "before": "Failed to load animation data from URL: /media/overlay-animation.json. Error: Failed to fetch animation data from URL: /media/overlay-animation.json. 404: Not Found",
+  "recovered": false,
+  "errorAfter": "Failed to load animation data from URL: /media/overlay-animation.json. Error: Failed to fetch animation data from URL: /media/overlay-animation.json. 404: Not Found",
+  "responses": [
+    {
+      "url": "http://127.0.0.1:3180/@fs/C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/core/cinematic-overlays.ts",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3180/@fs/C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/core/lottie.ts",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3180/@fs/C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/presentation/cinematic-overlay.tsx?t=1795007970142",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3180/@fs/C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/presentation/lottie-player.tsx",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3180/@fs/C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/presentation/tadazz-show/lottie-plate.ts",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3180/node_modules/.vite/deps/@lottiefiles_dotlottie-react.js?v=8a13da63",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3180/@fs/C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/core/cinematic-overlays.ts",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3180/@fs/C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/core/lottie.ts",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3180/@fs/C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/presentation/cinematic-overlay.tsx?t=1795007970142",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3180/@fs/C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/presentation/lottie-player.tsx",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3180/node_modules/.vite/deps/@lottiefiles_dotlottie-react.js?v=8a13da63",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3180/@fs/C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions/src/presentation/tadazz-show/lottie-plate.ts",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3180/api/extensions/lottie-wasm",
+      "status": 200
+    },
+    {
+      "url": "http://127.0.0.1:3180/media/overlay-animation.json",
+      "status": 404
+    },
+    {
+      "url": "http://127.0.0.1:3180/media/overlay-animation.json",
+      "status": 404
+    }
+  ],
+  "errors": []
+}

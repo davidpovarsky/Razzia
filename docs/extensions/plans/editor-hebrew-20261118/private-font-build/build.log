@@ -1,0 +1,70 @@
+{
+  "format": "tadazz-application-preview-build",
+  "available": true,
+  "files": [
+    {
+      "name": "renderer.mjs",
+      "bytes": 2566741,
+      "sha256": "2dd9bb67dc9183fb4dfcb202881b4e6a6c759c32146659ca012ad3b9907d1afc"
+    },
+    {
+      "name": "renderer.css",
+      "bytes": 454185,
+      "sha256": "91d23320b35de4d81c17e20e21b6874574d8e2304d2f3157dda0aa232f6207e9"
+    }
+  ],
+  "pins": [
+    {
+      "portVersion": 3,
+      "identityRuleVersion": 2,
+      "registry": {
+        "id": "tadazz-native-application",
+        "version": "1.0.0"
+      },
+      "registrySha256": "d197cadf86c27e88f0141f4dac9ba60486a725b25cce20c6bdb6a24428c9df1d",
+      "renderer": {
+        "id": "tadazz-classic-stage",
+        "version": "1.0.0"
+      },
+      "rendererBuildSha256": "43f06f59ecd2e5985bb88c4dea20e9686cd51c2126120e8c39c4761e3f290ceb"
+    },
+    {
+      "portVersion": 3,
+      "identityRuleVersion": 2,
+      "registry": {
+        "id": "tadazz-native-application",
+        "version": "1.0.0"
+      },
+      "registrySha256": "d197cadf86c27e88f0141f4dac9ba60486a725b25cce20c6bdb6a24428c9df1d",
+      "renderer": {
+        "id": "razzia-native-stage",
+        "version": "1.0.0"
+      },
+      "rendererBuildSha256": "43f06f59ecd2e5985bb88c4dea20e9686cd51c2126120e8c39c4761e3f290ceb"
+    }
+  ],
+  "verification": {
+    "format": "tadazz-application-preview-verification",
+    "mode": "generate-manifest",
+    "verifiedManifest": false,
+    "manifestSha256": "dabc00df0ebc0cbf11c2dd0c33f911f6567a2ef6c1a6883ef2175c0d5853cffb",
+    "artifactSha256": "f27d79be8479d0c525e7c7589877b252317b2a117547f80576b695833889f541",
+    "registrySha256": "d6b7dde2a706ed0d0f816b7fdbddc0bd56e43c0ea80bc26a236fc79d1ce8720f",
+    "files": [
+      {
+        "name": "renderer.mjs",
+        "bytes": 2566741,
+        "sha256": "2dd9bb67dc9183fb4dfcb202881b4e6a6c759c32146659ca012ad3b9907d1afc"
+      },
+      {
+        "name": "renderer.css",
+        "bytes": 454185,
+        "sha256": "91d23320b35de4d81c17e20e21b6874574d8e2304d2f3157dda0aa232f6207e9"
+      }
+    ],
+    "inputFiles": 3772,
+    "generatedSourceChanged": true,
+    "liveAuthorityInputs": [],
+    "productionChanged": false
+  }
+}

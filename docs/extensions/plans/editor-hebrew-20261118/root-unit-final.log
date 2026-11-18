@@ -1,0 +1,66 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118[39m
+
+ [32m✓[39m [30m[43m common [49m[39m packages/common/src/validators/game.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[43m common [49m[39m packages/common/src/validators/quizz.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 39[2mms[22m[39m
+ [32m✓[39m [30m[43m common [49m[39m packages/common/src/questions/estimation.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/api/accounts-isolation.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 2175[2mms[22m[39m
+   [32m✓[39m Tadazz HTTP tenant separation [2m(5)[22m
+     [33m[2m✓[22m[39m rejects legacy password and unverified account, then verifies both new accounts[33m 1900[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/account-auth.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 1880[2mms[22m[39m
+   [32m✓[39m Tadazz account ownership and authentication [2m(4)[22m
+     [33m[2m✓[22m[39m creates distinct verified accounts, never grants access to unverified users[33m 1105[2mms[22m[39m
+     [33m[2m✓[22m[39m reset with code invalidates previous sessions and changes password[33m 704[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/handlers/game.test.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 814[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/api/api.test.ts [2m([22m[2m23 tests[22m[2m)[22m[33m 1184[2mms[22m[39m
+   [32m✓[39m auth [2m(5)[22m
+     [33m[2m✓[22m[39m blocks the manager login until a password is configured[33m 311[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/api/billing.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 2911[2mms[22m[39m
+   [32m✓[39m real authenticated billing/game integration [2m(5)[22m
+     [33m[2m✓[22m[39m denies guests and players, exposes only the manager's own billing[33m 517[2mms[22m[39m
+     [33m[2m✓[22m[39m enforces one shared participant cap for real websocket and simulated phone[33m 637[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/config.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 944[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/api/pilot-phone.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 543[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/game.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 259[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/creating-worlds-repair.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 89[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/media.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 89[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/downstream-game.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 129[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/api/extensions/theme-routes.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 55457[2mms[22m[39m
+   [33m[2m✓[22m[39m enforces verified HTTP auth, tenant-private upload, independent review, signed persistence and private media[33m 54783[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/auth.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 93[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/api/extensions/demo-catalog.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 50[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/theme-vote-completion.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 51[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/utils/utils.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 38[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/registry.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 50[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/api/extensions/join-policy.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/scoring/scoring.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/cooldown-timer.pause.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/scoring/round.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/pilot-target.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/pilot-dial-target.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/scoring/score-ledger.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [2m[90m↓[39m[22m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts [2m([22m[2m11 tests[22m[2m | [22m[33m11 skipped[39m[2m)[22m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/locales/locales.test.ts [2m([22m[2m28 tests[22m[2m)[22m[33m 3137[2mms[22m[39m
+   [32m✓[39m translations [2m(28)[22m
+     [33m[2m✓[22m[39m every key used in web exists[33m 2533[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/features/game/phase-a-flow.browser.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 5482[2mms[22m[39m
+   [32m✓[39m PROTOCOL / SPEC: Synthetic DOM Event & Command Flow Simulation (Non-E2E / DOM Harness) [2m(10)[22m
+     [33m[2m✓[22m[39m 1. [Synthetic DOM Protocol] Manager End Timer command emission on click[33m 302[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/lib/session.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 209[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/locales/ranks.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 89[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/features/game/components/p1-timer-entrance.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/language-direction.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/features/game/components/game-controls.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/features/game/components/host-presentation-controller.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/features/questions/questions.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/features/game/components/tadazz-show/cooldown-sync.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/features/quizz/extensions-ui.test.ts [2m([22m[2m48 tests[22m[2m)[22m[32m 164[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m38 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (39)[39m
+[2m      Tests [22m [1m[32m384 passed[39m[22m[2m | [22m[33m11 skipped[39m[90m (395)[39m
+[2m   Start at [22m 15:20:43
+[2m   Duration [22m 109.11s[2m (import 44%, tests 39%, transform 15%, setup 1%)[22m
+
+[2m     Import [22m [30m[43m socket [49m[39m [33m295 modules were evaluated 730 times[39m[2m · 54.54s total, 40% of tracked time[22m
+[2m            [22m [2m~7.58s faster with [22m[33misolate: false[39m[2m — shared modules are evaluated once per worker instead of once per file[22m
+[2m            [22m [2mlearn more: https://vitest.dev/guide/improving-performance#test-isolation[22m

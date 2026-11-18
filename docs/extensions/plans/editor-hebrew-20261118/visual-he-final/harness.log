@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "checks": [
+    "Exact Classic stage localized; numeric aspect keyboard direction matches LTR group within RTL editor",
+    "Original Razzia theme selection renders actual Hebrew native preview; responsive theme cards reviewed",
+    "Scene settings heading and duration localized; elapsed/total transport isolated LTR",
+    "Interim result empty state and scene title have no English leakage",
+    "Negative numeric input keeps -20 value and LTR sign/digit direction in Hebrew form",
+    "Hebrew RTL unsaved-exit dialog fits320; cancel preserves edited numeric draft"
+  ],
+  "screenshots": 14,
+  "errors": []
+}

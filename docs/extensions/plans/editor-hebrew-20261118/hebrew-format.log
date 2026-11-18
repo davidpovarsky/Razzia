@@ -1,0 +1,85 @@
+packages/web/src/locales/de/common.json 31ms
+[90mpackages/web/src/locales/de/errors.json[39m 8ms (unchanged)
+[90mpackages/web/src/locales/de/game.json[39m 4ms (unchanged)
+[90mpackages/web/src/locales/de/manager.json[39m 4ms (unchanged)
+[90mpackages/web/src/locales/de/quizz.json[39m 8ms (unchanged)
+packages/web/src/locales/en/common.json 2ms
+[90mpackages/web/src/locales/en/errors.json[39m 5ms (unchanged)
+[90mpackages/web/src/locales/en/game.json[39m 5ms (unchanged)
+[90mpackages/web/src/locales/en/manager.json[39m 3ms (unchanged)
+[90mpackages/web/src/locales/en/quizz.json[39m 5ms (unchanged)
+packages/web/src/locales/es/common.json 2ms
+[90mpackages/web/src/locales/es/errors.json[39m 3ms (unchanged)
+[90mpackages/web/src/locales/es/game.json[39m 3ms (unchanged)
+[90mpackages/web/src/locales/es/manager.json[39m 3ms (unchanged)
+[90mpackages/web/src/locales/es/quizz.json[39m 4ms (unchanged)
+packages/web/src/locales/fr/common.json 2ms
+[90mpackages/web/src/locales/fr/errors.json[39m 4ms (unchanged)
+[90mpackages/web/src/locales/fr/game.json[39m 4ms (unchanged)
+[90mpackages/web/src/locales/fr/manager.json[39m 4ms (unchanged)
+[90mpackages/web/src/locales/fr/quizz.json[39m 3ms (unchanged)
+packages/web/src/locales/he/common.json 1ms
+packages/web/src/locales/he/errors.json 3ms
+packages/web/src/locales/he/game.json 4ms
+packages/web/src/locales/he/manager.json 2ms
+packages/web/src/locales/he/quizz.json 3ms
+packages/web/src/locales/it/common.json 1ms
+[90mpackages/web/src/locales/it/errors.json[39m 3ms (unchanged)
+[90mpackages/web/src/locales/it/game.json[39m 2ms (unchanged)
+[90mpackages/web/src/locales/it/manager.json[39m 2ms (unchanged)
+[90mpackages/web/src/locales/it/quizz.json[39m 3ms (unchanged)
+packages/web/src/locales/ja/common.json 1ms
+[90mpackages/web/src/locales/ja/errors.json[39m 3ms (unchanged)
+[90mpackages/web/src/locales/ja/game.json[39m 2ms (unchanged)
+[90mpackages/web/src/locales/ja/manager.json[39m 3ms (unchanged)
+[90mpackages/web/src/locales/ja/quizz.json[39m 3ms (unchanged)
+[90mpackages/web/src/locales/locales.test.ts[39m 252ms (unchanged)
+[90mpackages/web/src/locales/ranks.test.ts[39m 20ms (unchanged)
+packages/web/src/locales/tr/common.json 3ms
+[90mpackages/web/src/locales/tr/errors.json[39m 5ms (unchanged)
+[90mpackages/web/src/locales/tr/game.json[39m 7ms (unchanged)
+[90mpackages/web/src/locales/tr/manager.json[39m 2ms (unchanged)
+[90mpackages/web/src/locales/tr/quizz.json[39m 4ms (unchanged)
+packages/web/src/locales/vi/common.json 2ms
+[90mpackages/web/src/locales/vi/errors.json[39m 3ms (unchanged)
+[90mpackages/web/src/locales/vi/game.json[39m 2ms (unchanged)
+[90mpackages/web/src/locales/vi/manager.json[39m 2ms (unchanged)
+[90mpackages/web/src/locales/vi/quizz.json[39m 3ms (unchanged)
+extensions/src/locales/billing.json 19ms
+extensions/src/locales/de/extensions.json 23ms
+extensions/src/locales/en/extensions.json 17ms
+extensions/src/locales/es/extensions.json 12ms
+extensions/src/locales/fr/extensions.json 12ms
+extensions/src/locales/he/extensions.json 22ms
+extensions/src/locales/hebrew.test.ts 21ms
+extensions/src/locales/host-additions.json 2ms
+extensions/src/locales/host-additions.test.ts 10ms
+[90mextensions/src/locales/host-additions.ts[39m 17ms (unchanged)
+extensions/src/locales/index.ts 19ms
+extensions/src/locales/it/extensions.json 28ms
+extensions/src/locales/ja/extensions.json 24ms
+extensions/src/locales/locales.test.ts 17ms
+extensions/src/locales/packages.json 11ms
+extensions/src/locales/tr/extensions.json 15ms
+extensions/src/locales/vi/extensions.json 19ms
+packages/web/src/language-direction.ts 8ms
+packages/web/src/language-direction.test.ts 7ms
+packages/web/src/components/ApplicationDirection.tsx 8ms
+packages/web/src/components/ToggleGroup.tsx 26ms
+packages/web/src/components/Switch.tsx 8ms
+packages/web/src/components/LanguageSwitcher.tsx 10ms
+packages/web/src/main.tsx 7ms
+packages/web/src/i18n.ts 10ms
+extensions/src/platform-ui/scope.tsx 15ms
+extensions/src/core/show-themes/definition.ts 56ms
+extensions/src/core/show-themes/razzia.manifest.json 31ms
+extensions/src/core/show-themes/hebrew-compatibility.test.ts 6ms
+extensions/src/core/show-library/application-preview-input.ts 15ms
+extensions/src/core/show-library/application-preview-schema.ts 6ms
+extensions/src/core/show-library/compiled-index-schema.ts 93ms
+extensions/src/core/show-library/native-preview-frame-schema.ts 27ms
+extensions/src/core/show-library/preview-schemas.ts 47ms
+extensions/src/site/components/game-preview/contracts.ts 37ms
+extensions/src/mcp-app/contracts/schemas.ts 18ms
+packages/web/src/features/game/components/PhotoCardGrid.tsx 85ms
+extensions/src/presentation/scene-presenter.tsx 188ms

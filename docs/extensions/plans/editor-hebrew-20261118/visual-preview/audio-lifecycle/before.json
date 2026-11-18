@@ -1,0 +1,21 @@
+{
+  "ok": false,
+  "sourceSha256": "cd22877a48eb9298998d2f260d776d16971090b0f60c78a31d1b50e5db19dc84",
+  "error": "Error: expect(locator).toContainText(expected) failed\n\nLocator: getByTestId('test-audio-showQuestion')\nExpected substring: \"Stop\"\nReceived string:    \"Play\"\nTimeout: 5000ms\n\nCall log:\n  - Expect \"toContainText\" getByTestId('test-audio-showQuestion') with timeout 5000ms\n  - waiting for getByTestId('test-audio-showQuestion')\n    14 × locator resolved to <button type=\"button\" data-control-source=\"razzia\" data-testid=\"test-audio-showQuestion\" class=\"hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 font-display flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-colors border-primary/30 bg-primary/10 text-primary hover:bg-primary/20 border\">…</button>\n       - unexpected value \"Play\"\n",
+  "checks": [
+    "Mount does not create or autoplay audio",
+    "Switch stops and rewinds the previous cue"
+  ],
+  "errors": [],
+  "network": [
+    {
+      "console": "WebSocket connection to 'ws://127.0.0.1:3180/?token=JJhO4WRtLJGh' failed: Error in connection establishment: net::ERR_BLOCKED_BY_LOCAL_NETWORK_ACCESS_CHECKS"
+    },
+    {
+      "console": "WebSocket connection to 'ws://127.0.0.1:3180/?token=JJhO4WRtLJGh' failed: Error in connection establishment: net::ERR_BLOCKED_BY_LOCAL_NETWORK_ACCESS_CHECKS"
+    },
+    {
+      "console": "[vite] failed to connect to websocket.\nyour current setup:\n  (browser) 127.0.0.1:3180/ <--[HTTP]--> 127.0.0.1:3180/ (server)\n  (browser) 127.0.0.1:3180/ <--[WebSocket (failing)]--> 127.0.0.1:3180/ (server)\nCheck out your Vite / network configuration and https://vite.dev/config/server-options.html#server-hmr ."
+    }
+  ]
+}
