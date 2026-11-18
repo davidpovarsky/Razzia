@@ -147,6 +147,45 @@ def env_map(items):
     return result
 
 
+def package_probe_policy(container):
+    # Docker Config.Env is immutable for this inspected container identity.
+    # Accounts are mandatory here; the application's REMOTE_QA exception cannot
+    # admit an account-disabled deployment or change this expected status.
+    environment = env_map(container["Config"].get("Env"))
+    require(environment.get("TADAZZ_ACCOUNTS_ENABLED") == "true", "PACKAGE_PROBE_ACCOUNTS_REQUIRED")
+    enabled = environment.get("TADAZZ_PACKAGE_INSTALLER_ENABLED") == "true"
+    return {"accountsEnabled": True, "installerEnabled": enabled,
+            "expectedStatus": 401 if enabled else 404}
+
+
+def package_probe_proof(policy):
+    require(isinstance(policy, dict) and set(policy) == {"accountsEnabled", "installerEnabled", "expectedStatus"} and
+            policy["accountsEnabled"] is True and type(policy["installerEnabled"]) is bool and
+            policy["expectedStatus"] == (401 if policy["installerEnabled"] else 404), "PACKAGE_PROBE_POLICY_INVALID")
+    return {**policy, "status": policy["expectedStatus"], "contentType": "application/json"}
+
+
+def record_probe_failure(report, error, key="probeFailure"):
+    if isinstance(error, GateError) and hasattr(error, "probe"):
+        report[key] = error.probe
+
+
+def safe_probe_routes(value):
+    require(isinstance(value, dict) and len(value) <= 128, "PROBE_DIAGNOSTIC_SCHEMA")
+    result = {}
+    for path, item in value.items():
+        require(isinstance(path, str) and len(path) <= 2048 and
+                re.fullmatch(r"(?:GET|HEAD|POST) /[A-Za-z0-9_./-]*", path), "PROBE_DIAGNOSTIC_PATH")
+        require(isinstance(item, dict) and set(item) == {"status", "expectedStatus", "contentType"} and
+                type(item["status"]) is int and 100 <= item["status"] <= 599 and
+                type(item["expectedStatus"]) is int and 100 <= item["expectedStatus"] <= 599 and
+                isinstance(item["contentType"], str) and len(item["contentType"]) <= 128 and
+                (not item["contentType"] or re.fullmatch(r"[a-z0-9.+-]+/[a-z0-9.+-]+", item["contentType"])),
+                "PROBE_DIAGNOSTIC_VALUE")
+        result[path] = dict(item)
+    return result
+
+
 def replacement_payload(original, image, revision, run_id):
     payload = copy.deepcopy(original["Config"])
     previous = env_map(payload.get("Env"))
@@ -237,27 +276,57 @@ def request(origin, path, expected_status=200, method="GET", data=None, max_byte
     except urllib.error.HTTPError as error:
         response = error
     with response:
-        content = response.read(max_bytes + 1)
-        require(len(content) <= max_bytes, "PROBE_BODY_LIMIT")
-        require(response.status == expected_status, "PROBE_STATUS_" + str(response.status) + "_EXPECTED_" + str(expected_status))
-        return {"status": response.status, "headers": {k.lower(): v for k, v in response.headers.items()}, "body": content}
+        content_type = response.headers.get("content-type", "").split(";", 1)[0].strip().lower()
+        probe = {"path": path.split("?", 1)[0], "method": method, "status": response.status,
+                 "expectedStatus": expected_status, "contentType": content_type}
+        # Keep only status metadata on a rejected response; never its body,
+        # authorization headers or URL query (which may contain a capability).
+        if len(content_type) > 128 or (content_type and not re.fullmatch(r"[a-z0-9.+-]+/[a-z0-9.+-]+", content_type)):
+            probe["contentType"] = "invalid"
+        try:
+            content = response.read(max_bytes + 1)
+            require(len(content) <= max_bytes, "PROBE_BODY_LIMIT")
+            require(response.status == expected_status, "PROBE_STATUS_" + str(response.status) + "_EXPECTED_" + str(expected_status))
+        except GateError as error:
+            error.probe = probe
+            raise
+        return {"status": response.status, "headers": {k.lower(): v for k, v in response.headers.items()},
+                "body": content, "diagnostic": probe}
 
 
 def json_probe(origin, path, expected_status=200, expected=None):
     response = request(origin, path, expected_status)
-    require(response["headers"].get("content-type", "").startswith("application/json"), "PROBE_NOT_JSON")
-    value = json.loads(response["body"])
-    if expected is not None:
-        require(value == expected, "PROBE_JSON_VALUE")
+    try:
+        require(response["headers"].get("content-type", "").startswith("application/json"), "PROBE_NOT_JSON")
+        try:
+            value = json.loads(response["body"])
+        except (ValueError, UnicodeError):
+            raise GateError("PROBE_JSON_INVALID") from None
+        if expected is not None:
+            require(value == expected, "PROBE_JSON_VALUE")
+    except GateError as error:
+        error.probe = response["diagnostic"]
+        raise
     return value, response
 
 
-def base_probes(origin):
+def base_probes(origin, package_policy):
+    package_proof = package_probe_proof(package_policy)
     json_probe(origin, "/api/health", expected={"status": "ok"})
     json_probe(origin, "/api/auth/mode", expected={"accountsEnabled": True})
     json_probe(origin, "/api/billing/config", expected={"enabled": False})
-    for path in ("/api/billing", "/api/quizz", "/api/results", "/api/accounts/me", "/api/packages/capabilities"):
+    for path in ("/api/billing", "/api/quizz", "/api/results", "/api/accounts/me"):
         request(origin, path, 401)
+    expected_error = "errors:auth.unauthorized" if package_policy["installerEnabled"] else "not-found"
+    _, response = json_probe(origin, "/api/packages/capabilities", package_policy["expectedStatus"],
+                             expected={"error": expected_error})
+    actual = {**package_policy, "status": response["status"],
+              "contentType": response["diagnostic"]["contentType"]}
+    if actual != package_proof:
+        error = GateError("PACKAGE_PROBE_RESPONSE_MISMATCH")
+        error.probe = response["diagnostic"]
+        raise error
+    return {"packageCapabilities": actual}
 
 
 def socket_probe(origin):
@@ -549,6 +618,8 @@ def clone_boot(args, original, image, work, run_id, result):
         require(candidate["HostConfig"]["NetworkMode"] == "none" and not candidate["HostConfig"]["PortBindings"], "CLONE_NETWORK_NOT_ISOLATED")
         mounts = candidate["Mounts"]
         require(len(mounts) == 1 and mounts[0]["Source"] == str(restored) and mounts[0]["Destination"] == "/app/config" and mounts[0]["RW"] is True, "CLONE_MOUNTS_NOT_ISOLATED")
+        package_policy = package_probe_policy(candidate)
+        result["packagePolicy"] = package_policy
         docker_api("POST", "/containers/" + container_id + "/start")
         # This program contains no credentials. Host/domain and public-key pins are
         # passed as JSON literals; neither private config nor customer data prints.
@@ -556,6 +627,7 @@ def clone_boot(args, original, image, work, run_id, result):
 const origin = "https://tadazz.com";
 const expectedX = EXPECTED_PUBLIC_X;
 const nativeFiles = NATIVE_PREVIEW_FILES;
+const packagePolicy = PACKAGE_PROBE_POLICY, routes = {};
 const crypto = require("node:crypto");
 const fail = () => { throw new Error("clone probe failed"); };
 function req(path, status=200, limit=1048576) {
@@ -566,7 +638,9 @@ function req(path, status=200, limit=1048576) {
       headers:{Host:"tadazz.com"},timeout:2500},r=>{
       const chunks=[];let size=0;
       r.on("data",b=>{size+=b.length;if(size>limit){q.destroy();reject(Error("probe limit"));}else chunks.push(b);});
-      r.on("end",()=>{if(r.statusCode!==status){reject(Error("probe status"));return;}
+      r.on("end",()=>{routes['GET '+path.split('?')[0]]={status:r.statusCode,expectedStatus:status,
+          contentType:String(r.headers['content-type']??'').split(';')[0].trim().toLowerCase()};
+        if(r.statusCode!==status){reject(Error("probe status"));return;}
         const body=Buffer.concat(chunks);resolve({body,json:async()=>JSON.parse(body),
           headers:{get:name=>r.headers[name.toLowerCase()]??null}});});
       r.on("error",reject);
@@ -582,6 +656,14 @@ function req(path, status=200, limit=1048576) {
   if((await (await req("/api/auth/mode")).json()).accountsEnabled!==true)fail();
   if((await (await req("/api/billing/config")).json()).enabled!==false)fail();
   await req("/api/billing",401);await req("/api/accounts/me",401);
+  if(packagePolicy.accountsEnabled!==true||process.env.TADAZZ_ACCOUNTS_ENABLED!=="true"||
+     packagePolicy.installerEnabled!==(process.env.TADAZZ_PACKAGE_INSTALLER_ENABLED==="true")||
+     packagePolicy.expectedStatus!==(packagePolicy.installerEnabled?401:404))fail();
+  const capabilityResponse=await req("/api/packages/capabilities",packagePolicy.expectedStatus);
+  if(!capabilityResponse.headers.get("content-type")?.startsWith("application/json"))fail();
+  const capabilities=await capabilityResponse.json();
+  if(capabilities?.error!==(packagePolicy.installerEnabled?"errors:auth.unauthorized":"not-found")||Object.keys(capabilities).length!==1)fail();
+  const packageCapabilities={...packagePolicy,...routes['GET /api/packages/capabilities']};
   const metadata=await(await req("/.well-known/oauth-protected-resource")).json();
   if(metadata.resource!==origin+"/mcp")fail();
   const jwks=await(await req("/oauth/jwks.json")).json();
@@ -598,18 +680,28 @@ function req(path, status=200, limit=1048576) {
     await req("/api/extensions/preview/public-runtime/"+f.sha256+"/"+f.name,404);
   }
   const nativeApplicationPreview={files:nativeFiles,inlinePreviewEnabled:true,packagedHttpBytes:true,privateRuntimeUnauthorized:true,publicRuntimeDisabled:true,authenticatedStudioRender:false};
-  process.stdout.write(JSON.stringify({ok:true,nativeApplicationPreview}));
-})().catch(()=>{process.stdout.write(JSON.stringify({ok:false}));process.exitCode=1;});
-'''.replace("EXPECTED_PUBLIC_X", json.dumps(args.expected_jwk_x)).replace("NATIVE_PREVIEW_FILES", json.dumps(native_files))
+  process.stdout.write(JSON.stringify({ok:true,nativeApplicationPreview,packageCapabilities,routes}));
+})().catch(()=>{process.stdout.write(JSON.stringify({ok:false,routes}));process.exitCode=1;});
+'''.replace("EXPECTED_PUBLIC_X", json.dumps(args.expected_jwk_x)).replace("NATIVE_PREVIEW_FILES", json.dumps(native_files)).replace("PACKAGE_PROBE_POLICY", json.dumps(package_policy))
         execution = docker_api("POST", "/containers/" + container_id + "/exec", {
             "AttachStdout": True, "AttachStderr": True, "Tty": False, "Cmd": ["node", "-e", program],
         })
         output = docker_bytes("POST", "/exec/" + execution["Id"] + "/start", {"Detach": False, "Tty": False}, limit=65536)
         status = docker_api("GET", "/exec/" + execution["Id"] + "/json")
+        result["probeExitCode"] = status["ExitCode"]
+        try:
+            proof = json.loads(decode_logs(output))
+        except (ValueError, UnicodeError):
+            raise GateError("RESTORED_CANDIDATE_PROBE_OUTPUT_INVALID") from None
+        require(isinstance(proof, dict), "RESTORED_CANDIDATE_PROBE_OUTPUT_INVALID")
+        result["routes"] = safe_probe_routes(proof.get("routes", {}))
         require(not status["Running"] and status["ExitCode"] == 0, "RESTORED_CANDIDATE_BOOT_FAILED")
-        require(json.loads(decode_logs(output)) == {"ok": True, "nativeApplicationPreview": native_preview_proof(native_files)},
+        require(set(proof) == {"ok", "nativeApplicationPreview", "packageCapabilities", "routes"} and
+                proof["ok"] is True and proof["nativeApplicationPreview"] == native_preview_proof(native_files) and
+                proof["packageCapabilities"] == package_probe_proof(package_policy),
                 "RESTORED_CANDIDATE_PROBES_FAILED")
         result["nativeApplicationPreview"] = native_preview_proof(native_files)
+        result["packageCapabilities"] = package_probe_proof(package_policy)
         result["passed"] = True
     finally:
         if inspect(container_id)["State"]["Running"]:
@@ -626,6 +718,8 @@ def validate_qualification(args, original, image):
     require(receipt.get("success") is True and receipt.get("candidateCloneBoot", {}).get("passed") is True, "CANDIDATE_RESTORE_QUALIFICATION_NOT_PASSED")
     require(receipt.get("candidateCloneBoot", {}).get("nativeApplicationPreview") ==
             native_preview_proof(native_preview_files(Path(args.release_dir))), "NATIVE_PREVIEW_RESTORE_QUALIFICATION_MISSING")
+    require(receipt.get("candidateCloneBoot", {}).get("packageCapabilities") ==
+            package_probe_proof(package_probe_policy(original)), "PACKAGE_POLICY_RESTORE_QUALIFICATION_MISSING")
     require(receipt.get("revision") == args.revision and receipt.get("image") == image["Id"] and receipt.get("sourceImage") == original["Image"] and receipt.get("sourceContainer") == original["Id"] and receipt.get("configSha256") == args.expected_config_sha256, "RESTORE_QUALIFICATION_IDENTITY")
     when = dt.datetime.fromisoformat(receipt["finishedAt"])
     age = (dt.datetime.now(dt.timezone.utc) - when).total_seconds()
@@ -660,7 +754,7 @@ def qualify_backup(args, stage, original, image, others):
         wait_health()
         report["oldApplicationResumed"] = True
         report["stopToHealthySeconds"] = round(time.monotonic() - stopped_at, 3)
-        base_probes(PUBLIC_ORIGIN)
+        report["oldApplicationBaseProbes"] = base_probes(PUBLIC_ORIGIN, package_probe_policy(inspect(original["Id"])))
         report["phase"] = "offline-restore-check"
         qualify_private_archive(work, expected, report["backup"])
         if args.qualify_candidate:
@@ -671,6 +765,7 @@ def qualify_backup(args, stage, original, image, others):
                       releaseEligible=report["candidateCloneBoot"].get("passed") is True)
     except BaseException as error:
         report["failureCode"] = str(error) if isinstance(error, GateError) else type(error).__name__
+        record_probe_failure(report, error)
         if stop_requested:
             for sig in handlers:
                 signal.signal(sig, signal.SIG_IGN)
@@ -679,6 +774,7 @@ def qualify_backup(args, stage, original, image, others):
             except BaseException as restart_error:
                 report["oldApplicationResumed"] = False
                 report["restartFailureCode"] = str(restart_error) if isinstance(restart_error, GateError) else type(restart_error).__name__
+                record_probe_failure(report, restart_error, "restartProbeFailure")
     finally:
         report["finishedAt"] = dt.datetime.now(dt.timezone.utc).isoformat()
         report["receiptPath"] = str(work / "backup-qualification-result.json")
@@ -780,8 +876,9 @@ def rollback_container(original, replacement_id, failed_name, report):
     if not old["State"]["Running"]:
         docker_api("POST", "/containers/" + original["Id"] + "/start")
     wait_health()
-    require(inspect("tadazz")["Id"] == original["Id"], "ROLLBACK_IDENTITY_MISMATCH")
-    base_probes(PUBLIC_ORIGIN)
+    resumed = inspect("tadazz")
+    require(resumed["Id"] == original["Id"], "ROLLBACK_IDENTITY_MISMATCH")
+    report["rollbackBaseProbes"] = base_probes(PUBLIC_ORIGIN, package_probe_policy(resumed))
     report.update(rolledBack=True, rollbackDataRestored=False, currentCustomerWritesPreserved=True)
 
 
@@ -835,9 +932,10 @@ def deploy(args, stage, config, original, image, others):
         docker_api("POST", "/containers/" + replacement_id + "/start")
         wait_health()
         verify_replacement(original, inspect(replacement_id), payload)
+        package_policy = package_probe_policy(inspect(replacement_id))
         for origin, label in ((LOCAL_ORIGIN, "loopback"), (PUBLIC_ORIGIN, "publicHttps")):
-            base_probes(origin)
-            report[label] = mcp_probes(origin, stage, config, args.expected_jwk_x)
+            report[label] = {"baseProbes": base_probes(origin, package_policy)}
+            report[label].update(mcp_probes(origin, stage, config, args.expected_jwk_x))
         report["phase"] = "fresh-private-restore-check-after-startup"
         qualify_private_archive(work, expected, report["backup"])
         validate_config(args)
@@ -848,6 +946,7 @@ def deploy(args, stage, config, original, image, others):
                       installedChatGptVerified=False, installedClaudeVerified=False)
     except BaseException as error:
         report["failureCode"] = str(error) if isinstance(error, GateError) else type(error).__name__
+        record_probe_failure(report, error)
         if stop_requested:
             for sig in handlers:
                 signal.signal(sig, signal.SIG_IGN)
@@ -857,6 +956,7 @@ def deploy(args, stage, config, original, image, others):
             except BaseException as rollback_error:
                 report["rolledBack"] = False
                 report["rollbackFailureCode"] = str(rollback_error) if isinstance(rollback_error, GateError) else type(rollback_error).__name__
+                record_probe_failure(report, rollback_error, "rollbackProbeFailure")
         else:
             report["productionChanged"] = False
     finally:
@@ -1009,7 +1109,8 @@ def self_test():
     saved = {key: globals()[key] for key in ("inspect", "docker_api", "wait_health", "base_probes")}
     try:
         for replacement in ("new", None):
-            state = {"old": {"Id": "old", "Image": "old-image", "Name": "/old-retained" if replacement else "/tadazz", "State": {"Running": False}}}
+            state = {"old": {"Id": "old", "Image": "old-image", "Name": "/old-retained" if replacement else "/tadazz", "State": {"Running": False},
+                             "Config": {"Env": ["TADAZZ_ACCOUNTS_ENABLED=true"]}}}
             if replacement:
                 state["new"] = {"Id": "new", "Image": "new-image", "Name": "/tadazz", "State": {"Running": True}}
             calls = []
@@ -1029,7 +1130,7 @@ def self_test():
                     state[container_id]["Name"] = "/" + path.split("name=", 1)[1]
                 else:
                     raise GateError("SELFTEST_UNEXPECTED_DOCKER_MUTATION")
-            globals().update(inspect=fake_inspect, docker_api=fake_docker, wait_health=lambda: None, base_probes=lambda origin: None)
+            globals().update(inspect=fake_inspect, docker_api=fake_docker, wait_health=lambda: None, base_probes=lambda origin, policy: None)
             report = {}
             rollback_container({"Id": "old", "Image": "old-image"}, replacement, "failed-retained", report)
             require(state["old"]["State"]["Running"] and state["old"]["Name"] == "/tadazz" and report["rolledBack"] and not report["rollbackDataRestored"], "SELFTEST_ROLLBACK_FAILED")
@@ -1075,14 +1176,16 @@ def main():
     original, image, others = baseline(args)
     replacement_payload(original, image, args.revision, "preflight")
     room = game_count_evidence(original)
-    base_probes(LOCAL_ORIGIN)
-    base_probes(PUBLIC_ORIGIN)
+    package_policy = package_probe_policy(original)
+    base_results = {"loopback": base_probes(LOCAL_ORIGIN, package_policy),
+                    "publicHttps": base_probes(PUBLIC_ORIGIN, package_policy)}
     if args.action == "qualify-backup":
         return qualify_backup(args, stage, original, image, others)
     if args.action == "preflight":
         print(json.dumps({"preflight": "PASS", "revision": args.revision, "image": image["Id"],
                           "productionChanged": False, "roomGate": room, "runningContainers": len(others) + 1,
                           "configPinnedAndPrivate": True, "candidateStagePinned": True,
+                          "baseProbes": base_results,
                           "backupRestoreProof": "performed-only-after-stop-in-deploy", "installedHostVerified": False}))
         return 0
     return deploy(args, stage, config, original, image, others)
@@ -1093,5 +1196,7 @@ if __name__ == "__main__":
         sys.exit(main())
     except Exception as error:
         # Never emit raw tracebacks from customer file/SQLite/Docker exceptions.
-        print(json.dumps({"success": False, "failureCode": str(error) if isinstance(error, GateError) else type(error).__name__}))
+        failure = {"success": False, "failureCode": str(error) if isinstance(error, GateError) else type(error).__name__}
+        record_probe_failure(failure, error)
+        print(json.dumps(failure))
         sys.exit(1)

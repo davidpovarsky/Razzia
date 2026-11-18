@@ -1,0 +1,39 @@
+{
+  "deploy-mcp-site.py": {
+    "checks": 17,
+    "exit": 0,
+    "selfTest": "PASS",
+    "stderrBytes": 0,
+    "stdoutSha256": "51ec4b24c174732b95b5f0f027bb6097d8e3d22e446946afd4601ced26183180"
+  },
+  "files": {
+    "capability-probe.patch": {
+      "bytes": 28647,
+      "sha256": "1a187e09a35c210ef8a705530c177421c5cd621f76e639d7afac889b1718e19a"
+    },
+    "check-capability-contract.py": {
+      "bytes": 9290,
+      "sha256": "e30a45f53b7efbd1eccf5f6c0235ad6c8ea3541c63977774efa40e7983359149"
+    },
+    "deploy-mcp-site.py": {
+      "bytes": 69237,
+      "sha256": "1dca9562a014f79e98b13229b344f401c847cdd2c068f297d7b180aa0d1066d3"
+    },
+    "focused-contract-result.json": {
+      "bytes": 974,
+      "sha256": "f57687ae249d8f4732f91d6f3db8b408ade91cd1c74bf6f3f72e4cc984d8fe2b"
+    },
+    "stage-mcp-site.py": {
+      "bytes": 84331,
+      "sha256": "983374b46ea7393049f472ddbc33824a3ef2b85dc8418c4302e4c4119c73a118"
+    }
+  },
+  "stage-mcp-site.py": {
+    "checks": 68,
+    "exit": 0,
+    "selfTest": "PASS",
+    "stderrBytes": 0,
+    "stdoutSha256": "e3e0bf32fb03bb4ef23d9034f06f8c6e8b4b3b52dce8477aae883290ef293ffd"
+  },
+  "whitespaceCheck": "PASS"
+}

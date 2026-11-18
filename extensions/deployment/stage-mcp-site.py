@@ -582,22 +582,57 @@ def running_snapshot():
             for facts in [docker_inspect("container", identifier)]}
 
 
+def package_probe_policy(container):
+    # Read the inspected container, never the operator host's environment.
+    environment = {}
+    for item in container["Config"].get("Env") or []:
+        need(isinstance(item, str) and "=" in item, "SMOKE_ENV_INVALID")
+        name, value = item.split("=", 1)
+        need(name and name not in environment, "SMOKE_ENV_DUPLICATE")
+        environment[name] = value
+    need(environment.get("TADAZZ_ACCOUNTS_ENABLED") == "true", "SMOKE_ACCOUNTS_REQUIRED")
+    enabled = environment.get("TADAZZ_PACKAGE_INSTALLER_ENABLED") == "true"
+    return {"accountsEnabled": True, "installerEnabled": enabled,
+            "expectedStatus": 401 if enabled else 404}
+
+
+def safe_probe_routes(value):
+    need(isinstance(value, dict) and len(value) <= 128, "SMOKE_DIAGNOSTIC_SCHEMA")
+    result = {}
+    for path, item in value.items():
+        need(isinstance(path, str) and len(path) <= 2048 and
+             re.fullmatch(r"(?:GET|HEAD|POST) /[A-Za-z0-9_./-]*", path), "SMOKE_DIAGNOSTIC_PATH")
+        need(isinstance(item, dict) and set(item) == {"status", "expectedStatus", "contentType"} and
+             type(item["status"]) is int and 100 <= item["status"] <= 599 and
+             type(item["expectedStatus"]) is int and 100 <= item["expectedStatus"] <= 599 and
+             isinstance(item["contentType"], str) and len(item["contentType"]) <= 128 and
+             (not item["contentType"] or re.fullmatch(r"[a-z0-9.+-]+/[a-z0-9.+-]+", item["contentType"])),
+             "SMOKE_DIAGNOSTIC_VALUE")
+        result[path] = dict(item)
+    return result
+
+
 SMOKE_JS = r'''
 const http=require('node:http'),fs=require('node:fs'),crypto=require('node:crypto');
-const origin='https://tadazz.com',routes={},nativeFiles=NATIVE_PREVIEW_FILES;
+const origin='https://tadazz.com',routes={},nativeFiles=NATIVE_PREVIEW_FILES,packagePolicy=PACKAGE_PROBE_POLICY;
 function req(path,status=200,method='GET',body){return new Promise((resolve,reject)=>{
 const q=http.request({host:'127.0.0.1',port:3000,path,method,
  headers:{Host:'tadazz.com',...(body?{'Content-Type':'text/plain;charset=UTF-8'}:{})},timeout:2500},r=>{
  let chunks=[],size=0;r.on('data',b=>{size+=b.length;if(size>8*1024*1024){q.destroy();reject(Error('limit'));}else chunks.push(b)});
- r.on('end',()=>{if(r.statusCode!==status)return reject(Error('status'));const value={body:Buffer.concat(chunks),headers:r.headers};
- routes[path]={status:r.statusCode,contentType:r.headers['content-type']??''};resolve(value)});
+ r.on('end',()=>{routes[method+' '+path.split('?')[0]]={status:r.statusCode,expectedStatus:status,contentType:String(r.headers['content-type']??'').split(';')[0].trim().toLowerCase()};
+ if(r.statusCode!==status)return reject(Error('status'));const value={body:Buffer.concat(chunks),headers:r.headers};resolve(value)});
 });q.on('timeout',()=>q.destroy(Error('timeout')));q.on('error',reject);q.end(body);});}
 async function json(path,status=200){const r=await req(path,status);if(!r.headers['content-type']?.startsWith('application/json'))throw Error('type');return JSON.parse(r.body);}
 const ok=(v)=>{if(!v)throw Error('probe')}, hash=b=>crypto.createHash('sha256').update(b).digest('hex');
 (async()=>{
 let ready=false;for(let i=0;i<120;i++){try{ready=(await json('/api/health')).status==='ok';if(ready)break}catch{}await new Promise(r=>setTimeout(r,250))}ok(ready);
 ok((await json('/api/auth/mode')).accountsEnabled===true);ok((await json('/api/billing/config')).enabled===false);
-for(const p of ['/api/billing','/api/quizz','/api/results','/api/accounts/me','/api/packages/capabilities'])await req(p,401);
+for(const p of ['/api/billing','/api/quizz','/api/results','/api/accounts/me'])await req(p,401);
+ok(packagePolicy.accountsEnabled===true&&process.env.TADAZZ_ACCOUNTS_ENABLED==='true'&&packagePolicy.installerEnabled===(process.env.TADAZZ_PACKAGE_INSTALLER_ENABLED==='true'));
+ok(packagePolicy.expectedStatus===(packagePolicy.installerEnabled?401:404));
+const capabilities=await json('/api/packages/capabilities',packagePolicy.expectedStatus);
+ok(capabilities?.error===(packagePolicy.installerEnabled?'errors:auth.unauthorized':'not-found')&&Object.keys(capabilities).length===1);
+const packageCapabilities={...packagePolicy,...routes['GET /api/packages/capabilities']};
 const resource=await json('/.well-known/oauth-protected-resource');ok(resource.resource===origin+'/mcp'&&JSON.stringify(resource.authorization_servers)===JSON.stringify([origin+'/oauth']));
 const issuer=await json('/.well-known/oauth-authorization-server/oauth');ok(issuer.issuer===origin+'/oauth'&&issuer.authorization_endpoint===origin+'/oauth/authorize'&&issuer.token_endpoint===origin+'/oauth/token'&&issuer.code_challenge_methods_supported.includes('S256'));
 const key=crypto.createPublicKey(JSON.parse(fs.readFileSync('/app/config/extensions/mcp-service/runtime.json')).signingPrivateKeyPem).export({format:'jwk'});
@@ -617,7 +652,7 @@ for(const f of nativeFiles){
 }
 const nativeApplicationPreview={files:nativeFiles,inlinePreviewEnabled:true,packagedHttpBytes:true,privateRuntimeUnauthorized:true,publicRuntimeDisabled:true,authenticatedStudioRender:false};
 const query='/ws/?EIO=4&transport=polling&t=stage-smoke';const packet=(await req(query)).body.toString();ok(packet[0]==='0');const handshake=JSON.parse(packet.slice(1));ok(/^[A-Za-z0-9_-]{1,256}$/.test(handshake.sid));await req(query+'&sid='+handshake.sid,200,'POST','1');
-process.stdout.write(JSON.stringify({ok:true,routes,engineIoOpenClose:true,indexAndEntryAssets:assets.length,nativeApplicationPreview}));
+process.stdout.write(JSON.stringify({ok:true,routes,engineIoOpenClose:true,indexAndEntryAssets:assets.length,nativeApplicationPreview,packageCapabilities}));
 })().catch(()=>{process.stdout.write(JSON.stringify({ok:false,routes}));process.exitCode=1});
 '''
 
@@ -659,16 +694,40 @@ def synthetic_smoke(stage, image, revision, suffix, native_files):
         need(len(mounts) == 1 and mounts[0]["Source"] == str(private) and
              mounts[0]["Destination"] == "/app/config" and mounts[0]["RW"] is True,
              "SMOKE_MOUNTS_NOT_ISOLATED")
+        policy = package_probe_policy(facts)
+        result["packagePolicy"] = policy
         run(["docker", "start", identifier])
-        probe = json.loads(run(["docker", "exec", "-i", identifier, "node", "-"],
-                               input=SMOKE_JS.replace("NATIVE_PREVIEW_FILES", json.dumps(native_files)).encode(), timeout=65))
-        result.update(probe)
+        program = SMOKE_JS.replace("NATIVE_PREVIEW_FILES", json.dumps(native_files)).replace(
+            "PACKAGE_PROBE_POLICY", json.dumps(policy))
+        completed = subprocess.run(["docker", "exec", "-i", identifier, "node", "-"],
+                                   input=program.encode(), stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=65)
+        result["probeExitCode"] = completed.returncode
+        result["probeStderrBytes"] = len(completed.stderr)
+        result["probeStderrSha256"] = digest(completed.stderr)
+        need(len(completed.stdout) <= 8 * 1024 * 1024, "SMOKE_PROBE_OUTPUT_LIMIT")
+        try:
+            probe = json.loads(completed.stdout)
+        except (ValueError, UnicodeError):
+            raise GateError("SMOKE_PROBE_OUTPUT_INVALID") from None
+        need(isinstance(probe, dict), "SMOKE_PROBE_OUTPUT_INVALID")
+        # Capture only bounded status metadata before rejecting a failed process.
+        # Response bodies, headers, stderr text and URL queries are never retained.
+        result["routes"] = safe_probe_routes(probe.get("routes", {}))
+        need(completed.returncode == 0, "SYNTHETIC_SMOKE_PROCESS_FAILED")
+        for field in ("ok", "engineIoOpenClose", "indexAndEntryAssets", "nativeApplicationPreview", "packageCapabilities"):
+            if field in probe:
+                result[field] = probe[field]
         need(result["ok"] is True, "SYNTHETIC_SMOKE_FAILED")
+        need(result.get("packageCapabilities") == {**policy, "status": policy["expectedStatus"],
+                                                   "contentType": "application/json"}, "SMOKE_PACKAGE_POLICY_MISMATCH")
         need(result.get("nativeApplicationPreview") == {
             "files": native_files, "inlinePreviewEnabled": True, "packagedHttpBytes": True,
             "privateRuntimeUnauthorized": True, "publicRuntimeDisabled": True,
             "authenticatedStudioRender": False,
         }, "SYNTHETIC_NATIVE_PREVIEW_NOT_QUALIFIED")
+    except BaseException as error:
+        result["failureCode"] = str(error) if isinstance(error, GateError) else type(error).__name__
+        raise
     finally:
         if docker_inspect("container", identifier)["State"]["Running"]:
             run(["docker", "stop", "--time", "30", identifier], timeout=40)
