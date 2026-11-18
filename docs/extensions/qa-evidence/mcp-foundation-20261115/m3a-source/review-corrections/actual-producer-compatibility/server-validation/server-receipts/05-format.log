@@ -1,0 +1,10 @@
+Checking formatting...
+[warn] first-party/schema-manifest.ts
+[warn] first-party/schema.ts
+[warn] tests/first-party/abort.nodecheck.ts
+[warn] tests/first-party/compatibility.observation.ts
+[warn] tests/first-party/review-evidence.fixture.ts
+[warn] tests/first-party/schema-ad895.fixture.ts
+[warn] tests/first-party/schema.nodecheck.ts
+[warn] tests/first-party/store.nodecheck.ts
+[warn] Code style issues found in 8 files. Run Prettier with --write to fix.

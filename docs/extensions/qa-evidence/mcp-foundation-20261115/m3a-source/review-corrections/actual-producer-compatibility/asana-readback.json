@@ -1,0 +1,17 @@
+{
+  "task": "1220541793845448",
+  "completed": false,
+  "exactReadback": true,
+  "priorNotesPreserved": true,
+  "notesLength": 24656,
+  "originalsReadOpenUntouched": [
+    "1220539611695147",
+    "1220539638962739",
+    "1220539638955304",
+    "1220539632251971"
+  ],
+  "sourceCandidate": "bfb796c72495f0f9d99442066f825a74ebd054d4",
+  "firstPartyDeclarations": 34,
+  "additionalCompatibilityObservation": 1,
+  "runtime": "NOT_RUN"
+}

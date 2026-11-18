@@ -1,0 +1,1 @@
+typecheck=2 first_party=1 sdk=0 format=0 get_checks=1 tracer=no source=0

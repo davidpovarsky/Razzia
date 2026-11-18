@@ -1,0 +1,17 @@
+{
+  "command": [
+    "node",
+    "/evidence/check-source.mjs",
+    "/evidence/full-input-manifest.json",
+    "/ram/work",
+    "/evidence/source-after.json",
+    "/evidence/generated-private-pnpm-lock.yaml"
+  ],
+  "actualReturnCode": 0,
+  "shellExit": 0,
+  "seconds": 0.208,
+  "outputLimitBytes": 1048576,
+  "logTruncated": false,
+  "observedOutputBytes": 0,
+  "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

@@ -1,0 +1,16 @@
+{
+  "kind": "FINAL_WHITESPACE_CHECK_NOT_FREEZE_GUARD",
+  "completeRawEvidenceCheck": {
+    "exit": 2,
+    "stdout": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/validation-stage/server-receipts/attempt-01/01-resolve.log:9: trailing whitespace.\n+  │   \ndocs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/validation-stage/server-receipts/attempt-01/01-resolve.log:14: new blank line at EOF.\n",
+    "stderr": ""
+  },
+  "sourceAndOtherEvidenceCheck": {
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "exactRawEvidenceExcludedOnlyFromWhitespace": "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/validation-stage/server-receipts/attempt-01/01-resolve.log",
+  "reason": "Original pnpm error-box blank line and final blank line retained byte-for-byte; source/other evidence checked. No root guard/settings/parent tests changed.",
+  "rawEvidencePreserved": true
+}

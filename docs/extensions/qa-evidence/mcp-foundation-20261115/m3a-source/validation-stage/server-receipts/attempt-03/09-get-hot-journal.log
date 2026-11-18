@@ -1,0 +1,14 @@
+/evidence/get-observer.mjs:50
+          : reject(new Error("Synthetic crash worker failed")),
+                   ^
+
+Error: Synthetic crash worker failed
+    at ChildProcess.<anonymous> (/evidence/get-observer.mjs:50:20)
+    at ChildProcess.wrapper (node:events:639:12)
+    at ChildProcess.emit (node:events:514:28)
+    at maybeClose (node:internal/child_process:1172:16)
+    at Socket.<anonymous> (node:internal/child_process:527:11)
+    at Socket.emit (node:events:514:28)
+    at Pipe.<anonymous> (node:net:362:12)
+
+Node.js v24.22.2

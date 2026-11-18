@@ -1,0 +1,11 @@
+{
+  "kind": "EXACT_SOURCE_RECHECK",
+  "files": 150,
+  "sourceCommit": "2ba3f1cd9ad3394c5378bf3fc8de73f6d148f1a5",
+  "unexpectedChanges": [],
+  "authorizedPrivateLockOutput": {
+    "path": "extensions/src/mcp-app/pnpm-lock.yaml",
+    "oldSha256": "dc7d7a9c51674163dd26326a9d7f6b58e5978a8eaeb24ed293aad72a5dc6befe",
+    "pnpmGeneratedSha256": "e0bcdd5163a144d53ed743c57e526866083cf7500d4e2cfdfea88b88fbe09838"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "grant": "hq-mcp-bfb-87ffbfdbe45d43fdbe5e7f799c18036d",
+  "sourceManifestSha256": "4c02c37421191cd8ea2fe46e35c0b8a37467a7d89708a11bf8cd68047bac29ab",
+  "sourceOverlaySha256": "4b7d492161100582dfd2b0871554c73f63d8d54eeb6e03856e7586db2d6060a6",
+  "transportBytes": 42869,
+  "transportSha256": "52fe6a8649605ce780adef4d07ae635441be2af24b3f72889d4aa431cc4f5913",
+  "members": {
+    "consumer.py": {
+      "bytes": 14977,
+      "sha256": "54f4c09860c4d15078c76896e57ed9c896f8ee06d508cef97a09ac5f6fdd89f0"
+    },
+    "launch.py": {
+      "bytes": 5429,
+      "sha256": "1ff9ade1710e434e90a4d4b0f69db1cd8c772014affd1d5640cec8468219cbba"
+    },
+    "run-phase.py": {
+      "bytes": 2006,
+      "sha256": "02f6aed97feb7eb40fb31a323810d8208594185d223193cdfd4675b9a92eee1e"
+    },
+    "grant.json": {
+      "bytes": 1952,
+      "sha256": "3d89a28c28560ed5322ce0f48d0ab3d73b6d4cad02c63e1dc781c0264aac5f5a"
+    },
+    "final-source-overlay.tar.gz": {
+      "bytes": 30452,
+      "sha256": "4b7d492161100582dfd2b0871554c73f63d8d54eeb6e03856e7586db2d6060a6"
+    },
+    "MINIMAL_COMMANDS.md": {
+      "bytes": 4299,
+      "sha256": "964aab0df5adf6c3b4545c98dc84f19dae3dd17e45a41d9e2739676b02f721fc"
+    }
+  },
+  "all160LocalInputsUnchanged": true,
+  "runnerPythonSyntax": "PASS",
+  "localAppImportOrInstall": false
+}

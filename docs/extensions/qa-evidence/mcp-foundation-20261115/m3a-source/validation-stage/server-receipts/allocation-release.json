@@ -1,0 +1,647 @@
+{
+  "kind": "ACTUAL_ALLOCATION_RELEASE_AND_PHYSICAL_ACCOUNTING",
+  "allOwnContainersStopped": true,
+  "finalNaturalExit": 0,
+  "allOomKilledFalse": true,
+  "ownSourceEvidencePhysicalBytes": 4366336,
+  "ownContainerDirectoryPhysicalBytes": 290816,
+  "additionalLayerAllowanceBytes": 2097152,
+  "newPhysicalConservativeUpperBoundBytes": 6754304,
+  "newPhysicalCapBytes": 67108864,
+  "hostFreeAfterBytes": 2859171840,
+  "sharedMetadataKeeperLeftRunning": true,
+  "sharedMetadataCopied": false,
+  "validatedIndexSha256After": "ab1feb01feab44b1d2dc7c58eb6299dd24919753dd25dc16893cd5451dcdee89",
+  "containers": [
+    {
+      "state": {
+        "Dead": false,
+        "Error": "",
+        "ExitCode": 1,
+        "FinishedAt": "2026-11-15T10:03:06.251570919Z",
+        "OOMKilled": false,
+        "Paused": false,
+        "Pid": 0,
+        "Restarting": false,
+        "Running": false,
+        "StartedAt": "2026-11-15T10:02:59.875727195Z",
+        "Status": "exited"
+      },
+      "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+      "network": "none",
+      "portBindings": {},
+      "readonlyRootfs": true,
+      "memory": 2147483648,
+      "nanoCpus": 250000000,
+      "mounts": [
+        {
+          "Destination": "/cache-sdk",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/mcp-send-ce021e537e31af7cbc989d4b2c3e5abb0966de41413f994e2803276b31dec7d9/pnpm-store",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/validated-index.db",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/integrator-root-85e-20261115-public-union/runtime-v12/v11/index.db",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/accepted-source",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/mcp-send-ce021e537e31af7cbc989d4b2c3e5abb0966de41413f994e2803276b31dec7d9/app",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/all-evidence",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/mcp-m3a-e538db2b931fa6c223facffa9a7e0b0ac31b6270d8f629d8bf8e8d72245bc1f6",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/evidence",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": true,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/mcp-m3a-e538db2b931fa6c223facffa9a7e0b0ac31b6270d8f629d8bf8e8d72245bc1f6/attempt-01",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/snapshot",
+          "Driver": "local",
+          "Mode": "z",
+          "Name": "integrator-root-85e-20261115-metadata-ram",
+          "Propagation": "",
+          "RW": false,
+          "Source": "/var/lib/docker/volumes/integrator-root-85e-20261115-metadata-ram/_data",
+          "Type": "volume"
+        },
+        {
+          "Destination": "/cache-root",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/sb3-assets-755faf0f2e2719e20f9711231a0bf84da95b6b4a3a618e2a07827ffd78cf8aa9/pnpm-store",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/cache-descriptor.json",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/integrator-root-85e-20261115-public-union/descriptor.json",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/metadata-receipt.json",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/integrator-root-85e-20261115/metadata-vite-repair/hydration-receipt.json",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/delivery",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/mcp-m3a-e538db2b931fa6c223facffa9a7e0b0ac31b6270d8f629d8bf8e8d72245bc1f6",
+          "Type": "bind"
+        }
+      ],
+      "logPath": "/var/lib/docker/containers/3a56e34dfb3cf28b42f888a0998112f3f9d8b7f86d3e791fc3677d949a606ebd/3a56e34dfb3cf28b42f888a0998112f3f9d8b7f86d3e791fc3677d949a606ebd-json.log",
+      "name": "tadazz-hq-mcp-m3a-20261115",
+      "containerDirectoryPhysicalBytes": 45056
+    },
+    {
+      "state": {
+        "Dead": false,
+        "Error": "",
+        "ExitCode": 1,
+        "FinishedAt": "2026-11-15T10:06:39.985684696Z",
+        "OOMKilled": false,
+        "Paused": false,
+        "Pid": 0,
+        "Restarting": false,
+        "Running": false,
+        "StartedAt": "2026-11-15T10:06:31.965018576Z",
+        "Status": "exited"
+      },
+      "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+      "network": "none",
+      "portBindings": {},
+      "readonlyRootfs": true,
+      "memory": 2147483648,
+      "nanoCpus": 250000000,
+      "mounts": [
+        {
+          "Destination": "/snapshot",
+          "Driver": "local",
+          "Mode": "z",
+          "Name": "integrator-root-85e-20261115-metadata-ram",
+          "Propagation": "",
+          "RW": false,
+          "Source": "/var/lib/docker/volumes/integrator-root-85e-20261115-metadata-ram/_data",
+          "Type": "volume"
+        },
+        {
+          "Destination": "/cache-root",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/sb3-assets-755faf0f2e2719e20f9711231a0bf84da95b6b4a3a618e2a07827ffd78cf8aa9/pnpm-store",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/cache-sdk",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/mcp-send-ce021e537e31af7cbc989d4b2c3e5abb0966de41413f994e2803276b31dec7d9/pnpm-store",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/cache-descriptor.json",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/integrator-root-85e-20261115-public-union/descriptor.json",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/metadata-receipt.json",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/integrator-root-85e-20261115/metadata-vite-repair/hydration-receipt.json",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/accepted-source",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/mcp-send-ce021e537e31af7cbc989d4b2c3e5abb0966de41413f994e2803276b31dec7d9/app",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/all-deliveries",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/mcp-m3a-e538db2b931fa6c223facffa9a7e0b0ac31b6270d8f629d8bf8e8d72245bc1f6",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/all-evidence",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/mcp-m3a-e538db2b931fa6c223facffa9a7e0b0ac31b6270d8f629d8bf8e8d72245bc1f6",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/validated-index.db",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/integrator-root-85e-20261115-public-union/runtime-v12/v11/index.db",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/delivery",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/mcp-m3a-e538db2b931fa6c223facffa9a7e0b0ac31b6270d8f629d8bf8e8d72245bc1f6/attempt-02",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/evidence",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": true,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/mcp-m3a-e538db2b931fa6c223facffa9a7e0b0ac31b6270d8f629d8bf8e8d72245bc1f6/attempt-02",
+          "Type": "bind"
+        }
+      ],
+      "logPath": "/var/lib/docker/containers/027db9cff557bc2b2ceec4085e6db12d64ac7b59474c724b06e7636d609731c4/027db9cff557bc2b2ceec4085e6db12d64ac7b59474c724b06e7636d609731c4-json.log",
+      "name": "tadazz-hq-mcp-m3a-20261115-r2",
+      "containerDirectoryPhysicalBytes": 45056
+    },
+    {
+      "state": {
+        "Dead": false,
+        "Error": "",
+        "ExitCode": 1,
+        "FinishedAt": "2026-11-15T10:13:08.396013354Z",
+        "OOMKilled": false,
+        "Paused": false,
+        "Pid": 0,
+        "Restarting": false,
+        "Running": false,
+        "StartedAt": "2026-11-15T10:10:27.236456024Z",
+        "Status": "exited"
+      },
+      "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+      "network": "none",
+      "portBindings": {},
+      "readonlyRootfs": true,
+      "memory": 2147483648,
+      "nanoCpus": 250000000,
+      "mounts": [
+        {
+          "Destination": "/cache-sdk",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/mcp-send-ce021e537e31af7cbc989d4b2c3e5abb0966de41413f994e2803276b31dec7d9/pnpm-store",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/cache-descriptor.json",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/integrator-root-85e-20261115-public-union/descriptor.json",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/metadata-receipt.json",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/integrator-root-85e-20261115/metadata-vite-repair/hydration-receipt.json",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/accepted-source",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/mcp-send-ce021e537e31af7cbc989d4b2c3e5abb0966de41413f994e2803276b31dec7d9/app",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/delivery",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/mcp-m3a-e538db2b931fa6c223facffa9a7e0b0ac31b6270d8f629d8bf8e8d72245bc1f6/attempt-03",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/all-deliveries",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/mcp-m3a-e538db2b931fa6c223facffa9a7e0b0ac31b6270d8f629d8bf8e8d72245bc1f6",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/validated-index.db",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/integrator-root-85e-20261115-public-union/runtime-v12/v11/index.db",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/all-evidence",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/mcp-m3a-e538db2b931fa6c223facffa9a7e0b0ac31b6270d8f629d8bf8e8d72245bc1f6",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/evidence",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": true,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/mcp-m3a-e538db2b931fa6c223facffa9a7e0b0ac31b6270d8f629d8bf8e8d72245bc1f6/attempt-03",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/snapshot",
+          "Driver": "local",
+          "Mode": "z",
+          "Name": "integrator-root-85e-20261115-metadata-ram",
+          "Propagation": "",
+          "RW": false,
+          "Source": "/var/lib/docker/volumes/integrator-root-85e-20261115-metadata-ram/_data",
+          "Type": "volume"
+        },
+        {
+          "Destination": "/cache-root",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/sb3-assets-755faf0f2e2719e20f9711231a0bf84da95b6b4a3a618e2a07827ffd78cf8aa9/pnpm-store",
+          "Type": "bind"
+        }
+      ],
+      "logPath": "/var/lib/docker/containers/f19d432b8ba053037fd89c680ac0d04f316226bbbdf6684308cd11b688a73911/f19d432b8ba053037fd89c680ac0d04f316226bbbdf6684308cd11b688a73911-json.log",
+      "name": "tadazz-hq-mcp-m3a-20261115-r3",
+      "containerDirectoryPhysicalBytes": 45056
+    },
+    {
+      "state": {
+        "Dead": false,
+        "Error": "",
+        "ExitCode": 1,
+        "FinishedAt": "2026-11-15T10:23:08.403478627Z",
+        "OOMKilled": false,
+        "Paused": false,
+        "Pid": 0,
+        "Restarting": false,
+        "Running": false,
+        "StartedAt": "2026-11-15T10:21:29.384115185Z",
+        "Status": "exited"
+      },
+      "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+      "network": "none",
+      "portBindings": {},
+      "readonlyRootfs": true,
+      "memory": 2147483648,
+      "nanoCpus": 250000000,
+      "mounts": [
+        {
+          "Destination": "/cache-root",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/sb3-assets-755faf0f2e2719e20f9711231a0bf84da95b6b4a3a618e2a07827ffd78cf8aa9/pnpm-store",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/cache-sdk",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/mcp-send-ce021e537e31af7cbc989d4b2c3e5abb0966de41413f994e2803276b31dec7d9/pnpm-store",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/validated-index.db",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/integrator-root-85e-20261115-public-union/runtime-v12/v11/index.db",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/cache-descriptor.json",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/integrator-root-85e-20261115-public-union/descriptor.json",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/accepted-source",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/mcp-send-ce021e537e31af7cbc989d4b2c3e5abb0966de41413f994e2803276b31dec7d9/app",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/all-deliveries",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/mcp-m3a-e538db2b931fa6c223facffa9a7e0b0ac31b6270d8f629d8bf8e8d72245bc1f6",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/prior-sdk",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/mcp-m3a-e538db2b931fa6c223facffa9a7e0b0ac31b6270d8f629d8bf8e8d72245bc1f6/attempt-03",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/metadata-receipt.json",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/integrator-root-85e-20261115/metadata-vite-repair/hydration-receipt.json",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/delivery",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/mcp-m3a-e538db2b931fa6c223facffa9a7e0b0ac31b6270d8f629d8bf8e8d72245bc1f6/attempt-04",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/all-evidence",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/mcp-m3a-e538db2b931fa6c223facffa9a7e0b0ac31b6270d8f629d8bf8e8d72245bc1f6",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/evidence",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": true,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/mcp-m3a-e538db2b931fa6c223facffa9a7e0b0ac31b6270d8f629d8bf8e8d72245bc1f6/attempt-04",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/snapshot",
+          "Driver": "local",
+          "Mode": "z",
+          "Name": "integrator-root-85e-20261115-metadata-ram",
+          "Propagation": "",
+          "RW": false,
+          "Source": "/var/lib/docker/volumes/integrator-root-85e-20261115-metadata-ram/_data",
+          "Type": "volume"
+        }
+      ],
+      "logPath": "/var/lib/docker/containers/26d00f1d71f340449dafe417d7d4f7f5e3dccf7b8bff0da94da6cb71e51cabfe/26d00f1d71f340449dafe417d7d4f7f5e3dccf7b8bff0da94da6cb71e51cabfe-json.log",
+      "name": "tadazz-hq-mcp-m3a-20261115-r4",
+      "containerDirectoryPhysicalBytes": 49152
+    },
+    {
+      "state": {
+        "Dead": false,
+        "Error": "",
+        "ExitCode": 0,
+        "FinishedAt": "2026-11-15T10:26:59.427117786Z",
+        "OOMKilled": false,
+        "Paused": false,
+        "Pid": 0,
+        "Restarting": false,
+        "Running": false,
+        "StartedAt": "2026-11-15T10:26:57.765348525Z",
+        "Status": "exited"
+      },
+      "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+      "network": "none",
+      "portBindings": {},
+      "readonlyRootfs": true,
+      "memory": 2147483648,
+      "nanoCpus": 250000000,
+      "mounts": [
+        {
+          "Destination": "/ingress.ts",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/mcp-m3a-e538db2b931fa6c223facffa9a7e0b0ac31b6270d8f629d8bf8e8d72245bc1f6/attempt-04/app/extensions/src/mcp-app/first-party/ingress.ts",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/format-options.json",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/mcp-m3a-e538db2b931fa6c223facffa9a7e0b0ac31b6270d8f629d8bf8e8d72245bc1f6/attempt-04/format-options.json",
+          "Type": "bind"
+        }
+      ],
+      "logPath": "/var/lib/docker/containers/0d551df91c43029938ebfe97f6dca41e820e0a72478a5594f4dc8e6ffa2f6543/0d551df91c43029938ebfe97f6dca41e820e0a72478a5594f4dc8e6ffa2f6543-json.log",
+      "name": "tadazz-hq-mcp-m3a-format-20261115",
+      "containerDirectoryPhysicalBytes": 57344
+    },
+    {
+      "state": {
+        "Dead": false,
+        "Error": "",
+        "ExitCode": 0,
+        "FinishedAt": "2026-11-15T10:32:23.003316743Z",
+        "OOMKilled": false,
+        "Paused": false,
+        "Pid": 0,
+        "Restarting": false,
+        "Running": false,
+        "StartedAt": "2026-11-15T10:30:41.518480442Z",
+        "Status": "exited"
+      },
+      "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+      "network": "none",
+      "portBindings": {},
+      "readonlyRootfs": true,
+      "memory": 2147483648,
+      "nanoCpus": 250000000,
+      "mounts": [
+        {
+          "Destination": "/delivery",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/mcp-m3a-e538db2b931fa6c223facffa9a7e0b0ac31b6270d8f629d8bf8e8d72245bc1f6/attempt-06",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/evidence",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": true,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/mcp-m3a-e538db2b931fa6c223facffa9a7e0b0ac31b6270d8f629d8bf8e8d72245bc1f6/attempt-06",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/snapshot",
+          "Driver": "local",
+          "Mode": "z",
+          "Name": "integrator-root-85e-20261115-metadata-ram",
+          "Propagation": "",
+          "RW": false,
+          "Source": "/var/lib/docker/volumes/integrator-root-85e-20261115-metadata-ram/_data",
+          "Type": "volume"
+        },
+        {
+          "Destination": "/cache-sdk",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/mcp-send-ce021e537e31af7cbc989d4b2c3e5abb0966de41413f994e2803276b31dec7d9/pnpm-store",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/validated-index.db",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/integrator-root-85e-20261115-public-union/runtime-v12/v11/index.db",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/all-deliveries",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/mcp-m3a-e538db2b931fa6c223facffa9a7e0b0ac31b6270d8f629d8bf8e8d72245bc1f6",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/all-evidence",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/mcp-m3a-e538db2b931fa6c223facffa9a7e0b0ac31b6270d8f629d8bf8e8d72245bc1f6",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/prior-sdk",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/mcp-m3a-e538db2b931fa6c223facffa9a7e0b0ac31b6270d8f629d8bf8e8d72245bc1f6/attempt-03",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/cache-root",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/sb3-assets-755faf0f2e2719e20f9711231a0bf84da95b6b4a3a618e2a07827ffd78cf8aa9/pnpm-store",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/cache-descriptor.json",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/integrator-root-85e-20261115-public-union/descriptor.json",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/metadata-receipt.json",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/integrator-root-85e-20261115/metadata-vite-repair/hydration-receipt.json",
+          "Type": "bind"
+        },
+        {
+          "Destination": "/accepted-source",
+          "Mode": "",
+          "Propagation": "rprivate",
+          "RW": false,
+          "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/mcp-send-ce021e537e31af7cbc989d4b2c3e5abb0966de41413f994e2803276b31dec7d9/app",
+          "Type": "bind"
+        }
+      ],
+      "logPath": "/var/lib/docker/containers/e23da154a6150ec0b361557b29b576e55d1e1e633dfb7c0e5487e42edf81347b/e23da154a6150ec0b361557b29b576e55d1e1e633dfb7c0e5487e42edf81347b-json.log",
+      "name": "tadazz-hq-mcp-m3a-20261115-r6",
+      "containerDirectoryPhysicalBytes": 49152
+    }
+  ]
+}

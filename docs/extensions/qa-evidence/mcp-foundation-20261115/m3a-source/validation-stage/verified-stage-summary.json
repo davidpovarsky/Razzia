@@ -1,0 +1,75 @@
+{
+  "status": "PRIVATE_FUNCTIONAL_STAGE_VERIFIED_EXTERNAL_GATES_OPEN",
+  "sourceCommit": "ad8955327a56213b3a437379fcc7ccc6e05a261a",
+  "sourceManifestSha256": "d758084a11829061530a123dfdc6e371396b348196392dd8b8893b8e33303d4c",
+  "sourceInputs": 150,
+  "privateLockSha256": "e0bcdd5163a144d53ed743c57e526866083cf7500d4e2cfdfea88b88fbe09838",
+  "finalAttempt": "attempt-06",
+  "finalContainerNaturalExit": 0,
+  "offlineLockFrozenInstallReinstall": [
+    0,
+    0,
+    0
+  ],
+  "privateTypecheck": 0,
+  "newTests": {
+    "pass": 26,
+    "fail": 0,
+    "skip": 0
+  },
+  "sdkTests": {
+    "pass": 41,
+    "fail": 0,
+    "actualAttempt": "attempt-03",
+    "verifiedReuseInFinal": true,
+    "rerunInFinal": false
+  },
+  "format": 0,
+  "exactSourceRecheck": 0,
+  "getObservations": [
+    {
+      "case": "absent",
+      "http": 404,
+      "snapshotEqual": true,
+      "mutationNotifications": 0,
+      "positiveControlEvents": 3
+    },
+    {
+      "case": "regular",
+      "http": 200,
+      "snapshotEqual": true,
+      "mutationNotifications": 0,
+      "positiveControlEvents": 3
+    },
+    {
+      "case": "hot-journal",
+      "http": 503,
+      "snapshotEqual": true,
+      "mutationNotifications": 0,
+      "positiveControlEvents": 3
+    }
+  ],
+  "syscallNoWriteProof": "NOT_AVAILABLE_STRACE_ABSENT",
+  "scopeOfGetObservation": "PRIVATE_DRAFT_AND_NATIVE_ONLY; AUTH_WAL_SHM_AND_OS_ATIME_EXCLUDED",
+  "hotJournalAndDbPreserved": true,
+  "protectedFilesUnchangedSinceAccepted": 602,
+  "frozenLegacyFiles": 29,
+  "rawFreezeExit": 1,
+  "rawFreezeAllowlistDenials": 46,
+  "rawFreezeMismatches": [],
+  "ownTmpfsUsedBytes": 155594752,
+  "memoryPeakBytes": 649551872,
+  "sharedMetadataTmpfsBytesCountedOnce": 435142656,
+  "newPhysicalConservativeUpperBoundBytes": 6754304,
+  "resourceCapExpanded": false,
+  "allOwnAllocationsReleased": true,
+  "originalImplementationTasksAndHq": "OPEN",
+  "openGates": [
+    "host OAuth/private client grants",
+    "accepted renderer",
+    "native save consent/reservation/publication",
+    "R2 native read/import",
+    "actual download delivery",
+    "protected mount and release"
+  ]
+}

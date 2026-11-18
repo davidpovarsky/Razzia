@@ -1,0 +1,158 @@
+{
+  "kind": "BOUND_BFB160_ALLOCATION_RELEASE",
+  "grant": "hq-mcp-bfb-87ffbfdbe45d43fdbe5e7f799c18036d",
+  "ownContainerStoppedNaturally": true,
+  "naturalExit": 1,
+  "oomKilled": false,
+  "exitReason": "Scoped format check failed; all functional phases passed; no retry/edit",
+  "ownSourceEvidencePhysicalBytesBeforeReceipt": 1093632,
+  "ownContainerDirectoryPhysicalBytes": 49152,
+  "additionalLayerAllowanceBytes": 2097152,
+  "receiptAllowanceBytes": 65536,
+  "newPhysicalConservativeUpperBoundBytes": 3305472,
+  "newPhysicalCapBytes": 8388608,
+  "hostFreeAfterBytes": 2688434176,
+  "requiredRemainingReserveBytes": 2429390848,
+  "sharedMetadataKeeperLeftRunning": true,
+  "sharedMetadataCopied": false,
+  "validatedIndexSha256After": "ab1feb01feab44b1d2dc7c58eb6299dd24919753dd25dc16893cd5451dcdee89",
+  "computeReturned": true,
+  "container": {
+    "state": {
+      "Dead": false,
+      "Error": "",
+      "ExitCode": 1,
+      "FinishedAt": "2026-11-15T12:18:14.895847286Z",
+      "OOMKilled": false,
+      "Paused": false,
+      "Pid": 0,
+      "Restarting": false,
+      "Running": false,
+      "StartedAt": "2026-11-15T12:16:37.912140352Z",
+      "Status": "exited"
+    },
+    "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "network": "none",
+    "portBindings": {},
+    "readonlyRootfs": true,
+    "memory": 2147483648,
+    "memorySwap": 2147483648,
+    "nanoCpus": 250000000,
+    "mounts": [
+      {
+        "Destination": "/accepted-source",
+        "Mode": "",
+        "Propagation": "rprivate",
+        "RW": false,
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/mcp-send-ce021e537e31af7cbc989d4b2c3e5abb0966de41413f994e2803276b31dec7d9/app",
+        "Type": "bind"
+      },
+      {
+        "Destination": "/producer-source",
+        "Mode": "",
+        "Propagation": "rprivate",
+        "RW": false,
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/mcp-m3a-e538db2b931fa6c223facffa9a7e0b0ac31b6270d8f629d8bf8e8d72245bc1f6/attempt-06",
+        "Type": "bind"
+      },
+      {
+        "Destination": "/all-own-evidence",
+        "Mode": "",
+        "Propagation": "rprivate",
+        "RW": false,
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/mcp-bfb160-87ffbfdbe45d43fdbe5e7f799c18036d",
+        "Type": "bind"
+      },
+      {
+        "Destination": "/cache-sdk",
+        "Mode": "",
+        "Propagation": "rprivate",
+        "RW": false,
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/mcp-send-ce021e537e31af7cbc989d4b2c3e5abb0966de41413f994e2803276b31dec7d9/pnpm-store",
+        "Type": "bind"
+      },
+      {
+        "Destination": "/validated-index.db",
+        "Mode": "",
+        "Propagation": "rprivate",
+        "RW": false,
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/integrator-root-85e-20261115-public-union/runtime-v12/v11/index.db",
+        "Type": "bind"
+      },
+      {
+        "Destination": "/prior-sdk",
+        "Mode": "",
+        "Propagation": "rprivate",
+        "RW": false,
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/mcp-m3a-e538db2b931fa6c223facffa9a7e0b0ac31b6270d8f629d8bf8e8d72245bc1f6/attempt-03",
+        "Type": "bind"
+      },
+      {
+        "Destination": "/delivery",
+        "Mode": "",
+        "Propagation": "rprivate",
+        "RW": false,
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/mcp-bfb160-87ffbfdbe45d43fdbe5e7f799c18036d",
+        "Type": "bind"
+      },
+      {
+        "Destination": "/all-own-source",
+        "Mode": "",
+        "Propagation": "rprivate",
+        "RW": false,
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/source/mcp-bfb160-87ffbfdbe45d43fdbe5e7f799c18036d",
+        "Type": "bind"
+      },
+      {
+        "Destination": "/evidence",
+        "Mode": "",
+        "Propagation": "rprivate",
+        "RW": true,
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/mcp-bfb160-87ffbfdbe45d43fdbe5e7f799c18036d",
+        "Type": "bind"
+      },
+      {
+        "Destination": "/snapshot",
+        "Driver": "local",
+        "Mode": "z",
+        "Name": "integrator-root-85e-20261115-metadata-ram",
+        "Propagation": "",
+        "RW": false,
+        "Source": "/var/lib/docker/volumes/integrator-root-85e-20261115-metadata-ram/_data",
+        "Type": "volume"
+      },
+      {
+        "Destination": "/cache-root",
+        "Mode": "",
+        "Propagation": "rprivate",
+        "RW": false,
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/sb3-assets-755faf0f2e2719e20f9711231a0bf84da95b6b4a3a618e2a07827ffd78cf8aa9/pnpm-store",
+        "Type": "bind"
+      },
+      {
+        "Destination": "/cache-descriptor.json",
+        "Mode": "",
+        "Propagation": "rprivate",
+        "RW": false,
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/integrator-root-85e-20261115-public-union/descriptor.json",
+        "Type": "bind"
+      },
+      {
+        "Destination": "/metadata-receipt.json",
+        "Mode": "",
+        "Propagation": "rprivate",
+        "RW": false,
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/integrator-root-85e-20261115/metadata-vite-repair/hydration-receipt.json",
+        "Type": "bind"
+      }
+    ],
+    "logPath": "/var/lib/docker/containers/9a5940b8817778fec9f59c5216749dc933d01def17dd7c72d21eff7e123833ed/9a5940b8817778fec9f59c5216749dc933d01def17dd7c72d21eff7e123833ed-json.log",
+    "logConfig": {
+      "Config": {
+        "max-file": "1",
+        "max-size": "1m"
+      },
+      "Type": "json-file"
+    }
+  }
+}

@@ -1,0 +1,2 @@
+first-party/ingress.ts(31,31): error TS2488: Type 'Headers' must have a '[Symbol.iterator]()' method that returns an iterator.
+first-party/ingress.ts(42,25): error TS2339: Property 'keys' does not exist on type 'Headers'.

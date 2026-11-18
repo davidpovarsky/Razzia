@@ -1,0 +1,9 @@
+{
+  "newPhysicalBytes": 2179072,
+  "capBytes": 67108864,
+  "hostFreeBytes": 2868731904,
+  "dockerStateAndCappedLogAllowanceBytes": 2097152,
+  "newPhysicalUpperBoundBytes": 4276224,
+  "requiredRemainingReserveBytes": 2514403328,
+  "ownTmpfsUsedBytes": 0
+}

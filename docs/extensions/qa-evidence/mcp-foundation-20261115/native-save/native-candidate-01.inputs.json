@@ -1,0 +1,1657 @@
+{
+  "BPin": "1909da2f653377c545923b2e91dd2f4b1a2cf802",
+  "compiler": "existing esbuild0.28.2",
+  "target": "node24",
+  "platform": "node",
+  "format": "esm",
+  "bundleSha256": "1dee555bf9a5e96a1b63bd5374c03083a307ccafcf9d85874b22e232c13671de",
+  "warnings": [],
+  "publicDirectDependenciesFromExistingFrozenQaGraph": true,
+  "noAuthorityOrSchemaShim": true,
+  "inputs": [
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\packages\\common\\src\\constants.ts",
+      "bytes": 4231,
+      "sha256": "efe3bce19f2b96e7cd9730735a341e4de64a10b6307f509f3e6f5f1de97a279f",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:packages/common/src/constants.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\core\\util.js",
+      "bytes": 34840,
+      "sha256": "bb08133b11b478c8e715038fff26ebea204d7fd5443fba31fe138b142d202efb",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\core\\core.js",
+      "bytes": 6642,
+      "sha256": "c7ce485c97263e42568d16b11bb4a90133221c7e807498a9273d70f41ba16ef6",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\core\\errors.js",
+      "bytes": 10871,
+      "sha256": "a0c95ef2f7085b5bc2931f7b566f524b26a0360c8df741e3f87f923745cf9792",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\core\\parse.js",
+      "bytes": 8267,
+      "sha256": "fb05b91ec260f3f484f7c00a177b6126ceb8fd1b09dc90b1200afdffd4d98efd",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\core\\regexes.js",
+      "bytes": 11818,
+      "sha256": "24fc98f6fc9175e50ff29d28b040e3b4ac5650de19914d45ee27b853d367ecc6",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\core\\checks.js",
+      "bytes": 19491,
+      "sha256": "bc42543274218aa7ef72192b3218d2a4a399e53df8de240a04d9ff275096f563",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\core\\doc.js",
+      "bytes": 1290,
+      "sha256": "be4c1b1a1ad247cc70f360a572060edd7e0cea24252c3a319f33d247899c5643",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\core\\versions.js",
+      "bytes": 70,
+      "sha256": "c0f09e5bb7e9dd7712138a22096e0884bd2df3d5d8cfcd2a1bcad7086fc8dfc5",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\core\\schemas.js",
+      "bytes": 107291,
+      "sha256": "0ee56e8afbae28eeb1060a162ad7e56f0675ee6fb83f0ae56bea2e088f6cdbc0",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\core\\memoizer.js",
+      "bytes": 12517,
+      "sha256": "18a3188c51229d9189a5408b0b7fbc3e121b55c2b4c3c406d79cb9b77e7ad964",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\ar.js",
+      "bytes": 5404,
+      "sha256": "eec4016c2b3063ae929617d90ec609e4c425e60c97a954d3a24de0f457b6ec97",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\az.js",
+      "bytes": 4703,
+      "sha256": "5bd03646b9d18b73e71356cd28937e4e6413b806bb23e14689cc88f6f65ff3a6",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\be.js",
+      "bytes": 6998,
+      "sha256": "f969afea5d9800a71958a621658943b85a2576a2bfefdd5dea70afc4924d4af4",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\bg.js",
+      "bytes": 6029,
+      "sha256": "96741333a790320e05aef7286b5b709a4a7c48cfffc50fc5e6acff5b505275e9",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\bn.js",
+      "bytes": 5757,
+      "sha256": "6d8227b52a6864465b7c52a9ef7e09d261d904ec8a619932e15dd9f9f826e8dd",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\ca.js",
+      "bytes": 4908,
+      "sha256": "67f6f38b59a6e3ee81cc5155480465331dd9a142b2471a495503a81dafba0684",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\ckb.js",
+      "bytes": 5948,
+      "sha256": "bdb9ef0cfda4009f8892585a1780fff863cd409931d6f89394c271042c131137",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\cs.js",
+      "bytes": 4953,
+      "sha256": "4ffa0e484ad1842a2c0e5c7f2dfe9160155ff5be4b95ab6e524d3a30a2210488",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\da.js",
+      "bytes": 4987,
+      "sha256": "29addcd60e88422bed9ed78c6c864220a15c06b31fdb4ab7ad4f87be4098e6ae",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\de.js",
+      "bytes": 4774,
+      "sha256": "f344eb96ba18d9db907f3f9c95897ce2590ab0cde1553c023daffbb1cb5ef6f4",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\el.js",
+      "bytes": 5701,
+      "sha256": "fdea833aa0a8c381d26216db1521dd7fbc4dccb6d3aa50f9a585ffb975df91eb",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\en.js",
+      "bytes": 5302,
+      "sha256": "d5930e10d137b048b37823e168e4177947e1f696ada8419c71bb0d32da4333c0",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\eo.js",
+      "bytes": 4784,
+      "sha256": "97797bd22319ecc3f2044da6c305f1114b851803697029ffce2b66644757da3a",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\es.js",
+      "bytes": 5591,
+      "sha256": "12e762b921b1e3fdb8e265d2b554de81ce9706ceb23a81527f48ae2dddf355db",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\fa.js",
+      "bytes": 5343,
+      "sha256": "60e7eeff4c000c85f8420168374344305d3c2110a5f91a2fb672b2a2381eeddf",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\fi.js",
+      "bytes": 5007,
+      "sha256": "1e72af4193e564cd37dce4a850dc18bc1bcd6ca280f29e9f5f8c6bbab6a2cad9",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\fr.js",
+      "bytes": 5414,
+      "sha256": "477345d6401d0e4f07794b1a2cff8b78953723f1fc8cfaeb6b660c19be47125a",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\fr-CA.js",
+      "bytes": 4749,
+      "sha256": "a2ca0451ff943766bb6a88b392b25447462a1d3ed75c1adda5ddb0bc474bcd42",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\gu.js",
+      "bytes": 5930,
+      "sha256": "b1921ac6b4158e6360a8da6099df8bbf2d7bce7c1cf381d5a5e47aa0c74874d2",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\he.js",
+      "bytes": 12411,
+      "sha256": "1cfff31fac19616d900d1f3febd9690ea87711e13b5be299326ebfd3f33aad4d",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\hi.js",
+      "bytes": 5940,
+      "sha256": "c31e466c2a31dc10ba6a288e1aebf429a6e9566a26918d0240aae058693f6329",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\hr.js",
+      "bytes": 5184,
+      "sha256": "ff2bebef0761f2d6095103d58484e3b95551bc51d56770db8f161b8e0e0ec941",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\hu.js",
+      "bytes": 4871,
+      "sha256": "9816c21ee0b3be9d973f9e033e9587a608f2d35dd1b984d415b88e03242b0189",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\hy.js",
+      "bytes": 6720,
+      "sha256": "daf6d0c590d9b061759598ba9f7f97041e2874c7a58da2c64b86f152840d68fa",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\id.js",
+      "bytes": 4759,
+      "sha256": "e5c23bb0b6f696fa936bafd7969e64738504cf7a5be3ec04b24ae899d4912b58",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\is.js",
+      "bytes": 4822,
+      "sha256": "1cce1285bbf55c8a76303fea0be0fb6d39fbd0ece833137ea23a22f406ac1ae1",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\it.js",
+      "bytes": 4775,
+      "sha256": "096b497df6c5fe7de4422482b7733e764e4b344e8d7f768a7289556687acdb82",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\ja.js",
+      "bytes": 5054,
+      "sha256": "2a6bbbd6dbd573687b22f35873a13cdf730c07423b4ab114e5a8b12d8777146d",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\ka.js",
+      "bytes": 6527,
+      "sha256": "baf3204123cf4246df654fd1948b6c8da6917e7a06e470aeeaf7c1eaa7003628",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\km.js",
+      "bytes": 6509,
+      "sha256": "e61079f14070dfa9c7b2047eb79f5bea6d4e845f192756d103c121bbd63ee18a",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\kh.js",
+      "bytes": 111,
+      "sha256": "78c3d1991041bb8c8fc0f7c5d745aae422d4c2e4e8f30bae44f3fef4765900a8",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\kn.js",
+      "bytes": 6512,
+      "sha256": "884b1b68a1ca02fe9a774b8de9cbfa3486892eea36192699120f57b31f0a1f42",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\ko.js",
+      "bytes": 5109,
+      "sha256": "11fcef61a2f23e010bf0f569d71be0d49524afc97f3072cc03fdc6fe3ea2f14d",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\lt.js",
+      "bytes": 8223,
+      "sha256": "d2e67a35a3c6e7241a9eb9c5851e4b5b651ac8b23278854862e6055829946c48",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\mk.js",
+      "bytes": 5399,
+      "sha256": "64ddd914c432ba5690d0686bff6603651ce886a891f84823d7dc766c9c980cd1",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\ms.js",
+      "bytes": 4674,
+      "sha256": "94faf0d306ffa2a4f95e57f3e53060d27220a639b9cb529f00d1d01b6270f045",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\ne.js",
+      "bytes": 5819,
+      "sha256": "6da69989b702ae15baa27b799b6b2b32fd011ba3980a190dd0eccfc9233083d6",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\nl.js",
+      "bytes": 4939,
+      "sha256": "296ced8be508c5f9e82b562049d2974882029bcd5b2ab4ade14401b33ec99909",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\nn.js",
+      "bytes": 4678,
+      "sha256": "bae9756817629db30841eb54a27ed9b3c71c2a4208314d8d070be624bd2e9359",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\no.js",
+      "bytes": 4693,
+      "sha256": "f358e5586940350ee25a05db184565d23eb1c66903e182ebec812172f31cb55a",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\ota.js",
+      "bytes": 4723,
+      "sha256": "66ed8c3ce00b2e9971ed5a17f002937405d8cdfeb399ebe012db9d2317f42146",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\ps.js",
+      "bytes": 5123,
+      "sha256": "1c15b81fcce0cdc59dbcca18df5c4ecf4e176fc3fb7668207b9ba54df43cce46",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\pl.js",
+      "bytes": 5150,
+      "sha256": "b7f82cf9f747785beeec05cd31d3d7493c52bd3647598924141568f148c07222",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\pt.js",
+      "bytes": 7024,
+      "sha256": "93a820f60d571607bf34b69198f5b24617475584c0b22c0f8d160fcdef096a46",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\pt-BR.js",
+      "bytes": 7024,
+      "sha256": "abc52db767b9dd938954776728ea7480cdcab569a5a17664f60e5a2c1d63e60b",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\ro.js",
+      "bytes": 4883,
+      "sha256": "54751d2866171c9c7ce1a72868dec09efa54d1b2b67401767594c5b360aca38a",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\ru.js",
+      "bytes": 7095,
+      "sha256": "40a019b53bd1684fd4b750db87021520dd5d710f714010c0a594e5bcf5787478",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\sk.js",
+      "bytes": 4949,
+      "sha256": "ae7c49242e70149434c9051dd00209afbd517d98ba54c13692371a5340b616da",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\sl.js",
+      "bytes": 4756,
+      "sha256": "490ca48f8aae3aed660758b32856d49a9fc5c7e255dad220e75abaef8c35140b",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\sv.js",
+      "bytes": 4841,
+      "sha256": "448f36996bb0d159489b34ad7d86df03e520a13e43b1c98ea2fb18d7ed4a3c95",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\ta.js",
+      "bytes": 6688,
+      "sha256": "8b6e1bc033fdaefb1acfc7edf88c9f53c3a50cc892066effdab306103e994d42",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\tg.js",
+      "bytes": 5647,
+      "sha256": "9a5c9a3b18b8ccded28d66033575b22d823df17a7afa8bb9a733f31fe071462f",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\th.js",
+      "bytes": 6563,
+      "sha256": "913cc4962ddf5cb54ed694d04b7008493ef401d3333b26426b32f4890712574e",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\tk.js",
+      "bytes": 4458,
+      "sha256": "445abfed18c5a9d79143b02c9cf9c171b41fb5dff8ffc2cb59b7aef7203e5a7f",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\tr.js",
+      "bytes": 4642,
+      "sha256": "bca07607a27f518f19877dd9c2235fada9c73eb56896f0f6e274781fab71d64e",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\uk.js",
+      "bytes": 5665,
+      "sha256": "1e59ba41296aeb5b6142a6e5ed84712931e33e54ab0b9ae5d83faf436fc3d968",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\ua.js",
+      "bytes": 111,
+      "sha256": "9391169ffbc72f777a83230b6ffcc3f4cf46ab5945ec540de9ef4609dca1f4cc",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\ur.js",
+      "bytes": 5491,
+      "sha256": "d37ed2c93408e0a6b6e1cd290117a6f0e9d7b2c83509cd34b502e1dd94899c87",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\uz.js",
+      "bytes": 4844,
+      "sha256": "2cbe07635b03064ffad0bfcc98d2d570f3264b9cd3e22bbd5c160cd0343f7872",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\vi.js",
+      "bytes": 4967,
+      "sha256": "15939adaf263e0869c602d4b34c206178a235b8bec11c8207ccd3fa50de3a141",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\zh-CN.js",
+      "bytes": 4622,
+      "sha256": "8fc02f2bd4d92f46b24b8d82da0ee95c962fc80c14dd7dd469500e14de08d320",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\zh-TW.js",
+      "bytes": 4672,
+      "sha256": "01d9b119e318d8b9f1a8fa720d06424457429425a61d0730984b750e6a5edf7d",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\yo.js",
+      "bytes": 4847,
+      "sha256": "88b33f6527c1a2faaf159568330cf727c448dc468eac72142a6fb24f8714ac1e",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\locales\\index.js",
+      "bytes": 2607,
+      "sha256": "7ea85250d1e7bd9459cda61f38c78757a410d561a5421bb3f08019bba79c9849",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\core\\registries.js",
+      "bytes": 1540,
+      "sha256": "f04d4b2c0bc5b4ac2d6610ea34edf2e5260eade18f20976b79916dcdbeb9fa4d",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\core\\compile.js",
+      "bytes": 92003,
+      "sha256": "53fcf24821f50ecf42492ab7101abe8a50ead8286a53567d71648fe5ca346b99",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\core\\api.js",
+      "bytes": 28953,
+      "sha256": "03ae6016abc9585e3f3481d6b8d775a95ae4ee65badbde73ca1ed953ff14c0e7",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\core\\to-json-schema.js",
+      "bytes": 29029,
+      "sha256": "85b883eb8f05e9f060c71a39fce7df9345b566af29d5bc9c8fa477fe616a051d",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\core\\json-schema-processors.js",
+      "bytes": 34985,
+      "sha256": "b6d2aee72212c076b9cde38da6333591c76a24eb049a4ee4e7bd2b7825d8b817",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\core\\json-schema-generator.js",
+      "bytes": 3857,
+      "sha256": "beaeab6faa654e99e443b8a9f5d8a4adc08cd8226f92a0cd32477a58ecfa1807",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\core\\json-schema.js",
+      "bytes": 11,
+      "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\core\\index.js",
+      "bytes": 690,
+      "sha256": "2a0e452323aa5b75b7d7de4879289e2579b9dd2d6af291c0416ba6806ca2199d",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\classic\\checks.js",
+      "bytes": 690,
+      "sha256": "7543391a9ad5e7df287bbfecaa79844d46af44c75c1de0d43a411d65795d9dd1",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\classic\\errors.js",
+      "bytes": 2532,
+      "sha256": "d32f7c1ef8e2c70072f6f0ec8ba7081bbc331353cc3a7cb4429e5ece91409543",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\classic\\parse.js",
+      "bytes": 1057,
+      "sha256": "11941573401bbef138842c7a523dff554873343fccbf0e8b0a144259d2d703f1",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\classic\\schemas.js",
+      "bytes": 53354,
+      "sha256": "2bf4a631a18f734a9a7ab7fc11bcf919214774d2235a312dcec0dd53d0324c32",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\classic\\compat.js",
+      "bytes": 1090,
+      "sha256": "0e948b101771cc0e7b753e54b3f5b486929d3db9bd4c09d98fe4ce86271bcf7b",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\classic\\iso.js",
+      "bytes": 556,
+      "sha256": "deaa026b7c5302e59719f401248e7866691d8d8a892884dd2b6868b1cb7252d8",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\classic\\from-json-schema.js",
+      "bytes": 38171,
+      "sha256": "31dc999a26cb6928f5e99ea564d648567e85cf9aa47565198fb6186dbd6c070e",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\core\\visit.js",
+      "bytes": 6643,
+      "sha256": "a804062900869e09ea0b975cfa569fd3c70dc33bad7fc30b63872d451cae29f7",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\classic\\deep-partial.js",
+      "bytes": 543,
+      "sha256": "0abffcc9838e04dc6f091229c1d522fbfd43aab9563316b52d3eb8ff2bacf26d",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\classic\\in-out.js",
+      "bytes": 2190,
+      "sha256": "34370913842ff02d14a9796b11c5ec2af160bdb35a7148edc286e9a9c6fb5c17",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\classic\\coerce.js",
+      "bytes": 550,
+      "sha256": "fb2efe3b6eacc475c77cbb571b5fb8650d92a10f316dc869e49b722973d83c3c",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\classic\\external.js",
+      "bytes": 1101,
+      "sha256": "c6b584ae70ba4e7132b2cd78c23ea4ecedc9828abf999edee312372e1fb453d6",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\index.js",
+      "bytes": 422,
+      "sha256": "32e7efd49a94a765f6d10a1a0a3c02c50c246def17c80c6f0225f85525d98505",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\packages\\common\\src\\validators\\questions\\choice.ts",
+      "bytes": 788,
+      "sha256": "eacaa560ef536901de065be4355365578a4131797f5679b00b8f5bd48af8127e",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:packages/common/src/validators/questions/choice.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\packages\\common\\src\\questions\\options.ts",
+      "bytes": 447,
+      "sha256": "5478f57ce25ca226751d46fb530fab9ccef5f109cbebf68b5a9a53063e25cede",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:packages/common/src/questions/options.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\packages\\common\\src\\validators\\questions\\estimation.ts",
+      "bytes": 1253,
+      "sha256": "0080ddfc62fdb7d4410b097b89d2c8b3534adcf6e4c31169ce13f40c7f5329d4",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:packages/common/src/validators/questions/estimation.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\packages\\common\\src\\validators\\questions\\index.ts",
+      "bytes": 713,
+      "sha256": "4ef73f27053887f2d29c884fec0a053f059a6934d13b86de0fae306859be44b9",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:packages/common/src/validators/questions/index.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\packages\\common\\src\\validators\\quizz.ts",
+      "bytes": 3967,
+      "sha256": "8cd1ff3ce886aab0fabae58557f8053102b318fdbddfac37a4275487ac61ecbf",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:packages/common/src/validators/quizz.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\constants.ts",
+      "bytes": 2748,
+      "sha256": "bbeeb26c8d6f8a12da3621c9ab3cb5f7e2eadfd589471142918e2d1da3e7b721",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/constants.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\audio-catalog.ts",
+      "bytes": 2711,
+      "sha256": "676f3e7070845cd95c05540457eaa5be4f0d05b7cdad5d2f1aefbf38b4e19f51",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/audio-catalog.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\show-themes\\selection.ts",
+      "bytes": 6727,
+      "sha256": "c685af57e72ef60992666e052fd5bf5243cb6e8c528227ac87971530f704a723",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/show-themes/selection.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\packages\\paths.ts",
+      "bytes": 1981,
+      "sha256": "6edd30a1b784db72be98cf760a557b1a55b6eda895e20e4fac25a984c6ab8508",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/packages/paths.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\packages\\manifest.ts",
+      "bytes": 3577,
+      "sha256": "a57ca7a30837756ba5ca5a9d7ec03fc3c64c7a0f3d9c519a72d42e1bd34c327a",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/packages/manifest.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\packages\\protocol.ts",
+      "bytes": 5468,
+      "sha256": "92aaef0a758fed85a6bb3e117ffda36c445eb26db13824416e57097004f69d99",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/packages/protocol.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\show-themes\\definition.ts",
+      "bytes": 13409,
+      "sha256": "babeb6762eeb80c70c4c54b98083ddcbe49239b04bfdc2faf05e9d2f01820134",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/show-themes/definition.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\show-themes\\razzia.manifest.json",
+      "bytes": 45192,
+      "sha256": "ff910bf226e39af78de8240b81671c089ec0c81c48a57538708d0c0caf93eb51",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/show-themes/razzia.manifest.json"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\show-themes\\classic.manifest.json",
+      "bytes": 41813,
+      "sha256": "b7158ed1aaaee800972ec66bd6bcd9cbbe6de48a48912aa53d56a4af1ba8c061",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/show-themes/classic.manifest.json"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\show-themes\\registry.ts",
+      "bytes": 2006,
+      "sha256": "6f980606571688cb3e2fc653d77f047d7043ca1a06488edd0d3464afcd3e2e55",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/show-themes/registry.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\product-branding.ts",
+      "bytes": 258,
+      "sha256": "f6a8447cd41a2d81b5d25968455dea9ad119b10dfa77ba38cbae87cd8110fad9",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/product-branding.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\show-themes\\resolve.ts",
+      "bytes": 7201,
+      "sha256": "867529ee357fffdf315bcfba570ebf50ce1ccf0178b9131ff69197f11243ece5",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/show-themes/resolve.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\show-themes\\media.ts",
+      "bytes": 2893,
+      "sha256": "0abb2c489cf8472b18980d4b1bb59ef7d85e84a3d30b4d16a878c566e8ff5295",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/show-themes/media.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\show-themes\\audio.ts",
+      "bytes": 6254,
+      "sha256": "e2a323bc42ea729cfd8669cc9dd2b2d7eedc240ed8bb420f7df5e33de78e6c9e",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/show-themes/audio.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\show-themes\\index.ts",
+      "bytes": 163,
+      "sha256": "909454f8f9fc4c7e4e2c7c17f8838c19b7334ca9060a7a4e6120cf2efbfceb09",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/show-themes/index.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\lottie.ts",
+      "bytes": 43171,
+      "sha256": "69b3c742384732717b1679dcc488d1c4e77d8a8dccb7dbbed502388af51fe69d",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/lottie.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\media.ts",
+      "bytes": 11212,
+      "sha256": "a328fc4168bed2a84e11350aca48905de1f301865c375367c671814f77924f18",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/media.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\card-appearance.ts",
+      "bytes": 20335,
+      "sha256": "1e84151840bb664826c449ec2c993a9fa46f8a12441c31baf8d940ba28b4c744",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/card-appearance.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\uuid\\dist-node\\max.js",
+      "bytes": 55,
+      "sha256": "8f81a7b2a5f8704ea1b4e8f83d36659856fdf3d122b2bd16fe1b5c47c97b6ffa",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\uuid\\dist-node\\nil.js",
+      "bytes": 55,
+      "sha256": "a6f8ac293df0b75af2946e5190d8f00336b826bb1340b96d669a09beb8885ff8",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\uuid\\dist-node\\regex.js",
+      "bytes": 171,
+      "sha256": "774bc4bc767a58458dfdd252430d96b71b3d380ac241b50df6cb757aaa1b4783",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\uuid\\dist-node\\validate.js",
+      "bytes": 142,
+      "sha256": "78ba6a91a3c2d219e3a6980d7704c0998e8152cabcaece0f5a04989025d0e60c",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\uuid\\dist-node\\parse.js",
+      "bytes": 612,
+      "sha256": "a383f50a691c05533a40bbb4a87f718daa050abbc96debc9715efdc74d8538b4",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\uuid\\dist-node\\stringify.js",
+      "bytes": 1093,
+      "sha256": "bb592b599f2b00be6ca9fb2ac2fb7350abf3a6e6e274201cf6865c8c15e52b6a",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\uuid\\dist-node\\rng.js",
+      "bytes": 110,
+      "sha256": "69d169609cd3f16d85b120b1d88e247216a59c7c5a27b321290c0604627db5c3",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\uuid\\dist-node\\v1.js",
+      "bytes": 2776,
+      "sha256": "d9b4e9be4baa72c35dcabe41be85dec482db18592278f5acc96b38d277be1e5d",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\uuid\\dist-node\\v1ToV6.js",
+      "bytes": 842,
+      "sha256": "f0a2d19ee0d4398607808fcfc3eebeb1ea7af08a0c17d71d42fc612f97241a3f",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\uuid\\dist-node\\md5.js",
+      "bytes": 305,
+      "sha256": "9e143aad0b68e277fa3552a6f783052320bcd5d61d1d8c45fc64aac10113279c",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\uuid\\dist-node\\v35.js",
+      "bytes": 1503,
+      "sha256": "ce090c2ea41db958cff64383cdcd09de21b577d33a57fa281cad1dde2c87b02d",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\uuid\\dist-node\\v3.js",
+      "bytes": 259,
+      "sha256": "3b65ad31501886af057e13aeec03afedc54f1f85cc8d332b0eb89800b11fbce4",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\uuid\\dist-node\\v4.js",
+      "bytes": 926,
+      "sha256": "eb4b917bb2bfcb3e723fedf3c5d0256b83578a9285e85ebf4c60caa953aa3d39",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\uuid\\dist-node\\sha1.js",
+      "bytes": 308,
+      "sha256": "445563946f94669cb7efb10fbfa6d24b825d466ee99faad3e58d939f3ee46c5e",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\uuid\\dist-node\\v5.js",
+      "bytes": 262,
+      "sha256": "daaf09616ea3b145ccd6a1dfea190b65d546267a9916c5741e026d4290c61ae9",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\uuid\\dist-node\\v6.js",
+      "bytes": 630,
+      "sha256": "32f4c875353e043cb8d790f2d63d46e7b23d592fa3d5d09ace6afcff1dd44e03",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\uuid\\dist-node\\v6ToV1.js",
+      "bytes": 842,
+      "sha256": "78475a282beaea6e8c45e5f2586134929be2e21728f159fb8559df06d7288475",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\uuid\\dist-node\\v7.js",
+      "bytes": 2144,
+      "sha256": "3076cc79dd38200d1090d80bff1d3590729a66ace6578b510cf775b6b9cd0227",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\uuid\\dist-node\\version.js",
+      "bytes": 208,
+      "sha256": "5a43d6eb8496806fd5e152f92edda603dbb1f77108045edcf034f22c9e320ce8",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\uuid\\dist-node\\index.js",
+      "bytes": 636,
+      "sha256": "65e9fae8f22278e6c9ac5b016dbe1ead01b8014f66ce08a807741885d4bf01f1",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\phone-roster.ts",
+      "bytes": 7405,
+      "sha256": "438a39f8cd9848c6c517a91cdb3cc2e8dc8f8875c5216b318973baa7cafe75f8",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/phone-roster.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\quiz-extras.ts",
+      "bytes": 8612,
+      "sha256": "cff2c8bc7ec7f10f960a8b017f94e362c967de9c9f0646866f4353b471ce6e72",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/quiz-extras.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\cinematic-overlays.ts",
+      "bytes": 10293,
+      "sha256": "3799f40fd3fb9d5ca22bafdc3a71e93da4b144c6a60e3c6107497d5eab6e30a8",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/cinematic-overlays.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\tadazz-appearance.ts",
+      "bytes": 2670,
+      "sha256": "4f65c9a46d3fc3f23ab4efd11854d6ec85a85273ac92d30267679e449a9baa23",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/tadazz-appearance.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\studio-timeline-schema.ts",
+      "bytes": 21670,
+      "sha256": "082c17efbfbf4015b0c3983faf1fb25713208c9af4604aebc6bfbd0893dd666d",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/studio-timeline-schema.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\bundle.ts",
+      "bytes": 1022,
+      "sha256": "f94d0a9c5ad4634d99bab4c3b865d0c6e1663e6fb4b2ec825474a89b6ffd76be",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/bundle.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\card-media-references.ts",
+      "bytes": 17959,
+      "sha256": "3e3b6a5965d9a41d2068933daa7c8bd12feb45bdfe27683698b241cf143d50f0",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/card-media-references.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\commands.ts",
+      "bytes": 7652,
+      "sha256": "e15614078494be232b1ae5c793350fecfe70c44b1e757fc0e0acf57e4ba58564",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/commands.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\digest.ts",
+      "bytes": 5232,
+      "sha256": "7f49ad1f3ee9eb3b13bb8064d11646a9120c32d925f396c87cc892d44df1df4d",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/digest.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\roster-import.ts",
+      "bytes": 35601,
+      "sha256": "0fae3dfabd1e1fb0860f3686ae4c0f5244b146075f9543e10a3331f0083822bc",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/roster-import.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\questions.ts",
+      "bytes": 5124,
+      "sha256": "dcf097bcdc2bd6329ae78a0a573f01856257881828097f530ee578422fc29c4f",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/questions.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\studio-migrate.ts",
+      "bytes": 4723,
+      "sha256": "a3bea50ed8642d4d098d6e2971122cb473a3e3d6ad028a96756d7e81b9730415",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/studio-migrate.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\reveal.ts",
+      "bytes": 1572,
+      "sha256": "02127c9af9376025312c354e6dbea93d8079c178c95e83c1a0796c166990a683",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/reveal.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\revisions.ts",
+      "bytes": 2383,
+      "sha256": "76cb360eeaa7293348b3abff4597e30e406cf4b09835ff3704f0e59dca7197aa",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/revisions.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\state.ts",
+      "bytes": 949,
+      "sha256": "a867f63167849ee012db75ba9dba802287caf2bf50b32fd0fea1291b069e37bb",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/state.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\show-authoring-schema.ts",
+      "bytes": 26630,
+      "sha256": "04a193fce8b3a9a775f69d24ea255a0ad64e5a2e8b858e4e1e57b504190596df",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/show-authoring-schema.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\show-authoring-convert.ts",
+      "bytes": 40161,
+      "sha256": "6f3c81b9746835e9d2657d131df96df7d7e6ce6f460b87cffb4e875c493b3514",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/show-authoring-convert.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\show-workbook.ts",
+      "bytes": 85563,
+      "sha256": "02694f51ae2f4fa70589bf4d7f2c922f9c5ac35a30f6d9ce98b6d664023892ed",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/show-workbook.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\packages\\zip-detection.ts",
+      "bytes": 1311,
+      "sha256": "4b954b8c577538d11a43271afc340f1f032ad00312df8aba2f6693ec25f7756e",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/packages/zip-detection.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\show-import-preflight.ts",
+      "bytes": 16744,
+      "sha256": "9339ad52aefe61ae6c1bab9b303cfeccd03f56270316c8fe71722e3b6a769247",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/show-import-preflight.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\creating-worlds-show.ts",
+      "bytes": 3485,
+      "sha256": "06aa99edae27e18d105e4c1dd4254cadc05ba8a2fba8123283cf261e74c416d0",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/creating-worlds-show.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\question-play-mode.ts",
+      "bytes": 467,
+      "sha256": "34602143c2dcd7f2c1b4c7c182a7b36a2b2cd43ebfae76004cc95d5c3586b793",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/question-play-mode.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\media-selection.ts",
+      "bytes": 1021,
+      "sha256": "7d4855d2e44fe83f8fc3f401b1610f03c3938372d7d28bedf631d480d607bcc0",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/media-selection.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\billing\\contracts.ts",
+      "bytes": 2375,
+      "sha256": "6e9c60ce0047b2e12675508234d3fae576cc3d6b2b303fc0cc000d53c20cb779",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/billing/contracts.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\billing\\index.ts",
+      "bytes": 28,
+      "sha256": "666a5d34ddac023960884c39a87373045a991c09e9796522637e8dffd0b725f0",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/billing/index.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\packages\\index.ts",
+      "bytes": 80,
+      "sha256": "6e90c15cda228986114fb73c3397b5b0a3425c31b9a8b8cd3071966381a472b5",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/packages/index.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\core\\index.ts",
+      "bytes": 1028,
+      "sha256": "4cf7c309942cb3eaa5c722e051e54343b9419a3ad81d18c52343b26dc9439535",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/core/index.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\server\\storage\\durable-files.ts",
+      "bytes": 7708,
+      "sha256": "00a3f7474afc00c0f8409868e7f2b99ce261228d2150efed6b48dac2b6d1bec7",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/server/storage/durable-files.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\server\\storage\\creation-scope.ts",
+      "bytes": 5611,
+      "sha256": "7eba38e7fc319dcd2c7fc5ea57b62cc5f88601fea346129d01561837125293b1",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/server/storage/creation-scope.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\server\\storage\\creation-operation-record.ts",
+      "bytes": 6255,
+      "sha256": "e9847ef7ec7cde5e03daaa7a6b94cffc0407d00557d23f173633a58e7c5e324c",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/server/storage/creation-operation-record.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\server\\storage\\creation-operation-store.ts",
+      "bytes": 6585,
+      "sha256": "e850e4c1f4482cea1d54a7d7340af81d9e14e0e06577e2ac316054e0c687c51e",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/server/storage/creation-operation-store.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\extensions\\src\\server\\storage\\creation-reservation.ts",
+      "bytes": 32931,
+      "sha256": "58d38c6cccbf2dc7a1d7d65ea7263d7f1b1d16ddb32ddb05c1f1565d573ca8e1",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:extensions/src/server/storage/creation-reservation.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\http-exception.js",
+      "bytes": 1709,
+      "sha256": "449b2603121978f28c50a9809c577d5a761b24617a55fd21dbfeaea5335ad1d2",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\request\\constants.js",
+      "bytes": 112,
+      "sha256": "983bf06a2f366ec289ddbc253008175a63eead569dc501b5adea98b9f8faf3a9",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\utils\\crypto.js",
+      "bytes": 928,
+      "sha256": "cd2ad39f936ad472b583e248d218ea0fbc0d10678feb629571421bd38c05734b",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\utils\\buffer.js",
+      "bytes": 1958,
+      "sha256": "f72bd9c18c958eeccf72fd658de570a2471942a1a93da2f60930f46b8beb3bae",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\utils\\body.js",
+      "bytes": 3722,
+      "sha256": "6e41a63e30a29a0158a2016aecc7b5c68c7a465c20d08868262cc8a3e21e74e4",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\utils\\url.js",
+      "bytes": 7001,
+      "sha256": "2bac19f291e7b82961f1e8c643b1fa2a9c4a45085aba9a24f46c12e88ed4e873",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\request.js",
+      "bytes": 8870,
+      "sha256": "7606a9234008de851797cf618667c4ec9debe8cb517fe5a4aa9a9fa3507cd265",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\utils\\html.js",
+      "bytes": 2761,
+      "sha256": "fa086b8a756ce3aca5d58dd6d462f3a8cf75fa46c52b78681b792de5d19c4c03",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\context.js",
+      "bytes": 10128,
+      "sha256": "1f70e2e2c14ab515476bcf18897d887a9fb2a97464b41a732c61e75c8079893d",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\compose.js",
+      "bytes": 1687,
+      "sha256": "6dcd93b8a74298b867b8d2c90ca4fa344677333f16e92393668d224404326b3a",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\router.js",
+      "bytes": 885,
+      "sha256": "cf1dec50138249bcadc086cfb427780ee46ee5671231ea0bb25a3a5c38dd6bce",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\utils\\constants.js",
+      "bytes": 173,
+      "sha256": "9252298eac70224f65a052b98eab0f81460e9eb1d835bbd652faa762fcf4131a",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\hono-base.js",
+      "bytes": 10239,
+      "sha256": "b187a52a0d57f47a6a5ede24bb05bc8f1daab4c1c53f290dd749098d677e1d34",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\router\\utils.js",
+      "bytes": 124,
+      "sha256": "517286c2e5cfeb573ad35119a4b8813c66ca730f086fc195928a251f88c66824",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\router\\reg-exp-router\\matcher.js",
+      "bytes": 594,
+      "sha256": "bbb976ff313449c4490290ef392ab0fe0cb01c5a1f93a4ba5baf47e26ad0036f",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\router\\reg-exp-router\\node.js",
+      "bytes": 3220,
+      "sha256": "c962a952318e80f0260b47e67a92ae296ce9b253ae4be3c93823029bdecd25a4",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\router\\reg-exp-router\\trie.js",
+      "bytes": 1883,
+      "sha256": "dc3a7f110a75ae2de852e4de9af9570ae24f5981fc7084e5816a69f1e1dfee9b",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\router\\reg-exp-router\\router.js",
+      "bytes": 3983,
+      "sha256": "949c2286aa6787b942336c107b6877fee5518c43491e01bb163a04abc29b8621",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\router\\reg-exp-router\\prepared-router.js",
+      "bytes": 3518,
+      "sha256": "c3cfadf01bcf8e2fa9963cf891ae395e7c258480a1edeb338cbc12c2ecd97e67",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\router\\reg-exp-router\\index.js",
+      "bytes": 228,
+      "sha256": "822304b59df8cd453267e5335817db09e1d126307a4060afb465b4fa702c807d",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\router\\smart-router\\router.js",
+      "bytes": 1338,
+      "sha256": "545e65d0abf3d265678ad02478f1523610a2f361e338e9fe7abd6dbb54535dc8",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\router\\trie-router\\node.js",
+      "bytes": 4624,
+      "sha256": "b8ff86a389359d734245b0bd2096bd7db5cbbe40eaeb910f4d51d29a56923a62",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\router\\trie-router\\router.js",
+      "bytes": 453,
+      "sha256": "529da9a7e75c8bd388cf00527883d991dfcf51d97cb1934247c230db544af469",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\router\\trie-router\\index.js",
+      "bytes": 65,
+      "sha256": "0dba884522130fe101909713ef612ebd46da0ab030176259bd2cedd0a39fdd2e",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\hono.js",
+      "bytes": 951,
+      "sha256": "e630eb3e76ab5dc306e64bb5ba78eab92f539aa43202a2def785f1bf9c7defe4",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\index.js",
+      "bytes": 347,
+      "sha256": "a18108f10e31afeda6c1489a3dc6588c45966d4800ff6361f7cc77e0159154be",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\contracts\\schemas.ts",
+      "bytes": 3415,
+      "sha256": "8d2ab36da1292c178e0a974e9c331eed05e59adb97f530df11ae3ad3de812656",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\contracts\\tools.ts",
+      "bytes": 4844,
+      "sha256": "08e1c22ef58141f46b1377b8554a0e7a3e847eb1ae9b9e78551ec99348eb84c6",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\server\\errors.ts",
+      "bytes": 880,
+      "sha256": "9bdef8a34a50ff204d87cff417cac7475fa34ac349da363ab318f585713a4657",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\server\\authorization.ts",
+      "bytes": 3053,
+      "sha256": "a08edcf94ec5f8912a4895c958b906144ff34d7735706b787468ec674ac1a09e",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\server\\access-token.ts",
+      "bytes": 6577,
+      "sha256": "a0c04e49e06d797523a2e4f4191cc9bb3fd85a15b2ad6daad4b614aca52132f7",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\@modelcontextprotocol\\server\\dist\\chunk-vYduTEsO.mjs",
+      "bytes": 1426,
+      "sha256": "d4a000980e7c6a8a2ee04c12d80cf538b11e5040e8487dad7661b09d85894e74",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\@modelcontextprotocol\\server\\dist\\dialects-CDpMbily.mjs",
+      "bytes": 2107,
+      "sha256": "9f87722e2b700a170ea4de4c88719df0ab321fa84e9f4fcf666bec3d5cb04c38",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\classic\\index.js",
+      "bytes": 177,
+      "sha256": "978a923075be24db9051635ccd2c21ade18d7a6b5ce0fe6e0029660072073398",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\zod\\v4\\index.js",
+      "bytes": 351,
+      "sha256": "5ba6cdbd3839d2a9df5c6d91d2121ef680f3d22fd60ee9d2c0b4611b7cb49a65",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\@modelcontextprotocol\\core\\dist\\schemas-DscsoNZN.mjs",
+      "bytes": 59614,
+      "sha256": "e4419e9d2c8059c512b28e57d4dbdf4daee773ecfce698c389585a0cbea2fd73",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\@modelcontextprotocol\\core\\dist\\auth-UMQCo-ad.mjs",
+      "bytes": 9103,
+      "sha256": "6ea7a63dfceca17fd7ab5325947bcd4d4602b5c40f2736d406de69d906559db8",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\@modelcontextprotocol\\core\\dist\\internal.mjs",
+      "bytes": 11461,
+      "sha256": "c2ce2d072c43d3b8be0ce76642f7d5c19f98127ff705dac566a84fae331f6341",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\@modelcontextprotocol\\server\\dist\\src-DdvbAHrR.mjs",
+      "bytes": 337797,
+      "sha256": "f4d33527f049feccb3183d749039072deaa21528b6ba85d05e3a5fa68b2060ad",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\@modelcontextprotocol\\server\\dist\\ajvProvider-DyjnscPj.mjs",
+      "bytes": 294862,
+      "sha256": "944297315b903b46248bd29fe0590ba52c91fdc1bd91ff6853a77bedf7b09c64",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\@modelcontextprotocol\\server\\dist\\shimsNode.mjs",
+      "bytes": 184,
+      "sha256": "374289ae3f0d17734a08aa9ea60730a0b023d1430eab01cb057b04a7d5a83881",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\@modelcontextprotocol\\server\\dist\\mcp-oHn3ureC.mjs",
+      "bytes": 100559,
+      "sha256": "c542c2e9e84767827ca9ac561946ec25a7f10b9aa48e84acca12f48bf1123ea2",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\@modelcontextprotocol\\server\\dist\\listenRouter-Bartj63y.mjs",
+      "bytes": 15767,
+      "sha256": "b7acfe626bff3edc2eb1a11c4ad9a1c07225b0df89be9ab5280af207e88e690a",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\@modelcontextprotocol\\server\\dist\\index.mjs",
+      "bytes": 70276,
+      "sha256": "ab7434003c94a09e2c7dec6765647ed600104ad4ebcd347f574dab94f52fcf8d",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\@modelcontextprotocol\\ext-apps\\dist\\src\\server\\index.js",
+      "bytes": 561,
+      "sha256": "8021bea40fa3bac448e17f7d31f95d69d2e152cf0e40200e746df7f34503404d",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\core\\digest.ts",
+      "bytes": 5232,
+      "sha256": "7f49ad1f3ee9eb3b13bb8064d11646a9120c32d925f396c87cc892d44df1df4d",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\contracts\\canonical.ts",
+      "bytes": 3555,
+      "sha256": "2d5128d0c38a38ff094c0daf2631d60c5bd5218655558b7b17366dc12bd82318",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\server\\authoring.ts",
+      "bytes": 4270,
+      "sha256": "ac2399912320c3f073dd967e9cf02fcf81aba6ffe0a1e0cd4e24e24192aba895",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\server\\preview.ts",
+      "bytes": 3014,
+      "sha256": "c00835db267c2e3bdfca971df096fd9d788c04dd028799b70f22a6e78bfd381e",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\server\\drafts.ts",
+      "bytes": 1462,
+      "sha256": "3a15de742e0baf6fb4747d916b133dec567e168ba257be706d8281b106e709cc",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\server\\results.ts",
+      "bytes": 1776,
+      "sha256": "ab1eb5393a693c431688d2e2f0d4f69cc7d99c1d81f9bf5d4fafb14b68009263",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\server\\dispatch.ts",
+      "bytes": 6794,
+      "sha256": "2dc7f792dfefe3f1429f82006a608c1b12c1b3044763fb973e055a8995d75ec1",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\@modelcontextprotocol\\core\\dist\\index.mjs",
+      "bytes": 10115,
+      "sha256": "b844a6f7626cd4f4456f3608e14176a2ccd50a66f0c19f73abb5c0b11b397165",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\server\\request-boundary.ts",
+      "bytes": 4506,
+      "sha256": "da91ea678062064bea298655a48ba36178f9b13cc1987980b863b8f883219f1c",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\server\\connection.ts",
+      "bytes": 9086,
+      "sha256": "d67b8a49653561f0746e9cb7d4bd6f1f907676fbaefd638c7a714c4074b69923",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\server\\factory.ts",
+      "bytes": 6229,
+      "sha256": "4f4b49c9fab39d5ab465539b53e620db69e25301d7c8fcfa784588a1c14a9b14",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\first-party\\ingress.ts",
+      "bytes": 5816,
+      "sha256": "ad74dfb63f1055fa3cde26b44d30bb3aaacea4a7f9aeed921eb27bd2b4cb9531",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\server\\http.ts",
+      "bytes": 17456,
+      "sha256": "08d749fc8737f52526a158fde1a102bc5b88239be7e79e857e4cdfb98bb97727",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\packages\\socket\\src\\services\\account-scope.ts",
+      "bytes": 1311,
+      "sha256": "aef9bf0d3a9357f954c16255f14d0abec5ff8c93cb1f6099dee88785b7d1d33e",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:packages/socket/src/services/account-scope.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\packages\\common\\src\\validators\\auth.ts",
+      "bytes": 999,
+      "sha256": "33b7ece505e0c4a675740489942762a23f2c272e394066c0e960923a9dd48411",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:packages/common/src/validators/auth.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\packages\\socket\\src\\env.ts",
+      "bytes": 1106,
+      "sha256": "c3d4fd0b62615ceacf67fd10430aa0e37a7efa6ee858940af3e80298d0be2a63",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:packages/socket/src/env.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\packages\\socket\\src\\services\\config-scope.ts",
+      "bytes": 689,
+      "sha256": "b69bb60a74cfeb70c17d2769b7ef2734ec89757e35addd7494017a4be77f8e5f",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:packages/socket/src/services/config-scope.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\packages\\socket\\src\\services\\account-db.ts",
+      "bytes": 16347,
+      "sha256": "5c7ebb622d80da07a6dcfa6d536669a32f19879208a5b1a0d5f2758e71491ec8",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:packages/socket/src/services/account-db.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\packages\\socket\\src\\services\\account-auth.ts",
+      "bytes": 8376,
+      "sha256": "9f11e6c9eb3f4f8ffb2c75eaceaaa7c59555017e667a1575f8958b4d13f3c4ef",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:packages/socket/src/services/account-auth.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\utils\\jwt\\jwa.js",
+      "bytes": 727,
+      "sha256": "f0349ddff0ae2dec7d8412cc00359d2f110d05bc62943e302cb2673022618610",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\utils\\cookie.js",
+      "bytes": 5356,
+      "sha256": "a3794b506645c5b004d78f730ded447100e2d128b759ebc307bc0ccdb59f54ef",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\helper\\cookie\\index.js",
+      "bytes": 2489,
+      "sha256": "fcb2a37f557ac35320064121cd4d060ccda664016e8e7c014a5770be59c9ef4e",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\utils\\encode.js",
+      "bytes": 901,
+      "sha256": "39db4c67891401c8839439cc98b1c7ae421a3269c4b71c0cf7180234260abb71",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\utils\\jwt\\types.js",
+      "bytes": 3687,
+      "sha256": "268bed3570fed9b17acdf657321d65e41cfcd7419ed903cabe71762281130428",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\utils\\jwt\\utf8.js",
+      "bytes": 217,
+      "sha256": "87dc2c8ffef4e648d83b1d39262610ff972ddf3a3ceefcd97f0b556586406832",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\helper\\adapter\\index.js",
+      "bytes": 1131,
+      "sha256": "ddb47fdd81979682ec89860482785b6c5faaf5f001e7367b3a192e136de37336",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\utils\\jwt\\jws.js",
+      "bytes": 4384,
+      "sha256": "8ee987b6ff79bf97333b4407425e9926fe6dbc2175f368b28af356ecc8f6b28b",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\utils\\jwt\\jwt.js",
+      "bytes": 5983,
+      "sha256": "c97745e3263259bbc0b8e756cc53b97b8fdd1e92eb273da0f6b38b9337af2690",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\utils\\jwt\\index.js",
+      "bytes": 217,
+      "sha256": "387338c6078cfc93262b01ce15726b8eab338cf067358630c9e5aabeff895d54",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\middleware\\jwt\\jwt.js",
+      "bytes": 4593,
+      "sha256": "89fc957f99ce9218f46d1f22cc8134b851b0d88001b596fada1c7544747b843e",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\middleware\\jwt\\index.js",
+      "bytes": 197,
+      "sha256": "f4748b1e748a0e542122f3d395fc03661a01d21262ee34d7b7f2abde4767f459",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\packages\\socket\\src\\services\\auth.ts",
+      "bytes": 3356,
+      "sha256": "ff586db579912ad16e5db544a4908671fa9bad7665eb46bfca4d32034bc59fbe",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:packages/socket/src/services/auth.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\hono\\dist\\helper\\factory\\index.js",
+      "bytes": 838,
+      "sha256": "5e46cd194c89fa0ad4a60b6b2b4861a92c8186b2a24f4a92b025ceb2e9be9cb5",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\http-status-codes\\build\\cjs\\legacy.js",
+      "bytes": 9616,
+      "sha256": "10eb9ee52608ce541a36e2319e871081764cccd606d7576381b3fef845e211fd",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\http-status-codes\\build\\cjs\\utils.js",
+      "bytes": 3776,
+      "sha256": "476fbd50c4cf32a0dc55ef7031f9e714798a271870394ea0cb6240b1f633e7d5",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\http-status-codes\\build\\cjs\\utils-functions.js",
+      "bytes": 1649,
+      "sha256": "a070809ae327ad11ef6d9c3e8782958e3a792e319a8b9186f5c095cbd94775ba",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\http-status-codes\\build\\cjs\\status-codes.js",
+      "bytes": 21607,
+      "sha256": "3d5a45e45661376db3586191f0282adec547cbfc8f838d6ce792cc94b9b58981",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\http-status-codes\\build\\cjs\\reason-phrases.js",
+      "bytes": 20642,
+      "sha256": "a4c0c801793baa37b2a088816f6ca00e350ffd723420d898220e3919ea09a0fa",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\consent-boundary\\local-overlay-01\\extensions\\src\\mcp-app\\node_modules\\http-status-codes\\build\\cjs\\index.js",
+      "bytes": 2218,
+      "sha256": "75ec9d0a0dbd724a24268c75537860046f8a5860c5355bf7bfca39e5c3b25256",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\packages\\socket\\src\\api\\middleware.ts",
+      "bytes": 1519,
+      "sha256": "0fa1d2b278a13d0cecb616a0c13bf597a0fe72f5f57cb2ca866df566ca66a496",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:packages/socket/src/api/middleware.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\first-party\\bindings.ts",
+      "bytes": 7307,
+      "sha256": "3f6bbaa991715a14df56344431506e6e5bb67ea8e76746487b55b0fb828fdd2a",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\first-party\\oauth-protocol.ts",
+      "bytes": 13744,
+      "sha256": "fbfa235720773d0fc6b318f10ef933f90dd5b42154d7bb63f510f8c697b0264d",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\first-party\\oauth-export.ts",
+      "bytes": 1865,
+      "sha256": "cd2bd30a7d9316fe3ab99ff50d83205deb8525f33991a1cbb82d93053431e3a8",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\first-party\\oauth-native-save.ts",
+      "bytes": 23064,
+      "sha256": "e84f2150fb96e562591dfce727c2260a110751fe0dfd43f798e0d815de03706e",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\first-party\\oauth-grants.ts",
+      "bytes": 36069,
+      "sha256": "20ddc521ba68690cccf6f07b94589326f1e5541e6d12960918a0893a6ef1f8ce",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\first-party\\oauth.ts",
+      "bytes": 16325,
+      "sha256": "7b4c4ff6fe3e2d040d22d94eb1ca3a77b30a7c09effcad7b5e5a22669699843b",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\first-party\\owner.ts",
+      "bytes": 3505,
+      "sha256": "6cf7a2cc2e2d15e710e32f9f66919506655be398f011d4c7e5b69f9a040c06ae",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\first-party\\schema-manifest.ts",
+      "bytes": 2523,
+      "sha256": "0a9f68f83aff260b865b353f2c9ab74ba266c8136d5495a515e60483328293e1",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\first-party\\schema.ts",
+      "bytes": 4202,
+      "sha256": "af1c67d0b02de0fe3c0320accce74f488c7c5512d475bc2aeb3a1f3f894cd1fa",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\first-party\\store.ts",
+      "bytes": 10429,
+      "sha256": "43c5881dc2da0d837cdfa2d8168545d8cf777da7ce939bb5b17f50eb57b921d9",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\first-party\\http.ts",
+      "bytes": 5776,
+      "sha256": "ab27d868c1ace79cb71487738c0d6e74551c9b79c5840889fad30ee845a2a7fc",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\extensions\\src\\mcp-app\\tests\\first-party\\fixtures.ts",
+      "bytes": 7280,
+      "sha256": "70416c93ddb5f1c93698fa1947bf40a176edbb1943f3dbf0300b0e092e14bf98",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\packages\\socket\\src\\services\\errors.ts",
+      "bytes": 827,
+      "sha256": "6589f4eabe2870a09ddbbb9666f98e5f872097f51dad283c6ef1d4df5b1ed003",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:packages/socket/src/services/errors.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\node_modules\\.pnpm\\nanoid@6.0.2\\node_modules\\nanoid\\url-alphabet\\index.js",
+      "bytes": 94,
+      "sha256": "33ea592bd475568d67c0fb4e1a78c9dea91cdaf66348d6f1d4bb278e55077f2c",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\node_modules\\.pnpm\\nanoid@6.0.2\\node_modules\\nanoid\\index.js",
+      "bytes": 3247,
+      "sha256": "6d92c5d40b3eecfeb072c3543be4e74e331d23984de552ec6eec6efb3f7eff19",
+      "source": "immutable-build-input-bytes"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\packages\\socket\\src\\utils\\file.ts",
+      "bytes": 491,
+      "sha256": "4859a60a6900f36cdf730d5adc76ecb1c0dbbf887ffd470a30be70386802185b",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:packages/socket/src/utils/file.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-recovery-fresh-20261115\\packages\\socket\\src\\services\\config.ts",
+      "bytes": 7628,
+      "sha256": "cdb070c0c5978c02ef7ef8d0e03652fa18a005af42f86939f3158c33a7e37b9f",
+      "source": "git:1909da2f653377c545923b2e91dd2f4b1a2cf802:packages/socket/src/services/config.ts"
+    },
+    {
+      "file": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\native-save\\native-save-tests.ts",
+      "bytes": 7733,
+      "sha256": "0f7f7508c54c27acf4727d342d12e1f5883b8f0a039fbc879a2b1f548217e38a",
+      "source": "immutable-build-input-bytes"
+    }
+  ]
+}

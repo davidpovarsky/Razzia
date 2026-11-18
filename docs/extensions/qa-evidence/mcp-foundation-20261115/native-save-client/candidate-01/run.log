@@ -1,0 +1,58 @@
+TAP version 13
+# {"runtime":"v26.11.1","platform":"linux","filesystemMagic":61267}
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# Subtest: exact real E client inspects and approves without native allocation; original MCP key creates one real B target
+ok 1 - exact real E client inspects and approves without native allocation; original MCP key creates one real B target
+  ---
+  duration_ms: 760.001674
+  type: 'test'
+  ...
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# Subtest: real E client discards a genuine inspect response after native session changes in flight
+ok 2 - real E client discards a genuine inspect response after native session changes in flight
+  ---
+  duration_ms: 114.818779
+  type: 'test'
+  ...
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# Subtest: draft edit after actual E inspection is rejected by real F approval; consumed proof is not retried
+ok 3 - draft edit after actual E inspection is rejected by real F approval; consumed proof is not retried
+  ---
+  duration_ms: 156.439455
+  type: 'test'
+  ...
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# Subtest: lost approval ACK from actual F commit is uncertain to E and never auto-retried; fresh inspection and original MCP key reconcile
+ok 4 - lost approval ACK from actual F commit is uncertain to E and never auto-retried; fresh inspection and original MCP key reconcile
+  ---
+  duration_ms: 687.072806
+  type: 'test'
+  ...
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# {"retainedSyntheticRoot":"/home/david/tadazz-f-native-save-evidence-20261115/tadazz-m3a-synthetic-WXBAZS","publicReceipt":"public-native-client-results.json"}
+# Subtest: revoked actual native session cannot approve through E and no game is allocated
+ok 5 - revoked actual native session cannot approve through E and no game is allocated
+  ---
+  duration_ms: 192.458772
+  type: 'test'
+  ...
+1..5
+# tests 5
+# suites 0
+# pass 5
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3210.825323

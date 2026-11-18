@@ -1,0 +1,14 @@
+{
+  "kind": "READONLY_SERVER_PREFLIGHT_ATTEMPTS",
+  "attempts": [
+    {
+      "exit": 1,
+      "action": "Descriptor/resources were read successfully; a too-broad QA evidence file inventory encountered unrelated worker permission denials.",
+      "correction": "Stopped that inventory and read only the exact integrator run-r6/r7 paths. No files were changed."
+    },
+    {
+      "action": "Image inspect template requested optional Config.User and received missing-key error; enclosing read-only SSH sequence exit was0.",
+      "correction": "Launcher requests only actual image Id and explicitly supplies its own UID. No image pull or mutation."
+    }
+  ]
+}

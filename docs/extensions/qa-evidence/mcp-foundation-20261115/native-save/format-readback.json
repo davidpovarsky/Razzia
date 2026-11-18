@@ -1,0 +1,25 @@
+{
+  "formatter": "3.9.10",
+  "results": [
+    {
+      "file": "extensions/src/mcp-app/first-party/bindings.ts",
+      "pass": true
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/oauth-grants.ts",
+      "pass": true
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/oauth-protocol.ts",
+      "pass": true
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/oauth.ts",
+      "pass": true
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/oauth-native-save.ts",
+      "pass": true
+    }
+  ]
+}

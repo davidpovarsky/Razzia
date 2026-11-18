@@ -1,0 +1,9 @@
+{
+  "kind": "FORMAT_ONLY_SOURCE_CORRECTION",
+  "beforeSha256": "fb8ce4c2edcb8cd02b4b4465d0df1da9acc58488fc41f99f1345e2889290df06",
+  "afterSha256": "798222ff764137ec9ec55f9246a5aa77e8c84d7ea9fe415b479092960ab26cfa",
+  "nonWhitespaceBytesIdentical": true,
+  "diff": "--- validated859\n+++ formatter-output\n@@ -34,7 +34,8 @@\n       throw new HttpRejection(400)\n     headerBytes += new TextEncoder().encode(name + value).byteLength\n     if (headerBytes > 8192) throw new HttpRejection(400)\n-    if (name === \"forwarded\" || name.startsWith(\"x-forwarded-\")) forwarded = true\n+    if (name === \"forwarded\" || name.startsWith(\"x-forwarded-\"))\n+      forwarded = true\n   })\n   const url = new URL(request.url)\n   if (\n",
+  "functionalSource": "859b9d76fce4a3b9a323a3ae502e2af5367ef1ff",
+  "reasonForNoFunctionalRerun": "Only a line break/indentation after the forwarded-header condition; actual diff retained."
+}
