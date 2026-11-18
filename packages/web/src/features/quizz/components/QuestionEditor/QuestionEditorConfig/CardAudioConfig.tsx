@@ -16,7 +16,7 @@ import ConfigSection from "@razzia/web/features/quizz/components/QuestionEditor/
 import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 import clsx from "clsx"
 import { Music, Play, Square, Trash2 } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 interface CardAudioConfigProps {
   kind?: "question" | "scene"
@@ -60,24 +60,23 @@ const LegacyCardAudioConfig = ({
   >(null)
   const previewAudioRef = useRef<HTMLAudioElement | null>(null)
   const [playingSlot, setPlayingSlot] = useState<string | null>(null)
-  useEffect(
-    () => () => {
-      if (previewAudioRef.current) {
-        previewAudioRef.current.pause()
-        previewAudioRef.current = null
-      }
-    },
-    [currentQuestionId],
-  )
-  const stopPreview = () => {
-    if (previewAudioRef.current) {
-      previewAudioRef.current.pause()
-      previewAudioRef.current.currentTime = 0
-      previewAudioRef.current = null
-    }
+  const releasePreview = useCallback(() => {
+    const player = previewAudioRef.current
+    // Relinquish ownership before stopping: already queued callbacks cannot
+    // reset a later preview or update an unmounted component.
+    previewAudioRef.current = null
 
+    if (player) {
+      player.onended = null
+      player.onerror = null
+      player.pause()
+      player.currentTime = 0
+    }
+  }, [])
+  const stopPreview = useCallback(() => {
+    releasePreview()
     setPlayingSlot(null)
-  }
+  }, [releasePreview])
   const togglePreview = (slotKey: string, url?: string, volume = 0.8) => {
     if (playingSlot === slotKey) {
       stopPreview()
@@ -96,10 +95,16 @@ const LegacyCardAudioConfig = ({
       audio.volume = Math.max(0, Math.min(1, volume))
       previewAudioRef.current = audio
       setPlayingSlot(slotKey)
-      audio.onended = () => setPlayingSlot(null)
-      audio.play().catch(() => setPlayingSlot(null))
+      const finishPreview = () => {
+        if (previewAudioRef.current === audio) {
+          stopPreview()
+        }
+      }
+      audio.onended = finishPreview
+      audio.onerror = finishPreview
+      void audio.play().catch(finishPreview)
     } catch {
-      setPlayingSlot(null)
+      stopPreview()
     }
   }
   const currentPerQ =
@@ -107,6 +112,25 @@ const LegacyCardAudioConfig = ({
       ? extras.perQuestion[currentQuestionId]
       : undefined
   const activeCues: CardAudioOverrides = currentPerQ?.audioCues ?? {}
+  useEffect(() => {
+    releasePreview()
+    // oxlint-disable-next-line react/set-state-in-effect -- Synchronize the visible slot with an externally changed card or preview source.
+    setPlayingSlot(null)
+
+    return releasePreview
+  }, [
+    currentQuestionId,
+    kind,
+    sceneAudio?.mode,
+    sceneAudio?.url,
+    activeCues.showQuestion?.mode,
+    activeCues.showQuestion?.url,
+    activeCues.answersMusic?.mode,
+    activeCues.answersMusic?.url,
+    activeCues.revealResults?.mode,
+    activeCues.revealResults?.url,
+    releasePreview,
+  ])
   const updateQuestionSlot = (
     slot: QuestionAudioCueKey,
     next: CardAudioCueOverride | undefined,

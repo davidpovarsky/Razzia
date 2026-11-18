@@ -13,7 +13,7 @@ import { useUploadMedia } from "@razzia/web/features/quizz/hooks/useUploadMedia"
 import { deleteMedia, mediaKeys } from "@razzia/web/features/quizz/queries"
 import { ApiError } from "@razzia/web/lib/api"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
 
@@ -33,13 +33,20 @@ export function useMediaLibraryExtensions(
   )
   const queryClient = useQueryClient()
   const { t } = useTranslation()
-  useEffect(
-    () => () => {
-      previewAudioRef.current?.pause()
-      previewAudioRef.current = null
-    },
-    [],
-  )
+  const releasePreviewAudio = useCallback(() => {
+    const player = previewAudioRef.current
+    // Relinquish ownership before stopping: already queued callbacks cannot
+    // reset a later preview or update an unmounted component.
+    previewAudioRef.current = null
+
+    if (player) {
+      player.onended = null
+      player.onerror = null
+      player.pause()
+      player.currentTime = 0
+    }
+  }, [])
+  useEffect(() => releasePreviewAudio, [releasePreviewAudio])
   const themeDefaults =
     extras && "defaults" in extras ? extras.defaults : undefined
   const BUILT_IN_SOUNDS = useMemo(() => {
@@ -180,15 +187,10 @@ export function useMediaLibraryExtensions(
     [questions, extras],
   )
 
-  const stopPreviewAudio = () => {
-    if (previewAudioRef.current) {
-      previewAudioRef.current.pause()
-      previewAudioRef.current.currentTime = 0
-      previewAudioRef.current = null
-    }
-
+  const stopPreviewAudio = useCallback(() => {
+    releasePreviewAudio()
     setPlayingBuiltinUrl(null)
-  }
+  }, [releasePreviewAudio])
 
   const toggleBuiltinPreview = (url: string) => {
     if (playingBuiltinUrl === url) {
@@ -203,10 +205,16 @@ export function useMediaLibraryExtensions(
       const audio = new Audio(url)
       previewAudioRef.current = audio
       setPlayingBuiltinUrl(url)
-      audio.onended = () => setPlayingBuiltinUrl(null)
-      audio.play().catch(() => setPlayingBuiltinUrl(null))
+      const finishPreview = () => {
+        if (previewAudioRef.current === audio) {
+          stopPreviewAudio()
+        }
+      }
+      audio.onended = finishPreview
+      audio.onerror = finishPreview
+      void audio.play().catch(finishPreview)
     } catch {
-      setPlayingBuiltinUrl(null)
+      stopPreviewAudio()
     }
   }
 
