@@ -36,6 +36,16 @@ const labels: Readonly<Record<SemanticLocale, Labels>> = {
     shadchan: "Matchmaker",
     therapist: "Therapist",
   },
+  he: {
+    background: "רקע מובנה",
+    audio: "שמע מובנה",
+    purple: "רקע סגול",
+    dog: "כלב",
+    lamplighter: "מדליק פנסים",
+    pirate: "פיראט",
+    shadchan: "שדכן",
+    therapist: "מטפל",
+  },
   fr: {
     background: "Fond d’origine",
     audio: "Audio d’origine",
