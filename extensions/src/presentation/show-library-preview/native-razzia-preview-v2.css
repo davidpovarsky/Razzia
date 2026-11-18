@@ -60,3 +60,9 @@
   filter: none !important;
   clip-path: none !important;
 }
+
+/* Keep native photo choices responsive in WebKit while preserving selection feedback. */
+.native-razzia-preview-v2
+  button[data-testid^="photo-card-choice-"]:is(:hover, :active) {
+  filter: none;
+}
