@@ -142,7 +142,7 @@ async function ready(p: ReturnType<typeof child>, port: number) {
   throw Error(`Launcher did not become healthy: ${p.stderr()}`)
 }
 const request = (port: number, path: string, method = "GET") =>
-  new Promise<Response>((resolve, reject) => {
+  new Promise<Response>((resolveResponse, reject) => {
     // Undici fetch replaces caller-supplied Host with the loopback transport
     // host. Use a raw HTTP request to exercise the production Host boundary.
     const req = nodeRequest(
@@ -161,7 +161,7 @@ const request = (port: number, path: string, method = "GET") =>
             }
           }
 
-          resolve(
+          resolveResponse(
             new Response(method === "HEAD" ? null : Buffer.concat(chunks), {
               status: res.statusCode ?? 500,
               headers,
