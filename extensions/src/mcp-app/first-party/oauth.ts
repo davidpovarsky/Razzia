@@ -149,9 +149,10 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
       {
         kid: options.keyId,
         algorithm: "EdDSA",
-        pem: createPublicKey(options.signingPrivateKeyPem)
-          .export({ type: "spki", format: "pem" })
-          .toString(),
+        pem: createPublicKey(options.signingPrivateKeyPem).export({
+          type: "spki",
+          format: "pem",
+        }),
       },
     ],
     activeGrant: async (grantId, accountId) =>
