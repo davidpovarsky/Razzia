@@ -4,6 +4,8 @@ import { asset, catalogue, Cover, GameCard, type Game } from "./Catalogue"
 import { corrections } from "../../themes/corrections"
 import { sitePlatformStyle } from "../../themes/platform"
 import { Pricing } from "./Pricing"
+import { GreatGuessOffDemo } from "./GreatGuessOffDemo"
+import guessOffStyles from "./great-guessoff.css?inline"
 import { SiteButton } from "../shared/SiteButton"
 import { useEffect, useState, useMemo } from "react"
 import { createPublicPreviewProvider } from "../../components/game-preview/public-provider"
@@ -34,8 +36,7 @@ function selectedCatalogueGame(search: string): Game {
   const params = new URLSearchParams(search)
 
   return (
-    catalogue.find((game) => game.id === params.get("game")) ??
-    catalogue[params.get("view") === "demo" ? 1 : 0]
+    catalogue.find((game) => game.id === params.get("game")) ?? catalogue[0]
   )
 }
 
@@ -104,7 +105,7 @@ export function MarketingSite() {
     setSelected(game)
     go("product", game.id)
   }
-  const openDemo = (game: Game = catalogue[1]) => {
+  const openDemo = (game: Game = catalogue[0]) => {
     setSelected(game)
     go("demo", game.id)
   }
@@ -138,6 +139,7 @@ export function MarketingSite() {
       <ReferenceCanvas variant="marketing" styles={marketing}>
         <style>{corrections}</style>
         <style>{sitePlatformStyle}</style>
+        <style>{guessOffStyles}</style>
         <header className="site-header">
           <div className="wide header-inner">
             <SiteLink className="brand" href="/">
@@ -487,7 +489,11 @@ export function MarketingSite() {
                 {t("TRY A ROUND · INTERACTIVE SAMPLE")}
               </div>
               <h1 className="h1">{t(selected.title)}</h1>
-              <p className="prose">{demonstration("demo")}</p>
+              <p className="prose">
+                {selected.id === "great-guessoff"
+                  ? "Play the five-round interactive sample. Voting percentages and other players are illustrative demo data."
+                  : demonstration("demo")}
+              </p>
               <div
                 className="demo-stage marketing-native-demo"
                 data-testid="marketing-native-demo"
@@ -498,16 +504,20 @@ export function MarketingSite() {
                     ".marketing-native-demo{aspect-ratio:16/9}.marketing-native-demo>.game-preview-surface,.marketing-native-demo .game-preview-poster,.marketing-native-demo .game-cover{width:100%;height:100%}@media(max-width:640px){.marketing-native-demo{aspect-ratio:3/4}}"
                   }
                 </style>
-                <GamePreviewSurface
-                  selection={{
-                    kind: "published-demo",
-                    catalogueId: selected.id,
-                  }}
-                  label={t("Preview")}
-                  initiallyOpen
-                >
-                  <Cover game={selected} />
-                </GamePreviewSurface>
+                {selected.id === "great-guessoff" ? (
+                  <GreatGuessOffDemo />
+                ) : (
+                  <GamePreviewSurface
+                    selection={{
+                      kind: "published-demo",
+                      catalogueId: selected.id,
+                    }}
+                    label={t("Preview")}
+                    initiallyOpen
+                  >
+                    <Cover game={selected} />
+                  </GamePreviewSurface>
+                )}
               </div>
               <div className="button-row" style={{ marginTop: 24 }}>
                 <SiteButton
