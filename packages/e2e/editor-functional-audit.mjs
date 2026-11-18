@@ -1,10 +1,15 @@
 import { chromium, expect } from "@playwright/test"
 import fs from "node:fs"
 import path from "node:path"
+const evidenceName = process.env.TADAZZ_EDITOR_AUDIT_EVIDENCE ?? "functional"
+if (!/^[a-z0-9][a-z0-9-]{0,79}$/.test(evidenceName)) {
+  throw new Error("Invalid editor audit evidence basename")
+}
 const root = path.resolve("../.."),
   out = path.join(
     root,
-    "docs/extensions/plans/editor-hebrew-20261118/functional",
+    "docs/extensions/plans/editor-hebrew-20261118",
+    evidenceName,
   )
 fs.mkdirSync(out, { recursive: true })
 const dictionaries = Object.fromEntries(
@@ -149,13 +154,11 @@ try {
       await page.getByTestId("answer-mode-0-image").click()
       await page.getByTestId("answer-pick-image-0").click()
       const dialog = page.getByRole("dialog")
-      await dialog
-        .locator('input[type="file"]')
-        .setInputFiles({
-          name: "editor-proof.png",
-          mimeType: "image/png",
-          buffer: png,
-        })
+      await dialog.locator('input[type="file"]').setInputFiles({
+        name: "editor-proof.png",
+        mimeType: "image/png",
+        buffer: png,
+      })
       const item = dialog.getByTitle(/^editor-proof-.+\.png$/).last()
       await item.waitFor()
       await item.click()
@@ -508,13 +511,11 @@ try {
         .click()
       const dialog = page.getByRole("dialog"),
         name = "discard-proof-" + Date.now()
-      await dialog
-        .locator('input[type="file"]')
-        .setInputFiles({
-          name: name + ".png",
-          mimeType: "image/png",
-          buffer: png,
-        })
+      await dialog.locator('input[type="file"]').setInputFiles({
+        name: name + ".png",
+        mimeType: "image/png",
+        buffer: png,
+      })
       const item = dialog.getByTitle(new RegExp("^" + name + "-.+\\.png$"))
       await item.waitFor()
       await item

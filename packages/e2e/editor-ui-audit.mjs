@@ -1,8 +1,13 @@
 import { chromium, expect } from "@playwright/test"
 import fs from "node:fs"
 import path from "node:path"
+const evidenceName = process.env.TADAZZ_EDITOR_AUDIT_EVIDENCE ?? "visual"
+if (!/^[a-z0-9][a-z0-9-]{0,79}$/.test(evidenceName)) {
+  throw new Error("Invalid editor audit evidence basename")
+}
 const out = path.resolve(
-  "../../docs/extensions/plans/editor-hebrew-20261118/visual",
+  "../../docs/extensions/plans/editor-hebrew-20261118",
+  evidenceName,
 )
 fs.mkdirSync(out, { recursive: true })
 const browser = await chromium.launch({ headless: true, channel: "msedge" })
