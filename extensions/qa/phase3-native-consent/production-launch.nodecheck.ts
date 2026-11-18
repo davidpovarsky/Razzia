@@ -20,7 +20,9 @@ import { createEphemeralOAuthKeys, reserveLoopbackPort } from "./harness.ts"
 
 const isolated =
   process.platform === "linux" && process.env.TADAZZ_ISOLATED_LAUNCH_QA === "1"
-const origin = "https://launcher.example.invalid"
+// The pinned V3 widget CSP/base origin is the real production origin. Requests
+// still use only this fixture's reserved loopback port; no external host is hit.
+const origin = "https://tadazz.com"
 function fixture() {
   const parent = realpathSync(tmpdir())
   const root = realpathSync(mkdtempSync(join(parent, "tadazz-launch-qa-")))
@@ -178,6 +180,12 @@ test(
   "actual production artifact starts protected loopback APIs and retains issuer keys across restart",
   { skip: !isolated, timeout: 40000 },
   async () => {
+    assert(
+      existsSync("/app/mcp/full-show-artifact.json") &&
+        existsSync("/app/mcp/full-show.html") &&
+        existsSync("/app/web"),
+      "Pinned V3 widget and immutable public assets must be mounted read-only",
+    )
     const f = fixture()
 
     try {

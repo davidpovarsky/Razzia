@@ -1,0 +1,26 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "tadazz",
+  "version": "0.1.0",
+  "description": "Connect your Tadazz account to create, edit, preview, save, and export quiz drafts.",
+  "author": {
+    "name": "Tadazz",
+    "url": "https://tadazz.com"
+  },
+  "homepage": "https://tadazz.com",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Tadazz",
+        "shortDescription": "Create interactive quiz shows",
+        "longDescription": "Create and edit quiz drafts in your Tadazz account, preview them in the conversation, and save a selected draft after approving it in Tadazz. Preview interactions are demonstrations and do not cast live votes.",
+        "developerName": "Tadazz",
+        "capabilities": ["Interactive"],
+        "websiteURL": "https://tadazz.com",
+        "defaultPrompt": "Create a five-question quiz draft in Tadazz and show its interactive preview.",
+        "logo": "./assets/tadazz.png",
+        "composerIcon": "./assets/tadazz.png"
+      }
+    }
+  }
+}

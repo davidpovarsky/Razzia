@@ -178,14 +178,16 @@ else:
     prefix[4:4] = ["-e", "TMPDIR=" + fixture]
     cases = [native + "host-lifetime.nodecheck.ts", native + "consent-routes.nodecheck.ts", native + "native-host-e2e.nodecheck.ts"]
     if c["suite"] == "native-launch":
-        cases.append(native + "production-config.nodecheck.ts")
+        cases.extend(native + name for name in ["production-config.nodecheck.ts", "production-capabilities.nodecheck.ts", "production-artifacts.nodecheck.ts"])
     http_ok = check("native-http", 180, tsx + cases)
     check("native-types", 120, ["node", "/cleanup/node_modules/typescript/bin/tsc", "--noEmit", "-p", native + "tsconfig.json"])
     check("native-lint", 120, ["node", "--experimental-strip-types", "/cleanup/node_modules/oxlint/bin/oxlint", "-c", "oxlint.config.ts", "extensions/src/mcp-app/native-host", native])
     check("native-format", 60, ["node", "/cleanup/node_modules/prettier/bin/prettier.cjs", "--check", "extensions/src/mcp-app/native-host", native, "extensions/src/site/web/studio/Studio.tsx"])
     if http_ok and c["suite"] == "native-launch":
         prefix[4:4] = ["-e", "TADAZZ_NATIVE_HOST_DIST_DIR=" + fixture + "/native-host-build"]
-        check("native-launch-build", 90, ["node", "extensions/deployment/build-native-host.mjs"])
+        widget_ok = check("native-widget-build", 300, ["node", "extensions/src/mcp-app/widget/build-full-show.mjs"])
+        if widget_ok:
+            check("native-launch-build", 90, ["node", "extensions/deployment/build-native-host.mjs"])
     if http_ok and c["suite"] == "native-consent":
         prefix[4:4] = ["-e", "TADAZZ_SITE_ENABLED=true", "-e", "VITE_TADAZZ_OAUTH_ISSUER_PATH=/oauth", "-e", "VITE_TADAZZ_NATIVE_CONSENT_ENABLED=true", "-e", "TADAZZ_SITE_DIST_DIR=" + source + "/packages/web/dist", "-e", "TADAZZ_QA_RUN_DIR=" + fixture + "/browser", "-e", "TADAZZ_QA_OWNED_RUN_DIR=1"]
         # Consent/browser qualification does not manufacture a full-show pin or

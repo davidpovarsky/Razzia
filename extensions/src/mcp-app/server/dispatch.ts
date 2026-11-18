@@ -1,4 +1,8 @@
 import { randomUUID } from "node:crypto"
+import {
+  FULL_SHOW_META_V3,
+  fullShowFrameV3Schema,
+} from "../contracts/full-show-frame.ts"
 import type { CallToolResult } from "@modelcontextprotocol/server"
 import { canonicalJson, hashJson, utf8Bytes } from "../contracts/canonical.ts"
 import { CONTRACT_VERSION, LIMITS, jsonObject } from "../contracts/schemas.ts"
@@ -31,6 +35,7 @@ function publicDraft(record: DraftRecord) {
     summary: record.summary,
   }
 }
+
 export async function dispatch(
   name: ToolName,
   raw: unknown,
@@ -39,33 +44,58 @@ export async function dispatch(
   config: ServerConfig,
 ): Promise<CallToolResult> {
   const correlationId = randomUUID()
+
   try {
-    if (utf8Bytes(canonicalJson(raw)) > LIMITS.request)
+    if (utf8Bytes(canonicalJson(raw)) > LIMITS.request) {
       throw new ToolError("VALIDATION_FAILED")
-    if (!inputs[name].safeParse(raw).success)
+    }
+
+    if (!inputs[name].safeParse(raw).success) {
       throw new ToolError("VALIDATION_FAILED")
+    }
+
     let data: unknown
     let meta: Record<string, unknown> | undefined
+
     switch (name) {
       case "list_game_templates": {
-        if (!deps.catalog) throw unavailable()
+        if (!deps.catalog) {
+          throw unavailable()
+        }
+
         const a = inputs[name].parse(raw)
         data = await deps.catalog.listTemplates(p, a)
+
         break
       }
+
       case "list_themes": {
-        if (!deps.catalog) throw unavailable()
+        if (!deps.catalog) {
+          throw unavailable()
+        }
+
         const a = inputs[name].parse(raw)
         const listed = dataSchemas.list_themes.parse(
           await deps.catalog.listThemes(p, a),
         )
-        if (!deps.preview && listed.items.some((item) => item.previewAvailable))
+
+        if (
+          !deps.preview &&
+          listed.items.some((item) => item.previewAvailable)
+        ) {
           throw new ToolError("INTERNAL")
+        }
+
         data = listed
+
         break
       }
+
       case "create_game_draft": {
-        if (!deps.drafts || !deps.authoring) throw unavailable()
+        if (!deps.drafts || !deps.authoring) {
+          throw unavailable()
+        }
+
         const a = inputs[name].parse(raw)
         const normalized = normalizeDraft(a.authoredShowJson, deps.authoring)
         const record = checkedDraft(
@@ -86,27 +116,47 @@ export async function dispatch(
           ),
           deps,
         )
+
         if (
           record.revision !== 1 ||
           record.authoredShowJson !== normalized.authoredShowJson
-        )
+        ) {
           throw new ToolError("INTERNAL")
+        }
+
         data = publicDraft(record)
+
         break
       }
+
+      case "get_game_draft_summary": {
+        const a = inputs[name].parse(raw)
+        data = publicDraft(await readDraft(deps, p, a.draftId))
+
+        break
+      }
+
       case "get_game_draft": {
         const a = inputs[name].parse(raw)
         const record = await readDraft(deps, p, a.draftId)
-        if (utf8Bytes(record.authoredShowJson) > LIMITS.authored)
+
+        if (utf8Bytes(record.authoredShowJson) > LIMITS.authored) {
           throw new ToolError("INTERNAL")
+        }
+
         data = {
           ...publicDraft(record),
           authoredShowJson: record.authoredShowJson,
         }
+
         break
       }
+
       case "update_game_draft": {
-        if (!deps.drafts || !deps.authoring) throw unavailable()
+        if (!deps.drafts || !deps.authoring) {
+          throw unavailable()
+        }
+
         const a = inputs[name].parse(raw)
         const normalized = normalizeDraft(a.authoredShowJson, deps.authoring)
         const record = checkedDraft(
@@ -126,28 +176,117 @@ export async function dispatch(
           ),
           deps,
         )
+
         if (
           record.draftId !== a.draftId ||
           record.revision !== a.expectedRevision + 1 ||
           record.authoredShowJson !== normalized.authoredShowJson
-        )
+        ) {
           throw new ToolError("INTERNAL")
+        }
+
         data = publicDraft(record)
+
         break
       }
+
+      case "update_game_title": {
+        if (!deps.drafts || !deps.authoring) {
+          throw unavailable()
+        }
+
+        const a = inputs[name].parse(raw)
+        const original = await readDraft(deps, p, a.draftId, a.expectedRevision)
+        const normalized = normalizeDraft(
+          JSON.stringify({
+            ...JSON.parse(original.authoredShowJson),
+            title: a.title,
+          }),
+          deps.authoring,
+        )
+        const record = checkedDraft(
+          await deps.drafts.replace(
+            p,
+            a.draftId,
+            a.expectedRevision,
+            normalized,
+            {
+              idempotencyKey: a.idempotencyKey,
+              correlationId,
+              inputDigest: hashJson({
+                contractVersion: CONTRACT_VERSION,
+                authoredShowJson: normalized.authoredShowJson,
+                idempotencyKey: a.idempotencyKey,
+                draftId: a.draftId,
+                expectedRevision: a.expectedRevision,
+              }),
+            },
+          ),
+          deps,
+        )
+
+        if (
+          record.draftId !== a.draftId ||
+          record.revision !== a.expectedRevision + 1 ||
+          record.authoredShowJson !== normalized.authoredShowJson
+        ) {
+          throw new ToolError("INTERNAL")
+        }
+
+        data = publicDraft(record)
+
+        break
+      }
+
+      case "preview_show": {
+        if (!deps.fullShowPreviewV3 || !deps.fullShowUiResourceV3) {
+          throw new ToolError("PREVIEW_UNAVAILABLE")
+        }
+
+        const { contractVersion: _version, ...a } = inputs[name].parse(raw)
+        const frame = fullShowFrameV3Schema.parse(
+          await deps.fullShowPreviewV3.render(p, a),
+        )
+
+        if (
+          frame.inventory.draftId !== a.draftId ||
+          frame.inventory.revision !== a.expectedRevision ||
+          (a.chapterId && frame.inventory.selectedChapterId !== a.chapterId) ||
+          utf8Bytes(JSON.stringify(frame)) > LIMITS.preview
+        ) {
+          throw new ToolError("PREVIEW_UNAVAILABLE")
+        }
+
+        data = {
+          draftId: a.draftId,
+          revision: a.expectedRevision,
+          title: frame.inventory.title,
+          selectedChapterId: frame.inventory.selectedChapterId,
+          chapterCount: frame.inventory.chapters.length,
+          frameDigest: hashJson(frame),
+        }
+        meta = { [FULL_SHOW_META_V3]: frame }
+
+        break
+      }
+
       case "preview_game": {
         const a = inputs[name].parse(raw)
         const record = await readDraft(deps, p, a.draftId, a.expectedRevision)
+
         if (!deps.preview && deps.previewCandidateV2) {
           const candidate = previewCandidateV2Schema.parse(
             await deps.previewCandidateV2.render(p, record, a.locale),
           )
+
           if (
             candidate.draftId !== record.draftId ||
             candidate.revision !== record.revision ||
             utf8Bytes(JSON.stringify(candidate)) > LIMITS.preview
-          )
+          ) {
             throw new ToolError("PREVIEW_UNAVAILABLE")
+          }
+
           const failure = failureResult(
             name,
             new ToolError("PREVIEW_UNAVAILABLE"),
@@ -158,18 +297,28 @@ export async function dispatch(
             ...failure,
             _meta: { [PREVIEW_CANDIDATE_META_V2]: candidate },
           }
-          if (utf8Bytes(JSON.stringify(result)) > LIMITS.response)
+
+          if (utf8Bytes(JSON.stringify(result)) > LIMITS.response) {
             throw new ToolError("PREVIEW_UNAVAILABLE")
+          }
+
           return result
         }
+
         const result = await renderPreview(deps, p, record, a.locale)
         data = result.data
         meta = result.meta
+
         break
       }
+
       case "save_game": {
         const a = inputs[name].parse(raw)
-        if (!deps.storage) throw unavailable()
+
+        if (!deps.storage) {
+          throw unavailable()
+        }
+
         const saved = dataSchemas[name].parse(
           await deps.storage.createNewWithConsent(
             p,
@@ -181,18 +330,27 @@ export async function dispatch(
             },
           ),
         )
+
         if (
           saved.draftId !== a.draftId ||
           saved.revision !== a.expectedRevision
-        )
+        ) {
           throw new ToolError("INTERNAL")
+        }
+
         firstPartyUrl(saved.studioUrl, config)
         data = saved
+
         break
       }
+
       case "export_game": {
         const a = inputs[name].parse(raw)
-        if (!deps.exports) throw new ToolError("EXPORT_UNAVAILABLE")
+
+        if (!deps.exports) {
+          throw new ToolError("EXPORT_UNAVAILABLE")
+        }
+
         const exported = dataSchemas[name].parse(
           await deps.exports.createAuthorizedDownload(
             p,
@@ -205,17 +363,22 @@ export async function dispatch(
             },
           ),
         )
+
         if (
           exported.draftId !== a.draftId ||
           exported.revision !== a.expectedRevision ||
           exported.format !== a.format
-        )
+        ) {
           throw new ToolError("INTERNAL")
+        }
+
         firstPartyUrl(exported.downloadUrl, config)
         data = exported
+
         break
       }
     }
+
     const structuredContent = jsonObject.parse(
       outputs[name].parse({
         contractVersion: CONTRACT_VERSION,
@@ -224,8 +387,11 @@ export async function dispatch(
         data,
       }),
     )
-    if (utf8Bytes(JSON.stringify(structuredContent)) > LIMITS.structured)
+
+    if (utf8Bytes(JSON.stringify(structuredContent)) > LIMITS.structured) {
       throw new ToolError("INTERNAL")
+    }
+
     const result: CallToolResult = {
       content: [
         { type: "text", text: JSON.stringify({ ok: true, tool: name }) },
@@ -233,8 +399,11 @@ export async function dispatch(
       structuredContent,
       ...(meta ? { _meta: meta } : {}),
     }
-    if (utf8Bytes(JSON.stringify(result)) > LIMITS.response)
+
+    if (utf8Bytes(JSON.stringify(result)) > LIMITS.response) {
       throw new ToolError("INTERNAL")
+    }
+
     return result
   } catch (error) {
     return failureResult(name, error, config, correlationId)

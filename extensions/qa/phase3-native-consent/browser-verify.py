@@ -62,14 +62,32 @@ hash_code="import hashlib,json,pathlib,sys;root=pathlib.Path('/source');paths=js
 def hashes():
     result=subprocess.run(["docker","exec","-i",container,"python3","-c",hash_code],input=json.dumps(list(c["manifest"])),capture_output=True,text=True,check=True)
     return json.loads(result.stdout)
+def web_hashes():
+    root=source/'packages/web/dist'
+    assert root.is_dir() and not root.is_symlink(), 'Built web artifact required'
+    files={}
+    total=0
+    for path in sorted(root.rglob('*')):
+        assert not path.is_symlink(), 'No symlinks in release web artifact'
+        if path.is_dir(): continue
+        assert path.is_file(), 'No special files in release web artifact'
+        size=path.stat().st_size
+        total+=size
+        assert size <= 64*1024*1024 and total <= 512*1024*1024 and len(files)<10000
+        files[path.relative_to(root).as_posix()]={'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'bytes':size}
+    assert 'index.html' in files and files
+    return files
 try:
     before=hashes()
     assert before==c["manifest"],"Fresh browser source differs from committed input"
+    web_before=web_hashes()
     argv=["docker","exec","-w","/source","-e","TMPDIR=/tmp","-e","HOME=/tmp","-e","PLAYWRIGHT_BROWSERS_PATH=/root/.cache/ms-playwright","-e","TSX_DISABLE_CACHE=1","-e","NODE_OPTIONS=--max-old-space-size=1024","-e","TADAZZ_SITE_DIST_DIR=/source/packages/web/dist","-e","TADAZZ_QA_RUN_DIR=/evidence/browser-server","-e","TADAZZ_QA_OWNED_RUN_DIR=1",container,"nice","-n","19","taskset","-c","0","timeout","-k","5","360","node","/cleanup/extensions/node_modules/@playwright/test/cli.js","test","--config","extensions/qa/phase3-native-consent/native-consent.playwright.config.ts","--output=/evidence/test-results","--reporter=list"]
     started=time.time()
     result=subprocess.run(argv,capture_output=True,text=True,timeout=375)
     after=hashes()
+    web_after=web_hashes()
     receipt={"sha":c["sha"],"container":container,"network":"none","sourceReadOnly":True,"sourceFileCount":len(before),"allSourceHashesVerifiedBeforeAfter":before==after==c["manifest"],"sdkCacheFileCount":len(expected_deps),"sdkCacheHashesVerifiedBeforeAfter":dependency_hashes(deps)==expected_deps,"sdkCacheManifestSha256":hashlib.sha256(json.dumps(expected_deps,sort_keys=True).encode()).hexdigest(),"command":argv,"exit":result.returncode,"seconds":round(time.time()-started,3),"stdout":result.stdout,"stderr":result.stderr,"evidenceHostDirectory":str(owned),"customerMountAccessed":False,"productionChanged":False}
+    receipt.update({'sourceRun':c['sourceRun'],'webArtifacts':web_before,'webArtifactsUnchanged':web_before==web_after})
     print(json.dumps(receipt,indent=2))
 finally:
     subprocess.run(["docker","stop","--time","10",container],capture_output=True,check=True)
@@ -84,4 +102,4 @@ if result.returncode:
 receipt=json.loads(result.stdout)
 (evidence / "receipt.json").write_text(json.dumps(receipt,indent=2)+"\n",encoding="utf8",newline="\n")
 print(json.dumps({"sha":receipt["sha"],"evidence":str(evidence),"exit":receipt["exit"],"seconds":receipt["seconds"],"allSourceHashesVerifiedBeforeAfter":receipt["allSourceHashesVerifiedBeforeAfter"]},indent=2))
-raise SystemExit(0 if receipt["exit"]==0 and receipt["allSourceHashesVerifiedBeforeAfter"] and receipt["sdkCacheHashesVerifiedBeforeAfter"] else 1)
+raise SystemExit(0 if receipt["exit"]==0 and receipt["allSourceHashesVerifiedBeforeAfter"] and receipt["sdkCacheHashesVerifiedBeforeAfter"] and receipt['webArtifactsUnchanged'] else 1)

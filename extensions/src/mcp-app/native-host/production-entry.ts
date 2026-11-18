@@ -1,6 +1,8 @@
 // Explicit downstream production entry. The original server remains the OFF path.
 import { readProductionMcpConfiguration } from "./production-config.ts"
 
+declare const __TADAZZ_FULL_SHOW_MANIFEST_SHA256__: string
+
 async function start() {
   const crypto = readProductionMcpConfiguration()
 
@@ -19,11 +21,26 @@ async function start() {
   const [
     { createNativeConsentHost, listenNativeConsentHost },
     { createPrincipalRateLimiter },
+    { createProductionMcpCapabilities },
+    { readProductionFullShowArtifacts },
+    { createFullShowPreviewPortV3 },
   ] = await Promise.all([
     import("./index.ts"),
     import("../first-party/index.ts"),
+    import("./production-capabilities.ts"),
+    import("./production-artifacts.ts"),
+    import("../server/full-show-frame.ts"),
   ])
   const { origin } = new URL(crypto.config.issuer)
+  const capabilities = await createProductionMcpCapabilities({
+    clientIds: new Set(crypto.clients.map((client) => client.clientId)),
+  })
+  const preview = readProductionFullShowArtifacts({
+    artifactDirectory: "/app/mcp",
+    manifestSha256: __TADAZZ_FULL_SHOW_MANIFEST_SHA256__,
+    publicDirectory: "/app/web",
+    origin,
+  })
   const host = await createNativeConsentHost({
     enabled: true,
     configRoot: process.env.CONFIG_PATH,
@@ -33,7 +50,16 @@ async function start() {
       ...crypto,
       consentPageUrl: `${origin}/studio/oauth-consent`,
       allowedOrigins: [origin],
-      authoring: { allowedPublicAssetUrls: new Set<string>() },
+      ...capabilities,
+      fullShowPreviewV3: (drafts) =>
+        createFullShowPreviewPortV3(
+          { drafts, authoring: capabilities.authoring },
+          {
+            rendererBuildId: preview.rendererBuildId,
+            assertAssets: preview.assertAssets,
+          },
+        ),
+      fullShowUiResourceV3: preview.resource,
       rateLimit: createPrincipalRateLimiter(),
       nativeSave: { consentPageUrl: `${origin}/studio/native-save-consent` },
     },

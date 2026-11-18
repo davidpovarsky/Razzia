@@ -9,6 +9,8 @@ import { ToolError } from "../server/errors.ts"
 import type { OAuthProtocol } from "./oauth-protocol.ts"
 
 export interface FirstPartyCatalogOptions {
+  /** One real owner-approved public authored example, not a theme or QA fixture. */
+  template?: z.infer<typeof dataSchemas.list_game_templates>["items"][number]
   /** Existing account/profile language, never a model-supplied owner or locale. */
   locale(principal: VerifiedPrincipal): z.infer<typeof locale>
   /** Existing host i18next translator. D's own text resolver retains precedence. */
@@ -45,10 +47,17 @@ export function createNativeCatalog(
         ) {
           throw invalid()
         }
-        // No authoritative authored-game template port has been supplied. Never
-        // relabel native theme families or synthetic QA shows as game templates.
+        if (!options.template) {
+          throw unavailable()
+        }
 
-        throw unavailable()
+        if (page.cursor) {
+          throw invalid()
+        }
+
+        return dataSchemas.list_game_templates.parse({
+          items: [options.template],
+        })
       })
     },
     // eslint-disable-next-line require-await -- Preserve the existing asynchronous Catalog contract.

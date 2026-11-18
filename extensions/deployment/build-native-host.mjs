@@ -18,7 +18,53 @@ if (!isAbsolute(output)) {
 }
 
 await mkdir(output, { recursive: true })
+const widgetManifestPath = join(
+  root,
+  "extensions/src/mcp-app/widget/dist/full-show-artifact.json",
+)
+const widgetHtmlPath = join(
+  root,
+  "extensions/src/mcp-app/widget/dist/full-show.html",
+)
+const widgetManifestBytes = await readFile(widgetManifestPath)
+const widgetManifestSha256 = createHash("sha256")
+  .update(widgetManifestBytes)
+  .digest("hex")
+const widgetManifest = JSON.parse(widgetManifestBytes.toString("utf8"))
+
+if (
+  widgetManifest.resourceUri !== "ui://tadazz/full-show/v3.html" ||
+  createHash("sha256")
+    .update(await readFile(widgetHtmlPath))
+    .digest("hex") !== widgetManifest.sha256
+) {
+  throw Error(
+    "An exact full-show widget build is required before the host build",
+  )
+}
+
+for (const item of widgetManifest.physicalSources) {
+  if (
+    typeof item.path !== "string" ||
+    item.path.includes("\\") ||
+    item.path.split("/").some((part) => !part || part === "." || part === "..")
+  ) {
+    throw Error("Invalid widget physical source")
+  }
+
+  // oxlint-disable-next-line no-await-in-loop -- Sequential hashing bounds descriptors while verifying the immutable widget input set.
+  const current = await readFile(join(root, item.path))
+
+  if (
+    current.byteLength !== item.bytes ||
+    createHash("sha256").update(current).digest("hex") !== item.sha256
+  ) {
+    throw Error(`Widget source changed after build: ${item.path}`)
+  }
+}
 const inputs = new Set([
+  widgetManifestPath,
+  widgetHtmlPath,
   join(root, "tsconfig.json"),
   fileURLToPath(import.meta.url),
 ])
@@ -35,7 +81,13 @@ const bundle = await rolldown({
   input: join(root, "extensions/src/mcp-app/native-host/production-entry.ts"),
   platform: "node",
   tsconfig: join(root, "tsconfig.json"),
-  transform: { define: { "process.env.NODE_ENV": '"production"' } },
+  transform: {
+    define: {
+      "process.env.NODE_ENV": '"production"',
+      __TADAZZ_FULL_SHOW_MANIFEST_SHA256__:
+        JSON.stringify(widgetManifestSha256),
+    },
+  },
   plugins: [
     {
       name: "native-host-physical-input-receipt",
@@ -97,6 +149,7 @@ const receipt = {
   version: 1,
   entry: "extensions/src/mcp-app/native-host/production-entry.ts",
   bundler: "rolldown@1.2.13",
+  fullShowManifestSha256: widgetManifestSha256,
   node: process.version,
   sha256: createHash("sha256").update(code).digest("hex"),
   bytes: code.byteLength,

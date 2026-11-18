@@ -10,6 +10,7 @@ import {
   RESOURCE_MIME_TYPE,
 } from "@modelcontextprotocol/ext-apps/server"
 import { z } from "zod"
+import { FULL_SHOW_RESOURCE_V3 } from "../contracts/full-show-frame.ts"
 import { tadaShowV1Schema } from "@razzia/extensions/core"
 import { CONTRACT_VERSION, PREVIEW_RESOURCE } from "../contracts/schemas.ts"
 import {
@@ -33,8 +34,8 @@ import { guardedConnection } from "./connection.ts"
 import { failureResult } from "./results.ts"
 import { preparePreviewUiResource } from "./preview-resource.ts"
 
-/** Creates ONE independent SDK server per session/request, never a shared
- * singleton transport. No HTTP listener, route mount, env, account or disk access. */
+// Creates ONE independent SDK server per session/request, never a shared
+// singleton transport. No HTTP listener, route mount, env, account or disk access.
 export function createTadazzMcpServer(
   configInput: ServerConfig,
   dependencies: Dependencies = {},
@@ -46,24 +47,27 @@ export function createTadazzMcpServer(
     connection.run(context, handler),
   )
   connection = guardedConnection(server, deps, config)
+
   return { connect: connection.connect, close: connection.close }
 }
 
-/** Official SDK HTTP entry owns protocol-era negotiation and per-request
- * transport lifetime. The enclosing HTTP boundary authenticates before parsing;
- * this callback independently verifies live authority/scopes before dispatch.
- * Only a handler is exposed, never the underlying unguarded SDK instance. */
+// Official SDK HTTP entry owns protocol-era negotiation and per-request
+// transport lifetime. The enclosing HTTP boundary authenticates before parsing;
+// this callback independently verifies live authority/scopes before dispatch.
+// Only a handler is exposed, never the underlying unguarded SDK instance.
 export function createTadazzMcpHttpHandler(
   configInput: ServerConfig,
   dependencies: Dependencies,
 ) {
   const config = validateConfig(configInput)
   const deps = Object.freeze({ ...dependencies })
+
   return createMcpHandler(
     () =>
       registeredServer(config, deps, async (name, _context, handler) => {
         try {
           const principal = await authorize(name, undefined, deps, config)
+
           return await handler(principal)
         } catch (error) {
           return failureResult(name, error, config)
@@ -85,6 +89,9 @@ function registeredServer(
   const previewResource = deps.previewUiResource
     ? preparePreviewUiResource(deps.previewUiResource)
     : undefined
+  const fullShowResource = deps.fullShowUiResourceV3
+    ? preparePreviewUiResource(deps.fullShowUiResourceV3)
+    : undefined
   const server = new McpServer(
     { name: "tadazz", version: CONTRACT_VERSION },
     {
@@ -103,6 +110,9 @@ function registeredServer(
       ...(name === "preview_game" && previewResource
         ? { resourceUri: PREVIEW_RESOURCE }
         : {}),
+      ...(name === "preview_show" && fullShowResource
+        ? { resourceUri: FULL_SHOW_RESOURCE_V3 }
+        : {}),
       visibility,
     }
     const settings = {
@@ -112,7 +122,7 @@ function registeredServer(
       annotations: {
         readOnlyHint: !mutations.has(name),
         destructiveHint: false,
-        idempotentHint: true,
+        idempotentHint: name !== "update_game_title",
         openWorldHint: false,
       },
       _meta: {
@@ -131,9 +141,10 @@ function registeredServer(
         ),
     )
   }
+
   // No placeholder executable/UI resource is advertised without G's real static
   // artifact. Candidate data does not manufacture an artifact or its rights.
-  if (previewResource)
+  if (previewResource) {
     registerAppResource(
       server,
       "tadazz-preview",
@@ -161,6 +172,31 @@ function registeredServer(
         ],
       }),
     )
+  }
+
+  if (fullShowResource) {
+    registerAppResource(
+      server,
+      "tadazz-full-show-v3",
+      FULL_SHOW_RESOURCE_V3,
+      {
+        mimeType: RESOURCE_MIME_TYPE,
+        _meta: { ui: { csp: fullShowResource.csp } },
+      },
+      () =>
+        Promise.resolve({
+          contents: [
+            {
+              uri: FULL_SHOW_RESOURCE_V3,
+              mimeType: RESOURCE_MIME_TYPE,
+              text: fullShowResource.read(),
+              _meta: { ui: { csp: fullShowResource.csp } },
+            },
+          ],
+        }),
+    )
+  }
+
   server.registerResource(
     "tadazz-authoring-schema",
     "tadazz://authoring/v1/schema.json",
@@ -194,5 +230,6 @@ function registeredServer(
       ],
     }),
   )
+
   return server
 }

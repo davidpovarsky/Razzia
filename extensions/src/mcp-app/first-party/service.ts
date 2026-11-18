@@ -62,6 +62,10 @@ export interface ProtectedMcpServiceOptions extends OAuthCryptoOptions {
   readonly preview?: Dependencies["preview"]
   readonly previewCandidateV2?: PreviewCandidateV2Factory
   readonly previewUiResource?: Dependencies["previewUiResource"]
+  readonly fullShowPreviewV3?: (
+    drafts: DraftRepository,
+  ) => NonNullable<Dependencies["fullShowPreviewV3"]>
+  readonly fullShowUiResourceV3?: Dependencies["fullShowUiResourceV3"]
 }
 
 export interface ProtectedMcpService {
@@ -742,6 +746,7 @@ export async function createProtectedMcpService(
 
   const unscopedTracker = new RequestWorkTracker()
   const rawDrafts = oauth.draftRepository(authoring)
+  const rawFullShowPreviewV3 = options.fullShowPreviewV3?.(rawDrafts)
   const rawPreviewCandidateV2 =
     typeof options.previewCandidateV2 === "function"
       ? options.previewCandidateV2(rawDrafts)
@@ -782,6 +787,17 @@ export async function createProtectedMcpService(
             unscopedTracker,
           ),
         }
+      : {}),
+    ...(rawFullShowPreviewV3
+      ? {
+          fullShowPreviewV3: wrapTrackedObject(
+            rawFullShowPreviewV3,
+            unscopedTracker,
+          ),
+        }
+      : {}),
+    ...(options.fullShowUiResourceV3
+      ? { fullShowUiResourceV3: options.fullShowUiResourceV3 }
       : {}),
     ...(options.previewUiResource
       ? { previewUiResource: options.previewUiResource }

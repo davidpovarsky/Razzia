@@ -1,5 +1,12 @@
 // oxlint-disable init-declarations -- Node before hook initializes the actual issuer and fixture; no fallback authority.
 import assert from "node:assert/strict"
+import { createFullShowPreviewPortV3 } from "../../src/mcp-app/server/full-show-frame.ts"
+import {
+  fullShowFrameV3Schema,
+  FULL_SHOW_META_V3,
+  FULL_SHOW_RESOURCE_V3,
+} from "../../src/mcp-app/contracts/full-show-frame.ts"
+import { createFullShowConsumerV3 } from "../../src/mcp-app/client/full-show-frame.ts"
 import { tadaShowV1Schema } from "../../src/core/show-authoring-schema.ts"
 import { after, before, test } from "node:test"
 import { createFirstPartyOAuth } from "../../src/mcp-app/first-party/oauth.ts"
@@ -476,6 +483,244 @@ test("actual issuer and official MCP SDK deliver the reviewed base CSP on the HT
     await instance.close()
   }
 })
+
+const rendererBuildId = "a".repeat(64)
+const fullPort = (
+  assertAssets: () => Promise<void> = () => Promise.resolve(),
+) =>
+  createFullShowPreviewPortV3(
+    { drafts: repository, authoring: policy },
+    { rendererBuildId, assertAssets },
+  )
+test("V3 emits only the selected native chapter and reveals correct answers only in results", async () => {
+  const record = await created()
+  const runtime = fullPort()
+  const first = await runtime.render(a, selection(record))
+  assert.equal(first.inventory.chapters.length, 28)
+  for (const chapter of first.inventory.chapters) {
+    const frame = await runtime.render(a, {
+      ...selection(record),
+      chapterId: chapter.id,
+    })
+    assert.equal(fullShowFrameV3Schema.safeParse(frame).success, true)
+    assert.equal(frame.inventory.selectedChapterId, chapter.id)
+    const text = JSON.stringify(frame)
+    assert.doesNotMatch(
+      text,
+      /PRIVATE_NOTE|private-opening|private-transition|private-ending|authoredShowJson|correctAnswers|solutions|accountId|grantId|defaults/u,
+    )
+
+    if (frame.content.kind === "question") {
+      const ordinal = chapter.questionOrdinal
+      assert(ordinal !== null)
+      assert.equal(
+        frame.content.frame.question.text,
+        `FUTURE_QUESTION_${ordinal - 1}`,
+      )
+      for (let other = 0; other < 5; other += 1) {
+        if (other !== ordinal - 1) {
+          assert(!text.includes(`FUTURE_QUESTION_${other}`))
+        }
+      }
+
+      if (chapter.kind !== "results") {
+        assert.equal(frame.content.frame.results, undefined)
+      } else {
+        assert(frame.content.frame.results?.some((value) => value.correct))
+      }
+
+      if (chapter.kind === "question") {
+        assert.deepEqual(frame.content.frame.choices, [])
+      }
+    } else {
+      assert.doesNotMatch(text, /FUTURE_QUESTION/u)
+      assert.equal(frame.content.scene.kind, chapter.kind)
+    }
+  }
+})
+test("V3 rejects foreign authority and player/live context before delivering current data", async () => {
+  const record = await created()
+  let checked = 0
+  const runtime = fullPort(() => {
+    checked += 1
+
+    return Promise.resolve()
+  })
+  await assert.rejects(() => runtime.render({ ...a }, selection(record)))
+  await assert.rejects(() => runtime.render(b, selection(record)))
+  await assert.rejects(() =>
+    runtime.render(a, {
+      ...selection(record),
+      context: { ...context, role: "player" },
+    }),
+  )
+  assert.equal(checked, 0)
+})
+test("V3 rechecks actual issuer revision after asynchronous asset admission", async () => {
+  const record = await created()
+  const changed = normalizeDraft(
+    JSON.stringify({ ...authored(), title: "Changed during rights check" }),
+    policy,
+  )
+  const runtime = fullPort(async () => {
+    await repository.replace(
+      a,
+      record.draftId,
+      record.revision,
+      changed,
+      mutation(changed, record),
+    )
+  })
+  await assert.rejects(
+    () => runtime.render(a, selection(record)),
+    /REVISION_CONFLICT/u,
+  )
+})
+test("V3 denies asset callback failures and missing renderer build identity", async () => {
+  const record = await created()
+  await assert.rejects(() =>
+    fullPort(() => Promise.reject(new Error("Denied"))).render(
+      a,
+      selection(record),
+    ),
+  )
+  assert.throws(() =>
+    createFullShowPreviewPortV3(
+      { drafts: repository, authoring: policy },
+      {
+        rendererBuildId: "unreviewed",
+        assertAssets: () => Promise.resolve(),
+      },
+    ),
+  )
+})
+test("V3 strict consumer binds ticket, exact revision, context, digest, renderer and lifecycle", async () => {
+  const record = await created()
+  const frame = await fullPort().render(a, selection(record))
+  const result = {
+    content: [],
+    structuredContent: {
+      contractVersion: "0.1.0",
+      ok: true,
+      correlationId: key(),
+      data: {
+        draftId: record.draftId,
+        revision: record.revision,
+        title: frame.inventory.title,
+        selectedChapterId: frame.inventory.selectedChapterId,
+        chapterCount: frame.inventory.chapters.length,
+        frameDigest: hashJson(frame),
+      },
+    },
+    _meta: { [FULL_SHOW_META_V3]: frame },
+  }
+  const input = { ...selection(record), contractVersion: "0.1.0" }
+  const consumer = createFullShowConsumerV3(rendererBuildId)
+  const ticket = consumer.begin(input)
+  assert.deepEqual(consumer.receive(ticket, result), frame)
+  const tampered = structuredClone(result)
+  tampered._meta[FULL_SHOW_META_V3].rendererBuildId = "b".repeat(64)
+  tampered.structuredContent.data.frameDigest = hashJson(
+    tampered._meta[FULL_SHOW_META_V3],
+  )
+  assert.throws(() => consumer.receive(ticket, tampered))
+  const injection = { ...frame, authoredShowJson: record.authoredShowJson }
+  assert.equal(fullShowFrameV3Schema.safeParse(injection).success, false)
+  consumer.cancel()
+  assert.equal(consumer.receive(ticket, result), null)
+  const later = consumer.begin(input)
+  assert.equal(consumer.receive(ticket, result), null)
+  assert.deepEqual(consumer.receive(later, result), frame)
+  consumer.dispose()
+  assert.equal(consumer.receive(later, result), null)
+  assert.throws(() => consumer.begin(input))
+})
+test("official SDK delivers V3 tool frame and static resource, summary and title CAS without raw iframe source", async () => {
+  const record = await created()
+  const html =
+    "<!doctype html><html><body>V3 unit resource; not the browser artifact</body></html>"
+  const runtime = fullPort()
+  const instance = issuer.remote({
+    allowedOrigins: [],
+    dependencies: {
+      authoring: policy,
+      drafts: repository,
+      rateLimit: () => Promise.resolve(true),
+      fullShowPreviewV3: runtime,
+      fullShowUiResourceV3: {
+        html,
+        sha256: sha256Hex(html),
+        csp: { connectDomains: [], frameDomains: [], resourceDomains: [] },
+        canServe: () => true,
+      },
+    },
+  })
+  const grant = await grantFor(0, ["tadazz.drafts.read", "tadazz.drafts.write"])
+  const client = new Client({ name: "full-show-v3-local-qa", version: "1" })
+
+  try {
+    await client.connect(
+      new StreamableHTTPClientTransport(new URL(`${origin}/mcp`), {
+        authProvider: { token: () => Promise.resolve(grant.accessToken) },
+        fetch: (input, init) => {
+          const request = new Request(input, init)
+          request.headers.set("host", new URL(origin).host)
+
+          return instance.fetch(request)
+        },
+      }),
+    )
+    const raw = await client.callTool({
+      name: "preview_show",
+      arguments: { ...selection(record), contractVersion: "0.1.0" },
+    })
+    assert.notEqual(raw.isError, true)
+    assert.doesNotMatch(
+      JSON.stringify(raw),
+      /PRIVATE_NOTE|FUTURE_QUESTION|private-opening|authoredShowJson/u,
+    )
+    assert.equal(
+      (await client.readResource({ uri: FULL_SHOW_RESOURCE_V3 })).contents
+        .length,
+      1,
+    )
+    const summary = await client.callTool({
+      name: "get_game_draft_summary",
+      arguments: { contractVersion: "0.1.0", draftId: record.draftId },
+    })
+    assert.notEqual(summary.isError, true)
+    assert.doesNotMatch(
+      JSON.stringify(summary),
+      /authoredShowJson|FUTURE_QUESTION|PRIVATE_NOTE/u,
+    )
+    const changed = await client.callTool({
+      name: "update_game_title",
+      arguments: {
+        contractVersion: "0.1.0",
+        draftId: record.draftId,
+        expectedRevision: 1,
+        idempotencyKey: key(),
+        title: "Widget title changed",
+      },
+    })
+    assert.notEqual(changed.isError, true)
+    const current = await repository.get(a, record.draftId)
+    assert(current)
+    assert.equal(current.revision, 2)
+    assert.deepEqual(
+      tadaShowV1Schema.parse(JSON.parse(current.authoredShowJson)).cards,
+      tadaShowV1Schema.parse(JSON.parse(record.authoredShowJson)).cards,
+    )
+    assert.equal(
+      tadaShowV1Schema.parse(JSON.parse(current.authoredShowJson)).title,
+      "Widget title changed",
+    )
+  } finally {
+    await client.close()
+    await instance.close()
+  }
+})
+
 test("revoking the actual underlying first-party session invalidates an already prepared frame", async () => {
   const record = await created(b)
   const prepared = await port.prepare(b, selection(record))

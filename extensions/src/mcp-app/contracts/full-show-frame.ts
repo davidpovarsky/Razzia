@@ -1,0 +1,126 @@
+// V3 current-frame boundary: no authored source, private notes or future cards.
+import { z } from "zod"
+import { nativePreviewFrameV1Schema } from "../../core/show-library/native-preview-frame-schema.ts"
+import {
+  fullShowInventoryV3Schema,
+  fullShowSelectionInputV3Schema,
+} from "./full-show-selection.ts"
+import { SHOW_THEME_SLOTS } from "../../core/show-themes/selection.ts"
+import { nativePreviewVisualSettingsV2Schema } from "../../core/show-library/native-preview-renderer-v2-schema.ts"
+import { digest } from "./schemas.ts"
+
+export const FULL_SHOW_RESOURCE_V3 = "ui://tadazz/full-show/v3.html"
+
+export const FULL_SHOW_META_V3 = "tadazz/full-show-v3"
+
+export const fullShowToolInputV3Schema = fullShowSelectionInputV3Schema.extend({
+  contractVersion: z.literal("0.1.0"),
+})
+
+const publicId = z.string().regex(/^preview-scene-[a-f0-9]{64}$/u)
+const text = z.string().max(1000)
+const url = z
+  .url()
+  .max(2048)
+  .refine((value) => {
+    const parsed = new URL(value)
+
+    return (
+      parsed.protocol === "https:" &&
+      !parsed.username &&
+      !parsed.password &&
+      !parsed.search &&
+      !parsed.hash
+    )
+  })
+
+export const fullShowSceneV3Schema = z.strictObject({
+  id: publicId,
+  kind: z.enum([
+    "opening",
+    "closing",
+    "transition",
+    "animation",
+    "media",
+    "leaderboard",
+    "interimResults",
+    "answerRecap",
+    "countdown",
+  ]),
+  title: text.optional(),
+  subtitle: text.optional(),
+  description: text.optional(),
+  durationMs: z.number().int().min(500).max(300000).optional(),
+  durationSeconds: z.number().int().min(3).max(120).optional(),
+  advance: z.enum(["auto", "manual", "onMediaEnd"]),
+  preset: z.string().max(64).optional(),
+  mediaUrl: url.optional(),
+  mediaType: z.enum(["image", "video", "audio"]).optional(),
+  mediaFit: z.enum(["contain", "cover"]).optional(),
+  stageLayout: z.enum(["card", "cinema"]).optional(),
+  logoPosition: z.enum(["top", "center", "bottom", "hidden"]).optional(),
+  textOverlay: z.boolean().optional(),
+  endBehavior: z.enum(["holdFrame", "advanceNext", "fadeToTitle"]).optional(),
+  mode: z.enum(["mostSelected", "correctAnswer"]).optional(),
+  maxItemsPerPage: z.number().int().min(1).max(8).optional(),
+  showCounts: z.boolean().optional(),
+  showPercentages: z.boolean().optional(),
+})
+
+export const fullShowThemeV3Schema = z.strictObject({
+  id: z.enum(["tadazz-classic", "razzia-original"]),
+  version: z.literal("1.0.0"),
+  definitionSha256: digest,
+  rendererId: z.enum(["tadazz-classic-stage", "razzia-native-stage"]),
+  slots: z.record(
+    z.enum(SHOW_THEME_SLOTS),
+    z.strictObject({
+      variantId: z
+        .string()
+        .min(1)
+        .max(160)
+        .regex(/^[a-zA-Z0-9._-]+$/u),
+    }),
+  ),
+})
+
+const content = z.discriminatedUnion("kind", [
+  z.strictObject({
+    kind: z.literal("question"),
+    frame: nativePreviewFrameV1Schema,
+    visualSettings: nativePreviewVisualSettingsV2Schema,
+  }),
+  z.strictObject({ kind: z.literal("scene"), scene: fullShowSceneV3Schema }),
+])
+
+export const fullShowFrameV3Schema = z
+  .strictObject({
+    frameVersion: z.literal(3),
+    inventory: fullShowInventoryV3Schema,
+    rendererBuildId: digest,
+    theme: fullShowThemeV3Schema,
+    content,
+  })
+  .superRefine((value, ctx) => {
+    const chapter = value.inventory.chapters.find(
+      (c) => c.id === value.inventory.selectedChapterId,
+    )
+    const item = value.content
+
+    if (
+      !chapter ||
+      (item.kind === "question"
+        ? item.frame.phase !== chapter.kind ||
+          item.frame.revision !== value.inventory.revision ||
+          item.frame.role !== value.inventory.context.role ||
+          item.frame.question.ordinal !== chapter.questionOrdinal
+        : item.scene.kind !== chapter.kind) ||
+      value.inventory.context.role === "player"
+    ) {
+      ctx.addIssue({ code: "custom", message: "full-show:frame-association" })
+    }
+  })
+
+export type FullShowFrameV3 = z.infer<typeof fullShowFrameV3Schema>
+
+export type FullShowToolInputV3 = z.infer<typeof fullShowToolInputV3Schema>

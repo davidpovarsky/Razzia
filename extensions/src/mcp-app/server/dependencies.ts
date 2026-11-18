@@ -8,6 +8,7 @@ import type {
 import type { ToolName } from "../contracts/tools.ts"
 import type { PreviewIdentityEnvelope } from "../contracts/canonical.ts"
 import type { CandidatePreviewPortV2 } from "./preview-candidate-v2.ts"
+import type { FullShowPreviewPortV3 } from "./full-show-frame.ts"
 import type { PreviewUiResource } from "./preview-resource.ts"
 
 export interface VerifiedPrincipal {
@@ -22,26 +23,31 @@ export interface VerifiedPrincipal {
   active: true
   accountsEnabled: true
 }
+
 export interface NormalizedDraft {
   authoredShowJson: string
   summary: DraftSummary
   locale?: string
 }
+
 export interface DraftRecord extends NormalizedDraft {
   draftId: string
   revision: number
 }
+
 export interface MutationIdentity {
   idempotencyKey: string
   inputDigest: string
   correlationId: string
 }
+
 export interface DraftSelection {
   draftId: string
   expectedRevision: number
 }
-/** Implementations MUST use explicit account ownership and atomic CAS/key/outcome/audit.
- * There is intentionally no default filesystem/global/session adapter. */
+
+// Implementations MUST use explicit account ownership and atomic CAS/key/outcome/audit.
+// There is intentionally no default filesystem/global/session adapter.
 export interface DraftRepository {
   create(
     principal: VerifiedPrincipal,
@@ -60,10 +66,12 @@ export interface DraftRepository {
     mutation: MutationIdentity,
   ): Promise<DraftRecord>
 }
+
 export interface AuthoringPolicy {
   trustedDefaults?: unknown
   allowedPublicAssetUrls: ReadonlySet<string>
 }
+
 export interface Catalog {
   listTemplates(
     principal: VerifiedPrincipal,
@@ -74,15 +82,16 @@ export interface Catalog {
     page: { limit?: number; cursor?: string },
   ): Promise<unknown>
 }
+
 export interface Dependencies {
-  /** Trusted adapter owns cryptographic token verification, grant/revocation and
-   * account lookup on EVERY request. Never populate from unverified tool arguments. */
+  // Trusted adapter owns cryptographic token verification, grant/revocation and
+  // account lookup on EVERY request. Never populate from unverified tool arguments.
   authorize?: (extra: MessageExtraInfo | undefined) => Promise<unknown>
-  /** Trusted issuer may bind its unforgeable raw capability to the validated
-   * copy. Synchronous, after issuer/audience/expiry/scope checks; never a wire field. */
+  // Trusted issuer may bind its unforgeable raw capability to the validated
+  // copy. Synchronous, after issuer/audience/expiry/scope checks; never a wire field.
   principalAccepted?: (raw: unknown, accepted: VerifiedPrincipal) => void
-  /** Required ingress budget, including unauthenticated/malformed tool calls.
-   * Key only from trusted transport context; no model arguments are supplied. */
+  // Required ingress budget, including unauthenticated/malformed tool calls.
+  // Key only from trusted transport context; no model arguments are supplied.
   prevalidationLimit?: (extra: MessageExtraInfo | undefined) => Promise<boolean>
   rateLimit?: (
     principal: VerifiedPrincipal,
@@ -95,12 +104,14 @@ export interface Dependencies {
   previewCandidateV2?: CandidatePreviewPortV2
   /** G's reviewed static widget artifact + explicit host CSP/permission. */
   previewUiResource?: PreviewUiResource
-  /** M2-specific projection adapter; future implementation imports accepted SB
-   * exports. No SB schema/type/projection engine is duplicated here. */
+  fullShowPreviewV3?: FullShowPreviewPortV3
+  fullShowUiResourceV3?: PreviewUiResource
+  // M2-specific projection adapter; future implementation imports accepted SB
+  // exports. No SB schema/type/projection engine is duplicated here.
   preview?: {
     registryVersion: string
-    /** Accepted SB implementation validates canonical content/identity/compiled
-     * pin/assets against its immutable manifest. Not a model-supplied assertion. */
+    // Accepted SB implementation validates canonical content/identity/compiled
+    // pin/assets against its immutable manifest. Not a model-supplied assertion.
     assertAcceptedIdentity(envelope: PreviewIdentityEnvelope): void
     render(
       principal: VerifiedPrincipal,
@@ -112,11 +123,11 @@ export interface Dependencies {
       identity: PreviewIdentityEnvelope
     }>
   }
-  /** Authoritative atomic replay-or-new decision: recheck owner/grant/tool/key/
-   * digest and return a prior authorized outcome BEFORE current-draft lookup.
-   * NEW operation must read/validate canonical content+summary, exact revision and
-   * consent in the same durable decision, reserve one collision-safe target and
-   * reconcile crashes. Missing real adapter remains unavailable. */
+  // Authoritative atomic replay-or-new decision: recheck owner/grant/tool/key/
+  // digest and return a prior authorized outcome BEFORE current-draft lookup.
+  // NEW operation must read/validate canonical content+summary, exact revision and
+  // consent in the same durable decision, reserve one collision-safe target and
+  // reconcile crashes. Missing real adapter remains unavailable.
   storage?: {
     createNewWithConsent(
       principal: VerifiedPrincipal,
@@ -125,8 +136,8 @@ export interface Dependencies {
     ): Promise<unknown>
   }
   exports?: {
-    /** Same authoritative replay-or-new rules; new export validates exact draft
-     * revision/content/rights. Ordinary export adds no consent requirement. */
+    // Same authoritative replay-or-new rules; new export validates exact draft
+    // revision/content/rights. Ordinary export adds no consent requirement.
     createAuthorizedDownload(
       principal: VerifiedPrincipal,
       selection: DraftSelection,
@@ -135,10 +146,12 @@ export interface Dependencies {
     ): Promise<unknown>
   }
 }
+
 export interface ServerConfig {
   issuer: string
   resource: string
   resourceMetadataUrl: string
   firstPartyOrigins?: readonly string[]
 }
+
 export type SchemaValue<T extends z.ZodType> = z.infer<T>

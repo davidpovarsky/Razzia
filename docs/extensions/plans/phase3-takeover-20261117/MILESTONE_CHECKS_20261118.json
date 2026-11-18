@@ -1,0 +1,115 @@
+{
+    "version":  1,
+    "productionDeployed":  false,
+    "fullShowIssuerChecks":  {
+                                 "passed":  18,
+                                 "failed":  0
+                             },
+    "sourceBase":  "e1482c4219da52bd722e1823190355fa45abf78a",
+    "fullShowWindows":  {
+                            "failureCount":  0,
+                            "manifestSha256":  null,
+                            "sourceHashesUnchanged":  true,
+                            "checks":  [
+                                           {
+                                               "name":  "chromium / tadazz-classic native opening, five phases, transitions and closing",
+                                               "status":  "PASS",
+                                               "ms":  14918
+                                           },
+                                           {
+                                               "name":  "chromium / tadazz-classic title edit CAS and summary refresh through AppBridge",
+                                               "status":  "PASS",
+                                               "ms":  627
+                                           },
+                                           {
+                                               "name":  "chromium / tadazz-classic tamper, cancellation and tool-context teardown",
+                                               "status":  "PASS",
+                                               "ms":  1175
+                                           },
+                                           {
+                                               "name":  "chromium / tadazz-classic CSP, native media resources and browser errors",
+                                               "status":  "PASS",
+                                               "ms":  2
+                                           },
+                                           {
+                                               "name":  "chromium / razzia-original native opening, five phases, transitions and closing",
+                                               "status":  "PASS",
+                                               "ms":  8381
+                                           },
+                                           {
+                                               "name":  "chromium / razzia-original title edit CAS and summary refresh through AppBridge",
+                                               "status":  "PASS",
+                                               "ms":  964
+                                           },
+                                           {
+                                               "name":  "chromium / razzia-original tamper, cancellation and tool-context teardown",
+                                               "status":  "PASS",
+                                               "ms":  1353
+                                           },
+                                           {
+                                               "name":  "chromium / razzia-original CSP, native media resources and browser errors",
+                                               "status":  "PASS",
+                                               "ms":  3
+                                           },
+                                           {
+                                               "name":  "webkit / tadazz-classic native opening, five phases, transitions and closing",
+                                               "status":  "PASS",
+                                               "ms":  23683
+                                           },
+                                           {
+                                               "name":  "webkit / tadazz-classic title edit CAS and summary refresh through AppBridge",
+                                               "status":  "PASS",
+                                               "ms":  1568
+                                           },
+                                           {
+                                               "name":  "webkit / tadazz-classic tamper, cancellation and tool-context teardown",
+                                               "status":  "PASS",
+                                               "ms":  2064
+                                           },
+                                           {
+                                               "name":  "webkit / tadazz-classic CSP, native media resources and browser errors",
+                                               "status":  "PASS",
+                                               "ms":  5
+                                           },
+                                           {
+                                               "name":  "webkit / razzia-original native opening, five phases, transitions and closing",
+                                               "status":  "PASS",
+                                               "ms":  18059
+                                           },
+                                           {
+                                               "name":  "webkit / razzia-original title edit CAS and summary refresh through AppBridge",
+                                               "status":  "PASS",
+                                               "ms":  1279
+                                           },
+                                           {
+                                               "name":  "webkit / razzia-original tamper, cancellation and tool-context teardown",
+                                               "status":  "PASS",
+                                               "ms":  2111
+                                           },
+                                           {
+                                               "name":  "webkit / razzia-original CSP, native media resources and browser errors",
+                                               "status":  "PASS",
+                                               "ms":  4
+                                           }
+                                       ],
+                            "artifactSha256":  "7fe4264d1ce2e57997f4d6d6c5dd049f86800de6a55bf04c94d228b09e6fe6fa",
+                            "rendererBuildId":  "89d09feec599b08a137d71c72e3d8f0d7772d845fee818a35cc740c77e06c9f6"
+                        },
+    "productionAdaptersWindows":  {
+                                      "passed":  11,
+                                      "skipReason":  "Symlink case requires Linux",
+                                      "types":  "PASS",
+                                      "failed":  0,
+                                      "lint":  "PASS",
+                                      "skipped":  1,
+                                      "format":  "PASS"
+                                  },
+    "remaining":  [
+                      "immutable Linux build and browser verification",
+                      "consistent backup and cloned-candidate boot",
+                      "live deployment",
+                      "private ChatGPT OAuth connection",
+                      "supported Claude connection",
+                      "semantic editing/media/audio/undo acceptance"
+                  ]
+}
