@@ -1,0 +1,38 @@
+{
+  "run": "before",
+  "sourceSha256": {
+    "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/CardAudioConfig.tsx": "f52c1d671139e0ac1033f518f0e1251013e3e0cca1630f00ce0a34bca11de6bc",
+    "packages/web/src/features/quizz/components/studio/theme-audio-options.tsx": "cee0de9487cf2603d31c53a68c3b41b82942c1292ac76308c375c177d265f722"
+  },
+  "boundary": "Actual CardAudioConfig/ThemeAudioOptions with actual editor providers and native controls; controlled Audio events prove ownership, not audible decoding.",
+  "cases": [
+    {
+      "name": "stale-owner",
+      "mode": "legacy",
+      "status": "FAIL",
+      "checks": [
+        "No mount autoplay"
+      ],
+      "error": "Error: expect(locator).toHaveCount(expected) failed\n\nLocator:  getByTestId('card-audio-preview-answersMusic').locator('svg.lucide-square')\nExpected: 1\nReceived: 0\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" getByTestId('card-audio-preview-answersMusic').locator('svg.lucide-square') with timeout 5000ms\n  - waiting for getByTestId('card-audio-preview-answersMusic').locator('svg.lucide-square')\n    14 × locator resolved to 0 elements\n       - unexpected value \"0\"\n"
+    },
+    {
+      "name": "card-source-change",
+      "mode": "legacy",
+      "status": "FAIL",
+      "checks": [],
+      "error": "Error: expect(locator).toHaveCount(expected) failed\n\nLocator:  getByTestId('card-audio-preview-showQuestion').locator('svg.lucide-play')\nExpected: 1\nReceived: 0\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" getByTestId('card-audio-preview-showQuestion').locator('svg.lucide-play') with timeout 5000ms\n  - waiting for getByTestId('card-audio-preview-showQuestion').locator('svg.lucide-play')\n    14 × locator resolved to 0 elements\n       - unexpected value \"0\"\n"
+    },
+    {
+      "name": "source-owner",
+      "mode": "theme",
+      "status": "FAIL",
+      "checks": [
+        "No theme mount autoplay",
+        "Source change clears visible playback"
+      ],
+      "error": "Error: expect(locator).toBeVisible() failed\n\nLocator: getByRole('button', { name: 'עצירה', exact: true })\nExpected: visible\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n  - Expect \"toBeVisible\" getByRole('button', { name: 'עצירה', exact: true }) with timeout 5000ms\n  - waiting for getByRole('button', { name: 'עצירה', exact: true })\n"
+    }
+  ],
+  "pageErrors": [],
+  "status": "FAIL"
+}

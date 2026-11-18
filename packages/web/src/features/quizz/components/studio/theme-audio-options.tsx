@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import {
   type ResolvedShowTheme,
@@ -41,25 +41,29 @@ export function ThemeAudioOptions({
     value?.mediaUrl ??
     theme.definition.assets.find((asset) => asset.id === variant.assetId)?.url
   const muted = value?.muted === true || (variant.silent && !value?.mediaUrl)
-  const stop = () => {
+  const releasePreview = useCallback(() => {
     generation.current += 1
-    audio.current?.pause()
+    const player = audio.current
+    audio.current = null
+
+    if (player) {
+      player.onended = null
+      player.onerror = null
+      player.pause()
+      player.currentTime = 0
+      player.removeAttribute("src")
+    }
+  }, [])
+  const stop = useCallback(() => {
+    releasePreview()
     setPreviewing(false)
-  }
-  useEffect(
-    () => () => {
-      generation.current += 1
-      audio.current?.pause()
-      audio.current?.removeAttribute("src")
-    },
-    [],
-  )
+  }, [releasePreview])
+  useEffect(() => releasePreview, [releasePreview])
   useEffect(() => {
-    generation.current += 1
-    audio.current?.pause()
+    releasePreview()
     // oxlint-disable-next-line react/set-state-in-effect -- Reflect stopping the external preview when its source changes.
     setPreviewing(false)
-  }, [url, muted])
+  }, [url, muted, releasePreview])
   const labels = spec.variants.map((item) => {
     let label = t(`extensions:themes.variants.${item.id.split(".").at(-1)}`)
 
@@ -116,25 +120,41 @@ export function ThemeAudioOptions({
                 onClick={() => {
                   stop()
                   setError(false)
-                  const player = new Audio(url)
-                  player.volume = value?.volume ?? variant.volume
-                  player.onended = () => setPreviewing(false)
-                  audio.current = player
-                  const { current } = generation
-                  void player
-                    .play()
-                    .then(() => {
-                      if (current === generation.current) {
-                        setPreviewing(true)
-                      } else {
-                        player.pause()
+
+                  try {
+                    const player = new Audio(url)
+                    player.volume = value?.volume ?? variant.volume
+                    audio.current = player
+                    const { current } = generation
+                    const ownsPreview = () =>
+                      current === generation.current && audio.current === player
+                    const finishPreview = (failed = false) => {
+                      if (!ownsPreview()) {
+                        return
                       }
-                    })
-                    .catch(() => {
-                      if (current === generation.current) {
+
+                      stop()
+
+                      if (failed) {
                         setError(true)
                       }
-                    })
+                    }
+                    player.onended = () => finishPreview()
+                    player.onerror = () => finishPreview(true)
+                    void player
+                      .play()
+                      .then(() => {
+                        if (ownsPreview()) {
+                          setPreviewing(true)
+                        } else {
+                          player.pause()
+                        }
+                      })
+                      .catch(() => finishPreview(true))
+                  } catch {
+                    stop()
+                    setError(true)
+                  }
                 }}
               >
                 {t("extensions:themes.preview")}
