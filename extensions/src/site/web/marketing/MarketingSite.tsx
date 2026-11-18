@@ -4,6 +4,7 @@ import { asset, catalogue, Cover, GameCard, type Game } from "./Catalogue"
 import { corrections } from "../../themes/corrections"
 import { sitePlatformStyle } from "../../themes/platform"
 import { Pricing } from "./Pricing"
+import { GreatGuessOffDemo } from "./GreatGuessOffDemo"
 import { SiteButton } from "../shared/SiteButton"
 import { useEffect, useState, useMemo } from "react"
 import { createPublicPreviewProvider } from "../../components/game-preview/public-provider"
@@ -35,7 +36,8 @@ function selectedCatalogueGame(search: string): Game {
 
   return (
     catalogue.find((game) => game.id === params.get("game")) ??
-    catalogue[params.get("view") === "demo" ? 1 : 0]
+    catalogue.find((game) => game.id === "guessoff") ??
+    catalogue[0]
   )
 }
 
@@ -104,7 +106,9 @@ export function MarketingSite() {
     setSelected(game)
     go("product", game.id)
   }
-  const openDemo = (game: Game = catalogue[1]) => {
+  const openDemo = (
+    game: Game = catalogue.find((g) => g.id === "guessoff") ?? catalogue[0],
+  ) => {
     setSelected(game)
     go("demo", game.id)
   }
@@ -487,28 +491,50 @@ export function MarketingSite() {
                 {t("TRY A ROUND · INTERACTIVE SAMPLE")}
               </div>
               <h1 className="h1">{t(selected.title)}</h1>
-              <p className="prose">{demonstration("demo")}</p>
-              <div
-                className="demo-stage marketing-native-demo"
-                data-testid="marketing-native-demo"
-                style={{ padding: 0, overflow: "hidden", position: "relative" }}
-              >
-                <style>
-                  {
-                    ".marketing-native-demo{aspect-ratio:16/9}.marketing-native-demo>.game-preview-surface,.marketing-native-demo .game-preview-poster,.marketing-native-demo .game-cover{width:100%;height:100%}@media(max-width:640px){.marketing-native-demo{aspect-ratio:3/4}}"
-                  }
-                </style>
-                <GamePreviewSurface
-                  selection={{
-                    kind: "published-demo",
-                    catalogueId: selected.id,
+              <p className="prose">
+                {selected.id === "guessoff"
+                  ? "Play all five questions and experience the vote reveals, leaderboard and winner celebration. This free demo uses sample results, not real audience votes."
+                  : demonstration("demo")}
+              </p>
+              {selected.id === "guessoff" ? (
+                <div
+                  className="demo-stage"
+                  data-testid="marketing-guessoff-demo"
+                  style={{
+                    padding: 0,
+                    overflow: "visible",
+                    position: "relative",
                   }}
-                  label={t("Preview")}
-                  initiallyOpen
                 >
-                  <Cover game={selected} />
-                </GamePreviewSurface>
-              </div>
+                  <GreatGuessOffDemo />
+                </div>
+              ) : (
+                <div
+                  className="demo-stage marketing-native-demo"
+                  data-testid="marketing-native-demo"
+                  style={{
+                    padding: 0,
+                    overflow: "hidden",
+                    position: "relative",
+                  }}
+                >
+                  <style>
+                    {
+                      ".marketing-native-demo{aspect-ratio:16/9}.marketing-native-demo>.game-preview-surface,.marketing-native-demo .game-preview-poster,.marketing-native-demo .game-cover{width:100%;height:100%}@media(max-width:640px){.marketing-native-demo{aspect-ratio:3/4}}"
+                    }
+                  </style>
+                  <GamePreviewSurface
+                    selection={{
+                      kind: "published-demo",
+                      catalogueId: selected.id,
+                    }}
+                    label={t("Preview")}
+                    initiallyOpen
+                  >
+                    <Cover game={selected} />
+                  </GamePreviewSurface>
+                </div>
+              )}
               <div className="button-row" style={{ marginTop: 24 }}>
                 <SiteButton
                   className="btn btn-outline"
