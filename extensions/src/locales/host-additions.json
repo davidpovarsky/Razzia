@@ -94,5 +94,17 @@
         "duplicateQuestion": "Nhân bản câu hỏi"
       }
     }
+  },
+  "he": {
+    "errors": {
+      "game": {
+        "ambiguousTargetGame": "נמצאו כמה משחקים פעילים. ציינו gameId או inviteCode"
+      }
+    },
+    "quizz": {
+      "question": {
+        "duplicateQuestion": "שכפול שאלה"
+      }
+    }
   }
 }

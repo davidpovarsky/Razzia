@@ -1,0 +1,40 @@
+{
+  "gameId": "01a1ef3d-539e-7065-9f10-41ad358154df",
+  "gameSocketConnections": 1,
+  "gameSocketConnectionsBeforePresentation": 1,
+  "cleanupMs": 8252,
+  "cleanupPages": [
+    [
+      "http://127.0.0.1:3190/party/01a1ef3d-539e-7065-9f10-41ad358154df"
+    ],
+    [
+      "http://127.0.0.1:3190/display/01a1ef3d-539e-7065-9f10-41ad358154df"
+    ]
+  ],
+  "browserErrors": [],
+  "viewports": [
+    [
+      1920,
+      1080
+    ],
+    [
+      1366,
+      768
+    ],
+    [
+      1280,
+      720
+    ],
+    [
+      1024,
+      768
+    ]
+  ],
+  "playerViewport": {
+    "width": 390,
+    "height": 844
+  },
+  "actualFullscreen": true,
+  "submittedBrowserVote": true,
+  "shortcutContract": "Owner-requested November8 matching double press within500ms"
+}

@@ -5,17 +5,21 @@ import { useTranslation } from "react-i18next"
 
 export function QuestionCardActions({
   canDelete,
+  isActive,
   onDelete,
   onDuplicate,
 }: {
   canDelete: boolean
+  isActive: boolean
   onDelete: () => void
   onDuplicate?: () => void
 }) {
   const { t } = useTranslation()
 
   return (
-    <div className="absolute top-1.5 right-1.5 hidden items-center gap-1 group-focus-within:flex group-hover:flex focus-within:flex">
+    <div
+      className={`absolute end-1.5 top-1.5 flex items-center gap-1 group-focus-within:flex group-hover:flex focus-within:flex ${isActive ? "" : "lg:hidden"}`}
+    >
       {onDuplicate && (
         <NativeButton
           size="sm"

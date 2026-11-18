@@ -1,0 +1,248 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118[39m
+
+ [32m✓[39m [30m[43m common [49m[39m packages/common/src/validators/game.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[43m common [49m[39m packages/common/src/validators/quizz.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32m✓[39m [30m[43m common [49m[39m packages/common/src/questions/estimation.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/game.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 132[2mms[22m[39m
+ [31m❯[39m [30m[43m socket [49m[39m packages/socket/src/api/pilot-phone.test.ts [2m([22m[2m4 tests[22m[2m | [22m[31m3 failed[39m[2m)[22m[32m 145[2mms[22m[39m
+   [31m❯[39m POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance) [2m(4)[22m
+[31m     [31m×[31m A01: accepts answerIndex 4 for 5-answer survey and tallies 5th vote correctly[39m[32m 56[2mms[22m[39m
+[31m     [31m×[31m A02: bounds validation (2..5), rejects invalid indices, unsupported types, and enforces phone limits[39m[32m 26[2mms[22m[39m
+     [32m✓[39m enforces TADA_PILOT_SECRET when configured[32m 25[2mms[22m[39m
+[31m     [31m×[31m allows telephone participant to revote after Previous Screen reopens question in new epoch[39m[32m 24[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/handlers/game.test.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 642[2mms[22m[39m
+ [31m❯[39m [30m[43m socket [49m[39m packages/socket/src/api/extensions/theme-routes.test.ts [2m([22m[2m1 test[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 561[2mms[22m[39m
+[31m   [31m×[31m enforces verified HTTP auth, tenant-private upload, independent review, signed persistence and private media[39m[32m 153[2mms[22m[39m
+ [2m[90m↓[39m[22m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts [2m([22m[2m11 tests[22m[2m | [22m[33m11 skipped[39m[2m)[22m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/api/api.test.ts [2m([22m[2m23 tests[22m[2m)[22m[33m 518[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/downstream-game.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 39[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/api/accounts-isolation.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 970[2mms[22m[39m
+   [32m✓[39m Tadazz HTTP tenant separation [2m(5)[22m
+     [33m[2m✓[22m[39m rejects legacy password and unverified account, then verifies both new accounts[33m 869[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/creating-worlds-repair.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 41[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/scoring/score-ledger.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/api/billing.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 288[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/config.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 220[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/account-auth.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 965[2mms[22m[39m
+   [32m✓[39m Tadazz account ownership and authentication [2m(4)[22m
+     [33m[2m✓[22m[39m creates distinct verified accounts, never grants access to unverified users[33m 625[2mms[22m[39m
+     [33m[2m✓[22m[39m reset with code invalidates previous sessions and changes password[33m 307[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/scoring/round.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/api/extensions/demo-catalog.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/api/extensions/join-policy.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/auth.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/utils/utils.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/scoring/scoring.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/media.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 40[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/registry.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/cooldown-timer.pause.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/pilot-target.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/pilot-dial-target.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/theme-vote-completion.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [31m❯[39m [30m[46m web [49m[39m packages/web/src/features/game/phase-a-flow.browser.test.ts [2m([22m[2m10 tests[22m[2m | [22m[33m10 skipped[39m[2m)[22m[32m 24[2mms[22m[39m
+   [31m❯[39m PROTOCOL / SPEC: Synthetic DOM Event & Command Flow Simulation (Non-E2E / DOM Harness) [2m(10)[22m
+     [2m[90m↓[39m[22m 1. [Synthetic DOM Protocol] Manager End Timer command emission on click
+     [2m[90m↓[39m[22m 2. [Synthetic DOM Protocol] Immediate player personal result on SHOW_RESULT
+     [2m[90m↓[39m[22m 3. [Synthetic DOM Protocol] Authoritative percentage reveal on manager responses screen
+     [2m[90m↓[39m[22m 4. [Synthetic DOM Protocol] Previous / History data contract with question details
+     [2m[90m↓[39m[22m 5. [Synthetic DOM Protocol] Replay checkpoint confirmation and socket command emission
+     [2m[90m↓[39m[22m 6. [Synthetic DOM Protocol] Interlude auto and manual transition handling
+     [2m[90m↓[39m[22m 7. [Synthetic DOM Protocol] Keyboard shortcut focus isolation & modal protection
+     [2m[90m↓[39m[22m 8. [P1 DOM Protocol] Previous Screen button emission and Alt+ArrowLeft shortcut
+     [2m[90m↓[39m[22m 9. [P1 DOM Protocol] Big 20s countdown timer on Host & Audience Display with urgency threshold
+     [2m[90m↓[39m[22m 10. [P1 DOM Protocol] Question Entrance Animation wrapper applies preset & epoch cleanly
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/features/game/components/game-controls.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/locales/locales.test.ts [2m([22m[2m28 tests[22m[2m)[22m[32m 219[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/features/game/components/p1-timer-entrance.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/lib/session.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 48[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/features/game/components/host-presentation-controller.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/features/questions/questions.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/locales/ranks.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/language-direction.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/features/game/components/tadazz-show/cooldown-sync.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [31m❯[39m [30m[46m web [49m[39m packages/web/src/features/quizz/extensions-ui.test.ts [2m([22m[2m47 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 134[2mms[22m[39m
+   [32m✓[39m MEDIA01 - MEDIA03: Media, Accessibility, and Reveal [2m(3)[22m
+     [32m✓[39m MEDIA01: image answer preserves underlying accessible text and validates alt[32m 6[2mms[22m[39m
+     [32m✓[39m MEDIA02: rejects invalid image answer (unsafe javascript: URL or empty alt)[32m 1[2mms[22m[39m
+     [32m✓[39m MEDIA03: reveal synchronization by server epoch/seq: no premature reveal and no replay on reconnect[32m 1[2mms[22m[39m
+   [32m✓[39m AUDIO01 - AUDIO02: Audio Cues, Mute, Fallback, and Ducking [2m(2)[22m
+     [32m✓[39m AUDIO01: custom cue mute/volume=0 results in disabled audio; default fallback when media absent[32m 1[2mms[22m[39m
+     [32m✓[39m AUDIO02: ducks background answers music when question media has active audio/video[32m 0[2mms[22m[39m
+   [32m✓[39m INT01 - INT02: Interlude Position, Skip Once, and Resume [2m(3)[22m
+     [32m✓[39m INT01: manager skip operates exactly once (idempotent)[32m 1[2mms[22m[39m
+     [32m✓[39m INT02: reconnect mid-interlude resumes from server startedAt rather than resetting[32m 0[2mms[22m[39m
+     [32m✓[39m INT01: auto advance triggers when duration elapsed[32m 0[2mms[22m[39m
+   [32m✓[39m Save / Revision 409 & Question IDs Lifecycle [2m(4)[22m
+     [32m✓[39m handles 409 conflict when saving with outdated expectedRevision[32m 8[2mms[22m[39m
+     [32m✓[39m reordering questions keeps attachments pinned to question UUID[32m 1[2mms[22m[39m
+     [32m✓[39m duplicating and removing questions leaves zero orphans[32m 2[2mms[22m[39m
+     [32m✓[39m A1: stable UUID mapping across async sidecar load preserves attachments without orphans[32m 2[2mms[22m[39m
+   [32m✓[39m Feature-Off Regression & Team Scoring [2m(1)[22m
+     [32m✓[39m team score projection is pure and sums individual scores correctly[32m 1[2mms[22m[39m
+   [32m✓[39m A1: Authoritative Reveal Snapshot & Multi-Choice Denominator Integration [2m(3)[22m
+     [32m✓[39m first results render uses authoritative snapshot synchronously from store / context[32m 0[2mms[22m[39m
+     [32m✓[39m multi-choice percentages use unique respondents denominator and may exceed 100%[32m 0[2mms[22m[39m
+     [32m✓[39m immediate personal player result is unhindered by manager reveal delay[32m 0[2mms[22m[39m
+   [32m✓[39m DEFECT-MAYA-W2A-01: Stale Reveal State, Epoch Ordering, and Question Isolation Regressions [2m(6)[22m
+     [32m✓[39m 1. New question never displays previous question's percentages[32m 17[2mms[22m[39m
+     [32m✓[39m 2. Late event from a previous epoch is rejected[32m 0[2mms[22m[39m
+     [32m✓[39m 3. Reconnect receives the correct server snapshot[32m 0[2mms[22m[39m
+     [32m✓[39m 4. Replay starts the new reveal state correctly[32m 0[2mms[22m[39m
+     [32m✓[39m 5. Multi-choice percentages use unique respondents[32m 0[2mms[22m[39m
+     [32m✓[39m 6. Immediate personal player scoring remains unaffected[32m 0[2mms[22m[39m
+   [32m✓[39m MAYA WAVE 2: Conformance Acceptance & Regression Suite [2m(8)[22m
+     [32m✓[39m Media Library: selecting answer image writes to extras.perQuestion[qId] and preserves question media[32m 0[2mms[22m[39m
+     [32m✓[39m Media Library: selecting interlude writes to extras.perQuestion[qId].interlude and preserves question media[32m 0[2mms[22m[39m
+     [32m✓[39m Media Library: type validation rejects mismatched type[32m 0[2mms[22m[39m
+     [32m✓[39m Editor Preview: uses canonical upstream answer colors, never bespoke red/blue/green/yellow[32m 1[2mms[22m[39m
+     [32m✓[39m SHOW_QUESTION media parity: only image media rendered; audio/video suppressed until answers[32m 0[2mms[22m[39m
+     [32m✓[39m Feature-Off Parity: unenhanced quizzes preserve vanilla manager controls[32m 10[2mms[22m[39m
+     [32m✓[39m Conflict Modal: renders accessible dialog semantics and handles cancel[32m 6[2mms[22m[39m
+     [32m✓[39m Conflict Modal: renders nothing when closed[32m 0[2mms[22m[39m
+   [32m✓[39m P0.1: New quiz with extras first-save data-loss path [2m(1)[22m
+     [32m✓[39m fails if first save of a new quiz with extras falls back to vanilla create instead of composite create[32m 1[2mms[22m[39m
+   [32m✓[39m P0.2: Question identity stability, target isolation, and safe picker failure [2m(3)[22m
+     [32m✓[39m derives alt from captured target question, not the currently navigated question[32m 1[2mms[22m[39m
+     [32m✓[39m fails safely if target question was deleted while picker was open[32m 0[2mms[22m[39m
+     [32m✓[39m supports switching questions, safely handles deleted target question, and reopens picker for remaining questions[32m 0[2mms[22m[39m
+   [32m✓[39m P0.3: Media picker contract and expectedType validation [2m(2)[22m
+     [32m✓[39m rejects mismatched media type (video for image answer) and accepts matching type[32m 0[2mms[22m[39m
+     [32m✓[39m preserves original question.media untouched when answer visual or interlude is configured[32m 0[2mms[22m[39m
+   [32m✓[39m P0.4: Media library filter synchronization and delete integrity [2m(2)[22m
+     [32m✓[39m synchronizes filter when opening sequentially for image target then video target[32m 0[2mms[22m[39m
+     [32m✓[39m reconciles extras sidecar when media asset is deleted, clearing broken references[32m 1[2mms[22m[39m
+   [31m❯[39m P1.2: Radix ConflictDialog semantics and conscious overwrite confirmation [2m(4)[22m
+     [32m✓[39m renders accessible dialog semantics via Radix and presents title and revisions[32m 25[2mms[22m[39m
+[31m     [31m×[31m renders localized fallback when revision is missing or unversioned[39m[32m 23[2mms[22m[39m
+     [32m✓[39m renders nothing when closed[32m 3[2mms[22m[39m
+     [32m✓[39m handles two conflicting sessions, presents 409 with currentRevision, recomputes baseDigest on Force Overwrite, and reloads[32m 1[2mms[22m[39m
+   [32m✓[39m P1.3: Audio preview honors chosen settings (runtime resolver semantics) [2m(3)[22m
+     [32m✓[39m uses custom URL only when source='media'; falls back to DEFAULT_CUE_URLS when source='default'[32m 1[2mms[22m[39m
+     [32m✓[39m marks cue disabled when enabled=false or volume=0[32m 0[2mms[22m[39m
+     [32m✓[39m honors loop setting for background and answers music[32m 0[2mms[22m[39m
+   [32m✓[39m P0.3 / Controlled Component Wiring: Real Media Picker Interaction Flow [2m(1)[22m
+     [32m✓[39m simulates Browse -> select uploaded media -> updates extras with display, alt, and preserves base question media[32m 2[2mms[22m[39m
+   [32m✓[39m P0.9: QuizzEditorProvider real component lifecycle and question identity stability [2m(1)[22m
+     [32m✓[39m initializes deterministic question IDs and maintains attachments without orphans across editor operations[32m 8[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m34 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (39)[39m
+[2m      Tests [22m [1m[31m5 failed[39m[22m[2m | [22m[1m[32m368 passed[39m[22m[2m | [22m[33m21 skipped[39m[90m (394)[39m
+[2m   Start at [22m 14:51:06
+[2m   Duration [22m 35.50s[2m (import 66%, transform 24%, tests 9%, setup 1%, worker 1%)[22m
+
+[2m  Transform [22m [30m[46m web [49m[39m [33mtransforming modules took 7.52s[39m[2m · 29% of tracked time, re-done on every run[22m
+[2m            [22m [2mpersist transforms across runs with [22m[33mfsModuleCache: true[39m
+[2m            [22m [2mlearn more: https://vitest.dev/guide/improving-performance#caching-between-reruns[22m
+
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Suites 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m [30m[46m web [49m[39m packages/web/src/features/game/phase-a-flow.browser.test.ts[2m > [22mPROTOCOL / SPEC: Synthetic DOM Event & Command Flow Simulation (Non-E2E / DOM Harness)
+[31m[1mError[22m: browserType.launch: Executable doesn't exist at C:\Users\DAVID\AppData\Local\ms-playwright\chromium_headless_shell-1248\chrome-headless-shell-win64\chrome-headless-shell.exe
+╔════════════════════════════════════════════════════════════╗
+║ Looks like Playwright was just installed or updated.       ║
+║ Please run the following command to download new browsers: ║
+║                                                            ║
+║     pnpm exec playwright install                           ║
+║                                                            ║
+║ <3 Playwright Team                                         ║
+╚════════════════════════════════════════════════════════════╝[39m
+[36m [2m❯[22m packages/web/src/features/game/phase-a-flow.browser.test.ts:[2m61:30[22m[39m
+    [90m 59|[39m
+    [90m 60|[39m   beforeAll(async () => {
+    [90m 61|[39m     browser = await chromium.launch({ headless: true })
+    [90m   |[39m                              [31m^[39m
+    [90m 62|[39m     managerPage = await browser.newPage()
+    [90m 63|[39m     playerPage = await browser.newPage()
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯[22m[39m
+
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 5 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m [30m[43m socket [49m[39m packages/socket/src/api/pilot-phone.test.ts[2m > [22mPOST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)[2m > [22mA01: accepts answerIndex 4 for 5-answer survey and tallies 5th vote correctly
+[31m[1mAssertionError[22m: expected 401 to be 200 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 200[39m
+[31m+ 401[39m
+
+[36m [2m❯[22m packages/socket/src/api/pilot-phone.test.ts:[2m112:28[22m[39m
+    [90m110|[39m       },
+    [90m111|[39m     })
+    [90m112|[39m     expect(joinRes.status).toBe(StatusCodes.OK)
+    [90m   |[39m                            [31m^[39m
+    [90m113|[39m     const joinData = await json<{
+    [90m114|[39m       ok: boolean
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m [30m[43m socket [49m[39m packages/socket/src/api/pilot-phone.test.ts[2m > [22mPOST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)[2m > [22mA02: bounds validation (2..5), rejects invalid indices, unsupported types, and enforces phone limits
+[31m[1mAssertionError[22m: expected undefined to be false // Object.is equality[39m
+
+[32m- Expected:[39m
+false
+
+[31m+ Received:[39m
+undefined
+
+[36m [2m❯[22m packages/socket/src/api/pilot-phone.test.ts:[2m270:30[22m[39m
+    [90m268|[39m       reason: string
+    [90m269|[39m     }>(outOfBounds)
+    [90m270|[39m     expect(oobData.accepted).toBe(false)
+    [90m   |[39m                              [31m^[39m
+    [90m271|[39m     expect(oobData.reason).toBe("invalid_answer_index")
+    [90m272|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m [30m[43m socket [49m[39m packages/socket/src/api/pilot-phone.test.ts[2m > [22mPOST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)[2m > [22mallows telephone participant to revote after Previous Screen reopens question in new epoch
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m packages/socket/src/api/pilot-phone.test.ts:[2m550:59[22m[39m
+    [90m548|[39m     void game.start(manager)
+    [90m549|[39m     await vi.advanceTimersByTimeAsync(FIRST_QUESTION_DELAY_MS + 3000)
+    [90m550|[39m     expect(game.roundManager.isCurrentlyAcceptingAnswers).toBe(true)
+    [90m   |[39m                                                           [31m^[39m
+    [90m551|[39m     const initialEpoch = game.getCurrentQuestionPstnSupport().epoch
+    [90m552|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m [30m[43m socket [49m[39m packages/socket/src/api/extensions/theme-routes.test.ts[2m > [22menforces verified HTTP auth, tenant-private upload, independent review, signed persistence and private media
+[31m[1mError[22m: HTTP POST http://127.0.0.1:62881/api/themes/workspaces/720630a2-e1f4-4b78-ba92-6421f607b13d/drafts failed: Error: read ECONNRESET[39m
+[36m [2m❯[22m httpFetch packages/socket/src/api/extensions/theme-routes.test.ts:[2m133:11[22m[39m
+    [90m131|[39m   } catch (error) {
+    [90m132|[39m     const { cause } = error as Error & { cause?: Error }
+    [90m133|[39m     throw new Error(
+    [90m   |[39m           [31m^[39m
+    [90m134|[39m       `HTTP ${init?.method ?? "GET"} ${input instanceof Request ? inpu…
+    [90m135|[39m     )
+[90m [2m❯[22m packages/socket/src/api/extensions/theme-routes.test.ts:[2m177:7[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/6]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m [30m[46m web [49m[39m packages/web/src/features/quizz/extensions-ui.test.ts[2m > [22mP1.2: Radix ConflictDialog semantics and conscious overwrite confirmation[2m > [22mrenders localized fallback when revision is missing or unversioned
+[31m[1mAssertionError[22m: expected '<div data-state="open" class="data-[s…' to contain 'Unversioned'[39m
+
+Expected: [32m"Unversioned"[39m
+Received: [31m"<div data-state="open" class="data-[state=open]:animate-fade fixed inset-0 z-50 bg-black/60 backdrop-blur-sm" style="pointer-events:auto"></div><div role="dialog" id="radix-_R_0_" aria-describedby="conflict-dialog-desc" data-state="open" class="bg-background border-border data-[state=open]:animate-fade fixed top-1/2 left-1/2 z-50 flex max-h-[85vh] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 flex-col rounded-2xl border p-6 shadow-2xl" data-testid="conflict-modal" tabindex="-1"><div class="flex items-center justify-between border-b border-neutral-200 pb-4 dark:border-neutral-800"><div class="flex items-center gap-3"><div class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-amber-500/10 text-amber-500"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-triangle-alert lucide-alert-triangle size-6" aria-hidden="true"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg></div><div><h2 id="radix-_R_0H1_" class="text-foreground text-xl font-bold" data-testid="conflict-title">התנגשות גרסאות — HTTP 409</h2><p id="conflict-dialog-desc" class="text-muted-foreground text-sm">מנהל אחר שמר שינויים בחידון הזה. שמירה כעת תדרוס את העבודה שלו.</p></div></div><button type="button" aria-label="סגירה" class="text-muted-foreground hover:bg-muted hover:text-foreground rounded-lg p-1 transition-colors"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x size-5" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button></div><div class="my-5 rounded-xl border border-neutral-200 bg-neutral-50 p-4 text-sm dark:border-neutral-700 dark:bg-neutral-800/60"><div class="flex justify-between py-1"><span class="text-muted-foreground">הגרסה שלכם</span><span class="font-mono font-bold">ללא גרסה</span></div><div class="flex justify-between border-t border-neutral-200 py-1 dark:border-neutral-700"><span class="text-muted-foreground">הגרסה בשרת</span><span class="font-mono font-bold text-amber-600 dark:text-amber-400">לא ידועה — חדשה יותר</span></div></div><div class="flex flex-col gap-2.5 sm:flex-row sm:justify-end"><button class="rounded-lg hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 bg-accent text-accent-foreground px-4 py-2.5 text-sm font-semibold" type="button" data-testid="conflict-cancel-button"><div class="flex items-center justify-center gap-2">ביטול</div></button><button class="rounded-lg hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 bg-primary hover:bg-primary/90 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-bold text-white shadow-sm" type="button" data-testid="conflict-reload-button"><div class="flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-refresh-cw size-4" aria-hidden="true"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M8 16H3v5"></path></svg>טעינת הגרסה מהשרת</div></button><button class="rounded-lg hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 flex items-center justify-center gap-2 border border-red-300 bg-red-50 px-4 py-2.5 text-sm font-bold text-red-700 hover:bg-red-100 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300" type="button" data-testid="conflict-overwrite-button"><div class="flex items-center justify-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-save size-4" aria-hidden="true"><path d="M15.2 3a2 2 0 0 1 1.4.6l3.8 3.8a2 2 0 0 1 .6 1.4V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"></path><path d="M17 21v-7a1 1 0 0 0-1-1H8a1 1 0 0 0-1 1v7"></path><path d="M7 3v4a1 1 0 0 0 1 1h7"></path></svg>דריסת השינויים</div></button></div></div>"[39m
+
+[36m [2m❯[22m packages/web/src/features/quizz/extensions-ui.test.ts:[2m1465:18[22m[39m
+    [90m1463|[39m     )
+    [90m1464|[39m
+    [90m1465|[39m     expect(html).toContain("Unversioned")
+    [90m   |[39m                  [31m^[39m
+    [90m1466|[39m     expect(html).toContain("Unknown (Higher)")
+    [90m1467|[39m   })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/6]⎯[22m[39m

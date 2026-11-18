@@ -12,7 +12,17 @@ export const LIMITS = Object.freeze({
 })
 export const opaqueId = z.string().regex(/^[A-Za-z0-9_-]{22,64}$/u)
 export const revision = z.number().int().min(1).max(2_147_483_647)
-export const locale = z.enum(["en", "fr", "de", "es", "it", "ja", "tr", "vi"])
+export const locale = z.enum([
+  "en",
+  "fr",
+  "de",
+  "es",
+  "it",
+  "ja",
+  "tr",
+  "vi",
+  "he",
+])
 export const digest = z.string().regex(/^[a-f0-9]{64}$/u)
 const text = (max: number) => z.string().min(1).max(max)
 export const authoredJson = z.string().min(2).max(LIMITS.authored)

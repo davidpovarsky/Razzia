@@ -127,7 +127,8 @@
     "answerVisualDesc": "Cấu hình hình ảnh và nhãn trợ năng cho từng lựa chọn câu trả lời.",
     "revealDesc": "Tạo hiệu ứng hé lộ hình ảnh câu hỏi trong khi hiển thị câu hỏi.",
     "triggerMode": "Kích hoạt",
-    "audience": "Đối tượng xem"
+    "audience": "Đối tượng xem",
+    "optionLabel": "Lựa chọn {{index}}"
   },
   "interludes": {
     "interludeTitle": "Màn hình chuyển tiếp",
@@ -242,7 +243,12 @@
     "correct": "Chính xác",
     "incorrect": "Không chính xác",
     "answered": "đã trả lời",
-    "answeredRatio": "{{responders}} / {{eligible}} đã trả lời"
+    "answeredRatio": "{{responders}} / {{eligible}} đã trả lời",
+    "leader": "Dẫn đầu",
+    "coLeader": "Đồng dẫn đầu",
+    "votes_one": "{{count}} phiếu",
+    "votes_other": "{{count}} phiếu",
+    "votes_two": "{{count}} phiếu"
   },
   "editor": {
     "toggle": "Tiện ích mở rộng bài kiểm tra",
@@ -252,7 +258,13 @@
     "choiceNum": "Lựa chọn {{num}}",
     "seconds": "giây",
     "effect": "Hiệu ứng",
-    "duration": "Thời lượng"
+    "duration": "Thời lượng",
+    "answerTypeChangeTitle": "Đổi chế độ trả lời?",
+    "answerTypeChangeDescription": "Chuyển giữa lựa chọn và ước lượng bằng số sẽ thay thế câu trả lời cùng cài đặt của thẻ này.",
+    "confirmAnswerTypeChange": "Đổi chế độ",
+    "unsavedExitTitle": "Thoát mà không lưu?",
+    "unsavedExitDescription": "Các thay đổi về câu hỏi, cảnh và cài đặt chương trình chưa được lưu.",
+    "discardAndExit": "Thoát mà không lưu"
   },
   "preview": {
     "badge": "Xem trước trình chỉnh sửa",
@@ -318,7 +330,31 @@
     "statusNotJoined": "Chưa tham gia",
     "answeredYes": "Đã trả lời",
     "answeredNo": "Đang chờ",
-    "noPhone": "—"
+    "noPhone": "—",
+    "noSearchResults": "Không có người tham gia nào phù hợp với tìm kiếm.",
+    "errors": {
+      "corruptCsvUnclosedQuote": "Tệp CSV có dấu ngoặc kép chưa đóng. Hãy kiểm tra tệp và thử lại.",
+      "corruptXlsxFile": "Tệp Excel bị hỏng hoặc không đọc được.",
+      "xlsxTooLarge": "Tệp Excel sau khi giải nén vượt quá giới hạn 25 MB.",
+      "unsupportedXlsxCompression": "Tệp Excel này dùng định dạng nén không được hỗ trợ.",
+      "fileTooLarge": "Tệp vượt quá giới hạn 5 MB.",
+      "corruptXlsxMissingSheet": "Tệp Excel không có trang tính nào đọc được.",
+      "emptyImportFile": "Tệp không có dòng dữ liệu người tham gia.",
+      "invalidImportHeaders": "Tệp phải có các cột tên và số điện thoại.",
+      "tooManyImportRows": "Mỗi lần chỉ nhập tối đa 2.000 người tham gia.",
+      "formulaNotAllowed": "Không được dùng công thức bảng tính.",
+      "missingParticipantName": "Nhập tên người tham gia.",
+      "participantNameTooLong": "Tên người tham gia không được dài quá 40 ký tự.",
+      "missingPhoneNumber": "Nhập số điện thoại.",
+      "scientificNotationPhone": "Số điện thoại đang ở dạng ký hiệu khoa học. Hãy định dạng cột thành văn bản.",
+      "invalidPhoneNumber": "Nhập số điện thoại đầy đủ và hợp lệ, ví dụ +972501234567 hoặc 050-123-4567.",
+      "duplicatePhoneInImport": "Số điện thoại này xuất hiện nhiều lần trong tệp.",
+      "duplicatePhoneInRoster": "Số điện thoại này đã có trong danh sách người tham gia.",
+      "unsupportedFileFormat": "Chỉ hỗ trợ tệp Excel (.xlsx) và CSV (.csv).",
+      "corruptImportFile": "Không thể đọc tệp. Hãy kiểm tra định dạng và thử lại.",
+      "duplicateParticipantPhone": "Số điện thoại {{phone}} đã được gán cho {{name}}.",
+      "importReadFailed": "Không thể đọc tệp nhập dữ liệu."
+    }
   },
   "timeline": {
     "quiz": "Câu đố",
@@ -339,7 +375,10 @@
     "groupResults": "Kết quả",
     "deleteConfirmTitle": "Chuyển câu hỏi thành cảnh?",
     "deleteConfirmDesc": "Chuyển đổi câu hỏi này sẽ thay thế nội dung câu hỏi bằng cảnh đã chọn.",
-    "cannotDeleteLastQuestion": "Buổi biểu diễn phải có ít nhất một câu hỏi hoặc khảo sát."
+    "cannotDeleteLastQuestion": "Buổi biểu diễn phải có ít nhất một câu hỏi hoặc khảo sát.",
+    "duplicateCard": "Nhân bản thẻ",
+    "deleteCard": "Xóa thẻ cảnh",
+    "deleteCardConfirm": "Xóa thẻ cảnh này khỏi dòng thời gian?"
   },
   "studio": {
     "tabs": {
@@ -479,7 +518,7 @@
       "recapModeLabel": "Chế độ nổi bật",
       "recapModeMostSelected": "Đáp án được chọn nhiều nhất (bình chọn phổ biến)",
       "recapModeCorrectAnswer": "Đáp án đúng chính thức (cho câu đố)",
-      "recapMaxItemsPerPage": "Số câu hỏi mỗi trang (1–8)",
+      "recapMaxItemsPerPage": "Số câu hỏi mỗi trang (1–{{max}})",
       "recapShowCounts": "Hiển thị số lượt chọn",
       "recapShowPercentages": "Hiển thị phần trăm",
       "recapBadgeMostSelected": "Chọn nhiều nhất",
@@ -544,8 +583,22 @@
         "warnOpaqueBg": "Tệp Lottie có vẻ chứa lớp nền đặc toàn khung hình và có thể che khuất video.",
         "warnStartAfterScene": "Thời gian bắt đầu lớp phủ vượt quá thời lượng cảnh đã cấu hình.",
         "warnVideoBaseWithoutVideo": "Lớp phủ dùng đồng hồ video nhưng cảnh không có video chính; tự động chuyển sang đồng hồ cảnh.",
-        "warnLoopOnMediaEnd": "Video lặp lại kết hợp chuyển cảnh 'Khi hết media' sẽ không tự kết thúc; chuyển sang thời lượng cảnh."
-      }
+        "warnLoopOnMediaEnd": "Video lặp lại kết hợp chuyển cảnh 'Khi hết media' sẽ không tự kết thúc; chuyển sang thời lượng cảnh.",
+        "limitReached": "Đã đạt giới hạn {{max}} lớp hoạt ảnh."
+      },
+      "welcomeTitle": "Chào mừng đến với chương trình",
+      "mediaError": "Không thể tải tệp đa phương tiện",
+      "cardNameLabel": "Tên thẻ",
+      "cardNameHint": "Được dùng trong dòng thời gian. Mẫu của chủ đề này xác định tiêu đề trên sân khấu.",
+      "lottieInvalidFile": "Chọn một tệp JSON Lottie hợp lệ.",
+      "lottieUploaded": "Đã tải ảnh động lên."
+    },
+    "accessibility": {
+      "dragInstructions": "Nhấn Phím cách để nhấc thẻ, các phím mũi tên để di chuyển, Phím cách hoặc Enter để thả và Escape để hủy.",
+      "dragStart": "Đã nhấc thẻ {{position}}.",
+      "dragOver": "Đã chuyển thẻ đến vị trí {{position}}.",
+      "dragEnd": "Đã thả thẻ tại vị trí {{position}}.",
+      "dragCancel": "Đã hủy việc sắp xếp lại."
     }
   },
   "showImport": {
@@ -737,7 +790,9 @@
       "storyUnfolds": "CÂU CHUYỆN ĐANG MỞ RA...",
       "storyNow": "VÀ BÂY GIỜ...",
       "storyTitle": "CÂU CHUYỆN",
-      "storyRound": "VÒNG"
+      "storyRound": "VÒNG",
+      "questionLabel": "CÂU HỎI",
+      "choiceLabel": "Lựa chọn"
     },
     "seating": {
       "call": "GỌI ĐỂ THAM GIA",
@@ -848,5 +903,74 @@
       "z-wipe": "Chuyển cảnh"
     },
     "installationPreview": "Bản xem trước chủ đề riêng tư để xem xét và phê duyệt."
+  },
+  "editorPreview": {
+    "title": "Xem trước trực tiếp",
+    "description": "Cập nhật khi bạn chỉnh sửa. Không cần lưu hoặc bắt đầu trò chơi.",
+    "question": "Câu hỏi",
+    "answers": "Câu trả lời",
+    "results": "Kết quả",
+    "aspectRatio": "Tỷ lệ khung hình xem trước",
+    "showImage": "Hiện hình ảnh",
+    "resetImage": "Đặt lại hình ảnh",
+    "replay": "Phát lại hoạt ảnh",
+    "emptyQuestion": "Câu hỏi của bạn sẽ xuất hiện ở đây",
+    "emptyAnswer": "Câu trả lời {{number}}",
+    "noResponses": "Chỉ xem trước — chưa thu thập câu trả lời nào.",
+    "hide": "Ẩn xem trước",
+    "show": "Hiện xem trước",
+    "draftIncomplete": "Bản xem trước hiển thị bản nháp ngay cả khi một số trường chưa hoàn tất.",
+    "stageView": "Xem trước sân khấu",
+    "editLayers": "Chỉnh sửa lớp",
+    "lottieUnavailable": "Không thể xem trước Lottie. Hãy kiểm tra hoạt ảnh đã chọn."
+  },
+  "fullShow": {
+    "roleMain": "Nhân vật chính",
+    "roleSecond": "Nhân vật thứ hai",
+    "roleEra": "Thời đại",
+    "roleCrisis": "Khủng hoảng",
+    "roleEnding": "Kết thúc",
+    "awaitingVote": "Đang chờ bình chọn",
+    "directoryTitle": "Tìm người đại diện bàn của bạn",
+    "phoneVoting": "Bình chọn qua điện thoại",
+    "numberPending": "Số điện thoại sẽ được bổ sung",
+    "tables": "Các bàn",
+    "namePending": "Tên sẽ được bổ sung",
+    "tableStatus": "Bàn {{table}}: {{name}}, {{status}}",
+    "connected": "Đã kết nối",
+    "waiting": "Đang chờ",
+    "phoneTitle": "Chỉ cần gọi. Rồi chọn.",
+    "keypadVoting": "Bình chọn bằng bàn phím điện thoại",
+    "phoneEyebrow": "Không cần ứng dụng. Không cần điện thoại thông minh.",
+    "phoneSubtitle": "Người đại diện bàn bình chọn bằng phím bấm của điện thoại thông thường.",
+    "phoneReady": "TADAZZ! đã sẵn sàng",
+    "dialIn": "Gọi ngay",
+    "stepDialTitle": "Gọi số điện thoại của sự kiện",
+    "stepDialDescription": "Người dẫn chương trình sẽ hiển thị hoặc đọc số điện thoại.",
+    "stepListenTitle": "Lắng nghe câu hỏi",
+    "stepListenDescription": "Thảo luận lựa chọn với mọi người cùng bàn.",
+    "stepPressTitle": "Nhấn 1, 2, 3, 4 hoặc 5",
+    "stepPressDescription": "Mỗi bàn có một phiếu, dùng phím bấm điện thoại.",
+    "readinessTitle": "Các bàn đang sáng đèn",
+    "liveConnections": "Kết nối trực tiếp",
+    "readinessEyebrow": "Cả hội trường đang kết nối",
+    "readinessSubtitle": "Một đèn sáng lên cho mỗi đại diện bàn đã kết nối.",
+    "table": "Bàn",
+    "connectedTables": "Các bàn đã kết nối",
+    "previewData": "Dữ liệu xem trước — không trực tiếp",
+    "progressTitle": "Thế giới của bạn đang thành hình",
+    "piecesCollected": "Đã thu thập {{count}} trong {{total}} mảnh câu chuyện",
+    "progressSubtitle": "Mỗi hình ảnh được chọn trở thành một phần của câu chuyện.",
+    "piecesReady": "Các mảnh câu chuyện đã sẵn sàng",
+    "tieTitle": "Khán giả chia làm hai phe",
+    "equalVotes": "Số phiếu bằng nhau",
+    "votes": "{{count}} phiếu",
+    "tieInstruction": "Người dẫn chương trình chọn hình ảnh sẽ xuất hiện trong câu chuyện.",
+    "companyArtwork": "Kiến tạo thế giới",
+    "openingArtwork": "Hình giới thiệu màn khai mạc",
+    "openingTitle": "Câu chuyện bắt đầu từ bạn",
+    "openingSubtitle": "Trải nghiệm trực tiếp do khán giả tạo nên",
+    "firstStory": "Câu chuyện đầu tiên",
+    "newWorld": "Một thế giới hoàn toàn mới"
   }
 }

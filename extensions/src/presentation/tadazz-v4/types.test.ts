@@ -36,7 +36,7 @@ describe("TADAZZ v4 extracted presentation kit", () => {
       "countdown",
       "vote-locked",
     ])
-    expect(TADAZZ_V4_LABELS.storyBegin).toBe("LET THE STORY BEGINâ€¦")
+    expect(TADAZZ_V4_LABELS.storyBegin).toBe("LET THE STORY BEGIN…")
     expect(TADAZZ_V4_LABELS.leaderboard).toBe("LEADERBOARD")
     expect(TADAZZ_V4_LABELS.teamLeaderboard).toBe("TEAM LEADERBOARD")
   })

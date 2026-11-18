@@ -217,6 +217,7 @@ const LegacyCardAudioConfig = ({
                 key={m}
                 type="button"
                 data-testid={`card-audio-mode-${slotId}-${m}`}
+                aria-pressed={mode === m}
                 onClick={() => {
                   stopPreview()
 
@@ -264,7 +265,7 @@ const LegacyCardAudioConfig = ({
                 type="button"
                 data-testid={`card-audio-choose-${slotId}`}
                 onClick={() => setPickingSlot(slotId)}
-                className="bg-accent text-accent-foreground flex min-w-0 flex-1 items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-left text-xs font-semibold"
+                className="bg-accent text-accent-foreground flex min-w-0 flex-1 items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-start text-xs font-semibold"
               >
                 <Music className="text-primary size-3.5 shrink-0" />
                 <span className="truncate">

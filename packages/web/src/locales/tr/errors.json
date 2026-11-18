@@ -75,5 +75,8 @@
     "notFound": "Medya bulunamadı",
     "tooLarge": "Dosya çok büyük",
     "uploadFailed": "Dosya yüklenemedi"
+  },
+  "server": {
+    "internal": "Sunucu bir hatayla karşılaştı, lütfen tekrar deneyin"
   }
 }

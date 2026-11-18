@@ -14,7 +14,8 @@
     "it": "Italiano - Italiano",
     "ja": "日本語 - Japonés",
     "tr": "Türkçe - Turco",
-    "vi": "Tiếng Việt - Vietnamita"
+    "vi": "Tiếng Việt - Vietnamita",
+    "he": "עברית"
   },
   "loading": "Cargando...",
   "next": "Siguiente",
@@ -24,5 +25,6 @@
   "submit": "Enviar",
   "close": "Cerrar",
   "previous": "Anterior",
-  "changeLanguage": "Cambiar idioma"
+  "changeLanguage": "Cambiar idioma",
+  "untitledQuiz": "Cuestionario sin título"
 }

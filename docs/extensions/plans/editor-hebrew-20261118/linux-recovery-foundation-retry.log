@@ -1,0 +1,32 @@
+{
+  "sha": "8f965fe8e63a3989a41483d78856a45b43d0a530",
+  "evidence": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-hebrew-20261118\\docs\\extensions\\plans\\phase3-takeover-20261117\\tadazz-codex-8f965fe8e63a-b3861e54-retry-bbad21bd",
+  "sourceFilesVerified": 1786,
+  "checks": [
+    {
+      "label": "ext4-case5",
+      "exit": 0,
+      "seconds": 3.115
+    },
+    {
+      "label": "ext4-full8",
+      "exit": 0,
+      "seconds": 66.895
+    },
+    {
+      "label": "recovery-types",
+      "exit": 0,
+      "seconds": 2.58
+    },
+    {
+      "label": "recovery-lint",
+      "exit": 0,
+      "seconds": 4.251
+    },
+    {
+      "label": "recovery-format",
+      "exit": 0,
+      "seconds": 2.034
+    }
+  ]
+}

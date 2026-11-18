@@ -15,6 +15,7 @@ import {
 import { ShowThemeSettings } from "./show-theme-settings"
 import AlertDialog from "@razzia/web/components/AlertDialog"
 import Button from "@razzia/web/components/Button"
+import ToggleGroup from "@razzia/web/components/ToggleGroup"
 import Card from "@razzia/web/components/Card"
 import MediaLibrary from "@razzia/web/features/quizz/components/QuestionEditor/MediaLibrary"
 import {
@@ -244,7 +245,9 @@ export const StudioSettingsPage = () => {
                 "New question cards added to the timeline will automatically use this mode.",
               )}
             </ConfigField.Description>
-            <StudioSelect
+            <ToggleGroup
+              aria-label={t("extensions:studio.settings.newQuestionMode")}
+              className="h-auto [&>button]:min-h-10 [&>button]:flex-1 [&>button]:justify-center [&>button]:text-center [&>button]:whitespace-normal"
               value={defaults.newQuestionMode}
               onChange={(val: string) =>
                 updateDefaults({ newQuestionMode: val as "quiz" | "survey" })
@@ -264,7 +267,7 @@ export const StudioSettingsPage = () => {
               </p>
               <p className="text-muted-foreground text-xs">
                 {t("extensions:studio.settings.bulkDescription", {
-                  mode: defaults.newQuestionMode,
+                  mode: t(`extensions:timeline.${defaults.newQuestionMode}`),
                   defaultValue: `Bulk converts all questions in this show to ${defaults.newQuestionMode}.`,
                 })}
               </p>
@@ -275,7 +278,7 @@ export const StudioSettingsPage = () => {
                 "Convert all existing question cards to this mode?",
               )}
               description={t("extensions:studio.settings.bulkConfirmDesc", {
-                mode: defaults.newQuestionMode,
+                mode: t(`extensions:timeline.${defaults.newQuestionMode}`),
                 defaultValue: `This will set all existing questions to ${defaults.newQuestionMode} mode.`,
               })}
               confirmLabel={t(
@@ -343,7 +346,9 @@ export const StudioSettingsPage = () => {
                 "Default advance trigger when transitioning across timeline scenes.",
               )}
             </ConfigField.Description>
-            <StudioSelect
+            <ToggleGroup
+              aria-label={t("extensions:studio.settings.advanceMode")}
+              className="h-auto [&>button]:min-h-10 [&>button]:flex-1 [&>button]:justify-center [&>button]:text-center [&>button]:whitespace-normal"
               value={defaults.advanceMode}
               onChange={(val: string) =>
                 updateDefaults({ advanceMode: val as "auto" | "manual" })

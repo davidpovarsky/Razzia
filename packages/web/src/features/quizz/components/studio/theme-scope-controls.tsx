@@ -1,3 +1,4 @@
+import { themeSlotForSceneKind } from "@razzia/extensions/presentation"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import {
@@ -7,6 +8,7 @@ import {
   updateScopedTheme,
   resetThemeSection,
   type ThemeOverrides,
+  type SceneConfig,
   type ShowThemeAudioEvent,
   type ShowThemeSlotId,
   type ScopedThemeOverrides,
@@ -89,12 +91,15 @@ export function ThemeScopeControls({
     card?.themeOverrides?.themeId === selection.id &&
     card.themeOverrides.themeVersion === selection.version
   const local = savedThemeScope(card?.themeOverrides, selection)
-  const slot: ShowThemeSlotId = kind === "question" ? "question" : "interlude"
+  const sceneKind = sceneId ? scenes[sceneId]?.kind : undefined
+  const slot: ShowThemeSlotId = sceneKind
+    ? themeSlotForSceneKind(sceneKind)
+    : "question"
   const spec = theme.definition.slots[slot]
   const backgroundSlots: ShowThemeSlotId[] =
     kind === "question"
       ? ["question", "answerCards", "voting", "resultsReveal"]
-      : ["interlude"]
+      : [slot]
   const change = (overrides: ThemeOverrides, reset = false) => {
     let themeOverrides: ScopedThemeOverrides | null = null
 
@@ -138,10 +143,25 @@ export function ThemeScopeControls({
         : previous,
     )
   }
+  const sceneAudioEvents: Partial<
+    Record<SceneConfig["kind"], ShowThemeAudioEvent[]>
+  > = {
+    opening: ["opening"],
+    closing: ["closing"],
+    leaderboard: ["leaderboard"],
+    interimResults: ["revealResults"],
+    answerRecap: ["revealResults"],
+    transition: ["zzTransition"],
+    animation: ["zzTransition"],
+    countdown: ["zzTransition"],
+  }
+  const applicableSceneAudio = sceneKind
+    ? (sceneAudioEvents[sceneKind] ?? [])
+    : []
   const audioEvents: ShowThemeAudioEvent[] =
     kind === "question"
       ? ["showQuestion", "answersMusic", "revealResults"]
-      : ["zzTransition", "revealResults", "closing"]
+      : applicableSceneAudio
   const reset = () => {
     const next = resetThemeSection(local, {
       section,
@@ -149,6 +169,15 @@ export function ThemeScopeControls({
       events: audioEvents,
     })
     change(next, true)
+  }
+
+  const hasOverride =
+    section === "audio"
+      ? audioEvents.some((event) => local.audio?.[event] !== undefined)
+      : backgroundSlots.some((key) => local.slots?.[key] !== undefined)
+
+  if (section === "audio" && audioEvents.length === 0) {
+    return null
   }
 
   return (
@@ -235,14 +264,16 @@ export function ThemeScopeControls({
           )}
         </>
       )}
-      <Button
-        type="button"
-        size="sm"
-        className="bg-accent text-accent-foreground"
-        onClick={reset}
-      >
-        {t("extensions:themes.sectionReset")}
-      </Button>
+      {hasOverride && (
+        <Button
+          type="button"
+          size="sm"
+          className="bg-accent text-accent-foreground"
+          onClick={reset}
+        >
+          {t("extensions:themes.sectionReset")}
+        </Button>
+      )}
       <MediaLibrary
         open={picker}
         onOpenChange={setPicker}

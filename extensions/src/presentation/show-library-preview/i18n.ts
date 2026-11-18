@@ -6,6 +6,7 @@ import commonIt from "../../../../packages/web/src/locales/it/common.json"
 import commonJa from "../../../../packages/web/src/locales/ja/common.json"
 import commonTr from "../../../../packages/web/src/locales/tr/common.json"
 import commonVi from "../../../../packages/web/src/locales/vi/common.json"
+import commonHe from "../../../../packages/web/src/locales/he/common.json"
 import { requireLibraryValue } from "../../core/show-library/required"
 import { createInstance } from "i18next"
 import en from "../../locales/en/extensions.json"
@@ -16,6 +17,7 @@ import it from "../../locales/it/extensions.json"
 import ja from "../../locales/ja/extensions.json"
 import tr from "../../locales/tr/extensions.json"
 import vi from "../../locales/vi/extensions.json"
+import he from "../../locales/he/extensions.json"
 import type { TadazzStageLabels } from "../tadazz-show/labels"
 import { TADAZZ_V4_LABELS, type TadazzV4Labels } from "../tadazz-v4/types"
 import { createScenePresenterLabels } from "../scene-labels"
@@ -28,9 +30,10 @@ import gameIt from "../../../../packages/web/src/locales/it/game.json"
 import gameJa from "../../../../packages/web/src/locales/ja/game.json"
 import gameTr from "../../../../packages/web/src/locales/tr/game.json"
 import gameVi from "../../../../packages/web/src/locales/vi/game.json"
+import gameHe from "../../../../packages/web/src/locales/he/game.json"
 
 export type PreviewLocale =
-  "en" | "fr" | "de" | "es" | "it" | "ja" | "tr" | "vi"
+  "en" | "fr" | "de" | "es" | "it" | "ja" | "tr" | "vi" | "he"
 
 const commonData = {
   en: commonEn,
@@ -41,8 +44,9 @@ const commonData = {
   ja: commonJa,
   tr: commonTr,
   vi: commonVi,
+  he: commonHe,
 }
-const localeData = { en, fr, de, es, it, ja, tr, vi }
+const localeData = { en, fr, de, es, it, ja, tr, vi, he }
 const gameData = {
   en: gameEn,
   fr: gameFr,
@@ -52,6 +56,7 @@ const gameData = {
   ja: gameJa,
   tr: gameTr,
   vi: gameVi,
+  he: gameHe,
 }
 const streak = {
   en: "Streak",
@@ -62,6 +67,7 @@ const streak = {
   ja: "連続",
   tr: "Seri",
   vi: "Chuỗi",
+  he: "רצף",
 }
 
 /** A private instance: never changes the application or editor language. */

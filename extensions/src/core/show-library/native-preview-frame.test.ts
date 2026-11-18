@@ -295,7 +295,7 @@ describe("exact current native-stage frame host seam", () => {
       }).success,
     ).toBe(false)
   })
-  it("requires valid native cardinality, metadata, clock, revision and exact eight locales", () => {
+  it("requires valid native cardinality, metadata, clock, revision and exact nine supported locales", () => {
     const f = fixture(),
       frame = produceNativePreviewFrameV1(
         f.snapshot,
@@ -319,7 +319,17 @@ describe("exact current native-stage frame host seam", () => {
         nativePreviewFrameV1Schema.safeParse({ ...frame, ...patch }).success,
       ).toBe(false)
     }
-    for (const locale of ["en", "fr", "de", "es", "it", "ja", "tr", "vi"]) {
+    for (const locale of [
+      "en",
+      "fr",
+      "de",
+      "es",
+      "it",
+      "ja",
+      "tr",
+      "vi",
+      "he",
+    ]) {
       expect(
         nativePreviewRendererInputV1Schema.safeParse({
           frame,
@@ -331,7 +341,7 @@ describe("exact current native-stage frame host seam", () => {
     expect(
       nativePreviewRendererInputV1Schema.safeParse({
         frame,
-        locale: "he",
+        locale: "ru",
         reducedMotion: false,
       }).success,
     ).toBe(false)

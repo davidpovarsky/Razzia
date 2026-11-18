@@ -2,6 +2,7 @@ import deExtensions from "./de/extensions.json" with { type: "json" }
 import billing from "./billing.json" with { type: "json" }
 import packages from "./packages.json" with { type: "json" }
 import enExtensions from "./en/extensions.json" with { type: "json" }
+import heExtensions from "./he/extensions.json" with { type: "json" }
 import esExtensions from "./es/extensions.json" with { type: "json" }
 import frExtensions from "./fr/extensions.json" with { type: "json" }
 import itExtensions from "./it/extensions.json" with { type: "json" }
@@ -16,6 +17,7 @@ export const EXTENSION_LOCALES = {
   en: enExtensions,
   es: esExtensions,
   fr: frExtensions,
+  he: heExtensions,
   it: itExtensions,
   ja: jaExtensions,
   tr: trExtensions,
@@ -27,6 +29,7 @@ export const SUPPORTED_EXTENSION_LANGUAGES = [
   "de",
   "es",
   "fr",
+  "he",
   "it",
   "ja",
   "tr",
@@ -51,6 +54,9 @@ export const getExtensionResources = () => ({
   },
   fr: {
     extensions: { ...frExtensions, billing: billing.fr, packages: packages.fr },
+  },
+  he: {
+    extensions: { ...heExtensions, billing: billing.he, packages: packages.he },
   },
   it: {
     extensions: { ...itExtensions, billing: billing.it, packages: packages.it },

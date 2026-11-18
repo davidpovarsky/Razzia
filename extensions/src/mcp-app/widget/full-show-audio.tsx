@@ -1,3 +1,4 @@
+import NativeButton from "../../../../packages/web/src/components/Button"
 import { useMemo, useState } from "react"
 import { createPortal } from "react-dom"
 import { AudioCuePlayer } from "../../presentation/audio-cue-player.tsx"
@@ -90,7 +91,9 @@ export function FullShowAudioV3({
           return createPortal(
             <div className="widget-toolbar">
               {!enabled || controls.blocked ? (
-                <button
+                <NativeButton
+                  classNameContent="contents"
+                  data-control-source="razzia"
                   type="button"
                   data-testid="full-show-enable-audio"
                   onClick={() => {
@@ -100,9 +103,11 @@ export function FullShowAudioV3({
                   }}
                 >
                   {tx("enableSound")}
-                </button>
+                </NativeButton>
               ) : (
-                <button
+                <NativeButton
+                  classNameContent="contents"
+                  data-control-source="razzia"
                   type="button"
                   data-testid="full-show-mute-audio"
                   onClick={() => {
@@ -112,7 +117,7 @@ export function FullShowAudioV3({
                   }}
                 >
                   {tx("mute")}
-                </button>
+                </NativeButton>
               )}
             </div>,
             controlsTarget,

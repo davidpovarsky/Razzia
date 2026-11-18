@@ -237,6 +237,9 @@ describe("real process interruption and fresh-process recovery", () => {
             const expectedBase = structuredClone(before.shows[id].base)
             delete expectedBase.questions[0].media
             const expectedExtras = structuredClone(before.shows[id].extras)
+            // A committed detach changes the canonical base. The sidecar must
+            // bind to that new base, not retain the pre-delete digest.
+            expectedExtras.baseDigest = computeCanonicalBaseDigest(expectedBase)
             if (id === "show-b")
               delete expectedExtras.perQuestion[QUESTION_ID].background
             expect(first.state.shows[id].base).toEqual(expectedBase)

@@ -1,0 +1,51 @@
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+    ,-[packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/index.tsx:50:9]
+ 49 |         }
+ 50 |         const { answerVisuals: _answerVisuals, ...rest } =
+    :         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 51 |           previous.perQuestion[currentQuestionId]
+    `----
+
+  x @stylistic(padding-line-between-statements): Expected blank line before this statement.
+    ,-[packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/index.tsx:67:5]
+ 66 |     }
+ 67 |     const replacesAnswers =
+    :     ^^^^^^^^^^^^^^^^^^^^^^^
+ 68 |       nextType === "estimation" || questionType === "estimation"
+    `----
+
+  ! react-hooks(exhaustive-deps): React Hook useEffect has missing dependencies: 'questionIds', and 'acceptExtrasBaseline'
+    ,-[packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts:89:6]
+ 67 |                 initialData.id,
+ 68 |                 questionIds,
+    :                 ^^^^^^^^^^^
+ 69 |                 res.baseDigest,
+ 70 |               )
+ 71 |         acceptExtrasBaseline(loaded)
+    :         ^^^^^^^^^^^^^^^^^^^^
+ 72 |         setExtras((previous) => previous ?? loaded)
+ 73 |
+ 74 |         if (loaded.questionIds.length > 0) {
+ 75 |           setQuestionIds(loaded.questionIds)
+ 76 |         }
+ 77 |
+ 78 |         setExtrasStatus("ready")
+ 79 |       })
+ 80 |       .catch(() => {
+ 81 |         if (isSubscribed) {
+ 82 |           setExtrasStatus("error")
+ 83 |         }
+ 84 |       })
+ 85 |
+ 86 |     return () => {
+ 87 |       isSubscribed = false
+ 88 |     }
+ 89 |   }, [initialData?.id])
+    :      ^^^^^^^^^^^^^^^^^
+ 90 |
+    `----
+  help: Either include it or remove the dependency array.
+
+Found 1 warning and 2 errors.
+Finished in 3.8s on 26 files with 233 rules using 12 threads.

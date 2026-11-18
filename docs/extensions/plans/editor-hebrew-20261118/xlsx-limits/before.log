@@ -1,0 +1,124 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions[39m
+
+ [31m❯[39m src/core/xlsx-resource-limits.test.ts [2m([22m[2m12 tests[22m[2m | [22m[31m8 failed[39m[2m)[22m[33m 542[2mms[22m[39m
+   [31m❯[39m roster XLSX resource limits [2m(6)[22m
+     [32m✓[39m accepts real stored and deflated entries with their exact declared size[32m 5[2mms[22m[39m
+[31m     [31m×[31m rejects aggregate expanded data above25MiB before retaining another entry[39m[32m 243[2mms[22m[39m
+[31m     [31m×[31m does not trust a tiny declared size for a larger deflated body[39m[32m 11[2mms[22m[39m
+[31m     [31m×[31m rejects a stored entry whose actual size disagrees with the directory[39m[32m 2[2mms[22m[39m
+[31m     [31m×[31m rejects a deflated entry shorter than its claimed expanded size[39m[32m 1[2mms[22m[39m
+[31m     [31m×[31m bounds the directory entry count even when every payload is empty[39m[32m 4[2mms[22m[39m
+   [31m❯[39m show XLSX resource limits [2m(6)[22m
+     [32m✓[39m accepts real stored and deflated entries with their exact declared size[32m 2[2mms[22m[39m
+     [32m✓[39m rejects aggregate expanded data above25MiB before retaining another entry[32m 250[2mms[22m[39m
+[31m     [31m×[31m does not trust a tiny declared size for a larger deflated body[39m[32m 12[2mms[22m[39m
+[31m     [31m×[31m rejects a stored entry whose actual size disagrees with the directory[39m[32m 3[2mms[22m[39m
+[31m     [31m×[31m rejects a deflated entry shorter than its claimed expanded size[39m[32m 2[2mms[22m[39m
+     [32m✓[39m bounds the directory entry count even when every payload is empty[32m 5[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m8 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (12)[39m
+[2m   Start at [22m 16:52:56
+[2m   Duration [22m 2.33s[2m (import 46%, transform 28%, tests 26%)[22m
+
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 8 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/core/xlsx-resource-limits.test.ts[2m > [22mroster XLSX resource limits[2m > [22mrejects aggregate expanded data above25MiB before retaining another entry
+[31m[1mAssertionError[22m: expected [Function] to throw an error[39m
+
+[32m- Expected:[39m
+null
+
+[31m+ Received:[39m
+undefined
+
+[36m [2m❯[22m src/core/xlsx-resource-limits.test.ts:[2m89:31[22m[39m
+    [90m 87|[39m     ])
+    [90m 88|[39m     expect(bytes.byteLength).toBeLessThan(5 * 1024 * 1024)
+    [90m 89|[39m     expect(() => read(bytes)).toThrow("errors:extensions.xlsxTooLarge")
+    [90m   |[39m                               [31m^[39m
+    [90m 90|[39m   })
+    [90m 91|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/xlsx-resource-limits.test.ts[2m > [22mroster XLSX resource limits[2m > [22mdoes not trust a tiny declared size for a larger deflated body
+[41m[1m FAIL [22m[49m src/core/xlsx-resource-limits.test.ts[2m > [22mshow XLSX resource limits[2m > [22mdoes not trust a tiny declared size for a larger deflated body
+[31m[1mAssertionError[22m: expected [Function] to throw an error[39m
+
+[32m- Expected:[39m
+null
+
+[31m+ Received:[39m
+undefined
+
+[36m [2m❯[22m src/core/xlsx-resource-limits.test.ts:[2m101:31[22m[39m
+    [90m 99|[39m       },
+    [90m100|[39m     ])
+    [90m101|[39m     expect(() => read(bytes)).toThrow("errors:extensions.xlsxTooLarge")
+    [90m   |[39m                               [31m^[39m
+    [90m102|[39m   })
+    [90m103|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/xlsx-resource-limits.test.ts[2m > [22mroster XLSX resource limits[2m > [22mrejects a stored entry whose actual size disagrees with the directory
+[41m[1m FAIL [22m[49m src/core/xlsx-resource-limits.test.ts[2m > [22mshow XLSX resource limits[2m > [22mrejects a stored entry whose actual size disagrees with the directory
+[31m[1mAssertionError[22m: expected [Function] to throw an error[39m
+
+[32m- Expected:[39m
+null
+
+[31m+ Received:[39m
+undefined
+
+[36m [2m❯[22m src/core/xlsx-resource-limits.test.ts:[2m117:7[22m[39m
+    [90m115|[39m         ]),
+    [90m116|[39m       ),
+    [90m117|[39m     ).toThrow("errors:extensions.corruptXlsxFile")
+    [90m   |[39m       [31m^[39m
+    [90m118|[39m   })
+    [90m119|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/xlsx-resource-limits.test.ts[2m > [22mroster XLSX resource limits[2m > [22mrejects a deflated entry shorter than its claimed expanded size
+[41m[1m FAIL [22m[49m src/core/xlsx-resource-limits.test.ts[2m > [22mshow XLSX resource limits[2m > [22mrejects a deflated entry shorter than its claimed expanded size
+[31m[1mAssertionError[22m: expected [Function] to throw an error[39m
+
+[32m- Expected:[39m
+null
+
+[31m+ Received:[39m
+undefined
+
+[36m [2m❯[22m src/core/xlsx-resource-limits.test.ts:[2m128:7[22m[39m
+    [90m126|[39m         ]),
+    [90m127|[39m       ),
+    [90m128|[39m     ).toThrow("errors:extensions.corruptXlsxFile")
+    [90m   |[39m       [31m^[39m
+    [90m129|[39m   })
+    [90m130|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m src/core/xlsx-resource-limits.test.ts[2m > [22mroster XLSX resource limits[2m > [22mbounds the directory entry count even when every payload is empty
+[31m[1mAssertionError[22m: expected [Function] to throw an error[39m
+
+[32m- Expected:[39m
+null
+
+[31m+ Received:[39m
+undefined
+
+[36m [2m❯[22m src/core/xlsx-resource-limits.test.ts:[2m142:7[22m[39m
+    [90m140|[39m         ]),
+    [90m141|[39m       ),
+    [90m142|[39m     ).toThrow("errors:extensions.corruptXlsxFile")
+    [90m   |[39m       [31m^[39m
+    [90m143|[39m   })
+    [90m144|[39m })
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯[22m[39m

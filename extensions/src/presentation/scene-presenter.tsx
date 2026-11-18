@@ -1,4 +1,5 @@
 // oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
+import { useTranslation } from "react-i18next"
 import { PlatformButton } from "./platform-controls"
 import type {
   ActiveSceneData,
@@ -195,6 +196,13 @@ export const ScenePresenter = ({
   onClockTick,
   className,
 }: ScenePresenterProps) => {
+  const { t } = useTranslation()
+  const voteLabel = (count: number) =>
+    t("extensions:reveal.votes", {
+      count,
+      defaultValue: `${count} ${count === 1 ? "vote" : "votes"}`,
+    })
+
   const activeScene = scene ?? step?.scene
   const kind = activeScene?.kind ?? step?.kind ?? "transition"
   const stageAnimations = useMemo(
@@ -503,7 +511,8 @@ export const ScenePresenter = ({
     return () => clearInterval(timer)
   }, [kind, totalRecapPages, durationMs, controlledTimeMs])
   const getKindLabel = (k: string, defaultLabel: string): string =>
-    labels?.kinds?.[k] ?? defaultLabel
+    labels?.kinds?.[k] ??
+    t(`extensions:timeline.${k}`, { defaultValue: defaultLabel })
   const showHeaderOverlay =
     kind !== "opening" &&
     kind !== "closing" &&
@@ -566,7 +575,9 @@ export const ScenePresenter = ({
                     title: string
                   }
                 ).title
-              : "Welcome to the Show"}
+              : t("extensions:studio.scene.welcomeTitle", {
+                  defaultValue: "Welcome to the Show",
+                })}
           </h1>
           {"subtitle" in (activeScene ?? {}) &&
             (
@@ -611,7 +622,9 @@ export const ScenePresenter = ({
                     title: string
                   }
                 ).title
-              : "Thank You For Playing"}
+              : t("extensions:tadazzShow.finaleNoWinner", {
+                  defaultValue: "Thank You For Playing",
+                })}
           </h1>
           {"subtitle" in (activeScene ?? {}) &&
             (
@@ -860,7 +873,9 @@ export const ScenePresenter = ({
                         title: string
                       }
                     ).title
-                  : "Welcome to the Show"}
+                  : t("extensions:studio.scene.welcomeTitle", {
+                      defaultValue: "Welcome to the Show",
+                    })}
               </h1>
               {"subtitle" in (activeScene ?? {}) &&
                 (
@@ -900,7 +915,9 @@ export const ScenePresenter = ({
                         title: string
                       }
                     ).title
-                  : "Thank You For Playing"}
+                  : t("extensions:tadazzShow.finaleNoWinner", {
+                      defaultValue: "Thank You For Playing",
+                    })}
               </h1>
               {"subtitle" in (activeScene ?? {}) &&
                 (
@@ -936,7 +953,9 @@ export const ScenePresenter = ({
                         }
                       ).title
                     : undefined) ??
-                  "Cumulative Answer Recap"}
+                  t("extensions:studio.scene.answerRecapDefaultTitle", {
+                    defaultValue: "Cumulative Answer Recap",
+                  })}
               </h2>
               {(answerRecap?.subtitle ||
                 ("subtitle" in (activeScene ?? {}) &&
@@ -969,8 +988,13 @@ export const ScenePresenter = ({
                       activeScene as {
                         title?: string
                       }
-                    ).title ?? "Next Up")
-                  : "Next Up"}
+                    ).title ??
+                    t("extensions:tadazzShow.v4.upNext", {
+                      defaultValue: "Next Up",
+                    }))
+                  : t("extensions:tadazzShow.v4.upNext", {
+                      defaultValue: "Next Up",
+                    })}
               </h2>
               {"description" in (activeScene ?? {}) &&
                 (
@@ -1003,8 +1027,13 @@ export const ScenePresenter = ({
                       activeScene as {
                         title?: string
                       }
-                    ).title ?? "Leaderboard Standings")
-                  : "Leaderboard Standings"}
+                    ).title ??
+                    t("extensions:studio.scene.leaderboardDefaultTitle", {
+                      defaultValue: "Leaderboard Standings",
+                    }))
+                  : t("extensions:studio.scene.leaderboardDefaultTitle", {
+                      defaultValue: "Leaderboard Standings",
+                    })}
               </h2>
             </div>
           )}
@@ -1021,8 +1050,13 @@ export const ScenePresenter = ({
                       activeScene as {
                         title?: string
                       }
-                    ).title ?? "Audience Poll Results")
-                  : "Audience Poll Results"}
+                    ).title ??
+                    t("extensions:studio.scene.interimResultsDefaultTitle", {
+                      defaultValue: "Audience Poll Results",
+                    }))
+                  : t("extensions:studio.scene.interimResultsDefaultTitle", {
+                      defaultValue: "Audience Poll Results",
+                    })}
               </h2>
             </div>
           )}
@@ -1039,8 +1073,13 @@ export const ScenePresenter = ({
                       activeScene as {
                         title?: string
                       }
-                    ).title ?? "Get Ready")
-                  : "Get Ready"}
+                    ).title ??
+                    t("extensions:tadazzShow.getReady", {
+                      defaultValue: "Get Ready",
+                    }))
+                  : t("extensions:tadazzShow.getReady", {
+                      defaultValue: "Get Ready",
+                    })}
               </h2>
             </div>
           )}
@@ -1209,9 +1248,17 @@ export const ScenePresenter = ({
                       <TadazzLeaderboard
                         entries={leaderboardEntries}
                         epochKey={sceneAnimationKey}
-                        pointsLabel={labels?.points ?? "pts"}
+                        pointsLabel={
+                          labels?.points ??
+                          t("extensions:leaderboard.pts", {
+                            defaultValue: "pts",
+                          })
+                        }
                         emptyLabel={
-                          labels?.noScores ?? "No scores recorded yet."
+                          labels?.noScores ??
+                          t("extensions:studio.scene.noRankingsYet", {
+                            defaultValue: "No scores recorded yet.",
+                          })
                         }
                       />
                     )
@@ -1250,7 +1297,11 @@ export const ScenePresenter = ({
                               </span>
                             </div>
                             <span className="text-primary font-mono text-sm font-extrabold sm:text-base">
-                              {entry.points} {labels?.points ?? "pts"}
+                              {entry.points}{" "}
+                              {labels?.points ??
+                                t("extensions:leaderboard.pts", {
+                                  defaultValue: "pts",
+                                })}
                             </span>
                           </li>
                         ))}
@@ -1261,7 +1312,10 @@ export const ScenePresenter = ({
 
                 return (
                   <div className="rounded-xl border border-white/10 bg-black/40 px-6 py-4 text-sm text-white/70">
-                    {labels?.noScores ?? "No scores recorded yet."}
+                    {labels?.noScores ??
+                      t("extensions:studio.scene.noRankingsYet", {
+                        defaultValue: "No scores recorded yet.",
+                      })}
                   </div>
                 )
               })()}
@@ -1330,7 +1384,10 @@ export const ScenePresenter = ({
                                   : "my-1 px-3 py-1.5 text-xs sm:text-sm",
                               )}
                             >
-                              No votes yet
+                              {t(
+                                "extensions:tadazzShow.v4.noVotes",
+                                "No votes yet",
+                              )}
                             </div>
                           )
                         }
@@ -1445,15 +1502,23 @@ export const ScenePresenter = ({
                                     <span className="flex items-center gap-1 rounded-full bg-amber-400 px-1.5 py-0.5 text-[9px] font-black tracking-wider text-black uppercase shadow-lg sm:px-2.5 sm:text-[10px]">
                                       <Trophy className="size-3 fill-black sm:size-3.5" />
                                       <span>
-                                        {isTie ? "Co-leader" : "Leader"}
+                                        {t(
+                                          isTie
+                                            ? "extensions:reveal.coLeader"
+                                            : "extensions:reveal.leader",
+                                          {
+                                            defaultValue: isTie
+                                              ? "Co-leader"
+                                              : "Leader",
+                                          },
+                                        )}
                                       </span>
                                     </span>
 
                                     <div className="flex items-center gap-1 rounded-full bg-black/35 px-1.5 py-0.5 font-mono text-[9px] font-bold text-white shadow-md sm:text-[10px]">
                                       <span>{winner.percentage}%</span>
                                       <span className="text-white/80">
-                                        ({winner.count}{" "}
-                                        {winner.count === 1 ? "vote" : "votes"})
+                                        ({voteLabel(winner.count)})
                                       </span>
                                     </div>
                                   </div>
@@ -1604,8 +1669,7 @@ export const ScenePresenter = ({
                                         {index + 1}
                                       </span>
                                       <span className="rounded-full bg-black/35 px-1 py-0.5 font-mono text-[9px] font-bold text-white sm:text-[10px]">
-                                        {runner.count}{" "}
-                                        {runner.count === 1 ? "vote" : "votes"}
+                                        {voteLabel(runner.count)}
                                       </span>
                                     </div>
 
@@ -1756,7 +1820,7 @@ export const ScenePresenter = ({
                                 </span>
 
                                 <div className="mt-0.5 flex items-center justify-center gap-1 font-mono text-[10px] font-bold text-white/90">
-                                  <span>0 votes</span>
+                                  <span>{voteLabel(0)}</span>
                                   <span>(0%)</span>
                                 </div>
 
@@ -1780,7 +1844,7 @@ export const ScenePresenter = ({
                             ? labels.totalResponders(
                                 interimResults.totalResponders,
                               )
-                            : `Total votes: ${interimResults.totalResponders}`}
+                            : voteLabel(interimResults.totalResponders)}
                         </span>
                       </div>
                     </div>
@@ -1788,7 +1852,10 @@ export const ScenePresenter = ({
                 })()
               ) : (
                 <div className="rounded-xl border border-white/10 bg-black/40 px-6 py-4 text-sm text-white/70">
-                  {labels?.noInterimResults ?? "No completed results yet."}
+                  {labels?.noInterimResults ??
+                    t("extensions:studio.scene.noResponsesYet", {
+                      defaultValue: "No completed results yet.",
+                    })}
                 </div>
               )}
             </div>
@@ -1816,18 +1883,29 @@ export const ScenePresenter = ({
                         answerRecap?.showPercentages ?? true
                       const badgeLabel = (() => {
                         if (item.badgeType === "correctAnswer") {
-                          return "Correct Answer"
+                          return t(
+                            "extensions:studio.scene.recapBadgeCorrectAnswer",
+                            { defaultValue: "Correct Answer" },
+                          )
                         }
 
                         if (item.badgeType === "tiedMostSelected") {
-                          return "Tied Most Selected"
+                          return t("extensions:studio.scene.recapBadgeTied", {
+                            defaultValue: "Tied Most Selected",
+                          })
                         }
 
                         if (item.badgeType === "noResponses") {
-                          return "No Responses"
+                          return t(
+                            "extensions:studio.scene.recapBadgeNoResponses",
+                            { defaultValue: "No Responses" },
+                          )
                         }
 
-                        return "Most Selected"
+                        return t(
+                          "extensions:studio.scene.recapBadgeMostSelected",
+                          { defaultValue: "Most Selected" },
+                        )
                       })()
 
                       return (
@@ -1853,7 +1931,10 @@ export const ScenePresenter = ({
                         >
                           <div className="flex items-center justify-between gap-2">
                             <span className="rounded-md bg-white/15 px-2 py-0.5 text-[10px] font-black text-white sm:text-xs">
-                              Q{item.questionNumber}
+                              {t("extensions:host.questionNum", {
+                                num: item.questionNumber,
+                                defaultValue: `Question ${item.questionNumber}`,
+                              })}
                             </span>
                             <span
                               data-testid="recap-item-badge"
@@ -1941,7 +2022,10 @@ export const ScenePresenter = ({
                               className="rounded-lg border border-white/10 bg-black/30 px-2.5 py-1 text-xs text-white/60"
                             >
                               {labels?.noResponsesYet ??
-                                "No responses recorded for this question."}
+                                t("extensions:studio.scene.noResponsesYet", {
+                                  defaultValue:
+                                    "No responses recorded for this question.",
+                                })}
                             </div>
                           )}
                         </div>
@@ -1958,6 +2042,9 @@ export const ScenePresenter = ({
                         size="sm"
                         type="button"
                         data-testid="recap-prev-page"
+                        aria-label={t("common:previous", {
+                          defaultValue: "Previous",
+                        })}
                         onClick={() =>
                           setRecapPage(
                             (prev) =>
@@ -1966,24 +2053,29 @@ export const ScenePresenter = ({
                         }
                         className="rounded-full bg-white/15 p-1 text-white hover:bg-white/25"
                       >
-                        <ChevronLeft className="size-4" />
+                        <ChevronLeft className="size-4 rtl:rotate-180" />
                       </PlatformButton>
                       <span
                         data-testid="recap-page-indicator"
                         className="text-xs font-bold text-white/80"
                       >
-                        Page {clampedRecapPage + 1} of {totalRecapPages}
+                        {t("extensions:studio.scene.recapPageIndicator", {
+                          current: clampedRecapPage + 1,
+                          total: totalRecapPages,
+                          defaultValue: `Page ${clampedRecapPage + 1} of ${totalRecapPages}`,
+                        })}
                       </span>
                       <PlatformButton
                         size="sm"
                         type="button"
                         data-testid="recap-next-page"
+                        aria-label={t("common:next", { defaultValue: "Next" })}
                         onClick={() =>
                           setRecapPage((prev) => (prev + 1) % totalRecapPages)
                         }
                         className="rounded-full bg-white/15 p-1 text-white hover:bg-white/25"
                       >
-                        <ChevronRight className="size-4" />
+                        <ChevronRight className="size-4 rtl:rotate-180" />
                       </PlatformButton>
                     </div>
                   )}
@@ -1994,7 +2086,9 @@ export const ScenePresenter = ({
                   className="rounded-xl border border-white/10 bg-black/40 px-6 py-4 text-sm text-white/70"
                 >
                   {labels?.noInterimResults ??
-                    "No completed questions to recap yet."}
+                    t("extensions:studio.scene.recapNoPrecedingWarning", {
+                      defaultValue: "No completed questions to recap yet.",
+                    })}
                 </div>
               )}
             </div>
@@ -2042,8 +2136,14 @@ export const ScenePresenter = ({
                     <AlertTriangle className="size-10 text-yellow-400 sm:size-14" />
                     <p className="mt-2 text-sm font-semibold text-white/80 sm:text-base">
                       {mediaError
-                        ? (labels?.imageError ?? "Failed to load media asset")
-                        : (labels?.noMedia ?? "No media asset configured")}
+                        ? (labels?.imageError ??
+                          t("extensions:studio.scene.mediaError", {
+                            defaultValue: "Failed to load media asset",
+                          }))
+                        : (labels?.noMedia ??
+                          t("extensions:studio.scene.noMedia", {
+                            defaultValue: "No media asset configured",
+                          }))}
                     </p>
                   </div>
                 )
@@ -2117,8 +2217,13 @@ export const ScenePresenter = ({
                             activeScene as {
                               title?: string
                             }
-                          ).title ?? "Scene media")
-                        : "Scene media"
+                          ).title ??
+                          t("extensions:timeline.media", {
+                            defaultValue: "Scene media",
+                          }))
+                        : t("extensions:timeline.media", {
+                            defaultValue: "Scene media",
+                          })
                     }
                     onError={() => setMediaError(true)}
                     className={clsx(
@@ -2151,7 +2256,9 @@ export const ScenePresenter = ({
         {advanceMode === "auto" && (
           <div className="flex flex-col gap-0.5 sm:gap-1">
             <div className="flex items-center justify-between text-[10px] font-semibold text-white/70 sm:text-xs">
-              <span>{remainingSeconds}s</span>
+              <span>
+                {remainingSeconds} {t("common:seconds", "s")}
+              </span>
               <span>{Math.round(progressRatio * 100)}%</span>
             </div>
             <div className="h-1 w-full overflow-hidden rounded-full bg-white/20 sm:h-1.5">
@@ -2172,8 +2279,14 @@ export const ScenePresenter = ({
             className="text-[11px] font-medium text-white/60 sm:text-xs"
           >
             {advanceMode === "auto"
-              ? (labels?.autoProgression ?? "Automatic progression")
-              : (labels?.awaitingHost ?? "Awaiting host to advance")}
+              ? (labels?.autoProgression ??
+                t("extensions:studio.scene.advanceAuto", {
+                  defaultValue: "Automatic progression",
+                }))
+              : (labels?.awaitingHost ??
+                t("extensions:interludes.awaitingHost", {
+                  defaultValue: "Awaiting host to advance",
+                }))}
           </p>
 
           {isManager && (
@@ -2194,8 +2307,12 @@ export const ScenePresenter = ({
               data-testid="scene-skip-button"
             >
               {skipState.hasSkipped
-                ? (labels?.skipped ?? "Skipped")
-                : (labels?.advanceScene ?? "Advance Scene")}
+                ? (labels?.skipped ??
+                  t("extensions:interludes.skipped", {
+                    defaultValue: "Skipped",
+                  }))
+                : (labels?.advanceScene ??
+                  t("common:next", { defaultValue: "Advance Scene" }))}
             </PlatformButton>
           )}
         </div>

@@ -83,6 +83,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
     replaceQuestions,
     extras,
     setExtras,
+    acceptExtrasBaseline,
     currentIndex,
     setCurrentIndex,
   } = useQuizzEditor()
@@ -120,7 +121,11 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       setDefaults(extras.defaults)
 
       if (extras.timeline.length > 0) {
-        setSelectedTimelineId((prev) => prev ?? extras.timeline[0].id)
+        setSelectedTimelineId((prev) =>
+          extras.timeline.some((item) => item.id === prev)
+            ? prev
+            : extras.timeline[0].id,
+        )
       }
     } else if (extras && !isQuizExtrasV2(extras)) {
       // Migrate V1 to V2
@@ -136,7 +141,11 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       setDefaults(upgraded.defaults)
 
       if (upgraded.timeline.length > 0) {
-        setSelectedTimelineId((prev) => prev ?? upgraded.timeline[0].id)
+        setSelectedTimelineId((prev) =>
+          upgraded.timeline.some((item) => item.id === prev)
+            ? prev
+            : upgraded.timeline[0].id,
+        )
       }
 
       setExtras(upgraded)
@@ -172,10 +181,12 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       // Only set local extras when creating a brand new quiz with no server sidecar
       if (!quizzId) {
         setExtras(defaultV2)
+        acceptExtrasBaseline(defaultV2)
       }
     }
   }, [
     extras,
+    acceptExtrasBaseline,
     quizzId,
     getValues,
     setExtras,
@@ -367,7 +378,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           return {
             id: sceneId,
             kind: "media",
-            mediaUrl: "/media/background.png",
+            mediaUrl: "",
             mediaType: "image",
             title: "",
             durationMs: 5000,
@@ -423,7 +434,8 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           return {
             id: sceneId,
             kind: "opening",
-            title: getValues("subject") || "Welcome",
+            title:
+              getValues("subject") || t("extensions:studio.scene.welcomeTitle"),
             subtitle: "",
             durationMs: 5000,
             advance: "auto",
@@ -433,7 +445,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           return {
             id: sceneId,
             kind: "closing",
-            title: "Thank you for participating!",
+            title: t("extensions:tadazzShow.finaleNoWinner"),
             subtitle: "",
             durationMs: 5000,
             advance: "auto",
@@ -449,7 +461,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           }
       }
     },
-    [getValues, questionIds],
+    [getValues, questionIds, t],
   )
   interface StudioMutationResult {
     nextQuestions: Question[]

@@ -1,0 +1,4 @@
+[90mextensions/src/presentation/show-library-preview/application-runtime-entry.tsx[39m 678ms (unchanged)
+[90mextensions/src/presentation/show-library-preview/native-fonts.ts[39m 72ms (unchanged)
+[90mextensions/src/presentation/show-library-preview/native-fonts.test.ts[39m 76ms (unchanged)
+[90mpackages/e2e/editor-native-font-iframe-audit.mjs[39m 278ms (unchanged)

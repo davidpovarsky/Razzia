@@ -127,7 +127,8 @@
     "answerVisualDesc": "Configurez les images et les libellés d'accessibilité pour les choix de réponse.",
     "revealDesc": "Animez la révélation de l'image de la question lors de la présentation.",
     "triggerMode": "Déclenchement",
-    "audience": "Audience"
+    "audience": "Audience",
+    "optionLabel": "Option {{index}}"
   },
   "interludes": {
     "interludeTitle": "Diapositive d'intermède",
@@ -242,7 +243,12 @@
     "correct": "Correct",
     "incorrect": "Incorrect",
     "answered": "ont répondu",
-    "answeredRatio": "{{responders}} / {{eligible}} ont répondu"
+    "answeredRatio": "{{responders}} / {{eligible}} ont répondu",
+    "leader": "En tête",
+    "coLeader": "Ex æquo",
+    "votes_one": "{{count}} vote",
+    "votes_other": "{{count}} votes",
+    "votes_two": "{{count}} votes"
   },
   "editor": {
     "toggle": "Améliorations du quiz",
@@ -252,7 +258,13 @@
     "choiceNum": "Choix {{num}}",
     "seconds": "secondes",
     "effect": "Effet",
-    "duration": "Durée"
+    "duration": "Durée",
+    "answerTypeChangeTitle": "Changer le mode de réponse ?",
+    "answerTypeChangeDescription": "Passer des choix de réponse à une estimation numérique remplace les réponses et les réglages de cette carte.",
+    "confirmAnswerTypeChange": "Changer de mode",
+    "unsavedExitTitle": "Quitter sans enregistrer ?",
+    "unsavedExitDescription": "Les modifications des questions, des scènes et des paramètres du spectacle n’ont pas été enregistrées.",
+    "discardAndExit": "Quitter sans enregistrer"
   },
   "preview": {
     "badge": "Aperçu de l'éditeur",
@@ -318,7 +330,31 @@
     "statusNotJoined": "Non rejoint",
     "answeredYes": "Répondu",
     "answeredNo": "En attente",
-    "noPhone": "—"
+    "noPhone": "—",
+    "noSearchResults": "Aucun participant ne correspond à votre recherche.",
+    "errors": {
+      "corruptCsvUnclosedQuote": "Le fichier CSV contient un guillemet non fermé. Vérifiez le fichier et réessayez.",
+      "corruptXlsxFile": "Le fichier Excel est endommagé ou illisible.",
+      "xlsxTooLarge": "Le fichier Excel décompressé dépasse la limite de 25 Mo.",
+      "unsupportedXlsxCompression": "Ce fichier Excel utilise un format de compression non pris en charge.",
+      "fileTooLarge": "Le fichier dépasse la limite de 5 Mo.",
+      "corruptXlsxMissingSheet": "Le fichier Excel ne contient aucune feuille de calcul lisible.",
+      "emptyImportFile": "Le fichier ne contient aucune ligne de participants.",
+      "invalidImportHeaders": "Le fichier doit contenir des colonnes pour le nom et le téléphone.",
+      "tooManyImportRows": "Importez au maximum 2 000 participants à la fois.",
+      "formulaNotAllowed": "Les formules de feuille de calcul ne sont pas autorisées.",
+      "missingParticipantName": "Saisissez le nom du participant.",
+      "participantNameTooLong": "Le nom du participant ne doit pas dépasser 40 caractères.",
+      "missingPhoneNumber": "Saisissez un numéro de téléphone.",
+      "scientificNotationPhone": "Le téléphone est enregistré en notation scientifique. Formatez la colonne en texte.",
+      "invalidPhoneNumber": "Saisissez un numéro complet valide, par exemple +972501234567 ou 050-123-4567.",
+      "duplicatePhoneInImport": "Ce numéro de téléphone apparaît plusieurs fois dans le fichier.",
+      "duplicatePhoneInRoster": "Ce numéro de téléphone figure déjà dans la liste des participants.",
+      "unsupportedFileFormat": "Seuls les fichiers Excel (.xlsx) et CSV (.csv) sont pris en charge.",
+      "corruptImportFile": "Le fichier n’a pas pu être lu. Vérifiez son format et réessayez.",
+      "duplicateParticipantPhone": "Le numéro {{phone}} est déjà attribué à {{name}}.",
+      "importReadFailed": "Le fichier d’importation n’a pas pu être lu."
+    }
   },
   "timeline": {
     "quiz": "Quiz",
@@ -339,7 +375,10 @@
     "groupResults": "Résultats",
     "deleteConfirmTitle": "Convertir la question en scène ?",
     "deleteConfirmDesc": "Convertir cette question remplacera son contenu par la scène sélectionnée.",
-    "cannotDeleteLastQuestion": "Le spectacle doit contenir au moins une question ou un sondage."
+    "cannotDeleteLastQuestion": "Le spectacle doit contenir au moins une question ou un sondage.",
+    "duplicateCard": "Dupliquer la carte",
+    "deleteCard": "Supprimer la carte de scène",
+    "deleteCardConfirm": "Supprimer cette carte de scène de la chronologie ?"
   },
   "studio": {
     "tabs": {
@@ -479,7 +518,7 @@
       "recapModeLabel": "Mode de mise en avant",
       "recapModeMostSelected": "Réponse la plus choisie (vote populaire)",
       "recapModeCorrectAnswer": "Réponse correcte officielle (pour les quiz)",
-      "recapMaxItemsPerPage": "Questions par page (1–8)",
+      "recapMaxItemsPerPage": "Questions par page (1–{{max}})",
       "recapShowCounts": "Afficher le nombre de votes",
       "recapShowPercentages": "Afficher les pourcentages",
       "recapBadgeMostSelected": "Plus choisie",
@@ -544,8 +583,22 @@
         "warnOpaqueBg": "Cette ressource Lottie semble contenir un fond opaque plein écran pouvant masquer la vidéo.",
         "warnStartAfterScene": "Le début de la superposition dépasse la durée configurée de la scène.",
         "warnVideoBaseWithoutVideo": "Ce calque utilise l'horloge vidéo sans vidéo au premier plan ; bascule sur l'horloge de la scène.",
-        "warnLoopOnMediaEnd": "Une vidéo en boucle avec « Fin du média » ne se termine jamais naturellement ; repli sur la durée de la scène."
-      }
+        "warnLoopOnMediaEnd": "Une vidéo en boucle avec « Fin du média » ne se termine jamais naturellement ; repli sur la durée de la scène.",
+        "limitReached": "Le nombre maximal de calques d’animation ({{max}}) est atteint."
+      },
+      "welcomeTitle": "Bienvenue au spectacle",
+      "mediaError": "Impossible de charger le média",
+      "cardNameLabel": "Nom de la carte",
+      "cardNameHint": "Utilisé dans la chronologie. Le modèle de ce thème définit le titre affiché sur scène.",
+      "lottieInvalidFile": "Sélectionnez un fichier JSON Lottie valide.",
+      "lottieUploaded": "Animation importée."
+    },
+    "accessibility": {
+      "dragInstructions": "Appuyez sur Espace pour saisir une carte, sur les flèches pour la déplacer, sur Espace ou Entrée pour la déposer et sur Échap pour annuler.",
+      "dragStart": "Carte {{position}} saisie.",
+      "dragOver": "Carte déplacée à la position {{position}}.",
+      "dragEnd": "Carte déposée à la position {{position}}.",
+      "dragCancel": "Réorganisation annulée."
     }
   },
   "showImport": {
@@ -737,7 +790,9 @@
       "storyUnfolds": "L’HISTOIRE SE DÉROULE...",
       "storyNow": "ET MAINTENANT...",
       "storyTitle": "L’HISTOIRE",
-      "storyRound": "MANCHE"
+      "storyRound": "MANCHE",
+      "questionLabel": "QUESTION",
+      "choiceLabel": "Choix"
     },
     "seating": {
       "call": "APPELEZ POUR REJOINDRE",
@@ -848,5 +903,74 @@
       "z-wipe": "Transition"
     },
     "installationPreview": "Aperçu privé du thème pour révision et approbation."
+  },
+  "editorPreview": {
+    "title": "Aperçu en direct",
+    "description": "Se met à jour pendant la modification, sans enregistrer ni lancer une partie.",
+    "question": "Question",
+    "answers": "Réponses",
+    "results": "Résultats",
+    "aspectRatio": "Format de l’aperçu",
+    "showImage": "Révéler l’image",
+    "resetImage": "Réinitialiser l’image",
+    "replay": "Rejouer l’animation",
+    "emptyQuestion": "Votre question apparaîtra ici",
+    "emptyAnswer": "Réponse {{number}}",
+    "noResponses": "Aperçu uniquement — aucune réponse n’a été recueillie.",
+    "hide": "Masquer l’aperçu",
+    "show": "Afficher l’aperçu",
+    "draftIncomplete": "L’aperçu affiche votre brouillon même si certains champs sont incomplets.",
+    "stageView": "Aperçu de la scène",
+    "editLayers": "Modifier les calques",
+    "lottieUnavailable": "L’aperçu Lottie est indisponible. Vérifiez l’animation sélectionnée."
+  },
+  "fullShow": {
+    "roleMain": "Personnage principal",
+    "roleSecond": "Second personnage",
+    "roleEra": "Époque",
+    "roleCrisis": "Crise",
+    "roleEnding": "Fin",
+    "awaitingVote": "En attente du vote",
+    "directoryTitle": "Trouvez le représentant de votre table",
+    "phoneVoting": "Vote par téléphone",
+    "numberPending": "Numéro à venir",
+    "tables": "Tables",
+    "namePending": "Nom à venir",
+    "tableStatus": "Table {{table}} : {{name}}, {{status}}",
+    "connected": "Connecté",
+    "waiting": "En attente",
+    "phoneTitle": "Appelez. Puis choisissez.",
+    "keypadVoting": "Vote avec le clavier téléphonique",
+    "phoneEyebrow": "Sans application. Sans smartphone.",
+    "phoneSubtitle": "Le représentant de votre table vote avec les touches d’un téléphone ordinaire.",
+    "phoneReady": "TADAZZ! est prêt",
+    "dialIn": "Appelez maintenant",
+    "stepDialTitle": "Composez le numéro de l’événement",
+    "stepDialDescription": "L’animateur affichera ou annoncera le numéro.",
+    "stepListenTitle": "Écoutez la question",
+    "stepListenDescription": "Discutez de votre choix avec votre table.",
+    "stepPressTitle": "Appuyez sur 1, 2, 3, 4 ou 5",
+    "stepPressDescription": "Un vote par table, avec le clavier du téléphone.",
+    "readinessTitle": "Les tables s’illuminent",
+    "liveConnections": "Connexions en direct",
+    "readinessEyebrow": "La salle se connecte",
+    "readinessSubtitle": "Une lumière s’allume pour chaque représentant de table connecté.",
+    "table": "Table",
+    "connectedTables": "Tables connectées",
+    "previewData": "Données d’aperçu — pas en direct",
+    "progressTitle": "Votre monde prend forme",
+    "piecesCollected": "{{count}} éléments de l’histoire réunis sur {{total}}",
+    "progressSubtitle": "Chaque image choisie fait partie de l’histoire.",
+    "piecesReady": "Éléments de l’histoire prêts",
+    "tieTitle": "Le public est partagé",
+    "equalVotes": "Égalité des voix",
+    "votes": "{{count}} voix",
+    "tieInstruction": "L’animateur choisit l’image qui entre dans l’histoire.",
+    "companyArtwork": "Créer des mondes",
+    "openingArtwork": "Aperçu de la grande ouverture",
+    "openingTitle": "L’histoire commence avec vous",
+    "openingSubtitle": "Une expérience en direct créée par le public",
+    "firstStory": "La première histoire",
+    "newWorld": "Un tout nouveau monde"
   }
 }

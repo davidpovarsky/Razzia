@@ -58,7 +58,7 @@ export const StudioParticipantsPage = () => {
   }
 
   const tr = (key: string, fallback: string) =>
-    t(key, { defaultValue: fallback })
+    t(`extensions:${key}`, { defaultValue: fallback })
 
   return (
     <div className="bg-muted/40 flex flex-1 flex-col overflow-y-auto p-6 md:p-10">

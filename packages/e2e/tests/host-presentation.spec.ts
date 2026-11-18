@@ -16,9 +16,71 @@ test("same-window host presentation hides manager UI and controls authoritative 
 }) => {
   const evidenceDir = join(
     import.meta.dirname,
-    "../../../work/p0-audio-host-presentation-20261106",
+    "../../../docs/extensions/plans/editor-hebrew-20261118/followups/host-presentation/screenshots",
   )
   fs.mkdirSync(evidenceDir, { recursive: true })
+  const socketConnections: string[] = []
+  const commands: Array<{ action: string; requestId: string; epoch: number }> =
+    []
+  const pauseStates: Array<{
+    paused: boolean
+    remainingMs: number | null
+    epoch: number
+  }> = []
+  const browserErrors: string[] = []
+  host.on("websocket", (connection) => {
+    if (new URL(connection.url()).pathname.replace(/\/$/u, "") !== "/ws") {
+      return
+    }
+
+    socketConnections.push(connection.url())
+    const readEvent = (payload: string | Buffer) => {
+      const text = payload.toString()
+      const start = text.indexOf("[")
+
+      if (!text.startsWith("42") || start === -1) {
+        return null
+      }
+
+      return JSON.parse(text.slice(start)) as [string, Record<string, unknown>]
+    }
+    connection.on("framesent", ({ payload }) => {
+      const event = readEvent(payload)
+
+      if (event?.[0] === "extensions:command") {
+        const command = event[1] as {
+          action: string
+          requestId: string
+          payload: { epoch: number }
+        }
+        commands.push({
+          action: command.action,
+          requestId: command.requestId,
+          epoch: command.payload.epoch,
+        })
+      }
+    })
+    connection.on("framereceived", ({ payload }) => {
+      const event = readEvent(payload)
+
+      if (event?.[0] === "extensions:state" && event[1].pause) {
+        const state = event[1] as {
+          epoch: number
+          pause: { paused: boolean; remainingMs: number | null }
+        }
+        pauseStates.push({
+          paused: state.pause.paused,
+          remainingMs: state.pause.remainingMs,
+          epoch: state.epoch,
+        })
+      }
+    })
+  })
+  host.on("pageerror", (error) => browserErrors.push(error.message))
+  const doublePress = async (key: string) => {
+    await host.keyboard.press(key)
+    await host.keyboard.press(key)
+  }
   const title = `Host presentation ${Date.now()}`
   const questionId = crypto.randomUUID()
   const quizz = {
@@ -76,7 +138,7 @@ test("same-window host presentation hides manager UI and controls authoritative 
     await openingSkip.click()
   }
 
-  const pin = host.getByTestId("tadazz-lobby-pin")
+  const pin = host.getByText(/^\d{6}$/u).first()
   await expect(pin).toBeVisible()
   const originalPin = await pin.textContent()
   const originalUrl = host.url()
@@ -87,9 +149,10 @@ test("same-window host presentation hides manager UI and controls authoritative 
     viewport: { width: 1920, height: 1080 },
   })
   const display = await displayContext.newPage()
+  display.on("pageerror", (error) => browserErrors.push(error.message))
   const displayOpeningStartedAt = Date.now()
   await display.goto(`/display/${gameId}`)
-  await expect(display.getByTestId("tadazz-lobby-pin")).toHaveText(
+  await expect(display.getByText(/^\d{6}$/u).first()).toHaveText(
     originalPin ?? "",
     {
       timeout: 20_000,
@@ -98,7 +161,7 @@ test("same-window host presentation hides manager UI and controls authoritative 
   await expect(display.getByTestId("tadazz-opening")).toHaveCount(0, {
     timeout: 20_000,
   })
-  await expect(display.getByTestId("tadazz-lobby-pin")).toBeVisible()
+  await expect(display.getByText(/^\d{6}$/u).first()).toBeVisible()
   const displayLobbyElapsedMs = Date.now() - displayOpeningStartedAt
   expect(displayLobbyElapsedMs).toBeGreaterThanOrEqual(7400)
   expect(displayLobbyElapsedMs).toBeLessThan(12000)
@@ -110,6 +173,7 @@ test("same-window host presentation hides manager UI and controls authoritative 
     viewport: { width: 390, height: 844 },
   })
   const player = await playerContext.newPage()
+  player.on("pageerror", (error) => browserErrors.push(error.message))
   await joinGame(player, originalPin ?? "", "Mirror QA player")
 
   if (browserName === "webkit") {
@@ -130,14 +194,28 @@ test("same-window host presentation hides manager UI and controls authoritative 
     return
   }
 
+  await host.setViewportSize({ width: 1920, height: 1080 })
+  const connectionsBeforePresentation = socketConnections.length
+  expect(connectionsBeforePresentation).toBe(1)
   await host.getByTestId("host-present-from-host-btn").click()
   const shell = host.getByTestId("tadazz-show")
   await expect(shell).toHaveAttribute("data-host-presenting", "true")
   await expect(host.getByTestId("manager-control-toolbar")).toHaveCount(0)
   await expect(host.getByTestId("tadazz-host-controls")).toHaveCount(0)
   await expect(host.getByTestId("host-audio-controls")).toHaveCount(0)
+  await expect(host.getByRole("dialog")).toHaveCount(0)
+  await expect(host.getByRole("alertdialog")).toHaveCount(0)
+  await expect(host.locator('[role="tooltip"]:visible')).toHaveCount(0)
+  await expect(host.getByText("Mirror QA player", { exact: true })).toHaveCount(
+    0,
+  )
+  await expect
+    .poll(() => host.evaluate(() => document.fullscreenElement !== null))
+    .toBe(true)
   await expect(pin).toHaveText(originalPin ?? "")
-  await expect(host.getByTestId("tadazz-lobby-qr")).toBeVisible()
+  await expect(
+    host.getByRole("img", { name: "Show QR code", exact: true }),
+  ).toBeVisible()
   expect(host.url()).toBe(originalUrl)
 
   const viewports = [
@@ -160,6 +238,19 @@ test("same-window host presentation hides manager UI and controls authoritative 
       await expect(shell).toHaveAttribute("data-host-presenting", "true")
     }
 
+    await expect(host.getByTestId("tadazz-opening")).toHaveCount(0, {
+      timeout: 20_000,
+    })
+    await expect(pin).toBeVisible()
+    await expect(
+      host.getByRole("img", { name: "Show QR code", exact: true }),
+    ).toBeVisible()
+    await host.evaluate(async () => {
+      await document.fonts.ready
+      await new Promise<void>((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+      })
+    })
     const overflow = await shell.evaluate((element) => ({
       horizontal: element.scrollWidth - element.clientWidth,
       vertical: element.scrollHeight - element.clientHeight,
@@ -181,9 +272,14 @@ test("same-window host presentation hides manager UI and controls authoritative 
 
   await host.getByTestId("host-present-from-host-btn").click()
   await expect(shell).toHaveAttribute("data-host-presenting", "true")
-  // Starting from the public lobby is possible without exposing the toolbar.
+  // The owner-approved November8 contract requires two matching presses.
   await host.keyboard.press("ArrowRight")
-  await expect(player.getByTestId("tadazz-pad-option-0")).toBeVisible({
+  await host.waitForTimeout(600)
+  await expect(shell).toHaveAttribute("data-show-scene", "lobby")
+  await doublePress("ArrowRight")
+  await expect(
+    player.getByRole("button", { name: "1 One", exact: true }),
+  ).toBeVisible({
     timeout: 20_000,
   })
   await expect(shell).toHaveAttribute("data-host-presenting", "true")
@@ -201,22 +297,95 @@ test("same-window host presentation hides manager UI and controls authoritative 
   await host.keyboard.press("Shift+S")
   await expect(shell).toHaveAttribute("data-show-scene", "voting")
 
-  await host.keyboard.press("p")
+  const visibleTimer = host
+    .locator('[data-testid="tadazz-timer"]:visible')
+    .last()
+  await expect(visibleTimer).toBeVisible()
+  await doublePress("Space")
   await expect(shell).toHaveAttribute("data-game-paused", "true")
-  await expect(player.getByTestId("tadazz-pad-option-0")).toBeDisabled()
+  const pausedTimer = await visibleTimer.textContent()
+  const authoritativePause = pauseStates.at(-1)
+  expect(authoritativePause?.paused).toBe(true)
+  expect(authoritativePause?.remainingMs).toBeGreaterThan(0)
+  await expect(
+    player.getByRole("button", { name: "1 One", exact: true }),
+  ).toBeDisabled()
   await host.screenshot({ path: join(evidenceDir, "voting-paused-host.png") })
   await host.waitForTimeout(1200)
-  await host.keyboard.press("p")
+  await expect(visibleTimer).toHaveText(pausedTimer ?? "")
+  await doublePress("Space")
   await expect(shell).toHaveAttribute("data-game-paused", "false")
-  await expect(player.getByTestId("tadazz-pad-option-0")).toBeEnabled()
+  await expect(
+    player.getByRole("button", { name: "1 One", exact: true }),
+  ).toBeEnabled()
 
-  await host.keyboard.press("t")
+  await player.screenshot({ path: join(evidenceDir, "voting-player-390.png") })
+  await player.getByRole("button", { name: "1 One", exact: true }).click()
+  await doublePress("Enter")
   await expect(shell).toHaveAttribute("data-show-scene", "results")
-  await expect(player.getByTestId("tadazz-screen-player-result")).toBeVisible()
+  await expect(player.getByText("Nice!", { exact: true })).toBeVisible()
+  await expect(player.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-show-scene",
+    "results",
+  )
+  await player.screenshot({ path: join(evidenceDir, "results-player-390.png") })
+  await expect(
+    host.getByTestId("tadazz-question-panel").getByText("AUDIENCE RESULTS", {
+      exact: true,
+    }),
+  ).toBeVisible()
   await host.screenshot({ path: join(evidenceDir, "results-host-present.png") })
 
   await host.keyboard.press("Escape")
   await expect(host.getByTestId("manager-control-toolbar")).toBeVisible()
-  await playerContext.close()
-  await displayContext.close()
+  expect(host.url()).toBe(originalUrl)
+  expect(socketConnections).toHaveLength(connectionsBeforePresentation)
+  expect(browserErrors).toEqual([])
+  expect(commands.map(({ action }) => action)).toEqual([
+    "NEXT_SCREEN",
+    "PAUSE_GAME",
+    "RESUME_GAME",
+    "END_ANSWER_TIMER",
+  ])
+  expect(new Set(commands.map(({ requestId }) => requestId)).size).toBe(4)
+  expect(commands.every(({ epoch }) => Number.isInteger(epoch))).toBe(true)
+  expect(pauseStates.some((state) => state.paused)).toBe(true)
+  expect(pauseStates.at(-1)?.paused).toBe(false)
+  const cleanupStartedAt = Date.now()
+  const cleanupPages = [playerContext, displayContext].map((context) =>
+    context.pages().map((page) => {
+      const url = new URL(page.url())
+
+      return url.origin + url.pathname
+    }),
+  )
+  fs.writeFileSync(
+    join(evidenceDir, "cleanup-start.json"),
+    JSON.stringify({ cleanupPages, cleanupStartedAt }, null, 2),
+  )
+  await Promise.all([playerContext.close(), displayContext.close()])
+  fs.writeFileSync(
+    join(evidenceDir, "browser-receipt.json"),
+    JSON.stringify(
+      {
+        gameId,
+        gameSocketConnections: socketConnections.length,
+        gameSocketConnectionsBeforePresentation: connectionsBeforePresentation,
+        cleanupMs: Date.now() - cleanupStartedAt,
+        cleanupPages,
+        browserErrors,
+        commands,
+        authoritativePause,
+        pausedTimer,
+        viewports,
+        playerViewport: player.viewportSize(),
+        actualFullscreen: true,
+        submittedBrowserVote: true,
+        shortcutContract:
+          "Owner-requested November8 matching double press within500ms",
+      },
+      null,
+      2,
+    ),
+  )
 })

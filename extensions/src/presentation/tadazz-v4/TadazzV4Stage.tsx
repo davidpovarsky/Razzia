@@ -103,19 +103,10 @@ export const TadazzV4Stage = forwardRef<
     }
 
     const fit = () => {
-      const rect = viewport.getBoundingClientRect()
-      const vw = Math.min(
-        Math.max(1, rect.width || viewport.clientWidth),
-        typeof window !== "undefined" && window.innerWidth > 0
-          ? window.innerWidth
-          : Infinity,
-      )
-      const vh = Math.min(
-        Math.max(1, rect.height || viewport.clientHeight),
-        typeof window !== "undefined" && window.innerHeight > 0
-          ? window.innerHeight
-          : Infinity,
-      )
+      // Fit in local CSS layout space. Bounding rectangles already include
+      // an enclosing editor/preview transform and would apply its scale twice.
+      const vw = Math.max(1, viewport.clientWidth)
+      const vh = Math.max(1, viewport.clientHeight)
       const scale = Math.min(vw / 1920, vh / 1080)
       element.style.setProperty("--scale", String(scale > 0 ? scale : 0.0001))
     }

@@ -78,7 +78,7 @@ export type PreviewUnavailableReason = z.infer<
 >
 
 export const previewPreferencesSchema = z.strictObject({
-  locale: z.enum(["en", "fr", "de", "es", "it", "ja", "tr", "vi"]),
+  locale: z.enum(["en", "fr", "de", "es", "it", "ja", "tr", "vi", "he"]),
   reducedMotion: z.boolean(),
 })
 

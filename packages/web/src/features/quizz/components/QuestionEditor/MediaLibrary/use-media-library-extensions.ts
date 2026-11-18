@@ -17,8 +17,7 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
 
-const LEGACY_BUILT_IN_SOUNDS: Array<UploadedMedia & { label: string }> =
-  BUILT_IN_SOUNDS_LIST
+const LEGACY_BUILT_IN_SOUNDS = BUILT_IN_SOUNDS_LIST
 
 export function useMediaLibraryExtensions(
   acceptType?: "image" | "video" | "audio" | "all",
@@ -57,7 +56,12 @@ export function useMediaLibraryExtensions(
       }
     }
     const sounds = isLegacyShowRollback(themeDefaults)
-      ? LEGACY_BUILT_IN_SOUNDS
+      ? LEGACY_BUILT_IN_SOUNDS.map((sound) => ({
+          ...sound,
+          label: t(
+            `extensions:audio.cue${sound.cueId.charAt(0).toUpperCase()}${sound.cueId.slice(1)}`,
+          ),
+        }))
       : theme.definition.assets.flatMap((asset) => {
           const event = eventsByAsset.get(asset.id)
 

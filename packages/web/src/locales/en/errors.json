@@ -75,5 +75,8 @@
     "notFound": "Media not found",
     "tooLarge": "File is too large",
     "uploadFailed": "Failed to upload the file"
+  },
+  "server": {
+    "internal": "The server encountered an error, please try again"
   }
 }

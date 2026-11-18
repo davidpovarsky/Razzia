@@ -334,5 +334,47 @@
       "closing": "Kết thúc",
       "personalResult": "Kết quả của tôi"
     }
+  },
+  "he": {
+    "title": "חבילות TADAZZ",
+    "installFile": "התקנת חבילה",
+    "assets": "קבצים",
+    "game": "משחק",
+    "theme": "ערכת נושא",
+    "demo": "הדגמה",
+    "build": "הכנת תצוגה מקדימה",
+    "preview": "תצוגה מקדימה",
+    "installSelected": "התקנת הבחירה",
+    "export": "ייצוא חבילה",
+    "installed": "חבילות מותקנות",
+    "rollback": "שימוש בגרסה הזו",
+    "failed": "לא ניתן לעבד את החבילה.",
+    "working": "בודק את החבילה…",
+    "reviewRequired": "בודק עצמאי שהוקצה לחבילה חייב לאשר את הגרסה המדויקת הזו לפני ההתקנה.",
+    "codeBoundary": "ערכת הנושא מכילה רכיבי React מותאמים אישית. היא פועלת בסביבה מבודדת, ופקדי המשחק והשמע נשארים ב־TADAZZ.",
+    "runtimeFailed": "ערכת הנושא אינה זמינה. המשחק ממשיך בתצוגה הרגילה.",
+    "usePackageImport": "השתמשו בהתקנת חבילה כדי לייבא את קובץ ה־TADAZZ הזה.",
+    "unknownArchive": "הקובץ אינו מזוהה. בחרו חבילת TADAZZ או חוברת XLSX.",
+    "states": {
+      "validated": "אומת",
+      "building": "מכין תצוגה מקדימה",
+      "preview-ready": "מוכן לתצוגה מקדימה",
+      "installed": "מותקן באופן פרטי",
+      "failed": "ההכנה נכשלה",
+      "installing": "מתקין"
+    },
+    "phases": {
+      "opening": "פתיחה",
+      "lobby": "חדר המתנה",
+      "question": "שאלה",
+      "answerCards": "תשובות",
+      "voting": "מענה",
+      "voteLocked": "המענה נסגר",
+      "results": "תוצאות",
+      "leaderboard": "טבלת המובילים",
+      "interlude": "קטע מעבר",
+      "closing": "סיום",
+      "personalResult": "התוצאה שלי"
+    }
   }
 }

@@ -36,7 +36,11 @@ const seconds = z
   .int()
   .nonnegative()
   .max(Number.MAX_SAFE_INTEGER / 1000)
-const requestSchema = z.strictObject({
+// OAuth authorization requests are extensible. ChatGPT may append standard
+// hints (prompt, login_hint, id_token_hint, target_flow). Discard unknown
+// fields rather than rejecting the whole request; only the validated, listed
+// parameters are ever sealed into the consent ticket and grant.
+const requestSchema = z.object({
   response_type: z.literal("code"),
   client_id: bounded,
   redirect_uri: z.string().url().max(2048),

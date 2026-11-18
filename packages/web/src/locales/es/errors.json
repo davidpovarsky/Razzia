@@ -75,5 +75,8 @@
     "notFound": "Archivo no encontrado",
     "tooLarge": "El archivo es demasiado grande",
     "uploadFailed": "No se pudo subir el archivo"
+  },
+  "server": {
+    "internal": "El servidor encontró un error, inténtalo de nuevo"
   }
 }

@@ -20,6 +20,8 @@ const QuestionEditorTitle = () => {
         <div className="z-10 flex flex-col gap-1">
           <input
             {...field}
+            dir="auto"
+            aria-label={t("quizz:question.placeholder")}
             aria-invalid={fieldState.invalid}
             aria-describedby={
               fieldState.invalid ? `${field.name}-error` : undefined

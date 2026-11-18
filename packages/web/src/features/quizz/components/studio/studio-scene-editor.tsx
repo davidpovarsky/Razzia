@@ -1,6 +1,8 @@
 // oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import {
   isLegacyShowRollback,
+  isQuizExtrasV2,
+  nativeBundleToAuthoredShow,
   resolveShowTheme,
   type LottieMeta,
   MAX_CINEMATIC_OVERLAY_ANIMATIONS,
@@ -13,14 +15,21 @@ import {
   type CinematicOverlayAnimation,
   type SceneConfig,
 } from "@razzia/extensions/core"
-import type { UploadedMedia } from "@razzia/common/types/game"
+import type { UploadedMedia, Question } from "@razzia/common/types/game"
 import { useInstalledThemeCatalog } from "./installed-theme-catalog"
 import {
   CinematicLayerStack,
-  LottiePlayer,
+  ScenePresenter,
+  LiveEditorStagePreview,
+  createScenePresenterLabels,
+  hasAuthoredCinematicContent,
+  recapPageLimit,
+  recapPageSize,
 } from "@razzia/extensions/presentation"
+import { EditorPreviewViewport } from "../QuestionEditor/EditorPreviewViewport"
 import Button from "@razzia/web/components/Button"
 import Input from "@razzia/web/components/Input"
+import ToggleGroup from "@razzia/web/components/ToggleGroup"
 import {
   useQuizzEditor,
   type QuizzFormValues,
@@ -34,26 +43,19 @@ import {
   AlertTriangle,
   ArrowDown,
   ArrowUp,
-  BarChart2,
   ChevronDown,
   ChevronRight,
   Clock,
   Copy,
   DoorOpen,
-  Film,
   Flag,
   FolderOpen,
-  Image as ImageIcon,
-  Layers,
-  ListChecks,
-  Music,
   Pause,
   Play,
   Plus,
   RotateCcw,
   Sparkles,
   Trash2,
-  Trophy,
   Upload,
 } from "lucide-react"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
@@ -62,6 +64,8 @@ import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
 import { useStudioEditor } from "./studio-editor-context"
 import { StudioSelect } from "./studio-select"
+const EMPTY_QUESTIONS: Question[] = []
+
 interface CatalogLottieAsset {
   name: string
   url: string
@@ -118,7 +122,7 @@ function getManagerAuthHeaders(
 }
 
 export const StudioSceneEditor = () => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const registry = useInstalledThemeCatalog()
   const {
     selectedTimelineItem,
@@ -128,19 +132,21 @@ export const StudioSceneEditor = () => {
     updateSceneConfig,
     defaults,
   } = useStudioEditor()
-  const { quizzId, questionIds } = useQuizzEditor()
+  const { quizzId, questionIds, extras, gameMode } = useQuizzEditor()
   const { control } = useFormContext<QuizzFormValues>()
+  const subject = useWatch({ control, name: "subject" })
   const questions =
     useWatch({
       control,
       name: "questions",
-    }) ?? []
+    }) ?? EMPTY_QUESTIONS
   const [mediaPickerOpen, setMediaPickerOpen] = useState(false)
   const lottieInputRef = useRef<HTMLInputElement>(null)
   const overlayFileInputRef = useRef<HTMLInputElement>(null)
   const uploadTargetOverlayIdRef = useRef<string | null>(null)
 
   // Preview aspect & playback controls
+  const [previewEditingLayers, setPreviewEditingLayers] = useState(false)
   const [previewAspect, setPreviewAspect] = useState<"16:9" | "4:3">("16:9")
   const [isPreviewPlaying, setIsPreviewPlaying] = useState(false)
   const [previewTimeMs, setPreviewTimeMs] = useState(0)
@@ -196,6 +202,7 @@ export const StudioSceneEditor = () => {
   // Reset preview playback when switching timeline cards
   useEffect(() => {
     setIsPreviewPlaying(false)
+    setPreviewEditingLayers(false)
     setPreviewTimeMs(0)
     setDetectedVideoDurationMs(null)
     setSelectedOverlayId(null)
@@ -225,8 +232,17 @@ export const StudioSceneEditor = () => {
     (scene.mediaType === "video" ||
       /\.(mp4|webm|mov|m4v)$/iu.test(scene.mediaUrl)),
   )
-  const configuredDurationMs =
-    scene && "durationMs" in scene ? scene.durationMs : 5000
+  const hasTimedPreview = Boolean(
+    scene &&
+    !["leaderboard", "interimResults", "answerRecap"].includes(scene.kind),
+  )
+  const configuredDurationMs = (() => {
+    if (scene && "durationSeconds" in scene) {
+      return scene.durationSeconds * 1000
+    }
+
+    return scene && "durationMs" in scene ? scene.durationMs : 5000
+  })()
   const effectivePreviewDurationMs = useMemo(() => {
     if (
       hasForegroundVideo &&
@@ -241,7 +257,10 @@ export const StudioSceneEditor = () => {
 
   // Drive non-video preview playback via requestAnimationFrame when Play is active
   useEffect(() => {
-    if (!isPreviewPlaying || hasForegroundVideo) {
+    if (
+      !isPreviewPlaying ||
+      (isCinemaMode && hasForegroundVideo && previewEditingLayers)
+    ) {
       return undefined
     }
 
@@ -270,7 +289,13 @@ export const StudioSceneEditor = () => {
         cancelAnimationFrame(rafId)
       }
     }
-  }, [isPreviewPlaying, hasForegroundVideo, effectivePreviewDurationMs])
+  }, [
+    isPreviewPlaying,
+    isCinemaMode,
+    hasForegroundVideo,
+    previewEditingLayers,
+    effectivePreviewDurationMs,
+  ])
   const resolvedOverlays = useMemo(() => {
     if (!scene || !isCinemaCapableScene) {
       return []
@@ -371,6 +396,35 @@ export const StudioSceneEditor = () => {
     [resolvedOverlays, commitOverlays],
   )
 
+  const authoredSource = useMemo(() => {
+    if (!extras) {
+      return null
+    }
+
+    try {
+      return nativeBundleToAuthoredShow(
+        {
+          quizz: { subject, questions, gameMode },
+          extras: isQuizExtrasV2(extras)
+            ? { ...extras, timeline, scenes, defaults, questionIds }
+            : extras,
+        },
+        { includePrivateRoster: false },
+      )
+    } catch {
+      return null
+    }
+  }, [
+    extras,
+    questions,
+    questionIds,
+    gameMode,
+    subject,
+    defaults,
+    timeline,
+    scenes,
+  ])
+
   if (!selectedTimelineItem || selectedTimelineItem.kind === "question") {
     return null
   }
@@ -383,6 +437,18 @@ export const StudioSceneEditor = () => {
     )
   }
 
+  const activeTheme = resolveShowTheme({
+    selection: defaults.showTheme,
+    scope: scene.themeOverrides,
+    role: "manager",
+    registry,
+  })
+  const maxRecapItems = recapPageLimit(activeTheme.definition.rendererId)
+  const usesNativeOpeningPreset =
+    !defaults.showComposition &&
+    activeTheme.definition.rendererId === "tadazz-classic-stage" &&
+    (scene.kind === "opening" || scene.kind === "closing") &&
+    !hasAuthoredCinematicContent(scene)
   const presetItems = isLegacyShowRollback(defaults)
     ? [
         ...CREATING_WORLDS_PRESETS.map((value) => ({
@@ -406,11 +472,7 @@ export const StudioSceneEditor = () => {
           label: t("extensions:studio.scene.presetPulse", "Pulse"),
         },
       ]
-    : resolveShowTheme({
-        selection: defaults.showTheme,
-        role: "manager",
-        registry,
-      }).definition.capabilities.animationPresets.map((value) => ({
+    : activeTheme.definition.capabilities.animationPresets.map((value) => ({
         value,
         label: t(`extensions:themes.presets.${value}`),
       }))
@@ -726,14 +788,24 @@ export const StudioSceneEditor = () => {
   const handleAddOverlayLayer = (assetUrl?: string, customLabel?: string) => {
     if (resolvedOverlays.length >= MAX_CINEMATIC_OVERLAY_ANIMATIONS) {
       toast.error(
-        `Maximum of ${MAX_CINEMATIC_OVERLAY_ANIMATIONS} overlay animations reached.`,
+        t("extensions:studio.scene.overlays.limitReached", {
+          max: MAX_CINEMATIC_OVERLAY_ANIMATIONS,
+          defaultValue: "Maximum of {{max}} overlay animations reached.",
+        }),
       )
 
       return
     }
 
-    const targetUrl =
-      assetUrl ?? lottieCatalog[0]?.url ?? "/media/overlay-animation.json"
+    const targetUrl = assetUrl ?? lottieCatalog[0]?.url
+
+    if (!targetUrl) {
+      setCatalogTargetOverlayId(null)
+      setLottieCatalogOpen(true)
+
+      return
+    }
+
     const nextIndex = resolvedOverlays.length
     const defaultLabel =
       customLabel ??
@@ -823,7 +895,10 @@ export const StudioSceneEditor = () => {
   const handleDuplicateOverlay = (overlayId: string) => {
     if (resolvedOverlays.length >= MAX_CINEMATIC_OVERLAY_ANIMATIONS) {
       toast.error(
-        `Maximum of ${MAX_CINEMATIC_OVERLAY_ANIMATIONS} overlay animations reached.`,
+        t("extensions:studio.scene.overlays.limitReached", {
+          max: MAX_CINEMATIC_OVERLAY_ANIMATIONS,
+          defaultValue: "Maximum of {{max}} overlay animations reached.",
+        }),
       )
 
       return
@@ -839,7 +914,11 @@ export const StudioSceneEditor = () => {
     const cloned: CinematicOverlayAnimation = {
       ...structuredClone(source),
       id: crypto.randomUUID(),
-      label: `${source.label || `Overlay ${idx + 1}`} (Copy)`.slice(0, 80),
+      label:
+        `${source.label || t("extensions:studio.scene.overlays.layerDefaultLabel", { num: idx + 1 })} (${t("extensions:studio.scene.overlays.duplicate")})`.slice(
+          0,
+          80,
+        ),
       order: idx + 1,
     }
     const next = [
@@ -927,7 +1006,7 @@ export const StudioSceneEditor = () => {
     title: string
   }> = []
 
-  if (scene.kind === "answerRecap") {
+  {
     let qCounter = 0
     for (let i = 0; i < timeline.length; i += 1) {
       if (i >= selectedTimelineIndex && selectedTimelineIndex >= 0) {
@@ -971,6 +1050,118 @@ export const StudioSceneEditor = () => {
 
     return []
   })()
+  const sceneOrdinal = timeline
+    .slice(0, selectedTimelineIndex + 1)
+    .filter((item) => item.kind !== "question").length
+  const authoredKey = `${scene.kind.toUpperCase()}_${String(sceneOrdinal).padStart(2, "0")}`
+  const previewScene = {
+    ...scene,
+    ...("mediaUrl" in scene
+      ? { muted: true, volume: 0, showControls: false }
+      : {}),
+    audio: { mode: "mute" as const, volume: 0, loop: false },
+  }
+  const scenePreviewLabels = {
+    ...createScenePresenterLabels((key, fallback) => t(key, fallback)),
+    kinds: Object.fromEntries(
+      [
+        "opening",
+        "closing",
+        "transition",
+        "animation",
+        "media",
+        "leaderboard",
+        "interimResults",
+        "answerRecap",
+        "countdown",
+      ].map((kind) => [kind, t(`extensions:timeline.${kind}`)]),
+    ),
+    points: t("extensions:studio.scene.scoreLabel", "pts"),
+    noScores: t(
+      "extensions:studio.scene.noRankingsYet",
+      "No player scores yet.",
+    ),
+    noInterimResults: t(
+      "extensions:studio.scene.noResponsesYet",
+      "No responses recorded yet.",
+    ),
+    noMedia: t("extensions:studio.scene.noMedia", "No media selected yet"),
+    awaitingHost: t("extensions:studio.scene.advanceManual", "Manual"),
+    autoProgression: t("extensions:studio.scene.advanceAuto", "Automatic"),
+  }
+  const previewRecapItems = recapQuestionRange.map((item) => {
+    const question = questions[questionIds.indexOf(item.questionId)]
+    const perQuestion = extras?.perQuestion[item.questionId]
+    const playMode = question?.playMode ?? gameMode
+    const correct =
+      scene.kind === "answerRecap" &&
+      scene.mode === "correctAnswer" &&
+      playMode === "quiz"
+    const correctOptions =
+      correct && question?.type !== "estimation"
+        ? (question?.solutions ?? []).map((index) => ({
+            answerIndex: index,
+            label: question?.answers[index] ?? "",
+            count: 0,
+            percentage: 0,
+            imageUrl: perQuestion?.answerVisuals?.find(
+              (visual) =>
+                visual.answerIndex === index && visual.display !== "text",
+            )?.url,
+            isCorrect: true,
+          }))
+        : []
+
+    return {
+      questionId: item.questionId,
+      questionNumber: item.questionNumber,
+      questionText: item.title,
+      questionType: question?.type,
+      playMode,
+      totalResponders: 0,
+      badgeType: correct
+        ? ("correctAnswer" as const)
+        : ("noResponses" as const),
+      winningOptions: correctOptions,
+      correctOptions,
+    }
+  })
+  const lastQuestionId = precedingQuestions.at(-1)?.questionId
+  const lastQuestion = lastQuestionId
+    ? questions[questionIds.indexOf(lastQuestionId)]
+    : undefined
+  const scenePreviewData = {
+    ...(scene.kind === "answerRecap"
+      ? {
+          answerRecap: {
+            title: scene.title,
+            subtitle: scene.subtitle,
+            totalQuestionsInRange: previewRecapItems.length,
+            completedQuestionsCount: 0,
+            mode: scene.mode,
+            maxItemsPerPage: scene.maxItemsPerPage ?? 4,
+            showCounts: scene.showCounts ?? true,
+            showPercentages: scene.showPercentages ?? true,
+            items: previewRecapItems,
+          },
+        }
+      : {}),
+    ...(scene.kind === "interimResults" && lastQuestion
+      ? {
+          interimResults: {
+            sourceQuestionId: lastQuestionId ?? null,
+            questionText: lastQuestion.question,
+            totalResponders: 0,
+            options: lastQuestion.answers.map((label, answerIndex) => ({
+              answerIndex,
+              label,
+              count: 0,
+              percentage: 0,
+            })),
+          },
+        }
+      : {}),
+  }
   const pickerAcceptType = (() => {
     if ("mediaType" in scene) {
       if (scene.mediaType === "audio") {
@@ -1029,7 +1220,7 @@ export const StudioSceneEditor = () => {
         )}
 
         {/* Top Preview Bar: 16:9 / 4:3 Aspect Ratio Switch & Transport Controls */}
-        {isCinemaCapableScene && (
+        {
           <div
             data-testid="studio-preview-toolbar"
             className="border-accent bg-background/90 flex w-full max-w-3xl flex-wrap items-center justify-between gap-2 rounded-xl border px-3 py-1.5 text-xs shadow-xs"
@@ -1039,6 +1230,7 @@ export const StudioSceneEditor = () => {
                 size="sm"
                 type="button"
                 data-testid="studio-preview-aspect-16-9"
+                aria-pressed={previewAspect === "16:9"}
                 onClick={() => setPreviewAspect("16:9")}
                 className={clsx(
                   "rounded-md px-2.5 py-1 font-bold transition",
@@ -1053,6 +1245,7 @@ export const StudioSceneEditor = () => {
                 size="sm"
                 type="button"
                 data-testid="studio-preview-aspect-4-3"
+                aria-pressed={previewAspect === "4:3"}
                 onClick={() => setPreviewAspect("4:3")}
                 className={clsx(
                   "rounded-md px-2.5 py-1 font-bold transition",
@@ -1069,7 +1262,35 @@ export const StudioSceneEditor = () => {
             </div>
 
             {isCinemaMode && (
-              <div className="flex items-center gap-2">
+              <ToggleGroup
+                value={previewEditingLayers ? "layers" : "stage"}
+                onChange={(value) =>
+                  setPreviewEditingLayers(value === "layers")
+                }
+                items={[
+                  {
+                    value: "stage",
+                    label: t(
+                      "extensions:editorPreview.stageView",
+                      "Stage preview",
+                    ),
+                  },
+                  {
+                    value: "layers",
+                    label: t(
+                      "extensions:editorPreview.editLayers",
+                      "Edit layers",
+                    ),
+                  },
+                ]}
+                itemMetadata={(value) => ({
+                  "data-testid": `scene-preview-mode-${value}`,
+                })}
+              />
+            )}
+
+            {hasTimedPreview && (
+              <div className="flex flex-wrap items-center gap-2">
                 <Button
                   size="sm"
                   type="button"
@@ -1106,6 +1327,10 @@ export const StudioSceneEditor = () => {
                   size="sm"
                   type="button"
                   data-testid="studio-preview-replay"
+                  aria-label={t(
+                    "extensions:studio.scene.overlays.replay",
+                    "Replay from 0:00",
+                  )}
                   onClick={() => {
                     setIsPreviewPlaying(false)
                     setPreviewTimeMs(0)
@@ -1120,6 +1345,7 @@ export const StudioSceneEditor = () => {
                 </Button>
                 <span
                   data-testid="studio-preview-time-readout"
+                  dir="ltr"
                   className="text-muted-foreground font-mono text-[11px] font-bold"
                 >
                   {formatMsReadout(previewTimeMs)} /{" "}
@@ -1128,7 +1354,7 @@ export const StudioSceneEditor = () => {
               </div>
             )}
           </div>
-        )}
+        }
 
         {/* Stage Preview Container */}
         <div
@@ -1139,7 +1365,6 @@ export const StudioSceneEditor = () => {
             previewAspect === "4:3"
               ? "aspect-[4/3] max-w-2xl"
               : "aspect-video max-w-3xl",
-            !isCinemaMode && "p-4 sm:p-8",
           )}
         >
           {/* Scene Custom Background Preview (Distinct from foreground mediaUrl) */}
@@ -1151,6 +1376,9 @@ export const StudioSceneEditor = () => {
               <img
                 src={scene.background.url}
                 alt=""
+                style={{
+                  objectPosition: scene.background.position ?? "center",
+                }}
                 className={clsx(
                   "h-full w-full",
                   scene.background.fit === "contain"
@@ -1167,415 +1395,178 @@ export const StudioSceneEditor = () => {
             </div>
           )}
 
-          {/* Unified CinematicLayerStack for Opening, Closing, and Media Cinema Mode */}
-          {isCinemaMode ? (
-            <div
-              data-testid={`scene-preview-${scene.kind}`}
-              className="relative flex h-full w-full flex-1"
-            >
-              <CinematicLayerStack
-                sceneId={scene.id}
-                sceneKind={scene.kind}
-                mediaUrl={"mediaUrl" in scene ? scene.mediaUrl : undefined}
-                mediaType={"mediaType" in scene ? scene.mediaType : undefined}
-                mediaFit={
-                  "mediaFit" in scene
-                    ? (scene.mediaFit ??
-                      (scene.kind === "media" ? "contain" : "cover"))
-                    : "cover"
-                }
-                volume={"volume" in scene ? (scene.volume ?? 0.8) : 0.8}
-                loop={"loop" in scene ? (scene.loop ?? false) : false}
-                muted={"muted" in scene ? (scene.muted ?? false) : false}
-                showControls={false}
-                endBehavior={
-                  "endBehavior" in scene
-                    ? (scene.endBehavior ?? "holdFrame")
-                    : "holdFrame"
-                }
-                lottieUrl={"lottieUrl" in scene ? scene.lottieUrl : undefined}
-                lottieFit={
-                  "lottieFit" in scene
-                    ? (scene.lottieFit ?? "contain")
-                    : "contain"
-                }
-                lottieLoop={
-                  "lottieLoop" in scene ? (scene.lottieLoop ?? true) : true
-                }
-                lottieSpeed={
-                  "lottieSpeed" in scene ? (scene.lottieSpeed ?? 1) : 1
-                }
-                overlayAnimations={
-                  "overlayAnimations" in scene
-                    ? scene.overlayAnimations
-                    : undefined
-                }
-                interactiveEditorMode={true}
-                controlledPaused={!isPreviewPlaying}
-                controlledTimeMs={
-                  isPreviewPlaying && hasForegroundVideo
-                    ? undefined
-                    : previewTimeMs
-                }
-                selectedOverlayId={selectedOverlayId}
-                onSelectOverlay={(id) => {
-                  setSelectedOverlayId(id)
-
-                  if (id) {
-                    setExpandedOverlayId(id)
-                    setOverlaysSectionOpen(true)
+          <LiveEditorStagePreview
+            source={authoredSource}
+            authoredKey={authoredKey}
+            phase={scene.kind}
+            locale={i18n.language}
+            timeline={timeline}
+            activeSceneData={scenePreviewData}
+            elapsedMs={previewTimeMs}
+            paused={!isPreviewPlaying}
+            enabled={!isCinemaMode || !previewEditingLayers}
+          >
+            {/* Unified CinematicLayerStack for Opening, Closing, and Media Cinema Mode */}
+            {isCinemaMode ? (
+              <div
+                data-testid={`scene-preview-${scene.kind}`}
+                className="relative flex h-full w-full flex-1"
+              >
+                <CinematicLayerStack
+                  sceneId={scene.id}
+                  sceneKind={scene.kind}
+                  mediaUrl={"mediaUrl" in scene ? scene.mediaUrl : undefined}
+                  mediaType={"mediaType" in scene ? scene.mediaType : undefined}
+                  mediaFit={
+                    "mediaFit" in scene
+                      ? (scene.mediaFit ??
+                        (scene.kind === "media" ? "contain" : "cover"))
+                      : "cover"
                   }
-                }}
-                onUpdateOverlayPosition={handleUpdateOverlayPosition}
-                onVideoDurationDetected={(ms) => setDetectedVideoDurationMs(ms)}
-                onClockTick={(ms) => setPreviewTimeMs(ms)}
-                onEditorMediaEnded={() => setIsPreviewPlaying(false)}
-                titleSlot={
-                  <div
-                    className={clsx(
-                      "flex h-full w-full flex-col items-center justify-center gap-3 p-4",
-                      "logoPosition" in scene &&
-                        scene.logoPosition === "top" &&
-                        "justify-start pt-4",
-                      "logoPosition" in scene &&
-                        scene.logoPosition === "bottom" &&
-                        "justify-end pb-8",
-                    )}
-                  >
-                    {(scene.kind === "opening" || scene.kind === "closing") &&
-                      (scene.logoPosition ?? "center") !== "hidden" && (
-                        <div className="bg-primary/20 text-primary rounded-full p-4">
-                          {scene.kind === "opening" ? (
-                            <DoorOpen className="size-10 sm:size-12" />
-                          ) : (
-                            <Flag className="size-10 sm:size-12" />
-                          )}
-                        </div>
-                      )}
+                  volume={0}
+                  loop={"loop" in scene ? (scene.loop ?? false) : false}
+                  muted
+                  showControls={false}
+                  endBehavior={
+                    "endBehavior" in scene
+                      ? (scene.endBehavior ?? "holdFrame")
+                      : "holdFrame"
+                  }
+                  lottieUrl={"lottieUrl" in scene ? scene.lottieUrl : undefined}
+                  lottieFit={
+                    "lottieFit" in scene
+                      ? (scene.lottieFit ?? "contain")
+                      : "contain"
+                  }
+                  lottieLoop={
+                    "lottieLoop" in scene ? (scene.lottieLoop ?? true) : true
+                  }
+                  lottieSpeed={
+                    "lottieSpeed" in scene ? (scene.lottieSpeed ?? 1) : 1
+                  }
+                  overlayAnimations={
+                    "overlayAnimations" in scene
+                      ? scene.overlayAnimations
+                      : undefined
+                  }
+                  interactiveEditorMode={true}
+                  controlledPaused={!isPreviewPlaying}
+                  controlledTimeMs={
+                    isPreviewPlaying && hasForegroundVideo
+                      ? undefined
+                      : previewTimeMs
+                  }
+                  selectedOverlayId={selectedOverlayId}
+                  onSelectOverlay={(id) => {
+                    setSelectedOverlayId(id)
 
-                    {"mediaUrl" in scene &&
-                      scene.mediaUrl &&
-                      scene.mediaType === "audio" && (
-                        <audio
-                          data-testid="scene-preview-audio"
-                          src={scene.mediaUrl}
-                          controls={scene.showControls ?? true}
-                          className="pointer-events-auto w-60 max-w-full"
-                        />
-                      )}
-
-                    {(("textOverlay" in scene ? scene.textOverlay : true) ??
-                      true) && (
-                      <>
-                        {scene.title && (
-                          <h1 className="text-2xl font-extrabold tracking-tight drop-shadow-md sm:text-4xl">
-                            {scene.title}
-                          </h1>
-                        )}
-                        {"subtitle" in scene && scene.subtitle && (
-                          <p className="text-base text-white/85 drop-shadow-xs sm:text-xl">
-                            {scene.subtitle}
-                          </p>
-                        )}
-                      </>
-                    )}
-                  </div>
-                }
-              />
-            </div>
-          ) : (
-            <div className="relative z-10 flex h-full w-full flex-col items-center justify-center">
-              {scene.kind === "transition" && (
-                <div className="flex flex-col items-center gap-4">
-                  <div className="bg-primary/20 text-primary rounded-full p-4">
-                    <Layers className="size-12" />
-                  </div>
-                  <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-                    {scene.title ?? t("extensions:timeline.transition")}
-                  </h2>
-                  {scene.description && (
-                    <p className="max-w-md text-base text-white/80 sm:text-lg">
-                      {scene.description}
-                    </p>
-                  )}
-                </div>
-              )}
-
-              {scene.kind === "animation" && (
-                <div
-                  data-testid={`scene-preview-animation-${scene.preset}`}
-                  className="flex flex-col items-center gap-4"
-                >
-                  {scene.lottieUrl ? (
-                    <LottiePlayer
-                      src={scene.lottieUrl}
-                      loop={scene.lottieLoop ?? true}
-                      speed={scene.lottieSpeed ?? 1}
-                      fit={scene.lottieFit ?? "contain"}
-                      className="h-36 w-52"
-                      dataTestId="scene-preview-lottie"
-                    />
-                  ) : (
+                    if (id) {
+                      setExpandedOverlayId(id)
+                      setOverlaysSectionOpen(true)
+                    }
+                  }}
+                  onUpdateOverlayPosition={handleUpdateOverlayPosition}
+                  onVideoDurationDetected={(ms) =>
+                    setDetectedVideoDurationMs(ms)
+                  }
+                  onClockTick={(ms) => setPreviewTimeMs(ms)}
+                  onEditorMediaEnded={() => setIsPreviewPlaying(false)}
+                  titleSlot={
                     <div
                       className={clsx(
-                        "text-primary rounded-full p-5 transition-all",
-                        scene.preset === "spotlight" &&
-                          "bg-amber-400/25 shadow-[0_0_40px_rgba(251,191,36,0.45)] ring-4 ring-amber-300/40",
-                        scene.preset === "confetti" &&
-                          "animate-bounce bg-pink-500/25 ring-4 ring-pink-400/40",
-                        scene.preset === "bounce" &&
-                          "bg-primary/20 animate-bounce",
-                        scene.preset === "pulse" &&
-                          "animate-pulse bg-emerald-500/25 ring-4 ring-emerald-400/40",
+                        "flex h-full w-full flex-col items-center justify-center gap-3 p-4",
+                        "logoPosition" in scene &&
+                          scene.logoPosition === "top" &&
+                          "justify-start pt-4",
+                        "logoPosition" in scene &&
+                          scene.logoPosition === "bottom" &&
+                          "justify-end pb-8",
                       )}
                     >
-                      <Sparkles className="size-16" />
-                    </div>
-                  )}
-                  <h2 className="text-2xl font-bold sm:text-3xl">
-                    {scene.title ?? `Animation: ${scene.preset}`}
-                  </h2>
-                  <span className="text-primary rounded-full bg-white/20 px-4 py-1 text-sm font-semibold tracking-wider uppercase">
-                    {scene.preset}
-                  </span>
-                </div>
-              )}
-
-              {scene.kind === "media" && (
-                <div className="flex h-full w-full flex-col items-center justify-center gap-3">
-                  {Boolean(scene.mediaUrl) && scene.mediaType === "video" && (
-                    <video
-                      data-testid="scene-preview-video"
-                      src={scene.mediaUrl}
-                      className={clsx(
-                        "max-h-56 rounded-lg shadow-md sm:max-h-72",
-                        scene.mediaFit === "cover"
-                          ? "object-cover"
-                          : "object-contain",
-                      )}
-                      controls={scene.showControls ?? true}
-                      loop={scene.loop ?? false}
-                      muted={scene.muted ?? false}
-                    />
-                  )}
-                  {Boolean(scene.mediaUrl) && scene.mediaType === "audio" && (
-                    <div
-                      data-testid="scene-preview-audio"
-                      className="flex flex-col items-center gap-3 rounded-2xl bg-black/35 px-6 py-5"
-                    >
-                      <div className="bg-primary/25 text-primary rounded-full p-4">
-                        <Music className="size-12" />
-                      </div>
-                      <audio
-                        src={scene.mediaUrl}
-                        controls={scene.showControls ?? true}
-                        loop={scene.loop ?? false}
-                        muted={scene.muted ?? false}
-                        className="w-64 max-w-full"
-                      />
-                    </div>
-                  )}
-                  {Boolean(scene.mediaUrl) &&
-                    scene.mediaType !== "video" &&
-                    scene.mediaType !== "audio" && (
-                      <img
-                        data-testid="scene-preview-image"
-                        src={scene.mediaUrl}
-                        alt={scene.title ?? "Scene Media"}
-                        className={clsx(
-                          "max-h-56 rounded-lg shadow-md sm:max-h-72",
-                          scene.mediaFit === "cover"
-                            ? "object-cover"
-                            : "object-contain",
-                        )}
-                      />
-                    )}
-                  {!scene.mediaUrl && (
-                    <div className="flex flex-col items-center gap-2 text-white/60">
-                      {(() => {
-                        if (scene.mediaType === "audio") {
-                          return <Music className="size-16" />
-                        }
-
-                        if (scene.mediaType === "video") {
-                          return <Film className="size-16" />
-                        }
-
-                        return <ImageIcon className="size-16" />
-                      })()}
-                      <p className="text-sm">
-                        {t(
-                          "extensions:studio.scene.noMedia",
-                          "No media selected yet",
-                        )}
-                      </p>
-                    </div>
-                  )}
-                  {scene.title && (
-                    <p className="text-lg font-bold">{scene.title}</p>
-                  )}
-                </div>
-              )}
-
-              {scene.kind === "leaderboard" && (
-                <div className="flex flex-col items-center gap-4">
-                  <div className="bg-primary/20 text-primary rounded-full p-4">
-                    <Trophy className="size-14" />
-                  </div>
-                  <h2 className="text-2xl font-bold sm:text-3xl">
-                    {scene.title ?? t("extensions:timeline.leaderboard")}
-                  </h2>
-                  <div className="w-64 max-w-full rounded-lg bg-black/40 p-4 text-left text-sm font-semibold">
-                    <div className="mb-2 text-center text-xs font-normal text-white/50">
-                      [
-                      {t(
-                        "extensions:studio.scene.previewSampleBadge",
-                        "Editor Preview Sample Data",
-                      )}
-                      ]
-                    </div>
-                    <div className="flex justify-between border-b border-white/20 py-1">
-                      <span>
-                        1.{" "}
-                        {t("extensions:studio.scene.samplePlayer1", "Player 1")}
-                      </span>
-                      <span className="text-primary font-bold">1200 pts</span>
-                    </div>
-                    <div className="flex justify-between border-b border-white/20 py-1">
-                      <span>
-                        2.{" "}
-                        {t("extensions:studio.scene.samplePlayer2", "Player 2")}
-                      </span>
-                      <span className="text-primary font-bold">950 pts</span>
-                    </div>
-                    <div className="flex justify-between py-1">
-                      <span>
-                        3.{" "}
-                        {t("extensions:studio.scene.samplePlayer3", "Player 3")}
-                      </span>
-                      <span className="text-primary font-bold">800 pts</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {scene.kind === "interimResults" && (
-                <div className="flex flex-col items-center gap-4">
-                  <div className="bg-primary/20 text-primary rounded-full p-4">
-                    <BarChart2 className="size-14" />
-                  </div>
-                  <h2 className="text-2xl font-bold sm:text-3xl">
-                    {scene.title ?? t("extensions:timeline.interimResults")}
-                  </h2>
-                  <p className="text-sm text-white/70">
-                    {t(
-                      "extensions:studio.scene.interimResultsDesc",
-                      "Displays live response distribution of the most recent completed question",
-                    )}
-                  </p>
-                  <div className="text-xs font-normal text-white/50">
-                    [
-                    {t(
-                      "extensions:studio.scene.previewSampleBadge",
-                      "Editor Preview Sample Data",
-                    )}
-                    ]
-                  </div>
-                </div>
-              )}
-
-              {scene.kind === "answerRecap" && (
-                <div
-                  data-testid="scene-preview-answer-recap"
-                  className="flex h-full w-full flex-col items-center justify-center gap-3 px-2"
-                >
-                  <div className="flex items-center gap-2">
-                    <div className="bg-primary/20 text-primary rounded-full p-2.5">
-                      <ListChecks className="size-6" />
-                    </div>
-                    <h2 className="text-xl font-bold sm:text-2xl">
-                      {scene.title ??
-                        t(
-                          "extensions:timeline.answerRecap",
-                          "Cumulative Answer Recap",
-                        )}
-                    </h2>
-                  </div>
-                  {scene.subtitle && (
-                    <p className="text-xs text-white/75 sm:text-sm">
-                      {scene.subtitle}
-                    </p>
-                  )}
-                  {recapQuestionRange.length === 0 ? (
-                    <p
-                      data-testid="recap-no-preceding-questions-warning"
-                      className="rounded-lg bg-amber-500/20 px-4 py-2 text-xs text-amber-200"
-                    >
-                      {t(
-                        "extensions:studio.scene.recapNoPrecedingQuestions",
-                        "Place at least one question before this recap card in the timeline.",
-                      )}
-                    </p>
-                  ) : (
-                    <div className="grid w-full max-w-xl grid-cols-1 gap-2 sm:grid-cols-2">
-                      {recapQuestionRange
-                        .slice(0, scene.maxItemsPerPage ?? 4)
-                        .map((q) => (
-                          <div
-                            key={q.questionId}
-                            className="flex flex-col gap-1 rounded-xl border border-white/15 bg-black/40 p-2.5 text-left"
-                          >
-                            <div className="flex items-center justify-between gap-2 text-[11px] font-semibold text-white/70">
-                              <span>Q{q.questionNumber}</span>
-                              <span className="bg-primary/30 text-primary rounded px-1.5 py-0.5 text-[10px]">
-                                {scene.mode === "correctAnswer"
-                                  ? t(
-                                      "extensions:studio.scene.recapBadgeCorrectAnswer",
-                                      "Correct Answer",
-                                    )
-                                  : t(
-                                      "extensions:studio.scene.recapBadgeMostSelected",
-                                      "Most Selected",
-                                    )}
-                              </span>
-                            </div>
-                            <p className="truncate text-xs font-bold text-white">
-                              {q.title}
-                            </p>
+                      {(scene.kind === "opening" || scene.kind === "closing") &&
+                        (scene.logoPosition ?? "center") !== "hidden" && (
+                          <div className="bg-primary/20 text-primary rounded-full p-4">
+                            {scene.kind === "opening" ? (
+                              <DoorOpen className="size-10 sm:size-12" />
+                            ) : (
+                              <Flag className="size-10 sm:size-12" />
+                            )}
                           </div>
-                        ))}
+                        )}
+
+                      {"mediaUrl" in scene &&
+                        scene.mediaUrl &&
+                        scene.mediaType === "audio" && (
+                          <audio
+                            data-testid="scene-preview-audio"
+                            src={scene.mediaUrl}
+                            controls
+                            autoPlay={false}
+                            muted
+                            className="pointer-events-auto w-60 max-w-full"
+                          />
+                        )}
+
+                      {(("textOverlay" in scene ? scene.textOverlay : true) ??
+                        true) && (
+                        <>
+                          {scene.title && (
+                            <h1 className="text-2xl font-extrabold tracking-tight drop-shadow-md sm:text-4xl">
+                              {scene.title}
+                            </h1>
+                          )}
+                          {"subtitle" in scene && scene.subtitle && (
+                            <p className="text-base text-white/85 drop-shadow-xs sm:text-xl">
+                              {scene.subtitle}
+                            </p>
+                          )}
+                        </>
+                      )}
                     </div>
-                  )}
+                  }
+                />
+              </div>
+            ) : (
+              <EditorPreviewViewport
+                aspect={previewAspect}
+                animate={isPreviewPlaying}
+              >
+                <div className="relative z-10 flex h-full w-full flex-1 items-center justify-center p-4">
+                  <ScenePresenter
+                    scene={previewScene}
+                    activeSceneData={scenePreviewData}
+                    globalStageAnimations={defaults.stageAnimations}
+                    tadazzEnabled={false}
+                    controlledTimeMs={previewTimeMs}
+                    controlledPaused={!isPreviewPlaying}
+                    labels={scenePreviewLabels}
+                    epoch={scene.id}
+                  />
                 </div>
-              )}
+              </EditorPreviewViewport>
+            )}
+          </LiveEditorStagePreview>
 
-              {scene.kind === "countdown" && (
-                <div className="flex flex-col items-center gap-4">
-                  <div className="border-primary text-primary relative flex size-24 items-center justify-center rounded-full border-4 text-4xl font-black sm:size-28 sm:text-5xl">
-                    {scene.durationSeconds}
-                  </div>
-                  <h2 className="text-xl font-bold sm:text-2xl">
-                    {scene.title ?? t("extensions:timeline.countdown")}
-                  </h2>
-                </div>
-              )}
-            </div>
-          )}
-
-          <div className="pointer-events-none absolute bottom-3 left-4 z-10 flex items-center gap-2 text-xs font-semibold text-white/50">
+          <div className="pointer-events-none absolute start-4 bottom-3 z-10 flex items-center gap-2 text-xs font-semibold text-white/50">
             <Clock className="size-3.5" />
             <span>
               {"durationSeconds" in scene
-                ? `${scene.durationSeconds}s`
-                : `${Math.round(scene.durationMs / 1000)}s`}
+                ? scene.durationSeconds
+                : Math.round(scene.durationMs / 1000)}{" "}
+              {t("common:seconds")}
             </span>
             <span>•</span>
-            <span className="capitalize">{scene.advance}</span>
+            <span>
+              {t(
+                `extensions:studio.scene.advance${{ auto: "Auto", manual: "Manual", onMediaEnd: "OnMediaEnd" }[scene.advance]}`,
+                scene.advance,
+              )}
+            </span>
           </div>
         </div>
 
         {/* Unified Timeline Scrub Bar & Colored Overlay Tracks */}
-        {isCinemaMode && (
+        {hasTimedPreview && (
           <div
             data-testid="studio-preview-scrub-bar"
             className="border-accent bg-background/90 flex w-full max-w-3xl flex-col gap-1.5 rounded-xl border px-3 py-2 shadow-xs"
@@ -1590,6 +1581,11 @@ export const StudioSceneEditor = () => {
               <input
                 type="range"
                 data-testid="studio-preview-scrub-slider"
+                aria-label={t(
+                  "extensions:studio.scene.overlays.scrubTimeline",
+                  "Timeline Scrub",
+                )}
+                dir="ltr"
                 min={0}
                 max={effectivePreviewDurationMs}
                 step={50}
@@ -1639,7 +1635,7 @@ export const StudioSceneEditor = () => {
                         setOverlaysSectionOpen(true)
                       }}
                       className={`bg-accent/50 relative h-4 w-full cursor-pointer overflow-hidden rounded border-0 bg-transparent p-0 disabled:opacity-100`}
-                      title={`${ov.label || `Overlay ${idx + 1}`}: ${(ov.startMs / 1000).toFixed(1)}s – ${(endMs / 1000).toFixed(1)}s`}
+                      title={`${ov.label || t("extensions:studio.scene.overlays.layerDefaultLabel", { num: idx + 1 })}: ${(ov.startMs / 1000).toFixed(1)} ${t("common:seconds")} – ${(endMs / 1000).toFixed(1)} ${t("common:seconds")}`}
                     >
                       <div
                         className={clsx(
@@ -1655,7 +1651,11 @@ export const StudioSceneEditor = () => {
                         }}
                       >
                         <span className="truncate">
-                          {ov.label || `Overlay ${idx + 1}`}
+                          {ov.label ||
+                            t(
+                              "extensions:studio.scene.overlays.layerDefaultLabel",
+                              { num: idx + 1 },
+                            )}
                         </span>
                       </div>
                     </Button>
@@ -1678,7 +1678,7 @@ export const StudioSceneEditor = () => {
         <div className="border-accent flex items-center gap-2 border-b pb-3">
           <span className="text-muted-foreground text-sm font-bold tracking-wider uppercase">
             {t("extensions:studio.scene.kindSettings", {
-              kind: scene.kind,
+              kind: t(`extensions:timeline.${scene.kind}`, scene.kind),
               defaultValue: `${scene.kind} Settings`,
             })}
           </span>
@@ -1687,9 +1687,15 @@ export const StudioSceneEditor = () => {
         {/* Title Field */}
         <div className="flex flex-col gap-1.5">
           <label className="text-foreground text-xs font-bold">
-            {t("extensions:studio.scene.titleLabel", "Title")}
+            {usesNativeOpeningPreset
+              ? t("extensions:studio.scene.cardNameLabel", "Card name")
+              : t("extensions:studio.scene.titleLabel", "Title")}
           </label>
           <Input
+            data-testid="scene-title-input"
+            aria-describedby={
+              usesNativeOpeningPreset ? `${scene.id}-title-hint` : undefined
+            }
             value={scene.title ?? ""}
             onChange={(e) =>
               updateSceneConfig(sceneId, {
@@ -1702,37 +1708,53 @@ export const StudioSceneEditor = () => {
             )}
             variant="sm"
           />
+          {usesNativeOpeningPreset && (
+            <p
+              id={`${scene.id}-title-hint`}
+              data-testid="scene-preset-title-hint"
+              className="text-muted-foreground text-xs"
+            >
+              {t(
+                "extensions:studio.scene.cardNameHint",
+                "Used in the timeline. This theme’s preset defines the title on stage.",
+              )}
+            </p>
+          )}
         </div>
 
         {/* Subtitle / Description */}
-        {("subtitle" in scene || "description" in scene) && (
-          <div className="flex flex-col gap-1.5">
-            <label className="text-foreground text-xs font-bold">
-              {"subtitle" in scene
-                ? t("extensions:studio.scene.subtitleLabel", "Subtitle")
-                : t("extensions:studio.scene.descriptionLabel", "Description")}
-            </label>
-            <Input
-              value={subtitleOrDesc}
-              onChange={(e) => {
-                if ("subtitle" in scene) {
-                  updateSceneConfig(sceneId, {
-                    subtitle: e.target.value,
-                  })
-                } else if ("description" in scene) {
-                  updateSceneConfig(sceneId, {
-                    description: e.target.value,
-                  })
-                }
-              }}
-              placeholder={t(
-                "extensions:studio.scene.subtitlePlaceholder",
-                "Card description or subtitle...",
-              )}
-              variant="sm"
-            />
-          </div>
-        )}
+        {!usesNativeOpeningPreset &&
+          ("subtitle" in scene || "description" in scene) && (
+            <div className="flex flex-col gap-1.5">
+              <label className="text-foreground text-xs font-bold">
+                {"subtitle" in scene
+                  ? t("extensions:studio.scene.subtitleLabel", "Subtitle")
+                  : t(
+                      "extensions:studio.scene.descriptionLabel",
+                      "Description",
+                    )}
+              </label>
+              <Input
+                value={subtitleOrDesc}
+                onChange={(e) => {
+                  if ("subtitle" in scene) {
+                    updateSceneConfig(sceneId, {
+                      subtitle: e.target.value,
+                    })
+                  } else if ("description" in scene) {
+                    updateSceneConfig(sceneId, {
+                      description: e.target.value,
+                    })
+                  }
+                }}
+                placeholder={t(
+                  "extensions:studio.scene.subtitlePlaceholder",
+                  "Card description or subtitle...",
+                )}
+                variant="sm"
+              />
+            </div>
+          )}
 
         {/* Answer Recap Settings */}
         {scene.kind === "answerRecap" && (
@@ -1772,7 +1794,8 @@ export const StudioSceneEditor = () => {
                 ) : (
                   precedingQuestions.map((q) => (
                     <option key={q.questionId} value={q.questionId}>
-                      Q{q.questionNumber}: {q.title}
+                      {t("extensions:tadazzShow.v4.questionLabel", "Question")}{" "}
+                      {q.questionNumber}: {q.title}
                     </option>
                   ))
                 )}
@@ -1823,22 +1846,25 @@ export const StudioSceneEditor = () => {
 
             <div className="flex flex-col gap-1.5">
               <label className="text-foreground text-xs font-bold">
-                {t(
-                  "extensions:studio.scene.recapMaxItemsPerPage",
-                  "Questions Per Page (1–8)",
-                )}
+                {t("extensions:studio.scene.recapMaxItemsPerPage", {
+                  max: maxRecapItems,
+                  defaultValue: "Questions Per Page (1–{{max}})",
+                })}
               </label>
               <Input
                 data-testid="recap-max-items-input"
                 type="number"
                 min={1}
-                max={8}
-                value={scene.maxItemsPerPage ?? 4}
+                max={maxRecapItems}
+                value={recapPageSize(
+                  scene.maxItemsPerPage,
+                  activeTheme.definition.rendererId,
+                )}
                 onChange={(e) =>
                   updateSceneConfig(sceneId, {
-                    maxItemsPerPage: Math.max(
-                      1,
-                      Math.min(8, Number(e.target.value) || 4),
+                    maxItemsPerPage: recapPageSize(
+                      Number(e.target.value),
+                      activeTheme.definition.rendererId,
                     ),
                   })
                 }
@@ -2963,7 +2989,10 @@ export const StudioSceneEditor = () => {
                                         )
                                       : ""
                                   }
-                                  placeholder="Auto"
+                                  placeholder={t(
+                                    "extensions:studio.scene.overlays.durationNaturalPlaceholder",
+                                    "Auto",
+                                  )}
                                   onChange={(e) => {
                                     const raw = e.target.value.trim()
 

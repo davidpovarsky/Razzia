@@ -10,9 +10,11 @@ import { initConfig } from "@razzia/socket/services/config"
 import { getIo } from "@razzia/socket/services/io"
 import Registry from "@razzia/socket/services/registry"
 import { io as connect, type Socket } from "socket.io-client"
-import { afterAll, beforeAll, describe, expect, it } from "vitest"
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest"
 import { buildXlsxBuffer, type HostPresenceSnapshot } from "../core/index"
 import { RealRazziaTransport } from "./real-transport"
+
+const TEST_PILOT_SECRET = "isolated-p0-roster-test-secret"
 
 describe("P0 Telephony, Roster, Redial & Host Presence E2E (Real Hono + Real Socket.IO)", () => {
   let server: ReturnType<typeof createAdaptorServer> | null = null
@@ -21,6 +23,7 @@ describe("P0 Telephony, Roster, Redial & Host Presence E2E (Real Hono + Real Soc
   let tempConfigDir = ""
 
   beforeAll(async () => {
+    vi.stubEnv("TADA_PILOT_SECRET", TEST_PILOT_SECRET)
     tempConfigDir = fs.mkdtempSync(
       path.join(os.tmpdir(), "razzia-p0-roster-e2e-"),
     )
@@ -101,6 +104,7 @@ describe("P0 Telephony, Roster, Redial & Host Presence E2E (Real Hono + Real Soc
     if (tempConfigDir && fs.existsSync(tempConfigDir)) {
       fs.rmSync(tempConfigDir, { recursive: true, force: true })
     }
+    vi.unstubAllEnvs()
   }, 15000)
 
   const fetchApi = (url: string, init?: RequestInit): Promise<Response> => {
@@ -108,7 +112,11 @@ describe("P0 Telephony, Roster, Redial & Host Presence E2E (Real Hono + Real Soc
       throw new Error("realTransport not initialized")
     }
 
-    return realTransport.http.fetch(url, init)
+    const headers = new Headers(init?.headers)
+    if (new URL(url).pathname === "/api/games/pilot-phone") {
+      headers.set("x-tada-pilot-secret", TEST_PILOT_SECRET)
+    }
+    return realTransport.http.fetch(url, { ...init, headers })
   }
 
   const loginManager = async (): Promise<string> => {
@@ -398,6 +406,7 @@ describe("P0 Telephony, Roster, Redial & Host Presence E2E (Real Hono + Real Soc
             gameId,
             callId: `initial-call-${i}`,
             rosterPlayerId: rId,
+            phone: `+97250777${String(i).padStart(4, "0")}`,
             answerIndex: 0,
           }),
         })
@@ -506,6 +515,7 @@ describe("P0 Telephony, Roster, Redial & Host Presence E2E (Real Hono + Real Soc
             gameId,
             callId: `redial-brand-new-call-${i}`,
             rosterPlayerId: rId,
+            phone: `+97250777${String(i).padStart(4, "0")}`,
             answerIndex: 1,
           }),
         })
@@ -522,6 +532,7 @@ describe("P0 Telephony, Roster, Redial & Host Presence E2E (Real Hono + Real Soc
             gameId,
             callId: `redial-brand-new-call-${i}`,
             rosterPlayerId: rId,
+            phone: `+97250777${String(i).padStart(4, "0")}`,
             answerIndex: 1,
           }),
         })

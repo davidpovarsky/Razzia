@@ -8,7 +8,7 @@ import type {
 } from "@razzia/extensions/core"
 import { resolveAudioCue } from "@razzia/extensions/presentation"
 import { Play, Square } from "lucide-react"
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { clsx } from "./utils"
 
 interface Props {
@@ -22,36 +22,29 @@ export const AudioCuesSection = ({ extras, onChange, tr }: Props) => {
   const [testingCue, setTestingCue] = useState<CueId | null>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
-  useEffect(
-    () => () => {
-      if (audioRef.current) {
-        audioRef.current.pause()
-        audioRef.current.currentTime = 0
-        audioRef.current = null
-      }
-    },
-    [],
-  )
+  const stopPreview = useCallback(() => {
+    const audio = audioRef.current
+    // Relinquish ownership before stopping: an already queued callback from
+    // this player must not clear a later player or update an unmounted owner.
+    audioRef.current = null
+
+    if (audio) {
+      audio.onended = null
+      audio.onerror = null
+      audio.pause()
+      audio.currentTime = 0
+    }
+  }, [])
+
+  useEffect(() => stopPreview, [stopPreview])
 
   const handleTestPlay = (cueId: CueId) => {
-    // Stop currently playing cue if clicked again
-    if (testingCue === cueId) {
-      if (audioRef.current) {
-        audioRef.current.pause()
-        audioRef.current.currentTime = 0
-        audioRef.current = null
-      }
+    stopPreview()
 
+    if (testingCue === cueId) {
       setTestingCue(null)
 
       return
-    }
-
-    // Stop previous cue cleanly
-    if (audioRef.current) {
-      audioRef.current.pause()
-      audioRef.current.currentTime = 0
-      audioRef.current = null
     }
 
     // Resolve audio cue according to runtime semantics (source, fallback URL, enabled, volume, loop)
@@ -71,25 +64,21 @@ export const AudioCuesSection = ({ extras, onChange, tr }: Props) => {
       audio.loop = resolved.loop
       audioRef.current = audio
 
-      audio.onerror = () => {
+      const finishPreview = () => {
+        if (audioRef.current !== audio) {
+          return
+        }
+
+        stopPreview()
         setTestingCue(null)
-        audioRef.current = null
       }
+      audio.onerror = finishPreview
+      audio.onended = finishPreview
 
-      audio.onended = () => {
-        setTestingCue(null)
-        audioRef.current = null
-      }
-
-      const playPromise = audio.play()
-
-      void playPromise.catch(() => {
-        setTestingCue(null)
-        audioRef.current = null
-      })
+      void audio.play().catch(finishPreview)
     } catch {
+      stopPreview()
       setTestingCue(null)
-      audioRef.current = null
     }
   }
 

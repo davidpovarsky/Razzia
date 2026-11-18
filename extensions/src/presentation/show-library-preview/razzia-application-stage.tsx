@@ -21,9 +21,10 @@ import QuestionMedia from "../../../../packages/web/src/components/QuestionMedia
 import QuestionEntrance from "../../../../packages/web/src/features/game/components/QuestionEntrance"
 import type { ManagerStatusDataMap } from "../../../../packages/common/src/types/game/status"
 import { StageFitContainer } from "../stage-fit"
-import { ScenePresenter } from "../scene-presenter"
+import { ScenePresenter, type ScenePresenterProps } from "../scene-presenter"
 import { calculateRevealState } from "../reveal-timeline"
 import {
+  type BackgroundPosition,
   resolveQuestionDecoration,
   resolveCardStageAnimations,
 } from "../../core/card-appearance"
@@ -39,17 +40,23 @@ export function RazziaApplicationStage({
   chapter,
   theme,
   scene,
+  activeSceneData,
   backdropUrl,
   backdropFit,
+  backdropPosition = "center",
+  backdropOverlayOpacity = 0,
   onCommitted,
 }: {
   frame: ApplicationPreviewFrame
   chapter: AuthoredPreviewChapter
   theme: ResolvedShowTheme
   scene?: SceneConfig
+  activeSceneData?: ScenePresenterProps["activeSceneData"]
   onCommitted: () => void
   backdropUrl?: string
   backdropFit?: "contain" | "cover"
+  backdropPosition?: BackgroundPosition
+  backdropOverlayOpacity?: number
 }) {
   const viewport = useRef<HTMLDivElement>(null)
   const virtual = useRef<HTMLDivElement>(null)
@@ -71,7 +78,8 @@ export function RazziaApplicationStage({
     }
 
     const update = () => {
-      const bounds = node.getBoundingClientRect()
+      // Local layout dimensions exclude an enclosing preview scale transform.
+      const bounds = { width: node.clientWidth, height: node.clientHeight }
       const ratio = bounds.width / Math.max(1, bounds.height)
       let width = 1280
 
@@ -367,6 +375,7 @@ export function RazziaApplicationStage({
     content = scene ? (
       <ScenePresenter
         scene={scene}
+        activeSceneData={activeSceneData}
         tadazzEnabled={false}
         controlledTimeMs={frame.clock.elapsedMs}
         controlledPaused={frame.clock.paused}
@@ -387,10 +396,17 @@ export function RazziaApplicationStage({
           position: "relative",
           overflow: "hidden",
           backgroundImage: backdropUrl
-            ? `url(${JSON.stringify(backdropUrl)})`
+            ? [
+                backdropOverlayOpacity > 0
+                  ? `linear-gradient(rgba(0, 0, 0, ${backdropOverlayOpacity}), rgba(0, 0, 0, ${backdropOverlayOpacity}))`
+                  : undefined,
+                `url(${JSON.stringify(backdropUrl)})`,
+              ]
+                .filter(Boolean)
+                .join(", ")
             : undefined,
           backgroundSize: backdropFit ?? "cover",
-          backgroundPosition: "center",
+          backgroundPosition: backdropPosition,
         }}
       >
         <div

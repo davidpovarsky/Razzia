@@ -72,6 +72,18 @@ const SortableSceneItem = ({
       style={{ transform: CSS.Transform.toString(transform), transition }}
       {...attributes}
       {...listeners}
+      onKeyDown={(event) => {
+        if (
+          event.target === event.currentTarget &&
+          event.key === "Enter" &&
+          !isDragging
+        ) {
+          event.preventDefault()
+          onClick()
+        } else {
+          listeners?.onKeyDown(event)
+        }
+      }}
       className={clsx(isDragging && "shadow-lg")}
     >
       <TimelineSceneCard
@@ -206,12 +218,12 @@ export function useStudioTimelineSidebar({
               }
             | undefined
 
-          let durationText = "5s"
+          let durationText = `5 ${t("common:seconds")}`
 
           if (scene?.durationSeconds) {
-            durationText = `${scene.durationSeconds}s`
+            durationText = `${scene.durationSeconds} ${t("common:seconds")}`
           } else if (scene?.durationMs) {
-            durationText = `${Math.round(scene.durationMs / 1000)}s`
+            durationText = `${Math.round(scene.durationMs / 1000)} ${t("common:seconds")}`
           }
 
           return (

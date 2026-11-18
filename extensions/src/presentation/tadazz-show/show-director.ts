@@ -5,7 +5,7 @@ import {
   type FullShowInput,
   type FullShowScene,
 } from "../tadazz-v4/FullShowScenes"
-import type { ShowScene } from "./presentation-scene"
+import type { ShowScene, SceneDescriptor } from "./presentation-scene"
 import type {
   StageLeaderEntry,
   StageMode,
@@ -14,6 +14,17 @@ import type {
   StageWinner,
   TadazzStageHandle,
 } from "./TadazzStage"
+
+/** Shared by native scene planning and editor controls for the same authored content. */
+export function hasAuthoredCinematicContent(
+  scene: Pick<SceneDescriptor, "mediaUrl" | "lottieUrl" | "overlayAnimations">,
+): boolean {
+  return Boolean(
+    scene.mediaUrl ||
+    scene.lottieUrl ||
+    (scene.overlayAnimations?.length ?? 0) > 0,
+  )
+}
 
 /** One call on the stage handle. The director never invents data. */
 export type StageStep =
@@ -779,11 +790,7 @@ function planScene(
     case "closing":
 
     case "media":
-      if (
-        scene.mediaUrl ||
-        scene.lottieUrl ||
-        (scene.overlayAnimations?.length ?? 0) > 0
-      ) {
+      if (hasAuthoredCinematicContent(scene)) {
         return [
           {
             op: "custom",

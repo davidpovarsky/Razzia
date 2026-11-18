@@ -1,0 +1,12 @@
+{
+  "sourceBase": "af1d879431d3461c7f937a6c5f580eee97b073e2",
+  "boundary": "Actual HostPlayersModal, real React/Radix/application CSS/i18n and CSV parser; synthetic roster and intercepted HTTP, not a real game/backend/privacy acceptance.",
+  "checks": [],
+  "screens": [
+    "failure.png"
+  ],
+  "pageErrors": [],
+  "apiWrites": [],
+  "status": "FAIL",
+  "failure": "page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:3184/host-roster-proof.html?lng=he\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:3184/host-roster-proof.html?lng=he\", waiting until \"load\"\u001b[22m\n\n    at C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-host-roster-hebrew-20261118-ready\\docs\\extensions\\plans\\editor-hebrew-20261118\\host-roster\\browser.mjs:27:13"
+}

@@ -15,7 +15,7 @@ const Switch = ({ className, ...props }: Props) => (
     )}
     {...props}
   >
-    <RadixSwitch.Thumb className="block size-4 translate-x-0.5 rounded-sm bg-white shadow-sm transition-transform data-[state=checked]:translate-x-4.5" />
+    <RadixSwitch.Thumb className="block size-4 translate-x-0.5 rounded-sm bg-white shadow-sm transition-transform data-[state=checked]:translate-x-4.5 rtl:-translate-x-0.5 rtl:data-[state=checked]:-translate-x-4.5" />
   </RadixSwitch.Root>
 )
 

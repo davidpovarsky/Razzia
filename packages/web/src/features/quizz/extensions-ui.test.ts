@@ -38,7 +38,8 @@ import {
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
 import { usePlayerStore } from "@razzia/web/features/game/stores/player"
 import { useQuestionStore } from "@razzia/web/features/game/stores/question"
-import "@razzia/web/i18n"
+import i18n from "@razzia/web/i18n"
+import { I18nextProvider } from "react-i18next"
 import { ConflictDialog } from "@razzia/web/features/quizz/components/ConflictDialog"
 import {
   QuizzEditorProvider,
@@ -1451,20 +1452,31 @@ describe("P1.2: Radix ConflictDialog semantics and conscious overwrite confirmat
     expect(html).toContain('data-testid="conflict-overwrite-button"')
   })
 
-  it("renders localized fallback when revision is missing or unversioned", () => {
-    const html = renderToString(
-      createElement(ConflictDialog, {
-        open: true,
-        onReload: vi.fn(),
-        onOverwrite: vi.fn(),
-        onCancel: vi.fn(),
-        portal: false,
-      }),
-    )
+  it.each([
+    ["en", "Unversioned", "Unknown (Higher)"],
+    ["he", "ללא גרסה", "לא ידועה — חדשה יותר"],
+  ])(
+    "renders localized fallback in %s when revision is missing or unversioned",
+    (locale, unversioned, unknownHigher) => {
+      const scopedI18n = i18n.cloneInstance({ lng: locale, initAsync: false })
+      const html = renderToString(
+        createElement(
+          I18nextProvider,
+          { i18n: scopedI18n },
+          createElement(ConflictDialog, {
+            open: true,
+            onReload: vi.fn(),
+            onOverwrite: vi.fn(),
+            onCancel: vi.fn(),
+            portal: false,
+          }),
+        ),
+      )
 
-    expect(html).toContain("Unversioned")
-    expect(html).toContain("Unknown (Higher)")
-  })
+      expect(html).toContain(unversioned)
+      expect(html).toContain(unknownHigher)
+    },
+  )
 
   it("renders nothing when closed", () => {
     const html = renderToString(

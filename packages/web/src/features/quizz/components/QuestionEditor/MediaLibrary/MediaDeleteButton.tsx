@@ -17,6 +17,7 @@ const MediaDeleteButton = ({ media, onDelete, className }: Props) => {
     <AlertDialog
       trigger={
         <button
+          type="button"
           aria-label={t("quizz:media.delete")}
           className={clsx(
             "rounded-lg p-1.5 transition hover:bg-red-50",

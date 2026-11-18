@@ -242,7 +242,7 @@ const LegacyQuestionEntranceConfig = ({
       const validation = validateLottieJson(rawText)
 
       if (!validation.ok) {
-        toast.error(validation.error ?? "Invalid Lottie JSON file")
+        toast.error(t("extensions:studio.scene.lottieInvalidFile"))
 
         return
       }
@@ -266,7 +266,7 @@ const LegacyQuestionEntranceConfig = ({
       })
 
       if (!res.ok) {
-        toast.error("Failed to upload Lottie file")
+        toast.error(t("errors:media.uploadFailed"))
 
         return
       }
@@ -280,9 +280,9 @@ const LegacyQuestionEntranceConfig = ({
         lottieUrl: data.url,
         color: currentItem?.questionDecoration?.color,
       })
-      toast.success("Lottie animation uploaded")
+      toast.success(t("extensions:studio.scene.lottieUploaded"))
     } catch {
-      toast.error("Failed to upload Lottie file")
+      toast.error(t("errors:media.uploadFailed"))
     }
   }
   const handleDurationChange = (raw: string) => {
@@ -631,6 +631,7 @@ const LegacyQuestionEntranceConfig = ({
                     <div className="flex items-center gap-2">
                       <Input
                         data-testid="question-decoration-lottie-url"
+                        dir="ltr"
                         value={resolvedDecoration.lottieUrl ?? ""}
                         onChange={(e) =>
                           updateQuestionDecoration({
@@ -656,7 +657,7 @@ const LegacyQuestionEntranceConfig = ({
                         className="h-8 shrink-0 px-2.5 text-xs"
                         onClick={() => lottieInputRef.current?.click()}
                       >
-                        <Upload className="mr-1 size-3.5" />
+                        <Upload className="me-1 size-3.5" />
                         {t(
                           "extensions:studio.scene.lottieUploadButton",
                           "Upload Lottie (.json)",
@@ -692,7 +693,7 @@ const LegacyQuestionEntranceConfig = ({
                 onClick={handleTriggerPreview}
                 aria-label={t("extensions:entrance.replay", "Replay")}
               >
-                <RotateCcw className="mr-1 size-3" />
+                <RotateCcw className="me-1 size-3" />
                 {t("extensions:entrance.replay", "Replay")}
               </Button>
             </div>

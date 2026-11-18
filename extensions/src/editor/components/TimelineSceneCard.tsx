@@ -76,68 +76,93 @@ export const TimelineSceneCard = ({
   onDuplicate,
   DeleteConfirmation,
   t,
-}: TimelineSceneCardProps) => (
-  <div
-    className={[
-      "group border-accent bg-background relative flex h-36 cursor-pointer flex-col justify-between gap-1 rounded-lg border-2 px-6 py-2 transition-all",
-      isActive ? "border-primary shadow-sm" : "",
-    ].join(" ")}
-  >
-    <PlatformButton
-      type="button"
-      size="sm"
-      classNameContent="contents"
-      onClick={onClick}
-      aria-label={title ?? t(`extensions:timeline.${kind}`, kind)}
-      className="flex h-full w-full flex-1 flex-col justify-between gap-1 bg-transparent p-0"
+}: TimelineSceneCardProps) => {
+  const kindLabel = t(`extensions:timeline.${kind}`, kind)
+  const cardTitle = title?.trim() || kindLabel
+  const duplicateLabel = t(
+    "extensions:timeline.duplicateCard",
+    "Duplicate card",
+  )
+  const deleteLabel = t("extensions:timeline.deleteCard", "Delete scene card")
+
+  return (
+    <div
+      data-testid="editor-scene-card"
+      data-scene-kind={kind}
+      className={[
+        "group border-accent bg-background relative flex h-36 cursor-pointer flex-col justify-between gap-1 rounded-lg border-2 px-6 py-2 transition-all",
+        isActive ? "border-primary shadow-sm" : "",
+      ].join(" ")}
     >
-      <div className="absolute top-2 left-2 flex items-center gap-1.5">
-        <span className="bg-accent/40 text-muted-foreground rounded px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase">
-          {kind}
-        </span>
-      </div>
-
-      <div className="flex flex-1 flex-col items-center justify-center gap-1.5 pt-4">
-        {getSceneIcon(kind)}
-        <p className="text-foreground max-w-[180px] truncate text-center text-xs font-semibold">
-          {title ?? t(`extensions:timeline.${kind}`, kind)}
-        </p>
-      </div>
-
-      <div className="border-accent/40 text-muted-foreground flex items-center justify-between border-t pt-1 text-[11px]">
-        <span>{durationText}</span>
-      </div>
-    </PlatformButton>
-    <div className="absolute top-1.5 right-1.5 hidden items-center gap-1 group-focus-within:flex group-hover:flex focus-within:flex">
       <PlatformButton
-        size="sm"
         type="button"
-        onClick={(e) => {
-          e.stopPropagation()
-          onDuplicate()
-        }}
-        title="Duplicate card"
-        className="text-muted-foreground bg-background hover:bg-accent hover:text-foreground rounded-sm p-1"
+        size="sm"
+        classNameContent="contents"
+        onClick={onClick}
+        aria-label={cardTitle}
+        aria-pressed={isActive}
+        data-testid="editor-scene-select"
+        className="flex h-full w-full flex-1 flex-col justify-between gap-1 bg-transparent p-0"
       >
-        <Copy className="size-3.5" />
-      </PlatformButton>
+        <div className="absolute start-2 top-2 flex max-w-[calc(100%-4rem)] items-center gap-1.5">
+          <span className="bg-accent/40 text-muted-foreground truncate rounded px-1.5 py-0.5 text-[10px] font-bold">
+            {kindLabel}
+          </span>
+        </div>
 
-      <DeleteConfirmation
-        trigger={
-          <PlatformButton
-            size="sm"
-            type="button"
-            onClick={(e) => e.stopPropagation()}
-            className="text-muted-foreground bg-background rounded-sm p-1 hover:bg-red-50 hover:text-red-500"
-          >
-            <Trash2 className="size-3.5" />
-          </PlatformButton>
-        }
-        title="Delete Scene Card"
-        description="Are you sure you want to delete this scene card from the timeline?"
-        confirmLabel={t("common:delete")}
-        onConfirm={onDelete}
-      />
+        <div className="flex flex-1 flex-col items-center justify-center gap-1.5 pt-4">
+          {getSceneIcon(kind)}
+          <p className="text-foreground max-w-[180px] truncate text-center text-xs font-semibold">
+            {cardTitle}
+          </p>
+        </div>
+
+        <div className="border-accent/40 text-muted-foreground flex items-center justify-between border-t pt-1 text-[11px]">
+          <span>{durationText}</span>
+        </div>
+      </PlatformButton>
+      <div
+        className={[
+          "absolute end-1.5 top-1.5 flex items-center gap-1 group-focus-within:flex group-hover:flex focus-within:flex",
+          isActive ? "" : "lg:hidden",
+        ].join(" ")}
+      >
+        <PlatformButton
+          size="sm"
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            onDuplicate()
+          }}
+          title={duplicateLabel}
+          aria-label={duplicateLabel}
+          className="text-muted-foreground bg-background hover:bg-accent hover:text-foreground rounded-sm p-1"
+        >
+          <Copy className="size-3.5" />
+        </PlatformButton>
+
+        <DeleteConfirmation
+          trigger={
+            <PlatformButton
+              size="sm"
+              type="button"
+              onClick={(e) => e.stopPropagation()}
+              title={deleteLabel}
+              aria-label={deleteLabel}
+              className="text-muted-foreground bg-background rounded-sm p-1 hover:bg-red-50 hover:text-red-500"
+            >
+              <Trash2 className="size-3.5" />
+            </PlatformButton>
+          }
+          title={deleteLabel}
+          description={t(
+            "extensions:timeline.deleteCardConfirm",
+            "Delete this scene card from the timeline?",
+          )}
+          confirmLabel={t("common:delete")}
+          onConfirm={onDelete}
+        />
+      </div>
     </div>
-  </div>
-)
+  )
+}

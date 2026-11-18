@@ -1,0 +1,57 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118[39m
+
+ [32m✓[39m [30m[43m common [49m[39m packages/common/src/questions/estimation.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m [30m[43m common [49m[39m packages/common/src/validators/game.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[43m common [49m[39m packages/common/src/validators/quizz.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/api/api.test.ts [2m([22m[2m23 tests[22m[2m)[22m[33m 737[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/handlers/game.test.ts [2m([22m[2m24 tests[22m[2m)[22m[33m 773[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/api/accounts-isolation.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 1291[2mms[22m[39m
+   [32m✓[39m Tadazz HTTP tenant separation [2m(5)[22m
+     [33m[2m✓[22m[39m rejects legacy password and unverified account, then verifies both new accounts[33m 1193[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/account-auth.test.ts [2m([22m[2m4 tests[22m[2m)[22m[33m 1138[2mms[22m[39m
+   [32m✓[39m Tadazz account ownership and authentication [2m(4)[22m
+     [33m[2m✓[22m[39m creates distinct verified accounts, never grants access to unverified users[33m 757[2mms[22m[39m
+     [33m[2m✓[22m[39m reset with code invalidates previous sessions and changes password[33m 344[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/api/billing.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 313[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/api/pilot-phone.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 160[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/config.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 242[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/cooldown-timer.pause.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/game.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 170[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/creating-worlds-repair.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 56[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/media.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 68[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/downstream-game.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 120[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/auth.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 67[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/utils/utils.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 43[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/registry.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/theme-vote-completion.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/api/extensions/demo-catalog.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 43[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/scoring/round.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/scoring/scoring.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/api/extensions/join-policy.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/pilot-target.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/game/pilot-dial-target.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/scoring/score-ledger.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [2m[90m↓[39m[22m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts [2m([22m[2m11 tests[22m[2m | [22m[33m11 skipped[39m[2m)[22m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/lib/session.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 90[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/locales/locales.test.ts [2m([22m[2m28 tests[22m[2m)[22m[32m 290[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/locales/ranks.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 44[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/features/game/phase-a-flow.browser.test.ts [2m([22m[2m10 tests[22m[2m)[22m[33m 1972[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/features/game/components/p1-timer-entrance.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/features/game/components/host-presentation-controller.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/language-direction.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/features/questions/questions.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/features/game/components/tadazz-show/cooldown-sync.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/features/game/components/game-controls.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/api/extensions/theme-routes.test.ts [2m([22m[2m1 test[22m[2m)[22m[33m 22370[2mms[22m[39m
+   [33m[2m✓[22m[39m enforces verified HTTP auth, tenant-private upload, independent review, signed persistence and private media[33m 21988[2mms[22m[39m
+ [32m✓[39m [30m[46m web [49m[39m packages/web/src/features/quizz/extensions-ui.test.ts [2m([22m[2m48 tests[22m[2m)[22m[32m 86[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m38 passed[39m[22m[2m | [22m[33m1 skipped[39m[90m (39)[39m
+[2m      Tests [22m [1m[32m384 passed[39m[22m[2m | [22m[33m11 skipped[39m[90m (395)[39m
+[2m   Start at [22m 16:28:11
+[2m   Duration [22m 28.92s[2m (import 46%, tests 33%, transform 20%, setup 1%)[22m
+
+[2m  Transform [22m [30m[46m web [49m[39m [33mtransforming modules took 7.99s[39m[2m · 30% of tracked time, re-done on every run[22m
+[2m            [22m [2mpersist transforms across runs with [22m[33mfsModuleCache: true[39m
+[2m            [22m [2mlearn more: https://vitest.dev/guide/improving-performance#caching-between-reruns[22m

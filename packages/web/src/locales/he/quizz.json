@@ -1,0 +1,106 @@
+{
+  "addAnswerPlaceholder": "הוסיפו תשובה…",
+  "addQuestion": "הוספת שאלה",
+  "answersCountSuffix": " תשובות",
+  "deleteQuestion": "מחיקת שאלה",
+  "gameMode": {
+    "quiz": "חידון",
+    "survey": "סקר"
+  },
+  "noQuestionYet": "עדיין אין שאלות",
+  "question": {
+    "addMediaHint": "הוסיפו תמונה, וידאו או שמע לשאלה",
+    "config": {
+      "answerTime": "זמן למענה",
+      "answerTimeHint": "הזמן העומד לרשות השחקנים כדי לענות",
+      "noTimeLimit": "ללא הגבלת זמן",
+      "noTimeLimitHint": "הנקודות מוענקות לפי סדר המענה. אין הגבלת זמן לתשובה.",
+      "questionDisplay": "הצגת השאלה",
+      "questionDisplayHint": "משך הזמן לפני הופעת התשובות",
+      "timings": "תזמון",
+      "answerMode": "אופן המענה",
+      "category": "קטגוריה",
+      "categoryPlaceholder": "למשל: גאוגרפיה",
+      "categoryHint": "שאלות רצופות באותה קטגוריה יוצרות סבב. טבלת המובילים מוצגת רק כשהקטגוריה משתנה.",
+      "scoring": "ניקוד",
+      "maxPoints": "ניקוד מרבי",
+      "maxPointsHint": "מספר הנקודות המרבי לתשובה נכונה",
+      "penalty": "הפחתת ניקוד",
+      "penaltyHint": "נקודות שיופחתו על תשובה שגויה. הניקוד הכולל לא ירד מתחת ל־0",
+      "scoringMode": "שיטת הניקוד",
+      "scoringMode.strict": "קפדנית",
+      "scoringMode.balanced": "מאוזנת",
+      "scoringMode.lenient": "מקלה",
+      "scoringModeHint.strict": "ניקוד מלא רק אם נבחרו כל התשובות הנכונות ואף תשובה שגויה",
+      "scoringModeHint.balanced": "ניקוד חלקי: תשובות נכונות פחות תשובות שגויות",
+      "scoringModeHint.lenient": "ניקוד לכל תשובה נכונה, ללא הפחתה על תשובות שגויות",
+      "estimation": {
+        "title": "הערכה מספרית",
+        "inputMode": "סוג הקלט",
+        "inputModes": {
+          "slider": "מחוון",
+          "input": "הקלדת מספר"
+        },
+        "inputModeHint": {
+          "slider": "השחקנים בוחרים ערך בטווח באמצעות מחוון",
+          "input": "השחקנים מקלידים מספר בטווח המוגדר"
+        },
+        "min": "ערך מזערי",
+        "max": "ערך מרבי",
+        "step": "גודל צעד",
+        "stepHint": "רמת הדיוק של המחוון ושל התשובה הצפויה",
+        "margin": "טווח סטייה",
+        "marginHint": "תשובות בטווח זה מהתשובה הנכונה מקבלות בין 100% על תשובה מדויקת ל־50%. תשובות מחוץ לטווח אינן מקבלות נקודות."
+      }
+    },
+    "deleteQuestion": "מחיקת שאלה",
+    "deleteQuestionConfirm": "למחוק את השאלה הזו?",
+    "media": {
+      "audio": "שמע",
+      "image": "תמונה",
+      "video": "וידאו"
+    },
+    "mediaUrlPlaceholder": "הזינו כתובת…",
+    "placeholder": "הקלידו את השאלה…",
+    "note": "הסבר",
+    "notePlaceholder": "הוסיפו הסבר שיוצג עם חשיפת התשובה",
+    "estimation": {
+      "correctAnswer": "התשובה הנכונה"
+    },
+    "duplicateQuestion": "שכפול שאלה"
+  },
+  "questionHasErrors": "יש שגיאות בשאלה זו",
+  "questionType": {
+    "single": "בחירה אחת",
+    "multi": "בחירה מרובה",
+    "estimation": "הערכה מספרית"
+  },
+  "quizzSaved": "החידון נשמר בהצלחה",
+  "quizzUpdated": "החידון עודכן בהצלחה",
+  "titleQuizzPlaceholder": "כותרת החידון…",
+  "media": {
+    "delete": "מחיקת מדיה",
+    "deleteConfirm": "למחוק את \"{{name}}\"? המדיה תוסר מהחידון, וגם חידונים אחרים המשתמשים בה לא יוכלו להציג אותה.",
+    "library": "ספריית המדיה",
+    "libraryEmpty": "הספרייה שלכם ריקה",
+    "upload": "העלאה",
+    "uploadHint": "תמונות, שמע או וידאו, עד {{size}} MB",
+    "search": "חיפוש מדיה…",
+    "filter": {
+      "all": "הכול"
+    },
+    "use": "בחירה",
+    "dropHint": "גררו לכאן תמונות, קובצי שמע ווידאו, או השתמשו בכפתור ההעלאה",
+    "dropHere": "שחררו כדי להעלות",
+    "noResults": "לא נמצאה מדיה המתאימה לחיפוש",
+    "fromUrl": "הוספה מכתובת",
+    "view": {
+      "grid": "תצוגת רשת",
+      "list": "תצוגת רשימה"
+    },
+    "filterByType": "סינון לפי סוג"
+  },
+  "addAnswer": "הוספת תשובה",
+  "removeAnswer": "הסרת תשובה",
+  "markCorrect": "סימון {{label}} כתשובה נכונה"
+}

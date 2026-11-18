@@ -861,6 +861,10 @@
   text-shadow: 0 0 30px #e1ff6380;
 }
 .tzv4-stage .interlude-title {
+  max-width: calc(100% - 192px);
+  overflow-wrap: anywhere;
+  text-align: center;
+  text-wrap: balance;
   font-size: 167px;
   font-weight: 1000;
   letter-spacing: -0.085em;
@@ -879,6 +883,9 @@
   box-shadow: 0 0 29px #ce5afc9d;
 }
 .tzv4-stage .interlude-sub {
+  max-width: calc(100% - 240px);
+  overflow-wrap: anywhere;
+  text-align: center;
   font-size: 30px;
   font-weight: 800;
   letter-spacing: 0.15em;

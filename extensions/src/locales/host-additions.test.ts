@@ -22,12 +22,22 @@ describe("extension additions to upstream namespaces", () => {
     expect(resources.en.common).toEqual({ save: "Save" })
   })
 
-  it("adds complete nonempty translations for all eight languages and is idempotent", () => {
+  it("adds complete nonempty translations for all nine languages and is idempotent", () => {
     const resources: Record<string, Record<string, unknown>> = {}
     registerHostLocaleAdditions(resources)
     const initial = structuredClone(resources)
 
-    for (const language of ["en", "fr", "de", "es", "it", "ja", "tr", "vi"]) {
+    for (const language of [
+      "en",
+      "fr",
+      "de",
+      "es",
+      "it",
+      "ja",
+      "tr",
+      "vi",
+      "he",
+    ]) {
       const entry = resources[language] as {
         errors: { game: { ambiguousTargetGame: string } }
         quizz: { question: { duplicateQuestion: string } }

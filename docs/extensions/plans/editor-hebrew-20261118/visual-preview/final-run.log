@@ -1,0 +1,87 @@
+START razzia-original
+PASS razzia-original question question exact native
+PASS razzia-original question answers exact native
+PASS razzia-original question results exact native
+PASS razzia-original unsaved question and answer text update
+PASS razzia-original question aspect 4-3
+PASS razzia-original question aspect 16-9
+PASS razzia-original actual inner stage fills mobile 390
+PASS razzia-original actual inner stage fills mobile 320
+PASS razzia-original question hide show replay
+PASS razzia-original transition exact native
+PASS razzia-original transition aspect 4:3
+PASS razzia-original transition play scrub reset
+PASS razzia-original animation exact native
+PASS razzia-original animation aspect 4:3
+PASS razzia-original animation play scrub reset
+PASS razzia-original media exact native
+PASS razzia-original media aspect 4:3
+PASS razzia-original media play scrub reset
+PASS razzia-original opening exact native
+PASS razzia-original opening truthful native preset title controls
+PASS razzia-original opening aspect 4:3
+PASS razzia-original opening play scrub reset
+PASS razzia-original opening layer edit and native stage
+PASS razzia-original closing exact native
+PASS razzia-original closing truthful native preset title controls
+PASS razzia-original closing aspect 4:3
+PASS razzia-original closing play scrub reset
+PASS razzia-original closing layer edit and native stage
+PASS razzia-original countdown exact native
+PASS razzia-original countdown aspect 4:3
+PASS razzia-original countdown play scrub reset
+PASS razzia-original leaderboard exact native
+PASS razzia-original leaderboard aspect 4:3
+PASS razzia-original leaderboard hides inapplicable transport
+PASS razzia-original interimResults exact native
+PASS razzia-original interimResults aspect 4:3
+PASS razzia-original interimResults hides inapplicable transport
+PASS razzia-original answerRecap exact native
+PASS razzia-original answerRecap aspect 4:3
+PASS razzia-original answerRecap hides inapplicable transport
+START tadazz-classic
+PASS tadazz-classic question question exact native
+PASS tadazz-classic question answers exact native
+PASS tadazz-classic question results exact native
+PASS tadazz-classic unsaved question and answer text update
+PASS tadazz-classic question aspect 4-3
+PASS tadazz-classic question aspect 16-9
+PASS tadazz-classic actual inner stage fills mobile 390
+PASS tadazz-classic actual inner stage fills mobile 320
+PASS tadazz-classic question hide show replay
+PASS tadazz-classic transition exact native
+PASS Classic maximum120character transition remains inside native stage
+PASS tadazz-classic transition aspect 4:3
+PASS tadazz-classic transition play scrub reset
+PASS tadazz-classic animation exact native
+PASS tadazz-classic animation aspect 4:3
+PASS tadazz-classic animation play scrub reset
+PASS tadazz-classic media exact native
+PASS tadazz-classic media aspect 4:3
+PASS tadazz-classic media play scrub reset
+PASS tadazz-classic opening exact native
+PASS tadazz-classic opening truthful native preset title controls
+PASS tadazz-classic opening aspect 4:3
+PASS tadazz-classic opening play scrub reset
+PASS tadazz-classic opening layer edit and native stage
+PASS tadazz-classic closing exact native
+PASS tadazz-classic closing truthful native preset title controls
+PASS tadazz-classic closing aspect 4:3
+PASS tadazz-classic closing play scrub reset
+PASS tadazz-classic closing layer edit and native stage
+PASS tadazz-classic countdown exact native
+PASS tadazz-classic countdown aspect 4:3
+PASS tadazz-classic countdown play scrub reset
+PASS tadazz-classic leaderboard exact native
+PASS tadazz-classic leaderboard aspect 4:3
+PASS tadazz-classic leaderboard hides inapplicable transport
+PASS tadazz-classic interimResults exact native
+PASS tadazz-classic interimResults aspect 4:3
+PASS tadazz-classic interimResults hides inapplicable transport
+PASS tadazz-classic answerRecap exact native
+PASS tadazz-classic answerRecap aspect 4:3
+PASS tadazz-classic answerRecap hides inapplicable transport
+{"checks":83,"failures":[],"errors":[],"responses":[{"theme":"razzia-original","status":404,"url":"http://127.0.0.1:3180/branding/theme.json"},{"theme":"razzia-original","status":404,"url":"http://127.0.0.1:3180/branding/theme.json"},{"theme":"razzia-original","status":404,"url":"http://127.0.0.1:3180/api/themes/catalog"},{"theme":"razzia-original","status":404,"url":"http://127.0.0.1:3180/api/themes/catalog"},{"theme":"tadazz-classic","status":404,"url":"http://127.0.0.1:3180/branding/theme.json"},{"theme":"tadazz-classic","status":404,"url":"http://127.0.0.1:3180/branding/theme.json"},{"theme":"tadazz-classic","status":404,"url":"http://127.0.0.1:3180/api/themes/catalog"},{"theme":"tadazz-classic","status":404,"url":"http://127.0.0.1:3180/api/themes/catalog"}],"screenshots":["razzia-original-question-question.png","razzia-original-question-answers.png","razzia-original-question-results.png","razzia-original-question-aspect-4-3.png","razzia-original-question-aspect-16-9.png","razzia-original-mobile-390.png","razzia-original-mobile-320.png","razzia-original-transition.png","razzia-original-animation.png","razzia-original-media.png","razzia-original-opening.png","razzia-original-opening-layers.png","razzia-original-closing.png","razzia-original-closing-layers.png","razzia-original-countdown.png","razzia-original-countdown-scrub-seven-seconds.png","razzia-original-leaderboard.png","razzia-original-interimResults.png","razzia-original-answerRecap.png","tadazz-classic-question-question.png","tadazz-classic-question-answers.png","tadazz-classic-question-results.png","tadazz-classic-question-aspect-4-3.png","tadazz-classic-question-aspect-16-9.png","tadazz-classic-mobile-390.png","tadazz-classic-mobile-320.png","tadazz-classic-transition.png","tadazz-classic-transition-max120.png","tadazz-classic-animation.png","tadazz-classic-media.png","tadazz-classic-opening.png","tadazz-classic-opening-layers.png","tadazz-classic-closing.png","tadazz-classic-closing-layers.png","tadazz-classic-countdown.png","tadazz-classic-countdown-scrub-seven-seconds.png","tadazz-classic-leaderboard.png","tadazz-classic-interimResults.png","tadazz-classic-answerRecap.png"]}
+editor-live-preview-audit.mjs EXIT 0
+{"checks":[{"name":"tadazz-classic current valid question beside estimation; both","state":{"text":"Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nROUND 01 · QUESTION 01 / 3\nNEXT QUESTION\nWhich colour is the sky?\nBlue\nAUDIENCE FAVOURITE\n01\n2\nGreen\nAUDIENCE FAVOURITE\n02\n3\nRed\nAUDIENCE FAVOURITE\n03\n4\nYellow\nAUDIENCE FAVOURITE\n04\n5\nPurple\nAUDIENCE FAVOURITE\n05\nVOTING OPEN\nReplay animation","theme":"tadazz-classic","number":"1","total":"3","images":[{"src":"/tadazz-show/second-library/teaser-screen-source.jpg","alt":"Creating Worlds","naturalWidth":2048},{"src":"/tadazz-show/v4/tadazz-brand-logo.png","alt":"TADAZZ!","naturalWidth":1983},{"src":"/media/editor-proof-7rCI7nu6.png","alt":"A blue sky image","naturalWidth":1},{"src":"/tadazz-show/v4/tadazz-brand-logo.png","alt":"TADAZZ!","naturalWidth":1983},{"src":"/tadazz-show/v4/tadazz-brand-logo.png","alt":"TADAZZ!","naturalWidth":1983}]}},{"name":"tadazz-classic current valid question beside estimation; image","state":{"text":"Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nROUND 01 · QUESTION 01 / 3\nNEXT QUESTION\nWhich colour is the sky?\nAUDIENCE FAVOURITE\n01\n2\nGreen\nAUDIENCE FAVOURITE\n02\n3\nRed\nAUDIENCE FAVOURITE\n03\n4\nYellow\nAUDIENCE FAVOURITE\n04\n5\nPurple\nAUDIENCE FAVOURITE\n05\nVOTING OPEN\nReplay animation","theme":"tadazz-classic","number":"1","total":"3","images":[{"src":"/tadazz-show/second-library/teaser-screen-source.jpg","alt":"Creating Worlds","naturalWidth":2048},{"src":"/tadazz-show/v4/tadazz-brand-logo.png","alt":"TADAZZ!","naturalWidth":1983},{"src":"/media/editor-proof-7rCI7nu6.png","alt":"A blue sky image","naturalWidth":1},{"src":"/tadazz-show/v4/tadazz-brand-logo.png","alt":"TADAZZ!","naturalWidth":1983},{"src":"/tadazz-show/v4/tadazz-brand-logo.png","alt":"TADAZZ!","naturalWidth":1983}]}},{"name":"tadazz-classic current valid question beside estimation; text","state":{"text":"Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nROUND 01 · QUESTION 01 / 3\nNEXT QUESTION\nWhich colour is the sky?\n1\nBlue\nAUDIENCE FAVOURITE\n01\n2\nGreen\nAUDIENCE FAVOURITE\n02\n3\nRed\nAUDIENCE FAVOURITE\n03\n4\nYellow\nAUDIENCE FAVOURITE\n04\n5\nPurple\nAUDIENCE FAVOURITE\n05\nVOTING OPEN\nReplay animation","theme":"tadazz-classic","number":"1","total":"3","images":[{"src":"/tadazz-show/second-library/teaser-screen-source.jpg","alt":"Creating Worlds","naturalWidth":2048},{"src":"/tadazz-show/v4/tadazz-brand-logo.png","alt":"TADAZZ!","naturalWidth":1983},{"src":"/tadazz-show/v4/tadazz-brand-logo.png","alt":"TADAZZ!","naturalWidth":1983},{"src":"/tadazz-show/v4/tadazz-brand-logo.png","alt":"TADAZZ!","naturalWidth":1983}]}},{"name":"tadazz-classic multi exact","state":{"text":"Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nROUND 01 · QUESTION 02 / 3\nNEXT QUESTION\nChoose the primary colours\n1\nRed\nAUDIENCE FAVOURITE\n01\n2\nBlue\nAUDIENCE FAVOURITE\n02\nVOTING OPEN\nReplay animation","theme":"tadazz-classic","number":"2","total":"3","images":[{"src":"/tadazz-show/second-library/teaser-screen-source.jpg","alt":"Creating Worlds","naturalWidth":2048},{"src":"/tadazz-show/v4/tadazz-brand-logo.png","alt":"TADAZZ!","naturalWidth":1983},{"src":"/tadazz-show/v4/tadazz-brand-logo.png","alt":"TADAZZ!","naturalWidth":1983},{"src":"/tadazz-show/v4/tadazz-brand-logo.png","alt":"TADAZZ!","naturalWidth":1983}]}},{"name":"tadazz-classic estimation native primitive question","renderer":"native-estimation-fallback","text":"Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nEstimate the number\nReplay animation"},{"name":"tadazz-classic estimation native primitive answers","renderer":"native-estimation-fallback","text":"Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nEstimate the number\n0\n200\nReplay animation"},{"name":"tadazz-classic estimation native primitive results","renderer":"native-estimation-fallback","text":"Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\n0\n110 – 130\n0\n200\n120\nReplay animation\n\nPreview only — no responses have been collected."},{"name":"tadazz-classic exact recap preserves all3 prior native questions","recap":"THE AUDIENCE HAS SPOKEN\nANSWER RECAP\n1\nWhich colour is the sky?\nNo responses recorded yet.\n2\nChoose the primary colours\nNo responses recorded yet.\n3\nEstimate the number\nNo responses recorded yet.\n8 sec\n•\nAutomatic (on timer end)"},{"name":"razzia-original current valid question beside estimation; both","state":{"text":"Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nWhich colour is the sky?\n1\n\nBlue\n\n2\n\nGreen\n\n3\n\nRed\n\n4\n\nYellow\n\n5\n\nPurple\n\nReplay animation","theme":"razzia-original","number":"1","total":"3","images":[{"src":"/tadazz-show/v4/tadazz-brand-logo.png","alt":"TADAZZ!","naturalWidth":1983},{"src":"/media/editor-proof-7rCI7nu6.png","alt":"A blue sky image","naturalWidth":1}]}},{"name":"razzia-original current valid question beside estimation; image","state":{"text":"Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nWhich colour is the sky?\n1\nBlue\n2\n\nGreen\n\n3\n\nRed\n\n4\n\nYellow\n\n5\n\nPurple\n\nReplay animation","theme":"razzia-original","number":"1","total":"3","images":[{"src":"/tadazz-show/v4/tadazz-brand-logo.png","alt":"TADAZZ!","naturalWidth":1983},{"src":"/media/editor-proof-7rCI7nu6.png","alt":"A blue sky image","naturalWidth":1}]}},{"name":"razzia-original current valid question beside estimation; text","state":{"text":"Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nWhich colour is the sky?\n1\n\nBlue\n\n2\n\nGreen\n\n3\n\nRed\n\n4\n\nYellow\n\n5\n\nPurple\n\nReplay animation","theme":"razzia-original","number":"1","total":"3","images":[{"src":"/tadazz-show/v4/tadazz-brand-logo.png","alt":"TADAZZ!","naturalWidth":1983}]}},{"name":"razzia-original multi exact","state":{"text":"Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nChoose the primary colours\n1\n\nRed\n\n2\n\nBlue\n\nReplay animation","theme":"razzia-original","number":"2","total":"3","images":[{"src":"/tadazz-show/v4/tadazz-brand-logo.png","alt":"TADAZZ!","naturalWidth":1983}]}},{"name":"razzia-original estimation native primitive question","renderer":"native-estimation-fallback","text":"Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nEstimate the number\nReplay animation"},{"name":"razzia-original estimation native primitive answers","renderer":"native-estimation-fallback","text":"Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\nEstimate the number\n0\n200\nReplay animation"},{"name":"razzia-original estimation native primitive results","renderer":"native-estimation-fallback","text":"Live preview\nHide preview\n\nUpdates as you edit. No save or live game is needed.\n\nQuestion\nAnswers\nResults\n16:9\n4:3\n0\n110 – 130\n0\n200\n120\nReplay animation\n\nPreview only — no responses have been collected."},{"name":"razzia-original exact recap preserves all3 prior native questions","recap":"Answer Recap\nQuestion 1\nNO RESPONSES\n\nWhich colour is the sky?\n\nNo responses recorded yet.\nQuestion 2\nNO RESPONSES\n\nChoose the primary colours\n\nNo responses recorded yet.\nQuestion 3\nNO RESPONSES\n\nEstimate the number\n\nNo responses recorded yet.\n8 sec\n100%\n\nAutomatic (on timer end)\n\n8 sec\n•\nAutomatic (on timer end)"}],"failures":[],"errors":[]}
+editor-live-preview-mixed-audit.mjs EXIT 0

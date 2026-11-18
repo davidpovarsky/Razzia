@@ -31,6 +31,27 @@ import {
 import { withAccount } from "@razzia/socket/services/account-scope"
 import { getPath } from "@razzia/socket/services/config"
 
+// Reject declared oversize bodies before Hono materializes the Node body stream.
+// The adapter can then drain the incoming upload without a paused Web Stream
+// causing a later pooled request to be reset. Chunked bodies still use bodyLimit.
+const themeBodyLimit = (maxSize: number) => {
+  const readLimit = bodyLimit({ maxSize })
+
+  return apiFactory.createMiddleware(async (c, next) => {
+    const declaredLength = c.req.header("content-length")
+
+    if (
+      c.req.header("transfer-encoding") === undefined &&
+      declaredLength !== undefined &&
+      Number.parseInt(declaredLength, 10) > maxSize
+    ) {
+      return c.json({ error: "invalid-theme-request" }, 413)
+    }
+
+    return readLimit(c, next)
+  })
+}
+
 const actionSchema = z.strictObject({
   action: z.enum([
     "validate",
@@ -52,7 +73,7 @@ const workspace = new Hono<ApiEnv>()
   })
   .post(
     "/drafts",
-    bodyLimit({ maxSize: 1_000_000 }),
+    themeBodyLimit(1_000_000),
     zValidator("json", showThemeDefinitionSchema),
     (c) => {
       const p = themeWorkspacePrincipal(
@@ -78,7 +99,7 @@ const workspace = new Hono<ApiEnv>()
   })
   .put(
     "/drafts/:artifactId",
-    bodyLimit({ maxSize: 1_000_000 }),
+    themeBodyLimit(1_000_000),
     zValidator(
       "json",
       z.strictObject({
@@ -105,7 +126,7 @@ const workspace = new Hono<ApiEnv>()
   )
   .put(
     "/drafts/:artifactId/assets/:assetId",
-    bodyLimit({ maxSize: 100_000_000 }),
+    themeBodyLimit(100_000_000),
     async (c) => {
       const p = themeWorkspacePrincipal(
         c.get("claims").sub,
@@ -123,7 +144,7 @@ const workspace = new Hono<ApiEnv>()
   )
   .post(
     "/drafts/:artifactId/actions",
-    bodyLimit({ maxSize: 1000 }),
+    themeBodyLimit(1000),
     zValidator("json", actionSchema),
     (c) => {
       const p = themeWorkspacePrincipal(
@@ -166,7 +187,7 @@ const workspace = new Hono<ApiEnv>()
   )
   .post(
     "/drafts/:artifactId/approval",
-    bodyLimit({ maxSize: 2000 }),
+    themeBodyLimit(2000),
     zValidator("json", themeApprovalSchema),
     (c) => {
       const p = themeWorkspacePrincipal(
@@ -184,7 +205,7 @@ const workspace = new Hono<ApiEnv>()
   )
   .post(
     "/drafts/:artifactId/rejection",
-    bodyLimit({ maxSize: 4000 }),
+    themeBodyLimit(4000),
     zValidator(
       "json",
       z.strictObject({
@@ -276,18 +297,12 @@ export const themeRoutes = apiFactory
         c.req.path === "/api/themes/catalog"
       )
     ) {
-      c.header("Connection", "close")
-
       return c.json({ error: "not-found" }, 404)
     }
 
+    // The Node adapter owns bounded draining of unread request bodies.
+    // Forcing a close here can reset an upload before its 413 reaches the client.
     await next()
-
-    // Early rejection may leave an unread upload that the Node adapter drains
-    // or closes. Do not advertise that connection as reusable to API clients.
-    if (c.res.status >= 400 && !["GET", "HEAD"].includes(c.req.method)) {
-      c.header("Connection", "close")
-    }
   })
   .use("*", requireManager)
   .use("*", async (c, next) => {

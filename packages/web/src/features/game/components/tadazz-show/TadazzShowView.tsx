@@ -359,6 +359,8 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     backdrop = {
       url: themeBackground.mediaUrl,
       fit: compositionRoot?.props.fit ?? themeBackground.fit ?? "cover",
+      position: "center",
+      overlayOpacity: 0,
     }
   } else if (authoredBackdrop) {
     backdrop = {
@@ -1701,6 +1703,8 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                     }
                     backdropUrl={backdrop?.url}
                     backdropFit={compositionRoot?.props.fit ?? backdrop?.fit}
+                    backdropPosition={backdrop?.position}
+                    backdropOverlayOpacity={backdrop?.overlayOpacity}
                     interactive={
                       isPlayer &&
                       scene.kind === "voting" &&
@@ -1725,6 +1729,8 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                     labels={labels}
                     backdropUrl={backdrop?.url}
                     backdropFit={compositionRoot?.props.fit ?? backdrop?.fit}
+                    backdropPosition={backdrop?.position}
+                    backdropOverlayOpacity={backdrop?.overlayOpacity}
                     interactive={
                       isPlayer &&
                       scene.kind === "voting" &&

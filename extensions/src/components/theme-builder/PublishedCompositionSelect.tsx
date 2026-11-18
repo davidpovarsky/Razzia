@@ -39,7 +39,7 @@ export function PublishedCompositionSelect({
   const { i18n } = useTranslation(),
     [locale] = i18n.language.split("-")
   const text = builderText(
-    (["en", "fr", "de", "es", "it", "ja", "tr", "vi"].includes(locale)
+    (["en", "fr", "de", "es", "it", "ja", "tr", "vi", "he"].includes(locale)
       ? locale
       : "en") as PreviewLocale,
   )

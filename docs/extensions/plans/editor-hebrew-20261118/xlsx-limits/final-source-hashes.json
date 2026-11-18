@@ -1,0 +1,8 @@
+{
+  "extensions/src/core/roster-import.ts": "22b116ba7b8977ed5982d74643c427cc844c191abf57a50c5525c23710a65826",
+  "extensions/src/core/show-workbook.ts": "1c2c342c7b4afba7003d3f659db39aa280ed06eb01f6f9300a880c7789a78aa7",
+  "extensions/src/core/xlsx-resource-limits.test.ts": "9e9e087a31fe2745bedaf11a12d0682ee544d9f49f1a879e5a992b26fc0eaa16",
+  "packages/e2e/utils/fixtures.ts": "285dc7ebb5a5b39a85ac748c3fd691c904e8855d86cc7eafbdc45ca9db3112a4",
+  "packages/e2e/tests/wave1-show-import-acceptance.spec.ts": "27b9013e14f926f6bfe17b9eb8b07169368330b1f4686459dc3e53803fe61711",
+  "packages/e2e/playwright.editor-followup.config.ts": "34bcecb12523c64821694cb51840f1f7816432c307f407b2c18ba06f13afcee0"
+}

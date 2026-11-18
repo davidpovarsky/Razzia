@@ -4,6 +4,7 @@ import {
   StudioConversionDialog,
 } from "./studio/header-controls"
 import { useCompositeQuizzSave } from "./studio/use-composite-quizz-save"
+import AlertDialog from "@razzia/web/components/AlertDialog"
 import Button from "@razzia/web/components/Button"
 import FieldError from "@razzia/web/components/forms/FieldError"
 import Input from "@razzia/web/components/Input"
@@ -15,6 +16,11 @@ import { useTranslation } from "react-i18next"
 const QuizzEditorHeader = () => {
   const {
     control,
+    isSaving,
+    canSave,
+    navigationBlocked,
+    cancelNavigation,
+    confirmNavigation,
     conflict,
     setConflict,
     handleExit,
@@ -38,6 +44,8 @@ const QuizzEditorHeader = () => {
                 <Input
                   {...field}
                   variant="sm"
+                  dir="auto"
+                  disabled={!canSave}
                   aria-invalid={fieldState.invalid}
                   aria-describedby={
                     fieldState.invalid ? `${field.name}-error` : undefined
@@ -61,7 +69,7 @@ const QuizzEditorHeader = () => {
         <StudioHeaderNavigation />
 
         {/* Right: Exit and Save Buttons */}
-        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+        <div className="ms-auto flex shrink-0 items-center gap-1.5 sm:ms-0 sm:gap-2">
           <Button
             type="button"
             className="bg-accent text-accent-foreground sm:text-md px-2.5 py-1.5 text-sm font-semibold sm:px-4 sm:py-2"
@@ -74,6 +82,8 @@ const QuizzEditorHeader = () => {
             type="button"
             className="bg-primary sm:text-md px-2.5 py-1.5 text-sm sm:px-4 sm:py-2"
             onClick={handleSave}
+            disabled={isSaving || !canSave}
+            aria-busy={isSaving}
             data-testid="editor-save-btn"
           >
             {t("common:save")}
@@ -94,6 +104,19 @@ const QuizzEditorHeader = () => {
       />
 
       <StudioConversionDialog />
+      <AlertDialog
+        open={navigationBlocked}
+        onOpenChange={(open) => {
+          if (!open) {
+            cancelNavigation()
+          }
+        }}
+        title={t("extensions:editor.unsavedExitTitle")}
+        description={t("extensions:editor.unsavedExitDescription")}
+        confirmLabel={t("extensions:editor.discardAndExit")}
+        confirmTestId="editor-discard-exit"
+        onConfirm={confirmNavigation}
+      />
     </header>
   )
 }

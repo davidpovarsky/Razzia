@@ -1,0 +1,17 @@
+packages/web/src/features/quizz/components/QuizzEditorSidebar.tsx 220ms
+packages/web/src/features/quizz/components/QuizzEditorCard.tsx 45ms
+packages/web/src/features/quizz/components/QuestionEditor/AnswerVisualControls.tsx 35ms
+packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorMedia.tsx 32ms
+packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorAnswers.tsx 31ms
+packages/web/src/features/quizz/components/studio/QuestionCardActions.tsx 18ms
+packages/web/src/features/quizz/components/studio/header-controls.tsx 27ms
+packages/web/src/features/quizz/components/studio/studio-shell.tsx 17ms
+packages/web/src/features/quizz/components/studio/theme-scope-controls.tsx 50ms
+packages/web/src/features/quizz/components/studio/theme-audio-options.tsx 36ms
+packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/CardBackgroundConfig.tsx 31ms
+packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/CardAudioConfig.tsx 58ms
+packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/index.tsx 22ms
+packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/BaseConfig.tsx 24ms
+packages/web/src/features/questions/estimation/components/EstimationConfig.tsx 13ms
+packages/web/src/features/questions/estimation/components/EstimationEditor.tsx 18ms
+packages/web/src/features/quizz/components/QuestionEditor/use-answer-visual-editor.ts 32ms

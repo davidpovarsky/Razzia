@@ -15,7 +15,7 @@ export const applicationPreviewFrameSchema = z.strictObject({
   chapterIndex: z.number().int().min(0).max(1023),
   clock: demoClockSnapshotSchema,
   role: z.enum(["manager", "player", "spectator"]),
-  locale: z.enum(["en", "fr", "de", "es", "it", "ja", "tr", "vi"]),
+  locale: z.enum(["en", "fr", "de", "es", "it", "ja", "tr", "vi", "he"]),
   reducedMotion: z.boolean(),
   soundEnabled: z.boolean().default(false),
   mediaRevealed: z.boolean().default(false),

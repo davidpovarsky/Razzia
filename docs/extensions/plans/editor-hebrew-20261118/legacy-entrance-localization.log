@@ -1,0 +1,28 @@
+format
+packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/QuestionEntranceConfig.tsx 347ms (unchanged)
+extensions/src/locales/en/extensions.json 58ms (unchanged)
+extensions/src/locales/he/extensions.json 30ms (unchanged)
+extensions/src/locales/de/extensions.json 23ms (unchanged)
+extensions/src/locales/es/extensions.json 27ms (unchanged)
+extensions/src/locales/fr/extensions.json 24ms (unchanged)
+extensions/src/locales/it/extensions.json 23ms (unchanged)
+extensions/src/locales/ja/extensions.json 30ms (unchanged)
+extensions/src/locales/tr/extensions.json 28ms (unchanged)
+extensions/src/locales/vi/extensions.json 27ms (unchanged)
+
+lint
+Found 0 warnings and 0 errors.
+Finished in 2.1s on 1 file with 233 rules using 12 threads.
+
+locales
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions
+
+ ✓ src/locales/host-additions.test.ts (2 tests) 11ms
+ ✓ src/locales/hebrew.test.ts (2 tests) 63ms
+ ✓ src/locales/locales.test.ts (10 tests) 123ms
+
+ Test Files  3 passed (3)
+      Tests  14 passed (14)
+   Start at  16:12:08
+   Duration  1.20s (import 48%, transform 36%, tests 11%, worker 4%)

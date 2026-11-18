@@ -1,0 +1,15 @@
+{"loginUrl":"http://127.0.0.1:3182/manager","text":""}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+page.waitForURL: Timeout 20000ms exceeded.
+=========================== logs ===========================
+waiting for navigation to "**/manager/config" until "load"
+============================================================
+    at C:\Users\DAVID\Code\Razzia-worktrees\tadazz-editor-hebrew-20261118\packages\e2e\editor-before-audit.mjs:14:12 {
+  log: [],
+  name: 'TimeoutError'
+}
+
+Node.js v24.22.1

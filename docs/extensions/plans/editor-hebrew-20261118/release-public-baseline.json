@@ -1,0 +1,29 @@
+{
+  "tadazz": {
+    "id": "24b725ed6bffa1df8396d23272c1e7b068b57e8f1388a37f409da44e2df64d1c",
+    "image": "sha256:5c1f6bd344a9fcf7099f67ff7544e7858bccba79e672bdab079ca275a287d930",
+    "running": true,
+    "startedAt": "2026-11-18T11:23:24.987508339Z",
+    "revision": "e30133c7dfb03412cfb898705f1115d206548668"
+  },
+  "tadazz-phone-gateway": {
+    "id": "c29ea46f10ff6da76428b2f296ff1468c512ec9e2af76eba552d7a144766b202",
+    "image": "sha256:db1888623e93a18cb9e4005a0142e01b3e6c503b029bbd7856144a5f41e7aa5e",
+    "running": true,
+    "startedAt": "2026-11-08T11:37:09.544011462Z",
+    "revision": null
+  },
+  "runningCount": 7,
+  "observedAt": "2026-11-18T13:57:09.060490+00:00",
+  "publicJwkX": "tACOjBqxXwVTEOG6fEXsgmJlZbzxbbLsb-1W-cRbPoE",
+  "health": {
+    "status": "ok"
+  },
+  "expectedConfigSha256": "6524e1e0a86be5e0ec497be239a7889f53ad4425e4d3aeec285364fc5db9e9b5",
+  "configPinProvenance": "prior sanitized external-release-readback-20261118-a2/receipt.json; current match is checked only by existing guarded deployer",
+  "clientId": "tadazz-chatgpt-private-20261118",
+  "redirectUris": [
+    "https://chatgpt.com/connector_platform_oauth_redirect"
+  ],
+  "privateFileRead": false
+}

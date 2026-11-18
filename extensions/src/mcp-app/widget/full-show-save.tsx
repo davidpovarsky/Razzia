@@ -1,3 +1,4 @@
+import NativeButton from "../../../../packages/web/src/components/Button"
 import type { App } from "@modelcontextprotocol/ext-apps"
 import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -105,28 +106,32 @@ export function FullShowSaveV3({
   return (
     <section className="widget-save" aria-label={t("saveAction")}>
       {outcome?.kind !== "saved" && (
-        <button
+        <NativeButton
+          classNameContent="contents"
+          data-control-source="razzia"
           type="button"
           data-testid="full-show-save"
           disabled={disabled || busy || !canCall}
           onClick={() => void save()}
         >
           {t(busy ? "savingAction" : saveLabel)}
-        </button>
+        </NativeButton>
       )}
       {outcome?.kind === "consent" && (
         <>
           <p role="status" data-testid="full-show-save-consent">
             {t("consentPending")}
           </p>
-          <button
+          <NativeButton
+            classNameContent="contents"
+            data-control-source="razzia"
             type="button"
             data-testid="full-show-review-save"
             disabled={disabled || busy || !canOpen}
             onClick={() => void open(outcome.url)}
           >
             {t("reviewSave")}
-          </button>
+          </NativeButton>
         </>
       )}
       {outcome?.kind === "saved" && (
@@ -134,14 +139,16 @@ export function FullShowSaveV3({
           <p role="status" data-testid="full-show-save-complete">
             {t("savedInTadazz", { revision: outcome.savedRevision })}
           </p>
-          <button
+          <NativeButton
+            classNameContent="contents"
+            data-control-source="razzia"
             type="button"
             data-testid="full-show-open-saved"
             disabled={disabled || busy || !canOpen}
             onClick={() => void open(outcome.url)}
           >
             {t("openSavedGame")}
-          </button>
+          </NativeButton>
         </>
       )}
       {!canCall && <p>{t("saveUnsupported")}</p>}

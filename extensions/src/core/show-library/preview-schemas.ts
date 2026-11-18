@@ -12,7 +12,7 @@ import {
 export const previewContextSchema = z.strictObject({
   mode: z.literal("demo"),
   role: previewRoleSchema,
-  locale: z.enum(["en", "fr", "de", "es", "it", "ja", "tr", "vi"]),
+  locale: z.enum(["en", "fr", "de", "es", "it", "ja", "tr", "vi", "he"]),
   reducedMotion: z.boolean(),
   join: z.literal("unavailable-demo"),
   actions: z.literal("synthetic-only"),

@@ -325,10 +325,17 @@ describe("activation and backdrop priority", () => {
             mode: "card",
             url: "/media/bg.png",
             fit: "contain",
+            position: "bottom",
+            overlayOpacity: 0.65,
           },
         }),
       ),
-    ).toEqual({ url: "/media/bg.png", fit: "contain" })
+    ).toEqual({
+      url: "/media/bg.png",
+      fit: "contain",
+      position: "bottom",
+      overlayOpacity: 0.65,
+    })
     expect(
       resolveStageBackdrop(
         envelope({
@@ -337,6 +344,36 @@ describe("activation and backdrop priority", () => {
       ),
     ).toBeNull()
     expect(resolveStageBackdrop(envelope({}))).toBeNull()
+    expect(
+      resolveStageBackdrop(
+        envelope({
+          currentScene: {
+            kind: "transition",
+            background: {
+              url: "/media/scene.png",
+              fit: "cover",
+              position: "left",
+              overlayOpacity: 0,
+            },
+          },
+        }),
+      ),
+    ).toEqual({
+      url: "/media/scene.png",
+      fit: "cover",
+      position: "left",
+      overlayOpacity: 0,
+    })
+    expect(
+      resolveStageBackdrop(
+        envelope({ cardBackground: { url: "/media/defaults.png" } }),
+      ),
+    ).toEqual({
+      url: "/media/defaults.png",
+      fit: "cover",
+      position: "center",
+      overlayOpacity: 0.35,
+    })
   })
 })
 
