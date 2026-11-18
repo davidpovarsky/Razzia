@@ -1,0 +1,20 @@
+{
+  "applicationSourceBase": "e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
+  "applicationAndTestPathsChanged": [],
+  "existingHelperByteIdenticalAfterExactObserverErasure": true,
+  "originalForkWaitResultAnd25000msTimeoutPreserved": true,
+  "observerDefaultOff": true,
+  "nodeOnlyFiles": [
+    {
+      "path": "extensions/src/server/storage/creation-process.ts",
+      "bytes": 3173,
+      "sha256": "b7c18b62c74438caf918676500117e53b0d6bba91b8a0e345c172d6435cd8983"
+    },
+    {
+      "path": "extensions/src/server/storage/creation-process-observer.ts",
+      "bytes": 4896,
+      "sha256": "07905184e9232c1d8f9ba33afe39dbd7ac1e895ad85ff0958d60c84e38a82a54"
+    }
+  ],
+  "functionalExecution": false
+}

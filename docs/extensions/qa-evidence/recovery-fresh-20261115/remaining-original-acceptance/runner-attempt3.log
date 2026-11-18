@@ -1,0 +1,77 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115
+
+stderr | docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/tenant-startup.witness.ts > blocks ownerless startup with an unresolved quiz-save journal in an enabled tenant
+[Journal] Malformed JSON in journal synthetic-unresolved.journal.json: SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at recoverJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/journal.ts:174:22)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1398:24)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/tenant-startup.witness.ts:38:59
+    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:65:14)
+    at withAccount (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/packages/socket/src/services/account-scope.ts:12:29)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/tenant-startup.witness.ts:38:34
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+stderr | docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/tenant-startup.witness.ts > blocks ownerless startup with an unresolved media-delete journal in an enabled tenant
+[MediaJournal] Malformed JSON in journal synthetic-unresolved.journal.json: SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:917:22)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/tenant-startup.witness.ts:38:59
+    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:65:14)
+    at withAccount (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/packages/socket/src/services/account-scope.ts:12:29)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/tenant-startup.witness.ts:38:34
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+ × docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/tenant-startup.witness.ts > blocks ownerless startup with an unresolved quiz-save journal in an enabled tenant 53ms
+   → {"family":"quiz-save","owner":"00000000-0000-4000-8000-0000000000A1","state":"MEASURED","root":"C:\\Users\\DAVID\\AppData\\Local\\Temp\\tadazz-c1-native-synthetic-r2rvIF","tenantRoot":"C:\\Users\\DAVID\\AppData\\Local\\Temp\\tadazz-c1-native-synthetic-r2rvIF\\tenants\\00000000-0000-4000-8000-0000000000A1","globalResult":{"status":"clean","unresolvedCount":0,"quizRecovery":{"recoveredCount":0,"recoveredQuizIds":[],"unresolvedCount":0,"unresolvedQuizIds":[]},"mediaRecovery":{"recoveredCount":0,"recoveredQuizIds":[],"restoredMediaNames":[],"unresolvedCount":0,"unresolvedJournals":[]}},"tenantResult":{"status":"failed","unresolvedCount":1,"quizRecovery":{"recoveredCount":0,"recoveredQuizIds":[],"unresolvedCount":1,"unresolvedQuizIds":["synthetic-unresolved.journal.json"]},"mediaRecovery":{"recoveredCount":0,"recoveredQuizIds":[],"restoredMediaNames":[],"unresolvedCount":0,"unresolvedJournals":[]}},"preservedJournalSha256":"e1d2ee53dcbbd6a59d6f0c650bd59a9c2a8188a809a7a916fe6939f0868539c6","currentTenantScopePositiveControlPassed":true}: expected '' to match /startup blocked/i
+ × docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/tenant-startup.witness.ts > blocks ownerless startup with an unresolved media-delete journal in an enabled tenant 29ms
+   → {"family":"media-delete","owner":"00000000-0000-4000-8000-0000000000A1","state":"MEASURED","root":"C:\\Users\\DAVID\\AppData\\Local\\Temp\\tadazz-c1-native-synthetic-37hWOx","tenantRoot":"C:\\Users\\DAVID\\AppData\\Local\\Temp\\tadazz-c1-native-synthetic-37hWOx\\tenants\\00000000-0000-4000-8000-0000000000A1","globalResult":{"status":"clean","unresolvedCount":0,"quizRecovery":{"recoveredCount":0,"recoveredQuizIds":[],"unresolvedCount":0,"unresolvedQuizIds":[]},"mediaRecovery":{"recoveredCount":0,"recoveredQuizIds":[],"restoredMediaNames":[],"unresolvedCount":0,"unresolvedJournals":[]}},"tenantResult":{"status":"failed","unresolvedCount":1,"quizRecovery":{"recoveredCount":0,"recoveredQuizIds":[],"unresolvedCount":0,"unresolvedQuizIds":[]},"mediaRecovery":{"recoveredCount":0,"recoveredQuizIds":[],"restoredMediaNames":[],"unresolvedCount":1,"unresolvedJournals":["synthetic-unresolved.journal.json"]}},"preservedJournalSha256":"e1d2ee53dcbbd6a59d6f0c650bd59a9c2a8188a809a7a916fe6939f0868539c6","currentTenantScopePositiveControlPassed":true}: expected '' to match /startup blocked/i
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/tenant-startup.witness.ts > blocks ownerless startup with an unresolved quiz-save journal in an enabled tenant
+AssertionError: {"family":"quiz-save","owner":"00000000-0000-4000-8000-0000000000A1","state":"MEASURED","root":"C:\\Users\\DAVID\\AppData\\Local\\Temp\\tadazz-c1-native-synthetic-r2rvIF","tenantRoot":"C:\\Users\\DAVID\\AppData\\Local\\Temp\\tadazz-c1-native-synthetic-r2rvIF\\tenants\\00000000-0000-4000-8000-0000000000A1","globalResult":{"status":"clean","unresolvedCount":0,"quizRecovery":{"recoveredCount":0,"recoveredQuizIds":[],"unresolvedCount":0,"unresolvedQuizIds":[]},"mediaRecovery":{"recoveredCount":0,"recoveredQuizIds":[],"restoredMediaNames":[],"unresolvedCount":0,"unresolvedJournals":[]}},"tenantResult":{"status":"failed","unresolvedCount":1,"quizRecovery":{"recoveredCount":0,"recoveredQuizIds":[],"unresolvedCount":1,"unresolvedQuizIds":["synthetic-unresolved.journal.json"]},"mediaRecovery":{"recoveredCount":0,"recoveredQuizIds":[],"restoredMediaNames":[],"unresolvedCount":0,"unresolvedJournals":[]}},"preservedJournalSha256":"e1d2ee53dcbbd6a59d6f0c650bd59a9c2a8188a809a7a916fe6939f0868539c6","currentTenantScopePositiveControlPassed":true}: expected '' to match /startup blocked/i
+
+- Expected:
+/startup blocked/i
+
++ Received:
+""
+
+ ❯ docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/tenant-startup.witness.ts:47:58
+     45|       // Actual production startup uses this ownerless options object …
+     46|       // throw before listen when critical existing tenant evidence is…
+     47|       expect(globalError ?? "", JSON.stringify(receipt)).toMatch(/star…
+       |                                                          ^
+     48|       receipt.state = "PASS"
+     49|     } finally {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/tenant-startup.witness.ts > blocks ownerless startup with an unresolved media-delete journal in an enabled tenant
+AssertionError: {"family":"media-delete","owner":"00000000-0000-4000-8000-0000000000A1","state":"MEASURED","root":"C:\\Users\\DAVID\\AppData\\Local\\Temp\\tadazz-c1-native-synthetic-37hWOx","tenantRoot":"C:\\Users\\DAVID\\AppData\\Local\\Temp\\tadazz-c1-native-synthetic-37hWOx\\tenants\\00000000-0000-4000-8000-0000000000A1","globalResult":{"status":"clean","unresolvedCount":0,"quizRecovery":{"recoveredCount":0,"recoveredQuizIds":[],"unresolvedCount":0,"unresolvedQuizIds":[]},"mediaRecovery":{"recoveredCount":0,"recoveredQuizIds":[],"restoredMediaNames":[],"unresolvedCount":0,"unresolvedJournals":[]}},"tenantResult":{"status":"failed","unresolvedCount":1,"quizRecovery":{"recoveredCount":0,"recoveredQuizIds":[],"unresolvedCount":0,"unresolvedQuizIds":[]},"mediaRecovery":{"recoveredCount":0,"recoveredQuizIds":[],"restoredMediaNames":[],"unresolvedCount":1,"unresolvedJournals":["synthetic-unresolved.journal.json"]}},"preservedJournalSha256":"e1d2ee53dcbbd6a59d6f0c650bd59a9c2a8188a809a7a916fe6939f0868539c6","currentTenantScopePositiveControlPassed":true}: expected '' to match /startup blocked/i
+
+- Expected:
+/startup blocked/i
+
++ Received:
+""
+
+ ❯ docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/tenant-startup.witness.ts:47:58
+     45|       // Actual production startup uses this ownerless options object …
+     46|       // throw before listen when critical existing tenant evidence is…
+     47|       expect(globalError ?? "", JSON.stringify(receipt)).toMatch(/star…
+       |                                                          ^
+     48|       receipt.state = "PASS"
+     49|     } finally {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  17:38:12
+   Duration  3.29s (import 53%, transform 43%, tests 3%)
+
+JSON report written to C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/results-attempt3.json

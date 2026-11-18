@@ -1,0 +1,258 @@
+{
+  "sourceCommit": "e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
+  "packetCommit": "e121dff8be5d5df5652e76d187751bf5894e9746",
+  "result": {
+    "attempted": 48,
+    "passed": 41,
+    "failed": 7,
+    "groups": [
+      {
+        "name": "primitives-scope",
+        "total": 9,
+        "passed": 9,
+        "failed": 0
+      },
+      {
+        "name": "reservation",
+        "total": 16,
+        "passed": 16,
+        "failed": 0
+      },
+      {
+        "name": "review-regressions",
+        "total": 12,
+        "passed": 12,
+        "failed": 0
+      },
+      {
+        "name": "actual-native",
+        "total": 11,
+        "passed": 4,
+        "failed": 7
+      }
+    ]
+  },
+  "failedCases": [
+    {
+      "name": "C1 actual native creation composition uses real manager JWT/session middleware in two tenants and discovers the dedicated roots after a flag change",
+      "failureMessages": [
+        "AssertionError: runtime: failed to create new OS thread (have 4 already; errno=11)\nruntime: may need to increase max user processes (ulimit -u)\nfatal error: newosproc\n\nruntime stack:\nruntime.throw({0x5b1c1b?, 0xffffd8f47490?})\n\truntime/panic.go:1229 +0x38 fp=0xffffd8f47460 sp=0xffffd8f47430 pc=0x90158\nruntime.newosproc(0x7a9c7fec1008)\n\truntime/os_linux.go:199 +0x130 fp=0xffffd8f474d0 sp=0xffffd8f47460 pc=0x55cd0\nruntime.newm1(0x7a9c7fec1008)\n\truntime/proc.go:2927 +0xa0 fp=0xffffd8f47510 sp=0xffffd8f474d0 pc=0x60690\nruntime.newm(0xffffd8f47578?, 0x7a9c7feaa008, 0xffffd8f47578?)\n\truntime/proc.go:2902 +0x128 fp=0xffffd8f47540 sp=0xffffd8f47510 pc=0x60588\nruntime.startm(0x7a9c7feaa008?, 0x0, 0x0)\n\truntime/proc.go:3096 +0x128 fp=0xffffd8f47590 sp=0xffffd8f47540 pc=0x60b48\nruntime.handoffp(0xffffd8f47678?)\n\truntime/proc.go:3137 +0x3f0 fp=0xffffd8f475c0 sp=0xffffd8f47590 pc=0x610d0\nruntime.stoplockedm()\n\truntime/proc.go:3259 +0x44 fp=0xffffd8f47620 sp=0xffffd8f475c0 pc=0x61134\nruntime.schedule()\n\truntime/proc.go:4143 +0x34 fp=0xffffd8f47660 sp=0xffffd8f47620 pc=0x63974\nruntime.park_m(0x7a9c7fe761e0)\n\truntime/proc.go:4304 +0x244 fp=0xffffd8f476c0 sp=0xffffd8f47660 pc=0x63e54\nruntime.mcall()\n\truntime/asm_arm64.s:339 +0x54 fp=0xffffd8f476d0 sp=0xffffd8f476c0 pc=0x954f4\n\ngoroutine 1 gp=0x7a9c7fe761e0 m=nil [runnable, locked to thread]:\nruntime.gopark(0x80010100000000?, 0x0?, 0x8?, 0xe1?, 0xec34d3ba7880?)\n\truntime/proc.go:462 +0xbc fp=0x7a9c7febc650 sp=0x7a9c7febc630 pc=0x9026c\nruntime.chanrecv(0x7a9c7fedc000, 0x0, 0x1)\n\truntime/chan.go:667 +0x470 fp=0x7a9c7febc6d0 sp=0x7a9c7febc650 pc=0x253f0\nruntime.chanrecv1(0x0?, 0x2?)\n\truntime/chan.go:509 +0x14 fp=0x7a9c7febc700 sp=0x7a9c7febc6d0 pc=0x24f44\nruntime.gcenable()\n\truntime/mgc.go:216 +0xb8 fp=0x7a9c7febc730 sp=0x7a9c7febc700 pc=0x36ab8\nruntime.main()\n\truntime/proc.go:213 +0x15c fp=0x7a9c7febc7d0 sp=0x7a9c7febc730 pc=0x5b93c\nruntime.goexit({})\n\truntime/asm_arm64.s:1447 +0x4 fp=0x7a9c7febc7d0 sp=0x7a9c7febc7d0 pc=0x97574\n\ngoroutine 2 gp=0x7a9c7fe76780 m=nil [force gc (idle)]:\nruntime.gopark(0x0?, 0x0?, 0x0?, 0x0?, 0x0?)\n\truntime/proc.go:462 +0xbc fp=0x7a9c7febcf90 sp=0x7a9c7febcf70 pc=0x9026c\nruntime.goparkunlock(...)\n\truntime/proc.go:468\nruntime.forcegchelper()\n\truntime/proc.go:375 +0xb4 fp=0x7a9c7febcfd0 sp=0x7a9c7febcf90 pc=0x5bdb4\nruntime.goexit({})\n\truntime/asm_arm64.s:1447 +0x4 fp=0x7a9c7febcfd0 sp=0x7a9c7febcfd0 pc=0x97574\ncreated by runtime.init.7 in goroutine 1\n\truntime/proc.go:363 +0x24\n\ngoroutine 3 gp=0x7a9c7fe76d20 m=nil [GC sweep wait]:\nruntime.gopark(0x0?, 0x0?, 0x0?, 0x0?, 0x0?)\n\truntime/proc.go:462 +0xbc fp=0x7a9c7febd770 sp=0x7a9c7febd750 pc=0x9026c\nruntime.goparkunlock(...)\n\truntime/proc.go:468\nruntime.bgsweep(0x7a9c7fedc000)\n\truntime/mgcsweep.go:279 +0x9c fp=0x7a9c7febd7b0 sp=0x7a9c7febd770 pc=0x4555c\nruntime.gcenable.gowrap1()\n\truntime/mgc.go:214 +0x20 fp=0x7a9c7febd7d0 sp=0x7a9c7febd7b0 pc=0x36b50\nruntime.goexit({})\n\truntime/asm_arm64.s:1447 +0x4 fp=0x7a9c7febd7d0 sp=0x7a9c7febd7d0 pc=0x97574\ncreated by runtime.gcenable in goroutine 1\n\truntime/mgc.go:214 +0x6c\n\ngoroutine 4 gp=0x7a9c7fe76f00 m=nil [runnable]:\nruntime.gcenable.gowrap2()\n\truntime/mgc.go:215 fp=0x7a9c7febdfd0 sp=0x7a9c7febdfd0 pc=0x36af0\nruntime.goexit({})\n\truntime/asm_arm64.s:1447 +0x4 fp=0x7a9c7febdfd0 sp=0x7a9c7febdfd0 pc=0x97574\ncreated by runtime.gcenable in goroutine 1\n\truntime/mgc.go:215 +0xac\nnode:internal/modules/run_main:107\n    triggerUncaughtException(\n    ^\n\nError: The service was stopped\n    at /work/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:1001:38\n    at responseCallbacks.<computed> (/work/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:886:9)\n    at Socket.afterClose (/work/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:877:28)\n    at Socket.emit (node:events:526:24)\n    at endReadableNT (node:internal/streams/readable:1783:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {\n  name: 'TransformError'\n}\n\nNode.js v24.22.2\n: expected null to be 'SIGKILL' // Object.is equality\n    at /work/packages/socket/src/services/quiz-creation-reservation.test.ts:162:54\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async file:///work/node_modules/.pnpm/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:20"
+      ]
+    },
+    {
+      "name": "C1 actual native creation composition survives actual native before-public SIGKILL and two fresh startup replays",
+      "failureMessages": [
+        "Error: ENOENT: no such file or directory, open '/scratch/c1/tadazz-c1-native-synthetic-GRPMCv/.c1-interrupted.json'\n    at Object.readFileSync (node:fs:483:20)\n    at /work/packages/socket/src/services/quiz-creation-reservation.test.ts:232:16\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async file:///work/node_modules/.pnpm/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:20"
+      ]
+    },
+    {
+      "name": "C1 actual native creation composition survives actual native after-sidecar SIGKILL and two fresh startup replays",
+      "failureMessages": [
+        "Error: ENOENT: no such file or directory, open '/scratch/c1/tadazz-c1-native-synthetic-Yxvkp3/.c1-interrupted.json'\n    at Object.readFileSync (node:fs:483:20)\n    at /work/packages/socket/src/services/quiz-creation-reservation.test.ts:232:16\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async file:///work/node_modules/.pnpm/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:20"
+      ]
+    },
+    {
+      "name": "C1 actual native creation composition survives actual native before-id-return SIGKILL and two fresh startup replays",
+      "failureMessages": [
+        "Error: ENOENT: no such file or directory, open '/scratch/c1/tadazz-c1-native-synthetic-N56Jem/.c1-interrupted.json'\n    at Object.readFileSync (node:fs:483:20)\n    at /work/packages/socket/src/services/quiz-creation-reservation.test.ts:232:16\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async file:///work/node_modules/.pnpm/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:20"
+      ]
+    },
+    {
+      "name": "C1 actual native creation composition survives actual native committed-visible SIGKILL and two fresh startup replays",
+      "failureMessages": [
+        "Error: ENOENT: no such file or directory, open '/scratch/c1/tadazz-c1-native-synthetic-9rbXTW/.c1-interrupted.json'\n    at Object.readFileSync (node:fs:483:20)\n    at /work/packages/socket/src/services/quiz-creation-reservation.test.ts:232:16\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async file:///work/node_modules/.pnpm/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:20"
+      ]
+    },
+    {
+      "name": "C1 actual native creation composition survives actual native private-cleanup SIGKILL and two fresh startup replays",
+      "failureMessages": [
+        "Error: ENOENT: no such file or directory, open '/scratch/c1/tadazz-c1-native-synthetic-cq19KY/.c1-interrupted.json'\n    at Object.readFileSync (node:fs:483:20)\n    at /work/packages/socket/src/services/quiz-creation-reservation.test.ts:232:16\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async file:///work/node_modules/.pnpm/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:20"
+      ]
+    },
+    {
+      "name": "C1 actual native creation composition survives actual native before-slot-removal SIGKILL and two fresh startup replays",
+      "failureMessages": [
+        "Error: ENOENT: no such file or directory, open '/scratch/c1/tadazz-c1-native-synthetic-RSc3iL/.c1-interrupted.json'\n    at Object.readFileSync (node:fs:483:20)\n    at /work/packages/socket/src/services/quiz-creation-reservation.test.ts:232:16\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async file:///work/node_modules/.pnpm/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:20"
+      ]
+    }
+  ],
+  "passedNativeCases": [
+    "C1 actual native creation composition uses the actual validator, one preparer and independent random8 native basename without opaque save",
+    "C1 actual native creation composition keeps idless legacy bytes unchanged during pure preparation and rejects missing enabled owner before allocation",
+    "C1 actual native creation composition keeps actual HTTP create/import failures private before durable intent",
+    "C1 actual native creation composition retains explicit accounts-off legacy import with no sidecar publication"
+  ],
+  "observedDiagnostic": "Pending-tenant child esbuild/Go OS-thread creation failed (errno=11/newosproc); six native kill cases lack checkpoints.",
+  "causeLimit": "Consistent with thread/process capacity pressure under the configured 96-PID profile; no pids.events or peak-thread receipt establishes the exact limit, and six failed child results were not retained before checkpoint read.",
+  "reviewProcessReceiptsVerified": [
+    {
+      "name": "review-absent-base",
+      "killedOwnChildPid": 475,
+      "failedFreshPids": [
+        489,
+        503
+      ],
+      "successfulFreshPids": [
+        517,
+        531
+      ]
+    },
+    {
+      "name": "review-absent-sidecar",
+      "killedOwnChildPid": 545,
+      "failedFreshPids": [
+        559,
+        573
+      ],
+      "successfulFreshPids": [
+        587,
+        601
+      ]
+    },
+    {
+      "name": "review-move-active-committed",
+      "killedOwnChildPid": 615,
+      "failedFreshPids": [
+        629,
+        643
+      ],
+      "successfulFreshPids": [
+        657,
+        671
+      ]
+    },
+    {
+      "name": "review-move-resolved-committed",
+      "killedOwnChildPid": 686,
+      "failedFreshPids": [
+        700,
+        714
+      ],
+      "successfulFreshPids": [
+        728,
+        742
+      ]
+    },
+    {
+      "name": "review-move-active-empty",
+      "killedOwnChildPid": 756,
+      "failedFreshPids": [
+        770,
+        784
+      ],
+      "successfulFreshPids": [
+        798,
+        812
+      ]
+    },
+    {
+      "name": "review-move-resolved-empty",
+      "killedOwnChildPid": 826,
+      "failedFreshPids": [
+        840,
+        854
+      ],
+      "successfulFreshPids": [
+        868,
+        882
+      ]
+    }
+  ],
+  "fourHttpFaultRouteConditionsVerified": true,
+  "nativeKillCasesNotEstablished": [
+    {
+      "boundary": "before-public",
+      "expectedKillAndTwoReplayEvidenceEstablished": false,
+      "childResultRetainedBeforeCheckpointRead": false
+    },
+    {
+      "boundary": "after-sidecar",
+      "expectedKillAndTwoReplayEvidenceEstablished": false,
+      "childResultRetainedBeforeCheckpointRead": false
+    },
+    {
+      "boundary": "before-id-return",
+      "expectedKillAndTwoReplayEvidenceEstablished": false,
+      "childResultRetainedBeforeCheckpointRead": false
+    },
+    {
+      "boundary": "committed-visible",
+      "expectedKillAndTwoReplayEvidenceEstablished": false,
+      "childResultRetainedBeforeCheckpointRead": false
+    },
+    {
+      "boundary": "private-cleanup",
+      "expectedKillAndTwoReplayEvidenceEstablished": false,
+      "childResultRetainedBeforeCheckpointRead": false
+    },
+    {
+      "boundary": "before-slot-removal",
+      "expectedKillAndTwoReplayEvidenceEstablished": false,
+      "childResultRetainedBeforeCheckpointRead": false
+    }
+  ],
+  "tenantFlagReplayNotEstablished": true,
+  "finalPacketAnalyzerExecuted": false,
+  "lastFullMergedHashCheck": "after passing review-regressions, before failing actual-native",
+  "eightFrozenInputHashesUnchangedAfterRun": true,
+  "downloadedServerFilesShaMatched": 68,
+  "resourceSamples": 148,
+  "terminalStages": [
+    {
+      "file": "actual-native-resources.jsonl",
+      "returnCode": 1,
+      "logBytes": 21180
+    },
+    {
+      "file": "primitives-scope-resources.jsonl",
+      "returnCode": 0,
+      "logBytes": 2512
+    },
+    {
+      "file": "reservation-resources.jsonl",
+      "returnCode": 0,
+      "logBytes": 4376
+    },
+    {
+      "file": "review-regressions-resources.jsonl",
+      "returnCode": 0,
+      "logBytes": 2820
+    },
+    {
+      "file": "verify-before-resources.jsonl",
+      "returnCode": 0,
+      "logBytes": 5039
+    },
+    {
+      "file": "verify-primitives-scope-resources.jsonl",
+      "returnCode": 0,
+      "logBytes": 4295
+    },
+    {
+      "file": "verify-reservation-resources.jsonl",
+      "returnCode": 0,
+      "logBytes": 4295
+    },
+    {
+      "file": "verify-review-regressions-resources.jsonl",
+      "returnCode": 0,
+      "logBytes": 4295
+    }
+  ],
+  "minimumSampledFreeBytes": 2778378240,
+  "maximumSampledAccountedNewPhysicalBytes": 10571776,
+  "sampledStageWallSeconds": 283.4801139831543,
+  "admissionAgeAtFirstVitestGateSeconds": 12.893443584442139,
+  "container": {
+    "id": "77bf6b4467255991f45c3ec71ebcedde77838e5e87b91ab192d82bafb542c570",
+    "running": false,
+    "oomKilled": false,
+    "cpuNano": 250000000,
+    "memoryBytes": 2147483648,
+    "pidsLimit": 96
+  },
+  "retries": 0,
+  "sourceOrRunnerEdits": false,
+  "originalR2Result": "813 PASS / 6 FAIL unchanged",
+  "qualification": "A cooperating-writer source only; native process qualification incomplete; no B/F1/hardware/production adoption."
+}

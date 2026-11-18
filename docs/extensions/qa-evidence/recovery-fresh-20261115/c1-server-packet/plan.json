@@ -1,0 +1,448 @@
+{
+  "sourceCommit": "e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
+  "root": "/home/ubuntu/tadazz-hq-qa-20261115",
+  "base": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work",
+  "lower": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248",
+  "src": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2",
+  "fixture": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2",
+  "evidence": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2",
+  "runner": "tadazz-hq-recovery-c1-e1fb1b2-packet2-20261115",
+  "identity": {
+    "uid": 1001,
+    "gid": 1001
+  },
+  "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+  "prospectiveOnly": true,
+  "cpu": 0.25,
+  "memoryBytes": 2147483648,
+  "newPhysicalBytesCap": 67108864,
+  "absoluteDiskFloorBytes": 2147483648,
+  "maximumWallSeconds": 1800,
+  "sampleSeconds": 2,
+  "perLogBytesCap": 16777216,
+  "resourceAdmission": {
+    "rootThreadId": "01a1dd10-2ef0-73c2-9c65-569a843f44da",
+    "ownLaneId": "Recovery-C1",
+    "directory": "/home/ubuntu/tadazz-hq-qa-20261115/admissions",
+    "maximumAgeSeconds": 300,
+    "rootLedgerRequired": true
+  },
+  "historicalPlanningOnly": {
+    "initialFreeGateMiB": 2568,
+    "retainedSharedMetadataMiBOnce": 435,
+    "prospectiveAggregateCpu": 1.25,
+    "prospectiveAggregateGiB": 9,
+    "suppliesNoRuntimeAuthority": true
+  },
+  "mounts": [
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work",
+      "destination": "/work",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work",
+      "destination": "/retained-base",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/source-manifest.json",
+      "destination": "/retained-inputs/source-manifest.json",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/media-library-recovery.test.ts",
+      "destination": "/work/extensions/src/server/media-library-recovery.test.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/media-library.test.ts",
+      "destination": "/work/extensions/src/server/media-library.test.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/media-library.ts",
+      "destination": "/work/extensions/src/server/media-library.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/extensions/src/server/storage",
+      "destination": "/work/extensions/src/server/storage",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/packages/socket/src/services",
+      "destination": "/work/packages/socket/src/services",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/storage/create-recovery.test.ts",
+      "destination": "/work/extensions/src/server/storage/create-recovery.test.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/storage/error.ts",
+      "destination": "/work/extensions/src/server/storage/error.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/storage/journal-recovery.test.ts",
+      "destination": "/work/extensions/src/server/storage/journal-recovery.test.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/storage/journal.ts",
+      "destination": "/work/extensions/src/server/storage/journal.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/storage/native-binding-child.ts",
+      "destination": "/work/extensions/src/server/storage/native-binding-child.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/storage/native-binding-fixture.ts",
+      "destination": "/work/extensions/src/server/storage/native-binding-fixture.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/storage/native-binding-r2.test.ts",
+      "destination": "/work/extensions/src/server/storage/native-binding-r2.test.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/storage/native-binding.test.ts",
+      "destination": "/work/extensions/src/server/storage/native-binding.test.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/storage/native-recovery-adapter.ts",
+      "destination": "/work/extensions/src/server/storage/native-recovery-adapter.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/storage/package-stage-r2.test.ts",
+      "destination": "/work/extensions/src/server/storage/package-stage-r2.test.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/storage/physical-binding.ts",
+      "destination": "/work/extensions/src/server/storage/physical-binding.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/storage/process-interruption-child.ts",
+      "destination": "/work/extensions/src/server/storage/process-interruption-child.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/storage/process-interruption-state.ts",
+      "destination": "/work/extensions/src/server/storage/process-interruption-state.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/storage/process-interruption.test.ts",
+      "destination": "/work/extensions/src/server/storage/process-interruption.test.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/storage/recovery-fixture.ts",
+      "destination": "/work/extensions/src/server/storage/recovery-fixture.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/storage/recovery-state.ts",
+      "destination": "/work/extensions/src/server/storage/recovery-state.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/storage/review-binding-child.ts",
+      "destination": "/work/extensions/src/server/storage/review-binding-child.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/storage/review-binding-state.ts",
+      "destination": "/work/extensions/src/server/storage/review-binding-state.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248/overlay/extensions/src/server/storage/review-binding.test.ts",
+      "destination": "/work/extensions/src/server/storage/review-binding.test.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/packages/socket/src/services/account-auth.test.ts",
+      "destination": "/work/packages/socket/src/services/account-auth.test.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/packages/socket/src/services/account-auth.ts",
+      "destination": "/work/packages/socket/src/services/account-auth.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/packages/socket/src/services/account-db.ts",
+      "destination": "/work/packages/socket/src/services/account-db.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/packages/socket/src/services/account-directory.ts",
+      "destination": "/work/packages/socket/src/services/account-directory.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/packages/socket/src/services/account-mail.ts",
+      "destination": "/work/packages/socket/src/services/account-mail.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/packages/socket/src/services/account-scope.ts",
+      "destination": "/work/packages/socket/src/services/account-scope.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/packages/socket/src/services/account-session-policy.ts",
+      "destination": "/work/packages/socket/src/services/account-session-policy.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/packages/socket/src/services/auth.test.ts",
+      "destination": "/work/packages/socket/src/services/auth.test.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/packages/socket/src/services/auth.ts",
+      "destination": "/work/packages/socket/src/services/auth.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/packages/socket/src/services/billing.ts",
+      "destination": "/work/packages/socket/src/services/billing.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/packages/socket/src/services/config-scope.ts",
+      "destination": "/work/packages/socket/src/services/config-scope.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/packages/socket/src/services/config.test.ts",
+      "destination": "/work/packages/socket/src/services/config.test.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/packages/socket/src/services/errors.ts",
+      "destination": "/work/packages/socket/src/services/errors.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/packages/socket/src/services/game",
+      "destination": "/work/packages/socket/src/services/game",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/packages/socket/src/services/io.ts",
+      "destination": "/work/packages/socket/src/services/io.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/packages/socket/src/services/media-access.ts",
+      "destination": "/work/packages/socket/src/services/media-access.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/packages/socket/src/services/media-read.ts",
+      "destination": "/work/packages/socket/src/services/media-read.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/packages/socket/src/services/media.test.ts",
+      "destination": "/work/packages/socket/src/services/media.test.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/packages/socket/src/services/media.ts",
+      "destination": "/work/packages/socket/src/services/media.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/packages/socket/src/services/package-installation.ts",
+      "destination": "/work/packages/socket/src/services/package-installation.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/packages/socket/src/services/registry.test.ts",
+      "destination": "/work/packages/socket/src/services/registry.test.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/packages/socket/src/services/registry.ts",
+      "destination": "/work/packages/socket/src/services/registry.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/packages/socket/src/services/scoring",
+      "destination": "/work/packages/socket/src/services/scoring",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work/packages/socket/src/services/theme-installation.ts",
+      "destination": "/work/packages/socket/src/services/theme-installation.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/extensions/src/server/index.ts",
+      "destination": "/work/extensions/src/server/index.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/packages/socket/src/api/index.ts",
+      "destination": "/work/packages/socket/src/api/index.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/packages/socket/src/index.ts",
+      "destination": "/work/packages/socket/src/index.ts",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/cache-0",
+      "destination": "/work/extensions/node_modules/.vite",
+      "readonly": false
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/cache-1",
+      "destination": "/work/extensions/node_modules/.vite-temp",
+      "readonly": false
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/cache-2",
+      "destination": "/work/node_modules/.vite",
+      "readonly": false
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/cache-3",
+      "destination": "/work/node_modules/.vite-temp",
+      "readonly": false
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/scratch",
+      "destination": "/scratch",
+      "readonly": false
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/child-output-root",
+      "destination": "/qa",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/child-results",
+      "destination": "/qa/results",
+      "readonly": false
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/child-receipts",
+      "destination": "/qa/receipts",
+      "readonly": false
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2",
+      "destination": "/inputs",
+      "readonly": true
+    }
+  ],
+  "tests": [
+    {
+      "name": "primitives-scope",
+      "cwd": "/work/extensions",
+      "expectedCases": 9,
+      "wallSeconds": 120,
+      "args": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "vitest.config.ts",
+        "src/server/storage/durable-files.test.ts",
+        "src/server/storage/creation-scope.test.ts",
+        "--maxWorkers=1",
+        "--no-file-parallelism",
+        "--reporter=verbose",
+        "--reporter=json",
+        "--outputFile=/qa/results/primitives-scope.results.json"
+      ]
+    },
+    {
+      "name": "reservation",
+      "cwd": "/work/extensions",
+      "expectedCases": 16,
+      "wallSeconds": 600,
+      "args": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "vitest.config.ts",
+        "src/server/storage/creation-reservation.test.ts",
+        "--maxWorkers=1",
+        "--no-file-parallelism",
+        "--reporter=verbose",
+        "--reporter=json",
+        "--outputFile=/qa/results/reservation.results.json"
+      ]
+    },
+    {
+      "name": "review-regressions",
+      "cwd": "/work/extensions",
+      "expectedCases": 12,
+      "wallSeconds": 900,
+      "args": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--config",
+        "vitest.config.ts",
+        "src/server/storage/creation-review.test.ts",
+        "--maxWorkers=1",
+        "--no-file-parallelism",
+        "--reporter=verbose",
+        "--reporter=json",
+        "--outputFile=/qa/results/review-regressions.results.json"
+      ]
+    },
+    {
+      "name": "actual-native",
+      "cwd": "/work",
+      "expectedCases": 11,
+      "wallSeconds": 600,
+      "args": [
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "--project",
+        "socket",
+        "packages/socket/src/services/quiz-creation-reservation.test.ts",
+        "--maxWorkers=1",
+        "--no-file-parallelism",
+        "--reporter=verbose",
+        "--reporter=json",
+        "--outputFile=/qa/results/actual-native.results.json"
+      ]
+    }
+  ],
+  "env": {
+    "PATH": "/usr/local/bin:/usr/bin:/bin",
+    "HOME": "/scratch/home",
+    "TMPDIR": "/scratch/tmp",
+    "CONFIG_PATH": "/scratch/unused-initial-config",
+    "C1_FIXTURE_ROOT": "/scratch/c1",
+    "C1_RECEIPT_ROOT": "/qa/receipts",
+    "TSX_DISABLE_CACHE": "1",
+    "NODE_ENV": "test",
+    "MANAGER_PASSWORD": "c1-synthetic-fixture-only",
+    "JWT_SECRET": "c1-synthetic-fixture-jwt-key-no-real-authority",
+    "GAME_SPEED": "5",
+    "TADAZZ_ACCOUNTS_ENABLED": "false",
+    "TADAZZ_C1_CREATION_PROTOTYPE": "false"
+  }
+}

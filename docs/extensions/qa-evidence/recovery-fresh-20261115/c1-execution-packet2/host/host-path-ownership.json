@@ -1,0 +1,87 @@
+{
+  "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2": {
+    "uid": 1001,
+    "gid": 1001,
+    "mode": "0o700"
+  },
+  "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2": {
+    "uid": 1001,
+    "gid": 1001,
+    "mode": "0o700"
+  },
+  "/home/ubuntu/tadazz-hq-qa-20261115/evidence/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2": {
+    "uid": 1001,
+    "gid": 1001,
+    "mode": "0o700"
+  },
+  "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/cache-1": {
+    "uid": 1001,
+    "gid": 1001,
+    "mode": "0o700"
+  },
+  "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/scratch": {
+    "uid": 1001,
+    "gid": 1001,
+    "mode": "0o700"
+  },
+  "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/child-receipts": {
+    "uid": 1001,
+    "gid": 1001,
+    "mode": "0o700"
+  },
+  "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/child-output-root": {
+    "uid": 1001,
+    "gid": 1001,
+    "mode": "0o700"
+  },
+  "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/cache-0": {
+    "uid": 1001,
+    "gid": 1001,
+    "mode": "0o700"
+  },
+  "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/cache-3": {
+    "uid": 1001,
+    "gid": 1001,
+    "mode": "0o700"
+  },
+  "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/child-results": {
+    "uid": 1001,
+    "gid": 1001,
+    "mode": "0o700"
+  },
+  "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/cache-2": {
+    "uid": 1001,
+    "gid": 1001,
+    "mode": "0o700"
+  },
+  "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/scratch/home": {
+    "uid": 1001,
+    "gid": 1001,
+    "mode": "0o700"
+  },
+  "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/scratch/unused-initial-config": {
+    "uid": 1001,
+    "gid": 1001,
+    "mode": "0o700"
+  },
+  "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/scratch/tmp": {
+    "uid": 1001,
+    "gid": 1001,
+    "mode": "0o700"
+  },
+  "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/scratch/c1": {
+    "uid": 1001,
+    "gid": 1001,
+    "mode": "0o700"
+  },
+  "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/child-output-root/receipts": {
+    "uid": 1001,
+    "gid": 1001,
+    "mode": "0o700"
+  },
+  "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/child-output-root/results": {
+    "uid": 1001,
+    "gid": 1001,
+    "mode": "0o700"
+  }
+}

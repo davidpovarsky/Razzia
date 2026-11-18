@@ -1,0 +1,18 @@
+{
+  "method": "Existing installed esbuild transformSync; same sourcefile/loader/target/format for old and current modules",
+  "esbuild": "0.28.2",
+  "before": "f67c84088295b29044947aac68bbca2033f91441",
+  "provisioningAttempt": "Bare esbuild import unavailable at root; resolved existing .pnpm/esbuild@0.28.2 module; no install",
+  "rows": [
+    {
+      "file": "packages/socket/src/services/account-db.ts",
+      "javascriptIdentical": true,
+      "emittedSha256": "74c37721798a775c1beceb5d391e1130f2b1c014617ca491c3c48d0355150970"
+    },
+    {
+      "file": "extensions/src/server/storage/startup-recovery.ts",
+      "javascriptIdentical": true,
+      "emittedSha256": "4b5999223b5d55582482de1e91f69307893c513fd6d2852165f2663e848b2a00"
+    }
+  ]
+}

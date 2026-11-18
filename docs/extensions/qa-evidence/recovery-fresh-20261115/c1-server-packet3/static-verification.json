@@ -1,0 +1,20 @@
+{
+  "applicationSourceBase": "e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
+  "observerCommit": "47b68268375b5adf8c56a8496882830bc5922de3",
+  "applicationAndFiveTestBytesUnchanged": true,
+  "archiveFilesVerified": 20,
+  "effectiveFiles": 1288,
+  "nodeOnlyDeltaPaths": [
+    "extensions/src/server/storage/creation-process.ts",
+    "extensions/src/server/storage/creation-process-observer.ts"
+  ],
+  "reviewedBaseControllerByteIdentical": true,
+  "pythonAstOnly": "4 modules PASS",
+  "javaScriptSyntaxOnly": "2 scripts PASS",
+  "initEnabled": false,
+  "capsUnchanged": true,
+  "separateJobReceipts": true,
+  "old37ClaimedUnderNewEnvironment": false,
+  "runtimeExecuted": false,
+  "fixtureOrContainerCreated": false
+}

@@ -1,0 +1,74 @@
+{
+  "admissionSha256": "aa708d1b429f09e7a628700c6ea4d622f0a54fe0cb9e7469e618d3b8611c9b89",
+  "admission": {
+    "executionAuthorized": true,
+    "issuerThreadId": "01a1dd10-2ef0-73c2-9c65-569a843f44da",
+    "sourceDisposition": "APPROVE_WITH_EXACT_GATES",
+    "packetDisposition": "APPROVE_WITH_EXACT_GATES",
+    "sourceCommit": "e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
+    "admittedAtEpochSeconds": 1794742162,
+    "packetManifestSha256": "32d99568fb23b5e739385589d9cfb7ac633ae1506c57f1dc1875cb37fe228415",
+    "packetHashesSha256": "c7328c40119440eb4d02406a62d044ab5fe9daa55abb8c2916cf5341ba25edf2",
+    "laneLedgerPath": "/home/ubuntu/tadazz-hq-qa-20261115/admissions/hq-c1-9770877600484f8280acef0f4846c1fc.ledger.json",
+    "laneLedgerSha256": "2cfc5266f99d6d62c6e6549ba2093aa03a94ec0eec5717db0817d6d3eb3a55e0",
+    "laneLedgerSnapshotId": "hq-c1-9770877600484f8280acef0f4846c1fc",
+    "packetReviewSha256": "61a2b581ca7edd3ad249de66b8635e6a0806d7b0bf8b515bf96479f6556c8466",
+    "scope": "One persistent synthetic C1 packet48 run with exact reviewed limits; not B/production/hardware acceptance"
+  },
+  "laneLedgerSha256": "2cfc5266f99d6d62c6e6549ba2093aa03a94ec0eec5717db0817d6d3eb3a55e0",
+  "ledger": {
+    "schemaVersion": 1,
+    "exampleOnly": false,
+    "snapshotId": "hq-c1-9770877600484f8280acef0f4846c1fc",
+    "issuerThreadId": "01a1dd10-2ef0-73c2-9c65-569a843f44da",
+    "sourceCommit": "e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
+    "packetHashesSha256": "c7328c40119440eb4d02406a62d044ab5fe9daa55abb8c2916cf5341ba25edf2",
+    "capturedAtEpochSeconds": 1794742162,
+    "expiresAtEpochSeconds": 1794742462,
+    "lanes": [
+      {
+        "laneId": "Recovery-C1",
+        "cpuGrant": 0.25,
+        "memoryGrantBytes": 2147483648,
+        "newPhysicalBudgetBytes": 67108864,
+        "consumedPhysicalBytes": 0,
+        "state": "EXECUTE_APPROVED_PACKET48"
+      },
+      {
+        "laneId": "QA-Transparent",
+        "cpuGrant": 0.5,
+        "memoryGrantBytes": 2080374784,
+        "newPhysicalBudgetBytes": 209715200,
+        "consumedPhysicalBytes": 0,
+        "state": "PROVISION_STOPPED_ONLY_NO_START_HELPER"
+      },
+      {
+        "laneId": "MCP-Correction-Reserve",
+        "cpuGrant": 0.25,
+        "memoryGrantBytes": 2147483648,
+        "newPhysicalBudgetBytes": 8388608,
+        "consumedPhysicalBytes": 0,
+        "state": "RESERVED_SOURCE_ONLY_NO_EXECUTION"
+      }
+    ],
+    "aggregate": {
+      "approvedCpu": 1.0,
+      "approvedMemoryBytes": 6442450944,
+      "retainedSharedMetadataBytesOnce": 435142656
+    },
+    "disk": {
+      "floorBytes": 2147483648,
+      "futureReserveBytes": 0,
+      "marginBytes": 67108864
+    },
+    "ram": {
+      "minimumHostAvailableBytes": 2415919104
+    },
+    "measured": {
+      "hostFreeBytes": 2786570240,
+      "hostAvailableRamBytes": 11011112960,
+      "sourcePacketFilesIndependentlyVerified": 8
+    },
+    "accountingNote": "Non-C1 consumedPhysicalBytes=0 grants no credit for already-consumed blocks, conservatively reserving each full cap; not a claim of zero allocation. Existing allocations are included in measured free disk. C1 runner substitutes its actual inode-deduplicated own use. Completed UI/Core/Integrator/MCP phases have no remaining growth or CPU; retained metadata counted once. No real QA start/helper or MCP correction runtime is admitted by this C1 ledger."
+  }
+}

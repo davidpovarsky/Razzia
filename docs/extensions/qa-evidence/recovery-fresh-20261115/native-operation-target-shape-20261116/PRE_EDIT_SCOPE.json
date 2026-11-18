@@ -1,0 +1,10 @@
+{
+  "date": "2026-11-16",
+  "sourceTask": "1219882508725158",
+  "ownership": "Existing B C1 storage/recovery, untrusted foreign/tampered operation witness validation",
+  "path": "extensions/src/server/storage/creation-operation-record.ts",
+  "beforeSha256": "e9847ef7ec7cde5e03daaa7a6b94cffc0407d00557d23f173633a58e7c5e324c",
+  "expectedCorrection": "Explicitly require native target scalar strings; RegExp.test coercion must not admit JSON arrays into NativeCreationResult",
+  "publicTypesOrWireChange": false,
+  "scope": "One owned validator module plus isolated tests/evidence only; preserve C1 fences/optional defaults/current root exports/F ledger authority"
+}

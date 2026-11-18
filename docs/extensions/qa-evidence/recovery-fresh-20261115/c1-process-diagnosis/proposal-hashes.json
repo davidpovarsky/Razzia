@@ -1,0 +1,50 @@
+{
+  "applicationSourceBase": "e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
+  "nodeOnlyCandidate": "a4bd884db05a3368a1842d357cd9f173600bcf11",
+  "files": [
+    {
+      "path": "PROPOSAL_HANDOFF.md",
+      "bytes": 10001,
+      "sha256": "8cb8900a7cb64c4705244feb29f75bf2aa242f755b28df8d461461eafffff8fa"
+    },
+    {
+      "path": "packet3-plan.proposed.json",
+      "bytes": 11363,
+      "sha256": "1504e141328422a8548886f1b7df9887a591e48ce6c31fdb453182c95284e6d3"
+    },
+    {
+      "path": "pid_observer.proposed.py",
+      "bytes": 5507,
+      "sha256": "7f0b4c3d932d771d8c6ecbd72fda29e18fd9a58e58817d3808f4aebbd19b4745"
+    },
+    {
+      "path": "stopped-container-readonly.json",
+      "bytes": 1544,
+      "sha256": "6380e7851c22d493cea97fe9997c4358ed1b1935cef0ca64f5dc4054cb5e2c65"
+    },
+    {
+      "path": "immutable-binaries-readonly.json",
+      "bytes": 1579,
+      "sha256": "a44955338be4a4cd46d397857343b1222590e09b413f0f66bdf545eb1680e4b4"
+    },
+    {
+      "path": "frozen-child-accounting.json",
+      "bytes": 9642,
+      "sha256": "03a01cfad4d02eacf1a9861dce948e4c6a550c9cecd63cde5a3fbcf2dddffc16"
+    },
+    {
+      "path": "node-observer-source-audit.json",
+      "bytes": 702,
+      "sha256": "d44bfdea89184dbdf5b53a8049129d06bb58810521ee21290da859b3ac251257"
+    }
+  ],
+  "onlyPermittedNodeHelperSourceDelta": [
+    "extensions/src/server/storage/creation-process-observer.ts",
+    "extensions/src/server/storage/creation-process.ts"
+  ],
+  "applicationAndTestBytesUnchanged": true,
+  "old41Pass7FailPreserved": true,
+  "newTrialExecuted": false,
+  "runtimeExecutablePacketAssembled": false,
+  "executionGranted": false
+}

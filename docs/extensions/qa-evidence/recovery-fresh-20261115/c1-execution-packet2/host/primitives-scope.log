@@ -1,0 +1,22 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90m/work/extensions[39m
+
+ [32m✓[39m src/server/storage/durable-files.test.ts[2m > [22mC1 real Linux fence primitives[2m > [22mcreates exact private bytes and refuses to replace an existing leaf[32m 12[2mms[22m[39m
+ [32m✓[39m src/server/storage/durable-files.test.ts[2m > [22mC1 real Linux fence primitives[2m > [22mpreserves private evidence when its first file fence fails[32m 3[2mms[22m[39m
+ [32m✓[39m src/server/storage/durable-files.test.ts[2m > [22mC1 real Linux fence primitives[2m > [22mrejects linked parents and does not repair their modes or touch their target[32m 5[2mms[22m[39m
+ [32m✓[39m src/server/storage/durable-files.test.ts[2m > [22mC1 real Linux fence primitives[2m > [22mdoes not adopt a same-byte replacement inode after its exclusive write[32m 76[2mms[22m[39m
+ [32m✓[39m src/server/storage/durable-files.test.ts[2m > [22mC1 real Linux fence primitives[2m > [22mretains the visible new intent and last witness after rename succeeds but its directory fence fails[32m 18[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-scope.test.ts[2m > [22mC1 explicit creation scope[2m > [22mrejects missing enabled owner before fallback path lookup or allocation[32m 5[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-scope.test.ts[2m > [22mC1 explicit creation scope[2m > [22mpreserves exact tenant spelling and rejects a flag or owner switch[32m 4[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-scope.test.ts[2m > [22mC1 explicit creation scope[2m > [22mdiscovers only explicit private families without scanning customer tenant directories[32m 3[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-scope.test.ts[2m > [22mC1 explicit creation scope[2m > [22mdoes not create an absent family and rejects symlinked registry components[32m 2[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m9 passed[39m[22m[90m (9)[39m
+[2m   Start at [22m 11:29:36
+[2m   Duration [22m 2.30s[2m (transform 44%, import 40%, tests 14%, worker 1%)[22m
+
+[2m    Isolate [22m [33m2 workers spawned[39m[2m · ~597ms startup each (spawn + environment, per file)[22m
+[2m            [22m [2mat least ~597ms faster with [22m[33misolate: false[39m[2m — reuses workers across files instead of one per file[22m
+
+JSON report written to /qa/results/primitives-scope.results.json

@@ -1,0 +1,33 @@
+{
+  "actualResult": "41 PASS / 7 FAIL (48)",
+  "runtimeAttemptCount": 1,
+  "sourceCommit": "e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
+  "runnerStopped": true,
+  "retries": 0,
+  "readback": [
+    {
+      "gid": "1220109925694179",
+      "completed": false,
+      "checkpointSuffixVerified": true,
+      "noteLength": 26404
+    },
+    {
+      "gid": "1220111293723790",
+      "completed": false,
+      "checkpointSuffixVerified": true,
+      "noteLength": 25591
+    },
+    {
+      "gid": "1219882508725158",
+      "completed": false,
+      "checkpointSuffixVerified": true,
+      "noteLength": 22042
+    },
+    {
+      "gid": "1220541793835278",
+      "completed": false,
+      "checkpointSuffixVerified": true,
+      "noteLength": 21037
+    }
+  ]
+}

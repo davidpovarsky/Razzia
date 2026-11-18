@@ -1,0 +1,89 @@
+{
+  "scope": "Unchanged legacy Media/Sidecar algorithms and associated process/native tests; not an integrated-graph rerun",
+  "matchingFiles": [
+    {
+      "path": "extensions/src/server/media-library.ts",
+      "sha256": "db520680af48df59b6f60760b0b0027cdffc1453845bc51487dbf687f78f512b",
+      "byteIdenticalToR2": true
+    },
+    {
+      "path": "extensions/src/server/storage/journal.ts",
+      "sha256": "1f74a958ec4ca4d2c2633741bf3f8bb990ae33354f447017626ff8056985fbc8",
+      "byteIdenticalToR2": true
+    },
+    {
+      "path": "extensions/src/server/storage/native-recovery-adapter.ts",
+      "sha256": "efb0c489a5d25498164f984c8042d202e23797e0dc61f2e872b1f8564c88d7a6",
+      "byteIdenticalToR2": true
+    },
+    {
+      "path": "extensions/src/server/storage/physical-binding.ts",
+      "sha256": "bcfcb89db2615a497512e8d7599b2fd111ef94c2434f3ab212783e9af8f2e565",
+      "byteIdenticalToR2": true
+    },
+    {
+      "path": "extensions/src/server/storage/recovery-state.ts",
+      "sha256": "c130960d75da2fa2105b780e4e9e9cc71c6fb18efdb4eda26481269737a78438",
+      "byteIdenticalToR2": true
+    },
+    {
+      "path": "extensions/src/server/media-library.test.ts",
+      "sha256": "19cc13714ebff710fcfb2e2f116d5f87801aa0ef3e40a3ef0f4aa33eb8ae8817",
+      "byteIdenticalToR2": true
+    },
+    {
+      "path": "extensions/src/server/media-library-recovery.test.ts",
+      "sha256": "ca76aae38e18a25d152c9112a0bf54c97c96270450ba7c706e27f630ed8b316d",
+      "byteIdenticalToR2": true
+    },
+    {
+      "path": "extensions/src/server/storage/journal-recovery.test.ts",
+      "sha256": "7d5b260e543112692777a533375435d6511c95e5dfb9b01260804e865402f37d",
+      "byteIdenticalToR2": true
+    },
+    {
+      "path": "extensions/src/server/storage/process-interruption.test.ts",
+      "sha256": "8758e5e1cbed8bd39377ed674ca98a9f885d0f585b0066c62a89abb62deebfbc",
+      "byteIdenticalToR2": true
+    },
+    {
+      "path": "extensions/src/server/storage/process-interruption-child.ts",
+      "sha256": "843ba0b172f5bed82c7c88c299a4e03052fb6789c1841cded54a66091476de57",
+      "byteIdenticalToR2": true
+    },
+    {
+      "path": "extensions/src/server/storage/process-interruption-state.ts",
+      "sha256": "a1e56c526cf553a2bfe0411f2ab9413cdeffd4b27afd12e3490780a9551e4ade",
+      "byteIdenticalToR2": true
+    },
+    {
+      "path": "extensions/src/server/storage/native-binding.test.ts",
+      "sha256": "d0a7f75fda27a79b4f3f07d0d6e502ddd29848018197d2bf503195dbd28f9c2d",
+      "byteIdenticalToR2": true
+    },
+    {
+      "path": "extensions/src/server/storage/native-binding-r2.test.ts",
+      "sha256": "fafeb0df88d6a14a9bc32fa321ea74c3981353d7e3e82095e60dd40669323e8c",
+      "byteIdenticalToR2": true
+    },
+    {
+      "path": "extensions/src/server/storage/native-binding-child.ts",
+      "sha256": "2db81af1342104e4d9db61c336164ca9a06d28517a19d54f6d01c638a892f99b",
+      "byteIdenticalToR2": true
+    },
+    {
+      "path": "extensions/src/server/storage/native-binding-fixture.ts",
+      "sha256": "00d1638149dac733a248fc45630b026596c0354ba26ffa5a391e37e7d213aae0",
+      "byteIdenticalToR2": true
+    }
+  ],
+  "reusedSource": "991f38f216ad265e06aec53313db8928437da248",
+  "currentHead": "9934b9522c4296c049197c2c5589cc75c53db697",
+  "newWitnessResults": {
+    "attempt1": "PROVISIONING_ERROR,0 tests found; Windows glob corrected",
+    "attempt2": "2 FAIL; absent startup error measured; assertion type corrected",
+    "attempt3": "2 FAIL/0 PASS, expected startup block absent; both explicit tenant controls detect1 unresolved; journal SHA unchanged"
+  },
+  "productionCodeChanges": false,
+  "serverOperations": 0
+}

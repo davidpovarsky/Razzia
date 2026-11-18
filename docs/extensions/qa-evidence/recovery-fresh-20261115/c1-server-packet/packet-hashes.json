@@ -1,0 +1,42 @@
+{
+  "sourceCommit": "e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
+  "executionAuthorized": false,
+  "files": [
+    {
+      "path": "manifest.json",
+      "size": 630107,
+      "sha256": "32d99568fb23b5e739385589d9cfb7ac633ae1506c57f1dc1875cb37fe228415"
+    },
+    {
+      "path": "plan.json",
+      "size": 21096,
+      "sha256": "995225bb70eb8e21110c06748f10578be8ee9db0fa11ca9cd02297f96a9c0bc4"
+    },
+    {
+      "path": "overlay.tar.gz",
+      "size": 34242,
+      "sha256": "2d89ba70f0d023dc5871fd2bed12a0c8994840bbe3d9049435120839c042ecf2"
+    },
+    {
+      "path": "server-run.py",
+      "size": 1735,
+      "sha256": "95eccacf435c36737a9589c65a5bd15380fe76a5297963bc20b1970ce7a08548"
+    },
+    {
+      "path": "runner_host.py",
+      "size": 23141,
+      "sha256": "f9491c3748848035a3986a673bf893953864df93730ae15c9275ce7675bbe63c"
+    },
+    {
+      "path": "verify-merged.cjs",
+      "size": 5391,
+      "sha256": "cc86c81436178e931e1664d734ace050f6d9995c3630f045e63d4da5c902a5d9"
+    },
+    {
+      "path": "analyze-results.cjs",
+      "size": 5617,
+      "sha256": "f311e586c4d87e4f77fd22388286b3b8abc41e0f91ebfd1cdff60d024383ddb7"
+    }
+  ],
+  "totalTransferBytesExcludingThisHashFileAndActualAdmission": 721329
+}

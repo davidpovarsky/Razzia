@@ -1,0 +1,12 @@
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "../../../../../extensions/vitest.config" without a file extension (docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/vitest.config.ts:3:22). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115
+
+No test files found, exiting with code 1
+
+include: src/**/*.test.ts, C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-recovery-fresh-20261115\docs\extensions\qa-evidence\recovery-fresh-20261115\remaining-original-acceptance\tenant-startup.witness.ts
+exclude:  **/node_modules/**, **/.git/**
+
+JSON report written to C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/results.json

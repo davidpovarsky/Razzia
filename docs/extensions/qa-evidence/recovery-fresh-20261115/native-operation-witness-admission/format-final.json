@@ -1,0 +1,13 @@
+{
+  "method": "Actual Prettier.check API",
+  "checks": [
+    {
+      "name": "witness-tests.ts",
+      "pass": true
+    },
+    {
+      "name": "build-tests.mjs",
+      "pass": true
+    }
+  ]
+}

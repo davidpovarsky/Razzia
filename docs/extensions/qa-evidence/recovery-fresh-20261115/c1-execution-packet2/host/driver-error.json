@@ -1,0 +1,5 @@
+{
+  "kind": "HOLD_OR_FAILURE",
+  "error": "Stage failed; later jobs stopped: actual-native",
+  "runtimePassClaimed": false
+}
