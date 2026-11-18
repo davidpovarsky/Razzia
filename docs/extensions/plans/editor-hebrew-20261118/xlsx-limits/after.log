@@ -1,0 +1,12 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90mC:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/extensions[39m
+
+ [32m✓[39m src/core/show-workbook.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 93[2mms[22m[39m
+ [32m✓[39m src/core/xlsx-resource-limits.test.ts [2m([22m[2m12 tests[22m[2m)[22m[33m 442[2mms[22m[39m
+ [32m✓[39m src/core/show-import-preflight.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 70[2mms[22m[39m
+ [32m✓[39m src/core/roster.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 38[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m4 passed[39m[22m[90m (4)[39m
+[2m      Tests [22m [1m[32m45 passed[39m[22m[90m (45)[39m
+[2m   Start at [22m 16:58:19
+[2m   Duration [22m 2.47s[2m (import 49%, transform 34%, tests 17%, worker 1%)[22m

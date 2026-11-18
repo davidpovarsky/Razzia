@@ -131,6 +131,18 @@ test.describe("TADA Studio Show Import/Export Acceptance (JSON + Excel)", () => 
     await page.getByTestId("download-template-xlsx").click()
     const download = await downloadPromise
     expect(download.suggestedFilename()).toBe("TADA_Show_Template_v1.xlsx")
+    const templatePath = await download.path()
+    expect(templatePath).not.toBeNull()
+
+    if (!templatePath) {
+      throw new Error("Template download did not finish")
+    }
+
+    const templateBytes = new Uint8Array(fs.readFileSync(templatePath))
+    expect(templateBytes.byteLength).toBeGreaterThan(500)
+    expect(() => parseTadaShowWorkbook(templateBytes)).toThrow(
+      "errors:quizz.noQuestions",
+    )
 
     telemetry.assertClean()
   })

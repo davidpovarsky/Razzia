@@ -1,0 +1,32 @@
+[
+  {
+    "gate": "lint-fix",
+    "exit": 0,
+    "seconds": 2.64,
+    "tail": "Found 0 warnings and 0 errors.\nFinished in 2.5s on 6 files with 233 rules using 12 threads.\n"
+  },
+  {
+    "gate": "format",
+    "exit": 0,
+    "seconds": 1.06,
+    "tail": ""
+  },
+  {
+    "gate": "lint",
+    "exit": 0,
+    "seconds": 2.4,
+    "tail": "Found 0 warnings and 0 errors.\nFinished in 2.3s on 6 files with 233 rules using 12 threads.\n"
+  },
+  {
+    "gate": "types",
+    "exit": 0,
+    "seconds": 4.46,
+    "tail": ""
+  },
+  {
+    "gate": "browser",
+    "exit": 0,
+    "seconds": 47.21,
+    "tail": "\nRunning 6 tests using 1 worker\n\n  ok 1 [chromium] \u203a tests\\wave1-show-import-acceptance.spec.ts:113:3 \u203a TADA Studio Show Import/Export Acceptance (JSON + Excel) \u203a IMPORT01: Manager import area renders original design tokens, template download, and export affordances at 1024 & 1280 viewports (6.8s)\n  ok 2 [chromium] \u203a tests\\wave1-show-import-acceptance.spec.ts:150:3 \u203a TADA Studio Show Import/Export Acceptance (JSON + Excel) \u203a IMPORT02: Import friendly .tada.json with preflight preview, warnings, and editor opening with ordered cards & media (7.6s)\n  ok 3 [chromium] \u203a tests\\wave1-show-import-acceptance.spec.ts:199:3 \u203a TADA Studio Show Import/Export Acceptance (JSON + Excel) \u203a IMPORT03: Import multi-sheet Excel (.xlsx), export as Tada Excel (.xlsx), and verify zero writes on cancel (8.2s)\n  ok 4 [chromium] \u203a tests\\wave1-show-import-acceptance.spec.ts:249:3 \u203a TADA Studio Show Import/Export Acceptance (JSON + Excel) \u203a IMPORT04: Export as Friendly Tada JSON (.tada.json) and verify unsafe URL error blocking (4.6s)\n  ok 5 [chromium] \u203a tests\\wave1-show-import-acceptance.spec.ts:336:3 \u203a TADA Studio Show Import/Export Acceptance (JSON + Excel) \u203a IMPORT05: Import valid show with Hebrew note and per-question interlude, save in editor, reload, export .tada.json and .xlsx, verify byte content (7.2s)\n  ok 6 [chromium] \u203a tests\\wave1-show-import-acceptance.spec.ts:511:3 \u203a TADA Studio Show Import/Export Acceptance (JSON + Excel) \u203a IMPORT06: Reject invalid targetKey in JSON/XLSX and malformed interludeJson with zero server writes (5.4s)\n\n  6 passed (44.4s)\n"
+  }
+]

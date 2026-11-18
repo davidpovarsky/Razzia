@@ -400,9 +400,8 @@ export function extractZipEntries(zipBuf: Uint8Array): Map<string, Uint8Array> {
     const extraLen = readU16LE(zipBuf, ptr + 30)
     const commentLen = readU16LE(zipBuf, ptr + 32)
     const localHeaderOffset = readU32LE(zipBuf, ptr + 42)
-    cumulativeInflated += uncompressedSize
 
-    if (cumulativeInflated > MAX_INFLATED_BYTES) {
+    if (uncompressedSize > MAX_INFLATED_BYTES - cumulativeInflated) {
       throw new Error("errors:extensions.xlsxTooLarge")
     }
 
@@ -439,14 +438,28 @@ export function extractZipEntries(zipBuf: Uint8Array): Map<string, Uint8Array> {
 
     const compressedData = zipBuf.subarray(dataStart, dataEnd)
 
+    let expanded: Uint8Array = new Uint8Array(0)
+
     if (compressionMethod === 0) {
-      entries.set(fileName, new Uint8Array(compressedData))
+      if (compressedSize !== uncompressedSize) {
+        throw new Error("errors:extensions.corruptXlsxFile")
+      }
+
+      expanded = new Uint8Array(compressedData)
     } else if (compressionMethod === 8) {
-      const inflated = inflateRawBytes(compressedData, MAX_INFLATED_BYTES)
-      entries.set(fileName, inflated)
+      // Bound actual output by the declared size only after it fits the
+      // remaining archive budget. Forged directory sizes cannot bypass it.
+      expanded = inflateRawBytes(compressedData, uncompressedSize)
     } else {
       throw new Error("errors:extensions.unsupportedXlsxCompression")
     }
+
+    if (expanded.byteLength !== uncompressedSize) {
+      throw new Error("errors:extensions.corruptXlsxFile")
+    }
+
+    cumulativeInflated += expanded.byteLength
+    entries.set(fileName, expanded)
   }
 
   return entries

@@ -1,0 +1,346 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+      "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-hebrew-20261118\\packages\\e2e\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.editor-followup.config.ts",
+      "wave1-show-import-acceptance.spec.ts"
+    ],
+    "configFile": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-hebrew-20261118\\packages\\e2e\\playwright.editor-followup.config.ts",
+    "rootDir": "C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/packages/e2e/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/docs/extensions/plans/editor-hebrew-20261118/import-acceptance-after/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Users/DAVID/Code/Razzia-worktrees/tadazz-editor-hebrew-20261118/packages/e2e/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "wave1-show-import-acceptance.spec.ts",
+          "host-presentation.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-hebrew-20261118\\docs\\extensions\\plans\\editor-hebrew-20261118\\import-acceptance-after\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-hebrew-20261118\\packages\\e2e\\tests",
+        "snapshotDir": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-hebrew-20261118\\packages\\e2e\\tests",
+        "testIgnore": [],
+        "testMatch": [
+          "wave1-show-import-acceptance.spec.ts",
+          "host-presentation.spec.ts"
+        ],
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3180",
+          "locale": "en-US",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium",
+          "channel": "msedge"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-hebrew-20261118\\docs\\extensions\\plans\\editor-hebrew-20261118\\import-acceptance-after\\result.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "wave1-show-import-acceptance.spec.ts",
+      "file": "wave1-show-import-acceptance.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TADA Studio Show Import/Export Acceptance (JSON + Excel)",
+          "file": "wave1-show-import-acceptance.spec.ts",
+          "line": 112,
+          "column": 6,
+          "specs": [
+            {
+              "title": "IMPORT01: Manager import area renders original design tokens, template download, and export affordances at 1024 & 1280 viewports",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6831,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-18T15:04:10.324Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d6c33e06ffa1086255ec-c95ddf77c9802f2814b1",
+              "file": "wave1-show-import-acceptance.spec.ts",
+              "line": 113,
+              "column": 3
+            },
+            {
+              "title": "IMPORT02: Import friendly .tada.json with preflight preview, warnings, and editor opening with ordered cards & media",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7617,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-18T15:04:17.567Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d6c33e06ffa1086255ec-d60d6f89a961482c432c",
+              "file": "wave1-show-import-acceptance.spec.ts",
+              "line": 150,
+              "column": 3
+            },
+            {
+              "title": "IMPORT03: Import multi-sheet Excel (.xlsx), export as Tada Excel (.xlsx), and verify zero writes on cancel",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 8237,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-18T15:04:25.217Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d6c33e06ffa1086255ec-8d8eecfa7d3659715ad0",
+              "file": "wave1-show-import-acceptance.spec.ts",
+              "line": 199,
+              "column": 3
+            },
+            {
+              "title": "IMPORT04: Export as Friendly Tada JSON (.tada.json) and verify unsafe URL error blocking",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4634,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-18T15:04:33.484Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d6c33e06ffa1086255ec-c35cf228a8fe0d870965",
+              "file": "wave1-show-import-acceptance.spec.ts",
+              "line": 249,
+              "column": 3
+            },
+            {
+              "title": "IMPORT05: Import valid show with Hebrew note and per-question interlude, save in editor, reload, export .tada.json and .xlsx, verify byte content",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7246,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-18T15:04:38.145Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d6c33e06ffa1086255ec-d77c0ce0ed5671e78e84",
+              "file": "wave1-show-import-acceptance.spec.ts",
+              "line": 336,
+              "column": 3
+            },
+            {
+              "title": "IMPORT06: Reject invalid targetKey in JSON/XLSX and malformed interludeJson with zero server writes",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 120000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 5370,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-18T15:04:45.413Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "d6c33e06ffa1086255ec-b1a4603174293cfb5c91",
+              "file": "wave1-show-import-acceptance.spec.ts",
+              "line": 511,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-18T15:04:06.942Z",
+    "duration": 44416.79,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
