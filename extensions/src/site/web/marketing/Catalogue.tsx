@@ -11,13 +11,13 @@ export const asset = (name: string) =>
 
 export const catalogue = [
   {
-    id: "guessoff",
+    id: "great-guessoff",
     title: "The Great Guess-off",
     category: "Trivia",
-    time: "5–10 min",
-    desc: "Our free five-question show: family fun, picture trivia, audience polls, leaderboard and a grand winner reveal.",
+    time: "5–8 min",
+    desc: "Five playful survey and trivia rounds, picture choices, a leaderboard and a grand winner reveal. Free interactive sample.",
     visual: "z",
-    gradient: "linear-gradient(135deg,#0d295a,#59249a 48%,#ef48df)",
+    gradient: "linear-gradient(125deg,#20044e,#6834b7 50%,#d536b6)",
   },
   {
     id: "crowd",
@@ -151,9 +151,10 @@ export function GameCard({
 
   return (
     <HoverDevTiltCard suspended={active}>
-      {game.id === "guessoff" ? (
+      {game.id === "great-guessoff" ? (
         <SiteButton
-          className="tz-guessoff-cover-button"
+          className="ggo-catalogue-cover"
+          type="button"
           onClick={preview}
           aria-label={t("View {{name}}", { name: t(game.title) })}
         >

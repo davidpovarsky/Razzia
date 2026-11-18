@@ -1,419 +1,357 @@
-import { useEffect, useRef, useState } from "react"
-import { ArrowRight, RotateCcw, Trophy, Play, CheckCircle2 } from "lucide-react"
-import guessoffStyles from "./GreatGuessOffDemo.css?inline"
+import { useState } from "react"
+import {
+  ArrowLeft,
+  ArrowRight,
+  Crown,
+  Play,
+  RotateCcw,
+  Sparkles,
+  Trophy,
+} from "lucide-react"
 
-type Choice = { text: string; image?: string }
+type Option = { label: string; image?: string }
 type Question = {
-  kicker: string
+  category: string
   title: string
-  type: "survey" | "quiz"
+  kind: "quiz" | "survey"
+  options: readonly Option[]
   correct?: number
-  sampleVotes?: number[]
-  answers: Choice[]
+  sampleCounts?: readonly number[]
 }
-type Screen = "intro" | "question" | "midboard" | "finalboard" | "winner"
+type Scene =
+  "intro" | "question" | "reveal" | "leaderboard" | "finalResults" | "winner"
 
-const image = (name: string) =>
-  "/tadazz-design-reference/great-guessoff-" + name + ".webp"
-const questions: Question[] = [
+const media = "/tadazz-show/great-guessoff"
+const questions: readonly Question[] = [
   {
-    kicker: "01 · Family Fun",
+    category: "01 · FAMILY FUN",
     title: "What causes the biggest delay when the whole family is going out?",
-    type: "survey",
-    sampleVotes: [17, 11, 8, 14],
-    answers: [
-      { text: "Getting everyone ready" },
-      { text: "Finding missing things" },
-      { text: "Last-minute changes" },
-      { text: "Actually getting out the door" },
+    kind: "survey",
+    options: [
+      { label: "Getting everyone ready" },
+      { label: "Finding missing things" },
+      { label: "Last-minute changes" },
+      { label: "Actually getting out the door" },
     ],
+    sampleCounts: [38, 27, 15, 20],
   },
   {
-    kicker: "02 · Picture Trivia",
+    category: "02 · PICTURE TRIVIA",
     title: "Which of these is actually a berry?",
-    type: "quiz",
+    kind: "quiz",
     correct: 0,
-    answers: [
-      { text: "Banana", image: image("banana") },
-      { text: "Strawberry", image: image("strawberry") },
-      { text: "Raspberry", image: image("raspberry") },
-      { text: "Cherry", image: image("cherry") },
+    options: [
+      { label: "Banana", image: `${media}/banana.webp` },
+      { label: "Strawberry", image: `${media}/strawberry.webp` },
+      { label: "Raspberry", image: `${media}/raspberry.webp` },
+      { label: "Cherry", image: `${media}/cherry.webp` },
     ],
   },
   {
-    kicker: "03 · At Work",
+    category: "03 · AT WORK",
     title:
       "What's the real reason a five-minute meeting turns into half an hour?",
-    type: "survey",
-    sampleVotes: [22, 8, 15, 7],
-    answers: [
-      { text: '"Just one more thing..."' },
-      { text: "Technical problems" },
-      { text: "Off-topic conversations" },
-      { text: "Someone arriving late" },
+    kind: "survey",
+    options: [
+      { label: "“Just one more thing…”" },
+      { label: "Technical problems" },
+      { label: "Off-topic conversations" },
+      { label: "Someone arriving late" },
     ],
+    sampleCounts: [46, 18, 25, 11],
   },
   {
-    kicker: "04 · Quick Trivia",
+    category: "04 · QUICK TRIVIA",
     title: "How many hearts does an octopus have?",
-    type: "quiz",
+    kind: "quiz",
     correct: 2,
-    answers: [
-      { text: "One" },
-      { text: "Two" },
-      { text: "Three" },
-      { text: "Four" },
+    options: [
+      { label: "One" },
+      { label: "Two" },
+      { label: "Three" },
+      { label: "Four" },
     ],
   },
   {
-    kicker: "05 · The Grand Finale",
+    category: "05 · THE GRAND FINALE",
     title: "Which one are YOU at a party?",
-    type: "survey",
-    sampleVotes: [14, 19, 11, 16],
-    answers: [
-      { text: "The Organiser", image: image("organiser") },
-      { text: "The Entertainer", image: image("entertainer") },
-      { text: "The Photographer", image: image("photographer") },
-      { text: "The Snack Hunter", image: image("snack-hunter") },
+    kind: "survey",
+    options: [
+      { label: "The Organiser", image: `${media}/organiser.webp` },
+      { label: "The Entertainer", image: `${media}/entertainer.webp` },
+      { label: "The Photographer", image: `${media}/photographer.webp` },
+      { label: "The Snack Hunter", image: `${media}/snack-hunter.webp` },
     ],
+    sampleCounts: [26, 31, 19, 24],
   },
 ]
 
-const samplePlayers = [
-  { name: "Alex", score: 1500 },
-  { name: "Sam", score: 1000 },
-  { name: "Jordan", score: 500 },
-]
-const letters = ["A", "B", "C", "D"]
-
-function demoLeaders(score: number, midgame: boolean) {
-  const players = midgame
-    ? samplePlayers
-    : samplePlayers.map((player, i) => ({
-        ...player,
-        score: [1700, 1200, 800][i],
-      }))
-  return [...players, { name: "You", score }].sort(
-    (a, b) => b.score - a.score || a.name.localeCompare(b.name),
+function percentages(counts: readonly number[], picked: number): number[] {
+  const totals = counts.map(
+    (value, index) => value + (picked === index ? 1 : 0),
   )
+  const sum = totals.reduce((total, value) => total + value, 0)
+  const result = totals.map((value) => Math.floor((value / sum) * 100))
+  let remainder = 100 - result.reduce((total, value) => total + value, 0)
+  for (const index of totals
+    .map((_, i) => i)
+    .sort((a, b) => totals[b] - totals[a])) {
+    if (remainder <= 0) break
+    result[index] += 1
+    remainder -= 1
+  }
+  return result
 }
 
 export function GreatGuessOffDemo() {
-  const stageRef = useRef<HTMLElement>(null)
-  const [screen, setScreen] = useState<Screen>("intro")
+  const [scene, setScene] = useState<Scene>("intro")
   const [questionIndex, setQuestionIndex] = useState(0)
-  const [selection, setSelection] = useState<number | null>(null)
-  const [revealed, setRevealed] = useState(false)
-  const [score, setScore] = useState(0)
+  const [answers, setAnswers] = useState<Partial<Record<number, number>>>({})
+  const [animationKey, setAnimationKey] = useState(0)
   const question = questions[questionIndex]
-
-  useEffect(() => {
-    if (screen !== "intro") {
-      stageRef.current?.scrollIntoView({ block: "start", behavior: "instant" })
-    }
-  }, [screen, questionIndex])
+  const selected = answers[questionIndex]
+  const score = [1, 3].reduce(
+    (total, index) =>
+      total + (answers[index] === questions[index].correct ? 1000 : 0),
+    0,
+  )
+  const ranks = [
+    { name: "You", score, me: true },
+    { name: "Alex · demo", score: 1750 },
+    { name: "Maya · demo", score: 1500 },
+    { name: "Sam · demo", score: 750 },
+  ].sort((a, b) => b.score - a.score || (a.me ? -1 : 1))
+  const champion = ranks[0]
 
   const restart = () => {
-    setScreen("intro")
+    setAnswers({})
     setQuestionIndex(0)
-    setSelection(null)
-    setRevealed(false)
-    setScore(0)
+    setScene("intro")
+    setAnimationKey((n) => n + 1)
+  }
+  const next = () => {
+    if (questionIndex === 3) {
+      setScene("leaderboard")
+    } else if (questionIndex === 4) {
+      setScene("finalResults")
+    } else {
+      setQuestionIndex((n) => n + 1)
+      setScene("question")
+    }
+    setAnimationKey((n) => n + 1)
   }
 
-  const start = () => setScreen("question")
-  const reveal = () => {
-    if (selection === null || revealed) return
-    if (question.type === "quiz" && selection === question.correct) {
-      setScore((current) => current + 1000)
-    }
-    setRevealed(true)
-  }
-  const advance = () => {
-    setSelection(null)
-    setRevealed(false)
-    if (questionIndex === 3) {
-      setScreen("midboard")
-    } else if (questionIndex === 4) {
-      setScreen("finalboard")
-    } else {
-      setQuestionIndex((current) => current + 1)
-    }
-  }
-  const totals = (question.sampleVotes || []).map(
-    (votes, i) => votes + (selection === i ? 1 : 0),
+  const results = (title: string, final: boolean) => (
+    <div className="ggo-content ggo-score-scene" key={animationKey}>
+      <div className="ggo-eyebrow">
+        <Trophy size={17} /> {final ? "THE FINAL RESULTS" : "THE LEADERBOARD"}
+      </div>
+      <h2 className="ggo-scene-title">{title}</h2>
+      <p className="ggo-description">
+        Illustrative players and scores · Your trivia answers affect your
+        position.
+      </p>
+      <ol className="ggo-ranks">
+        {ranks.map((entry, index) => (
+          <li
+            key={entry.name}
+            className={`ggo-rank ${entry.me ? "ggo-rank-you" : ""}`}
+            style={{ animationDelay: `${index * 110}ms` }}
+          >
+            <span className="ggo-rank-number">{index + 1}</span>
+            <span className="ggo-rank-name">{entry.name}</span>
+            <strong>{entry.score.toLocaleString()} pts</strong>
+          </li>
+        ))}
+      </ol>
+      <button
+        className="ggo-primary"
+        onClick={() => {
+          if (final) setScene("winner")
+          else {
+            setQuestionIndex(4)
+            setScene("question")
+          }
+          setAnimationKey((n) => n + 1)
+        }}
+      >
+        {final ? "Celebrate the winner" : "Play the grand finale"}{" "}
+        <ArrowRight size={18} />
+      </button>
+    </div>
   )
-  const totalVotes = totals.reduce((sum, n) => sum + n, 0)
-  const percentages = totals.map((n) => Math.round((n / totalVotes) * 100))
-  const showBoard = screen === "midboard" || screen === "finalboard"
-  const leaders = demoLeaders(score, screen === "midboard")
-  const finalLeaders = demoLeaders(score, false)
-  const champion = finalLeaders[0]
+
   return (
     <section
-      className="tz-guessoff"
-      ref={stageRef}
-      dir="ltr"
-      aria-label="The Great Guess-off interactive demo"
+      className="ggo-stage"
+      aria-label="The Great Guess-off interactive sample"
+      data-testid="great-guessoff-demo"
     >
-      <style>{guessoffStyles}</style>
-      <div className="tz-guessoff-shine" aria-hidden="true" />
-      <div className="tz-guessoff-header">
-        <div className="tz-guessoff-brand">
-          <span className="tz-guessoff-brand-icon">Z!</span> TADAZZ{" "}
-          <span className="tz-guessoff-demo-tag">DEMO</span>
-        </div>
-        <span className="tz-guessoff-progress">
-          {screen === "intro"
-            ? "5 fun questions"
-            : "Your score · " + score.toLocaleString() + " pts"}
+      <div className="ggo-orb ggo-orb-one" aria-hidden="true" />
+      <div className="ggo-orb ggo-orb-two" aria-hidden="true" />
+      <div className="ggo-topline">
+        <span className="ggo-logo">
+          TADAZZ<span>!</span>
+        </span>
+        <span className="ggo-demo-flag">
+          INTERACTIVE SAMPLE · NO LIVE VOTES
         </span>
       </div>
 
-      {screen === "intro" && (
-        <div className="tz-guessoff-center tz-guessoff-intro">
-          <div className="tz-guessoff-orb" aria-hidden="true">
-            ?
-          </div>
-          <p className="tz-guessoff-eyebrow">WELCOME TO THE SHOW</p>
-          <h2>
-            The Great <em>Guess-off!</em>
-          </h2>
-          <p>
-            Two trivia challenges. Three audience surveys. One spectacular
-            finale.
-          </p>
-          <button type="button" className="tz-guessoff-primary" onClick={start}>
-            <Play size={20} fill="currentColor" /> Start playing{" "}
-            <ArrowRight size={20} />
-          </button>
-          <span className="tz-guessoff-disclaimer">
-            Instant solo demo · No account needed · Results are simulated
+      {scene === "intro" && (
+        <div className="ggo-content ggo-intro" key="intro">
+          <span className="ggo-eyebrow">
+            <Sparkles size={17} /> 5 ROUNDS. ENDLESS SURPRISES.
           </span>
+          <h2 className="ggo-hero-title">
+            THE GREAT <span>GUESS-OFF</span>
+          </h2>
+          <p className="ggo-description">
+            Family fun, picture trivia, surprising surveys, a live-style
+            leaderboard and one grand finale.
+          </p>
+          <p className="ggo-disclosure">
+            Try the whole show. Audience percentages and other players are
+            illustrative demo data, not real votes.
+          </p>
+          <button className="ggo-primary" onClick={() => setScene("question")}>
+            <Play size={20} fill="currentColor" /> Start the show
+          </button>
         </div>
       )}
 
-      {screen === "question" && (
-        <div className="tz-guessoff-question-screen">
-          <div className="tz-guessoff-question-top">
-            <span className="tz-guessoff-eyebrow">{question.kicker}</span>
-            <span className="tz-guessoff-count">
-              QUESTION {questionIndex + 1} / {questions.length}
-            </span>
+      {(scene === "question" || scene === "reveal") && (
+        <div
+          className="ggo-content ggo-question"
+          key={`${questionIndex}-${scene}-${animationKey}`}
+        >
+          <div className="ggo-question-meta">
+            <span>{question.category}</span>
+            <span>ROUND {questionIndex + 1} / 5</span>
           </div>
-          <h2>{question.title}</h2>
+          <h2 className="ggo-question-title">{question.title}</h2>
           <div
-            className={
-              "tz-guessoff-options" +
-              (question.answers.some((a) => a.image) ? " with-images" : "")
-            }
+            className={`ggo-choices ${question.options.some((option) => option.image) ? "ggo-image-choices" : ""}`}
           >
-            {question.answers.map((option, i) => {
+            {question.options.map((option, index) => {
+              const picked = selected === index
               const correct =
-                question.type === "quiz" && revealed && question.correct === i
+                question.kind === "quiz" && question.correct === index
+              const votes =
+                scene === "reveal" && question.sampleCounts
+                  ? percentages(question.sampleCounts, selected ?? -1)[index]
+                  : undefined
               return (
                 <button
                   type="button"
-                  key={option.text}
-                  className={
-                    "tz-guessoff-option" +
-                    (selection === i ? " selected" : "") +
-                    (correct ? " correct" : "")
+                  key={option.label}
+                  disabled={scene === "reveal"}
+                  aria-pressed={picked}
+                  className={`ggo-choice ${picked ? "ggo-picked" : ""} ${scene === "reveal" && correct ? "ggo-correct" : ""}`}
+                  onClick={() =>
+                    setAnswers((current) => ({
+                      ...current,
+                      [questionIndex]: index,
+                    }))
                   }
-                  onClick={() => {
-                    if (!revealed) setSelection(i)
-                  }}
-                  aria-pressed={selection === i}
-                  disabled={revealed}
                 >
                   {option.image && (
-                    <img
-                      src={option.image}
-                      alt={option.text}
-                      loading={questionIndex === 1 ? "eager" : "lazy"}
-                    />
+                    <img src={option.image} alt={option.label} />
                   )}
-                  <span className="tz-guessoff-answer-label">
-                    <b>{letters[i]}</b> {option.text}
+                  <span className="ggo-choice-text">
+                    <b>{String.fromCharCode(65 + index)}</b> {option.label}
                   </span>
-                  {correct && (
-                    <CheckCircle2
-                      className="tz-guessoff-check"
-                      size={19}
-                      aria-label="Correct answer"
-                    />
+                  {votes !== undefined && (
+                    <span
+                      className="ggo-vote-meter"
+                      aria-label={`${votes} percent of sample votes`}
+                    >
+                      <span
+                        className="ggo-vote-fill"
+                        style={{ width: `${votes}%` }}
+                      />
+                      <strong>{votes}%</strong>
+                    </span>
                   )}
                 </button>
               )
             })}
           </div>
-
-          {revealed && (
-            <div
-              className="tz-guessoff-reveal"
-              role="status"
-              aria-live="polite"
+          {scene === "question" ? (
+            <button
+              className="ggo-primary"
+              disabled={selected === undefined}
+              onClick={() => setScene("reveal")}
             >
-              {question.type === "survey" ? (
-                <>
-                  <div className="tz-guessoff-reveal-title">
-                    Here's how the audience voted!
-                  </div>
-                  <div className="tz-guessoff-percentages">
-                    {question.answers.map((a, i) => (
-                      <div className="tz-guessoff-result-row" key={a.text}>
-                        <span>
-                          {letters[i]}. {a.text}
-                        </span>
-                        <span>{percentages[i]}%</span>
-                        <div className="tz-guessoff-result-track">
-                          <i style={{ width: percentages[i] + "%" }} />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <small>
-                    Sample votes are simulated, including your choice. No live
-                    participants.
-                  </small>
-                </>
-              ) : (
-                <div className="tz-guessoff-feedback">
-                  <span>
-                    {selection === question.correct
-                      ? "🎉 You got it! +1,000 points"
-                      : "Nice guess! The correct answer is " +
-                        question.answers[question.correct || 0].text +
-                        "."}
-                  </span>
-                  {questionIndex === 1 && (
-                    <small>
-                      Botanically speaking, bananas are true berries.
-                      Strawberries and raspberries are not.
-                    </small>
-                  )}
-                </div>
-              )}
+              {selected === undefined ? "Choose an answer" : "Reveal results"}{" "}
+              <ArrowRight size={18} />
+            </button>
+          ) : (
+            <div className="ggo-reveal-footer">
+              <p role="status">
+                {question.kind === "survey"
+                  ? "Illustrative audience percentages, including your choice."
+                  : selected === question.correct
+                    ? "Correct! +1,000 points."
+                    : `The correct answer is ${question.options[question.correct ?? 0].label}.`}
+              </p>
+              <button className="ggo-primary" onClick={next}>
+                {questionIndex === 3
+                  ? "See the leaderboard"
+                  : questionIndex === 4
+                    ? "Final results"
+                    : "Next round"}
+                <ArrowRight size={18} />
+              </button>
             </div>
           )}
-
-          <div className="tz-guessoff-bottom">
-            <span>
-              {question.type === "survey"
-                ? "No wrong answers — everyone's opinion counts."
-                : "Choose the correct answer to earn points."}
-            </span>
-            {!revealed ? (
-              <button
-                type="button"
-                className="tz-guessoff-primary"
-                disabled={selection === null}
-                onClick={reveal}
-              >
-                Reveal answer <ArrowRight size={19} />
-              </button>
-            ) : (
-              <button
-                type="button"
-                className="tz-guessoff-primary"
-                onClick={advance}
-              >
-                {questionIndex === 4
-                  ? "Final results"
-                  : questionIndex === 3
-                    ? "See the leaderboard"
-                    : "Next question"}{" "}
-                <ArrowRight size={19} />
-              </button>
-            )}
-          </div>
         </div>
       )}
 
-      {showBoard && (
-        <div className="tz-guessoff-center tz-guessoff-board">
-          <Trophy size={38} className="tz-guessoff-trophy" aria-hidden="true" />
-          <p className="tz-guessoff-eyebrow">
-            {screen === "midboard"
-              ? "HALFTIME HIGHLIGHTS"
-              : "THE RESULTS ARE IN"}
-          </p>
-          <h2>
-            {screen === "midboard" ? "The leaderboard!" : "Final rankings!"}
-          </h2>
-          <div className="tz-guessoff-ranking">
-            {leaders.map((person, i) => (
-              <div
-                className={
-                  "tz-guessoff-leader" + (person.name === "You" ? " you" : "")
-                }
-                key={person.name}
-              >
-                <span className="tz-guessoff-medal">
-                  {["🥇", "🥈", "🥉", "4"][i]}
-                </span>
-                <strong>{person.name}</strong>
-                <span>{person.score.toLocaleString()} pts</span>
-              </div>
-            ))}
-          </div>
-          <p className="tz-guessoff-disclaimer">
-            Sample competitors and scores are simulated.
-          </p>
-          <button
-            type="button"
-            className="tz-guessoff-primary"
-            onClick={() => {
-              if (screen === "midboard") {
-                setQuestionIndex(4)
-                setScreen("question")
-              } else {
-                setScreen("winner")
-              }
-            }}
-          >
-            {screen === "midboard"
-              ? "Go to the grand finale"
-              : "Reveal the winner"}{" "}
-            <ArrowRight size={20} />
-          </button>
-        </div>
-      )}
-
-      {screen === "winner" && (
-        <div className="tz-guessoff-center tz-guessoff-winner">
-          <div className="tz-guessoff-confetti" aria-hidden="true">
-            {Array.from({ length: 26 }, (_, i) => (
+      {scene === "leaderboard" && results("The scores are in!", false)}
+      {scene === "finalResults" && results("Who topped the board?", true)}
+      {scene === "winner" && (
+        <div className="ggo-content ggo-winner" key={animationKey}>
+          <div className="ggo-confetti" aria-hidden="true">
+            {Array.from({ length: 24 }, (_, i) => (
               <i
                 key={i}
                 style={{
-                  left: ((i * 37) % 94) + "%",
-                  animationDelay: (i % 8) * -0.35 + "s",
+                  left: `${(i * 37) % 100}%`,
+                  animationDelay: `${(i % 9) * -0.35}s`,
                 }}
               />
             ))}
           </div>
-          <div className="tz-guessoff-crown" aria-hidden="true">
-            👑
-          </div>
-          <p className="tz-guessoff-eyebrow">AND THE WINNER IS...</p>
-          <h2>{champion.name === "You" ? "YOU!" : champion.name + "!"}</h2>
-          <p className="tz-guessoff-winning-score">
+          <Crown className="ggo-crown" size={65} strokeWidth={1.6} />
+          <span className="ggo-eyebrow">AND THE WINNER IS…</span>
+          <h2 className="ggo-winner-name">{champion.name}</h2>
+          <p className="ggo-champion-score">
             {champion.score.toLocaleString()} POINTS
           </p>
-          <p>What a show! Thanks for playing The Great Guess-off.</p>
-          <small className="tz-guessoff-disclaimer">
-            Demo winner and competing scores are simulated.
-          </small>
-          <button
-            type="button"
-            className="tz-guessoff-primary"
-            onClick={restart}
-          >
-            <RotateCcw size={19} /> Play again
+          <p className="ggo-description">
+            Thanks for playing The Great Guess-off!
+          </p>
+          <button className="ggo-primary" onClick={restart}>
+            <RotateCcw size={18} /> Play again
           </button>
         </div>
       )}
+
+      <div className="ggo-bottomline">
+        <span>
+          {scene === "intro"
+            ? "ARE YOU READY?"
+            : scene === "winner"
+              ? "THAT'S A WRAP!"
+              : "THE GREAT GUESS-OFF"}
+        </span>
+        {scene !== "intro" && scene !== "winner" && (
+          <button className="ggo-restart" type="button" onClick={restart}>
+            <ArrowLeft size={14} /> Restart
+          </button>
+        )}
+      </div>
     </section>
   )
 }
