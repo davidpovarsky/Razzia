@@ -1,0 +1,25 @@
+{
+  "start_utc": "2026-11-15T05:15:59.418763+00:00",
+  "end_utc": "2026-11-15T05:16:08.194844+00:00",
+  "command": [
+    "sudo",
+    "-n",
+    "docker",
+    "build",
+    "--cpu-period=100000",
+    "--cpu-quota=50000",
+    "--memory=2g",
+    "--memory-swap=2g",
+    "--network=none",
+    "--pull=false",
+    "--build-arg",
+    "TADAZZ_BASE_IMAGE=sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346",
+    "--build-arg",
+    "TADAZZ_SOURCE_REVISION=31b3cb084efeb50dced6952498e9703cb47dc45c",
+    "--tag",
+    "tadazz:site-31b3cb0",
+    "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0"
+  ],
+  "DOCKER_BUILDKIT": "0",
+  "exit": 0
+}
