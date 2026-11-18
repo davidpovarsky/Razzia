@@ -1,0 +1,39 @@
+{
+  "source_sha": "3a38a478184c741563d3df2b982b58e7da8b9eb4",
+  "phase": "operation",
+  "container": "phone-operation-3a38a47-attempt01",
+  "recorded_utc": "2026-11-15T21:54:37.231609+00:00",
+  "prior_cumulative_bytes": 15593472,
+  "archive": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-operation-receipts-operation-3a38a47.tar",
+  "archive_sha256": "b0fa85e506a8ed7a75a95fb2b2d3823a77235a202ad8a5f0d0dae6482b5536a7",
+  "archive_bytes": 40960,
+  "all_own_jobs_terminal": true,
+  "components": [
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-operation-3a38a478184c741563d3df2b982b58e7da8b9eb4",
+      "allocated_bytes": 344064
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/phone-auth-3a38a478184c741563d3df2b982b58e7da8b9eb4",
+      "allocated_bytes": 454656
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-operation-3a38a47-attempt01",
+      "allocated_bytes": 81920
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-summary-operation-3a38a47",
+      "allocated_bytes": 12288
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-operation-receipts-operation-3a38a47.tar",
+      "allocated_bytes": 40960
+    },
+    {
+      "path": "/var/lib/docker/containers/d25530cc3024bcfc9a971791af2b344ca0b4e7302719ce6cdd2acd2258916451",
+      "allocated_bytes": 40960
+    }
+  ],
+  "new_allocated_bytes": 974848,
+  "cumulative_allocated_bytes": 16568320
+}

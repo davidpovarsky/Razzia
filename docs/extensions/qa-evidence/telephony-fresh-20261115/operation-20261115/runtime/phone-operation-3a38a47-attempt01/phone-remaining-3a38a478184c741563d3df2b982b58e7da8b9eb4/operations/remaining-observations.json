@@ -1,0 +1,50 @@
+{
+  "scope": "new actual isolated fresh-composition gameplay acceptance; no provider/PSTN or production mount",
+  "observations": [
+    {
+      "test": "OP-01",
+      "fullPrecommitReadback": true,
+      "operationFileContainsCapability": false,
+      "native": [
+        "poll"
+      ],
+      "lostACKSameReceipt": true,
+      "serviceVersion": 2,
+      "intentUnchanged": true
+    },
+    {
+      "test": "OP-02",
+      "actualManagerSocket": true,
+      "native": [
+        "answer",
+        "hangup"
+      ],
+      "archivedAnswers": 1,
+      "actualPoints": 879,
+      "retiredAfterHangup": true,
+      "nativeJoin": 1,
+      "implicitRejoin": false
+    },
+    {
+      "test": "OP-03",
+      "negativeCasesNative": 0,
+      "actualTempCloseBarrierRetained": true,
+      "freshReopenDenied": true,
+      "nativeJoinRemains": 1,
+      "automaticRegister": false,
+      "controlledFixtureRestoreOnly": true
+    },
+    {
+      "test": "OP-04",
+      "actualPendingNoReplayNative": [
+        "poll"
+      ],
+      "pendingState": "PENDING",
+      "actualCommittedState": "APPLIED",
+      "actualRevokeAfterCommit": true,
+      "receiptDenied": true,
+      "operationIntentUnchanged": true,
+      "compensation": false
+    }
+  ]
+}

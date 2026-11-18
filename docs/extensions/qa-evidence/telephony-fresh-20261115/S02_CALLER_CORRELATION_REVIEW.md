@@ -1,5 +1,7 @@
 # S02 proposed caller correlation — NOT APPLIED
 
+Historical proposal update: manager later approved this bounded patch in PHONE_S02_CALLER_CORRELATION_20261115.md. Implementation and actual validation are recorded in [S02_RESULTS.md](S02_RESULTS.md). The original proposal and its approval boundary are retained below.
+
 Base: S01 implementation `0ba26fd025ca0e0cd9d7997b7d900cf9c8001e48`. The manager approved ONLY S01's two hunks. `S02_CALLER_CORRELATION_PROPOSED.patch` is a separate exact review artifact; SHA256 `81fdec956eaa229a3d01da901dd27e513cb73f2b7b4adcd93050603da5c96c1b`. `git apply --check` passes against S01; the protected route was not changed by preparing this proposal.
 
 Measured causes: API07 supplied a disconnected victim roster ID with a different phone and was rebound as the victim; API08 supplied copied active call/roster IDs with a different phone and set the victim's authoritative answered flag. Both tests possessed the shared gateway key. These results prove missing caller correlation, not ability to forge a cryptographically authenticated provider identity.

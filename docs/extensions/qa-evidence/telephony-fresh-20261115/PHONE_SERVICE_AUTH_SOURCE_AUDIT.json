@@ -1,0 +1,133 @@
+{
+  "status": "UNMOUNTED_READ_SIDE_SOURCE_CANDIDATE_ONLY",
+  "phase_baseline": "ffb3718cf14330dfa8267a44fc712bc578ea3992",
+  "source": [
+    {
+      "path": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "index_blob": "dcd9b1878dbff0533a399b8c9c2f3efd08a9c3fc",
+      "working_sha256": "acb3c038caa5b1899020a00fca4f44d1f88344d3f390f330ef4d6ba9aaebaae0"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "index_blob": "f0b5d9e006c8a8f9c92a13956bd2fccc328d11f4",
+      "working_sha256": "6d8da4a53ab5a137732b7649aebc60a5939f11c0d3eeb5bd1f489463b061fcd2"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "packages/socket/src/api/middleware.ts",
+      "blob": "be93e9b357f86fcc39ce738fd0d7ca95be463d97"
+    },
+    {
+      "path": "packages/socket/src/services/auth.ts",
+      "blob": "c3bd5d455f28d3e6bb180ac1646a4cfe9d9b8f84"
+    },
+    {
+      "path": "packages/socket/src/services/account-auth.ts",
+      "blob": "04ccf52e64779ceb84bcc5116402895d1c34a1f0"
+    },
+    {
+      "path": "packages/socket/src/services/account-scope.ts",
+      "blob": "b4694b1eaf4e6b613bd183a2ff8e8a565087f3b4"
+    },
+    {
+      "path": "packages/socket/src/services/registry.ts",
+      "blob": "4f175d6c9e1c83f02684cd10cc0dbf0fbfeff6e9"
+    },
+    {
+      "path": "packages/socket/src/env.ts",
+      "blob": "e08cdb04ae1b5502f5a0211b2aa2cf553d97bc86"
+    },
+    {
+      "path": "packages/socket/src/api/routes/games.ts",
+      "blob": "13d8a0de05d66853051fe9fbd915dbaa4e3fa80c"
+    },
+    {
+      "path": "packages/socket/src/api/extensions/game-routes.ts",
+      "blob": "4c4a806b15b2eace7f93d52c75ab53a09b48d783"
+    },
+    {
+      "path": "packages/socket/src/api/extensions/join-policy.ts",
+      "blob": "2f986d879ffbbde22a59652017e929596147e406"
+    },
+    {
+      "path": "packages/socket/src/handlers/game.ts",
+      "blob": "4abe7288f2e14adf30cee1cdfc6d96389a5851ab"
+    },
+    {
+      "path": "packages/socket/src/services/game/index.ts",
+      "blob": "8ada6d82e336c135850ebae075fea685f6e909c1"
+    },
+    {
+      "path": "extensions/src/server/game/roster/browser-identity.ts",
+      "blob": "0de15baa717fecb571172957d947ef0201e371d5"
+    }
+  ],
+  "accepted_v2a_unchanged": [
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/contracts.ts",
+      "accepted_blob": "4f3791a501497519ba5d58a20140b29a42dbd96d",
+      "current_blob": "4f3791a501497519ba5d58a20140b29a42dbd96d"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/store.ts",
+      "accepted_blob": "588eaaa3b2b5750c0d0c5af7a61f8c95c9ef27b9",
+      "current_blob": "588eaaa3b2b5750c0d0c5af7a61f8c95c9ef27b9"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/prototype.ts",
+      "accepted_blob": "2040cd449d86ea675a3941f8eeba31a9b7b04352",
+      "current_blob": "2040cd449d86ea675a3941f8eeba31a9b7b04352"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/game-facade.ts",
+      "accepted_blob": "a9463970319f74cb2a2e323d69454a561d6d99f8",
+      "current_blob": "a9463970319f74cb2a2e323d69454a561d6d99f8"
+    }
+  ],
+  "syntax": [
+    {
+      "path": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "exit": 0,
+      "stderr": "",
+      "scope": "syntax only; no module evaluation/typecheck"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "exit": 0,
+      "stderr": "",
+      "scope": "syntax only; no module evaluation/typecheck"
+    }
+  ],
+  "no_existing_import_or_barrel_or_route": true,
+  "actual_jwt_verifier": "verifyToken (async preparation only)",
+  "actual_live_predicates": [
+    "activeAccount",
+    "isAccountSessionValid",
+    "Registry.getManagerGame"
+  ],
+  "synchronous_callback_reloads_authority": true,
+  "concrete_service_lease_store_supplied": false,
+  "credential_issuer_or_route_supplied": false,
+  "full_typecheck": false,
+  "runtime_tests": false,
+  "server_run": false,
+  "new_live_credentials_or_customer_data": false,
+  "prettier_not_run_existing_local_dependency_tree_unavailable": true,
+  "generic_freeze_guard": {
+    "exit": 1,
+    "retained_preapproved_mismatch": "packages/socket/src/api/extensions/game-routes.ts"
+  },
+  "next_protected_hooks_are_proposals_only": true,
+  "service_hash_bound_fields": [
+    "owner",
+    "game",
+    "provider",
+    "service",
+    "version",
+    "issuerSid",
+    "executorId",
+    "expiresAt",
+    "initialActions"
+  ]
+}

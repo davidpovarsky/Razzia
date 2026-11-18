@@ -1,0 +1,211 @@
+{
+  "tested_sha": "ab8d7856a240e9af255e1246eb9f87b168f759cf",
+  "scope": "targeted fixture correction only; trusted synthetic context is NOT real auth",
+  "observations": [
+    {
+      "case": "SCOPED-01",
+      "writerExitedBeforeReopen": true,
+      "scopeKeys": [
+        "owner",
+        "game",
+        "provider",
+        "issuerSid",
+        "service",
+        "executorId",
+        "actions",
+        "expiresAt"
+      ],
+      "requestKeys": [
+        "requestId",
+        "providerReference",
+        "phone",
+        "expectedPredecessor",
+        "capability"
+      ],
+      "allScopeMatchedTrustedFixture": true,
+      "counters": {
+        "coordinator": 1,
+        "join": 1,
+        "answer": 0,
+        "hangup": 0
+      },
+      "actualGame": {
+        "activeCallId": "01ea7c70-95ff-4984-b813-1242aabc8f9a",
+        "clientId": "phone-client-01a1dea8-3e52-75e5-852e-52540f4a55b0",
+        "status": "connected",
+        "lastSeenAt": 1794736930386,
+        "points": 0,
+        "epoch": 0,
+        "answered": false,
+        "rosterCount": 1,
+        "playerCount": 1,
+        "connected": 1
+      },
+      "registrationCount": 1,
+      "rawCapabilityDisclosed": false,
+      "secondaryCaseFile": false
+    },
+    {
+      "case": "SCOPED-02",
+      "deniedRecords": 29,
+      "variants": [
+        "missing-record-despite-case-json",
+        "missing-scope-owner",
+        "mismatched-scope-owner",
+        "missing-scope-game",
+        "mismatched-scope-game",
+        "missing-scope-provider",
+        "mismatched-scope-provider",
+        "missing-scope-issuerSid",
+        "mismatched-scope-issuerSid",
+        "missing-scope-service",
+        "mismatched-scope-service",
+        "missing-scope-executorId",
+        "mismatched-scope-executorId",
+        "missing-scope-actions",
+        "mismatched-scope-actions",
+        "missing-scope-expiresAt",
+        "mismatched-scope-expiresAt",
+        "missing-attempt-requestId",
+        "mismatched-attempt-requestId",
+        "missing-attempt-providerReference",
+        "mismatched-attempt-providerReference",
+        "missing-attempt-phone",
+        "mismatched-attempt-phone",
+        "missing-attempt-expectedPredecessor",
+        "mismatched-attempt-expectedPredecessor",
+        "invalid-protocol-or-record-25",
+        "invalid-protocol-or-record-26",
+        "invalid-protocol-or-record-27",
+        "invalid-protocol-or-record-28"
+      ],
+      "counters": {
+        "coordinator": 0,
+        "join": 0,
+        "answer": 0,
+        "hangup": 0
+      },
+      "beforeGame": {
+        "activeCallId": "4285d6c4-580b-4ca8-a029-139fc2870859",
+        "clientId": "phone-client-01a1dea8-3ebd-74c8-9d3e-be6fb9d20fdd",
+        "status": "connected",
+        "lastSeenAt": 1794736930493,
+        "points": 0,
+        "epoch": 0,
+        "answered": false,
+        "rosterCount": 1,
+        "playerCount": 1,
+        "connected": 1
+      },
+      "afterGame": {
+        "activeCallId": "4285d6c4-580b-4ca8-a029-139fc2870859",
+        "clientId": "phone-client-01a1dea8-3ebd-74c8-9d3e-be6fb9d20fdd",
+        "status": "connected",
+        "lastSeenAt": 1794736930493,
+        "points": 0,
+        "epoch": 0,
+        "answered": false,
+        "rosterCount": 1,
+        "playerCount": 1,
+        "connected": 1
+      },
+      "beforeDatabase": {
+        "records": {
+          "authority": [
+            {
+              "service": "synthetic-service",
+              "issuer_sid": "synthetic-unverified-session",
+              "executor_id": "b8b9e002-0872-4764-b1b2-0a2741f3d38d"
+            }
+          ],
+          "registrations": [
+            {
+              "request_id": "scoped-negative",
+              "registration_id": "4285d6c4-580b-4ca8-a029-139fc2870859",
+              "generation": 1,
+              "state": "ACTIVE",
+              "roster_id": "01a1dea8-3ebd-74c8-9d3e-be6fb9d20fdd",
+              "client_id": "phone-client-01a1dea8-3ebd-74c8-9d3e-be6fb9d20fdd",
+              "receipt": "{\"ok\":true,\"status\":\"active\",\"registrationId\":\"4285d6c4-580b-4ca8-a029-139fc2870859\",\"generation\":1,\"rosterPlayerId\":\"01a1dea8-3ebd-74c8-9d3e-be6fb9d20fdd\",\"clientId\":\"phone-client-01a1dea8-3ebd-74c8-9d3e-be6fb9d20fdd\"}"
+            }
+          ],
+          "bindings": [
+            {
+              "caller_hash": "90ebdb8d1d8bc9be168659faecb546d54924bff39f67da62d6d9bde6d39d80dd",
+              "generation": 1,
+              "request_id": "scoped-negative",
+              "state": "ACTIVE"
+            }
+          ],
+          "operations": [],
+          "denials": []
+        },
+        "files": [
+          {
+            "name": "db",
+            "sha256": "97e8d54f8a7255106f66cf1b213c4a4d7b558d21310b1c2bfedc3d0d526dddda"
+          },
+          {
+            "name": "wal",
+            "sha256": "9b383a2e28322d1fd3d4d6367f0c97be7051c5b37b0ce62058f0361bd4f5b3a3"
+          }
+        ]
+      },
+      "afterDatabase": {
+        "records": {
+          "authority": [
+            {
+              "service": "synthetic-service",
+              "issuer_sid": "synthetic-unverified-session",
+              "executor_id": "b8b9e002-0872-4764-b1b2-0a2741f3d38d"
+            }
+          ],
+          "registrations": [
+            {
+              "request_id": "scoped-negative",
+              "registration_id": "4285d6c4-580b-4ca8-a029-139fc2870859",
+              "generation": 1,
+              "state": "ACTIVE",
+              "roster_id": "01a1dea8-3ebd-74c8-9d3e-be6fb9d20fdd",
+              "client_id": "phone-client-01a1dea8-3ebd-74c8-9d3e-be6fb9d20fdd",
+              "receipt": "{\"ok\":true,\"status\":\"active\",\"registrationId\":\"4285d6c4-580b-4ca8-a029-139fc2870859\",\"generation\":1,\"rosterPlayerId\":\"01a1dea8-3ebd-74c8-9d3e-be6fb9d20fdd\",\"clientId\":\"phone-client-01a1dea8-3ebd-74c8-9d3e-be6fb9d20fdd\"}"
+            }
+          ],
+          "bindings": [
+            {
+              "caller_hash": "90ebdb8d1d8bc9be168659faecb546d54924bff39f67da62d6d9bde6d39d80dd",
+              "generation": 1,
+              "request_id": "scoped-negative",
+              "state": "ACTIVE"
+            }
+          ],
+          "operations": [],
+          "denials": []
+        },
+        "files": [
+          {
+            "name": "db",
+            "sha256": "97e8d54f8a7255106f66cf1b213c4a4d7b558d21310b1c2bfedc3d0d526dddda"
+          },
+          {
+            "name": "wal",
+            "sha256": "9b383a2e28322d1fd3d4d6367f0c97be7051c5b37b0ce62058f0361bd4f5b3a3"
+          }
+        ]
+      },
+      "secondaryCaseFilePresentButNeverUsed": true
+    },
+    {
+      "case": "SCOPED-03",
+      "journalAndFalseExpectedMatchedButAuthorityDenied": 6,
+      "counters": {
+        "coordinator": 0,
+        "join": 0,
+        "answer": 0,
+        "hangup": 0
+      },
+      "actualPlayers": 0,
+      "databaseUnchanged": true
+    }
+  ]
+}

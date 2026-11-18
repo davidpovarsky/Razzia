@@ -1,5 +1,7 @@
 # S02 caller correlation and admission propagation — retest plan
 
+Execution update: [S02_RESULTS.md](S02_RESULTS.md) records the completed actual18-case run,15PASS/3retained lifecycle failures and native scoped types PASS. This plan is retained as pre-execution evidence.
+
 Manager decision PHONE_S02_CALLER_CORRELATION_20261115.md approves only the existing normalizePhoneE164 import, supplied-roster correlation guard and disconnected admission-denial propagation. UPSTREAM_TOUCHES.md was updated before edit. The approved condition was line-wrapped inside its own new hunk for formatting; no extra behavior/protected edit is included. S02_SOURCE_AUDIT.json verifies that bounded change and unchanged original fifteen test bodies.
 
 All fifteen prior actual-route cases remain. Three new Node-only cases add:
