@@ -1,0 +1,312 @@
+(node:11984) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+extensions/src/mcp-app/widget/virtual.d.ts:2:34: error typescript(array-type): Array type using 'readonly T[]' is forbidden for non-simple types. Use 'ReadonlyArray<T>' instead. help: Replace `readonly import("../../presentation/show-library-preview/native-theme-admission-v2").BuiltNativeDefinitionV2[]` with `ReadonlyArray<import("../../presentation/show-library-preview/native-theme-admission-v2").BuiltNativeDefinitionV2>`.
+extensions/src/mcp-app/widget/stage.tsx:8:1: error eslint(capitalized-comments): Comments should not begin with a lowercase letter help: Change the first letter of the comment to uppercase
+extensions/src/mcp-app/widget/stage.tsx:26:7: error typescript(no-non-null-assertion): Forbidden non-null assertion. help: Consider using the optional chain operator `?.` instead. `x!.y` is equivalent to `x.y` at runtime and will throw if `x` is `null` or `undefined`, but `x?.y` will return `undefined`.
+extensions/src/mcp-app/widget/stage.tsx:26:35: error typescript(no-non-null-assertion): Forbidden non-null assertion. help: Consider using the optional chain operator `?.` instead. `x!.y` is equivalent to `x.y` at runtime and will throw if `x` is `null` or `undefined`, but `x?.y` will return `undefined`.
+extensions/src/mcp-app/widget/stage.tsx:46:43: error eslint(curly): Expected { after 'if' condition. help: Replace `return` with `{return}`.
+extensions/src/mcp-app/widget/stage.tsx:11:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/stage.tsx:36:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/stage.tsx:47:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/stage.tsx:53:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/stage.tsx:57:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/entry.tsx:7:25: error typescript(no-non-null-assertion): Forbidden non-null assertion.
+extensions/src/mcp-app/widget/entry.tsx:12:20: error typescript(no-non-null-assertion): Forbidden non-null assertion. help: Consider using the optional chain operator `?.` instead. `x!.y` is equivalent to `x.y` at runtime and will throw if `x` is `null` or `undefined`, but `x?.y` will return `undefined`.
+extensions/src/mcp-app/widget/entry.tsx:38:23: error eslint(no-implicit-coercion): Unexpected implicit coercion to boolean help: Use `Boolean(value)` instead
+extensions/src/mcp-app/widget/entry.tsx:20:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/entry.tsx:25:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/draft-fields.ts:17:1: error @stylistic(multiline-comment-style): Expected multiple line comments instead of a block comment.
+extensions/src/mcp-app/widget/draft-fields.ts:4:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/draft-fields.ts:14:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/draft-fields.ts:19:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/draft-fields.ts:21:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/server.ts:8:24: error eslint(prefer-destructuring): Use Array destructuring. help: Use array destructuring rather than direct member access.
+extensions/qa/mcp-widget/server.ts:73:7: error eslint(no-nested-ternary): Do not nest ternary expressions. help: Refactor nested ternary expressions into if-else statements for better readability.
+extensions/qa/mcp-widget/server.ts:94:7: error eslint(no-nested-ternary): Do not nest ternary expressions. help: Refactor nested ternary expressions into if-else statements for better readability.
+extensions/qa/mcp-widget/server.ts:113:5: error eslint(curly): Expected { after 'if' condition. help: Replace `console.log( JSON.stringify({ port: address.port, root: fileURLToPath(root) }), )` with `{console.log( JSON.stringify({ port: address.port, root: fileURLToPath(root) }), )}`.
+extensions/qa/mcp-widget/server.ts:36:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/server.ts:39:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/server.ts:41:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/server.ts:44:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/server.ts:46:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/server.ts:51:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/server.ts:53:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/server.ts:63:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/server.ts:65:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/server.ts:68:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/server.ts:70:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/server.ts:80:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/server.ts:83:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/server.ts:91:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/server.ts:105:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/server.ts:107:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/server.ts:112:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/host-entry.tsx:20:3: error eslint(prefer-const): `calls` is never reassigned. help: Use `const` instead.
+extensions/qa/mcp-widget/host-entry.tsx:51:34: error eslint(no-promise-executor-return): Return statement should not be used in Promise executor. help: Use `resolve()` or `reject()` instead of returning a value.
+extensions/qa/mcp-widget/host-entry.tsx:53:5: error eslint(curly): Expected { after 'if' condition. help: Replace `return result({ draftId: id, revision, summary, authoredShowJson: text })` with `{return result({ draftId: id, revision, summary, authoredShowJson: text })}`.
+extensions/qa/mcp-widget/host-entry.tsx:60:5: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/qa/mcp-widget/host-entry.tsx:84:7: error eslint(curly): Expected { after 'if' condition. help: Replace `retained.result._meta["tadazz/preview-candidate-v2"].inputDigest = "0".repeat(64)` with `{retained.result._meta["tadazz/preview-candidate-v2"].inputDigest = "0".repeat(64)}`.
+extensions/qa/mcp-widget/host-entry.tsx:88:7: error eslint(curly): Expected { after 'if' condition. help: Replace `await bridge.sendToolInput({ arguments: { ...retained.selection, expectedRevision: retained.selection.expectedRevision + 1, }, })` with `{await bridge.sendToolInput({ arguments: { ...retained.selection, expectedRevision: retained.selection.expectedRevision + 1, }, })}`.
+extensions/qa/mcp-widget/host-entry.tsx:116:30: error typescript(no-non-null-assertion): Forbidden non-null assertion.
+extensions/qa/mcp-widget/host-entry.tsx:116:53: error typescript(no-non-null-assertion): Forbidden non-null assertion.
+extensions/qa/mcp-widget/host-entry.tsx:132:7: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/qa/mcp-widget/host-entry.tsx:52:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/host-entry.tsx:54:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/host-entry.tsx:61:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/host-entry.tsx:63:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/host-entry.tsx:81:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/host-entry.tsx:83:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/host-entry.tsx:86:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/host-entry.tsx:87:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/host-entry.tsx:94:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/host-entry.tsx:96:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/host-entry.tsx:98:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/fixture-entry.tsx:19:23: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("widget:fixture-unavailable")` with `{throw new Error("widget:fixture-unavailable")}`.
+extensions/qa/mcp-widget/fixture-entry.tsx:26:25: error typescript(no-non-null-assertion): Forbidden non-null assertion.
+extensions/qa/mcp-widget/fixture-entry.tsx:19:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/fixture-entry.tsx:20:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/Widget.tsx:2:32: error eslint(no-duplicate-imports): 'react' import is duplicated help: Merge the duplicated import into a single import statement
+extensions/src/mcp-app/widget/Widget.tsx:9:52: error eslint(no-duplicate-imports): '../../core/show-library/native-preview-renderer-v2-schema' import is duplicated help: Merge the duplicated import into a single import statement
+extensions/src/mcp-app/widget/Widget.tsx:96:26: error eslint(curly): Expected { after 'if' condition. help: Replace `return` with `{return}`.
+extensions/src/mcp-app/widget/Widget.tsx:104:22: error eslint(curly): Expected { after 'if' condition. help: Replace `setFixtureState("error")` with `{setFixtureState("error")}`.
+extensions/src/mcp-app/widget/Widget.tsx:109:47: error eslint(curly): Expected { after 'if' condition. help: Replace `return` with `{return}`.
+extensions/src/mcp-app/widget/Widget.tsx:116:11: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("widget:fixture-association")` with `{throw new Error("widget:fixture-association")}`.
+extensions/src/mcp-app/widget/Widget.tsx:121:24: error eslint(curly): Expected { after 'if' condition. help: Replace `setFixtureState("error")` with `{setFixtureState("error")}`.
+extensions/src/mcp-app/widget/Widget.tsx:131:23: error eslint(no-implicit-coercion): Unexpected implicit coercion to boolean help: Use `Boolean(value)` instead
+extensions/src/mcp-app/widget/Widget.tsx:132:18: error eslint(no-nested-ternary): Do not nest ternary expressions. help: Refactor nested ternary expressions into if-else statements for better readability.
+extensions/src/mcp-app/widget/Widget.tsx:134:7: error eslint(no-nested-ternary): Do not nest ternary expressions. help: Refactor nested ternary expressions into if-else statements for better readability.
+extensions/src/mcp-app/widget/Widget.tsx:327:38: error eslint(curly): Expected { after 'if' condition. help: Replace `return` with `{return}`.
+extensions/src/mcp-app/widget/Widget.tsx:329:31: error eslint(curly): Expected { after 'if' condition. help: Replace `setEditRevision(state.draft!.revision)` with `{setEditRevision(state.draft!.revision)}`.
+extensions/src/mcp-app/widget/Widget.tsx:329:47: error typescript(no-non-null-assertion): Forbidden non-null assertion. help: Consider using the optional chain operator `?.` instead. `x!.y` is equivalent to `x.y` at runtime and will throw if `x` is `null` or `undefined`, but `x?.y` will return `undefined`.
+extensions/src/mcp-app/widget/Widget.tsx:341:29: error typescript(no-non-null-assertion): Forbidden non-null assertion. help: Consider using the optional chain operator `?.` instead. `x!.y` is equivalent to `x.y` at runtime and will throw if `x` is `null` or `undefined`, but `x?.y` will return `undefined`.
+extensions/src/mcp-app/widget/Widget.tsx:342:37: error typescript(no-non-null-assertion): Forbidden non-null assertion. help: Consider using the optional chain operator `?.` instead. `x!.y` is equivalent to `x.y` at runtime and will throw if `x` is `null` or `undefined`, but `x?.y` will return `undefined`.
+extensions/src/mcp-app/widget/Widget.tsx:367:25: error eslint(curly): Expected { after 'if' condition. help: Replace `setDirty(false)` with `{setDirty(false)}`.
+extensions/src/mcp-app/widget/Widget.tsx:21:1: error @stylistic(multiline-comment-style): Expected multiple line comments instead of a block comment.
+extensions/src/mcp-app/widget/Widget.tsx:23:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/Widget.tsx:26:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/Widget.tsx:35:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/Widget.tsx:40:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/Widget.tsx:46:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/Widget.tsx:79:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/Widget.tsx:93:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/Widget.tsx:97:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/Widget.tsx:104:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/Widget.tsx:110:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/Widget.tsx:111:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/Widget.tsx:117:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/Widget.tsx:124:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/Widget.tsx:142:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/Widget.tsx:327:19: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/Widget.tsx:328:19: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/Widget.tsx:329:19: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/Widget.tsx:330:19: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/vite.config.ts:57:13: error eslint(capitalized-comments): Comments should not begin with a lowercase letter help: Change the first letter of the comment to uppercase
+extensions/src/mcp-app/widget/vite.config.ts:38:11: error eslint(curly): Expected { after 'if' condition. help: Replace `entryName = basename(String(config.build.lib.entry), ".tsx")` with `{entryName = basename(String(config.build.lib.entry), ".tsx")}`.
+extensions/src/mcp-app/widget/vite.config.ts:46:36: error eslint(curly): Expected { after 'if' condition. help: Replace `continue` with `{continue}`.
+extensions/src/mcp-app/widget/vite.config.ts:48:39: error typescript(no-non-null-assertion): Forbidden non-null assertion.
+extensions/src/mcp-app/widget/vite.config.ts:49:62: error eslint(curly): Expected { after 'if' condition. help: Replace `continue` with `{continue}`.
+extensions/src/mcp-app/widget/vite.config.ts:21:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/vite.config.ts:47:11: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/vite.config.ts:49:13: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/vite.config.ts:50:13: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:53:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("widget:result-too-large")` with `{throw new Error("widget:result-too-large")}`.
+extensions/src/mcp-app/widget/controller.ts:55:34: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("widget:contradictory-result")` with `{throw new Error("widget:contradictory-result")}`.
+extensions/src/mcp-app/widget/controller.ts:91:20: error eslint(array-callback-return): Unexpected return value in callback for "Array.prototype.forEach" help: Expected the return expression to be started with `void`
+extensions/src/mcp-app/widget/controller.ts:94:41: error eslint(curly): Expected { after 'if' condition. help: Replace `return` with `{return}`.
+extensions/src/mcp-app/widget/controller.ts:96:49: error eslint(curly): Expected { after 'if' condition. help: Replace `return` with `{return}`.
+extensions/src/mcp-app/widget/controller.ts:109:5: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/src/mcp-app/widget/controller.ts:126:41: error eslint(curly): Expected { after 'if' condition. help: Replace `this.publish({ status: "candidate" })` with `{this.publish({ status: "candidate" })}`.
+extensions/src/mcp-app/widget/controller.ts:142:41: error eslint(curly): Expected { after 'if' condition. help: Replace `return` with `{return}`.
+extensions/src/mcp-app/widget/controller.ts:153:9: error eslint(curly): Expected { after 'if' condition. help: Replace `return` with `{return}`.
+extensions/src/mcp-app/widget/controller.ts:155:9: error eslint(curly): Expected { after 'if' condition. help: Replace `return` with `{return}`.
+extensions/src/mcp-app/widget/controller.ts:175:9: error eslint(no-nested-ternary): Do not nest ternary expressions. help: Refactor nested ternary expressions into if-else statements for better readability.
+extensions/src/mcp-app/widget/controller.ts:195:41: error eslint(curly): Expected { after 'if' condition. help: Replace `return` with `{return}`.
+extensions/src/mcp-app/widget/controller.ts:198:24: error eslint(prefer-destructuring): Use Object destructuring. help: Use object destructuring rather than direct member access.
+extensions/src/mcp-app/widget/controller.ts:207:43: error eslint(curly): Expected { after 'if' condition. help: Replace `return` with `{return}`.
+extensions/src/mcp-app/widget/controller.ts:214:32: error eslint(prefer-destructuring): Use Object destructuring. help: Use object destructuring rather than direct member access.
+extensions/src/mcp-app/widget/controller.ts:221:9: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("widget:unexpected-ack")` with `{throw new Error("widget:unexpected-ack")}`.
+extensions/src/mcp-app/widget/controller.ts:227:9: error eslint(curly): Expected { after 'if' condition. help: Replace `this.history = { draftId: previous.draftId, revision: result.data.revision, before: previous.authoredShowJson, }` with `{this.history = { draftId: previous.draftId, revision: result.data.revision, before: previous.authoredShowJson, }}`.
+extensions/src/mcp-app/widget/controller.ts:237:9: error eslint(curly): Expected { after 'if' condition. help: Replace `this.history = null` with `{this.history = null}`.
+extensions/src/mcp-app/widget/controller.ts:246:9: error eslint(curly): Expected { after 'if' condition. help: Replace `this.publish({ status: "error", preview: null })` with `{this.publish({ status: "error", preview: null })}`.
+extensions/src/mcp-app/widget/controller.ts:248:35: error eslint(curly): Expected { after 'if' condition. help: Replace `this.active = undefined` with `{this.active = undefined}`.
+extensions/src/mcp-app/widget/controller.ts:253:19: error eslint(curly): Expected { after 'if' condition. help: Replace `return Promise.resolve()` with `{return Promise.resolve()}`.
+extensions/src/mcp-app/widget/controller.ts:267:19: error eslint(prefer-destructuring): Use Object destructuring. help: Use object destructuring rather than direct member access.
+extensions/src/mcp-app/widget/controller.ts:273:7: error eslint(curly): Expected { after 'if' condition. help: Replace `return Promise.resolve()` with `{return Promise.resolve()}`.
+extensions/src/mcp-app/widget/controller.ts:296:7: error eslint(curly): Expected { after 'if' condition. help: Replace `return Promise.resolve()` with `{return Promise.resolve()}`.
+extensions/src/mcp-app/widget/controller.ts:59:1: error @stylistic(multiline-comment-style): Expected multiple line comments instead of a block comment.
+extensions/src/mcp-app/widget/controller.ts:11:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:12:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:24:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:32:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:38:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:49:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:54:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:55:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:56:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:85:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:95:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:96:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:97:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:143:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:145:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:147:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:149:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:154:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:156:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:195:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:196:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:202:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:207:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:208:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:209:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:211:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:213:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:215:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:222:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:226:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:238:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:253:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:254:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:268:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:274:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:276:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:278:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:297:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/packet.mjs:34:25: error eslint(curly): Expected { after 'if' condition. help: Replace `continue` with `{continue}`.
+extensions/qa/mcp-widget/packet.mjs:40:215: error eslint(curly): Expected { after 'for-of'. help: Replace `dependencies.push({ path, sha256: sha(await readFile(new URL(path, root))) })` with `{dependencies.push({ path, sha256: sha(await readFile(new URL(path, root))) })}`.
+extensions/qa/mcp-widget/packet.mjs:35:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/browser.mjs:4:14: error eslint(prefer-destructuring): Use Array destructuring. help: Use array destructuring rather than direct member access.
+extensions/qa/mcp-widget/browser.mjs:6:3: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("qa:local-origin-required")` with `{throw new Error("qa:local-origin-required")}`.
+extensions/qa/mcp-widget/browser.mjs:22:35: error eslint(curly): Expected { after 'if' condition. help: Replace `errors.push(message.text())` with `{errors.push(message.text())}`.
+extensions/qa/mcp-widget/browser.mjs:264:5: error eslint(curly): Expected { after 'for-of'. help: Replace `await run(`rejects ${mode} candidate association`, async () => { await page.goto(`${base}/host.html?candidate=${mode}`) await page.locator("html[data-host-ready=true]").waitFor() const frame = page.frameLocator("iframe") await frame...` with `{await run(`rejects ${mode} candidate association`, async () => { await page.goto(`${base}/host.html?candidate=${mode}`) await page.locator("html[data-host-ready=true]").waitFor() const frame = page.frameLocator("iframe") await fram...`.
+extensions/qa/mcp-widget/browser.mjs:373:62: error eslint(require-await): Async function has no `await` expression. help: Consider removing the `async` keyword.
+extensions/qa/mcp-widget/browser.mjs:399:53: error eslint(curly): Expected { after 'if' condition. help: Replace `process.exitCode = 1` with `{process.exitCode = 1}`.
+extensions/qa/mcp-widget/browser.mjs:5:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/browser.mjs:7:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/browser.mjs:34:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/browser.mjs:399:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/browser.mjs:400:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:28:5: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/src/mcp-app/widget/bridge.ts:36:9: error eslint(curly): Expected { after 'if' condition. help: Replace `return Promise.reject(new Error("widget:tools-unavailable"))` with `{return Promise.reject(new Error("widget:tools-unavailable"))}`.
+extensions/src/mcp-app/widget/bridge.ts:41:5: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/src/mcp-app/widget/bridge.ts:72:52: error eslint(curly): Expected { after 'if' condition. help: Replace `return` with `{return}`.
+extensions/src/mcp-app/widget/bridge.ts:78:44: error eslint(curly): Expected { after 'if' condition. help: Replace `controller.candidate()` with `{controller.candidate()}`.
+extensions/src/mcp-app/widget/bridge.ts:85:19: error eslint(curly): Expected { after 'if' condition. help: Replace `return` with `{return}`.
+extensions/src/mcp-app/widget/bridge.ts:98:19: error eslint(curly): Expected { after 'if' condition. help: Replace `return` with `{return}`.
+extensions/src/mcp-app/widget/bridge.ts:111:7: error eslint(curly): Expected { after 'if' condition. help: Replace `cancelPreview()` with `{cancelPreview()}`.
+extensions/src/mcp-app/widget/bridge.ts:114:19: error eslint(curly): Expected { after 'if' condition. help: Replace `return` with `{return}`.
+extensions/src/mcp-app/widget/bridge.ts:140:9: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("widget:invalid-mount-lifecycle")` with `{throw new Error("widget:invalid-mount-lifecycle")}`.
+extensions/src/mcp-app/widget/bridge.ts:153:21: error eslint(prefer-destructuring): Use Object destructuring. help: Use object destructuring rather than direct member access.
+extensions/src/mcp-app/widget/bridge.ts:154:74: error eslint(curly): Expected { after 'if' condition. help: Replace `return` with `{return}`.
+extensions/src/mcp-app/widget/bridge.ts:165:20: error eslint(curly): Expected { after 'if' condition. help: Replace `return` with `{return}`.
+extensions/src/mcp-app/widget/bridge.ts:171:49: error eslint(curly): Expected { after 'if' condition. help: Replace `return` with `{return}`.
+extensions/src/mcp-app/widget/bridge.ts:173:48: error eslint(curly): Expected { after 'if' condition. help: Replace `controller.candidate()` with `{controller.candidate()}`.
+extensions/src/mcp-app/widget/bridge.ts:188:24: error eslint(curly): Expected { after 'if' condition. help: Replace `onContext(app.getHostContext() ?? {})` with `{onContext(app.getHostContext() ?? {})}`.
+extensions/src/mcp-app/widget/bridge.ts:190:24: error eslint(curly): Expected { after 'if' condition. help: Replace `controller.unavailable()` with `{controller.unavailable()}`.
+extensions/src/mcp-app/widget/bridge.ts:9:1: error @stylistic(multiline-comment-style): Expected multiple line comments instead of a block comment.
+extensions/src/mcp-app/widget/bridge.ts:35:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:37:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:42:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:46:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:55:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:57:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:59:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:62:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:64:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:73:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:78:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:86:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:93:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:95:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:99:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:115:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:132:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:134:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:141:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:146:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:154:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:155:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:165:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:166:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:171:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:172:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:173:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:185:11: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:187:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:188:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/controller.nodecheck.ts:55:7: error eslint(init-declarations): Variable 'resolve' should be initialized on declaration. help: Require or disallow initialization in variable declarations
+extensions/qa/mcp-widget/controller.nodecheck.ts:79:13: error eslint(require-await): Async function has no `await` expression. help: Consider removing the `async` keyword.
+extensions/qa/mcp-widget/controller.nodecheck.ts:108:11: error eslint(require-await): Async function has no `await` expression. help: Consider removing the `async` keyword.
+extensions/qa/mcp-widget/controller.nodecheck.ts:134:3: error eslint(curly): Expected { after 'for-of'. help: Replace `test(`${action} ignores late acknowledgement`, async () => { const pending = deferred() const controller = new WidgetController({ async callServerTool({ name }) { return name === "get_game_draft" ? draft() : pending.promise }, ...` with `{test(`${action} ignores late acknowledgement`, async () => { const pending = deferred() const controller = new WidgetController({ async callServerTool({ name }) { return name === "get_game_draft" ? draft() : pending.promise }, ...`.
+extensions/qa/mcp-widget/controller.nodecheck.ts:137:13: error eslint(require-await): Async function has no `await` expression. help: Consider removing the `async` keyword.
+extensions/qa/mcp-widget/controller.nodecheck.ts:144:30: error eslint(curly): Expected { after 'if' condition. help: Replace `controller.select(other)` with `{controller.select(other)}`.
+extensions/qa/mcp-widget/controller.nodecheck.ts:145:10: error eslint(curly): Expected { after 'else'. help: Replace `controller[action]()` with `{controller[action]()}`.
+extensions/qa/mcp-widget/controller.nodecheck.ts:153:11: error eslint(require-await): Async function has no `await` expression. help: Consider removing the `async` keyword.
+extensions/qa/mcp-widget/controller.nodecheck.ts:170:13: error eslint(require-await): Async function has no `await` expression. help: Consider removing the `async` keyword.
+extensions/qa/mcp-widget/controller.nodecheck.ts:197:11: error eslint(require-await): Async function has no `await` expression. help: Consider removing the `async` keyword.
+extensions/qa/mcp-widget/controller.nodecheck.ts:198:38: error eslint(curly): Expected { after 'if' condition. help: Replace `return draft(++reads)` with `{return draft(++reads)}`.
+extensions/qa/mcp-widget/controller.nodecheck.ts:198:51: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/qa/mcp-widget/controller.nodecheck.ts:199:7: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/qa/mcp-widget/controller.nodecheck.ts:215:11: error eslint(require-await): Async function has no `await` expression. help: Consider removing the `async` keyword.
+extensions/qa/mcp-widget/controller.nodecheck.ts:216:38: error eslint(curly): Expected { after 'if' condition. help: Replace `return draft()` with `{return draft()}`.
+extensions/qa/mcp-widget/controller.nodecheck.ts:244:16: error typescript(no-non-null-assertion): Forbidden non-null assertion.
+extensions/qa/mcp-widget/controller.nodecheck.ts:59:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/controller.nodecheck.ts:81:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/controller.nodecheck.ts:144:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/controller.nodecheck.ts:146:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/controller.nodecheck.ts:199:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/controller.nodecheck.ts:200:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/controller.nodecheck.ts:217:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/controller.nodecheck.ts:218:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/i18n.ts:308:3: error eslint(curly): Expected { after 'for-of'. help: Replace `Object.assign(resources[locale].widget, { candidate: candidateLabels[locale], })` with `{Object.assign(resources[locale].widget, { candidate: candidateLabels[locale], })}`.
+extensions/src/mcp-app/widget/i18n.ts:322:3: error eslint(curly): Expected { after 'for-of'. help: Replace `resources[locale].widget.edit = fieldLabels[locale]` with `{resources[locale].widget.edit = fieldLabels[locale]}`.
+extensions/src/mcp-app/widget/i18n.ts:337:3: error eslint(curly): Expected { after 'for-of'. help: Replace `Object.assign(resources[locale].widget, { reset: editLabels[locale][0], undo: editLabels[locale][1], })` with `{Object.assign(resources[locale].widget, { reset: editLabels[locale][0], undo: editLabels[locale][1], })}`.
+extensions/src/mcp-app/widget/i18n.ts:4:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/i18n.ts:5:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/i18n.ts:285:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/i18n.ts:294:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/i18n.ts:297:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/i18n.ts:341:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/i18n.ts:351:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/i18n.ts:353:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/i18n.ts:355:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/i18n.ts:357:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/build.mjs:11:14: error eslint(no-nested-ternary): Do not nest ternary expressions. help: Refactor nested ternary expressions into if-else statements for better readability.
+extensions/src/mcp-app/widget/build.mjs:35:11: error eslint(curly): Expected { after 'if' condition. help: Replace `process.exit(0)` with `{process.exit(0)}`.
+extensions/src/mcp-app/widget/build.mjs:46:3: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("widget:missing-style-marker")` with `{throw new Error("widget:missing-style-marker")}`.
+extensions/src/mcp-app/widget/build.mjs:35:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/build.mjs:36:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/build.mjs:45:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/build.mjs:47:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/vite.config.ts:12:7: error typescript(no-unsafe-assignment): Unsafe assignment of an any value. help: Assigned value has type `any`, so the target is also inferred as `any`. Use a safely typed value or `unknown`, and narrow it before use.
+extensions/src/mcp-app/widget/vite.config.ts:14:3: error typescript(no-unsafe-member-access): Unsafe member access .default on an `any` value.
+extensions/src/mcp-app/widget/vite.config.ts:38:39: error typescript(no-base-to-string): 'config.build.lib.entry' may use Object's default stringification format ('[object Object]') when stringified. help: Consider picking a property (e.g. `user.name`), using a formatter (or `JSON.stringify`), or implementing a custom `toString()`/`toLocaleString()` on the type.
+extensions/src/mcp-app/widget/vite.config.ts:48:39: error typescript(no-unnecessary-type-assertion): This assertion is unnecessary since it does not change the type of the expression.
+extensions/src/mcp-app/widget/vite.config.ts:78:5: error typescript(no-unsafe-call): Unsafe call of a(n) `any` typed value.
+extensions/src/mcp-app/widget/bridge.ts:49:7: error typescript(no-deprecated): `ontoolinput` is deprecated. Use `addEventListener("toolinput", handler)` instead — it composes with other listeners and supports cleanup via `removeEventListener`.
+extensions/src/mcp-app/widget/bridge.ts:67:7: error typescript(no-deprecated): `ontoolinputpartial` is deprecated. Use `addEventListener("toolinputpartial", handler)` instead — it composes with other listeners and supports cleanup via `removeEventListener`.
+extensions/src/mcp-app/widget/bridge.ts:71:7: error typescript(no-deprecated): `ontoolresult` is deprecated. Use `addEventListener("toolresult", handler)` instead — it composes with other listeners and supports cleanup via `removeEventListener`.
+extensions/src/mcp-app/widget/bridge.ts:80:7: error typescript(no-deprecated): `ontoolcancelled` is deprecated. Use `addEventListener("toolcancelled", handler)` instead — it composes with other listeners and supports cleanup via `removeEventListener`.
+extensions/src/mcp-app/widget/bridge.ts:84:7: error typescript(no-deprecated): `onhostcontextchanged` is deprecated. Use `addEventListener("hostcontextchanged", handler)` instead — it composes with other listeners and supports cleanup via `removeEventListener`.
+extensions/src/mcp-app/widget/controller.ts:235:9: error typescript(no-unnecessary-condition): Unnecessary optional chain on a non-nullish value. help: The checked value has type `{ draftId: string; revision: number; before: string; }`. Remove the optional chain; the value cannot be `null` or `undefined`.
+extensions/src/mcp-app/widget/bridge.ts:171:13: error typescript(no-unnecessary-condition): Unnecessary conditional, value is always falsy. help: The checked value has type `false`.
+extensions/src/mcp-app/widget/bridge.ts:175:13: error typescript(no-unnecessary-condition): Unnecessary conditional, value is always truthy. help: The checked value has type `false`.
+extensions/qa/mcp-widget/server.ts:8:7: error typescript(no-unsafe-assignment): Unsafe assignment of an any value. help: Assigned value has type `any`, so the target is also inferred as `any`. Use a safely typed value or `unknown`, and narrow it before use.
+extensions/qa/mcp-widget/fixture-entry.tsx:20:5: error typescript(no-unsafe-return): Unsafe return of a value of type `Promise<any>`. help: Returned expression has type `Promise<any>`. Return a safely typed value or narrow the value before returning it.
+extensions/qa/mcp-widget/server.ts:17:3: error typescript(no-unsafe-member-access): Unsafe member access .results on an `any` value.
+extensions/qa/mcp-widget/host-entry.tsx:79:33: error typescript(no-misused-promises): Promise-returning function provided to variable where a void return was expected.
+extensions/qa/mcp-widget/host-entry.tsx:79:8: error typescript(no-deprecated): `oninitialized` is deprecated. Use `addEventListener("initialized", handler)` instead — it composes with other listeners and supports cleanup via `removeEventListener`.
+extensions/qa/mcp-widget/host-entry.tsx:82:11: error typescript(no-unsafe-assignment): Unsafe assignment of an any value. help: Assigned value has type `any`, so the target is also inferred as `any`. Use a safely typed value or `unknown`, and narrow it before use.
+extensions/qa/mcp-widget/host-entry.tsx:84:16: error typescript(no-unsafe-member-access): Unsafe member access .result on an `any` value.
+extensions/qa/mcp-widget/host-entry.tsx:86:34: error typescript(no-unsafe-assignment): Unsafe assignment of an any value. help: Assigned value has type `any`; the target has type `Record<string, unknown> | undefined`. Use a safely typed value or `unknown`, and narrow it before use.
+extensions/qa/mcp-widget/host-entry.tsx:86:54: error typescript(no-unsafe-member-access): Unsafe member access .selection on an `any` value.
+extensions/qa/mcp-widget/host-entry.tsx:89:9: error typescript(no-unsafe-assignment): Unsafe assignment of an any value. help: Assigned value has type `any`; the target has type `Record<string, unknown> | undefined`. Use a safely typed value or `unknown`, and narrow it before use.
+extensions/qa/mcp-widget/host-entry.tsx:90:23: error typescript(no-unsafe-member-access): Unsafe member access .selection on an `any` value.
+extensions/qa/mcp-widget/host-entry.tsx:91:29: error typescript(restrict-plus-operands): Invalid operand of type 'any' for a '+' operation. help: Operands must each be a number or string.
+extensions/qa/mcp-widget/host-entry.tsx:91:38: error typescript(no-unsafe-member-access): Unsafe member access .selection on an `any` value.
+extensions/qa/mcp-widget/host-entry.tsx:94:33: error typescript(no-unsafe-argument): Unsafe argument of type any assigned to a parameter of type { [x: string]: unknown; _meta?: { [x: string]: unknown; "io.modelcontextprotocol/serverInfo"?: { version: string; websiteUrl?: string | undefined; description?: string | undefined; icons?: { src: string; mimeType?: string | undefined; sizes?: string[] | undefined; theme?: "dark" | "light" | undefined; }[] | undefined; name: string; title?: string | undefined; } | undefined; } | undefined; content: ({ type: "text"; text: string; annotations?: { audience?: ("assistant" | "user")[] | undefined; priority?: number | undefined; lastModified?: string | undefined; } | undefined; _meta?: { [x: string]: unknown; } | undefined; } | { type: "image"; data: string; mimeType: string; annotations?: { audience?: ("assistant" | "user")[] | undefined; priority?: number | undefined; lastModified?: string | undefined; } | undefined; _meta?: { [x: string]: unknown; } | undefined; } | { type: "audio"; data: string; mimeType: string; annotations?: { audience?: ("assistant" | "user")[] | undefined; priority?: number | undefined; lastModified?: string | undefined; } | undefined; _meta?: { [x: string]: unknown; } | undefined; } | { uri: string; description?: string | undefined; mimeType?: string | undefined; size?: number | undefined; annotations?: { audience?: ("assistant" | "user")[] | undefined; priority?: number | undefined; lastModified?: string | undefined; } | undefined; _meta?: { [x: string]: unknown; } | undefined; icons?: { src: string; mimeType?: string | undefined; sizes?: string[] | undefined; theme?: "dark" | "light" | undefined; }[] | undefined; name: string; title?: string | undefined; type: "resource_link"; } | { type: "resource"; resource: { uri: string; mimeType?: string | undefined; _meta?: { [x: string]: unknown; } | undefined; text: string; } | { uri: string; mimeType?: string | undefined; _meta?: { [x: string]: unknown; } | undefined; blob: string; }; annotations?: { audience?: ("assistant" | "user")[] | undefined; priority?: number | undefined; lastModified?: string | undefined; } | undefined; _meta?: { [x: string]: unknown; } | undefined; })[]; structuredContent?: unknown; isError?: boolean | undefined; }.
+extensions/qa/mcp-widget/host-entry.tsx:94:42: error typescript(no-unsafe-member-access): Unsafe member access .result on an `any` value.
+extensions/qa/mcp-widget/controller.nodecheck.ts:108:5: error typescript(require-await): Function has no 'await' expression.
+extensions/qa/mcp-widget/controller.nodecheck.ts:153:5: error typescript(require-await): Function has no 'await' expression.
+extensions/qa/mcp-widget/controller.nodecheck.ts:170:7: error typescript(require-await): Function has no 'await' expression.
+extensions/qa/mcp-widget/controller.nodecheck.ts:197:5: error typescript(require-await): Function has no 'await' expression.

@@ -1,0 +1,17 @@
+extensions/src/mcp-app/widget/bridge.ts 229ms (unchanged)
+extensions/src/mcp-app/widget/controller.ts 84ms (unchanged)
+extensions/src/mcp-app/widget/draft-fields.ts 8ms (unchanged)
+extensions/src/mcp-app/widget/i18n.ts 49ms (unchanged)
+extensions/src/mcp-app/widget/virtual.d.ts 6ms (unchanged)
+extensions/src/mcp-app/widget/vite.config.ts 45ms (unchanged)
+extensions/src/mcp-app/widget/entry.tsx 23ms (unchanged)
+extensions/src/mcp-app/widget/stage.tsx 13ms (unchanged)
+extensions/src/mcp-app/widget/Widget.tsx 81ms
+extensions/src/mcp-app/widget/build.mjs 33ms (unchanged)
+extensions/qa/mcp-widget/controller.nodecheck.ts 34ms (unchanged)
+extensions/qa/mcp-widget/retained-schema.ts 8ms (unchanged)
+extensions/qa/mcp-widget/server.ts 16ms
+extensions/qa/mcp-widget/fixture-entry.tsx 6ms (unchanged)
+extensions/qa/mcp-widget/host-entry.tsx 16ms (unchanged)
+extensions/qa/mcp-widget/browser.mjs 52ms (unchanged)
+extensions/qa/mcp-widget/packet.mjs 24ms (unchanged)

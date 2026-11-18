@@ -1,0 +1,136 @@
+TAP version 13
+# Subtest: parses strict structured result; rejects text, unknown fields and contradictory error
+ok 1 - parses strict structured result; rejects text, unknown fields and contradictory error
+  ---
+  duration_ms: 23.9296
+  type: 'test'
+  ...
+# Subtest: sends original tools with revision CAS; acknowledges only after server response
+not ok 2 - sends original tools with revision CAS; acknowledges only after server response
+  ---
+  duration_ms: 13.8878
+  type: 'test'
+  location: 'C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-widget-20261115\\extensions\\qa\\mcp-widget\\controller.nodecheck.ts:1:1883'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly deep-equal:
+    + actual - expected
+    
+    + undefined
+    - {
+    -   arguments: {
+    -     authoredShowJson: '{"title":"Edited"}',
+    -     contractVersion: '0.1.0',
+    -     draftId: 'widget_draft_A_123456789012',
+    -     expectedRevision: 1,
+    -     idempotencyKey: 'widget_intent_123456789012'
+    -   },
+    -   name: 'update_game_draft'
+    - }
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected:
+    name: 'update_game_draft'
+    arguments:
+      contractVersion: '0.1.0'
+      draftId: 'widget_draft_A_123456789012'
+      expectedRevision: 1
+      authoredShowJson: '{"title":"Edited"}'
+      idempotencyKey: 'widget_intent_123456789012'
+  operator: 'deepStrictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-mcp-widget-20261115\extensions\qa\mcp-widget\controller.nodecheck.ts:96:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: conflict retains prior content and exposes refresh requirement
+ok 3 - conflict retains prior content and exposes refresh requirement
+  ---
+  duration_ms: 5.3013
+  type: 'test'
+  ...
+# Subtest: cancel ignores late acknowledgement
+ok 4 - cancel ignores late acknowledgement
+  ---
+  duration_ms: 1.9825
+  type: 'test'
+  ...
+# Subtest: select ignores late acknowledgement
+ok 5 - select ignores late acknowledgement
+  ---
+  duration_ms: 2.4794
+  type: 'test'
+  ...
+# Subtest: close ignores late acknowledgement
+ok 6 - close ignores late acknowledgement
+  ---
+  duration_ms: 1.725
+  type: 'test'
+  ...
+# Subtest: out-of-order host preview cannot lower revision or switch draft
+ok 7 - out-of-order host preview cannot lower revision or switch draft
+  ---
+  duration_ms: 6.4839
+  type: 'test'
+  ...
+# Subtest: wrong response identity or revision never acknowledges write
+ok 8 - wrong response identity or revision never acknowledges write
+  ---
+  duration_ms: 6.2434
+  type: 'test'
+  ...
+# Subtest: eight i18next locales have complete nonempty label sets
+ok 9 - eight i18next locales have complete nonempty label sets
+  ---
+  duration_ms: 27.9111
+  type: 'test'
+  ...
+# Subtest: an edit from an older base cannot overwrite a refreshed revision
+ok 10 - an edit from an older base cannot overwrite a refreshed revision
+  ---
+  duration_ms: 2.3822
+  type: 'test'
+  ...
+# Subtest: undo is a new server-acknowledged CAS write, never an optimistic rollback
+not ok 11 - undo is a new server-acknowledged CAS write, never an optimistic rollback
+  ---
+  duration_ms: 8.396
+  type: 'test'
+  location: 'C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-widget-20261115\\extensions\\qa\\mcp-widget\\controller.nodecheck.ts:1:6048'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    undefined !== 2
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 2
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-mcp-widget-20261115\extensions\qa\mcp-widget\controller.nodecheck.ts:259:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: a title edit preserves every unrelated card and setting
+ok 12 - a title edit preserves every unrelated card and setting
+  ---
+  duration_ms: 1.4328
+  type: 'test'
+  ...
+# Subtest: oversized server structured content fails the original MCP bound
+ok 13 - oversized server structured content fails the original MCP bound
+  ---
+  duration_ms: 1.4566
+  type: 'test'
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 11
+# fail 2
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 1441.4114

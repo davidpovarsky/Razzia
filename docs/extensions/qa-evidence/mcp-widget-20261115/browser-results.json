@@ -1,0 +1,130 @@
+{
+  "surface": "local Edge Chromium; genuine SDK AppBridge synthetic host, not ChatGPT/Claude installation",
+  "cases": [
+    {
+      "name": "strict-CSP artifact fallback without host",
+      "status": "PASS"
+    },
+    {
+      "name": "genuine native Stage private fixture answer/results/navigation/replay",
+      "status": "PASS"
+    },
+    {
+      "name": "all eight locale bundles; native Razzia narrow and reduced motion",
+      "status": "PASS"
+    },
+    {
+      "name": "real SDK opaque iframe initialize and draft CAS acknowledgement",
+      "status": "PASS"
+    },
+    {
+      "name": "SDK conflict keeps edit; host cancellation and locale/theme updates",
+      "status": "PASS"
+    },
+    {
+      "name": "undo restores acknowledged content through a new server revision",
+      "status": "PASS"
+    },
+    {
+      "name": "refresh does not rebase unsubmitted edits over a remote revision",
+      "status": "PASS"
+    },
+    {
+      "name": "retained real F HTTP tool-error result through actual widget SDK and E mount",
+      "status": "PASS"
+    },
+    {
+      "name": "rejects tampered candidate association",
+      "status": "PASS"
+    },
+    {
+      "name": "rejects repeated candidate association",
+      "status": "PASS"
+    },
+    {
+      "name": "SDK teardown acknowledges and clears renderer and private draft",
+      "status": "PASS"
+    },
+    {
+      "name": "cancelled slow SDK write never reports success; refresh reconciles server revision",
+      "status": "PASS"
+    },
+    {
+      "name": "unsupported host tool capability disables actions",
+      "status": "PASS"
+    },
+    {
+      "name": "changed host invocation clears candidate and closes private state",
+      "status": "PASS"
+    },
+    {
+      "name": "no external connections or browser/CSP errors",
+      "status": "PASS"
+    }
+  ],
+  "errors": [],
+  "requests": [
+    "http://127.0.0.1:63201/widget.html",
+    "http://127.0.0.1:63201/fixture.html",
+    "http://127.0.0.1:63201/qa/input-v2?locale=en&theme=tadazz-classic&question=0&phase=answerCards&paused=true",
+    "http://127.0.0.1:63201/tadazz-show/v4/show-stage.webp",
+    "http://127.0.0.1:63201/tadazz-show/v4/question-bg.webp",
+    "http://127.0.0.1:63201/tadazz-show/v4/tadazz-brand-logo.png",
+    "http://127.0.0.1:63201/tadazz-show/second-library/teaser-screen-source.jpg",
+    "http://127.0.0.1:63201/qa/input-v2?locale=en&theme=tadazz-classic&question=0&phase=results&paused=true",
+    "http://127.0.0.1:63201/qa/input-v2?locale=en&theme=tadazz-classic&question=1&phase=results&paused=true",
+    "http://127.0.0.1:63201/qa/input-v2?locale=en&theme=tadazz-classic&question=1&phase=question&paused=true",
+    "http://127.0.0.1:63201/qa/input-v2?locale=en&theme=razzia-original&question=1&phase=question&paused=true",
+    "http://127.0.0.1:63201/qa/input-v2?locale=fr&theme=razzia-original&question=1&phase=question&paused=true",
+    "http://127.0.0.1:63201/qa/input-v2?locale=de&theme=razzia-original&question=1&phase=question&paused=true",
+    "http://127.0.0.1:63201/qa/input-v2?locale=es&theme=razzia-original&question=1&phase=question&paused=true",
+    "http://127.0.0.1:63201/qa/input-v2?locale=it&theme=razzia-original&question=1&phase=question&paused=true",
+    "http://127.0.0.1:63201/qa/input-v2?locale=ja&theme=razzia-original&question=1&phase=question&paused=true",
+    "http://127.0.0.1:63201/qa/input-v2?locale=tr&theme=razzia-original&question=1&phase=question&paused=true",
+    "http://127.0.0.1:63201/qa/input-v2?locale=vi&theme=razzia-original&question=1&phase=question&paused=true",
+    "http://127.0.0.1:63201/host.html",
+    "http://127.0.0.1:63201/host.js",
+    "http://127.0.0.1:63201/widget.html",
+    "http://127.0.0.1:63201/host.html",
+    "http://127.0.0.1:63201/host.js",
+    "http://127.0.0.1:63201/widget.html",
+    "http://127.0.0.1:63201/host.html",
+    "http://127.0.0.1:63201/host.js",
+    "http://127.0.0.1:63201/widget.html",
+    "http://127.0.0.1:63201/host.html?candidate=valid",
+    "http://127.0.0.1:63201/host.js",
+    "http://127.0.0.1:63201/widget.html",
+    "http://127.0.0.1:63201/qa/retained-tool-result",
+    "http://127.0.0.1:63201/tadazz-show/v4/tadazz-brand-logo.png",
+    "http://127.0.0.1:63201/tadazz-show/second-library/teaser-screen-source.jpg",
+    "http://127.0.0.1:63201/tadazz-show/v4/question-bg.webp",
+    "http://127.0.0.1:63201/host.html?candidate=tampered",
+    "http://127.0.0.1:63201/host.js",
+    "http://127.0.0.1:63201/widget.html",
+    "http://127.0.0.1:63201/qa/retained-tool-result",
+    "http://127.0.0.1:63201/host.html?candidate=repeated",
+    "http://127.0.0.1:63201/host.js",
+    "http://127.0.0.1:63201/widget.html",
+    "http://127.0.0.1:63201/qa/retained-tool-result",
+    "http://127.0.0.1:63201/host.html?candidate=valid",
+    "http://127.0.0.1:63201/host.js",
+    "http://127.0.0.1:63201/widget.html",
+    "http://127.0.0.1:63201/qa/retained-tool-result",
+    "http://127.0.0.1:63201/tadazz-show/v4/tadazz-brand-logo.png",
+    "http://127.0.0.1:63201/tadazz-show/second-library/teaser-screen-source.jpg",
+    "http://127.0.0.1:63201/tadazz-show/v4/question-bg.webp",
+    "http://127.0.0.1:63201/host.html",
+    "http://127.0.0.1:63201/host.js",
+    "http://127.0.0.1:63201/widget.html",
+    "http://127.0.0.1:63201/host.html?noTools=1",
+    "http://127.0.0.1:63201/host.js",
+    "http://127.0.0.1:63201/widget.html",
+    "http://127.0.0.1:63201/host.html?candidate=valid",
+    "http://127.0.0.1:63201/host.js",
+    "http://127.0.0.1:63201/widget.html",
+    "http://127.0.0.1:63201/qa/retained-tool-result",
+    "http://127.0.0.1:63201/tadazz-show/v4/tadazz-brand-logo.png",
+    "http://127.0.0.1:63201/tadazz-show/second-library/teaser-screen-source.jpg",
+    "http://127.0.0.1:63201/tadazz-show/v4/question-bg.webp"
+  ]
+}

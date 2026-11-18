@@ -1,0 +1,17 @@
+{
+  "surface": "local Edge Chromium; genuine SDK AppBridge synthetic host, not ChatGPT/Claude installation",
+  "cases": [
+    {
+      "name": "strict-CSP artifact fallback without host",
+      "status": "FAIL",
+      "message": "TimeoutError: locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByTestId('widget-status').filter({ hasText: 'Preview unavailable' }) to be visible\u001b[22m\n"
+    }
+  ],
+  "errors": [
+    "process is not defined",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "requests": [
+    "http://127.0.0.1:59516/widget.html"
+  ]
+}

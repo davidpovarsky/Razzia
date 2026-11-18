@@ -1,0 +1,12 @@
+{
+  "source": "2bf5d2272396fffa826c94c605545d2211df8819",
+  "loopbackOrigin": "http://127.0.0.1:63201",
+  "fixture": "stopped after final browser and served-byte verification",
+  "execSession": 58182,
+  "stop": "Ctrl-C only to this owned fixture; exit1 is intentional shutdown, not a test result",
+  "otherProcessesSignalled": false,
+  "oracle": "NOT_USED",
+  "publicEndpointOrTunnel": "NOT_CREATED",
+  "nativeSave605": "NOT_IMPORTED",
+  "originalDirtyWorktree": "NOT_WRITTEN"
+}

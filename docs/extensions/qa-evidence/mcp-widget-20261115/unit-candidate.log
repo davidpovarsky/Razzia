@@ -1,0 +1,64 @@
+TAP version 13
+# Subtest: parses strict structured result; rejects text, unknown fields and contradictory error
+ok 1 - parses strict structured result; rejects text, unknown fields and contradictory error
+  ---
+  duration_ms: 10.5296
+  type: 'test'
+  ...
+# Subtest: sends original tools with revision CAS; acknowledges only after server response
+ok 2 - sends original tools with revision CAS; acknowledges only after server response
+  ---
+  duration_ms: 5.7269
+  type: 'test'
+  ...
+# Subtest: conflict retains prior content and exposes refresh requirement
+ok 3 - conflict retains prior content and exposes refresh requirement
+  ---
+  duration_ms: 3.6607
+  type: 'test'
+  ...
+# Subtest: cancel ignores late acknowledgement
+ok 4 - cancel ignores late acknowledgement
+  ---
+  duration_ms: 2.2662
+  type: 'test'
+  ...
+# Subtest: select ignores late acknowledgement
+ok 5 - select ignores late acknowledgement
+  ---
+  duration_ms: 1.32
+  type: 'test'
+  ...
+# Subtest: close ignores late acknowledgement
+ok 6 - close ignores late acknowledgement
+  ---
+  duration_ms: 1.8742
+  type: 'test'
+  ...
+# Subtest: out-of-order host preview cannot lower revision or switch draft
+ok 7 - out-of-order host preview cannot lower revision or switch draft
+  ---
+  duration_ms: 4.5506
+  type: 'test'
+  ...
+# Subtest: wrong response identity or revision never acknowledges write
+ok 8 - wrong response identity or revision never acknowledges write
+  ---
+  duration_ms: 4.303
+  type: 'test'
+  ...
+# Subtest: eight i18next locales have complete nonempty label sets
+ok 9 - eight i18next locales have complete nonempty label sets
+  ---
+  duration_ms: 14.4254
+  type: 'test'
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 9
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 804.7422

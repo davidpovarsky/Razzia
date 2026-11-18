@@ -1,0 +1,33 @@
+extensions/src/mcp-app/widget/bridge.ts 218ms
+extensions/src/mcp-app/widget/build.mjs 38ms
+extensions/src/mcp-app/widget/controller.ts 87ms
+extensions/src/mcp-app/widget/dist/entry-inputs.json 281ms
+extensions/src/mcp-app/widget/dist/fixture-artifact.json 2ms
+extensions/src/mcp-app/widget/dist/fixture-entry-inputs.json 162ms
+extensions/src/mcp-app/widget/dist/fixture.css 1429ms
+extensions/src/mcp-app/widget/dist/fixture.html 5846ms
+extensions/src/mcp-app/widget/dist/fixture.js 2899ms
+extensions/src/mcp-app/widget/dist/host-entry-inputs.json 21ms
+extensions/src/mcp-app/widget/dist/host.js 793ms
+extensions/src/mcp-app/widget/dist/widget-artifact.json 2ms
+extensions/src/mcp-app/widget/dist/widget.css 1394ms
+extensions/src/mcp-app/widget/dist/widget.html 5477ms
+extensions/src/mcp-app/widget/dist/widget.js 2883ms
+extensions/src/mcp-app/widget/draft-fields.ts 22ms
+extensions/src/mcp-app/widget/entry.tsx 17ms (unchanged)
+extensions/src/mcp-app/widget/i18n.ts 41ms
+extensions/src/mcp-app/widget/README.md 117ms
+extensions/src/mcp-app/widget/stage.tsx 14ms
+extensions/src/mcp-app/widget/tsconfig.json 3ms (unchanged)
+extensions/src/mcp-app/widget/virtual.d.ts 6ms
+extensions/src/mcp-app/widget/vite.config.ts 28ms
+extensions/src/mcp-app/widget/widget.css 20ms (unchanged)
+extensions/src/mcp-app/widget/Widget.tsx 85ms
+extensions/qa/mcp-widget/browser.mjs 40ms
+extensions/qa/mcp-widget/controller.nodecheck.ts 47ms
+extensions/qa/mcp-widget/fixture-entry.tsx 8ms
+extensions/qa/mcp-widget/host-entry.tsx 23ms
+extensions/qa/mcp-widget/packet.mjs 17ms
+extensions/qa/mcp-widget/retained-schema.ts 7ms
+extensions/qa/mcp-widget/server.ts 16ms
+extensions/qa/mcp-widget/tsconfig.json 2ms (unchanged)

@@ -1,0 +1,9 @@
+{
+  "resourceUri": "ui://tadazz/quiz-preview/v1.html",
+  "mimeType": "text/html;profile=mcp-app",
+  "sdk": "@modelcontextprotocol/ext-apps@2.1.0",
+  "bytes": 2040068,
+  "sha256": "d276cc4ec3f75103fea467fb45a315a9783e0562fd6f5d625f7d6d8692e69514",
+  "admission": "candidate-only; V1 unavailable unchanged",
+  "externalConnections": []
+}
