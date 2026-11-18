@@ -1,0 +1,146 @@
+{
+  "status": "DOC_STATIC_CHECK_PASS",
+  "acceptedSourceCommit": "81d5b8f7c0bd3931982c2b0d5a3a13b86e523a8c",
+  "acceptedModuleHashesUnchanged": 23,
+  "planSha256": "283f7f3c1be2925354533d87d516fc08992d2b5c5f135358c235a092dc7afa2b",
+  "existingSourceAnchors": [
+    {
+      "path": "extensions/src/presentation/index.ts",
+      "sha256": "7c74d5e08915ebcd308ab90919908f69cb36ca36f60231677a0009f0196299c4",
+      "anchors": [
+        "TadazzV4Stage as ShowStage",
+        "TadazzV4StageAdapter as StageRendererAdapter"
+      ]
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/TadazzV4StageAdapter.tsx",
+      "sha256": "3d0a105f3fdc7e9fd8752868f044101592fdfdd712e88e145d3deb08c2e17baa",
+      "anchors": [
+        "export const TadazzV4StageAdapter",
+        "Date.now()",
+        "onSelectOption",
+        "fitRevision"
+      ]
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/TadazzStage.tsx",
+      "sha256": "e1a640bfef6bde4d6f06331d9a409e204fd75a02db1fc7ad4c3e0db99ef5f23d",
+      "anchors": [
+        "export interface StageQuestion",
+        "number: number",
+        "export interface TadazzStageHandle",
+        "presentOptions(data: StageQuestion)",
+        "lockVoting(): Promise<void>"
+      ]
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/presentation-scene.ts",
+      "sha256": "7d217e925df2cb8792a73051b53583e7f0d2605a9457bbb72bddfc6912b9f240",
+      "anchors": [
+        "export type ShowScene",
+        "totalPlayers: number"
+      ]
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/show-director.ts",
+      "sha256": "361a7d69bf5ee6f8270aaf420010324f2e6abdd96856340e9fd7fa944b278e78",
+      "anchors": [
+        "function planTransition(",
+        "export function collapseForResume",
+        "export async function runSteps",
+        "setTimeout(r, step.ms)"
+      ]
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/TadazzV4Stage.tsx",
+      "sha256": "5c3879c93825f6fa948d93500a5abbe370a0180777735d5229f0eb02f0cbe05d",
+      "anchors": [
+        "Math.min(vw / 1920, vh / 1080)",
+        "bubbles: false"
+      ]
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/motion.ts",
+      "sha256": "fcbca66b2200abae03cda5eef3aeebbbc0ef0027f9b1ba08d780a8823290257f",
+      "anchors": [
+        "no divergent setInterval stopwatch",
+        "root.querySelector"
+      ]
+    },
+    {
+      "path": "extensions/src/presentation/show-themes/context.tsx",
+      "sha256": "04dba6711e3d3aba83a43848aaef0e426196bd0dac8886f335c432afec7f3424",
+      "anchors": [
+        "export function ShowThemeScope",
+        "export function showThemeStyle",
+        "TADAZZ_PRODUCT_LOGO_URL"
+      ]
+    },
+    {
+      "path": "extensions/src/presentation/audio-cue-player.tsx",
+      "sha256": "4f8d964123a494c688ddf45947b0224e4efb3a1e8367f415bbab57198f681d9a",
+      "anchors": [
+        "export function AudioPreferencesScope",
+        "useState(false)",
+        "export interface AudioControlState",
+        "window.addEventListener(\"tadazz:sfx\"",
+        "window.dispatchEvent(",
+        "window.addEventListener(\"tadazz:audio-unlock\""
+      ]
+    },
+    {
+      "path": "extensions/src/presentation/package-runtime/ThemeSandboxHost.tsx",
+      "sha256": "e870316ed8559cf1b579e666c9670370b1cabc5ce598915b02c0d34f1238556f",
+      "anchors": [
+        "roomId: publicState.roomId",
+        "document.head.appendChild(policy)",
+        "ORIGIN_INVALID"
+      ]
+    },
+    {
+      "path": "extensions/src/core/studio-timeline-schema.ts",
+      "sha256": "082c17efbfbf4015b0c3983faf1fb25713208c9af4604aebc6bfbd0893dd666d",
+      "anchors": [
+        "questionId: z.uuid()"
+      ]
+    },
+    {
+      "path": "extensions/src/core/show-library/projection.ts",
+      "sha256": "f328e0e7d1976052c7daf9affbbc488b41845b0ec0d54dd0557c6524e6367c60",
+      "anchors": [
+        "show-library:visual-assets-unavailable",
+        "assertBoundPreviewPlan"
+      ]
+    },
+    {
+      "path": "extensions/src/core/show-library/assets.ts",
+      "sha256": "d8b50b13328c6df1e026ec26879e275d837b289d83411240fcbdec533afbaaa0",
+      "anchors": [
+        "export function checkAssetReference",
+        "metadata-policy-only-requires-trusted-storage-authorization"
+      ]
+    },
+    {
+      "path": "extensions/src/core/show-library/preview-schemas.ts",
+      "sha256": "42fc1d5411b60626bec1a9022b64b21c1dba34eccff0973762b7dc9a89bc7095",
+      "anchors": [
+        "portVersion: z.literal(3)",
+        "identityRuleVersion: z.literal(2)"
+      ]
+    },
+    {
+      "path": "extensions/src/platform-ui/index.ts",
+      "sha256": "c338e82452747c6725d8e18b7e47e7063ec0dbfa7755a8d04a579b93f0b29863",
+      "anchors": [
+        "export * from \"./scope\"",
+        "export * from \"./portal\""
+      ]
+    }
+  ],
+  "tests": "NOT_RUN_DOCUMENT_ONLY",
+  "typecheck": "NOT_RUN_DOCUMENT_ONLY",
+  "build": "NOT_RUN_DOCUMENT_ONLY",
+  "uiCheck": "NOT_RERUN_DOCUMENT_ONLY_HISTORICAL_FAIL_RETAINED",
+  "serverAllocation": "NONE_RETURNED",
+  "createdUtc": "2026-11-15T06:52:12.110670+00:00"
+}

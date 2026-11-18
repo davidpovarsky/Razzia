@@ -1,0 +1,25 @@
+{
+  "format": "tadazz-historical-candidate-runtime-disposition",
+  "schemaVersion": 1,
+  "uiSourceCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+  "historicalInventoryCommit": "60ec000bd88c5096fdb2009ab0d9f2ff013f15ce",
+  "historicalCandidateIndexSha256": "07b72f09185b629c0aee8a73e1c0a523b8963c33af4b920bbfeb2c744d274d90",
+  "historicalExampleSha256": "2e8d045e823d1eb36fd5a103a76e2d325e62a759a734300b9bbe1c55a9083320",
+  "historicalObservationCommit": "3ceabe6d87eaa1d482c6a9a57bb6f004733aca84",
+  "runtimeViability": "FAILED_PENDING_REPLACEMENT",
+  "failure": "Chromium failed before readiness because emitted JavaScript references Node process global",
+  "evidenceAuthority": {
+    "sourceThread": "01a1dd10-2ef0-73c2-9c65-569a843f44da",
+    "kind": "root-forwarded-actual-browser-result",
+    "rawBrowserLogReviewedByThisWorker": false,
+    "dependentCases": "UI owner stopped; failed/aborted evidence retained by UI owner"
+  },
+  "preservedResults": "UI source 12 tests / focused TypeScript / library-build results remain true; they did not establish browser execution",
+  "replacementRequirement": "UI-owned tracked browser-build configuration fix, new emitted output/index/hash and new browser evidence; no global process shim or emitted-string patch",
+  "exampleDisposition": "3ce examples remain unchanged historical observed candidate records, not executable acceptance",
+  "currentCoreSchemaStageCommit": "155c6b84df84c900872162e2a8c0267c90641153",
+  "schemaStage": "SOURCE_ONLY_TESTS_AND_TYPECHECK_NOT_RUN",
+  "activeCompiledPins": [],
+  "acceptedMetadataCore26": "UNCHANGED",
+  "createdUtc": "2026-11-15T10:28:27.226756+00:00"
+}
