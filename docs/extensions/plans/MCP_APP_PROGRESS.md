@@ -11,8 +11,8 @@ The owner explicitly authorized implementation, production deployment, private c
 - Active branch: `codex/tadazz-mcp-connect-20261118`.
 - Worktree: `C:/Users/DAVID/Code/Razzia-worktrees/tadazz-mcp-connect-20261118`.
 - Handoff base: `e1482c4219da52bd722e1823190355fa45abf78a`.
-- Pushed implementation milestone: `2a9db28b0a04cc58b9b459ef18ec4aa1ec6de470`.
-- Current committed controller checkpoint: `9c8b1081f07c608e03946deec14351d27d6cca57`; semantic/media/transport changes are still being qualified. Do not deploy this checkpoint as if it contains the later work.
+- Pushed integrated source checkpoint: `ac7f853b3882d9373631e3b34c3f3ad435d57662`. This is a source checkpoint, not a qualified deployment.
+- Preserved historical lint/controller baseline: `9c8b1081f07c608e03946deec14351d27d6cca57`. Current source still requires the narrow-layout fix, generated native-preview pins and final immutable qualification.
 - Production baseline: `tadazz:design-system-bff12a6`, image `sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346`.
 - Final source, image, backup, rollout and installed-host receipts will be recorded below after actual execution. A Windows pass is not an immutable Linux or production pass.
 
@@ -31,6 +31,14 @@ The owner explicitly authorized implementation, production deployment, private c
 | Parent                                   | OPEN                                   | Cross-host experience and remaining acceptance fulfilled                                                                     |
 
 See [independent review](phase3-takeover-20261117/INDEPENDENT_RELEASE_REVIEW_20261118.md), [native consent evidence](phase3-takeover-20261117/NATIVE_CONSENT_QUALIFICATION.md), [full-show ledger](phase3-takeover-20261117/FULL_SHOW_IMPLEMENTATION_LEDGER.md), and [production continuation](phase3-takeover-20261117/PRODUCTION_COMPLETION_20261118.md).
+
+## Completed development checkpoints
+
+- Model-only ordered question references passed the actual-issuer semantic suite (14/14); the legacy controller compatibility suite passed (13/13).
+- The Widget now has a native-consent save flow. Its exact URL/draft/revision boundary and Unicode checks passed (5/5); official App/AppBridge discovery and native-host initiation passed (2/2 in Windows). POSIX durable save/completion/replay remains part of the final Linux gate.
+- Studio accepts only exact reviewed built-in references with current byte validation and real account-owned source access. Its six source/asset checks passed without changing saved bytes or immutable revision.
+- The native image-card import boundary reduced the compiled Widget to 2,861,912 bytes under the unchanged 4,000,000-byte serialized-resource gate. The corrected development Chromium/Razzia pass completed 10/10 scenarios and 11/11 renderer fixtures, including text/image demo choices, original result frames, audio, replay, keyboard and four viewport/ratio combinations. The separately identified synthetic host-control fixture proved exact save retry keys, approved destination links and capability-gated fullscreen. This is a development pass, not the final 40-scenario Linux or installed-host qualification.
+- The native Studio preview runtime was generated successfully on Linux from ac7f853 with 1,735 tracked files unchanged except the generated pin manifest. Its Tailwind source inventory also covers the Widget viewport; therefore the corrected viewport must be checkpointed and the native pins regenerated before final qualification. Theme Builder, public preview and package installer remain off. Built-in read-only Studio preview is the only newly enabled site/API feature in the candidate.
 
 ## Public protocol and exact clients
 
@@ -90,14 +98,14 @@ Final host receipts record the exact SDK versions, browser versions, source mani
 - Mutations require the exact revision and stable idempotency key. A successful edit acknowledgement is a private draft update; library save additionally requires the actual first-party consent flow.
 - Built-in media is accepted only through the reviewed manifest, exact asset hash/path/size/theme/purpose and current file identities. JSON reference export is a separate explicit permission; it does not authorize binary redistribution or arbitrary tenant media.
 - Existing account rate limits remain 120 reads and 30 mutations per minute. The browser harness is paced; production limits are not raised to obtain a test pass.
-- Static UI resource serialization is bounded by the existing 4 MiB response gate. Full-show frames, inputs, exports and media streams retain their independent schema/byte limits.
+- Static UI resource serialization is bounded by the existing 4,000,000-byte response gate. Full-show frames, inputs, exports and media streams retain their independent schema/byte limits.
 - Audit records capture operation kinds/IDs/digests and timings, not authorization headers, signing keys, raw customer drafts or passwords. Production raw logs and backup content must not be copied into Git/chat.
 - No automatic data-deletion promise is made. Retention/deletion of durable drafts and saved native games follows explicit account/operator handling; reconnect/revoke tests must not delete customer state.
 
 ## Reproducible release gate
 
-1. Commit the final integrated source with `packages/**` unchanged. Preserve all old failures/evidence and the immutable lint baseline source.
-2. Run `extensions/qa/phase3-recovery/linux-verify.py native-launch` on that exact HEAD. This includes the expanded HTTP/issuer/semantic matrix, strict new-code checks, an explicit historical lint comparison, widget/backend/site builds and the separate production-image launcher.
+1. Commit an integrated source checkpoint with `packages/**` unchanged. On an isolated Linux snapshot, run the existing `extensions/qa/build-application-preview.mjs` in explicit generation mode. Verify that only `extensions/src/core/show-library/application-preview-build.json` changed, copy that manifest back with byte/hash readback, and commit the pins plus any finished UI fixes. Preserve all old failures/evidence and the immutable lint baseline source.
+2. Run `extensions/qa/phase3-recovery/linux-verify.py native-launch` on that exact HEAD. This uses `--verify-manifest` for the native Studio renderer, verifies its packaged web bytes, and includes the expanded HTTP/issuer/semantic matrix, strict new-code checks, an explicit historical lint comparison, widget/backend/site builds and the separate production-image launcher.
 3. Run `extensions/qa/phase3-native-consent/browser-verify.py <SOURCE_RUN>`, `extensions/qa/phase3-full-show/linux-browser-verify.py <SOURCE_RUN>`, and `extensions/qa/phase3-native-consent/proxy-verify.py --source-run <SOURCE_RUN> --immutable` against the same compiled inputs. The proxy gate must prove protected URL/query/Referer exclusion on success, denial and upstream failure, with positive ordinary-log controls. Recovery qualification has its own command and receipt.
 4. Copy and hash-check all five outer receipts: host, launch, consent browser, full-show browser and immutable proxy. Stage with `extensions/deployment/stage-mcp-site.py` including `--proxy-receipt`; the host receipt may also represent the web receipt only under its exact-source/gate identity check.
 5. Use `extensions/deployment/deploy-mcp-site.py --action qualify-backup --qualify-candidate` with exact source/image/container/config pins. The private archive must restore byte-for-byte with modes and SQLite validation, and the candidate must boot on that isolated restored clone.
@@ -132,4 +140,4 @@ Sanitized applied receipt: `/var/tmp/tadazz-caddy-privacy-candidate-20261118-736
 
 ## Final execution receipts
 
-Pending: final integrated commit, Linux native/launch/browser/recovery, stage/image, private restore qualification, live rollout/observation, private plugin URL, ChatGPT/Claude E2E, and corresponding Asana readback.
+Pending: native-preview pins and final source commit, Linux native/launch/browser/recovery, stage/image, private restore qualification, live rollout/observation, private plugin URL, ChatGPT/Claude E2E, and corresponding Asana readback.

@@ -444,6 +444,35 @@ def verify_fullshow(receipt, revision, manifest_pin, widget):
          "FULL_SHOW_SCENARIO_MISSING")
     verify_renderer_fixtures(inner, widget)
     verify_demo_answer_observations(inner)
+    verify_host_control_observations(inner)
+
+
+def verify_host_control_observations(inner):
+    expected = {(engine, theme) for engine in ("chromium", "webkit")
+                for theme in ("tadazz-classic", "razzia-original")}
+    seen = set()
+    for item in inner.get("observations", []):
+        if item.get("proof") != "synthetic-host-ui-control-fixture":
+            continue
+        identity = (item.get("engine"), item.get("theme"))
+        need(identity in expected and identity not in seen, "HOST_CONTROL_FIXTURE_IDENTITY")
+        seen.add(identity)
+        requests = item.get("saveRequests")
+        need(isinstance(requests, list) and len(requests) == 3 and requests[0] == requests[1] == requests[2],
+             "HOST_CONTROL_SAVE_RETRY_CHANGED")
+        value = requests[0]
+        need(isinstance(value, dict) and set(value) == {
+            "contractVersion", "draftId", "expectedRevision", "idempotencyKey", "intent"
+        } and value["contractVersion"] == "0.1.0" and value["intent"] == "createNew" and
+             type(value["expectedRevision"]) is int and value["expectedRevision"] > 0 and
+             all(isinstance(value[key], str) and re.fullmatch(r"[A-Za-z0-9_-]{16,128}", value[key])
+                 for key in ("draftId", "idempotencyKey")), "HOST_CONTROL_SAVE_REQUEST_INVALID")
+        need(item.get("openedLinks") == [ORIGIN + "/studio/native-save-consent/" + "S" * 54,
+                                        ORIGIN + "/manager/quizz/" + "Q" * 21] and
+             item.get("displayRequests") == ["fullscreen"] and
+             item.get("unsupportedFeaturesHiddenOrDisabled") is True and item.get("draftUnchanged") is True,
+             "HOST_CONTROL_ACTION_PROOF_MISSING")
+    need(seen == expected, "HOST_CONTROL_FIXTURES_INCOMPLETE")
 
 
 def verify_demo_answer_observations(inner):
@@ -555,7 +584,7 @@ def running_snapshot():
 
 SMOKE_JS = r'''
 const http=require('node:http'),fs=require('node:fs'),crypto=require('node:crypto');
-const origin='https://tadazz.com',routes={};
+const origin='https://tadazz.com',routes={},nativeFiles=NATIVE_PREVIEW_FILES;
 function req(path,status=200,method='GET',body){return new Promise((resolve,reject)=>{
 const q=http.request({host:'127.0.0.1',port:3000,path,method,
  headers:{Host:'tadazz.com',...(body?{'Content-Type':'text/plain;charset=UTF-8'}:{})},timeout:2500},r=>{
@@ -579,13 +608,21 @@ for(const p of ['/studio/oauth-consent?oauth_request=stage-smoke','/studio/nativ
 const index=fs.readFileSync('/app/web/index.html');ok(hash((await req('/')).body)===hash(index));
 const assets=[...new Set([...index.toString().matchAll(/(?:src|href)=["'](\/assets\/[^"'?#]+)/g)].map(m=>m[1]))];ok(assets.length>0&&assets.length<100);
 for(const p of assets)ok(hash((await req(p)).body)===hash(fs.readFileSync('/app/web'+p)));
+ok(process.env.TADAZZ_INLINE_GAME_PREVIEW_ENABLED==='true');
+for(const f of nativeFiles){
+ const b=fs.readFileSync('/app/web/tadazz-application-runtime/'+f.name);ok(b.length===f.bytes&&hash(b)===f.sha256);
+ const r=await req('/tadazz-application-runtime/'+f.name);ok(r.body.length===f.bytes&&hash(r.body)===f.sha256);
+ await req('/api/extensions/preview/runtime/'+f.sha256+'/'+f.name,401);
+ await req('/api/extensions/preview/public-runtime/'+f.sha256+'/'+f.name,404);
+}
+const nativeApplicationPreview={files:nativeFiles,inlinePreviewEnabled:true,packagedHttpBytes:true,privateRuntimeUnauthorized:true,publicRuntimeDisabled:true,authenticatedStudioRender:false};
 const query='/ws/?EIO=4&transport=polling&t=stage-smoke';const packet=(await req(query)).body.toString();ok(packet[0]==='0');const handshake=JSON.parse(packet.slice(1));ok(/^[A-Za-z0-9_-]{1,256}$/.test(handshake.sid));await req(query+'&sid='+handshake.sid,200,'POST','1');
-process.stdout.write(JSON.stringify({ok:true,routes,engineIoOpenClose:true,indexAndEntryAssets:assets.length}));
+process.stdout.write(JSON.stringify({ok:true,routes,engineIoOpenClose:true,indexAndEntryAssets:assets.length,nativeApplicationPreview}));
 })().catch(()=>{process.stdout.write(JSON.stringify({ok:false,routes}));process.exitCode=1});
 '''
 
 
-def synthetic_smoke(stage, image, revision, suffix):
+def synthetic_smoke(stage, image, revision, suffix, native_files):
     private = stage / "evidence/synthetic-config"
     runtime = private / "extensions/mcp-service/runtime.json"
     key = run(["openssl", "genpkey", "-algorithm", "ed25519"])
@@ -600,6 +637,7 @@ def synthetic_smoke(stage, image, revision, suffix):
     name = "tadazz-mcp-stage-smoke-" + suffix
     environment = {"CONFIG_PATH": "/app/config", "SOCKET_PORT": "3001", "NODE_ENV": "production",
                    "TMPDIR": "/tmp", "TADAZZ_MCP_SERVICE_ENABLED": "true", "TADAZZ_ACCOUNTS_ENABLED": "true",
+                   "TADAZZ_INLINE_GAME_PREVIEW_ENABLED": "true",
                    "JWT_SECRET": "synthetic-stage-" + secrets.token_hex(32),
                    "RESEND_API_KEY": "qa-no-network", "TADAZZ_AUTH_EMAIL_FROM": "qa@example.invalid"}
     command = ["docker", "create", "--pull=never", "--name", name, "--network", "none",
@@ -623,9 +661,14 @@ def synthetic_smoke(stage, image, revision, suffix):
              "SMOKE_MOUNTS_NOT_ISOLATED")
         run(["docker", "start", identifier])
         probe = json.loads(run(["docker", "exec", "-i", identifier, "node", "-"],
-                               input=SMOKE_JS.encode(), timeout=65))
+                               input=SMOKE_JS.replace("NATIVE_PREVIEW_FILES", json.dumps(native_files)).encode(), timeout=65))
         result.update(probe)
         need(result["ok"] is True, "SYNTHETIC_SMOKE_FAILED")
+        need(result.get("nativeApplicationPreview") == {
+            "files": native_files, "inlinePreviewEnabled": True, "packagedHttpBytes": True,
+            "privateRuntimeUnauthorized": True, "publicRuntimeDisabled": True,
+            "authenticatedStudioRender": False,
+        }, "SYNTHETIC_NATIVE_PREVIEW_NOT_QUALIFIED")
     finally:
         if docker_inspect("container", identifier)["State"]["Running"]:
             run(["docker", "stop", "--time", "30", identifier], timeout=40)
@@ -819,7 +862,7 @@ RUN chmod -R a+rX /app/web && chmod 600 /app/socket/index.cjs /app/mcp/full-show
         need(built_image.get("Os") == "linux" and built_image.get("Architecture") == "arm64", "BUILT_IMAGE_PLATFORM_MISMATCH")
         verify_source(inputs["source"], inputs["manifest"])
         need(tree(inputs["webRoot"]) == inputs["webFiles"], "WEB_CHANGED_DURING_BUILD")
-        smoke = synthetic_smoke(stage, built_image["Id"], args.revision, suffix)
+        smoke = synthetic_smoke(stage, built_image["Id"], args.revision, suffix, inputs["nativeApplication"]["files"])
         need({name: spec for name, spec in tree(stage).items() if name in payload} == payload,
              "STAGED_PAYLOAD_CHANGED")
         stage_manifest = {
@@ -950,6 +993,16 @@ def self_test_semantic_gates():
         for engine in ("chromium", "webkit") for family in ("tadazz-classic", "razzia-original")
         for surface in ("text", "five-pictures")
     ]
+    inner["observations"] += [
+        {"engine": engine, "theme": family, "proof": "synthetic-host-ui-control-fixture",
+         "saveRequests": [{"contractVersion": "0.1.0", "draftId": "synthetic-draft-id-0001",
+                           "expectedRevision": 6, "idempotencyKey": "synthetic-save-key-0001", "intent": "createNew"}
+                          for _ in range(3)],
+         "openedLinks": [ORIGIN + "/studio/native-save-consent/" + "S" * 54,
+                         ORIGIN + "/manager/quizz/" + "Q" * 21],
+         "displayRequests": ["fullscreen"], "unsupportedFeaturesHiddenOrDisabled": True, "draftUnchanged": True}
+        for engine in ("chromium", "webkit") for family in ("tadazz-classic", "razzia-original")
+    ]
     full = {"sha": revision, "exit": 0, "network": "none", "sourceReadOnly": True,
             "allSourceHashesVerifiedBeforeAfter": True, "allWidgetHashesVerifiedBeforeAfter": True,
             "sdkCacheHashesVerifiedBeforeAfter": True, "widgetManifestSha256": pin,
@@ -959,7 +1012,7 @@ def self_test_semantic_gates():
         value = json.loads(json.dumps(full))
         observations = value["fullShow"]["observations"]
         if failure == "missing":
-            observations.pop()
+            observations.pop(0)
         elif failure == "actual-vote":
             observations[0]["noVoteMutation"] = False
         else:
@@ -970,6 +1023,22 @@ def self_test_semantic_gates():
             witnessed.append("demo-answer-" + failure)
         else:
             raise AssertionError("Invalid demo answer proof accepted: " + failure)
+    for failure in ("missing", "changed-retry", "unsafe-link"):
+        value = json.loads(json.dumps(full))
+        observations = value["fullShow"]["observations"]
+        target = next(item for item in observations if item.get("proof") == "synthetic-host-ui-control-fixture")
+        if failure == "missing":
+            observations.remove(target)
+        elif failure == "changed-retry":
+            target["saveRequests"][2]["idempotencyKey"] = "different-synthetic-key"
+        else:
+            target["openedLinks"][1] = "https://example.invalid/foreign"
+        try:
+            verify_fullshow(value, revision, pin, widget)
+        except GateError:
+            witnessed.append("host-controls-" + failure)
+        else:
+            raise AssertionError("Invalid synthetic host UI proof accepted: " + failure)
     for failure in ("missing", "duplicate", "issuer-claim", "wrong-artifact", "changed-theme", "wrong-native-path", "missing-native-port", "failed", "raw-frame"):
         value = json.loads(json.dumps(full))
         fixtures = value["fullShow"]["rendererFixtures"]

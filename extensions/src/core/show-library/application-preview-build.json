@@ -1,6 +1,46 @@
 {
   "format": "tadazz-application-preview-build",
-  "available": false,
-  "pins": [],
-  "files": []
+  "available": true,
+  "files": [
+    {
+      "name": "renderer.mjs",
+      "bytes": 2390392,
+      "sha256": "856055e0ecd551ab65396b5fbf3b74867a900c55946a774bdc202cdc31990efb"
+    },
+    {
+      "name": "renderer.css",
+      "bytes": 284338,
+      "sha256": "f7b87e1510dd52c751be7f14f1033397236c7a4cc43c2ab274f93c8193d71f2e"
+    }
+  ],
+  "pins": [
+    {
+      "portVersion": 3,
+      "identityRuleVersion": 2,
+      "registry": {
+        "id": "tadazz-native-application",
+        "version": "1.0.0"
+      },
+      "registrySha256": "83490138c3b1a0b7fba807c1834509053d4f5a32ae2b9be30a3c0f5878c6ebc0",
+      "renderer": {
+        "id": "tadazz-classic-stage",
+        "version": "1.0.0"
+      },
+      "rendererBuildSha256": "38dfb38784dd6e81fb09218ec4a928bb645a56e0b2e136686104a5dabb4e9e30"
+    },
+    {
+      "portVersion": 3,
+      "identityRuleVersion": 2,
+      "registry": {
+        "id": "tadazz-native-application",
+        "version": "1.0.0"
+      },
+      "registrySha256": "83490138c3b1a0b7fba807c1834509053d4f5a32ae2b9be30a3c0f5878c6ebc0",
+      "renderer": {
+        "id": "razzia-native-stage",
+        "version": "1.0.0"
+      },
+      "rendererBuildSha256": "38dfb38784dd6e81fb09218ec4a928bb645a56e0b2e136686104a5dabb4e9e30"
+    }
+  ]
 }

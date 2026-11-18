@@ -99,6 +99,8 @@ export async function runLayoutDiagnostic({
           ch: node.clientHeight,
           sw: node.scrollWidth,
           sh: node.scrollHeight,
+          css: node.getAttribute("style"),
+          computed: Object.fromEntries(["width","height","max-width","max-height","min-width","min-height","transform","position"].map(key=>[key,getComputedStyle(node).getPropertyValue(key)])),
         }
       }
       return {

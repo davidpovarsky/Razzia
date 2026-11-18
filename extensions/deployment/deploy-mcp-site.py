@@ -259,6 +259,40 @@ def socket_probe(origin):
     request(origin, query + "&sid=" + packet["sid"], method="POST", data=b"1", max_bytes=65536)
 
 
+def native_preview_files(stage):
+    manifest = read_json(plain_path(stage / "stage-manifest.json", directory=False))
+    files = manifest.get("nativeApplicationPreview", {}).get("files")
+    require(isinstance(files, list) and len(files) == 2 and
+            {item.get("name") for item in files} == {"renderer.mjs", "renderer.css"},
+            "NATIVE_PREVIEW_FILES_MISSING")
+    for item in files:
+        require(isinstance(item.get("bytes"), int) and 0 < item["bytes"] <= 10_000_000 and
+                isinstance(item.get("sha256"), str) and HEX_RE.fullmatch(item["sha256"]),
+                "NATIVE_PREVIEW_FILE_PIN_INVALID")
+        file = plain_path(stage / "web/tadazz-application-runtime" / item["name"], directory=False)
+        require(file.stat().st_size == item["bytes"] and sha256(file) == item["sha256"],
+                "NATIVE_PREVIEW_PACKAGED_BYTES_CHANGED")
+    return files
+
+
+def native_preview_proof(files):
+    return {"files": files, "inlinePreviewEnabled": True, "packagedHttpBytes": True,
+            "privateRuntimeUnauthorized": True, "publicRuntimeDisabled": True,
+            "authenticatedStudioRender": False}
+
+
+def native_preview_probes(origin, stage):
+    files = native_preview_files(stage)
+    for item in files:
+        response = request(origin, "/tadazz-application-runtime/" + item["name"], max_bytes=item["bytes"])
+        require(len(response["body"]) == item["bytes"] and
+                hashlib.sha256(response["body"]).hexdigest() == item["sha256"],
+                "NATIVE_PREVIEW_HTTP_BYTES_MISMATCH")
+        request(origin, "/api/extensions/preview/runtime/" + item["sha256"] + "/" + item["name"], 401)
+        request(origin, "/api/extensions/preview/public-runtime/" + item["sha256"] + "/" + item["name"], 404)
+    return native_preview_proof(files)
+
+
 def mcp_probes(origin, stage, config, public_key_x):
     resource, _ = json_probe(origin, "/.well-known/oauth-protected-resource")
     require(resource.get("resource") == PUBLIC_ORIGIN + "/mcp" and resource.get("authorization_servers") == [PUBLIC_ORIGIN + "/oauth"], "RESOURCE_METADATA_MISMATCH")
@@ -292,6 +326,7 @@ def mcp_probes(origin, stage, config, public_key_x):
         require(hashlib.sha256(request(origin, path, max_bytes=8 * 1024**2)["body"]).hexdigest() == sha256(local), "WEB_ASSET_ARTIFACT_MISMATCH")
     socket_probe(origin)
     return {"oauthAndMcp": True, "consentGetHead": True, "indexAndEntryAssets": len(assets), "engineIoOpenClose": True,
+            "nativeApplicationPreview": native_preview_probes(origin, stage),
             "installedHostTest": False, "authenticatedGameplayTest": False}
 
 
@@ -484,6 +519,7 @@ def clone_boot(args, original, image, work, run_id, result):
     """Start only the private restored clone, with network NONE and no ports."""
     restored = plain_path(work / "restore-private", root_owned=True)
     validate_config(args, restored)
+    native_files = native_preview_files(work.parent)
     payload = replacement_payload(original, image, args.revision, run_id)
     payload["HostConfig"] = {
         "NetworkMode": "none", "Binds": [str(restored) + ":/app/config:rw"],
@@ -507,17 +543,19 @@ def clone_boot(args, original, image, work, run_id, result):
         program = r'''
 const origin = "https://tadazz.com";
 const expectedX = EXPECTED_PUBLIC_X;
+const nativeFiles = NATIVE_PREVIEW_FILES;
+const crypto = require("node:crypto");
 const fail = () => { throw new Error("clone probe failed"); };
-function req(path, status=200) {
+function req(path, status=200, limit=1048576) {
   // Undici may replace caller Host with the loopback transport host. The raw
   // request exercises the exact production Host boundary through local Nginx.
   return new Promise((resolve,reject)=>{
     const q=require("node:http").request({host:"127.0.0.1",port:3000,path,
       headers:{Host:"tadazz.com"},timeout:2500},r=>{
       const chunks=[];let size=0;
-      r.on("data",b=>{size+=b.length;if(size>1048576){q.destroy();reject(Error("probe limit"));}else chunks.push(b);});
+      r.on("data",b=>{size+=b.length;if(size>limit){q.destroy();reject(Error("probe limit"));}else chunks.push(b);});
       r.on("end",()=>{if(r.statusCode!==status){reject(Error("probe status"));return;}
-        const body=Buffer.concat(chunks);resolve({json:async()=>JSON.parse(body),
+        const body=Buffer.concat(chunks);resolve({body,json:async()=>JSON.parse(body),
           headers:{get:name=>r.headers[name.toLowerCase()]??null}});});
       r.on("error",reject);
     });
@@ -540,16 +578,26 @@ function req(path, status=200) {
   if(mcp.headers.get("www-authenticate")!=='Bearer resource_metadata="'+origin+'/.well-known/oauth-protected-resource", scope="tadazz.catalog.read"')fail();
   const consent=await req("/studio/oauth-consent?oauth_request=isolated-restore-proof");
   if(consent.headers.get("x-frame-options")!=="DENY"||consent.headers.get("cache-control")!=="no-store")fail();
-  process.stdout.write(JSON.stringify({ok:true}));
+  if(process.env.TADAZZ_INLINE_GAME_PREVIEW_ENABLED!=="true")fail();
+  for(const f of nativeFiles){
+    const r=await req("/tadazz-application-runtime/"+f.name,200,f.bytes);
+    if(r.body.length!==f.bytes||crypto.createHash("sha256").update(r.body).digest("hex")!==f.sha256)fail();
+    await req("/api/extensions/preview/runtime/"+f.sha256+"/"+f.name,401);
+    await req("/api/extensions/preview/public-runtime/"+f.sha256+"/"+f.name,404);
+  }
+  const nativeApplicationPreview={files:nativeFiles,inlinePreviewEnabled:true,packagedHttpBytes:true,privateRuntimeUnauthorized:true,publicRuntimeDisabled:true,authenticatedStudioRender:false};
+  process.stdout.write(JSON.stringify({ok:true,nativeApplicationPreview}));
 })().catch(()=>{process.stdout.write(JSON.stringify({ok:false}));process.exitCode=1;});
-'''.replace("EXPECTED_PUBLIC_X", json.dumps(args.expected_jwk_x))
+'''.replace("EXPECTED_PUBLIC_X", json.dumps(args.expected_jwk_x)).replace("NATIVE_PREVIEW_FILES", json.dumps(native_files))
         execution = docker_api("POST", "/containers/" + container_id + "/exec", {
             "AttachStdout": True, "AttachStderr": True, "Tty": False, "Cmd": ["node", "-e", program],
         })
         output = docker_bytes("POST", "/exec/" + execution["Id"] + "/start", {"Detach": False, "Tty": False}, limit=65536)
         status = docker_api("GET", "/exec/" + execution["Id"] + "/json")
         require(not status["Running"] and status["ExitCode"] == 0, "RESTORED_CANDIDATE_BOOT_FAILED")
-        require(json.loads(decode_logs(output)) == {"ok": True}, "RESTORED_CANDIDATE_PROBES_FAILED")
+        require(json.loads(decode_logs(output)) == {"ok": True, "nativeApplicationPreview": native_preview_proof(native_files)},
+                "RESTORED_CANDIDATE_PROBES_FAILED")
+        result["nativeApplicationPreview"] = native_preview_proof(native_files)
         result["passed"] = True
     finally:
         if inspect(container_id)["State"]["Running"]:
@@ -564,6 +612,8 @@ def validate_qualification(args, original, image):
     require(stat.S_IMODE(file.stat().st_mode) == 0o600 and HEX_RE.fullmatch(args.qualification_sha256) and sha256(file) == args.qualification_sha256, "QUALIFICATION_RECEIPT_PIN")
     receipt = read_json(file)
     require(receipt.get("success") is True and receipt.get("candidateCloneBoot", {}).get("passed") is True, "CANDIDATE_RESTORE_QUALIFICATION_NOT_PASSED")
+    require(receipt.get("candidateCloneBoot", {}).get("nativeApplicationPreview") ==
+            native_preview_proof(native_preview_files(Path(args.release_dir))), "NATIVE_PREVIEW_RESTORE_QUALIFICATION_MISSING")
     require(receipt.get("revision") == args.revision and receipt.get("image") == image["Id"] and receipt.get("sourceImage") == original["Image"] and receipt.get("sourceContainer") == original["Id"] and receipt.get("configSha256") == args.expected_config_sha256, "RESTORE_QUALIFICATION_IDENTITY")
     when = dt.datetime.fromisoformat(receipt["finishedAt"])
     age = (dt.datetime.now(dt.timezone.utc) - when).total_seconds()
@@ -652,6 +702,8 @@ def validate_stage(args):
     smoke = read_json(smoke_file)
     require(smoke.get("image") == args.image_sha256, "STAGE_SMOKE_IMAGE_MISMATCH")
     require(smoke.get("ok") is True and smoke.get("sourceSha") == args.revision and smoke.get("productionTouched") is False and smoke.get("customerMountUsed") is False and smoke.get("network") == "none", "SYNTHETIC_SMOKE_NOT_QUALIFIED")
+    require(smoke.get("nativeApplicationPreview") == native_preview_proof(native_preview_files(stage)),
+            "STAGE_NATIVE_PREVIEW_NOT_QUALIFIED")
     return stage
 
 

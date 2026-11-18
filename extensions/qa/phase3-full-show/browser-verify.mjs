@@ -1,4 +1,5 @@
 import { runLayoutDiagnostic } from "./layout-diagnostic.mjs"
+import { verifyHostControls } from "./host-controls.mjs"
 import { execFileSync } from "node:child_process"
 // Real issuer + repository + MCP SDK + AppBridge, isolated browsers and public asset bytes.
 // No production accounts, hosts, files or privileges are used by this harness.
@@ -689,6 +690,33 @@ try {
                 evidence,
                 theme,
                 engine,
+              }),
+            )
+          },
+        )
+        await context.close()
+        continue
+      }
+      if (process.env.TADAZZ_FULL_SHOW_DIAGNOSTIC === "host-controls") {
+        await run(
+          `${engine} / ${theme} synthetic host UI controls`,
+          async () => {
+            await page.goto(`${base}/host?scenario=${scenario.id}`)
+            await page.locator("html[data-host-ready=true]").waitFor()
+            await page
+              .frameLocator("iframe")
+              .locator("[data-full-show-chapter]")
+              .waitFor()
+            observations.push(
+              await verifyHostControls({
+                page,
+                base,
+                scenario,
+                engine,
+                theme,
+                evidence,
+                readRecord: () =>
+                  scenario.repository.get(principal, scenario.record.draftId),
               }),
             )
           },
@@ -1698,6 +1726,17 @@ try {
           assert.equal(unlabeled, 0)
           await page.setViewportSize({ width: 1280, height: 1200 })
           await iframe.getByTestId("full-show-aspect").selectOption("16 / 9")
+          const hostControls = await verifyHostControls({
+            page,
+            base,
+            scenario,
+            engine,
+            theme,
+            evidence,
+            readRecord: () =>
+              scenario.repository.get(principal, scenario.record.draftId),
+          })
+          observations.push(hostControls)
           observations.push({
             engine,
             theme,

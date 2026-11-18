@@ -15,6 +15,7 @@ export function NativeStageViewportV3({
   const viewport = useRef<HTMLDivElement>(null)
   const canvas = useRef<HTMLDivElement>(null)
   const [factor, setFactor] = useState(1)
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
 
   useLayoutEffect(() => {
     const outer = viewport.current
@@ -29,6 +30,7 @@ export function NativeStageViewportV3({
     let size = { width: 0, height: 0 }
     let currentFactor = 1
     let attempts = 0
+    let settlingFrames = 0
     const schedule = () => {
       cancelAnimationFrame(frame)
       frame = requestAnimationFrame(measure)
@@ -52,12 +54,34 @@ export function NativeStageViewportV3({
         size = { width, height }
         currentFactor = 1
         attempts = 0
+        settlingFrames = 0
+        outer.dataset.fitReady = "false"
+        setDimensions(size)
         setFactor(1)
         schedule()
 
         return
       }
 
+      // React and the browser must commit the requested logical canvas before
+      // its overflow can inform another fit attempt. Pixel dimensions avoid
+      // percentage-size resolution inside a size-contained native surface.
+      if (
+        Math.abs(inner.clientWidth - width * currentFactor) > 2 ||
+        Math.abs(inner.clientHeight - height * currentFactor) > 2
+      ) {
+        settlingFrames += 1
+
+        if (settlingFrames >= 8) {
+          onUnavailable()
+        } else {
+          schedule()
+        }
+
+        return
+      }
+
+      settlingFrames = 0
       const native = inner.querySelector<HTMLElement>(
         '[data-testid="native-razzia-preview-v2"]',
       )
@@ -147,8 +171,8 @@ export function NativeStageViewportV3({
       <div
         ref={canvas}
         style={{
-          width: `${factor * 100}%`,
-          height: `${factor * 100}%`,
+          width: dimensions.width ? dimensions.width * factor : "100%",
+          height: dimensions.height ? dimensions.height * factor : "100%",
           position: "absolute",
           inset: "0 auto auto 0",
           transform: `scale(${1 / factor})`,
