@@ -1,6 +1,7 @@
 import assert from "node:assert/strict"
 import { after, before, test } from "node:test"
 import { createHash, generateKeyPairSync, randomBytes } from "node:crypto"
+import { z } from "zod"
 import {
   existsSync,
   readFileSync,
@@ -201,6 +202,76 @@ test("exact client/redirect/resource/PKCE/scope admission rejects unsafe authori
   const response = await request("/oauth/authorize?client_id=a&client_id=b")
   assert.equal(response.status, 400)
   assert.equal(response.headers.get("location"), null)
+})
+test("ChatGPT authorization hints are ignored without altering exact client, PKCE, scopes or grant", async () => {
+  const hint = "synthetic-user@example.invalid"
+  const extras = {
+    prompt: "consent",
+    login_hint: hint,
+    id_token_hint: "synthetic-id-token",
+    target_flow: "chatgpt_siwc",
+  }
+  const begun = await begin(extras)
+  assert.equal(begun.response.status, 302)
+  const inspect = await request(
+    "/oauth/inspect",
+    "POST",
+    { ticket: begun.ticket },
+    f.sessions[0],
+  )
+  assert.equal(inspect.status, 200)
+  const responseText = await inspect.text()
+  assert.equal(responseText.includes(hint), false)
+  assert.equal(responseText.includes("synthetic-id-token"), false)
+  assert.equal(responseText.includes("chatgpt_siwc"), false)
+  const review = z
+    .object({ scopes: z.array(z.string()), proof: z.string() })
+    .parse(JSON.parse(responseText) as unknown)
+  assert.deepEqual(review.scopes, scope.split(" "))
+  const allowed = await request(
+    "/oauth/approve",
+    "POST",
+    { ticket: begun.ticket, proof: review.proof, decision: "allow" },
+    f.sessions[0],
+  )
+  assert.equal(allowed.status, 200)
+  const approved = z
+    .object({ redirectUrl: z.string() })
+    .parse((await allowed.json()) as unknown)
+  const redirect = new URL(approved.redirectUrl)
+  assert.equal(redirect.origin + redirect.pathname, redirectUri)
+  assert.equal(redirect.searchParams.get("state"), begun.state)
+  assert.equal(redirect.searchParams.get("iss"), config.issuer)
+  const authorizationCode = redirect.searchParams.get("code")
+  assert.ok(authorizationCode)
+  const tokenResponse = await request("/oauth/token", "POST", {
+    grant_type: "authorization_code",
+    client_id: clientId,
+    code: authorizationCode,
+    code_verifier: begun.verifier,
+    redirect_uri: redirectUri,
+    resource: config.resource,
+  })
+  assert.equal(tokenResponse.status, 200)
+  const tokens = z
+    .object({ access_token: z.string() })
+    .parse((await tokenResponse.json()) as unknown)
+  const principal = await issuer.verifyAccessToken(tokens.access_token)
+  assert.equal(principal.clientId, clientId)
+  assert.equal(principal.accountId, f.sessions[0].owner)
+  assert.equal(
+    (
+      await begin({
+        ...extras,
+        redirect_uri: "https://attacker.invalid/callback",
+      })
+    ).response.status,
+    400,
+  )
+  assert.equal(
+    (await begin({ ...extras, resource: config.issuer })).response.status,
+    400,
+  )
 })
 test("consent requires real manager identity, same origin and the exact account/session/ticket proof", async () => {
   const begun = await begin()
