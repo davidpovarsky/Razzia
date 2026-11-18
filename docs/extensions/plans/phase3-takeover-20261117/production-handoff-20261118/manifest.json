@@ -1,0 +1,37 @@
+{
+  "format": "tadazz-handoff-files",
+  "version": 1,
+  "applicationRevision": "e30133c7dfb03412cfb898705f1115d206548668",
+  "files": [
+    {
+      "name": "TADAZZ_PRODUCTION_HANDOFF_2026-11-18.md",
+      "bytes": 41853,
+      "sha256": "6aca5ad1f13f7983d938726d03dd94186386da3842bec6979b23d1a1d1f740c0"
+    },
+    {
+      "name": "release-evidence-summary.json",
+      "bytes": 37658,
+      "sha256": "2a0f964293b465cc450c86a4ffb35fc6e4de698fbf4f31532ab3e5f980a7e34d"
+    },
+    {
+      "name": "backup-and-provenance-review.json",
+      "bytes": 21365,
+      "sha256": "eea4fddad7978d0abbaa9704c7d8d8f8930b4cf5d25467a24b54f190ad68074c"
+    },
+    {
+      "name": "chatgpt-plugin-create-blocker.json",
+      "bytes": 872,
+      "sha256": "c7df029a3ce5772c32cd1d9b9ac50ed93522617678846ca7315ee0c5a33a3c5b"
+    },
+    {
+      "name": "asana-status-readback.json",
+      "bytes": 16229,
+      "sha256": "5285dc12ba459511749fb89a8b31fe3c83af6c33ce158cddcf57457def08951e"
+    },
+    {
+      "name": "claude-plan-limit.jpg",
+      "bytes": 13976,
+      "sha256": "065765ce345befeef4ccdf519800f80f545691ab72f81a38f7059d7051a54175"
+    }
+  ]
+}
