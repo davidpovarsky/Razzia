@@ -1,0 +1,11 @@
+# Real-game host acceptance — pre-edit ledger
+
+Baseline is isolated timer commit 0f64b7bf2a76d9f7f51ee74bc6dfcff1d5067a39, integrated by root as 2858d1292c73019817c6aed5ef6ffedefc1b1a78. Scope: Asana host presentation1220285573483365, keyboard1220285432942442, pause/resume1220285432942506, and directly related cleanup criteria supplied by the Asana auditor. Current work is actual-browser QA; no application edit is planned until an observed failure is diagnosed and its exact source seam is added here.
+
+Use a real Edge browser and actual manager/display/player connections on isolated frontend3190 and backend3191. Ports were reserved by root, verified free before start, and the frontend uses strictPort. Separate synthetic test configuration is used. Owned server PIDs are recorded for cleanup. Preserve the existing host-presentation.spec.ts assertions. No modification of packages/e2e/utils/fixtures.ts, which is separately owned by root.
+
+New scoped harness: packages/e2e/playwright.host-followup.config.ts changes only test browser channel, isolated URLs, serial execution, and evidence locations; it does not mock application DOM, fullscreen, media, sockets, or commands. The existing WebKit denial-only fixture is not selected in this Edge run. Any test adaptation will distinguish stale expectations from actual app defects and retain the original intent.
+
+## Existing browser test adaptation, before edit
+
+Observed healthy native lobby has accessible PIN/QR but not the old cinematic-only lobby test id. The existing host-presentation.spec.ts also predates the explicit November8 owner shortcut change recorded in docs/extensions/orchestration/handoffs/tomer/TZILA_HOST_CONTROLS_2026-11-08.md and docs/extensions/TADAZZ_LOBBY_HOST_GUIDE_2026-11-08.md. Preserve all fullscreen, same-game, toolbar-hide, display, viewport, pause and result assertions; use actual native accessible PIN/QR/player controls and the later double500ms shortcuts (Space pause,Enter end,Right next,R restart). Original Nov6 T/P/Shift mappings are superseded, not silently implemented. The baseline failure screenshot was opened and inspected. No application mutation is part of this adaptation. Add true fullscreen/no private dialog/tooltip checks, a real submitted browser vote, mobile screenshots, and socket connection continuity evidence.

@@ -1,0 +1,36 @@
+
+Running 1 test using 1 worker
+
+  x  1 [msedge] › tests\host-presentation.spec.ts:11:1 › same-window host presentation hides manager UI and controls authoritative pause (1.3m)
+
+
+  1) [msedge] › tests\host-presentation.spec.ts:11:1 › same-window host presentation hides manager UI and controls authoritative pause
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < 12000
+    Received:   18018
+
+      165 |   const displayLobbyElapsedMs = Date.now() - displayOpeningStartedAt
+      166 |   expect(displayLobbyElapsedMs).toBeGreaterThanOrEqual(7400)
+    > 167 |   expect(displayLobbyElapsedMs).toBeLessThan(12000)
+          |                                 ^
+      168 |   await display.screenshot({
+      169 |     path: join(evidenceDir, "lobby-display-1920x1080.png"),
+      170 |   })
+        at C:\Users\DAVID\Code\Razzia-worktrees\tadazz-editor-timer-20261118\packages\e2e\tests\host-presentation.spec.ts:167:33
+
+    Error: browserContext._wrapApiCall: file data stream has unexpected number of bytes
+
+    Error: End of central directory record signature not found. Either not a zip file, or file is truncated.
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\docs\extensions\plans\editor-hebrew-20261118\followups\host-presentation\playwright\host-presentation-same-win-421f5-ontrols-authoritative-pause-msedge\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\docs\extensions\plans\editor-hebrew-20261118\followups\host-presentation\playwright\host-presentation-same-win-421f5-ontrols-authoritative-pause-msedge\test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [msedge] › tests\host-presentation.spec.ts:11:1 › same-window host presentation hides manager UI and controls authoritative pause

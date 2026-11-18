@@ -1,0 +1,34 @@
+{
+  "baseCommit": "0f64b7bf2a76d9f7f51ee74bc6dfcff1d5067a39",
+  "syntheticConfig": "C:\\ProgramData\\SentinelX\\uploads\\tadazz-host-acceptance-config-20261118",
+  "processes": [
+    {
+      "name": "backend",
+      "pid": 33500,
+      "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-timer-20261118\\packages\\socket",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "--import",
+        "tsx",
+        "src/index.ts"
+      ],
+      "port": 3191
+    },
+    {
+      "name": "frontend",
+      "pid": 32156,
+      "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-timer-20261118\\packages\\web",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-editor-timer-20261118\\packages\\web\\node_modules\\vite\\bin\\vite.js",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "3190",
+        "--strictPort",
+        "--force"
+      ],
+      "port": 3190
+    }
+  ]
+}

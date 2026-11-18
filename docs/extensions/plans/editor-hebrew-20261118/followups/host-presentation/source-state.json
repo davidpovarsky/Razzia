@@ -1,0 +1,15 @@
+{
+  "applicationHead": "0f64b7bf2a76d9f7f51ee74bc6dfcff1d5067a39",
+  "productionSourceChanges": [],
+  "testFiles": [
+    {
+      "path": "packages/e2e/tests/host-presentation.spec.ts",
+      "sha256": "66b86ecf647f2700bc1fc97c9916392e795bb9279a62bc5aa70ef88a55cc1e1f"
+    },
+    {
+      "path": "packages/e2e/playwright.host-followup.config.ts",
+      "sha256": "84b2ee948b9fe5c24d1eece8849c4c589c4ab3aaa31ddb9b550e2e84df01cfee"
+    }
+  ],
+  "postSuccessfulRunChanges": "Explicit observed-wire types and equivalent lint syntax only; unexecuted settled-percentage wait removed. No application edits."
+}
