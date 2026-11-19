@@ -880,11 +880,26 @@ def other_containers_unchanged(others, current_id):
         require(current["State"]["Running"] and (current["Image"], current["State"]["StartedAt"]) == expected, "OTHER_CONTAINER_RESTARTED")
 
 
+def canonical_host_config(host):
+    """Docker create materializes an explicitly null OomKillDisable as false."""
+    # Moby applies this default without disabling OOM killing:
+    # https://github.com/moby/moby/blob/master/daemon/daemon_unix.go
+    require(isinstance(host, dict), "HOST_CONFIG_INVALID")
+    result = copy.deepcopy(host)
+    if "OomKillDisable" in result:
+        value = result["OomKillDisable"]
+        require(value is None or type(value) is bool, "HOST_CONFIG_OOM_KILL_DISABLE_INVALID")
+        if value is None:
+            result["OomKillDisable"] = False
+    return result
+
+
 def verify_replacement(original, replacement, payload):
     require(replacement["Image"] == payload["Image"], "REPLACEMENT_IMAGE_CHANGED")
     require(env_map(replacement["Config"].get("Env")) == env_map(payload["Env"]), "REPLACEMENT_ENV_CHANGED")
     require(replacement["Mounts"] == original["Mounts"], "REPLACEMENT_MOUNTS_CHANGED")
-    require(replacement["HostConfig"] == original["HostConfig"], "REPLACEMENT_HOST_CONFIG_CHANGED")
+    require(canonical_host_config(replacement["HostConfig"]) == canonical_host_config(original["HostConfig"]),
+            "REPLACEMENT_HOST_CONFIG_CHANGED")
 
 
 def rollback_container(original, replacement_id, failed_name, report):
@@ -967,7 +982,9 @@ def deploy(args, stage, config, original, image, others):
         validate_config(args)
         other_containers_unchanged(others, replacement_id)
         report.update(success=True, phase="verified", environmentPreservedExcept=sorted(ENV_OVERRIDES),
-                      hostConfigurationUnchanged=True, mountsUnchanged=True, otherContainersUnchanged=True,
+                      hostConfigurationUnchanged=True,
+                      hostConfigurationComparison="exact-except-present-null-OomKillDisable-equals-false",
+                      mountsUnchanged=True, otherContainersUnchanged=True,
                       previousContainerRetainedStopped=not inspect(original["Id"])["State"]["Running"],
                       installedChatGptVerified=False, installedClaudeVerified=False)
     except BaseException as error:
@@ -1161,9 +1178,104 @@ def deployment_identity_self_tests():
     return checks
 
 
+def host_config_self_tests():
+    """Exercise the real replacement guard with the observed Docker normalization."""
+    original = {
+        "Image": "old-image", "Config": {"Env": ["EXAMPLE=synthetic"]},
+        "Mounts": [{"Type": "bind", "Source": "/synthetic/config", "Destination": "/app/config", "RW": True}],
+        "HostConfig": {
+            "OomKillDisable": None, "NetworkMode": "bridge",
+            "PortBindings": {"3000/tcp": [{"HostIp": "127.0.0.1", "HostPort": "3000"}]},
+            "Binds": ["/synthetic/config:/app/config:rw"], "Privileged": False,
+            "AutoRemove": False, "ReadonlyRootfs": False, "SecurityOpt": ["no-new-privileges"],
+            "CapAdd": None, "CapDrop": ["NET_RAW"], "Devices": [], "DeviceRequests": None,
+            "Memory": 2 * 1024**3, "MemorySwappiness": None, "NanoCpus": 1000000000,
+            "PidsLimit": 256, "LogConfig": {"Type": "json-file", "Config": {"max-size": "5m"}},
+            "RestartPolicy": {"Name": "unless-stopped", "MaximumRetryCount": 0},
+        },
+    }
+    payload = replacement_payload(original, {"Id": "candidate-image"}, "b" * 40, "synthetic")
+    require(payload["HostConfig"] == original["HostConfig"] and
+            payload["HostConfig"]["OomKillDisable"] is None, "SELFTEST_CREATE_HOST_CONFIG_CHANGED")
+    replacement = {"Image": payload["Image"], "Config": {"Env": copy.deepcopy(payload["Env"])},
+                   "Mounts": copy.deepcopy(original["Mounts"]), "HostConfig": copy.deepcopy(original["HostConfig"])}
+    checks = []
+
+    def verify_case(label, old, new, failure=None):
+        before = copy.deepcopy((old, new, payload))
+        try:
+            verify_replacement(old, new, payload)
+        except GateError as error:
+            require(str(error) == failure, "SELFTEST_HOST_CONFIG_WRONG_FAILURE")
+        else:
+            require(failure is None, "SELFTEST_HOST_CONFIG_ACCEPTED_CHANGE")
+        require((old, new, payload) == before, "SELFTEST_HOST_CONFIG_INPUT_MUTATED")
+        checks.append(label)
+
+    for old_value, new_value, label in (
+            (None, None, "null-null"), (None, False, "null-false"),
+            (False, None, "false-null"), (False, False, "false-false"),
+            (True, True, "true-true")):
+        old, new = copy.deepcopy(original), copy.deepcopy(replacement)
+        old["HostConfig"]["OomKillDisable"] = old_value
+        new["HostConfig"]["OomKillDisable"] = new_value
+        verify_case("host-config-oom-" + label + "-accepted", old, new)
+    for old_value, new_value in ((True, False), (False, True), (True, None), (None, True)):
+        old, new = copy.deepcopy(original), copy.deepcopy(replacement)
+        old["HostConfig"]["OomKillDisable"] = old_value
+        new["HostConfig"]["OomKillDisable"] = new_value
+        verify_case("host-config-oom-" + str(old_value) + "-" + str(new_value) + "-rejected",
+                    old, new, "REPLACEMENT_HOST_CONFIG_CHANGED")
+    for side in ("original", "replacement"):
+        for value in (0, 1, "false", "true", [], {}):
+            old, new = copy.deepcopy(original), copy.deepcopy(replacement)
+            target = old if side == "original" else new
+            target["HostConfig"]["OomKillDisable"] = value
+            verify_case("host-config-oom-invalid-" + side + "-" + repr(value), old, new,
+                        "HOST_CONFIG_OOM_KILL_DISABLE_INVALID")
+        for present_value in (None, False, True):
+            old, new = copy.deepcopy(original), copy.deepcopy(replacement)
+            missing, present = (old, new) if side == "original" else (new, old)
+            del missing["HostConfig"]["OomKillDisable"]
+            present["HostConfig"]["OomKillDisable"] = present_value
+            verify_case("host-config-oom-missing-" + side + "-versus-" + str(present_value), old, new,
+                        "REPLACEMENT_HOST_CONFIG_CHANGED")
+    old, new = copy.deepcopy(original), copy.deepcopy(replacement)
+    del old["HostConfig"]["OomKillDisable"]
+    del new["HostConfig"]["OomKillDisable"]
+    verify_case("host-config-oom-both-missing-preserved", old, new)
+    for key, value in (
+            ("NetworkMode", "none"), ("PortBindings", {"3000/tcp": [{"HostIp": "0.0.0.0", "HostPort": "3000"}]}),
+            ("Binds", ["/synthetic/other:/app/config:rw"]), ("Privileged", True), ("AutoRemove", True),
+            ("ReadonlyRootfs", True), ("SecurityOpt", None), ("CapAdd", ["SYS_ADMIN"]), ("CapDrop", []),
+            ("Devices", [{"PathOnHost": "/dev/synthetic"}]), ("DeviceRequests", []),
+            ("Memory", 3 * 1024**3), ("MemorySwappiness", 0), ("NanoCpus", 2000000000),
+            ("PidsLimit", 257), ("LogConfig", {"Type": "none", "Config": {}}),
+            ("RestartPolicy", {"Name": "always", "MaximumRetryCount": 0}),
+            ("UnexpectedDockerField", None)):
+        new = copy.deepcopy(replacement)
+        new["HostConfig"]["OomKillDisable"] = False
+        new["HostConfig"][key] = value
+        verify_case("host-config-other-field-" + key + "-rejected", original, new,
+                    "REPLACEMENT_HOST_CONFIG_CHANGED")
+    new = copy.deepcopy(replacement)
+    del new["HostConfig"]["SecurityOpt"]
+    verify_case("host-config-other-missing-key-rejected", original, new, "REPLACEMENT_HOST_CONFIG_CHANGED")
+    new = copy.deepcopy(replacement)
+    new["Image"] = "different-image"
+    verify_case("host-config-guard-still-rejects-image-change", original, new, "REPLACEMENT_IMAGE_CHANGED")
+    new = copy.deepcopy(replacement)
+    new["Config"]["Env"].append("UNEXPECTED=synthetic")
+    verify_case("host-config-guard-still-rejects-env-change", original, new, "REPLACEMENT_ENV_CHANGED")
+    new = copy.deepcopy(replacement)
+    new["Mounts"][0]["RW"] = False
+    verify_case("host-config-guard-still-rejects-mount-change", original, new, "REPLACEMENT_MOUNTS_CHANGED")
+    return checks
+
+
 def self_test():
     """Synthetic, no Docker/network/customer access; retained only in temp dir."""
-    checks = game_count_self_tests() + deployment_identity_self_tests()
+    checks = game_count_self_tests() + deployment_identity_self_tests() + host_config_self_tests()
     original = {"Config": {"Env": ["SECRET=private-value", "SOCKET_PORT=9999", "PATH=/bin"], "Labels": {"existing": "yes"}}, "HostConfig": {"NetworkMode": "bridge"}}
     payload = replacement_payload(original, {"Id": "sha256:" + "a" * 64}, "b" * 40, "test")
     require(env_map(payload["Env"]) == {"SECRET": "private-value", "PATH": "/bin", **ENV_OVERRIDES}, "SELFTEST_ENV_PRESERVATION")
