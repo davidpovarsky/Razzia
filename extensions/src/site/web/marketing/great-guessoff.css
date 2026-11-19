@@ -633,64 +633,6 @@
   }
 }
 
-/* Audience Favourite / Correct Answer must be legible and dominant in the
-   single reveal (no second "Top Pick" scene or another row of cards). */
-.ggo-native[data-ggo-phase="results"] .tzv4-stage .q-frame {
-  top: 117px;
-  height: 201px;
-  gap: 7px;
-  border: 3px solid #cc8aff;
-  box-shadow:
-    0 0 38px #b650ff66,
-    0 15px 36px #09011dad;
-}
-.ggo-native[data-ggo-phase="results"] .tzv4-stage .q-frame .eyebrow {
-  font-size: 38px !important;
-  font-weight: 1000 !important;
-  line-height: 1.08 !important;
-  letter-spacing: 0.105em !important;
-  padding: 3px 19px 5px !important;
-  border-radius: 13px;
-  background: #130333c7;
-  color: #f0ff65 !important;
-  text-shadow:
-    0 0 17px #ebff82c4,
-    0 3px 12px #050018 !important;
-  border: 1px solid #f3ff75a8;
-}
-.ggo-native[data-ggo-phase="results"]
-  .tzv4-stage
-  .choice-slot.is-favourite
-  .winner-tag {
-  z-index: 20;
-  left: 8px !important;
-  right: 8px !important;
-  top: -14px !important;
-  min-height: 55px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 12px !important;
-  border-radius: 15px;
-  font-size: 26px !important;
-  font-weight: 1000 !important;
-  line-height: 1.08;
-  letter-spacing: 0.03em !important;
-  background: linear-gradient(130deg, #f5ff9b, #d0ff4e);
-  color: #2a1145 !important;
-  box-shadow:
-    0 0 28px #eaff789a,
-    0 5px 18px #000a;
-}
-.ggo-native[data-ggo-phase="results"][data-ggo-mode="survey"]
-  .tzv4-stage
-  .choice-slot.is-favourite
-  .answer-card {
-  box-shadow:
-    0 0 0 5px #f1ff6480,
-    0 0 42px #d5ff60b3,
-    0 17px 45px #080116 !important;
-}
 .ggo-native[data-ggo-phase="winner"] .tzv4-stage .stage-bg {
   background-image: url("/tadazz-show/v4/show-stage.webp") !important;
 }
@@ -702,44 +644,62 @@
   display: none !important;
 }
 
-/* Great Guess-off final result contract: these labels MUST be visible on the
-   stage, not merely present as hidden text. The native `eyebrow` is hidden by
-   a wider site rule, so explicitly restore it for this demo's result scenes. */
+/* A single balanced result label: centred above the question (never
+   repeated on the favourite/correct card). Keep the complete question
+   readable inside the native 1920x1080 stage and away from answer tiles. */
 .ggo-native[data-ggo-phase="results"] .tzv4-stage .q-frame {
-  top: 108px !important;
-  height: 223px !important;
-  padding: 16px 38px !important;
-  gap: 7px !important;
+  top: 116px !important;
+  height: 216px !important;
+  padding: 13px 44px 16px !important;
+  gap: 9px !important;
+  justify-content: center;
+  overflow: visible !important;
+  border: 2px solid #b980edcc !important;
+  box-shadow:
+    0 15px 36px #09011da8,
+    inset 0 2px 0 #ffffff21 !important;
 }
 .ggo-native[data-ggo-phase="results"] .tzv4-stage .q-frame .eyebrow {
   display: flex !important;
   visibility: visible !important;
   opacity: 1 !important;
+  flex: 0 0 auto !important;
   align-items: center;
   justify-content: center;
-  flex: 0 0 auto;
-  min-height: 48px;
   width: max-content;
   max-width: 100%;
-  padding: 6px 26px !important;
-  font-size: 42px !important;
-  font-weight: 950 !important;
-  line-height: 1.12 !important;
-  letter-spacing: 0.045em !important;
+  margin: 0 auto;
+  padding: 5px 23px 6px !important;
+  height: auto !important;
+  min-height: 39px !important;
+  border: 1px solid #cba1efba !important;
+  border-radius: 14px !important;
+  background: #25104cd6 !important;
+  box-shadow: 0 3px 12px #0e04274d !important;
+  color: #efff88 !important;
+  font-size: 31px !important;
+  font-weight: 900 !important;
+  line-height: 1.13 !important;
+  letter-spacing: 0.05em !important;
+  text-shadow: 0 1px 6px #07031b7a !important;
   white-space: nowrap;
-  background: #251052ed !important;
-  color: #f5ff8a !important;
-  border: 2px solid #c4deffae !important;
-  border-radius: 16px !important;
-  text-shadow: 0 2px 12px #0008 !important;
-  box-shadow: 0 4px 17px #09031d76 !important;
 }
 .ggo-native[data-ggo-phase="results"] .tzv4-stage .q-frame .q-text {
-  flex: 0 1 auto;
-  min-height: 0;
+  flex: 0 0 auto !important;
+  max-width: 1350px;
+  margin: 0 auto;
+  font-size: 54px !important;
+  line-height: 1.1 !important;
+  font-weight: 860 !important;
+  letter-spacing: -0.026em !important;
+  text-wrap: balance;
 }
-/* No second card entrance after choosing. Preserve the original answer
-   positions and reveal only the correct border or audience vote percentages. */
+/* The result heading is the ONLY wording. The winning card is recognised
+   through its original selected outline and animated percentage, not a
+   second massive "AUDIENCE FAVOURITE" banner over its number/text. */
+.ggo-native[data-ggo-phase="results"] .tzv4-stage .winner-tag {
+  display: none !important;
+}
 .ggo-native[data-ggo-phase="results"] .tzv4-stage .choice-slot {
   opacity: 1 !important;
   transform: none !important;
@@ -751,9 +711,11 @@
 .ggo-native[data-ggo-phase="results"][data-ggo-mode="survey"]
   .tzv4-stage
   .choice-slot.is-favourite
-  .winner-tag {
-  opacity: 1 !important;
-  visibility: visible !important;
+  .answer-card {
+  box-shadow:
+    0 0 0 4px #ebff7280,
+    0 0 27px #d7ff6280,
+    0 16px 36px #07011b8a !important;
 }
 /* The canonical Z-wipe remains visible. Hide ONLY the previous/native answer
    scene for the duration of a question change. This also prevents the old
@@ -761,4 +723,48 @@
 .ggo-native[data-ggo-phase="question-transition"] .tzv4-stage .tzv4-scene-root {
   visibility: hidden !important;
   pointer-events: none !important;
+}
+
+/* This is an English-language public sample even when the surrounding website
+   is viewed in Hebrew. Prevent mirrored punctuation and reversed A–D order. */
+.ggo-native-frame {
+  direction: ltr;
+}
+.ggo-native .tzv4-stage .q-frame .q-text {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+/* The marketing header is sticky on catalogue pages; in the interactive demo
+   it otherwise crosses the answer cards when the player scrolls into view. */
+.site-header:has(~ main .ggo-native) {
+  position: relative !important;
+  top: auto !important;
+}
+
+/* The Great Guess-off library cover must be a genuine clickable surface.
+   The platform's unstyled SiteButton otherwise collapses to 0 x 0 around
+   the aspect-ratio cover. */
+.ggo-catalogue-cover {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 16 / 10;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 16px 16px 0 0 !important;
+  overflow: hidden;
+  position: relative !important;
+  background: transparent !important;
+  cursor: pointer;
+}
+.ggo-catalogue-cover > .game-cover {
+  display: block;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+}
+.ggo-catalogue-cover:focus-visible {
+  outline: 3px solid #eaff66;
+  outline-offset: 3px;
 }
