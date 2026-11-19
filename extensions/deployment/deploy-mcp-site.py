@@ -319,11 +319,28 @@ def json_probe(origin, path, expected_status=200, expected=None):
     return value, response
 
 
+def billing_disabled_probe(origin):
+    value, response = json_probe(origin, "/api/billing/config")
+    # Preflight and rollback inspect the legacy response; the qualified candidate
+    # also publishes readiness. Accept only these two disabled billing contracts.
+    legacy = (isinstance(value, dict) and set(value) == {"enabled"} and
+              value["enabled"] is False)
+    current = (isinstance(value, dict) and
+               set(value) == {"enabled", "configured", "environment", "catalogAvailable"} and
+               value["enabled"] is False and value["configured"] is False and
+               value["catalogAvailable"] is False and value["environment"] in ("sandbox", "live"))
+    if not (legacy or current):
+        error = GateError("PROBE_JSON_VALUE")
+        error.probe = response["diagnostic"]
+        raise error
+    return value, response
+
+
 def base_probes(origin, package_policy):
     package_proof = package_probe_proof(package_policy)
     json_probe(origin, "/api/health", expected={"status": "ok"})
     json_probe(origin, "/api/auth/mode", expected={"accountsEnabled": True})
-    json_probe(origin, "/api/billing/config", expected={"enabled": False})
+    billing_disabled_probe(origin)
     for path in ("/api/billing", "/api/quizz", "/api/results", "/api/accounts/me"):
         request(origin, path, 401)
     expected_error = "errors:auth.unauthorized" if package_policy["installerEnabled"] else "not-found"
@@ -1273,9 +1290,129 @@ def host_config_self_tests():
     return checks
 
 
+def billing_probe_self_tests():
+    """Exercise the real request/JSON/base-probe chain with synthetic HTTP only."""
+    origin, path = "https://synthetic.invalid", "/api/billing/config"
+    routes, calls, checks = {}, [], []
+    saved_http = globals()["HTTP"]
+
+    class SyntheticResponse(io.BytesIO):
+        def __init__(self, body, status, content_type):
+            super().__init__(body)
+            self.status = status
+            self.headers = {"content-type": content_type, "x-private": "synthetic-header-secret"}
+
+        def read(self, size=-1):
+            require(size == 4 * 1024**2 + 1, "SELFTEST_BILLING_READ_BOUND")
+            return super().read(size)
+
+    class SyntheticHTTP:
+        def open(self, query, timeout):
+            parsed = urllib.parse.urlsplit(query.full_url)
+            require(parsed.scheme == "https" and parsed.netloc == "synthetic.invalid" and
+                    query.get_method() == "GET" and timeout == 10, "SELFTEST_BILLING_HTTP_SCOPE")
+            require(parsed.path in routes, "SELFTEST_BILLING_UNEXPECTED_PATH")
+            calls.append(parsed.path)
+            return SyntheticResponse(*routes[parsed.path])
+
+    def response(value, status=200, content_type="application/json"):
+        return (json.dumps(value).encode(), status, content_type)
+
+    def reject(body, code="PROBE_JSON_VALUE", status=200, content_type="application/json",
+               diagnostic_type=None):
+        routes[path] = (body, status, content_type)
+        try:
+            billing_disabled_probe(origin)
+        except GateError as error:
+            require(str(error) == code, "SELFTEST_BILLING_WRONG_FAILURE")
+            expected = {"path": path, "method": "GET", "status": status,
+                        "expectedStatus": 200, "contentType": diagnostic_type or content_type}
+            require(getattr(error, "probe", None) == expected, "SELFTEST_BILLING_DIAGNOSTIC")
+            report = {}
+            record_probe_failure(report, error)
+            require(report == {"probeFailure": expected} and "secret" not in json.dumps(report),
+                    "SELFTEST_BILLING_DIAGNOSTIC_DISCLOSURE")
+        else:
+            raise GateError("SELFTEST_BILLING_INVALID_ACCEPTED")
+
+    try:
+        globals()["HTTP"] = SyntheticHTTP()
+        legacy = {"enabled": False}
+        current = {"enabled": False, "configured": False, "environment": "sandbox",
+                   "catalogAvailable": False}
+        # Both package modes use the exact base_probes called by old preflight,
+        # new startup, and rollback; no private endpoint becomes anonymous.
+        for value in (legacy, current, {**current, "environment": "live"}):
+            for installer in (False, True):
+                policy = {"accountsEnabled": True, "installerEnabled": installer,
+                          "expectedStatus": 401 if installer else 404}
+                routes.clear()
+                routes.update({
+                    "/api/health": response({"status": "ok"}),
+                    "/api/auth/mode": response({"accountsEnabled": True}),
+                    path: response(value),
+                    "/api/packages/capabilities": response(
+                        {"error": "errors:auth.unauthorized" if installer else "not-found"},
+                        policy["expectedStatus"]),
+                })
+                for private_path in ("/api/billing", "/api/quizz", "/api/results", "/api/accounts/me"):
+                    routes[private_path] = response({"error": "errors:auth.unauthorized"}, 401)
+                before = len(calls)
+                proof = base_probes(origin, policy)
+                require(proof == {"packageCapabilities": package_probe_proof(policy)} and
+                        calls[before:] == ["/api/health", "/api/auth/mode", path, "/api/billing",
+                                           "/api/quizz", "/api/results", "/api/accounts/me",
+                                           "/api/packages/capabilities"], "SELFTEST_BILLING_BASE_PROBES")
+        checks.append("billing-legacy-and-current-sandbox-live-disabled-contracts-pass-both-package-modes")
+
+        invalid = [None, False, 0, [], "false", {}, {**legacy, "extra": False},
+                   {**current, "apiKey": "synthetic-body-secret"}]
+        for field in current:
+            invalid.append({key: value for key, value in current.items() if key != field})
+        for value in (True, 0, 0.0, "false", None, [], {}):
+            invalid.append({"enabled": value})
+            for field in ("enabled", "configured", "catalogAvailable"):
+                invalid.append({**current, field: value})
+        for environment in ("production", "", None, False, 0, [], {}):
+            invalid.append({**current, "environment": environment})
+        for value in invalid:
+            reject(json.dumps(value).encode())
+        checks.append("billing-strict-schema-boolean-and-environment-rejections-" + str(len(invalid)))
+
+        reject(b"{", code="PROBE_JSON_INVALID")
+        reject(bytes([0xff]), code="PROBE_JSON_INVALID")
+        reject(b"synthetic-body-secret", code="PROBE_NOT_JSON", content_type="text/plain")
+        reject(b"synthetic-body-secret", code="PROBE_NOT_JSON",
+               content_type="invalid synthetic-header-secret", diagnostic_type="invalid")
+        reject(b"synthetic-body-secret", code="PROBE_STATUS_503_EXPECTED_200", status=503)
+        reject(b"x" * (4 * 1024**2 + 1), code="PROBE_BODY_LIMIT")
+        checks.append("billing-http-status-json-type-body-limit-and-private-diagnostics-preserved")
+
+        # A billing-specific compatibility change must not relax generic probes.
+        for strict_path, expected in (("/api/health", {"status": "ok"}),
+                                      ("/api/auth/mode", {"accountsEnabled": True})):
+            routes[strict_path] = response({**expected, "extra": "synthetic-body-secret"})
+            try:
+                json_probe(origin, strict_path + "?capability=synthetic-query-secret", expected=expected)
+            except GateError as error:
+                require(str(error) == "PROBE_JSON_VALUE", "SELFTEST_BILLING_GENERIC_EQUALITY")
+                report = {}
+                record_probe_failure(report, error)
+                require(error.probe == {"path": strict_path, "method": "GET", "status": 200,
+                                        "expectedStatus": 200, "contentType": "application/json"} and
+                        "secret" not in json.dumps(report), "SELFTEST_BILLING_GENERIC_DIAGNOSTIC")
+            else:
+                raise GateError("SELFTEST_BILLING_GENERIC_EXTRA_KEY_ACCEPTED")
+        checks.append("billing-compatibility-keeps-generic-json-exact-and-query-body-headers-private")
+    finally:
+        globals()["HTTP"] = saved_http
+    return checks
+
+
 def self_test():
     """Synthetic, no Docker/network/customer access; retained only in temp dir."""
-    checks = game_count_self_tests() + deployment_identity_self_tests() + host_config_self_tests()
+    checks = (game_count_self_tests() + deployment_identity_self_tests() +
+              host_config_self_tests() + billing_probe_self_tests())
     original = {"Config": {"Env": ["SECRET=private-value", "SOCKET_PORT=9999", "PATH=/bin"], "Labels": {"existing": "yes"}}, "HostConfig": {"NetworkMode": "bridge"}}
     payload = replacement_payload(original, {"Id": "sha256:" + "a" * 64}, "b" * 40, "test")
     require(env_map(payload["Env"]) == {"SECRET": "private-value", "PATH": "/bin", **ENV_OVERRIDES}, "SELFTEST_ENV_PRESERVATION")
