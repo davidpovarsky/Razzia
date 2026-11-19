@@ -99,7 +99,11 @@
     "testStop": "停止",
     "url": "メディアURL",
     "cuesDesc": "ゲームイベント用のBGMと効果音を設定します。",
-    "source": "音源"
+    "source": "音源",
+    "musicLabel": "音楽",
+    "musicAutomatic": "自動",
+    "musicHelp": "この画面の音楽を変更します。次の画面では自動選択に戻ります。",
+    "musicUnavailable": "この音楽を読み込めませんでした。別の曲を選択してください。"
   },
   "visuals": {
     "answerVisualTitle": "選択肢の画像設定",
@@ -354,7 +358,11 @@
       "corruptImportFile": "ファイルを読み取れませんでした。形式を確認して、もう一度お試しください。",
       "duplicateParticipantPhone": "電話番号 {{phone}} はすでに {{name}} に割り当てられています。",
       "importReadFailed": "読み込み用のファイルを読み取れませんでした。"
-    }
+    },
+    "manageList": "名簿を管理",
+    "filterPlayers": "プレイヤーを絞り込む",
+    "tableNumber": "テーブル {{number}}",
+    "showingPlayers": "{{total}} 人中 {{shown}} 人"
   },
   "timeline": {
     "quiz": "クイズ",
@@ -902,7 +910,21 @@
       "survey-results": "結果",
       "z-wipe": "トランジション"
     },
-    "installationPreview": "レビューと承認のための非公開テーマプレビューです。"
+    "installationPreview": "レビューと承認のための非公開テーマプレビューです。",
+    "chooseDescription": "問題やプレイヤーを変更せずに、ゲームの見た目を変更できます。選択を保持するにはゲームを保存してください。",
+    "catalogUnavailable": "インストール済みのテーマを読み込めませんでした。保存済みのテーマは変更されていません。",
+    "importTheme": "テーマをインポート",
+    "chooseThemeFile": ".tadazzファイルを選択",
+    "importHint": ".tadazz形式のテーマパッケージをインポートします。ここではテーマのみがインストールされ、ゲームの内容は変更されません。",
+    "importUnavailable": "テーマをインポートできません。もう一度お試しください。",
+    "importEmpty": "このパッケージにはテーマが含まれていません。テーマパッケージを選択してください。",
+    "imported": "テーマをインストールしました。下から選択し、ゲームを保存してください。",
+    "libraryTitle": "ゲームのテーマ",
+    "libraryDescription": "ゲームを選び、エディターでテーマを変更またはインポートします。問題とプレイヤーは保持されます。",
+    "openEditor": "エディターでテーマを選択",
+    "noGames": "表示するゲームがありません。ゲームを作成してテーマを選択してください。",
+    "newGame": "ゲームを作成",
+    "advancedBuilder": "高度なテーマ作成"
   },
   "editorPreview": {
     "title": "ライブプレビュー",

@@ -26,6 +26,7 @@ export const config: BillingConfig = {
   enabled: true,
   environment: "sandbox",
   apiKey: "test-api-key",
+  clientToken: `test_${"a".repeat(27)}`,
   webhookSecret: "test-webhook-secret",
   catalog: [plan],
   graceMs: 72 * 3600000,

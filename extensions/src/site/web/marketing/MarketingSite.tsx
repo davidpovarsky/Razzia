@@ -3,7 +3,7 @@ import { SiteLink } from "../shared/SiteLink"
 import { asset, catalogue, Cover, GameCard, type Game } from "./Catalogue"
 import { corrections } from "../../themes/corrections"
 import { sitePlatformStyle } from "../../themes/platform"
-import { Input, Textarea } from "@razzia/extensions/platform-ui"
+import { ContactForm } from "./ContactForm"
 import { Pricing } from "./Pricing"
 import { GreatGuessOffDemo } from "./GreatGuessOffDemo"
 import guessOffStyles from "./great-guessoff.css?inline"
@@ -73,7 +73,6 @@ export function MarketingSite() {
   const [filter, setFilter] = useState("All")
   const [search, setSearch] = useState("")
   const [menu, setMenu] = useState(false)
-  const [notice, setNotice] = useState("")
   const visibleGames = catalogue.filter(
     (game) =>
       (filter === "All" || game.category === filter) &&
@@ -98,7 +97,6 @@ export function MarketingSite() {
   const go = (page: string, gameId?: string) => {
     setView(page)
     setMenu(false)
-    setNotice("")
     void router.navigate({
       to: "/",
       search:
@@ -605,49 +603,8 @@ export function MarketingSite() {
                 {t("We'll make it a show.")}
               </h1>
               <p className="prose">{t("Tell us your idea.")}</p>
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault()
-                  setNotice(
-                    "Enquiry not sent. Contact service is not connected in this preview.",
-                  )
-                }}
-                className="site-contact-form"
-              >
-                <Input
-                  label={t("Event type")}
-                  name="eventType"
-                  required
-                  maxLength={160}
-                  placeholder={t("What are you celebrating or hosting?")}
-                />
-                <Input
-                  label={t("Email address")}
-                  name="email"
-                  required
-                  type="email"
-                  autoComplete="email"
-                  maxLength={254}
-                />
-                <Textarea
-                  label={t("About your event")}
-                  name="message"
-                  rows={5}
-                  maxLength={4000}
-                />
-                <SiteButton disabled variant="primary">
-                  {t("Contact service unavailable")}
-                </SiteButton>
-                <p className="note">
-                  {t("This form does not send a message.")}
-                </p>
-              </form>
+              <ContactForm />
             </section>
-          )}
-          {notice && (
-            <p className="wrap preview-notice" role="status">
-              {t(notice)}
-            </p>
           )}
         </main>
         <footer className="site-footer">
@@ -666,7 +623,6 @@ export function MarketingSite() {
           </div>
           <div className="wrap footer-bottom">
             <span>{t("© 2026 TADAZZ!")}</span>
-            <span>{t("Catalogue examples · Purchases unavailable.")}</span>
           </div>
         </footer>
       </ReferenceCanvas>

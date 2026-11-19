@@ -1,5 +1,6 @@
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useState,
@@ -18,17 +19,27 @@ interface Catalog {
   registry: ShowThemeRegistry
   available: readonly ShowThemeDefinition[]
 }
+interface CatalogState extends Catalog {
+  failed: boolean
+  retry: () => void
+}
 const bundled: Catalog = {
   registry: showThemeRegistry,
   available: showThemeRegistry.list(),
 }
-const ThemeCatalogContext = createContext<Catalog>(bundled)
+const ThemeCatalogContext = createContext<CatalogState>({
+  ...bundled,
+  failed: false,
+  retry: () => undefined,
+})
 
 export const useInstalledThemeCatalog = () =>
   useContext(ThemeCatalogContext).registry
 
 export const useAvailableShowThemes = () =>
   useContext(ThemeCatalogContext).available
+
+export const useThemeCatalogStatus = () => useContext(ThemeCatalogContext)
 
 /** Each mounted account owns its catalog; no global registry or cross-account cache. */
 export function InstalledThemeCatalogProvider({
@@ -38,24 +49,28 @@ export function InstalledThemeCatalogProvider({
 }) {
   const owner = getClientId()
   const [catalogRevision, setCatalogRevision] = useState(0)
+  const retry = useCallback(() => setCatalogRevision((value) => value + 1), [])
   useEffect(() => {
-    const update = () => setCatalogRevision((value) => value + 1)
-    window.addEventListener("tadazz:packages-changed", update)
+    window.addEventListener("tadazz:packages-changed", retry)
 
-    return () => window.removeEventListener("tadazz:packages-changed", update)
-  }, [])
+    return () => window.removeEventListener("tadazz:packages-changed", retry)
+  }, [retry])
   const [result, setResult] = useState<{
     owner: string
     catalog: Catalog
+    failed: boolean
   } | null>(null)
   useEffect(() => {
-    let alive = true
+    const controller = new AbortController()
     void ensureSession()
       .then(async ({ token }) => {
         const response = await fetch("/api/themes/catalog", {
           headers: { Authorization: `Bearer ${token}` },
           cache: "no-store",
-          signal: AbortSignal.timeout(10_000),
+          signal: AbortSignal.any([
+            controller.signal,
+            AbortSignal.timeout(10_000),
+          ]),
         })
 
         // Installer is OFF.
@@ -95,16 +110,22 @@ export function InstalledThemeCatalogProvider({
             ),
         }
       })
-      .catch(() => bundled)
       .then((catalog) => {
-        if (alive) {
-          setResult({ owner, catalog })
+        if (!controller.signal.aborted && getClientId() === owner) {
+          setResult({ owner, catalog, failed: false })
+        }
+      })
+      .catch(() => {
+        if (!controller.signal.aborted && getClientId() === owner) {
+          setResult((previous) => ({
+            owner,
+            catalog: previous?.owner === owner ? previous.catalog : bundled,
+            failed: true,
+          }))
         }
       })
 
-    return () => {
-      alive = false
-    }
+    return () => controller.abort()
   }, [owner, catalogRevision])
 
   if (!result || result.owner !== owner) {
@@ -112,7 +133,9 @@ export function InstalledThemeCatalogProvider({
   }
 
   return (
-    <ThemeCatalogContext.Provider value={result.catalog}>
+    <ThemeCatalogContext.Provider
+      value={{ ...result.catalog, failed: result.failed, retry }}
+    >
       {children}
     </ThemeCatalogContext.Provider>
   )

@@ -1,3 +1,4 @@
+import { sendTransactionalMail } from "./mail-provider"
 import {
   type PublicAccount,
   accountForEmail,
@@ -29,24 +30,12 @@ export async function sendAccountMail(
   const title =
     purpose === "verify" ? "Verify your email" : "Reset your password"
   const text = `Your Tadazz code is ${code}. It expires in 10 minutes. Ignore this email if you did not request it.`
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${key}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      from,
-      to: [user.email],
-      subject: `Tadazz - ${title}`,
-      text,
-    }),
-    signal: AbortSignal.timeout(12000),
+  await sendTransactionalMail({
+    from,
+    to: [user.email],
+    subject: `Tadazz - ${title}`,
+    text,
   })
-
-  if (!res.ok) {
-    throw new Error("Could not send verification message")
-  }
 }
 
 export async function requestAccountReset(email: string): Promise<void> {

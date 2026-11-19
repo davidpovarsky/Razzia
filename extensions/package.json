@@ -34,7 +34,10 @@
     "./server": "./src/server/index.ts",
     "./server/startup-owner-snapshot": "./src/server/storage/startup-owner-snapshot.ts",
     "./site": "./src/site/index.ts",
-    "./platform-ui": "./src/platform-ui/index.ts"
+    "./platform-ui": "./src/platform-ui/index.ts",
+    "./presentation/show-themes/context": "./src/presentation/show-themes/context.tsx",
+    "./presentation/poll-ranking": "./src/presentation/poll-ranking.ts",
+    "./presentation/stage-fit": "./src/presentation/stage-fit.tsx"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.9.1",

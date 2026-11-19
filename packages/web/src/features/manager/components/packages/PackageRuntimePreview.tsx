@@ -79,6 +79,7 @@ export function PackageRuntimePreview({
         <div className="flex flex-wrap gap-1">
           {themes.map((theme) => (
             <Button
+              type="button"
               key={theme.id}
               size="sm"
               aria-pressed={theme.id === themeId}
@@ -92,6 +93,7 @@ export function PackageRuntimePreview({
       <div className="flex flex-wrap gap-1">
         {RUNTIME_PHASES.map((s) => (
           <Button
+            type="button"
             size="sm"
             key={s}
             onClick={() => setPhase(s)}

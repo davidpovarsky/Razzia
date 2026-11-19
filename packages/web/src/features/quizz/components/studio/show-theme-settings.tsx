@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { lazy, Suspense, useState } from "react"
 import { useTranslation } from "react-i18next"
 import {
   SHOW_THEME_AUDIO_EVENTS,
@@ -21,20 +21,28 @@ import { useStudioEditor } from "./studio-editor-context"
 import { StudioSelect } from "./studio-select"
 import { ThemeAudioOptions } from "./theme-audio-options"
 import { ShowThemePreview } from "./show-theme-preview"
-import {
-  OpenThemeBuilderLink,
-  PublishedCompositionSelect,
-} from "@razzia/extensions/presentation"
+import { PublishedCompositionSelect } from "@razzia/extensions/presentation"
 import {
   useInstalledThemeCatalog,
   useAvailableShowThemes,
+  useThemeCatalogStatus,
 } from "./installed-theme-catalog"
 
-export function ShowThemeSettings() {
+const ThemePackageImporter = lazy(() =>
+  import("@razzia/web/features/manager/components/packages/PackageManager").then(
+    (module) => ({ default: module.PackageManager }),
+  ),
+)
+
+export function ShowThemeSettings({ compact = false }: { compact?: boolean }) {
   const { t, i18n } = useTranslation()
   const { defaults, updateDefaults } = useStudioEditor()
   const registry = useInstalledThemeCatalog()
   const available = useAvailableShowThemes()
+  const catalog = useThemeCatalogStatus()
+  const [importing, setImporting] = useState(false)
+  const [importStarted, setImportStarted] = useState(false)
+  const [imported, setImported] = useState(false)
   const [pending, setPending] = useState<ShowThemeSelection | null>(null)
   const [showPreview, setShowPreview] = useState(false)
   const [pickingSlot, setPickingSlot] = useState<
@@ -89,12 +97,72 @@ export function ShowThemeSettings() {
 
   return (
     <div className="w-full" data-testid="show-theme-settings">
-      <Card className="flex w-full max-w-none flex-col gap-5 p-6 md:p-8">
-        <h2 className="text-foreground text-lg font-bold">
-          {t("extensions:themes.title")}
-        </h2>
-        <OpenThemeBuilderLink className="text-primary text-sm underline" />
+      <Card
+        className={
+          compact
+            ? "flex w-full max-w-none flex-col gap-4 rounded-none border-0 p-3 shadow-none"
+            : "flex w-full max-w-none flex-col gap-5 p-6 md:p-8"
+        }
+      >
+        {!compact && (
+          <h2 className="text-foreground text-lg font-bold">
+            {t("extensions:themes.title")}
+          </h2>
+        )}
+        <p className="text-muted-foreground text-sm">
+          {t(
+            "extensions:themes.chooseDescription",
+            "Change this game's appearance without changing its questions or players. Save the game to keep your selection.",
+          )}
+        </p>
+        {catalog.failed && (
+          <div role="alert" className="flex flex-col gap-2 text-sm">
+            <p>
+              {t(
+                "extensions:themes.catalogUnavailable",
+                "Installed themes could not be loaded. Your saved theme has not been changed.",
+              )}
+            </p>
+            <Button type="button" size="sm" onClick={catalog.retry}>
+              {t("extensions:conflict.reload")}
+            </Button>
+          </div>
+        )}
+        <Button
+          type="button"
+          size="sm"
+          className="bg-accent text-accent-foreground min-h-11"
+          onClick={() => {
+            setImportStarted(true)
+            setImporting((value) => !value)
+          }}
+          aria-expanded={importing}
+          data-testid="editor-import-theme-toggle"
+        >
+          {t("extensions:themes.importTheme", "Import theme")}
+        </Button>
+        {importStarted && (
+          <div hidden={!importing}>
+            <Suspense fallback={<p role="status">{t("common:loading")}</p>}>
+              <ThemePackageImporter
+                file={null}
+                themesOnly
+                onFileConsumed={() => undefined}
+                onImported={() => setImported(true)}
+              />
+            </Suspense>
+          </div>
+        )}
+        {imported && (
+          <p role="status" className="text-muted-foreground text-sm">
+            {t(
+              "extensions:themes.imported",
+              "Theme installed. Choose it below, then save your game.",
+            )}
+          </p>
+        )}
         <PublishedCompositionSelect
+          hideWhenEmpty={compact}
           pin={defaults.showComposition}
           onSelect={(value) => {
             if (!value) {
@@ -126,16 +194,30 @@ export function ShowThemeSettings() {
           return (
             <div
               key={`${definition.id}@${definition.version}`}
-              className="border-accent flex flex-col items-stretch gap-4 rounded-xl border p-4 sm:flex-row sm:flex-wrap sm:items-center"
+              className={
+                compact
+                  ? "border-accent grid grid-cols-[5rem_minmax(0,1fr)] items-center gap-3 rounded-xl border p-3"
+                  : "border-accent flex flex-col items-stretch gap-4 rounded-xl border p-4 sm:flex-row sm:flex-wrap sm:items-center"
+              }
               data-testid={`show-theme-${definition.id}`}
             >
               <img
                 src={poster?.url}
                 alt=""
-                className="aspect-video w-full shrink-0 rounded-lg object-cover sm:w-36"
+                className={
+                  compact
+                    ? "aspect-video w-20 rounded-lg object-cover"
+                    : "aspect-video w-full shrink-0 rounded-lg object-cover sm:w-36"
+                }
                 loading="lazy"
               />
-              <div className="flex min-w-0 flex-1 flex-col gap-1 sm:min-w-40">
+              <div
+                className={
+                  compact
+                    ? "flex min-w-0 flex-col gap-1"
+                    : "flex min-w-0 flex-1 flex-col gap-1 sm:min-w-40"
+                }
+              >
                 <p className="text-foreground font-semibold">
                   {showThemeText(
                     definition,
@@ -158,6 +240,7 @@ export function ShowThemeSettings() {
                 type="button"
                 size="sm"
                 disabled={active}
+                className={compact ? "col-span-2 min-h-11" : undefined}
                 onClick={() => {
                   const previous = defaults.themeHistory?.find(
                     (item) =>
@@ -192,6 +275,7 @@ export function ShowThemeSettings() {
           <Button
             type="button"
             size="sm"
+            className={compact ? "min-h-11" : undefined}
             onClick={() => setShowPreview((value) => !value)}
           >
             {t("extensions:themes.preview")}
@@ -199,7 +283,7 @@ export function ShowThemeSettings() {
           <Button
             type="button"
             size="sm"
-            className="bg-accent text-accent-foreground"
+            className="bg-accent text-accent-foreground min-h-11"
             onClick={() =>
               updateDefaults({ showTheme: resetThemeScope(selected) })
             }

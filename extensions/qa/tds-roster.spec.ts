@@ -5,6 +5,7 @@ import {
   type HostPresenceSnapshot,
 } from "../src/core"
 import { registerSynthetic } from "./tds-site-fixture"
+import { skipPlatformOpening } from "../../packages/e2e/utils/manager"
 
 async function openHost(page: Page) {
   const headers = await registerSynthetic(page)
@@ -37,9 +38,8 @@ async function openHost(page: Page) {
   ).toBe(true)
   await page.goto("/studio/games")
   await page.getByRole("link", { name: "Prepare show", exact: true }).click()
-  await page
-    .getByRole("button", { name: "Open show room", exact: true })
-    .click()
+  await expect(page).toHaveURL(/\/party\/manager\//u)
+  await skipPlatformOpening(page)
   await expect(page.getByTestId("manager-control-toolbar")).toBeVisible()
 
   return {
@@ -80,6 +80,7 @@ test("authoritative phone policy, confirmed deletion, imports, filtering and 40/
   const modal = page.getByTestId("host-players-modal")
   await expect(modal).toBeVisible()
 
+  await page.getByTestId("host-modal-manage-btn").click()
   const imported = page.waitForResponse(
     (response) =>
       response
@@ -118,11 +119,11 @@ test("authoritative phone policy, confirmed deletion, imports, filtering and 40/
   ).toHaveCount(1)
   await expect(modal).toContainText("Synthetic participant 040")
   await search.fill("")
-  await page.getByTestId("host-filter-not_joined").click()
+  await page.getByTestId("host-modal-filter").selectOption("not_joined")
   await expect(
     modal.getByTestId("host-modal-players-table").locator("tbody tr"),
   ).toHaveCount(40)
-  await page.getByTestId("host-filter-all").click()
+  await page.getByTestId("host-modal-filter").selectOption("all")
 
   const presence = await fetchPresence(page, room.gameId, room.headers)
   const participant = presence.players.find(
@@ -200,7 +201,9 @@ test("authoritative phone policy, confirmed deletion, imports, filtering and 40/
   await expect(rosterPolicy).not.toBeChecked()
   await rosterPolicy.click()
   await expect(rosterPolicy).toBeChecked()
-  await expect(modal.getByRole("status")).toHaveText("Saved")
+  await expect(
+    modal.locator(".tds-roster-policy").getByRole("status"),
+  ).toHaveText("Saved")
 
   await page.getByTestId("host-players-close-btn").click()
   const settingsTrigger = page.getByRole("button", {
@@ -257,6 +260,7 @@ test("authoritative phone policy, confirmed deletion, imports, filtering and 40/
   ).toHaveCount(1)
   await search.fill("")
 
+  await page.getByTestId("host-modal-manage-btn").click()
   await page.setViewportSize({ width: 1024, height: 768 })
   await modal.screenshot({
     path: `/evidence/phase-09-roster-400-1024-${testInfo.project.name}.png`,
@@ -272,9 +276,9 @@ test("authoritative phone policy, confirmed deletion, imports, filtering and 40/
     await page.getByTestId("host-modal-players-table").evaluate((table) => {
       const viewport = table.parentElement!
 
-      return table.scrollWidth > viewport.clientWidth
+      return table.scrollWidth > viewport.clientWidth + 1
     }),
-  ).toBe(true)
+  ).toBe(false)
   await modal.screenshot({
     path: `/evidence/phase-09-roster-400-390-${testInfo.project.name}.png`,
     animations: "disabled",

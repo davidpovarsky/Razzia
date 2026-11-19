@@ -5,14 +5,15 @@ import { builderText } from "./strings"
 /** Narrow navigation only; no editor appearance, draft or live room mutation. */
 export function OpenThemeBuilderLink({ className }: { className?: string }) {
   const { i18n } = useTranslation()
-  const language = i18n.language.split("-")[0]
+  const [language] = i18n.language.split("-")
   const locale = (
     ["en", "fr", "de", "es", "it", "ja", "tr", "vi", "he"].includes(language)
       ? language
       : "en"
   ) as PreviewLocale
+
   return (
-    <a href="/studio/themes" className={className}>
+    <a href="/studio/theme-builder" className={className}>
       {builderText(locale)("title")}
     </a>
   )

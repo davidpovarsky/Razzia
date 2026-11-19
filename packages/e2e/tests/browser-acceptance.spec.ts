@@ -1283,7 +1283,9 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     })
     await expect(bottomCounter).toHaveText("2 / 4")
     await expect(
-      manager.locator('[data-testid="kpi-disconnected"]'),
+      manager.locator(
+        '[data-testid="host-modal-filter"] option[value="disconnected"]',
+      ),
     ).toContainText("1")
 
     // 6. Yossi redials with a brand-new CallId -> status returns to Connected and bottom counter becomes 3 / 4

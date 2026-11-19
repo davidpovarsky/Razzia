@@ -71,8 +71,16 @@ export function EditorWorkspace({
   }, [])
 
   const close = () => {
+    const returnTo =
+      Array.from(
+        root.current?.querySelectorAll<HTMLButtonElement>(
+          ".editor-workspace-toggle",
+        ) ?? [],
+      ).find(
+        (button) => button.getAttribute("aria-controls") === `${id}-${active}`,
+      ) ?? trigger.current
     setActive(null)
-    trigger.current?.focus({ preventScroll: true })
+    returnTo?.focus({ preventScroll: true })
   }
 
   useEffect(() => {

@@ -16,6 +16,10 @@ import {
   HostRosterPolicy,
   HostRosterRemove,
   Button as NativeButton,
+  IconButton,
+  Input,
+  SearchInput,
+  Select,
 } from "@razzia/extensions/platform-ui"
 import { ApiError } from "@razzia/web/lib/api"
 import { localizeRosterError } from "./roster-error-text"
@@ -27,7 +31,8 @@ import {
   updateGameRosterSettings,
   upsertGameRosterParticipant,
 } from "@razzia/web/features/manager/roster-queries"
-import clsx from "clsx"
+import { STATUS } from "@razzia/common/types/game/status"
+import "./host-players-modal.css"
 import {
   AlertCircle,
   CheckCircle2,
@@ -37,13 +42,13 @@ import {
   Globe,
   Phone,
   Plus,
-  Search,
+  Settings2,
   Upload,
   Users,
   X,
 } from "lucide-react"
 import { Dialog } from "radix-ui"
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useId, useMemo, useRef, useState } from "react"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
 
@@ -77,7 +82,7 @@ interface Props {
 const HostPlayersModal = ({ open, onOpenChange }: Props) => {
   const { t, i18n } = useTranslation()
   const platformTheme = usePlatformTheme()
-  const { gameId, players, settings, hostPresence, updateManager } =
+  const { gameId, players, settings, status, hostPresence, updateManager } =
     useManagerStore()
 
   const [filterTab, setFilterTab] = useState<FilterTab>("all")
@@ -91,20 +96,64 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
     null,
   )
 
+  const [editorOpen, setEditorOpen] = useState(false)
+  const [managementOpen, setManagementOpen] = useState(false)
+  const [rosterLoadError, setRosterLoadError] = useState(false)
+  const [fetchAttempt, setFetchAttempt] = useState(0)
+  const editorWasOpen = useRef(false)
+  const editorId = useId()
+  const managementId = useId()
+  const nameInputRef = useRef<HTMLInputElement | null>(null)
+  const addButtonRef = useRef<HTMLButtonElement | null>(null)
+
+  useEffect(() => {
+    if (editorOpen) {
+      nameInputRef.current?.focus()
+    } else if (editorWasOpen.current) {
+      addButtonRef.current?.focus()
+    }
+
+    editorWasOpen.current = editorOpen
+  }, [editorOpen, editingId])
+
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
+    let active = true
+
     if (open && gameId) {
-      fetchGameRoster(gameId)
+      void fetchGameRoster(gameId)
         .then(({ presence }) => {
-          updateManager({ hostPresence: presence })
+          if (!active) {
+            return
+          }
+
+          const current = useManagerStore.getState().hostPresence
+
+          if (
+            !current ||
+            current.gameId !== presence.gameId ||
+            current.seq <= presence.seq
+          ) {
+            updateManager({ hostPresence: presence })
+          }
+
+          setRosterLoadError(false)
         })
-        .catch(() => undefined)
+        .catch(() => {
+          if (active) {
+            setRosterLoadError(true)
+          }
+        })
     }
-  }, [open, gameId, updateManager])
+
+    return () => {
+      active = false
+    }
+  }, [open, gameId, updateManager, fetchAttempt])
 
   const snapshot: HostPresenceSnapshot = useMemo(() => {
-    if (hostPresence) {
+    if (hostPresence?.gameId === gameId) {
       return hostPresence
     }
 
@@ -239,6 +288,8 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
       setEditingId(null)
       setNameInput("")
       setPhoneInput("")
+      setEditorOpen(false)
+      addButtonRef.current?.focus()
     } catch (err) {
       setFormError(
         err instanceof ApiError ? err.key : "errors:route.description",
@@ -249,6 +300,8 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
   }
 
   const handleEdit = (p: HostPlayerStatus) => {
+    setEditorOpen(true)
+    setManagementOpen(false)
     setEditingId(p.rosterPlayerId)
     setNameInput(p.displayName)
     setPhoneInput(p.phoneE164 ?? "")
@@ -270,6 +323,7 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
       updateManager({ hostPresence: presence })
 
       if (editingId === rosterPlayerId) {
+        setEditorOpen(false)
         setEditingId(null)
         setNameInput("")
         setPhoneInput("")
@@ -334,6 +388,19 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
     }
   }
 
+  const closeEditor = () => {
+    setEditorOpen(false)
+    setEditingId(null)
+    setNameInput("")
+    setPhoneInput("")
+    setFormError(null)
+    addButtonRef.current?.focus()
+  }
+  const showActivity = Boolean(status && status.name !== STATUS.SHOW_ROOM)
+  const showAnswers =
+    status?.name === STATUS.SELECT_ANSWER ||
+    status?.name === STATUS.SHOW_RESPONSES
+
   return (
     <PlatformThemeProvider {...platformTheme} dir={i18n.dir()}>
       <Dialog.Root open={open} onOpenChange={onOpenChange}>
@@ -341,96 +408,185 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
           legacy
           returnFocusTo='[data-testid="host-bottom-players-btn"]'
         >
-          <Dialog.Overlay className="data-[state=open]:animate-fade fixed inset-0 z-50 bg-black/60 backdrop-blur-xs" />
-
+          <Dialog.Overlay className="tds-overlay" />
           <Dialog.Content
-            aria-describedby={undefined}
+            className="host-roster-dialog"
             data-testid="host-players-modal"
-            className="tds-roster-dialog bg-background data-[state=open]:animate-fade fixed top-1/2 left-1/2 z-50 flex max-h-[88dvh] w-[95vw] max-w-4xl -translate-x-1/2 -translate-y-1/2 flex-col overflow-y-auto rounded-2xl border border-neutral-200 p-6 shadow-2xl dark:border-neutral-800"
           >
-            <Dialog.Close
-              data-testid="host-players-close-btn"
-              aria-label={t("common:close")}
-              className="hover:bg-muted text-muted-foreground hover:text-foreground absolute end-5 top-5 rounded-md p-1.5"
-            >
-              <X className="size-5" />
-            </Dialog.Close>
-
-            <div className="flex flex-wrap items-center justify-between gap-4 pe-10">
-              <div className="flex items-center gap-2.5">
-                <Users className="text-primary size-6" />
-                <Dialog.Title className="text-foreground text-xl font-bold">
-                  {t(
-                    "extensions:roster.liveModalTitle",
-                    "Players & Live Connection Status",
-                  )}
+            <header className="host-roster-header">
+              <div>
+                <Dialog.Title className="host-roster-title">
+                  <Users className="size-5" aria-hidden="true" />
+                  {t("extensions:roster.playersButton", "Players")}
                 </Dialog.Title>
+                <Dialog.Description className="host-roster-summary">
+                  <span data-testid="kpi-registered">
+                    {snapshot.registeredTotal}{" "}
+                    {t("extensions:roster.registeredTotal", "Registered")}
+                  </span>
+                  <span aria-hidden="true">·</span>
+                  <span data-testid="kpi-connected">
+                    {snapshot.connectedNow}{" "}
+                    {t("extensions:roster.connectedNow", "Connected Now")}
+                  </span>
+                </Dialog.Description>
               </div>
+              <Dialog.Close asChild>
+                <IconButton
+                  label={t("common:close")}
+                  variant="ghost"
+                  data-testid="host-players-close-btn"
+                >
+                  <X className="size-5" />
+                </IconButton>
+              </Dialog.Close>
+            </header>
 
-              <div className="flex flex-wrap items-center gap-2">
+            <div className="host-roster-toolbar">
+              <div className="host-roster-search">
+                <SearchInput
+                  value={searchQuery}
+                  aria-label={t("extensions:roster.searchPlaceholder")}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  placeholder={t(
+                    "extensions:roster.searchPlaceholder",
+                    "Search by name or phone number...",
+                  )}
+                  data-testid="host-modal-search-input"
+                />
+              </div>
+              <Select
+                aria-label={t(
+                  "extensions:roster.filterPlayers",
+                  "Filter players",
+                )}
+                value={filterTab}
+                onChange={(event) =>
+                  setFilterTab(event.target.value as FilterTab)
+                }
+                data-testid="host-modal-filter"
+              >
+                <option value="all">
+                  {t("extensions:roster.filterAll", "All")} (
+                  {snapshot.registeredTotal})
+                </option>
+                <option value="connected">
+                  {t("extensions:roster.filterConnected", "Connected")} (
+                  {snapshot.connectedNow})
+                </option>
+                <option value="disconnected">
+                  {t("extensions:roster.filterDisconnected", "Disconnected")} (
+                  {snapshot.disconnectedNow})
+                </option>
+                <option value="not_joined">
+                  {t("extensions:roster.filterNotJoined", "Not joined")} (
+                  {snapshot.notJoinedNow ?? 0})
+                </option>
+                <option value="phone">
+                  {t("extensions:roster.filterPhone", "Phone")}
+                </option>
+                <option value="web">
+                  {t("extensions:roster.filterWeb", "Web")}
+                </option>
+              </Select>
+              <NativeButton
+                ref={addButtonRef}
+                size="sm"
+                variant="primary"
+                disabled={!gameId || isBusy}
+                onClick={() => {
+                  setEditingId(null)
+                  setNameInput("")
+                  setPhoneInput("")
+                  setFormError(null)
+                  setEditorOpen(true)
+                  setManagementOpen(false)
+                }}
+                aria-expanded={editorOpen}
+                aria-controls={editorId}
+                data-testid="host-modal-add-btn"
+              >
+                <Plus className="size-4" aria-hidden="true" />
+                {t("extensions:roster.addParticipant", "Add Participant")}
+              </NativeButton>
+              <IconButton
+                label={t("extensions:roster.manageList", "Manage list")}
+                onClick={() => {
+                  setManagementOpen((value) => !value)
+                  setEditorOpen(false)
+                }}
+                aria-expanded={managementOpen}
+                aria-controls={managementId}
+                data-testid="host-modal-manage-btn"
+              >
+                <Settings2 className="size-4" />
+              </IconButton>
+            </div>
+
+            {managementOpen && (
+              <section
+                id={managementId}
+                className="host-roster-management"
+                aria-label={t("extensions:roster.manageList", "Manage list")}
+              >
                 <input
                   ref={fileInputRef}
                   type="file"
                   accept=".xlsx,.csv"
                   onChange={handleFileChange}
-                  className="hidden"
+                  hidden
                   data-testid="host-modal-file-input"
                 />
-                <NativeButton
-                  size="sm"
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-bold"
-                  data-testid="host-modal-import-btn"
-                >
-                  <Upload className="size-3.5" />
-                  {t("extensions:roster.importExcelCsv", "Import Excel / CSV")}
-                </NativeButton>
-
-                <NativeButton
-                  size="sm"
-                  type="button"
-                  onClick={() =>
-                    triggerFileDownload(
-                      "tada-roster-template.xlsx",
-                      generateRosterXlsxTemplate(),
-                      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    )
-                  }
-                  className="border-border bg-background text-foreground hover:bg-accent flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-xs font-semibold"
-                  data-testid="host-modal-xlsx-template-btn"
-                >
-                  <FileSpreadsheet className="size-3.5" />
-                  {t(
-                    "extensions:roster.downloadXlsxTemplate",
-                    "Template (.xlsx)",
-                  )}
-                </NativeButton>
-
-                <NativeButton
-                  size="sm"
-                  type="button"
-                  onClick={() =>
-                    triggerFileDownload(
-                      "tada-roster-template.csv",
-                      generateRosterCsvTemplate(),
-                      "text/csv;charset=utf-8",
-                    )
-                  }
-                  className="border-border bg-background text-foreground hover:bg-accent flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-xs font-semibold"
-                  data-testid="host-modal-csv-template-btn"
-                >
-                  <Download className="size-3.5" />
-                  {t(
-                    "extensions:roster.downloadCsvTemplate",
-                    "Template (.csv)",
-                  )}
-                </NativeButton>
-
-                {snapshot.players.length > 0 && (
+                <div className="host-roster-file-actions">
                   <NativeButton
                     size="sm"
-                    type="button"
+                    disabled={isBusy || !gameId}
+                    onClick={() => fileInputRef.current?.click()}
+                    data-testid="host-modal-import-btn"
+                  >
+                    <Upload className="size-4" aria-hidden="true" />
+                    {t(
+                      "extensions:roster.importExcelCsv",
+                      "Import Excel / CSV",
+                    )}
+                  </NativeButton>
+                  <NativeButton
+                    size="sm"
+                    onClick={() =>
+                      triggerFileDownload(
+                        "tada-roster-template.xlsx",
+                        generateRosterXlsxTemplate(),
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                      )
+                    }
+                    data-testid="host-modal-xlsx-template-btn"
+                  >
+                    <FileSpreadsheet className="size-4" aria-hidden="true" />
+                    {t(
+                      "extensions:roster.downloadXlsxTemplate",
+                      "Template (.xlsx)",
+                    )}
+                  </NativeButton>
+                  <NativeButton
+                    size="sm"
+                    onClick={() =>
+                      triggerFileDownload(
+                        "tada-roster-template.csv",
+                        generateRosterCsvTemplate(),
+                        "text/csv;charset=utf-8",
+                      )
+                    }
+                    data-testid="host-modal-csv-template-btn"
+                  >
+                    <Download className="size-4" aria-hidden="true" />
+                    {t(
+                      "extensions:roster.downloadCsvTemplate",
+                      "Template (.csv)",
+                    )}
+                  </NativeButton>
+                  <NativeButton
+                    size="sm"
+                    disabled={snapshot.players.length === 0}
                     onClick={() =>
                       triggerFileDownload(
                         "tada-live-roster.csv",
@@ -444,76 +600,115 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                         "text/csv;charset=utf-8",
                       )
                     }
-                    className="border-border bg-background text-foreground hover:bg-accent flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-xs font-semibold"
                     data-testid="host-modal-export-csv-btn"
                   >
-                    <Download className="size-3.5" />
+                    <Download className="size-4" aria-hidden="true" />
                     {t("extensions:roster.exportCsv", "Export (.csv)")}
                   </NativeButton>
+                </div>
+                <HostRosterPolicy
+                  checked={snapshot.phoneInviteOnly}
+                  disabled={isBusy || !gameId}
+                  onChange={handleToggleInviteOnly}
+                />
+              </section>
+            )}
+
+            {editorOpen && (
+              <form
+                id={editorId}
+                className="host-roster-editor"
+                onSubmit={(event) => {
+                  event.preventDefault()
+                  void handleSaveParticipant()
+                }}
+              >
+                <Input
+                  ref={nameInputRef}
+                  label={t("extensions:roster.nameLabel")}
+                  value={nameInput}
+                  maxLength={40}
+                  onChange={(event) => setNameInput(event.target.value)}
+                  placeholder={t(
+                    "extensions:roster.namePlaceholder",
+                    "Enter full display name",
+                  )}
+                  data-testid="host-modal-name-input"
+                />
+                <Input
+                  type="tel"
+                  dir="ltr"
+                  label={t("extensions:roster.phoneLabel")}
+                  value={phoneInput}
+                  onChange={(event) => setPhoneInput(event.target.value)}
+                  placeholder={t(
+                    "extensions:roster.phonePlaceholder",
+                    "+972501234567 or 050-123-4567",
+                  )}
+                  data-testid="host-modal-phone-input"
+                />
+                <div className="host-roster-editor-actions">
+                  <NativeButton
+                    size="sm"
+                    type="submit"
+                    variant="primary"
+                    loading={isBusy}
+                    disabled={!gameId}
+                    data-testid="host-modal-save-participant-btn"
+                  >
+                    {editingId
+                      ? t("extensions:roster.saveParticipant", "Save")
+                      : t(
+                          "extensions:roster.addParticipant",
+                          "Add Participant",
+                        )}
+                  </NativeButton>
+                  <NativeButton
+                    size="sm"
+                    onClick={closeEditor}
+                    disabled={isBusy}
+                  >
+                    {t("extensions:roster.cancel", "Cancel")}
+                  </NativeButton>
+                </div>
+                {formError && (
+                  <p
+                    role="alert"
+                    className="tds-field-error host-roster-form-error"
+                    data-testid="host-modal-form-error"
+                  >
+                    {localizeRosterError(t, formError)}
+                  </p>
                 )}
-              </div>
-            </div>
+              </form>
+            )}
 
-            {/* Live metrics; phone policy is a separate setting. */}
-            <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              <div
-                className="rounded-xl border border-neutral-200 bg-neutral-50 p-3 dark:border-neutral-800 dark:bg-neutral-900"
-                data-testid="kpi-registered"
+            {!editorOpen && formError && (
+              <p
+                role="alert"
+                className="tds-field-error"
+                data-testid="host-modal-form-error"
               >
-                <div className="text-xs font-semibold text-neutral-500">
-                  {t("extensions:roster.registeredTotal", "Registered")}
-                </div>
-                <div className="text-xl font-black text-neutral-900 dark:text-white">
-                  {snapshot.registeredTotal}
-                </div>
-              </div>
+                {localizeRosterError(t, formError)}
+              </p>
+            )}
 
-              <div
-                className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-3"
-                data-testid="kpi-connected"
-              >
-                <div className="text-xs font-semibold text-emerald-700 dark:text-emerald-300">
-                  {t("extensions:roster.connectedNow", "Connected Now")}
-                </div>
-                <div className="text-xl font-black text-emerald-700 dark:text-emerald-300">
-                  {snapshot.connectedNow}
-                </div>
+            {rosterLoadError && (
+              <div className="host-roster-load-error" role="alert">
+                <span>{t("errors:route.description")}</span>
+                <NativeButton
+                  size="sm"
+                  onClick={() => setFetchAttempt((value) => value + 1)}
+                >
+                  {t("common:retry", "Retry")}
+                </NativeButton>
               </div>
-
-              <div
-                className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-3"
-                data-testid="kpi-disconnected"
-              >
-                <div className="text-xs font-semibold text-amber-700 dark:text-amber-300">
-                  {t("extensions:roster.disconnectedNow", "Disconnected")}
-                </div>
-                <div className="text-xl font-black text-amber-700 dark:text-amber-300">
-                  {snapshot.disconnectedNow}
-                </div>
-              </div>
-
-              <div
-                className="rounded-xl border border-neutral-200 bg-neutral-50 p-3 dark:border-neutral-800 dark:bg-neutral-900"
-                data-testid="kpi-not-joined"
-              >
-                <div className="text-xs font-semibold text-neutral-500">
-                  {t("extensions:roster.notJoinedNow", "Not Joined")}
-                </div>
-                <div className="text-xl font-black text-neutral-700 dark:text-neutral-300">
-                  {snapshot.notJoinedNow}
-                </div>
-              </div>
-            </div>
-            <HostRosterPolicy
-              checked={snapshot.phoneInviteOnly}
-              disabled={isBusy || !gameId}
-              onChange={handleToggleInviteOnly}
-            />
+            )}
 
             {/* Import Preview Box */}
             {importPreview && (
               <div
-                className="border-primary/40 bg-card mt-4 flex flex-col gap-3 rounded-xl border-2 p-3"
+                className="host-roster-import-preview"
                 data-testid="host-modal-import-preview"
               >
                 <div className="flex items-center justify-between">
@@ -611,280 +806,165 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
               </div>
             )}
 
-            {/* Quick Add / Edit Row */}
-            <div className="mt-4 flex flex-wrap items-center gap-2 rounded-xl border border-neutral-200 bg-neutral-50/70 p-2.5 dark:border-neutral-800 dark:bg-neutral-900/50">
-              <input
-                type="text"
-                value={nameInput}
-                aria-label={t("extensions:roster.nameLabel")}
-                onChange={(e) => setNameInput(e.target.value)}
-                placeholder={t(
-                  "extensions:roster.namePlaceholder",
-                  "Enter full display name",
-                )}
-                className="border-border bg-background text-foreground min-w-44 flex-1 rounded-lg border px-3 py-1.5 text-xs font-semibold"
-                data-testid="host-modal-name-input"
-              />
-              <input
-                type="text"
-                dir="ltr"
-                value={phoneInput}
-                aria-label={t("extensions:roster.phoneLabel")}
-                onChange={(e) => setPhoneInput(e.target.value)}
-                placeholder={t(
-                  "extensions:roster.phonePlaceholder",
-                  "+972501234567 or 050-123-4567",
-                )}
-                className="border-border bg-background text-foreground min-w-48 flex-1 rounded-lg border px-3 py-1.5 font-mono text-xs"
-                data-testid="host-modal-phone-input"
-              />
-              <NativeButton
-                size="sm"
-                type="button"
-                disabled={isBusy}
-                onClick={handleSaveParticipant}
-                variant="primary"
-                className="bg-primary flex items-center gap-1 rounded-lg px-3.5 py-1.5 text-xs font-bold text-white"
-                data-testid="host-modal-save-participant-btn"
-              >
-                <Plus className="size-3.5" />
-                {editingId
-                  ? t("extensions:roster.saveParticipant", "Save")
-                  : t("extensions:roster.addParticipant", "Add Participant")}
-              </NativeButton>
-              {editingId && (
-                <NativeButton
-                  size="sm"
-                  type="button"
-                  onClick={() => {
-                    setEditingId(null)
-                    setNameInput("")
-                    setPhoneInput("")
-                  }}
-                  className="border-border bg-background rounded-lg border px-2.5 py-1.5 text-xs font-semibold"
-                >
-                  {t("extensions:roster.cancel", "Cancel")}
-                </NativeButton>
-              )}
-              {formError && (
-                <span
-                  className="w-full text-xs font-bold text-red-600"
-                  data-testid="host-modal-form-error"
-                >
-                  {localizeRosterError(t, formError)}
-                </span>
-              )}
-            </div>
-
-            {/* Search & Filter Bar */}
-            <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-              <div className="flex flex-wrap items-center gap-1">
-                {(
-                  [
-                    ["all", t("extensions:roster.filterAll", "All")],
-                    [
-                      "connected",
-                      t("extensions:roster.filterConnected", "Connected"),
-                    ],
-                    [
-                      "disconnected",
-                      t("extensions:roster.filterDisconnected", "Disconnected"),
-                    ],
-                    [
-                      "not_joined",
-                      t("extensions:roster.filterNotJoined", "Not Joined"),
-                    ],
-                    ["phone", t("extensions:roster.filterPhone", "Phone")],
-                    ["web", t("extensions:roster.filterWeb", "Web")],
-                  ] as Array<[FilterTab, string]>
-                ).map(([tabId, label]) => (
-                  <NativeButton
-                    size="sm"
-                    key={tabId}
-                    type="button"
-                    onClick={() => setFilterTab(tabId)}
-                    variant={filterTab === tabId ? "primary" : "secondary"}
-                    aria-pressed={filterTab === tabId}
-                    data-testid={`host-filter-${tabId}`}
-                    className={clsx(
-                      "rounded-lg px-2.5 py-1 text-xs font-bold transition-colors",
-                      filterTab === tabId
-                        ? "bg-primary text-white"
-                        : "bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300",
-                    )}
-                  >
-                    {label}
-                  </NativeButton>
-                ))}
-              </div>
-
-              <div className="relative min-w-56">
-                <Search className="absolute start-2.5 top-2 size-3.5 text-neutral-400" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  aria-label={t("extensions:roster.searchPlaceholder")}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder={t(
-                    "extensions:roster.searchPlaceholder",
-                    "Search by name or phone number...",
-                  )}
-                  className="border-border bg-background text-foreground w-full rounded-lg border py-1 ps-8 pe-3 text-xs"
-                  data-testid="host-modal-search-input"
-                />
-              </div>
-            </div>
-
-            {/* Players Table */}
-            <div className="tds-roster-table-scroll mt-3 min-h-40 shrink-0 overflow-auto rounded-xl border border-neutral-200 sm:min-h-0 sm:flex-1 sm:shrink dark:border-neutral-800">
+            <div className="host-roster-list" data-testid="host-roster-list">
               {filteredPlayers.length === 0 ? (
-                <div
-                  className="p-8 text-center text-sm text-neutral-500"
-                  data-testid="host-modal-empty"
-                >
+                <p className="host-roster-empty" data-testid="host-modal-empty">
                   {t(
                     searchQuery || filterTab !== "all"
                       ? "extensions:roster.noSearchResults"
                       : "extensions:roster.emptyRoster",
                   )}
-                </div>
+                </p>
               ) : (
                 <table
-                  className="w-full text-start text-xs"
+                  className="host-roster-table"
                   data-testid="host-modal-players-table"
                 >
-                  <thead className="sticky top-0 bg-neutral-100 font-bold text-neutral-700 dark:bg-neutral-800 dark:text-neutral-200">
+                  <thead>
                     <tr>
-                      <th className="px-3 py-2.5">
+                      <th scope="col">
                         {t("extensions:roster.colName", "Name")}
                       </th>
-                      <th className="px-3 py-2.5">
-                        {t("extensions:roster.colPhone", "Phone Number")}
-                      </th>
-                      <th className="px-3 py-2.5">
-                        {t("extensions:roster.colSource", "Source")}
-                      </th>
-                      <th className="px-3 py-2.5">
+                      <th scope="col">
                         {t("extensions:roster.colStatus", "Status")}
                       </th>
-                      <th className="px-3 py-2.5">
-                        {t("extensions:roster.colAnswered", "Current Q")}
-                      </th>
-                      <th className="px-3 py-2.5">
-                        {t("extensions:roster.colPoints", "Points")}
-                      </th>
-                      <th className="px-3 py-2.5 text-end">
+                      {showActivity && (
+                        <th scope="col">
+                          {t("extensions:roster.colPoints", "Points")}
+                        </th>
+                      )}
+                      <th scope="col" className="host-roster-actions-heading">
                         {t("extensions:roster.colActions")}
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
-                    {filteredPlayers.map((p) => (
+                  <tbody>
+                    {filteredPlayers.map((person) => (
                       <tr
-                        key={p.rosterPlayerId}
-                        data-testid={`host-player-row-${p.rosterPlayerId}`}
-                        className="bg-white hover:bg-neutral-50 dark:bg-neutral-900 dark:hover:bg-neutral-800/60"
+                        key={person.rosterPlayerId}
+                        data-testid={`host-player-row-${person.rosterPlayerId}`}
                       >
-                        <td
-                          className="px-3 py-2 font-bold text-neutral-900 dark:text-white"
-                          data-testid={`host-player-name-${p.rosterPlayerId}`}
-                        >
-                          {p.displayName}
-                        </td>
-                        <td
-                          className="px-3 py-2 font-mono text-neutral-800 dark:text-neutral-200"
-                          dir="ltr"
-                          data-testid={`host-player-phone-${p.rosterPlayerId}`}
-                        >
-                          {formatFullPhoneDisplay(p.phoneE164)}
-                        </td>
-                        <td className="px-3 py-2">
-                          {p.source === "phone" || p.phoneE164 ? (
-                            <span className="inline-flex items-center gap-1 rounded-md bg-blue-500/10 px-2 py-0.5 font-semibold text-blue-700 dark:text-blue-300">
-                              <Phone className="size-3" />
-                              {t("extensions:roster.sourcePhone", "Phone")}
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center gap-1 rounded-md bg-neutral-500/10 px-2 py-0.5 font-semibold text-neutral-700 dark:text-neutral-300">
-                              <Globe className="size-3" />
-                              {t("extensions:roster.sourceWeb", "Web")}
-                            </span>
-                          )}
-                        </td>
-                        <td
-                          className="px-3 py-2"
-                          data-testid={`host-player-status-${p.rosterPlayerId}`}
-                        >
-                          {p.status === "connected" && (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2.5 py-0.5 font-bold text-emerald-700 dark:text-emerald-300">
-                              <span className="size-2 rounded-full bg-emerald-500" />
-                              {t(
-                                "extensions:roster.statusConnected",
-                                "Connected",
-                              )}
-                            </span>
-                          )}
-                          {p.status === "disconnected" && (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/15 px-2.5 py-0.5 font-bold text-amber-700 dark:text-amber-300">
-                              <AlertCircle className="size-3" />
-                              {t(
-                                "extensions:roster.statusDisconnected",
-                                "Disconnected",
-                              )}
-                            </span>
-                          )}
-                          {p.status === "not_joined" && (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-neutral-200 px-2.5 py-0.5 font-semibold text-neutral-600 dark:bg-neutral-800 dark:text-neutral-400">
-                              {t(
-                                "extensions:roster.statusNotJoined",
-                                "Not joined",
-                              )}
-                            </span>
-                          )}
-                        </td>
-                        <td className="px-3 py-2">
-                          {p.answeredCurrentQuestion ? (
-                            <span className="inline-flex items-center gap-1 font-bold text-emerald-600">
-                              <CheckCircle2 className="size-3.5" />
-                              {t("extensions:roster.answeredYes", "Answered")}
-                            </span>
-                          ) : (
-                            <span className="text-neutral-400">
-                              {t("extensions:roster.answeredNo", "Waiting")}
-                            </span>
-                          )}
-                        </td>
-                        <td
-                          className="px-3 py-2 font-mono font-bold"
-                          data-testid={`host-player-points-${p.rosterPlayerId}`}
-                        >
-                          {p.points}
-                        </td>
-                        <td className="px-3 py-2 text-end">
-                          <div className="inline-flex items-center gap-1">
-                            <NativeButton
-                              size="sm"
-                              type="button"
-                              onClick={() => handleEdit(p)}
-                              aria-label={t(
-                                "extensions:roster.editParticipant",
-                              )}
-                              className="hover:bg-accent rounded p-1 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400"
-                              title={t(
-                                "extensions:roster.editParticipant",
-                                "Edit Participant",
-                              )}
-                              data-testid={`host-player-edit-${p.rosterPlayerId}`}
-                            >
-                              <Edit2 className="size-3.5" />
-                            </NativeButton>
-                            <HostRosterRemove
-                              name={p.displayName}
-                              participantId={p.rosterPlayerId}
-                              disabled={isBusy || !gameId}
-                              onConfirm={() => handleRemove(p.rosterPlayerId)}
-                            />
+                        <td className="host-roster-person">
+                          <strong
+                            data-testid={`host-player-name-${person.rosterPlayerId}`}
+                          >
+                            {person.displayName}
+                          </strong>
+                          <div className="host-roster-person-details">
+                            {person.phoneE164 ? (
+                              <span
+                                dir="ltr"
+                                data-testid={`host-player-phone-${person.rosterPlayerId}`}
+                              >
+                                <Phone className="size-3" aria-hidden="true" />
+                                {formatFullPhoneDisplay(person.phoneE164)}
+                              </span>
+                            ) : (
+                              <span>
+                                {person.source === "phone" ? (
+                                  <Phone
+                                    className="size-3"
+                                    aria-hidden="true"
+                                  />
+                                ) : (
+                                  <Globe
+                                    className="size-3"
+                                    aria-hidden="true"
+                                  />
+                                )}
+                                {t(
+                                  person.source === "phone"
+                                    ? "extensions:roster.sourcePhone"
+                                    : "extensions:roster.sourceWeb",
+                                )}
+                              </span>
+                            )}
+                            {person.tableNumber !== undefined && (
+                              <span>
+                                {t("extensions:roster.tableNumber", {
+                                  number: person.tableNumber,
+                                  defaultValue: "Table {{number}}",
+                                })}
+                              </span>
+                            )}
                           </div>
+                        </td>
+                        <td
+                          className="host-roster-connection"
+                          data-testid={`host-player-status-${person.rosterPlayerId}`}
+                        >
+                          <span
+                            className="host-roster-status"
+                            data-status={person.status}
+                          >
+                            {person.status === "connected" && (
+                              <CheckCircle2
+                                className="size-3.5"
+                                aria-hidden="true"
+                              />
+                            )}
+                            {person.status === "disconnected" && (
+                              <AlertCircle
+                                className="size-3.5"
+                                aria-hidden="true"
+                              />
+                            )}
+                            {person.status === "not_joined" && (
+                              <span
+                                className="host-roster-status-dot"
+                                aria-hidden="true"
+                              />
+                            )}
+                            {t(
+                              {
+                                connected: "extensions:roster.statusConnected",
+                                disconnected:
+                                  "extensions:roster.statusDisconnected",
+                                not_joined: "extensions:roster.statusNotJoined",
+                              }[person.status],
+                            )}
+                          </span>
+                        </td>
+                        {showActivity && (
+                          <td className="host-roster-activity">
+                            <strong
+                              data-testid={`host-player-points-${person.rosterPlayerId}`}
+                            >
+                              {person.points}{" "}
+                              <span className="host-roster-mobile-label">
+                                {t("extensions:roster.colPoints", "Points")}
+                              </span>
+                            </strong>
+                            {showAnswers && (
+                              <span>
+                                {t(
+                                  person.answeredCurrentQuestion
+                                    ? "extensions:roster.answeredYes"
+                                    : "extensions:roster.answeredNo",
+                                )}
+                              </span>
+                            )}
+                          </td>
+                        )}
+                        <td className="host-roster-row-actions">
+                          <IconButton
+                            size="sm"
+                            variant="ghost"
+                            disabled={isBusy || !gameId}
+                            label={`${t("extensions:roster.editParticipant")} · ${person.displayName}`}
+                            onClick={() => handleEdit(person)}
+                            data-testid={`host-player-edit-${person.rosterPlayerId}`}
+                          >
+                            <Edit2 className="size-4" />
+                          </IconButton>
+                          <HostRosterRemove
+                            name={person.displayName}
+                            participantId={person.rosterPlayerId}
+                            disabled={isBusy || !gameId}
+                            onConfirm={() =>
+                              handleRemove(person.rosterPlayerId)
+                            }
+                          />
                         </td>
                       </tr>
                     ))}
@@ -892,6 +972,13 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                 </table>
               )}
             </div>
+            <p className="host-roster-count" role="status">
+              {t("extensions:roster.showingPlayers", {
+                shown: filteredPlayers.length,
+                total: snapshot.registeredTotal,
+                defaultValue: "{{shown}} of {{total}} players",
+              })}
+            </p>
           </Dialog.Content>
         </DialogPortal>
       </Dialog.Root>

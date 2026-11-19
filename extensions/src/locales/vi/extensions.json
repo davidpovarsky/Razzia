@@ -99,7 +99,11 @@
     "testStop": "Dừng",
     "url": "Đường dẫn âm thanh",
     "cuesDesc": "Cấu hình nhạc nền và hiệu ứng âm thanh cho các sự kiện trong trò chơi.",
-    "source": "Nguồn"
+    "source": "Nguồn",
+    "musicLabel": "Nhạc",
+    "musicAutomatic": "Tự động",
+    "musicHelp": "Đổi nhạc cho màn hình này. Màn hình tiếp theo sẽ tự động chọn nhạc.",
+    "musicUnavailable": "Không thể tải nhạc này. Hãy chọn bản nhạc khác."
   },
   "visuals": {
     "answerVisualTitle": "Hình ảnh câu trả lời",
@@ -354,7 +358,11 @@
       "corruptImportFile": "Không thể đọc tệp. Hãy kiểm tra định dạng và thử lại.",
       "duplicateParticipantPhone": "Số điện thoại {{phone}} đã được gán cho {{name}}.",
       "importReadFailed": "Không thể đọc tệp nhập dữ liệu."
-    }
+    },
+    "manageList": "Quản lý danh sách",
+    "filterPlayers": "Lọc người chơi",
+    "tableNumber": "Bàn {{number}}",
+    "showingPlayers": "{{shown}} trong {{total}} người chơi"
   },
   "timeline": {
     "quiz": "Câu đố",
@@ -902,7 +910,21 @@
       "survey-results": "Kết quả",
       "z-wipe": "Chuyển cảnh"
     },
-    "installationPreview": "Bản xem trước chủ đề riêng tư để xem xét và phê duyệt."
+    "installationPreview": "Bản xem trước chủ đề riêng tư để xem xét và phê duyệt.",
+    "chooseDescription": "Thay đổi giao diện trò chơi mà không thay đổi câu hỏi hay người chơi. Lưu trò chơi để giữ lựa chọn của bạn.",
+    "catalogUnavailable": "Không thể tải các chủ đề đã cài đặt. Chủ đề đã lưu của bạn chưa bị thay đổi.",
+    "importTheme": "Nhập chủ đề",
+    "chooseThemeFile": "Chọn tệp .tadazz",
+    "importHint": "Nhập gói chủ đề .tadazz. Chỉ các chủ đề được cài đặt tại đây; nội dung trò chơi không thay đổi.",
+    "importUnavailable": "Hiện không thể nhập chủ đề. Vui lòng thử lại.",
+    "importEmpty": "Gói này không chứa chủ đề nào. Hãy chọn một gói chủ đề.",
+    "imported": "Đã cài đặt chủ đề. Chọn chủ đề bên dưới rồi lưu trò chơi.",
+    "libraryTitle": "Chủ đề trò chơi",
+    "libraryDescription": "Chọn trò chơi để đổi hoặc nhập chủ đề trong trình biên tập. Câu hỏi và người chơi được giữ nguyên.",
+    "openEditor": "Chọn chủ đề trong trình biên tập",
+    "noGames": "Không có trò chơi để hiển thị. Tạo trò chơi để chọn chủ đề.",
+    "newGame": "Tạo trò chơi",
+    "advancedBuilder": "Tạo chủ đề nâng cao"
   },
   "editorPreview": {
     "title": "Xem trước trực tiếp",

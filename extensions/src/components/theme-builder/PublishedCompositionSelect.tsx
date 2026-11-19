@@ -27,7 +27,9 @@ const key = (value: Pick<Choice, "workspaceId" | "id" | "version">) =>
 export function PublishedCompositionSelect({
   pin,
   onSelect,
+  hideWhenEmpty = false,
 }: {
+  hideWhenEmpty?: boolean
   pin?: ApplicationCompositionPin
   onSelect: (
     value: {
@@ -112,7 +114,11 @@ export function PublishedCompositionSelect({
     }
   }, [accountId, enabled])
 
-  if (!enabled || !accountId) {
+  if (
+    !enabled ||
+    !accountId ||
+    (hideWhenEmpty && !pin && !choices.length && !failed)
+  ) {
     return null
   }
 

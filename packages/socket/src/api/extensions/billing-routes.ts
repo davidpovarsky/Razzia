@@ -1,7 +1,13 @@
 import { Hono } from "hono"
 import { bodyLimit } from "hono/body-limit"
 import { z } from "zod"
-import { BillingError } from "@razzia/extensions/server"
+import {
+  BillingError,
+  hasBillingClientToken,
+  isBillingCheckoutConfigured,
+  publicBillingCatalog,
+  readBillingConfig,
+} from "@razzia/extensions/server"
 import { billingCurrencySchema } from "@razzia/extensions/core"
 import { requireManager } from "@razzia/socket/api/middleware"
 import type { ApiEnv } from "@razzia/socket/api/factory"
@@ -30,13 +36,23 @@ export const billingRoutes = new Hono<ApiEnv>()
 
     return c.json({ error: "extensions:billing.errors.unavailable" }, 503)
   })
-  .get("/config", (c) =>
-    c.json({
-      enabled:
-        process.env.TADAZZ_BILLING_ENABLED === "true" &&
-        process.env.TADAZZ_ACCOUNTS_ENABLED === "true",
-    }),
-  )
+  .get("/config", (c) => {
+    const { enabled, configured, environment, plans } =
+      publicBillingCatalog(readBillingConfig())
+    c.header("Cache-Control", "no-store")
+
+    return c.json({
+      enabled,
+      configured,
+      environment,
+      catalogAvailable: plans.length > 0,
+    })
+  })
+  .get("/catalog", (c) => {
+    c.header("Cache-Control", "no-store")
+
+    return c.json(publicBillingCatalog(readBillingConfig()))
+  })
   .post("/webhooks/paddle", async (c) => {
     const billing = getBilling()
 
@@ -60,17 +76,15 @@ export const billingRoutes = new Hono<ApiEnv>()
   .get("/", (c) => c.json(requireBilling().snapshot(c.get("claims").sub)))
   .post("/checkout", async (c) => {
     const body = checkoutBody.parse(await c.req.json())
-    const token = process.env.PADDLE_CLIENT_TOKEN ?? ""
     const billing = requireBilling()
-    const prefix = billing.config.environment === "live" ? "live_" : "test_"
 
-    if (!token.startsWith(prefix)) {
+    if (!isBillingCheckoutConfigured(billing.config)) {
       throw new BillingError("notConfigured", 503)
     }
 
     return c.json({
       ...(await billing.checkout.create(c.get("claims").sub, body)),
-      clientToken: token,
+      clientToken: billing.config.clientToken,
       environment: billing.config.environment,
     })
   })
@@ -94,20 +108,14 @@ export const billingRoutes = new Hono<ApiEnv>()
       throw new BillingError("notFound", 404)
     }
 
-    const clientToken = process.env.PADDLE_CLIENT_TOKEN ?? ""
-
-    if (
-      !clientToken.startsWith(
-        billing.config.environment === "live" ? "live_" : "test_",
-      )
-    ) {
+    if (!hasBillingClientToken(billing.config)) {
       throw new BillingError("notConfigured", 503)
     }
 
     return c.json({
       transactionId,
       completed: row.completed === 1,
-      clientToken,
+      clientToken: billing.config.clientToken,
       environment: billing.config.environment,
     })
   })

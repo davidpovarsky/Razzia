@@ -32,6 +32,41 @@ export const billingPlanSchema = z
 
 export type BillingPlan = z.infer<typeof billingPlanSchema>
 
+// Public prices never include provider identifiers or account entitlements.
+export const billingPublicPlanSchema = z.strictObject({
+  id: z.string().regex(/^[a-z0-9][a-z0-9-]{0,63}$/u),
+  version: z.number().int().positive(),
+  kind: z.enum(["single", "monthly"]),
+  participants: z.number().int().min(1).max(10_000),
+  games: z.number().int().min(1).max(10_000),
+  phoneMinutes: z.number().int().min(0).max(1_000_000),
+  prices: z
+    .array(billingPriceSchema.omit({ priceId: true }))
+    .min(1)
+    .max(4),
+})
+
+export const billingPublicCatalogSchema = z
+  .strictObject({
+    enabled: z.boolean(),
+    configured: z.boolean(),
+    environment: z.enum(["sandbox", "live"]),
+    currencies: z.array(billingCurrencySchema).max(4),
+    plans: z.array(billingPublicPlanSchema).max(100),
+  })
+  .superRefine((catalog, ctx) => {
+    if (
+      (!catalog.enabled ||
+        !catalog.configured ||
+        catalog.environment !== "live") &&
+      (catalog.plans.length > 0 || catalog.currencies.length > 0)
+    ) {
+      ctx.addIssue({ code: "custom", message: "Public catalog is unavailable" })
+    }
+  })
+
+export type BillingPublicCatalog = z.infer<typeof billingPublicCatalogSchema>
+
 export const billingCatalogSchema = z
   .array(billingPlanSchema)
   .max(100)

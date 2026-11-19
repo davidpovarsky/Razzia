@@ -99,7 +99,11 @@
     "testStop": "Durdur",
     "url": "Medya Bağlantısı",
     "cuesDesc": "Oyun etkinlikleri için arka plan müziğini ve ses ipuçlarını yapılandırın.",
-    "source": "Kaynak"
+    "source": "Kaynak",
+    "musicLabel": "Müzik",
+    "musicAutomatic": "Otomatik",
+    "musicHelp": "Bu ekranın müziğini değiştirir. Sonraki ekranda otomatik müziğe dönülür.",
+    "musicUnavailable": "Bu müzik yüklenemedi. Başka bir parça seçin."
   },
   "visuals": {
     "answerVisualTitle": "Cevap Görselleri",
@@ -354,7 +358,11 @@
       "corruptImportFile": "Dosya okunamadı. Biçimini kontrol edip yeniden deneyin.",
       "duplicateParticipantPhone": "{{phone}} numarası zaten {{name}} adlı katılımcıya atanmış.",
       "importReadFailed": "İçe aktarılacak dosya okunamadı."
-    }
+    },
+    "manageList": "Listeyi yönet",
+    "filterPlayers": "Oyuncuları filtrele",
+    "tableNumber": "Masa {{number}}",
+    "showingPlayers": "{{total}} oyuncudan {{shown}} tanesi"
   },
   "timeline": {
     "quiz": "Test",
@@ -902,7 +910,21 @@
       "survey-results": "Sonuçlar",
       "z-wipe": "Geçiş"
     },
-    "installationPreview": "İnceleme ve onay için özel tema önizlemesi."
+    "installationPreview": "İnceleme ve onay için özel tema önizlemesi.",
+    "chooseDescription": "Sorularını veya oyuncularını değiştirmeden oyunun görünümünü değiştirin. Seçiminizi korumak için oyunu kaydedin.",
+    "catalogUnavailable": "Yüklü temalar yüklenemedi. Kayıtlı temanız değiştirilmedi.",
+    "importTheme": "Tema içe aktar",
+    "chooseThemeFile": ".tadazz dosyası seç",
+    "importHint": ".tadazz tema paketi içe aktarın. Burada yalnızca temalar yüklenir; oyun içeriği değişmez.",
+    "importUnavailable": "Tema içe aktarma kullanılamıyor. Tekrar deneyin.",
+    "importEmpty": "Bu paket tema içermiyor. Bir tema paketi seçin.",
+    "imported": "Tema yüklendi. Aşağıdan seçin ve oyununuzu kaydedin.",
+    "libraryTitle": "Oyun temaları",
+    "libraryDescription": "Temasını düzenleyicide değiştirmek veya içe aktarmak için bir oyun seçin. Sorular ve oyuncular korunur.",
+    "openEditor": "Düzenleyicide tema seç",
+    "noGames": "Görüntülenecek oyun yok. Temasını seçmek için bir oyun oluşturun.",
+    "newGame": "Oyun oluştur",
+    "advancedBuilder": "Gelişmiş tema oluşturma"
   },
   "editorPreview": {
     "title": "Canlı önizleme",

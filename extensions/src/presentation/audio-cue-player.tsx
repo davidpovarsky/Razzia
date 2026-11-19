@@ -154,6 +154,7 @@ export function AudioPreferencesScope({ children }: PropsWithChildren) {
 
 export interface AudioControlState {
   blocked: boolean
+  unavailable?: boolean
   muted: boolean
   userPaused: boolean
   volume: number
@@ -161,6 +162,7 @@ export interface AudioControlState {
   tracks: ReadonlyArray<{
     value: string
     label: string
+    disabled?: boolean
   }>
   labels: NonNullable<AudioCuePlayerProps["controlLabels"]>
   unlock: () => void
@@ -199,6 +201,8 @@ export interface AudioCuePlayerProps {
   continuityKey?: string
   gameId?: string | null
   activeCardKey?: string | null
+  /** Manual music belongs to this screen; automatic continuity is unchanged. */
+  screenKey?: string | null
   phase?: string | null
   epoch?: number | string | null
   hasCompetingMedia?: boolean
@@ -279,6 +283,7 @@ export const AudioCuePlayer = ({
   continuityKey,
   gameId,
   activeCardKey,
+  screenKey,
   phase,
   epoch,
   hasCompetingMedia = false,
@@ -410,6 +415,9 @@ export const AudioCuePlayer = ({
   const finishedIdentityRef = useRef<string | null>(null)
   const playedSfxRef = useRef(new Set<string>())
   const [audioBlocked, setAudioBlocked] = useState(false)
+  const [failedTrackUrls, setFailedTrackUrls] = useState<ReadonlySet<string>>(
+    () => new Set(),
+  )
   const sharedPreferences = useContext(AudioPreferencesContext)
   const [localMuted, setLocalMuted] = useState(false)
   const [localVolume, setLocalVolume] = useState(1)
@@ -479,9 +487,13 @@ export const AudioCuePlayer = ({
     slot: SoundtrackSlotId
     stageKey: string
   } | null>(null)
-  const stageKey = `${soundtrackSlot ?? ""}:${continuityKey ?? ""}`
+  const stageKey = `${gameId ?? ""}:${screenKey ?? activeCardKey ?? ""}:${epoch ?? ""}:${phase ?? ""}:${soundtrackSlot ?? ""}:${continuityKey ?? ""}`
   const liveSlotOverride =
     manualTrack?.stageKey === stageKey ? manualTrack.slot : null
+  useEffect(() => {
+    // Expired choices must not reappear when history returns to an earlier screen.
+    setManualTrack((choice) => (choice?.stageKey === stageKey ? choice : null))
+  }, [stageKey])
   const selectedSoundtrackSlot = liveSlotOverride ?? soundtrackSlot
   useEffect(() => {
     if (selectedSoundtrackSlot !== "voting") {
@@ -508,8 +520,8 @@ export const AudioCuePlayer = ({
 
     setDucked(false)
   }, [selectedSoundtrackSlot, gameId, activeCardKey, epoch])
-  const configuredSoundtrackSlots = SOUNDTRACK_SLOT_IDS.filter(
-    (slot) => audioExtras?.soundtrack?.[slot]?.mode === "media",
+  const configuredSoundtrackSlots = SOUNDTRACK_SLOT_IDS.filter((slot) =>
+    Boolean(resolveSoundtrack(slot, audioExtras)),
   )
   const effectiveCueId: CueId | undefined =
     selectedSoundtrackSlot === "voting"
@@ -532,6 +544,21 @@ export const AudioCuePlayer = ({
   const desired = useMemo<DesiredTrack | null>(() => {
     if (eventOnly) {
       return null
+    }
+
+    // A deliberate music choice uses the selected configured recording, even
+    // when the automatic scene policy reserves that cue for reveal choreography.
+    // It expires with this exact screen; it never advances the game itself.
+    if (liveSlotOverride && soundtrack?.url && showTrack === undefined) {
+      return {
+        identity: `${gameId ?? "g"}:manual:${stageKey}:${liveSlotOverride}:${soundtrack.url}`,
+        url: soundtrack.url,
+        volume: soundtrack.volume,
+        loop: soundtrack.loop,
+        fadeMs: soundtrack.fadeMs,
+        startOffsetSeconds: soundtrack.startOffsetSeconds,
+        maxDurationMs: liveSlotOverride === "openingIntro" ? 12000 : undefined,
+      }
     }
 
     if (showTrack !== undefined) {
@@ -710,6 +737,7 @@ export const AudioCuePlayer = ({
     stageOwnsReveal,
     liveSlotOverride,
     sceneAudio,
+    stageKey,
   ])
   const effectiveVolume = useCallback(
     (track: DesiredTrack) =>
@@ -1001,6 +1029,9 @@ export const AudioCuePlayer = ({
             })
         }
       } else {
+        setFailedTrackUrls((urls) =>
+          urls.has(desired.url) ? urls : new Set([...urls, desired.url]),
+        )
         onError(new Error(`Failed to load presenter audio: ${desired.url}`))
       }
     }
@@ -1084,7 +1115,15 @@ export const AudioCuePlayer = ({
         }
 
         old.pause()
-        setAudioBlocked(true)
+
+        if (next.error) {
+          setFailedTrackUrls((urls) =>
+            urls.has(desired.url) ? urls : new Set([...urls, desired.url]),
+          )
+        } else {
+          setAudioBlocked(true)
+        }
+
         onError(error)
       })
   }, [
@@ -1664,6 +1703,24 @@ export const AudioCuePlayer = ({
     return () => window.removeEventListener("tadazz:audio-unlock", unlock)
   }, [unlock])
 
+  const selectTrack = (value: string) => {
+    if (
+      value &&
+      (!configuredSoundtrackSlots.includes(value as SoundtrackSlotId) ||
+        failedTrackUrls.has(
+          resolveSoundtrack(value as SoundtrackSlotId, audioExtras)?.url ?? "",
+        ))
+    ) {
+      return
+    }
+
+    // Choosing music is an explicit playback gesture. Retain mute/volume, while
+    // allowing this selected recording to play instead of preserving an old pause.
+    setAudioBlocked(false)
+    setUserPaused(false)
+    setManualTrack(value ? { slot: value as SoundtrackSlotId, stageKey } : null)
+  }
+
   return (
     <>
       <span
@@ -1677,6 +1734,9 @@ export const AudioCuePlayer = ({
         data-audio-identity={desired?.identity ?? ""}
         data-audio-loop={desired?.loop ? "true" : "false"}
         data-audio-blocked={audioBlocked ? "true" : "false"}
+        data-audio-error={
+          desired && failedTrackUrls.has(desired.url) ? "true" : "false"
+        }
         data-audio-paused={paused || userPaused ? "true" : "false"}
       />
       {!showControls && audioBlocked && (
@@ -1708,6 +1768,7 @@ export const AudioCuePlayer = ({
         (renderControls ? (
           renderControls({
             blocked: audioBlocked,
+            unavailable: Boolean(desired && failedTrackUrls.has(desired.url)),
             muted,
             userPaused,
             volume: masterVolume,
@@ -1717,6 +1778,9 @@ export const AudioCuePlayer = ({
                 ? configuredSoundtrackSlots.map((slot) => ({
                     value: slot,
                     label: soundtrackLabels?.[slot] ?? slot,
+                    disabled: failedTrackUrls.has(
+                      resolveSoundtrack(slot, audioExtras)?.url ?? "",
+                    ),
                   }))
                 : [],
             labels: controlLabels,
@@ -1724,15 +1788,7 @@ export const AudioCuePlayer = ({
             toggleMute: () => setMuted((value) => !value),
             togglePause: () => setUserPaused((value) => !value),
             setVolume: setMasterVolume,
-            setTrack: (value) =>
-              setManualTrack(
-                value
-                  ? {
-                      slot: value as SoundtrackSlotId,
-                      stageKey,
-                    }
-                  : null,
-              ),
+            setTrack: selectTrack,
           })
         ) : (
           <div
@@ -1756,22 +1812,19 @@ export const AudioCuePlayer = ({
                   <span>{controlLabels.track}</span>
                   <select
                     value={liveSlotOverride ?? ""}
-                    onChange={(event) =>
-                      setManualTrack(
-                        event.target.value
-                          ? {
-                              slot: event.target.value as SoundtrackSlotId,
-                              stageKey,
-                            }
-                          : null,
-                      )
-                    }
+                    onChange={(event) => selectTrack(event.target.value)}
                     className="rounded bg-black/30 px-2 py-1 text-white"
                     data-testid="host-audio-track-select"
                   >
                     <option value="">{controlLabels.followShow}</option>
                     {configuredSoundtrackSlots.map((slot) => (
-                      <option key={slot} value={slot}>
+                      <option
+                        key={slot}
+                        value={slot}
+                        disabled={failedTrackUrls.has(
+                          resolveSoundtrack(slot, audioExtras)?.url ?? "",
+                        )}
+                      >
                         {soundtrackLabels?.[slot] ?? slot}
                       </option>
                     ))}

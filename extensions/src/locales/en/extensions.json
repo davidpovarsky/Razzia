@@ -99,7 +99,11 @@
     "testStop": "Stop",
     "url": "Media URL",
     "cuesDesc": "Configure background music and sound cues for game events.",
-    "source": "Source"
+    "source": "Source",
+    "musicLabel": "Music",
+    "musicAutomatic": "Automatic",
+    "musicHelp": "Changes music for this screen. The next screen resumes automatic music.",
+    "musicUnavailable": "This music could not be loaded. Choose another track."
   },
   "visuals": {
     "answerVisualTitle": "Answer Visuals",
@@ -354,7 +358,11 @@
       "corruptImportFile": "The file could not be read. Check its format and try again.",
       "duplicateParticipantPhone": "Phone number {{phone}} is already assigned to {{name}}.",
       "importReadFailed": "The import file could not be read."
-    }
+    },
+    "manageList": "Manage list",
+    "filterPlayers": "Filter players",
+    "tableNumber": "Table {{number}}",
+    "showingPlayers": "{{shown}} of {{total}} players"
   },
   "timeline": {
     "quiz": "Quiz",
@@ -902,7 +910,21 @@
       "survey-results": "Results",
       "z-wipe": "Transition"
     },
-    "installationPreview": "Private theme preview for review and approval."
+    "installationPreview": "Private theme preview for review and approval.",
+    "chooseDescription": "Change this game's appearance without changing its questions or players. Save the game to keep your selection.",
+    "catalogUnavailable": "Installed themes could not be loaded. Your saved theme has not been changed.",
+    "importTheme": "Import theme",
+    "chooseThemeFile": "Choose .tadazz file",
+    "importHint": "Import a .tadazz theme package. Only themes are installed here; game content stays unchanged.",
+    "importUnavailable": "Theme import is unavailable. Try again.",
+    "importEmpty": "This package contains no themes. Choose a theme package.",
+    "imported": "Theme installed. Choose it below, then save your game.",
+    "libraryTitle": "Game themes",
+    "libraryDescription": "Choose a game to change or import its theme in the editor. Your questions and players stay with the game.",
+    "openEditor": "Choose theme in editor",
+    "noGames": "No games to display. Create a game to choose its theme.",
+    "newGame": "Create a game",
+    "advancedBuilder": "Advanced theme authoring"
   },
   "editorPreview": {
     "title": "Live preview",

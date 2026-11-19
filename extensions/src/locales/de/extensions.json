@@ -99,7 +99,11 @@
     "testStop": "Stopp",
     "url": "Medien-URL",
     "cuesDesc": "Hintergrundmusik und Soundeffekte für Spielereignisse konfigurieren.",
-    "source": "Quelle"
+    "source": "Quelle",
+    "musicLabel": "Musik",
+    "musicAutomatic": "Automatisch",
+    "musicHelp": "Ändert die Musik für diesen Bildschirm. Beim nächsten Bildschirm wird die Musik wieder automatisch gewählt.",
+    "musicUnavailable": "Diese Musik konnte nicht geladen werden. Wähle einen anderen Titel."
   },
   "visuals": {
     "answerVisualTitle": "Antwort-Bilder",
@@ -354,7 +358,11 @@
       "corruptImportFile": "Die Datei konnte nicht gelesen werden. Prüfe das Format und versuche es erneut.",
       "duplicateParticipantPhone": "Die Telefonnummer {{phone}} ist bereits {{name}} zugeordnet.",
       "importReadFailed": "Die Importdatei konnte nicht gelesen werden."
-    }
+    },
+    "manageList": "Liste verwalten",
+    "filterPlayers": "Spieler filtern",
+    "tableNumber": "Tisch {{number}}",
+    "showingPlayers": "{{shown}} von {{total}} Spielern"
   },
   "timeline": {
     "quiz": "Quiz",
@@ -902,7 +910,21 @@
       "survey-results": "Ergebnisse",
       "z-wipe": "Übergang"
     },
-    "installationPreview": "Private Themenvorschau zur Prüfung und Freigabe."
+    "installationPreview": "Private Themenvorschau zur Prüfung und Freigabe.",
+    "chooseDescription": "Ändere das Aussehen dieses Spiels, ohne seine Fragen oder Spieler zu ändern. Speichere das Spiel, um deine Auswahl zu behalten.",
+    "catalogUnavailable": "Installierte Designs konnten nicht geladen werden. Dein gespeichertes Design wurde nicht geändert.",
+    "importTheme": "Design importieren",
+    "chooseThemeFile": ".tadazz-Datei auswählen",
+    "importHint": "Importiere ein .tadazz-Designpaket. Hier werden nur Designs installiert; der Spielinhalt bleibt unverändert.",
+    "importUnavailable": "Der Designimport ist nicht verfügbar. Versuche es erneut.",
+    "importEmpty": "Dieses Paket enthält keine Designs. Wähle ein Designpaket aus.",
+    "imported": "Design installiert. Wähle es unten aus und speichere dann dein Spiel.",
+    "libraryTitle": "Spieldesigns",
+    "libraryDescription": "Wähle ein Spiel aus, um sein Design im Editor zu ändern oder zu importieren. Fragen und Spieler bleiben erhalten.",
+    "openEditor": "Design im Editor auswählen",
+    "noGames": "Keine Spiele vorhanden. Erstelle ein Spiel, um sein Design auszuwählen.",
+    "newGame": "Spiel erstellen",
+    "advancedBuilder": "Erweiterte Designerstellung"
   },
   "editorPreview": {
     "title": "Live-Vorschau",

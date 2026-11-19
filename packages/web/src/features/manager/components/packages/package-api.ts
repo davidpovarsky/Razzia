@@ -38,6 +38,10 @@ export async function packageRequest(path: string, options: RequestInit = {}) {
     headers,
     cache: "no-store",
     redirect: "error",
+    signal: AbortSignal.any([
+      ...(options.signal ? [options.signal] : []),
+      AbortSignal.timeout(30_000),
+    ]),
   })
 
   if (!response.ok) {

@@ -1,7 +1,7 @@
 import { SiteLink } from "../shared/SiteLink"
 import { useTranslation } from "react-i18next"
 import { SiteButton } from "../shared/SiteButton"
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { Select } from "@razzia/extensions/platform-ui"
 import { useQuery } from "@tanstack/react-query"
 import type { GameResult } from "@razzia/common/types/game"
@@ -186,8 +186,15 @@ export function Prepare({
   const [error, setError] = useState(false)
   const pending = useRef<AbortController | null>(null)
   const opened = useRef<{ quizId: string; gameId: string } | null>(null)
+  const launchRequest = useRef<{
+    quizId: string
+    requestId: string
+  } | null>(null)
+  const automaticAttempted = useRef(false)
   const [openedQuizId, setOpenedQuizId] = useState("")
   const { updateManager } = useManagerStore()
+  const requestedGame = games.find((game) => game.id === requestedId)
+  const direct = Boolean(requestedGame && selected === requestedId)
 
   useEffect(() => {
     const cancelPending = () => {
@@ -202,7 +209,7 @@ export function Prepare({
         // state. Restore the controls; never POST another room automatically.
         cancelPending()
         setBusy(false)
-        setError(false)
+        setError(automaticAttempted.current && !opened.current)
       }
     }
     window.addEventListener("pagehide", onPageHide)
@@ -215,7 +222,7 @@ export function Prepare({
     }
   }, [])
 
-  const start = async () => {
+  const start = useCallback(async () => {
     if (pending.current || !selected) {
       return
     }
@@ -223,7 +230,7 @@ export function Prepare({
     // A bfcache return or rapid second click reopens the acknowledged room.
     // Creating another room is never an implicit side effect of restoration.
     if (opened.current?.quizId === selected) {
-      window.location.assign(
+      window.location.replace(
         `/party/manager/${encodeURIComponent(opened.current.gameId)}`,
       )
 
@@ -237,12 +244,24 @@ export function Prepare({
     const deadline = window.setTimeout(() => controller.abort(), 20_000)
 
     try {
+      // Retain the same request on retry when the server may have opened a room
+      // but its response was lost. Choosing another game starts a new request.
+      if (launchRequest.current?.quizId !== selected) {
+        launchRequest.current = {
+          quizId: selected,
+          requestId: crypto.randomUUID(),
+        }
+      }
+
       const { gameId, inviteCode } = await siteRequest<{
         gameId: string
         inviteCode: string
       }>("/api/games", {
         method: "POST",
-        body: JSON.stringify({ quizzId: selected }),
+        body: JSON.stringify({
+          quizzId: selected,
+          requestId: launchRequest.current.requestId,
+        }),
         signal: controller.signal,
       })
 
@@ -264,7 +283,9 @@ export function Prepare({
           inviteCode,
         }),
       })
-      window.location.assign(`/party/manager/${encodeURIComponent(gameId)}`)
+      // The intermediate launch page should never become a Back-button stop
+      // that silently creates another room for the same selection.
+      window.location.replace(`/party/manager/${encodeURIComponent(gameId)}`)
     } catch {
       if (pending.current === controller) {
         setError(true)
@@ -277,7 +298,22 @@ export function Prepare({
         setBusy(false)
       }
     }
-  }
+  }, [selected, updateManager])
+
+  useEffect(() => {
+    if (!direct || automaticAttempted.current) {
+      return
+    }
+
+    // Defer one task so StrictMode's setup/cleanup cycle cannot send a POST
+    // from an abandoned effect. A failed request stays available for retry.
+    const timer = window.setTimeout(() => {
+      automaticAttempted.current = true
+      void start()
+    }, 0)
+
+    return () => window.clearTimeout(timer)
+  }, [direct, start])
 
   let openLabel = t("Open show room")
 
@@ -291,36 +327,46 @@ export function Prepare({
     <>
       <h1>{t("Prepare show")}</h1>
       <section className="editor-panel">
-        <h2>{t("Choose your game")}</h2>
+        <h2>{direct ? requestedGame?.subject : t("Choose your game")}</h2>
         <p>
           {t(
             "Open a real room, then configure participants, audio and presentation in the existing host.",
           )}
         </p>
         <div className="site-prepare-fields" aria-busy={busy}>
-          <Select
-            label={t("My Games")}
-            value={selected}
-            onChange={(event) => {
-              setSelection(event.target.value)
-              setError(false)
-            }}
-            disabled={busy}
-          >
-            <option value="">{t("Choose a game")}</option>
-            {games.map((game) => (
-              <option key={game.id} value={game.id}>
-                {game.subject}
-              </option>
-            ))}
-          </Select>
-          <SiteButton
-            disabled={!selected || busy}
-            className="btn primary"
-            onClick={() => void start()}
-          >
-            {openLabel}
-          </SiteButton>
+          {!direct && (
+            <Select
+              label={t("My Games")}
+              value={selected}
+              onChange={(event) => {
+                setSelection(event.target.value)
+                setError(false)
+              }}
+              disabled={busy}
+            >
+              <option value="">{t("Choose a game")}</option>
+              {games.map((game) => (
+                <option key={game.id} value={game.id}>
+                  {game.subject}
+                </option>
+              ))}
+            </Select>
+          )}
+          {direct && !error && <p role="status">{t("Opening your show…")}</p>}
+          {(!direct || error || openedQuizId === selected) && (
+            <SiteButton
+              disabled={!selected || busy}
+              className="btn primary"
+              onClick={() => void start()}
+            >
+              {openLabel}
+            </SiteButton>
+          )}
+          {direct && (
+            <SiteLink className="btn ghost" href="/studio/games">
+              {t("Back to My Games")}
+            </SiteLink>
+          )}
           {error && (
             <p role="alert">
               {t(

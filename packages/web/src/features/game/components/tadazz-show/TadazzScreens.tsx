@@ -8,19 +8,16 @@ import {
   TadazzMessageScreen,
   TadazzCountdownScreen,
 } from "@razzia/extensions/presentation"
-import type { Player } from "@razzia/common/types/game"
 import type { Interlude } from "@razzia/extensions/core"
 
-import {
-  useEvent,
-  useSocket,
-} from "@razzia/web/features/game/contexts/socket-context"
+import { useEvent } from "@razzia/web/features/game/contexts/socket-context"
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
 import { SFX } from "@razzia/web/features/game/utils/constants"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import useSound from "use-sound"
 import { useTadazzShellText } from "./useTadazzLabels"
+import { readPublicLobbyDirectory } from "./lobby-directory"
 
 export {
   TadazzMessageScreen,
@@ -64,61 +61,32 @@ export function TadazzConnectingScreen() {
 export function TadazzLobbyScreen({
   inviteCode: rawInviteCode,
   isManager,
-  fullShowData,
+  fullShowData: publicData,
   text,
 }: {
   inviteCode?: string
   isManager: boolean
-  fullShowData?: {
-    dialNumber?: string
-    representatives?: Array<{ table: number; name: string }>
-    connectedTables?: number[]
-  }
+  fullShowData?: unknown
   text?: string
 }) {
   const tx = useTadazzShellText()
-  const { gameId, players, locked } = useManagerStore()
-  const { socket } = useSocket()
-  const [list, setList] =
-    useState<Array<Player & { timedOut?: boolean }>>(players)
+  const { locked } = useManagerStore()
+  const fullShowData = readPublicLobbyDirectory(publicData)
   const join = useRoomJoin({
     inviteCode: rawInviteCode,
     managerLocked: isManager ? locked : undefined,
     directory: fullShowData,
   })
 
-  // Same live roster events as the legacy Room screen (manager only).
-  useEvent(EVENTS.MANAGER.NEW_PLAYER, (player) =>
-    setList((l) => (l.some((p) => p.id === player.id) ? l : [...l, player])),
-  )
-  useEvent(EVENTS.MANAGER.REMOVE_PLAYER, (playerId) =>
-    setList((l) => l.filter((p) => p.id !== playerId)),
-  )
-  useEvent(EVENTS.MANAGER.PLAYER_KICKED, (playerId) =>
-    setList((l) => l.filter((p) => p.id !== playerId)),
-  )
-  useEvent(EVENTS.MANAGER.PLAYER_UPDATED, ({ previousId, player, timedOut }) =>
-    setList((l) =>
-      l.map((p) => (p.id === previousId ? { ...player, timedOut } : p)),
-    ),
-  )
-
-  const kick = (playerId: string) => {
-    if (!isManager || !gameId) {
-      return
-    }
-
-    socket.emit(EVENTS.MANAGER.KICK_PLAYER, { gameId, playerId })
-  }
+  // The public stage is identical on host and audience. Management stays in
+  // the host roster dialog; fullscreen must not remove names or swap screens.
 
   return (
     <NativeClassicLobbyPanel
       join={join}
-      isManager={isManager}
+      isManager={false}
       fullShowData={fullShowData}
       text={text}
-      players={list}
-      onKick={kick}
       tx={tx}
     />
   )

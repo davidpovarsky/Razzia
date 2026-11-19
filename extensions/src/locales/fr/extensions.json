@@ -99,7 +99,11 @@
     "testStop": "Arrêter",
     "url": "URL du média",
     "cuesDesc": "Configurez la musique de fond et les effets sonores des événements.",
-    "source": "Source"
+    "source": "Source",
+    "musicLabel": "Musique",
+    "musicAutomatic": "Automatique",
+    "musicHelp": "Change la musique de cet écran. L’écran suivant rétablit la musique automatique.",
+    "musicUnavailable": "Cette musique n’a pas pu être chargée. Choisissez une autre piste."
   },
   "visuals": {
     "answerVisualTitle": "Visuels des réponses",
@@ -354,7 +358,11 @@
       "corruptImportFile": "Le fichier n’a pas pu être lu. Vérifiez son format et réessayez.",
       "duplicateParticipantPhone": "Le numéro {{phone}} est déjà attribué à {{name}}.",
       "importReadFailed": "Le fichier d’importation n’a pas pu être lu."
-    }
+    },
+    "manageList": "Gérer la liste",
+    "filterPlayers": "Filtrer les joueurs",
+    "tableNumber": "Table {{number}}",
+    "showingPlayers": "{{shown}} joueurs sur {{total}}"
   },
   "timeline": {
     "quiz": "Quiz",
@@ -902,7 +910,21 @@
       "survey-results": "Résultats",
       "z-wipe": "Transition"
     },
-    "installationPreview": "Aperçu privé du thème pour révision et approbation."
+    "installationPreview": "Aperçu privé du thème pour révision et approbation.",
+    "chooseDescription": "Modifiez l'apparence du jeu sans changer ses questions ni ses joueurs. Enregistrez le jeu pour conserver votre choix.",
+    "catalogUnavailable": "Impossible de charger les thèmes installés. Votre thème enregistré n'a pas été modifié.",
+    "importTheme": "Importer un thème",
+    "chooseThemeFile": "Choisir un fichier .tadazz",
+    "importHint": "Importez un paquet de thème .tadazz. Seuls les thèmes sont installés ici ; le contenu du jeu reste inchangé.",
+    "importUnavailable": "L'importation de thèmes est indisponible. Réessayez.",
+    "importEmpty": "Ce paquet ne contient aucun thème. Choisissez un paquet de thème.",
+    "imported": "Thème installé. Sélectionnez-le ci-dessous, puis enregistrez votre jeu.",
+    "libraryTitle": "Thèmes des jeux",
+    "libraryDescription": "Choisissez un jeu pour modifier ou importer son thème dans l'éditeur. Ses questions et joueurs sont conservés.",
+    "openEditor": "Choisir le thème dans l'éditeur",
+    "noGames": "Aucun jeu à afficher. Créez un jeu pour choisir son thème.",
+    "newGame": "Créer un jeu",
+    "advancedBuilder": "Création avancée de thèmes"
   },
   "editorPreview": {
     "title": "Aperçu en direct",

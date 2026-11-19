@@ -2,6 +2,7 @@
 // oxlint-disable no-await-in-loop -- Scene choreography and ordered stage operations must complete before the next step starts.
 import NativeButton from "@razzia/web/components/Button"
 import { NativeAudioCuePlayer as AudioCuePlayer } from "./NativeAudioCuePlayer"
+import { HostControlBar } from "@razzia/extensions/platform-ui"
 import { EVENTS, MEDIA_TYPES, QUIZZ_MODES } from "@razzia/common/constants"
 import { STATUS, type Status } from "@razzia/common/types/game/status"
 import {
@@ -903,26 +904,8 @@ export function TadazzShowView(props: TadazzShowViewProps) {
             inviteCode={
               scene.inviteCode ?? managerState.inviteCode ?? undefined
             }
-            isManager={manager && !isHostPresenting}
-            fullShowData={
-              extensionState?.extras.lobbyFullShow ??
-              (managerState.hostPresence?.players.length
-                ? {
-                    representatives: managerState.hostPresence.players.map(
-                      (p, i) => ({
-                        table: p.tableNumber ?? i + 1,
-                        name: p.displayName,
-                      }),
-                    ),
-                    connectedTables: managerState.hostPresence.players.flatMap(
-                      (p, i) =>
-                        p.status === "connected"
-                          ? [p.tableNumber ?? i + 1]
-                          : [],
-                    ),
-                  }
-                : undefined)
-            }
+            isManager={manager}
+            fullShowData={extensionState?.extras.lobbyFullShow}
             text={scene.text}
           />
         )
@@ -1682,6 +1665,9 @@ export function TadazzShowView(props: TadazzShowViewProps) {
               }
               gameId={extensionState.gameId}
               activeCardKey={extensionState.questionId ?? props.activeCardKey}
+              screenKey={
+                scene.kind === "scene" ? scene.scene.id : props.activeCardKey
+              }
               phase={
                 extensionState.phase === "scene"
                   ? "scene"
@@ -1735,11 +1721,8 @@ export function TadazzShowView(props: TadazzShowViewProps) {
               }
 
               return (
-                <div
+                <HostControlBar
                   className="z-50 box-border flex max-w-full flex-wrap items-center gap-2 p-2 sm:gap-3"
-                  style={{
-                    background: "#08011a",
-                  }}
                   data-testid="tadazz-host-controls"
                 >
                   {managerState.inviteCode &&
@@ -1830,7 +1813,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                       )}
                     </NativeButton>
                   </Tooltip>
-                </div>
+                </HostControlBar>
               )
             }
 

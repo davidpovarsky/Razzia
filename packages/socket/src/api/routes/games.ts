@@ -18,6 +18,13 @@ import { getIo } from "@razzia/socket/services/io"
 import Registry from "@razzia/socket/services/registry"
 import { StatusCodes } from "http-status-codes"
 
+// Retry identities live only as long as their in-memory rooms. No request can
+// discover another manager's room or reserve a key after its room is removed.
+const creationRequests = new WeakMap<
+  Game,
+  { requestId: string; quizzId: string }
+>()
+
 const routes = apiFactory
   .createApp()
   .post(
@@ -25,7 +32,7 @@ const routes = apiFactory
     requireManager,
     zValidator("json", createGameValidator, i18nHook),
     (c) => {
-      const { quizzId } = c.req.valid("json")
+      const { quizzId, requestId } = c.req.valid("json")
       const quizz = getQuizz().find((q) => q.id === quizzId)
 
       if (!quizz) {
@@ -33,10 +40,41 @@ const routes = apiFactory
       }
 
       const registry = Registry.getInstance()
-      const game = new Game(getIo(), c.get("claims").sub, quizz)
+      const ownerId = c.get("claims").sub
 
+      if (requestId) {
+        const existing = registry
+          .getAllGames()
+          .find(
+            (game) =>
+              game.manager.clientId === ownerId &&
+              creationRequests.get(game)?.requestId === requestId,
+          )
+
+        if (existing) {
+          if (creationRequests.get(existing)?.quizzId !== quizzId) {
+            return c.json(
+              { error: "game-creation-request-conflict" },
+              StatusCodes.CONFLICT,
+            )
+          }
+
+          return c.json(
+            { gameId: existing.gameId, inviteCode: existing.inviteCode },
+            StatusCodes.CREATED,
+          )
+        }
+      }
+
+      // This handler stays synchronous through registration, so concurrent
+      // retries cannot both pass the lookup before a room is registered.
+      const game = new Game(getIo(), ownerId, quizz)
       registry.addGame(game)
       registry.markGameAsEmpty(game)
+
+      if (requestId) {
+        creationRequests.set(game, { requestId, quizzId })
+      }
 
       return c.json(
         { gameId: game.gameId, inviteCode: game.inviteCode },
@@ -108,7 +146,10 @@ const routes = apiFactory
           },
           StatusCodes.FORBIDDEN,
         )
-      if (!phoneAllowed()) return phoneDenied()
+
+      if (!phoneAllowed()) {
+        return phoneDenied()
+      }
 
       if (game.manager.clientId === sub) {
         return c.json(
@@ -126,7 +167,10 @@ const routes = apiFactory
 
       if (resolution.kind === "existing") {
         await grantMediaForGuest(c, game.gameId)
-        if (!phoneAllowed()) return phoneDenied()
+
+        if (!phoneAllowed()) {
+          return phoneDenied()
+        }
 
         return c.json({
           gameId: game.gameId,
@@ -146,9 +190,16 @@ const routes = apiFactory
       }
 
       await grantMediaForGuest(c, game.gameId)
-      if (!phoneAllowed()) return phoneDenied()
+
+      if (!phoneAllowed()) {
+        return phoneDenied()
+      }
+
       const ticket = await mintJoinTicket(sub, game.gameId, resolution.identity)
-      if (!phoneAllowed()) return phoneDenied()
+
+      if (!phoneAllowed()) {
+        return phoneDenied()
+      }
 
       return c.json({
         gameId: game.gameId,

@@ -5,6 +5,7 @@ import {
 import { accountsEnabled, activeAccount } from "../services/account-scope"
 import { resolveConfigRoot } from "../services/config-scope"
 import { auth } from "@razzia/socket/api/routes/auth"
+import { contact } from "@razzia/socket/api/routes/contact"
 import { accounts } from "@razzia/socket/api/routes/accounts"
 import { games } from "@razzia/socket/api/routes/games"
 import { media } from "@razzia/socket/api/routes/media"
@@ -58,6 +59,7 @@ const routes = new Hono()
   .get("/health", (c) => c.json({ status: "ok" }))
   .route("/auth", auth)
   .route("/accounts", accounts)
+  .route("/contact", contact)
   .route("/billing", billingRoutes)
   .route("/quizz", quizz)
   .route("/results", results)

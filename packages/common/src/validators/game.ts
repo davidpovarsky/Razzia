@@ -7,6 +7,7 @@ import z from "zod"
 
 export const createGameValidator = z.object({
   quizzId: z.string().min(1, "errors:quizz.notFound"),
+  requestId: z.uuid().optional(),
 })
 
 export const checkGameValidator = z.object({

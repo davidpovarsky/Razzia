@@ -6,6 +6,7 @@ export interface BillingConfig {
   enabled: boolean
   environment: "sandbox" | "live"
   apiKey: string
+  clientToken: string
   webhookSecret: string
   catalog: BillingPlan[]
   graceMs: number
@@ -43,6 +44,24 @@ export function readBillingConfig(env = process.env): BillingConfig {
     catalog,
     graceMs: graceHours * 3_600_000,
     apiKey: env.PADDLE_API_KEY ?? "",
+    clientToken: env.PADDLE_CLIENT_TOKEN ?? "",
     webhookSecret: env.PADDLE_WEBHOOK_SECRET ?? "",
   }
+}
+
+export function hasBillingClientToken(config: BillingConfig): boolean {
+  const prefix = config.environment === "live" ? "live" : "test"
+
+  return new RegExp(`^${prefix}_[a-zA-Z0-9]{27}$`, "u").test(config.clientToken)
+}
+
+/** Local readiness only; provider prices are still verified at checkout. */
+export function isBillingCheckoutConfigured(config: BillingConfig): boolean {
+  return Boolean(
+    config.enabled &&
+    config.apiKey.trim() &&
+    config.webhookSecret.trim() &&
+    config.catalog.length &&
+    hasBillingClientToken(config),
+  )
 }

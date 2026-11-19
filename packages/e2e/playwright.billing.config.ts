@@ -11,7 +11,7 @@ const env = {
   TADAZZ_BILLING_ENABLED: "true",
   PADDLE_ENVIRONMENT: "sandbox",
   PADDLE_API_KEY: "synthetic-test-key",
-  PADDLE_CLIENT_TOKEN: "test_synthetic-public-token",
+  PADDLE_CLIENT_TOKEN: `test_${"a".repeat(27)}`,
   PADDLE_WEBHOOK_SECRET: "browser-fixture-signing-secret",
   JWT_SECRET: "billing-browser-only-at-least-32-characters",
   RESEND_API_KEY: "synthetic-unused",

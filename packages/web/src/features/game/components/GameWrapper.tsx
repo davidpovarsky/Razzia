@@ -367,13 +367,11 @@ const GameWrapperView = ({
     )
   }
 
-  // TADAZZ show (UPSTREAM_TOUCHES 2026-11-05 T1): own the whole stage so the
-  // legacy background/state components are never mounted, not even for a frame.
-  // Operator controls and participant interaction stay in native responsive Razzia.
-  // The 16:9 composition belongs to the public display / explicit host projection.
+  // The host and audience share one theme stage. Fullscreen only hides chrome;
+  // it must never switch renderer, lobby content or the active audio owner.
+  // Player input stays on its dedicated responsive surface.
   const cinematicSurface =
-    effectiveRole === "spectator" ||
-    isHostPresenting ||
+    effectiveRole !== "player" ||
     Boolean(theme.definition.runtime) ||
     forcedRenderer === "tadazz-classic-stage"
 

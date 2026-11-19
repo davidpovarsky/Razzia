@@ -60,6 +60,7 @@ import {
   Upload,
   List,
   Pencil,
+  Palette,
   SlidersHorizontal,
 } from "lucide-react"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
@@ -71,6 +72,7 @@ import { StudioSelect } from "./studio-select"
 import { EditorCanvasFrame } from "./EditorCanvasFrame"
 import QuizzEditorSidebar from "../QuizzEditorSidebar"
 import { StudioCardKindBar } from "./header-controls"
+import { ShowThemeSettings } from "./show-theme-settings"
 const EMPTY_QUESTIONS: Question[] = []
 
 interface CatalogLottieAsset {
@@ -3123,6 +3125,7 @@ export const StudioSceneEditor = () => {
         className="native-editor-workspace"
         ariaLabel={t("extensions:editorPreview.title", "Live preview")}
         closeLabel={t("common:close", "Close")}
+        defaultPanel={window.location.hash === "#themes" ? "themes" : undefined}
         panels={[
           {
             id: "timeline",
@@ -3138,6 +3141,12 @@ export const StudioSceneEditor = () => {
             icon: <Pencil size={19} />,
             dock: true,
             content: sceneConfiguration,
+          },
+          {
+            id: "themes",
+            label: t("extensions:themes.title"),
+            icon: <Palette size={19} />,
+            content: <ShowThemeSettings compact />,
           },
           {
             id: "preview",

@@ -1,5 +1,5 @@
 import { billingCurrencies, type BillingSnapshot } from "../../core/billing"
-import type { BillingConfig } from "./config"
+import { isBillingCheckoutConfigured, type BillingConfig } from "./config"
 import { BillingDatabase } from "./database"
 import { Entitlements } from "./entitlements"
 import { activeGrants, remainingGames } from "./grants"
@@ -35,11 +35,7 @@ export class BillingService {
   snapshot(tenantId: string): BillingSnapshot {
     return {
       enabled: this.config.enabled,
-      configured: Boolean(
-        this.config.apiKey &&
-        this.config.webhookSecret &&
-        this.config.catalog.length,
-      ),
+      configured: isBillingCheckoutConfigured(this.config),
       environment: this.config.environment,
       currencies: billingCurrencies,
       plans: this.config.catalog,

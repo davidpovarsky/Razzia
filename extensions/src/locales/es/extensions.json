@@ -99,7 +99,11 @@
     "testStop": "Detener",
     "url": "URL del medio",
     "cuesDesc": "Configura música de fondo y efectos de sonido para eventos del juego.",
-    "source": "Fuente"
+    "source": "Fuente",
+    "musicLabel": "Música",
+    "musicAutomatic": "Automática",
+    "musicHelp": "Cambia la música de esta pantalla. La siguiente pantalla vuelve a la música automática.",
+    "musicUnavailable": "No se pudo cargar esta música. Elige otra pista."
   },
   "visuals": {
     "answerVisualTitle": "Imágenes de respuestas",
@@ -354,7 +358,11 @@
       "corruptImportFile": "No se pudo leer el archivo. Revisa su formato e inténtalo de nuevo.",
       "duplicateParticipantPhone": "El teléfono {{phone}} ya está asignado a {{name}}.",
       "importReadFailed": "No se pudo leer el archivo de importación."
-    }
+    },
+    "manageList": "Gestionar lista",
+    "filterPlayers": "Filtrar jugadores",
+    "tableNumber": "Mesa {{number}}",
+    "showingPlayers": "{{shown}} de {{total}} jugadores"
   },
   "timeline": {
     "quiz": "Quiz",
@@ -902,7 +910,21 @@
       "survey-results": "Resultados",
       "z-wipe": "Transición"
     },
-    "installationPreview": "Vista previa privada del tema para revisión y aprobación."
+    "installationPreview": "Vista previa privada del tema para revisión y aprobación.",
+    "chooseDescription": "Cambia el aspecto del juego sin modificar sus preguntas ni sus jugadores. Guarda el juego para conservar tu selección.",
+    "catalogUnavailable": "No se pudieron cargar los temas instalados. Tu tema guardado no se ha modificado.",
+    "importTheme": "Importar tema",
+    "chooseThemeFile": "Elegir archivo .tadazz",
+    "importHint": "Importa un paquete de tema .tadazz. Aquí solo se instalan temas; el contenido del juego no cambia.",
+    "importUnavailable": "La importación de temas no está disponible. Inténtalo de nuevo.",
+    "importEmpty": "Este paquete no contiene temas. Elige un paquete de tema.",
+    "imported": "Tema instalado. Selecciónalo abajo y guarda tu juego.",
+    "libraryTitle": "Temas de juegos",
+    "libraryDescription": "Elige un juego para cambiar o importar su tema en el editor. Sus preguntas y jugadores se conservan.",
+    "openEditor": "Elegir tema en el editor",
+    "noGames": "No hay juegos para mostrar. Crea uno para elegir su tema.",
+    "newGame": "Crear un juego",
+    "advancedBuilder": "Creación avanzada de temas"
   },
   "editorPreview": {
     "title": "Vista previa en directo",

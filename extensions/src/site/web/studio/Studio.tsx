@@ -12,6 +12,7 @@ import {
   List,
   Menu,
   Plus,
+  Palette,
   Search,
   Settings2,
   Store,
@@ -35,7 +36,6 @@ import { useSiteText } from "../../locales"
 import { AccountPanel } from "./AccountPanel"
 import type { QuizMeta } from "./MyGames"
 import type { ResultMeta } from "./Events"
-import { OpenThemeBuilderLink } from "../../../components/theme-builder/OpenThemeBuilderLink"
 import { browserConsentLoginHandoff } from "../../../components/oauth-consent/login-handoff"
 import { InlineGamePreviewBoundary } from "../../components/game-preview/boundary"
 import { createAccountPreviewProvider } from "../../components/game-preview/account-provider"
@@ -56,6 +56,9 @@ const StudioThemeBuilder = lazy(() =>
     (module) => ({ default: module.StudioThemeBuilder }),
   ),
 )
+const StudioThemes = lazy(() =>
+  import("./StudioThemes").then((module) => ({ default: module.StudioThemes })),
+)
 const MyGames = lazy(() =>
   import("./MyGames").then((module) => ({ default: module.MyGames })),
 )
@@ -69,6 +72,7 @@ const Prepare = lazy(() =>
 const navigation = [
   ["dashboard", "Dashboard", House],
   ["games", "My Games", List],
+  ["themes", "Game themes", Palette],
   ["explore", "Explore Games", Store],
   ["events", "My Events", CalendarDays],
   ["account", "Account & licences", Settings2],
@@ -156,7 +160,7 @@ export function Studio() {
     )
   }
 
-  if (path === "/studio/themes") {
+  if (path === "/studio/theme-builder") {
     return (
       <Suspense fallback={<StudioLoading />}>
         <StudioThemeBuilder key={profile.data.id} accountId={profile.data.id} />
@@ -237,7 +241,7 @@ function StudioWorkspace({ account }: { account: Account }) {
     retry: 1,
     refetchOnWindowFocus: true,
     staleTime: 0,
-    enabled: ["dashboard", "games", "prepare"].includes(section),
+    enabled: ["dashboard", "games", "prepare", "themes"].includes(section),
   })
   const results = useQuery({
     queryKey: siteKey(account.id, "results"),
@@ -352,7 +356,6 @@ function StudioWorkspace({ account }: { account: Account }) {
               />
             </SiteLink>
             <nav className="side-nav">
-              <OpenThemeBuilderLink className="nav-btn" />
               {navigation.map(([id, label, Icon]) => (
                 <SiteLink
                   key={id}
@@ -528,6 +531,16 @@ function StudioWorkspace({ account }: { account: Account }) {
                       </SiteLink>
                     </div>
                   </>
+                )}
+                {section === "themes" && (
+                  <StudioThemes
+                    accountId={account.id}
+                    games={games}
+                    pending={quizzes.isPending}
+                    failed={quizzes.isError}
+                    search={search}
+                    retry={refreshGames}
+                  />
                 )}
                 {(section === "games" || section === "dashboard") && (
                   <>

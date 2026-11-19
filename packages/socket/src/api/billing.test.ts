@@ -14,6 +14,10 @@ import { saveQuizz } from "@razzia/socket/services/config"
 import { createQuestion, createQuizz } from "@razzia/socket/test/fixtures"
 import Registry from "@razzia/socket/services/registry"
 import { SESSION_ROLES, EVENTS } from "@razzia/common/constants"
+import {
+  EXTENSION_EVENTS,
+  type ExtensionStateEnvelope,
+} from "@razzia/extensions/core"
 import { insertGrant } from "../../../../extensions/src/server/billing/grants"
 import { plan } from "../../../../extensions/src/server/billing/test-fixture"
 
@@ -204,9 +208,29 @@ describe("real authenticated billing/game integration", () => {
   })
   it("consumes exactly one credit through the real manager socket", async () => {
     const host = await client(tokenA)
+    let presentation: ExtensionStateEnvelope | undefined = undefined
+    const launchStage = (): string | undefined => {
+      const launch = presentation?.extras.presentationLaunch
+
+      if (!launch || typeof launch !== "object" || !("stage" in launch)) {
+        return undefined
+      }
+
+      return typeof launch.stage === "string" ? launch.stage : undefined
+    }
+    host.on(EXTENSION_EVENTS.STATE, (state: ExtensionStateEnvelope) => {
+      presentation = state
+    })
     const connected = waitFor(host, EVENTS.MANAGER.SUCCESS_RECONNECT)
     host.emit(EVENTS.MANAGER.RECONNECT, { gameId })
     await connected
+    await vi.waitFor(() => expect(launchStage()).toBe("standby"))
+    host.emit(EVENTS.MANAGER.START_GAME, { gameId })
+    await vi.waitFor(() => expect(launchStage()).toBe("opening"))
+    expect(requireBilling().snapshot(tenantA).grants[0].remainingGames).toBe(1)
+    host.emit(EVENTS.MANAGER.START_GAME, { gameId })
+    await vi.waitFor(() => expect(launchStage()).toBe("lobby"))
+    expect(requireBilling().snapshot(tenantA).grants[0].remainingGames).toBe(1)
     host.emit(EVENTS.MANAGER.START_GAME, { gameId })
     await vi.waitFor(() =>
       expect(requireBilling().snapshot(tenantA).grants[0].remainingGames).toBe(

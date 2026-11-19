@@ -15,13 +15,17 @@ export function PackageManager({
   file,
   onImported,
   onFileConsumed,
+  themesOnly = false,
 }: {
   file: File | null
+  themesOnly?: boolean
   onImported: () => unknown
   onFileConsumed: () => void
 }) {
   const { t } = useTranslation()
   const [enabled, setEnabled] = useState(false)
+  const [capabilityError, setCapabilityError] = useState(false)
+  const [capabilityRevision, setCapabilityRevision] = useState(0)
   const [receipt, setReceipt] = useState<PackageReceipt | null>(null)
   const [selected, setSelected] = useState<string[]>([])
   const [catalog, setCatalog] = useState<CatalogEntry[]>([])
@@ -30,19 +34,26 @@ export function PackageManager({
   const [preview, setPreview] = useState(false)
   const [useClassic, setUseClassic] = useState(false)
   const input = useRef<HTMLInputElement>(null)
+  const running = useRef(false)
   const reload = () =>
     packageJson<{ packages: CatalogEntry[] }>("").then((r) =>
       setCatalog(r.packages),
     )
   useEffect(() => {
+    let active = true
     void packageJson("/capabilities")
       .then(async () => {
+        if (!active) {
+          return
+        }
+
         setEnabled(true)
+        setCapabilityError(false)
         const initial = new URLSearchParams(window.location.search).get(
           "packageUpload",
         )
 
-        if (initial) {
+        if (initial && !themesOnly) {
           const result = await packageJson<PackageReceipt>(
             `/uploads/${encodeURIComponent(initial)}`,
           )
@@ -51,11 +62,26 @@ export function PackageManager({
           setPreview(true)
         }
 
-        return reload()
+        if (!themesOnly) {
+          return reload()
+        }
       })
-      .catch(() => undefined)
-  }, [])
+      .catch(() => {
+        if (active) {
+          setCapabilityError(true)
+        }
+      })
+
+    return () => {
+      active = false
+    }
+  }, [themesOnly, capabilityRevision])
   const run = async (task: () => Promise<void>) => {
+    if (running.current) {
+      return
+    }
+
+    running.current = true
     setBusy(true)
     setError("")
 
@@ -64,6 +90,7 @@ export function PackageManager({
     } catch (e) {
       setError(e instanceof Error ? e.message : "PACKAGE_REQUEST_FAILED")
     } finally {
+      running.current = false
       setBusy(false)
     }
   }
@@ -78,10 +105,20 @@ export function PackageManager({
         headers: { "Idempotency-Key": crypto.randomUUID() },
       })
       setReceipt(result)
-      setSelected(
-        result.manifest.contents.filter((c) => !c.demo).map((c) => c.id),
+      const items = result.manifest.contents.filter((c) =>
+        themesOnly ? c.kind !== "game" : !c.demo,
       )
-      await reload()
+      setSelected(items.map((c) => c.id))
+
+      if (themesOnly && items.length === 0) {
+        setError("PACKAGE_NO_THEMES")
+
+        return
+      }
+
+      if (!themesOnly) {
+        await reload()
+      }
     })
   const uploadRef = useRef(upload)
   useLayoutEffect(() => {
@@ -108,14 +145,54 @@ export function PackageManager({
       return
     }
 
+    const controller = new AbortController()
     const timer = setInterval(() => {
-      void packageJson<PackageReceipt>(`/uploads/${receipt.uploadId}`)
-        .then(setReceipt)
-        .catch(() => setError("PACKAGE_BUILD_FAILED"))
+      void packageJson<PackageReceipt>(`/uploads/${receipt.uploadId}`, {
+        signal: controller.signal,
+      })
+        .then((value) => {
+          if (!controller.signal.aborted) {
+            setReceipt(value)
+          }
+        })
+        .catch(() => {
+          if (!controller.signal.aborted) {
+            setError("PACKAGE_BUILD_FAILED")
+          }
+        })
     }, 1500)
 
-    return () => clearInterval(timer)
+    return () => {
+      controller.abort()
+      clearInterval(timer)
+    }
   }, [receipt?.uploadId, receipt?.phase])
+
+  if (themesOnly && !enabled) {
+    return (
+      <div
+        className="border-accent space-y-2 rounded-lg border p-3 text-sm"
+        data-testid="theme-import-status"
+      >
+        <p role={capabilityError ? "alert" : "status"}>
+          {t(
+            capabilityError
+              ? "extensions:themes.importUnavailable"
+              : "common:loading",
+          )}
+        </p>
+        {capabilityError && (
+          <Button
+            type="button"
+            size="sm"
+            onClick={() => setCapabilityRevision((value) => value + 1)}
+          >
+            {t("extensions:conflict.reload")}
+          </Button>
+        )}
+      </div>
+    )
+  }
 
   if (!enabled && !file && !error) {
     return null
@@ -123,21 +200,37 @@ export function PackageManager({
 
   return (
     <section
-      className="border-accent font-display mb-4 max-h-[60dvh] shrink-0 space-y-3 overflow-y-auto rounded-xl border p-3"
+      className={
+        themesOnly
+          ? "border-accent font-display space-y-3 rounded-xl border p-3"
+          : "border-accent font-display mb-4 max-h-[60dvh] shrink-0 space-y-3 overflow-y-auto rounded-xl border p-3"
+      }
       data-testid="package-manager"
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="font-semibold">{t("extensions:packages.title")}</h2>
+        <h2 className="font-semibold">
+          {t(
+            themesOnly
+              ? "extensions:themes.importTheme"
+              : "extensions:packages.title",
+          )}
+        </h2>
         <Button
+          type="button"
           size="sm"
           disabled={busy}
           onClick={() => input.current?.click()}
         >
-          {t("extensions:packages.installFile")}
+          {t(
+            themesOnly
+              ? "extensions:themes.chooseThemeFile"
+              : "extensions:packages.installFile",
+          )}
         </Button>
         <input
           ref={input}
           type="file"
+          disabled={busy}
           accept=".tadazz"
           className="hidden"
           data-testid="package-file-input"
@@ -152,9 +245,20 @@ export function PackageManager({
           }}
         />
       </div>
+      {themesOnly && (
+        <p className="text-muted-foreground text-sm">
+          {t("extensions:themes.importHint")}
+        </p>
+      )}
       {error && (
         <p role="alert" className="text-red-600">
-          {t("extensions:packages.failed")} <code>{error}</code>
+          {error === "PACKAGE_NO_THEMES" ? (
+            t("extensions:themes.importEmpty")
+          ) : (
+            <>
+              {t("extensions:packages.failed")} <code>{error}</code>
+            </>
+          )}
         </p>
       )}
       {busy && <p role="status">{t("extensions:packages.working")}</p>}
@@ -174,68 +278,81 @@ export function PackageManager({
           {receipt.code && (
             <p className="text-sm">{t("extensions:packages.codeBoundary")}</p>
           )}
-          {receipt.manifest.contents.map((item) => (
-            <label key={item.id} className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={selected.includes(item.id)}
-                disabled={busy || receipt.phase === "installed"}
-                onChange={(e) =>
-                  setSelected((old) =>
-                    e.target.checked
-                      ? [...old, item.id]
-                      : old.filter((id) => id !== item.id),
-                  )
-                }
-              />
-              <span>
-                {item.id} ·{" "}
-                {t(
-                  item.kind === "game"
-                    ? "extensions:packages.game"
-                    : "extensions:packages.theme",
-                )}
-                {item.demo ? ` · ${t("extensions:packages.demo")}` : ""}
-              </span>
-            </label>
-          ))}
-          {receipt.manifest.contents.some(
-            (c) => c.kind !== "game" && !selected.includes(c.id),
-          ) && (
-            <label className="flex items-center gap-2 text-sm">
-              <input
-                type="checkbox"
-                checked={useClassic}
-                onChange={(e) => setUseClassic(e.target.checked)}
-                disabled={busy}
-              />
-              {t("extensions:themes.select")} · TADAZZ Classic
-            </label>
-          )}
-          <div className="flex flex-wrap gap-2">
-            {["validated", "failed"].includes(receipt.phase) && (
-              <Button
-                size="sm"
-                disabled={busy}
-                onClick={() =>
-                  void run(async () => {
-                    await packageRequest(`/uploads/${receipt.uploadId}/build`, {
-                      method: "POST",
-                    })
-                    setReceipt({ ...receipt, phase: "building" })
-                  })
-                }
-              >
-                {t("extensions:packages.build")}
-              </Button>
+          {receipt.manifest.contents
+            .filter((item) => !themesOnly || item.kind !== "game")
+            .map((item) => (
+              <label key={item.id} className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={selected.includes(item.id)}
+                  disabled={busy || receipt.phase === "installed"}
+                  onChange={(e) =>
+                    setSelected((old) =>
+                      e.target.checked
+                        ? [...old, item.id]
+                        : old.filter((id) => id !== item.id),
+                    )
+                  }
+                />
+                <span>
+                  {item.id} ·{" "}
+                  {t(
+                    item.kind === "game"
+                      ? "extensions:packages.game"
+                      : "extensions:packages.theme",
+                  )}
+                  {item.demo ? ` · ${t("extensions:packages.demo")}` : ""}
+                </span>
+              </label>
+            ))}
+          {!themesOnly &&
+            receipt.manifest.contents.some(
+              (c) => c.kind !== "game" && !selected.includes(c.id),
+            ) && (
+              <label className="flex items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  checked={useClassic}
+                  onChange={(e) => setUseClassic(e.target.checked)}
+                  disabled={busy}
+                />
+                {t("extensions:themes.select")} · TADAZZ Classic
+              </label>
             )}
+          <div className="flex flex-wrap gap-2">
+            {selected.length > 0 &&
+              ["validated", "failed"].includes(receipt.phase) && (
+                <Button
+                  type="button"
+                  size="sm"
+                  disabled={busy}
+                  onClick={() =>
+                    void run(async () => {
+                      await packageRequest(
+                        `/uploads/${receipt.uploadId}/build`,
+                        {
+                          method: "POST",
+                        },
+                      )
+                      setReceipt({ ...receipt, phase: "building" })
+                    })
+                  }
+                >
+                  {t("extensions:packages.build")}
+                </Button>
+              )}
             {receipt.manifest.contents.some((c) => c.kind !== "game") &&
               ["preview-ready", "installed"].includes(receipt.phase) && (
-                <Button size="sm" onClick={() => setPreview((v) => !v)}>
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={() => setPreview((v) => !v)}
+                >
                   {t("extensions:packages.preview")}
                 </Button>
               )}
             <Button
+              type="button"
               size="sm"
               disabled={
                 busy ||
@@ -261,7 +378,11 @@ export function PackageManager({
                     },
                   )
                   setReceipt(result)
-                  await reload()
+
+                  if (!themesOnly) {
+                    await reload()
+                  }
+
                   onImported()
                   window.dispatchEvent(new Event("tadazz:packages-changed"))
                 })
@@ -270,6 +391,7 @@ export function PackageManager({
               {t("extensions:packages.installSelected")}
             </Button>
             <Button
+              type="button"
               size="sm"
               disabled={busy}
               onClick={() =>
@@ -292,12 +414,32 @@ export function PackageManager({
           </div>
           {receipt.manifest.contents.some((c) => c.kind !== "game") &&
             !receipt.reviewed && (
-              <p className="text-muted-foreground text-sm">
-                {t("extensions:packages.reviewRequired")}
-              </p>
+              <div className="space-y-2">
+                <p className="text-muted-foreground text-sm">
+                  {t("extensions:packages.reviewRequired")}
+                </p>
+                {receipt.phase === "preview-ready" && (
+                  <Button
+                    type="button"
+                    size="sm"
+                    disabled={busy}
+                    onClick={() =>
+                      void run(async () => {
+                        const latest = await packageJson<PackageReceipt>(
+                          `/uploads/${receipt.uploadId}`,
+                        )
+                        setReceipt(latest)
+                      })
+                    }
+                  >
+                    {t("extensions:conflict.reload")}
+                  </Button>
+                )}
+              </div>
             )}
           {!["installed", "building"].includes(receipt.phase) && (
             <Button
+              type="button"
               size="sm"
               className="bg-accent text-foreground"
               onClick={() =>
@@ -315,32 +457,34 @@ export function PackageManager({
             </Button>
           )}
           {preview && <PackageRuntimePreview receipt={receipt} />}
-          {receipt.installedGames.map((quizId) => (
-            <Button
-              key={quizId}
-              size="sm"
-              disabled={busy}
-              onClick={() =>
-                void run(async () => {
-                  const response = await packageRequest(
-                    `/uploads/${receipt.uploadId}/games/${quizId}/export`,
-                    { method: "POST" },
-                  )
-                  const url = URL.createObjectURL(await response.blob()),
-                    link = document.createElement("a")
-                  link.href = url
-                  link.download = `game-${quizId}.tadazz`
-                  link.click()
-                  setTimeout(() => URL.revokeObjectURL(url), 1000)
-                })
-              }
-            >
-              {t("extensions:packages.export")} · {quizId.slice(0, 8)}
-            </Button>
-          ))}
+          {!themesOnly &&
+            receipt.installedGames.map((quizId) => (
+              <Button
+                type="button"
+                key={quizId}
+                size="sm"
+                disabled={busy}
+                onClick={() =>
+                  void run(async () => {
+                    const response = await packageRequest(
+                      `/uploads/${receipt.uploadId}/games/${quizId}/export`,
+                      { method: "POST" },
+                    )
+                    const url = URL.createObjectURL(await response.blob()),
+                      link = document.createElement("a")
+                    link.href = url
+                    link.download = `game-${quizId}.tadazz`
+                    link.click()
+                    setTimeout(() => URL.revokeObjectURL(url), 1000)
+                  })
+                }
+              >
+                {t("extensions:packages.export")} · {quizId.slice(0, 8)}
+              </Button>
+            ))}
         </div>
       )}
-      {catalog.length > 0 && (
+      {!themesOnly && catalog.length > 0 && (
         <ul
           className="space-y-2"
           aria-label={t("extensions:packages.installed")}
@@ -351,6 +495,7 @@ export function PackageManager({
               className="flex flex-wrap items-center gap-2 text-sm"
             >
               <Button
+                type="button"
                 size="sm"
                 className="bg-accent text-foreground"
                 onClick={() =>
@@ -369,6 +514,7 @@ export function PackageManager({
               <span>{t(`extensions:packages.states.${item.phase}`)}</span>
               {item.phase === "installed" && (
                 <Button
+                  type="button"
                   size="sm"
                   disabled={busy}
                   onClick={() =>

@@ -3,23 +3,36 @@ import {
   type AudioCuePlayerProps,
   type AudioControlState,
 } from "@razzia/extensions/presentation"
-import Button from "@razzia/web/components/Button"
 import {
+  Button,
+  IconButton,
+  PlatformScope,
   Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@razzia/web/components/Select"
-import { Pause, Play, Volume2, VolumeX } from "lucide-react"
+  Tooltip,
+} from "@razzia/extensions/platform-ui"
+import { CircleHelp, Music2, Pause, Play, Volume2, VolumeX } from "lucide-react"
+import { useId } from "react"
+import { useTranslation } from "react-i18next"
 
-/** Original Razzia controls; the extension engine remains the sole audio owner. */
+/** Platform controls around the single shared music engine. */
 export function NativeAudioControls(state: AudioControlState) {
-  const secondary = "bg-white text-black hover:bg-accent"
+  return <HostMusicControls {...state} />
+}
+
+function HostMusicControls(state: AudioControlState) {
+  const { t, i18n } = useTranslation()
+  const trackId = useId()
+  const musicLabel = t("extensions:audio.musicLabel", "Music")
+  const musicHelp = t(
+    "extensions:audio.musicHelp",
+    "Changes music for this screen. The next screen resumes automatic music.",
+  )
 
   return (
-    <div
-      className="font-display relative z-50 flex shrink-0 flex-wrap items-center gap-2 px-3 py-2 text-sm font-semibold"
+    <PlatformScope
+      context="platform.host"
+      dir={i18n.dir()}
+      className="relative z-50 flex shrink-0 flex-wrap items-center gap-2 px-3 py-2 text-sm font-semibold"
       data-testid="host-audio-controls"
     >
       {state.blocked && (
@@ -31,9 +44,20 @@ export function NativeAudioControls(state: AudioControlState) {
           {state.labels.enable}
         </Button>
       )}
+      {state.unavailable && (
+        <p
+          role="alert"
+          className="tds-field-error"
+          data-testid="host-music-unavailable"
+        >
+          {t(
+            "extensions:audio.musicUnavailable",
+            "This music could not be loaded. Choose another track.",
+          )}
+        </p>
+      )}
       <Button
         size="sm"
-        className={secondary}
         onClick={state.toggleMute}
         data-testid="host-toggle-audio-mute"
         aria-pressed={state.muted}
@@ -45,10 +69,14 @@ export function NativeAudioControls(state: AudioControlState) {
         )}
         {state.muted ? state.labels.unmute : state.labels.mute}
       </Button>
-      <label className="flex items-center gap-2 rounded-lg bg-black/40 px-3 py-1.5 text-white">
+      <label className="flex items-center gap-2 px-2">
         <span className="sr-only">{state.labels.volume}</span>
         <input
-          className="accent-primary w-24 cursor-pointer"
+          style={{
+            accentColor: "var(--tds-action)",
+            minHeight: "var(--tds-button-min-height)",
+          }}
+          className="w-24 cursor-pointer"
           type="range"
           min={0}
           max={1}
@@ -61,7 +89,6 @@ export function NativeAudioControls(state: AudioControlState) {
       </label>
       <Button
         size="sm"
-        className={secondary}
         onClick={state.togglePause}
         data-testid="host-toggle-audio-pause"
         aria-pressed={state.userPaused}
@@ -74,33 +101,49 @@ export function NativeAudioControls(state: AudioControlState) {
         {state.userPaused ? state.labels.play : state.labels.pause}
       </Button>
       {state.tracks.length > 0 && (
-        <div className="w-48 max-w-full">
-          <Select
-            value={state.track || "follow-show"}
-            onValueChange={(value) =>
-              state.setTrack(value === "follow-show" ? "" : value)
-            }
-          >
-            <SelectTrigger
-              aria-label={state.labels.track}
+        <div
+          className="flex max-w-full flex-wrap items-center gap-2"
+          data-testid="host-music-picker"
+        >
+          <label htmlFor={trackId} className="flex items-center gap-1.5">
+            <Music2 className="size-4" aria-hidden="true" />
+            {musicLabel}
+          </label>
+          <div className="w-48 max-w-full">
+            <Select
+              id={trackId}
+              aria-label={musicLabel}
+              value={state.track}
+              onChange={(event) => state.setTrack(event.target.value)}
               data-testid="host-audio-track-select"
             >
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="follow-show">
-                {state.labels.followShow}
-              </SelectItem>
+              <option value="">
+                {t("extensions:audio.musicAutomatic", "Automatic")}
+              </option>
               {state.tracks.map((track) => (
-                <SelectItem key={track.value} value={track.value}>
+                <option
+                  key={track.value}
+                  value={track.value}
+                  disabled={track.disabled}
+                >
                   {track.label}
-                </SelectItem>
+                </option>
               ))}
-            </SelectContent>
-          </Select>
+            </Select>
+          </div>
+          <Tooltip content={musicHelp}>
+            <IconButton
+              label={musicHelp}
+              size="sm"
+              variant="ghost"
+              data-testid="host-music-help"
+            >
+              <CircleHelp className="size-4" />
+            </IconButton>
+          </Tooltip>
         </div>
       )}
-    </div>
+    </PlatformScope>
   )
 }
 

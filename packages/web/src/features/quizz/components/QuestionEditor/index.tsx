@@ -1,9 +1,10 @@
 import { EditorStageFitNotice } from "./extension-adornments"
 import { lazy, Suspense } from "react"
 import { EditorWorkspace } from "@razzia/extensions/presentation"
-import { Image, List, Pencil, Settings2 } from "lucide-react"
+import { Image, List, Palette, Pencil, Settings2 } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import QuizzEditorSidebar from "../QuizzEditorSidebar"
+import { ShowThemeSettings } from "../studio/show-theme-settings"
 import { StudioCardKindBar } from "../studio/header-controls"
 import QuestionEditorAnswers from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorAnswers"
 import QuestionEditorConfig from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig"
@@ -35,6 +36,7 @@ const QuestionEditor = () => {
       className="native-editor-workspace"
       ariaLabel={t("extensions:studio.tabs.questions", "Questions")}
       closeLabel={t("common:close", "Close")}
+      defaultPanel={window.location.hash === "#themes" ? "themes" : undefined}
       panels={[
         {
           id: "timeline",
@@ -65,6 +67,12 @@ const QuestionEditor = () => {
           label: t("quizz:media.library", "Media"),
           icon: <Image size={19} />,
           content: <QuestionEditorMedia />,
+        },
+        {
+          id: "themes",
+          label: t("extensions:themes.title"),
+          icon: <Palette size={19} />,
+          content: <ShowThemeSettings compact />,
         },
         {
           id: "settings",
