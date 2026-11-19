@@ -71,7 +71,7 @@ const inspect = (page) => {
       request.method() !== "GET" &&
       request.method() !== "HEAD" &&
       (/\/catalogue\/[^/]+\/install$/.test(pathname) ||
-        /\/api\/(?:quizz|rooms|results)(?:\/|$)/.test(pathname))
+        /\/api\/(?:quizz|games|rooms|results)(?:\/|$)/.test(pathname))
     ) {
       observations.unexpectedWrites.push({
         path: pathname,
