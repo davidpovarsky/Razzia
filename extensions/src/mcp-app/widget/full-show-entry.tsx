@@ -793,7 +793,6 @@ function FullShowWidget() {
               data-testid="full-show-expand"
               aria-label={t("expand")}
               title={t("expand")}
-              disabled={busy}
               onClick={() => {
                 setHostActionFailed(false)
                 void app
