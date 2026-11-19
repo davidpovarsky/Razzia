@@ -158,7 +158,9 @@ export function GreatGuessOffDemo() {
   const soundOnRef = useRef(true)
   const [message, setMessage] = useState("")
   const deadlineRef = useRef(0)
-  const lockPromiseRef = useRef<Promise<void> | null>(null)
+  const revealRef = useRef<(chosenIndex?: number) => Promise<void>>(
+    async () => {},
+  )
   const sfxRef = useRef<HTMLAudioElement | null>(null)
   const musicRef = useRef<HTMLAudioElement | null>(null)
   const reducedMotion = useReducedMotion()
@@ -240,13 +242,9 @@ export function GreatGuessOffDemo() {
       })
   }
 
-  // Use the native Creating Worlds portal/logo opening without event artwork.
-  const showOpening = () =>
-    stage.current?.showFullShowScene?.("grand-opening", {
-      title: "THE GREAT GUESS-OFF",
-      subtitle: "FIVE ROUNDS OF SURPRISES",
-      eventArtworkUrl: "/tadazz-show/v4/show-stage.webp",
-    })
+  // Restore the original Tadazz opening used before the custom interlock.
+  // Every other game scene, result reveal, and finale is preserved.
+  const showOpening = () => stage.current?.showIntro()
 
   useEffect(() => {
     void showOpening()
@@ -265,34 +263,11 @@ export function GreatGuessOffDemo() {
       )
       setSecondsLeft(remaining)
       if (remaining === 0 && currentPhase.current === "voting") {
+        // The deadline advances DIRECTLY to the same result presentation.
+        // Never render the separate numbered "Votes Locked" screen.
         currentPhase.current = "locked"
-        setPhase("locked")
         stopMusic()
-        if (QUESTIONS[questionIndex].kind === "survey") {
-          lockPromiseRef.current = stage.current?.lockVoting() ?? null
-        } else {
-          // Trivia reveals the correct answer directly — no locked-vote scene
-          // and no survey percentages, including when the 20s clock expires.
-          busyRef.current = true
-          setBusy(true)
-          const q = QUESTIONS[questionIndex]
-          void stage.current
-            ?.revealResults({
-              mode: "quiz",
-              counts: q.answers.map(() => 0),
-              solutions: [q.correct ?? 0],
-              showPercentages: false,
-            })
-            .then(() => {
-              currentPhase.current = "results"
-              setPhase("results")
-            })
-            .catch(() => setMessage("Unable to reveal the correct answer."))
-            .finally(() => {
-              busyRef.current = false
-              setBusy(false)
-            })
-        }
+        run(() => revealRef.current())
       }
     }
     const interval = window.setInterval(tick, 160)
@@ -324,15 +299,12 @@ export function GreatGuessOffDemo() {
     const handle = stage.current
     if (!handle) return
     const q = QUESTIONS[questionIndex]
-    if (currentPhase.current === "voting") {
-      currentPhase.current = "locked"
-      setPhase("locked")
-      stopMusic()
-      // Only actual audience surveys have the intermediate Votes Locked scene.
-      if (q.kind === "survey") await handle.lockVoting()
-    } else if (q.kind === "survey" && lockPromiseRef.current) {
-      await lockPromiseRef.current
-    }
+    // Set result presentation BEFORE rendering so "Correct Answer" doesn't
+    // first appear in the tiny question font and jump to a larger size.
+    currentPhase.current = "results"
+    setPhase("results")
+    stopMusic()
+    // Render results in place, on the same four cards. No vote-locked scene.
     await handle.revealResults({
       mode: q.kind,
       counts:
@@ -345,6 +317,8 @@ export function GreatGuessOffDemo() {
     currentPhase.current = "results"
     setPhase("results")
   }
+
+  revealRef.current = reveal
 
   // A single tap is a complete vote. It advances straight to results rather
   // than waiting for the remaining 20-second countdown or another button.
@@ -385,7 +359,6 @@ export function GreatGuessOffDemo() {
     const handle = stage.current
     if (!handle) return
     stopMusic()
-    lockPromiseRef.current = null
     setQuestionIndex(index)
     currentPhase.current = "question-transition"
     setPhase("question-transition")
@@ -408,7 +381,6 @@ export function GreatGuessOffDemo() {
     const handle = stage.current
     if (!handle || phase === "intro" || phase === "question-transition") return
     stopMusic()
-    lockPromiseRef.current = null
     if (phase === "closing") {
       const winner = leaderboard[0]
       // Show the Z stage backdrop before the native confetti starts: one
@@ -441,7 +413,6 @@ export function GreatGuessOffDemo() {
     setVotes({})
     setQuestionIndex(0)
     setSecondsLeft(VOTING_SECONDS)
-    lockPromiseRef.current = null
     await showOpening()
     currentPhase.current = "intro"
     setPhase("intro")
@@ -470,9 +441,11 @@ export function GreatGuessOffDemo() {
         run: async () => {
           // The actual Creating Worlds curtains and effects are the closing
           // sequence; they never appear midway through this five-round demo.
-          await stage.current?.showFullShowScene?.("grand-finale", { round: 2 })
+          // Hide the two decorative Zs from the first frame of the curtain,
+          // not only after the closing animation resolves.
           currentPhase.current = "closing"
           setPhase("closing")
+          await stage.current?.showFullShowScene?.("grand-finale", { round: 2 })
         },
       }
     return { title: "Play again", run: restart }

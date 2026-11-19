@@ -331,67 +331,70 @@
   line-height: 1;
   color: #f5ff80;
 }
-/* A scored quiz is a reveal, not a survey: give the actual answer a
-   dramatic Tadazz lime spotlight and visibly recede the incorrect cards. */
+/* Trivia is a single, stable reveal: no expanding yellow flash or
+   glowing blanket over the answer number. Keep the native card visible. */
 .ggo-native[data-ggo-mode="quiz"]
   .tzv4-stage[data-v4-scene="survey-results"]
   .choice-slot.is-correct {
-  z-index: 12 !important;
-  filter: brightness(1.2) saturate(1.25);
+  z-index: 9 !important;
+  opacity: 1 !important;
+  filter: none !important;
+  transform: none !important;
 }
 .ggo-native[data-ggo-mode="quiz"]
   .tzv4-stage[data-v4-scene="survey-results"]
   .choice-slot.is-correct
   .answer-card {
-  border: 5px solid #f1ff5d !important;
+  border: 4px solid #c8e9fb !important;
   box-shadow:
-    0 0 0 10px #eaff5770,
-    0 0 68px 27px #d9ff4ca0,
-    0 19px 56px #050011 !important;
-  background: linear-gradient(154deg, #744ba6f5, #2d1258f5 78%) !important;
-  animation: ggo-correct-spotlight 850ms cubic-bezier(0.12, 0.8, 0.15, 1) both !important;
+    0 0 0 4px #a9e8ff7a,
+    0 0 28px #aedafa88,
+    0 16px 40px #06011b99 !important;
+  background: linear-gradient(140deg, #67368ef2, #2b1457f2 80%) !important;
+  transform: none !important;
+  animation: none !important;
 }
 .ggo-native[data-ggo-mode="quiz"]
   .tzv4-stage[data-v4-scene="survey-results"]
   .choice-slot.is-correct
-  .answer-title,
+  .answer-title {
+  color: #fff9e8 !important;
+  text-shadow: 0 2px 8px #11032680 !important;
+}
 .ggo-native[data-ggo-mode="quiz"]
   .tzv4-stage[data-v4-scene="survey-results"]
   .choice-slot.is-correct
   .answer-index {
-  color: #f3ff66 !important;
-  text-shadow:
-    0 0 18px #eaff5999,
-    0 2px 9px #140225;
+  z-index: 26 !important;
+  color: #23103f !important;
+  background: linear-gradient(160deg, #f7ffb7, #d9ed78) !important;
+  border: 3px solid #fff8d9 !important;
+  text-shadow: none !important;
+  box-shadow: 0 3px 14px #11042580 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+.ggo-native[data-ggo-mode="quiz"]
+  .tzv4-stage[data-v4-scene="survey-results"]
+  .choice-slot
+  .winner-tag {
+  display: none !important;
 }
 .ggo-native[data-ggo-mode="quiz"]
   .tzv4-stage[data-v4-scene="survey-results"]
   .choice-slot.is-incorrect {
-  opacity: 0.26 !important;
-  filter: grayscale(0.5) brightness(0.65);
+  opacity: 0.44 !important;
+  filter: grayscale(0.25) brightness(0.78) !important;
 }
-@keyframes ggo-correct-spotlight {
-  0% {
-    transform: scale(0.95);
-    filter: brightness(1);
-  }
-  48% {
-    transform: scale(1.14);
-    filter: brightness(1.55);
-  }
-  100% {
-    transform: scale(1.075);
-    filter: brightness(1.22);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .ggo-native[data-ggo-mode="quiz"]
-    .tzv4-stage[data-v4-scene="survey-results"]
-    .choice-slot.is-correct
-    .answer-card {
-    animation: none !important;
-    transform: scale(1.075);
-  }
+/* The native question-frame gradient line is unnecessary on quiz answers. */
+.ggo-native[data-ggo-phase="results"][data-ggo-mode="quiz"]
+  .tzv4-stage
+  .q-frame::before,
+.ggo-native[data-ggo-phase="results"][data-ggo-mode="quiz"]
+  .tzv4-stage
+  .q-frame::after {
+  content: none !important;
+  display: none !important;
 }
 
 /* Guess-off controls: the old Restart position becomes Start/Next, while
@@ -630,119 +633,6 @@
   }
 }
 
-/* The Creating Worlds opening portal and TADAZZ logo, without its event logo.
-   Two halves of the same approved TADAZZ logo interlock at centre and settle
-   into the native complete logo. No custom asset or alternate branding. */
-.ggo-native[data-ggo-phase="intro"] .tzv4-stage .full-grand-opening {
-  background:
-    radial-gradient(ellipse at 50% 64%, #b42eff50, transparent 58%),
-    linear-gradient(135deg, #130538d9, #070424b8);
-}
-.ggo-native[data-ggo-phase="intro"] .tzv4-stage .full-opening-event {
-  object-fit: cover;
-  filter: brightness(0.6) saturate(1.2);
-}
-.ggo-native[data-ggo-phase="intro"] .tzv4-stage .full-opening-logo {
-  position: relative;
-  isolation: isolate;
-  z-index: 10;
-  display: block;
-  flex: 0 0 auto;
-  width: 790px;
-  height: 200px;
-}
-.ggo-native[data-ggo-phase="intro"]
-  .tzv4-stage
-  .full-opening-logo
-  .full-brand-img {
-  width: 100%;
-  height: 100%;
-  max-height: none;
-  object-fit: contain;
-  opacity: 0;
-  animation: ggo-interlock-complete 520ms 3140ms ease both;
-}
-.ggo-native[data-ggo-phase="intro"] .tzv4-stage .full-opening-logo::before,
-.ggo-native[data-ggo-phase="intro"] .tzv4-stage .full-opening-logo::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  opacity: 0;
-  background: url("/tadazz-show/v4/tadazz-brand-logo.png") center/contain
-    no-repeat;
-  filter: drop-shadow(0 0 26px #c466ff88) drop-shadow(0 0 14px #efff4f66);
-}
-.ggo-native[data-ggo-phase="intro"] .tzv4-stage .full-opening-logo::before {
-  clip-path: inset(0 50% 0 0);
-  animation: ggo-interlock-left 1350ms 1970ms cubic-bezier(0.12, 0.92, 0.22, 1)
-    both;
-}
-.ggo-native[data-ggo-phase="intro"] .tzv4-stage .full-opening-logo::after {
-  clip-path: inset(0 0 0 50%);
-  animation: ggo-interlock-right 1350ms 1970ms cubic-bezier(0.12, 0.92, 0.22, 1)
-    both;
-}
-.ggo-native[data-ggo-phase="intro"] .tzv4-stage .full-opening-tag {
-  font-size: 47px;
-  font-weight: 900;
-  letter-spacing: 0.035em;
-  color: #f5ffe5;
-  text-shadow: 0 0 24px #c979f8;
-}
-@keyframes ggo-interlock-left {
-  0% {
-    opacity: 0;
-    transform: translateX(-440px) rotate(-9deg) scale(0.75);
-  }
-  28% {
-    opacity: 1;
-  }
-  70% {
-    opacity: 1;
-    transform: translateX(20px) rotate(1deg) scale(1.035);
-  }
-  84% {
-    opacity: 1;
-    transform: none;
-  }
-  100% {
-    opacity: 0;
-    transform: none;
-  }
-}
-@keyframes ggo-interlock-right {
-  0% {
-    opacity: 0;
-    transform: translateX(440px) rotate(9deg) scale(0.75);
-  }
-  28% {
-    opacity: 1;
-  }
-  70% {
-    opacity: 1;
-    transform: translateX(-20px) rotate(-1deg) scale(1.035);
-  }
-  84% {
-    opacity: 1;
-    transform: none;
-  }
-  100% {
-    opacity: 0;
-    transform: none;
-  }
-}
-@keyframes ggo-interlock-complete {
-  from {
-    opacity: 0;
-    filter: brightness(2.4) drop-shadow(0 0 38px #f6ff8f);
-  }
-  to {
-    opacity: 1;
-    filter: brightness(1) drop-shadow(0 0 33px #c267ff);
-  }
-}
-
 /* Audience Favourite / Correct Answer must be legible and dominant in the
    single reveal (no second "Top Pick" scene or another row of cards). */
 .ggo-native[data-ggo-phase="results"] .tzv4-stage .q-frame {
@@ -804,16 +694,10 @@
 .ggo-native[data-ggo-phase="winner"] .tzv4-stage .stage-bg {
   background-image: url("/tadazz-show/v4/show-stage.webp") !important;
 }
-@media (prefers-reduced-motion: reduce) {
-  .ggo-native[data-ggo-phase="intro"] .tzv4-stage .full-opening-logo::before,
-  .ggo-native[data-ggo-phase="intro"] .tzv4-stage .full-opening-logo::after {
-    display: none !important;
-  }
-  .ggo-native[data-ggo-phase="intro"]
-    .tzv4-stage
-    .full-opening-logo
-    .full-brand-img {
-    animation: none !important;
-    opacity: 1 !important;
-  }
+
+/* The final curtain is the only ending. Remove its two decorative Z glyphs,
+   while retaining the original Tadazz curtain animation and brand logo. */
+.ggo-native[data-ggo-phase="closing"] .tzv4-stage .full-finale-z,
+.ggo-native[data-ggo-phase="closing"] .tzv4-stage .full-final-zigzags {
+  display: none !important;
 }
