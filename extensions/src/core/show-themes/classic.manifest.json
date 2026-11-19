@@ -1210,6 +1210,86 @@
       "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
       "rights": "repository-existing",
       "preload": "slot"
+    },
+    {
+      "id": "classic-guessoff-banana",
+      "url": "/tadazz-show/great-guessoff/banana.webp",
+      "kind": "image",
+      "sha256": "e44f8561d297021b8a94dc39d3c439fa0aaee59f190e2fbf754b4d992eec3097",
+      "bytes": 14294,
+      "provenance": "Existing source-controlled Great Guess-off public sample illustration. Bound to the public preview to match the already published interactive game.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-guessoff-strawberry",
+      "url": "/tadazz-show/great-guessoff/strawberry.webp",
+      "kind": "image",
+      "sha256": "e83e15aea67e1a93091a9536b336fe26ed79518819f92b07302e05b0e99e9574",
+      "bytes": 56568,
+      "provenance": "Existing source-controlled Great Guess-off public sample illustration. Bound to the public preview to match the already published interactive game.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-guessoff-raspberry",
+      "url": "/tadazz-show/great-guessoff/raspberry.webp",
+      "kind": "image",
+      "sha256": "27f7d9f54361b86dd573c53d5752f33c1df7f8b528df1f2f30a542e614ef78ca",
+      "bytes": 60670,
+      "provenance": "Existing source-controlled Great Guess-off public sample illustration. Bound to the public preview to match the already published interactive game.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-guessoff-cherry",
+      "url": "/tadazz-show/great-guessoff/cherry.webp",
+      "kind": "image",
+      "sha256": "4650312d662191d34760e42ed1fb0be2174995a69759511a17653bcdc3fa69cc",
+      "bytes": 36770,
+      "provenance": "Existing source-controlled Great Guess-off public sample illustration. Bound to the public preview to match the already published interactive game.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-guessoff-organiser",
+      "url": "/tadazz-show/great-guessoff/organiser.webp",
+      "kind": "image",
+      "sha256": "e44111b0850900cb3b3a8b18505ebf818f1449a5b7e94c320d4bb7a37d10f03e",
+      "bytes": 35640,
+      "provenance": "Existing source-controlled Great Guess-off public sample illustration. Bound to the public preview to match the already published interactive game.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-guessoff-entertainer",
+      "url": "/tadazz-show/great-guessoff/entertainer.webp",
+      "kind": "image",
+      "sha256": "fd0481ec67574c24ccd148686a4b4fe93bbd979b6a56c6fc943f6375d53772db",
+      "bytes": 36614,
+      "provenance": "Existing source-controlled Great Guess-off public sample illustration. Bound to the public preview to match the already published interactive game.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-guessoff-photographer",
+      "url": "/tadazz-show/great-guessoff/photographer.webp",
+      "kind": "image",
+      "sha256": "76e319d433c653bf998a1de812f39b8e37d15a88fefbc10005d7a13f6ee835a9",
+      "bytes": 32198,
+      "provenance": "Existing source-controlled Great Guess-off public sample illustration. Bound to the public preview to match the already published interactive game.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-guessoff-snack-hunter",
+      "url": "/tadazz-show/great-guessoff/snack-hunter.webp",
+      "kind": "image",
+      "sha256": "88d90d5463b4e399f133b1a9d618a115ed7c22cb8f409b05dc87977e04b80f41",
+      "bytes": 41866,
+      "provenance": "Existing source-controlled Great Guess-off public sample illustration. Bound to the public preview to match the already published interactive game.",
+      "rights": "repository-existing",
+      "preload": "slot"
     }
   ],
   "adapterAssets": {

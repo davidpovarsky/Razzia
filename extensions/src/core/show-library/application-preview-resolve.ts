@@ -1,5 +1,6 @@
 import build from "./application-preview-build.json" with { type: "json" }
 import { resolveShowTheme } from "../show-themes/resolve"
+import { showThemeRegistry } from "../show-themes/registry"
 import { getPreviewIdentityId } from "./identity"
 import {
   assertApplicationPreviewDraft,
@@ -56,7 +57,7 @@ export function resolveApplicationPreviewPlan(
   })
   const ready = Boolean(
     pin &&
-    ["tadazz-classic", "razzia-original"].includes(theme.definition.id) &&
+    showThemeRegistry.get(theme.definition.id, theme.definition.version) &&
     theme.requested.id === theme.definition.id &&
     theme.diagnostics.length === 0 &&
     supported,

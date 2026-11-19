@@ -1,3 +1,4 @@
+import { publicDemoCatalogue } from "../../core/show-library/public-demo-catalogue"
 import {
   clearToken,
   getClientId,
@@ -81,7 +82,25 @@ export function safeReturnTo(value: string | null): string {
 
   const url = new URL(value, "https://tadazz.invalid")
 
-  if (url.origin !== "https://tadazz.invalid" || url.search || url.hash) {
+  if (url.origin !== "https://tadazz.invalid" || url.hash) {
+    return "/studio"
+  }
+
+  const catalogueId = url.searchParams.get("game")
+
+  // Preserve only an exact public catalogue selection across sign-in.
+  // Extra parameters, duplicate keys and unknown identifiers remain rejected.
+  if (
+    url.pathname === "/" &&
+    url.searchParams.size === 2 &&
+    url.searchParams.get("view") === "product" &&
+    catalogueId !== null &&
+    publicDemoCatalogue.some((game) => game.id === catalogueId)
+  ) {
+    return `/?view=product&game=${encodeURIComponent(catalogueId)}`
+  }
+
+  if (url.search) {
     return "/studio"
   }
 

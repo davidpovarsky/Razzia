@@ -1,3 +1,4 @@
+import { bundledGalleryThemes } from "./bundled-gallery-themes"
 import razziaManifest from "./razzia.manifest.json" with { type: "json" }
 import classicManifest from "./classic.manifest.json" with { type: "json" }
 import {
@@ -55,6 +56,9 @@ export const showThemeRegistry = new ShowThemeRegistry()
 
 showThemeRegistry.register(classicManifest)
 showThemeRegistry.register(razziaManifest)
+for (const theme of bundledGalleryThemes) {
+  showThemeRegistry.register(theme)
+}
 
 /** Per-tenant/per-room registry; never mutate the global bundled catalog. */
 export function createShowThemeRegistry(definitions: readonly unknown[] = []) {

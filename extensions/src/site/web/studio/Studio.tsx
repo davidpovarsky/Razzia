@@ -39,7 +39,13 @@ import type { ResultMeta } from "./Events"
 import { browserConsentLoginHandoff } from "../../../components/oauth-consent/login-handoff"
 import { InlineGamePreviewBoundary } from "../../components/game-preview/boundary"
 import { createAccountPreviewProvider } from "../../components/game-preview/account-provider"
+import { createPublicPreviewProvider } from "../../components/game-preview/public-provider"
 
+const StudioPublicGallery = lazy(() =>
+  import("./StudioPublicGallery").then((module) => ({
+    default: module.StudioPublicGallery,
+  })),
+)
 const LegacyTools = lazy(() => import("./LegacyTools"))
 const OAuthConsentPage = lazy(() =>
   import("../../../components/oauth-consent/OAuthConsentPage").then(
@@ -214,6 +220,7 @@ function StudioWorkspace({ account }: { account: Account }) {
     () => createAccountPreviewProvider(account.id),
     [account.id],
   )
+  const publicPreviewProvider = useMemo(createPublicPreviewProvider, [])
   const t = useSiteText()
   const queryClient = useQueryClient()
   const path = useRouterState({ select: (state) => state.location.pathname })
@@ -336,7 +343,7 @@ function StudioWorkspace({ account }: { account: Account }) {
   return (
     <InlineGamePreviewBoundary
       routeKey={`${account.id}:${section}`}
-      provider={previewProvider}
+      provider={section === "explore" ? publicPreviewProvider : previewProvider}
     >
       <ReferenceCanvas variant="studio" styles={studio}>
         <style>
@@ -641,46 +648,7 @@ function StudioWorkspace({ account }: { account: Account }) {
                     )
                   })()}
                 {section === "explore" && (
-                  <>
-                    <div className="pagehead">
-                      <h1>{t("Explore Games")}</h1>
-                    </div>
-                    <p className="muted">
-                      {t(
-                        "Illustrative catalogue. Template installation is unavailable.",
-                      )}
-                    </p>
-                    <div className="games-grid">
-                      {["Ready to play", "Make it yours", "Start fresh"].map(
-                        (label, index) => (
-                          <article className="game-card" key={label}>
-                            <img
-                              className="site-game-cover"
-                              src={`/tadazz-design-reference/marketing-${index === 1 ? "worlds" : "stage"}.webp`}
-                              alt=""
-                            />
-                            <div className="site-game-body">
-                              <h3>{t(label)}</h3>
-                              <SiteLink
-                                className="btn ghost"
-                                href={
-                                  index === 2
-                                    ? "/manager/quizz"
-                                    : "/?view=store"
-                                }
-                              >
-                                {t(
-                                  index === 2
-                                    ? "Create game"
-                                    : "Explore collection",
-                                )}
-                              </SiteLink>
-                            </div>
-                          </article>
-                        ),
-                      )}
-                    </div>
-                  </>
+                  <StudioPublicGallery search={search} />
                 )}
                 {section === "account" && <AccountPanel account={account} />}
               </Suspense>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+    <defs><linearGradient id="base" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071827"/><stop offset="1" stop-color="#143a58"/></linearGradient>
+    <radialGradient id="shade"><stop stop-color="#071827" stop-opacity=".02"/><stop offset=".55" stop-color="#071827" stop-opacity=".17"/><stop offset="1" stop-color="#071827" stop-opacity=".52"/></radialGradient>
+    <radialGradient id="light" cx=".5" cy="0" r="1"><stop stop-color="#e8be69" stop-opacity=".07"/><stop offset=".7" stop-color="#e8be69" stop-opacity="0"/></radialGradient></defs>
+    <rect width="1600" height="900" fill="url(#base)"/><rect width="1600" height="900" fill="url(#light)"/>
+    <g fill="none" stroke="#e8be69" opacity=".26" stroke-width="2">
+        <path d="M60 805V225a160 160 0 0 1 320 0v580M84 805V225a136 136 0 0 1 272 0v580M108 805V225a112 112 0 0 1 224 0v580"/>
+        <path d="M1220 100v580a160 160 0 0 0 320 0V100M1244 100v580a136 136 0 0 0 272 0V100M1268 100v580a112 112 0 0 0 224 0V100"/>
+        <path d="M40 40h1520v820H40zM54 54h1492v792H54z" opacity=".45"/></g>
+        <polygon points="1310,146 1318.3935734027366,168.44723732032574 1342.3359215540352,169.4934221912518 1323.5810870526948,184.41276267967424 1329.984698577944,207.5065778087482 1310,194.28 1290.015301422056,207.5065778087482 1296.4189129473052,184.41276267967424 1277.6640784459648,169.49342219125177 1301.6064265972634,168.44723732032574" fill="#e8be69" opacity="0.7"/><polygon points="292,704 295.9499168954054,714.5634057978003 307.21690426072246,715.0557280900008 298.3910997895034,722.0765942021997 301.4045640366796,732.9442719099992 292,726.72 282.5954359633204,732.9442719099992 285.6089002104966,722.0765942021997 276.78309573927754,715.0557280900008 288.0500831045946,714.5634057978003" fill="#94c9d6" opacity="0.55"/>
+        <circle cx="226" cy="220" r="66" fill="#e8be69" opacity="0.12"/><circle cx="1378" cy="682" r="64" fill="#94c9d6" opacity="0.08"/><rect width="1600" height="900" fill="url(#shade)"/>
+  </svg>

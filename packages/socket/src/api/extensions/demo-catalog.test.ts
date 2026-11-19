@@ -5,6 +5,20 @@ import { mintToken } from "../../services/auth"
 import { installedThemeForSelection } from "../../services/theme-installation"
 import { showThemeRegistry } from "@razzia/extensions/core"
 import { SESSION_ROLES } from "@razzia/common/constants"
+const bundledThemeIds = [
+  "tadazz-classic",
+  "razzia-original",
+  "tadazz-electric-social",
+  "tadazz-midnight-club",
+  "tadazz-storybook-grove",
+  "tadazz-colour-pop",
+  "tadazz-curiosity-lab",
+  "tadazz-golden-hour",
+  "tadazz-family-fiesta",
+  "tadazz-discovery-lab",
+  "tadazz-team-together",
+]
+
 const app = new Hono().route("/api/themes", themeRoutes)
 afterEach(() => vi.unstubAllEnvs())
 it("demo catalog defaults off and never changes the bundled registry", async () => {
@@ -17,10 +31,9 @@ it("demo catalog defaults off and never changes the bundled registry", async () 
       version: "2.0.0",
     }),
   ).toBeNull()
-  expect(showThemeRegistry.list().map((theme) => theme.id)).toEqual([
-    "tadazz-classic",
-    "razzia-original",
-  ])
+  expect(showThemeRegistry.list().map((theme) => theme.id)).toEqual(
+    bundledThemeIds,
+  )
 })
 it("explicit demo mode authenticates reads, resolves exact versions and denies workspace writes", async () => {
   vi.stubEnv("TADAZZ_DEMO_CATALOG_ENABLED", "true")
@@ -80,5 +93,7 @@ it("explicit demo mode authenticates reads, resolves exact versions and denies w
       version: "1.0.0",
     })?.id,
   ).toBe("tadazz-demo-cosmic")
-  expect(showThemeRegistry.list()).toHaveLength(2)
+  expect(showThemeRegistry.list().map((theme) => theme.id)).toEqual(
+    bundledThemeIds,
+  )
 })

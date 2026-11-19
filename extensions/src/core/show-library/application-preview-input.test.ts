@@ -10,6 +10,7 @@ import { authoredFixture, previewInputFixture } from "./preview-fixtures"
 import { normalizePreviewDraft } from "./identity"
 import { resolvePreviewPlan } from "./preview-resolve"
 import publicExample from "./approved-public-example.json" with { type: "json" }
+import { publicDemoCatalogue, getPublicDemo } from "./public-demo-catalogue"
 
 const context = { locale: "en", reducedMotion: false, role: "spectator" }
 function source() {
@@ -35,6 +36,31 @@ function source() {
   }
 }
 describe("account application preview source binding", () => {
+  it("resolves every public catalogue game through its exact bundled theme and shared production renderer", () => {
+    for (const metadata of publicDemoCatalogue) {
+      const example = getPublicDemo(metadata.id)!
+      const draft = normalizeApplicationPreviewDraft(
+        {
+          source: {
+            kind: "published-demo",
+            catalogueId: metadata.id,
+            immutableRevision: "a".repeat(64),
+          },
+          show: example.show,
+          assets: [],
+        },
+        context,
+      )
+      const plan = resolveApplicationPreviewPlan(draft)
+      expect(plan.resolution.requested.id).toBe(metadata.themeId)
+
+      if (getApplicationPreviewManifest().pins.length) {
+        expect(plan.resolution.kind).toBe("exact")
+        expect(plan.resolution.effective?.id).toBe(metadata.themeId)
+        expect(plan.diagnostics).toEqual([])
+      }
+    }
+  })
   it("admits only a spectator public projection without notes, settings or tenant assets", () => {
     const input = {
       source: {

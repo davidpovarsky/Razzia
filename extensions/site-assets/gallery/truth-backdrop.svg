@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+    <defs><linearGradient id="base" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#093b3e"/><stop offset="1" stop-color="#17645d"/></linearGradient>
+    <radialGradient id="shade"><stop stop-color="#093b3e" stop-opacity=".02"/><stop offset=".55" stop-color="#093b3e" stop-opacity=".17"/><stop offset="1" stop-color="#093b3e" stop-opacity=".52"/></radialGradient>
+    <radialGradient id="light" cx=".5" cy="0" r="1"><stop stop-color="#c5ef88" stop-opacity=".07"/><stop offset=".7" stop-color="#c5ef88" stop-opacity="0"/></radialGradient></defs>
+    <rect width="1600" height="900" fill="url(#base)"/><rect width="1600" height="900" fill="url(#light)"/>
+    <defs><pattern id="grid" width="44" height="44" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.3" fill="#82d5c9" opacity="0.13"/></pattern></defs>
+        <rect width="1600" height="900" fill="url(#grid)"/>
+        <g fill="none" stroke="#c5ef88" opacity=".24" stroke-width="3">
+        <path d="M60 140l80-46 80 46v92l-80 46-80-46zm1250 545l95-55 95 55v110l-95 55-95-55z"/>
+        <path d="M146 400h140m-70-70v140M1280 160h120m-60-60v120"/>
+        </g><circle cx="135" cy="715" r="90" fill="none" stroke="#82d5c9" stroke-width="3" opacity="0.17"/><circle cx="135" cy="715" r="45" fill="none" stroke="#c5ef88" stroke-width="3" opacity="0.18"/>
+        <circle cx="1400" cy="395" r="26" fill="#c5ef88" opacity="0.35"/><polygon points="350,107 353.2093074775169,115.58276721071279 362.36373471183697,115.98277907312568 355.19276857897154,121.68723278928721 357.64120827980213,130.5172209268743 350,125.46 342.35879172019787,130.5172209268743 344.80723142102846,121.68723278928721 337.63626528816303,115.98277907312568 346.7906925224831,115.58276721071279" fill="#82d5c9" opacity="0.28"/><rect width="1600" height="900" fill="url(#shade)"/>
+  </svg>

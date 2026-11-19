@@ -6,6 +6,13 @@ import { sitePlatformStyle } from "../../themes/platform"
 import { ContactForm } from "./ContactForm"
 import { Pricing } from "./Pricing"
 import { GreatGuessOffDemo } from "./GreatGuessOffDemo"
+import { CatalogueGameDemo } from "./CatalogueGameDemo"
+import catalogueStyles from "./catalogue.css?inline"
+import {
+  hasManagerSession,
+  siteRequest,
+  SiteApiError,
+} from "../../adapters/client"
 import guessOffStyles from "./great-guessoff.css?inline"
 import { SiteButton } from "../shared/SiteButton"
 import { useEffect, useState, useMemo } from "react"
@@ -30,7 +37,6 @@ import {
   Clapperboard,
   Menu,
   Search,
-  House,
 } from "lucide-react"
 
 function selectedCatalogueGame(search: string): Game {
@@ -61,9 +67,15 @@ export function MarketingSite() {
     const requested = new URLSearchParams(window.location.search).get("view")
 
     return requested &&
-      ["store", "how", "pricing", "custom", "demo", "product"].includes(
-        requested,
-      )
+      [
+        "store",
+        "how",
+        "pricing",
+        "custom",
+        "demo",
+        "preview",
+        "product",
+      ].includes(requested)
       ? requested
       : "home"
   })
@@ -71,21 +83,39 @@ export function MarketingSite() {
     selectedCatalogueGame(window.location.search),
   )
   const [filter, setFilter] = useState("All")
+  const [audience, setAudience] = useState("All")
+  const [installing, setInstalling] = useState<"play" | "edit" | null>(null)
+  const [installError, setInstallError] = useState("")
   const [search, setSearch] = useState("")
   const [menu, setMenu] = useState(false)
   const visibleGames = catalogue.filter(
     (game) =>
       (filter === "All" || game.category === filter) &&
-      matchesCatalogueSearch(t(game.title), search, language),
+      (audience === "All" || game.audience.includes(audience)) &&
+      matchesCatalogueSearch(
+        [
+          t(game.title),
+          t(game.themeName),
+          ...game.audience.map((item) => t(item)),
+        ].join(" "),
+        search,
+        language,
+      ),
   )
   useEffect(() => {
     const onBack = () => {
       const requested = new URLSearchParams(searchString).get("view")
       setView(
         requested &&
-          ["store", "how", "pricing", "custom", "demo", "product"].includes(
-            requested,
-          )
+          [
+            "store",
+            "how",
+            "pricing",
+            "custom",
+            "demo",
+            "preview",
+            "product",
+          ].includes(requested)
           ? requested
           : "home",
       )
@@ -108,13 +138,68 @@ export function MarketingSite() {
   }
   const open = (game: Game) => {
     setSelected(game)
+    setInstallError("")
     go("product", game.id)
   }
   const openDemo = (game: Game = catalogue[0]) => {
     setSelected(game)
     go("demo", game.id)
   }
+  const openPreview = (game: Game) => {
+    setSelected(game)
+    go("preview", game.id)
+  }
+  const useGame = async (game: Game, intent: "play" | "edit") => {
+    if (installing) {
+      return
+    }
+
+    const returnTo = `/?view=product&game=${encodeURIComponent(game.id)}`
+
+    if (!hasManagerSession()) {
+      window.location.assign(`/login?returnTo=${encodeURIComponent(returnTo)}`)
+
+      return
+    }
+
+    setInstalling(intent)
+    setInstallError("")
+
+    try {
+      const result = await siteRequest<{
+        quizzId: string
+        editorUrl: string
+        launchUrl: string
+      }>(`/api/extensions/catalogue/${encodeURIComponent(game.id)}/install`, {
+        method: "POST",
+        body: JSON.stringify({}),
+        signal: AbortSignal.timeout(30_000),
+      })
+
+      // Only the verified local quiz identity is used for navigation.
+      if (!/^[A-Za-z0-9_-]+$/u.test(result.quizzId)) {
+        throw new Error("Invalid installed game")
+      }
+
+      window.location.assign(
+        intent === "play"
+          ? `/studio/prepare?quiz=${encodeURIComponent(result.quizzId)}`
+          : `/manager/quizz/${encodeURIComponent(result.quizzId)}`,
+      )
+    } catch (error) {
+      if (error instanceof SiteApiError && error.status === 401) {
+        window.location.assign(
+          `/login?returnTo=${encodeURIComponent(returnTo)}`,
+        )
+      } else {
+        setInstallError(t("We could not add this game. Please try again."))
+      }
+    } finally {
+      setInstalling(null)
+    }
+  }
   const demonstration = previewText(previewLocale(i18n))
+  const useGameLabel = installing ? "Adding your game…" : "Use this game"
   const nav = (
     <>
       {[
@@ -135,7 +220,7 @@ export function MarketingSite() {
         key={game.id}
         game={game}
         open={() => open(game)}
-        preview={() => openDemo(game)}
+        preview={() => openPreview(game)}
       />
     ))
 
@@ -145,6 +230,7 @@ export function MarketingSite() {
         <style>{corrections}</style>
         <style>{sitePlatformStyle}</style>
         <style>{guessOffStyles}</style>
+        <style>{catalogueStyles}</style>
         <header className="site-header">
           <div className="wide header-inner">
             <SiteLink className="brand" href="/">
@@ -342,11 +428,11 @@ export function MarketingSite() {
                   </div>
                   <p className="note">
                     {t(
-                      "Illustrative catalogue. Template installation is unavailable.",
+                      "Complete games, ready to play. Every theme is also available in your editor.",
                     )}
                   </p>
                   <div className="featured-grid">
-                    {cards(catalogue.slice(0, 3))}
+                    {cards([catalogue[1], catalogue[3], catalogue[8]])}
                   </div>
                 </div>
               </section>
@@ -384,7 +470,7 @@ export function MarketingSite() {
               </section>
               <p className="preview-notice">
                 {t(
-                  "Illustrative catalogue. Template installation is unavailable.",
+                  "Complete games, ready to play. Every theme is also available in your editor.",
                 )}
               </p>
               <div className="store-tools">
@@ -411,6 +497,31 @@ export function MarketingSite() {
                   />
                 </label>
               </div>
+              <div
+                className="catalogue-audience-filter"
+                aria-label={t("Filter by audience")}
+              >
+                {[
+                  "All",
+                  "Adults",
+                  "Children",
+                  "Organisations",
+                  "Schools",
+                  "Families",
+                ].map((value) => (
+                  <SiteButton
+                    key={value}
+                    className={`filter-btn ${audience === value ? "active" : ""}`}
+                    aria-pressed={audience === value}
+                    onClick={() => setAudience(value)}
+                  >
+                    {t(value === "All" ? "Every audience" : value)}
+                  </SiteButton>
+                ))}
+                <span className="catalogue-count">
+                  {t("{{count}} games", { count: visibleGames.length })}
+                </span>
+              </div>
               <div className="store-grid">
                 {cards(visibleGames)}
                 {visibleGames.length === 0 && (
@@ -430,7 +541,16 @@ export function MarketingSite() {
               </div>
               <div className="product-grid">
                 <div className="product-preview">
-                  <Cover game={selected} />
+                  <GamePreviewSurface
+                    selection={{
+                      kind: "published-demo",
+                      catalogueId: selected.id,
+                    }}
+                    label={t("View {{name}}", { name: t(selected.title) })}
+                    onOpen={() => openDemo(selected)}
+                  >
+                    <Cover game={selected} />
+                  </GamePreviewSurface>
                 </div>
                 <div className="product-side">
                   <h1>{t(selected.title)}</h1>
@@ -442,27 +562,70 @@ export function MarketingSite() {
                       })}
                     </span>
                     <span>{t(selected.category)}</span>
-                    <span>{t("Flexible capacity")}</span>
+                    <span>
+                      {t("{{count}} rounds", { count: selected.questionCount })}
+                    </span>
+                    <span>{t(selected.themeName)}</span>
+                  </div>
+                  <p className="product-fineprint">
+                    {t("English questions · editable in any language")}
+                  </p>
+                  <div className="catalogue-product-audience">
+                    {selected.audience.map((item) => (
+                      <span key={item}>{t(item)}</span>
+                    ))}
                   </div>
                   <div className="product-actions">
-                    <SiteButton className="btn btn-primary" disabled>
-                      {t("Use this game")}
+                    <SiteButton
+                      className="btn btn-primary"
+                      onClick={() => openDemo(selected)}
+                      data-testid="catalogue-play-sample"
+                    >
+                      <Play />
+                      {t("Play this game")}
+                    </SiteButton>
+                    <SiteButton
+                      className="btn btn-outline"
+                      disabled={installing !== null}
+                      onClick={() => void useGame(selected, "play")}
+                      data-testid="catalogue-use-game"
+                    >
+                      {t(
+                        installing === "play"
+                          ? "Adding your game…"
+                          : "Use this game",
+                      )}
                       <ArrowRight />
                     </SiteButton>
-                    <SiteButton className="btn btn-outline" disabled>
-                      {t("Customise a copy")}
+                    <SiteButton
+                      className="btn btn-outline"
+                      disabled={installing !== null}
+                      onClick={() => void useGame(selected, "edit")}
+                      data-testid="catalogue-customise"
+                    >
+                      <Pencil />
+                      {t(
+                        installing === "edit"
+                          ? "Adding your game…"
+                          : "Customise a copy",
+                      )}
                     </SiteButton>
                     <SiteButton
                       className="btn btn-quiet"
-                      onClick={() => openDemo(selected)}
+                      onClick={() => openPreview(selected)}
                     >
                       <Play />
-                      {t("Preview")}
+                      {t("Preview full show")}
                     </SiteButton>
                   </div>
+                  {installError && (
+                    <p role="alert" className="catalogue-player-error">
+                      {installError}
+                    </p>
+                  )}
                   <p className="product-fineprint">
                     {t(
-                      "Illustrative catalogue. Template installation is unavailable.",
+                      "Play a free solo sample, or add an editable copy to your Studio and host it with your audience.",
                     )}
                   </p>
                 </div>
@@ -488,66 +651,84 @@ export function MarketingSite() {
               </div>
             </div>
           )}
-          {view === "demo" && (
+          {(view === "demo" || view === "preview") && (
             <section className="section wrap">
               <div className="eyebrow">
-                {t("TRY A ROUND · INTERACTIVE SAMPLE")}
+                {t(
+                  view === "preview"
+                    ? "FULL SHOW PREVIEW"
+                    : "PLAY A FREE SAMPLE",
+                )}
               </div>
               <h1 className="h1">{t(selected.title)}</h1>
               <p className="prose">
-                {selected.id === "great-guessoff"
-                  ? "Play the five-round interactive sample. Voting percentages and other players are illustrative demo data."
-                  : demonstration("demo")}
+                {view === "preview"
+                  ? demonstration("demo")
+                  : t(
+                      "Play the rounds, choose your answers and discover the theme in action.",
+                    )}
               </p>
               <div
-                className="demo-stage marketing-native-demo"
+                className={`catalogue-demo-shell ${view === "preview" ? "catalogue-full-preview" : ""}`}
                 data-testid="marketing-native-demo"
-                style={{
-                  padding: 0,
-                  overflow:
-                    selected.id === "great-guessoff" ? "visible" : "hidden",
-                  position: "relative",
-                  ...(selected.id === "great-guessoff"
-                    ? { aspectRatio: "auto", height: "auto" }
-                    : {}),
-                }}
               >
-                <style>
-                  {
-                    ".marketing-native-demo{aspect-ratio:16/9}.marketing-native-demo>.game-preview-surface,.marketing-native-demo .game-preview-poster,.marketing-native-demo .game-cover{width:100%;height:100%}@media(max-width:640px){.marketing-native-demo{aspect-ratio:3/4}}"
-                  }
-                </style>
-                {selected.id === "great-guessoff" ? (
-                  <GreatGuessOffDemo />
-                ) : (
+                {view === "preview" && (
                   <GamePreviewSurface
+                    key={selected.id}
                     selection={{
                       kind: "published-demo",
                       catalogueId: selected.id,
                     }}
                     label={t("Preview")}
                     initiallyOpen
+                    dismissOnOutside={false}
                   >
                     <Cover game={selected} />
                   </GamePreviewSurface>
+                )}
+                {view === "demo" && selected.id === "great-guessoff" && (
+                  <GreatGuessOffDemo />
+                )}
+                {view === "demo" && selected.id !== "great-guessoff" && (
+                  <CatalogueGameDemo
+                    key={selected.id}
+                    catalogueId={selected.id}
+                  />
                 )}
               </div>
               <div className="button-row" style={{ marginTop: 24 }}>
                 <SiteButton
                   className="btn btn-outline"
-                  onClick={() => go("home")}
+                  onClick={() => open(selected)}
                 >
-                  <House size={16} />
-                  {t("Back to home")}
+                  <ArrowRight size={16} />
+                  {t("View game")}
                 </SiteButton>
                 <SiteButton
                   className="btn btn-primary"
+                  onClick={() =>
+                    view === "preview"
+                      ? openDemo(selected)
+                      : void useGame(selected, "play")
+                  }
+                  disabled={installing !== null}
+                >
+                  {t(view === "preview" ? "Play this game" : useGameLabel)}
+                  <Play size={16} />
+                </SiteButton>
+                <SiteButton
+                  className="btn btn-quiet"
                   onClick={() => go("store")}
                 >
                   {t("Explore games")}
                   <ArrowRight size={16} />
                 </SiteButton>
               </div>
+              {installError && (
+                <p role="alert" className="catalogue-player-error">
+                  {installError}
+                </p>
+              )}
             </section>
           )}
           {view === "how" && (

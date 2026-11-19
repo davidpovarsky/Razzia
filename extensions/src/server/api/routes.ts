@@ -31,7 +31,12 @@ import {
   PreviewSourceError,
 } from "./account-preview-source"
 import { readApplicationPreviewRuntime } from "./application-preview-runtime"
-import { readPublicPreviewSource } from "./public-preview-source"
+import {
+  readPublicPreviewSource,
+  publicGameCatalogueEnabled,
+} from "./public-preview-source"
+import { publicDemoCatalogue } from "../../core/show-library/public-demo-catalogue"
+import { installPublicCatalogueGame } from "./public-catalogue-install"
 
 let cachedDotLottieWasmBytes: Uint8Array | null = null
 
@@ -134,6 +139,14 @@ export const createExtensionRoutes = (
     })
   })
 
+  app.get("/catalogue", (c) => {
+    c.header("Cache-Control", "public, max-age=300")
+
+    return publicGameCatalogueEnabled()
+      ? c.json({ games: publicDemoCatalogue })
+      : c.json({ error: "Public games unavailable" }, 404)
+  })
+
   app.get("/preview/public/:id", (c) => {
     c.header("Cache-Control", "no-store")
 
@@ -153,7 +166,7 @@ export const createExtensionRoutes = (
 
     if (
       process.env.TADAZZ_INLINE_GAME_PREVIEW_ENABLED !== "true" ||
-      process.env.TADAZZ_PUBLIC_GAME_PREVIEW_ENABLED !== "true"
+      !publicGameCatalogueEnabled()
     ) {
       return c.json({ error: "Preview unavailable" }, 404)
     }
@@ -173,6 +186,27 @@ export const createExtensionRoutes = (
   if (requireManagerMiddleware) {
     app.use("*", requireManagerMiddleware)
   }
+
+  app.post("/catalogue/:id/install", (c) => {
+    c.header("Cache-Control", "private, no-store")
+
+    if (!requireManagerMiddleware) {
+      return c.json({ error: "Authentication required" }, 401)
+    }
+
+    try {
+      const result = installPublicCatalogueGame(injections, c.req.param("id"))
+
+      return c.json(result, result.created ? 201 : 200)
+    } catch (error) {
+      return c.json(
+        { error: "Could not add this game" },
+        error instanceof CompositeStorageError
+          ? (error.statusCode as ContentfulStatusCode)
+          : 500,
+      )
+    }
+  })
 
   app.get("/preview/quizzes/:id", (c) => {
     c.header("Cache-Control", "private, no-store")

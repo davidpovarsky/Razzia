@@ -36,6 +36,25 @@ describe("site security boundaries", () => {
       expect(safeReturnTo(path)).toBe("/studio")
     }
   })
+  it("preserves only exact public catalogue product selections after sign-in", () => {
+    expect(safeReturnTo("/?view=product&game=quiz")).toBe(
+      "/?view=product&game=quiz",
+    )
+    expect(safeReturnTo("/?game=family&view=product")).toBe(
+      "/?view=product&game=family",
+    )
+    for (const path of [
+      "/?view=product&game=unknown",
+      "/?view=demo&game=quiz",
+      "/?view=product&game=quiz&token=secret",
+      "/?view=product&game=quiz#token",
+      "/?view=product&view=product&game=quiz",
+      "/?view=product&game=quiz&game=family",
+      "//evil.test/?view=product&game=quiz",
+    ]) {
+      expect(safeReturnTo(path)).toBe("/studio")
+    }
+  })
   it("partitions every private resource by account", () => {
     expect(siteKey("alice", "games")).not.toEqual(siteKey("bob", "games"))
     expect(siteKey("alice")).toEqual(["tadazz-site", "alice"])

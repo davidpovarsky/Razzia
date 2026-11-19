@@ -12,6 +12,7 @@ import path from "node:path"
 import { createHash } from "node:crypto"
 import { afterEach, describe, expect, it, vi } from "vitest"
 import { readPublicPreviewSource } from "./public-preview-source"
+import { publicDemoCatalogue } from "../../core/show-library/public-demo-catalogue"
 import { authoredShowToNativeBundleDraft } from "../../core/show-authoring-convert"
 import { authoredFixture } from "../../core/show-library/preview-fixtures"
 import {
@@ -26,21 +27,46 @@ afterEach(() => {
     rmSync(directory, { recursive: true, force: true })
   }
 })
-it("public source requires an explicit flag, binds one approved ID and can be withdrawn", () => {
+it("public sources bind only approved catalogue IDs and can be explicitly withdrawn", () => {
   vi.stubEnv("TADAZZ_PUBLIC_GAME_PREVIEW_ENABLED", "false")
   expect(readPublicPreviewSource("quiz")).toBeNull()
   vi.stubEnv("TADAZZ_PUBLIC_GAME_PREVIEW_ENABLED", "true")
-  expect(readPublicPreviewSource("crowd")).toBeNull()
+  expect(readPublicPreviewSource("unknown-customer-game")).toBeNull()
   expect(readPublicPreviewSource("../quiz")).toBeNull()
   const source = readPublicPreviewSource("quiz")
   expect(source?.source.kind).toBe("published-demo")
-  expect(source?.show.cards).toHaveLength(4)
+  expect(source?.show.cards.length).toBeGreaterThanOrEqual(6)
   expect(source?.assets).toEqual([])
   expect(JSON.stringify(source)).not.toMatch(
     /(?:QA_PRIVATE|goldysterling|accountId|quizId|631212f9)/u,
   )
+  for (const example of publicDemoCatalogue) {
+    const demo = readPublicPreviewSource(example.id)
+
+    expect(demo?.source).toMatchObject({
+      kind: "published-demo",
+      catalogueId: example.id,
+    })
+    expect(demo?.show.cards.length).toBeGreaterThanOrEqual(6)
+    expect(demo?.assets).toEqual([])
+    expect(demo?.show.defaults?.showTheme?.id).toBe(example.themeId)
+  }
   vi.stubEnv("TADAZZ_PUBLIC_GAME_PREVIEW_ENABLED", "false")
   expect(readPublicPreviewSource("quiz")).toBeNull()
+})
+it("enables the curated gallery with the site's inline preview while retaining an explicit public opt-out", () => {
+  vi.stubEnv("TADAZZ_PUBLIC_GAME_PREVIEW_ENABLED", undefined)
+  vi.stubEnv("TADAZZ_INLINE_GAME_PREVIEW_ENABLED", "true")
+  expect(readPublicPreviewSource("family")?.source).toMatchObject({
+    kind: "published-demo",
+    catalogueId: "family",
+  })
+  expect(readPublicPreviewSource("private-account-game")).toBeNull()
+  vi.stubEnv("TADAZZ_PUBLIC_GAME_PREVIEW_ENABLED", "false")
+  expect(readPublicPreviewSource("family")).toBeNull()
+  vi.stubEnv("TADAZZ_PUBLIC_GAME_PREVIEW_ENABLED", undefined)
+  vi.stubEnv("TADAZZ_INLINE_GAME_PREVIEW_ENABLED", "false")
+  expect(readPublicPreviewSource("family")).toBeNull()
 })
 function fixture(sidecar: boolean) {
   const root = mkdtempSync(path.join(tmpdir(), "phase2-preview-"))
