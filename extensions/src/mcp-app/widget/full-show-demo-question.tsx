@@ -82,7 +82,8 @@ export function FullShowDemoQuestionV3({
       paused: playback.clock.paused,
     },
   }
-  const rendererKey = `${input.inventory.selectedChapterId}:${input.inventory.revision}:${playback.clock.epoch}`
+  // Phase clocks reset at question/answers/results boundaries. The parent owns
+  // question/revision/explicit-replay identity, so keep the native stage mounted.
   const selected = selectedIndex === null ? null : frame.choices[selectedIndex]
   const result = selected
     ? frame.results?.find((value) => value.answerId === selected.id)
@@ -106,7 +107,6 @@ export function FullShowDemoQuestionV3({
     <>
       {theme.definition.rendererId === "tadazz-classic-stage" ? (
         <NativePreviewStage
-          key={rendererKey}
           frame={nativeFrame}
           locale={input.inventory.context.locale}
           reducedMotion={input.inventory.context.reducedMotion}
@@ -119,11 +119,7 @@ export function FullShowDemoQuestionV3({
           onDemoSelect={canChoose ? choose : undefined}
         />
       ) : (
-        <NativeStageViewportV3
-          key={rendererKey}
-          enabled
-          onUnavailable={onUnavailable}
-        >
+        <NativeStageViewportV3 enabled onUnavailable={onUnavailable}>
           <NativeRazziaPreviewV2
             theme={theme}
             presentation={input.presentation}

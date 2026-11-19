@@ -20,6 +20,14 @@ import {
 } from "./stage-scene-adapter"
 import { previewVotingDeadline } from "./preview-clock"
 
+const phaseOrder: Record<PreviewFrame["phase"], number> = {
+  question: 0,
+  answerCards: 1,
+  voting: 2,
+  voteLocked: 3,
+  results: 4,
+}
+
 /** Candidate only. Genuine producer binding and a reviewed pin precede mounting. */
 export function NativePreviewStage({
   frame,
@@ -48,7 +56,10 @@ export function NativePreviewStage({
   const observed = useRef(onStageHandle)
   observed.current = onStageHandle
   const attachStage = useCallback((handle: TadazzStageHandle | null) => {
-    if (stage.current === handle) return
+    if (stage.current === handle) {
+      return
+    }
+
     stage.current = handle
     observed.current?.(handle)
   }, [])
@@ -59,6 +70,7 @@ export function NativePreviewStage({
   const request = useRef(0)
   const lastKey = useRef("")
   const lastSelection = useRef("")
+  const lastPhase = useRef<PreviewFrame["phase"] | null>(null)
   const lastPaused = useRef(frame.clock.paused)
   const latest = useRef(frame)
   const pausedBootstrap = useRef(false)
@@ -76,15 +88,25 @@ export function NativePreviewStage({
   const labels = useMemo(() => previewNativeLabels(locale), [locale])
 
   useLayoutEffect(() => {
-    if (!stage.current) return
+    if (!stage.current) {
+      return
+    }
+
     const nextOwner = createPreviewTransitionOwner(
       stage.current,
       (questionKey) => {
-        const current = latest.current
-        if (current.phase !== "voting" || current.question.id !== questionKey)
+        const { current } = latest
+
+        if (current.phase !== "voting" || current.question.id !== questionKey) {
           return null
-        if (current.clock.paused && !pausedBootstrap.current) return null
+        }
+
+        if (current.clock.paused && !pausedBootstrap.current) {
+          return null
+        }
+
         const deadline = previewVotingDeadline(current.clock, Date.now())
+
         return {
           seconds: current.seconds,
           deadlineMs: deadline?.wallDeadlineMs,
@@ -92,6 +114,7 @@ export function NativePreviewStage({
       },
     )
     owner.current = nextOwner
+
     return () => {
       request.current += 1
       nextOwner.invalidate()
@@ -103,7 +126,11 @@ export function NativePreviewStage({
   useLayoutEffect(() => {
     const handle = stage.current
     const transition = owner.current
-    if (!handle || !transition) return
+
+    if (!handle || !transition) {
+      return
+    }
+
     try {
       validatePreviewFrame(frame)
       const selectionKey = `${frame.epoch}:${frame.question.id}:${frame.phase}`
@@ -130,28 +157,57 @@ export function NativePreviewStage({
         return
       }
 
+      const rewinding =
+        continuousPlayback &&
+        handle.questionKey === frame.question.id &&
+        lastPhase.current !== null &&
+        phaseOrder[frame.phase] < phaseOrder[lastPhase.current]
+      lastPhase.current = frame.phase
       lastSelection.current = selectionKey
       lastPaused.current = frame.clock.paused
 
       const key = `${frame.epoch}:${frame.question.id}:${frame.phase}:${frame.clock.paused}`
-      if (key === lastKey.current) return // elapsed ticks only update latest.current
+
+      // Elapsed ticks only update latest.current.
+      if (key === lastKey.current) {
+        return
+      }
+
       lastKey.current = key
-      const ticket = ++request.current
+      request.current += 1
+      const ticket = request.current
       const current = () => ticket === request.current
       pausedBootstrap.current = false
       transition.invalidate()
       // Completing native animations may fire cues; ownership was revoked first.
       handle.finishAnimations()
-      if (transition.hasUnsafe() || frame.clock.paused) setHidden(true)
+      const continueQuestion =
+        continuousPlayback &&
+        handle.questionKey === frame.question.id &&
+        !rewinding
+
+      if (!continueQuestion && (transition.hasUnsafe() || frame.clock.paused)) {
+        setHidden(true)
+      }
 
       const begin = async () => {
-        if (!current()) return
+        if (!current()) {
+          return
+        }
+
         const next = latest.current
         // A projected new card is a snapshot replacement, not a request to
         // replay a full-game wipe while the previous card remains on stage.
         // Reuse the existing native current-phase reconstruction and real clock.
+        const sameQuestion =
+          continuousPlayback &&
+          handle.questionKey === next.question.id &&
+          !rewinding
+        // Explicit backward navigation reconstructs the requested phase so
+        // answers/results from a later phase cannot remain on the stage.
         const planned =
-          next.clock.paused ||
+          rewinding ||
+          (next.clock.paused && !sameQuestion) ||
           (handle.questionKey !== next.question.id &&
             !(
               continuousPlayback &&
@@ -167,33 +223,58 @@ export function NativePreviewStage({
                 presentation,
               )
         previous.current = planned.scene
+
+        // Manual steps in a paused continuous question keep the visible scene;
+        // only new answer/result details enter, then remain paused.
+        if (sameQuestion) {
+          setHidden(false)
+        }
+
         if (!next.clock.paused) {
           handle.resumeAnimations?.()
           setHidden(false)
           void transition.run(planned.steps).catch(() => {
-            if (current()) onUnavailable()
+            if (current()) {
+              onUnavailable()
+            }
           })
+
           return
         }
+
         const last = planned.steps.at(-1)
         const voting = last?.op === "openVoting"
         const prefix = voting ? planned.steps.slice(0, -1) : planned.steps
-        if (!(await transition.run(prefix)) || !current()) return
-        if (voting && last.op === "openVoting") {
+
+        if (!(await transition.run(prefix)) || !current()) {
+          return
+        }
+
+        if (voting) {
           pausedBootstrap.current = true
           const running = transition.run([last])
           const isCurrent = transition.capture()
           void running.catch(() => {
-            if (current() && isCurrent()) onUnavailable()
+            if (current() && isCurrent()) {
+              onUnavailable()
+            }
           })
-          await new Promise<void>((resolve) =>
-            requestAnimationFrame(() => resolve()),
-          )
-          if (!current() || !isCurrent()) return
-          await new Promise<void>((resolve) =>
-            requestAnimationFrame(() => resolve()),
-          )
-          if (!current() || !isCurrent()) return
+          await new Promise<void>((resolve) => {
+            requestAnimationFrame(() => resolve())
+          })
+
+          if (!current() || !isCurrent()) {
+            return
+          }
+
+          await new Promise<void>((resolve) => {
+            requestAnimationFrame(() => resolve())
+          })
+
+          if (!current() || !isCurrent()) {
+            return
+          }
+
           const deadline = previewVotingDeadline(
             latest.current.clock,
             Date.now(),
@@ -201,11 +282,22 @@ export function NativePreviewStage({
           void handle
             .openVoting(latest.current.seconds, deadline?.wallDeadlineMs)
             .catch(() => {
-              if (current()) onUnavailable()
+              if (current()) {
+                onUnavailable()
+              }
             })
         }
-        if (!current()) return
-        handle.pauseAnimations?.()
+
+        if (!current()) {
+          return
+        }
+
+        if (latest.current.clock.paused) {
+          handle.pauseAnimations?.()
+        } else {
+          handle.resumeAnimations?.()
+        }
+
         pausedBootstrap.current = false
         // Native reconstruction has completed across the await above. Commit the
         // mask removal now rather than leaving it behind a deferred React paint.
@@ -217,7 +309,9 @@ export function NativePreviewStage({
         ? transition.drain().then(begin)
         : begin()
       void pending.catch(() => {
-        if (current()) onUnavailable()
+        if (current()) {
+          onUnavailable()
+        }
       })
     } catch {
       transition.invalidate()

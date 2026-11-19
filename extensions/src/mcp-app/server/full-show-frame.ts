@@ -237,6 +237,7 @@ export function createFullShowPreviewPortV3(
             stageAnimations: resolveCardStageAnimations({
               stageAnimations: card.stageAnimations,
               questionEntrance: card.questionEntrance,
+              globalStageAnimations: source.defaults.stageAnimations,
             }),
             questionDecoration: resolveQuestionDecoration({
               cardDecoration: card.questionDecoration,

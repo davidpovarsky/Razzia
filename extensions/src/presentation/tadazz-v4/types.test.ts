@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 import {
   TADAZZ_V4_SCENES,
   TADAZZ_V4_LABELS,
+  continuesQuestionStage,
   normalizeData,
   percentagesFor,
   topIndicesFor,
@@ -57,5 +58,76 @@ describe("TADAZZ v4 extracted presentation kit", () => {
     const normalized = normalizeData({ answers: eightAnswers, teams: tenTeams })
     expect(normalized.answers).toHaveLength(8)
     expect(normalized.teams).toHaveLength(10)
+  })
+})
+
+describe("question stage continuity", () => {
+  const question = { scene: "question" as const, data: { questionKey: "q1" } }
+
+  it("retains the question when new answers enter and cards when results reveal", () => {
+    expect(
+      continuesQuestionStage(question, {
+        scene: "picture-answers",
+        data: { questionKey: "q1", questionAlreadyOnStage: true },
+      }),
+    ).toBe(true)
+    expect(
+      continuesQuestionStage(
+        { ...question, scene: "countdown" },
+        {
+          scene: "survey-results",
+          data: { questionKey: "q1", cardsAlreadyOnStage: true },
+        },
+      ),
+    ).toBe(true)
+  })
+
+  it("requires an explicit continuation; replay and cold snapshots start fresh", () => {
+    for (const data of [
+      { questionKey: "q1" },
+      {
+        questionKey: "q1",
+        questionAlreadyOnStage: false,
+        cardsAlreadyOnStage: false,
+      },
+      { questionKey: "q2", cardsAlreadyOnStage: true },
+      { questionKey: "", cardsAlreadyOnStage: true },
+      { cardsAlreadyOnStage: true },
+    ]) {
+      expect(
+        continuesQuestionStage(question, { scene: "picture-answers", data }),
+      ).toBe(false)
+    }
+    expect(
+      continuesQuestionStage(null, {
+        scene: "picture-answers",
+        data: { questionKey: "q1", cardsAlreadyOnStage: true },
+      }),
+    ).toBe(false)
+  })
+
+  it("does not reuse a different composition as a question stage", () => {
+    for (const scene of [
+      "question-image",
+      "company-opening",
+      "top-pick",
+      "round-recap",
+    ] as const) {
+      expect(
+        continuesQuestionStage(question, {
+          scene,
+          data: { questionKey: "q1", cardsAlreadyOnStage: true },
+        }),
+      ).toBe(false)
+      expect(
+        continuesQuestionStage(
+          { ...question, scene },
+          {
+            scene: "picture-answers",
+            data: { questionKey: "q1", cardsAlreadyOnStage: true },
+          },
+        ),
+      ).toBe(false)
+    }
   })
 })
