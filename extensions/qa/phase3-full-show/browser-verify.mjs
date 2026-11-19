@@ -1727,9 +1727,125 @@ try {
             ),
             "Paused native media must not advance",
           )
-          await iframe.getByTestId("full-show-pause").press("Enter")
-          await iframe.locator('[data-playback-paused="false"]').waitFor()
-          await page.waitForTimeout(400)
+          const resumeProbe = await widgetFrame.evaluateHandle(
+            ({ pausedTime: pausedElapsed, stopped: pausedMedia }) => {
+              const nativeElement = document
+                .querySelector('[data-testid="full-show-native-surface"]')
+                .shadowRoot.querySelector("[data-full-show-chapter]")
+
+              return {
+                chapterId: nativeElement.getAttribute("data-full-show-chapter"),
+                epoch: nativeElement.getAttribute("data-playback-epoch"),
+                pausedTime: pausedElapsed,
+                stopped: pausedMedia,
+                elements: window.__nativeAudio.slice(),
+                startedAt: performance.now(),
+                firstClockProgressMs: null,
+                firstMediaProgressMs: null,
+              }
+            },
+            { pausedTime, stopped },
+          )
+          const resumeEvidence = {
+            engine,
+            theme,
+            check: "native resume readiness",
+            timeoutMs: 5000,
+            status: "waiting",
+          }
+          observations.push(resumeEvidence)
+
+          try {
+            await iframe.getByTestId("full-show-pause").press("Enter")
+            await iframe.locator('[data-playback-paused="false"]').waitFor()
+            await widgetFrame.waitForFunction(
+              (probe) => {
+                const nativeElement = document
+                  .querySelector('[data-testid="full-show-native-surface"]')
+                  ?.shadowRoot?.querySelector("[data-full-show-chapter]")
+                const clockAdvanced =
+                  nativeElement?.getAttribute("data-full-show-chapter") ===
+                    probe.chapterId &&
+                  nativeElement?.getAttribute("data-playback-epoch") ===
+                    probe.epoch &&
+                  nativeElement?.getAttribute("data-playback-paused") ===
+                    "false" &&
+                  Number(nativeElement?.getAttribute("data-playback-elapsed")) >
+                    probe.pausedTime + 200
+                const mediaAdvanced = probe.elements.some((element, index) => {
+                  const previous = probe.stopped[index]
+
+                  return (
+                    previous &&
+                    window.__nativeAudio[index] === element &&
+                    !element.paused &&
+                    (element.currentSrc || element.src) === previous.src &&
+                    element.currentTime > previous.time + 0.15
+                  )
+                })
+                const waitedMs = performance.now() - probe.startedAt
+
+                if (clockAdvanced && probe.firstClockProgressMs === null) {
+                  probe.firstClockProgressMs = waitedMs
+                }
+
+                if (mediaAdvanced && probe.firstMediaProgressMs === null) {
+                  probe.firstMediaProgressMs = waitedMs
+                }
+
+                return clockAdvanced && mediaAdvanced
+              },
+              resumeProbe,
+              { timeout: 5000, polling: 50 },
+            )
+            resumeEvidence.status = "ready"
+          } catch (error) {
+            resumeEvidence.status = "failed"
+            resumeEvidence.error = String(error)
+            throw error
+          } finally {
+            try {
+              resumeEvidence.snapshot = await resumeProbe.evaluate((probe) => {
+                const nativeElement = document
+                  .querySelector('[data-testid="full-show-native-surface"]')
+                  ?.shadowRoot?.querySelector("[data-full-show-chapter]")
+
+                return {
+                  chapterId: probe.chapterId,
+                  epoch: probe.epoch,
+                  pausedElapsedMs: probe.pausedTime,
+                  pausedMedia: probe.stopped,
+                  waitedMs: performance.now() - probe.startedAt,
+                  firstClockProgressMs: probe.firstClockProgressMs,
+                  firstMediaProgressMs: probe.firstMediaProgressMs,
+                  renderedChapterId: nativeElement?.getAttribute(
+                    "data-full-show-chapter",
+                  ),
+                  renderedEpoch: nativeElement?.getAttribute(
+                    "data-playback-epoch",
+                  ),
+                  renderedPaused: nativeElement?.getAttribute(
+                    "data-playback-paused",
+                  ),
+                  renderedElapsedMs: Number(
+                    nativeElement?.getAttribute("data-playback-elapsed"),
+                  ),
+                  media: window.__nativeAudio.map((element, index) => ({
+                    index,
+                    sameElement: probe.elements[index] === element,
+                    src: element.currentSrc || element.src,
+                    paused: element.paused,
+                    time: element.currentTime,
+                  })),
+                }
+              })
+            } catch (error) {
+              resumeEvidence.snapshotError = String(error)
+            }
+
+            await resumeProbe.dispose().catch(() => undefined)
+          }
+
           const resumed = await media()
           assert(
             Number(await stage.getAttribute("data-playback-elapsed")) >
