@@ -350,3 +350,7 @@ body:has(.widget-workspace-shell),
     gap: 0.15rem;
   }
 }
+
+.widget-editor-workspace .editor-workspace-canvas {
+  padding: 0;
+}

@@ -1,11 +1,14 @@
 /** Product opening: independent of any quiz, show manifest or theme palette. */
 export const PLATFORM_CURTAIN_DURATION_MS = 2180
+
 export const PLATFORM_OPENING_VIDEO_DURATION_MS = 7933
+
 export const PLATFORM_OPENING_DURATION_MS =
   PLATFORM_CURTAIN_DURATION_MS + PLATFORM_OPENING_VIDEO_DURATION_MS
 
 export const PLATFORM_CURTAIN_LEFT_URL =
   "/tadazz-show/second-library/curtain-left.png"
+
 export const PLATFORM_CURTAIN_RIGHT_URL =
   "/tadazz-show/second-library/curtain-right.png"
 
@@ -17,21 +20,28 @@ export interface PlatformOpeningSnapshot {
 export function readPlatformOpening(
   value: unknown,
 ): PlatformOpeningSnapshot | null {
-  if (!value || typeof value !== "object") return null
+  if (!value || typeof value !== "object") {
+    return null
+  }
+
   const record = value as Record<string, unknown>
+
   if (
     !["standby", "opening", "lobby", "running"].includes(String(record.stage))
   ) {
     return null
   }
+
   if (
     record.startedAt !== null &&
     (typeof record.startedAt !== "number" || !Number.isFinite(record.startedAt))
-  )
+  ) {
     return null
+  }
+
   return {
     stage: record.stage as PlatformOpeningSnapshot["stage"],
-    startedAt: record.startedAt as number | null,
+    startedAt: record.startedAt,
   }
 }
 
@@ -54,6 +64,7 @@ export function platformOpeningFrame(
           ),
         )
   const progress = Math.min(1, elapsedMs / PLATFORM_CURTAIN_DURATION_MS)
+
   return {
     elapsedMs,
     curtainProgress: progress * progress * (3 - 2 * progress),

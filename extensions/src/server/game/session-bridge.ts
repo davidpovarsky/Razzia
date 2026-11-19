@@ -179,11 +179,15 @@ export function createSessionDelegate(
     },
     isAcceptingAnswers: () => ctx.round.isCurrentlyAcceptingAnswers,
     pauseGame: () => {
-      const ok = ctx.presentationLaunch?.isOpening
-        ? ctx.presentationLaunch.pause()
-        : ctx.showCoordinator?.isSceneActive()
-          ? ctx.showCoordinator.pauseGame()
-          : ctx.round.pauseGame()
+      let ok = false
+
+      if (ctx.presentationLaunch?.isOpening) {
+        ok = ctx.presentationLaunch.pause()
+      } else if (ctx.showCoordinator?.isSceneActive()) {
+        ok = ctx.showCoordinator.pauseGame()
+      } else {
+        ok = ctx.round.pauseGame()
+      }
 
       if (ok) {
         ctx.broadcastExtensionState()
@@ -192,11 +196,15 @@ export function createSessionDelegate(
       return ok
     },
     resumeGame: () => {
-      const ok = ctx.presentationLaunch?.isOpening
-        ? ctx.presentationLaunch.resume()
-        : ctx.showCoordinator?.isSceneActive()
-          ? ctx.showCoordinator.resumeGame()
-          : ctx.round.resumeGame()
+      let ok = false
+
+      if (ctx.presentationLaunch?.isOpening) {
+        ok = ctx.presentationLaunch.resume()
+      } else if (ctx.showCoordinator?.isSceneActive()) {
+        ok = ctx.showCoordinator.resumeGame()
+      } else {
+        ok = ctx.round.resumeGame()
+      }
 
       if (ok) {
         ctx.broadcastExtensionState()
@@ -204,12 +212,17 @@ export function createSessionDelegate(
 
       return ok
     },
-    getPauseSnapshot: () =>
-      ctx.presentationLaunch?.isOpening
-        ? ctx.presentationLaunch.getPauseSnapshot()
-        : ctx.showCoordinator?.isSceneActive()
-          ? ctx.showCoordinator.getPauseSnapshot()
-          : ctx.round.getPauseSnapshot(),
+    getPauseSnapshot: () => {
+      if (ctx.presentationLaunch?.isOpening) {
+        return ctx.presentationLaunch.getPauseSnapshot()
+      }
+
+      if (ctx.showCoordinator?.isSceneActive()) {
+        return ctx.showCoordinator.getPauseSnapshot()
+      }
+
+      return ctx.round.getPauseSnapshot()
+    },
     getLeaderboard: () => {
       const currentLb = ctx.round.currentLeaderboard
       const source = currentLb.length > 0 ? currentLb : ctx.players()

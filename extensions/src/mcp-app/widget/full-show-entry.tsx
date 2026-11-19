@@ -21,6 +21,7 @@ import {
   useRef,
   useState,
   useSyncExternalStore,
+  type CSSProperties,
 } from "react"
 import { I18nextProvider, useTranslation } from "react-i18next"
 import { createFullShowConsumerV3 } from "../client/full-show-frame.ts"
@@ -254,9 +255,14 @@ function Surface({
   const element = useRef<HTMLDivElement>(null)
   const renderer = useRef<Root | null>(null)
   const [size, setSize] = useState({ width: 0, height: 0 })
+  const [appearance, setAppearance] = useState<CSSProperties>({})
   useLayoutEffect(() => {
     const target = viewport.current
-    if (!target) return
+
+    if (!target) {
+      return
+    }
+
     const ratio = aspect === "4 / 3" ? 4 / 3 : 16 / 9
     const fit = () => {
       const width = Math.min(target.clientWidth, target.clientHeight * ratio)
@@ -299,6 +305,7 @@ function Surface({
         onDemoReveal={onDemoReveal}
         demoLabels={demoLabels}
         onUnavailable={unavailable}
+        onWorkspaceAppearance={setAppearance}
         soundEnabled={soundEnabled}
         onSoundEnabled={onSoundEnabled}
       />,
@@ -315,7 +322,7 @@ function Surface({
   ])
 
   return (
-    <div ref={viewport} className="widget-stage-viewport">
+    <div ref={viewport} className="widget-stage-viewport" style={appearance}>
       <div
         ref={element}
         className="widget-stage-host"
@@ -385,14 +392,25 @@ function FullShowWidget() {
   const navigation = frame ? fullShowCardNavigation(frame.inventory) : null
   const automaticAttempt = useRef("")
   useEffect(() => {
-    if (!frame || !canCall || busy) return
+    if (!frame || !canCall || busy) {
+      return
+    }
+
     // Read the clock owner after the layout effect selected this frame. A React
     // render can still carry the preceding phase's sampled elapsed time.
     const livePlayback = playbackOwner.snapshot()
     const next = fullShowAutomaticChapter(frame.inventory, livePlayback)
-    if (!next) return
+
+    if (!next) {
+      return
+    }
+
     const key = `${frame.inventory.draftId}:${frame.inventory.revision}:${frame.inventory.selectedChapterId}:${livePlayback.clock.epoch}:${current.replaySequence}`
-    if (automaticAttempt.current === key) return
+
+    if (automaticAttempt.current === key) {
+      return
+    }
+
     automaticAttempt.current = key
     void preview(selection(frame, next.id))
   }, [frame, canCall, busy, playback, playbackOwner, current.replaySequence])
@@ -807,13 +825,15 @@ function FullShowWidget() {
                       onFocusCapture={(event) => {
                         const field = (event.target as HTMLElement).dataset
                           .testid
+
                         // Text editing must stay on this question; live audio
                         // controls keep the current media element playing.
                         if (
                           field === "full-show-title" ||
                           field === "full-show-question-text"
-                        )
+                        ) {
                           setPlayback(playbackOwner.pause())
+                        }
                       }}
                     >
                       <FullShowEditorV3
@@ -874,8 +894,10 @@ function FullShowWidget() {
                   chapter.cardId === selected.cardId &&
                   chapter.kind === "results",
               )
-              if (canCall && !busy && results)
+
+              if (canCall && !busy && results) {
                 void preview(selection(frame, results.id))
+              }
             }}
             demoLabels={{
               choose: t("demoChoose"),

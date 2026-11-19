@@ -24,7 +24,7 @@ export function fullShowCardNavigation(inventory: FullShowInventoryV3) {
     cards,
     index,
     selected,
-    current: cards[index],
+    current: index >= 0 ? cards[index] : undefined,
     previous: index > 0 ? cards[index - 1] : undefined,
     next: index >= 0 ? cards[index + 1] : undefined,
   }
@@ -37,6 +37,7 @@ export function fullShowAutomaticChapter(
 ): Chapter | undefined {
   const navigation = fullShowCardNavigation(inventory)
   const chapter = navigation.selected
+
   if (
     !chapter ||
     playback.clock.paused ||
@@ -45,6 +46,7 @@ export function fullShowAutomaticChapter(
   ) {
     return undefined
   }
+
   if (chapter.kind === "question" || chapter.kind === "voting") {
     // Native voting renders the answer entrance too. The intermediate manual
     // answerCards/voteLocked snapshots remain available to explicit tool calls.

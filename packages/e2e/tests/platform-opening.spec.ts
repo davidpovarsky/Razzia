@@ -20,9 +20,10 @@ fs.mkdirSync(evidenceDir, { recursive: true })
 async function openRoom(
   host: Page,
   request: APIRequestContext,
-  theme: "tadazz-classic" | "razzia-original",
-  legacy = false,
+  theme: "tadazz-classic" | "razzia-original" | "legacy",
 ) {
+  const legacy = theme === "legacy"
+  const selectedTheme = legacy ? "razzia-original" : theme
   const title = `Platform opening ${theme} ${Date.now()}`
   const quizz = {
     subject: title,
@@ -43,7 +44,11 @@ async function openRoom(
     [crypto.randomUUID()],
     computeCanonicalBaseDigest(quizz),
   )
-  extras.defaults.showTheme = { id: theme, version: "1.0.0", overrides: {} }
+  extras.defaults.showTheme = {
+    id: selectedTheme,
+    version: "1.0.0",
+    overrides: {},
+  }
   const login = await request.post("/api/auth/manager", {
     data: { password: "e2e-password" },
   })
@@ -75,6 +80,7 @@ async function openRoom(
     "data-platform-opening-stage",
     "standby",
   )
+
   return { gameId, quizId }
 }
 
@@ -91,6 +97,7 @@ test("shared product curtain, video, pause and reconnect return to the selected 
   })
   const display = await displayContext.newPage()
   display.on("pageerror", (error) => errors.push(error.message))
+
   try {
     await display.goto(`/display/${gameId}`)
     await expect(display.getByTestId("platform-game-opening")).toHaveAttribute(
@@ -234,15 +241,22 @@ test("legacy imports get an in-memory original-theme launch and reduced motion k
   request,
 }) => {
   await host.emulateMedia({ reducedMotion: "reduce" })
-  const { quizId } = await openRoom(host, request, "razzia-original", true)
+  const { quizId } = await openRoom(host, request, "legacy")
   const configPath =
     process.env.PLATFORM_OPENING_QA_CONFIG ??
     join(import.meta.dirname, "../../../work/platform-opening-qa-20261119")
   const quizDir = join(configPath, "quizz")
   const baseName = fs.readdirSync(quizDir).find((name) => {
-    if (!name.endsWith(".json")) return false
+    if (!name.endsWith(".json")) {
+      return false
+    }
+
     return (
-      JSON.parse(fs.readFileSync(join(quizDir, name), "utf-8")).id === quizId
+      (
+        JSON.parse(fs.readFileSync(join(quizDir, name), "utf-8")) as {
+          id?: string
+        }
+      ).id === quizId
     )
   })
   expect(baseName).toBeTruthy()

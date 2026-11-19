@@ -833,5 +833,6 @@ const closePanelLabels: Record<Locale, string> = {
   tr: "Paneli kapat",
   vi: "Đóng bảng điều khiển",
 }
-for (const locale of locales)
+for (const locale of locales) {
   resources[locale].widget.closePanel = closePanelLabels[locale]
+}

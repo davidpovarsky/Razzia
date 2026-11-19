@@ -1,5 +1,5 @@
 import { FullShowAudioV3 } from "./full-show-audio.tsx"
-import { useLayoutEffect, useMemo, useRef } from "react"
+import { useLayoutEffect, useMemo, useRef, type CSSProperties } from "react"
 import { I18nextProvider } from "react-i18next"
 import { builtDefinitions } from "virtual:tadazz-native-v2-definitions"
 import {
@@ -12,6 +12,7 @@ import { sceneConfigSchema } from "../../core/studio-timeline-schema.ts"
 import {
   ShowThemeScope,
   showThemeStyle,
+  themeAdapterAsset,
 } from "../../presentation/show-themes/context.tsx"
 import { ScenePresenter } from "../../presentation/scene-presenter.tsx"
 import { TadazzV4StageAdapter } from "../../presentation/tadazz-show/TadazzV4StageAdapter.tsx"
@@ -202,6 +203,7 @@ export function FullShowNativeStageV3({
   demoControlsTarget,
   onDemoReveal,
   demoLabels,
+  onWorkspaceAppearance,
 }: {
   value: FullShowFrameV3
   onUnavailable: () => void
@@ -212,9 +214,32 @@ export function FullShowNativeStageV3({
   demoControlsTarget?: HTMLDivElement | null
   onDemoReveal?: () => void
   demoLabels?: FullShowDemoLabels
+  onWorkspaceAppearance?: (appearance: CSSProperties) => void
 }) {
   const input = useMemo(() => fullShowFrameV3Schema.parse(value), [value])
   const theme = useMemo(() => resolved(input), [input])
+  // Reuse the verified native theme and admitted frame assets for the canvas
+  // surround; editor controls retain the application palette.
+  const workspaceAppearance = useMemo<CSSProperties>(() => {
+    const backdrop = input.presentation.background
+    const url =
+      backdrop?.url ??
+      themeAdapterAsset(
+        theme,
+        input.content.kind === "question" ? "questionBackdrop" : "showBackdrop",
+      )
+
+    return {
+      backgroundColor: theme.definition.tokens.background,
+      backgroundImage: url ? `url(${JSON.stringify(url)})` : "none",
+      backgroundSize: backdrop?.fit ?? "cover",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
+    }
+  }, [theme, input.content.kind, input.presentation.background])
+  useLayoutEffect(() => {
+    onWorkspaceAppearance?.(workspaceAppearance)
+  }, [onWorkspaceAppearance, workspaceAppearance])
   const { content } = input
   const key = `${input.inventory.selectedChapterId}:${input.inventory.revision}:${playback.clock.epoch}`
 

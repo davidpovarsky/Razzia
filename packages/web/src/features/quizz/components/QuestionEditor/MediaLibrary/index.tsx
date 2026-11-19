@@ -176,6 +176,7 @@ const MediaLibrary = ({
           }}
           onCloseAutoFocus={(event) => {
             const opener = returnFocus.current
+
             if (opener?.isConnected && !opener.closest("[inert]")) {
               event.preventDefault()
               opener.focus({ preventScroll: true })

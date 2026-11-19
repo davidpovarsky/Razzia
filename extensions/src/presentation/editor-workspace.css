@@ -205,18 +205,16 @@
 .editor-workspace[data-layout="wide"]:not(
     :has(.editor-workspace-panel-left[data-docked="true"])
   ) {
-  grid-template-columns: var(--workspace-rail) 0 minmax(0, 1fr) minmax(
-      260px,
-      320px
-    ) var(--workspace-rail);
+  grid-template-columns:
+    var(--workspace-rail) 0 minmax(0, 1fr) minmax(260px, 320px)
+    var(--workspace-rail);
 }
 .editor-workspace[data-layout="wide"]:not(
     :has(.editor-workspace-panel-right[data-docked="true"])
   ) {
-  grid-template-columns: var(--workspace-rail) minmax(180px, 220px) minmax(
-      0,
-      1fr
-    ) 0 var(--workspace-rail);
+  grid-template-columns:
+    var(--workspace-rail) minmax(180px, 220px) minmax(0, 1fr)
+    0 var(--workspace-rail);
 }
 .editor-workspace[data-layout="wide"]:not(
     :has(.editor-workspace-panel[data-docked="true"])

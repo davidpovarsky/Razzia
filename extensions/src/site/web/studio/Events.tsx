@@ -226,6 +226,7 @@ export function Prepare({
       window.location.assign(
         `/party/manager/${encodeURIComponent(opened.current.gameId)}`,
       )
+
       return
     }
 
@@ -244,9 +245,11 @@ export function Prepare({
         body: JSON.stringify({ quizzId: selected }),
         signal: controller.signal,
       })
+
       if (pending.current !== controller || controller.signal.aborted) {
         return
       }
+
       if (!gameId || !inviteCode) {
         throw new Error("Missing room response")
       }
@@ -268,11 +271,19 @@ export function Prepare({
       }
     } finally {
       window.clearTimeout(deadline)
+
       if (pending.current === controller) {
         pending.current = null
         setBusy(false)
       }
     }
+  }
+
+  let openLabel = t("Open show room")
+  if (busy) {
+    openLabel = t("Please wait…")
+  } else if (selected && openedQuizId === selected) {
+    openLabel = t("Open host")
   }
 
   return (
@@ -307,13 +318,7 @@ export function Prepare({
             className="btn primary"
             onClick={() => void start()}
           >
-            {t(
-              busy
-                ? "Please wait…"
-                : openedQuizId === selected
-                  ? "Open host"
-                  : "Open show room",
-            )}
+            {openLabel}
           </SiteButton>
           {error && (
             <p role="alert">

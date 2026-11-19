@@ -192,11 +192,17 @@ export function TadazzOpening({
 
   useEffect(() => {
     const video = videoRef.current
-    if (!video || elapsedMs === undefined || !videoReady) return
+
+    if (!video || elapsedMs === undefined || !videoReady) {
+      return
+    }
+
     const seconds = Math.min(elapsedMs, TADAZZ_OPENING_VIDEO_DURATION_MS) / 1000
+
     if (Math.abs(video.currentTime - seconds) > 0.35) {
       video.currentTime = seconds
     }
+
     if (paused || brandEnded) {
       video.pause()
     } else if (video.paused && (lottieReady || lottieFailed)) {

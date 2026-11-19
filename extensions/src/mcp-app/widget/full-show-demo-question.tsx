@@ -121,7 +121,7 @@ export function FullShowDemoQuestionV3({
       ) : (
         <NativeStageViewportV3
           key={rendererKey}
-          enabled={input.presentation.answerVisuals.length > 0}
+          enabled
           onUnavailable={onUnavailable}
         >
           <NativeRazziaPreviewV2

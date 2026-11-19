@@ -100,8 +100,7 @@
     transform: translateX(104%) !important;
   }
   .platform-game-opening[data-platform-opening-stage="opening"]
-    .platform-game-opening__still,
-  .platform-game-opening__welcome {
+    .platform-game-opening__welcome {
     opacity: 0 !important;
     visibility: hidden !important;
   }

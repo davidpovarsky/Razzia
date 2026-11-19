@@ -155,6 +155,7 @@ class Game {
             computeCanonicalBaseDigest(quizz),
           )
         : null)
+
     if (!sidecar && runtimeExtras && "defaults" in runtimeExtras) {
       runtimeExtras.defaults.showTheme = {
         id: RAZZIA_THEME_ID,
@@ -163,6 +164,7 @@ class Game {
         legacyPolicy: "preserve-saved",
       }
     }
+
     const isCreatingWorlds = isCreatingWorldsProgram(sidecar)
     this.isCreatingWorldsShow = isCreatingWorlds
     this.temporaryGuestsAllowed = allowsTemporaryGuests(

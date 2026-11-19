@@ -62,6 +62,7 @@ export async function verifyHostControls({
   await page.goto(`${base}/host?scenario=${scenario.id}`)
   await page.locator("html[data-host-ready=true]").waitFor()
   await iframe.locator("[data-full-show-chapter]").waitFor()
+
   return {
     engine,
     theme,

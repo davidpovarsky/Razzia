@@ -344,6 +344,7 @@ const GameWrapperView = ({
   const platformOpening = readPlatformOpening(
     extensionState?.extras.presentationLaunch,
   )
+
   if (
     extensionState &&
     platformOpening &&

@@ -6,7 +6,8 @@ import {
   fullShowCardNavigation,
 } from "./full-show-navigation.ts"
 
-const chapters = [
+type Chapter = FullShowInventoryV3["chapters"][number]
+const chapterSpecs: Array<[string, Chapter["kind"], Chapter["duration"]]> = [
   ["opening", "opening", { kind: "known", milliseconds: 1500 }],
   ["q1", "question", { kind: "known", milliseconds: 2000 }],
   ["q1", "answerCards", { kind: "manual" }],
@@ -18,17 +19,18 @@ const chapters = [
   ["q2", "voting", { kind: "infinite" }],
   ["q2", "results", { kind: "manual" }],
   ["closing", "closing", { kind: "unknown" }],
-].map(([cardId, kind, duration], index) => ({
-  id: `${cardId}:${kind}`,
-  cardId,
-  kind,
-  duration,
-  index,
-  cardOrdinal: [1, 2, 2, 2, 2, 2, 3, 4, 4, 4, 5][index],
-  questionOrdinal: String(cardId).startsWith("q")
-    ? Number(String(cardId).slice(1))
-    : null,
-})) as FullShowInventoryV3["chapters"]
+]
+const chapters: Chapter[] = chapterSpecs.map(
+  ([cardId, kind, duration], index) => ({
+    id: `${cardId}:${kind}`,
+    cardId,
+    kind,
+    duration,
+    index,
+    cardOrdinal: [1, 2, 2, 2, 2, 2, 3, 4, 4, 4, 5][index],
+    questionOrdinal: cardId.startsWith("q") ? Number(cardId.slice(1)) : null,
+  }),
+)
 
 function inventory(selectedChapterId: string) {
   return { chapters, selectedChapterId } as FullShowInventoryV3

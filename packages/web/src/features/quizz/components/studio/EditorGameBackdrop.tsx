@@ -15,12 +15,17 @@ export function EditorGameBackdrop() {
   const { extras, currentQuestionId } = useQuizzEditor()
   const { defaults, selectedTimelineItem, scenes } = useStudioEditor()
   const registry = useInstalledThemeCatalog()
-  const card =
-    selectedTimelineItem?.kind === "question"
-      ? extras?.perQuestion[currentQuestionId]
-      : selectedTimelineItem
-        ? scenes[selectedTimelineItem.sceneId]
-        : undefined
+  const card = (() => {
+    if (selectedTimelineItem?.kind === "question") {
+      return extras?.perQuestion[currentQuestionId]
+    }
+
+    if (selectedTimelineItem) {
+      return scenes[selectedTimelineItem.sceneId]
+    }
+
+    return undefined
+  })()
   const theme = resolveShowTheme({
     selection: defaults.showTheme,
     scope: card?.themeOverrides,
@@ -38,6 +43,7 @@ export function EditorGameBackdrop() {
   })
   const themeStyle = showViewportStyle(theme, null, STATUS.SHOW_QUESTION)
   const useExplicit = backdrop.source !== "original" || !themeStyle
+
   return (
     <div
       className="editor-game-backdrop"

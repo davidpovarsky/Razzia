@@ -198,6 +198,64 @@ try {
           page.getByTestId("editor-preview-viewport"),
         ).toHaveAttribute("data-preview-aspect", aspect)
         await measure("question", width, height, aspect)
+        if (width === 320 || width === 390) {
+          const toolbar = await page
+            .locator(".native-question-preview-tools")
+            .evaluate((node) => {
+              const bounds = node.getBoundingClientRect()
+              return {
+                width: node.clientWidth,
+                scrollWidth: node.scrollWidth,
+                bounds: {
+                  left: bounds.left,
+                  right: bounds.right,
+                  top: bounds.top,
+                  bottom: bounds.bottom,
+                },
+                buttons: Array.from(
+                  node.querySelectorAll(
+                    'button[data-testid^="question-preview-phase-"],button[data-testid^="question-preview-aspect-"]',
+                  ),
+                ).map((button) => {
+                  const b = button.getBoundingClientRect()
+                  return {
+                    id: button.getAttribute("data-testid"),
+                    left: b.left,
+                    right: b.right,
+                    top: b.top,
+                    bottom: b.bottom,
+                  }
+                }),
+              }
+            })
+          expect(toolbar.buttons).toHaveLength(5)
+          expect(toolbar.scrollWidth).toBeLessThanOrEqual(toolbar.width + 1)
+          for (const button of toolbar.buttons) {
+            expect(
+              button.left,
+              `${button.id} left visible`,
+            ).toBeGreaterThanOrEqual(toolbar.bounds.left - 1)
+            expect(
+              button.right,
+              `${button.id} right visible`,
+            ).toBeLessThanOrEqual(toolbar.bounds.right + 1)
+            expect(
+              button.top,
+              `${button.id} top visible`,
+            ).toBeGreaterThanOrEqual(toolbar.bounds.top - 1)
+            expect(
+              button.bottom,
+              `${button.id} bottom visible`,
+            ).toBeLessThanOrEqual(toolbar.bounds.bottom + 1)
+          }
+          metrics.push({
+            label: "all-preview-controls-visible",
+            width,
+            height,
+            aspect,
+            ...toolbar,
+          })
+        }
         await shot(`question-${width}x${height}-${aspect.replace(":", "-")}`)
       }
       if (width < 1100) {
@@ -318,6 +376,8 @@ try {
       await panel("edit")
         .locator('input[name$=".question"]')
         .fill("Second synthetic question")
+      await page.getByTestId("answer-text-0").fill("Mercury")
+      await page.getByTestId("answer-text-1").fill("Venus")
       await closePanel("edit")
       await openPanel("timeline")
       await expect(panel("timeline")).toContainText("Which colour is the sky?")
@@ -369,12 +429,124 @@ try {
             backdrop.evaluate((node) => getComputedStyle(node).backgroundImage),
           )
           .not.toBe(beforeImage)
+        metrics.push({
+          label: "theme-backdrop-change",
+          from: beforeTheme,
+          to: await backdrop.getAttribute("data-editor-theme"),
+          beforeImage,
+          afterImage: await backdrop.evaluate(
+            (node) => getComputedStyle(node).backgroundImage,
+          ),
+        })
         changed = true
         break
       }
       expect(changed).toBe(true)
       await page.getByTestId("studio-tab-questions").click()
       await shot("changed-theme-390x844")
+    },
+  )
+  await check(
+    "Actual Save and fresh reload preserve questions, answers, scene and theme",
+    async () => {
+      const backdrop = page.getByTestId("editor-game-backdrop")
+      const expectedTheme = await backdrop.getAttribute("data-editor-theme")
+      const expectedBackground = await backdrop.evaluate(
+        (node) => getComputedStyle(node).backgroundImage,
+      )
+      const [createResponse] = await Promise.all([
+        page.waitForResponse(
+          (response) =>
+            new URL(response.url()).pathname === "/api/extensions/quizzes" &&
+            response.request().method() === "POST",
+        ),
+        page.getByTestId("editor-save-btn").click(),
+      ])
+      expect(createResponse.status()).toBe(201)
+      const saved = await createResponse.json()
+      expect(saved.quizId).toBeTruthy()
+      await page.waitForURL("**/studio/games")
+      const savedURL = `${baseURL}/manager/quizz/${encodeURIComponent(saved.quizId)}?lng=en`
+      await page.goto(savedURL, { waitUntil: "domcontentloaded" })
+      await expect(page.getByTestId("editor-workspace")).toBeVisible({
+        timeout: 30000,
+      })
+      await expect(backdrop).toHaveAttribute("data-editor-theme", expectedTheme)
+      await expect
+        .poll(() =>
+          backdrop.evaluate((node) => getComputedStyle(node).backgroundImage),
+        )
+        .toBe(expectedBackground)
+      await openPanel("timeline")
+      await expect(page.getByTestId("editor-question-card-0")).toContainText(
+        "Which colour is the sky?",
+      )
+      await expect(page.getByTestId("editor-question-card-1")).toContainText(
+        "Second synthetic question",
+      )
+      await expect(page.getByTestId("editor-scene-card")).toHaveCount(1)
+      await expect(page.getByTestId("editor-scene-card")).toContainText(
+        "Opening",
+      )
+      await page.getByTestId("editor-question-card-0").click()
+      await closePanel("timeline")
+      await openPanel("edit")
+      await expect(
+        panel("edit").locator('input[name$=".question"]'),
+      ).toHaveValue("Which colour is the sky?")
+      await expect(page.getByTestId("answer-text-0")).toHaveValue("Blue")
+      await expect(page.getByTestId("answer-text-1")).toHaveValue("Green")
+      await closePanel("edit")
+      await openPanel("timeline")
+      await page.getByTestId("editor-question-card-1").click()
+      await closePanel("timeline")
+      await openPanel("edit")
+      await expect(
+        panel("edit").locator('input[name$=".question"]'),
+      ).toHaveValue("Second synthetic question")
+      await expect(page.getByTestId("answer-text-0")).toHaveValue("Mercury")
+      await expect(page.getByTestId("answer-text-1")).toHaveValue("Venus")
+      await page.getByTestId("answer-text-1").fill("Earth")
+      await closePanel("edit")
+      const [updateResponse] = await Promise.all([
+        page.waitForResponse(
+          (response) =>
+            new URL(response.url()).pathname ===
+              `/api/extensions/quizzes/${saved.quizId}` &&
+            response.request().method() === "PUT",
+        ),
+        page.getByTestId("editor-save-btn").click(),
+      ])
+      expect(updateResponse.status()).toBe(200)
+      await page.waitForURL("**/studio/games")
+      await page.goto(savedURL, { waitUntil: "domcontentloaded" })
+      await expect(page.getByTestId("editor-workspace")).toBeVisible({
+        timeout: 30000,
+      })
+      await expect(backdrop).toHaveAttribute("data-editor-theme", expectedTheme)
+      await expect
+        .poll(() =>
+          backdrop.evaluate((node) => getComputedStyle(node).backgroundImage),
+        )
+        .toBe(expectedBackground)
+      await openPanel("timeline")
+      await expect(page.getByTestId("editor-scene-card")).toHaveCount(1)
+      await page.getByTestId("editor-question-card-1").click()
+      await closePanel("timeline")
+      await openPanel("edit")
+      await expect(page.getByTestId("answer-text-1")).toHaveValue("Earth")
+      await closePanel("edit")
+      metrics.push({
+        label: "actual-composite-save-reload",
+        quizId: saved.quizId,
+        createStatus: createResponse.status(),
+        updateStatus: updateResponse.status(),
+        questions: 2,
+        scenes: 1,
+        theme: expectedTheme,
+        background: expectedBackground,
+      })
+      await shot("saved-reloaded-390x844")
     },
   )
   await check(
@@ -385,7 +557,9 @@ try {
         waitUntil: "domcontentloaded",
       })
       await expect(page.locator("html")).toHaveAttribute("dir", "rtl")
-      await expect(page.getByTestId("editor-workspace")).toBeVisible()
+      await expect(page.getByTestId("editor-workspace")).toBeVisible({
+        timeout: 30000,
+      })
       await page.setViewportSize({ width: 320, height: 640 })
       await measure("rtl-question", 320, 640, "16:9")
       await shot("rtl-question-320x640")

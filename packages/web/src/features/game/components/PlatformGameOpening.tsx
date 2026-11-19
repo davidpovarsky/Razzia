@@ -54,8 +54,11 @@ export function PlatformGameOpening({
 
   useEffect(() => {
     preloadOpeningAssets()
+
     return () => {
-      if (pendingTimer.current) clearTimeout(pendingTimer.current)
+      if (pendingTimer.current) {
+        clearTimeout(pendingTimer.current)
+      }
     }
   }, [])
 
@@ -67,14 +70,20 @@ export function PlatformGameOpening({
       socket.emit("extensions:clock", (serverNow) => {
         const received = Date.now()
         const rtt = received - sent
+
         if (alive && Number.isFinite(serverNow) && rtt < bestRtt) {
           bestRtt = rtt
           setClockOffset(serverNow - (sent + received) / 2)
         }
       })
     }
-    if (isConnected) sample()
+
+    if (isConnected) {
+      sample()
+    }
+
     const retry = setTimeout(sample, 500)
+
     return () => {
       alive = false
       clearTimeout(retry)
@@ -87,21 +96,27 @@ export function PlatformGameOpening({
   }, [launch.stage])
 
   useEffect(() => {
-    if (launch.stage !== "opening" || paused) return
+    if (launch.stage !== "opening" || paused) {
+      return
+    }
+
     let frame = 0
     let previous = 0
     const tick = (time: number) => {
       // Curtains follow the display refresh rate; the video needs only a drift check.
       const interval =
         Date.now() + clockOffset - (launch.startedAt ?? 0) < 2300 ? 16 : 100
+
       if (time - previous >= interval) {
         previous = time
         setNow(Date.now())
       }
+
       frame = requestAnimationFrame(tick)
     }
     setNow(Date.now())
     frame = requestAnimationFrame(tick)
+
     return () => cancelAnimationFrame(frame)
   }, [launch.stage, launch.startedAt, paused, clockOffset])
 
@@ -111,7 +126,10 @@ export function PlatformGameOpening({
     paused ? extensionState.pause?.remainingMs : undefined,
   )
   const advance = () => {
-    if (!manager || !isConnected || pendingRef.current || paused) return
+    if (!manager || !isConnected || pendingRef.current || paused) {
+      return
+    }
+
     pendingRef.current = true
     setPending(true)
     window.dispatchEvent(new Event("tadazz:audio-unlock"))
@@ -122,7 +140,11 @@ export function PlatformGameOpening({
       action: "NEXT_SCREEN",
       payload: { epoch: extensionState.epoch, phase: extensionState.phase },
     })
-    if (pendingTimer.current) clearTimeout(pendingTimer.current)
+
+    if (pendingTimer.current) {
+      clearTimeout(pendingTimer.current)
+    }
+
     pendingTimer.current = setTimeout(() => {
       pendingRef.current = false
       setPending(false)

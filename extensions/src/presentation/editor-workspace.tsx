@@ -46,7 +46,10 @@ export function EditorWorkspace({
       const panel = panels.find(
         (item) => item.dock && (item.side ?? "right") === side,
       )
-      if (panel) docked.add(panel.id)
+
+      if (panel) {
+        docked.add(panel.id)
+      }
     }
   }
 
@@ -54,11 +57,16 @@ export function EditorWorkspace({
 
   useEffect(() => {
     const element = root.current
-    if (!element) return
+
+    if (!element) {
+      return
+    }
+
     const update = () => setWide(element.clientWidth >= 1100)
     update()
     const observer = new ResizeObserver(update)
     observer.observe(element)
+
     return () => observer.disconnect()
   }, [])
 
@@ -68,13 +76,17 @@ export function EditorWorkspace({
   }
 
   useEffect(() => {
-    if (!modalPanel) return
+    if (!modalPanel) {
+      return
+    }
+
     const panel = panelElements.current.get(modalPanel)
     const frame = requestAnimationFrame(() => {
       panel
         ?.querySelector<HTMLButtonElement>("[data-editor-drawer-close]")
         ?.focus({ preventScroll: true })
     })
+
     return () => cancelAnimationFrame(frame)
   }, [modalPanel])
 
@@ -86,16 +98,24 @@ export function EditorWorkspace({
       data-layout={wide ? "wide" : "compact"}
       aria-label={ariaLabel}
       onKeyDown={(event) => {
-        if (!modalPanel) return
+        if (!modalPanel) {
+          return
+        }
+
         if (event.key === "Escape" && !event.defaultPrevented) {
           event.preventDefault()
           event.stopPropagation()
           close()
         }
+
         if (event.key === "Tab") {
           const panel = panelElements.current.get(modalPanel)
+
           // Leave focus to an open portal dialog (media library, confirmation).
-          if (!panel?.contains(event.target as Node)) return
+          if (!panel?.contains(event.target as Node)) {
+            return
+          }
+
           const nodes = Array.from(
             panel.querySelectorAll<HTMLElement>(
               'button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex="0"]',
@@ -104,8 +124,9 @@ export function EditorWorkspace({
             (node) =>
               node.getClientRects().length > 0 && !node.closest("[inert]"),
           )
-          const first = nodes[0]
+          const first = nodes.at(0)
           const last = nodes.at(-1)
+
           if (event.shiftKey && document.activeElement === first) {
             event.preventDefault()
             last?.focus()
@@ -138,6 +159,7 @@ export function EditorWorkspace({
                 aria-controls={`${id}-${panel.id}`}
                 onClick={(event) => {
                   trigger.current = event.currentTarget
+
                   if (docked.has(panel.id)) {
                     panelElements.current
                       .get(panel.id)
@@ -184,13 +206,17 @@ export function EditorWorkspace({
       {panels.map((panel) => {
         const isDocked = docked.has(panel.id)
         const visible = isDocked || active === panel.id
+
         return (
           <section
             key={panel.id}
             id={`${id}-${panel.id}`}
             ref={(element) => {
-              if (element) panelElements.current.set(panel.id, element)
-              else panelElements.current.delete(panel.id)
+              if (element) {
+                panelElements.current.set(panel.id, element)
+              } else {
+                panelElements.current.delete(panel.id)
+              }
             }}
             className={`editor-workspace-panel editor-workspace-panel-${panel.side ?? "right"}`}
             data-testid={`editor-panel-${panel.id}`}

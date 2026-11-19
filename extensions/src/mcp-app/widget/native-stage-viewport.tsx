@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState, type ReactNode } from "react"
 
-// Fits the complete native image-card composition without changing its layout.
+// Fits the complete native answer composition without changing its layout.
 // This observes layout only; the existing native demo clock owns playback time.
 //
 export function NativeStageViewportV3({
@@ -97,7 +97,7 @@ export function NativeStageViewportV3({
       let right = native.scrollWidth
       let bottom = native.scrollHeight
       const parts = native.querySelectorAll<HTMLElement>(
-        '[data-testid^="photo-card-choice-"], [data-testid="native-razzia-question"], [data-testid="native-razzia-clock"], [data-testid="zero-votes-notice"]',
+        '[data-testid^="photo-card-choice-"], [data-testid^="native-razzia-answer-"], [data-testid="native-razzia-question"], [data-testid="native-razzia-clock"], [data-testid="zero-votes-notice"]',
       )
       for (const part of parts) {
         let x = 0

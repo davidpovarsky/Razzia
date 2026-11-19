@@ -37,6 +37,7 @@ it("gives a persisted legacy quiz the platform launch without writing a sidecar 
   const snapshot = () =>
     fake.lastEvent("legacy-manager", EXTENSION_EVENTS.STATE)
       ?.data as ExtensionStateEnvelope
+
   try {
     game.reconnect(manager)
     game.join(player, "Legacy player")
@@ -59,7 +60,7 @@ it("gives a persisted legacy quiz the platform launch without writing a sidecar 
       stage: "lobby",
     })
     expect(game.started).toBe(false)
-    await game.start(manager)
+    void game.start(manager)
     await vi.advanceTimersByTimeAsync(11000)
     expect(fake.lastEvent(game.gameId, EVENTS.GAME.STATUS)?.data).toMatchObject(
       { name: STATUS.SELECT_ANSWER },

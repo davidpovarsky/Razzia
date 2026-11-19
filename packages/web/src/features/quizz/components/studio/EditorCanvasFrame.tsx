@@ -15,7 +15,11 @@ export function EditorCanvasFrame({
   const ratio = aspect === "4:3" ? 4 / 3 : 16 / 9
   useLayoutEffect(() => {
     const node = available.current
-    if (!node) return
+
+    if (!node) {
+      return
+    }
+
     const resize = () =>
       setWidth(
         Math.max(0, Math.min(node.clientWidth, node.clientHeight * ratio)),
@@ -23,8 +27,10 @@ export function EditorCanvasFrame({
     resize()
     const observer = new ResizeObserver(resize)
     observer.observe(node)
+
     return () => observer.disconnect()
   }, [ratio])
+
   return (
     <div className="editor-canvas-frame" ref={available}>
       <div

@@ -79,6 +79,7 @@ const StudioContent = () => {
       </EditorWorkspace>
     )
   }
+
   return selectedTimelineItem.kind === "question" ? (
     <QuestionEditor />
   ) : (
