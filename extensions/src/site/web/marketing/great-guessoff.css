@@ -254,3 +254,142 @@
   text-align: right;
   justify-content: flex-end;
 }
+
+/* Q1 / Q3 / Q4: 2 × 2 wide, text-first cards. No giant image placeholders
+   and no orphan answer-number-only tiles. Styling is scoped to Guess-off. */
+.ggo-native[data-ggo-media="text"] .tzv4-stage .answers {
+  top: 356px !important;
+  left: 228px !important;
+  right: 228px !important;
+  width: auto !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  grid-template-rows: repeat(2, 218px) !important;
+  gap: 26px 28px !important;
+  align-items: stretch !important;
+}
+.ggo-native[data-ggo-media="text"] .tzv4-stage .choice-slot {
+  height: 218px !important;
+  min-height: 218px;
+  align-self: stretch !important;
+  position: relative;
+}
+.ggo-native[data-ggo-media="text"] .tzv4-stage .choice-slot .answer-card {
+  width: 100%;
+  height: 218px !important;
+  min-height: 218px;
+  padding: 24px 34px !important;
+  overflow: hidden;
+  border-radius: 27px;
+}
+.ggo-native[data-ggo-media="text"] .tzv4-stage .answer-card .tz-photo-frame,
+.ggo-native[data-ggo-media="text"]
+  .tzv4-stage
+  .answer-card
+  .answer-image-empty {
+  display: none !important;
+}
+.ggo-native[data-ggo-media="text"]
+  .tzv4-stage
+  .answer-card
+  figure.answer-figure {
+  height: 100%;
+  display: flex !important;
+  align-items: stretch;
+  justify-content: center;
+}
+.ggo-native[data-ggo-media="text"] .tzv4-stage .answer-card .answer-title {
+  height: auto !important;
+  min-height: 0 !important;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 24px 26px 4px 14px !important;
+  font-size: 40px !important;
+  line-height: 1.16 !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.016em;
+  text-align: center;
+  overflow: visible !important;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+.ggo-native[data-ggo-media="text"] .tzv4-stage .choice-slot .answer-index {
+  position: absolute;
+  z-index: 10;
+  top: 17px;
+  right: 19px;
+  left: auto;
+  margin: 0 !important;
+  width: 49px !important;
+  height: 42px !important;
+  border: 1px solid #e5ff777a;
+  border-radius: 11px;
+  background: #190636b8;
+  box-shadow: none;
+  font-size: 23px !important;
+  line-height: 1;
+  color: #f5ff80;
+}
+/* A scored quiz is a reveal, not a survey: give the actual answer a
+   dramatic Tadazz lime spotlight and visibly recede the incorrect cards. */
+.ggo-native[data-ggo-mode="quiz"]
+  .tzv4-stage[data-v4-scene="survey-results"]
+  .choice-slot.is-correct {
+  z-index: 12 !important;
+  filter: brightness(1.2) saturate(1.25);
+}
+.ggo-native[data-ggo-mode="quiz"]
+  .tzv4-stage[data-v4-scene="survey-results"]
+  .choice-slot.is-correct
+  .answer-card {
+  border: 5px solid #f1ff5d !important;
+  box-shadow:
+    0 0 0 10px #eaff5770,
+    0 0 68px 27px #d9ff4ca0,
+    0 19px 56px #050011 !important;
+  background: linear-gradient(154deg, #744ba6f5, #2d1258f5 78%) !important;
+  animation: ggo-correct-spotlight 850ms cubic-bezier(0.12, 0.8, 0.15, 1) both !important;
+}
+.ggo-native[data-ggo-mode="quiz"]
+  .tzv4-stage[data-v4-scene="survey-results"]
+  .choice-slot.is-correct
+  .answer-title,
+.ggo-native[data-ggo-mode="quiz"]
+  .tzv4-stage[data-v4-scene="survey-results"]
+  .choice-slot.is-correct
+  .answer-index {
+  color: #f3ff66 !important;
+  text-shadow:
+    0 0 18px #eaff5999,
+    0 2px 9px #140225;
+}
+.ggo-native[data-ggo-mode="quiz"]
+  .tzv4-stage[data-v4-scene="survey-results"]
+  .choice-slot.is-incorrect {
+  opacity: 0.26 !important;
+  filter: grayscale(0.5) brightness(0.65);
+}
+@keyframes ggo-correct-spotlight {
+  0% {
+    transform: scale(0.95);
+    filter: brightness(1);
+  }
+  48% {
+    transform: scale(1.14);
+    filter: brightness(1.55);
+  }
+  100% {
+    transform: scale(1.075);
+    filter: brightness(1.22);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ggo-native[data-ggo-mode="quiz"]
+    .tzv4-stage[data-v4-scene="survey-results"]
+    .choice-slot.is-correct
+    .answer-card {
+    animation: none !important;
+    transform: scale(1.075);
+  }
+}

@@ -26,7 +26,7 @@
         "id": "tadazz-classic-stage",
         "version": "1.0.0"
       },
-      "rendererBuildSha256": "85f8c8709dc0f83687a887f7e06f17a7cf81818b0c4201fc16697dc8a8422229"
+      "rendererBuildSha256": "c988f63e130540f0999bc596f8aadfbfb887198bfe8de558d156428b64353da9"
     },
     {
       "portVersion": 3,
@@ -40,7 +40,7 @@
         "id": "razzia-native-stage",
         "version": "1.0.0"
       },
-      "rendererBuildSha256": "85f8c8709dc0f83687a887f7e06f17a7cf81818b0c4201fc16697dc8a8422229"
+      "rendererBuildSha256": "c988f63e130540f0999bc596f8aadfbfb887198bfe8de558d156428b64353da9"
     }
   ]
 }

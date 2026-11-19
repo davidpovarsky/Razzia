@@ -28,15 +28,12 @@ type Question = {
 }
 type Phase =
   | "intro"
-  | "round-launch"
   | "question-transition"
   | "voting"
   | "locked"
   | "results"
   | "top-pick"
   | "leaderboard"
-  | "grand-finale"
-  | "final-leaderboard"
   | "winner"
   | "closing"
 
@@ -216,15 +213,6 @@ export function GreatGuessOffDemo() {
     },
     [playSfx],
   )
-  const choose = useCallback(
-    (index: number) => {
-      if (currentPhase.current !== "voting" || busyRef.current) return
-      setVotes((previous) => ({ ...previous, [questionIndex]: index }))
-      stage.current?.setSelectedOptions([index])
-      playSfx(TADAZZ_PHASE_SFX.answerPressed, 0.5)
-    },
-    [questionIndex, playSfx],
-  )
   const toggleSound = () => {
     soundOnRef.current = !soundOnRef.current
     setSoundOn(soundOnRef.current)
@@ -326,7 +314,7 @@ export function GreatGuessOffDemo() {
     startMusic()
   }
 
-  const reveal = async () => {
+  const reveal = async (chosenIndex?: number) => {
     const handle = stage.current
     if (!handle) return
     const q = QUESTIONS[questionIndex]
@@ -343,7 +331,7 @@ export function GreatGuessOffDemo() {
       mode: q.kind,
       counts:
         q.kind === "survey"
-          ? displayedCounts(q, votes[questionIndex])
+          ? displayedCounts(q, chosenIndex ?? votes[questionIndex])
           : q.answers.map(() => 0),
       ...(q.kind === "quiz" ? { solutions: [q.correct ?? 0] } : {}),
       showPercentages: q.kind === "survey",
@@ -352,18 +340,31 @@ export function GreatGuessOffDemo() {
     setPhase("results")
   }
 
+  // A single tap is a complete vote. It advances straight to results rather
+  // than waiting for the remaining 20-second countdown or another button.
+  const choose = (index: number) => {
+    if (currentPhase.current !== "voting" || busyRef.current) return
+    setVotes((previous) => ({ ...previous, [questionIndex]: index }))
+    stage.current?.setSelectedOptions([index])
+    playSfx(TADAZZ_PHASE_SFX.answerPressed, 0.5)
+    run(() => reveal(index))
+  }
+
   const next = async () => {
     const handle = stage.current
     if (!handle) return
-    if (questionIndex === 3) {
+    if (questionIndex === 2) {
       stopMusic()
       playSfx("/sounds/snearRoll.mp3")
       await handle.showLeaderboard(leaderboard)
       setPhase("leaderboard")
     } else if (questionIndex === 4) {
-      playSfx("/sounds/snearRoll.mp3")
-      await handle.showLeaderboard(leaderboard)
-      setPhase("final-leaderboard")
+      stopMusic()
+      const winner = leaderboard[0]
+      playSfx("/sounds/first.mp3")
+      await handle.showFinale({ name: winner.name, score: winner.score })
+      currentPhase.current = "winner"
+      setPhase("winner")
     } else {
       await startQuestion(questionIndex + 1)
     }
@@ -395,19 +396,7 @@ export function GreatGuessOffDemo() {
     if (phase === "intro")
       return {
         title: "Start",
-        run: async () => {
-          playSfx(TADAZZ_PHASE_SFX.start)
-          await stage.current?.showFullShowScene?.("round-one", {
-            round: 1,
-            eyebrow: "THE GREAT GUESS-OFF",
-            title: "ROUND 01",
-          })
-          setPhase("round-launch")
-        },
-      }
-    if (phase === "round-launch")
-      return {
-        title: "Start",
+        // No additional question/number-only round launch before Q1.
         run: () => startQuestion(0),
       }
     if (phase === "voting" || phase === "locked")
@@ -420,37 +409,14 @@ export function GreatGuessOffDemo() {
         run: next,
       }
     if (phase === "leaderboard")
-      return {
-        title: "Next",
-        run: async () => {
-          await stage.current?.showFullShowScene?.("grand-finale", { round: 2 })
-          setPhase("grand-finale")
-        },
-      }
-    if (phase === "grand-finale")
-      return { title: "Next", run: () => startQuestion(4) }
-    if (phase === "final-leaderboard")
-      return {
-        title: "Next",
-        run: async () => {
-          const winner = leaderboard[0]
-          playSfx("/sounds/first.mp3")
-          await stage.current?.showFinale({
-            name: winner.name,
-            score: winner.score,
-          })
-          setPhase("winner")
-        },
-      }
+      return { title: "Next", run: () => startQuestion(3) }
     if (phase === "winner")
       return {
         title: "Next",
         run: async () => {
-          await stage.current?.playZZWipe()
-          await stage.current?.showInterlude?.({
-            title: "THANKS FOR PLAYING!",
-            subtitle: "THE GREAT GUESS-OFF",
-          })
+          // The actual Creating Worlds curtains and effects are the closing
+          // sequence; they never appear midway through this five-round demo.
+          await stage.current?.showFullShowScene?.("grand-finale", { round: 2 })
           currentPhase.current = "closing"
           setPhase("closing")
         },
@@ -460,18 +426,14 @@ export function GreatGuessOffDemo() {
 
   const captions = {
     intro: "The Great Guess-off · Five rounds of surprises",
-    "round-launch":
-      "Round one: Family Fun, Picture Trivia, At Work and Quick Trivia",
     "question-transition": `Question ${questionIndex + 1} · Get ready to vote`,
     voting: `Question ${questionIndex + 1} of 5 · ${secondsLeft}s remaining`,
     locked: `Question ${questionIndex + 1} of 5 · Time's up`,
     results: `Question ${questionIndex + 1} · Original Tadazz results reveal`,
     "top-pick": "The audience favourite · illustrative sample",
     leaderboard: "Native Tadazz leaderboard · illustrative players",
-    "grand-finale": "The grand finale",
-    "final-leaderboard": "Final standings · illustrative players",
     winner: "Native Tadazz finale and winner celebration",
-    closing: "Thanks for playing The Great Guess-off",
+    closing: "The Great Guess-off · Final curtain",
   } satisfies Record<Phase, string>
 
   return (
@@ -493,10 +455,15 @@ export function GreatGuessOffDemo() {
       >
         <TadazzV4StageAdapter
           ref={stage}
+          labels={{ introCaption: "", footer: "TADAZZ! · THE GREAT GUESS-OFF" }}
           v4Labels={{
             ...GUESS_OFF_STAGE_LABELS,
             audienceResults:
               question.kind === "quiz" ? "CORRECT ANSWER" : "AUDIENCE RESULTS",
+            mostChosenAnswer:
+              question.kind === "quiz"
+                ? "CORRECT ANSWER"
+                : "THE MOST CHOSEN ANSWER",
           }}
           interactive
           onSelectOption={choose}
