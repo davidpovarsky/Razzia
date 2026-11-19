@@ -218,6 +218,12 @@ export function FullShowNativeStageV3({
 }) {
   const input = useMemo(() => fullShowFrameV3Schema.parse(value), [value])
   const theme = useMemo(() => resolved(input), [input])
+  // The native stage has its own React root, so it needs the same private
+  // translation provider as the native scene and question components.
+  const nativeI18n = useMemo(
+    () => previewNativeLabels(input.inventory.context.locale).i18n,
+    [input.inventory.context.locale],
+  )
   // Reuse the verified native theme and admitted frame assets for the canvas
   // surround; editor controls retain the application palette.
   const workspaceAppearance = useMemo<CSSProperties>(() => {
@@ -244,51 +250,53 @@ export function FullShowNativeStageV3({
   const key = `${input.inventory.selectedChapterId}:${input.inventory.revision}:${playback.clock.epoch}`
 
   return (
-    <ShowThemeScope theme={theme}>
-      <div
-        data-full-show-stage={content.kind}
-        data-full-show-theme={input.theme.id}
-        data-full-show-chapter={input.inventory.selectedChapterId}
-        data-playback-elapsed={Math.round(playback.clock.elapsedMs)}
-        data-playback-epoch={playback.clock.epoch}
-        data-playback-paused={playback.clock.paused}
-        style={{
-          ...showThemeStyle(theme),
-          width: "100%",
-          height: "100%",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        {content.kind === "question" ? (
-          <FullShowDemoQuestionV3
-            key={`${input.inventory.draftId}:${input.inventory.revision}:${content.frame.question.id}:${playback.audioEpoch}`}
-            input={input}
-            theme={theme}
-            playback={playback}
-            onUnavailable={onUnavailable}
-            controlsTarget={demoControlsTarget}
-            onReveal={onDemoReveal}
-            labels={demoLabels}
+    <I18nextProvider i18n={nativeI18n}>
+      <ShowThemeScope theme={theme}>
+        <div
+          data-full-show-stage={content.kind}
+          data-full-show-theme={input.theme.id}
+          data-full-show-chapter={input.inventory.selectedChapterId}
+          data-playback-elapsed={Math.round(playback.clock.elapsedMs)}
+          data-playback-epoch={playback.clock.epoch}
+          data-playback-paused={playback.clock.paused}
+          style={{
+            ...showThemeStyle(theme),
+            width: "100%",
+            height: "100%",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          {content.kind === "question" ? (
+            <FullShowDemoQuestionV3
+              key={`${input.inventory.draftId}:${input.inventory.revision}:${content.frame.question.id}:${playback.audioEpoch}`}
+              input={input}
+              theme={theme}
+              playback={playback}
+              onUnavailable={onUnavailable}
+              controlsTarget={demoControlsTarget}
+              onReveal={onDemoReveal}
+              labels={demoLabels}
+            />
+          ) : (
+            <NativeScene
+              key={key}
+              input={input}
+              theme={theme}
+              onUnavailable={onUnavailable}
+              playback={playback}
+            />
+          )}
+          <FullShowAudioV3
+            value={input}
+            enabled={soundEnabled}
+            onEnabled={onSoundEnabled}
+            paused={playback.clock.paused}
+            replayEpoch={playback.audioEpoch}
+            controlsTarget={audioControlsTarget}
           />
-        ) : (
-          <NativeScene
-            key={key}
-            input={input}
-            theme={theme}
-            onUnavailable={onUnavailable}
-            playback={playback}
-          />
-        )}
-        <FullShowAudioV3
-          value={input}
-          enabled={soundEnabled}
-          onEnabled={onSoundEnabled}
-          paused={playback.clock.paused}
-          replayEpoch={playback.audioEpoch}
-          controlsTarget={audioControlsTarget}
-        />
-      </div>
-    </ShowThemeScope>
+        </div>
+      </ShowThemeScope>
+    </I18nextProvider>
   )
 }

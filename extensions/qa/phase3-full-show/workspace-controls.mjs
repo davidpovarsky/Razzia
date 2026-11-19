@@ -163,7 +163,16 @@ export async function verifyWorkspaceControls({
         .querySelector('[data-testid="full-show-native-surface"]')
         .getBoundingClientRect()
 
+      const canvas = document
+        .querySelector('[data-testid="editor-workspace-canvas"]')
+        .getBoundingClientRect()
+
       return (
+        Math.abs(canvas.bottom - innerHeight) <= 1 &&
+        surface.bottom <= innerHeight + 1 &&
+        Math.abs(
+          surface.width - Math.min(canvas.width, (canvas.height * 16) / 9),
+        ) <= 1 &&
         surface.width > 100 &&
         Math.abs(surface.width / surface.height - 16 / 9) < 0.02
       )

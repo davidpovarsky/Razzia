@@ -5,7 +5,7 @@ import {
   computeCanonicalBaseDigest,
   createDefaultQuizExtras,
 } from "../../../extensions/src/core"
-import { loginManager } from "../utils/manager"
+import { createGame } from "../utils/manager"
 import { joinGame } from "../utils/player"
 
 test("same-window host presentation hides manager UI and controls authoritative pause", async ({
@@ -16,7 +16,7 @@ test("same-window host presentation hides manager UI and controls authoritative 
 }) => {
   const evidenceDir = join(
     import.meta.dirname,
-    "../../../docs/extensions/plans/editor-hebrew-20261118/followups/host-presentation/screenshots",
+    "../../../docs/extensions/plans/ux-unified-20261119/host-presentation/screenshots",
   )
   fs.mkdirSync(evidenceDir, { recursive: true })
   const socketConnections: string[] = []
@@ -129,14 +129,8 @@ test("same-window host presentation hides manager UI and controls authoritative 
     expect(response.status(), `${path} must be served`).toBe(200)
   }
 
-  await loginManager(host)
-  await host.getByRole("button", { name: title, exact: true }).click()
-  await host.getByRole("button", { name: "Start game", exact: true }).click()
-  const openingSkip = host.getByTestId("tadazz-opening-skip")
-
-  if (await openingSkip.isVisible()) {
-    await openingSkip.click()
-  }
+  await createGame(host, title)
+  const presentationCommandStart = commands.length
 
   const pin = host.getByText(/^\d{6}$/u).first()
   await expect(pin).toBeVisible()
@@ -150,21 +144,25 @@ test("same-window host presentation hides manager UI and controls authoritative 
   })
   const display = await displayContext.newPage()
   display.on("pageerror", (error) => browserErrors.push(error.message))
-  const displayOpeningStartedAt = Date.now()
+  const displayLobbyStartedAt = Date.now()
   await display.goto(`/display/${gameId}`)
   await expect(display.getByText(/^\d{6}$/u).first()).toHaveText(
     originalPin ?? "",
-    {
-      timeout: 20_000,
-    },
+    { timeout: 5_000 },
   )
-  await expect(display.getByTestId("tadazz-opening")).toHaveCount(0, {
-    timeout: 20_000,
-  })
+  // The host already completed the shared ident. A new display and its reload
+  // join the same lobby without playing another local opening.
+  await expect(display.getByTestId("platform-game-opening")).toHaveCount(0)
+  await expect(display.getByTestId("tadazz-opening")).toHaveCount(0)
   await expect(display.getByText(/^\d{6}$/u).first()).toBeVisible()
-  const displayLobbyElapsedMs = Date.now() - displayOpeningStartedAt
-  expect(displayLobbyElapsedMs).toBeGreaterThanOrEqual(7400)
-  expect(displayLobbyElapsedMs).toBeLessThan(12000)
+  const displayLobbyElapsedMs = Date.now() - displayLobbyStartedAt
+  await display.reload()
+  await expect(display.getByText(/^\d{6}$/u).first()).toHaveText(
+    originalPin ?? "",
+    { timeout: 5_000 },
+  )
+  await expect(display.getByTestId("platform-game-opening")).toHaveCount(0)
+  await expect(display.getByTestId("tadazz-opening")).toHaveCount(0)
   await display.screenshot({
     path: join(evidenceDir, "lobby-display-1920x1080.png"),
   })
@@ -341,14 +339,19 @@ test("same-window host presentation hides manager UI and controls authoritative 
   expect(host.url()).toBe(originalUrl)
   expect(socketConnections).toHaveLength(connectionsBeforePresentation)
   expect(browserErrors).toEqual([])
-  expect(commands.map(({ action }) => action)).toEqual([
+  const presentationCommands = commands.slice(presentationCommandStart)
+  expect(presentationCommands.map(({ action }) => action)).toEqual([
     "NEXT_SCREEN",
     "PAUSE_GAME",
     "RESUME_GAME",
     "END_ANSWER_TIMER",
   ])
-  expect(new Set(commands.map(({ requestId }) => requestId)).size).toBe(4)
-  expect(commands.every(({ epoch }) => Number.isInteger(epoch))).toBe(true)
+  expect(
+    new Set(presentationCommands.map(({ requestId }) => requestId)).size,
+  ).toBe(4)
+  expect(
+    presentationCommands.every(({ epoch }) => Number.isInteger(epoch)),
+  ).toBe(true)
   expect(pauseStates.some((state) => state.paused)).toBe(true)
   expect(pauseStates.at(-1)?.paused).toBe(false)
   const cleanupStartedAt = Date.now()
@@ -374,7 +377,10 @@ test("same-window host presentation hides manager UI and controls authoritative 
         cleanupMs: Date.now() - cleanupStartedAt,
         cleanupPages,
         browserErrors,
-        commands,
+        commands: presentationCommands,
+        platformSetupCommands: commands.slice(0, presentationCommandStart),
+        displayLobbyElapsedMs,
+        displayReloadStayedInLobby: true,
         authoritativePause,
         pausedTimer,
         viewports,

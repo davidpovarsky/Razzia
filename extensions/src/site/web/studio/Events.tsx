@@ -280,6 +280,7 @@ export function Prepare({
   }
 
   let openLabel = t("Open show room")
+
   if (busy) {
     openLabel = t("Please wait…")
   } else if (selected && openedQuizId === selected) {

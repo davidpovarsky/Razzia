@@ -28,10 +28,34 @@ export const loginManager = async (page: Page) => {
   }
 }
 
+/** General game tests start at the lobby; platform-opening.spec covers the ident. */
+export const skipPlatformOpening = async (page: Page) => {
+  const opening = page.getByTestId("platform-game-opening")
+  const start = page.getByTestId("platform-opening-start")
+  const skip = page.getByTestId("platform-opening-skip")
+  const pin = page.getByText(/^\d{6}$/u).first()
+
+  // A new room must receive its authoritative launch snapshot before setup
+  // advances it; the native lobby can render before that socket event arrives.
+  await expect(opening).toBeVisible({ timeout: 20_000 })
+  await expect(start.or(skip).first()).toBeVisible({ timeout: 20_000 })
+
+  if (await start.isVisible()) {
+    await start.click()
+  }
+
+  await expect(skip).toBeVisible({ timeout: 20_000 })
+  await skip.click()
+
+  await expect(opening).toHaveCount(0, { timeout: 20_000 })
+  await expect(pin).toBeVisible({ timeout: 20_000 })
+}
+
 export const createGame = async (page: Page, subject = BASIC_QUIZZ) => {
   await loginManager(page)
   await page.getByRole("button", { name: subject }).click()
   await page.getByRole("button", { name: t("manager:quizz.startGame") }).click()
+  await skipPlatformOpening(page)
 
   const pin = page.getByText(/^\d{6}$/u)
 

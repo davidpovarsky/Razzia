@@ -294,7 +294,7 @@ test("stale expected revision and edits after selection cannot expose an old fra
     /REVISION_CONFLICT/u,
   )
 })
-test("all roles and eight existing locales retain exact caller context without granting live actions", async () => {
+test("all roles and nine supported locales retain exact caller context without granting live actions", async () => {
   const record = await created()
   for (const locale of [
     "en",
@@ -305,6 +305,7 @@ test("all roles and eight existing locales retain exact caller context without g
     "ja",
     "tr",
     "vi",
+    "he",
   ] as const) {
     for (const role of ["manager", "player", "spectator"] as const) {
       const wanted = { ...context, locale, role, reducedMotion: false }
@@ -331,7 +332,7 @@ test("strict inputs reject authority, arbitrary chapter, live actions and unsupp
       chapterId: `preview-card-${"0".repeat(64)}:question`,
     },
     { ...selection(record), context: { ...context, actions: "live" } },
-    { ...selection(record), context: { ...context, locale: "he" } },
+    { ...selection(record), context: { ...context, locale: "xx" } },
     {
       ...selection(record),
       context: { ...context, join: "https://arbitrary.invalid" },

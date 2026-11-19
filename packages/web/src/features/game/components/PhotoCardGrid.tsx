@@ -10,10 +10,10 @@ import { isValidAnswerVisual } from "@razzia/extensions/media"
 import {
   CANONICAL_ANSWER_COLORS,
   computePollRanking,
-  useStageFit,
   type PollOptionItem,
-} from "@razzia/extensions/presentation"
-import { ANSWERS_LABELS } from "@razzia/web/features/game/utils/constants"
+} from "@razzia/extensions/presentation/poll-ranking"
+import { useStageFit } from "@razzia/extensions/presentation/stage-fit"
+import { ANSWERS_LABELS } from "@razzia/web/features/game/utils/answer-style"
 import clsx from "clsx"
 import { Check, ImageOff, Trophy, Users } from "lucide-react"
 import { type CSSProperties, useEffect, useState } from "react"

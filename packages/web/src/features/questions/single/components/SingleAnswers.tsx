@@ -1,11 +1,11 @@
-import { useOptionalShowTheme } from "@razzia/extensions/presentation"
+import { useOptionalShowTheme } from "@razzia/extensions/presentation/show-themes/context"
 import { RAZZIA_THEME_ID } from "@razzia/extensions/core"
 import AnswerButton from "@razzia/web/features/game/components/AnswerButton"
 import PhotoCardGrid from "@razzia/web/features/game/components/PhotoCardGrid"
 import {
   ANSWERS_COLORS,
   ANSWERS_LABELS,
-} from "@razzia/web/features/game/utils/constants"
+} from "@razzia/web/features/game/utils/answer-style"
 import type { AnswerComponentProps } from "@razzia/web/features/questions/types"
 import clsx from "clsx"
 

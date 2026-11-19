@@ -10,7 +10,7 @@ fs.mkdirSync(join(configPath, "quizz"), { recursive: true })
 
 export default defineConfig({
   testDir: "tests",
-  testMatch: "platform-opening.spec.ts",
+  testMatch: ["platform-opening.spec.ts", "host-presentation.spec.ts"],
   outputDir: "test-results/platform-opening",
   timeout: 90000,
   expect: { timeout: 20000 },

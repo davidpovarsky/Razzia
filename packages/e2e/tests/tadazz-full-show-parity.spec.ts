@@ -34,7 +34,7 @@ const CANONICAL_HTML_PATH = join(
   "../../../docs/extensions/references/TADAZZ_Motion_Showcase_One_Click_20261105.html",
 )
 const SOCKET_API_URL = "http://127.0.0.1:3011/api/games/pilot-phone"
-const TZILA_TITLE = "Build Our Story — Tzila · Two-Round Audience Vote"
+const TZILA_TITLE = "Build Our Story â€” Tzila Â· Two-Round Audience Vote"
 const saveShot = async (page: Page, name: string, allowWebkit = false) => {
   const isWebkit = page.context().browser()?.browserType().name() === "webkit"
 
@@ -116,8 +116,8 @@ const installZeroLegacyFlickerProbe = async (page: Page) => {
     document.addEventListener("DOMContentLoaded", check)
   })
 }
-test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21", () => {
-  test("A01, A02, A03, A04, A05, A06, A07, A08, A11, A12, A15: Live 5-Image Show (Opening MP4+Lottie -> ZZ Wipe -> Lobby -> 3 Players + Phone Vote -> Question -> Vote -> Lock -> Reveal -> Tie -> Zero Votes -> Next Question -> Finale & Projector Parity)", async ({
+test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â€“A21", () => {
+  test("A01, A02, A03, A04, A05, A06, A07, A08, A11, A12, A15: Live 5-Image Show (Shared Lobby -> 3 Players + Phone Vote -> Question -> Vote -> Lock -> Reveal -> Tie -> Zero Votes -> Next Question -> Finale & Projector Parity)", async ({
     page: managerPage,
     browser,
     browserName,
@@ -146,7 +146,8 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
     await expect(managerPage.locator("iframe")).toHaveCount(0)
     await expect(managerPage.locator('img[alt="background"]')).toHaveCount(0)
 
-    // 2. A02: Verify Opening MP4 + transparent Lottie overlay on fresh spectator /display
+    // 2. The shared product opening has completed; a fresh display joins the lobby.
+    // platform-opening.spec owns MP4/Lottie and host/audience opening timing.
     const spectatorCtx = await browser.newContext({
       viewport:
         browserName === "webkit"
@@ -165,34 +166,19 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
     await expect(spectator.getByTestId("tadazz-show")).toBeVisible()
     await expect(spectator.locator("iframe")).toHaveCount(0)
     await expect(spectator.locator('img[alt="background"]')).toHaveCount(0)
-    const opening = spectator.getByTestId("tadazz-opening")
-    await expect(opening).toBeVisible()
-    const openingVideo = spectator.getByTestId("tadazz-opening-video")
-
-    if (await openingVideo.isVisible().catch(() => false)) {
-      await expect(openingVideo).toHaveAttribute(
-        "src",
-        "/tadazz-show/opening/Animate_gameshow_stage_loop_c01e8a8a_1080p.mp4",
-      )
-    }
-
-    const openingLottie = spectator.getByTestId("tadazz-opening-lottie")
-    await expect(openingLottie).toBeVisible()
-    await saveShot(spectator, "01_opening_mp4_plus_lottie.png")
-
-    // If manager or spectator opening is still playing, skip or let it transition via ZZ wipe to Lobby
-    for (const pg of [managerPage, spectator]) {
-      const skipBtn = pg.getByTestId("tadazz-opening-skip")
-
-      if (await skipBtn.isVisible().catch(() => false)) {
-        await skipBtn
-          .click({
-            force: true,
-            timeout: 1500,
-          })
-          .catch(() => undefined)
-      }
-    }
+    await expect(spectator.getByTestId("tadazz-lobby-pin")).toHaveText(pin, {
+      timeout: 5_000,
+    })
+    await expect(spectator.getByTestId("platform-game-opening")).toHaveCount(0)
+    await expect(spectator.getByTestId("tadazz-opening")).toHaveCount(0)
+    await expect(spectator.getByTestId("platform-opening-start")).toHaveCount(0)
+    await spectator.reload()
+    await expect(spectator.getByTestId("tadazz-lobby-pin")).toHaveText(pin, {
+      timeout: 5_000,
+    })
+    await expect(spectator.getByTestId("platform-game-opening")).toHaveCount(0)
+    await expect(spectator.getByTestId("tadazz-opening")).toHaveCount(0)
+    await saveShot(spectator, "01_existing_lobby_display.png")
 
     // 3. A03: Branded Lobby with real PIN, URL, QR, and 3 players joining across Gate A14 resolutions
     await expect(managerPage.getByTestId("tadazz-screen-lobby")).toBeVisible()
@@ -255,7 +241,7 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
     await advanceBtn.click()
 
     // 5. A04 & A05: Question 1 with 5 square photo cards
-    const q1Text = "Round 1 · Who is the main character?"
+    const q1Text = "Round 1 Â· Who is the main character?"
     await expect(
       managerPage.getByTestId("tadazz-question-panel"),
     ).toContainText(q1Text)
@@ -374,7 +360,7 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
     await next(managerPage)
     await expect(
       managerPage.getByTestId("tadazz-question-panel"),
-    ).toContainText("Round 1 · Who is the second character?", {
+    ).toContainText("Round 1 Â· Who is the second character?", {
       timeout: 15_000,
     })
     await expect(managerPage.getByTestId("tadazz-status")).toContainText(
@@ -406,7 +392,7 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
     await next(managerPage)
     await expect(
       managerPage.getByTestId("tadazz-question-panel"),
-    ).toContainText("Round 1 · In which era does the story take place?", {
+    ).toContainText("Round 1 Â· In which era does the story take place?", {
       timeout: 15_000,
     })
     await expect(managerPage.getByTestId("tadazz-status")).toContainText(
@@ -447,7 +433,7 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
     await p2Ctx.close()
     await p3Ctx.close()
   })
-  test("A09, A10, A12, A14, A17: Scored Quiz — Correct/Incorrect Badges, Leaderboard + Rank Change (updateLeaderboard), 2–4 Options Monogram Fallback, Finale with Real Winner & Confetti", async ({
+  test("A09, A10, A12, A14, A17: Scored Quiz â€” Correct/Incorrect Badges, Leaderboard + Rank Change (updateLeaderboard), 2â€“4 Options Monogram Fallback, Finale with Real Winner & Confetti", async ({
     page: managerPage,
     browser,
   }) => {
@@ -496,9 +482,9 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
     await startGame(managerPage)
 
     // Q1 (3 text options -> monogram 1, 2, 3 fallback)
-    // Mars — Alice right (1st)
+    // Mars â€” Alice right (1st)
     await clickCard(alice, "tadazz-card-1")
-    // Venus — Bob wrong
+    // Venus â€” Bob wrong
     await clickCard(bob, "tadazz-card-0")
 
     // Verify Quiz reveal: Mars (card 1) is-correct, Venus/Jupiter are is-incorrect

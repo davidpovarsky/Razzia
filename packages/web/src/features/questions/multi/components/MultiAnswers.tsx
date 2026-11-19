@@ -3,7 +3,7 @@ import AnswerButton from "@razzia/web/features/game/components/AnswerButton"
 import {
   ANSWERS_COLORS,
   ANSWERS_LABELS,
-} from "@razzia/web/features/game/utils/constants"
+} from "@razzia/web/features/game/utils/answer-style"
 import type { AnswerComponentProps } from "@razzia/web/features/questions/types"
 import clsx from "clsx"
 import { useState } from "react"

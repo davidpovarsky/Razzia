@@ -740,6 +740,33 @@ try {
           .frameLocator("iframe")
           .locator(`[data-full-show-chapter="${chapter.id}"]`)
           .waitFor()
+        const child = page
+          .frames()
+          .find((value) => value.url().endsWith("/widget"))
+        assert(child)
+        // The acknowledged frame mounts before native transitions and viewport
+        // fitting finish. Wait for actual visible content, not a fixed delay.
+        await child.waitForFunction(
+          (chapterId) => {
+            const native = document.querySelector(
+              '[data-testid="full-show-native-surface"]',
+            )?.shadowRoot
+            const selected = native?.querySelector("[data-full-show-chapter]")
+            const viewport = native?.querySelector(
+              '[data-testid="native-stage-viewport"]',
+            )
+
+            return (
+              selected?.getAttribute("data-full-show-chapter") === chapterId &&
+              Boolean(
+                native?.querySelector(".widget-native-stage")?.innerText.trim(),
+              ) &&
+              (!viewport || viewport.getAttribute("data-fit-ready") === "true")
+            )
+          },
+          chapter.id,
+          { timeout: 10000 },
+        )
       }
 
       if (process.env.TADAZZ_FULL_SHOW_DIAGNOSTIC === "workspace") {
@@ -1480,6 +1507,14 @@ try {
           )
           assert(before.length > 0, "Real native media time must advance")
           await openWorkspacePanel(page, "edit")
+          const audioSettingsDetails = iframe.locator(".widget-editor details")
+
+          if (
+            !(await audioSettingsDetails.evaluate((element) => element.open))
+          ) {
+            await audioSettingsDetails.locator("summary").click()
+          }
+
           await iframe.getByTestId("full-show-voting-volume").fill("20")
           assert.equal(
             await iframe
@@ -2246,7 +2281,10 @@ try {
 
                   if (kind === "leaderboard") {
                     const expectedEmptyText =
-                      labels.sceneLabels.noScores ?? "No scores recorded yet."
+                      labels.sceneLabels.noScores ??
+                      labels.i18n.t("extensions:studio.scene.noRankingsYet", {
+                        defaultValue: "No scores recorded yet.",
+                      })
                     const empty = surface.getByText(expectedEmptyText, {
                       exact: true,
                     })
@@ -2260,7 +2298,9 @@ try {
                   } else if (kind === "interimResults") {
                     const expectedEmptyText =
                       labels.sceneLabels.noInterimResults ??
-                      "No completed results yet."
+                      labels.i18n.t("extensions:studio.scene.noResponsesYet", {
+                        defaultValue: "No completed results yet.",
+                      })
                     const empty = surface.getByText(expectedEmptyText, {
                       exact: true,
                     })
@@ -2282,7 +2322,13 @@ try {
                     assert.equal(
                       emptyText,
                       labels.sceneLabels.noInterimResults ??
-                        "No completed questions to recap yet.",
+                        labels.i18n.t(
+                          "extensions:studio.scene.recapNoPrecedingWarning",
+                          {
+                            defaultValue:
+                              "No completed questions to recap yet.",
+                          },
+                        ),
                     )
                     emptyCounts.recapQuestions = await surface
                       .getByTestId("recap-question-card")
