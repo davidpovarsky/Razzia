@@ -71,6 +71,7 @@ export async function verifyEditorRefinements(options) {
   fixtureQuiz.questions[0] = {
     ...fixtureQuiz.questions[0],
     type: "multi",
+    playMode: "quiz",
     solutions: [0, 1],
     options: { scoringMode: "strict" },
     cooldown: 8,
@@ -177,6 +178,10 @@ export async function verifyEditorRefinements(options) {
     await expect(kindBar.locator('[data-testid^="toggle-kind-"]')).toHaveCount(
       2,
     )
+    await expect(kindBar.getByTestId("toggle-kind-quiz")).toHaveAttribute(
+      "aria-checked",
+      "true",
+    )
     await expect(page.getByTestId("editor-add-more-card-types")).toBeVisible()
     await page.getByTestId("editor-panel-toggle-settings").click()
     await expect(page.getByTestId("answer-type-multi")).toHaveAttribute(
@@ -190,11 +195,19 @@ export async function verifyEditorRefinements(options) {
     await expect(
       page.getByTestId("question-advanced-settings-toggle"),
     ).toHaveAttribute("aria-expanded", "true")
+    const advancedSettings = page.getByTestId("question-advanced-settings")
+    await expect(advancedSettings).toBeVisible()
     await expect(
-      page.locator('input[name="questions.0.cooldown"]'),
+      advancedSettings.getByRole("spinbutton", {
+        name: "Question display",
+        exact: true,
+      }),
     ).toHaveValue("8")
     await expect(
-      page.locator('input[name="questions.0.maxPoints"]'),
+      advancedSettings.getByRole("spinbutton", {
+        name: "Max points",
+        exact: true,
+      }),
     ).toHaveValue("500")
     await page.getByTestId("question-advanced-settings-toggle").click()
     await page.getByTestId("editor-panel-close-settings").click()
@@ -321,6 +334,39 @@ export async function verifyEditorRefinements(options) {
       JSON.stringify(receipt, null, 2) + "\n",
     )
     return receipt
+  } catch (error) {
+    const numericInputs = await page
+      .locator('input[type="number"]')
+      .evaluateAll((inputs) =>
+        inputs.map((input) => ({
+          name: input.getAttribute("name"),
+          label: input.getAttribute("aria-label"),
+          value: input.value,
+          visible: input.getClientRects().length > 0,
+        })),
+      )
+      .catch(() => [])
+    writeFileSync(
+      join(evidence, "partial-receipt.json"),
+      JSON.stringify(
+        {
+          passed: false,
+          results: report,
+          error: String(error?.stack ?? error),
+          numericInputs,
+          mutationRequests,
+        },
+        null,
+        2,
+      ) + "\n",
+    )
+    await page
+      .screenshot({
+        path: join(evidence, "editor-refinement-failure.png"),
+        fullPage: true,
+      })
+      .catch(() => {})
+    throw error
   } finally {
     page.off("request", onRequest)
     if (fixtureWritten) {
