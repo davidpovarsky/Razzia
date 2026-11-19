@@ -498,52 +498,6 @@
     0 3px 7px #06000d !important;
 }
 
-/* Text-only survey spotlight: the entire winning answer is one broad card
-   with readable, centered copy, never a square number placeholder. */
-.ggo-native[data-ggo-media="text"]
-  .tzv4-stage[data-v4-scene="top-pick"]
-  .spotlight-portrait {
-  display: none !important;
-}
-.ggo-native[data-ggo-media="text"]
-  .tzv4-stage[data-v4-scene="top-pick"]
-  .spotlight-name {
-  position: absolute !important;
-  top: 327px !important;
-  left: 300px !important;
-  right: 300px !important;
-  height: 295px !important;
-  padding: 30px 62px !important;
-  border: 5px solid #eaff61 !important;
-  border-radius: 43px !important;
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  text-wrap: balance;
-  overflow-wrap: anywhere;
-  font-size: 69px !important;
-  font-weight: 790 !important;
-  line-height: 1.14 !important;
-  letter-spacing: -0.02em !important;
-  color: #fffde1 !important;
-  background: linear-gradient(
-    135deg,
-    #6c299cf6,
-    #270850f7 62%,
-    #562084ef
-  ) !important;
-  box-shadow:
-    0 0 0 8px #dfef625a,
-    0 0 55px #d8f85b78,
-    0 27px 48px #070013 !important;
-}
-.ggo-native[data-ggo-media="text"]
-  .tzv4-stage[data-v4-scene="top-pick"]
-  .spotlight-plate {
-  background: radial-gradient(ellipse, #eaff705c, transparent 68%) !important;
-}
-
 /* Use the original blue/gold Z stage artwork and lights behind the winner,
    retaining the Creating Worlds confetti and native winner typography. */
 .ggo-native[data-ggo-phase="winner"] .tzv4-stage .stage-bg {
@@ -636,64 +590,6 @@
   color: #e9ff53;
   transform: rotate(17deg);
 }
-.ggo-winner-trophy {
-  position: absolute;
-  left: 50%;
-  top: 41%;
-  width: min(18%, 180px);
-  aspect-ratio: 1;
-  display: grid;
-  place-items: center;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(
-    circle,
-    #efff9666,
-    #f6bc4a28 44%,
-    transparent 72%
-  );
-  filter: drop-shadow(0 0 26px #eaff648a);
-  animation: ggo-trophy-rise 1.15s cubic-bezier(0.14, 1.1, 0.25, 1) both;
-}
-.ggo-winner-trophy::before {
-  content: "";
-  position: absolute;
-  inset: -20%;
-  border: 3px solid #fff19d78;
-  border-radius: 50%;
-  box-shadow:
-    0 0 18px #faff65a0,
-    inset 0 0 38px #ffd26440;
-  animation: ggo-trophy-aura 3s ease-in-out infinite alternate;
-}
-.ggo-winner-trophy-icon {
-  width: 80%;
-  height: 80%;
-  fill: #edac2c;
-  stroke: #fff4a9;
-  stroke-width: 2;
-  filter: drop-shadow(0 8px 6px #220239) drop-shadow(0 0 17px #ffed5aaa);
-}
-.ggo-winner-trophy-star {
-  position: absolute;
-  top: 36%;
-  font-size: clamp(13px, 2.2vw, 31px);
-  color: #fff7b1;
-  text-shadow: 0 0 14px #fff;
-}
-@keyframes ggo-trophy-rise {
-  from {
-    opacity: 0;
-    transform: translate(-50%, -12%) scale(0.3) rotate(-11deg);
-  }
-  75% {
-    opacity: 1;
-    transform: translate(-50%, -55%) scale(1.14);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
-  }
-}
 @keyframes ggo-winner-beams {
   from {
     opacity: 0.5;
@@ -702,16 +598,6 @@
   to {
     opacity: 0.9;
     filter: blur(12px);
-  }
-}
-@keyframes ggo-trophy-aura {
-  from {
-    transform: scale(0.92);
-    opacity: 0.35;
-  }
-  to {
-    transform: scale(1.11);
-    opacity: 0.85;
   }
 }
 @media (max-width: 700px) {
@@ -734,21 +620,200 @@
     grid-column: 2;
     grid-row: 2;
   }
-  .ggo-winner-trophy {
-    width: 19%;
-    top: 41%;
-  }
   .ggo-winner-z {
     font-size: 7vw;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .ggo-winner-light,
-  .ggo-winner-trophy,
-  .ggo-winner-trophy::before {
+  .ggo-winner-light {
     animation: none !important;
   }
-  .ggo-winner-trophy {
-    transform: translate(-50%, -50%);
+}
+
+/* The Creating Worlds opening portal and TADAZZ logo, without its event logo.
+   Two halves of the same approved TADAZZ logo interlock at centre and settle
+   into the native complete logo. No custom asset or alternate branding. */
+.ggo-native[data-ggo-phase="intro"] .tzv4-stage .full-grand-opening {
+  background:
+    radial-gradient(ellipse at 50% 64%, #b42eff50, transparent 58%),
+    linear-gradient(135deg, #130538d9, #070424b8);
+}
+.ggo-native[data-ggo-phase="intro"] .tzv4-stage .full-opening-event {
+  object-fit: cover;
+  filter: brightness(0.6) saturate(1.2);
+}
+.ggo-native[data-ggo-phase="intro"] .tzv4-stage .full-opening-logo {
+  position: relative;
+  isolation: isolate;
+  z-index: 10;
+  display: block;
+  flex: 0 0 auto;
+  width: 790px;
+  height: 200px;
+}
+.ggo-native[data-ggo-phase="intro"]
+  .tzv4-stage
+  .full-opening-logo
+  .full-brand-img {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  object-fit: contain;
+  opacity: 0;
+  animation: ggo-interlock-complete 520ms 3140ms ease both;
+}
+.ggo-native[data-ggo-phase="intro"] .tzv4-stage .full-opening-logo::before,
+.ggo-native[data-ggo-phase="intro"] .tzv4-stage .full-opening-logo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  opacity: 0;
+  background: url("/tadazz-show/v4/tadazz-brand-logo.png") center/contain
+    no-repeat;
+  filter: drop-shadow(0 0 26px #c466ff88) drop-shadow(0 0 14px #efff4f66);
+}
+.ggo-native[data-ggo-phase="intro"] .tzv4-stage .full-opening-logo::before {
+  clip-path: inset(0 50% 0 0);
+  animation: ggo-interlock-left 1350ms 1970ms cubic-bezier(0.12, 0.92, 0.22, 1)
+    both;
+}
+.ggo-native[data-ggo-phase="intro"] .tzv4-stage .full-opening-logo::after {
+  clip-path: inset(0 0 0 50%);
+  animation: ggo-interlock-right 1350ms 1970ms cubic-bezier(0.12, 0.92, 0.22, 1)
+    both;
+}
+.ggo-native[data-ggo-phase="intro"] .tzv4-stage .full-opening-tag {
+  font-size: 47px;
+  font-weight: 900;
+  letter-spacing: 0.035em;
+  color: #f5ffe5;
+  text-shadow: 0 0 24px #c979f8;
+}
+@keyframes ggo-interlock-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-440px) rotate(-9deg) scale(0.75);
+  }
+  28% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+    transform: translateX(20px) rotate(1deg) scale(1.035);
+  }
+  84% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+    transform: none;
+  }
+}
+@keyframes ggo-interlock-right {
+  0% {
+    opacity: 0;
+    transform: translateX(440px) rotate(9deg) scale(0.75);
+  }
+  28% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+    transform: translateX(-20px) rotate(-1deg) scale(1.035);
+  }
+  84% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+    transform: none;
+  }
+}
+@keyframes ggo-interlock-complete {
+  from {
+    opacity: 0;
+    filter: brightness(2.4) drop-shadow(0 0 38px #f6ff8f);
+  }
+  to {
+    opacity: 1;
+    filter: brightness(1) drop-shadow(0 0 33px #c267ff);
+  }
+}
+
+/* Audience Favourite / Correct Answer must be legible and dominant in the
+   single reveal (no second "Top Pick" scene or another row of cards). */
+.ggo-native[data-ggo-phase="results"] .tzv4-stage .q-frame {
+  top: 117px;
+  height: 201px;
+  gap: 7px;
+  border: 3px solid #cc8aff;
+  box-shadow:
+    0 0 38px #b650ff66,
+    0 15px 36px #09011dad;
+}
+.ggo-native[data-ggo-phase="results"] .tzv4-stage .q-frame .eyebrow {
+  font-size: 38px !important;
+  font-weight: 1000 !important;
+  line-height: 1.08 !important;
+  letter-spacing: 0.105em !important;
+  padding: 3px 19px 5px !important;
+  border-radius: 13px;
+  background: #130333c7;
+  color: #f0ff65 !important;
+  text-shadow:
+    0 0 17px #ebff82c4,
+    0 3px 12px #050018 !important;
+  border: 1px solid #f3ff75a8;
+}
+.ggo-native[data-ggo-phase="results"]
+  .tzv4-stage
+  .choice-slot.is-favourite
+  .winner-tag {
+  z-index: 20;
+  left: 8px !important;
+  right: 8px !important;
+  top: -14px !important;
+  min-height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px !important;
+  border-radius: 15px;
+  font-size: 26px !important;
+  font-weight: 1000 !important;
+  line-height: 1.08;
+  letter-spacing: 0.03em !important;
+  background: linear-gradient(130deg, #f5ff9b, #d0ff4e);
+  color: #2a1145 !important;
+  box-shadow:
+    0 0 28px #eaff789a,
+    0 5px 18px #000a;
+}
+.ggo-native[data-ggo-phase="results"][data-ggo-mode="survey"]
+  .tzv4-stage
+  .choice-slot.is-favourite
+  .answer-card {
+  box-shadow:
+    0 0 0 5px #f1ff6480,
+    0 0 42px #d5ff60b3,
+    0 17px 45px #080116 !important;
+}
+.ggo-native[data-ggo-phase="winner"] .tzv4-stage .stage-bg {
+  background-image: url("/tadazz-show/v4/show-stage.webp") !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ggo-native[data-ggo-phase="intro"] .tzv4-stage .full-opening-logo::before,
+  .ggo-native[data-ggo-phase="intro"] .tzv4-stage .full-opening-logo::after {
+    display: none !important;
+  }
+  .ggo-native[data-ggo-phase="intro"]
+    .tzv4-stage
+    .full-opening-logo
+    .full-brand-img {
+    animation: none !important;
+    opacity: 1 !important;
   }
 }
