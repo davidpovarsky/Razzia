@@ -166,6 +166,33 @@ function selection(
     ...(chapterId ? { chapterId } : {}),
   }
 }
+function getTransportFrame(): FullShowFrameV3 | null {
+  const current = state
+
+  if (
+    closed ||
+    (current.status === "loading" && current.previewOrigin !== "automatic")
+  ) {
+    return null
+  }
+
+  return current.frame
+}
+async function previewCard(action: "previous" | "next" | "replay") {
+  const frame = getTransportFrame()
+
+  if (!frame || !app.getHostCapabilities()?.serverTools) {
+    return
+  }
+
+  // Read the visible logical card, not the pending automatic destination.
+  const navigation = fullShowCardNavigation(frame.inventory)
+  const chapter = navigation[action === "replay" ? "current" : action]
+
+  if (chapter) {
+    await preview(selection(frame, chapter.id), action === "replay")
+  }
+}
 async function previewDisplayPreferences(patch: {
   locale?: string
   reducedMotion?: boolean
@@ -407,7 +434,7 @@ function FullShowWidget() {
   const { frame } = current
   const canCall = !closed && Boolean(app.getHostCapabilities()?.serverTools)
   const busy = current.status === "loading"
-  const displayBusy = busy && current.previewOrigin !== "automatic"
+  const manualBusy = busy && current.previewOrigin !== "automatic"
   const canExpand =
     !closed &&
     Boolean(app.getHostContext()?.availableDisplayModes?.includes("fullscreen"))
@@ -521,6 +548,19 @@ function FullShowWidget() {
       active = false
     }
   }, [frame?.inventory.draftId, frame?.inventory.revision, canCall])
+
+  function togglePlayback() {
+    if (!getTransportFrame()) {
+      return
+    }
+
+    const livePlayback = playbackOwner.snapshot()
+    setPlayback(
+      livePlayback.clock.paused
+        ? playbackOwner.resume()
+        : playbackOwner.pause(),
+    )
+  }
 
   async function refresh() {
     const { selected } = current
@@ -673,7 +713,7 @@ function FullShowWidget() {
         {t("language")}
         <select
           data-testid="full-show-language"
-          disabled={!canCall || displayBusy}
+          disabled={!canCall || manualBusy}
           value={frame.inventory.context.locale}
           onChange={(event) =>
             void previewDisplayPreferences({ locale: event.target.value })
@@ -689,7 +729,7 @@ function FullShowWidget() {
           data-testid="full-show-reduce-motion"
           type="checkbox"
           checked={frame.inventory.context.reducedMotion}
-          disabled={!canCall || displayBusy}
+          disabled={!canCall || manualBusy}
           onChange={(event) =>
             void previewDisplayPreferences({
               reducedMotion: event.target.checked,
@@ -737,11 +777,8 @@ function FullShowWidget() {
           data-testid="full-show-previous"
           aria-label={t("previousChapter")}
           title={t("previousChapter")}
-          disabled={!canCall || busy || !navigation.previous}
-          onClick={() =>
-            navigation.previous &&
-            void preview(selection(frame, navigation.previous.id))
-          }
+          disabled={!canCall || manualBusy || !navigation.previous}
+          onClick={() => void previewCard("previous")}
         >
           <ArrowLeft aria-hidden="true" />
         </NativeButton>
@@ -755,11 +792,8 @@ function FullShowWidget() {
           data-testid="full-show-next"
           aria-label={t("nextChapter")}
           title={t("nextChapter")}
-          disabled={!canCall || busy || !navigation.next}
-          onClick={() =>
-            navigation.next &&
-            void preview(selection(frame, navigation.next.id))
-          }
+          disabled={!canCall || manualBusy || !navigation.next}
+          onClick={() => void previewCard("next")}
         >
           <ArrowRight aria-hidden="true" />
         </NativeButton>
@@ -770,14 +804,8 @@ function FullShowWidget() {
           data-testid="full-show-pause"
           aria-label={t(playback.clock.paused ? "resumeShow" : "pauseShow")}
           title={t(playback.clock.paused ? "resumeShow" : "pauseShow")}
-          disabled={busy}
-          onClick={() =>
-            setPlayback(
-              playback.clock.paused
-                ? playbackOwner.resume()
-                : playbackOwner.pause(),
-            )
-          }
+          disabled={manualBusy}
+          onClick={togglePlayback}
         >
           {playback.clock.paused ? (
             <Play aria-hidden="true" />
@@ -792,10 +820,8 @@ function FullShowWidget() {
           data-testid="full-show-replay"
           aria-label={t("replay")}
           title={t("replay")}
-          disabled={!canCall || busy}
-          onClick={() =>
-            void preview(selection(frame, navigation.current?.id), true)
-          }
+          disabled={!canCall || manualBusy}
+          onClick={() => void previewCard("replay")}
         >
           <RotateCcw aria-hidden="true" />
         </NativeButton>

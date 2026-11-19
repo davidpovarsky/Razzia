@@ -1,0 +1,42 @@
+{
+  "observedVia": "real connected get_game_draft tool",
+  "contractVersion": "0.1.0",
+  "correlationId": "d704bd79-9d68-42dd-ba2b-6e267f4e8418",
+  "draftId": "RhVzsllFGTL7wir26_-ekpM-nBbss5Ob",
+  "revision": 1,
+  "summary": {
+    "title": "משחק הדגמה קצר — טריוויה",
+    "cardCount": 3,
+    "questionCount": 3,
+    "themeId": "tadazz-classic",
+    "themeVersion": "1.0.0",
+    "diagnostics": []
+  },
+  "questionRefs": [
+    {
+      "questionNumber": 1,
+      "publicQuestionId": "preview-question-d9f7a2a88b04dde0544bda03053e8c49ac4fd0e0a1d64d7abc78adddc77de894"
+    },
+    {
+      "questionNumber": 2,
+      "publicQuestionId": "preview-question-d4b5ea8c4842cec9d3cd842b7ffcfa624e6560c72d20d5b0b381ce3e01774fcd"
+    },
+    {
+      "questionNumber": 3,
+      "publicQuestionId": "preview-question-21c22532d5aebbb23f0fc14af0ad8e74e58a34de3e0c9343a2ccbd0617834502"
+    }
+  ],
+  "readOnly": true,
+  "observedAt": "2026-11-19T21:04:12.041200+00:00",
+  "authoredShowSha256": "97170143b7f7beb37629a8837b1e7ee25ff9bfe55b5765cbea0a05d170a6df7c",
+  "hashMethod": "sha256(raw authoredShowJson UTF-8 bytes)",
+  "matchingOriginalHashMethods": [
+    "raw-authoredShowJson-utf8",
+    "sorted-compact-utf8",
+    "compact-utf8"
+  ],
+  "originalRevisionUnchanged": true,
+  "originalQuestionRefsUnchanged": true,
+  "sourceSha": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "productionChanged": false
+}

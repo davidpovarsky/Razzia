@@ -1,0 +1,33 @@
+{
+  "kind": "timestamped read-only gallery status and completed baseline gate snapshot",
+  "observedAt": "2026-11-19T20:54:37.259870+00:00",
+  "sourceWorktree": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-public-gallery-20261119",
+  "files": [
+    {
+      "source": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-public-gallery-20261119\\docs\\extensions\\plans\\public-gallery-20261119\\release-state.json",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/release-planning/gallery-status-snapshot-20261119T205437Z/release-state.json",
+      "bytes": 16440,
+      "sourceBeforeSha256": "bd6cca1268621a1eb2558632db033424922763b04b4cd35009fe2e1551eeb09f",
+      "copiedSha256": "bd6cca1268621a1eb2558632db033424922763b04b4cd35009fe2e1551eeb09f",
+      "sourceAfterSha256": "bd6cca1268621a1eb2558632db033424922763b04b4cd35009fe2e1551eeb09f"
+    },
+    {
+      "source": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-public-gallery-20261119\\docs\\extensions\\plans\\phase3-takeover-20261117\\tadazz-codex-fullshow-845b2ae6cba5-908946e3\\receipt.json",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/release-planning/gallery-status-snapshot-20261119T205437Z/full-show-wrapper-receipt.json",
+      "bytes": 2651973,
+      "sourceBeforeSha256": "7d1e845df1d0bcec6b36e065159c95170d4359e1e4d48b2e0271f665a80c4d86",
+      "copiedSha256": "7d1e845df1d0bcec6b36e065159c95170d4359e1e4d48b2e0271f665a80c4d86",
+      "sourceAfterSha256": "7d1e845df1d0bcec6b36e065159c95170d4359e1e4d48b2e0271f665a80c4d86"
+    }
+  ],
+  "sourceUnchangedAfterCopy": true,
+  "previousStateHashReportedByPeer": "559cc39162d9d9d8b3bb261b26527c6c9807e26413ce18279479ac2547b88b36",
+  "currentStateHash": "bd6cca1268621a1eb2558632db033424922763b04b4cd35009fe2e1551eeb09f",
+  "sourceStateMayEvolveAfterObservation": true,
+  "statusAtObservation": "waiting-unrelated-server-release-lease-before-mobile-wip",
+  "branchKeptSeparate": true,
+  "notOurQualificationReceipt": true,
+  "copiedDependenciesOrArchives": false,
+  "productGitTestsOrReleaseActions": false,
+  "screeningUnexpectedFindings": 0
+}

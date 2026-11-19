@@ -1,0 +1,15 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119/extensions
+
+ ✓ src/presentation/tadazz-v4/types.test.ts (11 tests) 11ms
+ ✓ src/presentation/tadazz-v4/full-show.test.ts (21 tests) 141ms
+
+ Test Files  2 passed (2)
+      Tests  32 passed (32)
+   Start at  19:01:05
+   Duration  6.13s (import 64%, transform 25%, worker 7%, tests 3%)
+
+
+stderr | src/presentation/tadazz-v4/full-show.test.ts > FullShowScenes: React Component Rendering & Visual Parity > renders CompanyOpening with brand badge and event artwork
+react-i18next:: useTranslation: You will need to pass in an i18next instance by using initReactI18next or by passing it via props or context. In monorepo setups, make sure there is only one instance of react-i18next. { code: 'NO_I18NEXT_INSTANCE' }
+

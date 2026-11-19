@@ -1,0 +1,12 @@
+{
+  "at": "2026-11-19T18:27:11.690922+00:00",
+  "restoredCommit": "730cb4579d22589e1a7fc96a6873df9cb273e479",
+  "restoredPath": "extensions/qa/phase3-full-show/browser-verify.mjs",
+  "restoredSha256": "4dcb60dde9db58dd19db2e039875f77f75e886fa7475142a581739b4f791f090",
+  "preservedDiagnosticFile": "scheduling-browser-verify.mjs",
+  "preservedDiagnosticSha256": "16e47f76b66b0275a85e0d6d3515ddb07272b60e8df1ade1144ccfe6a0912579",
+  "trackedUnstagedPaths": [],
+  "trackedStagedPaths": [],
+  "productChanged": false,
+  "widgetRebuilt": false
+}

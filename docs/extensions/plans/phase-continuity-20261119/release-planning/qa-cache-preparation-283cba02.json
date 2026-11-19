@@ -1,0 +1,8 @@
+{
+  "exit": 1,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 95, in <module>\n  File \"/usr/lib/python3.12/subprocess.py\", line 571, in run\n    raise CalledProcessError(retcode, process.args,\nsubprocess.CalledProcessError: Command '['docker', 'cp', '/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-browser-c4125d58a746-8e0c29d3/mcp-deps/.', '07b64bb4f99518e306a2e3f5a693266a6ca543fdd1676627161af7077e818872:/tmp/phase3-999ed90c/.phase-continuity-20261119-a1c5c7f7a591']' returned non-zero exit status 1.\n",
+  "observedAt": "2026-11-19T17:04:26.569280+00:00",
+  "stateRequiresInspection": true,
+  "failurePolicy": "Preserve existing and task-owned cache contents for inspection; no automatic deletion or container stop."
+}

@@ -1,0 +1,123 @@
+{
+  "kind": "completed-diagnostic-evidence-exact-copy",
+  "createdUtc": "2026-11-19T18:18:31.150910+00:00",
+  "remoteRoot": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-phase-continuity-diagnostic-730cb4579d22-12eccf07",
+  "run": "tadazz-phase-continuity-diagnostic-730cb4579d22-12eccf07",
+  "releaseQualified": false,
+  "sourceModified": false,
+  "rawOriginalsModified": false,
+  "privateKeyContentsRead": false,
+  "excludedRemoteFiles": [
+    "full-show/progress.json",
+    "diagnostic-coordinator-receipt.json",
+    "qa-overlay/browser-verify.mjs"
+  ],
+  "exclusionReason": "Completed receipt and existing local coordinator/overlay copies already preserve these contents/provenance; no config, archives, source tree or dependencies were collected.",
+  "files": [
+    {
+      "path": "browser-resource-evidence.json",
+      "bytes": 855,
+      "sha256": "728b664eb08b7cb6b43d304b79720b40b35c36dbc6d6e4970db124fc309cabfb",
+      "alreadyExisted": false,
+      "copySha256": "728b664eb08b7cb6b43d304b79720b40b35c36dbc6d6e4970db124fc309cabfb"
+    },
+    {
+      "path": "browser.stderr.log",
+      "bytes": 17789,
+      "sha256": "9875c13f42b7602cca415752e57949ad4d51a8359023b73732536f0456cd3f5b",
+      "alreadyExisted": false,
+      "copySha256": "9875c13f42b7602cca415752e57949ad4d51a8359023b73732536f0456cd3f5b"
+    },
+    {
+      "path": "browser.stdout.log",
+      "bytes": 3202,
+      "sha256": "ed8a0b66ae2704b499b4145f5998ddf28dee5e2eea95714aa32fc8a2a4be60c2",
+      "alreadyExisted": false,
+      "copySha256": "ed8a0b66ae2704b499b4145f5998ddf28dee5e2eea95714aa32fc8a2a4be60c2"
+    },
+    {
+      "path": "full-show/receipt.json",
+      "bytes": 253200,
+      "sha256": "80867519ca517cb3c6050323043d498999ec6da946fefa1fe6d27719c3bfb5ef",
+      "alreadyExisted": false,
+      "copySha256": "80867519ca517cb3c6050323043d498999ec6da946fefa1fe6d27719c3bfb5ef"
+    },
+    {
+      "path": "full-show/webkit-razzia-original-failure-state-1.json",
+      "bytes": 40262,
+      "sha256": "74f3b2a4bc67ab4135d8ae04fc52178c6d19cf53fd4c32d04df9984c799539ff",
+      "alreadyExisted": false,
+      "copySha256": "74f3b2a4bc67ab4135d8ae04fc52178c6d19cf53fd4c32d04df9984c799539ff"
+    },
+    {
+      "path": "full-show/webkit-razzia-original-failure-state-1.png",
+      "bytes": 229192,
+      "sha256": "0c41f4195a6b2e5120cc76f44dc7a6a34a3c31b6874dd3286327127f58648d96",
+      "alreadyExisted": false,
+      "copySha256": "0c41f4195a6b2e5120cc76f44dc7a6a34a3c31b6874dd3286327127f58648d96"
+    },
+    {
+      "path": "full-show/webkit-razzia-original-failure-state-2.json",
+      "bytes": 64719,
+      "sha256": "803e9b9997ce1ee91c3f248b367c312d76e92d4de2270ae03e786fe6a2fdc903",
+      "alreadyExisted": false,
+      "copySha256": "803e9b9997ce1ee91c3f248b367c312d76e92d4de2270ae03e786fe6a2fdc903"
+    },
+    {
+      "path": "full-show/webkit-razzia-original-failure-state-2.png",
+      "bytes": 688976,
+      "sha256": "9db99b9ca2bed329b2ade520c5d5cbbdbf2a627408f5483ceb91f3befff3801d",
+      "alreadyExisted": false,
+      "copySha256": "9db99b9ca2bed329b2ade520c5d5cbbdbf2a627408f5483ceb91f3befff3801d"
+    },
+    {
+      "path": "full-show/webkit-razzia-original-five-pictures.png",
+      "bytes": 295670,
+      "sha256": "7545eb2b076b3f2cc806a64a9dd2915e7ef4b2c8e49895d4163ac7d8808df906",
+      "alreadyExisted": false,
+      "copySha256": "7545eb2b076b3f2cc806a64a9dd2915e7ef4b2c8e49895d4163ac7d8808df906"
+    },
+    {
+      "path": "full-show/webkit-tadazz-classic-failure-state-1.json",
+      "bytes": 34794,
+      "sha256": "068f24c5aa74cce323c5959f70b22d797694c3e1107d8b228b3ac21fee392718",
+      "alreadyExisted": false,
+      "copySha256": "068f24c5aa74cce323c5959f70b22d797694c3e1107d8b228b3ac21fee392718"
+    },
+    {
+      "path": "full-show/webkit-tadazz-classic-failure-state-1.png",
+      "bytes": 630054,
+      "sha256": "9044f55c3b147666bb49c89a56ad65859bad50ebbe0bba66997a79a53a25f8f3",
+      "alreadyExisted": false,
+      "copySha256": "9044f55c3b147666bb49c89a56ad65859bad50ebbe0bba66997a79a53a25f8f3"
+    },
+    {
+      "path": "full-show/webkit-tadazz-classic-failure-state-2.json",
+      "bytes": 34818,
+      "sha256": "dcf7eb9235e3c8a448dfe36214080e0cadfd07f89ef71402b0516d8cd0fd6a60",
+      "alreadyExisted": false,
+      "copySha256": "dcf7eb9235e3c8a448dfe36214080e0cadfd07f89ef71402b0516d8cd0fd6a60"
+    },
+    {
+      "path": "full-show/webkit-tadazz-classic-failure-state-2.png",
+      "bytes": 631909,
+      "sha256": "63f42936d41af5eb9506c712ce7574120be3a14979e8753911626d15126406e7",
+      "alreadyExisted": false,
+      "copySha256": "63f42936d41af5eb9506c712ce7574120be3a14979e8753911626d15126406e7"
+    },
+    {
+      "path": "full-show/webkit-tadazz-classic-failure-state-3.json",
+      "bytes": 18869,
+      "sha256": "b49985ea26e0cc4ffccdfded1e6909f77ba90a1f455620bf207c0d3dce2a691b",
+      "alreadyExisted": false,
+      "copySha256": "b49985ea26e0cc4ffccdfded1e6909f77ba90a1f455620bf207c0d3dce2a691b"
+    },
+    {
+      "path": "full-show/webkit-tadazz-classic-failure-state-3.png",
+      "bytes": 45595,
+      "sha256": "aa21417fa512579c42183f7eab9c88a168fef3e8774fbc873154dfe5e67bc907",
+      "alreadyExisted": false,
+      "copySha256": "aa21417fa512579c42183f7eab9c88a168fef3e8774fbc873154dfe5e67bc907"
+    }
+  ]
+}

@@ -1,0 +1,176 @@
+{
+  "kind": "independent-readonly-partial-release-review",
+  "at": "2026-11-19T20:55:50.959478+00:00",
+  "review": "PASS",
+  "sourceRevision": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "scope": [
+    "finalized native-launch source gate",
+    "finalized isolated production-launch gate",
+    "direct frozen-file hash verification"
+  ],
+  "pending": [
+    "native consent browser gate",
+    "standard full-show gate",
+    "focused Linux transport-race gate",
+    "immutable proxy gate",
+    "release staging and deployment"
+  ],
+  "releaseQualified": false,
+  "deployed": false,
+  "inputs": {
+    "sourceReceipt": {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase3-takeover-20261117\\tadazz-codex-dccfd9d22a46-5e75b0a8\\receipt.json",
+      "sha256": "bd39353bbf5140c6e2e2b8b5a7971fb804fa22370f2162f823b1b77c45b92c62"
+    },
+    "inputManifest": {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase3-takeover-20261117\\tadazz-codex-dccfd9d22a46-5e75b0a8\\input-manifest.json",
+      "sha256": "af43605039c06b5b8caf8c3438da559713b160423d0687a82390389ea22ca1ec"
+    },
+    "launchReceipt": {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase3-takeover-20261117\\tadazz-codex-launch-dccfd9d22a46-5e928a51\\receipt.json",
+      "sha256": "cf9849389f243c3a6cec738fe37de3fa3605ae9f8ee88bcf588418cd09d6ee5b"
+    }
+  },
+  "source": {
+    "count": 1873,
+    "manifestBeforeAfterIdentical": true,
+    "expectedMapSha256": "617f0610d446805b072740f0fd21eea4aac6d67d6d54e1e3009a7f056342e830",
+    "actualMapSha256": "617f0610d446805b072740f0fd21eea4aac6d67d6d54e1e3009a7f056342e830",
+    "mismatches": []
+  },
+  "checks": [
+    {
+      "label": "native-application-preview-build",
+      "exit": 0
+    },
+    {
+      "label": "native-widget-build",
+      "exit": 0
+    },
+    {
+      "label": "native-http",
+      "exit": 0
+    },
+    {
+      "label": "native-types",
+      "exit": 0
+    },
+    {
+      "label": "native-lint",
+      "exit": 0
+    },
+    {
+      "label": "native-format",
+      "exit": 0
+    },
+    {
+      "label": "semantic-types",
+      "exit": 0
+    },
+    {
+      "label": "full-show-widget-types",
+      "exit": 0
+    },
+    {
+      "label": "full-show-widget-lint",
+      "exit": 0
+    },
+    {
+      "label": "full-show-widget-format",
+      "exit": 0
+    },
+    {
+      "label": "semantic-lint",
+      "exit": 0
+    },
+    {
+      "label": "semantic-format",
+      "exit": 0
+    },
+    {
+      "label": "semantic-integration-lint-baseline",
+      "exit": 0
+    },
+    {
+      "label": "native-launch-build",
+      "exit": 0
+    },
+    {
+      "label": "native-site-build",
+      "exit": 0
+    },
+    {
+      "label": "native-application-package",
+      "exit": 0
+    }
+  ],
+  "launchTests": {
+    "tests": 9,
+    "pass": 9,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "widget": {
+    "manifestSha256": "405dc40cf146e307851c1aab85564a810d990eda92637ef2410af9d7dc1ffb7d",
+    "htmlSha256": "f89f5eb72499f36d278c3df94ca6237406ded6926c06b438bcaf76fc3098d1c0",
+    "htmlBytes": 3084345,
+    "rendererBuildId": "e1fdf5dc47e277e7da4ec8ce5ce88048bef1e7b34249da1b6240cde8c68ead9f",
+    "publicAssetCount": 85,
+    "physicalSourceCount": 748,
+    "readOnlyMountsVerified": true,
+    "hashesUnchanged": true
+  },
+  "backend": {
+    "sha256": "45e93ce219591fcd7757532d40d09019de6925f8be3103afec77d74797a98e2f",
+    "bytes": 2424678,
+    "fullShowManifestSha256": "405dc40cf146e307851c1aab85564a810d990eda92637ef2410af9d7dc1ffb7d",
+    "deploymentPerformed": false,
+    "previewAcceptance": false
+  },
+  "nativeApplication": {
+    "pinManifestSha256": "f46aa9302c3d86d79b3f3a4c86b32d12c63bc8be9f5ba493d0d7b4d80c7b2e7d",
+    "artifactSha256": "f419196035ae33f7f398018b10a7ddd1677dc6e0d028410f9526cf3edbedf556",
+    "registrySha256": "d6b7dde2a706ed0d0f816b7fdbddc0bd56e43c0ea80bc26a236fc79d1ce8720f",
+    "inputFiles": 3641,
+    "generatedSourceChanged": false,
+    "files": [
+      {
+        "name": "renderer.mjs",
+        "bytes": 2590785,
+        "sha256": "ba436dcfd0b5c91317661fb4ed5ae5379073ea4796892244a4506bd89d40555a"
+      },
+      {
+        "name": "renderer.css",
+        "bytes": 451273,
+        "sha256": "47c357f7404af66b4a30788a017f8c6237c5f9ffbe98317e0319b59f655354e5"
+      }
+    ],
+    "packagedBytesEqual": true
+  },
+  "web": {
+    "expectedCount": 203,
+    "actualCount": 203,
+    "expectedMapSha256": "5bdd7771972fc51e1f63d65a87a3a2b65470bcb7fc9b2c3de8974972985c9657",
+    "actualMapSha256": "5bdd7771972fc51e1f63d65a87a3a2b65470bcb7fc9b2c3de8974972985c9657",
+    "missing": [],
+    "extra": [],
+    "mismatches": []
+  },
+  "directFilesEvidence": {
+    "file": "native-launch-frozen-files.json",
+    "sha256": "e19fcff7a6dad8dd2d884501e0485dfbff038a453e9a90638bd4737a381dd934"
+  },
+  "directSourceEvidence": {
+    "file": "native-launch-source-and-assets.json",
+    "sha256": "df4ba508adda7ade316870f99aa146f1d7381e04d9bf807779a053cb9f770b58"
+  },
+  "isolation": {
+    "network": "none",
+    "productionChanged": false,
+    "customerDataAccessed": false,
+    "privateHostInstalled": false
+  },
+  "methods": "Read finalized receipts; compare full1873 hash maps; independently hash frozen source,748 widget sources,85 public assets,203 web artifacts and backend/widget bytes. No tests, builds, mutable config/customer files or incomplete gate receipts read."
+}

@@ -1,0 +1,229 @@
+{
+  "engine": "chromium",
+  "theme": "razzia-original",
+  "check": "host control request readiness",
+  "timeoutMs": 5000,
+  "status": "ready",
+  "originallyPaused": false,
+  "heldPreview": {
+    "holding": true,
+    "lifecycle": {
+      "documentId": "fce99d21-74cd-4025-b19c-4df068b565cb",
+      "disposing": false,
+      "remaining": {
+        "http": 0,
+        "handlers": 1,
+        "initialization": 0,
+        "replies": 1,
+        "connecting": false
+      },
+      "receipt": null
+    },
+    "newPreviewCalls": 1
+  },
+  "beforeClick": {
+    "at": "2026-11-19T19:49:53.292Z",
+    "elapsedMs": 592,
+    "sameButton": true,
+    "expandDisabled": false,
+    "refreshDisabled": true,
+    "pauseDisabled": true,
+    "status": "Loading…",
+    "focusedControl": null
+  },
+  "beforeRelease": {
+    "holding": true,
+    "remaining": {
+      "http": 0,
+      "handlers": 1,
+      "initialization": 0,
+      "replies": 1,
+      "connecting": false
+    },
+    "messages": [
+      {
+        "at": "2026-11-19T19:49:52.800Z",
+        "elapsedMs": 103.20000004768372,
+        "method": "tools/call",
+        "id": 10,
+        "name": "preview_show"
+      },
+      {
+        "at": "2026-11-19T19:49:53.481Z",
+        "elapsedMs": 784.2000000476837,
+        "method": "ui/request-display-mode",
+        "id": 11,
+        "mode": "fullscreen"
+      }
+    ]
+  },
+  "snapshot": {
+    "waitedMs": 802.1000001430511,
+    "firstReadyMs": 784.6000001430511,
+    "sameDocument": true,
+    "sameHost": true,
+    "sameBridgeBinding": true,
+    "received": {
+      "proof": "synthetic-host-ui-control-fixture",
+      "saveRequests": [
+        {
+          "contractVersion": "0.1.0",
+          "draftId": "BngoT7ilv92bJrnIgxKmnWT8TcD54ySD",
+          "expectedRevision": 11,
+          "idempotencyKey": "100ed4f0-56c0-4494-9de3-bcf7e442929d",
+          "intent": "createNew"
+        },
+        {
+          "contractVersion": "0.1.0",
+          "draftId": "BngoT7ilv92bJrnIgxKmnWT8TcD54ySD",
+          "expectedRevision": 11,
+          "idempotencyKey": "100ed4f0-56c0-4494-9de3-bcf7e442929d",
+          "intent": "createNew"
+        },
+        {
+          "contractVersion": "0.1.0",
+          "draftId": "BngoT7ilv92bJrnIgxKmnWT8TcD54ySD",
+          "expectedRevision": 11,
+          "idempotencyKey": "100ed4f0-56c0-4494-9de3-bcf7e442929d",
+          "intent": "createNew"
+        }
+      ],
+      "openedLinks": [
+        "https://tadazz.com/studio/native-save-consent/SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS",
+        "https://tadazz.com/manager/quizz/QQQQQQQQQQQQQQQQQQQQQ"
+      ],
+      "displayRequests": [
+        "fullscreen"
+      ]
+    },
+    "holding": true,
+    "lifecycle": {
+      "documentId": "fce99d21-74cd-4025-b19c-4df068b565cb",
+      "disposing": false,
+      "remaining": {
+        "http": 0,
+        "handlers": 1,
+        "initialization": 0,
+        "replies": 1,
+        "connecting": false
+      },
+      "receipt": null
+    },
+    "messages": [
+      {
+        "at": "2026-11-19T19:49:52.800Z",
+        "elapsedMs": 103.20000004768372,
+        "method": "tools/call",
+        "id": 10,
+        "name": "preview_show"
+      },
+      {
+        "at": "2026-11-19T19:49:53.481Z",
+        "elapsedMs": 784.2000000476837,
+        "method": "ui/request-display-mode",
+        "id": 11,
+        "mode": "fullscreen"
+      }
+    ]
+  },
+  "control": {
+    "snapshot": {
+      "at": "2026-11-19T19:49:53.502Z",
+      "elapsedMs": 801.4000000953674,
+      "sameButton": true,
+      "expandDisabled": false,
+      "refreshDisabled": true,
+      "pauseDisabled": true,
+      "status": "Loading…",
+      "focusedControl": "full-show-expand"
+    },
+    "events": [
+      {
+        "type": "pointerdown",
+        "trusted": true,
+        "at": "2026-11-19T19:49:53.473Z",
+        "elapsedMs": 773,
+        "sameButton": true,
+        "expandDisabled": false,
+        "refreshDisabled": true,
+        "pauseDisabled": true,
+        "status": "Loading…",
+        "focusedControl": null
+      },
+      {
+        "type": "mousedown",
+        "trusted": true,
+        "at": "2026-11-19T19:49:53.473Z",
+        "elapsedMs": 773.0999999046326,
+        "sameButton": true,
+        "expandDisabled": false,
+        "refreshDisabled": true,
+        "pauseDisabled": true,
+        "status": "Loading…",
+        "focusedControl": null
+      },
+      {
+        "type": "pointerup",
+        "trusted": true,
+        "at": "2026-11-19T19:49:53.474Z",
+        "elapsedMs": 773.5,
+        "sameButton": true,
+        "expandDisabled": false,
+        "refreshDisabled": true,
+        "pauseDisabled": true,
+        "status": "Loading…",
+        "focusedControl": "full-show-expand"
+      },
+      {
+        "type": "mouseup",
+        "trusted": true,
+        "at": "2026-11-19T19:49:53.474Z",
+        "elapsedMs": 773.5999999046326,
+        "sameButton": true,
+        "expandDisabled": false,
+        "refreshDisabled": true,
+        "pauseDisabled": true,
+        "status": "Loading…",
+        "focusedControl": "full-show-expand"
+      },
+      {
+        "type": "click",
+        "trusted": true,
+        "at": "2026-11-19T19:49:53.474Z",
+        "elapsedMs": 773.7000000476837,
+        "sameButton": true,
+        "expandDisabled": false,
+        "refreshDisabled": true,
+        "pauseDisabled": true,
+        "status": "Loading…",
+        "focusedControl": "full-show-expand"
+      }
+    ]
+  },
+  "afterRelease": {
+    "at": "2026-11-19T19:49:53.569Z",
+    "elapsedMs": 868.7999999523163,
+    "sameButton": true,
+    "expandDisabled": false,
+    "refreshDisabled": false,
+    "pauseDisabled": false,
+    "status": null,
+    "focusedControl": "full-show-expand"
+  },
+  "cleanup": {
+    "released": true,
+    "restoredPaused": false,
+    "lifecycle": {
+      "documentId": "fce99d21-74cd-4025-b19c-4df068b565cb",
+      "disposing": false,
+      "remaining": {
+        "http": 0,
+        "handlers": 0,
+        "initialization": 0,
+        "replies": 0,
+        "connecting": false
+      },
+      "receipt": null
+    }
+  }
+}

@@ -1,0 +1,664 @@
+diff --git a/extensions/qa/phase3-full-show/browser-verify.mjs b/extensions/qa/phase3-full-show/browser-verify.mjs
+index 9a7b4d6..797f9b9 100644
+--- a/extensions/qa/phase3-full-show/browser-verify.mjs
++++ b/extensions/qa/phase3-full-show/browser-verify.mjs
+@@ -261,6 +261,12 @@ const requestFailures = []
+ const pageErrorEvents = []
+ const qaRequestEvents = []
+ const activity = { check: null, step: null }
++const frameSchedulingDiagnostic =
++  process.env.TADAZZ_FULL_SHOW_DIAGNOSTIC === "frame-scheduling"
++const failureStateDiagnostic =
++  frameSchedulingDiagnostic ||
++  process.env.TADAZZ_FULL_SHOW_DIAGNOSTIC === "failure-state"
++let captureActiveFailure = null
+ function writeProgress(active) {
+   activity.step = active ?? activity.check
+   fs.writeFileSync(
+@@ -373,6 +379,13 @@ const server = createServer((req, res) => {
+       })
+       assert.notEqual(result.isError, true)
+       scenario.lastPreviewResult = result
++      if (failureStateDiagnostic) {
++        scenario.lastInitialPreview = {
++          acknowledgedAt: new Date().toISOString(),
++          requestedChapterId: scenario.selection.chapterId,
++          frame: result.structuredContent?.data,
++        }
++      }
+       res.setHeader("Content-Type", "application/json")
+       res.end(JSON.stringify({ selection: scenario.selection, result }))
+ 
+@@ -408,6 +421,12 @@ const server = createServer((req, res) => {
+ 
+       calls.push({
+         name: call.name,
++        ...(failureStateDiagnostic
++          ? {
++              completedAt: new Date().toISOString(),
++              requestedChapterId: call.arguments?.chapterId,
++            }
++          : {}),
+         inputRevision: call.arguments?.expectedRevision,
+         inputDigest: hashJson(call.arguments),
+         patchKind: call.arguments?.patch?.kind,
+@@ -640,6 +659,12 @@ async function run(name, operation, budgetMs = 120000) {
+       ms: Date.now() - start,
+     })
+     console.error(`${name}: ${error.message}`)
++    if (captureActiveFailure) {
++      await captureActiveFailure("check failure", {
++        check: name,
++        error: String(error),
++      })
++    }
+ 
+     if (error.message.startsWith("QA_CHECK_TIMEOUT")) {
+       throw error
+@@ -701,9 +726,392 @@ try {
+           }),
+         )
+       })
++      if (failureStateDiagnostic) {
++        await context.addInitScript(() => {
++          window.__failureUiEvents = []
++          for (const type of ["pointerdown", "pointerup", "click"]) {
++            document.addEventListener(
++              type,
++              (event) => {
++                const target = event
++                  .composedPath()
++                  .find(
++                    (node) =>
++                      node instanceof Element &&
++                      node.matches(
++                        '[data-testid="full-show-undo"],[data-testid="full-show-demo-reveal"],[data-testid="full-show-pause"]',
++                      ),
++                  )
++                if (!target) return
++                const native = document.querySelector(
++                  '[data-testid="full-show-native-surface"]',
++                )?.shadowRoot
++                const stage = native?.querySelector("[data-full-show-chapter]")
++                window.__failureUiEvents.push({
++                  at: new Date().toISOString(),
++                  eventTimestamp: event.timeStamp,
++                  type: event.type,
++                  trusted: event.isTrusted,
++                  target: target.getAttribute("data-testid"),
++                  disabled: target.disabled ?? null,
++                  ariaDisabled: target.getAttribute("aria-disabled"),
++                  chapter: stage?.getAttribute("data-full-show-chapter"),
++                  elapsed: stage?.getAttribute("data-playback-elapsed"),
++                  paused: stage?.getAttribute("data-playback-paused"),
++                  epoch: stage?.getAttribute("data-playback-epoch"),
++                  revision: document.querySelector(
++                    '[data-testid="full-show-revision"]',
++                  )?.textContent,
++                })
++                if (window.__failureUiEvents.length > 20)
++                  window.__failureUiEvents.shift()
++              },
++              { capture: true, passive: true },
++            )
++          }
++        })
++      }
++      if (frameSchedulingDiagnostic) {
++        // Observe native scheduling only. Never replace callbacks, advance clocks,
++        // modify geometry, or dispatch user input to make an assertion pass.
++        await context.addInitScript(() => {
++          const start = performance.now()
++          const state = {
++            startedAt: new Date().toISOString(),
++            startedPerf: start,
++            frameKind: window === window.top ? "host" : "widget",
++            visibility: document.visibilityState,
++            rafCount: 0,
++            lastRafAt: null,
++            lastRafPerf: start,
++            maxRafGapMs: 0,
++            rafGaps: [],
++            timerCount: 0,
++            lastTimerAt: null,
++            lastTimerPerf: start,
++            maxTimerGapMs: 0,
++            timerGaps: [],
++            visibilityEvents: [],
++            nativeRootObservedAt: null,
++            mutationCount: 0,
++            lastMutationAt: null,
++            commits: [],
++          }
++          window.__failureScheduling = state
++          const remember = (items, value, limit = 20) => {
++            items.push(value)
++            if (items.length > limit) items.shift()
++          }
++          const tick = () => {
++            const now = performance.now()
++            const gap = now - state.lastRafPerf
++            state.rafCount += 1
++            state.lastRafAt = new Date().toISOString()
++            state.lastRafPerf = now
++            state.maxRafGapMs = Math.max(state.maxRafGapMs, gap)
++            if (gap >= 250)
++              remember(state.rafGaps, {
++                at: state.lastRafAt,
++                gap,
++                count: state.rafCount,
++              })
++            requestAnimationFrame(tick)
++          }
++          requestAnimationFrame(tick)
++          document.addEventListener(
++            "visibilitychange",
++            () => {
++              state.visibility = document.visibilityState
++              remember(state.visibilityEvents, {
++                at: new Date().toISOString(),
++                visibility: state.visibility,
++              })
++            },
++            { passive: true },
++          )
++          let nativeObserver = null
++          const observeNativeRoot = () => {
++            if (nativeObserver) return
++            const host = document.querySelector(
++              '[data-testid="full-show-native-surface"]',
++            )
++            const shadow = host?.shadowRoot
++            if (!shadow) return
++            state.nativeRootObservedAt = new Date().toISOString()
++            const record = (reason, count) => {
++              const stage = shadow.querySelector("[data-full-show-chapter]")
++              const fit = shadow.querySelector(
++                '[data-testid="native-stage-viewport"]',
++              )
++              state.mutationCount += count
++              state.lastMutationAt = new Date().toISOString()
++              remember(
++                state.commits,
++                {
++                  at: state.lastMutationAt,
++                  perf: performance.now(),
++                  reason,
++                  mutations: count,
++                  rafCount: state.rafCount,
++                  timerCount: state.timerCount,
++                  chapter: stage?.getAttribute("data-full-show-chapter"),
++                  elapsed: stage?.getAttribute("data-playback-elapsed"),
++                  paused: stage?.getAttribute("data-playback-paused"),
++                  fitReady: fit?.getAttribute("data-fit-ready"),
++                  hostStyle: host.getAttribute("style"),
++                },
++                40,
++              )
++            }
++            nativeObserver = new MutationObserver((records) =>
++              record("mutation", records.length),
++            )
++            nativeObserver.observe(shadow, {
++              subtree: true,
++              childList: true,
++              attributes: true,
++              attributeFilter: [
++                "data-full-show-chapter",
++                "data-playback-elapsed",
++                "data-playback-epoch",
++                "data-playback-paused",
++                "data-fit-ready",
++                "data-fit-factor",
++                "data-phase",
++                "data-v4-scene",
++                "style",
++              ],
++            })
++            record("observer attached", 0)
++          }
++          setInterval(() => {
++            const now = performance.now()
++            const gap = now - state.lastTimerPerf
++            state.timerCount += 1
++            state.lastTimerAt = new Date().toISOString()
++            state.lastTimerPerf = now
++            state.maxTimerGapMs = Math.max(state.maxTimerGapMs, gap)
++            if (gap >= 250)
++              remember(state.timerGaps, {
++                at: state.lastTimerAt,
++                gap,
++                count: state.timerCount,
++              })
++            observeNativeRoot()
++          }, 100)
++        })
++      }
+       const page = await context.newPage()
+       page.setDefaultTimeout(10000)
+       const caseErrors = []
++      let diagnosticSequence = 0
++      const captureFailureState = async (reason, detail = {}) => {
++        if (!failureStateDiagnostic) return
++        const sequence = ++diagnosticSequence
++        const stem = `${engine}-${theme}-failure-state-${sequence}`
++        const capture = {
++          at: new Date().toISOString(),
++          engine,
++          theme,
++          reason,
++          check: activity.check,
++          step: activity.step,
++          detail,
++          requestedChapterId: scenario.selection.chapterId,
++          initialFrame: scenario.lastInitialPreview,
++          lastAcknowledgedPreview:
++            scenario.lastPreviewResult?.structuredContent?.data,
++          hostUrl: page.url(),
++        }
++        const bounded = async (operation) => {
++          let timer
++          try {
++            return await Promise.race([
++              operation,
++              new Promise((_, reject) => {
++                timer = setTimeout(
++                  () => reject(new Error("capture budget")),
++                  3000,
++                )
++              }),
++            ])
++          } catch (error) {
++            return { captureError: String(error) }
++          } finally {
++            clearTimeout(timer)
++          }
++        }
++        const child = page
++          .frames()
++          .find((frame) => frame.url().endsWith("/widget"))
++        capture.widget = child
++          ? await bounded(
++              child.evaluate(() => {
++                const host = document.querySelector(
++                  '[data-testid="full-show-native-surface"]',
++                )
++                const shadow = host?.shadowRoot
++                const describe = (element) => {
++                  if (!element) return null
++                  const rect = element.getBoundingClientRect()
++                  const style = getComputedStyle(element)
++                  return {
++                    attributes: Object.fromEntries(
++                      [...element.attributes].map((a) => [a.name, a.value]),
++                    ),
++                    rect: {
++                      x: rect.x,
++                      y: rect.y,
++                      width: rect.width,
++                      height: rect.height,
++                    },
++                    clientSize: {
++                      width: element.clientWidth,
++                      height: element.clientHeight,
++                    },
++                    scrollSize: {
++                      width: element.scrollWidth,
++                      height: element.scrollHeight,
++                    },
++                    style: {
++                      display: style.display,
++                      visibility: style.visibility,
++                      opacity: style.opacity,
++                      transform: style.transform,
++                      overflow: style.overflow,
++                    },
++                    text: element.innerText?.slice(0, 3000) ?? null,
++                    textContent: element.textContent?.slice(0, 3000) ?? null,
++                  }
++                }
++                const native = shadow?.querySelector(".widget-native-stage")
++                const stage = shadow?.querySelector("[data-full-show-chapter]")
++                const renderer = shadow?.querySelector(
++                  '[data-testid="tadazz-stage"],[data-testid="native-razzia-preview-v2"]',
++                )
++                return {
++                  capturedAt: new Date().toISOString(),
++                  uiEvents: window.__failureUiEvents?.slice() ?? [],
++                  scheduling: window.__failureScheduling
++                    ? {
++                        ...window.__failureScheduling,
++                        capturedPerf: performance.now(),
++                        rafAgeMs:
++                          performance.now() -
++                          window.__failureScheduling.lastRafPerf,
++                        timerAgeMs:
++                          performance.now() -
++                          window.__failureScheduling.lastTimerPerf,
++                      }
++                    : null,
++                  documentReady: document.readyState,
++                  visibilityState: document.visibilityState,
++                  uiText: document.body.innerText.slice(0, 7000),
++                  revision: document.querySelector(
++                    '[data-testid="full-show-revision"]',
++                  )?.textContent,
++                  status: [...document.querySelectorAll('[role="status"]')].map(
++                    (x) => x.textContent,
++                  ),
++                  pause: describe(
++                    document.querySelector('[data-testid="full-show-pause"]'),
++                  ),
++                  host: describe(host),
++                  layoutAncestors: (() => {
++                    const result = []
++                    let element = host?.parentElement
++                    while (element && result.length < 5) {
++                      result.push(describe(element))
++                      element = element.parentElement
++                    }
++                    return result
++                  })(),
++                  native: describe(native),
++                  stage: describe(stage),
++                  renderer: describe(renderer),
++                  preview: describe(
++                    shadow?.querySelector(
++                      '[data-testid="native-preview-surface"]',
++                    ),
++                  ),
++                  fit: describe(
++                    shadow?.querySelector(
++                      '[data-testid="native-stage-viewport"]',
++                    ),
++                  ),
++                  question: describe(
++                    shadow?.querySelector(
++                      '[data-testid="tadazz-question-panel"],[data-testid="native-razzia-question"]',
++                    ),
++                  ),
++                  answers: [
++                    ...(shadow?.querySelectorAll(
++                      '[data-testid^="tadazz-card-"],[data-testid^="native-razzia-answer-"],[data-testid^="photo-card-choice-"]',
++                    ) ?? []),
++                  ].map(describe),
++                  nativeMarkup: native?.outerHTML.slice(0, 20000) ?? null,
++                }
++              }),
++            )
++          : {
++              missingWidgetFrame: true,
++              frames: page.frames().map((frame) => frame.url()),
++            }
++        capture.host = await bounded(
++          page.evaluate(() => ({
++            capturedAt: new Date().toISOString(),
++            ready: document.documentElement.getAttribute("data-host-ready"),
++            scheduling: window.__failureScheduling
++              ? {
++                  ...window.__failureScheduling,
++                  capturedPerf: performance.now(),
++                  rafAgeMs:
++                    performance.now() - window.__failureScheduling.lastRafPerf,
++                  timerAgeMs:
++                    performance.now() -
++                    window.__failureScheduling.lastTimerPerf,
++                }
++              : null,
++            calls: window.__host?.calls?.(),
++            lifecycle: window.__host?.lifecycle?.(),
++            iframe: [...document.querySelectorAll("iframe")].map((frame) => ({
++              src: frame.src,
++              rect: {
++                width: frame.getBoundingClientRect().width,
++                height: frame.getBoundingClientRect().height,
++              },
++              visibility: getComputedStyle(frame).visibility,
++              display: getComputedStyle(frame).display,
++            })),
++          })),
++        )
++        capture.requests = qaRequestEvents
++          .filter((event) => event.engine === engine && event.theme === theme)
++          .slice(-12)
++        capture.calls = calls.slice(-12)
++        capture.screenshot = await bounded(
++          page
++            .screenshot({
++              path: path.join(evidence, `${stem}.png`),
++              timeout: 3000,
++            })
++            .then(() => `${stem}.png`),
++        )
++        fs.writeFileSync(
++          path.join(evidence, `${stem}.json`),
++          JSON.stringify(capture, null, 2),
++        )
++        observations.push({
++          engine,
++          theme,
++          check: "diagnostic failure state",
++          reason,
++          file: `${stem}.json`,
++          at: capture.at,
++        })
++        writeProgress(activity.step)
++      }
++      captureActiveFailure = failureStateDiagnostic ? captureFailureState : null
+       observeHostLifecycle(page, (event) => {
+         observations.push({
+           engine,
+@@ -754,6 +1162,17 @@ try {
+             url: request.url(),
+             method: request.method(),
+           }
++          if (failureStateDiagnostic && request.method() === "POST") {
++            try {
++              const call = request.postDataJSON()
++              event.tool = call?.name
++              event.requestedChapterId = call?.arguments?.chapterId
++              event.expectedRevision = call?.arguments?.expectedRevision
++              event.patchKind = call?.arguments?.patch?.kind
++            } catch {
++              event.postDataUnparsed = true
++            }
++          }
+           qaRequests.set(request, event)
+           qaRequestEvents.push(event)
+         }
+@@ -822,41 +1241,70 @@ try {
+       // complete timed-question flow is asserted by verifyWorkspaceControls.
+       const loadNativeChapter = async (chapter) => {
+         assert(chapter)
+-        scenario.selection.chapterId = chapter.id
+-        await prepareHostNavigation(page, "navigate host")
+-        await page.goto(`${base}/host?scenario=${scenario.id}`)
+-        await page.locator("html[data-host-ready=true]").waitFor()
+-        await page
+-          .frameLocator("iframe")
+-          .locator(`[data-full-show-chapter="${chapter.id}"]`)
+-          .waitFor()
+-        const child = page
+-          .frames()
+-          .find((value) => value.url().endsWith("/widget"))
+-        assert(child)
+-        // The acknowledged frame mounts before native transitions and viewport
+-        // fitting finish. Wait for actual visible content, not a fixed delay.
+-        await child.waitForFunction(
+-          (chapterId) => {
+-            const native = document.querySelector(
+-              '[data-testid="full-show-native-surface"]',
+-            )?.shadowRoot
+-            const selected = native?.querySelector("[data-full-show-chapter]")
+-            const viewport = native?.querySelector(
+-              '[data-testid="native-stage-viewport"]',
+-            )
++        const diagnosticLoad = failureStateDiagnostic
++          ? {
++              engine,
++              theme,
++              check: "explicit native chapter load",
++              chapterId: chapter.id,
++              kind: chapter.kind,
++              startedAt: new Date().toISOString(),
++            }
++          : null
++        if (diagnosticLoad) observations.push(diagnosticLoad)
++        try {
++          scenario.selection.chapterId = chapter.id
++          await prepareHostNavigation(page, "navigate host")
++          await page.goto(`${base}/host?scenario=${scenario.id}`)
++          await page.locator("html[data-host-ready=true]").waitFor()
++          await page
++            .frameLocator("iframe")
++            .locator(`[data-full-show-chapter="${chapter.id}"]`)
++            .waitFor()
++          const child = page
++            .frames()
++            .find((value) => value.url().endsWith("/widget"))
++          assert(child)
++          // The acknowledged frame mounts before native transitions and viewport
++          // fitting finish. Wait for actual visible content, not a fixed delay.
++          await child.waitForFunction(
++            (chapterId) => {
++              const native = document.querySelector(
++                '[data-testid="full-show-native-surface"]',
++              )?.shadowRoot
++              const selected = native?.querySelector("[data-full-show-chapter]")
++              const viewport = native?.querySelector(
++                '[data-testid="native-stage-viewport"]',
++              )
+ 
+-            return (
+-              selected?.getAttribute("data-full-show-chapter") === chapterId &&
+-              Boolean(
+-                native?.querySelector(".widget-native-stage")?.innerText.trim(),
+-              ) &&
+-              (!viewport || viewport.getAttribute("data-fit-ready") === "true")
++              return (
++                selected?.getAttribute("data-full-show-chapter") ===
++                  chapterId &&
++                Boolean(
++                  native
++                    ?.querySelector(".widget-native-stage")
++                    ?.innerText.trim(),
++                ) &&
++                (!viewport ||
++                  viewport.getAttribute("data-fit-ready") === "true")
++              )
++            },
++            chapter.id,
++            { timeout: 10000 },
++          )
++          if (diagnosticLoad)
++            diagnosticLoad.completedAt = new Date().toISOString()
++        } catch (error) {
++          if (diagnosticLoad) {
++            diagnosticLoad.failedAt = new Date().toISOString()
++            diagnosticLoad.error = String(error)
++            await captureFailureState(
++              "native chapter load failure",
++              diagnosticLoad,
+             )
+-          },
+-          chapter.id,
+-          { timeout: 10000 },
+-        )
++          }
++          throw error
++        }
+       }
+ 
+       if (process.env.TADAZZ_FULL_SHOW_DIAGNOSTIC === "phase-continuity") {
+@@ -980,10 +1428,45 @@ try {
+       }
+ 
+       await run(
+-        `${engine} / ${
+-          theme
+-        } native opening, five phases, transitions and closing`,
++        failureStateDiagnostic
++          ? `${engine} / ${theme} diagnostic workspace and logical card navigation`
++          : `${engine} / ${theme} native opening, five phases, transitions and closing`,
+         async () => {
++          if (frameSchedulingDiagnostic) {
++            // Exact initial workspace setup and ordinary pause action, scoped to
++            // the observed failure; the larger navigation matrix is not needed.
++            const question = scenario.chapters.find(
++              (chapter) => chapter.kind === "question",
++            )
++            assert(question)
++            const results = scenario.chapters.find(
++              (chapter) =>
++                chapter.cardId === question.cardId &&
++                chapter.kind === "results",
++            )
++            assert(results)
++            scenario.selection.chapterId = results.id
++            await prepareHostNavigation(page, "workspace scenario")
++            await page.goto(`${base}/host?scenario=${scenario.id}`)
++            await page.locator("html[data-host-ready=true]").waitFor()
++            const iframe = page.frameLocator("iframe")
++            const stage = iframe.locator("[data-full-show-chapter]")
++            await iframe
++              .locator(`[data-full-show-chapter="${results.id}"]`)
++              .waitFor({ timeout: 10000 })
++            if ((await stage.getAttribute("data-playback-paused")) !== "true") {
++              await iframe.getByTestId("full-show-pause").click()
++            }
++            await iframe.locator('[data-playback-paused="true"]').waitFor()
++            observations.push({
++              engine,
++              theme,
++              check: "initial native results and ordinary pause",
++              chapterId: results.id,
++              paused: true,
++            })
++            return
++          }
+           observations.push(
+             await verifyWorkspaceControls({
+               page,
+@@ -999,6 +1482,7 @@ try {
+                 ),
+             }),
+           )
++          if (failureStateDiagnostic) return
+           await page.setViewportSize({ width: 1280, height: 1200 })
+           const iframe = page.frameLocator("iframe")
+           const stage = iframe.locator("[data-full-show-chapter]")
+@@ -1090,6 +1574,18 @@ try {
+         // need the same one-CPU budget as the compound semantic editing check.
+         300000,
+       )
++      if (frameSchedulingDiagnostic) {
++        await captureFailureState("workspace scheduling completion", {
++          outcome: entries.at(-1)?.status,
++        })
++        await prepareHostNavigation(
++          page,
++          "close frame-scheduling diagnostic context",
++        )
++        captureActiveFailure = null
++        await context.close()
++        continue
++      }
+       await run(
+         `${engine} / ${
+           theme
+@@ -1501,6 +1997,15 @@ try {
+         },
+         300000,
+       )
++      if (failureStateDiagnostic) {
++        await prepareHostNavigation(
++          page,
++          "close failure-state diagnostic context",
++        )
++        captureActiveFailure = null
++        await context.close()
++        continue
++      }
+       await run(
+         `${engine} / ${theme} nine localized interfaces and non-reduced native motion`,
+         async () => {

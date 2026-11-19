@@ -1,0 +1,12 @@
+{
+  "command": [
+    "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+    "--import",
+    "file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119/extensions/node_modules/tsx/dist/loader.mjs",
+    "--test",
+    "--test-name-pattern=full-show projection inherits trusted native entrance presets",
+    "extensions/qa/phase3-full-show/selection.nodecheck.ts"
+  ],
+  "exit": 0,
+  "seconds": 6.0
+}

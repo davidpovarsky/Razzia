@@ -1,0 +1,31 @@
+{
+  "parentHelper": "work/phase-continuity-20261119/release-tools/diagnose_fullshow_failure_state.py",
+  "parentSha256": "30bfe2deeff09ae3282b7b2bc126d9b3ba103f4daa2faa6e573ccfbcc2d3a4d4",
+  "helper": "work/phase-continuity-20261119/release-tools/diagnose_frame_scheduling.py",
+  "helperSha256": "5ac04cdcb14f409a6aff96e8941ee95d659e92b62d46fc1e1d8a355042bd5c5e",
+  "overlaySha256": "16e47f76b66b0275a85e0d6d3515ddb07272b60e8df1ade1144ccfe6a0912579",
+  "overlayBytes": 128009,
+  "mode": "frame-scheduling",
+  "browserTimeoutSeconds": 180,
+  "controllerTimeoutSeconds": 300,
+  "assertionsUnchanged": true,
+  "resourceBoundsUnchanged": true,
+  "diagnosticOnly": true,
+  "releaseQualified": false,
+  "executed": false,
+  "syntaxCompiled": [
+    "outer",
+    "remote",
+    "hash_code",
+    "resource_code"
+  ],
+  "changes": [
+    "New owned namespace preserves prior diagnostic",
+    "Pin final scheduling-only QA overlay; same frozen product/widget and SDK",
+    "Add DEBUG=pw:browser only, no pw:api or protocol logging",
+    "Before/after CPU stat and pressure plus one-second host per-core/owned-process samples",
+    "Preserve nice19/taskset0 and 1 CPU/3 GiB/zero swap/no-network",
+    "Browser 180s, subprocess 200s, SSH 300s; exact owned cleanup"
+  ],
+  "cleanupReview": "Cgroup initialization inside owned-container try/finally; owned cleanup retained even if telemetry initialization fails"
+}

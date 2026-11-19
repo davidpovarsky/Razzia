@@ -1,0 +1,2 @@
+START chromium / tadazz-classic preferences supersede automatic preview
+{"evidence":"C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-preview-preference-race-20261119\\docs\\extensions\\plans\\phase-continuity-20261119\\mcp\\preference-race\\baseline\\qa","results":[{"name":"chromium / tadazz-classic preferences supersede automatic preview","status":"FAIL","error":"AssertionError [ERR_ASSERTION]: Authoring must stay disabled during automatic loading\n\nfalse !== true\n"}],"errors":[]}

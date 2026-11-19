@@ -1,0 +1,19 @@
+{
+  "activeQa": [
+    {
+      "name": "tadazz-codex-fullshow-845b2ae6cba5-908946e3",
+      "id": "3f32373139ad",
+      "status": "Up 22 minutes"
+    }
+  ],
+  "production": {
+    "id": "090d26a2fe7dd98a43226288932b7387bb9ec847cee5e5e2ff6ef48b6444bf40",
+    "image": "sha256:56de89dd9ca496595980af84a7187b49fbff8c0cb563c3393c269d2b7c09d82a",
+    "running": true,
+    "oomKilled": false,
+    "restartCount": 0
+  },
+  "observedAt": "2026-11-19T20:43:25.267114+00:00",
+  "ownCandidate": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "ownQualificationStarted": false
+}

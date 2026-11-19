@@ -1,0 +1,12 @@
+{
+  "kind": "exact reviewed transport-v2 lock helper copy; not executed by curator",
+  "createdUtc": "2026-11-19T21:17:40.177033+00:00",
+  "source": "work/phase-continuity-20261119/release-tools/with_shared_qa_lock_transport_v2.py",
+  "copy": "docs/extensions/plans/phase-continuity-20261119/release-tools/with_shared_qa_lock_transport_v2.py",
+  "bytes": 13250,
+  "sourceBeforeSha256": "01ad775f77f46539da80c4f935104869685c58710d58075d01ea5978b41f9a8a",
+  "copiedSha256": "01ad775f77f46539da80c4f935104869685c58710d58075d01ea5978b41f9a8a",
+  "sourceAfterSha256": "01ad775f77f46539da80c4f935104869685c58710d58075d01ea5978b41f9a8a",
+  "testsOrActionsByCurator": false,
+  "privateKeyContentsRead": false
+}

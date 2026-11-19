@@ -1,0 +1,23 @@
+{
+  "sourceSha": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "productCommit": "d99b9c78a8034f9fdde6e5bf528fe4b8ed684e26",
+  "integratedBase": "34a9e0a59482fa035ab98338f7c977589e46287d",
+  "status": "awaiting-exact-source-qualification",
+  "manifestSha256": "f46aa9302c3d86d79b3f3a4c86b32d12c63bc8be9f5ba493d0d7b4d80c7b2e7d",
+  "nativePinReceipt": "docs/extensions/plans/editor-hebrew-20261118/tadazz-editor-pins-d99b9c78a803-e7048ebe/receipt.json",
+  "focusedBrowserCases": 8,
+  "ggoPassed": true,
+  "createdAt": "2026-11-19T17:30:04.149125+00:00",
+  "originalContinuityCommit": "33b35be347c46ec012a28a800ed1b7504096b294",
+  "qaControllerCommit": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "preferenceBrowserCases": 4,
+  "preferenceRaces": 8,
+  "updatedAt": "2026-11-19T20:39:35.118200+00:00",
+  "nativePinSourceSha": "d99b9c78a8034f9fdde6e5bf528fe4b8ed684e26",
+  "transportQualification": {
+    "status": "pending-isolated-linux-both-engines",
+    "chromiumWindowsCasesPassed": 4,
+    "windowsWebkitAccepted": false,
+    "windowsWebkitFailuresPreserved": 2
+  }
+}

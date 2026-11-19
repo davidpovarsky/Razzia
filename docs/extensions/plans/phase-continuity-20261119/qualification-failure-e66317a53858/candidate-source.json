@@ -1,0 +1,16 @@
+{
+  "sourceSha": "e66317a5385862a3a756a18a5646fad4e64e5c26",
+  "productCommit": "368ab893129698eb0695841f422562277e71ef19",
+  "integratedBase": "34a9e0a59482fa035ab98338f7c977589e46287d",
+  "status": "awaiting-exact-source-qualification",
+  "manifestSha256": "fc673a52b738f29ef3b7fd1464222403ff84e5a1a7be9f6d61a27cd667e7e8cc",
+  "nativePinReceipt": "docs/extensions/plans/editor-hebrew-20261118/tadazz-editor-pins-b03e07cd0033-92e0eebc/receipt.json",
+  "focusedBrowserCases": 8,
+  "ggoPassed": true,
+  "createdAt": "2026-11-19T17:30:04.149125+00:00",
+  "originalContinuityCommit": "33b35be347c46ec012a28a800ed1b7504096b294",
+  "qaControllerCommit": "b03e07cd003347da46802b046dccc3d09214e78c",
+  "preferenceBrowserCases": 4,
+  "preferenceRaces": 8,
+  "updatedAt": "2026-11-19T19:35:19.583888+00:00"
+}

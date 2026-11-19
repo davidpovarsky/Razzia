@@ -1,0 +1,5 @@
+START chromium / tadazz-classic preferences supersede automatic preview
+START chromium / razzia-original preferences supersede automatic preview
+START webkit / tadazz-classic preferences supersede automatic preview
+START webkit / razzia-original preferences supersede automatic preview
+{"evidence":"C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-preview-preference-race-20261119\\docs\\extensions\\plans\\phase-continuity-20261119\\mcp\\preference-race\\fixed\\matrix\\qa","results":[{"name":"chromium / tadazz-classic preferences supersede automatic preview","status":"PASS"},{"name":"chromium / razzia-original preferences supersede automatic preview","status":"PASS"},{"name":"webkit / tadazz-classic preferences supersede automatic preview","status":"PASS"},{"name":"webkit / razzia-original preferences supersede automatic preview","status":"PASS"}],"errors":[]}

@@ -1,0 +1,15 @@
+{
+  "taskId": "1220670147437352",
+  "permalink": "https://app.asana.com/1/1219597879016953/project/1219846276680200/task/1220670147437352",
+  "modifiedAt": "2026-11-19T21:18:13.651Z",
+  "verifiedAt": "2026-11-19T21:19:03.832Z",
+  "completed": false,
+  "priorHistoryPreserved": true,
+  "appendedTextPresent": true,
+  "exactNotesMatch": true,
+  "priorCharacters": 14756,
+  "currentCharacters": 16524,
+  "appendedText": "19.11.2026 — האימות הסטנדרטי ובדיקת בקרי ההתקדמות עברו; הפריסה עדיין ממתינה\nהמועמד הקבוע dccfd9d22a4673130704fea02bd80a8399498467 השלים את כל ארבעת שערי האימות הסטנדרטיים ב־21:09:50 UTC: בדיקות המקור/native וההפעלה, native consent, full-show ו־immutable proxy. עברו 16 בדיקות מקור/בנייה/טיפוסים/lint וכו׳, 9 בדיקות הפעלה ו־6 בדיקות consent בשני המנועים. full-show עבר 40/40 תרחישים ו־44/44 renderer fixtures ב־Chromium וב־WebKit, ללא שגיאות דף או בקשות שנכשלו. מקור, ארטיפקטים ו־SDK אומתו ללא שינוי.\n\nבדיקת transport נפרדת של אותו מקור ושל אותו widget הסתיימה ב־21:12:13 UTC: שני המנועים עברו, ובכל אחד עברו Pause, Replay, Next ו־Previous בזמן תשובה אוטומטית מעוכבת — 8 פעולות בסך הכול. נשמרו קבלות מלאות, שמונה צילומים ושני witnesses גולמיים עם hashes תואמים לתוצאות. זו קבלה נפרדת שאינה מחליפה את 40 בדיקות ה־full-show.\n\nשתי ההרצות בוצעו תחת נעילת QA/פריסה משותפת. קבלות הסיום מאשרות יציאה תקינה ושחרור מפורש של הנעילה. בבדיקת transport אומת שהקונטיינר המדויק נעצר, PID=0, ללא תהליכים פעילים השייכים להרצה וללא כשל ניקוי. לא שונו assertions או זמני המתנה כדי לקבל PASS.\n\nכל הכישלונות הקודמים נשמרים: שערי 28/40, 39/40 ו־38/40 ושתי קריסות Windows WebKit. אין ייחוס חדש או לא מוכח לסיבת Pause ההיסטורית או לקריסות. קריאת MCP אמיתית לפני פריסה מאשרת שהטיוטה המקורית נשארה revision 1 עם 3 שאלות ועם authoredShow hash 97170143b7f7beb37629a8837b1e7ee25ff9bfe55b5765cbea0a05d170a6df7c.\n\nהמשימה נשארת פתוחה. staging, פריסה מוגנת ואימות אחרי פריסה עדיין באחריות מתאם השחרור; אין עדיין טענה שהגרסה החדשה פועלת ברכיב ChatGPT של המשתמש.\nראיות: docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46, qualification-transport-dccfd9d22a46, shared-qa-lock-standard-dccfd9d22a46.json, shared-qa-lock-transport-v2-dccfd9d22a46.json ו־RELEASE_REPORT.md.",
+  "notesOnlyUpdate": true,
+  "noCommentOrCompletionAction": true
+}

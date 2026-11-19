@@ -1,0 +1,69 @@
+{
+  "browserVersion": "27.2",
+  "caseErrors": [],
+  "pageErrorEvents": [],
+  "entries": [
+    {
+      "name": "webkit / tadazz-classic native opening, five phases, transitions and closing",
+      "status": "PASS",
+      "budgetMs": 300000,
+      "ms": 230068
+    },
+    {
+      "name": "webkit / tadazz-classic title edit CAS and summary refresh through AppBridge",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 6014
+    },
+    {
+      "name": "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "status": "PASS",
+      "budgetMs": 300000,
+      "ms": 103802
+    },
+    {
+      "name": "webkit / tadazz-classic nine localized interfaces and non-reduced native motion",
+      "status": "FAIL",
+      "error": "TimeoutError: locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().locator('[data-testid=\"full-show-reduce-motion\"]:not(:checked)') to be visible\n",
+      "stack": "locator.waitFor: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().locator('[data-testid=\"full-show-reduce-motion\"]:not(:checked)') to be visible\n\n    at /source/extensions/qa/phase3-full-show/browser-verify.mjs:1588:16\n    at async run (/source/extensions/qa/phase3-full-show/browser-verify.mjs:623:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1504:7",
+      "budgetMs": 120000,
+      "ms": 50951
+    },
+    {
+      "name": "webkit / tadazz-classic native audio gesture, acknowledged music and volume, persistent playback",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 26727
+    },
+    {
+      "name": "webkit / tadazz-classic native pause, resume, replay and adjacent skip",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 15422
+    },
+    {
+      "name": "webkit / tadazz-classic responsive 16:9 and 4:3 keyboard controls",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 67136
+    },
+    {
+      "name": "webkit / tadazz-classic zero-vote, tie and picture result parity with preserved media and motion",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 56299
+    },
+    {
+      "name": "webkit / tadazz-classic tamper, cancellation and tool-context teardown",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 9719
+    },
+    {
+      "name": "webkit / tadazz-classic CSP, native media resources and browser errors",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 168
+    }
+  ]
+}

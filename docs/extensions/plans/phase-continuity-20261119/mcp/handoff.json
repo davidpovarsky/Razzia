@@ -1,0 +1,936 @@
+{
+  "status": "PASS",
+  "baseline": "34a9e0a59482fa035ab98338f7c977589e46287d",
+  "scope": "Isolated real MCP SDK + AppBridge continuity regression; not installed ChatGPT or production consent proof",
+  "browserCases": 8,
+  "targetedNodeTests": 1,
+  "ownedSourceHashes": {
+    "extensions/src/mcp-app/widget/full-show-demo-question.tsx": "03b0c4794bf9c2f12581177fdbb91d5355a76655068535264717aa9b9cf933d9",
+    "extensions/src/mcp-app/server/full-show-frame.ts": "4328c6e82c21d515107acd6131134387114bd19ee6260c66290ed00f53915b49",
+    "extensions/qa/phase3-full-show/phase-continuity.mjs": "de4511fbea48cf02cd43052889634d00a8f47d2a20192504b8a20ca7041400d2",
+    "extensions/qa/phase3-full-show/browser-verify.mjs": "4dcb60dde9db58dd19db2e039875f77f75e886fa7475142a581739b4f791f090",
+    "extensions/qa/phase3-full-show/selection.nodecheck.ts": "6746137fa0a6653967767c541f1204d1605661e5fc510892bf114325937ebcee"
+  },
+  "widgetBuild": {
+    "command": [
+      "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+      "extensions/src/mcp-app/widget/build-full-show.mjs"
+    ],
+    "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119",
+    "exit": 0,
+    "seconds": 30.87,
+    "rendererBuildId": "fe84b1cab9c3d480c68fe93cec23c241475c55e8d14191b76d5b77804cfde27e",
+    "widgetSha256": "b291d6202ec7cc237f30e3c6b9acf887646f426b9718a90fe634324c72aeb573",
+    "physicalModuleCount": 2694,
+    "offWorktreeProductModules": [],
+    "inputReceiptSha256": "953dae09ca8c4743826e3dc8a675fc5c999d14c0523ba6215abfab4521cc2289",
+    "criticalModules": [
+      {
+        "path": "extensions/src/mcp-app/widget/full-show-demo-question.tsx",
+        "sha256": "03b0c4794bf9c2f12581177fdbb91d5355a76655068535264717aa9b9cf933d9",
+        "bytes": 6519
+      },
+      {
+        "path": "extensions/src/presentation/show-library-preview/NativePreviewStage.tsx",
+        "sha256": "f9fc8dd2ab4ba3bdd2f0e5c2e8e37550559795c775c01adc7157e05bcfbaec54",
+        "bytes": 10583
+      },
+      {
+        "path": "extensions/src/presentation/show-library-preview/NativeRazziaPreviewV2.tsx",
+        "sha256": "29d2d5d6a0c2d51cbc617c8265a362dc7cbd4f5d5a164f2205f1055dab572619",
+        "bytes": 8652
+      },
+      {
+        "path": "extensions/src/presentation/tadazz-show/TadazzV4StageAdapter.tsx",
+        "sha256": "e3714fb5dc00ba3d8a8962ce77dd13516e7f2f41d21295d6f6a323afa953331e",
+        "bytes": 26301
+      },
+      {
+        "path": "extensions/src/presentation/tadazz-v4/motion.ts",
+        "sha256": "6e244d5905b123f7e13156e2a9ad74ef1918c537c9367e5f32730f07e46fe3a3",
+        "bytes": 44192
+      },
+      {
+        "path": "extensions/src/presentation/tadazz-v4/TadazzV4Stage.tsx",
+        "sha256": "9e8e8a0a41a1502b1b8ce8c2fcbed2221ccd5ae353cc3888df803350511c04a9",
+        "bytes": 13034
+      }
+    ]
+  },
+  "nodeRegression": {
+    "command": [
+      "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+      "--import",
+      "file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119/extensions/node_modules/tsx/dist/loader.mjs",
+      "--test",
+      "--test-name-pattern=full-show projection inherits trusted native entrance presets",
+      "extensions/qa/phase3-full-show/selection.nodecheck.ts"
+    ],
+    "exit": 0,
+    "seconds": 6.0
+  },
+  "runs": [
+    {
+      "directory": "chromium-final",
+      "receiptSha256": "aa410378a5bb768bc299f58261985358209d6df1de6e0237a442f3a5ccc3d019",
+      "exit": 0,
+      "ownedNodePid": 24988,
+      "seconds": 71.01,
+      "browserVersions": [
+        {
+          "name": "chromium",
+          "version": "157.0.4341.60"
+        }
+      ],
+      "failureCount": 0,
+      "sourceHashesUnchanged": true,
+      "outboundDenied": [],
+      "pageErrors": [],
+      "entries": [
+        {
+          "name": "chromium / tadazz-classic phase continuity normal motion",
+          "status": "PASS",
+          "budgetMs": 60000,
+          "ms": 24546
+        },
+        {
+          "name": "chromium / tadazz-classic phase continuity reduced motion",
+          "status": "PASS",
+          "budgetMs": 60000,
+          "ms": 11180
+        },
+        {
+          "name": "chromium / razzia-original phase continuity normal motion",
+          "status": "PASS",
+          "budgetMs": 60000,
+          "ms": 14517
+        },
+        {
+          "name": "chromium / razzia-original phase continuity reduced motion",
+          "status": "PASS",
+          "budgetMs": 60000,
+          "ms": 10593
+        }
+      ],
+      "qaSourceHashes": {
+        "extensions/qa/phase3-full-show/phase-continuity.mjs": "de4511fbea48cf02cd43052889634d00a8f47d2a20192504b8a20ca7041400d2",
+        "extensions/qa/phase3-full-show/browser-verify.mjs": "4dcb60dde9db58dd19db2e039875f77f75e886fa7475142a581739b4f791f090",
+        "extensions/qa/phase3-full-show/browser-host.ts": "314047a5ff1cba6b238931653f9d0381b7698ea5a309b0bd989e83c0248a74b9"
+      },
+      "lifecycleDrains": [
+        {
+          "engine": "chromium",
+          "theme": "tadazz-classic",
+          "check": "host document lifecycle",
+          "at": "2026-11-19T17:18:20.330Z",
+          "reason": "close continuity context",
+          "url": "http://127.0.0.1:63024/host?scenario=TPkUojV-uteEVhToMlunOJqO",
+          "status": "drained",
+          "receipt": {
+            "documentId": "c0e92daa-7747-40db-a9fe-9e837be5b611",
+            "url": "http://127.0.0.1:63024/host?scenario=TPkUojV-uteEVhToMlunOJqO",
+            "status": "drained",
+            "startedAt": "2026-11-19T17:18:20.332Z",
+            "finishedAt": "2026-11-19T17:18:20.332Z",
+            "elapsedMs": 0.20000004768371582,
+            "initial": {
+              "http": 0,
+              "handlers": 0,
+              "initialization": 0,
+              "replies": 0,
+              "connecting": false
+            },
+            "remaining": {
+              "http": 0,
+              "handlers": 0,
+              "initialization": 0,
+              "replies": 0,
+              "connecting": false
+            },
+            "sentReplies": 9,
+            "cancelledReplies": 0,
+            "rejectedNewCalls": 0,
+            "requestEvents": [
+              {
+                "at": "2026-11-19T17:18:09.630Z",
+                "path": "/qa/initial",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:18:09.827Z",
+                "path": "/qa/initial",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:18:09.888Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:18:10.308Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:18:12.886Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:18:13.035Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:18:13.579Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:18:13.783Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:18:14.424Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:18:14.613Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:18:14.813Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:18:15.162Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:18:15.394Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:18:15.732Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:18:18.767Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:18:18.915Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:18:19.470Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:18:19.632Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:18:19.889Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:18:20.160Z",
+                "path": "/qa/call",
+                "status": "completed"
+              }
+            ],
+            "errors": []
+          },
+          "finishedAt": "2026-11-19T17:18:20.334Z"
+        },
+        {
+          "engine": "chromium",
+          "theme": "razzia-original",
+          "check": "host document lifecycle",
+          "at": "2026-11-19T17:18:47.609Z",
+          "reason": "close continuity context",
+          "url": "http://127.0.0.1:63024/host?scenario=17GBi0v1h0NRpk4VXFPMcJhk",
+          "status": "drained",
+          "receipt": {
+            "documentId": "db25a79e-3809-4d19-b0cc-8ed1f628efec",
+            "url": "http://127.0.0.1:63024/host?scenario=17GBi0v1h0NRpk4VXFPMcJhk",
+            "status": "drained",
+            "startedAt": "2026-11-19T17:18:47.610Z",
+            "finishedAt": "2026-11-19T17:18:47.610Z",
+            "elapsedMs": 0.2999999523162842,
+            "initial": {
+              "http": 0,
+              "handlers": 0,
+              "initialization": 0,
+              "replies": 0,
+              "connecting": false
+            },
+            "remaining": {
+              "http": 0,
+              "handlers": 0,
+              "initialization": 0,
+              "replies": 0,
+              "connecting": false
+            },
+            "sentReplies": 9,
+            "cancelledReplies": 0,
+            "rejectedNewCalls": 0,
+            "requestEvents": [
+              {
+                "at": "2026-11-19T17:18:37.477Z",
+                "path": "/qa/initial",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:18:37.710Z",
+                "path": "/qa/initial",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:18:37.782Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:18:38.159Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:18:40.766Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:18:40.951Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:18:41.301Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:18:41.466Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:18:41.768Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:18:42.037Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:18:42.169Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:18:42.542Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:18:42.669Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:18:43.057Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:18:46.083Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:18:46.269Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:18:46.766Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:18:46.925Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:18:47.032Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:18:47.432Z",
+                "path": "/qa/call",
+                "status": "completed"
+              }
+            ],
+            "errors": []
+          },
+          "finishedAt": "2026-11-19T17:18:47.614Z"
+        }
+      ]
+    },
+    {
+      "directory": "webkit-final",
+      "receiptSha256": "f881a46ba5037efecf26704af9b90242f9b86db06a90a2d9a65ff348fdd73d1e",
+      "exit": 0,
+      "ownedNodePid": 34992,
+      "seconds": 107.43,
+      "browserVersions": [
+        {
+          "name": "webkit",
+          "version": "27.2"
+        }
+      ],
+      "failureCount": 0,
+      "sourceHashesUnchanged": true,
+      "outboundDenied": [],
+      "pageErrors": [],
+      "entries": [
+        {
+          "name": "webkit / tadazz-classic phase continuity normal motion",
+          "status": "PASS",
+          "budgetMs": 60000,
+          "ms": 30535
+        },
+        {
+          "name": "webkit / tadazz-classic phase continuity reduced motion",
+          "status": "PASS",
+          "budgetMs": 60000,
+          "ms": 18343
+        },
+        {
+          "name": "webkit / razzia-original phase continuity normal motion",
+          "status": "PASS",
+          "budgetMs": 60000,
+          "ms": 16191
+        },
+        {
+          "name": "webkit / razzia-original phase continuity reduced motion",
+          "status": "PASS",
+          "budgetMs": 60000,
+          "ms": 12858
+        }
+      ],
+      "qaSourceHashes": {
+        "extensions/qa/phase3-full-show/phase-continuity.mjs": "de4511fbea48cf02cd43052889634d00a8f47d2a20192504b8a20ca7041400d2",
+        "extensions/qa/phase3-full-show/browser-verify.mjs": "4dcb60dde9db58dd19db2e039875f77f75e886fa7475142a581739b4f791f090",
+        "extensions/qa/phase3-full-show/browser-host.ts": "314047a5ff1cba6b238931653f9d0381b7698ea5a309b0bd989e83c0248a74b9"
+      },
+      "lifecycleDrains": [
+        {
+          "engine": "webkit",
+          "theme": "tadazz-classic",
+          "check": "host document lifecycle",
+          "at": "2026-11-19T17:25:09.887Z",
+          "reason": "close continuity context",
+          "url": "http://127.0.0.1:55273/host?scenario=pypa4dfjtP88VWSNrWGV-iwF",
+          "status": "drained",
+          "receipt": {
+            "documentId": "3cabbe50-fe2d-4b43-89fa-1f721cf9570b",
+            "url": "http://127.0.0.1:55273/host?scenario=pypa4dfjtP88VWSNrWGV-iwF",
+            "status": "drained",
+            "startedAt": "2026-11-19T17:25:09.891Z",
+            "finishedAt": "2026-11-19T17:25:09.891Z",
+            "elapsedMs": 0,
+            "initial": {
+              "http": 0,
+              "handlers": 0,
+              "initialization": 0,
+              "replies": 0,
+              "connecting": false
+            },
+            "remaining": {
+              "http": 0,
+              "handlers": 0,
+              "initialization": 0,
+              "replies": 0,
+              "connecting": false
+            },
+            "sentReplies": 9,
+            "cancelledReplies": 0,
+            "rejectedNewCalls": 0,
+            "requestEvents": [
+              {
+                "at": "2026-11-19T17:24:52.317Z",
+                "path": "/qa/initial",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:24:52.532Z",
+                "path": "/qa/initial",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:24:52.728Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:24:53.101Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:24:55.701Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:24:55.900Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:24:57.462Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:24:57.680Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:24:59.497Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:24:59.851Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:25:00.356Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:25:00.601Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:25:01.092Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:25:01.398Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:25:04.533Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:25:04.824Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:25:06.673Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:25:06.927Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:25:08.858Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:25:09.124Z",
+                "path": "/qa/call",
+                "status": "completed"
+              }
+            ],
+            "errors": []
+          },
+          "finishedAt": "2026-11-19T17:25:09.896Z"
+        },
+        {
+          "engine": "webkit",
+          "theme": "razzia-original",
+          "check": "host document lifecycle",
+          "at": "2026-11-19T17:25:41.354Z",
+          "reason": "close continuity context",
+          "url": "http://127.0.0.1:55273/host?scenario=B6LT5fkvyWO-__OZ5-DAq5Pk",
+          "status": "drained",
+          "receipt": {
+            "documentId": "c6faf21f-20ac-4cde-a490-63cdfce85460",
+            "url": "http://127.0.0.1:55273/host?scenario=B6LT5fkvyWO-__OZ5-DAq5Pk",
+            "status": "drained",
+            "startedAt": "2026-11-19T17:25:41.356Z",
+            "finishedAt": "2026-11-19T17:25:41.356Z",
+            "elapsedMs": 0,
+            "initial": {
+              "http": 0,
+              "handlers": 0,
+              "initialization": 0,
+              "replies": 0,
+              "connecting": false
+            },
+            "remaining": {
+              "http": 0,
+              "handlers": 0,
+              "initialization": 0,
+              "replies": 0,
+              "connecting": false
+            },
+            "sentReplies": 9,
+            "cancelledReplies": 0,
+            "rejectedNewCalls": 0,
+            "requestEvents": [
+              {
+                "at": "2026-11-19T17:25:29.069Z",
+                "path": "/qa/initial",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:25:29.291Z",
+                "path": "/qa/initial",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:25:29.485Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:25:29.817Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:25:32.438Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:25:32.626Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:25:33.551Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:25:33.752Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:25:34.386Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:25:34.583Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:25:34.951Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:25:35.139Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:25:35.524Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:25:35.722Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:25:38.794Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:25:38.993Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:25:40.167Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:25:40.393Z",
+                "path": "/qa/call",
+                "status": "completed"
+              },
+              {
+                "at": "2026-11-19T17:25:40.753Z",
+                "path": "/qa/call",
+                "status": "started"
+              },
+              {
+                "at": "2026-11-19T17:25:40.922Z",
+                "path": "/qa/call",
+                "status": "completed"
+              }
+            ],
+            "errors": []
+          },
+          "finishedAt": "2026-11-19T17:25:41.360Z"
+        }
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "engine": "chromium",
+      "theme": "razzia-original",
+      "reducedMotion": false,
+      "status": "PASS",
+      "initialQuestionEntrances": 1,
+      "questionEntrancesAfterReveal": 1,
+      "initialAnswerEntrances": 5,
+      "answerEntrancesAfterReveal": 5,
+      "pausedRevealExtraQuestionEntrances": 0,
+      "pausedRevealExtraAnswerEntrances": 0,
+      "draftUnchanged": true,
+      "resultCounts": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "snapshotCount": 13,
+      "witness": "chromium-final/chromium-razzia-original-normal-phase-continuity.json"
+    },
+    {
+      "engine": "chromium",
+      "theme": "razzia-original",
+      "reducedMotion": true,
+      "status": "PASS",
+      "initialQuestionEntrances": 0,
+      "questionEntrancesAfterReveal": 0,
+      "initialAnswerEntrances": 0,
+      "answerEntrancesAfterReveal": 0,
+      "pausedRevealExtraQuestionEntrances": 0,
+      "pausedRevealExtraAnswerEntrances": 0,
+      "draftUnchanged": true,
+      "resultCounts": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "snapshotCount": 13,
+      "witness": "chromium-final/chromium-razzia-original-reduced-phase-continuity.json"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "reducedMotion": false,
+      "status": "PASS",
+      "initialQuestionEntrances": 1,
+      "questionEntrancesAfterReveal": 1,
+      "initialAnswerEntrances": 5,
+      "answerEntrancesAfterReveal": 5,
+      "pausedRevealExtraQuestionEntrances": 0,
+      "pausedRevealExtraAnswerEntrances": 0,
+      "draftUnchanged": true,
+      "resultCounts": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "snapshotCount": 13,
+      "witness": "chromium-final/chromium-tadazz-classic-normal-phase-continuity.json"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "reducedMotion": true,
+      "status": "PASS",
+      "initialQuestionEntrances": 1,
+      "questionEntrancesAfterReveal": 1,
+      "initialAnswerEntrances": 5,
+      "answerEntrancesAfterReveal": 5,
+      "pausedRevealExtraQuestionEntrances": 0,
+      "pausedRevealExtraAnswerEntrances": 0,
+      "draftUnchanged": true,
+      "resultCounts": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "snapshotCount": 13,
+      "witness": "chromium-final/chromium-tadazz-classic-reduced-phase-continuity.json"
+    },
+    {
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "reducedMotion": false,
+      "status": "PASS",
+      "initialQuestionEntrances": 1,
+      "questionEntrancesAfterReveal": 1,
+      "initialAnswerEntrances": 5,
+      "answerEntrancesAfterReveal": 5,
+      "pausedRevealExtraQuestionEntrances": 0,
+      "pausedRevealExtraAnswerEntrances": 0,
+      "draftUnchanged": true,
+      "resultCounts": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "snapshotCount": 13,
+      "witness": "webkit-final/webkit-razzia-original-normal-phase-continuity.json"
+    },
+    {
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "reducedMotion": true,
+      "status": "PASS",
+      "initialQuestionEntrances": 0,
+      "questionEntrancesAfterReveal": 0,
+      "initialAnswerEntrances": 0,
+      "answerEntrancesAfterReveal": 0,
+      "pausedRevealExtraQuestionEntrances": 0,
+      "pausedRevealExtraAnswerEntrances": 0,
+      "draftUnchanged": true,
+      "resultCounts": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "snapshotCount": 13,
+      "witness": "webkit-final/webkit-razzia-original-reduced-phase-continuity.json"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "reducedMotion": false,
+      "status": "PASS",
+      "initialQuestionEntrances": 1,
+      "questionEntrancesAfterReveal": 1,
+      "initialAnswerEntrances": 5,
+      "answerEntrancesAfterReveal": 5,
+      "pausedRevealExtraQuestionEntrances": 0,
+      "pausedRevealExtraAnswerEntrances": 0,
+      "draftUnchanged": true,
+      "resultCounts": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "snapshotCount": 13,
+      "witness": "webkit-final/webkit-tadazz-classic-normal-phase-continuity.json"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "reducedMotion": true,
+      "status": "PASS",
+      "initialQuestionEntrances": 1,
+      "questionEntrancesAfterReveal": 1,
+      "initialAnswerEntrances": 5,
+      "answerEntrancesAfterReveal": 5,
+      "pausedRevealExtraQuestionEntrances": 0,
+      "pausedRevealExtraAnswerEntrances": 0,
+      "draftUnchanged": true,
+      "resultCounts": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "snapshotCount": 13,
+      "witness": "webkit-final/webkit-tadazz-classic-reduced-phase-continuity.json"
+    }
+  ],
+  "directBrowserChapters": [
+    "question",
+    "voting",
+    "results"
+  ],
+  "nativeAnswerEntrance": "Measured during actual automatic question-to-voting transition",
+  "fivePhaseProjection": [
+    "question",
+    "answerCards",
+    "voting",
+    "voteLocked",
+    "results"
+  ],
+  "fivePhaseProjectionProof": "selection.nodecheck.ts trusted defaults regression",
+  "notClaimed": [
+    "Repeated host toolinput support; the existing one-input lifecycle was unchanged",
+    "Positive-vote picture ranking identity; intentional result composition is covered separately",
+    "A pre-fix browser run for phase keys; original keys are preserved as static evidence"
+  ],
+  "priorAttempts": [
+    {
+      "directory": "chromium-1",
+      "result": "Setup refused raw per-card stageAnimations by existing authoring policy; zero browser cases"
+    },
+    {
+      "directory": "chromium-2",
+      "result": "3 PASS; Original normal initial entrance prerequisite failed because full-show projection omitted trusted global stageAnimations; narrow canonical-resolver fix then validated"
+    }
+  ],
+  "cleanup": "Both final runners exited0 after awaited context/browser closure, host lifecycle drain and loopback server shutdown. No service or production change.",
+  "reviewedSourceCommit": "33b35be347c46ec012a28a800ed1b7504096b294",
+  "commitBinding": "Root source-commit.json binds the reviewed source bytes to this commit. Historical browser receipts retain baseline HEAD34a9e0a59482fa035ab98338f7c977589e46287d and their actual artifact/source hashes."
+}

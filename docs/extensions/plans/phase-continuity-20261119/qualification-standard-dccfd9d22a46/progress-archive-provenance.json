@@ -1,0 +1,10 @@
+{
+  "kind": "completed standard gate progress archive",
+  "source": "docs/extensions/plans/phase-continuity-20261119/release-gates-progress.json",
+  "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-standard-dccfd9d22a46/release-gates-progress.json",
+  "sourceBeforeSha256": "6a8441edac1c2a83a0d3a2dea35fed8eda06a82a11b9b62143a6058b6e325362",
+  "copySha256": "6a8441edac1c2a83a0d3a2dea35fed8eda06a82a11b9b62143a6058b6e325362",
+  "sourceAfterSha256": "6a8441edac1c2a83a0d3a2dea35fed8eda06a82a11b9b62143a6058b6e325362",
+  "sourceUnchanged": true,
+  "createdUtc": "2026-11-19T21:17:40.191185+00:00"
+}

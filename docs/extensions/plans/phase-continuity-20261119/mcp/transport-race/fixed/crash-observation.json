@@ -1,0 +1,49 @@
+{
+  "kind": "focused-transport-regression-crash-observation",
+  "productSourceHash": "6b270bfba2229d9d3e3413b0838f36a322ab4d7ef572fff1bbf73edd323a4067",
+  "widgetSha256": "88bd7eeeada87452b0325b21eef45349988acbe8cb78405996ebee878a79edcb",
+  "sourceHashesUnchanged": true,
+  "chromium": {
+    "name": "chromium",
+    "version": "157.0.4341.60",
+    "outcomes": [
+      {
+        "name": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+        "status": "PASS",
+        "budgetMs": 60000,
+        "ms": 25640
+      }
+    ]
+  },
+  "webkit": {
+    "name": "webkit",
+    "version": "27.2",
+    "outcomes": [
+      {
+        "name": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+        "status": "FAIL",
+        "error": "Error: frame.evaluate: Target page, context or browser has been closed",
+        "stack": "frame.evaluate: Target page, context or browser has been closed\n    at verifyTransportRace (C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-transport-race-20261119\\extensions\\qa\\phase3-full-show\\transport-race.mjs:54:19)\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-transport-race-20261119/extensions/qa/phase3-full-show/browser-verify.mjs:871:15\n    at async run (C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-transport-race-20261119\\extensions\\qa\\phase3-full-show\\browser-verify.mjs:625:5)\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-transport-race-20261119/extensions/qa/phase3-full-show/browser-verify.mjs:865:9",
+        "budgetMs": 60000,
+        "ms": 30017
+      }
+    ]
+  },
+  "crashLifecycle": [
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T20:21:51.087Z",
+      "reason": "close transport race context",
+      "url": "http://127.0.0.1:60047/host?scenario=yBulJSMd4ZEjydnMlDlHp2pA",
+      "status": "failed",
+      "error": "Error: page.evaluate: Target crashed ",
+      "snapshotError": "Error: page.evaluate: Target crashed ",
+      "finishedAt": "2026-11-19T20:21:51.093Z"
+    }
+  ],
+  "causalLimit": "WebKit page crash occurred during fresh Replay setup before automatic gate claim or explicit Replay input. Cause of the native process crash is not established. This does not replace the separate prior Linux manual-results Pause finding.",
+  "receiptSha256": "d14340d84eed30578ad92b4a76f6ecfb1a0b3d327bc3d43b7542d97f93ea1749",
+  "witnessSha256": "59afceaa7b21309282a6d2e91b618fdbd1f9339f57cb32e84c3bc3d124f9b9da"
+}

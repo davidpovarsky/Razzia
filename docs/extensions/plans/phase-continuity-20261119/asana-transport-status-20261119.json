@@ -1,0 +1,15 @@
+{
+  "taskId": "1220670147437352",
+  "permalink": "https://app.asana.com/1/1219597879016953/project/1219846276680200/task/1220670147437352",
+  "modifiedAt": "2026-11-19T20:40:50.590Z",
+  "verifiedAt": "2026-11-19T20:41:12.656Z",
+  "completed": false,
+  "priorHistoryPreserved": true,
+  "appendedTextPresent": true,
+  "exactNotesMatch": true,
+  "priorCharacters": 13239,
+  "currentCharacters": 14756,
+  "appendedText": "19.11.2026 — תיקון בקרי התקדמות אוטומטית שולב; אימות Linux ממתין\nתיקון ארבעת בקרי Pause / Replay / Next / Previous נשמר ב־d99b9c78a8034f9fdde6e5bf528fe4b8ed684e26 ושולב ב־fast-forward לענף המאוחד. בדיקת baseline אמיתית עם תשובת preview אוטומטית מעוכבת שחזרה שכל ארבעת הבקרים מושבתים. התיקון משאיר אותם זמינים בזמן טעינה אוטומטית; בקשה ידנית עדיין נועלת את הבקרים, משתמשת בכרטיס הלוגי הגלוי ומקבלת עדיפות על תשובה אוטומטית ישנה. Pause שומר את בחירת ההשהיה גם לאחר קבלת התשובה האוטומטית. נעילות עריכה ושינוי נתונים נשמרו.\n\nארבעת תרחישי Chromium עברו: Pause, Replay, Next ו־Previous. שני ניסיונות Windows WebKit נשמרו ככישלונות: בהרצה המעורבת Pause עבר ואז הדף קרס בהכנת Replay לפני פעולת Replay; בהרצה הנפרדת, באותו מקור ובאותו widget ללא build נוסף, התקבל ACK אוטומטי במצב voting מושהה ואז הדף קרס בעת קריאת snapshot. אין קבלת WebKit ל־Replay/Next/Previous, ואין טענה שהבדיקות עברו. סיבת הקריסות לא הוכחה; אין ייחוס ל־OOM או לסיבת לחיצת Pause ההיסטורית ב־Linux.\n\nבדיקת Replay הקנונית תוקנה כך שתמתין ל־preview_show ACK אמיתי עבור שאלת היעד, ולא תסתפק בהחלפת epoch אוטומטית. בדיקות ה־remount, התוכן והשלב, וזמן ההמתנה המקורי, נשמרו.\n\nהמועמד הקבוע הבא הוא dccfd9d22a4673130704fea02bd80a8399498467, מעל d99, עם בקר QA שנבדק ו־native pins מעודכנים. qualification מלא ב־Linux ובדיקת transport נפרדת לשני המנועים עדיין ממתינים לתוצאה. אין פריסה חדשה ואין סגירת משימה.\nראיות: docs/extensions/plans/phase-continuity-20261119/mcp/transport-race, transport-integration.json ו־RELEASE_REPORT.md. ההרצות שנכשלו נשמרות ללא שינוי.",
+  "notesOnlyUpdate": true,
+  "noCommentOrCompletionAction": true
+}

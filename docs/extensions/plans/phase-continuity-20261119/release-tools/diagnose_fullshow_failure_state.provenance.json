@@ -1,0 +1,14 @@
+{
+  "updatedAt": "2026-11-19T18:06:00.250886+00:00",
+  "helper": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\work\\phase-continuity-20261119\\release-tools\\diagnose_fullshow_failure_state.py",
+  "priorHelperSha256": "0296b3da711e61cad7aa9af624a66d423d5d742c4bd92d1bd1f9f238804000c9",
+  "helperSha256": "30bfe2deeff09ae3282b7b2bc126d9b3ba103f4daa2faa6e573ccfbcc2d3a4d4",
+  "previousOverlaySha256": "9d20fb8bd89914ed32e2fd91f14e0fb68b5f0f4d182ef630c5a4ee5fbd5e0546",
+  "overlaySha256": "68250f4a6919907f5a5e02444b07911f9a30f3884a36f766d6c00775477a33be",
+  "overlayBytes": 120047,
+  "changes": "Only one expected overlay hash and the two overlay-size guards changed; all behavior and resource/time bounds unchanged.",
+  "outerCompiled": true,
+  "remoteCompiled": true,
+  "innerFragmentsCompiled": 2,
+  "executed": false
+}

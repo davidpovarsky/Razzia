@@ -1,0 +1,115 @@
+{
+  "at": "2026-11-19T20:54:41.641564+00:00",
+  "sourceRun": "tadazz-codex-dccfd9d22a46-5e75b0a8",
+  "launchRun": "tadazz-codex-launch-dccfd9d22a46-5e928a51",
+  "receiptFiles": {
+    "tadazz-codex-dccfd9d22a46-5e75b0a8/input-manifest.json": {
+      "exists": false,
+      "sha256": null
+    },
+    "tadazz-codex-dccfd9d22a46-5e75b0a8/receipt.json": {
+      "exists": false,
+      "sha256": null
+    },
+    "tadazz-codex-launch-dccfd9d22a46-5e928a51/receipt.json": {
+      "exists": false,
+      "sha256": null
+    }
+  },
+  "widgetFiles": {
+    "full-show-artifact.json": {
+      "sha256": "405dc40cf146e307851c1aab85564a810d990eda92637ef2410af9d7dc1ffb7d",
+      "bytes": 159613
+    },
+    "full-show.html": {
+      "sha256": "f89f5eb72499f36d278c3df94ca6237406ded6926c06b438bcaf76fc3098d1c0",
+      "bytes": 3084345
+    },
+    "full-show-entry-inputs.json": {
+      "sha256": "2244977b8e0b2d05406b80f1df7ed2f20d70b7a578c345d8a5b5fb9dd6415c9a",
+      "bytes": 745652
+    }
+  },
+  "widgetManifestSummary": {
+    "keys": [
+      "resourceUri",
+      "mimeType",
+      "rendererBuildId",
+      "sha256",
+      "bytes",
+      "origin",
+      "csp",
+      "physicalSources",
+      "publicAssets",
+      "acceptance"
+    ],
+    "rendererBuildId": "e1fdf5dc47e277e7da4ec8ce5ce88048bef1e7b34249da1b6240cde8c68ead9f",
+    "sha256": "f89f5eb72499f36d278c3df94ca6237406ded6926c06b438bcaf76fc3098d1c0",
+    "bytes": 3084345,
+    "sourcesCount": 0,
+    "publicAssetsCount": 85
+  },
+  "backendFiles": {
+    "index.cjs": {
+      "sha256": "45e93ce219591fcd7757532d40d09019de6925f8be3103afec77d74797a98e2f",
+      "bytes": 2424678
+    },
+    "artifact.json": {
+      "sha256": "5a1badeac1f6bbbfa63ff79cf026d86d084076fe5efb0bdb51e506c14183fa36",
+      "bytes": 154461
+    }
+  },
+  "backendNames": [
+    "index.cjs",
+    "artifact.json"
+  ],
+  "nativePin": {
+    "manifestSha256": "f46aa9302c3d86d79b3f3a4c86b32d12c63bc8be9f5ba493d0d7b4d80c7b2e7d",
+    "files": [
+      {
+        "name": "renderer.mjs",
+        "bytes": 2590785,
+        "sha256": "ba436dcfd0b5c91317661fb4ed5ae5379073ea4796892244a4506bd89d40555a"
+      },
+      {
+        "name": "renderer.css",
+        "bytes": 451273,
+        "sha256": "47c357f7404af66b4a30788a017f8c6237c5f9ffbe98317e0319b59f655354e5"
+      }
+    ],
+    "pins": [
+      {
+        "portVersion": 3,
+        "identityRuleVersion": 2,
+        "registry": {
+          "id": "tadazz-native-application",
+          "version": "1.0.0"
+        },
+        "registrySha256": "d197cadf86c27e88f0141f4dac9ba60486a725b25cce20c6bdb6a24428c9df1d",
+        "renderer": {
+          "id": "tadazz-classic-stage",
+          "version": "1.0.0"
+        },
+        "rendererBuildSha256": "8832afa1d750c0f07b40c86c8455eb2093c0f83a4be088353a1deb58362dd098"
+      },
+      {
+        "portVersion": 3,
+        "identityRuleVersion": 2,
+        "registry": {
+          "id": "tadazz-native-application",
+          "version": "1.0.0"
+        },
+        "registrySha256": "d197cadf86c27e88f0141f4dac9ba60486a725b25cce20c6bdb6a24428c9df1d",
+        "renderer": {
+          "id": "razzia-native-stage",
+          "version": "1.0.0"
+        },
+        "rendererBuildSha256": "8832afa1d750c0f07b40c86c8455eb2093c0f83a4be088353a1deb58362dd098"
+      }
+    ]
+  },
+  "web": {
+    "count": 203,
+    "mapSha256": "5bdd7771972fc51e1f63d65a87a3a2b65470bcb7fc9b2c3de8974972985c9657"
+  }
+}

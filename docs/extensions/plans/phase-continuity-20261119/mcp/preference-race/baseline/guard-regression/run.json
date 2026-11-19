@@ -1,0 +1,18 @@
+{
+  "exitCode": 1,
+  "seconds": 11.12,
+  "entries": [
+    {
+      "name": "chromium / tadazz-classic preferences supersede automatic preview",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Automatic loading must not disable the motion preference\n\ntrue !== false\n",
+      "stack": "AssertionError [ERR_ASSERTION]: Automatic loading must not disable the motion preference\n\ntrue !== false\n\n    at verifyPreferenceRace (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119/extensions/qa/phase3-full-show/preference-race.mjs:173:14)\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119/extensions/qa/phase3-full-show/browser-verify.mjs:868:15\n    at async run (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119/extensions/qa/phase3-full-show/browser-verify.mjs:624:5)\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119/extensions/qa/phase3-full-show/browser-verify.mjs:864:9",
+      "budgetMs": 60000,
+      "ms": 4292
+    }
+  ],
+  "errors": [],
+  "sourceHashesUnchanged": true,
+  "widgetSha256": "ceb8fbd063e3a6a1cc3ef8a18cb44a144ef3433054a04fe20fd1013734ee9dac",
+  "helperSha256": "1e0a3a27378ea136cc1b69995646b748ab226641a061fec5377a775036611cb4"
+}

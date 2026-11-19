@@ -1,0 +1,95 @@
+{
+  "sha": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "evidence": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase3-takeover-20261117\\tadazz-codex-launch-dccfd9d22a46-5e928a51",
+  "artifactSha256": "45e93ce219591fcd7757532d40d09019de6925f8be3103afec77d74797a98e2f",
+  "exit": 0,
+  "seconds": 9.752,
+  "sourceHashesUnchanged": true
+}
+{
+  "sha": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "evidence": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase3-takeover-20261117\\tadazz-codex-dccfd9d22a46-5e75b0a8",
+  "sourceFilesVerified": 1873,
+  "checks": [
+    {
+      "label": "native-application-preview-build",
+      "exit": 0,
+      "seconds": 3.595
+    },
+    {
+      "label": "native-widget-build",
+      "exit": 0,
+      "seconds": 8.563
+    },
+    {
+      "label": "native-http",
+      "exit": 0,
+      "seconds": 53.088
+    },
+    {
+      "label": "native-types",
+      "exit": 0,
+      "seconds": 7.4
+    },
+    {
+      "label": "native-lint",
+      "exit": 0,
+      "seconds": 5.649
+    },
+    {
+      "label": "native-format",
+      "exit": 0,
+      "seconds": 3.534
+    },
+    {
+      "label": "semantic-types",
+      "exit": 0,
+      "seconds": 6.384
+    },
+    {
+      "label": "full-show-widget-types",
+      "exit": 0,
+      "seconds": 4.794
+    },
+    {
+      "label": "full-show-widget-lint",
+      "exit": 0,
+      "seconds": 5.314
+    },
+    {
+      "label": "full-show-widget-format",
+      "exit": 0,
+      "seconds": 2.012
+    },
+    {
+      "label": "semantic-lint",
+      "exit": 0,
+      "seconds": 5.852
+    },
+    {
+      "label": "semantic-format",
+      "exit": 0,
+      "seconds": 1.89
+    },
+    {
+      "label": "semantic-integration-lint-baseline",
+      "exit": 0,
+      "seconds": 6.37
+    },
+    {
+      "label": "native-launch-build",
+      "exit": 0,
+      "seconds": 1.146
+    },
+    {
+      "label": "native-site-build",
+      "exit": 0,
+      "seconds": 6.68
+    },
+    {
+      "label": "native-application-package",
+      "exit": 0,
+      "seconds": 0.153
+    }
+  ]
+}

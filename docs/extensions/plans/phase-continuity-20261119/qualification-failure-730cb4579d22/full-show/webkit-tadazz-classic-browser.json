@@ -1,0 +1,79 @@
+{
+  "browserVersion": "27.2",
+  "caseErrors": [],
+  "pageErrorEvents": [],
+  "entries": [
+    {
+      "name": "webkit / tadazz-classic native opening, five phases, transitions and closing",
+      "status": "PASS",
+      "budgetMs": 300000,
+      "ms": 216803
+    },
+    {
+      "name": "webkit / tadazz-classic title edit CAS and summary refresh through AppBridge",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 5995
+    },
+    {
+      "name": "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "status": "FAIL",
+      "error": "TimeoutError: frame.waitForFunction: Timeout 10000ms exceeded.",
+      "stack": "frame.waitForFunction: Timeout 10000ms exceeded.\n    at loadNativeChapter (/source/extensions/qa/phase3-full-show/browser-verify.mjs:839:21)\n    at async go (/source/extensions/qa/phase3-full-show/browser-verify.mjs:1159:13)\n    at async verifyDemoSelection (/source/extensions/qa/phase3-full-show/browser-verify.mjs:1266:13)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1454:11\n    at async run (/source/extensions/qa/phase3-full-show/browser-verify.mjs:623:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1135:7",
+      "budgetMs": 300000,
+      "ms": 91066
+    },
+    {
+      "name": "webkit / tadazz-classic nine localized interfaces and non-reduced native motion",
+      "status": "FAIL",
+      "error": "TypeError: scenario.go is not a function",
+      "stack": "TypeError: scenario.go is not a function\n    at file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1582:28\n    at async run (file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:623:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1504:7",
+      "budgetMs": 120000,
+      "ms": 61745
+    },
+    {
+      "name": "webkit / tadazz-classic native audio gesture, acknowledged music and volume, persistent playback",
+      "status": "FAIL",
+      "error": "TypeError: scenario.go is not a function",
+      "stack": "TypeError: scenario.go is not a function\n    at file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1627:26\n    at run (file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:624:7)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1618:7",
+      "budgetMs": 120000,
+      "ms": 73
+    },
+    {
+      "name": "webkit / tadazz-classic native pause, resume, replay and adjacent skip",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: undefined == true",
+      "stack": "AssertionError [ERR_ASSERTION]: undefined == true\n    at file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1819:11\n    at run (file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:624:7)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1811:7",
+      "budgetMs": 120000,
+      "ms": 70
+    },
+    {
+      "name": "webkit / tadazz-classic responsive 16:9 and 4:3 keyboard controls",
+      "status": "FAIL",
+      "error": "TypeError: scenario.go is not a function",
+      "stack": "TypeError: scenario.go is not a function\n    at file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:2053:26\n    at run (file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:624:7)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:2049:7",
+      "budgetMs": 120000,
+      "ms": 65
+    },
+    {
+      "name": "webkit / tadazz-classic zero-vote, tie and picture result parity with preserved media and motion",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: undefined == true",
+      "stack": "AssertionError [ERR_ASSERTION]: undefined == true\n    at file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:2266:11\n    at run (file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:624:7)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:2263:7",
+      "budgetMs": 120000,
+      "ms": 69
+    },
+    {
+      "name": "webkit / tadazz-classic tamper, cancellation and tool-context teardown",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 15936
+    },
+    {
+      "name": "webkit / tadazz-classic CSP, native media resources and browser errors",
+      "status": "PASS",
+      "budgetMs": 120000,
+      "ms": 175
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "exitCode": 0,
+  "seconds": 55.39,
+  "entries": [
+    {
+      "name": "chromium / tadazz-classic preferences supersede automatic preview",
+      "status": "PASS",
+      "budgetMs": 60000,
+      "ms": 10562
+    },
+    {
+      "name": "chromium / razzia-original preferences supersede automatic preview",
+      "status": "PASS",
+      "budgetMs": 60000,
+      "ms": 9610
+    },
+    {
+      "name": "webkit / tadazz-classic preferences supersede automatic preview",
+      "status": "PASS",
+      "budgetMs": 60000,
+      "ms": 11188
+    },
+    {
+      "name": "webkit / razzia-original preferences supersede automatic preview",
+      "status": "PASS",
+      "budgetMs": 60000,
+      "ms": 10184
+    }
+  ],
+  "errors": [],
+  "sourceHashesUnchanged": true,
+  "widgetSha256": "fba454780cce5225421ac0281c9e8478b0652499a781c4ed428bdcd328c89839",
+  "engines": [
+    {
+      "name": "chromium",
+      "version": "157.0.4341.60"
+    },
+    {
+      "name": "webkit",
+      "version": "27.2"
+    }
+  ],
+  "stderrTail": "ropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n",
+  "sourceHashes": {
+    "extensions/src/mcp-app/widget/full-show-entry.tsx": "ea70de20ea1f826ae95d22a6e4f16cc0310b86d8ed46e793697200e5cc286c80",
+    "extensions/qa/phase3-full-show/browser-verify.mjs": "29bf9264ea80a877df603a5faece0fa5680629164ef9c4478c16fa35f45d4114",
+    "extensions/qa/phase3-full-show/preference-race.mjs": "ac3efd6fc2ced0815cc900d0ed008750463ae9885eb26f003bd47d25c1c6ad14"
+  }
+}

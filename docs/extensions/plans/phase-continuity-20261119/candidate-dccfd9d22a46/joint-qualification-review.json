@@ -1,0 +1,464 @@
+{
+  "kind": "independent-joint-source-qualification-review",
+  "reviewedAt": "2026-11-19T21:20:47.723689+00:00",
+  "review": "PASS",
+  "sourceSha": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "sourceRun": "tadazz-codex-dccfd9d22a46-5e75b0a8",
+  "standardQualificationAccepted": true,
+  "focusedTransportAccepted": true,
+  "qualificationAccepted": true,
+  "readyForStaging": true,
+  "releaseQualified": true,
+  "qualificationScope": "Exact frozen source offline gates only; staging, fresh live identity, deployment and post-deployment observation remain separate",
+  "productionDeploymentAccepted": false,
+  "checks": [
+    {
+      "check": "Exact candidate source in all six receipts",
+      "status": "PASS"
+    },
+    {
+      "check": "Exact built sourceRun in later gates",
+      "status": "PASS"
+    },
+    {
+      "check": "All1873 source hashes unchanged",
+      "status": "PASS"
+    },
+    {
+      "check": "Native16/16 checks",
+      "status": "PASS"
+    },
+    {
+      "check": "Launch9/9 and consent6/6",
+      "status": "PASS"
+    },
+    {
+      "check": "Prior direct audits bind actual receipts",
+      "status": "PASS"
+    },
+    {
+      "check": "All five standard and transport widget hashes identical",
+      "status": "PASS"
+    },
+    {
+      "check": "All three consent-bound widget files agree",
+      "status": "PASS"
+    },
+    {
+      "check": "Final native pin verification",
+      "status": "PASS"
+    },
+    {
+      "check": "fullShow immutable source/widget/SDK",
+      "status": "PASS"
+    },
+    {
+      "check": "fullShow exact widget/renderer binding",
+      "status": "PASS"
+    },
+    {
+      "check": "fullShow no isolation/browser failures",
+      "status": "PASS"
+    },
+    {
+      "check": "fullShow2CPU/3GiB/zero-swap/no-OOM",
+      "status": "PASS"
+    },
+    {
+      "check": "fullShow reviewed nice/timeout command",
+      "status": "PASS"
+    },
+    {
+      "check": "transport immutable source/widget/SDK",
+      "status": "PASS"
+    },
+    {
+      "check": "transport exact widget/renderer binding",
+      "status": "PASS"
+    },
+    {
+      "check": "transport no isolation/browser failures",
+      "status": "PASS"
+    },
+    {
+      "check": "transport2CPU/3GiB/zero-swap/no-OOM",
+      "status": "PASS"
+    },
+    {
+      "check": "transport reviewed nice/timeout command",
+      "status": "PASS"
+    },
+    {
+      "check": "Standard40/40 and44/44",
+      "status": "PASS"
+    },
+    {
+      "check": "Transport diagnostic remains separate",
+      "status": "PASS"
+    },
+    {
+      "check": "Both transport browsers present",
+      "status": "PASS"
+    },
+    {
+      "check": "chromium raw remote bytes and embedded object match",
+      "status": "PASS"
+    },
+    {
+      "check": "chromium four actions/seven fulfilled genuine gates",
+      "status": "PASS"
+    },
+    {
+      "check": "webkit raw remote bytes and embedded object match",
+      "status": "PASS"
+    },
+    {
+      "check": "webkit four actions/seven fulfilled genuine gates",
+      "status": "PASS"
+    },
+    {
+      "check": "Proxy immutable exact-source/privacy gates",
+      "status": "PASS"
+    },
+    {
+      "check": "standardLock exact explicit successful release",
+      "status": "PASS"
+    },
+    {
+      "check": "transportLock exact explicit successful release",
+      "status": "PASS"
+    },
+    {
+      "check": "Transport cleanup and continuity",
+      "status": "PASS"
+    },
+    {
+      "check": "Cleanup receipt binds actual independently inspected container",
+      "status": "PASS"
+    }
+  ],
+  "evidence": {
+    "host": {
+      "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-dccfd9d22a46-5e75b0a8/receipt.json",
+      "sha256": "bd39353bbf5140c6e2e2b8b5a7971fb804fa22370f2162f823b1b77c45b92c62",
+      "bytes": 1149031
+    },
+    "launch": {
+      "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-launch-dccfd9d22a46-5e928a51/receipt.json",
+      "sha256": "cf9849389f243c3a6cec738fe37de3fa3605ae9f8ee88bcf588418cd09d6ee5b",
+      "bytes": 196794
+    },
+    "consent": {
+      "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-browser-dccfd9d22a46-bc4da0bb/receipt.json",
+      "sha256": "0b0597a81e5ca589fa83c5cb8b9e17cbfd835c908b1d85949cc1aa5737e7b632",
+      "bytes": 45590
+    },
+    "fullShow": {
+      "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-dccfd9d22a46-f3cddd12/receipt.json",
+      "sha256": "3b98b04099062aaf8e41e5e99c17a8e81994267c845237d688003bc030f7fdc5",
+      "bytes": 2644117
+    },
+    "proxy": {
+      "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-proxy-dccfd9d22a46-73c7e019/receipt.json",
+      "sha256": "5e6b8d554daeff2b834679028d0b011fb0700626de890fb07ee0934d9f06e7d8",
+      "bytes": 478876
+    },
+    "transport": {
+      "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-transport-dccfd9d22a46-2ea61b7a/receipt.json",
+      "sha256": "0676174b7b12524c5b43d385c149f40729eb824f3c8fd34198cea976ce816458",
+      "bytes": 155479
+    },
+    "inputManifest": {
+      "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-dccfd9d22a46-5e75b0a8/input-manifest.json",
+      "sha256": "af43605039c06b5b8caf8c3438da559713b160423d0687a82390389ea22ca1ec",
+      "bytes": 238088
+    },
+    "standardLock": {
+      "path": "docs/extensions/plans/phase-continuity-20261119/shared-qa-lock-standard-dccfd9d22a46.json",
+      "sha256": "b06d7dcd4b7fc99a551b1e442d6f01367ea3a4d7159ea3b7b8b800689db6d62c",
+      "bytes": 731
+    },
+    "transportLock": {
+      "path": "docs/extensions/plans/phase-continuity-20261119/shared-qa-lock-transport-v2-dccfd9d22a46.json",
+      "sha256": "062237d957f1db9de1249232ca99a63e29254b17f818dc5b85d77cd0cd7f9601",
+      "bytes": 2638
+    },
+    "nativePinPreparation": {
+      "path": "docs/extensions/plans/editor-hebrew-20261118/tadazz-editor-pins-d99b9c78a803-e7048ebe/receipt.json",
+      "sha256": "ce1ffc930adeb5e74943edfcbaf080a888070e0855182b1e333a50f78b739a23",
+      "bytes": 1253
+    },
+    "nativePinManifest": {
+      "path": "extensions/src/core/show-library/application-preview-build.json",
+      "sha256": "f46aa9302c3d86d79b3f3a4c86b32d12c63bc8be9f5ba493d0d7b4d80c7b2e7d",
+      "bytes": 1303
+    },
+    "nativeIndependentReview": {
+      "path": "docs/extensions/plans/phase-continuity-20261119/candidate-dccfd9d22a46/native-launch-partial-review.json",
+      "sha256": "9643b1b224bfffc7c1e41b0ae7f9b48f97ac61995f13b2fa33e8462d9894549e",
+      "bytes": 5687
+    },
+    "consentIndependentReview": {
+      "path": "docs/extensions/plans/phase-continuity-20261119/candidate-dccfd9d22a46/consent-partial-review.json",
+      "sha256": "c41ef7b1b8d97a91e7dd6891acc6c22aa0541938df19030e557d617c7b25d056",
+      "bytes": 3094
+    }
+  },
+  "counts": {
+    "nativeSourceChecks": 16,
+    "productionLaunchTests": 9,
+    "consentCases": 6,
+    "standardBrowserChecks": 40,
+    "standardRendererFixtures": 44,
+    "transportBrowserCases": 2,
+    "transportActions": 8,
+    "genuineResponseGates": 14,
+    "realTlsProxyTests": 1,
+    "sourceFiles": 1873,
+    "sdkEntries": 2042,
+    "webArtifacts": 203
+  },
+  "artifactBinding": {
+    "widgetManifestSha256": "405dc40cf146e307851c1aab85564a810d990eda92637ef2410af9d7dc1ffb7d",
+    "widgetHtmlSha256": "f89f5eb72499f36d278c3df94ca6237406ded6926c06b438bcaf76fc3098d1c0",
+    "widgetArtifacts": {
+      "full-show.css": "b5924cd77c9d159207dab50831956e230c1bde60cf3c306a72f3482e5a4e106e",
+      "full-show.js": "de67af2cd566dbcc0a80faee3225c1fc496034622fa2b8ee4e3f0f5f61376d67",
+      "full-show-entry-inputs.json": "2244977b8e0b2d05406b80f1df7ed2f20d70b7a578c345d8a5b5fb9dd6415c9a",
+      "full-show.html": "f89f5eb72499f36d278c3df94ca6237406ded6926c06b438bcaf76fc3098d1c0",
+      "full-show-artifact.json": "405dc40cf146e307851c1aab85564a810d990eda92637ef2410af9d7dc1ffb7d"
+    },
+    "consentBoundWidgetFiles": 3,
+    "rendererBuildId": "e1fdf5dc47e277e7da4ec8ce5ce88048bef1e7b34249da1b6240cde8c68ead9f",
+    "backendSha256": "45e93ce219591fcd7757532d40d09019de6925f8be3103afec77d74797a98e2f",
+    "nativePinVerification": {
+      "format": "tadazz-application-preview-verification",
+      "mode": "verify-manifest",
+      "verifiedManifest": true,
+      "manifestSha256": "f46aa9302c3d86d79b3f3a4c86b32d12c63bc8be9f5ba493d0d7b4d80c7b2e7d",
+      "artifactSha256": "f419196035ae33f7f398018b10a7ddd1677dc6e0d028410f9526cf3edbedf556",
+      "registrySha256": "d6b7dde2a706ed0d0f816b7fdbddc0bd56e43c0ea80bc26a236fc79d1ce8720f",
+      "files": [
+        {
+          "name": "renderer.mjs",
+          "bytes": 2590785,
+          "sha256": "ba436dcfd0b5c91317661fb4ed5ae5379073ea4796892244a4506bd89d40555a"
+        },
+        {
+          "name": "renderer.css",
+          "bytes": 451273,
+          "sha256": "47c357f7404af66b4a30788a017f8c6237c5f9ffbe98317e0319b59f655354e5"
+        }
+      ],
+      "inputFiles": 3641,
+      "generatedSourceChanged": false,
+      "liveAuthorityInputs": [],
+      "productionChanged": false
+    },
+    "sdkCacheManifestSha256": "0d1e3e9c089b66a75ff0e6b284f58b94ddb4e4b47b55129d82865980f62d67de",
+    "sdkVersions": {
+      "server": "2.4.0",
+      "client": "2.4.0",
+      "core": "2.4.0"
+    }
+  },
+  "browserEngines": [
+    {
+      "name": "chromium",
+      "version": "156.0.8078.4",
+      "checks": 20
+    },
+    {
+      "name": "webkit",
+      "version": "27.2",
+      "checks": 20
+    }
+  ],
+  "fixturePairs": {
+    "chromium/tadazz-classic": 11,
+    "chromium/razzia-original": 11,
+    "webkit/tadazz-classic": 11,
+    "webkit/razzia-original": 11
+  },
+  "resources": {
+    "standard": {
+      "before": {
+        "memoryLimitBytes": 3221225472,
+        "memoryCurrentBytes": 5640192,
+        "memoryPeakBytes": 5640192,
+        "memorySwapLimitBytes": 0,
+        "memoryEvents": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0,
+          "sock_throttled": 0
+        },
+        "cpuMax": [
+          200000,
+          100000
+        ]
+      },
+      "after": {
+        "memoryLimitBytes": 3221225472,
+        "memoryCurrentBytes": 78860288,
+        "memoryPeakBytes": 2732019712,
+        "memorySwapLimitBytes": 0,
+        "memoryEvents": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0,
+          "sock_throttled": 0
+        },
+        "cpuMax": [
+          200000,
+          100000
+        ]
+      },
+      "configuredMemoryLimitBytes": 3221225472,
+      "configuredNanoCpus": 2000000000,
+      "dockerOOMKilled": false
+    },
+    "transport": {
+      "before": {
+        "memoryLimitBytes": 3221225472,
+        "memoryCurrentBytes": 5406720,
+        "memoryPeakBytes": 5406720,
+        "memorySwapLimitBytes": 0,
+        "memoryEvents": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0,
+          "sock_throttled": 0
+        },
+        "cpuMax": [
+          200000,
+          100000
+        ]
+      },
+      "after": {
+        "memoryLimitBytes": 3221225472,
+        "memoryCurrentBytes": 15867904,
+        "memoryPeakBytes": 1212661760,
+        "memorySwapLimitBytes": 0,
+        "memoryEvents": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0,
+          "sock_throttled": 0
+        },
+        "cpuMax": [
+          200000,
+          100000
+        ]
+      },
+      "configuredMemoryLimitBytes": 3221225472,
+      "configuredNanoCpus": 2000000000,
+      "dockerOOMKilled": false
+    },
+    "directStoppedContainerObservation": [
+      {
+        "name": "tadazz-codex-fullshow-dccfd9d22a46-f3cddd12",
+        "id": "c870bc55bd7f2452cee608a35cdb357b85323c6d063c395d5203c6ed8715b0e9",
+        "running": false,
+        "pid": 0,
+        "oomKilled": false,
+        "networkMode": "none",
+        "readOnlyRootfs": true,
+        "nanoCpus": 2000000000,
+        "memory": 3221225472,
+        "memorySwap": 3221225472,
+        "pidsLimit": 512,
+        "ports": {},
+        "mountCount": 5,
+        "sourceMount": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-dccfd9d22a46-5e75b0a8/source",
+        "readOnlyMounts": [
+          "/source",
+          "/cleanup",
+          "/tmp/phase3-999ed90c/deps",
+          "/root/.cache/ms-playwright"
+        ],
+        "onlyWritableBind": "/evidence"
+      },
+      {
+        "name": "tadazz-codex-transport-dccfd9d22a46-2ea61b7a",
+        "id": "e3914156ce37fa7a1800a4cb31f99f09199c31bddfc792d3913e0394836cfc15",
+        "running": false,
+        "pid": 0,
+        "oomKilled": false,
+        "networkMode": "none",
+        "readOnlyRootfs": true,
+        "nanoCpus": 2000000000,
+        "memory": 3221225472,
+        "memorySwap": 3221225472,
+        "pidsLimit": 512,
+        "ports": {},
+        "mountCount": 5,
+        "sourceMount": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-dccfd9d22a46-5e75b0a8/source",
+        "readOnlyMounts": [
+          "/source",
+          "/cleanup",
+          "/tmp/phase3-999ed90c/deps",
+          "/root/.cache/ms-playwright"
+        ],
+        "onlyWritableBind": "/evidence"
+      }
+    ]
+  },
+  "rawRemoteWitnessVerification": {
+    "chromium": {
+      "bytes": 14932,
+      "sha256": "0c6dedf6adbe3a055e8c47ae53e7c49d84284d9c9243200dced2c48c235c736b",
+      "canonicalSha256": "712263d15edea775529baba7753697df996ffc1b2f7d4861cc5921bef2b2726c",
+      "path": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-transport-dccfd9d22a46-2ea61b7a/full-show/chromium-tadazz-classic-transport-race.json",
+      "source": "Independently read exact raw remote file bytes in preceding read-only audit; no assumed local copy"
+    },
+    "webkit": {
+      "bytes": 14747,
+      "sha256": "c88cb3b6f5556245c7905a932d111c3d5740d9113edeca9d6fc47d98beca1088",
+      "canonicalSha256": "dff0c622c4de02f7ba3230b74647a6094c2631904c8b99a0a2ecf10e05d45bcc",
+      "path": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-transport-dccfd9d22a46-2ea61b7a/full-show/webkit-tadazz-classic-transport-race.json",
+      "source": "Independently read exact raw remote file bytes in preceding read-only audit; no assumed local copy"
+    }
+  },
+  "privacyProof": {
+    "version": 1,
+    "passed": true,
+    "ordinaryAccessControl": true,
+    "ordinaryUpstreamErrorControl": true,
+    "sensitiveAccessLogAbsent": true,
+    "sensitiveErrorLogAbsent": true,
+    "protectedSuccess": true,
+    "protectedDenial": true,
+    "protectedUpstreamFailure": true
+  },
+  "remainingReleaseGates": [
+    "Fresh production/gateway/runtime/worker identity and shared deployment lock",
+    "Exact-source staging/image checks",
+    "Fresh backup and restore qualification",
+    "Deployment and post-deployment observation"
+  ],
+  "limitations": [
+    "Focused transport proof supplements rather than replaces40/44 standard qualification.",
+    "Raw witness hashes and parsed objects were verified remotely; local controller output does not contain raw witness files.",
+    "Consent receipt stores three {sha256,bytes} widget records; standard and transport store five hash strings. All common hashes match; the two full maps are identical.",
+    "The2CPU budget does not prove causality for earlier failures; semantic assertions and individual waits were preserved."
+  ],
+  "methods": [
+    "Read completed receipts and compare hash/input maps; no tests/builds.",
+    "Read-only selected Docker fields for exact two stopped owned QA containers.",
+    "Independently read/hash two exact raw remote witness files and compare to embedded objects.",
+    "No source/Git/server mutation, credential/config/customer-data read, or deployment."
+  ]
+}

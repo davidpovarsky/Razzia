@@ -1,0 +1,11 @@
+{
+  "baselineCommit": "e66317a5385862a3a756a18a5646fad4e64e5c26",
+  "widgetSha256": "9cc68db02e7cf51e771665268e5a1c8bdab524df61c7130a9f3c5e3610bf703d",
+  "artifactSha256": "8b07e08fdbdc272087f28734f266f4c6dd1133ad0c73ab094a5910d23c648464",
+  "physicalInputsSha256": "c1d6aaaac3380e9bc32bdf0b0f26da65b33a71a2adef3e81dfd894095539e5ff",
+  "physicalModuleCount": 2694,
+  "offWorktreeNonDependencyModules": [],
+  "sourceUnchanged": true,
+  "qaReceiptSha256": "c0f20c53e56afc23f8181d7124aecf4f721835c03fc51a5d0c3c1c0bdf6f7ade",
+  "witnessSha256": "a48ac1ba4ffa4ef4265160ba1f4bf66761db9a768299e231fc814b10d7aacf8c"
+}

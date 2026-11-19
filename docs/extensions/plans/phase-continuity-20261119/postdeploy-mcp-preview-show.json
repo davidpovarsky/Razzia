@@ -1,0 +1,23 @@
+{
+  "observedAt": "2026-11-19T21:26:25.665406+00:00",
+  "sourceSha": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "source": "real connected preview_show after deployment",
+  "toolReceipt": {
+    "contractVersion": "0.1.0",
+    "ok": true,
+    "correlationId": "0a9cb9e0-985f-48b2-8e26-645ceb9dea5a",
+    "data": {
+      "draftId": "RhVzsllFGTL7wir26_-ekpM-nBbss5Ob",
+      "revision": 1,
+      "title": "משחק הדגמה קצר — טריוויה",
+      "selectedChapterId": "preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:question",
+      "chapterCount": 15,
+      "frameDigest": "e2fe91369ca7f6fda610a55f5dcf35c672a96a925370740e47918f385b92bff2"
+    }
+  },
+  "newPreviewRequested": true,
+  "liveRoomCreated": false,
+  "realVotesSubmitted": false,
+  "customerDraftSaved": false,
+  "currentChatGPTHostVisualInspection": false
+}

@@ -1,0 +1,15 @@
+{
+  "kind": "exact locked staging helper copy",
+  "createdUtc": "2026-11-19T21:23:46.408443+00:00",
+  "source": "work/phase-continuity-20261119/release-tools/stage_current_candidate_with_lock.py",
+  "copy": "docs/extensions/plans/phase-continuity-20261119/release-tools/stage_current_candidate_with_lock.py",
+  "bytes": 11774,
+  "sourceBeforeSha256": "0c8a3cd0949a3c38cbf78f9c3cc0f0bf219b400f8ca70fa4fe01c683ae68dab2",
+  "copiedSha256": "0c8a3cd0949a3c38cbf78f9c3cc0f0bf219b400f8ca70fa4fe01c683ae68dab2",
+  "sourceAfterSha256": "0c8a3cd0949a3c38cbf78f9c3cc0f0bf219b400f8ca70fa4fe01c683ae68dab2",
+  "unchangedBaseHelperSha256": "5550666638ac83cee42ceba84a4238938868c8e77e85101c62853f6ebe1f4cbf",
+  "review": "docs/extensions/plans/phase-continuity-20261119/release-planning/staging-lock-wrapper-review.json",
+  "reviewSha256": "b22b90fdc73c1b7c2500683f8d4b411b5345bb5325914756fe8556ed8eff412a",
+  "helperExecutedByCurator": false,
+  "privateKeyContentsRead": false
+}

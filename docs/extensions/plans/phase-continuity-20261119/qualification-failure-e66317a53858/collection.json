@@ -1,0 +1,612 @@
+{
+  "kind": "failed-e663-full-show-evidence-exact-copy",
+  "createdUtc": "2026-11-19T20:06:19.648380+00:00",
+  "remoteRoot": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-fullshow-e66317a53858-53da4bfb",
+  "run": "tadazz-codex-fullshow-e66317a53858-53da4bfb",
+  "sourceSha": "e66317a5385862a3a756a18a5646fad4e64e5c26",
+  "releaseQualified": false,
+  "result": {
+    "checks": 40,
+    "passed": 38,
+    "failed": 2,
+    "rendererFixtureCount": 44,
+    "errors": 0,
+    "pageErrors": 0,
+    "requestFailures": 0
+  },
+  "files": [
+    {
+      "path": "browser-resource-evidence.json",
+      "bytes": 854,
+      "sha256": "6920067bb17eaf10c6e4933aba832f048aa8307fb705ce25cc49496d27826d14",
+      "copySha256": "6920067bb17eaf10c6e4933aba832f048aa8307fb705ce25cc49496d27826d14",
+      "alreadyExisted": false
+    },
+    {
+      "path": "browser.stderr.log",
+      "bytes": 131196,
+      "sha256": "cf77a2f6c1bf22b209e969ea33e33bc4a12f2e97dfcf2cd4bd29cd004826247b",
+      "copySha256": "cf77a2f6c1bf22b209e969ea33e33bc4a12f2e97dfcf2cd4bd29cd004826247b",
+      "alreadyExisted": false
+    },
+    {
+      "path": "browser.stdout.log",
+      "bytes": 9100,
+      "sha256": "00b90525dae7ef851d813b6bb62233a01b772a69d7a825c8fc6e837b1b7990ed",
+      "copySha256": "00b90525dae7ef851d813b6bb62233a01b772a69d7a825c8fc6e837b1b7990ed",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-razzia-original-0.png",
+      "bytes": 274829,
+      "sha256": "ff48ec98d06dfeed56be639d12d54625701079770275ad671a38aa59c334d30b",
+      "copySha256": "ff48ec98d06dfeed56be639d12d54625701079770275ad671a38aa59c334d30b",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-razzia-original-1.png",
+      "bytes": 262277,
+      "sha256": "b542e25d336b20438c859628d62c8a30d5d6520c7e77ccb15a7a5f83d689211f",
+      "copySha256": "b542e25d336b20438c859628d62c8a30d5d6520c7e77ccb15a7a5f83d689211f",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-razzia-original-26.png",
+      "bytes": 281600,
+      "sha256": "6ed54ad0508a690d063d928fa3ec7a7f78b1afb08b7c695db4fa0630d8fbc273",
+      "copySha256": "6ed54ad0508a690d063d928fa3ec7a7f78b1afb08b7c695db4fa0630d8fbc273",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-razzia-original-27.png",
+      "bytes": 274306,
+      "sha256": "aa9c85deaa916e4e6a0f8703ae7f4e1763232483691a4bde31f679b10d7030c0",
+      "copySha256": "aa9c85deaa916e4e6a0f8703ae7f4e1763232483691a4bde31f679b10d7030c0",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-razzia-original-390-169.png",
+      "bytes": 30231,
+      "sha256": "08516c77794b09cfd4a94b4ea2c5d842834515a95031f2c6ecabbbdeeb17a461",
+      "copySha256": "08516c77794b09cfd4a94b4ea2c5d842834515a95031f2c6ecabbbdeeb17a461",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-razzia-original-390-43.png",
+      "bytes": 35988,
+      "sha256": "f226bf4bee0fa511dcdd96e809bb265a3134a0962d219275ae36739b36050858",
+      "copySha256": "f226bf4bee0fa511dcdd96e809bb265a3134a0962d219275ae36739b36050858",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-razzia-original-4.png",
+      "bytes": 272862,
+      "sha256": "9489f4ebd7120d264db09083bd50033bb0f9693d36364cfae89c5cb805fd6d6f",
+      "copySha256": "9489f4ebd7120d264db09083bd50033bb0f9693d36364cfae89c5cb805fd6d6f",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-razzia-original-5.png",
+      "bytes": 281567,
+      "sha256": "31b97854ae7c296c8de6996b91c3863ecc51f2fbb61f7b9d7ec7c11573ad0ca0",
+      "copySha256": "31b97854ae7c296c8de6996b91c3863ecc51f2fbb61f7b9d7ec7c11573ad0ca0",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-razzia-original-browser.json",
+      "bytes": 1942,
+      "sha256": "8bd74226c453f0ae3625e8047fea4c6520ad6055c3c01f51f01ce162c5adc6b4",
+      "copySha256": "8bd74226c453f0ae3625e8047fea4c6520ad6055c3c01f51f01ce162c5adc6b4",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-razzia-original-five-pictures-voting.png",
+      "bytes": 261937,
+      "sha256": "1e331cbe7f18ba5745c28cc7e54e79c060681a5a6b99ae2eb5d0a03ba2ff0f65",
+      "copySha256": "1e331cbe7f18ba5745c28cc7e54e79c060681a5a6b99ae2eb5d0a03ba2ff0f65",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-razzia-original-five-pictures.png",
+      "bytes": 265816,
+      "sha256": "85a0a057c7f7ce6d4e94fced92083bbc0d3e447d3c61439a53295086413dc4b1",
+      "copySha256": "85a0a057c7f7ce6d4e94fced92083bbc0d3e447d3c61439a53295086413dc4b1",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-razzia-original-fr-controls.png",
+      "bytes": 30949,
+      "sha256": "f730b03d5fa0365a978738db428d7a40da007cf6d11834256c3f1c876afd25ee",
+      "copySha256": "f730b03d5fa0365a978738db428d7a40da007cf6d11834256c3f1c876afd25ee",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-razzia-original-he-controls.png",
+      "bytes": 24518,
+      "sha256": "bc0bb0aecf918877398178908c106fd3b7e7f2b42220200eb3e60cd142a49627",
+      "copySha256": "bc0bb0aecf918877398178908c106fd3b7e7f2b42220200eb3e60cd142a49627",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-razzia-original-host-controls-readiness.json",
+      "bytes": 6030,
+      "sha256": "8fc532827e33b51cff07f16b59ef0f02809ec36c970937c2bfb309f7898229ee",
+      "copySha256": "8fc532827e33b51cff07f16b59ef0f02809ec36c970937c2bfb309f7898229ee",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-razzia-original-host-controls.png",
+      "bytes": 258160,
+      "sha256": "00eb5a4662df73100bdb4c345044f780f360df168f34edbf32d91dbda48de80c",
+      "copySha256": "00eb5a4662df73100bdb4c345044f780f360df168f34edbf32d91dbda48de80c",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-razzia-original-image-only-five-pictures.png",
+      "bytes": 267863,
+      "sha256": "48907670cc2bfbc5f52fdf124fe722ae53b4dc49d3e3bd3940e0880a9a943bac",
+      "copySha256": "48907670cc2bfbc5f52fdf124fe722ae53b4dc49d3e3bd3940e0880a9a943bac",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-razzia-original-ja-controls.png",
+      "bytes": 40379,
+      "sha256": "729eb52b22bfac4dc1fbce86edf23e7d135166789c573c747a4bd8a5e5e0072d",
+      "copySha256": "729eb52b22bfac4dc1fbce86edf23e7d135166789c573c747a4bd8a5e5e0072d",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-razzia-original-tie-five-pictures.png",
+      "bytes": 266543,
+      "sha256": "9666998d6affd092d213d4120ec638a807c7484fa83bcebec8aa5bf0d94410fc",
+      "copySha256": "9666998d6affd092d213d4120ec638a807c7484fa83bcebec8aa5bf0d94410fc",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-razzia-original-workspace-1366.png",
+      "bytes": 118422,
+      "sha256": "dc4dc7c29924fc18e92a13726c1038de2acfb9bf5309fa167a9be41b20e0762b",
+      "copySha256": "dc4dc7c29924fc18e92a13726c1038de2acfb9bf5309fa167a9be41b20e0762b",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-razzia-original-workspace-390.png",
+      "bytes": 102533,
+      "sha256": "6ea497b2af5eb8412c695e84359df2b9e92d7c0f18134b26433af63e10d6df27",
+      "copySha256": "6ea497b2af5eb8412c695e84359df2b9e92d7c0f18134b26433af63e10d6df27",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-tadazz-classic-0.png",
+      "bytes": 802168,
+      "sha256": "61efa53c9f2536d1be383d10e05f6af855a6eb05ef599563a5a1ca58036df45f",
+      "copySha256": "61efa53c9f2536d1be383d10e05f6af855a6eb05ef599563a5a1ca58036df45f",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-tadazz-classic-1.png",
+      "bytes": 632175,
+      "sha256": "5c14bcf2fe75e809f73c99785eb76f11194e9e4011667af8c7afcb4cc6a0bf07",
+      "copySha256": "5c14bcf2fe75e809f73c99785eb76f11194e9e4011667af8c7afcb4cc6a0bf07",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-tadazz-classic-26.png",
+      "bytes": 1065235,
+      "sha256": "6ffe039bf6ceb65aea995a78c96b61a543c09d8e6b6f578e6ba168e1a702b840",
+      "copySha256": "6ffe039bf6ceb65aea995a78c96b61a543c09d8e6b6f578e6ba168e1a702b840",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-tadazz-classic-27.png",
+      "bytes": 784382,
+      "sha256": "8a8a402faa7c08978cb90b808430b816ac8b5532d0fdbebc336b6866354ea918",
+      "copySha256": "8a8a402faa7c08978cb90b808430b816ac8b5532d0fdbebc336b6866354ea918",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-tadazz-classic-390-169.png",
+      "bytes": 62561,
+      "sha256": "4c7e4507bd362ef8a122e145c53124cf301d35688759c78cde45bcf82d96f82c",
+      "copySha256": "4c7e4507bd362ef8a122e145c53124cf301d35688759c78cde45bcf82d96f82c",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-tadazz-classic-390-43.png",
+      "bytes": 65484,
+      "sha256": "c18760e07545ba58f3cc3fe48a64c12f95df0ebb30dac41ab8849b406c3aab8b",
+      "copySha256": "c18760e07545ba58f3cc3fe48a64c12f95df0ebb30dac41ab8849b406c3aab8b",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-tadazz-classic-4.png",
+      "bytes": 612761,
+      "sha256": "c4d43beb7e21bec47813b331780e53faade12625daad34d889ef2198a71cfc72",
+      "copySha256": "c4d43beb7e21bec47813b331780e53faade12625daad34d889ef2198a71cfc72",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-tadazz-classic-5.png",
+      "bytes": 594906,
+      "sha256": "8b4f6cc985953ec995e6ad71a43ade576a9a17d0dea5a84a7a5dabdb100a01ae",
+      "copySha256": "8b4f6cc985953ec995e6ad71a43ade576a9a17d0dea5a84a7a5dabdb100a01ae",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-tadazz-classic-browser.json",
+      "bytes": 1934,
+      "sha256": "e88fecc0bb4a08cf724bd2f2b38e3d55c3c55975f79524e88f781a758f1329c1",
+      "copySha256": "e88fecc0bb4a08cf724bd2f2b38e3d55c3c55975f79524e88f781a758f1329c1",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-tadazz-classic-five-pictures-voting.png",
+      "bytes": 425505,
+      "sha256": "8b16a745d043d13db99582b902e81ff6416ecdae19b3b0d2a0dac8b7afb1b420",
+      "copySha256": "8b16a745d043d13db99582b902e81ff6416ecdae19b3b0d2a0dac8b7afb1b420",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-tadazz-classic-five-pictures.png",
+      "bytes": 412516,
+      "sha256": "fcd7157ee5e6943bd65aab263aa7b08b7661e5acff0c06f1c2055bb87928fac9",
+      "copySha256": "fcd7157ee5e6943bd65aab263aa7b08b7661e5acff0c06f1c2055bb87928fac9",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-tadazz-classic-fr-controls.png",
+      "bytes": 30949,
+      "sha256": "c72af60245ad9c4c0908b28ab45dd36b35ccd340231c4c30e251ed6dbc0f0584",
+      "copySha256": "c72af60245ad9c4c0908b28ab45dd36b35ccd340231c4c30e251ed6dbc0f0584",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-tadazz-classic-he-controls.png",
+      "bytes": 24363,
+      "sha256": "c70204f38ac20c1129ab13da98a079d9daa98544732d5bfab148c1c6f04c055c",
+      "copySha256": "c70204f38ac20c1129ab13da98a079d9daa98544732d5bfab148c1c6f04c055c",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-tadazz-classic-host-controls-readiness.json",
+      "bytes": 6029,
+      "sha256": "6be6586657f8e297f2d3c6844bd70bdfc3bc36d8f9f4738163b1c22973e325ea",
+      "copySha256": "6be6586657f8e297f2d3c6844bd70bdfc3bc36d8f9f4738163b1c22973e325ea",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-tadazz-classic-host-controls.png",
+      "bytes": 470850,
+      "sha256": "d93ed5280dc9e58c3c463ac890be714f522d5d98a91848f2588a2db472c91d92",
+      "copySha256": "d93ed5280dc9e58c3c463ac890be714f522d5d98a91848f2588a2db472c91d92",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-tadazz-classic-image-only-five-pictures.png",
+      "bytes": 437926,
+      "sha256": "0c444edda285a94df756b704bc916ef4cf9ddf4646ba62a4335122d2f6fd0526",
+      "copySha256": "0c444edda285a94df756b704bc916ef4cf9ddf4646ba62a4335122d2f6fd0526",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-tadazz-classic-ja-controls.png",
+      "bytes": 40167,
+      "sha256": "cd857a7202034ad11fefc186c6c9156e2ff790ffb3e3895ee36a754ad0efd771",
+      "copySha256": "cd857a7202034ad11fefc186c6c9156e2ff790ffb3e3895ee36a754ad0efd771",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-tadazz-classic-motion-a.png",
+      "bytes": 253557,
+      "sha256": "e41c1a9d2893243a5a31163973f549a2d6f4cfe7f185dde673ab5d16c65bb558",
+      "copySha256": "e41c1a9d2893243a5a31163973f549a2d6f4cfe7f185dde673ab5d16c65bb558",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-tadazz-classic-motion-b.png",
+      "bytes": 298674,
+      "sha256": "af099d22ec6ee2863cdb22a8c91d1ff48ae764ed47c0ffe2cd510260f2da3ceb",
+      "copySha256": "af099d22ec6ee2863cdb22a8c91d1ff48ae764ed47c0ffe2cd510260f2da3ceb",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-tadazz-classic-tie-five-pictures.png",
+      "bytes": 440514,
+      "sha256": "a4d46748fd5d50bc66b858740a4e62130796882ae5952a00685c4f8e05f18965",
+      "copySha256": "a4d46748fd5d50bc66b858740a4e62130796882ae5952a00685c4f8e05f18965",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-tadazz-classic-workspace-1366.png",
+      "bytes": 545047,
+      "sha256": "b4ea3eaa154718d515b8a2bd65ef5269b41111b3ecc1604a57d5172f8d2478a5",
+      "copySha256": "b4ea3eaa154718d515b8a2bd65ef5269b41111b3ecc1604a57d5172f8d2478a5",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/chromium-tadazz-classic-workspace-390.png",
+      "bytes": 156778,
+      "sha256": "be44bb969f01da1ece2067b656d403737cdd843fcf8d923b5133ba8001b9d277",
+      "copySha256": "be44bb969f01da1ece2067b656d403737cdd843fcf8d923b5133ba8001b9d277",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/receipt.json",
+      "bytes": 2185425,
+      "sha256": "bcb6b1523805f3726b5897db51dcd811444b62386e9a12d7c85e151006a61298",
+      "copySha256": "bcb6b1523805f3726b5897db51dcd811444b62386e9a12d7c85e151006a61298",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-razzia-original-0.png",
+      "bytes": 325778,
+      "sha256": "0f6f0cdf7138833cf1219dccd34f92abff28207829f3a5232d494fc0a692a976",
+      "copySha256": "0f6f0cdf7138833cf1219dccd34f92abff28207829f3a5232d494fc0a692a976",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-razzia-original-1.png",
+      "bytes": 312602,
+      "sha256": "bba97303e55491dc8d22dcb3c4284a4c182ca76f467edcc812cb7aa14ef7804c",
+      "copySha256": "bba97303e55491dc8d22dcb3c4284a4c182ca76f467edcc812cb7aa14ef7804c",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-razzia-original-26.png",
+      "bytes": 330235,
+      "sha256": "1a5825d3d1d628d8a57b2a80c61f7163d6fd3fd4718ea715026ee756a9bebcea",
+      "copySha256": "1a5825d3d1d628d8a57b2a80c61f7163d6fd3fd4718ea715026ee756a9bebcea",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-razzia-original-27.png",
+      "bytes": 325657,
+      "sha256": "eccd4ee2ed80984e5afe024549de1f613f1d1982721995468ec018330faee31e",
+      "copySha256": "eccd4ee2ed80984e5afe024549de1f613f1d1982721995468ec018330faee31e",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-razzia-original-390-169.png",
+      "bytes": 33373,
+      "sha256": "5dfbddb1025fa88a5e3670a3a2dd8552a1d688304fb37dcf8058dd127a36d2ce",
+      "copySha256": "5dfbddb1025fa88a5e3670a3a2dd8552a1d688304fb37dcf8058dd127a36d2ce",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-razzia-original-390-43.png",
+      "bytes": 39142,
+      "sha256": "96cf1e2d99added5835f41901964f4c4552d6566b9227d1ea3e971efbc2edc7f",
+      "copySha256": "96cf1e2d99added5835f41901964f4c4552d6566b9227d1ea3e971efbc2edc7f",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-razzia-original-4.png",
+      "bytes": 324582,
+      "sha256": "1cd48557000ffb9fd48237f6ebddfad4965ea59ef9fcccd2920b91cc7fa839e8",
+      "copySha256": "1cd48557000ffb9fd48237f6ebddfad4965ea59ef9fcccd2920b91cc7fa839e8",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-razzia-original-5.png",
+      "bytes": 336618,
+      "sha256": "efbbddccdacf1bebc9fd89313441ed33553af556e03884f7a6728db2ba57d3cd",
+      "copySha256": "efbbddccdacf1bebc9fd89313441ed33553af556e03884f7a6728db2ba57d3cd",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-razzia-original-browser.json",
+      "bytes": 1919,
+      "sha256": "290dd3022ae486abbb63591c35fd075f5bcf23f2445422fb03d8ba968817634b",
+      "copySha256": "290dd3022ae486abbb63591c35fd075f5bcf23f2445422fb03d8ba968817634b",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-razzia-original-five-pictures-voting.png",
+      "bytes": 293137,
+      "sha256": "7c616634ed9a6c9a01dad9bd704a6e2044c032a498421631ba52ce3b69aaa262",
+      "copySha256": "7c616634ed9a6c9a01dad9bd704a6e2044c032a498421631ba52ce3b69aaa262",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-razzia-original-five-pictures.png",
+      "bytes": 294056,
+      "sha256": "f650611d719f9a58ecc7679342dcd4d5ea3718cecb75a0421b7c038b7c4b8b94",
+      "copySha256": "f650611d719f9a58ecc7679342dcd4d5ea3718cecb75a0421b7c038b7c4b8b94",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-razzia-original-fr-controls.png",
+      "bytes": 42490,
+      "sha256": "7a422e9f5c7971387d774303e95ba27d9a2d209f8f5ea1e048ddccec61fd84bf",
+      "copySha256": "7a422e9f5c7971387d774303e95ba27d9a2d209f8f5ea1e048ddccec61fd84bf",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-razzia-original-he-controls.png",
+      "bytes": 31897,
+      "sha256": "753dd2e19b0c5427276bfa09e75aba11971a4ab6ab9a548c69ee97b4c5e51733",
+      "copySha256": "753dd2e19b0c5427276bfa09e75aba11971a4ab6ab9a548c69ee97b4c5e51733",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-razzia-original-host-controls-readiness.json",
+      "bytes": 5882,
+      "sha256": "76172d733ad540dc10c936aff72683f2523551b5a9cab402353a0b8a7cab6929",
+      "copySha256": "76172d733ad540dc10c936aff72683f2523551b5a9cab402353a0b8a7cab6929",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-razzia-original-host-controls.png",
+      "bytes": 284216,
+      "sha256": "334f82c4bc804425fcaf65ea7dccf21a9113490daedf5389ed7c044e185bf386",
+      "copySha256": "334f82c4bc804425fcaf65ea7dccf21a9113490daedf5389ed7c044e185bf386",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-razzia-original-image-only-five-pictures.png",
+      "bytes": 297451,
+      "sha256": "4cbdd9a23ed88cc4e0eaa692a98c4323fc20e10d169d495be8010d4ab3c5d946",
+      "copySha256": "4cbdd9a23ed88cc4e0eaa692a98c4323fc20e10d169d495be8010d4ab3c5d946",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-razzia-original-ja-controls.png",
+      "bytes": 50523,
+      "sha256": "b515fe2ae9c35eeae8dc180455d8ae4f781d4610c857b63fe58ffc11f3ad01df",
+      "copySha256": "b515fe2ae9c35eeae8dc180455d8ae4f781d4610c857b63fe58ffc11f3ad01df",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-razzia-original-tie-five-pictures.png",
+      "bytes": 280991,
+      "sha256": "0468dc5390e7deaa73a67846f13368290721c5bcd6b306216b36537417316741",
+      "copySha256": "0468dc5390e7deaa73a67846f13368290721c5bcd6b306216b36537417316741",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-razzia-original-workspace-1366.png",
+      "bytes": 149931,
+      "sha256": "210cd503de2271991b6395708345f2001c5f4ead0e901430c637a084d7d9e367",
+      "copySha256": "210cd503de2271991b6395708345f2001c5f4ead0e901430c637a084d7d9e367",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-razzia-original-workspace-390.png",
+      "bytes": 138996,
+      "sha256": "7fd83f94cb5c595f776df8a0b859238b69cbbc0afd25cfbd292241b8439e75cb",
+      "copySha256": "7fd83f94cb5c595f776df8a0b859238b69cbbc0afd25cfbd292241b8439e75cb",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-tadazz-classic-390-169.png",
+      "bytes": 69064,
+      "sha256": "bbb16f20acf63ac77ed319fd1976a2954bfa989a0ac75dcfe057e9616f306b93",
+      "copySha256": "bbb16f20acf63ac77ed319fd1976a2954bfa989a0ac75dcfe057e9616f306b93",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-tadazz-classic-390-43.png",
+      "bytes": 70045,
+      "sha256": "f9904fc609d0fb64cc7aa6f239cc5830ca18c10646f073809d78d875a827c5b3",
+      "copySha256": "f9904fc609d0fb64cc7aa6f239cc5830ca18c10646f073809d78d875a827c5b3",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-tadazz-classic-browser.json",
+      "bytes": 4429,
+      "sha256": "365a8ce42fbead7a9d24ebb90522a77561eaf3bac381a1fa4c39e8bd826fba09",
+      "copySha256": "365a8ce42fbead7a9d24ebb90522a77561eaf3bac381a1fa4c39e8bd826fba09",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-tadazz-classic-five-pictures-voting.png",
+      "bytes": 385515,
+      "sha256": "46e10dddd76ca2d5d024c5d18cb8a1a920225307d45ce51f2ff4737c22e1f616",
+      "copySha256": "46e10dddd76ca2d5d024c5d18cb8a1a920225307d45ce51f2ff4737c22e1f616",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-tadazz-classic-five-pictures.png",
+      "bytes": 381960,
+      "sha256": "0db84756430f5a841abec9d26b78d8bc897741ec1e06a4193c94ff9d631d2977",
+      "copySha256": "0db84756430f5a841abec9d26b78d8bc897741ec1e06a4193c94ff9d631d2977",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-tadazz-classic-fr-controls.png",
+      "bytes": 43213,
+      "sha256": "93ddd16b08b795e20259fc1493dc699c9a249fdbb9acc9bfe6c27ee852440ebb",
+      "copySha256": "93ddd16b08b795e20259fc1493dc699c9a249fdbb9acc9bfe6c27ee852440ebb",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-tadazz-classic-he-controls.png",
+      "bytes": 32419,
+      "sha256": "df1bc03aa613ba00f4f4e54371cbbc6128f769ab7cf4a342686f2e0df6587dab",
+      "copySha256": "df1bc03aa613ba00f4f4e54371cbbc6128f769ab7cf4a342686f2e0df6587dab",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-tadazz-classic-host-controls-readiness.json",
+      "bytes": 5883,
+      "sha256": "d21e5737361289f1f1f03e94b7a32958e7f25318dc6e871a9b3117c8111d71e7",
+      "copySha256": "d21e5737361289f1f1f03e94b7a32958e7f25318dc6e871a9b3117c8111d71e7",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-tadazz-classic-host-controls.png",
+      "bytes": 482034,
+      "sha256": "ad80553cbe7e44b0dd816efedd1c8d9bdd899fa6d5ef159008b7023246219adb",
+      "copySha256": "ad80553cbe7e44b0dd816efedd1c8d9bdd899fa6d5ef159008b7023246219adb",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-tadazz-classic-image-only-five-pictures.png",
+      "bytes": 396827,
+      "sha256": "2860bd11ae4a372ba68eb43d8e86fbb06cff3e65824068b75c64bdd2c2443b38",
+      "copySha256": "2860bd11ae4a372ba68eb43d8e86fbb06cff3e65824068b75c64bdd2c2443b38",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-tadazz-classic-ja-controls.png",
+      "bytes": 51294,
+      "sha256": "8050573aa518c47fd6bd1c7cd2af9c4d945a12c49671ea6e973ca458dc2bb7f2",
+      "copySha256": "8050573aa518c47fd6bd1c7cd2af9c4d945a12c49671ea6e973ca458dc2bb7f2",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-tadazz-classic-motion-a.png",
+      "bytes": 351769,
+      "sha256": "aacf9e04adea21be891f3db13e102dd8353270a3bc09ed6f1465562b6759e77d",
+      "copySha256": "aacf9e04adea21be891f3db13e102dd8353270a3bc09ed6f1465562b6759e77d",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-tadazz-classic-motion-b.png",
+      "bytes": 360564,
+      "sha256": "f016ae47c8c7b007ad8bab9660f8970d8862923c8ed548c9818f525e53484363",
+      "copySha256": "f016ae47c8c7b007ad8bab9660f8970d8862923c8ed548c9818f525e53484363",
+      "alreadyExisted": false
+    },
+    {
+      "path": "full-show/webkit-tadazz-classic-tie-five-pictures.png",
+      "bytes": 399138,
+      "sha256": "8e7f61cf3bfb78c6be732629da5433fb1820451cb86435eb9ce3602b472ce63d",
+      "copySha256": "8e7f61cf3bfb78c6be732629da5433fb1820451cb86435eb9ce3602b472ce63d",
+      "alreadyExisted": false
+    }
+  ],
+  "existingObservationsPreserved": [
+    {
+      "path": "pause-resource-observation.json",
+      "beforeSha256": "e44eee8064a7ae9ab5acd5f9f8b7bb203d6594bba67f8eab59d85b4fc2682825",
+      "afterSha256": "e44eee8064a7ae9ab5acd5f9f8b7bb203d6594bba67f8eab59d85b4fc2682825",
+      "unchanged": true
+    },
+    {
+      "path": "replay-existing-call-observation.json",
+      "beforeSha256": "6c554459eb7f70ecbec861068859e0322d9b2705452e1c0cd840abc612381a62",
+      "afterSha256": "6c554459eb7f70ecbec861068859e0322d9b2705452e1c0cd840abc612381a62",
+      "unchanged": true
+    },
+    {
+      "path": "replay-target-source-supplement.json",
+      "beforeSha256": "c8490466c5bb2f32f07020ea06f1df461fc00abb1b580502df9dc96c862ab76c",
+      "afterSha256": "c8490466c5bb2f32f07020ea06f1df461fc00abb1b580502df9dc96c862ab76c",
+      "unchanged": true
+    }
+  ],
+  "candidateIdentityArchive": {
+    "source": "docs/extensions/plans/phase-continuity-20261119/current-release-source.json",
+    "copy": "docs/extensions/plans/phase-continuity-20261119/qualification-failure-e66317a53858/candidate-source.json",
+    "sha256": "15363213e7261b88acc5ecd7626058640fba1fb4094af0a5ae3964e12404790c",
+    "sourceUnchanged": true
+  },
+  "excludedRemoteFiles": [
+    "full-show/progress.json"
+  ],
+  "exclusionReason": "Completed receipt retained; superseded progress remains remote. No dependencies, configuration, archives or broad source copies collected.",
+  "rawOriginalsModified": false,
+  "privateKeyContentsRead": false,
+  "noTestsOrProductActions": true
+}

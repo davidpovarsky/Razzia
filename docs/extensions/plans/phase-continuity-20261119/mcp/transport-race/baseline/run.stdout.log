@@ -1,0 +1,2 @@
+START chromium / tadazz-classic readonly transport supersedes automatic preview
+{"evidence":"C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-transport-race-20261119\\docs\\extensions\\plans\\phase-continuity-20261119\\mcp\\transport-race\\baseline\\qa","results":[{"name":"chromium / tadazz-classic readonly transport supersedes automatic preview","status":"FAIL","error":"AssertionError [ERR_ASSERTION]: Automatic loading must not disable pause\n\ntrue !== false\n"}],"errors":[]}

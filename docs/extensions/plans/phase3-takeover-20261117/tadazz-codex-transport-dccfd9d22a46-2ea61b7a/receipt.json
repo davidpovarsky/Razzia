@@ -1,0 +1,4191 @@
+{
+  "sha": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "container": "tadazz-codex-transport-dccfd9d22a46-2ea61b7a",
+  "network": "none",
+  "sourceReadOnly": true,
+  "sourceFileCount": 1873,
+  "allSourceHashesVerifiedBeforeAfter": true,
+  "widgetManifestSha256": "405dc40cf146e307851c1aab85564a810d990eda92637ef2410af9d7dc1ffb7d",
+  "widgetHtmlSha256": "f89f5eb72499f36d278c3df94ca6237406ded6926c06b438bcaf76fc3098d1c0",
+  "widgetArtifacts": {
+    "full-show.css": "b5924cd77c9d159207dab50831956e230c1bde60cf3c306a72f3482e5a4e106e",
+    "full-show.js": "de67af2cd566dbcc0a80faee3225c1fc496034622fa2b8ee4e3f0f5f61376d67",
+    "full-show-entry-inputs.json": "2244977b8e0b2d05406b80f1df7ed2f20d70b7a578c345d8a5b5fb9dd6415c9a",
+    "full-show.html": "f89f5eb72499f36d278c3df94ca6237406ded6926c06b438bcaf76fc3098d1c0",
+    "full-show-artifact.json": "405dc40cf146e307851c1aab85564a810d990eda92637ef2410af9d7dc1ffb7d"
+  },
+  "allWidgetHashesVerifiedBeforeAfter": true,
+  "sdkCacheFileCount": 2042,
+  "sdkCacheHashesVerifiedBeforeAfter": true,
+  "sdkCacheManifestSha256": "0d1e3e9c089b66a75ff0e6b284f58b94ddb4e4b47b55129d82865980f62d67de",
+  "command": [
+    "docker",
+    "exec",
+    "-w",
+    "/source",
+    "-e",
+    "TMPDIR=/tmp",
+    "-e",
+    "HOME=/tmp",
+    "-e",
+    "PLAYWRIGHT_BROWSERS_PATH=/root/.cache/ms-playwright",
+    "-e",
+    "TSX_DISABLE_CACHE=1",
+    "-e",
+    "NODE_OPTIONS=--max-old-space-size=1024",
+    "-e",
+    "TADAZZ_FULL_SHOW_EVIDENCE=/evidence/full-show",
+    "-e",
+    "TADAZZ_FULL_SHOW_SOURCE_SHA=dccfd9d22a4673130704fea02bd80a8399498467",
+    "-e",
+    "TADAZZ_FULL_SHOW_BROWSERS=chromium,webkit",
+    "-e",
+    "TADAZZ_FULL_SHOW_DIAGNOSTIC=transport-race",
+    "-e",
+    "TADAZZ_FULL_SHOW_THEMES=tadazz-classic",
+    "tadazz-codex-transport-dccfd9d22a46-2ea61b7a",
+    "nice",
+    "-n",
+    "19",
+    "timeout",
+    "-k",
+    "5",
+    "1800",
+    "node",
+    "/cleanup/extensions/node_modules/tsx/dist/cli.mjs",
+    "--tsconfig",
+    "tsconfig.json",
+    "extensions/qa/phase3-full-show/browser-verify.mjs"
+  ],
+  "exit": 0,
+  "seconds": 62.337,
+  "stdout": "START chromium / tadazz-classic readonly transport supersedes automatic preview\nSTART webkit / tadazz-classic readonly transport supersedes automatic preview\n{\"evidence\":\"/evidence/full-show\",\"results\":[{\"name\":\"chromium / tadazz-classic readonly transport supersedes automatic preview\",\"status\":\"PASS\"},{\"name\":\"webkit / tadazz-classic readonly transport supersedes automatic preview\",\"status\":\"PASS\"}],\"errors\":[]}\n",
+  "stderr": "responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n",
+  "evidenceHostDirectory": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-transport-dccfd9d22a46-2ea61b7a",
+  "customerMountAccessed": false,
+  "productionChanged": false,
+  "resources": {
+    "before": {
+      "memoryLimitBytes": 3221225472,
+      "memoryCurrentBytes": 5406720,
+      "memoryPeakBytes": 5406720,
+      "memorySwapLimitBytes": 0,
+      "memoryEvents": {
+        "low": 0,
+        "high": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0,
+        "sock_throttled": 0
+      },
+      "cpuMax": [
+        200000,
+        100000
+      ]
+    },
+    "after": {
+      "memoryLimitBytes": 3221225472,
+      "memoryCurrentBytes": 15867904,
+      "memoryPeakBytes": 1212661760,
+      "memorySwapLimitBytes": 0,
+      "memoryEvents": {
+        "low": 0,
+        "high": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0,
+        "sock_throttled": 0
+      },
+      "cpuMax": [
+        200000,
+        100000
+      ]
+    },
+    "configuredMemoryLimitBytes": 3221225472,
+    "configuredNanoCpus": 2000000000,
+    "dockerOOMKilled": false
+  },
+  "sourceRun": "tadazz-codex-dccfd9d22a46-5e75b0a8",
+  "diagnosticOnly": true,
+  "diagnosticMode": "transport-race",
+  "releaseQualified": false,
+  "transportRace": {
+    "kind": "real issuer + official MCP client + AppBridge + sandboxed native Stage",
+    "claim": "Isolated fixture validation; not ChatGPT installation or production consent",
+    "sha": "dccfd9d22a4673130704fea02bd80a8399498467",
+    "widgetManifestSha256": "405dc40cf146e307851c1aab85564a810d990eda92637ef2410af9d7dc1ffb7d",
+    "widgetHtmlSha256": "f89f5eb72499f36d278c3df94ca6237406ded6926c06b438bcaf76fc3098d1c0",
+    "sourceHashesUnchanged": true,
+    "diagnosticMode": "transport-race",
+    "productionChanged": false,
+    "customerMountAccessed": false,
+    "oauthSession": {
+      "kind": "actual-issuer-oauth-refresh",
+      "scheduler": "wall-clock",
+      "accessTokenLifetimeSeconds": 300,
+      "refreshCount": 0,
+      "rejected": false,
+      "automaticReauthorization": false,
+      "refreshes": []
+    },
+    "network": "none",
+    "transport": "Loopback HTTP plus exact hash-verified public-asset interception; no outbound network",
+    "outboundDenied": [],
+    "engines": [
+      {
+        "name": "chromium",
+        "version": "156.0.8078.4",
+        "outcomes": [
+          {
+            "name": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+            "status": "PASS",
+            "budgetMs": 60000,
+            "ms": 20306
+          }
+        ]
+      },
+      {
+        "name": "webkit",
+        "version": "27.2",
+        "outcomes": [
+          {
+            "name": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+            "status": "PASS",
+            "budgetMs": 60000,
+            "ms": 32583
+          }
+        ]
+      }
+    ],
+    "requiredChecks": [
+      "chromium / tadazz-classic native opening, five phases, transitions and closing",
+      "chromium / tadazz-classic title edit CAS and summary refresh through AppBridge",
+      "chromium / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "chromium / tadazz-classic nine localized interfaces and non-reduced native motion",
+      "chromium / tadazz-classic native audio gesture, acknowledged music and volume, persistent playback",
+      "chromium / tadazz-classic native pause, resume, replay and adjacent skip",
+      "chromium / tadazz-classic responsive 16:9 and 4:3 keyboard controls",
+      "chromium / tadazz-classic zero-vote, tie and picture result parity with preserved media and motion",
+      "chromium / tadazz-classic tamper, cancellation and tool-context teardown",
+      "chromium / tadazz-classic CSP, native media resources and browser errors",
+      "chromium / razzia-original native opening, five phases, transitions and closing",
+      "chromium / razzia-original title edit CAS and summary refresh through AppBridge",
+      "chromium / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "chromium / razzia-original nine localized interfaces and non-reduced native motion",
+      "chromium / razzia-original native audio gesture, acknowledged music and volume, persistent playback",
+      "chromium / razzia-original native pause, resume, replay and adjacent skip",
+      "chromium / razzia-original responsive 16:9 and 4:3 keyboard controls",
+      "chromium / razzia-original zero-vote, tie and picture result parity with preserved media and motion",
+      "chromium / razzia-original tamper, cancellation and tool-context teardown",
+      "chromium / razzia-original CSP, native media resources and browser errors",
+      "webkit / tadazz-classic native opening, five phases, transitions and closing",
+      "webkit / tadazz-classic title edit CAS and summary refresh through AppBridge",
+      "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "webkit / tadazz-classic nine localized interfaces and non-reduced native motion",
+      "webkit / tadazz-classic native audio gesture, acknowledged music and volume, persistent playback",
+      "webkit / tadazz-classic native pause, resume, replay and adjacent skip",
+      "webkit / tadazz-classic responsive 16:9 and 4:3 keyboard controls",
+      "webkit / tadazz-classic zero-vote, tie and picture result parity with preserved media and motion",
+      "webkit / tadazz-classic tamper, cancellation and tool-context teardown",
+      "webkit / tadazz-classic CSP, native media resources and browser errors",
+      "webkit / razzia-original native opening, five phases, transitions and closing",
+      "webkit / razzia-original title edit CAS and summary refresh through AppBridge",
+      "webkit / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "webkit / razzia-original nine localized interfaces and non-reduced native motion",
+      "webkit / razzia-original native audio gesture, acknowledged music and volume, persistent playback",
+      "webkit / razzia-original native pause, resume, replay and adjacent skip",
+      "webkit / razzia-original responsive 16:9 and 4:3 keyboard controls",
+      "webkit / razzia-original zero-vote, tie and picture result parity with preserved media and motion",
+      "webkit / razzia-original tamper, cancellation and tool-context teardown",
+      "webkit / razzia-original CSP, native media resources and browser errors"
+    ],
+    "failureCount": 0,
+    "rendererBuildId": "e1fdf5dc47e277e7da4ec8ce5ce88048bef1e7b34249da1b6240cde8c68ead9f",
+    "artifactSha256": "f89f5eb72499f36d278c3df94ca6237406ded6926c06b438bcaf76fc3098d1c0",
+    "entries": [
+      {
+        "name": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+        "status": "PASS",
+        "budgetMs": 60000,
+        "ms": 20306
+      },
+      {
+        "name": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+        "status": "PASS",
+        "budgetMs": 60000,
+        "ms": 32583
+      }
+    ],
+    "observations": [
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "check": "host document lifecycle",
+        "at": "2026-11-19T21:11:16.281Z",
+        "reason": "pause automatic transport race",
+        "url": "about:blank",
+        "status": "no-host",
+        "finishedAt": "2026-11-19T21:11:16.281Z"
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "check": "host document lifecycle",
+        "at": "2026-11-19T21:11:21.240Z",
+        "reason": "replay automatic transport race",
+        "url": "http://127.0.0.1:36063/host?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "status": "drained",
+        "receipt": {
+          "documentId": "acc0f847-66df-4a64-ad53-b5f9333b4042",
+          "url": "http://127.0.0.1:36063/host?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+          "status": "drained",
+          "startedAt": "2026-11-19T21:11:21.241Z",
+          "finishedAt": "2026-11-19T21:11:21.242Z",
+          "elapsedMs": 0.6000001430511475,
+          "initial": {
+            "http": 0,
+            "handlers": 0,
+            "initialization": 0,
+            "replies": 0,
+            "connecting": false
+          },
+          "remaining": {
+            "http": 0,
+            "handlers": 0,
+            "initialization": 0,
+            "replies": 0,
+            "connecting": false
+          },
+          "sentReplies": 2,
+          "cancelledReplies": 0,
+          "rejectedNewCalls": 0,
+          "requestEvents": [
+            {
+              "at": "2026-11-19T21:11:17.081Z",
+              "path": "/qa/initial",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:11:17.278Z",
+              "path": "/qa/initial",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-19T21:11:17.429Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:11:17.748Z",
+              "path": "/qa/call",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-19T21:11:20.337Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:11:20.851Z",
+              "path": "/qa/call",
+              "status": "completed"
+            }
+          ],
+          "errors": []
+        },
+        "finishedAt": "2026-11-19T21:11:21.244Z"
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "check": "host document lifecycle",
+        "at": "2026-11-19T21:11:26.305Z",
+        "reason": "next automatic transport race",
+        "url": "http://127.0.0.1:36063/host?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "status": "drained",
+        "receipt": {
+          "documentId": "4ff95283-b783-4979-821f-095bb80e1eaf",
+          "url": "http://127.0.0.1:36063/host?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+          "status": "drained",
+          "startedAt": "2026-11-19T21:11:26.306Z",
+          "finishedAt": "2026-11-19T21:11:26.306Z",
+          "elapsedMs": 0.20000004768371582,
+          "initial": {
+            "http": 0,
+            "handlers": 0,
+            "initialization": 0,
+            "replies": 0,
+            "connecting": false
+          },
+          "remaining": {
+            "http": 0,
+            "handlers": 0,
+            "initialization": 0,
+            "replies": 0,
+            "connecting": false
+          },
+          "sentReplies": 3,
+          "cancelledReplies": 0,
+          "rejectedNewCalls": 0,
+          "requestEvents": [
+            {
+              "at": "2026-11-19T21:11:21.650Z",
+              "path": "/qa/initial",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:11:21.809Z",
+              "path": "/qa/initial",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-19T21:11:21.907Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:11:22.303Z",
+              "path": "/qa/call",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-19T21:11:24.903Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:11:25.309Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:11:25.618Z",
+              "path": "/qa/call",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-19T21:11:25.947Z",
+              "path": "/qa/call",
+              "status": "completed"
+            }
+          ],
+          "errors": []
+        },
+        "finishedAt": "2026-11-19T21:11:26.308Z"
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "check": "host document lifecycle",
+        "at": "2026-11-19T21:11:31.352Z",
+        "reason": "previous automatic transport race",
+        "url": "http://127.0.0.1:36063/host?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "status": "drained",
+        "receipt": {
+          "documentId": "238d785b-89c4-42b2-a1d1-6a49213d89c4",
+          "url": "http://127.0.0.1:36063/host?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+          "status": "drained",
+          "startedAt": "2026-11-19T21:11:31.353Z",
+          "finishedAt": "2026-11-19T21:11:31.354Z",
+          "elapsedMs": 0.20000004768371582,
+          "initial": {
+            "http": 0,
+            "handlers": 0,
+            "initialization": 0,
+            "replies": 0,
+            "connecting": false
+          },
+          "remaining": {
+            "http": 0,
+            "handlers": 0,
+            "initialization": 0,
+            "replies": 0,
+            "connecting": false
+          },
+          "sentReplies": 3,
+          "cancelledReplies": 0,
+          "rejectedNewCalls": 0,
+          "requestEvents": [
+            {
+              "at": "2026-11-19T21:11:26.719Z",
+              "path": "/qa/initial",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:11:26.872Z",
+              "path": "/qa/initial",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-19T21:11:26.950Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:11:27.360Z",
+              "path": "/qa/call",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-19T21:11:29.904Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:11:30.204Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:11:30.611Z",
+              "path": "/qa/call",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-19T21:11:31.000Z",
+              "path": "/qa/call",
+              "status": "completed"
+            }
+          ],
+          "errors": []
+        },
+        "finishedAt": "2026-11-19T21:11:31.356Z"
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "status": "PASS",
+        "cases": [
+          {
+            "action": "pause",
+            "snapshots": [
+              {
+                "step": "automatic ACK held",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "paused while automatic ACK held",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "true"
+              },
+              {
+                "step": "automatic ACK preserves user pause",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+                "epoch": 2,
+                "paused": "true"
+              }
+            ],
+            "userPausePreserved": true,
+            "events": [
+              {
+                "type": "pointerdown",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 4122.799999952316
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 4123.5
+              },
+              {
+                "type": "click",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 4123.799999952316
+              }
+            ],
+            "status": "PASS"
+          },
+          {
+            "action": "replay",
+            "snapshots": [
+              {
+                "step": "automatic ACK held",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "explicit transport ACK held",
+                "disabled": {
+                  "pause": true,
+                  "replay": true,
+                  "next": true,
+                  "previous": true
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "explicit transport acknowledged, native remounted and paused",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 2,
+                "paused": "true"
+              },
+              {
+                "step": "old automatic ACK ignored",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 2,
+                "paused": "true"
+              }
+            ],
+            "explicitTarget": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+            "oldAutomaticTarget": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "events": [
+              {
+                "type": "pointerdown",
+                "id": "full-show-replay",
+                "disabled": false,
+                "at": 3863.7000000476837
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-replay",
+                "disabled": false,
+                "at": 3864.2999999523163
+              },
+              {
+                "type": "click",
+                "id": "full-show-replay",
+                "disabled": false,
+                "at": 3864.5
+              },
+              {
+                "type": "pointerdown",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 4377.900000095367
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 4378.400000095367
+              },
+              {
+                "type": "click",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 4378.599999904633
+              }
+            ],
+            "status": "PASS"
+          },
+          {
+            "action": "next",
+            "snapshots": [
+              {
+                "step": "automatic ACK held",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "explicit transport ACK held",
+                "disabled": {
+                  "pause": true,
+                  "replay": true,
+                  "next": true,
+                  "previous": true
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "explicit transport acknowledged, native remounted and paused",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+                "epoch": 2,
+                "paused": "true"
+              },
+              {
+                "step": "old automatic ACK ignored",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+                "epoch": 2,
+                "paused": "true"
+              }
+            ],
+            "explicitTarget": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+            "oldAutomaticTarget": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "events": [
+              {
+                "type": "pointerdown",
+                "id": "full-show-next",
+                "disabled": false,
+                "at": 3698
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-next",
+                "disabled": false,
+                "at": 3698.600000143051
+              },
+              {
+                "type": "click",
+                "id": "full-show-next",
+                "disabled": false,
+                "at": 3698.7000000476837
+              },
+              {
+                "type": "pointerdown",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 4325.400000095367
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 4326
+              },
+              {
+                "type": "click",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 4326.200000047684
+              }
+            ],
+            "status": "PASS"
+          },
+          {
+            "action": "previous",
+            "snapshots": [
+              {
+                "step": "automatic ACK held",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "explicit transport ACK held",
+                "disabled": {
+                  "pause": true,
+                  "replay": true,
+                  "next": true,
+                  "previous": true
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "explicit transport acknowledged, native remounted and paused",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+                "epoch": 2,
+                "paused": "true"
+              },
+              {
+                "step": "old automatic ACK ignored",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+                "epoch": 2,
+                "paused": "true"
+              }
+            ],
+            "explicitTarget": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+            "oldAutomaticTarget": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "events": [
+              {
+                "type": "pointerdown",
+                "id": "full-show-previous",
+                "disabled": false,
+                "at": 3940.7999999523163
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-previous",
+                "disabled": false,
+                "at": 3941.399999856949
+              },
+              {
+                "type": "click",
+                "id": "full-show-previous",
+                "disabled": false,
+                "at": 3941.5
+              },
+              {
+                "type": "pointerdown",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 4529
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 4529.5
+              },
+              {
+                "type": "click",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 4529.5
+              }
+            ],
+            "status": "PASS"
+          }
+        ],
+        "gates": [
+          {
+            "label": "pause automatic",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "0tzorRPmx034zgs33xAA3wWQMf3PB70i",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          },
+          {
+            "label": "replay automatic",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "0tzorRPmx034zgs33xAA3wWQMf3PB70i",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          },
+          {
+            "label": "replay manual",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "0tzorRPmx034zgs33xAA3wWQMf3PB70i",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          },
+          {
+            "label": "next automatic",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "0tzorRPmx034zgs33xAA3wWQMf3PB70i",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          },
+          {
+            "label": "next manual",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "0tzorRPmx034zgs33xAA3wWQMf3PB70i",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          },
+          {
+            "label": "previous automatic",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "0tzorRPmx034zgs33xAA3wWQMf3PB70i",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          },
+          {
+            "label": "previous manual",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "0tzorRPmx034zgs33xAA3wWQMf3PB70i",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          }
+        ]
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "check": "host document lifecycle",
+        "at": "2026-11-19T21:11:36.575Z",
+        "reason": "close transport race context",
+        "url": "http://127.0.0.1:36063/host?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "status": "drained",
+        "receipt": {
+          "documentId": "43ebe0f0-4db5-458d-8cbc-d152ae782cbd",
+          "url": "http://127.0.0.1:36063/host?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+          "status": "drained",
+          "startedAt": "2026-11-19T21:11:36.576Z",
+          "finishedAt": "2026-11-19T21:11:36.577Z",
+          "elapsedMs": 0.20000004768371582,
+          "initial": {
+            "http": 0,
+            "handlers": 0,
+            "initialization": 0,
+            "replies": 0,
+            "connecting": false
+          },
+          "remaining": {
+            "http": 0,
+            "handlers": 0,
+            "initialization": 0,
+            "replies": 0,
+            "connecting": false
+          },
+          "sentReplies": 3,
+          "cancelledReplies": 0,
+          "rejectedNewCalls": 0,
+          "requestEvents": [
+            {
+              "at": "2026-11-19T21:11:31.801Z",
+              "path": "/qa/initial",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:11:31.953Z",
+              "path": "/qa/initial",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-19T21:11:32.034Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:11:32.435Z",
+              "path": "/qa/call",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-19T21:11:35.086Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:11:35.469Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:11:35.869Z",
+              "path": "/qa/call",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-19T21:11:36.230Z",
+              "path": "/qa/call",
+              "status": "completed"
+            }
+          ],
+          "errors": []
+        },
+        "finishedAt": "2026-11-19T21:11:36.579Z"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "check": "host document lifecycle",
+        "at": "2026-11-19T21:11:39.753Z",
+        "reason": "pause automatic transport race",
+        "url": "about:blank",
+        "status": "no-host",
+        "finishedAt": "2026-11-19T21:11:39.753Z"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "check": "host document lifecycle",
+        "at": "2026-11-19T21:11:52.892Z",
+        "reason": "replay automatic transport race",
+        "url": "http://127.0.0.1:36063/host?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "status": "drained",
+        "receipt": {
+          "documentId": "c05a9f98-51f4-4f4e-8d47-88edd41c5b82",
+          "url": "http://127.0.0.1:36063/host?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+          "status": "drained",
+          "startedAt": "2026-11-19T21:11:52.894Z",
+          "finishedAt": "2026-11-19T21:11:52.895Z",
+          "elapsedMs": 0,
+          "initial": {
+            "http": 0,
+            "handlers": 0,
+            "initialization": 0,
+            "replies": 0,
+            "connecting": false
+          },
+          "remaining": {
+            "http": 0,
+            "handlers": 0,
+            "initialization": 0,
+            "replies": 0,
+            "connecting": false
+          },
+          "sentReplies": 2,
+          "cancelledReplies": 0,
+          "rejectedNewCalls": 0,
+          "requestEvents": [
+            {
+              "at": "2026-11-19T21:11:40.506Z",
+              "path": "/qa/initial",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:11:40.664Z",
+              "path": "/qa/initial",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-19T21:11:40.890Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:11:41.940Z",
+              "path": "/qa/call",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-19T21:11:47.134Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:11:48.523Z",
+              "path": "/qa/call",
+              "status": "completed"
+            }
+          ],
+          "errors": []
+        },
+        "finishedAt": "2026-11-19T21:11:52.897Z"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "check": "host document lifecycle",
+        "at": "2026-11-19T21:11:59.172Z",
+        "reason": "next automatic transport race",
+        "url": "http://127.0.0.1:36063/host?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "status": "drained",
+        "receipt": {
+          "documentId": "9bcfd0c4-1d52-4778-a009-e651b10e4155",
+          "url": "http://127.0.0.1:36063/host?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+          "status": "drained",
+          "startedAt": "2026-11-19T21:11:59.173Z",
+          "finishedAt": "2026-11-19T21:11:59.174Z",
+          "elapsedMs": 0,
+          "initial": {
+            "http": 0,
+            "handlers": 0,
+            "initialization": 0,
+            "replies": 0,
+            "connecting": false
+          },
+          "remaining": {
+            "http": 0,
+            "handlers": 0,
+            "initialization": 0,
+            "replies": 0,
+            "connecting": false
+          },
+          "sentReplies": 3,
+          "cancelledReplies": 0,
+          "rejectedNewCalls": 0,
+          "requestEvents": [
+            {
+              "at": "2026-11-19T21:11:53.577Z",
+              "path": "/qa/initial",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:11:53.862Z",
+              "path": "/qa/initial",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-19T21:11:54.080Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:11:54.450Z",
+              "path": "/qa/call",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-19T21:11:57.055Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:11:57.635Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:11:57.853Z",
+              "path": "/qa/call",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-19T21:11:58.490Z",
+              "path": "/qa/call",
+              "status": "completed"
+            }
+          ],
+          "errors": []
+        },
+        "finishedAt": "2026-11-19T21:11:59.179Z"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "check": "host document lifecycle",
+        "at": "2026-11-19T21:12:05.745Z",
+        "reason": "previous automatic transport race",
+        "url": "http://127.0.0.1:36063/host?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "status": "drained",
+        "receipt": {
+          "documentId": "165ba155-a034-4b86-831c-fe3fba8b941d",
+          "url": "http://127.0.0.1:36063/host?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+          "status": "drained",
+          "startedAt": "2026-11-19T21:12:05.746Z",
+          "finishedAt": "2026-11-19T21:12:05.746Z",
+          "elapsedMs": 0,
+          "initial": {
+            "http": 0,
+            "handlers": 0,
+            "initialization": 0,
+            "replies": 0,
+            "connecting": false
+          },
+          "remaining": {
+            "http": 0,
+            "handlers": 0,
+            "initialization": 0,
+            "replies": 0,
+            "connecting": false
+          },
+          "sentReplies": 3,
+          "cancelledReplies": 0,
+          "rejectedNewCalls": 0,
+          "requestEvents": [
+            {
+              "at": "2026-11-19T21:11:59.985Z",
+              "path": "/qa/initial",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:12:00.133Z",
+              "path": "/qa/initial",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-19T21:12:00.300Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:12:00.657Z",
+              "path": "/qa/call",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-19T21:12:03.211Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:12:03.856Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:12:04.348Z",
+              "path": "/qa/call",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-19T21:12:05.135Z",
+              "path": "/qa/call",
+              "status": "completed"
+            }
+          ],
+          "errors": []
+        },
+        "finishedAt": "2026-11-19T21:12:05.749Z"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "status": "PASS",
+        "cases": [
+          {
+            "action": "pause",
+            "snapshots": [
+              {
+                "step": "automatic ACK held",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "paused while automatic ACK held",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "true"
+              },
+              {
+                "step": "automatic ACK preserves user pause",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+                "epoch": 2,
+                "paused": "true"
+              }
+            ],
+            "userPausePreserved": true,
+            "events": [
+              {
+                "type": "pointerdown",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 8408
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 8411
+              },
+              {
+                "type": "click",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 8412
+              }
+            ],
+            "status": "PASS"
+          },
+          {
+            "action": "replay",
+            "snapshots": [
+              {
+                "step": "automatic ACK held",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "explicit transport ACK held",
+                "disabled": {
+                  "pause": true,
+                  "replay": true,
+                  "next": true,
+                  "previous": true
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "explicit transport acknowledged, native remounted and paused",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 2,
+                "paused": "true"
+              },
+              {
+                "step": "old automatic ACK ignored",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 2,
+                "paused": "true"
+              }
+            ],
+            "explicitTarget": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+            "oldAutomaticTarget": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "events": [
+              {
+                "type": "pointerdown",
+                "id": "full-show-replay",
+                "disabled": false,
+                "at": 4533
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-replay",
+                "disabled": false,
+                "at": 4535
+              },
+              {
+                "type": "click",
+                "id": "full-show-replay",
+                "disabled": false,
+                "at": 4535
+              },
+              {
+                "type": "pointerdown",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 5305
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 5306
+              },
+              {
+                "type": "click",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 5306
+              }
+            ],
+            "status": "PASS"
+          },
+          {
+            "action": "next",
+            "snapshots": [
+              {
+                "step": "automatic ACK held",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "explicit transport ACK held",
+                "disabled": {
+                  "pause": true,
+                  "replay": true,
+                  "next": true,
+                  "previous": true
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "explicit transport acknowledged, native remounted and paused",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+                "epoch": 2,
+                "paused": "true"
+              },
+              {
+                "step": "old automatic ACK ignored",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+                "epoch": 2,
+                "paused": "true"
+              }
+            ],
+            "explicitTarget": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+            "oldAutomaticTarget": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "events": [
+              {
+                "type": "pointerdown",
+                "id": "full-show-next",
+                "disabled": false,
+                "at": 4351
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-next",
+                "disabled": false,
+                "at": 4359
+              },
+              {
+                "type": "click",
+                "id": "full-show-next",
+                "disabled": false,
+                "at": 4359
+              },
+              {
+                "type": "pointerdown",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 5468
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 5471
+              },
+              {
+                "type": "click",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 5471
+              }
+            ],
+            "status": "PASS"
+          },
+          {
+            "action": "previous",
+            "snapshots": [
+              {
+                "step": "automatic ACK held",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "explicit transport ACK held",
+                "disabled": {
+                  "pause": true,
+                  "replay": true,
+                  "next": true,
+                  "previous": true
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "explicit transport acknowledged, native remounted and paused",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+                "epoch": 2,
+                "paused": "true"
+              },
+              {
+                "step": "old automatic ACK ignored",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+                "epoch": 2,
+                "paused": "true"
+              }
+            ],
+            "explicitTarget": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+            "oldAutomaticTarget": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "events": [
+              {
+                "type": "pointerdown",
+                "id": "full-show-previous",
+                "disabled": false,
+                "at": 4676
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-previous",
+                "disabled": false,
+                "at": 4678
+              },
+              {
+                "type": "click",
+                "id": "full-show-previous",
+                "disabled": false,
+                "at": 4678
+              },
+              {
+                "type": "pointerdown",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 5545
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 5549
+              },
+              {
+                "type": "click",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 5549
+              }
+            ],
+            "status": "PASS"
+          }
+        ],
+        "gates": [
+          {
+            "label": "pause automatic",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "sgQ3o8K490uOs-k4j7i5WHHSypNAtsv7",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          },
+          {
+            "label": "replay automatic",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "sgQ3o8K490uOs-k4j7i5WHHSypNAtsv7",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          },
+          {
+            "label": "replay manual",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "sgQ3o8K490uOs-k4j7i5WHHSypNAtsv7",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          },
+          {
+            "label": "next automatic",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "sgQ3o8K490uOs-k4j7i5WHHSypNAtsv7",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          },
+          {
+            "label": "next manual",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "sgQ3o8K490uOs-k4j7i5WHHSypNAtsv7",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          },
+          {
+            "label": "previous automatic",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "sgQ3o8K490uOs-k4j7i5WHHSypNAtsv7",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          },
+          {
+            "label": "previous manual",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "sgQ3o8K490uOs-k4j7i5WHHSypNAtsv7",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          }
+        ]
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "check": "host document lifecycle",
+        "at": "2026-11-19T21:12:12.327Z",
+        "reason": "close transport race context",
+        "url": "http://127.0.0.1:36063/host?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "status": "drained",
+        "receipt": {
+          "documentId": "1f7bcde6-b074-45fa-9528-74d6f44f1ed6",
+          "url": "http://127.0.0.1:36063/host?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+          "status": "drained",
+          "startedAt": "2026-11-19T21:12:12.332Z",
+          "finishedAt": "2026-11-19T21:12:12.333Z",
+          "elapsedMs": 0,
+          "initial": {
+            "http": 0,
+            "handlers": 0,
+            "initialization": 0,
+            "replies": 0,
+            "connecting": false
+          },
+          "remaining": {
+            "http": 0,
+            "handlers": 0,
+            "initialization": 0,
+            "replies": 0,
+            "connecting": false
+          },
+          "sentReplies": 3,
+          "cancelledReplies": 0,
+          "rejectedNewCalls": 0,
+          "requestEvents": [
+            {
+              "at": "2026-11-19T21:12:06.654Z",
+              "path": "/qa/initial",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:12:06.886Z",
+              "path": "/qa/initial",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-19T21:12:07.102Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:12:07.453Z",
+              "path": "/qa/call",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-19T21:12:10.061Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:12:10.649Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T21:12:10.900Z",
+              "path": "/qa/call",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-19T21:12:11.666Z",
+              "path": "/qa/call",
+              "status": "completed"
+            }
+          ],
+          "errors": []
+        },
+        "finishedAt": "2026-11-19T21:12:12.335Z"
+      }
+    ],
+    "rendererFixtures": [],
+    "calls": [
+      {
+        "name": "get_game_draft_summary",
+        "inputRevision": 1,
+        "inputDigest": "5e4e5ae03797cb186f0005b9ef899e14bb5fe970ca025955f505a49f0886f5bb",
+        "result": {
+          "contractVersion": "0.1.0",
+          "ok": true,
+          "correlationId": "eccb2672-741f-417e-b3c0-491b22468025",
+          "data": {
+            "draftId": "0tzorRPmx034zgs33xAA3wWQMf3PB70i",
+            "revision": 1,
+            "summary": {
+              "title": "Full show tadazz-classic chromium",
+              "cardCount": 8,
+              "questionCount": 5,
+              "themeId": "tadazz-classic",
+              "themeVersion": "1.0.0",
+              "diagnostics": []
+            }
+          }
+        }
+      },
+      {
+        "name": "preview_show",
+        "inputRevision": 1,
+        "inputDigest": "2ce51e346b8fc6f4775b38d53cae0ab253c28f2ecc3e8b11fc90038a4951698f",
+        "result": {
+          "contractVersion": "0.1.0",
+          "ok": true,
+          "correlationId": "683278ef-086b-4ab4-8e02-84cfb4180298",
+          "data": {
+            "draftId": "0tzorRPmx034zgs33xAA3wWQMf3PB70i",
+            "revision": 1,
+            "title": "Full show tadazz-classic chromium",
+            "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "chapterCount": 28,
+            "frameDigest": "0b127ecfa5bbaefece8e04f3ec51035690b980ede4b2585c7f6e7c04c1c95fe6"
+          }
+        }
+      },
+      {
+        "name": "get_game_draft_summary",
+        "inputRevision": 1,
+        "inputDigest": "5e4e5ae03797cb186f0005b9ef899e14bb5fe970ca025955f505a49f0886f5bb",
+        "result": {
+          "contractVersion": "0.1.0",
+          "ok": true,
+          "correlationId": "02fa435f-6170-4834-8a68-c059ff1de462",
+          "data": {
+            "draftId": "0tzorRPmx034zgs33xAA3wWQMf3PB70i",
+            "revision": 1,
+            "summary": {
+              "title": "Full show tadazz-classic chromium",
+              "cardCount": 8,
+              "questionCount": 5,
+              "themeId": "tadazz-classic",
+              "themeVersion": "1.0.0",
+              "diagnostics": []
+            }
+          }
+        }
+      },
+      {
+        "name": "preview_show",
+        "inputRevision": 1,
+        "inputDigest": "2ce51e346b8fc6f4775b38d53cae0ab253c28f2ecc3e8b11fc90038a4951698f",
+        "result": {
+          "contractVersion": "0.1.0",
+          "ok": true,
+          "correlationId": "4bf3e865-970e-4756-8f80-815cbeb22b71",
+          "data": {
+            "draftId": "0tzorRPmx034zgs33xAA3wWQMf3PB70i",
+            "revision": 1,
+            "title": "Full show tadazz-classic chromium",
+            "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "chapterCount": 28,
+            "frameDigest": "0b127ecfa5bbaefece8e04f3ec51035690b980ede4b2585c7f6e7c04c1c95fe6"
+          }
+        }
+      },
+      {
+        "name": "preview_show",
+        "inputRevision": 1,
+        "inputDigest": "aff776bb629ce5674022e17031978fdc048faed266546d39656f93f9f1506c90",
+        "result": {
+          "contractVersion": "0.1.0",
+          "ok": true,
+          "correlationId": "63fda513-bd5b-48a0-81f7-77d981e76109",
+          "data": {
+            "draftId": "0tzorRPmx034zgs33xAA3wWQMf3PB70i",
+            "revision": 1,
+            "title": "Full show tadazz-classic chromium",
+            "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+            "chapterCount": 28,
+            "frameDigest": "2360f6b4fd19aaf7dcfe35899e08df13bf0f59de84c02b1f83e0d454620c5bfe"
+          }
+        }
+      },
+      {
+        "name": "get_game_draft_summary",
+        "inputRevision": 1,
+        "inputDigest": "5e4e5ae03797cb186f0005b9ef899e14bb5fe970ca025955f505a49f0886f5bb",
+        "result": {
+          "contractVersion": "0.1.0",
+          "ok": true,
+          "correlationId": "45c43108-52a4-40bf-ad76-5a219bff8207",
+          "data": {
+            "draftId": "0tzorRPmx034zgs33xAA3wWQMf3PB70i",
+            "revision": 1,
+            "summary": {
+              "title": "Full show tadazz-classic chromium",
+              "cardCount": 8,
+              "questionCount": 5,
+              "themeId": "tadazz-classic",
+              "themeVersion": "1.0.0",
+              "diagnostics": []
+            }
+          }
+        }
+      },
+      {
+        "name": "preview_show",
+        "inputRevision": 1,
+        "inputDigest": "2ce51e346b8fc6f4775b38d53cae0ab253c28f2ecc3e8b11fc90038a4951698f",
+        "result": {
+          "contractVersion": "0.1.0",
+          "ok": true,
+          "correlationId": "2ce52e0e-2708-4ca6-b84f-6daa6e416644",
+          "data": {
+            "draftId": "0tzorRPmx034zgs33xAA3wWQMf3PB70i",
+            "revision": 1,
+            "title": "Full show tadazz-classic chromium",
+            "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "chapterCount": 28,
+            "frameDigest": "0b127ecfa5bbaefece8e04f3ec51035690b980ede4b2585c7f6e7c04c1c95fe6"
+          }
+        }
+      },
+      {
+        "name": "preview_show",
+        "inputRevision": 1,
+        "inputDigest": "a255273217658ca8bb854c86c856171499d29d76dd171364299738d80cfc5739",
+        "result": {
+          "contractVersion": "0.1.0",
+          "ok": true,
+          "correlationId": "d7397c2e-4ce4-4f52-ab37-cef9df0e980c",
+          "data": {
+            "draftId": "0tzorRPmx034zgs33xAA3wWQMf3PB70i",
+            "revision": 1,
+            "title": "Full show tadazz-classic chromium",
+            "selectedChapterId": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+            "chapterCount": 28,
+            "frameDigest": "cc9736aeb4208d4f2d19b9c8743e792988b53f150314ccddc2e9bcc60bb56d5f"
+          }
+        }
+      },
+      {
+        "name": "get_game_draft_summary",
+        "inputRevision": 1,
+        "inputDigest": "5e4e5ae03797cb186f0005b9ef899e14bb5fe970ca025955f505a49f0886f5bb",
+        "result": {
+          "contractVersion": "0.1.0",
+          "ok": true,
+          "correlationId": "e9676510-e000-47d7-8eb9-b6a0a9edb675",
+          "data": {
+            "draftId": "0tzorRPmx034zgs33xAA3wWQMf3PB70i",
+            "revision": 1,
+            "summary": {
+              "title": "Full show tadazz-classic chromium",
+              "cardCount": 8,
+              "questionCount": 5,
+              "themeId": "tadazz-classic",
+              "themeVersion": "1.0.0",
+              "diagnostics": []
+            }
+          }
+        }
+      },
+      {
+        "name": "preview_show",
+        "inputRevision": 1,
+        "inputDigest": "2ce51e346b8fc6f4775b38d53cae0ab253c28f2ecc3e8b11fc90038a4951698f",
+        "result": {
+          "contractVersion": "0.1.0",
+          "ok": true,
+          "correlationId": "e9e77d38-25a6-4485-a289-2bf7b231e522",
+          "data": {
+            "draftId": "0tzorRPmx034zgs33xAA3wWQMf3PB70i",
+            "revision": 1,
+            "title": "Full show tadazz-classic chromium",
+            "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "chapterCount": 28,
+            "frameDigest": "0b127ecfa5bbaefece8e04f3ec51035690b980ede4b2585c7f6e7c04c1c95fe6"
+          }
+        }
+      },
+      {
+        "name": "preview_show",
+        "inputRevision": 1,
+        "inputDigest": "b84e4c8a4f05280ac13b780b68bd4c058e52bb3cae30e96b114579d038676400",
+        "result": {
+          "contractVersion": "0.1.0",
+          "ok": true,
+          "correlationId": "a0239a60-1ab6-4441-bcbc-2d3b9d0c49d9",
+          "data": {
+            "draftId": "0tzorRPmx034zgs33xAA3wWQMf3PB70i",
+            "revision": 1,
+            "title": "Full show tadazz-classic chromium",
+            "selectedChapterId": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+            "chapterCount": 28,
+            "frameDigest": "534a14a4f6a13d503ad0da9bf155ee250ffe2cd6daf8470156caf5e0d5c2fa95"
+          }
+        }
+      },
+      {
+        "name": "get_game_draft_summary",
+        "inputRevision": 1,
+        "inputDigest": "d32f90ed0d2e5f89ef30e2917c582430c5aae2bb0f74f29364103e0b067758c9",
+        "result": {
+          "contractVersion": "0.1.0",
+          "ok": true,
+          "correlationId": "27fbb2a7-1dea-44a2-b955-5fb806022833",
+          "data": {
+            "draftId": "sgQ3o8K490uOs-k4j7i5WHHSypNAtsv7",
+            "revision": 1,
+            "summary": {
+              "title": "Full show tadazz-classic webkit",
+              "cardCount": 8,
+              "questionCount": 5,
+              "themeId": "tadazz-classic",
+              "themeVersion": "1.0.0",
+              "diagnostics": []
+            }
+          }
+        }
+      },
+      {
+        "name": "preview_show",
+        "inputRevision": 1,
+        "inputDigest": "69dcf49f7311af90d975c892f0d81b742e1a329a96fd2735ced39f5f5b9ca065",
+        "result": {
+          "contractVersion": "0.1.0",
+          "ok": true,
+          "correlationId": "f815fc37-27fd-4028-919e-f9f974e39534",
+          "data": {
+            "draftId": "sgQ3o8K490uOs-k4j7i5WHHSypNAtsv7",
+            "revision": 1,
+            "title": "Full show tadazz-classic webkit",
+            "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "chapterCount": 28,
+            "frameDigest": "5391b3bba4244b34dd2dfec20520abbcee39bc5535c22b9c230a2d7071e4ea18"
+          }
+        }
+      },
+      {
+        "name": "get_game_draft_summary",
+        "inputRevision": 1,
+        "inputDigest": "d32f90ed0d2e5f89ef30e2917c582430c5aae2bb0f74f29364103e0b067758c9",
+        "result": {
+          "contractVersion": "0.1.0",
+          "ok": true,
+          "correlationId": "c4b80034-7b65-40d0-a42d-e6daac53541b",
+          "data": {
+            "draftId": "sgQ3o8K490uOs-k4j7i5WHHSypNAtsv7",
+            "revision": 1,
+            "summary": {
+              "title": "Full show tadazz-classic webkit",
+              "cardCount": 8,
+              "questionCount": 5,
+              "themeId": "tadazz-classic",
+              "themeVersion": "1.0.0",
+              "diagnostics": []
+            }
+          }
+        }
+      },
+      {
+        "name": "preview_show",
+        "inputRevision": 1,
+        "inputDigest": "69dcf49f7311af90d975c892f0d81b742e1a329a96fd2735ced39f5f5b9ca065",
+        "result": {
+          "contractVersion": "0.1.0",
+          "ok": true,
+          "correlationId": "fc8712c6-9e74-4aa6-9cd6-c589e8be22ea",
+          "data": {
+            "draftId": "sgQ3o8K490uOs-k4j7i5WHHSypNAtsv7",
+            "revision": 1,
+            "title": "Full show tadazz-classic webkit",
+            "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "chapterCount": 28,
+            "frameDigest": "5391b3bba4244b34dd2dfec20520abbcee39bc5535c22b9c230a2d7071e4ea18"
+          }
+        }
+      },
+      {
+        "name": "preview_show",
+        "inputRevision": 1,
+        "inputDigest": "7e21c94229aa4237a61fe49cc1713b58a7a565d7b1046f5e2f4c5a6518e1c01e",
+        "result": {
+          "contractVersion": "0.1.0",
+          "ok": true,
+          "correlationId": "6c510919-fcbb-4425-a838-60afa147c594",
+          "data": {
+            "draftId": "sgQ3o8K490uOs-k4j7i5WHHSypNAtsv7",
+            "revision": 1,
+            "title": "Full show tadazz-classic webkit",
+            "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+            "chapterCount": 28,
+            "frameDigest": "2d63ccd3b2dac18831d8d147255e69a3528509e21e41b1466efe82d84d68aef4"
+          }
+        }
+      },
+      {
+        "name": "get_game_draft_summary",
+        "inputRevision": 1,
+        "inputDigest": "d32f90ed0d2e5f89ef30e2917c582430c5aae2bb0f74f29364103e0b067758c9",
+        "result": {
+          "contractVersion": "0.1.0",
+          "ok": true,
+          "correlationId": "30dd5604-47f3-4e5f-84dc-f50e0be01227",
+          "data": {
+            "draftId": "sgQ3o8K490uOs-k4j7i5WHHSypNAtsv7",
+            "revision": 1,
+            "summary": {
+              "title": "Full show tadazz-classic webkit",
+              "cardCount": 8,
+              "questionCount": 5,
+              "themeId": "tadazz-classic",
+              "themeVersion": "1.0.0",
+              "diagnostics": []
+            }
+          }
+        }
+      },
+      {
+        "name": "preview_show",
+        "inputRevision": 1,
+        "inputDigest": "69dcf49f7311af90d975c892f0d81b742e1a329a96fd2735ced39f5f5b9ca065",
+        "result": {
+          "contractVersion": "0.1.0",
+          "ok": true,
+          "correlationId": "bc9bb0e2-8d8e-43c9-8af8-3d0a4c992a2f",
+          "data": {
+            "draftId": "sgQ3o8K490uOs-k4j7i5WHHSypNAtsv7",
+            "revision": 1,
+            "title": "Full show tadazz-classic webkit",
+            "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "chapterCount": 28,
+            "frameDigest": "5391b3bba4244b34dd2dfec20520abbcee39bc5535c22b9c230a2d7071e4ea18"
+          }
+        }
+      },
+      {
+        "name": "preview_show",
+        "inputRevision": 1,
+        "inputDigest": "3effd8b1deb849ad1b5d8f1c7110ac65f1bdaecf1985a226c30bb25f2b5ec04e",
+        "result": {
+          "contractVersion": "0.1.0",
+          "ok": true,
+          "correlationId": "e91e16d1-281f-4b8a-bcf5-c633d3c01407",
+          "data": {
+            "draftId": "sgQ3o8K490uOs-k4j7i5WHHSypNAtsv7",
+            "revision": 1,
+            "title": "Full show tadazz-classic webkit",
+            "selectedChapterId": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+            "chapterCount": 28,
+            "frameDigest": "518450690202734b401cad6a0667d4a48614ae4a4b24ac45f86ffdada3fb8631"
+          }
+        }
+      },
+      {
+        "name": "get_game_draft_summary",
+        "inputRevision": 1,
+        "inputDigest": "d32f90ed0d2e5f89ef30e2917c582430c5aae2bb0f74f29364103e0b067758c9",
+        "result": {
+          "contractVersion": "0.1.0",
+          "ok": true,
+          "correlationId": "fbba2bcf-3204-4ebd-862c-81dbca5db5c1",
+          "data": {
+            "draftId": "sgQ3o8K490uOs-k4j7i5WHHSypNAtsv7",
+            "revision": 1,
+            "summary": {
+              "title": "Full show tadazz-classic webkit",
+              "cardCount": 8,
+              "questionCount": 5,
+              "themeId": "tadazz-classic",
+              "themeVersion": "1.0.0",
+              "diagnostics": []
+            }
+          }
+        }
+      },
+      {
+        "name": "preview_show",
+        "inputRevision": 1,
+        "inputDigest": "69dcf49f7311af90d975c892f0d81b742e1a329a96fd2735ced39f5f5b9ca065",
+        "result": {
+          "contractVersion": "0.1.0",
+          "ok": true,
+          "correlationId": "ece7a39b-1497-4965-bae9-acd4df6169dd",
+          "data": {
+            "draftId": "sgQ3o8K490uOs-k4j7i5WHHSypNAtsv7",
+            "revision": 1,
+            "title": "Full show tadazz-classic webkit",
+            "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "chapterCount": 28,
+            "frameDigest": "5391b3bba4244b34dd2dfec20520abbcee39bc5535c22b9c230a2d7071e4ea18"
+          }
+        }
+      },
+      {
+        "name": "preview_show",
+        "inputRevision": 1,
+        "inputDigest": "c9f0655ab6d849daf0c102cb5c0382a7ba1a58b7d0c9dc50f6ba0030e213dcd0",
+        "result": {
+          "contractVersion": "0.1.0",
+          "ok": true,
+          "correlationId": "6dfdef12-ca4d-4fa4-9fa4-55ecfa7aa7e9",
+          "data": {
+            "draftId": "sgQ3o8K490uOs-k4j7i5WHHSypNAtsv7",
+            "revision": 1,
+            "title": "Full show tadazz-classic webkit",
+            "selectedChapterId": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+            "chapterCount": 28,
+            "frameDigest": "77fc6d95ee260bb66e56ea1bcad182473cad7ae4721884b52a51ebc84e37dfc6"
+          }
+        }
+      }
+    ],
+    "errors": [],
+    "resources": [
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/show-stage.webp",
+        "admitted": true
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/question-bg.webp",
+        "admitted": true
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+        "admitted": true
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/second-library/teaser-screen-source.jpg",
+        "admitted": true
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/show-stage.webp",
+        "admitted": true
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/question-bg.webp",
+        "admitted": true
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+        "admitted": true
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/second-library/teaser-screen-source.jpg",
+        "admitted": true
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/show-stage.webp",
+        "admitted": true
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/question-bg.webp",
+        "admitted": true
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+        "admitted": true
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/second-library/teaser-screen-source.jpg",
+        "admitted": true
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/show-stage.webp",
+        "admitted": true
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/question-bg.webp",
+        "admitted": true
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+        "admitted": true
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/second-library/teaser-screen-source.jpg",
+        "admitted": true
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+        "admitted": true
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/show-stage.webp",
+        "admitted": true
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/second-library/teaser-screen-source.jpg",
+        "admitted": true
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/question-bg.webp",
+        "admitted": true
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+        "admitted": true
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/show-stage.webp",
+        "admitted": true
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/second-library/teaser-screen-source.jpg",
+        "admitted": true
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/question-bg.webp",
+        "admitted": true
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+        "admitted": true
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/show-stage.webp",
+        "admitted": true
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/second-library/teaser-screen-source.jpg",
+        "admitted": true
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/question-bg.webp",
+        "admitted": true
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+        "admitted": true
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/show-stage.webp",
+        "admitted": true
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/second-library/teaser-screen-source.jpg",
+        "admitted": true
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/question-bg.webp",
+        "admitted": true
+      }
+    ],
+    "requestFailures": [],
+    "pageErrorEvents": [],
+    "qaRequestEvents": [
+      {
+        "at": "2026-11-19T21:11:17.093Z",
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "url": "http://127.0.0.1:36063/qa/initial?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "method": "GET",
+        "responseAt": "2026-11-19T21:11:17.278Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:11:17.453Z",
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "url": "http://127.0.0.1:36063/qa/call?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "method": "POST",
+        "responseAt": "2026-11-19T21:11:17.747Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:11:20.340Z",
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "HTTP get_game_draft_summary",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "url": "http://127.0.0.1:36063/qa/call?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "method": "POST",
+        "responseAt": "2026-11-19T21:11:20.854Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:11:21.659Z",
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "HTTP preview_show",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "url": "http://127.0.0.1:36063/qa/initial?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "method": "GET",
+        "responseAt": "2026-11-19T21:11:21.811Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:11:21.916Z",
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "HTTP preview_show",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "url": "http://127.0.0.1:36063/qa/call?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "method": "POST",
+        "responseAt": "2026-11-19T21:11:22.303Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:11:24.906Z",
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "HTTP get_game_draft_summary",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "url": "http://127.0.0.1:36063/qa/call?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "method": "POST",
+        "responseAt": "2026-11-19T21:11:25.948Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:11:25.313Z",
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "HTTP preview_show",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "url": "http://127.0.0.1:36063/qa/call?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "method": "POST",
+        "responseAt": "2026-11-19T21:11:25.621Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:11:26.734Z",
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "HTTP preview_show",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "url": "http://127.0.0.1:36063/qa/initial?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "method": "GET",
+        "responseAt": "2026-11-19T21:11:26.874Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:11:26.970Z",
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "HTTP preview_show",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "url": "http://127.0.0.1:36063/qa/call?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "method": "POST",
+        "responseAt": "2026-11-19T21:11:27.368Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:11:29.907Z",
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "HTTP get_game_draft_summary",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "url": "http://127.0.0.1:36063/qa/call?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "method": "POST",
+        "responseAt": "2026-11-19T21:11:31.001Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:11:30.209Z",
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "HTTP preview_show",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "url": "http://127.0.0.1:36063/qa/call?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "method": "POST",
+        "responseAt": "2026-11-19T21:11:30.611Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:11:31.807Z",
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "HTTP preview_show",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "url": "http://127.0.0.1:36063/qa/initial?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "method": "GET",
+        "responseAt": "2026-11-19T21:11:31.951Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:11:32.066Z",
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "HTTP preview_show",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "url": "http://127.0.0.1:36063/qa/call?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "method": "POST",
+        "responseAt": "2026-11-19T21:11:32.435Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:11:35.089Z",
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "HTTP get_game_draft_summary",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "url": "http://127.0.0.1:36063/qa/call?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "method": "POST",
+        "responseAt": "2026-11-19T21:11:36.231Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:11:35.473Z",
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "HTTP preview_show",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "url": "http://127.0.0.1:36063/qa/call?scenario=VIxgpNfcvolQyGJkR7Cnze7u",
+        "method": "POST",
+        "responseAt": "2026-11-19T21:11:35.871Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:11:40.509Z",
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "activeCheck": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "url": "http://127.0.0.1:36063/qa/initial?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "method": "GET",
+        "responseAt": "2026-11-19T21:11:40.667Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:11:40.892Z",
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "activeCheck": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "url": "http://127.0.0.1:36063/qa/call?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "method": "POST",
+        "responseAt": "2026-11-19T21:11:41.946Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:11:47.137Z",
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "activeCheck": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "HTTP get_game_draft_summary",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "url": "http://127.0.0.1:36063/qa/call?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "method": "POST",
+        "responseAt": "2026-11-19T21:11:48.521Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:11:53.580Z",
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "activeCheck": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "HTTP preview_show",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "url": "http://127.0.0.1:36063/qa/initial?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "method": "GET",
+        "responseAt": "2026-11-19T21:11:53.868Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:11:54.082Z",
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "activeCheck": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "HTTP preview_show",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "url": "http://127.0.0.1:36063/qa/call?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "method": "POST",
+        "responseAt": "2026-11-19T21:11:54.460Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:11:57.057Z",
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "activeCheck": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "HTTP get_game_draft_summary",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "url": "http://127.0.0.1:36063/qa/call?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "method": "POST",
+        "responseAt": "2026-11-19T21:11:58.490Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:11:57.637Z",
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "activeCheck": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "HTTP preview_show",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "url": "http://127.0.0.1:36063/qa/call?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "method": "POST",
+        "responseAt": "2026-11-19T21:11:57.852Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:11:59.987Z",
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "activeCheck": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "HTTP preview_show",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "url": "http://127.0.0.1:36063/qa/initial?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "method": "GET",
+        "responseAt": "2026-11-19T21:12:00.134Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:12:00.302Z",
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "activeCheck": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "HTTP preview_show",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "url": "http://127.0.0.1:36063/qa/call?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "method": "POST",
+        "responseAt": "2026-11-19T21:12:00.668Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:12:03.213Z",
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "activeCheck": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "HTTP get_game_draft_summary",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "url": "http://127.0.0.1:36063/qa/call?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "method": "POST",
+        "responseAt": "2026-11-19T21:12:05.134Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:12:03.860Z",
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "activeCheck": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "HTTP preview_show",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "url": "http://127.0.0.1:36063/qa/call?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "method": "POST",
+        "responseAt": "2026-11-19T21:12:04.349Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:12:06.658Z",
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "activeCheck": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "HTTP preview_show",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "url": "http://127.0.0.1:36063/qa/initial?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "method": "GET",
+        "responseAt": "2026-11-19T21:12:06.890Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:12:07.104Z",
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "activeCheck": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "HTTP preview_show",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "url": "http://127.0.0.1:36063/qa/call?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "method": "POST",
+        "responseAt": "2026-11-19T21:12:07.467Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:12:10.062Z",
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "activeCheck": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "HTTP get_game_draft_summary",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "url": "http://127.0.0.1:36063/qa/call?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "method": "POST",
+        "responseAt": "2026-11-19T21:12:11.667Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T21:12:10.653Z",
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "activeCheck": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+        "activeStep": "HTTP preview_show",
+        "documentUrl": "http://127.0.0.1:36063/host?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "url": "http://127.0.0.1:36063/qa/call?scenario=ugSgy9rqSiYXO84FgCyWAFgB",
+        "method": "POST",
+        "responseAt": "2026-11-19T21:12:10.896Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      }
+    ],
+    "requests": [
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/second-library/teaser-screen-source.jpg"
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/second-library/teaser-screen-source.jpg"
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/second-library/teaser-screen-source.jpg"
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/second-library/teaser-screen-source.jpg"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/second-library/teaser-screen-source.jpg"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/sounds/tadazz-reveal-bright-20261108.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/sounds/tadazz-timer-end-368edc1d9522.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/sounds/tadazz-confirm-20261108.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/sounds/tadazz-silky-transition-20261108.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/sounds/answersMusic.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/second-library/teaser-screen-source.jpg"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/sounds/tadazz-reveal-bright-20261108.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/sounds/tadazz-timer-end-368edc1d9522.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/sounds/tadazz-confirm-20261108.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/sounds/tadazz-silky-transition-20261108.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/second-library/teaser-screen-source.jpg"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/sounds/tadazz-reveal-bright-20261108.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/sounds/tadazz-timer-end-368edc1d9522.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/sounds/tadazz-confirm-20261108.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/sounds/tadazz-silky-transition-20261108.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/second-library/teaser-screen-source.jpg"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/sounds/tadazz-reveal-bright-20261108.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/sounds/tadazz-timer-end-368edc1d9522.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/sounds/tadazz-confirm-20261108.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/sounds/tadazz-silky-transition-20261108.mp3"
+      }
+    ]
+  },
+  "transportWitnesses": {
+    "chromium": {
+      "path": "full-show/chromium-tadazz-classic-transport-race.json",
+      "sha256": "0c6dedf6adbe3a055e8c47ae53e7c49d84284d9c9243200dced2c48c235c736b",
+      "witness": {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "status": "PASS",
+        "cases": [
+          {
+            "action": "pause",
+            "snapshots": [
+              {
+                "step": "automatic ACK held",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "paused while automatic ACK held",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "true"
+              },
+              {
+                "step": "automatic ACK preserves user pause",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+                "epoch": 2,
+                "paused": "true"
+              }
+            ],
+            "userPausePreserved": true,
+            "events": [
+              {
+                "type": "pointerdown",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 4122.799999952316
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 4123.5
+              },
+              {
+                "type": "click",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 4123.799999952316
+              }
+            ],
+            "status": "PASS"
+          },
+          {
+            "action": "replay",
+            "snapshots": [
+              {
+                "step": "automatic ACK held",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "explicit transport ACK held",
+                "disabled": {
+                  "pause": true,
+                  "replay": true,
+                  "next": true,
+                  "previous": true
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "explicit transport acknowledged, native remounted and paused",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 2,
+                "paused": "true"
+              },
+              {
+                "step": "old automatic ACK ignored",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 2,
+                "paused": "true"
+              }
+            ],
+            "explicitTarget": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+            "oldAutomaticTarget": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "events": [
+              {
+                "type": "pointerdown",
+                "id": "full-show-replay",
+                "disabled": false,
+                "at": 3863.7000000476837
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-replay",
+                "disabled": false,
+                "at": 3864.2999999523163
+              },
+              {
+                "type": "click",
+                "id": "full-show-replay",
+                "disabled": false,
+                "at": 3864.5
+              },
+              {
+                "type": "pointerdown",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 4377.900000095367
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 4378.400000095367
+              },
+              {
+                "type": "click",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 4378.599999904633
+              }
+            ],
+            "status": "PASS"
+          },
+          {
+            "action": "next",
+            "snapshots": [
+              {
+                "step": "automatic ACK held",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "explicit transport ACK held",
+                "disabled": {
+                  "pause": true,
+                  "replay": true,
+                  "next": true,
+                  "previous": true
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "explicit transport acknowledged, native remounted and paused",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+                "epoch": 2,
+                "paused": "true"
+              },
+              {
+                "step": "old automatic ACK ignored",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+                "epoch": 2,
+                "paused": "true"
+              }
+            ],
+            "explicitTarget": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+            "oldAutomaticTarget": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "events": [
+              {
+                "type": "pointerdown",
+                "id": "full-show-next",
+                "disabled": false,
+                "at": 3698
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-next",
+                "disabled": false,
+                "at": 3698.600000143051
+              },
+              {
+                "type": "click",
+                "id": "full-show-next",
+                "disabled": false,
+                "at": 3698.7000000476837
+              },
+              {
+                "type": "pointerdown",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 4325.400000095367
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 4326
+              },
+              {
+                "type": "click",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 4326.200000047684
+              }
+            ],
+            "status": "PASS"
+          },
+          {
+            "action": "previous",
+            "snapshots": [
+              {
+                "step": "automatic ACK held",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "explicit transport ACK held",
+                "disabled": {
+                  "pause": true,
+                  "replay": true,
+                  "next": true,
+                  "previous": true
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "explicit transport acknowledged, native remounted and paused",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+                "epoch": 2,
+                "paused": "true"
+              },
+              {
+                "step": "old automatic ACK ignored",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+                "epoch": 2,
+                "paused": "true"
+              }
+            ],
+            "explicitTarget": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+            "oldAutomaticTarget": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "events": [
+              {
+                "type": "pointerdown",
+                "id": "full-show-previous",
+                "disabled": false,
+                "at": 3940.7999999523163
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-previous",
+                "disabled": false,
+                "at": 3941.399999856949
+              },
+              {
+                "type": "click",
+                "id": "full-show-previous",
+                "disabled": false,
+                "at": 3941.5
+              },
+              {
+                "type": "pointerdown",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 4529
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 4529.5
+              },
+              {
+                "type": "click",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 4529.5
+              }
+            ],
+            "status": "PASS"
+          }
+        ],
+        "gates": [
+          {
+            "label": "pause automatic",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "0tzorRPmx034zgs33xAA3wWQMf3PB70i",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          },
+          {
+            "label": "replay automatic",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "0tzorRPmx034zgs33xAA3wWQMf3PB70i",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          },
+          {
+            "label": "replay manual",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "0tzorRPmx034zgs33xAA3wWQMf3PB70i",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          },
+          {
+            "label": "next automatic",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "0tzorRPmx034zgs33xAA3wWQMf3PB70i",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          },
+          {
+            "label": "next manual",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "0tzorRPmx034zgs33xAA3wWQMf3PB70i",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          },
+          {
+            "label": "previous automatic",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "0tzorRPmx034zgs33xAA3wWQMf3PB70i",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          },
+          {
+            "label": "previous manual",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "0tzorRPmx034zgs33xAA3wWQMf3PB70i",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          }
+        ]
+      }
+    },
+    "webkit": {
+      "path": "full-show/webkit-tadazz-classic-transport-race.json",
+      "sha256": "c88cb3b6f5556245c7905a932d111c3d5740d9113edeca9d6fc47d98beca1088",
+      "witness": {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "status": "PASS",
+        "cases": [
+          {
+            "action": "pause",
+            "snapshots": [
+              {
+                "step": "automatic ACK held",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "paused while automatic ACK held",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "true"
+              },
+              {
+                "step": "automatic ACK preserves user pause",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+                "epoch": 2,
+                "paused": "true"
+              }
+            ],
+            "userPausePreserved": true,
+            "events": [
+              {
+                "type": "pointerdown",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 8408
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 8411
+              },
+              {
+                "type": "click",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 8412
+              }
+            ],
+            "status": "PASS"
+          },
+          {
+            "action": "replay",
+            "snapshots": [
+              {
+                "step": "automatic ACK held",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "explicit transport ACK held",
+                "disabled": {
+                  "pause": true,
+                  "replay": true,
+                  "next": true,
+                  "previous": true
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "explicit transport acknowledged, native remounted and paused",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 2,
+                "paused": "true"
+              },
+              {
+                "step": "old automatic ACK ignored",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 2,
+                "paused": "true"
+              }
+            ],
+            "explicitTarget": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+            "oldAutomaticTarget": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "events": [
+              {
+                "type": "pointerdown",
+                "id": "full-show-replay",
+                "disabled": false,
+                "at": 4533
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-replay",
+                "disabled": false,
+                "at": 4535
+              },
+              {
+                "type": "click",
+                "id": "full-show-replay",
+                "disabled": false,
+                "at": 4535
+              },
+              {
+                "type": "pointerdown",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 5305
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 5306
+              },
+              {
+                "type": "click",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 5306
+              }
+            ],
+            "status": "PASS"
+          },
+          {
+            "action": "next",
+            "snapshots": [
+              {
+                "step": "automatic ACK held",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "explicit transport ACK held",
+                "disabled": {
+                  "pause": true,
+                  "replay": true,
+                  "next": true,
+                  "previous": true
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "explicit transport acknowledged, native remounted and paused",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+                "epoch": 2,
+                "paused": "true"
+              },
+              {
+                "step": "old automatic ACK ignored",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+                "epoch": 2,
+                "paused": "true"
+              }
+            ],
+            "explicitTarget": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+            "oldAutomaticTarget": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "events": [
+              {
+                "type": "pointerdown",
+                "id": "full-show-next",
+                "disabled": false,
+                "at": 4351
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-next",
+                "disabled": false,
+                "at": 4359
+              },
+              {
+                "type": "click",
+                "id": "full-show-next",
+                "disabled": false,
+                "at": 4359
+              },
+              {
+                "type": "pointerdown",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 5468
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 5471
+              },
+              {
+                "type": "click",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 5471
+              }
+            ],
+            "status": "PASS"
+          },
+          {
+            "action": "previous",
+            "snapshots": [
+              {
+                "step": "automatic ACK held",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "explicit transport ACK held",
+                "disabled": {
+                  "pause": true,
+                  "replay": true,
+                  "next": true,
+                  "previous": true
+                },
+                "authoringDisabled": true,
+                "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+                "epoch": 1,
+                "paused": "false"
+              },
+              {
+                "step": "explicit transport acknowledged, native remounted and paused",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+                "epoch": 2,
+                "paused": "true"
+              },
+              {
+                "step": "old automatic ACK ignored",
+                "disabled": {
+                  "pause": false,
+                  "replay": false,
+                  "next": false,
+                  "previous": false
+                },
+                "authoringDisabled": false,
+                "chapter": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+                "epoch": 2,
+                "paused": "true"
+              }
+            ],
+            "explicitTarget": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+            "oldAutomaticTarget": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "events": [
+              {
+                "type": "pointerdown",
+                "id": "full-show-previous",
+                "disabled": false,
+                "at": 4676
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-previous",
+                "disabled": false,
+                "at": 4678
+              },
+              {
+                "type": "click",
+                "id": "full-show-previous",
+                "disabled": false,
+                "at": 4678
+              },
+              {
+                "type": "pointerdown",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 5545
+              },
+              {
+                "type": "pointerup",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 5549
+              },
+              {
+                "type": "click",
+                "id": "full-show-pause",
+                "disabled": false,
+                "at": 5549
+              }
+            ],
+            "status": "PASS"
+          }
+        ],
+        "gates": [
+          {
+            "label": "pause automatic",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "sgQ3o8K490uOs-k4j7i5WHHSypNAtsv7",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          },
+          {
+            "label": "replay automatic",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "sgQ3o8K490uOs-k4j7i5WHHSypNAtsv7",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          },
+          {
+            "label": "replay manual",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "sgQ3o8K490uOs-k4j7i5WHHSypNAtsv7",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          },
+          {
+            "label": "next automatic",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "sgQ3o8K490uOs-k4j7i5WHHSypNAtsv7",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          },
+          {
+            "label": "next manual",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "sgQ3o8K490uOs-k4j7i5WHHSypNAtsv7",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          },
+          {
+            "label": "previous automatic",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "sgQ3o8K490uOs-k4j7i5WHHSypNAtsv7",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          },
+          {
+            "label": "previous manual",
+            "input": {
+              "selectionVersion": 3,
+              "draftId": "sgQ3o8K490uOs-k4j7i5WHHSypNAtsv7",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "claimed": true,
+            "fulfilled": true
+          }
+        ]
+      }
+    }
+  }
+}

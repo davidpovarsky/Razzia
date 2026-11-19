@@ -1,0 +1,28 @@
+{
+  "kind": "independent-readonly-staging-lock-wrapper-review",
+  "reviewedAt": "2026-11-19T21:21:24.606881+00:00",
+  "review": "PASS",
+  "original": {
+    "path": "work/phase-continuity-20261119/release-tools/stage_current_candidate.py",
+    "sha256": "5550666638ac83cee42ceba84a4238938868c8e77e85101c62853f6ebe1f4cbf"
+  },
+  "reviewedWrapper": {
+    "path": "work/phase-continuity-20261119/release-tools/stage_current_candidate_with_lock.py",
+    "sha256": "0c8a3cd0949a3c38cbf78f9c3cc0f0bf219b400f8ca70fa4fe01c683ae68dab2"
+  },
+  "scope": "Only the added eight-line shared-lock and heavy-QA admission diff plus imports; original staging implementation and gates unchanged",
+  "findings": [
+    "The remote parent opens the established lock with O_NOFOLLOW, verifies regular file/root owner/single link/0600 mode, and takes an exclusive nonblocking flock.",
+    "The lock and running-heavy-QA admission precede payload parsing and all staging mutations.",
+    "The parent retains the raw lock FD for the lifetime of the existing synchronous staging action. Process exit releases it; there is no early explicit unlock in the added code.",
+    "A busy lock, unsafe lock or active foreign QA fails before staging starts.",
+    "Original source/receipt/image/production/runtime/worker guards and staging behavior are unchanged."
+  ],
+  "executedByReviewer": false,
+  "sourceChangedByReviewer": false,
+  "productionAcceptance": false,
+  "limits": [
+    "This is operational source review, not evidence of a successful staging or deployment run.",
+    "The finalized stage receipt and fresh production/worker observations remain necessary."
+  ]
+}
