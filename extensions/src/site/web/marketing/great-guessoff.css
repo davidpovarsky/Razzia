@@ -393,3 +393,362 @@
     transform: scale(1.075);
   }
 }
+
+/* Guess-off controls: the old Restart position becomes Start/Next, while
+   Back sits in the middle; preserve the sound control at the other edge. */
+.ggo-native-actions {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(120px, 174px));
+  justify-content: center;
+  align-items: stretch;
+  column-gap: 14px;
+  width: 100%;
+  max-width: 600px;
+  margin-inline: auto;
+}
+.ggo-native-actions > button,
+.ggo-native-actions .ggo-native-back-slot > button {
+  width: 100%;
+  min-width: 0;
+  min-height: 49px;
+}
+.ggo-native-back-slot {
+  min-height: 49px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.ggo-native-back {
+  background: linear-gradient(135deg, #542286, #341056);
+  color: #f9eafa;
+  border-color: #c48dff99 !important;
+}
+.ggo-native-back:hover {
+  background: #7132a5;
+}
+.ggo-native-next {
+  order: initial !important;
+}
+
+/* Vote identifiers should be the first thing the participant spots.
+   For text cards, retain 2 × 2 wide layout and legible, less-heavy answers. */
+.ggo-native[data-ggo-media="text"] .tzv4-stage .answer-card .answer-title {
+  font-size: 39px !important;
+  font-weight: 760 !important;
+  letter-spacing: -0.012em !important;
+  padding: 26px 142px 12px 26px !important;
+}
+.ggo-native[data-ggo-media="text"] .tzv4-stage .choice-slot .answer-index {
+  top: 15px !important;
+  right: 18px !important;
+  width: 103px !important;
+  height: 78px !important;
+  font-size: 56px !important;
+  color: #231040 !important;
+  background: linear-gradient(158deg, #f6ff99, #d6ff39) !important;
+  border: 3px solid #fffcc0 !important;
+  border-radius: 20px !important;
+  box-shadow:
+    0 5px 20px #0009,
+    0 0 22px #efff5799 !important;
+  text-shadow: none !important;
+}
+.ggo-native[data-ggo-media="image"] .tzv4-stage .answer-card .answer-title {
+  font-weight: 760 !important;
+}
+.ggo-native[data-ggo-media="image"] .tzv4-stage .choice-slot .answer-index {
+  width: 114px !important;
+  height: 92px !important;
+  font-size: 60px !important;
+  color: #241047 !important;
+  background: linear-gradient(158deg, #f6ffab, #dcff52) !important;
+  border: 3px solid #fffed2 !important;
+  border-radius: 21px !important;
+  text-shadow: none !important;
+  box-shadow:
+    0 8px 24px #0008,
+    0 0 24px #eaff5466 !important;
+}
+.ggo-native[data-ggo-media="image"] .tzv4-stage .answer-card .answer-title {
+  left: 128px !important;
+}
+.ggo-native:dir(rtl)[data-ggo-media="image"]
+  .tzv4-stage
+  .answer-card
+  .answer-title {
+  left: -7px !important;
+  right: 128px !important;
+}
+.ggo-native[data-ggo-media="text"] .tzv4-stage .choice-slot .result-percentage {
+  min-width: 114px !important;
+  font-size: 46px !important;
+  color: #edff62 !important;
+  border-color: #edff62bb !important;
+}
+.ggo-native[data-ggo-media="image"]
+  .tzv4-stage
+  .choice-slot
+  .result-percentage {
+  min-width: 118px !important;
+  font-size: 55px !important;
+  color: #f2ff80 !important;
+  border-color: #e9ff66bb !important;
+  text-shadow:
+    0 0 15px #d4ff7399,
+    0 3px 7px #06000d !important;
+}
+
+/* Text-only survey spotlight: the entire winning answer is one broad card
+   with readable, centered copy, never a square number placeholder. */
+.ggo-native[data-ggo-media="text"]
+  .tzv4-stage[data-v4-scene="top-pick"]
+  .spotlight-portrait {
+  display: none !important;
+}
+.ggo-native[data-ggo-media="text"]
+  .tzv4-stage[data-v4-scene="top-pick"]
+  .spotlight-name {
+  position: absolute !important;
+  top: 327px !important;
+  left: 300px !important;
+  right: 300px !important;
+  height: 295px !important;
+  padding: 30px 62px !important;
+  border: 5px solid #eaff61 !important;
+  border-radius: 43px !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+  font-size: 69px !important;
+  font-weight: 790 !important;
+  line-height: 1.14 !important;
+  letter-spacing: -0.02em !important;
+  color: #fffde1 !important;
+  background: linear-gradient(
+    135deg,
+    #6c299cf6,
+    #270850f7 62%,
+    #562084ef
+  ) !important;
+  box-shadow:
+    0 0 0 8px #dfef625a,
+    0 0 55px #d8f85b78,
+    0 27px 48px #070013 !important;
+}
+.ggo-native[data-ggo-media="text"]
+  .tzv4-stage[data-v4-scene="top-pick"]
+  .spotlight-plate {
+  background: radial-gradient(ellipse, #eaff705c, transparent 68%) !important;
+}
+
+/* Use the original blue/gold Z stage artwork and lights behind the winner,
+   retaining the Creating Worlds confetti and native winner typography. */
+.ggo-native[data-ggo-phase="winner"] .tzv4-stage .stage-bg {
+  background-image: url("/tadazz-show/v4/show-stage.webp") !important;
+  background-size: cover !important;
+  background-position: center !important;
+}
+.ggo-native[data-ggo-phase="winner"] .tzv4-stage .veil {
+  opacity: 0.1 !important;
+}
+.ggo-native[data-ggo-phase="winner"]
+  .tz-screen[data-testid="tadazz-finale-screen"]::before {
+  background: linear-gradient(
+    180deg,
+    #0a023840 0%,
+    #17014360 48%,
+    #07021bd3 100%
+  ) !important;
+  backdrop-filter: none !important;
+}
+.ggo-native[data-ggo-phase="winner"] .tz-win-logo {
+  width: 460px !important;
+  top: 90px !important;
+  filter: drop-shadow(0 0 30px #d452fff0) !important;
+}
+.ggo-native[data-ggo-phase="winner"] .tz-win-headline {
+  top: 685px !important;
+  color: #f0d7ff !important;
+}
+.ggo-native[data-ggo-phase="winner"] .tz-win-name {
+  font-size: 103px !important;
+  color: #ecff4d !important;
+  text-shadow:
+    0 0 35px #deff7fba,
+    0 0 90px #ceff4b74 !important;
+}
+.ggo-winner-decoration {
+  position: absolute;
+  z-index: 22;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.ggo-winner-light {
+  position: absolute;
+  top: -35%;
+  width: 36%;
+  height: 118%;
+  opacity: 0.78;
+  background: linear-gradient(
+    180deg,
+    #fff6a37a,
+    #d785ff3a 40%,
+    transparent 100%
+  );
+  filter: blur(17px);
+  mix-blend-mode: screen;
+  clip-path: polygon(44% 0, 58% 0, 100% 100%, 0 100%);
+  transform-origin: 50% 0%;
+  animation: ggo-winner-beams 5s ease-in-out infinite alternate;
+}
+.ggo-winner-light-left {
+  left: 9%;
+  transform: rotate(18deg);
+}
+.ggo-winner-light-right {
+  right: 9%;
+  transform: rotate(-18deg);
+  animation-delay: -2s;
+}
+.ggo-winner-z {
+  position: absolute;
+  top: 34%;
+  color: #fff4d8;
+  opacity: 0.42;
+  font-family: "Rubik", sans-serif;
+  font-size: clamp(55px, 11vw, 148px);
+  font-weight: 1000;
+  transform: rotate(-17deg);
+  text-shadow:
+    0 0 36px #ffb6f6,
+    0 0 56px #926aff;
+}
+.ggo-winner-z-left {
+  left: 9%;
+  color: #45bbff;
+}
+.ggo-winner-z-right {
+  right: 9%;
+  color: #e9ff53;
+  transform: rotate(17deg);
+}
+.ggo-winner-trophy {
+  position: absolute;
+  left: 50%;
+  top: 41%;
+  width: min(18%, 180px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle,
+    #efff9666,
+    #f6bc4a28 44%,
+    transparent 72%
+  );
+  filter: drop-shadow(0 0 26px #eaff648a);
+  animation: ggo-trophy-rise 1.15s cubic-bezier(0.14, 1.1, 0.25, 1) both;
+}
+.ggo-winner-trophy::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  border: 3px solid #fff19d78;
+  border-radius: 50%;
+  box-shadow:
+    0 0 18px #faff65a0,
+    inset 0 0 38px #ffd26440;
+  animation: ggo-trophy-aura 3s ease-in-out infinite alternate;
+}
+.ggo-winner-trophy-icon {
+  width: 80%;
+  height: 80%;
+  fill: #edac2c;
+  stroke: #fff4a9;
+  stroke-width: 2;
+  filter: drop-shadow(0 8px 6px #220239) drop-shadow(0 0 17px #ffed5aaa);
+}
+.ggo-winner-trophy-star {
+  position: absolute;
+  top: 36%;
+  font-size: clamp(13px, 2.2vw, 31px);
+  color: #fff7b1;
+  text-shadow: 0 0 14px #fff;
+}
+@keyframes ggo-trophy-rise {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -12%) scale(0.3) rotate(-11deg);
+  }
+  75% {
+    opacity: 1;
+    transform: translate(-50%, -55%) scale(1.14);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+@keyframes ggo-winner-beams {
+  from {
+    opacity: 0.5;
+    filter: blur(23px);
+  }
+  to {
+    opacity: 0.9;
+    filter: blur(12px);
+  }
+}
+@keyframes ggo-trophy-aura {
+  from {
+    transform: scale(0.92);
+    opacity: 0.35;
+  }
+  to {
+    transform: scale(1.11);
+    opacity: 0.85;
+  }
+}
+@media (max-width: 700px) {
+  .ggo-native-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+    max-width: none;
+  }
+  .ggo-native-next {
+    order: initial !important;
+    grid-column: 1/-1;
+    grid-row: 1;
+    width: 100%;
+  }
+  .ggo-native-back-slot {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .ggo-native-actions > .ggo-native-sound {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .ggo-winner-trophy {
+    width: 19%;
+    top: 41%;
+  }
+  .ggo-winner-z {
+    font-size: 7vw;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ggo-winner-light,
+  .ggo-winner-trophy,
+  .ggo-winner-trophy::before {
+    animation: none !important;
+  }
+  .ggo-winner-trophy {
+    transform: translate(-50%, -50%);
+  }
+}

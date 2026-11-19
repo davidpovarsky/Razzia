@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { ArrowRight, RotateCcw, Volume2, VolumeX } from "lucide-react"
+import { ArrowLeft, ArrowRight, Trophy, Volume2, VolumeX } from "lucide-react"
 import { TadazzV4StageAdapter } from "../../../presentation/tadazz-show/TadazzV4StageAdapter"
 import type {
   StageLeaderEntry,
@@ -382,6 +382,72 @@ export function GreatGuessOffDemo() {
     setPhase("top-pick")
   }
 
+  /** Restore the real previous scene, retaining the original vote and score.
+   * There is no "restart" control in this demo; Back is genuine history.
+   * Only visible scenes are navigable (not transient wipe/locked frames). */
+  const restoreResult = async (index: number, topPick: boolean) => {
+    const handle = stage.current
+    if (!handle) return
+    stopMusic()
+    lockPromiseRef.current = null
+    setQuestionIndex(index)
+    currentPhase.current = "question-transition"
+    setPhase("question-transition")
+    const q = QUESTIONS[index]
+    await handle.nextQuestion(stageQuestion(q, index))
+    await handle.revealResults({
+      mode: q.kind,
+      counts:
+        q.kind === "survey"
+          ? displayedCounts(q, votes[index])
+          : q.answers.map(() => 0),
+      ...(q.kind === "quiz" ? { solutions: [q.correct ?? 0] } : {}),
+      showPercentages: q.kind === "survey",
+    })
+    if (topPick) {
+      const counts = displayedCounts(q, votes[index])
+      const maximum = Math.max(...counts)
+      await handle.showTopPick?.({
+        question: stageQuestion(q, index),
+        counts,
+        topIndex: counts.indexOf(maximum),
+      })
+    }
+    currentPhase.current = topPick ? "top-pick" : "results"
+    setPhase(topPick ? "top-pick" : "results")
+  }
+
+  const back = async () => {
+    const handle = stage.current
+    if (!handle || phase === "intro" || phase === "question-transition") return
+    stopMusic()
+    lockPromiseRef.current = null
+    if (phase === "closing") {
+      const winner = leaderboard[0]
+      await handle.showFinale({ name: winner.name, score: winner.score })
+      currentPhase.current = "winner"
+      setPhase("winner")
+      return
+    }
+    if (phase === "winner") return restoreResult(4, true)
+    if (phase === "leaderboard") return restoreResult(2, true)
+    if (phase === "top-pick") return restoreResult(questionIndex, false)
+    if (phase === "results") return startQuestion(questionIndex)
+    if (phase === "locked" || phase === "voting") {
+      if (questionIndex === 0) return restart()
+      if (questionIndex === 1) return restoreResult(0, true)
+      if (questionIndex === 2) return restoreResult(1, false)
+      if (questionIndex === 3) {
+        await handle.showLeaderboard(leaderboard)
+        setQuestionIndex(2)
+        currentPhase.current = "leaderboard"
+        setPhase("leaderboard")
+        return
+      }
+      return restoreResult(3, false)
+    }
+  }
+
   const restart = async () => {
     stopMusic()
     setVotes({})
@@ -446,6 +512,7 @@ export function GreatGuessOffDemo() {
           : "text"
       }
       data-ggo-mode={question.kind}
+      data-ggo-phase={phase}
       aria-label="The Great Guess-off · Tadazz native stage"
     >
       <style>{nativeStageCss}</style>
@@ -471,6 +538,22 @@ export function GreatGuessOffDemo() {
           reducedMotion={reducedMotion}
           backdropUrl="/tadazz-show/v4/question-bg.webp"
         />
+        {phase === "winner" && (
+          <div
+            className="ggo-winner-decoration"
+            data-testid="ggo-winner-trophy"
+            aria-hidden="true"
+          >
+            <div className="ggo-winner-light ggo-winner-light-left" />
+            <div className="ggo-winner-light ggo-winner-light-right" />
+            <span className="ggo-winner-z ggo-winner-z-left">Z</span>
+            <span className="ggo-winner-z ggo-winner-z-right">Z</span>
+            <div className="ggo-winner-trophy">
+              <Trophy className="ggo-winner-trophy-icon" strokeWidth={1.75} />
+              <span className="ggo-winner-trophy-star">★</span>
+            </div>
+          </div>
+        )}
       </div>
       <div className="ggo-native-console">
         <div className="ggo-native-info">
@@ -488,6 +571,20 @@ export function GreatGuessOffDemo() {
             {soundOn ? <Volume2 size={18} /> : <VolumeX size={18} />}
             <span>{soundOn ? "Sound on" : "Sound off"}</span>
           </button>
+          <div className="ggo-native-back-slot">
+            {phase !== "intro" && (
+              <button
+                className="ggo-native-back"
+                type="button"
+                data-testid="ggo-back-action"
+                disabled={busy}
+                onClick={() => run(back)}
+              >
+                <ArrowLeft size={18} />
+                <span>Back</span>
+              </button>
+            )}
+          </div>
           <button
             type="button"
             className="ggo-native-next"
@@ -498,18 +595,6 @@ export function GreatGuessOffDemo() {
             {mainButton.title}
             <ArrowRight size={18} />
           </button>
-          {phase !== "intro" && (
-            <button
-              className="ggo-native-sound"
-              aria-label="Restart the demo"
-              type="button"
-              disabled={busy}
-              onClick={() => run(restart)}
-            >
-              <RotateCcw size={17} />
-              <span>Restart</span>
-            </button>
-          )}
         </div>
         {message && (
           <p role="alert" className="ggo-native-error">
