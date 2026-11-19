@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "runId": "20261119T172039Z-d4b213df",
+  "startedUtc": "2026-11-19T17:20:39.014682+00:00",
+  "evidence": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase-continuity-20261119\\ggo\\20261119T172039Z-d4b213df",
+  "ports": {
+    "web": 4412,
+    "api": 4413
+  },
+  "status": "PASS",
+  "noProviderNetwork": "Canonical synthetic fixture disables global fetch; billing stays disabled",
+  "canonicalSmoke": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\extensions\\qa\\phase2\\great-guessoff-cta-balanced-results.smoke.mjs",
+  "viteConfig": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\extensions\\qa\\billing-public.vite.config.ts",
+  "head": "34a9e0a59482fa035ab98338f7c977589e46287d",
+  "nodeVersion": "v24.22.1",
+  "edgeExecutable": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+  "syntheticConfig": "C:\\Users\\DAVID\\AppData\\Local\\Temp\\tadazz-billing-public-browser-ggo-1i2y3q15",
+  "warmupSHA256": "4cecac0412e4bbcb7170bc9f7688ad4ea92a3e124fc0631f02ddf5f8af50641f",
+  "warmupExitCode": 0,
+  "smokeCommand": [
+    "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\extensions\\qa\\phase2\\great-guessoff-cta-balanced-results.smoke.mjs"
+  ],
+  "smokeCwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase-continuity-20261119\\ggo\\20261119T172039Z-d4b213df",
+  "smokeExitCode": 0,
+  "ownedTemporaryFixtureRemoved": true,
+  "ownedTemporaryWarmupRemoved": true,
+  "ownedSyntheticConfigRemoved": true,
+  "cleanup": [
+    {
+      "name": "smoke",
+      "ownedPid": 36156,
+      "stopped": true,
+      "priorExit": 0
+    },
+    {
+      "name": "warmup",
+      "ownedPid": 17580,
+      "stopped": true,
+      "priorExit": 0
+    },
+    {
+      "name": "web",
+      "ownedPid": 20492,
+      "stopped": true,
+      "taskkillExit": 0,
+      "taskkillOutput": "SUCCESS: The process with PID 20492 (child process of PID 37784) has been terminated.\n"
+    },
+    {
+      "name": "api",
+      "ownedPid": 36632,
+      "stopped": true,
+      "taskkillExit": 0,
+      "taskkillOutput": "SUCCESS: The process with PID 34308 (child process of PID 36632) has been terminated.\nSUCCESS: The process with PID 36632 (child process of PID 37784) has been terminated.\n"
+    }
+  ],
+  "allOwnedProcessesStopped": true,
+  "productFilesChanged": [],
+  "productFilesUnchanged": true,
+  "finishedUtc": "2026-11-19T17:21:14.910464+00:00",
+  "screenshots": [
+    "qa\\phase2\\ggo-balanced-result-0.png",
+    "qa\\phase2\\ggo-balanced-result-1.png",
+    "qa\\phase2\\ggo-balanced-result-mobile.png",
+    "qa\\phase2\\ggo-warmup-homepage.png"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "children": [
+    {
+      "name": "smoke",
+      "ownedPid": 36156,
+      "stopped": true,
+      "priorExit": 0
+    },
+    {
+      "name": "warmup",
+      "ownedPid": 17580,
+      "stopped": true,
+      "priorExit": 0
+    },
+    {
+      "name": "web",
+      "ownedPid": 20492,
+      "stopped": true,
+      "taskkillExit": 0,
+      "taskkillOutput": "SUCCESS: The process with PID 20492 (child process of PID 37784) has been terminated.\n"
+    },
+    {
+      "name": "api",
+      "ownedPid": 36632,
+      "stopped": true,
+      "taskkillExit": 0,
+      "taskkillOutput": "SUCCESS: The process with PID 34308 (child process of PID 36632) has been terminated.\nSUCCESS: The process with PID 36632 (child process of PID 37784) has been terminated.\n"
+    }
+  ],
+  "allStopped": true,
+  "temporaryFixtureRemoved": true,
+  "syntheticConfigRemoved": true
+}

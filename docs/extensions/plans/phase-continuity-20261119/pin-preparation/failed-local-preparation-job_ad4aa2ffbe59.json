@@ -1,0 +1,24 @@
+{
+  "id": "job_ad4aa2ffbe59",
+  "type": "job_result",
+  "source": "script_run@host_7ec8382e82747448",
+  "severity": "warning",
+  "tool": "script_run",
+  "host": "host_7ec8382e82747448",
+  "status": "failed",
+  "exit_code": 1,
+  "created_at": 1795116352.3054888,
+  "started_at": "2026-11-19T19:25:52.366825+00:00",
+  "finished_at": "2026-11-19T19:25:56.338525+00:00",
+  "duration_s": 3.97,
+  "error": null,
+  "output_truncated": false,
+  "timeout_s": 820,
+  "read": false,
+  "notified": {
+    "telegram": null,
+    "resend": null
+  },
+  "notify_spec": {},
+  "output": "{\"exit\": 1, \"output\": \"\", \"error\": \"fatal: write error: No space left on device\\nTraceback (most recent call last):\\n  File \\\"C:\\\\Users\\\\DAVID\\\\Code\\\\Razzia-worktrees\\\\tadazz-ux-unified-20261119\\\\extensions\\\\qa\\\\editor-hebrew\\\\generate-native-pins.py\\\", line 29, in <module>\\n    subprocess.run([\\\"git\\\", \\\"archive\\\", \\\"--format=tar.gz\\\", \\\"-o\\\", str(archive_path), SHA,\\n  File \\\"C:\\\\Users\\\\DAVID\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\Lib\\\\subprocess.py\\\", line 571, in run\\n    raise CalledProcessError(retcode, process.args,\\nsubprocess.CalledProcessError: Command '['git', 'archive', '--format=tar.gz', '-o', 'C:\\\\\\\\Users\\\\\\\\DAVID\\\\\\\\AppData\\\\\\\\Local\\\\\\\\Temp\\\\\\\\tadazz-editor-pins-b03e07cd0033-5a952aa0kqvet4f8\\\\\\\\source.tar.gz', 'b03e07cd003347da46802b046dccc3d09214e78c', '--', '.prettierrc.json', 'extensions', 'oxlint.config.ts', 'package.json', 'packages', 'pnpm-lock.yaml', 'pnpm-workspace.yaml', 'tsconfig.json']' returned non-zero exit status 128.\\n\"}"
+}

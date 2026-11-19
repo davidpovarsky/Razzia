@@ -1,0 +1,21 @@
+{
+  "sourceSha": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "mode": "standard",
+  "startedAt": "2026-11-19T20:47:01.242701+00:00",
+  "status": "passed",
+  "productionChanged": false,
+  "admission": {
+    "held": true,
+    "pid": 1809103,
+    "path": "/run/lock/tadazz-mcp-deploy.lock",
+    "heavyQa": [],
+    "productionContainer": "090d26a2fe7dd98a43226288932b7387bb9ec847cee5e5e2ff6ef48b6444bf40",
+    "productionImage": "sha256:56de89dd9ca496595980af84a7187b49fbff8c0cb563c3393c269d2b7c09d82a"
+  },
+  "exit": 0,
+  "seconds": 1366.32,
+  "lockHolderExit": 0,
+  "lockReleaseOutput": "{\"released\": true, \"reason\": \"release\"}\n",
+  "lockStderr": "",
+  "finishedAt": "2026-11-19T21:09:50.572552+00:00"
+}

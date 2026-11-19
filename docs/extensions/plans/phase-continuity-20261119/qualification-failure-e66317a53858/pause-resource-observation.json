@@ -1,0 +1,744 @@
+{
+  "kind": "independent read-only failure/resource observation",
+  "sourceSha": "e66317a5385862a3a756a18a5646fad4e64e5c26",
+  "run": "tadazz-codex-fullshow-e66317a53858-53da4bfb",
+  "recordedAtUtc": "2026-11-19T19:54:29.638620+00:00",
+  "scope": "Existing owned progress and a two-second cgroup/host CPU sample only. No browser evaluation, new test, timeout alteration, source/QA mutation, service interruption or production action.",
+  "failure": {
+    "name": "webkit / tadazz-classic native opening, five phases, transitions and closing",
+    "status": "FAIL",
+    "error": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().getByTestId('full-show-pause')\n    - locator resolved to <button type=\"button\" title=\"Pause show\" aria-label=\"Pause show\" data-control-source=\"razzia\" data-testid=\"full-show-pause\" class=\"bg-primary rounded-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg\">…</button>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n",
+    "stack": "locator.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().getByTestId('full-show-pause')\n    - locator resolved to <button type=\"button\" title=\"Pause show\" aria-label=\"Pause show\" data-control-source=\"razzia\" data-testid=\"full-show-pause\" class=\"bg-primary rounded-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg\">…</button>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n    - element is visible, enabled and stable\n    - scrolling into view if needed\n    - done scrolling\n    - performing click action\n\n    at pause (/source/extensions/qa/phase3-full-show/workspace-controls.mjs:145:51)\n    at async verifyWorkspaceControls (/source/extensions/qa/phase3-full-show/workspace-controls.mjs:150:3)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1018:13\n    at async run (/source/extensions/qa/phase3-full-show/browser-verify.mjs:624:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1012:7",
+    "budgetMs": 300000,
+    "ms": 14469,
+    "existingRequestEvents": [
+      {
+        "at": "2026-11-19T19:50:28.374Z",
+        "responseAt": "2026-11-19T19:50:28.652Z",
+        "method": "GET",
+        "status": 200,
+        "activeStep": "webkit / tadazz-classic native opening, five phases, transitions and closing"
+      },
+      {
+        "at": "2026-11-19T19:50:29.068Z",
+        "responseAt": "2026-11-19T19:50:31.115Z",
+        "method": "POST",
+        "status": 200,
+        "activeStep": "webkit / tadazz-classic native opening, five phases, transitions and closing"
+      }
+    ],
+    "hostLifecycleAfterFailure": {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T19:50:50.598Z",
+      "reason": "navigate host",
+      "status": "drained",
+      "receipt": {
+        "documentId": "4d679b9e-d07d-4820-93ea-689f818be064",
+        "status": "drained",
+        "startedAt": "2026-11-19T19:50:50.650Z",
+        "finishedAt": "2026-11-19T19:50:50.651Z",
+        "elapsedMs": 1,
+        "initial": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "remaining": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "sentReplies": 7,
+        "cancelledReplies": 0,
+        "rejectedNewCalls": 0,
+        "errors": {
+          "count": 0,
+          "first": null
+        }
+      },
+      "finishedAt": "2026-11-19T19:50:50.654Z"
+    },
+    "canonicalProgressSha256AtRead": "6f2818c7f958b3635c714e997e659825b3416dabc2d1731a269cd56b1753ac9b",
+    "finalGateOutcome": null
+  },
+  "captureLimits": {
+    "nativeRafHeartbeatCapturedAtFailure": false,
+    "pointerClickChangeJournalCapturedAtFailure": false,
+    "comment": "No such capture artifacts or observation fields exist in the observed canonical run. Exact event delivery, native RAF behavior and failure-time CPU load cannot be reconstructed from the current evidence."
+  },
+  "currentSample": {
+    "firstAtUtc": "2026-11-19T19:53:37.345007+00:00",
+    "lastAtUtc": "2026-11-19T19:53:39.350487+00:00",
+    "elapsedSeconds": 2.005,
+    "allocatedCpuCores": 1,
+    "ownCpuCoreEquivalent": 0.9994,
+    "cgroupPeriods": 21,
+    "throttledPeriods": 21,
+    "throttledMicroseconds": 1965384,
+    "hostPerCore": [
+      {
+        "cpu": "cpu0",
+        "totalTicks": 200,
+        "idleAndIowaitTicks": 99,
+        "busyPercent": 50.5
+      },
+      {
+        "cpu": "cpu1",
+        "totalTicks": 200,
+        "idleAndIowaitTicks": 100,
+        "busyPercent": 50
+      }
+    ],
+    "container": {
+      "id": "5df8919fb8b413bb8946a7c942f07180b9850eacd3f1ac90c9a33916fa89d35a",
+      "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+      "state": {
+        "Status": "running",
+        "Running": true,
+        "Paused": false,
+        "OOMKilled": false,
+        "ExitCode": 0,
+        "Pid": 1795983,
+        "StartedAt": "2026-11-19T19:44:04.32336777Z",
+        "FinishedAt": "0001-01-01T00:00:00Z"
+      },
+      "resources": {
+        "NanoCpus": 1000000000,
+        "Memory": 3221225472,
+        "MemorySwap": 3221225472,
+        "PidsLimit": 512,
+        "CpusetCpus": "",
+        "ReadonlyRootfs": true,
+        "NetworkMode": "none"
+      }
+    },
+    "samples": [
+      {
+        "at": "2026-11-19T19:53:37.345007+00:00",
+        "hostProcStat": [
+          "cpu  9748046 2623591 2339101 255996267 476127 0 41258 302234 0 0",
+          "cpu0 4882573 2413874 1261966 126801596 232486 0 27753 140962 0 0",
+          "cpu1 4865472 209717 1077134 129194670 243640 0 13505 161272 0 0"
+        ],
+        "hostLoadavg": "3.02 2.42 2.05 1/585 1797845",
+        "cgroup": {
+          "cpu.stat": "usage_usec 535119333\nuser_usec 476543059\nsystem_usec 58576274\nnice_usec 471839070\ncore_sched.force_idle_usec 0\nnr_periods 5710\nnr_throttled 5115\nthrottled_usec 337860208\nnr_bursts 0\nburst_usec 0",
+          "cpu.pressure": "some avg10=52.47 avg60=55.15 avg300=44.36 total=289684745\nfull avg10=36.16 avg60=36.76 avg300=27.30 total=173188499",
+          "cpu.max": "100000 100000",
+          "memory.current": "1776001024",
+          "memory.peak": "2856026112",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+          "pids.current": "111",
+          "cpuset.cpus.effective": "0-1"
+        },
+        "ownedProcesses": [
+          {
+            "pid": 1795983,
+            "comm": "docker-init",
+            "status": {
+              "Name": "docker-init",
+              "State": "S (sleeping)",
+              "VmRSS": "604 kB",
+              "Threads": "1",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 0,
+            "cpuTicks": 2
+          },
+          {
+            "pid": 1795997,
+            "comm": "sleep",
+            "status": {
+              "Name": "sleep",
+              "State": "S (sleeping)",
+              "VmRSS": "1044 kB",
+              "Threads": "1",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 0,
+            "cpuTicks": 0
+          },
+          {
+            "pid": 1796073,
+            "comm": "timeout",
+            "status": {
+              "Name": "timeout",
+              "State": "S (sleeping)",
+              "VmRSS": "1112 kB",
+              "Threads": "1",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 0
+          },
+          {
+            "pid": 1796079,
+            "comm": "MainThread",
+            "status": {
+              "Name": "MainThread",
+              "State": "S (sleeping)",
+              "VmRSS": "54156 kB",
+              "Threads": "11",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 7
+          },
+          {
+            "pid": 1796090,
+            "comm": "MainThread",
+            "status": {
+              "Name": "MainThread",
+              "State": "R (running)",
+              "VmRSS": "679868 kB",
+              "Threads": "12",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 13426
+          },
+          {
+            "pid": 1796098,
+            "comm": "esbuild",
+            "status": {
+              "Name": "esbuild",
+              "State": "S (sleeping)",
+              "VmRSS": "14156 kB",
+              "Threads": "6",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 57
+          },
+          {
+            "pid": 1796105,
+            "comm": "esbuild",
+            "status": {
+              "Name": "esbuild",
+              "State": "S (sleeping)",
+              "VmRSS": "16416 kB",
+              "Threads": "6",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 63
+          },
+          {
+            "pid": 1796889,
+            "comm": "bash",
+            "status": {
+              "Name": "bash",
+              "State": "S (sleeping)",
+              "VmRSS": "2792 kB",
+              "Threads": "1",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 1
+          },
+          {
+            "pid": 1796895,
+            "comm": "MiniBrowser",
+            "status": {
+              "Name": "MiniBrowser",
+              "State": "S (sleeping)",
+              "VmRSS": "123544 kB",
+              "Threads": "10",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 364
+          },
+          {
+            "pid": 1796912,
+            "comm": "WPENetworkProce",
+            "status": {
+              "Name": "WPENetworkProce",
+              "State": "S (sleeping)",
+              "VmRSS": "61540 kB",
+              "Threads": "8",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 101
+          },
+          {
+            "pid": 1796914,
+            "comm": "WPEWebProcess",
+            "status": {
+              "Name": "WPEWebProcess",
+              "State": "R (running)",
+              "VmRSS": "1200464 kB",
+              "Threads": "54",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 16276
+          }
+        ]
+      },
+      {
+        "at": "2026-11-19T19:53:38.347109+00:00",
+        "hostProcStat": [
+          "cpu  9748046 2623688 2339105 255996366 476127 0 41258 302234 0 0",
+          "cpu0 4882573 2413924 1261967 126801645 232486 0 27753 140962 0 0",
+          "cpu1 4865473 209763 1077137 129194720 243640 0 13505 161272 0 0"
+        ],
+        "hostLoadavg": "3.10 2.45 2.06 1/585 1797845",
+        "cgroup": {
+          "cpu.stat": "usage_usec 536119382\nuser_usec 477509887\nsystem_usec 58609495\nnice_usec 472805616\ncore_sched.force_idle_usec 0\nnr_periods 5720\nnr_throttled 5125\nthrottled_usec 338776806\nnr_bursts 0\nburst_usec 0",
+          "cpu.pressure": "some avg10=52.47 avg60=55.15 avg300=44.36 total=290400576\nfull avg10=36.16 avg60=36.76 avg300=27.30 total=173668885",
+          "cpu.max": "100000 100000",
+          "memory.current": "1787211776",
+          "memory.peak": "2856026112",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+          "pids.current": "111",
+          "cpuset.cpus.effective": "0-1"
+        },
+        "ownedProcesses": [
+          {
+            "pid": 1795983,
+            "comm": "docker-init",
+            "status": {
+              "Name": "docker-init",
+              "State": "S (sleeping)",
+              "VmRSS": "604 kB",
+              "Threads": "1",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 0,
+            "cpuTicks": 2
+          },
+          {
+            "pid": 1795997,
+            "comm": "sleep",
+            "status": {
+              "Name": "sleep",
+              "State": "S (sleeping)",
+              "VmRSS": "1044 kB",
+              "Threads": "1",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 0,
+            "cpuTicks": 0
+          },
+          {
+            "pid": 1796073,
+            "comm": "timeout",
+            "status": {
+              "Name": "timeout",
+              "State": "S (sleeping)",
+              "VmRSS": "1112 kB",
+              "Threads": "1",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 0
+          },
+          {
+            "pid": 1796079,
+            "comm": "MainThread",
+            "status": {
+              "Name": "MainThread",
+              "State": "S (sleeping)",
+              "VmRSS": "54156 kB",
+              "Threads": "11",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 7
+          },
+          {
+            "pid": 1796090,
+            "comm": "MainThread",
+            "status": {
+              "Name": "MainThread",
+              "State": "R (running)",
+              "VmRSS": "685828 kB",
+              "Threads": "12",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 13436
+          },
+          {
+            "pid": 1796098,
+            "comm": "esbuild",
+            "status": {
+              "Name": "esbuild",
+              "State": "S (sleeping)",
+              "VmRSS": "14156 kB",
+              "Threads": "6",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 57
+          },
+          {
+            "pid": 1796105,
+            "comm": "esbuild",
+            "status": {
+              "Name": "esbuild",
+              "State": "S (sleeping)",
+              "VmRSS": "16416 kB",
+              "Threads": "6",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 63
+          },
+          {
+            "pid": 1796889,
+            "comm": "bash",
+            "status": {
+              "Name": "bash",
+              "State": "S (sleeping)",
+              "VmRSS": "2792 kB",
+              "Threads": "1",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 1
+          },
+          {
+            "pid": 1796895,
+            "comm": "MiniBrowser",
+            "status": {
+              "Name": "MiniBrowser",
+              "State": "S (sleeping)",
+              "VmRSS": "123680 kB",
+              "Threads": "10",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 367
+          },
+          {
+            "pid": 1796912,
+            "comm": "WPENetworkProce",
+            "status": {
+              "Name": "WPENetworkProce",
+              "State": "S (sleeping)",
+              "VmRSS": "61560 kB",
+              "Threads": "8",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 101
+          },
+          {
+            "pid": 1796914,
+            "comm": "WPEWebProcess",
+            "status": {
+              "Name": "WPEWebProcess",
+              "State": "R (running)",
+              "VmRSS": "1205312 kB",
+              "Threads": "54",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 16364
+          }
+        ]
+      },
+      {
+        "at": "2026-11-19T19:53:39.350487+00:00",
+        "hostProcStat": [
+          "cpu  9748047 2623782 2339110 255996465 476127 0 41258 302235 0 0",
+          "cpu0 4882573 2413973 1261968 126801695 232486 0 27753 140962 0 0",
+          "cpu1 4865473 209808 1077142 129194770 243640 0 13505 161272 0 0"
+        ],
+        "hostLoadavg": "3.10 2.45 2.06 6/585 1797845",
+        "cgroup": {
+          "cpu.stat": "usage_usec 537123167\nuser_usec 478461350\nsystem_usec 58661817\nnice_usec 473748745\ncore_sched.force_idle_usec 0\nnr_periods 5731\nnr_throttled 5136\nthrottled_usec 339825592\nnr_bursts 0\nburst_usec 0",
+          "cpu.pressure": "some avg10=53.84 avg60=55.31 avg300=44.47 total=291175485\nfull avg10=37.04 avg60=36.90 avg300=27.40 total=174145981",
+          "cpu.max": "100000 100000",
+          "memory.current": "1748361216",
+          "memory.peak": "2856026112",
+          "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+          "pids.current": "111",
+          "cpuset.cpus.effective": "0-1"
+        },
+        "ownedProcesses": [
+          {
+            "pid": 1795983,
+            "comm": "docker-init",
+            "status": {
+              "Name": "docker-init",
+              "State": "S (sleeping)",
+              "VmRSS": "604 kB",
+              "Threads": "1",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 0,
+            "cpuTicks": 2
+          },
+          {
+            "pid": 1795997,
+            "comm": "sleep",
+            "status": {
+              "Name": "sleep",
+              "State": "S (sleeping)",
+              "VmRSS": "1044 kB",
+              "Threads": "1",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 0,
+            "cpuTicks": 0
+          },
+          {
+            "pid": 1796073,
+            "comm": "timeout",
+            "status": {
+              "Name": "timeout",
+              "State": "S (sleeping)",
+              "VmRSS": "1112 kB",
+              "Threads": "1",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 0
+          },
+          {
+            "pid": 1796079,
+            "comm": "MainThread",
+            "status": {
+              "Name": "MainThread",
+              "State": "S (sleeping)",
+              "VmRSS": "54156 kB",
+              "Threads": "11",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 7
+          },
+          {
+            "pid": 1796090,
+            "comm": "MainThread",
+            "status": {
+              "Name": "MainThread",
+              "State": "S (sleeping)",
+              "VmRSS": "641476 kB",
+              "Threads": "12",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 13458
+          },
+          {
+            "pid": 1796098,
+            "comm": "esbuild",
+            "status": {
+              "Name": "esbuild",
+              "State": "S (sleeping)",
+              "VmRSS": "14156 kB",
+              "Threads": "6",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 57
+          },
+          {
+            "pid": 1796105,
+            "comm": "esbuild",
+            "status": {
+              "Name": "esbuild",
+              "State": "S (sleeping)",
+              "VmRSS": "16416 kB",
+              "Threads": "6",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 63
+          },
+          {
+            "pid": 1796889,
+            "comm": "bash",
+            "status": {
+              "Name": "bash",
+              "State": "S (sleeping)",
+              "VmRSS": "2792 kB",
+              "Threads": "1",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 1
+          },
+          {
+            "pid": 1796895,
+            "comm": "MiniBrowser",
+            "status": {
+              "Name": "MiniBrowser",
+              "State": "S (sleeping)",
+              "VmRSS": "125140 kB",
+              "Threads": "10",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 369
+          },
+          {
+            "pid": 1796912,
+            "comm": "WPENetworkProce",
+            "status": {
+              "Name": "WPENetworkProce",
+              "State": "S (sleeping)",
+              "VmRSS": "61608 kB",
+              "Threads": "8",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 102
+          },
+          {
+            "pid": 1796914,
+            "comm": "WPEWebProcess",
+            "status": {
+              "Name": "WPEWebProcess",
+              "State": "R (running)",
+              "VmRSS": "1210604 kB",
+              "Threads": "54",
+              "Cpus_allowed_list": "0-1"
+            },
+            "nice": 19,
+            "cpuTicks": 16440
+          }
+        ]
+      }
+    ]
+  },
+  "worker": {
+    "currentService": {
+      "exit": 0,
+      "fields": {
+        "ExecMainStartTimestamp": "Thu 2026-11-19 19:53:30 UTC",
+        "ExecMainExitTimestamp": "Thu 2026-11-19 19:53:30 UTC",
+        "ExecMainStatus": "0",
+        "MemoryCurrent": "[not set]",
+        "CPUUsageNSec": "50972000",
+        "TasksCurrent": "[not set]",
+        "ActiveState": "inactive",
+        "SubState": "dead"
+      }
+    },
+    "currentTimer": {
+      "exit": 0,
+      "fields": {
+        "NextElapseUSecRealtime": "",
+        "NextElapseUSecMonotonic": "2w 1d 17h 21min 48.813776s",
+        "LastTriggerUSec": "Thu 2026-11-19 19:53:30 UTC",
+        "ActiveState": "active",
+        "SubState": "waiting"
+      }
+    },
+    "historicalJournalWindow": {
+      "exit": 0,
+      "fromUtc": "2026-11-19T19:50:23.374000+00:00",
+      "untilUtc": "2026-11-19T19:50:49.068000+00:00",
+      "entries": [
+        {
+          "__REALTIME_TIMESTAMP": "1795117823390142",
+          "_SYSTEMD_UNIT": "init.scope",
+          "UNIT": "tadazz-package-builder.service",
+          "JOB_TYPE": "start",
+          "MESSAGE_ID": "7d4958e842da4a758f6c1cdc7b36dcc5"
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795117823470399",
+          "_SYSTEMD_UNIT": "init.scope",
+          "UNIT": "tadazz-package-builder.service",
+          "MESSAGE_ID": "7ad2d189f7e94e70a38c781354912448"
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795117823470671",
+          "_SYSTEMD_UNIT": "init.scope",
+          "UNIT": "tadazz-package-builder.service",
+          "JOB_TYPE": "start",
+          "JOB_RESULT": "done",
+          "MESSAGE_ID": "39f53479d3a045ac8e11786248231fbf"
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795117835452680",
+          "_SYSTEMD_UNIT": "init.scope",
+          "UNIT": "tadazz-package-builder.service",
+          "JOB_TYPE": "start",
+          "MESSAGE_ID": "7d4958e842da4a758f6c1cdc7b36dcc5"
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795117835499704",
+          "_SYSTEMD_UNIT": "init.scope",
+          "UNIT": "tadazz-package-builder.service",
+          "MESSAGE_ID": "7ad2d189f7e94e70a38c781354912448"
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795117835500133",
+          "_SYSTEMD_UNIT": "init.scope",
+          "UNIT": "tadazz-package-builder.service",
+          "JOB_TYPE": "start",
+          "JOB_RESULT": "done",
+          "MESSAGE_ID": "39f53479d3a045ac8e11786248231fbf"
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795117848392114",
+          "_SYSTEMD_UNIT": "init.scope",
+          "UNIT": "tadazz-package-builder.service",
+          "JOB_TYPE": "start",
+          "MESSAGE_ID": "7d4958e842da4a758f6c1cdc7b36dcc5"
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795117848442004",
+          "_SYSTEMD_UNIT": "init.scope",
+          "UNIT": "tadazz-package-builder.service",
+          "MESSAGE_ID": "7ad2d189f7e94e70a38c781354912448"
+        },
+        {
+          "__REALTIME_TIMESTAMP": "1795117848442154",
+          "_SYSTEMD_UNIT": "init.scope",
+          "UNIT": "tadazz-package-builder.service",
+          "JOB_TYPE": "start",
+          "JOB_RESULT": "done",
+          "MESSAGE_ID": "39f53479d3a045ac8e11786248231fbf"
+        }
+      ]
+    },
+    "completedInvocations": [
+      {
+        "startedAtUtc": "2026-11-19T19:50:23.390Z",
+        "finishedAtUtc": "2026-11-19T19:50:23.470Z",
+        "durationMs": 80.529,
+        "result": "done"
+      },
+      {
+        "startedAtUtc": "2026-11-19T19:50:35.452Z",
+        "finishedAtUtc": "2026-11-19T19:50:35.500Z",
+        "durationMs": 47.453,
+        "result": "done"
+      },
+      {
+        "startedAtUtc": "2026-11-19T19:50:48.392Z",
+        "finishedAtUtc": "2026-11-19T19:50:48.442Z",
+        "durationMs": 50.04,
+        "result": "done"
+      }
+    ]
+  },
+  "observedFacts": [
+    "All observed owned browser and Node processes retain affinity 0-1 and nice 19. Docker has a one-CPU quota, 3 GiB memory equal to memory+swap limit, a read-only root and network none.",
+    "The later two-second sample consumed approximately one CPU core and was throttled in every observed CPU quota period, while both physical cores were approximately half idle.",
+    "The running container was not OOM-killed; all cgroup memory event counters were zero and recorded memory peak was 2856026112 bytes.",
+    "The known worker timer completed three nearby service activations in approximately 47-80 ms; the latest observed service was inactive after successful completion."
+  ],
+  "inferencesAndLimits": [
+    "Current quota saturation is a plausible browser scheduling pressure, but the sample is about three minutes after the failed Pause action and cannot prove that it caused this failure.",
+    "The affinity correction is present; this measurement does not support a reversion to the earlier CPU0-only pin.",
+    "The available worker timestamps do not support attributing a ten-second pause stall to the short worker activations. Other historical load was not sampled and cannot be excluded.",
+    "A returned/visible/enabled Playwright actionability check followed by timeout at performing click does not establish that the widget received pointer/click/change events.",
+    "No retry, budget change or product fix is authorized by this observation alone. The ongoing gate should finish and preserve its complete failure record."
+  ]
+}

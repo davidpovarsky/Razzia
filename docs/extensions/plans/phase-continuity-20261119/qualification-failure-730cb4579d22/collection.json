@@ -1,0 +1,43 @@
+{
+  "sourceSha": "730cb4579d22589e1a7fc96a6873df9cb273e479",
+  "failedRun": "tadazz-codex-fullshow-730cb4579d22-1587d04d",
+  "capturedAt": "2026-11-19T18:02:08.187744+00:00",
+  "releaseQualified": false,
+  "files": [
+    {
+      "path": "browser.stderr.log",
+      "bytes": 106166,
+      "sha256": "889c6947365059dff0b51b2b1d3a8ec527c746e77a801c67f8906405f33bae30"
+    },
+    {
+      "path": "browser.stdout.log",
+      "bytes": 9255,
+      "sha256": "2f3673fe6d5f5ed8eb6b625dba3fa2022c289ea92c4ab03110080d689bd38557"
+    },
+    {
+      "path": "browser-resource-evidence.json",
+      "bytes": 854,
+      "sha256": "753bf610344dc3b4c88fc01bc47792796c5c2e0fae654ac82fcfebc4e453db0e"
+    },
+    {
+      "path": "full-show/receipt.json",
+      "bytes": 1616722,
+      "sha256": "b4537e897cfccbbf8836c27d9d24ab2d36d60b455a4e25250e23561d03f2e21a"
+    },
+    {
+      "path": "full-show/progress.json",
+      "bytes": 1597778,
+      "sha256": "d05f61fc14967373fc3025c255d3ccc0b00ef839e29da3f6a0d5666f4816afe1"
+    },
+    {
+      "path": "full-show/webkit-tadazz-classic-browser.json",
+      "bytes": 4475,
+      "sha256": "c4f323dadb74e31232991c58bd99ad226911b070386eb6e203ac87369cf26498"
+    },
+    {
+      "path": "full-show/webkit-razzia-original-browser.json",
+      "bytes": 5177,
+      "sha256": "6096d944648ac390af1463442a8729cdded5a287513f24d9d77d6c8089d32e01"
+    }
+  ]
+}

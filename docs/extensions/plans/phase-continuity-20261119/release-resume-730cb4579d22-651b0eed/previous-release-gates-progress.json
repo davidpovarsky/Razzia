@@ -1,0 +1,30 @@
+{
+  "sourceSha": "730cb4579d22589e1a7fc96a6873df9cb273e479",
+  "serialCpuBudget": true,
+  "fullShowMemoryLimitBytes": 3221225472,
+  "completed": [
+    {
+      "check": "native-launch",
+      "exit": 0,
+      "seconds": 213.4,
+      "log": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase-continuity-20261119\\linux-native-launch-730cb4579d22.log"
+    },
+    {
+      "check": "native-consent",
+      "exit": 0,
+      "seconds": 272.6,
+      "log": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase-continuity-20261119\\linux-native-consent-730cb4579d22.log"
+    },
+    {
+      "check": "full-show",
+      "exit": 1,
+      "seconds": 914.8,
+      "log": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase-continuity-20261119\\linux-full-show-730cb4579d22.log"
+    }
+  ],
+  "status": "failed",
+  "current": "full-show",
+  "stepStartedAt": 1795109914.762982,
+  "sourceRun": "tadazz-codex-730cb4579d22-d298324d",
+  "failedCheck": "full-show"
+}

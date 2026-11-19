@@ -1,0 +1,25 @@
+{
+  "helper": "work/phase-continuity-20261119/release-tools/fullshow_affinity_corrected.py",
+  "sha256": "b1a7563155042939649f064228a5f04243d8c46a4bbf641fa5415679a58638cc",
+  "baselineControllerPath": "extensions/qa/phase3-full-show/linux-browser-verify.py",
+  "baselineControllerSha256": "3db9cdf9336ad435f9565d7e6368e7e0d4cf5a184d43ec8d79ed68fff5bee617",
+  "candidateSha": "730cb4579d22589e1a7fc96a6873df9cb273e479",
+  "sourceRun": "tadazz-codex-730cb4579d22-d298324d",
+  "changes": [
+    "Relocate external controller root",
+    "Remove taskset -c 0 only; preserve nice19 and cgroup1CPU",
+    "Keep DEBUG=pw:browser and CPUstat/pressure evidence",
+    "Append explicit runner-correction provenance"
+  ],
+  "unchanged": [
+    "Original frozen browser QA source",
+    "All40 checks/44 fixtures",
+    "All assertion/action timeouts",
+    "1800s gate ceiling",
+    "3GiB memory/zero swap/no network/read-only mounts",
+    "Original source/widget/dependency verification",
+    "Owned-container finally cleanup"
+  ],
+  "syntax": "PASS",
+  "executed": false
+}

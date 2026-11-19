@@ -1,0 +1,84 @@
+{
+  "kind": "prepared unapplied offline browser CPU budget patch",
+  "preparedAtUtc": "2026-11-19T20:10:43.348901+00:00",
+  "baseSourceSha": "e66317a5385862a3a756a18a5646fad4e64e5c26",
+  "canonicalPath": "extensions/qa/phase3-full-show/linux-browser-verify.py",
+  "canonicalBeforeSha256": "7e950af3ba46ac6ee9fbf0bedb55b510751e34d0dc8710936a4b9f21c072d2b1",
+  "proposedAfterSha256": "0f19aabf900d7bd6bace5d49121c70f2111170d63f0fd5b3dadcade77fb06afd",
+  "proposedCopyPath": "work/phase-continuity-20261119/release-tools/fullshow_two_cpu_budget.py",
+  "proposedBytes": 11007,
+  "patchPath": "docs/extensions/plans/phase-continuity-20261119/release-planning/fullshow-two-cpu-budget.patch",
+  "patchSha256": "5feb69360fdd5ce47cf2c64f9b8bee2e6691674e612ba6673ad06c85fae1a4d3",
+  "syntaxParsed": true,
+  "appliedToCanonicalSource": false,
+  "executed": false,
+  "productionChanged": false,
+  "instructions": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "d6bbadae0ef65df0dba49fa96a261d579d7aed603ebe6edbb5b2949e60efbd9f",
+      "cpuLimitRequirement": null
+    },
+    {
+      "path": "CLAUDE.md",
+      "sha256": "302517282fc69da25fa21dbbfccd7b1ee1824634440e1cbc5980ce985fedb980",
+      "cpuLimitRequirement": null
+    }
+  ],
+  "gateContract": {
+    "path": "extensions/deployment/stage-mcp-site.py",
+    "sha256": "daeb027f27a183b95fc9259fd58ea2742adf387398bd56aa995bb7f97be2538a",
+    "required": [
+      "exact source and widget hashes",
+      "source/widget/SDK integrity",
+      "network none and read-only source",
+      "both Chromium and WebKit",
+      "all40 scenario checks and44 renderer fixtures",
+      "no customer or production mutation"
+    ],
+    "fixedOneCpuRequirement": false
+  },
+  "budgetReview": {
+    "oldCpuQuotaCores": 1,
+    "newCpuQuotaCores": 2,
+    "scope": "Only a newly created owned offline full-show browser QA container; no existing containers or production/worker settings are changed.",
+    "matchingGuardsRetained": [
+      "cpu.max numerator equals two times positive period",
+      "cpu.max unchanged before and after",
+      "Docker configuredNanoCpus equals2000000000"
+    ],
+    "unchanged": [
+      "nice19",
+      "no physical affinity pin",
+      "3GiB memory",
+      "zero swap",
+      "read-only root/source/dependencies",
+      "network none/no published ports",
+      "all behavioral assertions",
+      "all per-assertion timeouts",
+      "1800s browser ceiling and1815s controller ceiling",
+      "both browser engines",
+      "40 required checks",
+      "44 renderer fixtures",
+      "source/widget/SDK before-after hashes",
+      "OOM rejection",
+      "owned-container cleanup",
+      "production and worker preservation guards"
+    ]
+  },
+  "basis": {
+    "observationPath": "docs/extensions/plans/phase-continuity-20261119/qualification-failure-e66317a53858/pause-resource-observation.json",
+    "observationSha256": "e44eee8064a7ae9ab5acd5f9f8b7bb203d6594bba67f8eab59d85b4fc2682825",
+    "observed": "Later two-second sample used0.9994CPU and throttled21/21 periods while both host CPUs were approximately50percent idle.",
+    "limitation": "This sample does not prove that CPU quota caused the prior Pause click failure. Raising the declared budget improves resource adequacy; it does not convert historical failures into passes."
+  },
+  "releaseSequence": [
+    "Preserve failed e663 receipts and evidence; let its owned run complete.",
+    "Finish the isolated transport fix and Replay readiness correction with focused baseline/proof.",
+    "Root reviews/applies this explicit budget patch and commits the combined candidate.",
+    "Generate and commit native pins where required by product changes, then freeze a clean final SHA.",
+    "Run one complete exact-source qualifier on the final SHA, retaining all gates and timeouts.",
+    "Accept only actual passing receipts; identify the browser runner budget as two CPUs in release provenance."
+  ],
+  "resourceCaveat": "A two-CPU quota can use both host cores. Keep only one heavy QA run active; nice19 gives low task priority but is not a reserved production core."
+}

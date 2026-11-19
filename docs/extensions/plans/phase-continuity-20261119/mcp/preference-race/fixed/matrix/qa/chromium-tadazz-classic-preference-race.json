@@ -1,0 +1,301 @@
+{
+  "engine": "chromium",
+  "theme": "tadazz-classic",
+  "mechanism": "Unmodified real responses held at loopback HTTP before AppBridge ACK",
+  "cases": [
+    {
+      "preference": "motion",
+      "expected": {
+        "locale": "en",
+        "reducedMotion": false
+      },
+      "snapshots": [
+        {
+          "step": "automatic ACK held",
+          "motionDisabled": false,
+          "languageDisabled": false,
+          "motion": true,
+          "locale": "en",
+          "authoringDisabled": true,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question"
+        },
+        {
+          "step": "preference ACK held",
+          "motionDisabled": true,
+          "languageDisabled": true,
+          "motion": true,
+          "locale": "en",
+          "authoringDisabled": true,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question"
+        },
+        {
+          "step": "new preference acknowledged",
+          "motionDisabled": false,
+          "languageDisabled": false,
+          "motion": false,
+          "locale": "en",
+          "authoringDisabled": false,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting"
+        },
+        {
+          "step": "old automatic ACK delivered",
+          "motionDisabled": false,
+          "languageDisabled": false,
+          "motion": false,
+          "locale": "en",
+          "authoringDisabled": false,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting"
+        }
+      ],
+      "requests": {
+        "automatic": {
+          "selectionVersion": 3,
+          "draftId": "pRvDSG5CylIKca5DF3oPETGVIqyrQW0l",
+          "expectedRevision": 1,
+          "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "context": {
+            "mode": "demo",
+            "role": "spectator",
+            "locale": "en",
+            "reducedMotion": true,
+            "join": "unavailable-demo",
+            "actions": "synthetic-only"
+          },
+          "contractVersion": "0.1.0"
+        },
+        "preference": {
+          "selectionVersion": 3,
+          "draftId": "pRvDSG5CylIKca5DF3oPETGVIqyrQW0l",
+          "expectedRevision": 1,
+          "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "context": {
+            "mode": "demo",
+            "role": "spectator",
+            "locale": "en",
+            "reducedMotion": false,
+            "join": "unavailable-demo",
+            "actions": "synthetic-only"
+          },
+          "contractVersion": "0.1.0"
+        },
+        "deliveredOldAfterNew": true
+      },
+      "events": [
+        {
+          "type": "pointerdown",
+          "id": "full-show-reduce-motion",
+          "at": 3936.5,
+          "disabled": false,
+          "checked": true
+        },
+        {
+          "type": "pointerup",
+          "id": "full-show-reduce-motion",
+          "at": 3937.199999988079,
+          "disabled": false,
+          "checked": true
+        },
+        {
+          "type": "click",
+          "id": "full-show-reduce-motion",
+          "at": 3937.399999976158,
+          "disabled": false,
+          "checked": false
+        },
+        {
+          "type": "input",
+          "id": "full-show-reduce-motion",
+          "at": 3940.399999976158,
+          "disabled": true,
+          "checked": true
+        },
+        {
+          "type": "change",
+          "id": "full-show-reduce-motion",
+          "at": 3940.5,
+          "disabled": true,
+          "checked": true
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "preference": "language",
+      "expected": {
+        "locale": "fr",
+        "reducedMotion": true
+      },
+      "snapshots": [
+        {
+          "step": "automatic ACK held",
+          "motionDisabled": false,
+          "languageDisabled": false,
+          "motion": true,
+          "locale": "en",
+          "authoringDisabled": true,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question"
+        },
+        {
+          "step": "preference ACK held",
+          "motionDisabled": true,
+          "languageDisabled": true,
+          "motion": true,
+          "locale": "en",
+          "authoringDisabled": true,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question"
+        },
+        {
+          "step": "new preference acknowledged",
+          "motionDisabled": false,
+          "languageDisabled": false,
+          "motion": true,
+          "locale": "fr",
+          "authoringDisabled": false,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting"
+        },
+        {
+          "step": "old automatic ACK delivered",
+          "motionDisabled": false,
+          "languageDisabled": false,
+          "motion": true,
+          "locale": "fr",
+          "authoringDisabled": false,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting"
+        }
+      ],
+      "requests": {
+        "automatic": {
+          "selectionVersion": 3,
+          "draftId": "pRvDSG5CylIKca5DF3oPETGVIqyrQW0l",
+          "expectedRevision": 1,
+          "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "context": {
+            "mode": "demo",
+            "role": "spectator",
+            "locale": "en",
+            "reducedMotion": true,
+            "join": "unavailable-demo",
+            "actions": "synthetic-only"
+          },
+          "contractVersion": "0.1.0"
+        },
+        "preference": {
+          "selectionVersion": 3,
+          "draftId": "pRvDSG5CylIKca5DF3oPETGVIqyrQW0l",
+          "expectedRevision": 1,
+          "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "context": {
+            "mode": "demo",
+            "role": "spectator",
+            "locale": "fr",
+            "reducedMotion": true,
+            "join": "unavailable-demo",
+            "actions": "synthetic-only"
+          },
+          "contractVersion": "0.1.0"
+        },
+        "deliveredOldAfterNew": true
+      },
+      "events": [
+        {
+          "type": "input",
+          "id": "full-show-language",
+          "at": 3615.199999988079,
+          "disabled": false,
+          "locale": "fr"
+        },
+        {
+          "type": "change",
+          "id": "full-show-language",
+          "at": 3615.300000011921,
+          "disabled": false,
+          "locale": "fr"
+        }
+      ],
+      "status": "PASS"
+    }
+  ],
+  "status": "PASS",
+  "gates": [
+    {
+      "label": "motion automatic",
+      "input": {
+        "selectionVersion": 3,
+        "draftId": "pRvDSG5CylIKca5DF3oPETGVIqyrQW0l",
+        "expectedRevision": 1,
+        "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+        "context": {
+          "mode": "demo",
+          "role": "spectator",
+          "locale": "en",
+          "reducedMotion": true,
+          "join": "unavailable-demo",
+          "actions": "synthetic-only"
+        },
+        "contractVersion": "0.1.0"
+      },
+      "claimed": true,
+      "fulfilled": true
+    },
+    {
+      "label": "motion explicit",
+      "input": {
+        "selectionVersion": 3,
+        "draftId": "pRvDSG5CylIKca5DF3oPETGVIqyrQW0l",
+        "expectedRevision": 1,
+        "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+        "context": {
+          "mode": "demo",
+          "role": "spectator",
+          "locale": "en",
+          "reducedMotion": false,
+          "join": "unavailable-demo",
+          "actions": "synthetic-only"
+        },
+        "contractVersion": "0.1.0"
+      },
+      "claimed": true,
+      "fulfilled": true
+    },
+    {
+      "label": "language automatic",
+      "input": {
+        "selectionVersion": 3,
+        "draftId": "pRvDSG5CylIKca5DF3oPETGVIqyrQW0l",
+        "expectedRevision": 1,
+        "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+        "context": {
+          "mode": "demo",
+          "role": "spectator",
+          "locale": "en",
+          "reducedMotion": true,
+          "join": "unavailable-demo",
+          "actions": "synthetic-only"
+        },
+        "contractVersion": "0.1.0"
+      },
+      "claimed": true,
+      "fulfilled": true
+    },
+    {
+      "label": "language explicit",
+      "input": {
+        "selectionVersion": 3,
+        "draftId": "pRvDSG5CylIKca5DF3oPETGVIqyrQW0l",
+        "expectedRevision": 1,
+        "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+        "context": {
+          "mode": "demo",
+          "role": "spectator",
+          "locale": "fr",
+          "reducedMotion": true,
+          "join": "unavailable-demo",
+          "actions": "synthetic-only"
+        },
+        "contractVersion": "0.1.0"
+      },
+      "claimed": true,
+      "fulfilled": true
+    }
+  ]
+}

@@ -1,0 +1,536 @@
+{
+  "kind": "source-backed clarification of Replay request target",
+  "sourceSha": "e66317a5385862a3a756a18a5646fad4e64e5c26",
+  "scope": "Read-only committed source inspection and existing failure metadata; no tests or changes.",
+  "priorObservation": {
+    "path": "replay-existing-call-observation.json",
+    "sha256": "6c554459eb7f70ecbec861068859e0322d9b2705452e1c0cd840abc612381a62"
+  },
+  "sourceBindings": [
+    {
+      "path": "extensions/src/core/show-library/full-show-preview-timeline.ts",
+      "sha256": "8a914aeb168fbfd3884483632d326ecc3f299588be8ca7293b2fc76d0f3f9309",
+      "lines": [
+        {
+          "line": 40,
+          "text": "        seek: \"unavailable\","
+        },
+        {
+          "line": 41,
+          "text": "      })"
+        },
+        {
+          "line": 42,
+          "text": "    }"
+        },
+        {
+          "line": 43,
+          "text": ""
+        },
+        {
+          "line": 44,
+          "text": "    if (card.kind === \"quiz\" || card.kind === \"survey\") {"
+        },
+        {
+          "line": 45,
+          "text": "      add(\"question\", {"
+        },
+        {
+          "line": 46,
+          "text": "        kind: \"known\","
+        },
+        {
+          "line": 47,
+          "text": "        milliseconds: card.cooldownSeconds * 1000,"
+        },
+        {
+          "line": 48,
+          "text": "      })"
+        },
+        {
+          "line": 49,
+          "text": "      add(\"answerCards\", { kind: \"manual\" })"
+        },
+        {
+          "line": 50,
+          "text": "      add("
+        },
+        {
+          "line": 51,
+          "text": "        \"voting\","
+        },
+        {
+          "line": 52,
+          "text": "        card.timeSeconds > 0"
+        },
+        {
+          "line": 53,
+          "text": "          ? { kind: \"known\", milliseconds: card.timeSeconds * 1000 }"
+        },
+        {
+          "line": 54,
+          "text": "          : { kind: \"infinite\" },"
+        },
+        {
+          "line": 55,
+          "text": "      )"
+        },
+        {
+          "line": 56,
+          "text": "      for (const phase of [\"voteLocked\", \"results\"]) {"
+        },
+        {
+          "line": 57,
+          "text": "        add(phase, { kind: \"manual\" })"
+        },
+        {
+          "line": 58,
+          "text": "      }"
+        },
+        {
+          "line": 59,
+          "text": "    } else {"
+        },
+        {
+          "line": 60,
+          "text": "      let duration: PreviewDuration = { kind: \"unknown\" }"
+        },
+        {
+          "line": 61,
+          "text": ""
+        },
+        {
+          "line": 62,
+          "text": "      if (card.advance === \"manual\") {"
+        },
+        {
+          "line": 63,
+          "text": "        duration = { kind: \"manual\" }"
+        },
+        {
+          "line": 64,
+          "text": "      } else if (card.advance === \"onMediaEnd\") {"
+        }
+      ]
+    },
+    {
+      "path": "extensions/src/mcp-app/server/full-show-selection.ts",
+      "sha256": "cd0f3f27ca2c8a4ef16a2d15c699c196581c52d14297c6a3d5fb0326a745008d",
+      "lines": [
+        {
+          "line": 126,
+          "text": "          return deriveAuthoredShowPreviewIdentityMap(show)"
+        },
+        {
+          "line": 127,
+          "text": "        } catch {"
+        },
+        {
+          "line": 128,
+          "text": "          throw new ToolError(\"PREVIEW_UNAVAILABLE\")"
+        },
+        {
+          "line": 129,
+          "text": "        }"
+        },
+        {
+          "line": 130,
+          "text": "      })()"
+        },
+        {
+          "line": 131,
+          "text": ""
+        },
+        {
+          "line": 132,
+          "text": "      const timeline = compileFullShowPreviewTimeline(show)"
+        },
+        {
+          "line": 133,
+          "text": "      let questionOrdinal = 0"
+        },
+        {
+          "line": 134,
+          "text": "      const ordinals = show.cards.map((card) => {"
+        },
+        {
+          "line": 135,
+          "text": "        if (card.kind !== \"quiz\" && card.kind !== \"survey\") {"
+        },
+        {
+          "line": 136,
+          "text": "          return null"
+        },
+        {
+          "line": 137,
+          "text": "        }"
+        },
+        {
+          "line": 138,
+          "text": ""
+        },
+        {
+          "line": 139,
+          "text": "        questionOrdinal += 1"
+        },
+        {
+          "line": 140,
+          "text": ""
+        },
+        {
+          "line": 141,
+          "text": "        return questionOrdinal"
+        },
+        {
+          "line": 142,
+          "text": "      })"
+        },
+        {
+          "line": 143,
+          "text": "      const chapters = timeline.map((chapter, index) => {"
+        },
+        {
+          "line": 144,
+          "text": "        const publicCardId = getPreviewIdentityId("
+        },
+        {
+          "line": 145,
+          "text": "          identities,"
+        },
+        {
+          "line": 146,
+          "text": "          \"cards\","
+        },
+        {
+          "line": 147,
+          "text": "          chapter.authoredKey,"
+        },
+        {
+          "line": 148,
+          "text": "        )"
+        },
+        {
+          "line": 149,
+          "text": ""
+        },
+        {
+          "line": 150,
+          "text": "        return {"
+        },
+        {
+          "line": 151,
+          "text": "          id: `${publicCardId}:${chapter.phase}`,"
+        },
+        {
+          "line": 152,
+          "text": "          cardId: publicCardId,"
+        },
+        {
+          "line": 153,
+          "text": "          index,"
+        },
+        {
+          "line": 154,
+          "text": "          kind: chapter.phase,"
+        },
+        {
+          "line": 155,
+          "text": "          cardOrdinal: chapter.cardIndex + 1,"
+        },
+        {
+          "line": 156,
+          "text": "          questionOrdinal: ordinals[chapter.cardIndex],"
+        },
+        {
+          "line": 157,
+          "text": "          duration: chapter.duration,"
+        },
+        {
+          "line": 158,
+          "text": "        }"
+        },
+        {
+          "line": 159,
+          "text": "      })"
+        },
+        {
+          "line": 160,
+          "text": "      const selectedChapterId = request.chapterId ?? chapters[0]?.id"
+        },
+        {
+          "line": 161,
+          "text": "      const selectedIndex = chapters.findIndex("
+        },
+        {
+          "line": 162,
+          "text": "        (chapter) => chapter.id === selectedChapterId,"
+        }
+      ]
+    },
+    {
+      "path": "extensions/src/mcp-app/client/full-show-navigation.ts",
+      "sha256": "f40b7cde85af9e8026addd71d0ef957f99ec2970d6a4efa9a4f0b7abe7fa14a9",
+      "lines": [
+        {
+          "line": 1,
+          "text": "import type { FullShowInventoryV3 } from \"../contracts/full-show-selection.ts\""
+        },
+        {
+          "line": 2,
+          "text": "import type { FullShowPlaybackSnapshot } from \"./full-show-playback.ts\""
+        },
+        {
+          "line": 3,
+          "text": ""
+        },
+        {
+          "line": 4,
+          "text": "type Chapter = FullShowInventoryV3[\"chapters\"][number]"
+        },
+        {
+          "line": 5,
+          "text": ""
+        },
+        {
+          "line": 6,
+          "text": "/** The transport retains native phases; people navigate authored cards. */"
+        },
+        {
+          "line": 7,
+          "text": "export function fullShowCardNavigation(inventory: FullShowInventoryV3) {"
+        },
+        {
+          "line": 8,
+          "text": "  const cards: Chapter[] = []"
+        },
+        {
+          "line": 9,
+          "text": "  const seen = new Set<string>()"
+        },
+        {
+          "line": 10,
+          "text": "  for (const chapter of inventory.chapters) {"
+        },
+        {
+          "line": 11,
+          "text": "    if (!seen.has(chapter.cardId)) {"
+        },
+        {
+          "line": 12,
+          "text": "      seen.add(chapter.cardId)"
+        },
+        {
+          "line": 13,
+          "text": "      cards.push(chapter)"
+        },
+        {
+          "line": 14,
+          "text": "    }"
+        },
+        {
+          "line": 15,
+          "text": "  }"
+        },
+        {
+          "line": 16,
+          "text": "  const selected = inventory.chapters.find("
+        },
+        {
+          "line": 17,
+          "text": "    (chapter) => chapter.id === inventory.selectedChapterId,"
+        },
+        {
+          "line": 18,
+          "text": "  )"
+        },
+        {
+          "line": 19,
+          "text": "  const index = selected"
+        },
+        {
+          "line": 20,
+          "text": "    ? cards.findIndex((chapter) => chapter.cardId === selected.cardId)"
+        },
+        {
+          "line": 21,
+          "text": "    : -1"
+        },
+        {
+          "line": 22,
+          "text": ""
+        },
+        {
+          "line": 23,
+          "text": "  return {"
+        },
+        {
+          "line": 24,
+          "text": "    cards,"
+        },
+        {
+          "line": 25,
+          "text": "    index,"
+        },
+        {
+          "line": 26,
+          "text": "    selected,"
+        },
+        {
+          "line": 27,
+          "text": "    current: index >= 0 ? cards[index] : undefined,"
+        },
+        {
+          "line": 28,
+          "text": "    previous: index > 0 ? cards[index - 1] : undefined,"
+        },
+        {
+          "line": 29,
+          "text": "    next: index >= 0 ? cards[index + 1] : undefined,"
+        },
+        {
+          "line": 30,
+          "text": "  }"
+        },
+        {
+          "line": 31,
+          "text": "}"
+        },
+        {
+          "line": 32,
+          "text": ""
+        },
+        {
+          "line": 33,
+          "text": "/** Advance only at authored deadlines observed on the existing native clock. */"
+        },
+        {
+          "line": 34,
+          "text": "export function fullShowAutomaticChapter("
+        }
+      ]
+    },
+    {
+      "path": "extensions/src/mcp-app/widget/full-show-entry.tsx",
+      "sha256": "ea70de20ea1f826ae95d22a6e4f16cc0310b86d8ed46e793697200e5cc286c80",
+      "lines": [
+        {
+          "line": 778,
+          "text": "                : playbackOwner.pause(),"
+        },
+        {
+          "line": 779,
+          "text": "            )"
+        },
+        {
+          "line": 780,
+          "text": "          }"
+        },
+        {
+          "line": 781,
+          "text": "        >"
+        },
+        {
+          "line": 782,
+          "text": "          {playback.clock.paused ? ("
+        },
+        {
+          "line": 783,
+          "text": "            <Play aria-hidden=\"true\" />"
+        },
+        {
+          "line": 784,
+          "text": "          ) : ("
+        },
+        {
+          "line": 785,
+          "text": "            <Pause aria-hidden=\"true\" />"
+        },
+        {
+          "line": 786,
+          "text": "          )}"
+        },
+        {
+          "line": 787,
+          "text": "        </NativeButton>"
+        },
+        {
+          "line": 788,
+          "text": "        <NativeButton"
+        },
+        {
+          "line": 789,
+          "text": "          classNameContent=\"contents\""
+        },
+        {
+          "line": 790,
+          "text": "          data-control-source=\"razzia\""
+        },
+        {
+          "line": 791,
+          "text": "          type=\"button\""
+        },
+        {
+          "line": 792,
+          "text": "          data-testid=\"full-show-replay\""
+        },
+        {
+          "line": 793,
+          "text": "          aria-label={t(\"replay\")}"
+        },
+        {
+          "line": 794,
+          "text": "          title={t(\"replay\")}"
+        },
+        {
+          "line": 795,
+          "text": "          disabled={!canCall || busy}"
+        },
+        {
+          "line": 796,
+          "text": "          onClick={() =>"
+        },
+        {
+          "line": 797,
+          "text": "            void preview(selection(frame, navigation.current?.id), true)"
+        },
+        {
+          "line": 798,
+          "text": "          }"
+        },
+        {
+          "line": 799,
+          "text": "        >"
+        },
+        {
+          "line": 800,
+          "text": "          <RotateCcw aria-hidden=\"true\" />"
+        },
+        {
+          "line": 801,
+          "text": "        </NativeButton>"
+        },
+        {
+          "line": 802,
+          "text": "        <div ref={setDemoControlsTarget} className=\"widget-demo-controls\" />"
+        },
+        {
+          "line": 803,
+          "text": "      </nav>"
+        }
+      ]
+    }
+  ],
+  "sourceFacts": [
+    "For quiz/survey cards, compileFullShowPreviewTimeline adds question before answerCards, voting, voteLocked and results.",
+    "The server maps this timeline into inventory chapters in the original order.",
+    "fullShowCardNavigation takes the first chapter for each card and assigns navigation.current to that first chapter for the selected card.",
+    "The Replay handler calls preview(selection(frame,navigation.current?.id),true). Consequently Replay on this question card targets :question even if the displayed phase has advanced to voting."
+  ],
+  "correction": "This source evidence supersedes the earlier provisional possibility that explicit Replay after a phase advance could target :voting. The earlier raw observation is preserved unchanged for provenance.",
+  "conclusion": "The recorded :voting result is consistent with automatic progression and cannot be the explicit question-card Replay handler's intended response. The any-epoch wait can therefore observe a same-question automatic transition while its retained DOM remains connected.",
+  "limits": [
+    "Canonical failure metadata still does not prove whether the ordinary Replay click was delivered to its handler.",
+    "No explicit :question Replay response is visible in the inspected candidate call window; this does not establish a pending request without an event or request record.",
+    "The raw ordinal association lacks a direct request-to-result correlation. This clarification supports a source-level assertion ambiguity, not acceptance of the failed release gate."
+  ]
+}

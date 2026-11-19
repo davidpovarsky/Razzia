@@ -1,0 +1,509 @@
+{
+  "engine": "chromium",
+  "theme": "tadazz-classic",
+  "status": "PASS",
+  "cases": [
+    {
+      "action": "pause",
+      "snapshots": [
+        {
+          "step": "automatic ACK held",
+          "disabled": {
+            "pause": false,
+            "replay": false,
+            "next": false,
+            "previous": false
+          },
+          "authoringDisabled": true,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "epoch": 1,
+          "paused": "false"
+        },
+        {
+          "step": "paused while automatic ACK held",
+          "disabled": {
+            "pause": false,
+            "replay": false,
+            "next": false,
+            "previous": false
+          },
+          "authoringDisabled": true,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "epoch": 1,
+          "paused": "true"
+        },
+        {
+          "step": "automatic ACK preserves user pause",
+          "disabled": {
+            "pause": false,
+            "replay": false,
+            "next": false,
+            "previous": false
+          },
+          "authoringDisabled": false,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "epoch": 2,
+          "paused": "true"
+        }
+      ],
+      "userPausePreserved": true,
+      "events": [
+        {
+          "type": "pointerdown",
+          "id": "full-show-pause",
+          "disabled": false,
+          "at": 5863.699999988079
+        },
+        {
+          "type": "pointerup",
+          "id": "full-show-pause",
+          "disabled": false,
+          "at": 5865.100000023842
+        },
+        {
+          "type": "click",
+          "id": "full-show-pause",
+          "disabled": false,
+          "at": 5865.600000023842
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "action": "replay",
+      "snapshots": [
+        {
+          "step": "automatic ACK held",
+          "disabled": {
+            "pause": false,
+            "replay": false,
+            "next": false,
+            "previous": false
+          },
+          "authoringDisabled": true,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "epoch": 1,
+          "paused": "false"
+        },
+        {
+          "step": "explicit transport ACK held",
+          "disabled": {
+            "pause": true,
+            "replay": true,
+            "next": true,
+            "previous": true
+          },
+          "authoringDisabled": true,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "epoch": 1,
+          "paused": "false"
+        },
+        {
+          "step": "explicit transport acknowledged, native remounted and paused",
+          "disabled": {
+            "pause": false,
+            "replay": false,
+            "next": false,
+            "previous": false
+          },
+          "authoringDisabled": false,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "epoch": 2,
+          "paused": "true"
+        },
+        {
+          "step": "old automatic ACK ignored",
+          "disabled": {
+            "pause": false,
+            "replay": false,
+            "next": false,
+            "previous": false
+          },
+          "authoringDisabled": false,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "epoch": 2,
+          "paused": "true"
+        }
+      ],
+      "explicitTarget": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+      "oldAutomaticTarget": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+      "events": [
+        {
+          "type": "pointerdown",
+          "id": "full-show-replay",
+          "disabled": false,
+          "at": 4429.900000035763
+        },
+        {
+          "type": "pointerup",
+          "id": "full-show-replay",
+          "disabled": false,
+          "at": 4431.300000011921
+        },
+        {
+          "type": "click",
+          "id": "full-show-replay",
+          "disabled": false,
+          "at": 4431.5
+        },
+        {
+          "type": "pointerdown",
+          "id": "full-show-pause",
+          "disabled": false,
+          "at": 5141.5
+        },
+        {
+          "type": "pointerup",
+          "id": "full-show-pause",
+          "disabled": false,
+          "at": 5142.400000035763
+        },
+        {
+          "type": "click",
+          "id": "full-show-pause",
+          "disabled": false,
+          "at": 5142.700000047684
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "action": "next",
+      "snapshots": [
+        {
+          "step": "automatic ACK held",
+          "disabled": {
+            "pause": false,
+            "replay": false,
+            "next": false,
+            "previous": false
+          },
+          "authoringDisabled": true,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "epoch": 1,
+          "paused": "false"
+        },
+        {
+          "step": "explicit transport ACK held",
+          "disabled": {
+            "pause": true,
+            "replay": true,
+            "next": true,
+            "previous": true
+          },
+          "authoringDisabled": true,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "epoch": 1,
+          "paused": "false"
+        },
+        {
+          "step": "explicit transport acknowledged, native remounted and paused",
+          "disabled": {
+            "pause": false,
+            "replay": false,
+            "next": false,
+            "previous": false
+          },
+          "authoringDisabled": false,
+          "chapter": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+          "epoch": 2,
+          "paused": "true"
+        },
+        {
+          "step": "old automatic ACK ignored",
+          "disabled": {
+            "pause": false,
+            "replay": false,
+            "next": false,
+            "previous": false
+          },
+          "authoringDisabled": false,
+          "chapter": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+          "epoch": 2,
+          "paused": "true"
+        }
+      ],
+      "explicitTarget": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+      "oldAutomaticTarget": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+      "events": [
+        {
+          "type": "pointerdown",
+          "id": "full-show-next",
+          "disabled": false,
+          "at": 4553.099999964237
+        },
+        {
+          "type": "pointerup",
+          "id": "full-show-next",
+          "disabled": false,
+          "at": 4554.299999952316
+        },
+        {
+          "type": "click",
+          "id": "full-show-next",
+          "disabled": false,
+          "at": 4554.5
+        },
+        {
+          "type": "pointerdown",
+          "id": "full-show-pause",
+          "disabled": false,
+          "at": 5218.599999964237
+        },
+        {
+          "type": "pointerup",
+          "id": "full-show-pause",
+          "disabled": false,
+          "at": 5221.599999964237
+        },
+        {
+          "type": "click",
+          "id": "full-show-pause",
+          "disabled": false,
+          "at": 5221.899999976158
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "action": "previous",
+      "snapshots": [
+        {
+          "step": "automatic ACK held",
+          "disabled": {
+            "pause": false,
+            "replay": false,
+            "next": false,
+            "previous": false
+          },
+          "authoringDisabled": true,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "epoch": 1,
+          "paused": "false"
+        },
+        {
+          "step": "explicit transport ACK held",
+          "disabled": {
+            "pause": true,
+            "replay": true,
+            "next": true,
+            "previous": true
+          },
+          "authoringDisabled": true,
+          "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "epoch": 1,
+          "paused": "false"
+        },
+        {
+          "step": "explicit transport acknowledged, native remounted and paused",
+          "disabled": {
+            "pause": false,
+            "replay": false,
+            "next": false,
+            "previous": false
+          },
+          "authoringDisabled": false,
+          "chapter": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+          "epoch": 2,
+          "paused": "true"
+        },
+        {
+          "step": "old automatic ACK ignored",
+          "disabled": {
+            "pause": false,
+            "replay": false,
+            "next": false,
+            "previous": false
+          },
+          "authoringDisabled": false,
+          "chapter": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+          "epoch": 2,
+          "paused": "true"
+        }
+      ],
+      "explicitTarget": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+      "oldAutomaticTarget": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+      "events": [
+        {
+          "type": "pointerdown",
+          "id": "full-show-previous",
+          "disabled": false,
+          "at": 4149.400000035763
+        },
+        {
+          "type": "pointerup",
+          "id": "full-show-previous",
+          "disabled": false,
+          "at": 4150.300000011921
+        },
+        {
+          "type": "click",
+          "id": "full-show-previous",
+          "disabled": false,
+          "at": 4150.400000035763
+        },
+        {
+          "type": "pointerdown",
+          "id": "full-show-pause",
+          "disabled": false,
+          "at": 4672.100000023842
+        },
+        {
+          "type": "pointerup",
+          "id": "full-show-pause",
+          "disabled": false,
+          "at": 4673.5
+        },
+        {
+          "type": "click",
+          "id": "full-show-pause",
+          "disabled": false,
+          "at": 4673.800000011921
+        }
+      ],
+      "status": "PASS"
+    }
+  ],
+  "gates": [
+    {
+      "label": "pause automatic",
+      "input": {
+        "selectionVersion": 3,
+        "draftId": "dB6ikB5yrgJNOTZlF9g20gy7WJgSWLiO",
+        "expectedRevision": 1,
+        "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+        "context": {
+          "mode": "demo",
+          "role": "spectator",
+          "locale": "en",
+          "reducedMotion": true,
+          "join": "unavailable-demo",
+          "actions": "synthetic-only"
+        },
+        "contractVersion": "0.1.0"
+      },
+      "claimed": true,
+      "fulfilled": true
+    },
+    {
+      "label": "replay automatic",
+      "input": {
+        "selectionVersion": 3,
+        "draftId": "dB6ikB5yrgJNOTZlF9g20gy7WJgSWLiO",
+        "expectedRevision": 1,
+        "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+        "context": {
+          "mode": "demo",
+          "role": "spectator",
+          "locale": "en",
+          "reducedMotion": true,
+          "join": "unavailable-demo",
+          "actions": "synthetic-only"
+        },
+        "contractVersion": "0.1.0"
+      },
+      "claimed": true,
+      "fulfilled": true
+    },
+    {
+      "label": "replay manual",
+      "input": {
+        "selectionVersion": 3,
+        "draftId": "dB6ikB5yrgJNOTZlF9g20gy7WJgSWLiO",
+        "expectedRevision": 1,
+        "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+        "context": {
+          "mode": "demo",
+          "role": "spectator",
+          "locale": "en",
+          "reducedMotion": true,
+          "join": "unavailable-demo",
+          "actions": "synthetic-only"
+        },
+        "contractVersion": "0.1.0"
+      },
+      "claimed": true,
+      "fulfilled": true
+    },
+    {
+      "label": "next automatic",
+      "input": {
+        "selectionVersion": 3,
+        "draftId": "dB6ikB5yrgJNOTZlF9g20gy7WJgSWLiO",
+        "expectedRevision": 1,
+        "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+        "context": {
+          "mode": "demo",
+          "role": "spectator",
+          "locale": "en",
+          "reducedMotion": true,
+          "join": "unavailable-demo",
+          "actions": "synthetic-only"
+        },
+        "contractVersion": "0.1.0"
+      },
+      "claimed": true,
+      "fulfilled": true
+    },
+    {
+      "label": "next manual",
+      "input": {
+        "selectionVersion": 3,
+        "draftId": "dB6ikB5yrgJNOTZlF9g20gy7WJgSWLiO",
+        "expectedRevision": 1,
+        "chapterId": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+        "context": {
+          "mode": "demo",
+          "role": "spectator",
+          "locale": "en",
+          "reducedMotion": true,
+          "join": "unavailable-demo",
+          "actions": "synthetic-only"
+        },
+        "contractVersion": "0.1.0"
+      },
+      "claimed": true,
+      "fulfilled": true
+    },
+    {
+      "label": "previous automatic",
+      "input": {
+        "selectionVersion": 3,
+        "draftId": "dB6ikB5yrgJNOTZlF9g20gy7WJgSWLiO",
+        "expectedRevision": 1,
+        "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+        "context": {
+          "mode": "demo",
+          "role": "spectator",
+          "locale": "en",
+          "reducedMotion": true,
+          "join": "unavailable-demo",
+          "actions": "synthetic-only"
+        },
+        "contractVersion": "0.1.0"
+      },
+      "claimed": true,
+      "fulfilled": true
+    },
+    {
+      "label": "previous manual",
+      "input": {
+        "selectionVersion": 3,
+        "draftId": "dB6ikB5yrgJNOTZlF9g20gy7WJgSWLiO",
+        "expectedRevision": 1,
+        "chapterId": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+        "context": {
+          "mode": "demo",
+          "role": "spectator",
+          "locale": "en",
+          "reducedMotion": true,
+          "join": "unavailable-demo",
+          "actions": "synthetic-only"
+        },
+        "contractVersion": "0.1.0"
+      },
+      "claimed": true,
+      "fulfilled": true
+    }
+  ]
+}

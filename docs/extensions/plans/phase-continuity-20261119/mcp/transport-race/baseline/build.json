@@ -1,0 +1,20 @@
+{
+  "command": [
+    "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+    "extensions/src/mcp-app/widget/build-full-show.mjs"
+  ],
+  "exitCode": 0,
+  "seconds": 64.25,
+  "sourceBefore": {
+    "extensions/src/mcp-app/widget/full-show-entry.tsx": "ea70de20ea1f826ae95d22a6e4f16cc0310b86d8ed46e793697200e5cc286c80",
+    "extensions/qa/phase3-full-show/browser-verify.mjs": "ce311a798e90459cc061aa3b8ac358979464b9ebb228c9356d672ad2cb044335",
+    "extensions/qa/phase3-full-show/preference-race.mjs": "795c8e29ee6f3bb921a999c2a2286da83729b77c62912d6569d9431739adb7f8",
+    "extensions/qa/phase3-full-show/transport-race.mjs": "4fb57817d67baf42a84837af6638531dc74ca895e185f60890296860b0441376"
+  },
+  "sourceAfter": {
+    "extensions/src/mcp-app/widget/full-show-entry.tsx": "ea70de20ea1f826ae95d22a6e4f16cc0310b86d8ed46e793697200e5cc286c80",
+    "extensions/qa/phase3-full-show/browser-verify.mjs": "ce311a798e90459cc061aa3b8ac358979464b9ebb228c9356d672ad2cb044335",
+    "extensions/qa/phase3-full-show/preference-race.mjs": "795c8e29ee6f3bb921a999c2a2286da83729b77c62912d6569d9431739adb7f8",
+    "extensions/qa/phase3-full-show/transport-race.mjs": "4fb57817d67baf42a84837af6638531dc74ca895e185f60890296860b0441376"
+  }
+}

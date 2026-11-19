@@ -1,0 +1,16 @@
+{
+  "command": [
+    "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+    "--import",
+    "file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119/extensions/node_modules/tsx/dist/loader.mjs",
+    "extensions/qa/phase3-full-show/browser-verify.mjs"
+  ],
+  "pid": 24988,
+  "started": "2026-11-19T17:17:37Z",
+  "evidence": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase-continuity-20261119\\mcp\\chromium-final",
+  "qaSourceHashes": {
+    "extensions/qa/phase3-full-show/phase-continuity.mjs": "de4511fbea48cf02cd43052889634d00a8f47d2a20192504b8a20ca7041400d2",
+    "extensions/qa/phase3-full-show/browser-verify.mjs": "4dcb60dde9db58dd19db2e039875f77f75e886fa7475142a581739b4f791f090",
+    "extensions/qa/phase3-full-show/browser-host.ts": "314047a5ff1cba6b238931653f9d0381b7698ea5a309b0bd989e83c0248a74b9"
+  }
+}

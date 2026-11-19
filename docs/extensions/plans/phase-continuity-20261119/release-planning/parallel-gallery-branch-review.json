@@ -1,0 +1,486 @@
+{
+  "kind": "read-only parallel branch scope and merge-risk review",
+  "ours": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "other": "845b2ae6cba51dea87ff33b568e27355331e74c7",
+  "mergeBase": "e66317a5385862a3a756a18a5646fad4e64e5c26",
+  "ourCommits": [
+    {
+      "sha": "d99b9c78a8034f9fdde6e5bf528fe4b8ed684e26",
+      "title": "fix(mcp): keep readonly transport responsive during automatic preview"
+    },
+    {
+      "sha": "dccfd9d22a4673130704fea02bd80a8399498467",
+      "title": "test(mcp): qualify transport races on isolated Linux browsers"
+    }
+  ],
+  "otherCommits": [
+    {
+      "sha": "8a34ba98a22135612513b1b36ec7caa1de472a32",
+      "title": "feat: connect public games gallery and shared site themes"
+    },
+    {
+      "sha": "10bd3b4087ce256862217c2000661e2d057af674",
+      "title": "merge: preserve native phase continuity in public gallery release"
+    },
+    {
+      "sha": "f3896d2c89f398a40821271608e2b6d3e6276d55",
+      "title": "build: pin native renderer for the public gallery release"
+    },
+    {
+      "sha": "a1a93ddc3e3edd2e0d8583d58d3b4fb282c1c341",
+      "title": "fix: apply native gallery palettes and qualify public previews"
+    },
+    {
+      "sha": "f6e04ba9de7ade827a3505e9180ee23d12f5dded",
+      "title": "build: pin corrected gallery native renderer"
+    },
+    {
+      "sha": "7c47ef1b4f9e61465345b65b435197c117b93ebe",
+      "title": "merge: preserve latest native preference continuity"
+    },
+    {
+      "sha": "845b2ae6cba51dea87ff33b568e27355331e74c7",
+      "title": "Refresh native preview pins after preference integration"
+    }
+  ],
+  "otherChangedFileCount": 90,
+  "ourChangedFileCount": 6,
+  "otherChangedFiles": [
+    {
+      "change": "A",
+      "path": "docs/extensions/plans/public-gallery-20261119/README.md"
+    },
+    {
+      "change": "M",
+      "path": "extensions/deployment/deploy-mcp-site.py"
+    },
+    {
+      "change": "M",
+      "path": "extensions/deployment/stage-mcp-site.py"
+    },
+    {
+      "change": "A",
+      "path": "extensions/qa/public-gallery/account-verify.mjs"
+    },
+    {
+      "change": "A",
+      "path": "extensions/qa/public-gallery/browser-verify.mjs"
+    },
+    {
+      "change": "A",
+      "path": "extensions/qa/public-gallery/editor-verify.mjs"
+    },
+    {
+      "change": "A",
+      "path": "extensions/qa/public-gallery/linux-browser-verify.py"
+    },
+    {
+      "change": "A",
+      "path": "extensions/qa/public-gallery/linux-quick-verify.py"
+    },
+    {
+      "change": "A",
+      "path": "extensions/qa/public-gallery/linux-recheck.py"
+    },
+    {
+      "change": "A",
+      "path": "extensions/qa/public-gallery/palette-verify.mjs"
+    },
+    {
+      "change": "A",
+      "path": "extensions/site-assets/gallery/classroom-backdrop.svg"
+    },
+    {
+      "change": "A",
+      "path": "extensions/site-assets/gallery/crowd-backdrop.svg"
+    },
+    {
+      "change": "A",
+      "path": "extensions/site-assets/gallery/family-backdrop.svg"
+    },
+    {
+      "change": "A",
+      "path": "extensions/site-assets/gallery/finale-backdrop.svg"
+    },
+    {
+      "change": "A",
+      "path": "extensions/site-assets/gallery/generate-art.mjs"
+    },
+    {
+      "change": "A",
+      "path": "extensions/site-assets/gallery/picture-backdrop.svg"
+    },
+    {
+      "change": "A",
+      "path": "extensions/site-assets/gallery/picture-balloon.svg"
+    },
+    {
+      "change": "A",
+      "path": "extensions/site-assets/gallery/picture-bicycle.svg"
+    },
+    {
+      "change": "A",
+      "path": "extensions/site-assets/gallery/picture-boat.svg"
+    },
+    {
+      "change": "A",
+      "path": "extensions/site-assets/gallery/picture-circle.svg"
+    },
+    {
+      "change": "A",
+      "path": "extensions/site-assets/gallery/picture-cloud.svg"
+    },
+    {
+      "change": "A",
+      "path": "extensions/site-assets/gallery/picture-leaf.svg"
+    },
+    {
+      "change": "A",
+      "path": "extensions/site-assets/gallery/picture-rocket.svg"
+    },
+    {
+      "change": "A",
+      "path": "extensions/site-assets/gallery/picture-square.svg"
+    },
+    {
+      "change": "A",
+      "path": "extensions/site-assets/gallery/picture-star.svg"
+    },
+    {
+      "change": "A",
+      "path": "extensions/site-assets/gallery/picture-sun.svg"
+    },
+    {
+      "change": "A",
+      "path": "extensions/site-assets/gallery/picture-train.svg"
+    },
+    {
+      "change": "A",
+      "path": "extensions/site-assets/gallery/picture-triangle.svg"
+    },
+    {
+      "change": "A",
+      "path": "extensions/site-assets/gallery/picture-umbrella.svg"
+    },
+    {
+      "change": "A",
+      "path": "extensions/site-assets/gallery/quiz-backdrop.svg"
+    },
+    {
+      "change": "A",
+      "path": "extensions/site-assets/gallery/story-backdrop.svg"
+    },
+    {
+      "change": "A",
+      "path": "extensions/site-assets/gallery/team-backdrop.svg"
+    },
+    {
+      "change": "A",
+      "path": "extensions/site-assets/gallery/truth-backdrop.svg"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/core/show-library/application-preview-build.json"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/core/show-library/application-preview-input.test.ts"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/core/show-library/application-preview-resolve.ts"
+    },
+    {
+      "change": "A",
+      "path": "extensions/src/core/show-library/public-demo-catalogue.test.ts"
+    },
+    {
+      "change": "A",
+      "path": "extensions/src/core/show-library/public-demo-catalogue.ts"
+    },
+    {
+      "change": "A",
+      "path": "extensions/src/core/show-themes/bundled-gallery-themes.ts"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/core/show-themes/classic.manifest.json"
+    },
+    {
+      "change": "A",
+      "path": "extensions/src/core/show-themes/gallery-assets.json"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/core/show-themes/registry.ts"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/core/show-themes/show-themes.test.ts"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/presentation/tadazz-v4/TadazzV4Stage.tsx"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/presentation/tadazz-v4/tadazz-v4.css"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/server/api/account-preview-source.test.ts"
+    },
+    {
+      "change": "A",
+      "path": "extensions/src/server/api/public-catalogue-install.test.ts"
+    },
+    {
+      "change": "A",
+      "path": "extensions/src/server/api/public-catalogue-install.ts"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/server/api/public-preview-source.ts"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/server/api/routes.ts"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/site/adapters/client.ts"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/site/locales/de.json"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/site/locales/en.json"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/site/locales/es.json"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/site/locales/fr.json"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/site/locales/he.json"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/site/locales/it.json"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/site/locales/ja.json"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/site/locales/tr.json"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/site/locales/vi.json"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/site/tests/client.test.ts"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/site/web/marketing/Catalogue.tsx"
+    },
+    {
+      "change": "A",
+      "path": "extensions/src/site/web/marketing/CatalogueGameDemo.tsx"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/site/web/marketing/MarketingSite.tsx"
+    },
+    {
+      "change": "A",
+      "path": "extensions/src/site/web/marketing/catalogue.css"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/site/web/studio/Studio.tsx"
+    },
+    {
+      "change": "A",
+      "path": "extensions/src/site/web/studio/StudioPublicGallery.tsx"
+    },
+    {
+      "change": "M",
+      "path": "packages/socket/src/api/extensions/demo-catalog.test.ts"
+    },
+    {
+      "change": "A",
+      "path": "packages/web/public/tadazz-show/gallery/classroom-backdrop.png"
+    },
+    {
+      "change": "A",
+      "path": "packages/web/public/tadazz-show/gallery/crowd-backdrop.png"
+    },
+    {
+      "change": "A",
+      "path": "packages/web/public/tadazz-show/gallery/family-backdrop.png"
+    },
+    {
+      "change": "A",
+      "path": "packages/web/public/tadazz-show/gallery/finale-backdrop.png"
+    },
+    {
+      "change": "A",
+      "path": "packages/web/public/tadazz-show/gallery/picture-backdrop.png"
+    },
+    {
+      "change": "A",
+      "path": "packages/web/public/tadazz-show/gallery/picture-balloon.png"
+    },
+    {
+      "change": "A",
+      "path": "packages/web/public/tadazz-show/gallery/picture-bicycle.png"
+    },
+    {
+      "change": "A",
+      "path": "packages/web/public/tadazz-show/gallery/picture-boat.png"
+    },
+    {
+      "change": "A",
+      "path": "packages/web/public/tadazz-show/gallery/picture-circle.png"
+    },
+    {
+      "change": "A",
+      "path": "packages/web/public/tadazz-show/gallery/picture-cloud.png"
+    },
+    {
+      "change": "A",
+      "path": "packages/web/public/tadazz-show/gallery/picture-leaf.png"
+    },
+    {
+      "change": "A",
+      "path": "packages/web/public/tadazz-show/gallery/picture-rocket.png"
+    },
+    {
+      "change": "A",
+      "path": "packages/web/public/tadazz-show/gallery/picture-square.png"
+    },
+    {
+      "change": "A",
+      "path": "packages/web/public/tadazz-show/gallery/picture-star.png"
+    },
+    {
+      "change": "A",
+      "path": "packages/web/public/tadazz-show/gallery/picture-sun.png"
+    },
+    {
+      "change": "A",
+      "path": "packages/web/public/tadazz-show/gallery/picture-train.png"
+    },
+    {
+      "change": "A",
+      "path": "packages/web/public/tadazz-show/gallery/picture-triangle.png"
+    },
+    {
+      "change": "A",
+      "path": "packages/web/public/tadazz-show/gallery/picture-umbrella.png"
+    },
+    {
+      "change": "A",
+      "path": "packages/web/public/tadazz-show/gallery/quiz-backdrop.png"
+    },
+    {
+      "change": "A",
+      "path": "packages/web/public/tadazz-show/gallery/story-backdrop.png"
+    },
+    {
+      "change": "A",
+      "path": "packages/web/public/tadazz-show/gallery/team-backdrop.png"
+    },
+    {
+      "change": "A",
+      "path": "packages/web/public/tadazz-show/gallery/truth-backdrop.png"
+    }
+  ],
+  "ourChangedFiles": [
+    {
+      "change": "M",
+      "path": "extensions/qa/phase3-full-show/browser-verify.mjs"
+    },
+    {
+      "change": "M",
+      "path": "extensions/qa/phase3-full-show/linux-browser-verify.py"
+    },
+    {
+      "change": "M",
+      "path": "extensions/qa/phase3-full-show/preference-race.mjs"
+    },
+    {
+      "change": "A",
+      "path": "extensions/qa/phase3-full-show/transport-race.mjs"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/core/show-library/application-preview-build.json"
+    },
+    {
+      "change": "M",
+      "path": "extensions/src/mcp-app/widget/full-show-entry.tsx"
+    }
+  ],
+  "overlappingPaths": [
+    "extensions/src/core/show-library/application-preview-build.json"
+  ],
+  "mergePreview": {
+    "command": [
+      "git",
+      "merge-tree",
+      "e66317a5385862a3a756a18a5646fad4e64e5c26",
+      "dccfd9d22a4673130704fea02bd80a8399498467",
+      "845b2ae6cba51dea87ff33b568e27355331e74c7"
+    ],
+    "usedWriteTree": false,
+    "exit": 0,
+    "rawOutputBytes": 4970693,
+    "rawOutputSha256": "531142d45e09a86faed3e1da681b3ff270c23f07eabeb3d9df7d13341d3adbf1",
+    "conflictMarkerCount": 2,
+    "conflictingPath": "extensions/src/core/show-library/application-preview-build.json",
+    "ourRendererBuildSha256": "8832afa1d750c0f07b40c86c8455eb2093c0f83a4be088353a1deb58362dd098",
+    "otherRendererBuildSha256": "bf209762c341214384259fc07c7ab18de399511af8f07019dbb51630d9670ff5",
+    "note": "The three-tree preview exits zero even with displayed conflict markers; it was not treated as a conflict-free result."
+  },
+  "integrity": {
+    "before": {
+      "head": "dccfd9d22a4673130704fea02bd80a8399498467",
+      "status": "",
+      "indexSha256": "04f93bae682d6b45df14963e289b4cd8b1b65ccd73433741d4d766715604db24"
+    },
+    "after": {
+      "head": "dccfd9d22a4673130704fea02bd80a8399498467",
+      "status": "",
+      "indexSha256": "04f93bae682d6b45df14963e289b4cd8b1b65ccd73433741d4d766715604db24"
+    },
+    "headIndexStatusUnchanged": true
+  },
+  "facts": [
+    "The only overlapping changed path is the generated native pin manifest; two rendererBuildSha256 conflicts were observed.",
+    "The gallery branch does not change the MCP widget entry or transport/controller QA files changed on our branch.",
+    "Gallery introduces catalogue/install flows, bundled themes and assets, palette rendering, site UI and deployment changes across90 files.",
+    "The V4 change adds declarative palette context/styles/data attributes without editing native continuity logic.",
+    "Gallery staging changes public-runtime acceptance from disabled to enabled and adds exact ten-game catalogue/public-runtime proof."
+  ],
+  "readinessBoundary": "The independent MCP agent reported that gallery845 remains unstaged and held for a mobile readability improvement. This report does not independently establish that external release-state status; cite the MCP agent's separate saved state evidence.",
+  "recommendation": "Keep the urgent dcc candidate separate while gallery is held. Preserve both branches and use fresh production identity guards plus the agreed shared deployment lock to avoid overwriting any subsequently released state.",
+  "laterMergeRequirements": [
+    "Regenerate native pins from the combined source; neither side's generated hash qualifies it.",
+    "Review the gallery release-orchestration changes and satisfy gallery acceptance as well as the unchanged core gates.",
+    "Qualify the resulting exact source rather than reuse either branch's earlier receipts."
+  ],
+  "scope": "No fetch, checkout, commit, merge, source/index change, test or release execution. This documentation record is derived from already completed read-only observations.",
+  "recordedAtUtc": "2026-11-19T20:49:56.846891+00:00"
+}

@@ -1,0 +1,229 @@
+{
+  "engine": "chromium",
+  "theme": "tadazz-classic",
+  "check": "host control request readiness",
+  "timeoutMs": 5000,
+  "status": "ready",
+  "originallyPaused": false,
+  "heldPreview": {
+    "holding": true,
+    "lifecycle": {
+      "documentId": "22503fb7-94a6-475f-986e-5c081f678b7b",
+      "disposing": false,
+      "remaining": {
+        "http": 0,
+        "handlers": 1,
+        "initialization": 0,
+        "replies": 1,
+        "connecting": false
+      },
+      "receipt": null
+    },
+    "newPreviewCalls": 1
+  },
+  "beforeClick": {
+    "at": "2026-11-19T18:32:30.874Z",
+    "elapsedMs": 476.90000009536743,
+    "sameButton": true,
+    "expandDisabled": false,
+    "refreshDisabled": true,
+    "pauseDisabled": true,
+    "status": "Loading…",
+    "focusedControl": null
+  },
+  "beforeRelease": {
+    "holding": true,
+    "remaining": {
+      "http": 0,
+      "handlers": 1,
+      "initialization": 0,
+      "replies": 1,
+      "connecting": false
+    },
+    "messages": [
+      {
+        "at": "2026-11-19T18:32:30.470Z",
+        "elapsedMs": 75.39999985694885,
+        "method": "tools/call",
+        "id": 10,
+        "name": "preview_show"
+      },
+      {
+        "at": "2026-11-19T18:32:30.985Z",
+        "elapsedMs": 589.7999999523163,
+        "method": "ui/request-display-mode",
+        "id": 11,
+        "mode": "fullscreen"
+      }
+    ]
+  },
+  "snapshot": {
+    "waitedMs": 616.1999998092651,
+    "firstReadyMs": 596.2999999523163,
+    "sameDocument": true,
+    "sameHost": true,
+    "sameBridgeBinding": true,
+    "received": {
+      "proof": "synthetic-host-ui-control-fixture",
+      "saveRequests": [
+        {
+          "contractVersion": "0.1.0",
+          "draftId": "eSuiCmo-WJFQGId1VqjmcMu10PwRsStj",
+          "expectedRevision": 11,
+          "idempotencyKey": "d26d9efd-947c-4c54-81de-c3d83cf015ca",
+          "intent": "createNew"
+        },
+        {
+          "contractVersion": "0.1.0",
+          "draftId": "eSuiCmo-WJFQGId1VqjmcMu10PwRsStj",
+          "expectedRevision": 11,
+          "idempotencyKey": "d26d9efd-947c-4c54-81de-c3d83cf015ca",
+          "intent": "createNew"
+        },
+        {
+          "contractVersion": "0.1.0",
+          "draftId": "eSuiCmo-WJFQGId1VqjmcMu10PwRsStj",
+          "expectedRevision": 11,
+          "idempotencyKey": "d26d9efd-947c-4c54-81de-c3d83cf015ca",
+          "intent": "createNew"
+        }
+      ],
+      "openedLinks": [
+        "https://tadazz.com/studio/native-save-consent/SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS",
+        "https://tadazz.com/manager/quizz/QQQQQQQQQQQQQQQQQQQQQ"
+      ],
+      "displayRequests": [
+        "fullscreen"
+      ]
+    },
+    "holding": true,
+    "lifecycle": {
+      "documentId": "22503fb7-94a6-475f-986e-5c081f678b7b",
+      "disposing": false,
+      "remaining": {
+        "http": 0,
+        "handlers": 1,
+        "initialization": 0,
+        "replies": 1,
+        "connecting": false
+      },
+      "receipt": null
+    },
+    "messages": [
+      {
+        "at": "2026-11-19T18:32:30.470Z",
+        "elapsedMs": 75.39999985694885,
+        "method": "tools/call",
+        "id": 10,
+        "name": "preview_show"
+      },
+      {
+        "at": "2026-11-19T18:32:30.985Z",
+        "elapsedMs": 589.7999999523163,
+        "method": "ui/request-display-mode",
+        "id": 11,
+        "mode": "fullscreen"
+      }
+    ]
+  },
+  "control": {
+    "snapshot": {
+      "at": "2026-11-19T18:32:31.015Z",
+      "elapsedMs": 618.4000000953674,
+      "sameButton": true,
+      "expandDisabled": false,
+      "refreshDisabled": true,
+      "pauseDisabled": true,
+      "status": "Loading…",
+      "focusedControl": "full-show-expand"
+    },
+    "events": [
+      {
+        "type": "pointerdown",
+        "trusted": true,
+        "at": "2026-11-19T18:32:30.978Z",
+        "elapsedMs": 580.9000000953674,
+        "sameButton": true,
+        "expandDisabled": false,
+        "refreshDisabled": true,
+        "pauseDisabled": true,
+        "status": "Loading…",
+        "focusedControl": null
+      },
+      {
+        "type": "mousedown",
+        "trusted": true,
+        "at": "2026-11-19T18:32:30.978Z",
+        "elapsedMs": 581,
+        "sameButton": true,
+        "expandDisabled": false,
+        "refreshDisabled": true,
+        "pauseDisabled": true,
+        "status": "Loading…",
+        "focusedControl": null
+      },
+      {
+        "type": "pointerup",
+        "trusted": true,
+        "at": "2026-11-19T18:32:30.978Z",
+        "elapsedMs": 581.7000000476837,
+        "sameButton": true,
+        "expandDisabled": false,
+        "refreshDisabled": true,
+        "pauseDisabled": true,
+        "status": "Loading…",
+        "focusedControl": "full-show-expand"
+      },
+      {
+        "type": "mouseup",
+        "trusted": true,
+        "at": "2026-11-19T18:32:30.978Z",
+        "elapsedMs": 581.7999999523163,
+        "sameButton": true,
+        "expandDisabled": false,
+        "refreshDisabled": true,
+        "pauseDisabled": true,
+        "status": "Loading…",
+        "focusedControl": "full-show-expand"
+      },
+      {
+        "type": "click",
+        "trusted": true,
+        "at": "2026-11-19T18:32:30.979Z",
+        "elapsedMs": 581.9000000953674,
+        "sameButton": true,
+        "expandDisabled": false,
+        "refreshDisabled": true,
+        "pauseDisabled": true,
+        "status": "Loading…",
+        "focusedControl": "full-show-expand"
+      }
+    ]
+  },
+  "afterRelease": {
+    "at": "2026-11-19T18:32:31.101Z",
+    "elapsedMs": 704.0999999046326,
+    "sameButton": true,
+    "expandDisabled": false,
+    "refreshDisabled": false,
+    "pauseDisabled": false,
+    "status": null,
+    "focusedControl": "full-show-expand"
+  },
+  "cleanup": {
+    "released": true,
+    "restoredPaused": false,
+    "lifecycle": {
+      "documentId": "22503fb7-94a6-475f-986e-5c081f678b7b",
+      "disposing": false,
+      "remaining": {
+        "http": 0,
+        "handlers": 0,
+        "initialization": 0,
+        "replies": 0,
+        "connecting": false
+      },
+      "receipt": null
+    }
+  }
+}

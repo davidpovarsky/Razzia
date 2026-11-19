@@ -1,0 +1,36 @@
+{
+  "kind": "scheduling-diagnostic-helper-copy-provenance",
+  "createdUtc": "2026-11-19T18:27:06.001278+00:00",
+  "scriptsExecutedDuringCuration": false,
+  "sourceModified": false,
+  "privateKeyContentsRead": false,
+  "helperFiles": [
+    {
+      "source": "work/phase-continuity-20261119/release-tools/diagnose_frame_scheduling.py",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/release-tools/diagnose_frame_scheduling.py",
+      "bytes": 19665,
+      "sourceBeforeSha256": "5ac04cdcb14f409a6aff96e8941ee95d659e92b62d46fc1e1d8a355042bd5c5e",
+      "copySha256": "5ac04cdcb14f409a6aff96e8941ee95d659e92b62d46fc1e1d8a355042bd5c5e",
+      "sourceAfterSha256": "5ac04cdcb14f409a6aff96e8941ee95d659e92b62d46fc1e1d8a355042bd5c5e",
+      "allEqual": true
+    },
+    {
+      "source": "work/phase-continuity-20261119/release-tools/diagnose_frame_scheduling.provenance.json",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/release-tools/diagnose_frame_scheduling.provenance.json",
+      "bytes": 1398,
+      "sourceBeforeSha256": "0d975edfb47afbf44e6083bc24483e4b2f3816da1eb37b7d3454282105b631d9",
+      "copySha256": "0d975edfb47afbf44e6083bc24483e4b2f3816da1eb37b7d3454282105b631d9",
+      "sourceAfterSha256": "0d975edfb47afbf44e6083bc24483e4b2f3816da1eb37b7d3454282105b631d9",
+      "allEqual": true
+    }
+  ],
+  "executedOverlay": {
+    "path": "docs/extensions/plans/phase-continuity-20261119/mcp/failure-diagnostic/tadazz-phase-continuity-scheduling-730cb4579d22-56930064/browser-verify.overlay.mjs",
+    "sha256": "16e47f76b66b0275a85e0d6d3515ddb07272b60e8df1ade1144ccfe6a0912579",
+    "bytes": 128009,
+    "matchesCompletedCoordinatorReceipt": true
+  },
+  "completedDiagnosticReceipt": "docs/extensions/plans/phase-continuity-20261119/mcp/failure-diagnostic/tadazz-phase-continuity-scheduling-730cb4579d22-56930064/receipt.json",
+  "collectionReceipt": "docs/extensions/plans/phase-continuity-20261119/mcp/failure-diagnostic/tadazz-phase-continuity-scheduling-730cb4579d22-56930064/collection.json",
+  "findings": []
+}

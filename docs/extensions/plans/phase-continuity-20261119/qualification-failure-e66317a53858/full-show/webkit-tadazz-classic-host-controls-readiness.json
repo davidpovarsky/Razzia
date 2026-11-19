@@ -1,0 +1,229 @@
+{
+  "engine": "webkit",
+  "theme": "tadazz-classic",
+  "check": "host control request readiness",
+  "timeoutMs": 5000,
+  "status": "ready",
+  "originallyPaused": false,
+  "heldPreview": {
+    "holding": true,
+    "lifecycle": {
+      "documentId": "519ccde7-a67c-4a70-9e61-d6f697db67a9",
+      "disposing": false,
+      "remaining": {
+        "http": 0,
+        "handlers": 1,
+        "initialization": 0,
+        "replies": 1,
+        "connecting": false
+      },
+      "receipt": null
+    },
+    "newPreviewCalls": 1
+  },
+  "beforeClick": {
+    "at": "2026-11-19T19:54:58.377Z",
+    "elapsedMs": 2301,
+    "sameButton": true,
+    "expandDisabled": false,
+    "refreshDisabled": true,
+    "pauseDisabled": true,
+    "status": "Loading…",
+    "focusedControl": null
+  },
+  "beforeRelease": {
+    "holding": true,
+    "remaining": {
+      "http": 0,
+      "handlers": 1,
+      "initialization": 0,
+      "replies": 1,
+      "connecting": false
+    },
+    "messages": [
+      {
+        "at": "2026-11-19T19:54:57.505Z",
+        "elapsedMs": 1430,
+        "method": "tools/call",
+        "id": 10,
+        "name": "preview_show"
+      },
+      {
+        "at": "2026-11-19T19:54:59.254Z",
+        "elapsedMs": 3180,
+        "method": "ui/request-display-mode",
+        "id": 11,
+        "mode": "fullscreen"
+      }
+    ]
+  },
+  "snapshot": {
+    "waitedMs": 3201,
+    "firstReadyMs": 3187,
+    "sameDocument": true,
+    "sameHost": true,
+    "sameBridgeBinding": true,
+    "received": {
+      "proof": "synthetic-host-ui-control-fixture",
+      "saveRequests": [
+        {
+          "contractVersion": "0.1.0",
+          "draftId": "_9rfOesSlc99JBFWsAuv6H4J0bOcnXYP",
+          "expectedRevision": 11,
+          "idempotencyKey": "fa61291b-9851-438a-8c82-7a58f171e78c",
+          "intent": "createNew"
+        },
+        {
+          "contractVersion": "0.1.0",
+          "draftId": "_9rfOesSlc99JBFWsAuv6H4J0bOcnXYP",
+          "expectedRevision": 11,
+          "idempotencyKey": "fa61291b-9851-438a-8c82-7a58f171e78c",
+          "intent": "createNew"
+        },
+        {
+          "contractVersion": "0.1.0",
+          "draftId": "_9rfOesSlc99JBFWsAuv6H4J0bOcnXYP",
+          "expectedRevision": 11,
+          "idempotencyKey": "fa61291b-9851-438a-8c82-7a58f171e78c",
+          "intent": "createNew"
+        }
+      ],
+      "openedLinks": [
+        "https://tadazz.com/studio/native-save-consent/SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS",
+        "https://tadazz.com/manager/quizz/QQQQQQQQQQQQQQQQQQQQQ"
+      ],
+      "displayRequests": [
+        "fullscreen"
+      ]
+    },
+    "holding": true,
+    "lifecycle": {
+      "documentId": "519ccde7-a67c-4a70-9e61-d6f697db67a9",
+      "disposing": false,
+      "remaining": {
+        "http": 0,
+        "handlers": 1,
+        "initialization": 0,
+        "replies": 1,
+        "connecting": false
+      },
+      "receipt": null
+    },
+    "messages": [
+      {
+        "at": "2026-11-19T19:54:57.505Z",
+        "elapsedMs": 1430,
+        "method": "tools/call",
+        "id": 10,
+        "name": "preview_show"
+      },
+      {
+        "at": "2026-11-19T19:54:59.254Z",
+        "elapsedMs": 3180,
+        "method": "ui/request-display-mode",
+        "id": 11,
+        "mode": "fullscreen"
+      }
+    ]
+  },
+  "control": {
+    "snapshot": {
+      "at": "2026-11-19T19:54:59.279Z",
+      "elapsedMs": 3203,
+      "sameButton": true,
+      "expandDisabled": false,
+      "refreshDisabled": true,
+      "pauseDisabled": true,
+      "status": "Loading…",
+      "focusedControl": "full-show-expand"
+    },
+    "events": [
+      {
+        "type": "pointerdown",
+        "trusted": true,
+        "at": "2026-11-19T19:54:59.205Z",
+        "elapsedMs": 3128,
+        "sameButton": true,
+        "expandDisabled": false,
+        "refreshDisabled": true,
+        "pauseDisabled": true,
+        "status": "Loading…",
+        "focusedControl": null
+      },
+      {
+        "type": "mousedown",
+        "trusted": true,
+        "at": "2026-11-19T19:54:59.205Z",
+        "elapsedMs": 3129,
+        "sameButton": true,
+        "expandDisabled": false,
+        "refreshDisabled": true,
+        "pauseDisabled": true,
+        "status": "Loading…",
+        "focusedControl": null
+      },
+      {
+        "type": "pointerup",
+        "trusted": true,
+        "at": "2026-11-19T19:54:59.248Z",
+        "elapsedMs": 3172,
+        "sameButton": true,
+        "expandDisabled": false,
+        "refreshDisabled": true,
+        "pauseDisabled": true,
+        "status": "Loading…",
+        "focusedControl": "full-show-expand"
+      },
+      {
+        "type": "mouseup",
+        "trusted": true,
+        "at": "2026-11-19T19:54:59.248Z",
+        "elapsedMs": 3172,
+        "sameButton": true,
+        "expandDisabled": false,
+        "refreshDisabled": true,
+        "pauseDisabled": true,
+        "status": "Loading…",
+        "focusedControl": "full-show-expand"
+      },
+      {
+        "type": "click",
+        "trusted": true,
+        "at": "2026-11-19T19:54:59.248Z",
+        "elapsedMs": 3172,
+        "sameButton": true,
+        "expandDisabled": false,
+        "refreshDisabled": true,
+        "pauseDisabled": true,
+        "status": "Loading…",
+        "focusedControl": "full-show-expand"
+      }
+    ]
+  },
+  "afterRelease": {
+    "at": "2026-11-19T19:54:59.390Z",
+    "elapsedMs": 3314,
+    "sameButton": true,
+    "expandDisabled": false,
+    "refreshDisabled": false,
+    "pauseDisabled": false,
+    "status": null,
+    "focusedControl": "full-show-expand"
+  },
+  "cleanup": {
+    "released": true,
+    "restoredPaused": false,
+    "lifecycle": {
+      "documentId": "519ccde7-a67c-4a70-9e61-d6f697db67a9",
+      "disposing": false,
+      "remaining": {
+        "http": 0,
+        "handlers": 0,
+        "initialization": 0,
+        "replies": 0,
+        "connecting": false
+      },
+      "receipt": null
+    }
+  }
+}

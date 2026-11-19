@@ -1,0 +1,18 @@
+{
+  "exitCode": 1,
+  "seconds": 25.95,
+  "entries": [
+    {
+      "name": "chromium / tadazz-classic preferences supersede automatic preview",
+      "status": "FAIL",
+      "error": "AssertionError [ERR_ASSERTION]: Authoring must stay disabled during automatic loading\n\nfalse !== true\n",
+      "stack": "AssertionError [ERR_ASSERTION]: Authoring must stay disabled during automatic loading\n\nfalse !== true\n\n    at verifyPreferenceRace (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119/extensions/qa/phase3-full-show/preference-race.mjs:170:14)\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119/extensions/qa/phase3-full-show/browser-verify.mjs:868:15\n    at async run (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119/extensions/qa/phase3-full-show/browser-verify.mjs:624:5)\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119/extensions/qa/phase3-full-show/browser-verify.mjs:864:9",
+      "budgetMs": 60000,
+      "ms": 4625
+    }
+  ],
+  "errors": [],
+  "sourceHashesUnchanged": true,
+  "widgetSha256": "ceb8fbd063e3a6a1cc3ef8a18cb44a144ef3433054a04fe20fd1013734ee9dac",
+  "stderrTail": "responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nresponseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\nchromium / tadazz-classic preferences supersede automatic preview: Authoring must stay disabled during automatic loading\n\nfalse !== true\n\n"
+}

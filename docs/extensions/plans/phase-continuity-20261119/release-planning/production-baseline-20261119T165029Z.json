@@ -1,0 +1,53 @@
+{
+  "observedAt": "2026-11-19T16:50:29.530868+00:00",
+  "app": {
+    "id": "090d26a2fe7dd98a43226288932b7387bb9ec847cee5e5e2ff6ef48b6444bf40",
+    "image": "sha256:56de89dd9ca496595980af84a7187b49fbff8c0cb563c3393c269d2b7c09d82a",
+    "imageReference": "sha256:56de89dd9ca496595980af84a7187b49fbff8c0cb563c3393c269d2b7c09d82a",
+    "running": true,
+    "state": "running",
+    "restarts": 0,
+    "startedAt": "2026-11-19T15:36:08.569366276Z"
+  },
+  "gateway": {
+    "id": "c29ea46f10ff6da76428b2f296ff1468c512ec9e2af76eba552d7a144766b202",
+    "image": "sha256:db1888623e93a18cb9e4005a0142e01b3e6c503b029bbd7856144a5f41e7aa5e",
+    "imageReference": "tadazz:qa-combined-gateway-20261108",
+    "running": true,
+    "state": "running",
+    "restarts": 0,
+    "startedAt": "2026-11-08T11:37:09.544011462Z"
+  },
+  "qaCache": {
+    "id": "07b64bb4f99518e306a2e3f5a693266a6ca543fdd1676627161af7077e818872",
+    "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "imageReference": "tadazz:design-system-qa-20261110",
+    "running": false,
+    "state": "exited",
+    "restarts": 0,
+    "startedAt": "2026-11-19T14:07:26.061359415Z"
+  },
+  "runtimeSha256": "6524e1e0a86be5e0ec497be239a7889f53ad4425e4d3aeec285364fc5db9e9b5",
+  "workerUnitSha256": "7bfd2b44f2409588f162e278e2b3eb5a8671f61d81f1609ad29292608231559c",
+  "workerBrokerSha256": "7b591a69dd4aca951cf0f8224670c797696979085ae23c01d596ab99159d60d6",
+  "timer": {
+    "Unit": "tadazz-package-builder.service",
+    "ActiveState": "active",
+    "SubState": "waiting",
+    "UnitFileState": "enabled"
+  },
+  "service": {
+    "Result": "success",
+    "ExecMainStatus": "0",
+    "ActiveState": "inactive",
+    "SubState": "dead"
+  },
+  "workerImagePresent": true,
+  "publicHealth": {
+    "http": 200,
+    "body": {
+      "status": "ok"
+    }
+  },
+  "mutations": false
+}

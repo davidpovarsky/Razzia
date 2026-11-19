@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "runId": "20261119T171325Z-1a8574ec",
+  "startedUtc": "2026-11-19T17:13:25.188614+00:00",
+  "evidence": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase-continuity-20261119\\ggo\\20261119T171325Z-1a8574ec",
+  "ports": {
+    "web": 4412,
+    "api": 4413
+  },
+  "status": "FAIL",
+  "noProviderNetwork": "Canonical synthetic fixture disables global fetch; billing stays disabled",
+  "canonicalSmoke": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\extensions\\qa\\phase2\\great-guessoff-cta-balanced-results.smoke.mjs",
+  "viteConfig": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\extensions\\qa\\billing-public.vite.config.ts",
+  "head": "34a9e0a59482fa035ab98338f7c977589e46287d",
+  "nodeVersion": "v24.22.1",
+  "edgeExecutable": "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
+  "syntheticConfig": "C:\\Users\\DAVID\\AppData\\Local\\Temp\\tadazz-billing-public-browser-ggo-wfkop48n",
+  "smokeCommand": [
+    "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\extensions\\qa\\phase2\\great-guessoff-cta-balanced-results.smoke.mjs"
+  ],
+  "smokeCwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\phase-continuity-20261119\\ggo\\20261119T171325Z-1a8574ec",
+  "smokeExitCode": 1,
+  "ownedTemporaryFixtureRemoved": true,
+  "ownedSyntheticConfigRemoved": true,
+  "cleanup": [
+    {
+      "name": "smoke",
+      "ownedPid": 23292,
+      "stopped": true,
+      "priorExit": 1
+    },
+    {
+      "name": "web",
+      "ownedPid": 36708,
+      "stopped": true,
+      "taskkillExit": 0,
+      "taskkillOutput": "SUCCESS: The process with PID 36708 (child process of PID 29812) has been terminated.\n"
+    },
+    {
+      "name": "api",
+      "ownedPid": 8356,
+      "stopped": true,
+      "taskkillExit": 0,
+      "taskkillOutput": "SUCCESS: The process with PID 21164 (child process of PID 8356) has been terminated.\nSUCCESS: The process with PID 8356 (child process of PID 29812) has been terminated.\n"
+    }
+  ],
+  "allOwnedProcessesStopped": true,
+  "productFilesChanged": [],
+  "productFilesUnchanged": true,
+  "finishedUtc": "2026-11-19T17:14:34.447194+00:00",
+  "screenshots": []
+}

@@ -1,0 +1,5 @@
+Found 0 warnings and 0 errors.
+Finished in 2.5s on 8 files with 233 rules using 12 threads.
+
+(node:7984) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)

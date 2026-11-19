@@ -1,0 +1,3146 @@
+{
+  "kind": "real issuer + official MCP client + AppBridge + sandboxed native Stage",
+  "claim": "Isolated fixture validation; not ChatGPT installation or production consent",
+  "sha": "730cb4579d22589e1a7fc96a6873df9cb273e479",
+  "widgetManifestSha256": "dfc769e76fdad0be2d03e648ab04af9822de15598c7c6a324cc65e5dfb879344",
+  "widgetHtmlSha256": "fba454780cce5225421ac0281c9e8478b0652499a781c4ed428bdcd328c89839",
+  "sourceHashesUnchanged": true,
+  "diagnosticMode": "preference-race",
+  "productionChanged": false,
+  "customerMountAccessed": false,
+  "oauthSession": {
+    "kind": "actual-issuer-oauth-refresh",
+    "scheduler": "wall-clock",
+    "accessTokenLifetimeSeconds": 300,
+    "refreshCount": 0,
+    "rejected": false,
+    "automaticReauthorization": false,
+    "refreshes": []
+  },
+  "network": "none",
+  "transport": "Loopback HTTP plus exact hash-verified public-asset interception; no outbound network",
+  "outboundDenied": [],
+  "engines": [
+    {
+      "name": "chromium",
+      "version": "157.0.4341.60",
+      "outcomes": [
+        {
+          "name": "chromium / tadazz-classic preferences supersede automatic preview",
+          "status": "PASS",
+          "budgetMs": 60000,
+          "ms": 10562
+        },
+        {
+          "name": "chromium / razzia-original preferences supersede automatic preview",
+          "status": "PASS",
+          "budgetMs": 60000,
+          "ms": 9610
+        }
+      ]
+    },
+    {
+      "name": "webkit",
+      "version": "27.2",
+      "outcomes": [
+        {
+          "name": "webkit / tadazz-classic preferences supersede automatic preview",
+          "status": "PASS",
+          "budgetMs": 60000,
+          "ms": 11188
+        },
+        {
+          "name": "webkit / razzia-original preferences supersede automatic preview",
+          "status": "PASS",
+          "budgetMs": 60000,
+          "ms": 10184
+        }
+      ]
+    }
+  ],
+  "requiredChecks": [
+    "chromium / tadazz-classic native opening, five phases, transitions and closing",
+    "chromium / tadazz-classic title edit CAS and summary refresh through AppBridge",
+    "chromium / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+    "chromium / tadazz-classic nine localized interfaces and non-reduced native motion",
+    "chromium / tadazz-classic native audio gesture, acknowledged music and volume, persistent playback",
+    "chromium / tadazz-classic native pause, resume, replay and adjacent skip",
+    "chromium / tadazz-classic responsive 16:9 and 4:3 keyboard controls",
+    "chromium / tadazz-classic zero-vote, tie and picture result parity with preserved media and motion",
+    "chromium / tadazz-classic tamper, cancellation and tool-context teardown",
+    "chromium / tadazz-classic CSP, native media resources and browser errors",
+    "chromium / razzia-original native opening, five phases, transitions and closing",
+    "chromium / razzia-original title edit CAS and summary refresh through AppBridge",
+    "chromium / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+    "chromium / razzia-original nine localized interfaces and non-reduced native motion",
+    "chromium / razzia-original native audio gesture, acknowledged music and volume, persistent playback",
+    "chromium / razzia-original native pause, resume, replay and adjacent skip",
+    "chromium / razzia-original responsive 16:9 and 4:3 keyboard controls",
+    "chromium / razzia-original zero-vote, tie and picture result parity with preserved media and motion",
+    "chromium / razzia-original tamper, cancellation and tool-context teardown",
+    "chromium / razzia-original CSP, native media resources and browser errors",
+    "webkit / tadazz-classic native opening, five phases, transitions and closing",
+    "webkit / tadazz-classic title edit CAS and summary refresh through AppBridge",
+    "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+    "webkit / tadazz-classic nine localized interfaces and non-reduced native motion",
+    "webkit / tadazz-classic native audio gesture, acknowledged music and volume, persistent playback",
+    "webkit / tadazz-classic native pause, resume, replay and adjacent skip",
+    "webkit / tadazz-classic responsive 16:9 and 4:3 keyboard controls",
+    "webkit / tadazz-classic zero-vote, tie and picture result parity with preserved media and motion",
+    "webkit / tadazz-classic tamper, cancellation and tool-context teardown",
+    "webkit / tadazz-classic CSP, native media resources and browser errors",
+    "webkit / razzia-original native opening, five phases, transitions and closing",
+    "webkit / razzia-original title edit CAS and summary refresh through AppBridge",
+    "webkit / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+    "webkit / razzia-original nine localized interfaces and non-reduced native motion",
+    "webkit / razzia-original native audio gesture, acknowledged music and volume, persistent playback",
+    "webkit / razzia-original native pause, resume, replay and adjacent skip",
+    "webkit / razzia-original responsive 16:9 and 4:3 keyboard controls",
+    "webkit / razzia-original zero-vote, tie and picture result parity with preserved media and motion",
+    "webkit / razzia-original tamper, cancellation and tool-context teardown",
+    "webkit / razzia-original CSP, native media resources and browser errors"
+  ],
+  "failureCount": 0,
+  "rendererBuildId": "3769b213b9cb98919fcc15564ec37769ee451e548bb0b8cba8d4f01c42e2ad17",
+  "artifactSha256": "fba454780cce5225421ac0281c9e8478b0652499a781c4ed428bdcd328c89839",
+  "entries": [
+    {
+      "name": "chromium / tadazz-classic preferences supersede automatic preview",
+      "status": "PASS",
+      "budgetMs": 60000,
+      "ms": 10562
+    },
+    {
+      "name": "chromium / razzia-original preferences supersede automatic preview",
+      "status": "PASS",
+      "budgetMs": 60000,
+      "ms": 9610
+    },
+    {
+      "name": "webkit / tadazz-classic preferences supersede automatic preview",
+      "status": "PASS",
+      "budgetMs": 60000,
+      "ms": 11188
+    },
+    {
+      "name": "webkit / razzia-original preferences supersede automatic preview",
+      "status": "PASS",
+      "budgetMs": 60000,
+      "ms": 10184
+    }
+  ],
+  "observations": [
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T19:19:17.826Z",
+      "reason": "motion preference race",
+      "url": "about:blank",
+      "status": "no-host",
+      "finishedAt": "2026-11-19T19:19:17.826Z"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T19:19:23.318Z",
+      "reason": "language preference race",
+      "url": "http://127.0.0.1:64163/host?scenario=30V_0lw1iNNIEi9KjSA9ahCN",
+      "status": "drained",
+      "receipt": {
+        "documentId": "9b1bc375-2e0e-4011-98a2-5bc81dc1adb0",
+        "url": "http://127.0.0.1:64163/host?scenario=30V_0lw1iNNIEi9KjSA9ahCN",
+        "status": "drained",
+        "startedAt": "2026-11-19T19:19:23.323Z",
+        "finishedAt": "2026-11-19T19:19:23.324Z",
+        "elapsedMs": 0.800000011920929,
+        "initial": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "remaining": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "sentReplies": 3,
+        "cancelledReplies": 0,
+        "rejectedNewCalls": 0,
+        "requestEvents": [
+          {
+            "at": "2026-11-19T19:19:18.462Z",
+            "path": "/qa/initial",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:19:18.689Z",
+            "path": "/qa/initial",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T19:19:18.777Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:19:19.138Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T19:19:21.729Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:19:21.992Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:19:22.490Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T19:19:22.591Z",
+            "path": "/qa/call",
+            "status": "completed"
+          }
+        ],
+        "errors": []
+      },
+      "finishedAt": "2026-11-19T19:19:23.329Z"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "mechanism": "Unmodified real responses held at loopback HTTP before AppBridge ACK",
+      "cases": [
+        {
+          "preference": "motion",
+          "expected": {
+            "locale": "en",
+            "reducedMotion": false
+          },
+          "snapshots": [
+            {
+              "step": "automatic ACK held",
+              "motionDisabled": false,
+              "languageDisabled": false,
+              "motion": true,
+              "locale": "en",
+              "authoringDisabled": true,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question"
+            },
+            {
+              "step": "preference ACK held",
+              "motionDisabled": true,
+              "languageDisabled": true,
+              "motion": true,
+              "locale": "en",
+              "authoringDisabled": true,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question"
+            },
+            {
+              "step": "new preference acknowledged",
+              "motionDisabled": false,
+              "languageDisabled": false,
+              "motion": false,
+              "locale": "en",
+              "authoringDisabled": false,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting"
+            },
+            {
+              "step": "old automatic ACK delivered",
+              "motionDisabled": false,
+              "languageDisabled": false,
+              "motion": false,
+              "locale": "en",
+              "authoringDisabled": false,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting"
+            }
+          ],
+          "requests": {
+            "automatic": {
+              "selectionVersion": 3,
+              "draftId": "pRvDSG5CylIKca5DF3oPETGVIqyrQW0l",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "preference": {
+              "selectionVersion": 3,
+              "draftId": "pRvDSG5CylIKca5DF3oPETGVIqyrQW0l",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": false,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "deliveredOldAfterNew": true
+          },
+          "events": [
+            {
+              "type": "pointerdown",
+              "id": "full-show-reduce-motion",
+              "at": 3936.5,
+              "disabled": false,
+              "checked": true
+            },
+            {
+              "type": "pointerup",
+              "id": "full-show-reduce-motion",
+              "at": 3937.199999988079,
+              "disabled": false,
+              "checked": true
+            },
+            {
+              "type": "click",
+              "id": "full-show-reduce-motion",
+              "at": 3937.399999976158,
+              "disabled": false,
+              "checked": false
+            },
+            {
+              "type": "input",
+              "id": "full-show-reduce-motion",
+              "at": 3940.399999976158,
+              "disabled": true,
+              "checked": true
+            },
+            {
+              "type": "change",
+              "id": "full-show-reduce-motion",
+              "at": 3940.5,
+              "disabled": true,
+              "checked": true
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "preference": "language",
+          "expected": {
+            "locale": "fr",
+            "reducedMotion": true
+          },
+          "snapshots": [
+            {
+              "step": "automatic ACK held",
+              "motionDisabled": false,
+              "languageDisabled": false,
+              "motion": true,
+              "locale": "en",
+              "authoringDisabled": true,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question"
+            },
+            {
+              "step": "preference ACK held",
+              "motionDisabled": true,
+              "languageDisabled": true,
+              "motion": true,
+              "locale": "en",
+              "authoringDisabled": true,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question"
+            },
+            {
+              "step": "new preference acknowledged",
+              "motionDisabled": false,
+              "languageDisabled": false,
+              "motion": true,
+              "locale": "fr",
+              "authoringDisabled": false,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting"
+            },
+            {
+              "step": "old automatic ACK delivered",
+              "motionDisabled": false,
+              "languageDisabled": false,
+              "motion": true,
+              "locale": "fr",
+              "authoringDisabled": false,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting"
+            }
+          ],
+          "requests": {
+            "automatic": {
+              "selectionVersion": 3,
+              "draftId": "pRvDSG5CylIKca5DF3oPETGVIqyrQW0l",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "preference": {
+              "selectionVersion": 3,
+              "draftId": "pRvDSG5CylIKca5DF3oPETGVIqyrQW0l",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "fr",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "deliveredOldAfterNew": true
+          },
+          "events": [
+            {
+              "type": "input",
+              "id": "full-show-language",
+              "at": 3615.199999988079,
+              "disabled": false,
+              "locale": "fr"
+            },
+            {
+              "type": "change",
+              "id": "full-show-language",
+              "at": 3615.300000011921,
+              "disabled": false,
+              "locale": "fr"
+            }
+          ],
+          "status": "PASS"
+        }
+      ],
+      "status": "PASS",
+      "gates": [
+        {
+          "label": "motion automatic",
+          "input": {
+            "selectionVersion": 3,
+            "draftId": "pRvDSG5CylIKca5DF3oPETGVIqyrQW0l",
+            "expectedRevision": 1,
+            "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "context": {
+              "mode": "demo",
+              "role": "spectator",
+              "locale": "en",
+              "reducedMotion": true,
+              "join": "unavailable-demo",
+              "actions": "synthetic-only"
+            },
+            "contractVersion": "0.1.0"
+          },
+          "claimed": true,
+          "fulfilled": true
+        },
+        {
+          "label": "motion explicit",
+          "input": {
+            "selectionVersion": 3,
+            "draftId": "pRvDSG5CylIKca5DF3oPETGVIqyrQW0l",
+            "expectedRevision": 1,
+            "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "context": {
+              "mode": "demo",
+              "role": "spectator",
+              "locale": "en",
+              "reducedMotion": false,
+              "join": "unavailable-demo",
+              "actions": "synthetic-only"
+            },
+            "contractVersion": "0.1.0"
+          },
+          "claimed": true,
+          "fulfilled": true
+        },
+        {
+          "label": "language automatic",
+          "input": {
+            "selectionVersion": 3,
+            "draftId": "pRvDSG5CylIKca5DF3oPETGVIqyrQW0l",
+            "expectedRevision": 1,
+            "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "context": {
+              "mode": "demo",
+              "role": "spectator",
+              "locale": "en",
+              "reducedMotion": true,
+              "join": "unavailable-demo",
+              "actions": "synthetic-only"
+            },
+            "contractVersion": "0.1.0"
+          },
+          "claimed": true,
+          "fulfilled": true
+        },
+        {
+          "label": "language explicit",
+          "input": {
+            "selectionVersion": 3,
+            "draftId": "pRvDSG5CylIKca5DF3oPETGVIqyrQW0l",
+            "expectedRevision": 1,
+            "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "context": {
+              "mode": "demo",
+              "role": "spectator",
+              "locale": "fr",
+              "reducedMotion": true,
+              "join": "unavailable-demo",
+              "actions": "synthetic-only"
+            },
+            "contractVersion": "0.1.0"
+          },
+          "claimed": true,
+          "fulfilled": true
+        }
+      ]
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T19:19:28.346Z",
+      "reason": "close preference race context",
+      "url": "http://127.0.0.1:64163/host?scenario=30V_0lw1iNNIEi9KjSA9ahCN",
+      "status": "drained",
+      "receipt": {
+        "documentId": "09d684bd-2dc6-4f95-9c5c-a8a5a7182aa9",
+        "url": "http://127.0.0.1:64163/host?scenario=30V_0lw1iNNIEi9KjSA9ahCN",
+        "status": "drained",
+        "startedAt": "2026-11-19T19:19:28.349Z",
+        "finishedAt": "2026-11-19T19:19:28.349Z",
+        "elapsedMs": 0.19999998807907104,
+        "initial": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "remaining": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "sentReplies": 3,
+        "cancelledReplies": 0,
+        "rejectedNewCalls": 0,
+        "requestEvents": [
+          {
+            "at": "2026-11-19T19:19:23.780Z",
+            "path": "/qa/initial",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:19:23.950Z",
+            "path": "/qa/initial",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T19:19:24.005Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:19:24.421Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T19:19:26.993Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:19:27.217Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:19:27.764Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T19:19:27.909Z",
+            "path": "/qa/call",
+            "status": "completed"
+          }
+        ],
+        "errors": []
+      },
+      "finishedAt": "2026-11-19T19:19:28.350Z"
+    },
+    {
+      "engine": "chromium",
+      "theme": "razzia-original",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T19:19:30.379Z",
+      "reason": "motion preference race",
+      "url": "about:blank",
+      "status": "no-host",
+      "finishedAt": "2026-11-19T19:19:30.379Z"
+    },
+    {
+      "engine": "chromium",
+      "theme": "razzia-original",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T19:19:35.312Z",
+      "reason": "language preference race",
+      "url": "http://127.0.0.1:64163/host?scenario=HjWTjaaVLwAL4x436vQczOvl",
+      "status": "drained",
+      "receipt": {
+        "documentId": "26ee3ab9-87de-412f-8eca-38261f777ab1",
+        "url": "http://127.0.0.1:64163/host?scenario=HjWTjaaVLwAL4x436vQczOvl",
+        "status": "drained",
+        "startedAt": "2026-11-19T19:19:35.315Z",
+        "finishedAt": "2026-11-19T19:19:35.316Z",
+        "elapsedMs": 0.6000000238418579,
+        "initial": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "remaining": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "sentReplies": 3,
+        "cancelledReplies": 0,
+        "rejectedNewCalls": 0,
+        "requestEvents": [
+          {
+            "at": "2026-11-19T19:19:30.973Z",
+            "path": "/qa/initial",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:19:31.160Z",
+            "path": "/qa/initial",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T19:19:31.225Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:19:31.681Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T19:19:34.261Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:19:34.525Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:19:34.964Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T19:19:35.038Z",
+            "path": "/qa/call",
+            "status": "completed"
+          }
+        ],
+        "errors": []
+      },
+      "finishedAt": "2026-11-19T19:19:35.317Z"
+    },
+    {
+      "engine": "chromium",
+      "theme": "razzia-original",
+      "mechanism": "Unmodified real responses held at loopback HTTP before AppBridge ACK",
+      "cases": [
+        {
+          "preference": "motion",
+          "expected": {
+            "locale": "en",
+            "reducedMotion": false
+          },
+          "snapshots": [
+            {
+              "step": "automatic ACK held",
+              "motionDisabled": false,
+              "languageDisabled": false,
+              "motion": true,
+              "locale": "en",
+              "authoringDisabled": true,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question"
+            },
+            {
+              "step": "preference ACK held",
+              "motionDisabled": true,
+              "languageDisabled": true,
+              "motion": true,
+              "locale": "en",
+              "authoringDisabled": true,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question"
+            },
+            {
+              "step": "new preference acknowledged",
+              "motionDisabled": false,
+              "languageDisabled": false,
+              "motion": false,
+              "locale": "en",
+              "authoringDisabled": false,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting"
+            },
+            {
+              "step": "old automatic ACK delivered",
+              "motionDisabled": false,
+              "languageDisabled": false,
+              "motion": false,
+              "locale": "en",
+              "authoringDisabled": false,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting"
+            }
+          ],
+          "requests": {
+            "automatic": {
+              "selectionVersion": 3,
+              "draftId": "gIK4ylrfKOUSZrAtmWL5gU1AAhrFaVpY",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "preference": {
+              "selectionVersion": 3,
+              "draftId": "gIK4ylrfKOUSZrAtmWL5gU1AAhrFaVpY",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": false,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "deliveredOldAfterNew": true
+          },
+          "events": [
+            {
+              "type": "pointerdown",
+              "id": "full-show-reduce-motion",
+              "at": 3951,
+              "disabled": false,
+              "checked": true
+            },
+            {
+              "type": "pointerup",
+              "id": "full-show-reduce-motion",
+              "at": 3951.400000035763,
+              "disabled": false,
+              "checked": true
+            },
+            {
+              "type": "click",
+              "id": "full-show-reduce-motion",
+              "at": 3951.400000035763,
+              "disabled": false,
+              "checked": false
+            },
+            {
+              "type": "input",
+              "id": "full-show-reduce-motion",
+              "at": 3954.300000011921,
+              "disabled": true,
+              "checked": true
+            },
+            {
+              "type": "change",
+              "id": "full-show-reduce-motion",
+              "at": 3954.400000035763,
+              "disabled": true,
+              "checked": true
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "preference": "language",
+          "expected": {
+            "locale": "fr",
+            "reducedMotion": true
+          },
+          "snapshots": [
+            {
+              "step": "automatic ACK held",
+              "motionDisabled": false,
+              "languageDisabled": false,
+              "motion": true,
+              "locale": "en",
+              "authoringDisabled": true,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question"
+            },
+            {
+              "step": "preference ACK held",
+              "motionDisabled": true,
+              "languageDisabled": true,
+              "motion": true,
+              "locale": "en",
+              "authoringDisabled": true,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question"
+            },
+            {
+              "step": "new preference acknowledged",
+              "motionDisabled": false,
+              "languageDisabled": false,
+              "motion": true,
+              "locale": "fr",
+              "authoringDisabled": false,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting"
+            },
+            {
+              "step": "old automatic ACK delivered",
+              "motionDisabled": false,
+              "languageDisabled": false,
+              "motion": true,
+              "locale": "fr",
+              "authoringDisabled": false,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting"
+            }
+          ],
+          "requests": {
+            "automatic": {
+              "selectionVersion": 3,
+              "draftId": "gIK4ylrfKOUSZrAtmWL5gU1AAhrFaVpY",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "preference": {
+              "selectionVersion": 3,
+              "draftId": "gIK4ylrfKOUSZrAtmWL5gU1AAhrFaVpY",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "fr",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "deliveredOldAfterNew": true
+          },
+          "events": [
+            {
+              "type": "input",
+              "id": "full-show-language",
+              "at": 3600.599999964237,
+              "disabled": false,
+              "locale": "fr"
+            },
+            {
+              "type": "change",
+              "id": "full-show-language",
+              "at": 3600.699999988079,
+              "disabled": false,
+              "locale": "fr"
+            }
+          ],
+          "status": "PASS"
+        }
+      ],
+      "status": "PASS",
+      "gates": [
+        {
+          "label": "motion automatic",
+          "input": {
+            "selectionVersion": 3,
+            "draftId": "gIK4ylrfKOUSZrAtmWL5gU1AAhrFaVpY",
+            "expectedRevision": 1,
+            "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "context": {
+              "mode": "demo",
+              "role": "spectator",
+              "locale": "en",
+              "reducedMotion": true,
+              "join": "unavailable-demo",
+              "actions": "synthetic-only"
+            },
+            "contractVersion": "0.1.0"
+          },
+          "claimed": true,
+          "fulfilled": true
+        },
+        {
+          "label": "motion explicit",
+          "input": {
+            "selectionVersion": 3,
+            "draftId": "gIK4ylrfKOUSZrAtmWL5gU1AAhrFaVpY",
+            "expectedRevision": 1,
+            "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "context": {
+              "mode": "demo",
+              "role": "spectator",
+              "locale": "en",
+              "reducedMotion": false,
+              "join": "unavailable-demo",
+              "actions": "synthetic-only"
+            },
+            "contractVersion": "0.1.0"
+          },
+          "claimed": true,
+          "fulfilled": true
+        },
+        {
+          "label": "language automatic",
+          "input": {
+            "selectionVersion": 3,
+            "draftId": "gIK4ylrfKOUSZrAtmWL5gU1AAhrFaVpY",
+            "expectedRevision": 1,
+            "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "context": {
+              "mode": "demo",
+              "role": "spectator",
+              "locale": "en",
+              "reducedMotion": true,
+              "join": "unavailable-demo",
+              "actions": "synthetic-only"
+            },
+            "contractVersion": "0.1.0"
+          },
+          "claimed": true,
+          "fulfilled": true
+        },
+        {
+          "label": "language explicit",
+          "input": {
+            "selectionVersion": 3,
+            "draftId": "gIK4ylrfKOUSZrAtmWL5gU1AAhrFaVpY",
+            "expectedRevision": 1,
+            "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "context": {
+              "mode": "demo",
+              "role": "spectator",
+              "locale": "fr",
+              "reducedMotion": true,
+              "join": "unavailable-demo",
+              "actions": "synthetic-only"
+            },
+            "contractVersion": "0.1.0"
+          },
+          "claimed": true,
+          "fulfilled": true
+        }
+      ]
+    },
+    {
+      "engine": "chromium",
+      "theme": "razzia-original",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T19:19:39.978Z",
+      "reason": "close preference race context",
+      "url": "http://127.0.0.1:64163/host?scenario=HjWTjaaVLwAL4x436vQczOvl",
+      "status": "drained",
+      "receipt": {
+        "documentId": "0be65bb9-4c42-4975-83c6-eb59f4fa8c2e",
+        "url": "http://127.0.0.1:64163/host?scenario=HjWTjaaVLwAL4x436vQczOvl",
+        "status": "drained",
+        "startedAt": "2026-11-19T19:19:39.981Z",
+        "finishedAt": "2026-11-19T19:19:39.981Z",
+        "elapsedMs": 0.19999998807907104,
+        "initial": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "remaining": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "sentReplies": 3,
+        "cancelledReplies": 0,
+        "rejectedNewCalls": 0,
+        "requestEvents": [
+          {
+            "at": "2026-11-19T19:19:35.691Z",
+            "path": "/qa/initial",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:19:35.882Z",
+            "path": "/qa/initial",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T19:19:35.934Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:19:36.332Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T19:19:38.909Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:19:39.086Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:19:39.598Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T19:19:39.682Z",
+            "path": "/qa/call",
+            "status": "completed"
+          }
+        ],
+        "errors": []
+      },
+      "finishedAt": "2026-11-19T19:19:39.982Z"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T19:19:43.662Z",
+      "reason": "motion preference race",
+      "url": "about:blank",
+      "status": "no-host",
+      "finishedAt": "2026-11-19T19:19:43.662Z"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T19:19:49.531Z",
+      "reason": "language preference race",
+      "url": "http://127.0.0.1:64163/host?scenario=tFM5lHtendCpNDScn_D2bWMq",
+      "status": "drained",
+      "receipt": {
+        "documentId": "8aeb1a9e-1650-41ff-9a3d-29a0c79959ea",
+        "url": "http://127.0.0.1:64163/host?scenario=tFM5lHtendCpNDScn_D2bWMq",
+        "status": "drained",
+        "startedAt": "2026-11-19T19:19:49.535Z",
+        "finishedAt": "2026-11-19T19:19:49.535Z",
+        "elapsedMs": 0,
+        "initial": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "remaining": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "sentReplies": 3,
+        "cancelledReplies": 0,
+        "rejectedNewCalls": 0,
+        "requestEvents": [
+          {
+            "at": "2026-11-19T19:19:44.298Z",
+            "path": "/qa/initial",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:19:44.474Z",
+            "path": "/qa/initial",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T19:19:44.646Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:19:44.986Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T19:19:47.675Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:19:48.062Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:19:48.403Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T19:19:48.583Z",
+            "path": "/qa/call",
+            "status": "completed"
+          }
+        ],
+        "errors": []
+      },
+      "finishedAt": "2026-11-19T19:19:49.536Z"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "mechanism": "Unmodified real responses held at loopback HTTP before AppBridge ACK",
+      "cases": [
+        {
+          "preference": "motion",
+          "expected": {
+            "locale": "en",
+            "reducedMotion": false
+          },
+          "snapshots": [
+            {
+              "step": "automatic ACK held",
+              "motionDisabled": false,
+              "languageDisabled": false,
+              "motion": true,
+              "locale": "en",
+              "authoringDisabled": true,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question"
+            },
+            {
+              "step": "preference ACK held",
+              "motionDisabled": true,
+              "languageDisabled": true,
+              "motion": true,
+              "locale": "en",
+              "authoringDisabled": true,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question"
+            },
+            {
+              "step": "new preference acknowledged",
+              "motionDisabled": false,
+              "languageDisabled": false,
+              "motion": false,
+              "locale": "en",
+              "authoringDisabled": false,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting"
+            },
+            {
+              "step": "old automatic ACK delivered",
+              "motionDisabled": false,
+              "languageDisabled": false,
+              "motion": false,
+              "locale": "en",
+              "authoringDisabled": false,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting"
+            }
+          ],
+          "requests": {
+            "automatic": {
+              "selectionVersion": 3,
+              "draftId": "_JFZ1xWeEyR4juP5gBn1y_rZikDm1-9U",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "preference": {
+              "selectionVersion": 3,
+              "draftId": "_JFZ1xWeEyR4juP5gBn1y_rZikDm1-9U",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": false,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "deliveredOldAfterNew": true
+          },
+          "events": [
+            {
+              "type": "pointerdown",
+              "id": "full-show-reduce-motion",
+              "at": 4205,
+              "disabled": false,
+              "checked": true
+            },
+            {
+              "type": "pointerup",
+              "id": "full-show-reduce-motion",
+              "at": 4207,
+              "disabled": false,
+              "checked": true
+            },
+            {
+              "type": "click",
+              "id": "full-show-reduce-motion",
+              "at": 4207,
+              "disabled": false,
+              "checked": false
+            },
+            {
+              "type": "input",
+              "id": "full-show-reduce-motion",
+              "at": 4210,
+              "disabled": true,
+              "checked": true
+            },
+            {
+              "type": "change",
+              "id": "full-show-reduce-motion",
+              "at": 4210,
+              "disabled": true,
+              "checked": true
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "preference": "language",
+          "expected": {
+            "locale": "fr",
+            "reducedMotion": true
+          },
+          "snapshots": [
+            {
+              "step": "automatic ACK held",
+              "motionDisabled": false,
+              "languageDisabled": false,
+              "motion": true,
+              "locale": "en",
+              "authoringDisabled": true,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question"
+            },
+            {
+              "step": "preference ACK held",
+              "motionDisabled": true,
+              "languageDisabled": true,
+              "motion": true,
+              "locale": "en",
+              "authoringDisabled": true,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question"
+            },
+            {
+              "step": "new preference acknowledged",
+              "motionDisabled": false,
+              "languageDisabled": false,
+              "motion": true,
+              "locale": "fr",
+              "authoringDisabled": false,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting"
+            },
+            {
+              "step": "old automatic ACK delivered",
+              "motionDisabled": false,
+              "languageDisabled": false,
+              "motion": true,
+              "locale": "fr",
+              "authoringDisabled": false,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting"
+            }
+          ],
+          "requests": {
+            "automatic": {
+              "selectionVersion": 3,
+              "draftId": "_JFZ1xWeEyR4juP5gBn1y_rZikDm1-9U",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "preference": {
+              "selectionVersion": 3,
+              "draftId": "_JFZ1xWeEyR4juP5gBn1y_rZikDm1-9U",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "fr",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "deliveredOldAfterNew": true
+          },
+          "events": [
+            {
+              "type": "input",
+              "id": "full-show-language",
+              "at": 3771,
+              "disabled": false,
+              "locale": "fr"
+            },
+            {
+              "type": "change",
+              "id": "full-show-language",
+              "at": 3771,
+              "disabled": false,
+              "locale": "fr"
+            }
+          ],
+          "status": "PASS"
+        }
+      ],
+      "status": "PASS",
+      "gates": [
+        {
+          "label": "motion automatic",
+          "input": {
+            "selectionVersion": 3,
+            "draftId": "_JFZ1xWeEyR4juP5gBn1y_rZikDm1-9U",
+            "expectedRevision": 1,
+            "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "context": {
+              "mode": "demo",
+              "role": "spectator",
+              "locale": "en",
+              "reducedMotion": true,
+              "join": "unavailable-demo",
+              "actions": "synthetic-only"
+            },
+            "contractVersion": "0.1.0"
+          },
+          "claimed": true,
+          "fulfilled": true
+        },
+        {
+          "label": "motion explicit",
+          "input": {
+            "selectionVersion": 3,
+            "draftId": "_JFZ1xWeEyR4juP5gBn1y_rZikDm1-9U",
+            "expectedRevision": 1,
+            "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "context": {
+              "mode": "demo",
+              "role": "spectator",
+              "locale": "en",
+              "reducedMotion": false,
+              "join": "unavailable-demo",
+              "actions": "synthetic-only"
+            },
+            "contractVersion": "0.1.0"
+          },
+          "claimed": true,
+          "fulfilled": true
+        },
+        {
+          "label": "language automatic",
+          "input": {
+            "selectionVersion": 3,
+            "draftId": "_JFZ1xWeEyR4juP5gBn1y_rZikDm1-9U",
+            "expectedRevision": 1,
+            "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "context": {
+              "mode": "demo",
+              "role": "spectator",
+              "locale": "en",
+              "reducedMotion": true,
+              "join": "unavailable-demo",
+              "actions": "synthetic-only"
+            },
+            "contractVersion": "0.1.0"
+          },
+          "claimed": true,
+          "fulfilled": true
+        },
+        {
+          "label": "language explicit",
+          "input": {
+            "selectionVersion": 3,
+            "draftId": "_JFZ1xWeEyR4juP5gBn1y_rZikDm1-9U",
+            "expectedRevision": 1,
+            "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "context": {
+              "mode": "demo",
+              "role": "spectator",
+              "locale": "fr",
+              "reducedMotion": true,
+              "join": "unavailable-demo",
+              "actions": "synthetic-only"
+            },
+            "contractVersion": "0.1.0"
+          },
+          "claimed": true,
+          "fulfilled": true
+        }
+      ]
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T19:19:54.839Z",
+      "reason": "close preference race context",
+      "url": "http://127.0.0.1:64163/host?scenario=tFM5lHtendCpNDScn_D2bWMq",
+      "status": "drained",
+      "receipt": {
+        "documentId": "ad1a8617-87f9-4109-8b37-4fa16970847c",
+        "url": "http://127.0.0.1:64163/host?scenario=tFM5lHtendCpNDScn_D2bWMq",
+        "status": "drained",
+        "startedAt": "2026-11-19T19:19:54.842Z",
+        "finishedAt": "2026-11-19T19:19:54.842Z",
+        "elapsedMs": 0,
+        "initial": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "remaining": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "sentReplies": 3,
+        "cancelledReplies": 0,
+        "rejectedNewCalls": 0,
+        "requestEvents": [
+          {
+            "at": "2026-11-19T19:19:49.950Z",
+            "path": "/qa/initial",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:19:50.111Z",
+            "path": "/qa/initial",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T19:19:50.241Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:19:50.632Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T19:19:53.234Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:19:53.449Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:19:53.953Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T19:19:54.144Z",
+            "path": "/qa/call",
+            "status": "completed"
+          }
+        ],
+        "errors": []
+      },
+      "finishedAt": "2026-11-19T19:19:54.844Z"
+    },
+    {
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T19:19:56.844Z",
+      "reason": "motion preference race",
+      "url": "about:blank",
+      "status": "no-host",
+      "finishedAt": "2026-11-19T19:19:56.844Z"
+    },
+    {
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T19:20:01.997Z",
+      "reason": "language preference race",
+      "url": "http://127.0.0.1:64163/host?scenario=XJL41cC0E9kRwyVz-oh2Mfr9",
+      "status": "drained",
+      "receipt": {
+        "documentId": "775446fe-c9b1-469c-b19e-382327199c8a",
+        "url": "http://127.0.0.1:64163/host?scenario=XJL41cC0E9kRwyVz-oh2Mfr9",
+        "status": "drained",
+        "startedAt": "2026-11-19T19:20:01.999Z",
+        "finishedAt": "2026-11-19T19:20:02.000Z",
+        "elapsedMs": 0,
+        "initial": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "remaining": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "sentReplies": 3,
+        "cancelledReplies": 0,
+        "rejectedNewCalls": 0,
+        "requestEvents": [
+          {
+            "at": "2026-11-19T19:19:57.342Z",
+            "path": "/qa/initial",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:19:57.538Z",
+            "path": "/qa/initial",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T19:19:57.684Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:19:57.988Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T19:20:00.635Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:20:01.013Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:20:01.352Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T19:20:01.522Z",
+            "path": "/qa/call",
+            "status": "completed"
+          }
+        ],
+        "errors": []
+      },
+      "finishedAt": "2026-11-19T19:20:02.002Z"
+    },
+    {
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "mechanism": "Unmodified real responses held at loopback HTTP before AppBridge ACK",
+      "cases": [
+        {
+          "preference": "motion",
+          "expected": {
+            "locale": "en",
+            "reducedMotion": false
+          },
+          "snapshots": [
+            {
+              "step": "automatic ACK held",
+              "motionDisabled": false,
+              "languageDisabled": false,
+              "motion": true,
+              "locale": "en",
+              "authoringDisabled": true,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question"
+            },
+            {
+              "step": "preference ACK held",
+              "motionDisabled": true,
+              "languageDisabled": true,
+              "motion": true,
+              "locale": "en",
+              "authoringDisabled": true,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question"
+            },
+            {
+              "step": "new preference acknowledged",
+              "motionDisabled": false,
+              "languageDisabled": false,
+              "motion": false,
+              "locale": "en",
+              "authoringDisabled": false,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting"
+            },
+            {
+              "step": "old automatic ACK delivered",
+              "motionDisabled": false,
+              "languageDisabled": false,
+              "motion": false,
+              "locale": "en",
+              "authoringDisabled": false,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting"
+            }
+          ],
+          "requests": {
+            "automatic": {
+              "selectionVersion": 3,
+              "draftId": "kKRZdcyKdFp2EueEjHz3YFHAo3a1lvfJ",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "preference": {
+              "selectionVersion": 3,
+              "draftId": "kKRZdcyKdFp2EueEjHz3YFHAo3a1lvfJ",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": false,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "deliveredOldAfterNew": true
+          },
+          "events": [
+            {
+              "type": "pointerdown",
+              "id": "full-show-reduce-motion",
+              "at": 4034,
+              "disabled": false,
+              "checked": true
+            },
+            {
+              "type": "pointerup",
+              "id": "full-show-reduce-motion",
+              "at": 4035,
+              "disabled": false,
+              "checked": true
+            },
+            {
+              "type": "click",
+              "id": "full-show-reduce-motion",
+              "at": 4036,
+              "disabled": false,
+              "checked": false
+            },
+            {
+              "type": "input",
+              "id": "full-show-reduce-motion",
+              "at": 4039,
+              "disabled": true,
+              "checked": true
+            },
+            {
+              "type": "change",
+              "id": "full-show-reduce-motion",
+              "at": 4039,
+              "disabled": true,
+              "checked": true
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "preference": "language",
+          "expected": {
+            "locale": "fr",
+            "reducedMotion": true
+          },
+          "snapshots": [
+            {
+              "step": "automatic ACK held",
+              "motionDisabled": false,
+              "languageDisabled": false,
+              "motion": true,
+              "locale": "en",
+              "authoringDisabled": true,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question"
+            },
+            {
+              "step": "preference ACK held",
+              "motionDisabled": true,
+              "languageDisabled": true,
+              "motion": true,
+              "locale": "en",
+              "authoringDisabled": true,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question"
+            },
+            {
+              "step": "new preference acknowledged",
+              "motionDisabled": false,
+              "languageDisabled": false,
+              "motion": true,
+              "locale": "fr",
+              "authoringDisabled": false,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting"
+            },
+            {
+              "step": "old automatic ACK delivered",
+              "motionDisabled": false,
+              "languageDisabled": false,
+              "motion": true,
+              "locale": "fr",
+              "authoringDisabled": false,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting"
+            }
+          ],
+          "requests": {
+            "automatic": {
+              "selectionVersion": 3,
+              "draftId": "kKRZdcyKdFp2EueEjHz3YFHAo3a1lvfJ",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "en",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "preference": {
+              "selectionVersion": 3,
+              "draftId": "kKRZdcyKdFp2EueEjHz3YFHAo3a1lvfJ",
+              "expectedRevision": 1,
+              "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "context": {
+                "mode": "demo",
+                "role": "spectator",
+                "locale": "fr",
+                "reducedMotion": true,
+                "join": "unavailable-demo",
+                "actions": "synthetic-only"
+              },
+              "contractVersion": "0.1.0"
+            },
+            "deliveredOldAfterNew": true
+          },
+          "events": [
+            {
+              "type": "input",
+              "id": "full-show-language",
+              "at": 3775,
+              "disabled": false,
+              "locale": "fr"
+            },
+            {
+              "type": "change",
+              "id": "full-show-language",
+              "at": 3775,
+              "disabled": false,
+              "locale": "fr"
+            }
+          ],
+          "status": "PASS"
+        }
+      ],
+      "status": "PASS",
+      "gates": [
+        {
+          "label": "motion automatic",
+          "input": {
+            "selectionVersion": 3,
+            "draftId": "kKRZdcyKdFp2EueEjHz3YFHAo3a1lvfJ",
+            "expectedRevision": 1,
+            "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "context": {
+              "mode": "demo",
+              "role": "spectator",
+              "locale": "en",
+              "reducedMotion": true,
+              "join": "unavailable-demo",
+              "actions": "synthetic-only"
+            },
+            "contractVersion": "0.1.0"
+          },
+          "claimed": true,
+          "fulfilled": true
+        },
+        {
+          "label": "motion explicit",
+          "input": {
+            "selectionVersion": 3,
+            "draftId": "kKRZdcyKdFp2EueEjHz3YFHAo3a1lvfJ",
+            "expectedRevision": 1,
+            "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "context": {
+              "mode": "demo",
+              "role": "spectator",
+              "locale": "en",
+              "reducedMotion": false,
+              "join": "unavailable-demo",
+              "actions": "synthetic-only"
+            },
+            "contractVersion": "0.1.0"
+          },
+          "claimed": true,
+          "fulfilled": true
+        },
+        {
+          "label": "language automatic",
+          "input": {
+            "selectionVersion": 3,
+            "draftId": "kKRZdcyKdFp2EueEjHz3YFHAo3a1lvfJ",
+            "expectedRevision": 1,
+            "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "context": {
+              "mode": "demo",
+              "role": "spectator",
+              "locale": "en",
+              "reducedMotion": true,
+              "join": "unavailable-demo",
+              "actions": "synthetic-only"
+            },
+            "contractVersion": "0.1.0"
+          },
+          "claimed": true,
+          "fulfilled": true
+        },
+        {
+          "label": "language explicit",
+          "input": {
+            "selectionVersion": 3,
+            "draftId": "kKRZdcyKdFp2EueEjHz3YFHAo3a1lvfJ",
+            "expectedRevision": 1,
+            "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "context": {
+              "mode": "demo",
+              "role": "spectator",
+              "locale": "fr",
+              "reducedMotion": true,
+              "join": "unavailable-demo",
+              "actions": "synthetic-only"
+            },
+            "contractVersion": "0.1.0"
+          },
+          "claimed": true,
+          "fulfilled": true
+        }
+      ]
+    },
+    {
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T19:20:07.018Z",
+      "reason": "close preference race context",
+      "url": "http://127.0.0.1:64163/host?scenario=XJL41cC0E9kRwyVz-oh2Mfr9",
+      "status": "drained",
+      "receipt": {
+        "documentId": "018c68b5-c931-475c-a616-695e560b92f0",
+        "url": "http://127.0.0.1:64163/host?scenario=XJL41cC0E9kRwyVz-oh2Mfr9",
+        "status": "drained",
+        "startedAt": "2026-11-19T19:20:07.023Z",
+        "finishedAt": "2026-11-19T19:20:07.024Z",
+        "elapsedMs": 1,
+        "initial": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "remaining": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "sentReplies": 3,
+        "cancelledReplies": 0,
+        "rejectedNewCalls": 0,
+        "requestEvents": [
+          {
+            "at": "2026-11-19T19:20:02.424Z",
+            "path": "/qa/initial",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:20:02.571Z",
+            "path": "/qa/initial",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T19:20:02.703Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:20:03.100Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T19:20:05.709Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:20:05.929Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T19:20:06.447Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T19:20:06.582Z",
+            "path": "/qa/call",
+            "status": "completed"
+          }
+        ],
+        "errors": []
+      },
+      "finishedAt": "2026-11-19T19:20:07.026Z"
+    }
+  ],
+  "rendererFixtures": [],
+  "calls": [
+    {
+      "name": "get_game_draft_summary",
+      "inputRevision": 1,
+      "inputDigest": "50c6fe37b302f67480852e1b5a63608704b3c82f6e5cc2d029730a1382da1757",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "3130a9f8-1fde-4513-9c4e-8f569e8b24c3",
+        "data": {
+          "draftId": "pRvDSG5CylIKca5DF3oPETGVIqyrQW0l",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic chromium",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "9ddd9241a23ffe9f77941d15ac5aed86a59b6f3052cf5d779ae39bd2bf0da0f1",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "8649ec3d-9a05-4e70-9ff1-6ecf9c08721e",
+        "data": {
+          "draftId": "pRvDSG5CylIKca5DF3oPETGVIqyrQW0l",
+          "revision": 1,
+          "title": "Full show tadazz-classic chromium",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "chapterCount": 28,
+          "frameDigest": "16f902f3e54e5535605929339c18a9319a5ffb929eebe2fa80fa6e09154ce6d3"
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "2d5879a3fc43d797542fd816a65e9775a4e2faa26cecdeeef8c26ec4700e5b13",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "ece0d966-f5e0-480d-93f9-a5a8ec1664a1",
+        "data": {
+          "draftId": "pRvDSG5CylIKca5DF3oPETGVIqyrQW0l",
+          "revision": 1,
+          "title": "Full show tadazz-classic chromium",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "chapterCount": 28,
+          "frameDigest": "cfb548327de6d363d843db93c77acd231ea9060f630e73eafb64c1b9454fc851"
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "inputRevision": 1,
+      "inputDigest": "50c6fe37b302f67480852e1b5a63608704b3c82f6e5cc2d029730a1382da1757",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "8f63e414-ac71-41b6-a833-6d55b857e53a",
+        "data": {
+          "draftId": "pRvDSG5CylIKca5DF3oPETGVIqyrQW0l",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic chromium",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "9ddd9241a23ffe9f77941d15ac5aed86a59b6f3052cf5d779ae39bd2bf0da0f1",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "0a58f931-ba5f-4e33-864d-8eebbc3933fd",
+        "data": {
+          "draftId": "pRvDSG5CylIKca5DF3oPETGVIqyrQW0l",
+          "revision": 1,
+          "title": "Full show tadazz-classic chromium",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "chapterCount": 28,
+          "frameDigest": "16f902f3e54e5535605929339c18a9319a5ffb929eebe2fa80fa6e09154ce6d3"
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "89191208ae52e2f6d0629af5129fa76eb0f5e1f2da17ede7e07b5de22e24a02d",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "422b0721-1b02-4b1e-b442-9c8dc7836a7d",
+        "data": {
+          "draftId": "pRvDSG5CylIKca5DF3oPETGVIqyrQW0l",
+          "revision": 1,
+          "title": "Full show tadazz-classic chromium",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "chapterCount": 28,
+          "frameDigest": "c8506f5953bc4ebba21823435b3bd994b16431f651d31f3e7a5ba3b1b60a35d1"
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "inputRevision": 1,
+      "inputDigest": "4e1bfdebae7b79f785fc8247e8b3d45b60d6c1aaf81b9516621723e231e066fd",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "daf6166e-5f56-41ee-914a-80a2909b7641",
+        "data": {
+          "draftId": "gIK4ylrfKOUSZrAtmWL5gU1AAhrFaVpY",
+          "revision": 1,
+          "summary": {
+            "title": "Full show razzia-original chromium",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "razzia-original",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "dd9a17d8585cf915430b6053de9629ed43fe35f37a666e8f6ce4e480cfdadde6",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "ae69c789-548f-44fa-9ebe-a66ca9f89d17",
+        "data": {
+          "draftId": "gIK4ylrfKOUSZrAtmWL5gU1AAhrFaVpY",
+          "revision": 1,
+          "title": "Full show razzia-original chromium",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "chapterCount": 28,
+          "frameDigest": "90039fe7e71803530ba3bef129f56f8ced30d6bf5902172ff0e4c24d4eddfdcd"
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "f74db76e4b831f9e7af8dd6a32e21dbd07869bd7994be037a9efaca055043660",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "e636fa0b-a05e-4037-8f19-75df2acfbf37",
+        "data": {
+          "draftId": "gIK4ylrfKOUSZrAtmWL5gU1AAhrFaVpY",
+          "revision": 1,
+          "title": "Full show razzia-original chromium",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "chapterCount": 28,
+          "frameDigest": "9daf604ad07ae2276d8d3222c4fa0d912530fb7c59aa0cb0a67f5ff7ff9ecee9"
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "inputRevision": 1,
+      "inputDigest": "4e1bfdebae7b79f785fc8247e8b3d45b60d6c1aaf81b9516621723e231e066fd",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "d1cf4a9c-e078-43bb-9f85-fb299f37b4e1",
+        "data": {
+          "draftId": "gIK4ylrfKOUSZrAtmWL5gU1AAhrFaVpY",
+          "revision": 1,
+          "summary": {
+            "title": "Full show razzia-original chromium",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "razzia-original",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "dd9a17d8585cf915430b6053de9629ed43fe35f37a666e8f6ce4e480cfdadde6",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "73933b57-765f-4d5d-8dd4-540f48d151ca",
+        "data": {
+          "draftId": "gIK4ylrfKOUSZrAtmWL5gU1AAhrFaVpY",
+          "revision": 1,
+          "title": "Full show razzia-original chromium",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "chapterCount": 28,
+          "frameDigest": "90039fe7e71803530ba3bef129f56f8ced30d6bf5902172ff0e4c24d4eddfdcd"
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "d8d3ece4978e26453322342aa82b514e5adfc4e0aeed38e80dd199d87add9c91",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "93a4b9b4-8249-4303-b5d5-40fd2807e343",
+        "data": {
+          "draftId": "gIK4ylrfKOUSZrAtmWL5gU1AAhrFaVpY",
+          "revision": 1,
+          "title": "Full show razzia-original chromium",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "chapterCount": 28,
+          "frameDigest": "bc9572eca785941afea81a8d53e18c8b43c7e7ecce8f227245b16ab2bd416713"
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "inputRevision": 1,
+      "inputDigest": "1f6437c7a6374c0f499288e06c4f64ea2f40dbbb8aa57e7733902d5b0d3bcc4c",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "682da0d5-ff35-485f-aa8b-53bcb1a3bd77",
+        "data": {
+          "draftId": "_JFZ1xWeEyR4juP5gBn1y_rZikDm1-9U",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "88d5cc3f3d334609cfa331087aec73121e003010cd407598761b6fa05d612cdb",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "cbad6ae4-b32a-4e4f-b635-3d4537a029af",
+        "data": {
+          "draftId": "_JFZ1xWeEyR4juP5gBn1y_rZikDm1-9U",
+          "revision": 1,
+          "title": "Full show tadazz-classic webkit",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "chapterCount": 28,
+          "frameDigest": "a32d0b6293bf9d07776e8728ac51606ac91353e3f13427d32522906d83c7476f"
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "8fb9939c28090e154f1178eabcf065ffe835695607527ca6398ef0690f2da302",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "e04338cb-4007-4dc1-b743-fb7c249174b4",
+        "data": {
+          "draftId": "_JFZ1xWeEyR4juP5gBn1y_rZikDm1-9U",
+          "revision": 1,
+          "title": "Full show tadazz-classic webkit",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "chapterCount": 28,
+          "frameDigest": "455529fdaa18b49de5419a796bc0578d1476baa1794217343c79e707e7bb5dc8"
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "inputRevision": 1,
+      "inputDigest": "1f6437c7a6374c0f499288e06c4f64ea2f40dbbb8aa57e7733902d5b0d3bcc4c",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "6b56b01a-7ae6-48d0-813f-e3503b0d62b3",
+        "data": {
+          "draftId": "_JFZ1xWeEyR4juP5gBn1y_rZikDm1-9U",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "88d5cc3f3d334609cfa331087aec73121e003010cd407598761b6fa05d612cdb",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "7ab77d5e-6f4c-4bd4-901b-0e988a588670",
+        "data": {
+          "draftId": "_JFZ1xWeEyR4juP5gBn1y_rZikDm1-9U",
+          "revision": 1,
+          "title": "Full show tadazz-classic webkit",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "chapterCount": 28,
+          "frameDigest": "a32d0b6293bf9d07776e8728ac51606ac91353e3f13427d32522906d83c7476f"
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "162baaf20c6ed9fba1f0e0c2bd8a851c98495e74271bf655b2a44dce7769575f",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "003bf4d4-4255-4a44-ac39-78a2087f2041",
+        "data": {
+          "draftId": "_JFZ1xWeEyR4juP5gBn1y_rZikDm1-9U",
+          "revision": 1,
+          "title": "Full show tadazz-classic webkit",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "chapterCount": 28,
+          "frameDigest": "169f65e6f4f2a0ac9cba22513ec2d880528703a5937f6745174489e7c063ad22"
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "inputRevision": 1,
+      "inputDigest": "e0c5af20335090153f4e960bbfec5441e6e7a879130fb701a5ea87d7bb1d5cc5",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "09f53cef-c46b-4b9e-85dc-f28c284f69a4",
+        "data": {
+          "draftId": "kKRZdcyKdFp2EueEjHz3YFHAo3a1lvfJ",
+          "revision": 1,
+          "summary": {
+            "title": "Full show razzia-original webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "razzia-original",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "f35d422935c78624dc03d75a33067fcac1a8b4740476ce4b2c0c0512f4a503bc",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "5facf87c-05d3-428a-b19d-767dbd46afac",
+        "data": {
+          "draftId": "kKRZdcyKdFp2EueEjHz3YFHAo3a1lvfJ",
+          "revision": 1,
+          "title": "Full show razzia-original webkit",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "chapterCount": 28,
+          "frameDigest": "28627db1a2ef39732c9def26700b30ee1de4719fbb5c3fa7b06da8f9ba4369ac"
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "b6b66e0d81699e28c9c59d825d05f749227649723db9f24f98a64804b6bba802",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "d7498e24-358d-4349-bbe8-0b29b146f31b",
+        "data": {
+          "draftId": "kKRZdcyKdFp2EueEjHz3YFHAo3a1lvfJ",
+          "revision": 1,
+          "title": "Full show razzia-original webkit",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "chapterCount": 28,
+          "frameDigest": "b12051d13165f4b4dae62ca4dd9fa7746cd5cccc85dda5fe0f07e63989810147"
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "inputRevision": 1,
+      "inputDigest": "e0c5af20335090153f4e960bbfec5441e6e7a879130fb701a5ea87d7bb1d5cc5",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "6fe2aeb8-4ba2-4991-a27e-a41c2976cbce",
+        "data": {
+          "draftId": "kKRZdcyKdFp2EueEjHz3YFHAo3a1lvfJ",
+          "revision": 1,
+          "summary": {
+            "title": "Full show razzia-original webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "razzia-original",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "f35d422935c78624dc03d75a33067fcac1a8b4740476ce4b2c0c0512f4a503bc",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "e87d69a0-a98d-46bb-869c-a868882e416e",
+        "data": {
+          "draftId": "kKRZdcyKdFp2EueEjHz3YFHAo3a1lvfJ",
+          "revision": 1,
+          "title": "Full show razzia-original webkit",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "chapterCount": 28,
+          "frameDigest": "28627db1a2ef39732c9def26700b30ee1de4719fbb5c3fa7b06da8f9ba4369ac"
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "2c589bde9f271d6eb78ad27741bc095a20d303783c01382c3a2f4bb68a2dd2ef",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "49b20389-c0a4-478f-80da-5eda39c44caa",
+        "data": {
+          "draftId": "kKRZdcyKdFp2EueEjHz3YFHAo3a1lvfJ",
+          "revision": 1,
+          "title": "Full show razzia-original webkit",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "chapterCount": 28,
+          "frameDigest": "7ec7f452783127d891ff97a1d6eb23c28ad466498c1b82ce28379a53e9b687e3"
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "resources": [
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/show-stage.webp",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/question-bg.webp",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/second-library/teaser-screen-source.jpg",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/show-stage.webp",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/question-bg.webp",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/second-library/teaser-screen-source.jpg",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "razzia-original",
+      "path": "/tadazz-show/razzia-original/background.png",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "razzia-original",
+      "path": "/tadazz-show/razzia-original/background.png",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/show-stage.webp",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/second-library/teaser-screen-source.jpg",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/question-bg.webp",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/show-stage.webp",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/second-library/teaser-screen-source.jpg",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/question-bg.webp",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "path": "/tadazz-show/razzia-original/background.png",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "path": "/tadazz-show/razzia-original/background.png",
+      "admitted": true
+    }
+  ],
+  "requestFailures": [],
+  "pageErrorEvents": [],
+  "qaRequestEvents": [
+    {
+      "at": "2026-11-19T19:19:18.463Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic preferences supersede automatic preview",
+      "activeStep": "chromium / tadazz-classic preferences supersede automatic preview",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=30V_0lw1iNNIEi9KjSA9ahCN",
+      "url": "http://127.0.0.1:64163/qa/initial?scenario=30V_0lw1iNNIEi9KjSA9ahCN",
+      "method": "GET",
+      "responseAt": "2026-11-19T19:19:18.696Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:19:18.782Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic preferences supersede automatic preview",
+      "activeStep": "chromium / tadazz-classic preferences supersede automatic preview",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=30V_0lw1iNNIEi9KjSA9ahCN",
+      "url": "http://127.0.0.1:64163/qa/call?scenario=30V_0lw1iNNIEi9KjSA9ahCN",
+      "method": "POST",
+      "responseAt": "2026-11-19T19:19:19.137Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:19:21.729Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic preferences supersede automatic preview",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=30V_0lw1iNNIEi9KjSA9ahCN",
+      "url": "http://127.0.0.1:64163/qa/call?scenario=30V_0lw1iNNIEi9KjSA9ahCN",
+      "method": "POST",
+      "responseAt": "2026-11-19T19:19:22.591Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:19:21.993Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic preferences supersede automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=30V_0lw1iNNIEi9KjSA9ahCN",
+      "url": "http://127.0.0.1:64163/qa/call?scenario=30V_0lw1iNNIEi9KjSA9ahCN",
+      "method": "POST",
+      "responseAt": "2026-11-19T19:19:22.489Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:19:23.780Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic preferences supersede automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=30V_0lw1iNNIEi9KjSA9ahCN",
+      "url": "http://127.0.0.1:64163/qa/initial?scenario=30V_0lw1iNNIEi9KjSA9ahCN",
+      "method": "GET",
+      "responseAt": "2026-11-19T19:19:23.951Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:19:24.008Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic preferences supersede automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=30V_0lw1iNNIEi9KjSA9ahCN",
+      "url": "http://127.0.0.1:64163/qa/call?scenario=30V_0lw1iNNIEi9KjSA9ahCN",
+      "method": "POST",
+      "responseAt": "2026-11-19T19:19:24.420Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:19:26.994Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic preferences supersede automatic preview",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=30V_0lw1iNNIEi9KjSA9ahCN",
+      "url": "http://127.0.0.1:64163/qa/call?scenario=30V_0lw1iNNIEi9KjSA9ahCN",
+      "method": "POST",
+      "responseAt": "2026-11-19T19:19:27.909Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:19:27.218Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic preferences supersede automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=30V_0lw1iNNIEi9KjSA9ahCN",
+      "url": "http://127.0.0.1:64163/qa/call?scenario=30V_0lw1iNNIEi9KjSA9ahCN",
+      "method": "POST",
+      "responseAt": "2026-11-19T19:19:27.764Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:19:30.974Z",
+      "engine": "chromium",
+      "theme": "razzia-original",
+      "activeCheck": "chromium / razzia-original preferences supersede automatic preview",
+      "activeStep": "chromium / razzia-original preferences supersede automatic preview",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=HjWTjaaVLwAL4x436vQczOvl",
+      "url": "http://127.0.0.1:64163/qa/initial?scenario=HjWTjaaVLwAL4x436vQczOvl",
+      "method": "GET",
+      "responseAt": "2026-11-19T19:19:31.161Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:19:31.227Z",
+      "engine": "chromium",
+      "theme": "razzia-original",
+      "activeCheck": "chromium / razzia-original preferences supersede automatic preview",
+      "activeStep": "chromium / razzia-original preferences supersede automatic preview",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=HjWTjaaVLwAL4x436vQczOvl",
+      "url": "http://127.0.0.1:64163/qa/call?scenario=HjWTjaaVLwAL4x436vQczOvl",
+      "method": "POST",
+      "responseAt": "2026-11-19T19:19:31.680Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:19:34.261Z",
+      "engine": "chromium",
+      "theme": "razzia-original",
+      "activeCheck": "chromium / razzia-original preferences supersede automatic preview",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=HjWTjaaVLwAL4x436vQczOvl",
+      "url": "http://127.0.0.1:64163/qa/call?scenario=HjWTjaaVLwAL4x436vQczOvl",
+      "method": "POST",
+      "responseAt": "2026-11-19T19:19:35.038Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:19:34.526Z",
+      "engine": "chromium",
+      "theme": "razzia-original",
+      "activeCheck": "chromium / razzia-original preferences supersede automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=HjWTjaaVLwAL4x436vQczOvl",
+      "url": "http://127.0.0.1:64163/qa/call?scenario=HjWTjaaVLwAL4x436vQczOvl",
+      "method": "POST",
+      "responseAt": "2026-11-19T19:19:34.963Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:19:35.691Z",
+      "engine": "chromium",
+      "theme": "razzia-original",
+      "activeCheck": "chromium / razzia-original preferences supersede automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=HjWTjaaVLwAL4x436vQczOvl",
+      "url": "http://127.0.0.1:64163/qa/initial?scenario=HjWTjaaVLwAL4x436vQczOvl",
+      "method": "GET",
+      "responseAt": "2026-11-19T19:19:35.890Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:19:35.935Z",
+      "engine": "chromium",
+      "theme": "razzia-original",
+      "activeCheck": "chromium / razzia-original preferences supersede automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=HjWTjaaVLwAL4x436vQczOvl",
+      "url": "http://127.0.0.1:64163/qa/call?scenario=HjWTjaaVLwAL4x436vQczOvl",
+      "method": "POST",
+      "responseAt": "2026-11-19T19:19:36.331Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:19:38.909Z",
+      "engine": "chromium",
+      "theme": "razzia-original",
+      "activeCheck": "chromium / razzia-original preferences supersede automatic preview",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=HjWTjaaVLwAL4x436vQczOvl",
+      "url": "http://127.0.0.1:64163/qa/call?scenario=HjWTjaaVLwAL4x436vQczOvl",
+      "method": "POST",
+      "responseAt": "2026-11-19T19:19:39.682Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:19:39.086Z",
+      "engine": "chromium",
+      "theme": "razzia-original",
+      "activeCheck": "chromium / razzia-original preferences supersede automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=HjWTjaaVLwAL4x436vQczOvl",
+      "url": "http://127.0.0.1:64163/qa/call?scenario=HjWTjaaVLwAL4x436vQczOvl",
+      "method": "POST",
+      "responseAt": "2026-11-19T19:19:39.597Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:19:44.299Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic preferences supersede automatic preview",
+      "activeStep": "webkit / tadazz-classic preferences supersede automatic preview",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=tFM5lHtendCpNDScn_D2bWMq",
+      "url": "http://127.0.0.1:64163/qa/initial?scenario=tFM5lHtendCpNDScn_D2bWMq",
+      "method": "GET",
+      "responseAt": "2026-11-19T19:19:44.470Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:19:44.646Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic preferences supersede automatic preview",
+      "activeStep": "webkit / tadazz-classic preferences supersede automatic preview",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=tFM5lHtendCpNDScn_D2bWMq",
+      "url": "http://127.0.0.1:64163/qa/call?scenario=tFM5lHtendCpNDScn_D2bWMq",
+      "method": "POST",
+      "responseAt": "2026-11-19T19:19:44.982Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:19:47.675Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic preferences supersede automatic preview",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=tFM5lHtendCpNDScn_D2bWMq",
+      "url": "http://127.0.0.1:64163/qa/call?scenario=tFM5lHtendCpNDScn_D2bWMq",
+      "method": "POST",
+      "responseAt": "2026-11-19T19:19:48.582Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:19:48.062Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic preferences supersede automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=tFM5lHtendCpNDScn_D2bWMq",
+      "url": "http://127.0.0.1:64163/qa/call?scenario=tFM5lHtendCpNDScn_D2bWMq",
+      "method": "POST",
+      "responseAt": "2026-11-19T19:19:48.402Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:19:49.949Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic preferences supersede automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=tFM5lHtendCpNDScn_D2bWMq",
+      "url": "http://127.0.0.1:64163/qa/initial?scenario=tFM5lHtendCpNDScn_D2bWMq",
+      "method": "GET",
+      "responseAt": "2026-11-19T19:19:50.111Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:19:50.242Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic preferences supersede automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=tFM5lHtendCpNDScn_D2bWMq",
+      "url": "http://127.0.0.1:64163/qa/call?scenario=tFM5lHtendCpNDScn_D2bWMq",
+      "method": "POST",
+      "responseAt": "2026-11-19T19:19:50.630Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:19:53.235Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic preferences supersede automatic preview",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=tFM5lHtendCpNDScn_D2bWMq",
+      "url": "http://127.0.0.1:64163/qa/call?scenario=tFM5lHtendCpNDScn_D2bWMq",
+      "method": "POST",
+      "responseAt": "2026-11-19T19:19:54.138Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:19:53.449Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic preferences supersede automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=tFM5lHtendCpNDScn_D2bWMq",
+      "url": "http://127.0.0.1:64163/qa/call?scenario=tFM5lHtendCpNDScn_D2bWMq",
+      "method": "POST",
+      "responseAt": "2026-11-19T19:19:53.951Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:19:57.344Z",
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "activeCheck": "webkit / razzia-original preferences supersede automatic preview",
+      "activeStep": "webkit / razzia-original preferences supersede automatic preview",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=XJL41cC0E9kRwyVz-oh2Mfr9",
+      "url": "http://127.0.0.1:64163/qa/initial?scenario=XJL41cC0E9kRwyVz-oh2Mfr9",
+      "method": "GET",
+      "responseAt": "2026-11-19T19:19:57.538Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:19:57.686Z",
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "activeCheck": "webkit / razzia-original preferences supersede automatic preview",
+      "activeStep": "webkit / razzia-original preferences supersede automatic preview",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=XJL41cC0E9kRwyVz-oh2Mfr9",
+      "url": "http://127.0.0.1:64163/qa/call?scenario=XJL41cC0E9kRwyVz-oh2Mfr9",
+      "method": "POST",
+      "responseAt": "2026-11-19T19:19:57.977Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:20:00.636Z",
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "activeCheck": "webkit / razzia-original preferences supersede automatic preview",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=XJL41cC0E9kRwyVz-oh2Mfr9",
+      "url": "http://127.0.0.1:64163/qa/call?scenario=XJL41cC0E9kRwyVz-oh2Mfr9",
+      "method": "POST",
+      "responseAt": "2026-11-19T19:20:01.521Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:20:01.014Z",
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "activeCheck": "webkit / razzia-original preferences supersede automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=XJL41cC0E9kRwyVz-oh2Mfr9",
+      "url": "http://127.0.0.1:64163/qa/call?scenario=XJL41cC0E9kRwyVz-oh2Mfr9",
+      "method": "POST",
+      "responseAt": "2026-11-19T19:20:01.352Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:20:02.425Z",
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "activeCheck": "webkit / razzia-original preferences supersede automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=XJL41cC0E9kRwyVz-oh2Mfr9",
+      "url": "http://127.0.0.1:64163/qa/initial?scenario=XJL41cC0E9kRwyVz-oh2Mfr9",
+      "method": "GET",
+      "responseAt": "2026-11-19T19:20:02.571Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:20:02.705Z",
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "activeCheck": "webkit / razzia-original preferences supersede automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=XJL41cC0E9kRwyVz-oh2Mfr9",
+      "url": "http://127.0.0.1:64163/qa/call?scenario=XJL41cC0E9kRwyVz-oh2Mfr9",
+      "method": "POST",
+      "responseAt": "2026-11-19T19:20:03.092Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:20:05.711Z",
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "activeCheck": "webkit / razzia-original preferences supersede automatic preview",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=XJL41cC0E9kRwyVz-oh2Mfr9",
+      "url": "http://127.0.0.1:64163/qa/call?scenario=XJL41cC0E9kRwyVz-oh2Mfr9",
+      "method": "POST",
+      "responseAt": "2026-11-19T19:20:06.581Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T19:20:05.931Z",
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "activeCheck": "webkit / razzia-original preferences supersede automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:64163/host?scenario=XJL41cC0E9kRwyVz-oh2Mfr9",
+      "url": "http://127.0.0.1:64163/qa/call?scenario=XJL41cC0E9kRwyVz-oh2Mfr9",
+      "method": "POST",
+      "responseAt": "2026-11-19T19:20:06.447Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    }
+  ],
+  "requests": [
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/second-library/teaser-screen-source.jpg"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/second-library/teaser-screen-source.jpg"
+    },
+    {
+      "engine": "chromium",
+      "theme": "razzia-original",
+      "url": "https://tadazz.com/tadazz-show/razzia-original/background.png"
+    },
+    {
+      "engine": "chromium",
+      "theme": "razzia-original",
+      "url": "https://tadazz.com/tadazz-show/razzia-original/background.png"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/second-library/teaser-screen-source.jpg"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/second-library/teaser-screen-source.jpg"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+    },
+    {
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "url": "https://tadazz.com/tadazz-show/razzia-original/background.png"
+    },
+    {
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "url": "https://tadazz.com/tadazz-show/razzia-original/background.png"
+    }
+  ]
+}

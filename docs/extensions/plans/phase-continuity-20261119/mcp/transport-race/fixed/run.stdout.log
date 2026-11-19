@@ -1,0 +1,3 @@
+START chromium / tadazz-classic readonly transport supersedes automatic preview
+START webkit / tadazz-classic readonly transport supersedes automatic preview
+{"evidence":"C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-transport-race-20261119\\docs\\extensions\\plans\\phase-continuity-20261119\\mcp\\transport-race\\fixed\\qa","results":[{"name":"chromium / tadazz-classic readonly transport supersedes automatic preview","status":"PASS"},{"name":"webkit / tadazz-classic readonly transport supersedes automatic preview","status":"FAIL","error":"Error: frame.evaluate: Target page, context or browser has been closed"}],"errors":[]}

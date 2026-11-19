@@ -1,0 +1,891 @@
+{
+  "sha": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "container": "tadazz-codex-browser-dccfd9d22a46-bc4da0bb",
+  "network": "none",
+  "sourceReadOnly": true,
+  "sourceFileCount": 1873,
+  "allSourceHashesVerifiedBeforeAfter": true,
+  "sdkCacheFileCount": 2042,
+  "sdkCacheHashesVerifiedBeforeAfter": true,
+  "sdkCacheManifestSha256": "0d1e3e9c089b66a75ff0e6b284f58b94ddb4e4b47b55129d82865980f62d67de",
+  "command": [
+    "docker",
+    "exec",
+    "-w",
+    "/source",
+    "-e",
+    "TMPDIR=/tmp",
+    "-e",
+    "HOME=/tmp",
+    "-e",
+    "PLAYWRIGHT_BROWSERS_PATH=/root/.cache/ms-playwright",
+    "-e",
+    "TSX_DISABLE_CACHE=1",
+    "-e",
+    "NODE_OPTIONS=--max-old-space-size=1024",
+    "-e",
+    "TADAZZ_SITE_DIST_DIR=/source/packages/web/dist",
+    "-e",
+    "TADAZZ_QA_RUN_DIR=/evidence/browser-server",
+    "-e",
+    "TADAZZ_QA_OWNED_RUN_DIR=1",
+    "tadazz-codex-browser-dccfd9d22a46-bc4da0bb",
+    "nice",
+    "-n",
+    "19",
+    "taskset",
+    "-c",
+    "0",
+    "timeout",
+    "-k",
+    "5",
+    "360",
+    "node",
+    "/cleanup/extensions/node_modules/@playwright/test/cli.js",
+    "test",
+    "--config",
+    "extensions/qa/phase3-native-consent/native-consent.playwright.config.ts",
+    "--output=/evidence/test-results",
+    "--reporter=list"
+  ],
+  "exit": 0,
+  "seconds": 271.006,
+  "stdout": "\nRunning 6 tests using 1 worker\n\n  \u2713  1 [chromium] \u203a extensions/qa/phase3-native-consent/native-consent.spec.ts:621:3 \u203a phase 3 native consent Studio integration \u203a authenticated browser flow -> OAuth consent -> MCP draft -> native save consent -> retry -> Studio & editor reopen (29.7s)\n  \u2713  2 [chromium] \u203a extensions/qa/phase3-native-consent/native-consent.spec.ts:995:3 \u203a phase 3 native consent Studio integration \u203a fail-closed negative cases: B consent denial, framing block, URL tamper, cancel, cross-tab switch, draft drift (25.1s)\n  \u2713  3 [chromium] \u203a extensions/qa/phase3-native-consent/native-consent.spec.ts:1242:3 \u203a phase 3 native consent Studio integration \u203a renders native-save consent page across all 8 locales (14.6s)\n  \u2713  4 [webkit] \u203a extensions/qa/phase3-native-consent/native-consent.spec.ts:621:3 \u203a phase 3 native consent Studio integration \u203a authenticated browser flow -> OAuth consent -> MCP draft -> native save consent -> retry -> Studio & editor reopen (1.6m)\n  \u2713  5 [webkit] \u203a extensions/qa/phase3-native-consent/native-consent.spec.ts:995:3 \u203a phase 3 native consent Studio integration \u203a fail-closed negative cases: B consent denial, framing block, URL tamper, cancel, cross-tab switch, draft drift (57.5s)\n  \u2713  6 [webkit] \u203a extensions/qa/phase3-native-consent/native-consent.spec.ts:1242:3 \u203a phase 3 native consent Studio integration \u203a renders native-save consent page across all 8 locales (32.3s)\n\n  6 passed (4.5m)\n",
+  "stderr": "[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n[WebServer] responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.\n",
+  "evidenceHostDirectory": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-browser-dccfd9d22a46-bc4da0bb",
+  "customerMountAccessed": false,
+  "productionChanged": false,
+  "sourceRun": "tadazz-codex-dccfd9d22a46-5e75b0a8",
+  "webArtifacts": {
+    "assets/AccountGateway-BgSvhmLk.js": {
+      "sha256": "39d64c0cfb345f423141fcf106f1c376baf2d77ac4163dab99a61d1ed3a84219",
+      "bytes": 9180
+    },
+    "assets/Button-DV3PjM8w.js": {
+      "sha256": "ef940fcdf6a8dbfb18fcb99ea4dc521bf919ae50a2186a058e5b939038b7f644",
+      "bytes": 27755
+    },
+    "assets/Card-Cw16PsaP.js": {
+      "sha256": "d046c4ea8701dedb23f59f77f349aa2ff262375457797d447eb1334dcf98c8da",
+      "bytes": 357
+    },
+    "assets/Catalogue-CPOWkNit.js": {
+      "sha256": "a6d693177d7cf38d0ec0301ac1fb8db535b81267371d0f9ca4b56073e6880974",
+      "bytes": 5145
+    },
+    "assets/Dialog-BqmfOV-y.js": {
+      "sha256": "eb817befa5be2de587d035934829b44fde5d4a50cd6ae476ccfb28cc63d23cbf",
+      "bytes": 622
+    },
+    "assets/EditorCanvasFrame-Dx6U7HE9.js": {
+      "sha256": "3732d6e5e1f811ee67abfde9f43708979e3715d3d6067733196dc82db4cf02c3",
+      "bytes": 1825
+    },
+    "assets/Events-BXfYBQId.js": {
+      "sha256": "0c885f93927bf485fa65c3d0858a3839aa1e2f42ffa67edd83cef8e1b153444c",
+      "bytes": 6024
+    },
+    "assets/LegacyTools-CYmHTdOP.js": {
+      "sha256": "9897e44fdd346fa68fd031c2a6eeebbe0a02880a663c6a75cf73c79eeef8efcf",
+      "bytes": 458
+    },
+    "assets/ManagerAuthBackground-DXDynq3T.js": {
+      "sha256": "7c7ad920bbba6646fae9a61563ceb03eada8fb1bb3dbce4a845d53a1ed9881ee",
+      "bytes": 18456
+    },
+    "assets/MarketingSite-ChxElSPW.js": {
+      "sha256": "1a7b4a360d77a431cb8895b9b6e49652940265f3bdfc8eb7b3cc9e9f104571b2",
+      "bytes": 204921
+    },
+    "assets/MediaThumbnail-Rl7gR-Vq.js": {
+      "sha256": "0040508e6e8be0ca62457f826a35339c5915e32945b232db879465a5a06655cd",
+      "bytes": 1088
+    },
+    "assets/MyGames-BFMDSLAx.js": {
+      "sha256": "7dc4e4a81eff2a0a496cc4c4d3f6800b9d1a98367c117ce36eb874fb95d99eb1",
+      "bytes": 12226
+    },
+    "assets/NativeGameLayout-C5hqEzUC.js": {
+      "sha256": "81c7b04f623497903838f6ee91ac6128a545c18f0b43ba7ce9cd0c1bacc0880e",
+      "bytes": 1672
+    },
+    "assets/NativeSaveConsentPage-CajAqgng.js": {
+      "sha256": "7ae0676890d1315449b972b4698e968b667874665b15f4bf369d53a3af9ea8c7",
+      "bytes": 112767
+    },
+    "assets/OAuthConsentPage-RcNhIVVe.js": {
+      "sha256": "01c8d6f40831f07452d0c82f42ec1deaf7775749058a906572337b1ef671156f",
+      "bytes": 12406
+    },
+    "assets/PackageManager-BlSqHee-.js": {
+      "sha256": "776cb5f0c3d4027c4d9ad63c8e393ce27894647542047f51f669ac2e490e5e4b",
+      "bytes": 62
+    },
+    "assets/PackageManager-CmQskbD1.js": {
+      "sha256": "d8f31b61a36d0145881ff86eeb544942ec53a7ea40ad973483d184ec35d71bb5",
+      "bytes": 15736
+    },
+    "assets/QueryClientProvider-DlEDXLe2.js": {
+      "sha256": "5860e5f5bbfd4163bf1a2a3a418d07fe5d012b7796b1063b942c7f4d9f61c85e",
+      "bytes": 426
+    },
+    "assets/QuestionLivePreview-BeT0u8_4.js": {
+      "sha256": "59f7df828e6dca7e05bc5902be85a2ad0fcc195fb86a24d617fbcd4bf5467142",
+      "bytes": 8661
+    },
+    "assets/ReferenceCanvas-Dabr4Be8.js": {
+      "sha256": "2e8287aee53597f92dff803a4f302b551ec7aa97d4ab6d869745b6d84a9a6e33",
+      "bytes": 89143
+    },
+    "assets/ResultModal-DIgizc-M.js": {
+      "sha256": "cbaa98a63a42dbee71d2864c2b135c00991dc7647ebc0305ca566b3c384015c3",
+      "bytes": 10675
+    },
+    "assets/ShowImportModal-CA-ubheP.js": {
+      "sha256": "68bbb2b7457b988f261fe50c32aff03947ca64f2b519aadcf9891f27434520ec",
+      "bytes": 11814
+    },
+    "assets/SiteButton-Df9JqywA.js": {
+      "sha256": "8c8b2ea5c66599a77a060f5a1afb716d34871b7897c9f75954151e426656b18c",
+      "bytes": 234
+    },
+    "assets/SiteLink-CYU5lFBJ.js": {
+      "sha256": "84af89c32593420c44a9ef761a97b1c1ea0381195b18b7ae7c6a891d090157c3",
+      "bytes": 513
+    },
+    "assets/Studio-DbO_E_-5.js": {
+      "sha256": "96c4e3e97abf42c1f44b3480a5d6e5fac8039f896c57f3e92bae79798da90f77",
+      "bytes": 76529
+    },
+    "assets/StudioThemeBuilder-D7qhG5rK.js": {
+      "sha256": "0e3f7e0110cbccb3e0d025de9a51f6f390e1726962b932c25311ee4b5ec17d2f",
+      "bytes": 44926
+    },
+    "assets/StudioThemes-CqfaVFqw.js": {
+      "sha256": "2950805a504aac995b9e382cccefa272207b757095dcbbd4161b4406ead35d4a",
+      "bytes": 3323
+    },
+    "assets/__root-DzaqllGU.js": {
+      "sha256": "48b95f447438cdd96bc5868c10345eb44bcc472bbc6b4355d8f148a677585f78",
+      "bytes": 17350
+    },
+    "assets/account-provider-9xvJVhZu.js": {
+      "sha256": "ba2c0c71550d08c5baf3881619fbf5bfc3ae3546559a2ff721f14fc78a6b77ed",
+      "bytes": 7317
+    },
+    "assets/api-n4mClQRJ.js": {
+      "sha256": "231aa217a717f680897f7c8a56daa531694aaea5a3d5be7d42857be29027e368",
+      "bytes": 10490
+    },
+    "assets/application-preview-stage-C2KZgMhJ.js": {
+      "sha256": "f94f0b6b4a91d73120d813d5f831df74a8fbe55814a96ce038aad2edf5548fa9",
+      "bytes": 19729
+    },
+    "assets/application-session-CcHEcI0H.js": {
+      "sha256": "726883820d386a0d4ca7f363898b2a79c313e6c69b63f9369abef484e7399ede",
+      "bytes": 112999
+    },
+    "assets/arrow-left-DGRV2D2f.js": {
+      "sha256": "d8e4a397d41a7c8a54eeec52fc9d218034ef112f9cea9af86a68acd3a746bbca",
+      "bytes": 200
+    },
+    "assets/arrow-right-D49hgwzZ.js": {
+      "sha256": "ea23ba4dd8b667e1f3a8befa7eccb3f79837593a9f8a02ad8b0a8663bbaac5fa",
+      "bytes": 200
+    },
+    "assets/audio-ByRbSNxp.js": {
+      "sha256": "57a5d874b3b6ec41870bf979ae1261961d9384e46ea1e86ba2e71b11b81a32c5",
+      "bytes": 3071
+    },
+    "assets/audio-cue-player-Bral-Vkg.js": {
+      "sha256": "0a6a232ca91a291fcf27600e99aec15c6c9f5cc45f2d7157f0817bbdaa2a9d0c",
+      "bytes": 221424
+    },
+    "assets/audio-cue-player-D-o_0PAN.css": {
+      "sha256": "9cc4f3f72bc12c885f2c256b4aad5b7dde266857d294391e041519f921bf6e78",
+      "bytes": 148522
+    },
+    "assets/background-CMjhDDHd.png": {
+      "sha256": "39615d76461d456e303bdb4c90d7a1c0ec38c3beb7d679ea66b8d28c91bf6085",
+      "bytes": 2777381
+    },
+    "assets/branding-DkbCKomo.js": {
+      "sha256": "e9de4421e44a73171d1e6be4295e14aa6c433f6daafee10b84134b843a3ea320",
+      "bytes": 1148
+    },
+    "assets/choice-results-view-Dzjeon8v.js": {
+      "sha256": "3d9f0caa0d1cefca698f61347d32cb30ba4c546f75550c046f3eafa2f86ae388",
+      "bytes": 135848
+    },
+    "assets/circle-x-CkIQXAj2.js": {
+      "sha256": "8ba9672f32bdd9adc8974908b932f676f0f9c4e3e5fe4a5838a6e230c2e8d502",
+      "bytes": 484
+    },
+    "assets/client-C_TmQZEq.js": {
+      "sha256": "36225d3fb9364980cf887e10fb4f243aa0e12c110866430fb941008badcfae6c",
+      "bytes": 1226
+    },
+    "assets/clsx-DB0hHKMi.js": {
+      "sha256": "c02db88e233e8727170f389eded16d86931efa576b4c1b0591df806eb7f24789",
+      "bytes": 369
+    },
+    "assets/core-DDRQf67e.js": {
+      "sha256": "a56ee7b8a97c1bddd6beaf756fcbf2adca0a92849a06840732e5956e397b5a06",
+      "bytes": 11077
+    },
+    "assets/dist-Ds4quwX5.js": {
+      "sha256": "ac310a724907057367102fb476cd587772fcfc8df4dae88ce82d89f683716999",
+      "bytes": 11616
+    },
+    "assets/extensions-DDTpSHWW.js": {
+      "sha256": "5aecda3d475f5ad122170b192564c3ba6dcd23990401612e7108926ed6cef833",
+      "bytes": 374379
+    },
+    "assets/game-ppoFp0iv.js": {
+      "sha256": "082d2408555c24a4f52e939a985a1f178f8ce7f084430295f7c3e371f32a625f",
+      "bytes": 32916
+    },
+    "assets/game-preview-surface-30Jz4QWH.js": {
+      "sha256": "989b71eef91346d824fe7afc0883efb02903f07accda57648af1b24269167a9a",
+      "bytes": 18272
+    },
+    "assets/howler-DvpfHRP7.js": {
+      "sha256": "6bde5a81ee3770a016e796c84ceee7a092a991817c6d56210afba780b59e3074",
+      "bytes": 35943
+    },
+    "assets/i18next-CKBcTAyQ.js": {
+      "sha256": "73b1436d24795ee217514393107daeee241cd5f881aba575a1039503ca910a94",
+      "bytes": 43065
+    },
+    "assets/index-DdSiaUoC.css": {
+      "sha256": "6b1e9cda82534b8f9d3e952d8a2d2b5ceba1df519b96c0de3520b9b2af09886b",
+      "bytes": 122912
+    },
+    "assets/index-RD01lPL_.js": {
+      "sha256": "b31154c28476b5dd303b2c27686dc791cf49fbdec2b9d86746aa96185964ae69",
+      "bytes": 222454
+    },
+    "assets/link-BWnS0Xao.js": {
+      "sha256": "65e1f3d55393f04f68234e96588ebe14c9d7901b772aefff3bae09d6679291a5",
+      "bytes": 59464
+    },
+    "assets/locales-BgzNwbnP.js": {
+      "sha256": "1472f1991e07280c4c45a5ed71d1b68fdef6ab647a61cb76606be5ed19af7129",
+      "bytes": 37360
+    },
+    "assets/locales-CD-aBdf0.js": {
+      "sha256": "ae890df6793a51bbf0fd3d5ef4a7e83b34b2a08b5a8fd6aad1d022a64879e5e6",
+      "bytes": 255692
+    },
+    "assets/login-handoff-BWg7jZ9T.js": {
+      "sha256": "9d8e4006c265fa5cdca0b0082d7cba1fb152f2bc3b787101e3862572a7bafec0",
+      "bytes": 1428
+    },
+    "assets/manager-CIj8gloc.js": {
+      "sha256": "b7dff1b9c483c94657e0347b718a2aaa73f56dfc5232e1168f44579de4472f56",
+      "bytes": 888
+    },
+    "assets/mutation-DAKY54v-.js": {
+      "sha256": "670a7baa05acd9aca6d6c0ef0c87d1f254b81e39b4854b795aaed6012eb0e742",
+      "bytes": 3445
+    },
+    "assets/native-question-CNUkvKQ_.css": {
+      "sha256": "16e7eec6ea070c87e9f08b0809eb8538a29c210a33ed4a2d4e100efc80c4df01",
+      "bytes": 23389
+    },
+    "assets/native-question-d0_5qmMS.js": {
+      "sha256": "b22b758aa557b532f5fc7b0cb6dca5f040a8a2bd1814725bb5c043fb54b20d1e",
+      "bytes": 830284
+    },
+    "assets/palette-da_kKweN.js": {
+      "sha256": "d9d4563bbb06d90b0dec9e94bf8410c573fe5f495dc4576c1ec2e86c63fdccdc",
+      "bytes": 545
+    },
+    "assets/pencil-BsegN4N6.js": {
+      "sha256": "1ae7489fc5c4a302250fb49a50b46264deb80949f87a5f09944269fb1a69f48b",
+      "bytes": 311
+    },
+    "assets/platform-DjWkvVPb.js": {
+      "sha256": "f763d07ef4d1cc92494a1c35da50b27fc7ae9dd7422598309f131a4b6d82f709",
+      "bytes": 6538
+    },
+    "assets/platform-ui-B37oJcw6.js": {
+      "sha256": "0a0e391fef4f6a8556b3f4fdada402b8a291ddf78a00110d7eb5f73bdaf0b2f7",
+      "bytes": 176665
+    },
+    "assets/plus-BjYpCmwK.js": {
+      "sha256": "ebcd18718687b0dc7d8905019c9cb4dcd91ceb8c8d954092a5170fb9814c71ff",
+      "bytes": 188
+    },
+    "assets/preload-helper-BU_Kwx8Q.js": {
+      "sha256": "9770b1a68cca06a3e6c5e735b9ff60e8132925d58dee75fc71c69f2fa24fcd29",
+      "bytes": 82656
+    },
+    "assets/query-fiE78FBu.js": {
+      "sha256": "657ac6d3668a1509cd0f5e6a9348d47f6a79f2750d8f36e4339f7f530170ee5f",
+      "bytes": 7617
+    },
+    "assets/react-AD8xOYCg.js": {
+      "sha256": "39b1acbe50db49c999e216f1d96766a6e0110d8a8fac490303f4a461e9ac3496",
+      "bytes": 126658
+    },
+    "assets/removable-DFuYGxq4.js": {
+      "sha256": "ed4ed8774b4d474903de5540d111d050cd8ad976922ee20e3f8c1b810a4d2726",
+      "bytes": 7150
+    },
+    "assets/rolldown-runtime-hePW80VL.js": {
+      "sha256": "580ad8c58061a4dde99bde0a56905e382f0568516ee2f5b84dbfb52085709021",
+      "bytes": 716
+    },
+    "assets/route-CH6-dgd6.css": {
+      "sha256": "064f27272db3fafce8bba124457ca746c15ea976ad70a0e78ebbd815f1cf3fa8",
+      "bytes": 10857
+    },
+    "assets/route.gen-CrC4c1_M.js": {
+      "sha256": "0ae6fd20272a4778a8653f476aed1f42601cacb3ad76d2953f0320fcd680c5be",
+      "bytes": 310757
+    },
+    "assets/rubik-arabic-wght-normal-CGnJ-sf6.woff2": {
+      "sha256": "f5052e4870bf211fc22df5b85e791a292a77b9baef8cef1dc5a8e62a783ea1e0",
+      "bytes": 32468
+    },
+    "assets/rubik-cyrillic-ext-wght-normal-BjodpZir.woff2": {
+      "sha256": "35e30483bb79be6fd8de0fec4e038fda9e637fc7337f6ff61418c7d08077878b",
+      "bytes": 12388
+    },
+    "assets/rubik-cyrillic-wght-normal-DveCct9I.woff2": {
+      "sha256": "bdb2b33ab916e9e7b42edb61f8aea5f5dd83ad773d6ee4e9b55665daf8954ce8",
+      "bytes": 15112
+    },
+    "assets/rubik-hebrew-wght-normal-BIkpbuMU.woff2": {
+      "sha256": "197b6dbe5c6bec7276c59b02d70a16ee6acd44322fc2f8d0226c07f8d57976c2",
+      "bytes": 9348
+    },
+    "assets/rubik-latin-ext-wght-normal-OacczzuJ.woff2": {
+      "sha256": "09472f217ad1ebb61a7669cf532f9f2f80685e07652ee862fde9a79665aef479",
+      "bytes": 19400
+    },
+    "assets/rubik-latin-wght-normal-CnQIisVs.woff2": {
+      "sha256": "691cd1d9b4c0cdf31a1dcf04259c86f92c85e69f6622abab7964d81e36890691",
+      "bytes": 35348
+    },
+    "assets/schemas-BJTHMcrP.js": {
+      "sha256": "bc6fa27b59c79d23e417940d503a0ac679363b6bb6408b3d6b2e139d67d99226",
+      "bytes": 84316
+    },
+    "assets/search-xaN7cem5.js": {
+      "sha256": "49cf5d5ac8058ebb40c1375b4e90d556ff3dc2a96cd7b543d562e6514830d882",
+      "bytes": 209
+    },
+    "assets/settings-2-Du3aBrJh.js": {
+      "sha256": "706939f21392e6a2b4872e9e73874159469866f5098c05f1b684be7f84869175",
+      "bytes": 287
+    },
+    "assets/socket-context-znh-3Lkj.js": {
+      "sha256": "3530f3a94098836a3c2133c39dc64dd2d7de8afe20cb48846da10a4516bba0b1",
+      "bytes": 42737
+    },
+    "assets/strings-B45-FQ9P.js": {
+      "sha256": "07cb8d784902ae7e958a1e1305de750ceef3d7240a2672871897e2700a7e55c5",
+      "bytes": 20297
+    },
+    "assets/tadazz-audio-policy-Bk_S1xJJ.js": {
+      "sha256": "10e2189516e4723c3cb118b67b9d10ac0d385444cb7e40f9ed00c16bfb7ce642",
+      "bytes": 3109
+    },
+    "assets/tadazz-question-background-BnsH8I8M.png": {
+      "sha256": "fb3dba4bc8587abf8e10165f02191c649610923f4c6bc8625218065965c3a31c",
+      "bytes": 1610338
+    },
+    "assets/ui-strings-ByPNdzrK.js": {
+      "sha256": "9f20a664e7064d196945cb42bf22e4d7463288377e96fc714b6ab28301eec9a8",
+      "bytes": 4031
+    },
+    "assets/useQuery--rKIahBG.js": {
+      "sha256": "f6814241788c67360154a3d7228ffd1da420f42dbec3b6213c0b408d49b4cd4f",
+      "bytes": 8638
+    },
+    "assets/useRouterState-mRRt9LJM.js": {
+      "sha256": "2bfebef8db726d71d8fe62c0b41e08fc2879cee4be1788d96a697c724de86af5",
+      "bytes": 1698
+    },
+    "icon.svg": {
+      "sha256": "7594a69ec11c73e9f8c04d189bd3ac6d5533bfe00f65dedb4d420478ea4bcadb",
+      "bytes": 988
+    },
+    "index.html": {
+      "sha256": "9a45f621b71de7309f4a591d6c13ea549d166af220b70f82434506050a5e300f",
+      "bytes": 3524
+    },
+    "media/blue-sky.png": {
+      "sha256": "c414cd0e204de974f73753c7e28d7638e7b3691bb8b1a2bab6b25bb7fed7ce77",
+      "bytes": 70
+    },
+    "motion/tadazz-motion-runtime.html": {
+      "sha256": "d5980f1d673271274eba650ed00a9d62284d48fd4607e8cd83d5ef1f05aba8b6",
+      "bytes": 992496
+    },
+    "sounds/answersMusic.mp3": {
+      "sha256": "d1ebc0f3046aa0916ba5f2604df4f1f8f4087402d4d237ce75fa21f0a1de3cc6",
+      "bytes": 1246763
+    },
+    "sounds/answersSound.mp3": {
+      "sha256": "14a1a33ddf0b7b1a5b45cf3c6e4f87892ae6bc09ca06c4a12df43b0ba2972d5b",
+      "bytes": 28212
+    },
+    "sounds/boump.mp3": {
+      "sha256": "4569d220e4dfd88a61390ea3139806021dd015eabac73fa23dac311295c63224",
+      "bytes": 5878
+    },
+    "sounds/first.mp3": {
+      "sha256": "9fcd09708b798984a0d2ad7edb46efaad5cc4bda7123ee06133fa99c476f6e90",
+      "bytes": 164093
+    },
+    "sounds/results.mp3": {
+      "sha256": "851de7da474e2bd62978bcde5ef4f3fbca67eb4fdb4396751d6e95d0b5695382",
+      "bytes": 52845
+    },
+    "sounds/second.mp3": {
+      "sha256": "75e490e301325354d62fb2f44876a90999e3da322e064961876fe9973a9f1cdb",
+      "bytes": 77750
+    },
+    "sounds/show.mp3": {
+      "sha256": "e3e2d6b871982ffcef21d2329109fc477103fa6e6243fb2958432e7225757649",
+      "bytes": 7941
+    },
+    "sounds/snearRoll.mp3": {
+      "sha256": "0928c8cf6063808a14e674a04aa370a29941c802c41c4e31e471e00ca3701212",
+      "bytes": 390765
+    },
+    "sounds/tadazz-confirm-20261108.mp3": {
+      "sha256": "2d9152323b9061b99512b8876da2d26dac250ce17c3c7f132c62a6fbcba7da94",
+      "bytes": 8193
+    },
+    "sounds/tadazz-reveal-bright-20261108.mp3": {
+      "sha256": "f264ded0b6135806df49240840de23054d936c0bf0c3c0b26c6efb2d4d234823",
+      "bytes": 28255
+    },
+    "sounds/tadazz-silky-transition-20261108.mp3": {
+      "sha256": "4c3c0a5b880c5a1eae787c3895fae6a4cab4b4b7538eadb3b0b66955ce87e104",
+      "bytes": 18476
+    },
+    "sounds/tadazz-soft-reveal-20261108.mp3": {
+      "sha256": "0b7f14b455819166fa3576b92c2a2f5c1271a6aaba3cd7e1231ab46abb7ec427",
+      "bytes": 17647
+    },
+    "sounds/tadazz-timer-end-368edc1d9522.mp3": {
+      "sha256": "368edc1d95220e8255c853850f02b447a128c06b59e1a8756fb02b6b9f4ab8e4",
+      "bytes": 25974
+    },
+    "sounds/tadazz-timer-final-20261108.mp3": {
+      "sha256": "623deeb6e312c17f6feeb4d2fad8482d4c967055f7a5df975a84f8962e03630e",
+      "bytes": 9447
+    },
+    "sounds/tadazz-timer-tick-20261108.mp3": {
+      "sha256": "efcd6b041fc7f13e565e30a6ee878965d5caab7d29aa6ad86b657dbf3444c275",
+      "bytes": 5058
+    },
+    "sounds/tadazz-timer-urgent-20261108.mp3": {
+      "sha256": "dcb2f17e811e0107cd324b541fecdd1334fd2dd19b8a9f8fed7feb0302960047",
+      "bytes": 5685
+    },
+    "sounds/three.mp3": {
+      "sha256": "374b3a93f05832dd1544e645d69413b82272fdf8f88416ffc23c3a30686ea997",
+      "bytes": 61238
+    },
+    "tadazz-application-runtime/renderer.css": {
+      "sha256": "47c357f7404af66b4a30788a017f8c6237c5f9ffbe98317e0319b59f655354e5",
+      "bytes": 451273
+    },
+    "tadazz-application-runtime/renderer.mjs": {
+      "sha256": "ba436dcfd0b5c91317661fb4ed5ae5379073ea4796892244a4506bd89d40555a",
+      "bytes": 2590785
+    },
+    "tadazz-design-reference/favicon-z-64-20261110.png": {
+      "sha256": "368e3b274765d2fdd564065f38d3c2c137964d01cc062569827ebc112657ccf8",
+      "bytes": 6331
+    },
+    "tadazz-design-reference/great-guessoff-banana.webp": {
+      "sha256": "4604c875bc307e336e9ce18a301253e3a1b7c75b19c0133d77a6e1ac614ab4bb",
+      "bytes": 12420
+    },
+    "tadazz-design-reference/great-guessoff-cherry.webp": {
+      "sha256": "fe6f1e7256b5de2af83a0a808a8ba7ef6432cbb1357c2b1e8b28f99b9b1925a0",
+      "bytes": 32168
+    },
+    "tadazz-design-reference/great-guessoff-entertainer.webp": {
+      "sha256": "93d977d292e42d8296f142697fd259c088abd34c040468e9c5be291d72b0ec2b",
+      "bytes": 32970
+    },
+    "tadazz-design-reference/great-guessoff-organiser.webp": {
+      "sha256": "3f6ed8780300337ad3ff2016da46f7c1e6a2f71c16d0578d8f17774e17db9252",
+      "bytes": 32036
+    },
+    "tadazz-design-reference/great-guessoff-photographer.webp": {
+      "sha256": "929e5dbced727bda7a6a468ee5a44b1d7589626490221b8fda521883758ef111",
+      "bytes": 29198
+    },
+    "tadazz-design-reference/great-guessoff-raspberry.webp": {
+      "sha256": "c94526300de9f959c608ddb400da04346b7918c2b3ac8d2971971ac5ae64236d",
+      "bytes": 51472
+    },
+    "tadazz-design-reference/great-guessoff-snack-hunter.webp": {
+      "sha256": "8a84622c45c2c925b01b601af5e47434c7a5c01100d782e3e9d8e7040333ab68",
+      "bytes": 37924
+    },
+    "tadazz-design-reference/great-guessoff-strawberry.webp": {
+      "sha256": "e116de706f74cc29b42ec0c08ddc9634f083171306f539f41faafa515e378b6f",
+      "bytes": 49502
+    },
+    "tadazz-design-reference/marketing-exclaim.webp": {
+      "sha256": "090b7d7ac46428834537a19286167631b600ea72914b05c4fac7416ee59b6df1",
+      "bytes": 19460
+    },
+    "tadazz-design-reference/marketing-icons.svg": {
+      "sha256": "bca131a95be247ba5789580406e85bc70ee8859e2268fd0d48052083a14d9b9a",
+      "bytes": 3571
+    },
+    "tadazz-design-reference/marketing-logo.webp": {
+      "sha256": "4815ad04e3d56b0c5d81d9f5651473036230aa69af732fae185f88d02ad30c03",
+      "bytes": 187692
+    },
+    "tadazz-design-reference/marketing-questions.webp": {
+      "sha256": "c0661f2e193d37758a315973990c5205c480fdd56b4c64eec4724cad6a867574",
+      "bytes": 79910
+    },
+    "tadazz-design-reference/marketing-rays.webp": {
+      "sha256": "d1dbd3dbf6f9219a04fb5d162056e204d68e6c023ffffa1d898b41a87b10d3d4",
+      "bytes": 35080
+    },
+    "tadazz-design-reference/marketing-stage.webp": {
+      "sha256": "cc754716cb22677b88e80bf7535e62647096d71275f2c95ec15fd15725fe8116",
+      "bytes": 242306
+    },
+    "tadazz-design-reference/marketing-worlds.webp": {
+      "sha256": "cff8fe590f8a60c5aac67c859784101879215be7ba77b8d75c3b5d121cb573af",
+      "bytes": 56520
+    },
+    "tadazz-design-reference/marketing-zb.webp": {
+      "sha256": "d3b8626a274c9f00cc12524e85e17eaea8fa7f7aeaa48248510f267e6ce56322",
+      "bytes": 53972
+    },
+    "tadazz-design-reference/marketing-zl.webp": {
+      "sha256": "e478114cbfec416ca2135e8ab683461484da382e46be1334bcbe8cb4f3264271",
+      "bytes": 48894
+    },
+    "tadazz-design-reference/marketing.css": {
+      "sha256": "d0068b44e5e680a3e3a681783634e36ad30dd74d36233536b786ca9f3cd3d309",
+      "bytes": 72036
+    },
+    "tadazz-design-reference/studio-blue.webp": {
+      "sha256": "d3b8626a274c9f00cc12524e85e17eaea8fa7f7aeaa48248510f267e6ce56322",
+      "bytes": 53972
+    },
+    "tadazz-design-reference/studio-icons.svg": {
+      "sha256": "f51ebefd4edfc2cd3cf4854b6257e76d9b4ece1ff4a9b75f56c555a51d9e807e",
+      "bytes": 3352
+    },
+    "tadazz-design-reference/studio-lime.webp": {
+      "sha256": "e478114cbfec416ca2135e8ab683461484da382e46be1334bcbe8cb4f3264271",
+      "bytes": 48894
+    },
+    "tadazz-design-reference/studio-logo.webp": {
+      "sha256": "4815ad04e3d56b0c5d81d9f5651473036230aa69af732fae185f88d02ad30c03",
+      "bytes": 187692
+    },
+    "tadazz-design-reference/studio-questions.webp": {
+      "sha256": "c0661f2e193d37758a315973990c5205c480fdd56b4c64eec4724cad6a867574",
+      "bytes": 79910
+    },
+    "tadazz-design-reference/studio-stage.webp": {
+      "sha256": "cc754716cb22677b88e80bf7535e62647096d71275f2c95ec15fd15725fe8116",
+      "bytes": 242306
+    },
+    "tadazz-design-reference/studio-worlds.webp": {
+      "sha256": "cff8fe590f8a60c5aac67c859784101879215be7ba77b8d75c3b5d121cb573af",
+      "bytes": 56520
+    },
+    "tadazz-design-reference/studio.css": {
+      "sha256": "119e2a3edc6050f778e7db424bb9242bb3e0815f2535f0d3e42c01c32b7acea4",
+      "bytes": 1927702
+    },
+    "tadazz-favicon-z-20261108.png": {
+      "sha256": "0773459d325e1903f56fdc8542560a98c9021e2a26e8b4c1ccfa5ae61b2a410f",
+      "bytes": 1223522
+    },
+    "tadazz-show/demos/cosmic/v1/backdrop.png": {
+      "sha256": "7a613b3b59e2c6f89f081ca2b5cf4cd84e4f54e94341212a45da726b36446fe7",
+      "bytes": 2228060
+    },
+    "tadazz-show/demos/cosmic/v1/logo.png": {
+      "sha256": "9057bad3a21e098f26494c056fa725b05943d2ed53a4df67116ae16fe7f9007a",
+      "bytes": 11791
+    },
+    "tadazz-show/demos/cosmic/v1/opening.json": {
+      "sha256": "4ec6b0de97a844b7f46ae1190d806fe90f7cda7f18f773e65c3e0dca51ad136b",
+      "bytes": 1121
+    },
+    "tadazz-show/demos/cosmic/v1/opening.webm": {
+      "sha256": "a517338c881a4f1b674a862839d03f849e770a3ee27a35356c0aa0d7a4d338a0",
+      "bytes": 145492
+    },
+    "tadazz-show/demos/cosmic/v2/backdrop.png": {
+      "sha256": "7a613b3b59e2c6f89f081ca2b5cf4cd84e4f54e94341212a45da726b36446fe7",
+      "bytes": 2228060
+    },
+    "tadazz-show/demos/cosmic/v2/opening.json": {
+      "sha256": "e02fddf90cafac0427d291fa658b3b6dcd4e8af76e45fe4cc8b369cbdabd7697",
+      "bytes": 574
+    },
+    "tadazz-show/demos/cosmic/v2/opening.webm": {
+      "sha256": "09919adec55d6463e8bb532b98abe20a5d0ff9e3334b2486e0eff7d9537a7304",
+      "bytes": 151150
+    },
+    "tadazz-show/demos/jade/v1/backdrop.png": {
+      "sha256": "4ea30988916082f5600ec49ae27472fa90490b21e160bc34a828add0c07baebd",
+      "bytes": 2183148
+    },
+    "tadazz-show/demos/jade/v1/logo.png": {
+      "sha256": "ef6eb964850cd2992416104dbf161a1d369acb5413f60fcee810c7635460ed1e",
+      "bytes": 11217
+    },
+    "tadazz-show/demos/jade/v1/opening.json": {
+      "sha256": "2232e53b589b83df629dcc772c4996af010750ba37b0e6582662424d08ee048c",
+      "bytes": 1120
+    },
+    "tadazz-show/demos/jade/v1/opening.webm": {
+      "sha256": "2f570937511660da009fa1dcc65fd406d461bc7e027b34a99d84b0445b2bc485",
+      "bytes": 158881
+    },
+    "tadazz-show/demos/jade/v2/backdrop.png": {
+      "sha256": "4ea30988916082f5600ec49ae27472fa90490b21e160bc34a828add0c07baebd",
+      "bytes": 2183148
+    },
+    "tadazz-show/demos/jade/v2/opening.json": {
+      "sha256": "ea3bc7bba8f09cd73b98bee3c49e7fdae1852766c93723ec2203c377b1e9d107",
+      "bytes": 573
+    },
+    "tadazz-show/demos/jade/v2/opening.webm": {
+      "sha256": "e9d119aeb6b20b8a74c3bf5b9da6f56a056198375acd21a2b7f03b14c6ee3894",
+      "bytes": 157352
+    },
+    "tadazz-show/great-guessoff/banana.webp": {
+      "sha256": "e44f8561d297021b8a94dc39d3c439fa0aaee59f190e2fbf754b4d992eec3097",
+      "bytes": 14294
+    },
+    "tadazz-show/great-guessoff/cherry.webp": {
+      "sha256": "4650312d662191d34760e42ed1fb0be2174995a69759511a17653bcdc3fa69cc",
+      "bytes": 36770
+    },
+    "tadazz-show/great-guessoff/entertainer.webp": {
+      "sha256": "fd0481ec67574c24ccd148686a4b4fe93bbd979b6a56c6fc943f6375d53772db",
+      "bytes": 36614
+    },
+    "tadazz-show/great-guessoff/organiser.webp": {
+      "sha256": "e44111b0850900cb3b3a8b18505ebf818f1449a5b7e94c320d4bb7a37d10f03e",
+      "bytes": 35640
+    },
+    "tadazz-show/great-guessoff/photographer.webp": {
+      "sha256": "76e319d433c653bf998a1de812f39b8e37d15a88fefbc10005d7a13f6ee835a9",
+      "bytes": 32198
+    },
+    "tadazz-show/great-guessoff/raspberry.webp": {
+      "sha256": "27f7d9f54361b86dd573c53d5752f33c1df7f8b528df1f2f30a542e614ef78ca",
+      "bytes": 60670
+    },
+    "tadazz-show/great-guessoff/snack-hunter.webp": {
+      "sha256": "88d90d5463b4e399f133b1a9d618a115ed7c22cb8f409b05dc87977e04b80f41",
+      "bytes": 41866
+    },
+    "tadazz-show/great-guessoff/strawberry.webp": {
+      "sha256": "e83e15aea67e1a93091a9536b336fe26ed79518819f92b07302e05b0e99e9574",
+      "bytes": 56568
+    },
+    "tadazz-show/motion/backdrop.webp": {
+      "sha256": "a76a50432f43313d29e78f625302a256e7e7b71db322612c4b66ee3aef0cf37e",
+      "bytes": 94502
+    },
+    "tadazz-show/motion/logo.webp": {
+      "sha256": "4a925b8950ac3ba4ba878b849b88d1ce8dd44cf91d4e444547826251b1b1b672",
+      "bytes": 151654
+    },
+    "tadazz-show/music/balloons-forever.ogg": {
+      "sha256": "63c963f6f90fe9aec17061089271038833dc161f9e08a3f40109eeb58f552b5a",
+      "bytes": 2962473
+    },
+    "tadazz-show/music/credits.html": {
+      "sha256": "3bf75206f9b0728ab5a6ff13d303f138d1d873e838ca7656c1c266fc759814ed",
+      "bytes": 1125
+    },
+    "tadazz-show/music/cutie-patootie.mp3": {
+      "sha256": "1c3cafcf431726d25105ed8346271a9e69e35bdb09d40e418c55d46b6272f80c",
+      "bytes": 784914
+    },
+    "tadazz-show/music/epic-main-menu.mp3": {
+      "sha256": "36377deb75d643232d583e509126919ec8feeb14a16dee734b1a9cbc778adf36",
+      "bytes": 839514
+    },
+    "tadazz-show/opening/Animate_gameshow_stage_loop_c01e8a8a_1080p.mp4": {
+      "sha256": "74e5f1d1114053ea55805af1d4b327eedab8092ef5ac088321220251175d4fac",
+      "bytes": 5028530
+    },
+    "tadazz-show/opening/Scene-1.json": {
+      "sha256": "7da27b375f06da524a04fd51fadd651f91fb6a54a04a4f1b6dc39353fbdfe06b",
+      "bytes": 1354334
+    },
+    "tadazz-show/opening/TADAZZ-Opening-4-5s.json": {
+      "sha256": "48037458d5aedef5055d6ca85f167b8fc079aa91e109b540eb81c554fa266f78",
+      "bytes": 1212173
+    },
+    "tadazz-show/razzia-original/background.png": {
+      "sha256": "39615d76461d456e303bdb4c90d7a1c0ec38c3beb7d679ea66b8d28c91bf6085",
+      "bytes": 2777381
+    },
+    "tadazz-show/second-library/cards/dog.svg": {
+      "sha256": "e7c59ed107687236ca2975b6c63150ddb53d6d0e38295d69f079d383a377fa5a",
+      "bytes": 1962
+    },
+    "tadazz-show/second-library/cards/lamplighter.svg": {
+      "sha256": "64347234d0627c91643abdbcab2073d30837a7ca45f20163de0c6d7f39a87b3b",
+      "bytes": 2039
+    },
+    "tadazz-show/second-library/cards/pirate.svg": {
+      "sha256": "686c5abfdfa22e39d44347725bd2b67555f7b9b0f22b09b96c90270b488a16bb",
+      "bytes": 1923
+    },
+    "tadazz-show/second-library/cards/shadchan.svg": {
+      "sha256": "0fb4004f0f9e8cfac27f12bc67f49eb9bc84fdb99308d18243d6992e935bd564",
+      "bytes": 1932
+    },
+    "tadazz-show/second-library/cards/therapist.svg": {
+      "sha256": "3f6cbb9afac04b7728b7d8ac31d2bde7a1649ccc08c7db6477e32415f0461bbe",
+      "bytes": 1847
+    },
+    "tadazz-show/second-library/creating-worlds-intro.png": {
+      "sha256": "2a9b5838016d41442079a2c3c533df6c1565a5e3f4ed40c1c8a4175640b7bbfd",
+      "bytes": 2410686
+    },
+    "tadazz-show/second-library/curtain-left.png": {
+      "sha256": "429ab6d5f360406bb22be1f4a833359543fd09f1f415583a20f0a319968df060",
+      "bytes": 1132717
+    },
+    "tadazz-show/second-library/curtain-right.png": {
+      "sha256": "9a46bb396bbbb104f0b398f0f9b52c38e6915d7013b010a8830404f85cf408fa",
+      "bytes": 1132143
+    },
+    "tadazz-show/second-library/question-bg.webp": {
+      "sha256": "2f6912d851d8600e08d9a47d58e73dd40144fe30a908b82d10b3ba4036554321",
+      "bytes": 87904
+    },
+    "tadazz-show/second-library/show-stage.webp": {
+      "sha256": "9f3d1fe8d4458e98441303e728bba996b9a314295bbf5108f581c229f6db2d20",
+      "bytes": 261066
+    },
+    "tadazz-show/second-library/tadazz-brand-logo.png": {
+      "sha256": "e50aaf5f62f60a83b5a84ea1d55a8068c2e754df5c917681da553771756ebabd",
+      "bytes": 1976726
+    },
+    "tadazz-show/second-library/teaser-screen-source.jpg": {
+      "sha256": "eaef71e6f2b59595eca49a5fb72df70e45f47a80351ea4d35e03d91f28851c17",
+      "bytes": 266631
+    },
+    "tadazz-show/second-library/teaser-screen.jpg": {
+      "sha256": "77b4214d75bbb2c3f61af285b0aca09678bbc78d217c47c904fb5e082eddf34d",
+      "bytes": 3780431
+    },
+    "tadazz-show/story/672dd07f229b8c36.mp3": {
+      "sha256": "672dd07f229b8c36f9c56484975fad7e28bedff9623fea049d2ca475022e84f8",
+      "bytes": 1222052
+    },
+    "tadazz-show/story/7ff12046cb1aac7b.png": {
+      "sha256": "7ff12046cb1aac7be6fbdd3131bc8e5854a96f34b5560446f3183170731de037",
+      "bytes": 412633
+    },
+    "tadazz-show/story/84acdb923677d591.webp": {
+      "sha256": "84acdb923677d591d7641d8452eb185aad360b4b990d6e0879905ad0494dbdc6",
+      "bytes": 134540
+    },
+    "tadazz-show/story/9db4acdc6c4e411c.mp3": {
+      "sha256": "9db4acdc6c4e411ced75f9c85b31b136a775a9ea43543f867a2976da1f1fd36b",
+      "bytes": 91052
+    },
+    "tadazz-show/story/b789ffb48c74e55d.webp": {
+      "sha256": "b789ffb48c74e55dad7cee0275c9e1ad32edc19b45e9ef7c84a99d979f30f748",
+      "bytes": 60174
+    },
+    "tadazz-show/story/fef87578b7d57eae.webp": {
+      "sha256": "fef87578b7d57eae4b94709ff8fa909ed566a3336c84b7b041b795cba3007371",
+      "bytes": 178706
+    },
+    "tadazz-show/v4/cards/dog.svg": {
+      "sha256": "e7c59ed107687236ca2975b6c63150ddb53d6d0e38295d69f079d383a377fa5a",
+      "bytes": 1962
+    },
+    "tadazz-show/v4/cards/lamplighter.svg": {
+      "sha256": "64347234d0627c91643abdbcab2073d30837a7ca45f20163de0c6d7f39a87b3b",
+      "bytes": 2039
+    },
+    "tadazz-show/v4/cards/pirate.svg": {
+      "sha256": "686c5abfdfa22e39d44347725bd2b67555f7b9b0f22b09b96c90270b488a16bb",
+      "bytes": 1923
+    },
+    "tadazz-show/v4/cards/shadchan.svg": {
+      "sha256": "0fb4004f0f9e8cfac27f12bc67f49eb9bc84fdb99308d18243d6992e935bd564",
+      "bytes": 1932
+    },
+    "tadazz-show/v4/cards/therapist.svg": {
+      "sha256": "3f6cbb9afac04b7728b7d8ac31d2bde7a1649ccc08c7db6477e32415f0461bbe",
+      "bytes": 1847
+    },
+    "tadazz-show/v4/creating-worlds-intro.png": {
+      "sha256": "2a9b5838016d41442079a2c3c533df6c1565a5e3f4ed40c1c8a4175640b7bbfd",
+      "bytes": 2410686
+    },
+    "tadazz-show/v4/curtain-left.png": {
+      "sha256": "429ab6d5f360406bb22be1f4a833359543fd09f1f415583a20f0a319968df060",
+      "bytes": 1132717
+    },
+    "tadazz-show/v4/curtain-right.png": {
+      "sha256": "9a46bb396bbbb104f0b398f0f9b52c38e6915d7013b010a8830404f85cf408fa",
+      "bytes": 1132143
+    },
+    "tadazz-show/v4/question-bg.webp": {
+      "sha256": "2f6912d851d8600e08d9a47d58e73dd40144fe30a908b82d10b3ba4036554321",
+      "bytes": 87904
+    },
+    "tadazz-show/v4/show-stage.webp": {
+      "sha256": "9f3d1fe8d4458e98441303e728bba996b9a314295bbf5108f581c229f6db2d20",
+      "bytes": 261066
+    },
+    "tadazz-show/v4/tadazz-brand-logo.png": {
+      "sha256": "e50aaf5f62f60a83b5a84ea1d55a8068c2e754df5c917681da553771756ebabd",
+      "bytes": 1976726
+    },
+    "tadazz-show/v4/teaser-screen-source.jpg": {
+      "sha256": "eaef71e6f2b59595eca49a5fb72df70e45f47a80351ea4d35e03d91f28851c17",
+      "bytes": 266631
+    },
+    "tadazz-show/v4/teaser-screen.jpg": {
+      "sha256": "77b4214d75bbb2c3f61af285b0aca09678bbc78d217c47c904fb5e082eddf34d",
+      "bytes": 3780431
+    }
+  },
+  "webArtifactsUnchanged": true,
+  "widgetArtifacts": {
+    "full-show-artifact.json": {
+      "sha256": "405dc40cf146e307851c1aab85564a810d990eda92637ef2410af9d7dc1ffb7d",
+      "bytes": 159613
+    },
+    "full-show.html": {
+      "sha256": "f89f5eb72499f36d278c3df94ca6237406ded6926c06b438bcaf76fc3098d1c0",
+      "bytes": 3084345
+    },
+    "full-show-entry-inputs.json": {
+      "sha256": "2244977b8e0b2d05406b80f1df7ed2f20d70b7a578c345d8a5b5fb9dd6415c9a",
+      "bytes": 745652
+    }
+  },
+  "widgetArtifactsUnchanged": true,
+  "widgetManifestSha256": "405dc40cf146e307851c1aab85564a810d990eda92637ef2410af9d7dc1ffb7d",
+  "widgetHtmlSha256": "f89f5eb72499f36d278c3df94ca6237406ded6926c06b438bcaf76fc3098d1c0"
+}

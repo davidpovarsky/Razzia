@@ -1,0 +1,284 @@
+{
+  "kind": "independent-final-release-acceptance",
+  "reviewedAt": "2026-11-19T21:34:04.333475+00:00",
+  "review": "PASS",
+  "sourceSha": "dccfd9d22a4673130704fea02bd80a8399498467",
+  "sourceRun": "tadazz-codex-dccfd9d22a46-5e75b0a8",
+  "qualificationAccepted": true,
+  "stagingAccepted": true,
+  "backupAndCandidateBootAccepted": true,
+  "productionDeploymentAccepted": true,
+  "postDeploymentObservationAccepted": true,
+  "deployed": true,
+  "liveContainer": "fe741fb4db4ce0d18910abf7c96061ad53051b3f426a85456cbf69d1f52e40b4",
+  "liveImage": "sha256:f56cdcc5f5302128f9b259f19d6008e954dbddc1f4fddbe6d8a5dabbba297b70",
+  "stageManifestSha256": "75b4a7c5452760b812e6e2968866eb3acb6b83f2ce567e172292e9c397f6f95a",
+  "checks": [
+    {
+      "check": "Reviewed qualification binding",
+      "status": "PASS"
+    },
+    {
+      "check": "Stage exact qualified source and image",
+      "status": "PASS"
+    },
+    {
+      "check": "preflight coordinator successful without deadline ambiguity",
+      "status": "PASS"
+    },
+    {
+      "check": "backup coordinator successful without deadline ambiguity",
+      "status": "PASS"
+    },
+    {
+      "check": "deploy coordinator successful without deadline ambiguity",
+      "status": "PASS"
+    },
+    {
+      "check": "Preflight passed",
+      "status": "PASS"
+    },
+    {
+      "check": "Prior backup/clone qualification",
+      "status": "PASS"
+    },
+    {
+      "check": "Deploy exact candidate verified",
+      "status": "PASS"
+    },
+    {
+      "check": "Prior qualification raw receipt binding",
+      "status": "PASS"
+    },
+    {
+      "check": "Fresh deployment backup restoration proof",
+      "status": "PASS"
+    },
+    {
+      "check": "Rollback and unrelated application configuration preserved",
+      "status": "PASS"
+    },
+    {
+      "check": "No hidden installed-host claim",
+      "status": "PASS"
+    },
+    {
+      "check": "loopback deployment probes and renderer bytes",
+      "status": "PASS"
+    },
+    {
+      "check": "publicHttps deployment probes and renderer bytes",
+      "status": "PASS"
+    },
+    {
+      "check": "Observation exact source/live identity",
+      "status": "PASS"
+    },
+    {
+      "check": "All15 post-deploy probes over3samples",
+      "status": "PASS"
+    },
+    {
+      "check": "Zero restarts or observed error signals",
+      "status": "PASS"
+    },
+    {
+      "check": "Nine public routes respond200",
+      "status": "PASS"
+    },
+    {
+      "check": "stage worker repair preserved",
+      "status": "PASS"
+    },
+    {
+      "check": "preflight worker repair preserved",
+      "status": "PASS"
+    },
+    {
+      "check": "backup worker repair preserved",
+      "status": "PASS"
+    },
+    {
+      "check": "deploy worker repair preserved",
+      "status": "PASS"
+    },
+    {
+      "check": "observation worker repair preserved",
+      "status": "PASS"
+    },
+    {
+      "check": "Real connected draft read unchanged",
+      "status": "PASS"
+    },
+    {
+      "check": "Real connected preview acknowledgement",
+      "status": "PASS"
+    },
+    {
+      "check": "Fresh read-only metadata observation completed",
+      "status": "PASS"
+    },
+    {
+      "check": "Raw remote stage and backup receipts match release binding",
+      "status": "PASS"
+    },
+    {
+      "check": "Fresh live/rollback/gateway identities",
+      "status": "PASS"
+    },
+    {
+      "check": "Fresh runtime hash/worker repair unchanged",
+      "status": "PASS"
+    }
+  ],
+  "evidence": {
+    "jointQualification": {
+      "path": "docs/extensions/plans/phase-continuity-20261119/candidate-dccfd9d22a46/joint-qualification-review.json",
+      "sha256": "9c5923e74204476492d406142f44a82f9fe2125de40a658a98e621ca422e42cb",
+      "bytes": 15810
+    },
+    "stage": {
+      "path": "docs/extensions/plans/phase-continuity-20261119/stage-execution.json",
+      "sha256": "18c39cb2da63030b4f4e27a15e4dfa261a2ae4c116f08c869ba5e277e1c338d4",
+      "bytes": 2695
+    },
+    "preflight": {
+      "path": "docs/extensions/plans/phase-continuity-20261119/deployment-preflight-execution.json",
+      "sha256": "4d0173dc229db85f0d9d8eafc8de059481ec7c7547d51f99416d929e6d1d2b27",
+      "bytes": 3326
+    },
+    "backup": {
+      "path": "docs/extensions/plans/phase-continuity-20261119/deployment-qualify-backup-execution.json",
+      "sha256": "eac090c5f5ae6b491c62dfa6f1722cf564417cb97b88227f6c47d0c2f1e0419f",
+      "bytes": 8051
+    },
+    "deploy": {
+      "path": "docs/extensions/plans/phase-continuity-20261119/deployment-deploy-execution.json",
+      "sha256": "cce0e13f79f6674d1c7f9cc971fccc2d7fe21b7be019142db37c56da3bc5d437",
+      "bytes": 6570
+    },
+    "observation": {
+      "path": "docs/extensions/plans/phase-continuity-20261119/post-deploy-observation.json",
+      "sha256": "49c583a8bae28609aefc63dacea71869f830715e0dde458aa70e4e9dbca648d5",
+      "bytes": 9371
+    },
+    "observationExecution": {
+      "path": "docs/extensions/plans/phase-continuity-20261119/post-deploy-execution.json",
+      "sha256": "80eeb0ad627dadb9f6396976ddb0395fde15926b851a9477859b2e942a0f46f0",
+      "bytes": 7366
+    },
+    "backupBinding": {
+      "path": "docs/extensions/plans/phase-continuity-20261119/candidate-dccfd9d22a46/backup-qualification-binding.json",
+      "sha256": "b54bba0de567ac5ef659aeea5271f10724aaf875608a6a86917611f3d2cff7fd",
+      "bytes": 426
+    },
+    "draftRead": {
+      "path": "docs/extensions/plans/phase-continuity-20261119/postdeploy-mcp-draft-read.json",
+      "sha256": "f87e8e9cfb1cf5dd5d694cbba04ab4b79704e1af67a4d5f1b6a09621b25d3d29",
+      "bytes": 1498
+    },
+    "previewAck": {
+      "path": "docs/extensions/plans/phase-continuity-20261119/postdeploy-mcp-preview-show.json",
+      "sha256": "9cdc0d183fff94566ed1c75e647604cda72658bbf61040afdc20607b6836253e",
+      "bytes": 887
+    }
+  },
+  "freshReadOnlyMetadata": {
+    "observedAt": "2026-11-19T21:34:04.240654+00:00",
+    "rawReceiptHashes": {
+      "stageManifest": {
+        "path": "/home/ubuntu/tadazz-mcp-release-dccfd9d22a46-20261119/stage-manifest.json",
+        "sha256": "75b4a7c5452760b812e6e2968866eb3acb6b83f2ce567e172292e9c397f6f95a",
+        "bytes": 37847
+      },
+      "backupQualification": {
+        "path": "/home/ubuntu/tadazz-mcp-release-dccfd9d22a46-20261119/backup-qualification-20261119T212136Z-d2878f3a/backup-qualification-result.json",
+        "sha256": "f139c52f57b079ee280e7bce5eab4594079c5377acea3fd1f86251476d466eb1",
+        "bytes": 5855
+      }
+    },
+    "containers": {
+      "tadazz": {
+        "id": "fe741fb4db4ce0d18910abf7c96061ad53051b3f426a85456cbf69d1f52e40b4",
+        "image": "sha256:f56cdcc5f5302128f9b259f19d6008e954dbddc1f4fddbe6d8a5dabbba297b70",
+        "running": true,
+        "restartCount": 0
+      },
+      "tadazz-phone-gateway": {
+        "id": "c29ea46f10ff6da76428b2f296ff1468c512ec9e2af76eba552d7a144766b202",
+        "image": "sha256:db1888623e93a18cb9e4005a0142e01b3e6c503b029bbd7856144a5f41e7aa5e",
+        "running": true,
+        "restartCount": 0
+      },
+      "090d26a2fe7dd98a43226288932b7387bb9ec847cee5e5e2ff6ef48b6444bf40": {
+        "id": "090d26a2fe7dd98a43226288932b7387bb9ec847cee5e5e2ff6ef48b6444bf40",
+        "image": "sha256:56de89dd9ca496595980af84a7187b49fbff8c0cb563c3393c269d2b7c09d82a",
+        "running": false,
+        "restartCount": 0
+      }
+    },
+    "runtimeConfigSha256": "6524e1e0a86be5e0ec497be239a7889f53ad4425e4d3aeec285364fc5db9e9b5",
+    "workerUnitSha256": "7bfd2b44f2409588f162e278e2b3eb5a8671f61d81f1609ad29292608231559c",
+    "workerBrokerSha256": "7b591a69dd4aca951cf0f8224670c797696979085ae23c01d596ab99159d60d6",
+    "workerTimer": {
+      "ActiveState": "active",
+      "UnitFileState": "enabled"
+    }
+  },
+  "backupProof": {
+    "priorQualificationSha256": "f139c52f57b079ee280e7bce5eab4594079c5377acea3fd1f86251476d466eb1",
+    "candidateCloneBootPassed": true,
+    "sqliteDatabasesVerified": 3,
+    "freshDeploymentBackupSha256": "3f8f00d5e4ac59724cb12cea46ce476692c51549f88913fff7dc7a381cfa7476",
+    "productionDataRestored": false,
+    "oldApplicationRetainedStopped": true
+  },
+  "preservation": {
+    "gatewayId": "c29ea46f10ff6da76428b2f296ff1468c512ec9e2af76eba552d7a144766b202",
+    "runtimeConfigSha256": "6524e1e0a86be5e0ec497be239a7889f53ad4425e4d3aeec285364fc5db9e9b5",
+    "worker": {
+      "unitSha256": "7bfd2b44f2409588f162e278e2b3eb5a8671f61d81f1609ad29292608231559c",
+      "brokerSha256": "7b591a69dd4aca951cf0f8224670c797696979085ae23c01d596ab99159d60d6",
+      "image": "sha256:4ef04ef752c23e5360399880f1bcf4c79c0f48900c9597bcaa68da8aa01d1411"
+    },
+    "workerTimerActiveAndEnabled": true,
+    "mountsUnchanged": true,
+    "hostConfigurationUnchanged": true,
+    "otherContainersUnchanged": true
+  },
+  "observedHealth": {
+    "publicRoutesPassed": 9,
+    "healthAndOAuthProbesPassed": 15,
+    "samples": 3,
+    "restartsDuringWindow": 0,
+    "errorKeywordLines": 0,
+    "http5xxLines": 0,
+    "medianProbeMs": 12.92,
+    "maxProbeMs": 17.01,
+    "windowStartedAt": "2026-11-19T21:25:45.110896+00:00",
+    "windowFinishedAt": "2026-11-19T21:26:15.322243+00:00"
+  },
+  "connectedMcp": {
+    "draftReadPassed": true,
+    "draftRevision": 1,
+    "questionCount": 3,
+    "canonicalAuthoredShowHashUnchanged": "97170143b7f7beb37629a8837b1e7ee25ff9bfe55b5765cbea0a05d170a6df7c",
+    "previewAcknowledgementPassed": true,
+    "chapterCount": 15,
+    "currentChatGPTHostVisualInspection": false,
+    "liveRoomCreated": false,
+    "realVotesSubmitted": false,
+    "customerDraftSaved": false
+  },
+  "limits": [
+    "Production HTTP, identity, backup/restore proof and real connected MCP acknowledgements are verified; visual inspection inside the current ChatGPT host was not performed.",
+    "Browser behavior was verified against the exact qualified artifact in Chromium/WebKit before deployment.",
+    "The30-second post-deploy observation is bounded; no long-term reliability or complete-traffic error-rate claim.",
+    "Earlier failures and intermediate receipts remain evidence; no source/test/deployment action was executed by this reviewer."
+  ],
+  "methods": [
+    "Read finalized staging, preflight, backup, deploy, observation and connected-MCP receipts.",
+    "Independently hash raw remote stage/backup receipts and inspect selected live container metadata.",
+    "Read runtime/worker files only to hash them; no values, credentials, customer records or raw production logs emitted."
+  ]
+}

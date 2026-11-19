@@ -1,0 +1,141 @@
+{
+  "failedReceipt": "qa-cache-preparation-283cba02.json",
+  "inspection": {
+    "observedAt": "2026-11-19T17:10:18.452237+00:00",
+    "readOnly": true,
+    "cache": {
+      "id": "07b64bb4f99518e306a2e3f5a693266a6ca543fdd1676627161af7077e818872",
+      "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+      "running": true,
+      "readonlyRootfs": false,
+      "tmpfs": {
+        "/tmp": "rw,size=536870912"
+      },
+      "restartCount": 0
+    },
+    "hostDockerFreeBytes": 8243109888,
+    "source": {
+      "exists": true,
+      "entries": 2042,
+      "symlinks": 97,
+      "directories": 318,
+      "fileBytes": 63587810,
+      "manifestSha256": "0d1e3e9c089b66a75ff0e6b284f58b94ddb4e4b47b55129d82865980f62d67de",
+      "sdkVersions": {
+        "server": "2.4.0",
+        "client": "2.4.0",
+        "core": "2.4.0"
+      }
+    },
+    "inside": {
+      "filesystems": {
+        "/tmp": {
+          "exists": true,
+          "device": 108,
+          "mode": "0o41777",
+          "uid": 0,
+          "isSymlink": false,
+          "bytesTotal": 536870912,
+          "bytesFree": 536870912,
+          "inodesTotal": 1526424,
+          "inodesFree": 1526421,
+          "mountOptions": [
+            "891 882 0:108 / /tmp rw,nosuid,nodev,noexec,relatime - tmpfs tmpfs rw,size=524288k,inode64"
+          ]
+        },
+        "/tmp/phase3-999ed90c": {
+          "exists": true,
+          "device": 108,
+          "mode": "0o40700",
+          "uid": 0,
+          "isSymlink": false,
+          "bytesTotal": 536870912,
+          "bytesFree": 536870912,
+          "inodesTotal": 1526424,
+          "inodesFree": 1526421,
+          "mountOptions": [
+            "891 882 0:108 / /tmp rw,nosuid,nodev,noexec,relatime - tmpfs tmpfs rw,size=524288k,inode64"
+          ]
+        },
+        "/tmp/phase3-999ed90c/deps": {
+          "exists": false
+        },
+        "/tmp/phase3-999ed90c/.phase-continuity-20261119-a1c5c7f7a591": {
+          "exists": true,
+          "device": 108,
+          "mode": "0o40700",
+          "uid": 0,
+          "isSymlink": false,
+          "bytesTotal": 536870912,
+          "bytesFree": 536870912,
+          "inodesTotal": 1526424,
+          "inodesFree": 1526421,
+          "mountOptions": [
+            "891 882 0:108 / /tmp rw,nosuid,nodev,noexec,relatime - tmpfs tmpfs rw,size=524288k,inode64"
+          ]
+        }
+      },
+      "target": {
+        "exists": false
+      },
+      "staging": {
+        "exists": true,
+        "entries": 0,
+        "symlinks": 0,
+        "directories": 0,
+        "fileBytes": 0,
+        "manifestSha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+        "sdkVersions": {}
+      }
+    },
+    "comparison": {
+      "target": {
+        "missing": 2042,
+        "extra": 0,
+        "different": 0,
+        "firstMissing": [
+          "node_modules/.bin/tsc",
+          "node_modules/.bin/tsserver",
+          "node_modules/.bin/tsx",
+          "node_modules/.bin/uuid",
+          "node_modules/.modules.yaml",
+          "node_modules/.pnpm-workspace-state-v1.json",
+          "node_modules/.pnpm/@esbuild+linux-arm64@0.27.7/node_modules/@esbuild/linux-arm64/README.md",
+          "node_modules/.pnpm/@esbuild+linux-arm64@0.27.7/node_modules/@esbuild/linux-arm64/bin/esbuild"
+        ],
+        "firstExtra": [],
+        "firstDifferent": []
+      },
+      "staging": {
+        "missing": 2042,
+        "extra": 0,
+        "different": 0,
+        "firstMissing": [
+          "node_modules/.bin/tsc",
+          "node_modules/.bin/tsserver",
+          "node_modules/.bin/tsx",
+          "node_modules/.bin/uuid",
+          "node_modules/.modules.yaml",
+          "node_modules/.pnpm-workspace-state-v1.json",
+          "node_modules/.pnpm/@esbuild+linux-arm64@0.27.7/node_modules/@esbuild/linux-arm64/README.md",
+          "node_modules/.pnpm/@esbuild+linux-arm64@0.27.7/node_modules/@esbuild/linux-arm64/bin/esbuild"
+        ],
+        "firstExtra": [],
+        "firstDifferent": []
+      }
+    },
+    "daemonJournalExit": 0,
+    "matchingDaemonMessages": []
+  },
+  "readOnlyArchiveProbe": {
+    "kind": "read-only-docker-archive-path-probe",
+    "path": "/tmp/phase3-999ed90c/.phase-continuity-20261119-a1c5c7f7a591",
+    "exit": 1,
+    "archiveBytes": 0,
+    "archiveSha256": null,
+    "stderr": "Error response from daemon: Could not find the file /tmp/phase3-999ed90c/.phase-continuity-20261119-a1c5c7f7a591 in container 07b64bb4f99518e306a2e3f5a693266a6ca543fdd1676627161af7077e818872\n",
+    "mutations": false
+  },
+  "conclusion": "Docker exec sees the empty tmpfs directory, but the Docker archive read path cannot resolve that same directory. Capacity and source integrity are healthy. The original copy stderr was not retained; the read-only probe demonstrates the path visibility mismatch.",
+  "serverMutationPerformedByReviewer": false
+}

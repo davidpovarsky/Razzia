@@ -1,0 +1,151 @@
+import base64,gzip,hashlib,json,pathlib,subprocess,time
+ROOT=pathlib.Path(r"C:\Users\DAVID\Code\Razzia-worktrees\tadazz-ux-unified-20261119")
+DOCS=ROOT/"docs/extensions/plans/phase-continuity-20261119"
+EVIDENCE=ROOT/"docs/extensions/plans/phase3-takeover-20261117"
+SHA=json.loads((DOCS/"current-release-source.json").read_text(encoding="utf-8"))["sourceSha"]
+assert len(SHA)==40 and all(c in "0123456789abcdef" for c in SHA)
+def digest(data): return hashlib.sha256(data).hexdigest()
+progress=json.loads((DOCS/"release-gates-progress.json").read_text(encoding="utf-8"))
+assert progress["sourceSha"]==SHA and progress["status"]=="passed", "All exact-source gates must pass first"
+assert [x["check"] for x in progress["completed"]]==["native-launch","native-consent","full-show","proxy"]
+assert all(x["exit"]==0 for x in progress["completed"])
+head=subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip()
+assert head==SHA and not subprocess.check_output(["git","diff","--name-only","HEAD","--","extensions","packages"],cwd=ROOT,text=True).strip()
+source_run=progress["sourceRun"]
+paths={"host.json":EVIDENCE/source_run/"receipt.json"}
+for label,prefix in [("launch.json","tadazz-codex-launch-"),("browser.json","tadazz-codex-browser-"),("full-show.json","tadazz-codex-fullshow-"),("proxy.json","tadazz-codex-proxy-")]:
+ matches=list(EVIDENCE.glob(prefix+SHA[:12]+"-*/receipt.json"))
+ assert len(matches)==1,(label,[str(x) for x in matches])
+ paths[label]=matches[0]
+files={}
+for label,path in paths.items():
+ raw=path.read_bytes(); value=json.loads(raw)
+ assert value.get("sha")==SHA,(label,"wrong revision")
+ if label=="host.json":
+  assert value["allHashesVerifiedBeforeAfter"] and all(x["exit"]==0 for x in value["checks"])
+ else: assert value["exit"]==0,label
+ if label=="full-show.json":
+  assert len(value["fullShow"]["entries"])==40 and all(x["status"]=="PASS" for x in value["fullShow"]["entries"])
+  assert not value["resources"]["dockerOOMKilled"]
+  assert all(value["resources"]["after"]["memoryEvents"][x]==0 for x in ("oom","oom_kill","oom_group_kill"))
+ if label=="proxy.json": assert value["combinedImmutableGate"] and value["privacyProof"]["passed"]
+ files[label]={"base64":base64.b64encode(raw).decode(),"sha256":digest(raw)}
+cfg={"sha":SHA,"sourceRun":source_run,"files":files,
+ "stageScriptSha256":digest(subprocess.check_output(["git","show",SHA+":extensions/deployment/stage-mcp-site.py"],cwd=ROOT)),
+ "expectedContainer":"090d26a2fe7dd98a43226288932b7387bb9ec847cee5e5e2ff6ef48b6444bf40",
+ "expectedImage":"sha256:56de89dd9ca496595980af84a7187b49fbff8c0cb563c3393c269d2b7c09d82a",
+ "expectedGateway":"c29ea46f10ff6da76428b2f296ff1468c512ec9e2af76eba552d7a144766b202",
+ "expectedConfigSha256":"6524e1e0a86be5e0ec497be239a7889f53ad4425e4d3aeec285364fc5db9e9b5",
+ "baseImage":"sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346"}
+payload=base64.b64encode(gzip.compress(json.dumps(cfg).encode(),mtime=0)).decode()
+remote=r'''import base64,fcntl,gzip,hashlib,json,os,pathlib,re,shutil,stat,subprocess,time
+os.umask(0o077)
+# Keep the established shared release lock throughout staging.
+lock_fd=os.open("/run/lock/tadazz-mcp-deploy.lock",os.O_CREAT|os.O_RDWR|getattr(os,"O_NOFOLLOW",0),0o600)
+lock_info=os.fstat(lock_fd)
+assert stat.S_ISREG(lock_info.st_mode) and lock_info.st_uid==0 and lock_info.st_nlink==1 and stat.S_IMODE(lock_info.st_mode)==0o600,"Unsafe shared release lock"
+fcntl.flock(lock_fd,fcntl.LOCK_EX|fcntl.LOCK_NB)
+active_names=subprocess.check_output(["docker","ps","--format","{{.Names}}"],text=True,timeout=20).splitlines()
+heavy=[name for name in active_names if name.startswith(("tadazz-codex-","tadazz-gallery-","tadazz-editor-pins-","tadazz-mcp-stage-","tadazz-mcp-restore-proof-"))]
+assert not heavy,("Other Tadazz QA is active",heavy)
+c=json.loads(gzip.decompress(base64.b64decode(__PAYLOAD__)))
+assert re.fullmatch(r"[0-9a-f]{40}",c["sha"])
+assert re.fullmatch(r"tadazz-codex-"+c["sha"][:12]+r"-[0-9a-f]{8}",c["sourceRun"])
+def digest(data): return hashlib.sha256(data).hexdigest()
+def inspect(name): return json.loads(subprocess.check_output(["docker","inspect",name]))[0]
+def running(): return sorted(subprocess.check_output(["docker","ps","-q","--no-trunc"]).decode().splitlines())
+
+def worker_snapshot():
+ unit=pathlib.Path("/etc/systemd/system/tadazz-package-builder.service")
+ broker=pathlib.Path("/opt/tadazz-package-runtime/package-build-worker.py")
+ unit_hash=hashlib.sha256(unit.read_bytes()).hexdigest()
+ broker_hash=hashlib.sha256(broker.read_bytes()).hexdigest()
+ assert unit_hash=="7bfd2b44f2409588f162e278e2b3eb5a8671f61d81f1609ad29292608231559c","Worker unit changed since baseline"
+ assert broker_hash=="7b591a69dd4aca951cf0f8224670c797696979085ae23c01d596ab99159d60d6","Worker broker changed since baseline"
+ image="sha256:4ef04ef752c23e5360399880f1bcf4c79c0f48900c9597bcaa68da8aa01d1411"
+ assert json.loads(subprocess.check_output(["docker","image","inspect","--format","{{json .Id}}",image],timeout=20))==image
+ def properties(unit,fields):
+  output=subprocess.check_output(["systemctl","show",unit,"--property="+",".join(fields)],text=True,timeout=20)
+  return dict(line.split("=",1) for line in output.splitlines() if "=" in line)
+ timer=properties("tadazz-package-builder.timer",["Unit","ActiveState","SubState","UnitFileState"])
+ service=properties("tadazz-package-builder.service",["Result","ExecMainStatus","ActiveState","SubState"])
+ assert timer["Unit"]=="tadazz-package-builder.service" and timer["ActiveState"]=="active" and timer["UnitFileState"]=="enabled","Worker timer changed"
+ assert service["Result"]=="success" and service["ExecMainStatus"]=="0" and service["ActiveState"]!="failed","Worker service unhealthy"
+ return {"unitSha256":unit_hash,"brokerSha256":broker_hash,"image":image,"imagePresent":True,"timer":timer,"service":service,"passed":True}
+
+worker_before=worker_snapshot()
+app=inspect("tadazz"); gateway=inspect("tadazz-phone-gateway")
+assert app["Id"]==c["expectedContainer"] and app["Image"]==c["expectedImage"] and app["State"]["Running"]
+assert gateway["Id"]==c["expectedGateway"] and gateway["State"]["Running"]
+runtime=pathlib.Path("/var/lib/tadazz-release-5312660/config/extensions/mcp-service/runtime.json")
+assert digest(runtime.read_bytes())==c["expectedConfigSha256"]
+owned=pathlib.Path("/home/ubuntu/tadazz-phase2-20261116/evidence")/c["sourceRun"]
+assert owned.is_dir() and not owned.is_symlink()
+receipts=owned/"release-receipts"
+receipts.mkdir(mode=0o700,exist_ok=True)
+assert not receipts.is_symlink() and receipts.stat().st_uid==0
+assert set(c["files"])=={"host.json","launch.json","browser.json","full-show.json","proxy.json"}
+receipt_hashes={}
+for name,item in c["files"].items():
+ data=base64.b64decode(item["base64"])
+ assert len(data)<10000000 and digest(data)==item["sha256"]
+ assert json.loads(data)["sha"]==c["sha"]
+ path=receipts/name
+ if path.exists():
+  assert not path.is_symlink() and path.stat().st_uid==0 and digest(path.read_bytes())==item["sha256"]
+ else:
+  with path.open("xb") as out: out.write(data)
+  path.chmod(0o600)
+ receipt_hashes[name]=item["sha256"]
+script=owned/"source/extensions/deployment/stage-mcp-site.py"
+assert digest(script.read_bytes())==c["stageScriptSha256"]
+cache=inspect("tadazz-phase2-20261116")
+assert cache["Id"]=="07b64bb4f99518e306a2e3f5a693266a6ca543fdd1676627161af7077e818872"
+assert cache["HostConfig"]["NetworkMode"]=="none" and not any((cache["NetworkSettings"].get("Ports") or {}).values())
+cache_was_running=cache["State"]["Running"]
+if cache_was_running:
+ subprocess.run(["docker","stop","--time","10",cache["Id"]],capture_output=True,check=True,timeout=30)
+assert not inspect(cache["Id"])["State"]["Running"]
+before=running()
+assert shutil.disk_usage("/var/lib/docker").free>2*1024**3
+release=pathlib.Path("/home/ubuntu/tadazz-mcp-release-"+c["sha"][:12]+"-20261119")
+assert not release.exists(),"Release directory must be fresh"
+tag="tadazz:mcp-"+c["sha"][:12]+"-20261119"
+args=["python3",str(script),"--source-run",c["sourceRun"],"--web-source-run",c["sourceRun"],"--revision",c["sha"],"--release-dir",str(release),"--image",tag,"--base-image",c["baseImage"]]
+for flag,name in [("--host-receipt","host.json"),("--launch-receipt","launch.json"),("--web-receipt","host.json"),("--browser-receipt","browser.json"),("--full-show-receipt","full-show.json"),("--proxy-receipt","proxy.json")]:
+ args.extend([flag,str(receipts/name)])
+started=time.time()
+try:
+ result=subprocess.run(args,capture_output=True,text=True,timeout=1300)
+except subprocess.TimeoutExpired as error:
+ def text(value): return value.decode("utf-8",errors="replace") if isinstance(value,bytes) else (value or "")
+ (receipts/"stage.stdout.log").write_text(text(error.stdout))
+ (receipts/"stage.stderr.log").write_text(text(error.stderr))
+ print(json.dumps({"exit":124,"stageTimedOut":True,"releaseDir":str(release),"sourceSha":c["sha"],"cacheRestoredStopped":True,"stateRequiresInspection":True}))
+ raise SystemExit(124)
+(receipts/"stage.stdout.log").write_text(result.stdout)
+(receipts/"stage.stderr.log").write_text(result.stderr)
+if result.returncode:
+ print(json.dumps({"exit":result.returncode,"stdout":result.stdout[-10000:],"stderr":result.stderr[-5000:],"cacheRestoredStopped":True}))
+ raise SystemExit(result.returncode)
+manifest_file=release/"stage-manifest.json"
+manifest=json.loads(manifest_file.read_text())
+image_id=json.loads(subprocess.check_output(["docker","image","inspect",tag]))[0]["Id"]
+assert manifest["sourceSha"]==c["sha"] and manifest["imageId"]==image_id and manifest["baseImage"]==c["baseImage"]
+after=running()
+assert after==before,"Other running containers changed during staging"
+worker_after=worker_snapshot()
+app_after=inspect("tadazz");gateway_after=inspect("tadazz-phone-gateway")
+assert app_after["Id"]==app["Id"] and app_after["Image"]==app["Image"] and app_after["State"]["Running"] and app_after["RestartCount"]==app["RestartCount"],"Production app changed during staging"
+assert gateway_after["Id"]==gateway["Id"] and gateway_after["State"]["Running"] and gateway_after["RestartCount"]==gateway["RestartCount"],"Gateway changed during staging"
+assert digest(runtime.read_bytes())==c["expectedConfigSha256"],"Runtime configuration changed during staging"
+state={"workerPreservation":{"before":worker_before,"after":worker_after,"passed":True},"sourceSha":c["sha"],"sourceRun":c["sourceRun"],"releaseDir":str(release),"candidateTag":tag,"candidateImage":image_id,"stageManifestSha256":digest(manifest_file.read_bytes()),"receiptHashes":receipt_hashes,"runningCount":len(after),"cacheRestoredStopped":True,"cacheWasRunning":cache_was_running,"productionContainer":app["Id"],"productionImage":app["Image"],"gatewayContainer":gateway["Id"],"runtimeConfigSha256":c["expectedConfigSha256"],"seconds":round(time.time()-started,3),"exit":0,"productionChanged":False}
+(receipts/"coordinator-stage-state.json").write_text(json.dumps(state,indent=2)+"\n")
+print(json.dumps(state))
+'''
+remote=remote.replace("__PAYLOAD__",repr(payload))
+compile(remote,"stage-remote","exec")
+result=subprocess.run(["ssh","-i",r"C:\Users\DAVID\.ssh\tadazz_oracle_2026","-o","BatchMode=yes","-o","StrictHostKeyChecking=yes","-o","ConnectTimeout=10","ubuntu@132.145.25.168","sudo -n python3 -"],input=remote,capture_output=True,text=True,timeout=1420)
+(DOCS/"stage-execution.json").write_text(json.dumps({"exit":result.returncode,"stdout":result.stdout,"stderr":result.stderr},indent=2)+"\n",encoding="utf-8")
+print(json.dumps({"exit":result.returncode,"stdout":result.stdout,"stderr":result.stderr}),flush=True)
+raise SystemExit(result.returncode)

@@ -1,0 +1,258 @@
+{
+  "kind": "independent analysis of existing replay failure metadata",
+  "sourceSha": "e66317a5385862a3a756a18a5646fad4e64e5c26",
+  "run": "tadazz-codex-fullshow-e66317a53858-53da4bfb",
+  "recordedAtUtc": "2026-11-19T19:56:48.115331+00:00",
+  "progressSha256": "7e73108b3582a6c1f7ddda7a27026ff5715e1af400f46546da5b592351156fa3",
+  "scope": "Existing canonical progress only. No browser evaluation, new test or source/QA mutation.",
+  "failure": {
+    "name": "webkit / tadazz-classic native pause, resume, replay and adjacent skip",
+    "status": "FAIL",
+    "error": "AssertionError [ERR_ASSERTION]: Replay must remount the native question or scene\n\ntrue !== false\n",
+    "stack": "AssertionError [ERR_ASSERTION]: Replay must remount the native question or scene\n\ntrue !== false\n\n    at file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:2037:20\n    at async run (file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:624:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1841:7",
+    "budgetMs": 120000,
+    "ms": 8088
+  },
+  "requestWindows": [
+    {
+      "name": "webkit / tadazz-classic native pause, resume, replay and adjacent skip",
+      "events": [
+        {
+          "postOrdinal": 388,
+          "at": "2026-11-19T19:53:55.899Z",
+          "responseAt": "2026-11-19T19:53:56.577Z",
+          "activeStep": "webkit / tadazz-classic native pause, resume, replay and adjacent skip",
+          "method": "POST",
+          "status": 200
+        },
+        {
+          "postOrdinal": 389,
+          "at": "2026-11-19T19:53:58.884Z",
+          "responseAt": "2026-11-19T19:53:59.676Z",
+          "activeStep": "HTTP get_game_draft_summary",
+          "method": "POST",
+          "status": 200
+        }
+      ]
+    }
+  ],
+  "candidateCallWindows": [
+    {
+      "name": "webkit / tadazz-classic native pause, resume, replay and adjacent skip",
+      "warning": "Ordinal alignment is not asserted; compare total counts and sequencing before interpreting.",
+      "calls": [
+        {
+          "callIndex": 383,
+          "name": "list_editing_assets",
+          "inputRevision": 10,
+          "inputDigest": "63a3d509f3a75a04d1c5bafefa5c806ecc6abe896aac4373a816f6b9ce1c1420",
+          "ok": true,
+          "data": {
+            "draftId": "_9rfOesSlc99JBFWsAuv6H4J0bOcnXYP",
+            "revision": 10,
+            "selectedChapterId": null
+          }
+        },
+        {
+          "callIndex": 384,
+          "name": "list_themes",
+          "inputRevision": null,
+          "inputDigest": "b37f0a674b93e604963e33b892d5f81d641731f74b3d785fbcc4c8ab9bab3fad",
+          "ok": true,
+          "data": {
+            "draftId": null,
+            "revision": null,
+            "selectedChapterId": null
+          }
+        },
+        {
+          "callIndex": 385,
+          "name": "apply_game_edit",
+          "inputRevision": 10,
+          "inputDigest": "eafc8aef3147fb6330c2e08497b25f54e0e86076f16e6ccf8cd8b1a615686fb4",
+          "ok": true,
+          "data": {
+            "draftId": "_9rfOesSlc99JBFWsAuv6H4J0bOcnXYP",
+            "revision": 11,
+            "selectedChapterId": null
+          }
+        },
+        {
+          "callIndex": 386,
+          "name": "preview_show",
+          "inputRevision": 11,
+          "inputDigest": "9e27f04ad6fbcb3b4430c04be24cb886d856201aed9dda18c3358e65f2637e26",
+          "ok": true,
+          "data": {
+            "draftId": "_9rfOesSlc99JBFWsAuv6H4J0bOcnXYP",
+            "revision": 11,
+            "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting"
+          }
+        },
+        {
+          "callIndex": 387,
+          "name": "get_game_draft_summary",
+          "inputRevision": 11,
+          "inputDigest": "511eca16bfb83fdb07da4b623f5e0c5c6331b0efaf31197d7aa34e46b4bd161a",
+          "ok": true,
+          "data": {
+            "draftId": "_9rfOesSlc99JBFWsAuv6H4J0bOcnXYP",
+            "revision": 11,
+            "selectedChapterId": null
+          }
+        },
+        {
+          "callIndex": 388,
+          "name": "get_game_draft_summary",
+          "inputRevision": 11,
+          "inputDigest": "511eca16bfb83fdb07da4b623f5e0c5c6331b0efaf31197d7aa34e46b4bd161a",
+          "ok": true,
+          "data": {
+            "draftId": "_9rfOesSlc99JBFWsAuv6H4J0bOcnXYP",
+            "revision": 11,
+            "selectedChapterId": null
+          }
+        },
+        {
+          "callIndex": 389,
+          "name": "preview_show",
+          "inputRevision": 11,
+          "inputDigest": "9e27f04ad6fbcb3b4430c04be24cb886d856201aed9dda18c3358e65f2637e26",
+          "ok": true,
+          "data": {
+            "draftId": "_9rfOesSlc99JBFWsAuv6H4J0bOcnXYP",
+            "revision": 11,
+            "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting"
+          }
+        },
+        {
+          "callIndex": 390,
+          "name": "get_game_draft_summary",
+          "inputRevision": 11,
+          "inputDigest": "511eca16bfb83fdb07da4b623f5e0c5c6331b0efaf31197d7aa34e46b4bd161a",
+          "ok": true,
+          "data": {
+            "draftId": "_9rfOesSlc99JBFWsAuv6H4J0bOcnXYP",
+            "revision": 11,
+            "selectedChapterId": null
+          }
+        },
+        {
+          "callIndex": 391,
+          "name": "get_game_draft_summary",
+          "inputRevision": null,
+          "inputDigest": "8291a83a4e669ebb5d9f1ccf9d21a8a578d33fef8179d1a540bdd1d2dfed7f15",
+          "ok": true,
+          "data": {
+            "draftId": "_9rfOesSlc99JBFWsAuv6H4J0bOcnXYP",
+            "revision": 11,
+            "selectedChapterId": null
+          }
+        },
+        {
+          "callIndex": 392,
+          "name": "preview_show",
+          "inputRevision": 11,
+          "inputDigest": "3f44c549d26c45870d16a04432d13e085ebdee573037aa8dc76d5861a9186d27",
+          "ok": true,
+          "data": {
+            "draftId": "_9rfOesSlc99JBFWsAuv6H4J0bOcnXYP",
+            "revision": 11,
+            "selectedChapterId": "preview-card-15d1ef97cf9541fef29ff5bb774e69a32843979ee9c9b1b75ea8f162e3f94d61:opening"
+          }
+        },
+        {
+          "callIndex": 393,
+          "name": "get_game_draft_summary",
+          "inputRevision": 11,
+          "inputDigest": "511eca16bfb83fdb07da4b623f5e0c5c6331b0efaf31197d7aa34e46b4bd161a",
+          "ok": true,
+          "data": {
+            "draftId": "_9rfOesSlc99JBFWsAuv6H4J0bOcnXYP",
+            "revision": 11,
+            "selectedChapterId": null
+          }
+        },
+        {
+          "callIndex": 394,
+          "name": "preview_show",
+          "inputRevision": 11,
+          "inputDigest": "852c3a733befb3d746bce45b97a83e8a58f22a3ec90208684c6c226fd63fe608",
+          "ok": true,
+          "data": {
+            "draftId": "_9rfOesSlc99JBFWsAuv6H4J0bOcnXYP",
+            "revision": 11,
+            "selectedChapterId": "preview-card-15d1ef97cf9541fef29ff5bb774e69a32843979ee9c9b1b75ea8f162e3f94d61:opening"
+          }
+        }
+      ]
+    }
+  ],
+  "existingResumeObservations": [
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "check": "native resume readiness",
+      "timeoutMs": 5000,
+      "status": "ready",
+      "snapshot": {
+        "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+        "epoch": "1",
+        "pausedElapsedMs": 26621,
+        "pausedMedia": [
+          {
+            "index": 0,
+            "time": 12.383502111,
+            "paused": true,
+            "src": "https://tadazz.com/sounds/answersMusic.mp3"
+          },
+          {
+            "index": 1,
+            "time": 4.669545733,
+            "paused": true,
+            "src": "https://tadazz.com/sounds/answersMusic.mp3"
+          }
+        ],
+        "waitedMs": 982,
+        "firstClockProgressMs": 979,
+        "firstMediaProgressMs": 280,
+        "renderedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+        "renderedEpoch": "1",
+        "renderedPaused": "false",
+        "renderedElapsedMs": 27501,
+        "media": [
+          {
+            "index": 0,
+            "sameElement": true,
+            "src": "https://tadazz.com/sounds/answersMusic.mp3",
+            "paused": true,
+            "time": 12.383502111
+          },
+          {
+            "index": 1,
+            "sameElement": true,
+            "src": "https://tadazz.com/sounds/answersMusic.mp3",
+            "paused": false,
+            "time": 5.566278345
+          }
+        ]
+      }
+    }
+  ],
+  "recordedTotals": {
+    "calls": 422,
+    "httpPostEvents": 422
+  },
+  "observedFacts": [
+    "The Replay check failed because its previously captured native node remained connected after the epoch-change wait.",
+    "The activeCheck request window contains two POST requests: one completed at 19:53:56.577Z, the second completed at 19:53:59.676Z.",
+    "Nearby recorded call 388 is get_game_draft_summary; call 389 is a successful preview_show selecting question3 voting at revision11; call390 is the following summary. No question replay preview result is present in this candidate call window.",
+    "All recorded POST and call counts match at 422, but origin and direct request-to-result correlation are not logged."
+  ],
+  "inferencesAndLimits": [
+    "An automatic question-to-voting epoch change is compatible with the existing any-epoch wait completing while the same-question DOM is correctly retained.",
+    "This record does not establish that an automatic ACK overtook a pending explicit Replay ACK: there is no recorded request origin, and a manual Replay invoked after a phase change could also select voting.",
+    "Request ordinal to call ordinal mapping is a candidate association based on counts/order, not a unique correlation-ID proof.",
+    "Source-level Replay assertions should be assessed against explicit acknowledged Replay behavior; this evidence alone neither proves a product bug nor permits accepting the failed qualification."
+  ]
+}

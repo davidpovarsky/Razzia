@@ -1,0 +1,20 @@
+{
+  "status": "MERGED",
+  "head": "34a9e0a59482fa035ab98338f7c977589e46287d",
+  "branch": "codex/tadazz-ux-unified-20261119",
+  "parents": [
+    "e75d519a11da2cb08c21ac78dc648d2cd67075bf",
+    "6b973ecffac2d075268dad08627a59e680e8eb66"
+  ],
+  "latestPublicDemo": "6b973ecffac2d075268dad08627a59e680e8eb66",
+  "productSourceBeforeMerge": "34568c5c937a51d236a440513adeb9bf93637525",
+  "changedPaths": [
+    "extensions/qa/phase2/great-guessoff-cta-balanced-results.smoke.mjs",
+    "extensions/qa/phase2/great-guessoff-visible-results-no-repeat.smoke.mjs",
+    "extensions/src/site/web/marketing/GreatGuessOffDemo.tsx",
+    "extensions/src/site/web/marketing/great-guessoff.css"
+  ],
+  "trackedChanges": [],
+  "index": [],
+  "deploymentPerformed": false
+}

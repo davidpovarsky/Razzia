@@ -1,0 +1,10 @@
+{
+  "exitCode": 0,
+  "durationSeconds": 89.2,
+  "rendererBuildId": "0c47e5ee4b577fb127e31e89662c6bbe6b2be95c999a6e7698cd4e7cf9060a80",
+  "widgetSha256": "ceb8fbd063e3a6a1cc3ef8a18cb44a144ef3433054a04fe20fd1013734ee9dac",
+  "manifestSha256": "1d3c52b68aec8648c6cfe86e85d1de6544fd08834f276240bf858b41a3c62139",
+  "physicalModules": 2694,
+  "offWorktreeProductModules": [],
+  "productEntrySha256": "5065e92ac8b6f90be553478fec30f8f59f82598a6561b72b2e7b5955686c843d"
+}

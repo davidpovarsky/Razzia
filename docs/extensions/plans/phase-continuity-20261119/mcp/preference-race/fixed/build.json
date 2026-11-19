@@ -1,0 +1,14 @@
+{
+  "exitCode": 0,
+  "durationSeconds": 22.01,
+  "rendererBuildId": "3769b213b9cb98919fcc15564ec37769ee451e548bb0b8cba8d4f01c42e2ad17",
+  "widgetSha256": "fba454780cce5225421ac0281c9e8478b0652499a781c4ed428bdcd328c89839",
+  "manifestSha256": "dfc769e76fdad0be2d03e648ab04af9822de15598c7c6a324cc65e5dfb879344",
+  "physicalModules": 2694,
+  "offWorktreeProductModules": [],
+  "sourceHashes": {
+    "extensions/src/mcp-app/widget/full-show-entry.tsx": "ea70de20ea1f826ae95d22a6e4f16cc0310b86d8ed46e793697200e5cc286c80",
+    "extensions/qa/phase3-full-show/browser-verify.mjs": "29bf9264ea80a877df603a5faece0fa5680629164ef9c4478c16fa35f45d4114",
+    "extensions/qa/phase3-full-show/preference-race.mjs": "ac3efd6fc2ced0815cc900d0ed008750463ae9885eb26f003bd47d25c1c6ad14"
+  }
+}

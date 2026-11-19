@@ -1,0 +1,628 @@
+{
+  "kind": "phase-continuity-bounded-frame-scheduling-diagnostic",
+  "diagnosticOnly": true,
+  "releaseQualified": false,
+  "sourceSha": "730cb4579d22589e1a7fc96a6873df9cb273e479",
+  "sourceRun": "tadazz-codex-730cb4579d22-d298324d",
+  "run": "tadazz-phase-continuity-scheduling-730cb4579d22-56930064",
+  "overlayPath": "extensions/qa/phase3-full-show/browser-verify.mjs",
+  "overlaySha256": "16e47f76b66b0275a85e0d6d3515ddb07272b60e8df1ade1144ccfe6a0912579",
+  "originalOverlayPathSha256": "4dcb60dde9db58dd19db2e039875f77f75e886fa7475142a581739b4f791f090",
+  "codeUnderTest": "existing frozen source/dist; no rebuild",
+  "container": "033cd6e5b9d04c7d3d9b3d020727110b211749fb80ca53586d45c86597093ad3",
+  "network": "none",
+  "sourceReadOnly": true,
+  "qaOverlayReadOnly": true,
+  "browserTimeoutSeconds": 180,
+  "assertionWaitsChanged": false,
+  "sourceFileCount": 1871,
+  "sourceInputManifestSha256": "f2a8689c21efccc567b73c9b405c6b682aa6c1be903fb8bdf04c6d4edaf9771b",
+  "diagnosticComplete": true,
+  "integrityPassed": true,
+  "customerMountAccessed": false,
+  "schedulingEvidence": {
+    "path": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-phase-continuity-scheduling-730cb4579d22-56930064/scheduling-host-samples.jsonl",
+    "sha256": "de1fd9bc3d65bcd98831ec982478f61be3bc0c892f4e88c336629f755e75dcfa",
+    "samples": 64,
+    "errors": [],
+    "sampleIntervalSeconds": 1,
+    "ownedCgroup": "/sys/fs/cgroup/system.slice/docker-033cd6e5b9d04c7d3d9b3d020727110b211749fb80ca53586d45c86597093ad3.scope",
+    "processArgumentsCollected": false,
+    "nativeBrowserStderr": "DEBUG=pw:browser",
+    "priority": 19,
+    "tasksetCpuList": "0",
+    "physicalPinningChanged": false,
+    "quotaChanged": false
+  },
+  "browserExit": 1,
+  "seconds": 63.885,
+  "resources": {
+    "before": {
+      "memoryLimitBytes": 3221225472,
+      "memoryCurrentBytes": 5472256,
+      "memoryPeakBytes": 14028800,
+      "memorySwapLimitBytes": 0,
+      "memoryEvents": {
+        "low": 0,
+        "high": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0,
+        "sock_throttled": 0
+      },
+      "cpuMax": [
+        100000,
+        100000
+      ],
+      "cpuStat": {
+        "usage_usec": 223160,
+        "user_usec": 156369,
+        "system_usec": 66790,
+        "nice_usec": 0,
+        "core_sched.force_idle_usec": 0,
+        "nr_periods": 4,
+        "nr_throttled": 0,
+        "throttled_usec": 0,
+        "nr_bursts": 0,
+        "burst_usec": 0
+      },
+      "cpuPressure": "some avg10=0.00 avg60=0.00 avg300=0.00 total=24499\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=19013\n"
+    },
+    "after": {
+      "memoryLimitBytes": 3221225472,
+      "memoryCurrentBytes": 11874304,
+      "memoryPeakBytes": 1075417088,
+      "memorySwapLimitBytes": 0,
+      "memoryEvents": {
+        "low": 0,
+        "high": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0,
+        "sock_throttled": 0
+      },
+      "cpuMax": [
+        100000,
+        100000
+      ],
+      "cpuStat": {
+        "usage_usec": 31216222,
+        "user_usec": 29165494,
+        "system_usec": 2050727,
+        "nice_usec": 29298691,
+        "core_sched.force_idle_usec": 0,
+        "nr_periods": 628,
+        "nr_throttled": 0,
+        "throttled_usec": 0,
+        "nr_bursts": 0,
+        "burst_usec": 0
+      },
+      "cpuPressure": "some avg10=76.62 avg60=48.94 avg300=14.47 total=47491074\nfull avg10=49.46 avg60=31.50 avg300=9.33 total=30886250\n"
+    },
+    "configuredMemoryLimitBytes": 3221225472,
+    "configuredNanoCpus": 1000000000,
+    "dockerOOMKilled": false
+  },
+  "proofs": {
+    "baseSourceHashesVerifiedBeforeAfter": true,
+    "effectiveSourceHashesVerifiedBeforeAfter": true,
+    "qaOverlayHashUnchanged": true,
+    "widgetArtifactsUnchanged": true,
+    "sdkCacheHashesVerifiedBeforeAfter": true,
+    "productionUnchanged": true,
+    "originalCacheStillRunning": true,
+    "resourceBoundsUnchanged": true,
+    "noOom": true
+  },
+  "baseSourceManifestDigest": "46e901ae1442ad1dbd8cfe93fea8923ee63a0377c3542080d3d06625bf0b06ec",
+  "effectiveSourceManifestDigest": "7525481e16c404f19980845328a12843804adbddfbad50aa0b1fa253a1d35094",
+  "widgetArtifacts": {
+    "full-show.css": "b5924cd77c9d159207dab50831956e230c1bde60cf3c306a72f3482e5a4e106e",
+    "full-show.js": "6e8f857947909786c48cae17f9afc1ff187d2d56bc5038421b9999536624bbd0",
+    "full-show-entry-inputs.json": "0b36f6ecdb33ce3fd30ba8b8cf3bbfd77ba0ccb9012b3c6114672410ad62d618",
+    "full-show.html": "b104367d1f9742e3e8b6f12d24391648b8bf92a72dee4f6d1c074a193c6397f6",
+    "full-show-artifact.json": "b5016791c480d583a84f1bcb4076ef5bc7054ebac8fdaa417ce30962c4aee4d4"
+  },
+  "widgetHtmlSha256": "b104367d1f9742e3e8b6f12d24391648b8bf92a72dee4f6d1c074a193c6397f6",
+  "widgetManifestSha256": "b5016791c480d583a84f1bcb4076ef5bc7054ebac8fdaa417ce30962c4aee4d4",
+  "rendererBuildId": "0c47e5ee4b577fb127e31e89662c6bbe6b2be95c999a6e7698cd4e7cf9060a80",
+  "sdkCacheFileCount": 2042,
+  "sdkCacheManifestSha256": "0d1e3e9c089b66a75ff0e6b284f58b94ddb4e4b47b55129d82865980f62d67de",
+  "innerReceiptPath": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-phase-continuity-scheduling-730cb4579d22-56930064/full-show/receipt.json",
+  "fullShow": {
+    "kind": "real issuer + official MCP client + AppBridge + sandboxed native Stage",
+    "claim": "Isolated fixture validation; not ChatGPT installation or production consent",
+    "sha": "730cb4579d22589e1a7fc96a6873df9cb273e479",
+    "widgetManifestSha256": "b5016791c480d583a84f1bcb4076ef5bc7054ebac8fdaa417ce30962c4aee4d4",
+    "widgetHtmlSha256": "b104367d1f9742e3e8b6f12d24391648b8bf92a72dee4f6d1c074a193c6397f6",
+    "sourceHashesUnchanged": true,
+    "diagnosticMode": "frame-scheduling",
+    "productionChanged": false,
+    "customerMountAccessed": false,
+    "oauthSession": {
+      "kind": "actual-issuer-oauth-refresh",
+      "scheduler": "wall-clock",
+      "accessTokenLifetimeSeconds": 300,
+      "refreshCount": 0,
+      "rejected": false,
+      "automaticReauthorization": false,
+      "refreshes": []
+    },
+    "network": "none",
+    "transport": "Loopback HTTP plus exact hash-verified public-asset interception; no outbound network",
+    "outboundDenied": [],
+    "engines": [
+      {
+        "name": "webkit",
+        "version": "27.2",
+        "outcomes": [
+          {
+            "name": "webkit / tadazz-classic diagnostic workspace and logical card navigation",
+            "status": "FAIL",
+            "error": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().getByTestId('full-show-pause')\n    - locator resolved to <button type=\"button\" title=\"Pause show\" aria-label=\"Pause show\" data-control-source=\"razzia\" data-testid=\"full-show-pause\" class=\"bg-primary rounded-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg\">\u2026</button>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n",
+            "stack": "locator.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().getByTestId('full-show-pause')\n    - locator resolved to <button type=\"button\" title=\"Pause show\" aria-label=\"Pause show\" data-control-source=\"razzia\" data-testid=\"full-show-pause\" class=\"bg-primary rounded-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg\">\u2026</button>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n\n    at /source/extensions/qa/phase3-full-show/browser-verify.mjs:1458:59\n    at async run (/source/extensions/qa/phase3-full-show/browser-verify.mjs:642:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1430:7",
+            "budgetMs": 300000,
+            "ms": 19833
+          },
+          {
+            "name": "webkit / razzia-original diagnostic workspace and logical card navigation",
+            "status": "FAIL",
+            "error": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().getByTestId('full-show-pause')\n    - locator resolved to <button type=\"button\" title=\"Pause show\" aria-label=\"Pause show\" data-control-source=\"razzia\" data-testid=\"full-show-pause\" class=\"bg-primary rounded-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg\">\u2026</button>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n",
+            "stack": "locator.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().getByTestId('full-show-pause')\n    - locator resolved to <button type=\"button\" title=\"Pause show\" aria-label=\"Pause show\" data-control-source=\"razzia\" data-testid=\"full-show-pause\" class=\"bg-primary rounded-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg\">\u2026</button>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n\n    at /source/extensions/qa/phase3-full-show/browser-verify.mjs:1458:59\n    at async run (/source/extensions/qa/phase3-full-show/browser-verify.mjs:642:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1430:7",
+            "budgetMs": 300000,
+            "ms": 17200
+          }
+        ]
+      }
+    ],
+    "requiredChecks": [
+      "chromium / tadazz-classic native opening, five phases, transitions and closing",
+      "chromium / tadazz-classic title edit CAS and summary refresh through AppBridge",
+      "chromium / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "chromium / tadazz-classic nine localized interfaces and non-reduced native motion",
+      "chromium / tadazz-classic native audio gesture, acknowledged music and volume, persistent playback",
+      "chromium / tadazz-classic native pause, resume, replay and adjacent skip",
+      "chromium / tadazz-classic responsive 16:9 and 4:3 keyboard controls",
+      "chromium / tadazz-classic zero-vote, tie and picture result parity with preserved media and motion",
+      "chromium / tadazz-classic tamper, cancellation and tool-context teardown",
+      "chromium / tadazz-classic CSP, native media resources and browser errors",
+      "chromium / razzia-original native opening, five phases, transitions and closing",
+      "chromium / razzia-original title edit CAS and summary refresh through AppBridge",
+      "chromium / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "chromium / razzia-original nine localized interfaces and non-reduced native motion",
+      "chromium / razzia-original native audio gesture, acknowledged music and volume, persistent playback",
+      "chromium / razzia-original native pause, resume, replay and adjacent skip",
+      "chromium / razzia-original responsive 16:9 and 4:3 keyboard controls",
+      "chromium / razzia-original zero-vote, tie and picture result parity with preserved media and motion",
+      "chromium / razzia-original tamper, cancellation and tool-context teardown",
+      "chromium / razzia-original CSP, native media resources and browser errors",
+      "webkit / tadazz-classic native opening, five phases, transitions and closing",
+      "webkit / tadazz-classic title edit CAS and summary refresh through AppBridge",
+      "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "webkit / tadazz-classic nine localized interfaces and non-reduced native motion",
+      "webkit / tadazz-classic native audio gesture, acknowledged music and volume, persistent playback",
+      "webkit / tadazz-classic native pause, resume, replay and adjacent skip",
+      "webkit / tadazz-classic responsive 16:9 and 4:3 keyboard controls",
+      "webkit / tadazz-classic zero-vote, tie and picture result parity with preserved media and motion",
+      "webkit / tadazz-classic tamper, cancellation and tool-context teardown",
+      "webkit / tadazz-classic CSP, native media resources and browser errors",
+      "webkit / razzia-original native opening, five phases, transitions and closing",
+      "webkit / razzia-original title edit CAS and summary refresh through AppBridge",
+      "webkit / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "webkit / razzia-original nine localized interfaces and non-reduced native motion",
+      "webkit / razzia-original native audio gesture, acknowledged music and volume, persistent playback",
+      "webkit / razzia-original native pause, resume, replay and adjacent skip",
+      "webkit / razzia-original responsive 16:9 and 4:3 keyboard controls",
+      "webkit / razzia-original zero-vote, tie and picture result parity with preserved media and motion",
+      "webkit / razzia-original tamper, cancellation and tool-context teardown",
+      "webkit / razzia-original CSP, native media resources and browser errors"
+    ],
+    "failureCount": 2,
+    "rendererBuildId": "0c47e5ee4b577fb127e31e89662c6bbe6b2be95c999a6e7698cd4e7cf9060a80",
+    "artifactSha256": "b104367d1f9742e3e8b6f12d24391648b8bf92a72dee4f6d1c074a193c6397f6",
+    "entries": [
+      {
+        "name": "webkit / tadazz-classic diagnostic workspace and logical card navigation",
+        "status": "FAIL",
+        "error": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().getByTestId('full-show-pause')\n    - locator resolved to <button type=\"button\" title=\"Pause show\" aria-label=\"Pause show\" data-control-source=\"razzia\" data-testid=\"full-show-pause\" class=\"bg-primary rounded-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg\">\u2026</button>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n",
+        "stack": "locator.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().getByTestId('full-show-pause')\n    - locator resolved to <button type=\"button\" title=\"Pause show\" aria-label=\"Pause show\" data-control-source=\"razzia\" data-testid=\"full-show-pause\" class=\"bg-primary rounded-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg\">\u2026</button>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n\n    at /source/extensions/qa/phase3-full-show/browser-verify.mjs:1458:59\n    at async run (/source/extensions/qa/phase3-full-show/browser-verify.mjs:642:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1430:7",
+        "budgetMs": 300000,
+        "ms": 19833
+      },
+      {
+        "name": "webkit / razzia-original diagnostic workspace and logical card navigation",
+        "status": "FAIL",
+        "error": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().getByTestId('full-show-pause')\n    - locator resolved to <button type=\"button\" title=\"Pause show\" aria-label=\"Pause show\" data-control-source=\"razzia\" data-testid=\"full-show-pause\" class=\"bg-primary rounded-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg\">\u2026</button>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n",
+        "stack": "locator.click: Timeout 10000ms exceeded.\nCall log:\n  - waiting for locator('iframe').contentFrame().getByTestId('full-show-pause')\n    - locator resolved to <button type=\"button\" title=\"Pause show\" aria-label=\"Pause show\" data-control-source=\"razzia\" data-testid=\"full-show-pause\" class=\"bg-primary rounded-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg\">\u2026</button>\n  - attempting click action\n    - waiting for element to be visible, enabled and stable\n\n    at /source/extensions/qa/phase3-full-show/browser-verify.mjs:1458:59\n    at async run (/source/extensions/qa/phase3-full-show/browser-verify.mjs:642:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:1430:7",
+        "budgetMs": 300000,
+        "ms": 17200
+      }
+    ],
+    "observations": [
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "check": "host document lifecycle",
+        "at": "2026-11-19T18:22:36.334Z",
+        "reason": "workspace scenario",
+        "url": "about:blank",
+        "status": "no-host",
+        "finishedAt": "2026-11-19T18:22:36.334Z"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "check": "diagnostic failure state",
+        "reason": "check failure",
+        "file": "webkit-tadazz-classic-failure-state-1.json",
+        "at": "2026-11-19T18:22:56.167Z"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "check": "diagnostic failure state",
+        "reason": "workspace scheduling completion",
+        "file": "webkit-tadazz-classic-failure-state-2.json",
+        "at": "2026-11-19T18:22:58.361Z"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "check": "host document lifecycle",
+        "at": "2026-11-19T18:23:00.398Z",
+        "reason": "close frame-scheduling diagnostic context",
+        "url": "http://127.0.0.1:46637/host?scenario=676WjTdTdHfTVEC7Z5GFG_5Y",
+        "status": "drained",
+        "receipt": {
+          "documentId": "8b525f01-6c1c-42d6-b724-f7133bdd3b6b",
+          "url": "http://127.0.0.1:46637/host?scenario=676WjTdTdHfTVEC7Z5GFG_5Y",
+          "status": "drained",
+          "startedAt": "2026-11-19T18:23:00.446Z",
+          "finishedAt": "2026-11-19T18:23:00.450Z",
+          "elapsedMs": 4,
+          "initial": {
+            "http": 0,
+            "handlers": 0,
+            "initialization": 0,
+            "replies": 0,
+            "connecting": false
+          },
+          "remaining": {
+            "http": 0,
+            "handlers": 0,
+            "initialization": 0,
+            "replies": 0,
+            "connecting": false
+          },
+          "sentReplies": 1,
+          "cancelledReplies": 0,
+          "rejectedNewCalls": 0,
+          "requestEvents": [
+            {
+              "at": "2026-11-19T18:22:38.877Z",
+              "path": "/qa/initial",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T18:22:40.111Z",
+              "path": "/qa/initial",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-19T18:22:41.049Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T18:22:45.735Z",
+              "path": "/qa/call",
+              "status": "completed"
+            }
+          ],
+          "errors": []
+        },
+        "finishedAt": "2026-11-19T18:23:00.453Z"
+      },
+      {
+        "engine": "webkit",
+        "theme": "razzia-original",
+        "check": "host document lifecycle",
+        "at": "2026-11-19T18:23:04.592Z",
+        "reason": "workspace scenario",
+        "url": "about:blank",
+        "status": "no-host",
+        "finishedAt": "2026-11-19T18:23:04.592Z"
+      },
+      {
+        "engine": "webkit",
+        "theme": "razzia-original",
+        "check": "diagnostic failure state",
+        "reason": "check failure",
+        "file": "webkit-razzia-original-failure-state-1.json",
+        "at": "2026-11-19T18:23:21.792Z"
+      },
+      {
+        "engine": "webkit",
+        "theme": "razzia-original",
+        "check": "diagnostic failure state",
+        "reason": "workspace scheduling completion",
+        "file": "webkit-razzia-original-failure-state-2.json",
+        "at": "2026-11-19T18:23:23.492Z"
+      },
+      {
+        "engine": "webkit",
+        "theme": "razzia-original",
+        "check": "host document lifecycle",
+        "at": "2026-11-19T18:23:25.155Z",
+        "reason": "close frame-scheduling diagnostic context",
+        "url": "http://127.0.0.1:46637/host?scenario=HziBgcZw9vAHF2NeK7Z_Xh1t",
+        "status": "drained",
+        "receipt": {
+          "documentId": "cd22948a-2566-408f-90c6-acb10da97d24",
+          "url": "http://127.0.0.1:46637/host?scenario=HziBgcZw9vAHF2NeK7Z_Xh1t",
+          "status": "drained",
+          "startedAt": "2026-11-19T18:23:25.164Z",
+          "finishedAt": "2026-11-19T18:23:25.170Z",
+          "elapsedMs": 6,
+          "initial": {
+            "http": 0,
+            "handlers": 0,
+            "initialization": 0,
+            "replies": 0,
+            "connecting": false
+          },
+          "remaining": {
+            "http": 0,
+            "handlers": 0,
+            "initialization": 0,
+            "replies": 0,
+            "connecting": false
+          },
+          "sentReplies": 1,
+          "cancelledReplies": 0,
+          "rejectedNewCalls": 0,
+          "requestEvents": [
+            {
+              "at": "2026-11-19T18:23:08.632Z",
+              "path": "/qa/initial",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T18:23:09.428Z",
+              "path": "/qa/initial",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-19T18:23:10.351Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-19T18:23:11.350Z",
+              "path": "/qa/call",
+              "status": "completed"
+            }
+          ],
+          "errors": []
+        },
+        "finishedAt": "2026-11-19T18:23:25.172Z"
+      }
+    ],
+    "rendererFixtures": [],
+    "calls": [
+      {
+        "name": "get_game_draft_summary",
+        "completedAt": "2026-11-19T18:22:42.360Z",
+        "inputRevision": 1,
+        "inputDigest": "3e4ada217938a5aa84046b9bfaa9c698e4a85f28027799bc1c9f08a51498731b",
+        "result": {
+          "contractVersion": "0.1.0",
+          "ok": true,
+          "correlationId": "394c70b3-140e-4656-a599-9433e0c4d831",
+          "data": {
+            "draftId": "zHU0SG8McN2spxRAPw6Vp0-d9JZjBgBK",
+            "revision": 1,
+            "summary": {
+              "title": "Full show tadazz-classic webkit",
+              "cardCount": 8,
+              "questionCount": 5,
+              "themeId": "tadazz-classic",
+              "themeVersion": "1.0.0",
+              "diagnostics": []
+            }
+          }
+        }
+      },
+      {
+        "name": "get_game_draft_summary",
+        "completedAt": "2026-11-19T18:23:11.345Z",
+        "inputRevision": 1,
+        "inputDigest": "258592115df2ed9bda1967fa80a0f25ce1c926b2558aa0ae55a6fcbff2b26eff",
+        "result": {
+          "contractVersion": "0.1.0",
+          "ok": true,
+          "correlationId": "08c765a0-a7fc-4c08-aa6d-be5b92c2db76",
+          "data": {
+            "draftId": "MbrLEXtcQnq_wNrtZlfCcuHebKExZjtE",
+            "revision": 1,
+            "summary": {
+              "title": "Full show razzia-original webkit",
+              "cardCount": 8,
+              "questionCount": 5,
+              "themeId": "razzia-original",
+              "themeVersion": "1.0.0",
+              "diagnostics": []
+            }
+          }
+        }
+      }
+    ],
+    "errors": [],
+    "resources": [
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+        "admitted": true
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/show-stage.webp",
+        "admitted": true
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/second-library/teaser-screen-source.jpg",
+        "admitted": true
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "path": "/tadazz-show/v4/question-bg.webp",
+        "admitted": true
+      },
+      {
+        "engine": "webkit",
+        "theme": "razzia-original",
+        "path": "/tadazz-show/razzia-original/background.png",
+        "admitted": true
+      }
+    ],
+    "requestFailures": [],
+    "pageErrorEvents": [],
+    "qaRequestEvents": [
+      {
+        "at": "2026-11-19T18:22:38.889Z",
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "activeCheck": "webkit / tadazz-classic diagnostic workspace and logical card navigation",
+        "activeStep": "webkit / tadazz-classic diagnostic workspace and logical card navigation",
+        "documentUrl": "http://127.0.0.1:46637/host?scenario=676WjTdTdHfTVEC7Z5GFG_5Y",
+        "url": "http://127.0.0.1:46637/qa/initial?scenario=676WjTdTdHfTVEC7Z5GFG_5Y",
+        "method": "GET",
+        "responseAt": "2026-11-19T18:22:40.134Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T18:22:41.057Z",
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "activeCheck": "webkit / tadazz-classic diagnostic workspace and logical card navigation",
+        "activeStep": "webkit / tadazz-classic diagnostic workspace and logical card navigation",
+        "documentUrl": "http://127.0.0.1:46637/host?scenario=676WjTdTdHfTVEC7Z5GFG_5Y",
+        "url": "http://127.0.0.1:46637/qa/call?scenario=676WjTdTdHfTVEC7Z5GFG_5Y",
+        "method": "POST",
+        "tool": "get_game_draft_summary",
+        "expectedRevision": 1,
+        "responseAt": "2026-11-19T18:22:45.526Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T18:23:08.640Z",
+        "engine": "webkit",
+        "theme": "razzia-original",
+        "activeCheck": "webkit / razzia-original diagnostic workspace and logical card navigation",
+        "activeStep": "webkit / razzia-original diagnostic workspace and logical card navigation",
+        "documentUrl": "http://127.0.0.1:46637/host?scenario=HziBgcZw9vAHF2NeK7Z_Xh1t",
+        "url": "http://127.0.0.1:46637/qa/initial?scenario=HziBgcZw9vAHF2NeK7Z_Xh1t",
+        "method": "GET",
+        "responseAt": "2026-11-19T18:23:09.476Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      },
+      {
+        "at": "2026-11-19T18:23:10.361Z",
+        "engine": "webkit",
+        "theme": "razzia-original",
+        "activeCheck": "webkit / razzia-original diagnostic workspace and logical card navigation",
+        "activeStep": "webkit / razzia-original diagnostic workspace and logical card navigation",
+        "documentUrl": "http://127.0.0.1:46637/host?scenario=HziBgcZw9vAHF2NeK7Z_Xh1t",
+        "url": "http://127.0.0.1:46637/qa/call?scenario=HziBgcZw9vAHF2NeK7Z_Xh1t",
+        "method": "POST",
+        "tool": "get_game_draft_summary",
+        "expectedRevision": 1,
+        "responseAt": "2026-11-19T18:23:11.382Z",
+        "status": 200,
+        "contentType": "application/json",
+        "allowOrigin": null
+      }
+    ],
+    "requests": [
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/second-library/teaser-screen-source.jpg"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/sounds/tadazz-reveal-bright-20261108.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/sounds/tadazz-timer-end-368edc1d9522.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/sounds/tadazz-confirm-20261108.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "razzia-original",
+        "url": "https://tadazz.com/sounds/results.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "razzia-original",
+        "url": "https://tadazz.com/tadazz-show/razzia-original/background.png"
+      },
+      {
+        "engine": "webkit",
+        "theme": "razzia-original",
+        "url": "https://tadazz.com/sounds/tadazz-timer-end-368edc1d9522.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "razzia-original",
+        "url": "https://tadazz.com/sounds/tadazz-confirm-20261108.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "razzia-original",
+        "url": "https://tadazz.com/sounds/results.mp3"
+      }
+    ]
+  },
+  "cleanup": {
+    "ownedContainerStopped": true,
+    "onlyOwnedContainerTouched": true,
+    "evidenceRetained": true
+  },
+  "exit": 0
+}

@@ -1,0 +1,1428 @@
+{
+  "at": "2026-11-19T18:11:36.036Z",
+  "engine": "webkit",
+  "theme": "razzia-original",
+  "reason": "check failure",
+  "check": "webkit / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+  "step": "HTTP get_game_draft_summary",
+  "detail": {
+    "check": "webkit / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+    "error": "TimeoutError: locator.scrollIntoViewIfNeeded: Timeout 9960.756999999983ms exceeded.\nCall log:\n  - attempting scroll into view action\n    - waiting for element to be stable\n"
+  },
+  "requestedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:answerCards",
+  "initialFrame": {
+    "acknowledgedAt": "2026-11-19T18:11:05.097Z",
+    "requestedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:answerCards",
+    "frame": {
+      "draftId": "CZd9T_-3CHfUmkwdbdkNLOAbz9xiSLFR",
+      "revision": 7,
+      "title": "Edited title razzia-original",
+      "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:answerCards",
+      "chapterCount": 28,
+      "frameDigest": "a62650f13aa5a7fda96d9bb40b7c5776b0a581285f49bb43c801e710938e5102"
+    }
+  },
+  "lastAcknowledgedPreview": {
+    "draftId": "CZd9T_-3CHfUmkwdbdkNLOAbz9xiSLFR",
+    "revision": 8,
+    "title": "Edited title razzia-original",
+    "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:answerCards",
+    "chapterCount": 28,
+    "frameDigest": "2178d5d022235d1f62a5afcf7b953a9e97b3c9b519d47cf241ce7aa2150b92fa"
+  },
+  "hostUrl": "http://127.0.0.1:45519/host?scenario=YngivioIsXccHubzZQ_eL76f",
+  "widget": {
+    "capturedAt": "2026-11-19T18:11:36.044Z",
+    "uiEvents": [],
+    "documentReady": "complete",
+    "visibilityState": "visible",
+    "uiText": "Edited title razzia-original\n\nPreview / demo — no live player votes\n\nSave in Tadazz\nEdit this draft\nAppearance and sound\n4 / 8\nChoose an answer in this demo.\nResults\nEdit this draft\nDraft title\nApply draft edit\nQuestion text\nApply draft edit\nAppearance and sound\n\nOnly approved built-in assets for this theme are available. Audio starts only after Enable sound.\n\nVoting music volume (%)\nApply draft edit\nLoad approved assets\n\nRevision 8\n\nUndo acknowledged edit",
+    "revision": "Revision 8",
+    "status": [],
+    "pause": {
+      "attributes": {
+        "class": "bg-primary rounded-lg font-semibold text-white hover:brightness-[1.05] active:brightness-[0.95] disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:brightness-100 disabled:active:brightness-100 p-2 text-lg",
+        "data-control-source": "razzia",
+        "type": "button",
+        "data-testid": "full-show-pause",
+        "aria-label": "Pause show",
+        "title": "Pause show"
+      },
+      "rect": {
+        "x": 498.390625,
+        "y": 60,
+        "width": 40,
+        "height": 40
+      },
+      "clientSize": {
+        "width": 40,
+        "height": 40
+      },
+      "scrollSize": {
+        "width": 40,
+        "height": 40
+      },
+      "style": {
+        "display": "flex",
+        "visibility": "visible",
+        "opacity": "1",
+        "transform": "none",
+        "overflow": "visible"
+      },
+      "text": "",
+      "textContent": ""
+    },
+    "host": {
+      "attributes": {
+        "class": "widget-stage-host",
+        "data-testid": "full-show-native-surface",
+        "style": "width: 824px; height: 463.5px; aspect-ratio: 16 / 9; visibility: visible;"
+      },
+      "rect": {
+        "x": 60,
+        "y": 390.25,
+        "width": 824,
+        "height": 463.5
+      },
+      "clientSize": {
+        "width": 824,
+        "height": 464
+      },
+      "scrollSize": {
+        "width": 824,
+        "height": 464
+      },
+      "style": {
+        "display": "block",
+        "visibility": "visible",
+        "opacity": "1",
+        "transform": "none",
+        "overflow": "hidden"
+      },
+      "text": "",
+      "textContent": ""
+    },
+    "layoutAncestors": [
+      {
+        "attributes": {
+          "class": "widget-stage-viewport",
+          "style": "background-color: rgb(8, 1, 26); background-image: url(\"https://tadazz.com/tadazz-show/v4/question-bg.webp\"); background-size: cover; background-position: center center; background-repeat: no-repeat;"
+        },
+        "rect": {
+          "x": 60,
+          "y": 144,
+          "width": 824,
+          "height": 956
+        },
+        "clientSize": {
+          "width": 824,
+          "height": 956
+        },
+        "scrollSize": {
+          "width": 824,
+          "height": 956
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "none",
+          "overflow": "hidden"
+        },
+        "text": "",
+        "textContent": ""
+      },
+      {
+        "attributes": {
+          "class": "editor-workspace-canvas",
+          "data-testid": "editor-workspace-canvas"
+        },
+        "rect": {
+          "x": 60,
+          "y": 144,
+          "width": 824,
+          "height": 956
+        },
+        "clientSize": {
+          "width": 824,
+          "height": 956
+        },
+        "scrollSize": {
+          "width": 824,
+          "height": 956
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "none",
+          "overflow": "hidden"
+        },
+        "text": "",
+        "textContent": ""
+      },
+      {
+        "attributes": {
+          "class": "editor-workspace-center"
+        },
+        "rect": {
+          "x": 60,
+          "y": 56,
+          "width": 824,
+          "height": 1044
+        },
+        "clientSize": {
+          "width": 824,
+          "height": 1044
+        },
+        "scrollSize": {
+          "width": 824,
+          "height": 1044
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "none",
+          "overflow": "hidden"
+        },
+        "text": "4 / 8\nChoose an answer in this demo.\nResults",
+        "textContent": "4 / 8Choose an answer in this demo.Results"
+      },
+      {
+        "attributes": {
+          "class": "editor-workspace widget-editor-workspace",
+          "data-testid": "editor-workspace",
+          "data-layout": "wide",
+          "aria-label": "Edit this draft"
+        },
+        "rect": {
+          "x": 0,
+          "y": 56,
+          "width": 1264,
+          "height": 1044
+        },
+        "clientSize": {
+          "width": 1264,
+          "height": 1044
+        },
+        "scrollSize": {
+          "width": 1264,
+          "height": 1044
+        },
+        "style": {
+          "display": "grid",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "none",
+          "overflow": "hidden"
+        },
+        "text": "Save in Tadazz\nEdit this draft\nAppearance and sound\n4 / 8\nChoose an answer in this demo.\nResults\nEdit this draft\nDraft title\nApply draft edit\nQuestion text\nApply draft edit\nAppearance and sound\n\nOnly approved built-in assets for this theme are available. Audio starts only after Enable sound.\n\nVoting music volume (%)\nApply draft edit\nLoad approved assets\n\nRevision 8\n\nUndo acknowledged edit",
+        "textContent": "Save in TadazzEdit this draftAppearance and sound4 / 8Choose an answer in this demo.ResultsEdit this draftDraft titleApply draft editQuestion textFINAL_QUESTION_THREEApply draft editAppearance and soundOnly approved built-in assets for this theme are available. Audio starts only after Enable sound.Voting music volume (%)Apply draft editLoad approved assetsRevision 8Undo acknowledged editAppearance and soundAspect ratio16:94:3LanguageenfrdeesitjatrviheReduce motionEnable soundSave in TadazzSave in TadazzSaving to your library requires approval in Tadazz. This widget cannot approve it."
+      },
+      {
+        "attributes": {
+          "class": "widget-shell widget-workspace-shell",
+          "data-testid": "full-show-widget",
+          "dir": "ltr",
+          "lang": "en"
+        },
+        "rect": {
+          "x": 0,
+          "y": 0,
+          "width": 1264,
+          "height": 1100
+        },
+        "clientSize": {
+          "width": 1264,
+          "height": 1100
+        },
+        "scrollSize": {
+          "width": 1264,
+          "height": 1100
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "none",
+          "overflow": "hidden"
+        },
+        "text": "Edited title razzia-original\n\nPreview / demo — no live player votes\n\nSave in Tadazz\nEdit this draft\nAppearance and sound\n4 / 8\nChoose an answer in this demo.\nResults\nEdit this draft\nDraft title\nApply draft edit\nQuestion text\nApply draft edit\nAppearance and sound\n\nOnly approved built-in assets for this theme are available. Audio starts only after Enable sound.\n\nVoting music volume (%)\nApply draft edit\nLoad approved assets\n\nRevision 8\n\nUndo acknowledged edit",
+        "textContent": "Edited title razzia-originalPreview / demo — no live player votesSave in TadazzEdit this draftAppearance and sound4 / 8Choose an answer in this demo.ResultsEdit this draftDraft titleApply draft editQuestion textFINAL_QUESTION_THREEApply draft editAppearance and soundOnly approved built-in assets for this theme are available. Audio starts only after Enable sound.Voting music volume (%)Apply draft editLoad approved assetsRevision 8Undo acknowledged editAppearance and soundAspect ratio16:94:3LanguageenfrdeesitjatrviheReduce motionEnable soundSave in TadazzSave in TadazzSaving to your library requires approval in Tadazz. This widget cannot approve it."
+      }
+    ],
+    "native": {
+      "attributes": {
+        "class": "widget-native-stage"
+      },
+      "rect": {
+        "x": 60,
+        "y": 390.25,
+        "width": 824,
+        "height": 463.5
+      },
+      "clientSize": {
+        "width": 824,
+        "height": 464
+      },
+      "scrollSize": {
+        "width": 824,
+        "height": 464
+      },
+      "style": {
+        "display": "block",
+        "visibility": "visible",
+        "opacity": "1",
+        "transform": "none",
+        "overflow": "visible"
+      },
+      "text": "ROUND 01 · QUESTION 03 / 5\nNEXT QUESTION\nFINAL_QUESTION_THREE\nA\nAUDIENCE FAVOURITE\n01\nB\nAUDIENCE FAVOURITE\n02\nC\nAUDIENCE FAVOURITE\n03\nD\nAUDIENCE FAVOURITE\n04\nE\nAUDIENCE FAVOURITE\n05\nVOTING OPEN",
+      "textContent": "ROUND 01 · QUESTION 03 / 5NEXT QUESTIONFINAL_QUESTION_THREEAAUDIENCE FAVOURITE01BAUDIENCE FAVOURITE02CAUDIENCE FAVOURITE03DAUDIENCE FAVOURITE04EAUDIENCE FAVOURITE05VOTING OPENTHE AUDIENCE DECIDESTHANK YOU FOR PLAYING"
+    },
+    "stage": {
+      "attributes": {
+        "data-full-show-stage": "question",
+        "data-full-show-theme": "tadazz-classic",
+        "data-full-show-chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:answerCards",
+        "data-playback-elapsed": "20950",
+        "data-playback-epoch": "1",
+        "data-playback-paused": "false",
+        "style": "background: rgb(8, 1, 26); --show-theme-background: #08011a; --show-theme-foreground: #fff7e6; --show-theme-accent: #ff9900; --show-theme-font: Inter, ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Arial, sans-serif; --show-theme-night: #08001d; --show-theme-purple: #34056f; --show-theme-violet: #8b20f4; --show-theme-pink: #ef48df; --show-theme-blue: #00baff; --show-theme-royal: #2e70ff; --show-theme-lime: #e5ff37; --show-theme-gold: #ffbe53; --show-theme-cream: #fff5db; --show-theme-ink: #130423; width: 100%; height: 100%; position: relative; overflow: hidden;"
+      },
+      "rect": {
+        "x": 60,
+        "y": 390.25,
+        "width": 824,
+        "height": 463.5
+      },
+      "clientSize": {
+        "width": 824,
+        "height": 464
+      },
+      "scrollSize": {
+        "width": 824,
+        "height": 464
+      },
+      "style": {
+        "display": "block",
+        "visibility": "visible",
+        "opacity": "1",
+        "transform": "none",
+        "overflow": "hidden"
+      },
+      "text": "ROUND 01 · QUESTION 03 / 5\nNEXT QUESTION\nFINAL_QUESTION_THREE\nA\nAUDIENCE FAVOURITE\n01\nB\nAUDIENCE FAVOURITE\n02\nC\nAUDIENCE FAVOURITE\n03\nD\nAUDIENCE FAVOURITE\n04\nE\nAUDIENCE FAVOURITE\n05\nVOTING OPEN",
+      "textContent": "ROUND 01 · QUESTION 03 / 5NEXT QUESTIONFINAL_QUESTION_THREEAAUDIENCE FAVOURITE01BAUDIENCE FAVOURITE02CAUDIENCE FAVOURITE03DAUDIENCE FAVOURITE04EAUDIENCE FAVOURITE05VOTING OPENTHE AUDIENCE DECIDESTHANK YOU FOR PLAYING"
+    },
+    "renderer": {
+      "attributes": {
+        "class": "tzv4-stage",
+        "data-v4-scene": "picture-answers",
+        "data-stage-mode": "picture-answers",
+        "data-question-key": "preview-question-21c22532d5aebbb23f0fc14af0ad8e74e58a34de3e0c9343a2ccbd0617834502",
+        "data-reduced-motion": "true",
+        "data-testid": "tadazz-stage",
+        "style": "width: 1920px; height: 1080px; --scale: 0.42916666666666664;"
+      },
+      "rect": {
+        "x": 60,
+        "y": 390.25,
+        "width": 824,
+        "height": 463.5
+      },
+      "clientSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "scrollSize": {
+        "width": 1920,
+        "height": 1080
+      },
+      "style": {
+        "display": "block",
+        "visibility": "visible",
+        "opacity": "1",
+        "transform": "matrix(0.429167, 0, 0, 0.429167, -960, -540)",
+        "overflow": "hidden"
+      },
+      "text": "ROUND 01 · QUESTION 03 / 5\nNEXT QUESTION\nFINAL_QUESTION_THREE\nA\nAUDIENCE FAVOURITE\n01\nB\nAUDIENCE FAVOURITE\n02\nC\nAUDIENCE FAVOURITE\n03\nD\nAUDIENCE FAVOURITE\n04\nE\nAUDIENCE FAVOURITE\n05\nVOTING OPEN",
+      "textContent": "ROUND 01 · QUESTION 03 / 5NEXT QUESTIONFINAL_QUESTION_THREEAAUDIENCE FAVOURITE01BAUDIENCE FAVOURITE02CAUDIENCE FAVOURITE03DAUDIENCE FAVOURITE04EAUDIENCE FAVOURITE05VOTING OPENTHE AUDIENCE DECIDESTHANK YOU FOR PLAYING"
+    },
+    "preview": {
+      "attributes": {
+        "data-testid": "native-preview-surface",
+        "data-preview-ready": "true",
+        "style": "background: rgb(8, 1, 26); --show-theme-background: #08011a; --show-theme-foreground: #fff7e6; --show-theme-accent: #ff9900; --show-theme-font: Inter, ui-sans-serif, system-ui, -apple-system, \"Segoe UI\", Arial, sans-serif; --show-theme-night: #08001d; --show-theme-purple: #34056f; --show-theme-violet: #8b20f4; --show-theme-pink: #ef48df; --show-theme-blue: #00baff; --show-theme-royal: #2e70ff; --show-theme-lime: #e5ff37; --show-theme-gold: #ffbe53; --show-theme-cream: #fff5db; --show-theme-ink: #130423; width: 100%; height: 100%; opacity: 1;"
+      },
+      "rect": {
+        "x": 60,
+        "y": 390.25,
+        "width": 824,
+        "height": 463.5
+      },
+      "clientSize": {
+        "width": 824,
+        "height": 464
+      },
+      "scrollSize": {
+        "width": 824,
+        "height": 464
+      },
+      "style": {
+        "display": "block",
+        "visibility": "visible",
+        "opacity": "1",
+        "transform": "none",
+        "overflow": "visible"
+      },
+      "text": "ROUND 01 · QUESTION 03 / 5\nNEXT QUESTION\nFINAL_QUESTION_THREE\nA\nAUDIENCE FAVOURITE\n01\nB\nAUDIENCE FAVOURITE\n02\nC\nAUDIENCE FAVOURITE\n03\nD\nAUDIENCE FAVOURITE\n04\nE\nAUDIENCE FAVOURITE\n05\nVOTING OPEN",
+      "textContent": "ROUND 01 · QUESTION 03 / 5NEXT QUESTIONFINAL_QUESTION_THREEAAUDIENCE FAVOURITE01BAUDIENCE FAVOURITE02CAUDIENCE FAVOURITE03DAUDIENCE FAVOURITE04EAUDIENCE FAVOURITE05VOTING OPENTHE AUDIENCE DECIDESTHANK YOU FOR PLAYING"
+    },
+    "fit": null,
+    "question": {
+      "attributes": {
+        "class": "q-frame",
+        "data-v4": "question-frame",
+        "data-testid": "tadazz-question-panel"
+      },
+      "rect": {
+        "x": 171.5833282470703,
+        "y": 449.04583740234375,
+        "width": 600.8333740234375,
+        "height": 73.38751220703125
+      },
+      "clientSize": {
+        "width": 1396,
+        "height": 167
+      },
+      "scrollSize": {
+        "width": 1396,
+        "height": 167
+      },
+      "style": {
+        "display": "flex",
+        "visibility": "visible",
+        "opacity": "1",
+        "transform": "matrix(1, 0, 0, 1, 0, 0)",
+        "overflow": "hidden"
+      },
+      "text": "NEXT QUESTION\nFINAL_QUESTION_THREE",
+      "textContent": "NEXT QUESTIONFINAL_QUESTION_THREE"
+    },
+    "answers": [
+      {
+        "attributes": {
+          "type": "button",
+          "class": "border-0 bg-transparent p-0 disabled:opacity-100 choice-slot tz-card is-vote-open is-selectable",
+          "data-v4-choice": "0",
+          "data-index": "0",
+          "data-testid": "tadazz-card-0",
+          "aria-pressed": "false",
+          "aria-label": "A A",
+          "data-control-source": "standalone"
+        },
+        "rect": {
+          "x": 93.04582977294922,
+          "y": 541.745849609375,
+          "width": 145.058349609375,
+          "height": 235.18328857421875
+        },
+        "clientSize": {
+          "width": 338,
+          "height": 548
+        },
+        "scrollSize": {
+          "width": 372,
+          "height": 548
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "overflow": "visible"
+        },
+        "text": "A\nAUDIENCE FAVOURITE\n01",
+        "textContent": "AAUDIENCE FAVOURITE01"
+      },
+      {
+        "attributes": {
+          "type": "button",
+          "class": "border-0 bg-transparent p-0 disabled:opacity-100 choice-slot tz-card is-vote-open is-selectable",
+          "data-v4-choice": "1",
+          "data-index": "1",
+          "data-testid": "tadazz-card-1",
+          "aria-pressed": "false",
+          "aria-label": "B B",
+          "data-control-source": "standalone"
+        },
+        "rect": {
+          "x": 246.25833129882812,
+          "y": 541.745849609375,
+          "width": 145.058349609375,
+          "height": 235.18328857421875
+        },
+        "clientSize": {
+          "width": 338,
+          "height": 548
+        },
+        "scrollSize": {
+          "width": 372,
+          "height": 548
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "overflow": "visible"
+        },
+        "text": "B\nAUDIENCE FAVOURITE\n02",
+        "textContent": "BAUDIENCE FAVOURITE02"
+      },
+      {
+        "attributes": {
+          "type": "button",
+          "class": "border-0 bg-transparent p-0 disabled:opacity-100 choice-slot tz-card is-vote-open is-selectable",
+          "data-v4-choice": "2",
+          "data-index": "2",
+          "data-testid": "tadazz-card-2",
+          "aria-pressed": "false",
+          "aria-label": "C C",
+          "data-control-source": "standalone"
+        },
+        "rect": {
+          "x": 399.4708251953125,
+          "y": 541.745849609375,
+          "width": 145.058349609375,
+          "height": 235.18328857421875
+        },
+        "clientSize": {
+          "width": 338,
+          "height": 548
+        },
+        "scrollSize": {
+          "width": 372,
+          "height": 548
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "overflow": "visible"
+        },
+        "text": "C\nAUDIENCE FAVOURITE\n03",
+        "textContent": "CAUDIENCE FAVOURITE03"
+      },
+      {
+        "attributes": {
+          "type": "button",
+          "class": "border-0 bg-transparent p-0 disabled:opacity-100 choice-slot tz-card is-vote-open is-selectable",
+          "data-v4-choice": "3",
+          "data-index": "3",
+          "data-testid": "tadazz-card-3",
+          "aria-pressed": "false",
+          "aria-label": "D D",
+          "data-control-source": "standalone"
+        },
+        "rect": {
+          "x": 552.683349609375,
+          "y": 541.745849609375,
+          "width": 145.05828857421875,
+          "height": 235.18328857421875
+        },
+        "clientSize": {
+          "width": 338,
+          "height": 548
+        },
+        "scrollSize": {
+          "width": 372,
+          "height": 548
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "overflow": "visible"
+        },
+        "text": "D\nAUDIENCE FAVOURITE\n04",
+        "textContent": "DAUDIENCE FAVOURITE04"
+      },
+      {
+        "attributes": {
+          "type": "button",
+          "class": "border-0 bg-transparent p-0 disabled:opacity-100 choice-slot tz-card is-vote-open is-selectable",
+          "data-v4-choice": "4",
+          "data-index": "4",
+          "data-testid": "tadazz-card-4",
+          "aria-pressed": "false",
+          "aria-label": "E E",
+          "data-control-source": "standalone"
+        },
+        "rect": {
+          "x": 705.8958129882812,
+          "y": 541.745849609375,
+          "width": 145.058349609375,
+          "height": 235.18328857421875
+        },
+        "clientSize": {
+          "width": 338,
+          "height": 548
+        },
+        "scrollSize": {
+          "width": 372,
+          "height": 548
+        },
+        "style": {
+          "display": "flex",
+          "visibility": "visible",
+          "opacity": "1",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "overflow": "visible"
+        },
+        "text": "E\nAUDIENCE FAVOURITE\n05",
+        "textContent": "EAUDIENCE FAVOURITE05"
+      }
+    ],
+    "nativeMarkup": "<div class=\"widget-native-stage\"><div data-full-show-stage=\"question\" data-full-show-theme=\"tadazz-classic\" data-full-show-chapter=\"preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:answerCards\" data-playback-elapsed=\"20950\" data-playback-epoch=\"1\" data-playback-paused=\"false\" style=\"background: rgb(8, 1, 26); --show-theme-background: #08011a; --show-theme-foreground: #fff7e6; --show-theme-accent: #ff9900; --show-theme-font: Inter, ui-sans-serif, system-ui, -apple-system, &quot;Segoe UI&quot;, Arial, sans-serif; --show-theme-night: #08001d; --show-theme-purple: #34056f; --show-theme-violet: #8b20f4; --show-theme-pink: #ef48df; --show-theme-blue: #00baff; --show-theme-royal: #2e70ff; --show-theme-lime: #e5ff37; --show-theme-gold: #ffbe53; --show-theme-cream: #fff5db; --show-theme-ink: #130423; width: 100%; height: 100%; position: relative; overflow: hidden;\"><div data-testid=\"native-preview-surface\" data-preview-ready=\"true\" style=\"background: rgb(8, 1, 26); --show-theme-background: #08011a; --show-theme-foreground: #fff7e6; --show-theme-accent: #ff9900; --show-theme-font: Inter, ui-sans-serif, system-ui, -apple-system, &quot;Segoe UI&quot;, Arial, sans-serif; --show-theme-night: #08001d; --show-theme-purple: #34056f; --show-theme-violet: #8b20f4; --show-theme-pink: #ef48df; --show-theme-blue: #00baff; --show-theme-royal: #2e70ff; --show-theme-lime: #e5ff37; --show-theme-gold: #ffbe53; --show-theme-cream: #fff5db; --show-theme-ink: #130423; width: 100%; height: 100%; opacity: 1;\"><div class=\"tz-viewport tzv4-viewport\" data-testid=\"tadazz-stage-viewport\"><div class=\"tzv4-stage\" data-v4-scene=\"picture-answers\" data-stage-mode=\"picture-answers\" data-question-key=\"preview-question-21c22532d5aebbb23f0fc14af0ad8e74e58a34de3e0c9343a2ccbd0617834502\" data-reduced-motion=\"true\" data-testid=\"tadazz-stage\" style=\"width: 1920px; height: 1080px; --scale: 0.42916666666666664;\"><div class=\"stage-bg\" data-testid=\"tadazz-backdrop\" style=\"background-image: url(&quot;https://tadazz.com/tadazz-show/v4/question-bg.webp&quot;), url(&quot;/tadazz-show/v4/question-bg.webp&quot;); background-size: cover; background-position: center center;\"></div><div class=\"veil\"></div><div class=\"ambient\" aria-hidden=\"true\"><div class=\"ambient-beam\"></div><div class=\"ambient-beam\"></div><div class=\"ambient-beam\"></div><div class=\"ambient-beam\"></div><div class=\"ambient-bulbs\"><i style=\"animation-delay: 0s;\"></i><i style=\"animation-delay: -0.16s;\"></i><i style=\"animation-delay: -0.32s;\"></i><i style=\"animation-delay: -0.48s;\"></i><i style=\"animation-delay: -0.64s;\"></i><i style=\"animation-delay: -0.8s;\"></i><i style=\"animation-delay: -0.96s;\"></i><i style=\"animation-delay: -1.12s;\"></i><i style=\"animation-delay: -1.28s;\"></i><i style=\"animation-delay: -1.44s;\"></i><i style=\"animation-delay: -1.6s;\"></i><i style=\"animation-delay: -1.76s;\"></i><i style=\"animation-delay: -1.92s;\"></i><i style=\"animation-delay: -2.08s;\"></i><i style=\"animation-delay: -2.24s;\"></i></div><div class=\"ambient-floor\"></div></div><img class=\"stage-teaser\" alt=\"Creating Worlds\" src=\"/tadazz-show/second-library/teaser-screen-source.jpg\"><div class=\"tzv4-scene-root\"><div class=\"stage-identity\"><img class=\"stage-brand-logo\" alt=\"TADAZZ!\" src=\"/tadazz-show/v4/tadazz-brand-logo.png\"></div><div class=\"stage-round-pill\">ROUND 01 · QUESTION 03 / 5</div><div class=\"q-frame\" data-v4=\"question-frame\" data-testid=\"tadazz-question-panel\"><div class=\"eyebrow\">NEXT QUESTION</div><div class=\"q-text\">FINAL_QUESTION_THREE</div></div><div class=\"answers\" data-v4=\"answer-cards\" role=\"group\"><button type=\"button\" class=\"border-0 bg-transparent p-0 disabled:opacity-100 choice-slot tz-card is-vote-open is-selectable\" data-v4-choice=\"0\" data-index=\"0\" data-testid=\"tadazz-card-0\" aria-pressed=\"false\" aria-label=\"A A\" data-control-source=\"standalone\"><article class=\"answer-card\"><figure class=\"answer-figure\"><div class=\"tz-photo-frame\"><img class=\"answer-image\" alt=\"Dog\" loading=\"eager\" decoding=\"async\" src=\"https://tadazz.com/tadazz-show/v4/cards/dog.svg\"></div><figcaption class=\"answer-title\" data-has-caption=\"true\" dir=\"auto\">A</figcaption></figure><div class=\"result-percentage tz-result-number\" data-target-percentage=\"0\" style=\"visibility: hidden; opacity: 0;\"></div><div class=\"winner-tag tz-winner-tag\">AUDIENCE FAVOURITE</div><div class=\"result-track tz-result-track\" style=\"opacity: 0;\"><div class=\"result-track-fill tz-result-fill\" style=\"transform: scaleX(0); transform-origin: left center;\"></div></div></article><div class=\"answer-index\">01</div></button><button type=\"button\" class=\"border-0 bg-transparent p-0 disabled:opacity-100 choice-slot tz-card is-vote-open is-selectable\" data-v4-choice=\"1\" data-index=\"1\" data-testid=\"tadazz-card-1\" aria-pressed=\"false\" aria-label=\"B B\" data-control-source=\"standalone\"><article class=\"answer-card\"><figure class=\"answer-figure\"><div class=\"tz-photo-frame\"><img class=\"answer-image\" alt=\"Lamplighter\" loading=\"eager\" decoding=\"async\" src=\"https://tadazz.com/tadazz-show/v4/cards/lamplighter.svg\"></div><figcaption class=\"answer-title\" data-has-caption=\"true\" dir=\"auto\">B</figcaption></figure><div class=\"result-percentage tz-result-number\" data-target-percentage=\"0\" style=\"visibility: hidden; opacity: 0;\"></div><div class=\"winner-tag tz-winner-tag\">AUDIENCE FAVOURITE</div><div class=\"result-track tz-result-track\" style=\"opacity: 0;\"><div class=\"result-track-fill tz-result-fill\" style=\"transform: scaleX(0); transform-origin: left center;\"></div></div></article><div class=\"answer-index\">02</div></button><button type=\"button\" class=\"border-0 bg-transparent p-0 disabled:opacity-100 choice-slot tz-card is-vote-open is-selectable\" data-v4-choice=\"2\" data-index=\"2\" data-testid=\"tadazz-card-2\" aria-pressed=\"false\" aria-label=\"C C\" data-control-source=\"standalone\"><article class=\"answer-card\"><figure class=\"answer-figure\"><div class=\"tz-photo-frame\"><img class=\"answer-image\" alt=\"Pirate\" loading=\"eager\" decoding=\"async\" src=\"https://tadazz.com/tadazz-show/v4/cards/pirate.svg\"></div><figcaption class=\"answer-title\" data-has-caption=\"true\" dir=\"auto\">C</figcaption></figure><div class=\"result-percentage tz-result-number\" data-target-percentage=\"0\" style=\"visibility: hidden; opacity: 0;\"></div><div class=\"winner-tag tz-winner-tag\">AUDIENCE FAVOURITE</div><div class=\"result-track tz-result-track\" style=\"opacity: 0;\"><div class=\"result-track-fill tz-result-fill\" style=\"transform: scaleX(0); transform-origin: left center;\"></div></div></article><div class=\"answer-index\">03</div></button><button type=\"button\" class=\"border-0 bg-transparent p-0 disabled:opacity-100 choice-slot tz-card is-vote-open is-selectable\" data-v4-choice=\"3\" data-index=\"3\" data-testid=\"tadazz-card-3\" aria-pressed=\"false\" aria-label=\"D D\" data-control-source=\"standalone\"><article class=\"answer-card\"><figure class=\"answer-figure\"><div class=\"tz-photo-frame\"><img class=\"answer-image\" alt=\"Matchmaker\" loading=\"eager\" decoding=\"async\" src=\"https://tadazz.com/tadazz-show/v4/cards/shadchan.svg\"></div><figcaption class=\"answer-title\" data-has-caption=\"true\" dir=\"auto\">D</figcaption></figure><div class=\"result-percentage tz-result-number\" data-target-percentage=\"0\" style=\"visibility: hidden; opacity: 0;\"></div><div class=\"winner-tag tz-winner-tag\">AUDIENCE FAVOURITE</div><div class=\"result-track tz-result-track\" style=\"opacity: 0;\"><div class=\"result-track-fill tz-result-fill\" style=\"transform: scaleX(0); transform-origin: left center;\"></div></div></article><div class=\"answer-index\">04</div></button><button type=\"button\" class=\"border-0 bg-transparent p-0 disabled:opacity-100 choice-slot tz-card is-vote-open is-selectable\" data-v4-choice=\"4\" data-index=\"4\" data-testid=\"tadazz-card-4\" aria-pressed=\"false\" aria-label=\"E E\" data-control-source=\"standalone\"><article class=\"answer-card\"><figure class=\"answer-figure\"><div class=\"tz-photo-frame\"><img class=\"answer-image\" alt=\"Therapist\" loading=\"eager\" decoding=\"async\" src=\"https://tadazz.com/tadazz-show/v4/cards/therapist.svg\"></div><figcaption class=\"answer-title\" data-has-caption=\"true\" dir=\"auto\">E</figcaption></figure><div class=\"result-percentage tz-result-number\" data-target-percentage=\"0\" style=\"visibility: hidden; opacity: 0;\"></div><div class=\"winner-tag tz-winner-tag\">AUDIENCE FAVOURITE</div><div class=\"result-track tz-result-track\" style=\"opacity: 0;\"><div class=\"result-track-fill tz-result-fill\" style=\"transform: scaleX(0); transform-origin: left center;\"></div></div></article><div class=\"answer-index\">05</div></button></div><div class=\"tzv4-sr-status\" data-testid=\"tadazz-status\">VOTING OPEN</div></div><div class=\"tzv4-custom-root\"><div class=\"tz-screen\" data-testid=\"tadazz-intro-screen\"><div class=\"tz-screen-inner\"><div class=\"tz-shock\"></div><img class=\"tz-intro-logo\" alt=\"TADAZZ!\" src=\"/tadazz-show/v4/tadazz-brand-logo.png\"><div class=\"tz-intro-caption\">THE AUDIENCE DECIDES</div></div></div><div class=\"tz-screen\" data-testid=\"tadazz-finale-screen\"><div class=\"tz-screen-inner\"><div class=\"tz-confetti\"></div><img class=\"tz-win-logo\" alt=\"TADAZZ!\" src=\"/tadazz-show/v4/tadazz-brand-logo.png\"><div class=\"tz-win-headline\">THANK YOU FOR PLAYING</div><div class=\"tz-win-name\" data-testid=\"tadazz-winner-name\"></div><div class=\"tz-win-score\"></div></div></div><div class=\"tz-screen tz-custom-screen\" data-testid=\"tadazz-custom-screen\"><div class=\"tz-screen-inner\"></div></div></div><div class=\"tzv4-fx-root\" aria-hidden=\"true\"></div><div class=\"tzv4-screen-flash\" aria-hidden=\"true\" style=\"opacity: 0;\"></div></div></div></div><div class=\"widget-audio\" data-testid=\"full-show-audio\" data-audio-enabled=\"false\" data-audio-playing=\"false\"><span class=\"sr-only\" data-testid=\"audio-cue-player-state\" data-sfx-ducked=\"false\" data-cue-id=\"answersMusic\" data-soundtrack-slot=\"voting\" data-should-play=\"true\" data-audio-url=\"/sounds/answersMusic.mp3\" data-audio-identity=\"CZd9T_-3CHfUmkwdbdkNLOAbz9xiSLFR:voting:preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:answerCards:preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:answerCards:0:/sounds/answersMusic.mp3\" data-audio-loop=\"true\" data-audio-blocked=\"false\" data-audio-error=\"false\" data-audio-paused=\"true\"></span></div></div></div>"
+  },
+  "host": {
+    "capturedAt": "2026-11-19T18:11:36.096Z",
+    "ready": "true",
+    "calls": [
+      "get_game_draft_summary",
+      "list_editing_assets",
+      "list_editing_assets",
+      "list_editing_assets",
+      "list_themes",
+      "apply_game_edit",
+      "preview_show",
+      "get_game_draft_summary"
+    ],
+    "lifecycle": {
+      "documentId": "e223c07a-aeed-4e74-ae14-676f7934e126",
+      "disposing": false,
+      "remaining": {
+        "http": 0,
+        "handlers": 0,
+        "initialization": 0,
+        "replies": 0,
+        "connecting": false
+      },
+      "receipt": null
+    },
+    "iframe": [
+      {
+        "src": "http://127.0.0.1:45519/widget",
+        "rect": {
+          "width": 1264,
+          "height": 1100
+        },
+        "visibility": "visible",
+        "display": "inline"
+      }
+    ]
+  },
+  "requests": [
+    {
+      "at": "2026-11-19T18:10:52.223Z",
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "activeCheck": "webkit / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:45519/host?scenario=YngivioIsXccHubzZQ_eL76f",
+      "url": "http://127.0.0.1:45519/qa/call?scenario=YngivioIsXccHubzZQ_eL76f",
+      "method": "POST",
+      "tool": "get_game_draft_summary",
+      "expectedRevision": 7,
+      "responseAt": "2026-11-19T18:10:53.302Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:10:59.161Z",
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "activeCheck": "webkit / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:45519/host?scenario=YngivioIsXccHubzZQ_eL76f",
+      "url": "http://127.0.0.1:45519/qa/initial?scenario=YngivioIsXccHubzZQ_eL76f",
+      "method": "GET",
+      "responseAt": "2026-11-19T18:11:00.044Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:11:00.615Z",
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "activeCheck": "webkit / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:45519/host?scenario=YngivioIsXccHubzZQ_eL76f",
+      "url": "http://127.0.0.1:45519/qa/call?scenario=YngivioIsXccHubzZQ_eL76f",
+      "method": "POST",
+      "tool": "get_game_draft_summary",
+      "expectedRevision": 7,
+      "responseAt": "2026-11-19T18:11:01.655Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:11:04.245Z",
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "activeCheck": "webkit / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:45519/host?scenario=YngivioIsXccHubzZQ_eL76f",
+      "url": "http://127.0.0.1:45519/qa/initial?scenario=YngivioIsXccHubzZQ_eL76f",
+      "method": "GET",
+      "responseAt": "2026-11-19T18:11:05.118Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:11:05.676Z",
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "activeCheck": "webkit / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:45519/host?scenario=YngivioIsXccHubzZQ_eL76f",
+      "url": "http://127.0.0.1:45519/qa/call?scenario=YngivioIsXccHubzZQ_eL76f",
+      "method": "POST",
+      "tool": "get_game_draft_summary",
+      "expectedRevision": 7,
+      "responseAt": "2026-11-19T18:11:06.809Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:11:17.933Z",
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "activeCheck": "webkit / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:45519/host?scenario=YngivioIsXccHubzZQ_eL76f",
+      "url": "http://127.0.0.1:45519/qa/call?scenario=YngivioIsXccHubzZQ_eL76f",
+      "method": "POST",
+      "tool": "list_editing_assets",
+      "expectedRevision": 7,
+      "responseAt": "2026-11-19T18:11:18.421Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:11:17.933Z",
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "activeCheck": "webkit / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:45519/host?scenario=YngivioIsXccHubzZQ_eL76f",
+      "url": "http://127.0.0.1:45519/qa/call?scenario=YngivioIsXccHubzZQ_eL76f",
+      "method": "POST",
+      "tool": "list_editing_assets",
+      "expectedRevision": 7,
+      "responseAt": "2026-11-19T18:11:18.976Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:11:17.942Z",
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "activeCheck": "webkit / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:45519/host?scenario=YngivioIsXccHubzZQ_eL76f",
+      "url": "http://127.0.0.1:45519/qa/call?scenario=YngivioIsXccHubzZQ_eL76f",
+      "method": "POST",
+      "tool": "list_editing_assets",
+      "expectedRevision": 7,
+      "responseAt": "2026-11-19T18:11:19.421Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:11:17.949Z",
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "activeCheck": "webkit / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:45519/host?scenario=YngivioIsXccHubzZQ_eL76f",
+      "url": "http://127.0.0.1:45519/qa/call?scenario=YngivioIsXccHubzZQ_eL76f",
+      "method": "POST",
+      "tool": "list_themes",
+      "responseAt": "2026-11-19T18:11:20.217Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:11:22.733Z",
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "activeCheck": "webkit / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "activeStep": "HTTP list_themes",
+      "documentUrl": "http://127.0.0.1:45519/host?scenario=YngivioIsXccHubzZQ_eL76f",
+      "url": "http://127.0.0.1:45519/qa/call?scenario=YngivioIsXccHubzZQ_eL76f",
+      "method": "POST",
+      "tool": "apply_game_edit",
+      "expectedRevision": 7,
+      "patchKind": "select-theme",
+      "responseAt": "2026-11-19T18:11:23.644Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:11:23.685Z",
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "activeCheck": "webkit / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "activeStep": "HTTP apply_game_edit",
+      "documentUrl": "http://127.0.0.1:45519/host?scenario=YngivioIsXccHubzZQ_eL76f",
+      "url": "http://127.0.0.1:45519/qa/call?scenario=YngivioIsXccHubzZQ_eL76f",
+      "method": "POST",
+      "tool": "preview_show",
+      "requestedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:answerCards",
+      "expectedRevision": 8,
+      "responseAt": "2026-11-19T18:11:24.384Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:11:24.584Z",
+      "engine": "webkit",
+      "theme": "razzia-original",
+      "activeCheck": "webkit / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:45519/host?scenario=YngivioIsXccHubzZQ_eL76f",
+      "url": "http://127.0.0.1:45519/qa/call?scenario=YngivioIsXccHubzZQ_eL76f",
+      "method": "POST",
+      "tool": "get_game_draft_summary",
+      "expectedRevision": 8,
+      "responseAt": "2026-11-19T18:11:25.580Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    }
+  ],
+  "calls": [
+    {
+      "name": "preview_show",
+      "completedAt": "2026-11-19T18:10:43.850Z",
+      "requestedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:results",
+      "inputRevision": 7,
+      "inputDigest": "dbfbe5d06e83ea864863bde0458dafdb726c0ebbcf87198622d9bce758b6048c",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "13669b8f-ac1f-4cce-8d5b-7baafd6214d9",
+        "data": {
+          "draftId": "CZd9T_-3CHfUmkwdbdkNLOAbz9xiSLFR",
+          "revision": 7,
+          "title": "Edited title razzia-original",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:results",
+          "chapterCount": 28,
+          "frameDigest": "65867612cb4d62e69cb4d7ead8a57f5f160040110c44ba6ca181245b0eca408e"
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "completedAt": "2026-11-19T18:10:48.343Z",
+      "requestedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+      "inputRevision": 7,
+      "inputDigest": "dc768069d1730e6d57f83085b204c3bb7a2c2e3b3ad541da9f5b7f4f6999d870",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "87d2bbbd-ed54-4717-81c9-fcb740433f62",
+        "data": {
+          "draftId": "CZd9T_-3CHfUmkwdbdkNLOAbz9xiSLFR",
+          "revision": 7,
+          "title": "Edited title razzia-original",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "chapterCount": 28,
+          "frameDigest": "b7801e1974868d82a3b53e602366e53530dd46a22e5c4943304f8f8148647288"
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "completedAt": "2026-11-19T18:10:53.104Z",
+      "inputRevision": 7,
+      "inputDigest": "53a2239ac5de7faa3212b62c037b06fa455f6746a06ea5cf22be8d5752ed7eff",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "4ddbdd72-4b05-4aa4-9899-9e800d6afcd7",
+        "data": {
+          "draftId": "CZd9T_-3CHfUmkwdbdkNLOAbz9xiSLFR",
+          "revision": 7,
+          "summary": {
+            "title": "Edited title razzia-original",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "razzia-original",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          },
+          "undoOperationId": "d8a409ed-ae93-4518-b8c1-e0ef9963e8c8"
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "completedAt": "2026-11-19T18:11:01.608Z",
+      "inputRevision": 7,
+      "inputDigest": "53a2239ac5de7faa3212b62c037b06fa455f6746a06ea5cf22be8d5752ed7eff",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "276cec87-b383-430a-a463-184853724129",
+        "data": {
+          "draftId": "CZd9T_-3CHfUmkwdbdkNLOAbz9xiSLFR",
+          "revision": 7,
+          "summary": {
+            "title": "Edited title razzia-original",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "razzia-original",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          },
+          "undoOperationId": "d8a409ed-ae93-4518-b8c1-e0ef9963e8c8"
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "completedAt": "2026-11-19T18:11:06.626Z",
+      "inputRevision": 7,
+      "inputDigest": "53a2239ac5de7faa3212b62c037b06fa455f6746a06ea5cf22be8d5752ed7eff",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "f3c11f3b-dbb2-4c23-a7a4-7716db9cdd2f",
+        "data": {
+          "draftId": "CZd9T_-3CHfUmkwdbdkNLOAbz9xiSLFR",
+          "revision": 7,
+          "summary": {
+            "title": "Edited title razzia-original",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "razzia-original",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          },
+          "undoOperationId": "d8a409ed-ae93-4518-b8c1-e0ef9963e8c8"
+        }
+      }
+    },
+    {
+      "name": "list_editing_assets",
+      "completedAt": "2026-11-19T18:11:18.388Z",
+      "inputRevision": 7,
+      "inputDigest": "1300bb2ce1bab22e63b42624c3aaa952089411687479f3adc739158447d9c365",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "e6bcbd1f-8b88-4376-b4e8-b80a66ce1eeb",
+        "data": {
+          "draftId": "CZd9T_-3CHfUmkwdbdkNLOAbz9xiSLFR",
+          "revision": 7,
+          "purpose": "background",
+          "assets": [
+            {
+              "ref": {
+                "assetId": "classic-backdrop",
+                "sha256": "39615d76461d456e303bdb4c90d7a1c0ec38c3beb7d679ea66b8d28c91bf6085",
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                }
+              },
+              "publicUrl": "https://tadazz.com/tadazz-show/razzia-original/background.png",
+              "mime": "image/png",
+              "label": "Native background · classic-backdrop"
+            },
+            {
+              "ref": {
+                "assetId": "tadazz-reference-purple-background",
+                "sha256": "2f6912d851d8600e08d9a47d58e73dd40144fe30a908b82d10b3ba4036554321",
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                }
+              },
+              "publicUrl": "https://tadazz.com/tadazz-show/v4/question-bg.webp",
+              "mime": "image/webp",
+              "label": "Purple background"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "list_editing_assets",
+      "completedAt": "2026-11-19T18:11:18.947Z",
+      "inputRevision": 7,
+      "inputDigest": "61770f16013fcc9f19804ff032a5ce0902cdf1954438033d27ff87e4d5ac3b4c",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "1aecf1b8-f5f7-433d-b772-2a1cb49554d1",
+        "data": {
+          "draftId": "CZd9T_-3CHfUmkwdbdkNLOAbz9xiSLFR",
+          "revision": 7,
+          "purpose": "audio",
+          "assets": [
+            {
+              "ref": {
+                "assetId": "classic-transition",
+                "sha256": "4c3c0a5b880c5a1eae787c3895fae6a4cab4b4b7538eadb3b0b66955ce87e104",
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                }
+              },
+              "publicUrl": "https://tadazz.com/sounds/tadazz-silky-transition-20261108.mp3",
+              "mime": "audio/mpeg",
+              "label": "Native audio · classic-transition"
+            },
+            {
+              "ref": {
+                "assetId": "classic-reveal",
+                "sha256": "f264ded0b6135806df49240840de23054d936c0bf0c3c0b26c6efb2d4d234823",
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                }
+              },
+              "publicUrl": "https://tadazz.com/sounds/tadazz-reveal-bright-20261108.mp3",
+              "mime": "audio/mpeg",
+              "label": "Native audio · classic-reveal"
+            },
+            {
+              "ref": {
+                "assetId": "classic-confirm",
+                "sha256": "2d9152323b9061b99512b8876da2d26dac250ce17c3c7f132c62a6fbcba7da94",
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                }
+              },
+              "publicUrl": "https://tadazz.com/sounds/tadazz-confirm-20261108.mp3",
+              "mime": "audio/mpeg",
+              "label": "Native audio · classic-confirm"
+            },
+            {
+              "ref": {
+                "assetId": "classic-voting",
+                "sha256": "d1ebc0f3046aa0916ba5f2604df4f1f8f4087402d4d237ce75fa21f0a1de3cc6",
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                }
+              },
+              "publicUrl": "https://tadazz.com/sounds/answersMusic.mp3",
+              "mime": "audio/mpeg",
+              "label": "Native audio · classic-voting"
+            },
+            {
+              "ref": {
+                "assetId": "classic-timer",
+                "sha256": "368edc1d95220e8255c853850f02b447a128c06b59e1a8756fb02b6b9f4ab8e4",
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                }
+              },
+              "publicUrl": "https://tadazz.com/sounds/tadazz-timer-end-368edc1d9522.mp3",
+              "mime": "audio/mpeg",
+              "label": "Native audio · classic-timer"
+            },
+            {
+              "ref": {
+                "assetId": "classic-tick",
+                "sha256": "efcd6b041fc7f13e565e30a6ee878965d5caab7d29aa6ad86b657dbf3444c275",
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                }
+              },
+              "publicUrl": "https://tadazz.com/sounds/tadazz-timer-tick-20261108.mp3",
+              "mime": "audio/mpeg",
+              "label": "Native audio · classic-tick"
+            },
+            {
+              "ref": {
+                "assetId": "classic-urgent",
+                "sha256": "dcb2f17e811e0107cd324b541fecdd1334fd2dd19b8a9f8fed7feb0302960047",
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                }
+              },
+              "publicUrl": "https://tadazz.com/sounds/tadazz-timer-urgent-20261108.mp3",
+              "mime": "audio/mpeg",
+              "label": "Native audio · classic-urgent"
+            },
+            {
+              "ref": {
+                "assetId": "classic-final",
+                "sha256": "623deeb6e312c17f6feeb4d2fad8482d4c967055f7a5df975a84f8962e03630e",
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                }
+              },
+              "publicUrl": "https://tadazz.com/sounds/tadazz-timer-final-20261108.mp3",
+              "mime": "audio/mpeg",
+              "label": "Native audio · classic-final"
+            },
+            {
+              "ref": {
+                "assetId": "classic-leaderboard",
+                "sha256": "0928c8cf6063808a14e674a04aa370a29941c802c41c4e31e471e00ca3701212",
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                }
+              },
+              "publicUrl": "https://tadazz.com/sounds/snearRoll.mp3",
+              "mime": "audio/mpeg",
+              "label": "Native audio · classic-leaderboard"
+            },
+            {
+              "ref": {
+                "assetId": "classic-first",
+                "sha256": "9fcd09708b798984a0d2ad7edb46efaad5cc4bda7123ee06133fa99c476f6e90",
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                }
+              },
+              "publicUrl": "https://tadazz.com/sounds/first.mp3",
+              "mime": "audio/mpeg",
+              "label": "Native audio · classic-first"
+            },
+            {
+              "ref": {
+                "assetId": "classic-second",
+                "sha256": "75e490e301325354d62fb2f44876a90999e3da322e064961876fe9973a9f1cdb",
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                }
+              },
+              "publicUrl": "https://tadazz.com/sounds/second.mp3",
+              "mime": "audio/mpeg",
+              "label": "Native audio · classic-second"
+            },
+            {
+              "ref": {
+                "assetId": "classic-third",
+                "sha256": "374b3a93f05832dd1544e645d69413b82272fdf8f88416ffc23c3a30686ea997",
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                }
+              },
+              "publicUrl": "https://tadazz.com/sounds/three.mp3",
+              "mime": "audio/mpeg",
+              "label": "Native audio · classic-third"
+            },
+            {
+              "ref": {
+                "assetId": "classic-story-mixer",
+                "sha256": "672dd07f229b8c36f9c56484975fad7e28bedff9623fea049d2ca475022e84f8",
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                }
+              },
+              "publicUrl": "https://tadazz.com/tadazz-show/story/672dd07f229b8c36.mp3",
+              "mime": "audio/mpeg",
+              "label": "Native audio · classic-story-mixer"
+            },
+            {
+              "ref": {
+                "assetId": "classic-story-reveal",
+                "sha256": "9db4acdc6c4e411ced75f9c85b31b136a775a9ea43543f867a2976da1f1fd36b",
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                }
+              },
+              "publicUrl": "https://tadazz.com/tadazz-show/story/9db4acdc6c4e411c.mp3",
+              "mime": "audio/mpeg",
+              "label": "Native audio · classic-story-reveal"
+            },
+            {
+              "ref": {
+                "assetId": "classic-results-music",
+                "sha256": "1c3cafcf431726d25105ed8346271a9e69e35bdb09d40e418c55d46b6272f80c",
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                }
+              },
+              "publicUrl": "https://tadazz.com/tadazz-show/music/cutie-patootie.mp3",
+              "mime": "audio/mpeg",
+              "label": "Native audio · classic-results-music"
+            },
+            {
+              "ref": {
+                "assetId": "classic-results-fallback",
+                "sha256": "36377deb75d643232d583e509126919ec8feeb14a16dee734b1a9cbc778adf36",
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                }
+              },
+              "publicUrl": "https://tadazz.com/tadazz-show/music/epic-main-menu.mp3",
+              "mime": "audio/mpeg",
+              "label": "Native audio · classic-results-fallback"
+            },
+            {
+              "ref": {
+                "assetId": "razzia-audio-opening",
+                "sha256": "4569d220e4dfd88a61390ea3139806021dd015eabac73fa23dac311295c63224",
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                }
+              },
+              "publicUrl": "https://tadazz.com/sounds/boump.mp3",
+              "mime": "audio/mpeg",
+              "label": "Native audio · razzia-audio-opening"
+            },
+            {
+              "ref": {
+                "assetId": "razzia-audio-answerSubmitted",
+                "sha256": "14a1a33ddf0b7b1a5b45cf3c6e4f87892ae6bc09ca06c4a12df43b0ba2972d5b",
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                }
+              },
+              "publicUrl": "https://tadazz.com/sounds/answersSound.mp3",
+              "mime": "audio/mpeg",
+              "label": "Native audio · razzia-audio-answerSubmitted"
+            },
+            {
+              "ref": {
+                "assetId": "razzia-audio-revealResults",
+                "sha256": "851de7da474e2bd62978bcde5ef4f3fbca67eb4fdb4396751d6e95d0b5695382",
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                }
+              },
+              "publicUrl": "https://tadazz.com/sounds/results.mp3",
+              "mime": "audio/mpeg",
+              "label": "Native audio · razzia-audio-revealResults"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "list_editing_assets",
+      "completedAt": "2026-11-19T18:11:19.400Z",
+      "inputRevision": 7,
+      "inputDigest": "ad5ce8b6dfd13a2c7e9d7b3a9e765a9a368cec2aa3a98d25e04ac81f4ac3a4c7",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "bf1a5e67-fec1-4039-9942-b9d7d3b47312",
+        "data": {
+          "draftId": "CZd9T_-3CHfUmkwdbdkNLOAbz9xiSLFR",
+          "revision": 7,
+          "purpose": "answer-image",
+          "assets": [
+            {
+              "ref": {
+                "assetId": "tadazz-reference-card-dog",
+                "sha256": "e7c59ed107687236ca2975b6c63150ddb53d6d0e38295d69f079d383a377fa5a",
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                }
+              },
+              "publicUrl": "https://tadazz.com/tadazz-show/v4/cards/dog.svg",
+              "mime": "image/svg+xml",
+              "label": "Dog",
+              "alt": "Dog"
+            },
+            {
+              "ref": {
+                "assetId": "tadazz-reference-card-lamplighter",
+                "sha256": "64347234d0627c91643abdbcab2073d30837a7ca45f20163de0c6d7f39a87b3b",
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                }
+              },
+              "publicUrl": "https://tadazz.com/tadazz-show/v4/cards/lamplighter.svg",
+              "mime": "image/svg+xml",
+              "label": "Lamplighter",
+              "alt": "Lamplighter"
+            },
+            {
+              "ref": {
+                "assetId": "tadazz-reference-card-pirate",
+                "sha256": "686c5abfdfa22e39d44347725bd2b67555f7b9b0f22b09b96c90270b488a16bb",
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                }
+              },
+              "publicUrl": "https://tadazz.com/tadazz-show/v4/cards/pirate.svg",
+              "mime": "image/svg+xml",
+              "label": "Pirate",
+              "alt": "Pirate"
+            },
+            {
+              "ref": {
+                "assetId": "tadazz-reference-card-shadchan",
+                "sha256": "0fb4004f0f9e8cfac27f12bc67f49eb9bc84fdb99308d18243d6992e935bd564",
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                }
+              },
+              "publicUrl": "https://tadazz.com/tadazz-show/v4/cards/shadchan.svg",
+              "mime": "image/svg+xml",
+              "label": "Matchmaker",
+              "alt": "Matchmaker"
+            },
+            {
+              "ref": {
+                "assetId": "tadazz-reference-card-therapist",
+                "sha256": "3f6cbb9afac04b7728b7d8ac31d2bde7a1649ccc08c7db6477e32415f0461bbe",
+                "theme": {
+                  "id": "razzia-original",
+                  "version": "1.0.0"
+                }
+              },
+              "publicUrl": "https://tadazz.com/tadazz-show/v4/cards/therapist.svg",
+              "mime": "image/svg+xml",
+              "label": "Therapist",
+              "alt": "Therapist"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "list_themes",
+      "completedAt": "2026-11-19T18:11:19.909Z",
+      "inputDigest": "b37f0a674b93e604963e33b892d5f81d641731f74b3d785fbcc4c8ab9bab3fad",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "e13846b3-92a9-474e-a4cf-d4b015a7ec7a",
+        "data": {
+          "items": [
+            {
+              "themeId": "tadazz-classic",
+              "version": "1.0.0",
+              "title": "TADAZZ Classic",
+              "previewAvailable": false,
+              "exportPermitted": false
+            },
+            {
+              "themeId": "razzia-original",
+              "version": "1.0.0",
+              "title": "Razzia Original",
+              "previewAvailable": false,
+              "exportPermitted": false
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "apply_game_edit",
+      "completedAt": "2026-11-19T18:11:23.522Z",
+      "inputRevision": 7,
+      "inputDigest": "718505f4fb77ac1b77f57e46e8576f3424b63c832779a893815c17cbeef70dd0",
+      "patchKind": "select-theme",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "67eefdc9-4488-4b99-944c-a812a2384204",
+        "data": {
+          "draftId": "CZd9T_-3CHfUmkwdbdkNLOAbz9xiSLFR",
+          "revision": 8,
+          "summary": {
+            "title": "Edited title razzia-original",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          },
+          "undoOperationId": "ec3fd07f-5986-4fd5-80f5-81929a82bd11"
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "completedAt": "2026-11-19T18:11:24.331Z",
+      "requestedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:answerCards",
+      "inputRevision": 8,
+      "inputDigest": "ba2fef69304004fda8e8c090f7d2fb91945675be6211353c6edf4698b7884147",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "b51da574-3551-4d2e-9a2a-3ad964a9af38",
+        "data": {
+          "draftId": "CZd9T_-3CHfUmkwdbdkNLOAbz9xiSLFR",
+          "revision": 8,
+          "title": "Edited title razzia-original",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:answerCards",
+          "chapterCount": 28,
+          "frameDigest": "2178d5d022235d1f62a5afcf7b953a9e97b3c9b519d47cf241ce7aa2150b92fa"
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "completedAt": "2026-11-19T18:11:25.509Z",
+      "inputRevision": 8,
+      "inputDigest": "be24b067f3ce98b70277c214ed6468ad6b04fa202c88378574ea9163e2c1190f",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "f916cc49-ba5f-42b1-82f3-d6bcac670ada",
+        "data": {
+          "draftId": "CZd9T_-3CHfUmkwdbdkNLOAbz9xiSLFR",
+          "revision": 8,
+          "summary": {
+            "title": "Edited title razzia-original",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          },
+          "undoOperationId": "ec3fd07f-5986-4fd5-80f5-81929a82bd11"
+        }
+      }
+    }
+  ],
+  "screenshot": "webkit-razzia-original-failure-state-2.png"
+}

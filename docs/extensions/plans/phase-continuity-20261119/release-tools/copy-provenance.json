@@ -1,0 +1,74 @@
+{
+  "createdUtc": "2026-11-19T17:33:31.421920+00:00",
+  "kind": "release-helper-exact-copy-provenance",
+  "scriptsExecuted": false,
+  "sourceModified": false,
+  "findings": [],
+  "privateKeyContentsRead": false,
+  "screeningNote": "Pattern screening only; public JWK material/client IDs and paths are not treated as secrets. No matched values are displayed.",
+  "files": [
+    {
+      "source": "work/phase-continuity-20261119/release-tools/qualify_current_candidate.py",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/release-tools/qualify_current_candidate.py",
+      "bytes": 2790,
+      "sourceBeforeSha256": "79fe3281270fdd53079267a24534a2967b0d60394b7e3e484c59dbd327fe3225",
+      "copySha256": "79fe3281270fdd53079267a24534a2967b0d60394b7e3e484c59dbd327fe3225",
+      "sourceAfterSha256": "79fe3281270fdd53079267a24534a2967b0d60394b7e3e484c59dbd327fe3225",
+      "allEqual": true
+    },
+    {
+      "source": "work/phase-continuity-20261119/release-tools/stage_current_candidate.py",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/release-tools/stage_current_candidate.py",
+      "bytes": 10876,
+      "sourceBeforeSha256": "5550666638ac83cee42ceba84a4238938868c8e77e85101c62853f6ebe1f4cbf",
+      "copySha256": "5550666638ac83cee42ceba84a4238938868c8e77e85101c62853f6ebe1f4cbf",
+      "sourceAfterSha256": "5550666638ac83cee42ceba84a4238938868c8e77e85101c62853f6ebe1f4cbf",
+      "allEqual": true
+    },
+    {
+      "source": "work/phase-continuity-20261119/release-tools/deploy_current_candidate.py",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/release-tools/deploy_current_candidate.py",
+      "bytes": 7402,
+      "sourceBeforeSha256": "5c5c7c5650e819747ba8f37ae57c8cd82f0a22e1e21096a24225a6e07b7bdf72",
+      "copySha256": "5c5c7c5650e819747ba8f37ae57c8cd82f0a22e1e21096a24225a6e07b7bdf72",
+      "sourceAfterSha256": "5c5c7c5650e819747ba8f37ae57c8cd82f0a22e1e21096a24225a6e07b7bdf72",
+      "allEqual": true
+    },
+    {
+      "source": "work/phase-continuity-20261119/release-tools/observe_current_candidate.py",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/release-tools/observe_current_candidate.py",
+      "bytes": 5957,
+      "sourceBeforeSha256": "2d3a47a6419bd62b1307bf3132242d1535e25361172239cf0fbf8355e16abe36",
+      "copySha256": "2d3a47a6419bd62b1307bf3132242d1535e25361172239cf0fbf8355e16abe36",
+      "sourceAfterSha256": "2d3a47a6419bd62b1307bf3132242d1535e25361172239cf0fbf8355e16abe36",
+      "allEqual": true
+    },
+    {
+      "source": "work/phase-continuity-20261119/release-tools/prepare_qa_cache.py",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/release-tools/prepare_qa_cache.py",
+      "bytes": 13083,
+      "sourceBeforeSha256": "63ee368567611f36c971da4e8affa8e2302e69334825e2a4a19851cd5477eda7",
+      "copySha256": "63ee368567611f36c971da4e8affa8e2302e69334825e2a4a19851cd5477eda7",
+      "sourceAfterSha256": "63ee368567611f36c971da4e8affa8e2302e69334825e2a4a19851cd5477eda7",
+      "allEqual": true
+    },
+    {
+      "source": "work/phase-continuity-20261119/release-tools/recover_qa_cache_copy.py",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/release-tools/recover_qa_cache_copy.py",
+      "bytes": 13479,
+      "sourceBeforeSha256": "2f004caa7a0aa5661235d99140a30463f6f1101c02fdb78c066331a40776a16b",
+      "copySha256": "2f004caa7a0aa5661235d99140a30463f6f1101c02fdb78c066331a40776a16b",
+      "sourceAfterSha256": "2f004caa7a0aa5661235d99140a30463f6f1101c02fdb78c066331a40776a16b",
+      "allEqual": true
+    },
+    {
+      "source": "work/phase-continuity-20261119/release-tools/prepare_qa_cache.v1-docker-cp.py",
+      "copy": "docs/extensions/plans/phase-continuity-20261119/release-tools/prepare_qa_cache.v1-docker-cp.py",
+      "bytes": 11291,
+      "sourceBeforeSha256": "84c4eca17002a80f2eec4f0d13229f7edd7001880d2c5580c15edf99a9aeb316",
+      "copySha256": "84c4eca17002a80f2eec4f0d13229f7edd7001880d2c5580c15edf99a9aeb316",
+      "sourceAfterSha256": "84c4eca17002a80f2eec4f0d13229f7edd7001880d2c5580c15edf99a9aeb316",
+      "allEqual": true
+    }
+  ]
+}

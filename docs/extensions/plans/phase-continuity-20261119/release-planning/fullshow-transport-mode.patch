@@ -1,0 +1,93 @@
+--- a/extensions/qa/phase3-full-show/linux-browser-verify.py
++++ b/extensions/qa/phase3-full-show/linux-browser-verify.py
+@@ -5,6 +5,8 @@
+ The 1800s ceiling bounds all 40 checks and 44 renderer fixtures. The fresh
+ offline browser container uses a two-CPU quota for its renderer and fixture host.
+ Behavioral assertions and their individual timeouts remain unchanged.
++The optional transport-race argument runs both browsers against the focused
++Classic transport proof in a separate diagnostic-only receipt namespace.
+ """
+ import json
+ import pathlib
+@@ -15,17 +17,24 @@
+ 
+ ROOT = pathlib.Path(__file__).resolve().parents[3]
+ BASE = ROOT / "docs/extensions/plans/phase3-takeover-20261117"
+-if len(sys.argv) != 2 or not re.fullmatch(r"tadazz-codex-[a-f0-9]{12}-[a-f0-9]{8}", sys.argv[1]):
+-    raise SystemExit("Pass the qualified source run directory name")
++if len(sys.argv) not in (2, 3) or not re.fullmatch(r"tadazz-codex-[a-f0-9]{12}-[a-f0-9]{8}", sys.argv[1]):
++    raise SystemExit("Pass the qualified source run directory name and optional transport-race")
++if len(sys.argv) == 3 and sys.argv[2] != "transport-race":
++    raise SystemExit("The only optional mode is transport-race")
++mode = "transport-race" if len(sys.argv) == 3 else "full-show"
+ source_run = sys.argv[1]
+ inputs = json.loads((BASE / source_run / "input-manifest.json").read_text(encoding="utf8"))
+-run = f"tadazz-codex-fullshow-{inputs['sha'][:12]}-{uuid.uuid4().hex[:8]}"
++run_kind = "transport" if mode == "transport-race" else "fullshow"
++run = f"tadazz-codex-{run_kind}-{inputs['sha'][:12]}-{uuid.uuid4().hex[:8]}"
+ evidence = BASE / run
+ evidence.mkdir()
+-config = {"sha": inputs["sha"], "manifest": inputs["files"], "sourceRun": source_run, "run": run}
++config = {"sha": inputs["sha"], "manifest": inputs["files"], "sourceRun": source_run, "run": run, "mode": mode}
+ REMOTE = r'''
+ import hashlib,json,pathlib,shutil,subprocess,time
+ c=CONFIG
++assert c["mode"] in ("full-show","transport-race")
++expected_prefix="tadazz-codex-"+("transport" if c["mode"]=="transport-race" else "fullshow")+"-"+c["sha"][:12]+"-"
++assert c["run"].startswith(expected_prefix),"QA_MODE_NAMESPACE_MISMATCH"
+ old="tadazz-phase2-20261116"
+ facts=json.loads(subprocess.check_output(["docker","inspect",old]))[0]
+ assert facts["State"]["Running"] and facts["HostConfig"]["NetworkMode"]=="none"
+@@ -100,6 +109,9 @@
+     # Keep nice 19 and allow both cores within the two-CPU QA quota.
+     # A CPU 0 pin starved native browser frames while CPU 1 was idle in QA.
+     argv=["docker","exec","-w","/source","-e","TMPDIR=/tmp","-e","HOME=/tmp","-e","PLAYWRIGHT_BROWSERS_PATH=/root/.cache/ms-playwright","-e","TSX_DISABLE_CACHE=1","-e","NODE_OPTIONS=--max-old-space-size=1024","-e","TADAZZ_FULL_SHOW_EVIDENCE=/evidence/full-show","-e","TADAZZ_FULL_SHOW_SOURCE_SHA="+c["sha"],"-e","TADAZZ_FULL_SHOW_BROWSERS=chromium,webkit",container,"nice","-n","19","timeout","-k","5","1800","node","/cleanup/extensions/node_modules/tsx/dist/cli.mjs","--tsconfig","tsconfig.json","extensions/qa/phase3-full-show/browser-verify.mjs"]
++    if c["mode"]=="transport-race":
++        position=argv.index(container)
++        argv[position:position]=["-e","TADAZZ_FULL_SHOW_DIAGNOSTIC=transport-race","-e","TADAZZ_FULL_SHOW_THEMES=tadazz-classic"]
+     started=time.time()
+     result=subprocess.run(argv,capture_output=True,text=True,timeout=1815)
+     # Preserve the primary browser failure even if a receipt gate rejects early.
+@@ -126,8 +138,42 @@
+     assert engines=={"chromium","webkit"}, "Both browser engines are required"
+     assert inner["entries"] and all(entry["status"]=="PASS" for entry in inner["entries"]), "A full-show browser gate failed"
+     assert not inner["errors"]
++    assert result.returncode==0 and inner["failureCount"]==0,"BROWSER_EXECUTION_FAILED"
++    assert inner["sha"]==c["sha"] and inner["widgetManifestSha256"]==widget_before["full-show-artifact.json"] and inner["widgetHtmlSha256"]==artifact["sha256"],"BROWSER_RECEIPT_INPUT_MISMATCH"
++    assert inner["sourceHashesUnchanged"] is True and inner["network"]=="none" and inner["outboundDenied"]==[],"BROWSER_ISOLATION_FAILURE"
++    assert inner["productionChanged"] is False and inner["customerMountAccessed"] is False,"BROWSER_LIVE_DATA_ACCESSED"
++    transport_witnesses={}
++    if c["mode"]=="transport-race":
++        assert inner["diagnosticMode"]=="transport-race","TRANSPORT_MODE_MISSING"
++        expected_checks={engine+" / tadazz-classic readonly transport supersedes automatic preview" for engine in ("chromium","webkit")}
++        assert len(inner["entries"])==2 and {entry["name"] for entry in inner["entries"]}==expected_checks,"TRANSPORT_CHECKS_MISSING"
++        assert {engine["name"] for engine in inner["engines"]}=={"chromium","webkit"} and len(inner["engines"])==2,"TRANSPORT_ENGINES_MISSING"
++        expected_actions={"pause","replay","next","previous"}
++        expected_gates={"pause automatic","replay automatic","replay manual","next automatic","next manual","previous automatic","previous manual"}
++        for engine in ("chromium","webkit"):
++            witness_path=owned/"full-show"/(engine+"-tadazz-classic-transport-race.json")
++            witness_bytes=witness_path.read_bytes()
++            witness=json.loads(witness_bytes)
++            assert witness["engine"]==engine and witness["theme"]=="tadazz-classic" and witness["status"]=="PASS" and not witness.get("error"),"TRANSPORT_WITNESS_FAILED"
++            cases=witness["cases"]
++            assert len(cases)==4 and {case["action"] for case in cases}==expected_actions and all(case["status"]=="PASS" for case in cases),"TRANSPORT_ACTIONS_MISSING"
++            assert next(case for case in cases if case["action"]=="pause")["userPausePreserved"] is True,"TRANSPORT_PAUSE_NOT_PRESERVED"
++            gates=witness["gates"]
++            assert len(gates)==7 and {gate["label"] for gate in gates}==expected_gates and all(gate["claimed"] is True and gate["fulfilled"] is True for gate in gates),"TRANSPORT_REAL_ACKS_INCOMPLETE"
++            transport_witnesses[engine]={"path":witness_path.relative_to(owned).as_posix(),"sha256":hashlib.sha256(witness_bytes).hexdigest(),"witness":witness}
++    else:
++        assert inner["diagnosticMode"] is None,"FULL_SHOW_DIAGNOSTIC_MODE_FORBIDDEN"
++        assert len(inner["entries"])==40,"FULL_SHOW_40_CHECKS_REQUIRED"
++        assert len(inner["rendererFixtures"])==44 and all(fixture["observed"]["status"]=="PASS" for fixture in inner["rendererFixtures"]),"FULL_SHOW_44_FIXTURES_REQUIRED"
+     receipt={"sha":c["sha"],"container":container,"network":"none","sourceReadOnly":True,"sourceFileCount":len(before),"allSourceHashesVerifiedBeforeAfter":before==after==c["manifest"],"widgetManifestSha256":widget_before["full-show-artifact.json"],"widgetHtmlSha256":artifact["sha256"],"widgetArtifacts":widget_before,"allWidgetHashesVerifiedBeforeAfter":widget_before==widget_after,"fullShow":inner,"sdkCacheFileCount":len(expected_deps),"sdkCacheHashesVerifiedBeforeAfter":dependency_hashes(deps)==expected_deps,"sdkCacheManifestSha256":hashlib.sha256(json.dumps(expected_deps,sort_keys=True).encode()).hexdigest(),"command":argv,"exit":result.returncode,"seconds":round(time.time()-started,3),"stdout":result.stdout,"stderr":result.stderr,"evidenceHostDirectory":str(owned),"customerMountAccessed":False,"productionChanged":False}
+     receipt["resources"]=resource_evidence
++    receipt["sourceRun"]=c["sourceRun"]
++    if c["mode"]=="transport-race":
++        receipt["diagnosticOnly"]=True
++        receipt["diagnosticMode"]="transport-race"
++        receipt["releaseQualified"]=False
++        receipt["transportRace"]=receipt.pop("fullShow")
++        receipt["transportWitnesses"]=transport_witnesses
+     print(json.dumps(receipt,indent=2))
+ finally:
+     subprocess.run(["docker","stop","--time","10",container],capture_output=True,check=True)

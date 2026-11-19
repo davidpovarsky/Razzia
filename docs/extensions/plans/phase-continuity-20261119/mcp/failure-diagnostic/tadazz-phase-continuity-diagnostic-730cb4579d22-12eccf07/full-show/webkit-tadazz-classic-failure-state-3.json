@@ -1,0 +1,481 @@
+{
+  "at": "2026-11-19T18:08:16.672Z",
+  "engine": "webkit",
+  "theme": "tadazz-classic",
+  "reason": "check failure",
+  "check": "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+  "step": "HTTP apply_game_edit",
+  "detail": {
+    "check": "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+    "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n2 !== 3\n"
+  },
+  "requestedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+  "initialFrame": {
+    "acknowledgedAt": "2026-11-19T18:08:10.453Z",
+    "requestedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+    "frame": {
+      "draftId": "uefzNxw9dK021XnecEANWjCxoJyMyyXy",
+      "revision": 1,
+      "title": "Full show tadazz-classic webkit",
+      "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+      "chapterCount": 28,
+      "frameDigest": "3d45501f41cbfab01a5e02bca9314199ab36c3fc5b38f61be35674c7a3a00e6b"
+    }
+  },
+  "lastAcknowledgedPreview": {
+    "draftId": "uefzNxw9dK021XnecEANWjCxoJyMyyXy",
+    "revision": 1,
+    "title": "Full show tadazz-classic webkit",
+    "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+    "chapterCount": 28,
+    "frameDigest": "3d45501f41cbfab01a5e02bca9314199ab36c3fc5b38f61be35674c7a3a00e6b"
+  },
+  "hostUrl": "http://127.0.0.1:45519/host?scenario=nAz11lp8z7n3c9nMATkczkmF",
+  "widget": {
+    "capturedAt": "2026-11-19T18:08:16.678Z",
+    "uiEvents": [],
+    "documentReady": "complete",
+    "visibilityState": "visible",
+    "uiText": "Tadazz preview\n\nPreview / demo — no live player votes\n\nSave in Tadazz\n\nThe draft changed elsewhere. Refresh before applying your edit again.\n\nSave in Tadazz\nSave in Tadazz\nRetry the same edit\n\nSaving to your library requires approval in Tadazz. This widget cannot approve it.",
+    "status": [
+      "The draft changed elsewhere. Refresh before applying your edit again."
+    ],
+    "pause": null,
+    "host": null,
+    "layoutAncestors": [],
+    "native": null,
+    "stage": null,
+    "renderer": null,
+    "preview": null,
+    "fit": null,
+    "question": null,
+    "answers": [],
+    "nativeMarkup": null
+  },
+  "host": {
+    "capturedAt": "2026-11-19T18:08:16.695Z",
+    "ready": "true",
+    "calls": [
+      "get_game_draft_summary",
+      "apply_game_edit"
+    ],
+    "lifecycle": {
+      "documentId": "52ab8fa8-0b81-4e9d-9aab-96462c0c087a",
+      "disposing": false,
+      "remaining": {
+        "http": 0,
+        "handlers": 0,
+        "initialization": 0,
+        "replies": 0,
+        "connecting": false
+      },
+      "receipt": null
+    },
+    "iframe": [
+      {
+        "src": "http://127.0.0.1:45519/widget",
+        "rect": {
+          "width": 1264,
+          "height": 1100
+        },
+        "visibility": "visible",
+        "display": "inline"
+      }
+    ]
+  },
+  "requests": [
+    {
+      "at": "2026-11-19T18:07:25.557Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "activeStep": "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "documentUrl": "http://127.0.0.1:45519/host?scenario=nAz11lp8z7n3c9nMATkczkmF",
+      "url": "http://127.0.0.1:45519/qa/call?scenario=nAz11lp8z7n3c9nMATkczkmF",
+      "method": "POST",
+      "tool": "get_game_draft_summary",
+      "expectedRevision": 1,
+      "responseAt": "2026-11-19T18:07:26.821Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:07:32.974Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:45519/host?scenario=nAz11lp8z7n3c9nMATkczkmF",
+      "url": "http://127.0.0.1:45519/qa/call?scenario=nAz11lp8z7n3c9nMATkczkmF",
+      "method": "POST",
+      "tool": "preview_show",
+      "requestedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:results",
+      "expectedRevision": 1,
+      "responseAt": "2026-11-19T18:07:33.759Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:07:45.617Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:45519/host?scenario=nAz11lp8z7n3c9nMATkczkmF",
+      "url": "http://127.0.0.1:45519/qa/call?scenario=nAz11lp8z7n3c9nMATkczkmF",
+      "method": "POST",
+      "tool": "preview_show",
+      "requestedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+      "expectedRevision": 1,
+      "responseAt": "2026-11-19T18:07:46.261Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:07:48.481Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:45519/host?scenario=nAz11lp8z7n3c9nMATkczkmF",
+      "url": "http://127.0.0.1:45519/qa/initial?scenario=nAz11lp8z7n3c9nMATkczkmF",
+      "method": "GET",
+      "responseAt": "2026-11-19T18:07:49.655Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:07:50.322Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:45519/host?scenario=nAz11lp8z7n3c9nMATkczkmF",
+      "url": "http://127.0.0.1:45519/qa/call?scenario=nAz11lp8z7n3c9nMATkczkmF",
+      "method": "POST",
+      "tool": "get_game_draft_summary",
+      "expectedRevision": 1,
+      "responseAt": "2026-11-19T18:07:51.083Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:07:57.942Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:45519/host?scenario=nAz11lp8z7n3c9nMATkczkmF",
+      "url": "http://127.0.0.1:45519/qa/initial?scenario=nAz11lp8z7n3c9nMATkczkmF",
+      "method": "GET",
+      "responseAt": "2026-11-19T18:07:58.907Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:07:59.522Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:45519/host?scenario=nAz11lp8z7n3c9nMATkczkmF",
+      "url": "http://127.0.0.1:45519/qa/call?scenario=nAz11lp8z7n3c9nMATkczkmF",
+      "method": "POST",
+      "tool": "get_game_draft_summary",
+      "expectedRevision": 1,
+      "responseAt": "2026-11-19T18:08:00.400Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:08:03.775Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:45519/host?scenario=nAz11lp8z7n3c9nMATkczkmF",
+      "url": "http://127.0.0.1:45519/qa/initial?scenario=nAz11lp8z7n3c9nMATkczkmF",
+      "method": "GET",
+      "responseAt": "2026-11-19T18:08:04.442Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:08:05.059Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:45519/host?scenario=nAz11lp8z7n3c9nMATkczkmF",
+      "url": "http://127.0.0.1:45519/qa/call?scenario=nAz11lp8z7n3c9nMATkczkmF",
+      "method": "POST",
+      "tool": "get_game_draft_summary",
+      "expectedRevision": 1,
+      "responseAt": "2026-11-19T18:08:05.920Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:08:09.351Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:45519/host?scenario=nAz11lp8z7n3c9nMATkczkmF",
+      "url": "http://127.0.0.1:45519/qa/initial?scenario=nAz11lp8z7n3c9nMATkczkmF",
+      "method": "GET",
+      "responseAt": "2026-11-19T18:08:10.480Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:08:11.306Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:45519/host?scenario=nAz11lp8z7n3c9nMATkczkmF",
+      "url": "http://127.0.0.1:45519/qa/call?scenario=nAz11lp8z7n3c9nMATkczkmF",
+      "method": "POST",
+      "tool": "get_game_draft_summary",
+      "expectedRevision": 1,
+      "responseAt": "2026-11-19T18:08:12.431Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T18:08:15.574Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:45519/host?scenario=nAz11lp8z7n3c9nMATkczkmF",
+      "url": "http://127.0.0.1:45519/qa/call?scenario=nAz11lp8z7n3c9nMATkczkmF",
+      "method": "POST",
+      "tool": "apply_game_edit",
+      "expectedRevision": 1,
+      "patchKind": "set-question-text",
+      "responseAt": "2026-11-19T18:08:16.043Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    }
+  ],
+  "calls": [
+    {
+      "name": "get_game_draft_summary",
+      "completedAt": "2026-11-19T18:06:51.470Z",
+      "inputRevision": 1,
+      "inputDigest": "e18a1046521cb70502b6264e183cf453168653dd3968bd6050a08b23c73b75bf",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "2a8174e1-ab5c-46b7-b64b-3e511df6c9ab",
+        "data": {
+          "draftId": "uefzNxw9dK021XnecEANWjCxoJyMyyXy",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "completedAt": "2026-11-19T18:07:26.706Z",
+      "inputRevision": 1,
+      "inputDigest": "e18a1046521cb70502b6264e183cf453168653dd3968bd6050a08b23c73b75bf",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "b2a1cd80-31d3-4541-af12-71de75058106",
+        "data": {
+          "draftId": "uefzNxw9dK021XnecEANWjCxoJyMyyXy",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "completedAt": "2026-11-19T18:07:33.720Z",
+      "requestedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:results",
+      "inputRevision": 1,
+      "inputDigest": "40dd7db68c5bcf1cc7bd5b9a49ad5a7b9c1bf77cd5e0cc210e628adde4ea0019",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "32b28095-e3e6-4fb3-a23e-1fb290cd9c23",
+        "data": {
+          "draftId": "uefzNxw9dK021XnecEANWjCxoJyMyyXy",
+          "revision": 1,
+          "title": "Full show tadazz-classic webkit",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:results",
+          "chapterCount": 28,
+          "frameDigest": "f4158a73a8ac70844da72ec8951cb1f23ff3cba7425c28769d8c3bc144abb0e7"
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "completedAt": "2026-11-19T18:07:46.241Z",
+      "requestedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+      "inputRevision": 1,
+      "inputDigest": "d57d7a8edca5ab3989e24bafc224517ebf33a86fa2566dcb36209aaf52713f54",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "bb183296-88d9-459d-af0e-dd92741b1757",
+        "data": {
+          "draftId": "uefzNxw9dK021XnecEANWjCxoJyMyyXy",
+          "revision": 1,
+          "title": "Full show tadazz-classic webkit",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "chapterCount": 28,
+          "frameDigest": "3d45501f41cbfab01a5e02bca9314199ab36c3fc5b38f61be35674c7a3a00e6b"
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "completedAt": "2026-11-19T18:07:50.953Z",
+      "inputRevision": 1,
+      "inputDigest": "e18a1046521cb70502b6264e183cf453168653dd3968bd6050a08b23c73b75bf",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "410feb9d-747a-4c78-aa24-fbbf10606983",
+        "data": {
+          "draftId": "uefzNxw9dK021XnecEANWjCxoJyMyyXy",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "completedAt": "2026-11-19T18:08:00.266Z",
+      "inputRevision": 1,
+      "inputDigest": "e18a1046521cb70502b6264e183cf453168653dd3968bd6050a08b23c73b75bf",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "d00ce223-5b54-4ca3-ad22-c2d7d9a41c7a",
+        "data": {
+          "draftId": "uefzNxw9dK021XnecEANWjCxoJyMyyXy",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "completedAt": "2026-11-19T18:08:05.850Z",
+      "inputRevision": 1,
+      "inputDigest": "e18a1046521cb70502b6264e183cf453168653dd3968bd6050a08b23c73b75bf",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "30fd1796-58d7-40d4-956a-081a04832a3d",
+        "data": {
+          "draftId": "uefzNxw9dK021XnecEANWjCxoJyMyyXy",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "completedAt": "2026-11-19T18:08:12.155Z",
+      "inputRevision": 1,
+      "inputDigest": "e18a1046521cb70502b6264e183cf453168653dd3968bd6050a08b23c73b75bf",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "d099adec-9dbc-446f-a160-dbd135a2483d",
+        "data": {
+          "draftId": "uefzNxw9dK021XnecEANWjCxoJyMyyXy",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "apply_game_edit",
+      "completedAt": "2026-11-19T18:08:16.023Z",
+      "inputRevision": 1,
+      "inputDigest": "ff3f07e231b375324c463d68e15033eff47c7864c5af4fc9cff6048615f2e8e2",
+      "patchKind": "set-question-text",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "d856b608-adfa-434e-96c8-10d05ae87984",
+        "data": {
+          "draftId": "uefzNxw9dK021XnecEANWjCxoJyMyyXy",
+          "revision": 2,
+          "summary": {
+            "title": "Full show tadazz-classic webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          },
+          "undoOperationId": "04d85379-5cb6-4feb-9943-d01778ea0811"
+        }
+      }
+    }
+  ],
+  "screenshot": "webkit-tadazz-classic-failure-state-3.png"
+}

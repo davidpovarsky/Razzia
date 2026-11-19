@@ -1,0 +1,1857 @@
+{
+  "kind": "real issuer + official MCP client + AppBridge + sandboxed native Stage",
+  "claim": "Isolated fixture validation; not ChatGPT installation or production consent",
+  "sha": "e66317a5385862a3a756a18a5646fad4e64e5c26",
+  "widgetManifestSha256": "071e8db00ebc53b8937e88a2803ca5b3993552f72e64aba3be8b0408f97d1c6f",
+  "widgetHtmlSha256": "88bd7eeeada87452b0325b21eef45349988acbe8cb78405996ebee878a79edcb",
+  "sourceHashesUnchanged": true,
+  "diagnosticMode": "transport-race",
+  "productionChanged": false,
+  "customerMountAccessed": false,
+  "oauthSession": {
+    "kind": "actual-issuer-oauth-refresh",
+    "scheduler": "wall-clock",
+    "accessTokenLifetimeSeconds": 300,
+    "refreshCount": 0,
+    "rejected": false,
+    "automaticReauthorization": false,
+    "refreshes": []
+  },
+  "network": "none",
+  "transport": "Loopback HTTP plus exact hash-verified public-asset interception; no outbound network",
+  "outboundDenied": [],
+  "engines": [
+    {
+      "name": "chromium",
+      "version": "157.0.4341.60",
+      "outcomes": [
+        {
+          "name": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+          "status": "PASS",
+          "budgetMs": 60000,
+          "ms": 25640
+        }
+      ]
+    },
+    {
+      "name": "webkit",
+      "version": "27.2",
+      "outcomes": [
+        {
+          "name": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+          "status": "FAIL",
+          "error": "Error: frame.evaluate: Target page, context or browser has been closed",
+          "stack": "frame.evaluate: Target page, context or browser has been closed\n    at verifyTransportRace (C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-transport-race-20261119\\extensions\\qa\\phase3-full-show\\transport-race.mjs:54:19)\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-transport-race-20261119/extensions/qa/phase3-full-show/browser-verify.mjs:871:15\n    at async run (C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-transport-race-20261119\\extensions\\qa\\phase3-full-show\\browser-verify.mjs:625:5)\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-transport-race-20261119/extensions/qa/phase3-full-show/browser-verify.mjs:865:9",
+          "budgetMs": 60000,
+          "ms": 30017
+        }
+      ]
+    }
+  ],
+  "requiredChecks": [
+    "chromium / tadazz-classic native opening, five phases, transitions and closing",
+    "chromium / tadazz-classic title edit CAS and summary refresh through AppBridge",
+    "chromium / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+    "chromium / tadazz-classic nine localized interfaces and non-reduced native motion",
+    "chromium / tadazz-classic native audio gesture, acknowledged music and volume, persistent playback",
+    "chromium / tadazz-classic native pause, resume, replay and adjacent skip",
+    "chromium / tadazz-classic responsive 16:9 and 4:3 keyboard controls",
+    "chromium / tadazz-classic zero-vote, tie and picture result parity with preserved media and motion",
+    "chromium / tadazz-classic tamper, cancellation and tool-context teardown",
+    "chromium / tadazz-classic CSP, native media resources and browser errors",
+    "chromium / razzia-original native opening, five phases, transitions and closing",
+    "chromium / razzia-original title edit CAS and summary refresh through AppBridge",
+    "chromium / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+    "chromium / razzia-original nine localized interfaces and non-reduced native motion",
+    "chromium / razzia-original native audio gesture, acknowledged music and volume, persistent playback",
+    "chromium / razzia-original native pause, resume, replay and adjacent skip",
+    "chromium / razzia-original responsive 16:9 and 4:3 keyboard controls",
+    "chromium / razzia-original zero-vote, tie and picture result parity with preserved media and motion",
+    "chromium / razzia-original tamper, cancellation and tool-context teardown",
+    "chromium / razzia-original CSP, native media resources and browser errors",
+    "webkit / tadazz-classic native opening, five phases, transitions and closing",
+    "webkit / tadazz-classic title edit CAS and summary refresh through AppBridge",
+    "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+    "webkit / tadazz-classic nine localized interfaces and non-reduced native motion",
+    "webkit / tadazz-classic native audio gesture, acknowledged music and volume, persistent playback",
+    "webkit / tadazz-classic native pause, resume, replay and adjacent skip",
+    "webkit / tadazz-classic responsive 16:9 and 4:3 keyboard controls",
+    "webkit / tadazz-classic zero-vote, tie and picture result parity with preserved media and motion",
+    "webkit / tadazz-classic tamper, cancellation and tool-context teardown",
+    "webkit / tadazz-classic CSP, native media resources and browser errors",
+    "webkit / razzia-original native opening, five phases, transitions and closing",
+    "webkit / razzia-original title edit CAS and summary refresh through AppBridge",
+    "webkit / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+    "webkit / razzia-original nine localized interfaces and non-reduced native motion",
+    "webkit / razzia-original native audio gesture, acknowledged music and volume, persistent playback",
+    "webkit / razzia-original native pause, resume, replay and adjacent skip",
+    "webkit / razzia-original responsive 16:9 and 4:3 keyboard controls",
+    "webkit / razzia-original zero-vote, tie and picture result parity with preserved media and motion",
+    "webkit / razzia-original tamper, cancellation and tool-context teardown",
+    "webkit / razzia-original CSP, native media resources and browser errors"
+  ],
+  "failureCount": 1,
+  "rendererBuildId": "b2589bf55dad99f683d10ade1aa9898a98d36cfb39527272b0099f25bf867b91",
+  "artifactSha256": "88bd7eeeada87452b0325b21eef45349988acbe8cb78405996ebee878a79edcb",
+  "entries": [
+    {
+      "name": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+      "status": "PASS",
+      "budgetMs": 60000,
+      "ms": 25640
+    },
+    {
+      "name": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+      "status": "FAIL",
+      "error": "Error: frame.evaluate: Target page, context or browser has been closed",
+      "stack": "frame.evaluate: Target page, context or browser has been closed\n    at verifyTransportRace (C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-transport-race-20261119\\extensions\\qa\\phase3-full-show\\transport-race.mjs:54:19)\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-transport-race-20261119/extensions/qa/phase3-full-show/browser-verify.mjs:871:15\n    at async run (C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-transport-race-20261119\\extensions\\qa\\phase3-full-show\\browser-verify.mjs:625:5)\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-transport-race-20261119/extensions/qa/phase3-full-show/browser-verify.mjs:865:9",
+      "budgetMs": 60000,
+      "ms": 30017
+    }
+  ],
+  "observations": [
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T20:20:44.534Z",
+      "reason": "pause automatic transport race",
+      "url": "about:blank",
+      "status": "no-host",
+      "finishedAt": "2026-11-19T20:20:44.535Z"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T20:20:52.043Z",
+      "reason": "replay automatic transport race",
+      "url": "http://127.0.0.1:60047/host?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "status": "drained",
+      "receipt": {
+        "documentId": "30881d69-6308-4b5a-8e37-01758698e08f",
+        "url": "http://127.0.0.1:60047/host?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+        "status": "drained",
+        "startedAt": "2026-11-19T20:20:52.053Z",
+        "finishedAt": "2026-11-19T20:20:52.054Z",
+        "elapsedMs": 1,
+        "initial": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "remaining": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "sentReplies": 2,
+        "cancelledReplies": 0,
+        "rejectedNewCalls": 0,
+        "requestEvents": [
+          {
+            "at": "2026-11-19T20:20:45.741Z",
+            "path": "/qa/initial",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T20:20:46.247Z",
+            "path": "/qa/initial",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T20:20:46.369Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T20:20:46.623Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T20:20:49.349Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T20:20:51.050Z",
+            "path": "/qa/call",
+            "status": "completed"
+          }
+        ],
+        "errors": []
+      },
+      "finishedAt": "2026-11-19T20:20:52.061Z"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T20:20:58.360Z",
+      "reason": "next automatic transport race",
+      "url": "http://127.0.0.1:60047/host?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "status": "drained",
+      "receipt": {
+        "documentId": "2f96c561-f0cb-4fea-8a19-87b936aa510a",
+        "url": "http://127.0.0.1:60047/host?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+        "status": "drained",
+        "startedAt": "2026-11-19T20:20:58.364Z",
+        "finishedAt": "2026-11-19T20:20:58.364Z",
+        "elapsedMs": 0.3999999761581421,
+        "initial": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "remaining": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "sentReplies": 3,
+        "cancelledReplies": 0,
+        "rejectedNewCalls": 0,
+        "requestEvents": [
+          {
+            "at": "2026-11-19T20:20:52.649Z",
+            "path": "/qa/initial",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T20:20:53.003Z",
+            "path": "/qa/initial",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T20:20:53.112Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T20:20:53.477Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T20:20:56.117Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T20:20:56.790Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T20:20:57.271Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T20:20:57.709Z",
+            "path": "/qa/call",
+            "status": "completed"
+          }
+        ],
+        "errors": []
+      },
+      "finishedAt": "2026-11-19T20:20:58.369Z"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T20:21:04.591Z",
+      "reason": "previous automatic transport race",
+      "url": "http://127.0.0.1:60047/host?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "status": "drained",
+      "receipt": {
+        "documentId": "da6d9be7-1df0-4a44-9ae7-98af9cff9bed",
+        "url": "http://127.0.0.1:60047/host?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+        "status": "drained",
+        "startedAt": "2026-11-19T20:21:04.594Z",
+        "finishedAt": "2026-11-19T20:21:04.594Z",
+        "elapsedMs": 0.30000001192092896,
+        "initial": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "remaining": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "sentReplies": 3,
+        "cancelledReplies": 0,
+        "rejectedNewCalls": 0,
+        "requestEvents": [
+          {
+            "at": "2026-11-19T20:20:59.102Z",
+            "path": "/qa/initial",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T20:20:59.541Z",
+            "path": "/qa/initial",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T20:20:59.635Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T20:20:59.925Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T20:21:02.691Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T20:21:03.321Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T20:21:03.809Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T20:21:04.121Z",
+            "path": "/qa/call",
+            "status": "completed"
+          }
+        ],
+        "errors": []
+      },
+      "finishedAt": "2026-11-19T20:21:04.606Z"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "status": "PASS",
+      "cases": [
+        {
+          "action": "pause",
+          "snapshots": [
+            {
+              "step": "automatic ACK held",
+              "disabled": {
+                "pause": false,
+                "replay": false,
+                "next": false,
+                "previous": false
+              },
+              "authoringDisabled": true,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+              "epoch": 1,
+              "paused": "false"
+            },
+            {
+              "step": "paused while automatic ACK held",
+              "disabled": {
+                "pause": false,
+                "replay": false,
+                "next": false,
+                "previous": false
+              },
+              "authoringDisabled": true,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+              "epoch": 1,
+              "paused": "true"
+            },
+            {
+              "step": "automatic ACK preserves user pause",
+              "disabled": {
+                "pause": false,
+                "replay": false,
+                "next": false,
+                "previous": false
+              },
+              "authoringDisabled": false,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+              "epoch": 2,
+              "paused": "true"
+            }
+          ],
+          "userPausePreserved": true,
+          "events": [
+            {
+              "type": "pointerdown",
+              "id": "full-show-pause",
+              "disabled": false,
+              "at": 5863.699999988079
+            },
+            {
+              "type": "pointerup",
+              "id": "full-show-pause",
+              "disabled": false,
+              "at": 5865.100000023842
+            },
+            {
+              "type": "click",
+              "id": "full-show-pause",
+              "disabled": false,
+              "at": 5865.600000023842
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "action": "replay",
+          "snapshots": [
+            {
+              "step": "automatic ACK held",
+              "disabled": {
+                "pause": false,
+                "replay": false,
+                "next": false,
+                "previous": false
+              },
+              "authoringDisabled": true,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+              "epoch": 1,
+              "paused": "false"
+            },
+            {
+              "step": "explicit transport ACK held",
+              "disabled": {
+                "pause": true,
+                "replay": true,
+                "next": true,
+                "previous": true
+              },
+              "authoringDisabled": true,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+              "epoch": 1,
+              "paused": "false"
+            },
+            {
+              "step": "explicit transport acknowledged, native remounted and paused",
+              "disabled": {
+                "pause": false,
+                "replay": false,
+                "next": false,
+                "previous": false
+              },
+              "authoringDisabled": false,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+              "epoch": 2,
+              "paused": "true"
+            },
+            {
+              "step": "old automatic ACK ignored",
+              "disabled": {
+                "pause": false,
+                "replay": false,
+                "next": false,
+                "previous": false
+              },
+              "authoringDisabled": false,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+              "epoch": 2,
+              "paused": "true"
+            }
+          ],
+          "explicitTarget": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "oldAutomaticTarget": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "events": [
+            {
+              "type": "pointerdown",
+              "id": "full-show-replay",
+              "disabled": false,
+              "at": 4429.900000035763
+            },
+            {
+              "type": "pointerup",
+              "id": "full-show-replay",
+              "disabled": false,
+              "at": 4431.300000011921
+            },
+            {
+              "type": "click",
+              "id": "full-show-replay",
+              "disabled": false,
+              "at": 4431.5
+            },
+            {
+              "type": "pointerdown",
+              "id": "full-show-pause",
+              "disabled": false,
+              "at": 5141.5
+            },
+            {
+              "type": "pointerup",
+              "id": "full-show-pause",
+              "disabled": false,
+              "at": 5142.400000035763
+            },
+            {
+              "type": "click",
+              "id": "full-show-pause",
+              "disabled": false,
+              "at": 5142.700000047684
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "action": "next",
+          "snapshots": [
+            {
+              "step": "automatic ACK held",
+              "disabled": {
+                "pause": false,
+                "replay": false,
+                "next": false,
+                "previous": false
+              },
+              "authoringDisabled": true,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+              "epoch": 1,
+              "paused": "false"
+            },
+            {
+              "step": "explicit transport ACK held",
+              "disabled": {
+                "pause": true,
+                "replay": true,
+                "next": true,
+                "previous": true
+              },
+              "authoringDisabled": true,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+              "epoch": 1,
+              "paused": "false"
+            },
+            {
+              "step": "explicit transport acknowledged, native remounted and paused",
+              "disabled": {
+                "pause": false,
+                "replay": false,
+                "next": false,
+                "previous": false
+              },
+              "authoringDisabled": false,
+              "chapter": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+              "epoch": 2,
+              "paused": "true"
+            },
+            {
+              "step": "old automatic ACK ignored",
+              "disabled": {
+                "pause": false,
+                "replay": false,
+                "next": false,
+                "previous": false
+              },
+              "authoringDisabled": false,
+              "chapter": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+              "epoch": 2,
+              "paused": "true"
+            }
+          ],
+          "explicitTarget": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+          "oldAutomaticTarget": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "events": [
+            {
+              "type": "pointerdown",
+              "id": "full-show-next",
+              "disabled": false,
+              "at": 4553.099999964237
+            },
+            {
+              "type": "pointerup",
+              "id": "full-show-next",
+              "disabled": false,
+              "at": 4554.299999952316
+            },
+            {
+              "type": "click",
+              "id": "full-show-next",
+              "disabled": false,
+              "at": 4554.5
+            },
+            {
+              "type": "pointerdown",
+              "id": "full-show-pause",
+              "disabled": false,
+              "at": 5218.599999964237
+            },
+            {
+              "type": "pointerup",
+              "id": "full-show-pause",
+              "disabled": false,
+              "at": 5221.599999964237
+            },
+            {
+              "type": "click",
+              "id": "full-show-pause",
+              "disabled": false,
+              "at": 5221.899999976158
+            }
+          ],
+          "status": "PASS"
+        },
+        {
+          "action": "previous",
+          "snapshots": [
+            {
+              "step": "automatic ACK held",
+              "disabled": {
+                "pause": false,
+                "replay": false,
+                "next": false,
+                "previous": false
+              },
+              "authoringDisabled": true,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+              "epoch": 1,
+              "paused": "false"
+            },
+            {
+              "step": "explicit transport ACK held",
+              "disabled": {
+                "pause": true,
+                "replay": true,
+                "next": true,
+                "previous": true
+              },
+              "authoringDisabled": true,
+              "chapter": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+              "epoch": 1,
+              "paused": "false"
+            },
+            {
+              "step": "explicit transport acknowledged, native remounted and paused",
+              "disabled": {
+                "pause": false,
+                "replay": false,
+                "next": false,
+                "previous": false
+              },
+              "authoringDisabled": false,
+              "chapter": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+              "epoch": 2,
+              "paused": "true"
+            },
+            {
+              "step": "old automatic ACK ignored",
+              "disabled": {
+                "pause": false,
+                "replay": false,
+                "next": false,
+                "previous": false
+              },
+              "authoringDisabled": false,
+              "chapter": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+              "epoch": 2,
+              "paused": "true"
+            }
+          ],
+          "explicitTarget": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+          "oldAutomaticTarget": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "events": [
+            {
+              "type": "pointerdown",
+              "id": "full-show-previous",
+              "disabled": false,
+              "at": 4149.400000035763
+            },
+            {
+              "type": "pointerup",
+              "id": "full-show-previous",
+              "disabled": false,
+              "at": 4150.300000011921
+            },
+            {
+              "type": "click",
+              "id": "full-show-previous",
+              "disabled": false,
+              "at": 4150.400000035763
+            },
+            {
+              "type": "pointerdown",
+              "id": "full-show-pause",
+              "disabled": false,
+              "at": 4672.100000023842
+            },
+            {
+              "type": "pointerup",
+              "id": "full-show-pause",
+              "disabled": false,
+              "at": 4673.5
+            },
+            {
+              "type": "click",
+              "id": "full-show-pause",
+              "disabled": false,
+              "at": 4673.800000011921
+            }
+          ],
+          "status": "PASS"
+        }
+      ],
+      "gates": [
+        {
+          "label": "pause automatic",
+          "input": {
+            "selectionVersion": 3,
+            "draftId": "dB6ikB5yrgJNOTZlF9g20gy7WJgSWLiO",
+            "expectedRevision": 1,
+            "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "context": {
+              "mode": "demo",
+              "role": "spectator",
+              "locale": "en",
+              "reducedMotion": true,
+              "join": "unavailable-demo",
+              "actions": "synthetic-only"
+            },
+            "contractVersion": "0.1.0"
+          },
+          "claimed": true,
+          "fulfilled": true
+        },
+        {
+          "label": "replay automatic",
+          "input": {
+            "selectionVersion": 3,
+            "draftId": "dB6ikB5yrgJNOTZlF9g20gy7WJgSWLiO",
+            "expectedRevision": 1,
+            "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "context": {
+              "mode": "demo",
+              "role": "spectator",
+              "locale": "en",
+              "reducedMotion": true,
+              "join": "unavailable-demo",
+              "actions": "synthetic-only"
+            },
+            "contractVersion": "0.1.0"
+          },
+          "claimed": true,
+          "fulfilled": true
+        },
+        {
+          "label": "replay manual",
+          "input": {
+            "selectionVersion": 3,
+            "draftId": "dB6ikB5yrgJNOTZlF9g20gy7WJgSWLiO",
+            "expectedRevision": 1,
+            "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+            "context": {
+              "mode": "demo",
+              "role": "spectator",
+              "locale": "en",
+              "reducedMotion": true,
+              "join": "unavailable-demo",
+              "actions": "synthetic-only"
+            },
+            "contractVersion": "0.1.0"
+          },
+          "claimed": true,
+          "fulfilled": true
+        },
+        {
+          "label": "next automatic",
+          "input": {
+            "selectionVersion": 3,
+            "draftId": "dB6ikB5yrgJNOTZlF9g20gy7WJgSWLiO",
+            "expectedRevision": 1,
+            "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "context": {
+              "mode": "demo",
+              "role": "spectator",
+              "locale": "en",
+              "reducedMotion": true,
+              "join": "unavailable-demo",
+              "actions": "synthetic-only"
+            },
+            "contractVersion": "0.1.0"
+          },
+          "claimed": true,
+          "fulfilled": true
+        },
+        {
+          "label": "next manual",
+          "input": {
+            "selectionVersion": 3,
+            "draftId": "dB6ikB5yrgJNOTZlF9g20gy7WJgSWLiO",
+            "expectedRevision": 1,
+            "chapterId": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+            "context": {
+              "mode": "demo",
+              "role": "spectator",
+              "locale": "en",
+              "reducedMotion": true,
+              "join": "unavailable-demo",
+              "actions": "synthetic-only"
+            },
+            "contractVersion": "0.1.0"
+          },
+          "claimed": true,
+          "fulfilled": true
+        },
+        {
+          "label": "previous automatic",
+          "input": {
+            "selectionVersion": 3,
+            "draftId": "dB6ikB5yrgJNOTZlF9g20gy7WJgSWLiO",
+            "expectedRevision": 1,
+            "chapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "context": {
+              "mode": "demo",
+              "role": "spectator",
+              "locale": "en",
+              "reducedMotion": true,
+              "join": "unavailable-demo",
+              "actions": "synthetic-only"
+            },
+            "contractVersion": "0.1.0"
+          },
+          "claimed": true,
+          "fulfilled": true
+        },
+        {
+          "label": "previous manual",
+          "input": {
+            "selectionVersion": 3,
+            "draftId": "dB6ikB5yrgJNOTZlF9g20gy7WJgSWLiO",
+            "expectedRevision": 1,
+            "chapterId": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+            "context": {
+              "mode": "demo",
+              "role": "spectator",
+              "locale": "en",
+              "reducedMotion": true,
+              "join": "unavailable-demo",
+              "actions": "synthetic-only"
+            },
+            "contractVersion": "0.1.0"
+          },
+          "claimed": true,
+          "fulfilled": true
+        }
+      ]
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T20:21:10.142Z",
+      "reason": "close transport race context",
+      "url": "http://127.0.0.1:60047/host?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "status": "drained",
+      "receipt": {
+        "documentId": "85f9e8ca-1360-47b7-b6bd-81674fa6f5cb",
+        "url": "http://127.0.0.1:60047/host?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+        "status": "drained",
+        "startedAt": "2026-11-19T20:21:10.146Z",
+        "finishedAt": "2026-11-19T20:21:10.146Z",
+        "elapsedMs": 0.2999999523162842,
+        "initial": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "remaining": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "sentReplies": 3,
+        "cancelledReplies": 0,
+        "rejectedNewCalls": 0,
+        "requestEvents": [
+          {
+            "at": "2026-11-19T20:21:05.091Z",
+            "path": "/qa/initial",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T20:21:05.356Z",
+            "path": "/qa/initial",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T20:21:05.434Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T20:21:05.867Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T20:21:08.467Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T20:21:08.968Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T20:21:09.314Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T20:21:09.623Z",
+            "path": "/qa/call",
+            "status": "completed"
+          }
+        ],
+        "errors": []
+      },
+      "finishedAt": "2026-11-19T20:21:10.148Z"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T20:21:22.325Z",
+      "reason": "pause automatic transport race",
+      "url": "about:blank",
+      "status": "no-host",
+      "finishedAt": "2026-11-19T20:21:22.325Z"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T20:21:45.336Z",
+      "reason": "replay automatic transport race",
+      "url": "http://127.0.0.1:60047/host?scenario=yBulJSMd4ZEjydnMlDlHp2pA",
+      "status": "drained",
+      "receipt": {
+        "documentId": "1df11d5d-3384-489a-bc8c-ad853cac8b38",
+        "url": "http://127.0.0.1:60047/host?scenario=yBulJSMd4ZEjydnMlDlHp2pA",
+        "status": "drained",
+        "startedAt": "2026-11-19T20:21:45.578Z",
+        "finishedAt": "2026-11-19T20:21:45.582Z",
+        "elapsedMs": 4,
+        "initial": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "remaining": {
+          "http": 0,
+          "handlers": 0,
+          "initialization": 0,
+          "replies": 0,
+          "connecting": false
+        },
+        "sentReplies": 2,
+        "cancelledReplies": 0,
+        "rejectedNewCalls": 0,
+        "requestEvents": [
+          {
+            "at": "2026-11-19T20:21:26.851Z",
+            "path": "/qa/initial",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T20:21:27.260Z",
+            "path": "/qa/initial",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T20:21:28.218Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T20:21:29.094Z",
+            "path": "/qa/call",
+            "status": "completed"
+          },
+          {
+            "at": "2026-11-19T20:21:31.391Z",
+            "path": "/qa/call",
+            "status": "started"
+          },
+          {
+            "at": "2026-11-19T20:21:41.277Z",
+            "path": "/qa/call",
+            "status": "completed"
+          }
+        ],
+        "errors": []
+      },
+      "finishedAt": "2026-11-19T20:21:45.590Z"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "check": "host document lifecycle",
+      "at": "2026-11-19T20:21:51.087Z",
+      "reason": "close transport race context",
+      "url": "http://127.0.0.1:60047/host?scenario=yBulJSMd4ZEjydnMlDlHp2pA",
+      "status": "failed",
+      "error": "Error: page.evaluate: Target crashed ",
+      "snapshotError": "Error: page.evaluate: Target crashed ",
+      "finishedAt": "2026-11-19T20:21:51.093Z"
+    }
+  ],
+  "rendererFixtures": [],
+  "calls": [
+    {
+      "name": "get_game_draft_summary",
+      "inputRevision": 1,
+      "inputDigest": "c90363fd5e31ba37afc966f9a727784fe82df2d157de4749887564bafb89e169",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "383497d0-4719-462a-aa51-3d76a5100736",
+        "data": {
+          "draftId": "dB6ikB5yrgJNOTZlF9g20gy7WJgSWLiO",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic chromium",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "17cc5675fae530411427faed49b37fb95bda2440f896c3828f26307645dde692",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "95336442-65ef-4504-b4cc-64ce4d2a4e40",
+        "data": {
+          "draftId": "dB6ikB5yrgJNOTZlF9g20gy7WJgSWLiO",
+          "revision": 1,
+          "title": "Full show tadazz-classic chromium",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "chapterCount": 28,
+          "frameDigest": "2ac5d13a2f6f8dc4522081d19e30753427ca665653a68a0ee7698168d54607f6"
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "inputRevision": 1,
+      "inputDigest": "c90363fd5e31ba37afc966f9a727784fe82df2d157de4749887564bafb89e169",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "9caa2fc7-aafc-4bed-9bc4-187099d1a5f0",
+        "data": {
+          "draftId": "dB6ikB5yrgJNOTZlF9g20gy7WJgSWLiO",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic chromium",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "17cc5675fae530411427faed49b37fb95bda2440f896c3828f26307645dde692",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "32afd73a-4b5a-4746-b832-8efb8c74a8c8",
+        "data": {
+          "draftId": "dB6ikB5yrgJNOTZlF9g20gy7WJgSWLiO",
+          "revision": 1,
+          "title": "Full show tadazz-classic chromium",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "chapterCount": 28,
+          "frameDigest": "2ac5d13a2f6f8dc4522081d19e30753427ca665653a68a0ee7698168d54607f6"
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "ed82a3055e945a73be50ed7a4dca5893b736a650be3ab5395235f108854c5e7c",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "7f400aea-7aee-4d80-9076-12c0fc01c683",
+        "data": {
+          "draftId": "dB6ikB5yrgJNOTZlF9g20gy7WJgSWLiO",
+          "revision": 1,
+          "title": "Full show tadazz-classic chromium",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question",
+          "chapterCount": 28,
+          "frameDigest": "39aa611c3b0f99e65da8da3d995e4cd5c31987e9a261acb3a517edd436271819"
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "inputRevision": 1,
+      "inputDigest": "c90363fd5e31ba37afc966f9a727784fe82df2d157de4749887564bafb89e169",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "f28d3665-b5b6-4e16-b229-127a6fca4151",
+        "data": {
+          "draftId": "dB6ikB5yrgJNOTZlF9g20gy7WJgSWLiO",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic chromium",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "17cc5675fae530411427faed49b37fb95bda2440f896c3828f26307645dde692",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "1ffb77f6-d4a7-43b8-adb2-f0b275565565",
+        "data": {
+          "draftId": "dB6ikB5yrgJNOTZlF9g20gy7WJgSWLiO",
+          "revision": 1,
+          "title": "Full show tadazz-classic chromium",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "chapterCount": 28,
+          "frameDigest": "2ac5d13a2f6f8dc4522081d19e30753427ca665653a68a0ee7698168d54607f6"
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "dbee77a6c2e7c976307c0a6fa24d8bf070da51e6e86c8a3caef0b2d74a6ae4c0",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "54ea5735-49c1-4537-b442-85b27ab02791",
+        "data": {
+          "draftId": "dB6ikB5yrgJNOTZlF9g20gy7WJgSWLiO",
+          "revision": 1,
+          "title": "Full show tadazz-classic chromium",
+          "selectedChapterId": "preview-card-b6a19b2455d98fa4bab8472676aa11a9a2dc3d42903c9615163e6def2f513ddb:question",
+          "chapterCount": 28,
+          "frameDigest": "394dfdeb17d7ee49d1c15b5b454e4b2d96d976e8fcce798edfbc62603238b4d9"
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "inputRevision": 1,
+      "inputDigest": "c90363fd5e31ba37afc966f9a727784fe82df2d157de4749887564bafb89e169",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "316b79f4-fb5b-4a53-abc9-b7a3c7077ba4",
+        "data": {
+          "draftId": "dB6ikB5yrgJNOTZlF9g20gy7WJgSWLiO",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic chromium",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "17cc5675fae530411427faed49b37fb95bda2440f896c3828f26307645dde692",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "dfee9bcd-2b0f-4417-a5c3-72bfe56c9760",
+        "data": {
+          "draftId": "dB6ikB5yrgJNOTZlF9g20gy7WJgSWLiO",
+          "revision": 1,
+          "title": "Full show tadazz-classic chromium",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "chapterCount": 28,
+          "frameDigest": "2ac5d13a2f6f8dc4522081d19e30753427ca665653a68a0ee7698168d54607f6"
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "3b67d25b2be50a0e6dae2a851047007fbf1503971e65a7ce755edf1392ab4fc9",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "fecb8c45-83e1-4cb2-bbfb-21409d0fcd6c",
+        "data": {
+          "draftId": "dB6ikB5yrgJNOTZlF9g20gy7WJgSWLiO",
+          "revision": 1,
+          "title": "Full show tadazz-classic chromium",
+          "selectedChapterId": "preview-card-63fcdfae9ac6442031e05a2523146f733dec1a1a7309061728b4f9e8daa425c9:question",
+          "chapterCount": 28,
+          "frameDigest": "7916294516382948f3ce69d6a4b24f5ce578b4c947abccbb020b318ca4fa5b61"
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "inputRevision": 1,
+      "inputDigest": "0c4676a148582bc218c9efad5e5bde14f6b159633edd32c87008253bc9616801",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "156de9b9-32e4-461e-a6b7-1b2cbafb2748",
+        "data": {
+          "draftId": "MMg7NZcbhvCL7-jEFYvJ5Kq3oEsG3pa4",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    },
+    {
+      "name": "preview_show",
+      "inputRevision": 1,
+      "inputDigest": "4a90e3d564d060424b926abf24b757bd81dc25b76a4491bc96ecfa473008923c",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "9f021dfb-e806-4eb1-878c-b851f0f056b7",
+        "data": {
+          "draftId": "MMg7NZcbhvCL7-jEFYvJ5Kq3oEsG3pa4",
+          "revision": 1,
+          "title": "Full show tadazz-classic webkit",
+          "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+          "chapterCount": 28,
+          "frameDigest": "096630990cead78804995e1adf84f6750e224267165bb7e20e171c4992d24ad1"
+        }
+      }
+    },
+    {
+      "name": "get_game_draft_summary",
+      "inputRevision": 1,
+      "inputDigest": "0c4676a148582bc218c9efad5e5bde14f6b159633edd32c87008253bc9616801",
+      "result": {
+        "contractVersion": "0.1.0",
+        "ok": true,
+        "correlationId": "4570309d-8f22-4159-8787-b73c02350cc8",
+        "data": {
+          "draftId": "MMg7NZcbhvCL7-jEFYvJ5Kq3oEsG3pa4",
+          "revision": 1,
+          "summary": {
+            "title": "Full show tadazz-classic webkit",
+            "cardCount": 8,
+            "questionCount": 5,
+            "themeId": "tadazz-classic",
+            "themeVersion": "1.0.0",
+            "diagnostics": []
+          }
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "resources": [
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/show-stage.webp",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/question-bg.webp",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/second-library/teaser-screen-source.jpg",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/show-stage.webp",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/question-bg.webp",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/second-library/teaser-screen-source.jpg",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/show-stage.webp",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/question-bg.webp",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/second-library/teaser-screen-source.jpg",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/show-stage.webp",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/question-bg.webp",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+      "admitted": true
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/second-library/teaser-screen-source.jpg",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/show-stage.webp",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/second-library/teaser-screen-source.jpg",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/question-bg.webp",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/show-stage.webp",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/second-library/teaser-screen-source.jpg",
+      "admitted": true
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "path": "/tadazz-show/v4/question-bg.webp",
+      "admitted": true
+    }
+  ],
+  "requestFailures": [],
+  "pageErrorEvents": [],
+  "qaRequestEvents": [
+    {
+      "at": "2026-11-19T20:20:45.771Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+      "activeStep": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+      "documentUrl": "http://127.0.0.1:60047/host?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "url": "http://127.0.0.1:60047/qa/initial?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "method": "GET",
+      "responseAt": "2026-11-19T20:20:46.263Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T20:20:46.374Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+      "activeStep": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+      "documentUrl": "http://127.0.0.1:60047/host?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "url": "http://127.0.0.1:60047/qa/call?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "method": "POST",
+      "responseAt": "2026-11-19T20:20:46.663Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T20:20:49.427Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:60047/host?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "url": "http://127.0.0.1:60047/qa/call?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "method": "POST",
+      "responseAt": "2026-11-19T20:20:51.053Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T20:20:52.651Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:60047/host?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "url": "http://127.0.0.1:60047/qa/initial?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "method": "GET",
+      "responseAt": "2026-11-19T20:20:53.055Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T20:20:53.119Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:60047/host?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "url": "http://127.0.0.1:60047/qa/call?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "method": "POST",
+      "responseAt": "2026-11-19T20:20:53.479Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T20:20:56.122Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:60047/host?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "url": "http://127.0.0.1:60047/qa/call?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "method": "POST",
+      "responseAt": "2026-11-19T20:20:57.714Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T20:20:56.794Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:60047/host?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "url": "http://127.0.0.1:60047/qa/call?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "method": "POST",
+      "responseAt": "2026-11-19T20:20:57.271Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T20:20:59.106Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:60047/host?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "url": "http://127.0.0.1:60047/qa/initial?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "method": "GET",
+      "responseAt": "2026-11-19T20:20:59.552Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T20:20:59.637Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:60047/host?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "url": "http://127.0.0.1:60047/qa/call?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "method": "POST",
+      "responseAt": "2026-11-19T20:20:59.927Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T20:21:02.693Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:60047/host?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "url": "http://127.0.0.1:60047/qa/call?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "method": "POST",
+      "responseAt": "2026-11-19T20:21:04.123Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T20:21:03.327Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:60047/host?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "url": "http://127.0.0.1:60047/qa/call?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "method": "POST",
+      "responseAt": "2026-11-19T20:21:03.811Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T20:21:05.093Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:60047/host?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "url": "http://127.0.0.1:60047/qa/initial?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "method": "GET",
+      "responseAt": "2026-11-19T20:21:05.361Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T20:21:05.437Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:60047/host?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "url": "http://127.0.0.1:60047/qa/call?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "method": "POST",
+      "responseAt": "2026-11-19T20:21:05.867Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T20:21:08.469Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:60047/host?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "url": "http://127.0.0.1:60047/qa/call?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "method": "POST",
+      "responseAt": "2026-11-19T20:21:09.625Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T20:21:08.972Z",
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "activeCheck": "chromium / tadazz-classic readonly transport supersedes automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:60047/host?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "url": "http://127.0.0.1:60047/qa/call?scenario=1uoFiiYiCHXvRoxaXLsV5J29",
+      "method": "POST",
+      "responseAt": "2026-11-19T20:21:09.315Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T20:21:26.884Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+      "activeStep": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+      "documentUrl": "http://127.0.0.1:60047/host?scenario=yBulJSMd4ZEjydnMlDlHp2pA",
+      "url": "http://127.0.0.1:60047/qa/initial?scenario=yBulJSMd4ZEjydnMlDlHp2pA",
+      "method": "GET",
+      "responseAt": "2026-11-19T20:21:27.273Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T20:21:28.250Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+      "activeStep": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+      "documentUrl": "http://127.0.0.1:60047/host?scenario=yBulJSMd4ZEjydnMlDlHp2pA",
+      "url": "http://127.0.0.1:60047/qa/call?scenario=yBulJSMd4ZEjydnMlDlHp2pA",
+      "method": "POST",
+      "responseAt": "2026-11-19T20:21:28.672Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T20:21:31.394Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+      "activeStep": "HTTP get_game_draft_summary",
+      "documentUrl": "http://127.0.0.1:60047/host?scenario=yBulJSMd4ZEjydnMlDlHp2pA",
+      "url": "http://127.0.0.1:60047/qa/call?scenario=yBulJSMd4ZEjydnMlDlHp2pA",
+      "method": "POST",
+      "responseAt": "2026-11-19T20:21:41.252Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T20:21:47.627Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:60047/host?scenario=yBulJSMd4ZEjydnMlDlHp2pA",
+      "url": "http://127.0.0.1:60047/qa/initial?scenario=yBulJSMd4ZEjydnMlDlHp2pA",
+      "method": "GET",
+      "responseAt": "2026-11-19T20:21:48.426Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    },
+    {
+      "at": "2026-11-19T20:21:49.190Z",
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "activeCheck": "webkit / tadazz-classic readonly transport supersedes automatic preview",
+      "activeStep": "HTTP preview_show",
+      "documentUrl": "http://127.0.0.1:60047/host?scenario=yBulJSMd4ZEjydnMlDlHp2pA",
+      "url": "http://127.0.0.1:60047/qa/call?scenario=yBulJSMd4ZEjydnMlDlHp2pA",
+      "method": "POST",
+      "responseAt": "2026-11-19T20:21:49.859Z",
+      "status": 200,
+      "contentType": "application/json",
+      "allowOrigin": null
+    }
+  ],
+  "requests": [
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/second-library/teaser-screen-source.jpg"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/second-library/teaser-screen-source.jpg"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/second-library/teaser-screen-source.jpg"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+    },
+    {
+      "engine": "chromium",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/second-library/teaser-screen-source.jpg"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/second-library/teaser-screen-source.jpg"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/second-library/teaser-screen-source.jpg"
+    },
+    {
+      "engine": "webkit",
+      "theme": "tadazz-classic",
+      "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+    }
+  ]
+}
