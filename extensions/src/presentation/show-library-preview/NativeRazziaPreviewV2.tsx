@@ -16,10 +16,9 @@ import "./native-razzia-utilities-v2.css"
 // Exact native AnswerButton palette from packages/web/src/index.css.
 const colors = ["#e69f00", "#56b4e9", "#3dbfa0", "#cc79a7", "#0072b2"]
 
-/** Read-only frame adapter for the genuine upstream native visual primitives.
- * No upstream gameplay hook, socket, player store, scoring or audio is mounted.
- * Clock text is a projection of the host frame; this component never ticks time.
- */
+// Read-only frame adapter for the genuine upstream native visual primitives.
+// No upstream gameplay hook, socket, player store, scoring or audio is mounted.
+// Clock text is a projection of the host frame; this component never ticks time.
 export function NativeRazziaPreviewV2({
   input,
   theme,
@@ -55,6 +54,7 @@ export function NativeRazziaPreviewV2({
         const visual = presentation?.answerVisuals.find(
           (value) => value.answerId === choice.id,
         )
+
         return visual
           ? [
               {
@@ -81,7 +81,15 @@ export function NativeRazziaPreviewV2({
         0,
     ]),
   )
-  const epoch = `${frame.epoch}:${frame.question.id}:${results}`
+  // A phase clock restart is not a new question entrance. The continuous
+  // host remounts this renderer for an explicit replay/revision/new question.
+  const epoch = continuousPlayback
+    ? frame.question.id
+    : `${frame.epoch}:${frame.question.id}:${results}`
+  const photoAnimations =
+    continuousPlayback && results && Object.values(counts).every((n) => n === 0)
+      ? { ...animations, resultsRevealEntrance: animations.answerEntrance }
+      : animations
   const remaining =
     frame.clock.deadlineMs === null
       ? null
@@ -89,6 +97,7 @@ export function NativeRazziaPreviewV2({
           0,
           Math.ceil((frame.clock.deadlineMs - frame.clock.elapsedMs) / 1000),
         )
+
   return (
     <StageFitContainer>
       <div
@@ -134,7 +143,7 @@ export function NativeRazziaPreviewV2({
         </QuestionEntrance>
         {frame.phase === "voting" && (
           <output data-testid="native-razzia-clock">
-            {remaining === null ? labels.votingOpen : remaining}
+            {remaining ?? labels.votingOpen}
           </output>
         )}
         {frame.phase === "voteLocked" && <p>{translated.labels.votesLocked}</p>}
@@ -150,7 +159,7 @@ export function NativeRazziaPreviewV2({
             isSurvey={frame.question.mode === "survey"}
             responses={results ? counts : undefined}
             percentages={results ? percentages : undefined}
-            stageAnimations={animations}
+            stageAnimations={photoAnimations}
             animationEpochKey={epoch}
           />
         )}
@@ -168,6 +177,11 @@ export function NativeRazziaPreviewV2({
                 results && frame.question.mode === "quiz"
                   ? result?.correct
                   : undefined
+              let background = colors[index]
+
+              if (correct !== undefined) {
+                background = correct ? "#059669" : "#b91c1c"
+              }
 
               return (
                 <AnswerButton
@@ -185,7 +199,7 @@ export function NativeRazziaPreviewV2({
                       : undefined
                   }
                   cardEntrance={
-                    results
+                    results && !continuousPlayback
                       ? animations.resultsRevealEntrance
                       : animations.answerEntrance
                   }
@@ -208,14 +222,7 @@ export function NativeRazziaPreviewV2({
                   percentage={results ? result?.percent : undefined}
                   count={results ? result?.count : undefined}
                   data-testid={`native-razzia-answer-${index}`}
-                  style={{
-                    background:
-                      correct === undefined
-                        ? colors[index]
-                        : correct
-                          ? "#059669"
-                          : "#b91c1c",
-                  }}
+                  style={{ background }}
                 >
                   {choice.label}
                 </AnswerButton>

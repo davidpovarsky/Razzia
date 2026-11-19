@@ -299,6 +299,9 @@ export const TadazzV4StageAdapter = forwardRef<
       },
       async presentOptions(data) {
         const { current } = questionRef
+        const questionAlreadyOnStage =
+          current?.key === data.key &&
+          ["question", "voting", "locked", "results"].includes(modeRef.current)
         questionRef.current = data
         setScreenMode("none")
 
@@ -327,7 +330,10 @@ export const TadazzV4StageAdapter = forwardRef<
         const scene = isPhotoQuestion(data)
           ? "question-image"
           : "picture-answers"
-        await v4Ref.current?.play(scene, buildQuestionData(data))
+        await v4Ref.current?.play(
+          scene,
+          buildQuestionData(data, { questionAlreadyOnStage }),
+        )
       },
       async openVoting(seconds, deadlineMs) {
         const q = questionRef.current

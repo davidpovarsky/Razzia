@@ -501,6 +501,85 @@ const fullPort = (
     { drafts: repository, authoring: policy },
     { rendererBuildId, assertAssets },
   )
+test("full-show projection inherits trusted native entrance presets across question phases", async () => {
+  const data = show("Trusted native motion inheritance")
+  const trustedDefaults = tadaShowV1Schema.parse({
+    ...data,
+    defaults: {
+      showTheme: { id: "razzia-original", version: "1.0.0" },
+      stageAnimations: {
+        questionEntrance: { preset: "slide-up", durationMs: 600 },
+        answerEntrance: {
+          preset: "cascade",
+          durationMs: 650,
+          timing: "sequential",
+          staggerMs: 90,
+        },
+        resultsRevealEntrance: { preset: "zoom-soft", durationMs: 700 },
+      },
+    },
+  }).defaults
+  assert(trustedDefaults?.stageAnimations)
+  const authoring = { ...policy, trustedDefaults }
+  const drafts = issuer.draftRepository(authoring)
+  const normalized = normalizeDraft(JSON.stringify(data), authoring)
+  const record = await drafts.create(a, normalized, mutation(normalized))
+  const preview = createFullShowPreviewPortV3(
+    { drafts, authoring },
+    { rendererBuildId, assertAssets: () => Promise.resolve() },
+  )
+  const initial = await preview.render(a, selection(record))
+  const phases = initial.inventory.chapters.filter(
+    (chapter) => chapter.questionOrdinal === 1,
+  )
+  assert.deepEqual(
+    phases.map((chapter) => chapter.kind),
+    ["question", "answerCards", "voting", "voteLocked", "results"],
+  )
+  for (const chapter of phases) {
+    const frame = await preview.render(a, {
+      ...selection(record),
+      chapterId: chapter.id,
+    })
+    assert(frame.content.kind === "question")
+    const inherited = frame.content.visualSettings.stageAnimations
+    assert.deepEqual(
+      inherited.questionEntrance,
+      trustedDefaults.stageAnimations.questionEntrance,
+    )
+    assert.deepEqual(
+      inherited.answerEntrance,
+      trustedDefaults.stageAnimations.answerEntrance,
+    )
+    assert.deepEqual(
+      inherited.resultsRevealEntrance,
+      trustedDefaults.stageAnimations.resultsRevealEntrance,
+    )
+    assert(inherited.answerBadgeEntrance)
+    assert.equal(inherited.answerBadgeEntrance.preset, "none")
+  }
+  // Per-card appearance remains forbidden at this authoring boundary. Native
+  // resolver precedence is retained; this fix grants no raw model override.
+  assert.throws(
+    () =>
+      normalizeDraft(
+        JSON.stringify({
+          ...data,
+          cards: data.cards.map((card) => ({
+            ...card,
+            stageAnimations: { questionEntrance: { preset: "none" } },
+          })),
+        }),
+        authoring,
+      ),
+    /VALIDATION_FAILED/u,
+  )
+  const afterProjection = await drafts.get(a, record.draftId)
+  assert(afterProjection)
+  assert.equal(afterProjection.revision, record.revision)
+  assert.equal(afterProjection.authoredShowJson, normalized.authoredShowJson)
+})
+
 test("native demo transport pauses elapsed time, resumes continuously and explicitly replays question and scene epochs", async () => {
   const record = await created()
   const runtime = fullPort()

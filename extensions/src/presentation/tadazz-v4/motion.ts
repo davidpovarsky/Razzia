@@ -129,7 +129,9 @@ export class TadazzV4Motion {
   resume() {
     this.active.forEach((a) => {
       try {
-        if (a.playState === "paused") a.play()
+        if (a.playState === "paused") {
+          a.play()
+        }
       } catch {
         /* Stale */
       }
@@ -213,7 +215,11 @@ export class TadazzV4Motion {
     // A visible WebKit shadow stage can leave new effects play-pending until a
     // costly paint. Use this animation's native timeline as its start authority.
     const timelineTime = a.timeline?.currentTime
-    if (typeof timelineTime === "number") a.startTime = timelineTime
+
+    if (typeof timelineTime === "number") {
+      a.startTime = timelineTime
+    }
+
     void a.finished.catch(() => undefined)
 
     return a
@@ -1080,7 +1086,11 @@ export class TadazzV4Motion {
       this.cue("top-pick-reveal", 690)
     }
   }
-  private questionImage() {
+  private questionImage(data: TadazzV4Data) {
+    if (data.cardsAlreadyOnStage) {
+      return
+    }
+
     const root = this.root()
     all(root, ".photo-option").forEach((option, i) => {
       this.animate(
@@ -1117,6 +1127,11 @@ export class TadazzV4Motion {
         duration: 1370,
       },
     )
+
+    if (data.questionAlreadyOnStage) {
+      return
+    }
+
     this.animate(
       query(root, ".photo-question-panel"),
       [
@@ -1491,8 +1506,13 @@ export class TadazzV4Motion {
         break
 
       case "picture-answers":
-        this.questionMotion(70)
-        this.cardsMotion(370)
+        if (!data.questionAlreadyOnStage && !data.cardsAlreadyOnStage) {
+          this.questionMotion(70)
+        }
+
+        if (!data.cardsAlreadyOnStage) {
+          this.cardsMotion(370)
+        }
 
         break
 
@@ -1527,7 +1547,7 @@ export class TadazzV4Motion {
         break
 
       case "question-image":
-        this.questionImage()
+        this.questionImage(data)
 
         break
 
@@ -1860,8 +1880,10 @@ export class TadazzV4Motion {
         if (
           animation === this.countdownSweep ||
           animation.effect?.getTiming().iterations === Infinity
-        )
+        ) {
           continue
+        }
+
         try {
           animation.finish()
         } catch {
@@ -1876,6 +1898,7 @@ export class TadazzV4Motion {
     const pending = this.config.reducedMotion
       ? this.active.filter((animation) => animation === this.countdownSweep)
       : this.active
+
     return Promise.allSettled(pending.map((a) => a.finished)).then(
       () => token === this.token,
     )

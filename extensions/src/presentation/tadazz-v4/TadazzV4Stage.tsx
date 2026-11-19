@@ -20,6 +20,7 @@ import { TadazzV4Motion } from "./motion"
 import "./source-layout.css"
 import "./tadazz-v4.css"
 import {
+  continuesQuestionStage,
   normalizeData,
   TADAZZ_V4_ASSET_BASE,
   TADAZZ_V4_SHOW_SCENES,
@@ -32,6 +33,7 @@ interface CurrentScene {
   scene: TadazzV4Scene
   data: TadazzV4Data
   revision: number
+  contentRevision: number
 }
 
 /**
@@ -69,6 +71,7 @@ export const TadazzV4Stage = forwardRef<
           scene: initialScene,
           data: normalizeData(initialData),
           revision: 0,
+          contentRevision: 0,
         }
       : null,
   )
@@ -133,11 +136,15 @@ export const TadazzV4Stage = forwardRef<
         }
       }
       engineRef.current?.stop()
-      setView({
+      setView((previous) => ({
         scene,
         data: normalizeData(data),
         revision,
-      })
+        contentRevision:
+          previous && continuesQuestionStage(previous, { scene, data })
+            ? previous.contentRevision
+            : revision,
+      }))
 
       return new Promise<boolean>((resolve) => {
         resolutions.current.set(revision, resolve)
@@ -267,7 +274,13 @@ export const TadazzV4Stage = forwardRef<
       replay: async () => {
         const { current } = viewRef
 
-        return current ? start(current.scene, current.data) : false
+        return current
+          ? start(current.scene, {
+              ...current.data,
+              questionAlreadyOnStage: false,
+              cardsAlreadyOnStage: false,
+            })
+          : false
       },
       pause: () => {
         engineRef.current?.pause()
@@ -423,7 +436,7 @@ export const TadazzV4Stage = forwardRef<
               alt="Creating Worlds"
             />
           )}
-        <div className="tzv4-scene-root" key={view?.revision}>
+        <div className="tzv4-scene-root" key={view?.contentRevision}>
           {view ? (
             <StageSceneV4
               scene={view.scene}

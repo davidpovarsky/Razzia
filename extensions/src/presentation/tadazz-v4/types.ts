@@ -116,6 +116,8 @@ export interface TadazzV4Data {
   subtitle?: string
   photoAlt?: string
   emptyMessage?: string
+  /** The same question is visible; enter only newly presented answers. */
+  questionAlreadyOnStage?: boolean
   /** If true, question header & answer cards are already on stage and should not replay their initial entrance. */
   cardsAlreadyOnStage?: boolean
   labels?: Partial<TadazzV4Labels>
@@ -124,6 +126,31 @@ export interface TadazzV4Data {
   backgroundFit?: "cover" | "contain"
   backgroundPosition?: BackgroundPosition
   backgroundOverlayOpacity?: number
+}
+
+const questionScenes = new Set<TadazzV4Scene>([
+  "question",
+  "picture-answers",
+  "voting-open",
+  "countdown",
+  "vote-locked",
+  "chosen",
+  "survey-results",
+])
+
+/** Continuity is explicit: snapshots, replay, and another question start fresh. */
+export function continuesQuestionStage(
+  previous: { scene: TadazzV4Scene; data: TadazzV4Data } | null,
+  next: { scene: TadazzV4Scene; data: TadazzV4Data },
+): boolean {
+  return Boolean(
+    previous &&
+    next.data.questionKey &&
+    previous.data.questionKey === next.data.questionKey &&
+    (next.data.questionAlreadyOnStage || next.data.cardsAlreadyOnStage) &&
+    questionScenes.has(previous.scene) &&
+    questionScenes.has(next.scene),
+  )
 }
 
 export interface TadazzV4Labels {

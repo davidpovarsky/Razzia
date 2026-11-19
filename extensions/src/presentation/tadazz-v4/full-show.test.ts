@@ -383,6 +383,107 @@ describe("TadazzV4Motion: WAAPI Cue Emission & Reduced Motion Lifecycle", () => 
       expect(emittedCueNames).toContain(expectedCue)
     }
   })
+  it("enters a question once across answers, voting, selection, and results", async () => {
+    const element = () => ({
+      style: {} as Record<string, string>,
+      querySelector: () => null,
+      querySelectorAll: () => [],
+      replaceChildren: () => undefined,
+      classList: { add: vi.fn(), remove: vi.fn() },
+      animate: vi.fn(
+        (_frames: Keyframe[], _options?: KeyframeAnimationOptions) => ({
+          finished: Promise.resolve(),
+          cancel: vi.fn(),
+          finish: vi.fn(),
+        }),
+      ),
+    })
+    const question = element()
+    const text = element()
+    const eyebrow = element()
+    const cards = [element(), element()]
+    const stage = {
+      ...element(),
+      querySelector: (selector: string) =>
+        (
+          ({
+            ".q-frame": question,
+            ".q-text": text,
+            ".q-frame .eyebrow": eyebrow,
+          }) as Record<string, unknown>
+        )[selector] ?? null,
+      querySelectorAll: (selector: string) =>
+        selector === ".choice-slot" ? cards : [],
+    } as unknown as HTMLElement
+    const motion = new TadazzV4Motion(stage, { reducedMotion: true })
+
+    await motion.play("question")
+    await motion.play("picture-answers", { questionAlreadyOnStage: true })
+    for (const scene of [
+      "voting-open",
+      "vote-locked",
+      "chosen",
+      "survey-results",
+    ] as const) {
+      await motion.play(scene, {
+        cardsAlreadyOnStage: true,
+        selectedIndex: 0,
+        counts: [3, 1],
+      })
+    }
+    for (const node of [question, text, eyebrow]) {
+      expect(node.animate).toHaveBeenCalledTimes(1)
+    }
+    for (const card of cards) {
+      const entrances = card.animate.mock.calls.filter(
+        ([frames]) => frames[0]?.opacity === 0,
+      )
+      expect(entrances).toHaveLength(1)
+    }
+
+    // A cold/replayed question phase still owns a complete entrance.
+    await motion.play("picture-answers")
+    for (const node of [question, text, eyebrow]) {
+      expect(node.animate).toHaveBeenCalledTimes(2)
+    }
+  })
+
+  it("keeps an existing question readable when photo artwork and options enter", async () => {
+    const animate = () =>
+      vi.fn((_frames: Keyframe[]) => ({
+        finished: Promise.resolve(),
+        finish: vi.fn(),
+        cancel: vi.fn(),
+      }))
+    const panel = { animate: animate() }
+    const artwork = { animate: animate() }
+    const option = { animate: animate() }
+    const stage = {
+      querySelector: (selector: string) =>
+        (
+          ({
+            ".photo-question-panel": panel,
+            ".photo-question-img": artwork,
+          }) as Record<string, unknown>
+        )[selector] ?? null,
+      querySelectorAll: (selector: string) =>
+        selector === ".photo-option" ? [option] : [],
+    } as unknown as HTMLElement
+    const motion = new TadazzV4Motion(stage, { reducedMotion: true })
+    await motion.play("question-image", { questionAlreadyOnStage: true })
+    expect(panel.animate).not.toHaveBeenCalled()
+    expect(artwork.animate).toHaveBeenCalledTimes(1)
+    expect(option.animate).toHaveBeenCalledTimes(1)
+    await motion.play("question-image", { cardsAlreadyOnStage: true })
+    expect(panel.animate).not.toHaveBeenCalled()
+    expect(artwork.animate).toHaveBeenCalledTimes(1)
+    expect(option.animate).toHaveBeenCalledTimes(1)
+    await motion.play("question-image")
+    expect(panel.animate).toHaveBeenCalledTimes(1)
+    expect(artwork.animate).toHaveBeenCalledTimes(2)
+    expect(option.animate).toHaveBeenCalledTimes(2)
+  })
+
   it("stop() cancels active state and clears pending timers", () => {
     const stage = fakeElement()
     const motion = new TadazzV4Motion(stage)
@@ -392,7 +493,7 @@ describe("TadazzV4Motion: WAAPI Cue Emission & Reduced Motion Lifecycle", () => 
   })
   it("settles suspended finite CSS decoration only when reduced motion is enabled", async () => {
     for (const reducedMotion of [false, true]) {
-      let complete!: () => void
+      let complete: () => void = () => undefined
       const finished = new Promise<void>((resolve) => {
         complete = resolve
       })
@@ -412,7 +513,11 @@ describe("TadazzV4Motion: WAAPI Cue Emission & Reduced Motion Lifecycle", () => 
       const playing = motion.play("question", {})
       expect(finite.finish).toHaveBeenCalledTimes(reducedMotion ? 1 : 0)
       expect(ambient.finish).not.toHaveBeenCalled()
-      if (!reducedMotion) complete()
+
+      if (!reducedMotion) {
+        complete()
+      }
+
       await expect(playing).resolves.toBe(true)
     }
   })

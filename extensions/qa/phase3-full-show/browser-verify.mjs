@@ -7,6 +7,10 @@ import {
 } from "./workspace-controls.mjs"
 import { runLayoutDiagnostic } from "./layout-diagnostic.mjs"
 import { verifyHostControls } from "./host-controls.mjs"
+import {
+  installPhaseContinuityProbe,
+  verifyPhaseContinuity,
+} from "./phase-continuity.mjs"
 import { execFileSync } from "node:child_process"
 // Real issuer + repository + MCP SDK + AppBridge, isolated browsers and public asset bytes.
 // No production accounts, hosts, files or privileges are used by this harness.
@@ -458,7 +462,25 @@ async function scenarioFor(theme, engine) {
   }
   const trustedDefaults = tadaShowV1Schema.parse({
     ...authored,
-    defaults: { showTheme: { id: theme, version: "1.0.0" } },
+    defaults: {
+      showTheme: { id: theme, version: "1.0.0" },
+      // Native appearance is host-owned trusted configuration. Raw model-authored
+      // cards remain subject to the unchanged presentation-field deny policy.
+      ...(process.env.TADAZZ_FULL_SHOW_DIAGNOSTIC === "phase-continuity"
+        ? {
+            stageAnimations: {
+              questionEntrance: { preset: "slide-up", durationMs: 600 },
+              answerEntrance: {
+                preset: "cascade",
+                durationMs: 650,
+                timing: "sequential",
+                staggerMs: 90,
+              },
+              resultsRevealEntrance: { preset: "zoom-soft", durationMs: 700 },
+            },
+          }
+        : {}),
+    },
   }).defaults
   const authoring = {
     ...policy,
@@ -835,6 +857,41 @@ try {
           chapter.id,
           { timeout: 10000 },
         )
+      }
+
+      if (process.env.TADAZZ_FULL_SHOW_DIAGNOSTIC === "phase-continuity") {
+        await installPhaseContinuityProbe(page)
+        for (const reducedMotion of [false, true]) {
+          await run(
+            `${engine} / ${theme} phase continuity ${
+              reducedMotion ? "reduced motion" : "normal motion"
+            }`,
+            async () => {
+              observations.push(
+                await verifyPhaseContinuity({
+                  page,
+                  base,
+                  scenario,
+                  engine,
+                  theme,
+                  evidence,
+                  reducedMotion,
+                  readRecord: async () =>
+                    scenario.repository.get(
+                      await qaSession.principal(),
+                      scenario.record.draftId,
+                    ),
+                }),
+              )
+              assert.deepEqual(caseErrors, [])
+            },
+            60000,
+          )
+        }
+        await prepareHostNavigation(page, "close continuity context")
+        await context.close()
+
+        continue
       }
 
       if (process.env.TADAZZ_FULL_SHOW_DIAGNOSTIC === "workspace") {
