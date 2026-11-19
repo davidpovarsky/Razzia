@@ -2,6 +2,10 @@ import { afterEach, describe, expect, it, vi } from "vitest"
 import { PresentationLaunch } from "./presentation-launch"
 import {
   PLATFORM_CURTAIN_DURATION_MS,
+  PLATFORM_CLOSING_DURATION_MS,
+  PLATFORM_CLOSING_HOLD_MS,
+  platformClosingFrame,
+  readTerminalFinaleStartedAt,
   PLATFORM_OPENING_DURATION_MS,
   PLATFORM_OPENING_VIDEO_DURATION_MS,
   platformOpeningFrame,
@@ -107,5 +111,94 @@ describe("platform opening", () => {
       stage: "standby",
       startedAt: null,
     })
+  })
+})
+
+describe("platform closing", () => {
+  it("ends generic rooms once, keeps the closed curtain on reconnect, and consumes extra advances", () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(100000)
+    const changed = vi.fn()
+    const launch = new PresentationLaunch(changed)
+    launch.close()
+    const initial = launch.snapshot(false)
+    expect(initial).toEqual({ stage: "closing", startedAt: 100000 })
+    vi.advanceTimersByTime(1000)
+    launch.close()
+    expect(launch.snapshot(false)).toEqual(initial)
+    vi.advanceTimersByTime(PLATFORM_CLOSING_DURATION_MS - 1000)
+    expect(launch.snapshot(false)).toEqual({
+      stage: "closed",
+      startedAt: 100000,
+    })
+    expect(launch.advance()).toBe(true)
+    expect(launch.snapshot(false).stage).toBe("closed")
+    expect(changed).toHaveBeenCalledTimes(2)
+  })
+
+  it("continues an authored finale without a second curtain or a restarted hold", () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(109200)
+    const launch = new PresentationLaunch(vi.fn())
+    launch.close(100000)
+    expect(launch.snapshot(false)).toEqual({
+      stage: "closed",
+      startedAt: 100000,
+    })
+    launch.close()
+    expect(launch.snapshot(false)).toEqual({
+      stage: "closed",
+      startedAt: 100000,
+    })
+    expect(launch.getPauseSnapshot().remainingMs).toBeNull()
+  })
+
+  it("freezes a generic ending and reopens the existing room for history replay", () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(100000)
+    const launch = new PresentationLaunch(vi.fn())
+    launch.close()
+    vi.advanceTimersByTime(PLATFORM_CLOSING_HOLD_MS + 500)
+    expect(launch.pause()).toBe(true)
+    const frozen = launch.getPauseSnapshot()
+    vi.advanceTimersByTime(20000)
+    expect(launch.getPauseSnapshot()).toEqual(frozen)
+    expect(launch.snapshot(false).stage).toBe("closing")
+    expect(launch.resume()).toBe(true)
+    vi.advanceTimersByTime(frozen.remainingMs ?? 0)
+    expect(launch.snapshot(false).stage).toBe("closed")
+    launch.resumeRunning()
+    expect(launch.snapshot(true).stage).toBe("running")
+    expect(launch.advance()).toBe(false)
+    launch.close()
+    expect(launch.snapshot(false)).toEqual({
+      stage: "closing",
+      startedAt: Date.now(),
+    })
+  })
+
+  it("keeps existing finale timing and only hands the terminal built-in scene to the product", () => {
+    expect(platformClosingFrame(PLATFORM_CLOSING_HOLD_MS).curtainProgress).toBe(
+      0,
+    )
+    const moving = platformClosingFrame(PLATFORM_CLOSING_HOLD_MS + 1090)
+    expect(moving.curtainProgress).toBeGreaterThan(0)
+    expect(moving.curtainProgress).toBeLessThan(1)
+    expect(platformClosingFrame(PLATFORM_CLOSING_DURATION_MS)).toMatchObject({
+      curtainProgress: 1,
+      closed: true,
+    })
+    const step = {
+      scene: { kind: "animation", preset: "grand-finale" },
+      stepIndex: 4,
+      totalSteps: 5,
+      startedAt: 100000,
+    }
+    expect(readTerminalFinaleStartedAt(step)).toBe(100000)
+    expect(readTerminalFinaleStartedAt({ ...step, stepIndex: 1 })).toBeNull()
+    expect(readTerminalFinaleStartedAt({ ...step, startedAt: NaN })).toBeNull()
+    expect(
+      readPlatformOpening({ stage: "closed", startedAt: 100000 })?.stage,
+    ).toBe("closed")
   })
 })

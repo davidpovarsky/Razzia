@@ -3,6 +3,9 @@ import { STATUS } from "@razzia/common/types/game/status"
 import {
   EXTENSION_EVENTS,
   PLATFORM_OPENING_DURATION_MS,
+  PLATFORM_CLOSING_DURATION_MS,
+  PLATFORM_CLOSING_HOLD_MS,
+  readPlatformOpening,
   type ExtensionStateEnvelope,
 } from "@razzia/extensions/core"
 import { getSidecarFilePath } from "@razzia/extensions/server"
@@ -66,6 +69,42 @@ it("gives a persisted legacy quiz the platform launch without writing a sidecar 
       { name: STATUS.SELECT_ANSWER },
     )
     expect(game.started).toBe(true)
+    // Exercise the production finish callback and session delegate, not just
+    // the standalone presentation controller.
+    ;(game as unknown as { round: { finish(): void } }).round.finish()
+    expect(
+      readPlatformOpening(snapshot().extras.presentationLaunch)?.stage,
+    ).toBe("closing")
+    await vi.advanceTimersByTimeAsync(PLATFORM_CLOSING_HOLD_MS + 400)
+    const send = (action: "PAUSE_GAME" | "RESUME_GAME") =>
+      game.handleExtensionCommand({
+        v: 1,
+        gameId: game.gameId,
+        requestId: crypto.randomUUID(),
+        action,
+        payload: { epoch: snapshot().epoch },
+      })
+    expect(send("PAUSE_GAME")).toMatchObject({ success: true })
+    const paused = structuredClone(snapshot().pause)
+    expect(paused?.paused).toBe(true)
+    expect(paused?.remainingMs).toBe(
+      PLATFORM_CLOSING_DURATION_MS - PLATFORM_CLOSING_HOLD_MS - 400,
+    )
+    await vi.advanceTimersByTimeAsync(20000)
+    game.reconnect(manager)
+    expect(snapshot().pause).toEqual(paused)
+    expect(
+      readPlatformOpening(snapshot().extras.presentationLaunch)?.stage,
+    ).toBe("closing")
+    expect(send("RESUME_GAME")).toMatchObject({ success: true })
+    await vi.advanceTimersByTimeAsync(paused?.remainingMs ?? 0)
+    expect(
+      readPlatformOpening(snapshot().extras.presentationLaunch)?.stage,
+    ).toBe("closed")
+    game.reconnect(manager)
+    expect(
+      readPlatformOpening(snapshot().extras.presentationLaunch)?.stage,
+    ).toBe("closed")
     expect(fs.readFileSync(baseFile, "utf-8")).toBe(original)
     expect(fs.existsSync(sidecarFile)).toBe(false)
   } finally {

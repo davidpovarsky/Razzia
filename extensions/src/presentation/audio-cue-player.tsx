@@ -3,7 +3,7 @@ import {
   DEFAULT_CUE_URLS,
   SOUNDTRACK_SLOT_IDS,
   resolveEffectiveAudioCue,
-  type AudioCueSetting,
+  resolvePlatformAudioDefaults,
   type AudioExtras,
   type CardAudioMode,
   type CardAudioOverrides,
@@ -33,6 +33,7 @@ import {
   themeAllowsAudioUrl,
 } from "../core/show-themes/audio"
 import { useOptionalShowTheme } from "./show-themes/context"
+import { usePlatformClosingState } from "./platform-closing"
 
 export { DEFAULT_CUE_URLS }
 
@@ -49,22 +50,10 @@ export const resolveAudioCue = (
   cueId: CueId,
   audioExtras?: AudioExtras,
 ): ResolvedAudioCue => {
-  const setting: AudioCueSetting | undefined = audioExtras?.cues[cueId]
-
-  if (!setting) {
-    return {
-      cueId,
-      url: DEFAULT_CUE_URLS[cueId],
-      volume: 0.8,
-      enabled: true,
-      loop: cueId === "answersMusic",
-      isDefault: true,
-    }
-  }
-
-  const isCustom = setting.source === "media" && Boolean(setting.url)
-  const effectiveUrl =
-    isCustom && setting.url ? setting.url : DEFAULT_CUE_URLS[cueId]
+  const setting = resolvePlatformAudioDefaults(audioExtras).cues[cueId]
+  const original = audioExtras?.cues[cueId]
+  const isCustom = original?.source === "media" && Boolean(original.url)
+  const effectiveUrl = setting.url ?? DEFAULT_CUE_URLS[cueId]
   const isEnabled = setting.enabled && setting.volume > 0
 
   return {
@@ -116,6 +105,52 @@ export const TADAZZ_SFX_BY_CUE: Readonly<Record<string, string>> = {
   "story-live-hold": TRANSITION,
   "finale-impact": "/sounds/first.mp3",
   "curtains-closed": TRANSITION,
+}
+
+/** Suppress competing playback owners, while retaining distinct player actions. */
+export function shouldSuppressAudioEffect({
+  name,
+  url,
+  playingUrls,
+  lastEffect,
+  now,
+}: {
+  name?: string
+  url: string
+  playingUrls: readonly string[]
+  lastEffect: { url: string; at: number }
+  now: number
+}): boolean {
+  if (name === "answer-selected" || name === "answer-submitted") {
+    return false
+  }
+
+  const milestone = [
+    "timer-ended",
+    "vote-locked",
+    "survey-reveal",
+    "top-pick-reveal",
+  ].includes(name ?? "")
+  const tick = !milestone && Boolean(name?.startsWith("timer-"))
+
+  return (
+    playingUrls.includes(url) ||
+    (!tick && !milestone && lastEffect.url === url && now - lastEffect.at < 500)
+  )
+}
+
+/** Resume a timed recording at the same media position, including authored offsets. */
+export function resolveTimedAudioOffset(
+  elapsedMs: number,
+  startOffsetSeconds = 0,
+  loop = false,
+  durationSeconds = Infinity,
+): number {
+  const position = Math.max(0, startOffsetSeconds + elapsedMs / 1000)
+
+  return loop && Number.isFinite(durationSeconds) && durationSeconds > 0
+    ? position % durationSeconds
+    : position
 }
 
 interface AudioPreferences {
@@ -184,6 +219,8 @@ export interface AudioCuePlayerProps {
     elapsedMs?: number
     durationMs: number
     volume: number
+    startOffsetSeconds?: number
+    loop?: boolean
   } | null
   /** The show animation owns the question's reveal cue, rather than phase changes. */
   stageOwnsReveal?: boolean
@@ -307,11 +344,12 @@ export const AudioCuePlayer = ({
   onError: onErrorProp,
 }: AudioCuePlayerProps) => {
   const theme = useOptionalShowTheme()
+  const { closed: platformClosed } = usePlatformClosingState()
   const audioExtras = useMemo(
     () =>
       theme
         ? applyThemeAudioDefaults(theme, suppliedAudioExtras)
-        : suppliedAudioExtras,
+        : resolvePlatformAudioDefaults(suppliedAudioExtras),
     [theme, suppliedAudioExtras],
   )
   const cardAudioCues = useMemo(() => {
@@ -362,6 +400,7 @@ export const AudioCuePlayer = ({
   } | null>(null)
   useEffect(() => {
     pendingEffectRef.current = null
+    lastEffectRef.current = { url: "", at: 0 }
   }, [gameId, activeCardKey, epoch])
   const callbacksRef = useRef({
     onPlaybackStartedProp,
@@ -470,8 +509,15 @@ export const AudioCuePlayer = ({
 
       // Compute from the live clock on each user action. Reusing the initial
       // offset here would rewind the soundtrack whenever volume/mute changes.
-      if (Math.abs(active.currentTime - elapsed / 1000) > 0.4) {
-        active.currentTime = elapsed / 1000
+      const position = resolveTimedAudioOffset(
+        elapsed,
+        showTrack.startOffsetSeconds,
+        showTrack.loop,
+        active.duration,
+      )
+
+      if (Math.abs(active.currentTime - position) > 0.4) {
+        active.currentTime = position
       }
 
       track.maxDurationMs = showTrack.durationMs - elapsed
@@ -520,9 +566,12 @@ export const AudioCuePlayer = ({
 
     setDucked(false)
   }, [selectedSoundtrackSlot, gameId, activeCardKey, epoch])
-  const configuredSoundtrackSlots = SOUNDTRACK_SLOT_IDS.filter((slot) =>
-    Boolean(resolveSoundtrack(slot, audioExtras)),
-  )
+  const configuredSoundtrackSlots =
+    showTrack === undefined
+      ? SOUNDTRACK_SLOT_IDS.filter((slot) =>
+          Boolean(resolveSoundtrack(slot, audioExtras)),
+        )
+      : []
   const effectiveCueId: CueId | undefined =
     selectedSoundtrackSlot === "voting"
       ? "answersMusic"
@@ -542,7 +591,7 @@ export const AudioCuePlayer = ({
     : null
   const soundtrack = resolveSoundtrack(selectedSoundtrackSlot, audioExtras)
   const desired = useMemo<DesiredTrack | null>(() => {
-    if (eventOnly) {
+    if (eventOnly || platformClosed) {
       return null
     }
 
@@ -586,9 +635,12 @@ export const AudioCuePlayer = ({
         identity: `${gameId ?? "g"}:reference-story:${showTrack.key}:${showTrack.url}`,
         url: showTrack.url,
         volume: showTrack.volume,
-        loop: false,
+        loop: showTrack.loop ?? false,
         fadeMs: 0,
-        startOffsetSeconds: elapsed / 1000,
+        startOffsetSeconds: resolveTimedAudioOffset(
+          elapsed,
+          showTrack.startOffsetSeconds,
+        ),
         maxDurationMs: showTrack.durationMs - elapsed,
       }
     }
@@ -632,7 +684,38 @@ export const AudioCuePlayer = ({
       }
     }
 
-    // Voting retains the existing answersMusic URL/gain/loop or authored question override.
+    // A question choice is most specific; otherwise an explicitly configured
+    // voting stage replaces the global cue. Both feed this one music owner.
+    if (selectedSoundtrackSlot === "voting") {
+      const cardMode = cardAudioCues?.answersMusic?.mode
+      const cardOwnsVoting = cardMode !== undefined && cardMode !== "inherit"
+      const configuredVoting = audioExtras?.soundtrack?.voting
+
+      if (cardOwnsVoting && !resolvedCue?.shouldPlay) {
+        return null
+      }
+
+      if (!cardOwnsVoting && configuredVoting?.mode === "mute") {
+        return null
+      }
+
+      if (
+        !cardOwnsVoting &&
+        configuredVoting?.mode === "media" &&
+        soundtrack?.url
+      ) {
+        return {
+          identity: `${gameId ?? "g"}:voting-stage:${activeCardKey ?? "question"}:${epoch ?? 0}:${soundtrack.url}`,
+          url: soundtrack.url,
+          volume: soundtrack.volume,
+          loop: soundtrack.loop,
+          fadeMs: soundtrack.fadeMs,
+          startOffsetSeconds: soundtrack.startOffsetSeconds,
+        }
+      }
+    }
+
+    // Without an explicit voting stage, answersMusic owns the recording.
     if (
       effectiveCueId === "answersMusic" &&
       (!selectedSoundtrackSlot || selectedSoundtrackSlot === "voting") &&
@@ -718,6 +801,8 @@ export const AudioCuePlayer = ({
     }
   }, [
     eventOnly,
+    platformClosed,
+    cardAudioCues,
     theme,
     showTrack,
     paused,
@@ -1332,16 +1417,6 @@ export const AudioCuePlayer = ({
       if (
         theme &&
         themeCue &&
-        Object.keys(theme.audioSelections[themeCue.event] ?? {}).length > 0 &&
-        url &&
-        currentRef.current?.url === url
-      ) {
-        return
-      }
-
-      if (
-        theme &&
-        themeCue &&
         !Object.keys(theme.audioSelections[themeCue.event] ?? {}).length
       ) {
         const savedCueId = (Object.keys(CUE_THEME_EVENTS) as CueId[]).find(
@@ -1400,13 +1475,20 @@ export const AudioCuePlayer = ({
       }
 
       playedSfxRef.current.add(identity)
-      // The wipe/impact animation can emit adjacent cues for one movement.
+      // A cue and scene choreography may describe the same movement. Deduplicate
+      // active playback, not a stale desired URL after its recording has ended.
+      const playingUrls = (backgroundsRef.current ?? [])
+        .filter((audio) => !audio.paused && !audio.ended)
+        .map((audio) => audio.getAttribute("src") ?? "")
 
       if (
-        !isTick &&
-        !isMilestone &&
-        lastEffectRef.current.url === url &&
-        now - lastEffectRef.current.at < 500
+        shouldSuppressAudioEffect({
+          name: detail.name,
+          url,
+          playingUrls,
+          lastEffect: lastEffectRef.current,
+          now,
+        })
       ) {
         return
       }
@@ -1557,6 +1639,8 @@ export const AudioCuePlayer = ({
     if (
       !soundtrack ||
       !effectiveCueId ||
+      !resolvedCue?.shouldPlay ||
+      !resolvedCue.url ||
       effectiveCueId === "answersMusic" ||
       (stageOwnsReveal && effectiveCueId === "revealResults") ||
       selectedSoundtrackSlot === "openingIntro" ||
@@ -1569,14 +1653,8 @@ export const AudioCuePlayer = ({
       new CustomEvent("tadazz:sfx", {
         detail: {
           name: `phase-${effectiveCueId}`,
-          ...(stageOwnsReveal
-            ? {
-                volume: 0.55,
-              }
-            : {}),
-          url:
-            (stageOwnsReveal ? TADAZZ_PHASE_SFX[effectiveCueId] : undefined) ??
-            DEFAULT_CUE_URLS[effectiveCueId],
+          volume: stageOwnsReveal ? 0.55 : resolvedCue.volume,
+          url: resolvedCue.url,
           identity: `${gameId ?? "g"}:${epoch ?? 0}:phase:${effectiveCueId}`,
         },
       }),
@@ -1588,6 +1666,9 @@ export const AudioCuePlayer = ({
     selectedSoundtrackSlot,
     soundtrack,
     stageOwnsReveal,
+    resolvedCue?.shouldPlay,
+    resolvedCue?.url,
+    resolvedCue?.volume,
   ])
   const unlock = useCallback(() => {
     setAudioBlocked(false)

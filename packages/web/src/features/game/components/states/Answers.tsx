@@ -11,7 +11,6 @@ import {
   QuestionUnderline,
   TadazzSurveyCards,
   useStageFit,
-  isTadazzShowActive,
 } from "@razzia/extensions/presentation"
 import { EVENTS, MEDIA_TYPES } from "@razzia/common/constants"
 import type { QuestionMediaType } from "@razzia/common/types/game"
@@ -82,10 +81,7 @@ const Answers = ({
     votingStartsAt,
     Boolean(effectiveExtensionState?.pause?.paused),
   )
-  const themedAudio = Boolean(
-    effectiveExtensionState?.gameId &&
-    isTadazzShowActive(effectiveExtensionState),
-  )
+  const platformAudio = Boolean(effectiveExtensionState?.gameId)
   const canSubmit =
     roleCanSubmit && nativeVotingOpen && !effectiveExtensionState?.pause?.paused
   const { t } = useTranslation()
@@ -123,7 +119,7 @@ const Answers = ({
       return
     }
 
-    if (themedAudio && effectiveExtensionState) {
+    if (platformAudio && effectiveExtensionState) {
       const { epoch, questionId } = effectiveExtensionState
       socket.emit(
         EVENTS.PLAYER.SELECTED_ANSWER,
@@ -190,7 +186,7 @@ const Answers = ({
   useEvent(EVENTS.GAME.PLAYER_ANSWER, (count) => {
     setTotalAnswer(count)
 
-    if (!themedAudio) {
+    if (!platformAudio) {
       sfxPop()
     }
   })

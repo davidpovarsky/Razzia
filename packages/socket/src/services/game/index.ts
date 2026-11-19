@@ -216,7 +216,8 @@ class Game {
           this.round.showCompletedQuestionResults(qIdx)
           this.syncExtensionStatus(STATUS.SHOW_RESPONSES)
         },
-        onFinish: () => {
+        onFinish: (authoredClosingStartedAt) => {
+          this.presentationLaunch?.close(authoredClosingStartedAt)
           this.round.finish()
         },
         onBroadcastState: () => this.broadcastExtensionState(),
@@ -253,11 +254,13 @@ class Game {
       broadcast: this.broadcastStatus.bind(this),
       send: this.sendStatus.bind(this),
       onNewQuestion: () => {
+        this.presentationLaunch?.resumeRunning()
         this.playerStatus.clear()
         this.managerStatus = null
         this.broadcastHostPresence()
       },
       onGameFinished: (result) => {
+        this.presentationLaunch?.close()
         if (accountsEnabled()) {
           void withAccount(managerClientId, () => saveResult(result))
         } else {
@@ -295,7 +298,12 @@ class Game {
       round: this.round,
       players: this.playerManager,
       started: () => this.started,
-      settings: () => this._settings,
+      // The host, HTTP and native phone paths share the same effective policy,
+      // including legacy Creating Worlds roster restrictions when no override exists.
+      settings: () => ({
+        ...this._settings,
+        allowUnregisteredPlayers: this.allowUnregisteredPlayers,
+      }),
       locked: () => this._locked,
       session: () => this.extensionSession,
       coordinator: () => this.showCoordinator,
@@ -398,7 +406,13 @@ class Game {
       return false
     }
 
-    this._settings = { ...this._settings, ...settings }
+    this._settings = {
+      ...this._settings,
+      ...settings,
+      ...(settings.allowUnregisteredPlayers === true
+        ? { phoneInviteOnly: false }
+        : {}),
+    }
 
     if (settings.endOnAllAnswered) {
       this.round.endIfEveryoneAnswered()
@@ -411,6 +425,48 @@ class Game {
 
   get phoneInviteOnly(): boolean {
     return Boolean(this._settings.phoneInviteOnly)
+  }
+
+  get allowUnregisteredPlayers(): boolean {
+    return (
+      this._settings.allowUnregisteredPlayers ??
+      (!this.isCreatingWorldsShow ||
+        this.temporaryGuestsAllowed ||
+        ![...this.roster.entries.values()].some((entry) => entry.preRegistered))
+    )
+  }
+
+  setRosterJoinSettings(settings: {
+    phoneInviteOnly?: boolean
+    allowUnregisteredPlayers?: boolean
+  }): void {
+    this._settings = {
+      ...this._settings,
+      ...settings,
+      ...(settings.allowUnregisteredPlayers === true
+        ? { phoneInviteOnly: false }
+        : {}),
+    }
+    this.broadcastHostPresence()
+  }
+
+  findRosterForJoin(input: {
+    clientId: string
+    username?: string
+    phone?: string
+    source?: "web" | "phone"
+  }) {
+    const { entry } = this.roster.resolveBrowserJoin({
+      clientId: input.clientId,
+      username: input.username,
+      claimsExtra: { phoneE164: input.phone, source: input.source },
+      isCreatingWorldsShow: this.isCreatingWorldsShow,
+      temporaryGuestsAllowed: this.temporaryGuestsAllowed,
+      phoneInviteOnly: this.phoneInviteOnly,
+      allowUnregisteredPlayers: this._settings.allowUnregisteredPlayers,
+    })
+
+    return entry ?? null
   }
 
   canAdoptPhoneLifecycleV2(): boolean {
@@ -519,11 +575,14 @@ class Game {
   }
 
   getHostPresenceSnapshot(): HostPresenceSnapshot {
-    return this.roster.snapshot(
-      this.gameId,
-      this.phoneInviteOnly,
-      this.round.getAnsweredPlayerIds(),
-    )
+    return {
+      ...this.roster.snapshot(
+        this.gameId,
+        this.phoneInviteOnly,
+        this.round.getAnsweredPlayerIds(),
+      ),
+      allowUnregisteredPlayers: this.allowUnregisteredPlayers,
+    }
   }
 
   broadcastHostPresence(): void {
@@ -705,6 +764,7 @@ class Game {
       isCreatingWorldsShow: this.isCreatingWorldsShow,
       temporaryGuestsAllowed: this.temporaryGuestsAllowed,
       phoneInviteOnly: Boolean(this._settings.phoneInviteOnly),
+      allowUnregisteredPlayers: this._settings.allowUnregisteredPlayers,
     })
 
     if (rosterError) {

@@ -3,6 +3,9 @@ import {
   EXTENSION_EVENTS,
   PLATFORM_CURTAIN_LEFT_URL,
   PLATFORM_CURTAIN_RIGHT_URL,
+  PLATFORM_OPENING_DURATION_MS,
+  applyThemeAudioDefaults,
+  type AudioExtras,
   TADAZZ_PRODUCT_LOGO_URL,
   platformOpeningFrame,
   type ExtensionStateEnvelope,
@@ -11,16 +14,20 @@ import {
 import {
   TadazzOpening,
   preloadOpeningAssets,
+  useResolvedShowTheme,
 } from "@razzia/extensions/presentation"
 import { Button, PlatformScope } from "@razzia/extensions/platform-ui"
 import { STATUS } from "@razzia/common/types/game/status"
 import { Play, SkipForward } from "lucide-react"
 import { useReducedMotion } from "motion/react"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useSocket } from "../contexts/socket-context"
 import ManagerControlToolbar from "./ManagerControlToolbar"
+import HostGuestJoinToggle from "./HostGuestJoinToggle"
 import { useTadazzShellText } from "./tadazz-show/useTadazzLabels"
+import { NativeAudioCuePlayer } from "./tadazz-show/NativeAudioCuePlayer"
+import { usePlatformClock } from "./use-platform-clock"
 import "./platform-game-opening.css"
 
 const holdFinalFrame = () => undefined
@@ -45,12 +52,27 @@ export function PlatformGameOpening({
   const tx = useTadazzShellText()
   const reducedMotion = useReducedMotion() ?? false
   const { socket, isConnected } = useSocket()
-  const [now, setNow] = useState(Date.now)
-  const [clockOffset, setClockOffset] = useState(0)
   const [pending, setPending] = useState(false)
   const pendingRef = useRef(false)
   const pendingTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const paused = extensionState.pause?.paused ?? false
+  const { now, clockOffset } = usePlatformClock(
+    launch.stage === "opening",
+    paused,
+  )
+  const theme = useResolvedShowTheme(
+    extensionState,
+    manager ? "manager" : "spectator",
+  )
+  const audio = useMemo(
+    () =>
+      applyThemeAudioDefaults(
+        theme,
+        extensionState.extras.audio as AudioExtras | undefined,
+      ),
+    [theme, extensionState.extras.audio],
+  )
+  const openingTrack = audio.soundtrack?.openingIntro
 
   useEffect(() => {
     preloadOpeningAssets()
@@ -63,68 +85,34 @@ export function PlatformGameOpening({
   }, [])
 
   useEffect(() => {
-    let alive = true
-    let bestRtt = Infinity
-    const sample = () => {
-      const sent = Date.now()
-      socket.emit("extensions:clock", (serverNow) => {
-        const received = Date.now()
-        const rtt = received - sent
-
-        if (alive && Number.isFinite(serverNow) && rtt < bestRtt) {
-          bestRtt = rtt
-          setClockOffset(serverNow - (sent + received) / 2)
-        }
-      })
-    }
-
-    if (isConnected) {
-      sample()
-    }
-
-    const retry = setTimeout(sample, 500)
-
-    return () => {
-      alive = false
-      clearTimeout(retry)
-    }
-  }, [socket, isConnected])
-
-  useEffect(() => {
     pendingRef.current = false
     setPending(false)
   }, [launch.stage])
 
-  useEffect(() => {
-    if (launch.stage !== "opening" || paused) {
-      return
-    }
-
-    let frame = 0
-    let previous = 0
-    const tick = (time: number) => {
-      // Curtains follow the display refresh rate; the video needs only a drift check.
-      const interval =
-        Date.now() + clockOffset - (launch.startedAt ?? 0) < 2300 ? 16 : 100
-
-      if (time - previous >= interval) {
-        previous = time
-        setNow(Date.now())
-      }
-
-      frame = requestAnimationFrame(tick)
-    }
-    setNow(Date.now())
-    frame = requestAnimationFrame(tick)
-
-    return () => cancelAnimationFrame(frame)
-  }, [launch.stage, launch.startedAt, paused, clockOffset])
-
   const frame = platformOpeningFrame(
     launch,
-    now + clockOffset,
+    now,
     paused ? extensionState.pause?.remainingMs : undefined,
   )
+  const showTrack =
+    launch.stage === "opening" &&
+    openingTrack?.mode === "media" &&
+    openingTrack.url &&
+    openingTrack.volume > 0
+      ? {
+          key: `platform-opening:${launch.startedAt}`,
+          url: openingTrack.url,
+          volume: openingTrack.volume,
+          startOffsetSeconds: openingTrack.startOffsetSeconds,
+          loop: openingTrack.loop,
+          startedAt: (launch.startedAt ?? now) - clockOffset,
+          elapsedMs: frame.elapsedMs,
+          durationMs: Math.min(
+            openingTrack.maxDurationMs ?? PLATFORM_OPENING_DURATION_MS,
+            PLATFORM_OPENING_DURATION_MS,
+          ),
+        }
+      : null
   const advance = () => {
     if (!manager || !isConnected || pendingRef.current || paused) {
       return
@@ -168,6 +156,11 @@ export function PlatformGameOpening({
           onExit={onExit}
           onPresent={onPresent}
         />
+      )}
+      {manager && !isHostPresenting && (
+        <div className="flex shrink-0 justify-end px-3 py-2">
+          <HostGuestJoinToggle />
+        </div>
       )}
       <div className="platform-game-opening__stage">
         {launch.stage === "opening" && !reducedMotion && (
@@ -243,6 +236,28 @@ export function PlatformGameOpening({
           </div>
         )}
       </div>
+      <NativeAudioCuePlayer
+        audioExtras={audio}
+        showTrack={showTrack}
+        soundtrackSlot="openingIntro"
+        gameId={extensionState.gameId}
+        activeCardKey="platform-opening"
+        phase="platform-opening"
+        epoch={extensionState.epoch}
+        paused={paused || launch.stage !== "opening"}
+        autoPlay={launch.stage === "opening"}
+        showControls={manager && !isHostPresenting}
+        controlLabels={{
+          enable: t("extensions:audio.enableSound", "Enable sound"),
+          volume: t("extensions:audio.volume", "Volume"),
+          mute: t("extensions:audio.mute", "Mute"),
+          unmute: t("extensions:audio.unmute", "Unmute"),
+          pause: t("extensions:audio.pauseAudio", "Pause audio"),
+          play: t("extensions:audio.playAudio", "Play audio"),
+          track: t("extensions:audio.track", "Track"),
+          followShow: t("extensions:audio.followShow", "Follow show"),
+        }}
+      />
     </PlatformScope>
   )
 }

@@ -13,6 +13,7 @@ export * from "./scene-presenter"
 export * from "./interlude-preview"
 
 export * from "./audio-cue-player"
+export * from "./platform-closing"
 
 export * from "./tadazz-audio-policy"
 

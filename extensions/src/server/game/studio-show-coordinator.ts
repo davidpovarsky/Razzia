@@ -13,7 +13,7 @@ export interface StudioCoordinatorCallbacks {
   onStartQuestion: (questionIndex: number) => Promise<void> | void
   onReopenQuestion?: (questionIndex: number) => Promise<void> | void
   onShowCompletedQuestionResults?: (questionIndex: number) => void
-  onFinish: () => void
+  onFinish: (authoredClosingStartedAt?: number) => void
   onBroadcastState: () => void
 }
 
@@ -389,10 +389,15 @@ export class StudioShowCoordinator {
     const { step, done } = this.runner.advance()
 
     if (done || !step) {
+      const authoredClosingStartedAt =
+        activeStep?.scene?.kind === "animation" &&
+        activeStep.scene.preset === "grand-finale"
+          ? this.startedAt
+          : undefined
       this.phase = "finished"
       this.epoch += 1
       this.seq += 1
-      this.callbacks.onFinish()
+      this.callbacks.onFinish(authoredClosingStartedAt)
 
       return true
     }

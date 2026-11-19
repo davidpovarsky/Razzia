@@ -1,5 +1,6 @@
 // oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import { PlatformButton } from "../platform-controls"
+import { usePlatformClosingOwner } from "../platform-closing"
 import { ReferenceStoryScene } from "./reference-story/ReferenceStoryScene"
 import type { ReactNode } from "react"
 import { useTranslation } from "react-i18next"
@@ -625,6 +626,7 @@ export function Tie({ data }: { data: FullShowInput }) {
 }
 
 export function Finale({ data }: { data: FullShowInput }) {
+  const platformOwnsCurtain = usePlatformClosingOwner()
   const leftCurtain =
     data.curtainLeftUrl || "/tadazz-show/second-library/curtain-left.png"
   const rightCurtain =
@@ -673,9 +675,13 @@ export function Finale({ data }: { data: FullShowInput }) {
       <div className="full-final-center">
         <BrandLogo className="full-finale-logo" />
       </div>
-      <img src={leftCurtain} alt="" className="full-curtain left" />
-      <img src={rightCurtain} alt="" className="full-curtain right" />
-      <div className="full-curtain-seam" />
+      {!platformOwnsCurtain && (
+        <>
+          <img src={leftCurtain} alt="" className="full-curtain left" />
+          <img src={rightCurtain} alt="" className="full-curtain right" />
+          <div className="full-curtain-seam" />
+        </>
+      )}
     </div>
   )
 }

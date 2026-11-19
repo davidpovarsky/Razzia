@@ -103,6 +103,8 @@ export interface GameSettings {
   generatedUsernames: boolean
   answersOnly: boolean
   phoneInviteOnly?: boolean
+  /** Optional live event-roster override; absent preserves legacy admission. */
+  allowUnregisteredPlayers?: boolean
   endOnAllAnswered?: boolean
   autoAdvance: AutoAdvanceSettings
 }

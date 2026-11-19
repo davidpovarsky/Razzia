@@ -60,7 +60,7 @@
   },
   "audio": {
     "soundtrackTitle": "司会者用サウンドトラック",
-    "soundtrackDesc": "承認済みのテナントメディアのみ使用してください。候補ファイルは同梱されません。",
+    "soundtrackDesc": "すべての場面で使える標準の音楽が用意されています。初期設定のまま使う、自分の音楽を選ぶ、特定の場面をミュートすることができます。",
     "slotOpeningIntro": "オープニング（12秒）",
     "slotLobby": "ロビー / QR",
     "slotRoundStart": "ラウンド開始",
@@ -70,7 +70,7 @@
     "slotLeaderboard": "ランキング / 同点",
     "slotRecap": "ラウンドまとめ / ストーリー",
     "slotFinale": "フィナーレ",
-    "inherit": "キューを使用 / 継承",
+    "inherit": "システムとテーマの初期設定を使う",
     "none": "BGMなし",
     "fade": "フェード ms",
     "enableSound": "音声を有効化",
@@ -277,6 +277,9 @@
     "interludeTitle": "インターリュードスライドのプレビュー"
   },
   "roster": {
+    "allowUnregisteredPlayers": "未登録の参加者を許可",
+    "allowUnregisteredPlayersDescription": "このゲームの名簿にない参加者の Web・電話からの新規参加を制御します。登録済みまたは参加済みのプレイヤーは再接続できます。ルームのロックは引き続き適用されます。",
+    "allowUnregisteredPlayersPhoneRestricted": "電話での参加には、電話招待の設定による制限も適用されます。",
     "title": "参加者・電話名簿",
     "description": "参加者の名前と電話番号（+972、+44など）を事前登録して発信者を自動認識します。",
     "phoneInviteOnly": "登録電話番号のみ許可",
@@ -365,6 +368,30 @@
     "showingPlayers": "{{total}} 人中 {{shown}} 人"
   },
   "timeline": {
+    "sceneDescriptions": {
+      "opening": "観客を迎え、ゲームを紹介します。",
+      "closing": "ゲームを締めくくり、フィナーレを祝います。",
+      "joinDirectory": "テーブルの代表者と参加者一覧を表示します。",
+      "joinInstructions": "電話からの参加方法を説明します。",
+      "joinReadiness": "接続済みで準備ができている参加者を表示します。",
+      "roundIntro": "次のラウンドの質問を紹介します。",
+      "storyProgress": "物語の進行状況と完了した質問を表示します。",
+      "tieBreak": "最多得票の回答が同票の場合に決着をつけます。",
+      "storyAssembly": "選ばれた回答から物語を組み立てます。",
+      "storyLive": "完成した物語とカウントダウンを表示します。",
+      "winner": "選ばれた回答や勝利した回答を発表します。",
+      "roundRecap": "完了したラウンドの回答を振り返ります。",
+      "interlude": "ゲームの各パートの間に休憩を入れます。",
+      "transition": "ゲームを次のパートへ進めます。",
+      "leaderboard": "プレイヤーの順位と得点を表示します。",
+      "interimResults": "直前の質問に対する回答の分布を表示します。",
+      "answerRecap": "完了した質問の回答を振り返ります。",
+      "countdown": "ゲームの次のパートまでカウントダウンします。",
+      "media": "カードで選択したメディアを表示または再生します。",
+      "animation": "装飾用のアニメーションを再生します。"
+    },
+    "waitForHost": "司会者が進行",
+    "afterMedia": "メディア終了後",
     "quiz": "クイズ",
     "survey": "アンケート",
     "transition": "トランジション",
@@ -389,6 +416,18 @@
     "deleteCardConfirm": "このシーンカードをタイムラインから削除しますか？"
   },
   "studio": {
+    "editing": {
+      "modeLabel": "編集モード",
+      "simple": "シンプル編集",
+      "advanced": "詳細編集",
+      "simpleHint": "質問と回答の作成に集中できます。現在のゲーム設定はそのまま適用されます。",
+      "advancedHint": "得点、デザイン、サウンド、動き、すべてのカード種類を設定できます。",
+      "customSettings": "カスタム設定が有効です",
+      "customSettingsHint": "この質問には追加設定があります。シンプル編集でもその設定は保持されます。",
+      "advancedSettings": "詳細設定",
+      "moreCardTypes": "その他のカード種類",
+      "advancedControls": "得点、外観、サウンド、動き"
+    },
     "tabs": {
       "questions": "問題",
       "participants": "参加者",

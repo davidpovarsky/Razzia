@@ -60,7 +60,7 @@
   },
   "audio": {
     "soundtrackTitle": "Sunucu müzikleri",
-    "soundtrackDesc": "Yalnızca onaylı hesap medyasını kullanın. Aday dosyalar pakete eklenmez.",
+    "soundtrackDesc": "Sistem müziği her aşama için hazırdır. Varsayılanları koruyun, kendi müziğinizi seçin veya belirli bir aşamayı sessize alın.",
     "slotOpeningIntro": "Açılış (12 saniye)",
     "slotLobby": "Lobi / QR",
     "slotRoundStart": "Tur başlangıcı",
@@ -70,7 +70,7 @@
     "slotLeaderboard": "Liderlik / beraberlik",
     "slotRecap": "Tur özeti / hikâye",
     "slotFinale": "Final",
-    "inherit": "Sesi kullan / devral",
+    "inherit": "Sistem ve tema varsayılanlarını kullan",
     "none": "Arka plan müziği yok",
     "fade": "Geçiş ms",
     "enableSound": "Sesi aç",
@@ -277,6 +277,9 @@
     "interludeTitle": "Ara Slaytı Önizlemesi"
   },
   "roster": {
+    "allowUnregisteredPlayers": "Kayıtsız katılımcılara izin ver",
+    "allowUnregisteredPlayersDescription": "Bu oyunun listesinde bulunmayan yeni web ve telefon katılımcılarını yönetin. Kayıtlı ve daha önce kabul edilmiş oyuncular yeniden bağlanabilir. Oda kilidi geçerli olmaya devam eder.",
+    "allowUnregisteredPlayersPhoneRestricted": "Telefonla katılım, telefon daveti ayarıyla da sınırlandırılır.",
     "title": "Katılımcılar ve Telefon Listesi",
     "description": "Arayanları anında tanımak için isimleri ve tam telefon numaralarını (+972, +44 vb.) önceden kaydedin.",
     "phoneInviteOnly": "Yalnızca Davetli Telefonlar",
@@ -365,6 +368,30 @@
     "showingPlayers": "{{total}} oyuncudan {{shown}} tanesi"
   },
   "timeline": {
+    "sceneDescriptions": {
+      "opening": "İzleyicileri karşılar ve oyunu tanıtır.",
+      "closing": "Oyunu bitirir ve finali kutlar.",
+      "joinDirectory": "Masa temsilcilerini ve katılımcı listesini gösterir.",
+      "joinInstructions": "Telefonla nasıl katılınacağını açıklar.",
+      "joinReadiness": "Hangi katılımcıların bağlı ve hazır olduğunu gösterir.",
+      "roundIntro": "Sonraki soru turunu tanıtır.",
+      "storyProgress": "Hikâyenin ilerleyişini ve tamamlanan soruları gösterir.",
+      "tieBreak": "Önde gelen cevaplar arasındaki eşitliği bozar.",
+      "storyAssembly": "Seçilen cevaplardan hikâyeyi oluşturur.",
+      "storyLive": "Oluşturulan hikâyeyi ve canlı geri sayımını sunar.",
+      "winner": "Seçilen veya kazanan cevabı açıklar.",
+      "roundRecap": "Tamamlanan turdaki cevapları özetler.",
+      "interlude": "Oyunun bölümleri arasında ara verir.",
+      "transition": "Oyunu bir bölümden diğerine geçirir.",
+      "leaderboard": "Oyuncu sıralamasını ve puanlarını gösterir.",
+      "interimResults": "Son soruya verilen cevapların dağılımını gösterir.",
+      "answerRecap": "Tamamlanan soruların cevaplarını gözden geçirir.",
+      "countdown": "Oyunun sonraki bölümüne geri sayar.",
+      "media": "Kart için seçilen medyayı gösterir veya oynatır.",
+      "animation": "Dekoratif bir animasyon oynatır."
+    },
+    "waitForHost": "Sunucu ilerletir",
+    "afterMedia": "Medya bitince",
     "quiz": "Test",
     "survey": "Anket",
     "transition": "Geçiş",
@@ -389,6 +416,18 @@
     "deleteCardConfirm": "Bu sahne kartı zaman çizelgesinden silinsin mi?"
   },
   "studio": {
+    "editing": {
+      "modeLabel": "Düzenleme modu",
+      "simple": "Basit düzenleme",
+      "advanced": "Gelişmiş düzenleme",
+      "simpleHint": "Sorulara ve cevaplara odaklanın. Mevcut oyun ayarlarınız geçerli kalır.",
+      "advancedHint": "Puanları, tasarımı, sesleri, animasyonları ve tüm kart türlerini ayarlayın.",
+      "customSettings": "Özel ayarlar etkin",
+      "customSettingsHint": "Bu sorunun ek ayarları var. Basit düzenleme bu ayarları değiştirmez.",
+      "advancedSettings": "Gelişmiş ayarlar",
+      "moreCardTypes": "Diğer kart türleri",
+      "advancedControls": "Puanlar, görünüm, sesler ve animasyonlar"
+    },
     "tabs": {
       "questions": "Sorular",
       "participants": "Katılımcılar",

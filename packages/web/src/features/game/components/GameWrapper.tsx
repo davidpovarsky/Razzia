@@ -23,6 +23,7 @@ import {
   readPlatformOpening,
 } from "@razzia/extensions/core"
 import { PlatformGameOpening } from "./PlatformGameOpening"
+import { PlatformGameClosing } from "./PlatformGameClosing"
 import {
   AudioPreferencesScope,
   ShowThemeRenderer,
@@ -51,6 +52,7 @@ import {
 import HostPlayersModal from "@razzia/web/features/game/components/HostPlayersModal"
 import ManagerControlToolbar from "@razzia/web/features/game/components/ManagerControlToolbar"
 import RoomLockButton from "@razzia/web/features/game/components/RoomLockButton"
+import HostGuestJoinToggle from "@razzia/web/features/game/components/HostGuestJoinToggle"
 import { SHOW_THEME_ADAPTERS } from "@razzia/web/features/game/components/tadazz-show/show-theme-adapters"
 import { TadazzMotionStage } from "@razzia/web/features/game/components/TadazzMotionStage"
 import { ExtensionStateProvider } from "@razzia/web/features/game/contexts/extension-state-context"
@@ -382,220 +384,226 @@ const GameWrapperView = ({
         isTadazzShowActive(extensionState)))
   ) {
     return (
-      <ShowThemeRenderer
-        envelope={extensionState}
-        role={effectiveRole}
-        renderers={SHOW_THEME_ADAPTERS}
-        rendererId={forcedRenderer}
-        viewProps={{
-          nativeContent: renderStageContent(),
-          manager: Boolean(manager),
-          role: effectiveRole,
-          statusName,
-          extensionState,
-          onNext,
-          onBack,
-          countdown,
-          totalPlayers,
-          roomMediaReady,
-          audioCueId: activePhaseCueId,
-          hasCompetingMediaAudio,
-          activeCardKey,
-          sceneAudio:
-            extensionState?.extras.sceneAudio ?? currentSceneObj?.audio,
-          isHostPresenting,
-          onPresent: beginHostPresentation,
-          onExitPresentation: exitHostPresentation,
-          presentationRootRef: () => undefined,
-        }}
-      />
+      <PlatformGameClosing extensionState={extensionState} role={effectiveRole}>
+        <ShowThemeRenderer
+          envelope={extensionState}
+          role={effectiveRole}
+          renderers={SHOW_THEME_ADAPTERS}
+          rendererId={forcedRenderer}
+          viewProps={{
+            nativeContent: renderStageContent(),
+            manager: Boolean(manager),
+            role: effectiveRole,
+            statusName,
+            extensionState,
+            onNext,
+            onBack,
+            countdown,
+            totalPlayers,
+            roomMediaReady,
+            audioCueId: activePhaseCueId,
+            hasCompetingMediaAudio,
+            activeCardKey,
+            sceneAudio:
+              extensionState?.extras.sceneAudio ?? currentSceneObj?.audio,
+            isHostPresenting,
+            onPresent: beginHostPresentation,
+            onExitPresentation: exitHostPresentation,
+            presentationRootRef: () => undefined,
+          }}
+        />
+      </PlatformGameClosing>
     )
   }
 
   return (
-    <NativeGameFrame
-      onRoot={() => undefined}
-      theme={theme}
-      extensionState={extensionState}
-      statusName={statusName}
-      role={effectiveRole}
-      isHostPresenting={isHostPresenting}
-    >
-      {theme.definition.id === RAZZIA_THEME_ID && <GameBackground />}
+    <PlatformGameClosing extensionState={extensionState} role={effectiveRole}>
+      <NativeGameFrame
+        onRoot={() => undefined}
+        theme={theme}
+        extensionState={extensionState}
+        statusName={statusName}
+        role={effectiveRole}
+        isHostPresenting={isHostPresenting}
+      >
+        {theme.definition.id === RAZZIA_THEME_ID && <GameBackground />}
 
-      <div className="relative z-10 flex h-full min-h-0 w-full max-w-full flex-1 flex-col justify-between overflow-hidden">
-        {!isConnected && !statusName ? (
-          <div className="flex h-full w-full flex-1 flex-col items-center justify-center">
-            <Loader className="h-30" />
-            <h1 className="text-4xl font-bold text-white">
-              {t("common:connecting")}
-            </h1>
-          </div>
-        ) : (
-          <>
-            {!isHostPresenting && renderHeader()}
-            {manager && !isHostPresenting && theme.diagnostics.length > 0 && (
-              <p
-                role="status"
-                data-testid="show-theme-warning"
-                className="text-foreground relative z-50 rounded-lg bg-white px-3 py-2 text-sm"
-              >
-                {t("extensions:themes.invalidChoice")}
-              </p>
-            )}
-
-            <NativeCompositionBoundary
-              envelope={extensionState}
-              role={effectiveRole}
-              statusName={statusName}
-            >
-              <NativeGameSurface theme={theme}>
-                <ViewportBackdropLayer
-                  component={LegacyStageBackdrops}
-                  contained
-                  showBase={
-                    theme.requested.id === "tadazz-classic" &&
-                    theme.diagnostics.length > 0
-                  }
-                  tadazzBackdrop={tadazzBackdrop}
-                  setTadazzImageUnavailable={setTadazzImageUnavailable}
-                  showCustomCardBackground={showCustomCardBackground}
-                  effectiveBackground={effectiveBackground}
-                  setCardBgErrorUrl={setCardBgErrorUrl}
-                />
-
-                <div
-                  key={
-                    manager && roomMediaReady
-                      ? "media-authorized"
-                      : "media-pending"
-                  }
-                  className="relative z-10 flex h-full min-h-0 w-full flex-1 flex-col"
+        <div className="relative z-10 flex h-full min-h-0 w-full max-w-full flex-1 flex-col justify-between overflow-hidden">
+          {!isConnected && !statusName ? (
+            <div className="flex h-full w-full flex-1 flex-col items-center justify-center">
+              <Loader className="h-30" />
+              <h1 className="text-4xl font-bold text-white">
+                {t("common:connecting")}
+              </h1>
+            </div>
+          ) : (
+            <>
+              {!isHostPresenting && renderHeader()}
+              {manager && !isHostPresenting && theme.diagnostics.length > 0 && (
+                <p
+                  role="status"
+                  data-testid="show-theme-warning"
+                  className="text-foreground relative z-50 rounded-lg bg-white px-3 py-2 text-sm"
                 >
-                  {renderStageContent()}
-                </div>
-                {motionScene && forcedRenderer !== "razzia-native-stage" && (
-                  <TadazzMotionStage scene={motionScene} />
-                )}
-              </NativeGameSurface>
-            </NativeCompositionBoundary>
+                  {t("extensions:themes.invalidChoice")}
+                </p>
+              )}
 
-            <HostAudioControls
-              component={LegacyStageAudio}
-              extensionState={extensionState}
-              effectiveRole={effectiveRole}
-              manager={manager}
-              roomMediaReady={roomMediaReady}
-              activePhaseCueId={activePhaseCueId}
-              currentSceneObj={currentSceneObj}
-              activeCardKey={activeCardKey}
-              statusName={statusName}
-              isHostPresenting={isHostPresenting}
-              hasCompetingMediaAudio={hasCompetingMediaAudio}
-            />
+              <NativeCompositionBoundary
+                envelope={extensionState}
+                role={effectiveRole}
+                statusName={statusName}
+              >
+                <NativeGameSurface theme={theme}>
+                  <ViewportBackdropLayer
+                    component={LegacyStageBackdrops}
+                    contained
+                    showBase={
+                      theme.requested.id === "tadazz-classic" &&
+                      theme.diagnostics.length > 0
+                    }
+                    tadazzBackdrop={tadazzBackdrop}
+                    setTadazzImageUnavailable={setTadazzImageUnavailable}
+                    showCustomCardBackground={showCustomCardBackground}
+                    effectiveBackground={effectiveBackground}
+                    setCardBgErrorUrl={setCardBgErrorUrl}
+                  />
 
-            {(() => {
-              if (manager) {
-                if (isHostPresenting) {
-                  return null
-                }
-
-                return (
-                  <HostControlBar
-                    className={clsx(
-                      "z-50 box-border flex max-w-full flex-wrap items-center gap-2 p-2 sm:gap-3 sm:p-4",
-                      {
-                        "absolute inset-x-0 bottom-0":
-                          statusName === STATUS.FINISHED,
-                      },
-                    )}
+                  <div
+                    key={
+                      manager && roomMediaReady
+                        ? "media-authorized"
+                        : "media-pending"
+                    }
+                    className="relative z-10 flex h-full min-h-0 w-full flex-1 flex-col"
                   >
-                    {inviteCode && statusName !== STATUS.SHOW_ROOM && (
-                      <div className="flex shrink-0 items-center gap-2 rounded-lg bg-black/40 px-2.5 py-1 text-sm font-bold text-white drop-shadow-md sm:gap-3 sm:px-3 sm:py-1.5 sm:text-base md:text-xl">
-                        {!locked && (
-                          <>
-                            <span className="max-w-[120px] truncate sm:max-w-none">
-                              {window.location.host}
-                            </span>
-                            <span className="h-4 w-px bg-white/40 sm:h-5" />
-                            <span>{inviteCode}</span>
-                          </>
-                        )}
-                        <RoomLockButton className="-mx-1 rounded-md p-1 hover:bg-white/20" />
-                      </div>
-                    )}
+                    {renderStageContent()}
+                  </div>
+                  {motionScene && forcedRenderer !== "razzia-native-stage" && (
+                    <TadazzMotionStage scene={motionScene} />
+                  )}
+                </NativeGameSurface>
+              </NativeCompositionBoundary>
 
-                    <HostPresenceButton
-                      hostPresence={hostPresence}
-                      players={players}
-                      totalPlayers={totalPlayers}
-                      isConnected={isConnected}
-                      onClick={() => setPlayersModalOpen(true)}
-                    />
+              <HostAudioControls
+                component={LegacyStageAudio}
+                extensionState={extensionState}
+                effectiveRole={effectiveRole}
+                manager={manager}
+                roomMediaReady={roomMediaReady}
+                activePhaseCueId={activePhaseCueId}
+                currentSceneObj={currentSceneObj}
+                activeCardKey={activeCardKey}
+                statusName={statusName}
+                isHostPresenting={isHostPresenting}
+                hasCompetingMediaAudio={hasCompetingMediaAudio}
+              />
 
-                    <GameSettingsModal
-                      onOpenRoster={() => setPlayersModalOpen(true)}
-                    />
+              {(() => {
+                if (manager) {
+                  if (isHostPresenting) {
+                    return null
+                  }
 
-                    <HostPlayersModal
-                      open={playersModalOpen}
-                      onOpenChange={setPlayersModalOpen}
-                    />
-
-                    <Tooltip
-                      content={t(
-                        isFullscreen
-                          ? "common:exitFullscreen"
-                          : "common:fullscreen",
+                  return (
+                    <HostControlBar
+                      className={clsx(
+                        "z-50 box-border flex max-w-full flex-wrap items-center gap-2 p-2 sm:gap-3 sm:p-4",
+                        {
+                          "absolute inset-x-0 bottom-0":
+                            statusName === STATUS.FINISHED,
+                        },
                       )}
                     >
-                      <IconButton
-                        onClick={toggleFullscreen}
-                        label={t(
+                      {inviteCode && statusName !== STATUS.SHOW_ROOM && (
+                        <div className="flex shrink-0 items-center gap-2 rounded-lg bg-black/40 px-2.5 py-1 text-sm font-bold text-white drop-shadow-md sm:gap-3 sm:px-3 sm:py-1.5 sm:text-base md:text-xl">
+                          {!locked && (
+                            <>
+                              <span className="max-w-[120px] truncate sm:max-w-none">
+                                {window.location.host}
+                              </span>
+                              <span className="h-4 w-px bg-white/40 sm:h-5" />
+                              <span>{inviteCode}</span>
+                            </>
+                          )}
+                          <RoomLockButton className="-mx-1 rounded-md p-1 hover:bg-white/20" />
+                        </div>
+                      )}
+
+                      <HostGuestJoinToggle />
+
+                      <HostPresenceButton
+                        hostPresence={hostPresence}
+                        players={players}
+                        totalPlayers={totalPlayers}
+                        isConnected={isConnected}
+                        onClick={() => setPlayersModalOpen(true)}
+                      />
+
+                      <GameSettingsModal
+                        onOpenRoster={() => setPlayersModalOpen(true)}
+                      />
+
+                      <HostPlayersModal
+                        open={playersModalOpen}
+                        onOpenChange={setPlayersModalOpen}
+                      />
+
+                      <Tooltip
+                        content={t(
                           isFullscreen
                             ? "common:exitFullscreen"
                             : "common:fullscreen",
                         )}
-                        className="flex items-center justify-center rounded-lg bg-black/40 px-2.5 text-white drop-shadow-md hover:bg-black/60"
                       >
-                        {isFullscreen ? (
-                          <Minimize className="size-5" />
-                        ) : (
-                          <Maximize className="size-5" />
-                        )}
-                      </IconButton>
-                    </Tooltip>
-                  </HostControlBar>
-                )
-              }
+                        <IconButton
+                          onClick={toggleFullscreen}
+                          label={t(
+                            isFullscreen
+                              ? "common:exitFullscreen"
+                              : "common:fullscreen",
+                          )}
+                          className="flex items-center justify-center rounded-lg bg-black/40 px-2.5 text-white drop-shadow-md hover:bg-black/60"
+                        >
+                          {isFullscreen ? (
+                            <Minimize className="size-5" />
+                          ) : (
+                            <Maximize className="size-5" />
+                          )}
+                        </IconButton>
+                      </Tooltip>
+                    </HostControlBar>
+                  )
+                }
 
-              if (effectiveRole === "spectator") {
-                return null
-              }
+                if (effectiveRole === "spectator") {
+                  return null
+                }
 
-              return (
-                <div className="z-50 flex items-center justify-between bg-white px-4 py-2 text-lg font-bold text-white">
-                  <div className="flex items-center gap-2">
-                    <p className="text-gray-800">{player?.username}</p>
-                    <PlayerTeamBadge
-                      extensionState={extensionState}
-                      clientId={clientId}
-                      player={player}
-                    />
-                  </div>
-                  {(gameMode !== QUIZZ_MODES.SURVEY ||
-                    (player?.points !== undefined && player.points > 0)) && (
-                    <div className="rounded-lg bg-gray-800 px-3 py-1 text-lg">
-                      {player?.points}
+                return (
+                  <div className="z-50 flex items-center justify-between bg-white px-4 py-2 text-lg font-bold text-white">
+                    <div className="flex items-center gap-2">
+                      <p className="text-gray-800">{player?.username}</p>
+                      <PlayerTeamBadge
+                        extensionState={extensionState}
+                        clientId={clientId}
+                        player={player}
+                      />
                     </div>
-                  )}
-                </div>
-              )
-            })()}
-          </>
-        )}
-      </div>
-    </NativeGameFrame>
+                    {(gameMode !== QUIZZ_MODES.SURVEY ||
+                      (player?.points !== undefined && player.points > 0)) && (
+                      <div className="rounded-lg bg-gray-800 px-3 py-1 text-lg">
+                        {player?.points}
+                      </div>
+                    )}
+                  </div>
+                )
+              })()}
+            </>
+          )}
+        </div>
+      </NativeGameFrame>
+    </PlatformGameClosing>
   )
 }
 const GameWrapper = (props: Props) => {

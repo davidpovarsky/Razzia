@@ -1,21 +1,39 @@
 import { PlatformButton } from "../../presentation/platform-controls"
-import type { ComponentType, ReactNode } from "react"
+import { useId, type ComponentType, type ReactNode } from "react"
+import {
+  getSceneCardPresentation,
+  type SceneCardIcon,
+  type SceneCardMetadata,
+} from "../scene-card-presentation"
 import {
   BarChart2,
+  BookOpen,
+  Building2,
+  CircleCheck,
+  Coffee,
   Copy,
   DoorOpen,
   Flag,
   Image as ImageIcon,
   Layers,
   ListChecks,
+  Music,
+  Phone,
+  Scale,
   Sparkles,
   Timer,
   Trash2,
   Trophy,
+  UserCheck,
+  Users,
+  Video,
+  WandSparkles,
+  type LucideIcon,
 } from "lucide-react"
 
 interface TimelineSceneCardProps {
   kind: string
+  scene?: SceneCardMetadata
   title?: string
   durationText: string
   isActive: boolean
@@ -32,42 +50,33 @@ interface TimelineSceneCardProps {
   }>
 }
 
-const getSceneIcon = (kind: string) => {
-  switch (kind) {
-    case "transition":
-      return <Layers className="text-primary size-5" />
-
-    case "animation":
-      return <Sparkles className="text-primary size-5" />
-
-    case "media":
-      return <ImageIcon className="text-primary size-5" />
-
-    case "leaderboard":
-      return <Trophy className="text-primary size-5" />
-
-    case "interimResults":
-      return <BarChart2 className="text-primary size-5" />
-
-    case "answerRecap":
-      return <ListChecks className="text-primary size-5" />
-
-    case "countdown":
-      return <Timer className="text-primary size-5" />
-
-    case "opening":
-      return <DoorOpen className="text-primary size-5" />
-
-    case "closing":
-      return <Flag className="text-primary size-5" />
-
-    default:
-      return <Layers className="text-primary size-5" />
-  }
+export const SCENE_CARD_ICONS: Record<SceneCardIcon, LucideIcon> = {
+  animation: Sparkles,
+  transition: Layers,
+  image: ImageIcon,
+  video: Video,
+  audio: Music,
+  leaderboard: Trophy,
+  results: BarChart2,
+  recap: ListChecks,
+  countdown: Timer,
+  opening: DoorOpen,
+  closing: Flag,
+  company: Building2,
+  participants: Users,
+  phone: Phone,
+  ready: UserCheck,
+  round: Flag,
+  tie: Scale,
+  assembly: WandSparkles,
+  story: BookOpen,
+  winner: CircleCheck,
+  interlude: Coffee,
 }
 
 export const TimelineSceneCard = ({
   kind,
+  scene,
   title,
   durationText,
   isActive,
@@ -77,8 +86,17 @@ export const TimelineSceneCard = ({
   DeleteConfirmation,
   t,
 }: TimelineSceneCardProps) => {
-  const kindLabel = t(`extensions:timeline.${kind}`, kind)
-  const cardTitle = title?.trim() || kindLabel
+  const descriptionId = useId()
+  const presentation = getSceneCardPresentation(kind, scene)
+  const Icon = SCENE_CARD_ICONS[presentation.icon]
+  const kindLabel = t(presentation.labelKey, kind)
+  const cardTitle = title?.trim() || presentation.authoredTitle || kindLabel
+  const description =
+    presentation.authoredDescription ||
+    (presentation.descriptionKey ? t(presentation.descriptionKey, "") : "")
+  const advanceText = presentation.advanceLabelKey
+    ? t(presentation.advanceLabelKey, durationText)
+    : durationText
   const duplicateLabel = t(
     "extensions:timeline.duplicateCard",
     "Duplicate card",
@@ -89,8 +107,10 @@ export const TimelineSceneCard = ({
     <div
       data-testid="editor-scene-card"
       data-scene-kind={kind}
+      data-scene-role={presentation.semanticKind}
+      data-scene-preset={scene?.preset}
       className={[
-        "group border-accent bg-background relative flex h-36 cursor-pointer flex-col justify-between gap-1 rounded-lg border-2 px-6 py-2 transition-all",
+        "group border-accent bg-background relative flex h-44 cursor-pointer flex-col justify-between gap-1 rounded-lg border-2 px-6 py-2 transition-all",
         isActive ? "border-primary shadow-sm" : "",
       ].join(" ")}
     >
@@ -100,6 +120,7 @@ export const TimelineSceneCard = ({
         classNameContent="contents"
         onClick={onClick}
         aria-label={cardTitle}
+        aria-describedby={description ? descriptionId : undefined}
         aria-pressed={isActive}
         data-testid="editor-scene-select"
         className="flex h-full w-full flex-1 flex-col justify-between gap-1 bg-transparent p-0"
@@ -111,14 +132,22 @@ export const TimelineSceneCard = ({
         </div>
 
         <div className="flex flex-1 flex-col items-center justify-center gap-1.5 pt-4">
-          {getSceneIcon(kind)}
-          <p className="text-foreground max-w-[180px] truncate text-center text-xs font-semibold">
+          <Icon aria-hidden="true" className="text-primary size-6" />
+          <p className="text-foreground line-clamp-2 w-full text-center text-xs font-semibold">
             {cardTitle}
           </p>
+          {description && (
+            <p
+              id={descriptionId}
+              className="text-muted-foreground line-clamp-2 w-full text-center text-[11px] leading-snug font-normal"
+            >
+              {description}
+            </p>
+          )}
         </div>
 
         <div className="border-accent/40 text-muted-foreground flex items-center justify-between border-t pt-1 text-[11px]">
-          <span>{durationText}</span>
+          <span>{advanceText}</span>
         </div>
       </PlatformButton>
       <div

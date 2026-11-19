@@ -13,6 +13,7 @@ import type {
 import {
   TadazzAnimatedBackdrop,
   isTadazzShowActive,
+  resolveTadazzAudioPolicy,
   themeTimerTransition,
   type ThemeTimerEndState,
 } from "@razzia/extensions/presentation"
@@ -128,6 +129,22 @@ export function LegacyStageAudio({
   const { t } = useTranslation()
   const themed = Boolean(extensionState && isTadazzShowActive(extensionState))
   const timerState = useRef<ThemeTimerEndState | null>(null)
+  const audioPolicy = resolveTadazzAudioPolicy({
+    statusName,
+    extensionPhase: extensionState?.phase,
+    sceneKind:
+      currentSceneObj &&
+      "kind" in currentSceneObj &&
+      typeof currentSceneObj.kind === "string"
+        ? currentSceneObj.kind
+        : undefined,
+    scenePreset:
+      currentSceneObj &&
+      "preset" in currentSceneObj &&
+      typeof currentSceneObj.preset === "string"
+        ? currentSceneObj.preset
+        : undefined,
+  })
   useEffect(() => {
     if (!extensionState) {
       timerState.current = null
@@ -175,67 +192,67 @@ export function LegacyStageAudio({
   return (
     <>
       {" "}
-      {extensionState &&
-        (effectiveRole !== "player" || themed) &&
-        (!manager || roomMediaReady) && (
-          <AudioCuePlayer
-            eventOnly={effectiveRole === "player"}
-            cueId={activePhaseCueId}
-            audioExtras={
-              extensionState.extras.audio as QuizExtrasV1["audio"] | undefined
-            }
-            cardAudioCues={
-              extensionState.extras.cardAudioCues as
-                CardAudioOverrides | undefined
-            }
-            sceneAudio={
-              (extensionState.extras.sceneAudio as
-                | {
-                    mode?: "inherit" | "mute" | "custom"
-                    cueId?: CueId
-                    url?: string
-                    volume?: number
-                    loop?: boolean
-                  }
-                | undefined) ?? currentSceneObj?.audio
-            }
-            gameId={extensionState.gameId}
-            activeCardKey={activeCardKey}
-            phase={
-              extensionState.phase === "scene"
-                ? "scene"
-                : (statusName ?? extensionState.phase)
-            }
-            epoch={extensionState.epoch}
-            paused={extensionState.pause?.paused}
-            showControls={Boolean(manager && !isHostPresenting)}
-            controlLabels={{
-              enable: t("extensions:audio.enableSound", "Enable sound"),
-              volume: t("extensions:audio.volume", "Volume"),
-              mute: t("extensions:audio.mute", "Mute"),
-              unmute: t("extensions:audio.unmute", "Unmute"),
-              pause: t("extensions:audio.pauseAudio", "Pause audio"),
-              play: t("extensions:audio.playAudio", "Play audio"),
-              track: t("extensions:audio.track", "Track"),
-              followShow: t("extensions:audio.followShow", "Follow show"),
-            }}
-            soundtrackLabels={{
-              openingIntro: t(
-                "extensions:audio.slotOpeningIntro",
-                "Opening intro",
-              ),
-              lobby: t("extensions:audio.slotLobby", "Lobby / QR"),
-              roundStart: t("extensions:audio.slotRoundStart", "Round start"),
-              question: t("extensions:audio.slotQuestion", "Question"),
-              voting: t("extensions:audio.slotVoting", "Voting"),
-              results: t("extensions:audio.slotResults", "Results"),
-              leaderboard: t("extensions:audio.slotLeaderboard", "Leaderboard"),
-              recap: t("extensions:audio.slotRecap", "Recap"),
-              finale: t("extensions:audio.slotFinale", "Finale"),
-            }}
-            hasCompetingMedia={hasCompetingMediaAudio}
-          />
-        )}
+      {extensionState && (!manager || roomMediaReady) && (
+        <AudioCuePlayer
+          eventOnly={effectiveRole === "player"}
+          cueId={activePhaseCueId}
+          soundtrackSlot={audioPolicy.slot}
+          continuityKey={audioPolicy.continuityKey}
+          audioExtras={
+            extensionState.extras.audio as QuizExtrasV1["audio"] | undefined
+          }
+          cardAudioCues={
+            extensionState.extras.cardAudioCues as
+              CardAudioOverrides | undefined
+          }
+          sceneAudio={
+            (extensionState.extras.sceneAudio as
+              | {
+                  mode?: "inherit" | "mute" | "custom"
+                  cueId?: CueId
+                  url?: string
+                  volume?: number
+                  loop?: boolean
+                }
+              | undefined) ?? currentSceneObj?.audio
+          }
+          gameId={extensionState.gameId}
+          activeCardKey={activeCardKey}
+          phase={
+            extensionState.phase === "scene"
+              ? "scene"
+              : (statusName ?? extensionState.phase)
+          }
+          epoch={extensionState.epoch}
+          paused={extensionState.pause?.paused}
+          showControls={Boolean(manager && !isHostPresenting)}
+          controlLabels={{
+            enable: t("extensions:audio.enableSound", "Enable sound"),
+            volume: t("extensions:audio.volume", "Volume"),
+            mute: t("extensions:audio.mute", "Mute"),
+            unmute: t("extensions:audio.unmute", "Unmute"),
+            pause: t("extensions:audio.pauseAudio", "Pause audio"),
+            play: t("extensions:audio.playAudio", "Play audio"),
+            track: t("extensions:audio.track", "Track"),
+            followShow: t("extensions:audio.followShow", "Follow show"),
+          }}
+          soundtrackLabels={{
+            openingIntro: t(
+              "extensions:audio.slotOpeningIntro",
+              "Opening intro",
+            ),
+            lobby: t("extensions:audio.slotLobby", "Lobby / QR"),
+            roundStart: t("extensions:audio.slotRoundStart", "Round start"),
+            question: t("extensions:audio.slotQuestion", "Question"),
+            voting: t("extensions:audio.slotVoting", "Voting"),
+            results: t("extensions:audio.slotResults", "Results"),
+            leaderboard: t("extensions:audio.slotLeaderboard", "Leaderboard"),
+            recap: t("extensions:audio.slotRecap", "Recap"),
+            finale: t("extensions:audio.slotFinale", "Finale"),
+          }}
+          hasCompetingMedia={hasCompetingMediaAudio}
+        />
+      )}
     </>
   )
 }

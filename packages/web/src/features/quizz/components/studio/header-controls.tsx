@@ -1,8 +1,16 @@
 import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 import NativeButton from "@razzia/web/components/Button"
 import type { TimelineItemKind } from "@razzia/extensions/core"
-import { getTimelineKindOptions } from "@razzia/extensions/editor"
+import {
+  getSceneCardPresentation,
+  getTimelineKindOptions,
+  SCENE_CARD_ICONS,
+} from "@razzia/extensions/editor"
 import { useStudioEditor } from "./studio-editor-context"
+import {
+  EditorEditingModeControl,
+  useEditorEditingMode,
+} from "./editor-editing-mode"
 import ToggleGroup from "./GroupedToggleGroup"
 import AlertDialog from "@razzia/web/components/AlertDialog"
 import clsx from "clsx"
@@ -14,74 +22,77 @@ export function StudioHeaderNavigation() {
   const { t } = useTranslation()
 
   return (
-    <div className="editor-screen-tabs bg-accent/80 order-3 grid w-full max-w-full shrink-0 grid-cols-2 items-center gap-0.5 rounded-lg p-0.5 sm:order-none sm:flex sm:h-8 sm:w-auto sm:gap-0">
-      <NativeButton
-        size="sm"
-        type="button"
-        data-testid="studio-tab-questions"
-        aria-pressed={activeTab === "questions"}
-        aria-controls="studio-content"
-        onClick={() => setActiveTab("questions")}
-        className={clsx(
-          "flex h-8 min-w-0 items-center justify-center gap-1 rounded-md bg-transparent px-2.5 text-xs font-semibold transition-colors sm:h-full sm:shrink-0 sm:gap-1.5 sm:px-3",
-          activeTab === "questions"
-            ? "bg-background text-foreground shadow-xs"
-            : "text-muted-foreground hover:text-foreground",
-        )}
-      >
-        {t("extensions:studio.tabs.questions", "Questions")}
-      </NativeButton>
-      <NativeButton
-        size="sm"
-        type="button"
-        data-testid="studio-tab-participants"
-        aria-pressed={activeTab === "participants"}
-        aria-controls="studio-content"
-        onClick={() => setActiveTab("participants")}
-        className={clsx(
-          "flex h-8 min-w-0 items-center justify-center gap-1 rounded-md bg-transparent px-2.5 text-xs font-semibold transition-colors sm:h-full sm:shrink-0 sm:gap-1.5 sm:px-3",
-          activeTab === "participants"
-            ? "bg-background text-foreground shadow-xs"
-            : "text-muted-foreground hover:text-foreground",
-        )}
-      >
-        <Users className="size-3.5" />
-        {t("extensions:studio.tabs.participants", "Participants")}
-      </NativeButton>
-      <NativeButton
-        size="sm"
-        type="button"
-        data-testid="studio-tab-settings"
-        aria-pressed={activeTab === "settings"}
-        aria-controls="studio-content"
-        onClick={() => setActiveTab("settings")}
-        className={clsx(
-          "flex h-8 min-w-0 items-center justify-center gap-1 rounded-md bg-transparent px-2.5 text-xs font-semibold transition-colors sm:h-full sm:shrink-0 sm:gap-1.5 sm:px-3",
-          activeTab === "settings"
-            ? "bg-background text-foreground shadow-xs"
-            : "text-muted-foreground hover:text-foreground",
-        )}
-      >
-        <Settings className="size-3.5" />
-        {t("extensions:studio.tabs.settings", "Settings")}
-      </NativeButton>
-      <NativeButton
-        size="sm"
-        type="button"
-        data-testid="studio-tab-launch"
-        aria-pressed={activeTab === "launch"}
-        aria-controls="studio-content"
-        onClick={() => setActiveTab("launch")}
-        className={clsx(
-          "flex h-8 min-w-0 items-center justify-center gap-1 rounded-md bg-transparent px-2.5 text-xs font-semibold transition-colors sm:h-full sm:shrink-0 sm:gap-1.5 sm:px-3",
-          activeTab === "launch"
-            ? "bg-primary text-white shadow-xs"
-            : "text-muted-foreground hover:text-foreground",
-        )}
-      >
-        <Rocket className="size-3.5" />
-        {t("extensions:studio.tabs.launch", "Launch")}
-      </NativeButton>
+    <div className="order-3 flex w-full min-w-0 flex-wrap items-center gap-2 sm:order-none sm:w-auto">
+      <div className="editor-screen-tabs bg-accent/80 order-3 grid w-full max-w-full shrink-0 grid-cols-2 items-center gap-0.5 rounded-lg p-0.5 sm:order-none sm:flex sm:h-8 sm:w-auto sm:gap-0">
+        <NativeButton
+          size="sm"
+          type="button"
+          data-testid="studio-tab-questions"
+          aria-pressed={activeTab === "questions"}
+          aria-controls="studio-content"
+          onClick={() => setActiveTab("questions")}
+          className={clsx(
+            "flex h-8 min-w-0 items-center justify-center gap-1 rounded-md bg-transparent px-2.5 text-xs font-semibold transition-colors sm:h-full sm:shrink-0 sm:gap-1.5 sm:px-3",
+            activeTab === "questions"
+              ? "bg-background text-foreground shadow-xs"
+              : "text-muted-foreground hover:text-foreground",
+          )}
+        >
+          {t("extensions:studio.tabs.questions", "Questions")}
+        </NativeButton>
+        <NativeButton
+          size="sm"
+          type="button"
+          data-testid="studio-tab-participants"
+          aria-pressed={activeTab === "participants"}
+          aria-controls="studio-content"
+          onClick={() => setActiveTab("participants")}
+          className={clsx(
+            "flex h-8 min-w-0 items-center justify-center gap-1 rounded-md bg-transparent px-2.5 text-xs font-semibold transition-colors sm:h-full sm:shrink-0 sm:gap-1.5 sm:px-3",
+            activeTab === "participants"
+              ? "bg-background text-foreground shadow-xs"
+              : "text-muted-foreground hover:text-foreground",
+          )}
+        >
+          <Users className="size-3.5" />
+          {t("extensions:studio.tabs.participants", "Participants")}
+        </NativeButton>
+        <NativeButton
+          size="sm"
+          type="button"
+          data-testid="studio-tab-settings"
+          aria-pressed={activeTab === "settings"}
+          aria-controls="studio-content"
+          onClick={() => setActiveTab("settings")}
+          className={clsx(
+            "flex h-8 min-w-0 items-center justify-center gap-1 rounded-md bg-transparent px-2.5 text-xs font-semibold transition-colors sm:h-full sm:shrink-0 sm:gap-1.5 sm:px-3",
+            activeTab === "settings"
+              ? "bg-background text-foreground shadow-xs"
+              : "text-muted-foreground hover:text-foreground",
+          )}
+        >
+          <Settings className="size-3.5" />
+          {t("extensions:studio.tabs.settings", "Settings")}
+        </NativeButton>
+        <NativeButton
+          size="sm"
+          type="button"
+          data-testid="studio-tab-launch"
+          aria-pressed={activeTab === "launch"}
+          aria-controls="studio-content"
+          onClick={() => setActiveTab("launch")}
+          className={clsx(
+            "flex h-8 min-w-0 items-center justify-center gap-1 rounded-md bg-transparent px-2.5 text-xs font-semibold transition-colors sm:h-full sm:shrink-0 sm:gap-1.5 sm:px-3",
+            activeTab === "launch"
+              ? "bg-primary text-white shadow-xs"
+              : "text-muted-foreground hover:text-foreground",
+          )}
+        >
+          <Rocket className="size-3.5" />
+          {t("extensions:studio.tabs.launch", "Launch")}
+        </NativeButton>
+      </div>
+      {activeTab === "questions" && <EditorEditingModeControl />}
     </div>
   )
 }
@@ -97,9 +108,34 @@ export function StudioCardKindBar({
     selectedKind,
     selectedTimelineItem,
     changeSelectedCardKind,
+    scenes,
   } = useStudioEditor()
   const { t } = useTranslation()
+  const { advanced } = useEditorEditingMode()
+  const selectedScene =
+    selectedTimelineItem && selectedTimelineItem.kind !== "question"
+      ? scenes[selectedTimelineItem.sceneId]
+      : undefined
+  const selectedPresentation = selectedScene
+    ? getSceneCardPresentation(selectedScene.kind, selectedScene)
+    : undefined
   const timelineKinds = getTimelineKindOptions(t)
+    .map((item) =>
+      item.value === selectedKind && selectedPresentation
+        ? {
+            ...item,
+            label: t(selectedPresentation.labelKey),
+            icon: SCENE_CARD_ICONS[selectedPresentation.icon],
+          }
+        : item,
+    )
+    .filter(
+      (item) =>
+        advanced ||
+        selectedTimelineItem?.kind !== "question" ||
+        item.value === "quiz" ||
+        item.value === "survey",
+    )
 
   return (
     <>

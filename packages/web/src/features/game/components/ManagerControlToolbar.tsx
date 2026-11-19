@@ -661,7 +661,9 @@ export const ManagerControlToolbar = ({
           />
         )}
 
-        {(launch?.stage === "opening" || (!isLobby && !isFinished)) && (
+        {(launch?.stage === "opening" ||
+          launch?.stage === "closing" ||
+          (!isLobby && !isFinished)) && (
           <Button
             size="sm"
             onClick={handlePauseToggle}

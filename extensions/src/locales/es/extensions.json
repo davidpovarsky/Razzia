@@ -60,7 +60,7 @@
   },
   "audio": {
     "soundtrackTitle": "Banda sonora del presentador",
-    "soundtrackDesc": "Usa solo medios autorizados del espacio. Los archivos candidatos no se incluyen.",
+    "soundtrackDesc": "La música del sistema está lista para cada etapa. Mantén los valores predeterminados, elige tu música o silencia una etapa concreta.",
     "slotOpeningIntro": "Introducción (12 segundos)",
     "slotLobby": "Sala / QR",
     "slotRoundStart": "Inicio de ronda",
@@ -70,7 +70,7 @@
     "slotLeaderboard": "Clasificación / empate",
     "slotRecap": "Resumen de ronda / historia",
     "slotFinale": "Final",
-    "inherit": "Usar señal / heredar",
+    "inherit": "Usar los valores predeterminados del sistema y del tema",
     "none": "Sin música de fondo",
     "fade": "Fundido ms",
     "enableSound": "Activar sonido",
@@ -277,6 +277,9 @@
     "interludeTitle": "Vista previa de la diapositiva de interludio"
   },
   "roster": {
+    "allowUnregisteredPlayers": "Permitir participantes no inscritos",
+    "allowUnregisteredPlayersDescription": "Controla las nuevas entradas por web y teléfono de personas que no figuran en la lista del juego. Las personas inscritas y ya admitidas pueden reconectarse. El bloqueo de la sala sigue vigente.",
+    "allowUnregisteredPlayersPhoneRestricted": "La participación por teléfono también depende del ajuste de invitaciones telefónicas.",
     "title": "Participantes y lista telefónica",
     "description": "Registra nombres y números completos (+972, +44, etc.) para reconocer a quienes llaman.",
     "phoneInviteOnly": "Solo invitados por teléfono",
@@ -365,6 +368,30 @@
     "showingPlayers": "{{shown}} de {{total}} jugadores"
   },
   "timeline": {
+    "sceneDescriptions": {
+      "opening": "Da la bienvenida al público y presenta el juego.",
+      "closing": "Cierra el juego y celebra el final.",
+      "joinDirectory": "Muestra los representantes de las mesas y la lista de participantes.",
+      "joinInstructions": "Explica cómo participar por teléfono.",
+      "joinReadiness": "Muestra qué participantes están conectados y listos.",
+      "roundIntro": "Presenta la siguiente ronda de preguntas.",
+      "storyProgress": "Muestra el progreso de la historia y las preguntas completadas.",
+      "tieBreak": "Resuelve el empate entre las respuestas más votadas.",
+      "storyAssembly": "Crea la historia con las respuestas seleccionadas.",
+      "storyLive": "Presenta la historia creada y su cuenta atrás.",
+      "winner": "Revela la respuesta seleccionada o ganadora.",
+      "roundRecap": "Resume las respuestas de la ronda completada.",
+      "interlude": "Hace una pausa entre las secciones del juego.",
+      "transition": "Pasa de una sección del juego a la siguiente.",
+      "leaderboard": "Muestra la clasificación y los puntos.",
+      "interimResults": "Muestra la distribución de respuestas a la última pregunta.",
+      "answerRecap": "Resume las respuestas de las preguntas completadas.",
+      "countdown": "Cuenta atrás hasta la siguiente parte del juego.",
+      "media": "Muestra o reproduce el contenido multimedia de la tarjeta.",
+      "animation": "Reproduce una animación decorativa."
+    },
+    "waitForHost": "Avanza el anfitrión",
+    "afterMedia": "Al finalizar el contenido",
     "quiz": "Quiz",
     "survey": "Encuesta",
     "transition": "Transición",
@@ -389,6 +416,18 @@
     "deleteCardConfirm": "¿Eliminar esta tarjeta de escena de la línea de tiempo?"
   },
   "studio": {
+    "editing": {
+      "modeLabel": "Modo de edición",
+      "simple": "Edición sencilla",
+      "advanced": "Edición avanzada",
+      "simpleHint": "Céntrate en las preguntas y respuestas. La configuración actual del juego sigue activa.",
+      "advancedHint": "Configura puntuación, diseño, sonido, animaciones y todos los tipos de tarjetas.",
+      "customSettings": "Hay ajustes personalizados activos",
+      "customSettingsHint": "Esta pregunta tiene ajustes adicionales. La edición sencilla los conserva.",
+      "advancedSettings": "Ajustes avanzados",
+      "moreCardTypes": "Más tipos de tarjetas",
+      "advancedControls": "Puntuación, apariencia, sonido y animaciones"
+    },
     "tabs": {
       "questions": "Preguntas",
       "participants": "Participantes",

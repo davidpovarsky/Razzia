@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next"
 import QuizzEditorSidebar from "../QuizzEditorSidebar"
 import { ShowThemeSettings } from "../studio/show-theme-settings"
 import { StudioCardKindBar } from "../studio/header-controls"
+import { QuestionEditingGuide } from "../studio/editor-editing-mode"
 import QuestionEditorAnswers from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorAnswers"
 import QuestionEditorConfig from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig"
 import QuestionEditorMedia from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorMedia"
@@ -36,7 +37,7 @@ const QuestionEditor = () => {
       className="native-editor-workspace"
       ariaLabel={t("extensions:studio.tabs.questions", "Questions")}
       closeLabel={t("common:close", "Close")}
-      defaultPanel={window.location.hash === "#themes" ? "themes" : undefined}
+      defaultPanel={window.location.hash === "#themes" ? "themes" : "edit"}
       panels={[
         {
           id: "timeline",
@@ -54,6 +55,7 @@ const QuestionEditor = () => {
           dock: true,
           content: (
             <div className="native-editor-fields">
+              <QuestionEditingGuide />
               <StudioCardKindBar embedded />
               <EditorStageFitNotice question={currentQuestion} />
               <QuestionEditorTitle />

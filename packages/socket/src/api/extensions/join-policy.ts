@@ -5,6 +5,10 @@ export interface GameJoinPort {
   readonly settings: { generatedUsernames: boolean }
   readonly locked: boolean
   readonly phoneInviteOnly: boolean
+  readonly allowUnregisteredPlayers?: boolean
+  findRosterForJoin?: (
+    input: JoinInput,
+  ) => { rosterPlayerId: string; displayName: string } | null | undefined
   findRosterByPhone: (
     phone: string,
   ) => { rosterPlayerId: string; displayName: string } | null | undefined
@@ -23,7 +27,7 @@ export type JoinResolution =
       kind: "denied"
       error: "errors:game.locked" | "errors:auth.usernameTooShort"
       status: 400 | 403
-      reason?: "phone_invite_only"
+      reason?: "phone_invite_only" | "roster_only"
     }
   | {
       kind: "ticket"
@@ -41,14 +45,16 @@ export function resolveGameJoin(
   input: JoinInput,
 ): JoinResolution {
   const phone = input.phone ? normalizePhoneE164(input.phone) : null
-  const match = phone ? game.findRosterByPhone(phone) : null
+  const phoneMatch = phone ? game.findRosterByPhone(phone) : null
   const existing = game.players.find(
     (player) => player.clientId === input.clientId,
   )
 
-  if (existing && !match) {
+  if (existing && !phoneMatch) {
     return { kind: "existing", username: existing.username }
   }
+
+  const match = phoneMatch ?? (!phone ? game.findRosterForJoin?.(input) : null)
 
   if ((input.source === "phone" || phone) && !match && game.phoneInviteOnly) {
     return {
@@ -56,6 +62,15 @@ export function resolveGameJoin(
       error: "errors:game.locked",
       status: 403,
       reason: "phone_invite_only",
+    }
+  }
+
+  if (!match && game.allowUnregisteredPlayers === false) {
+    return {
+      kind: "denied",
+      error: "errors:game.locked",
+      status: 403,
+      reason: "roster_only",
     }
   }
 

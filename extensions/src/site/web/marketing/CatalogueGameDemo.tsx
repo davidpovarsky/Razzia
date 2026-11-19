@@ -20,7 +20,7 @@ import type {
   TadazzStageHandle,
 } from "../../../presentation/tadazz-show/TadazzStage"
 import type { TadazzV4Cue } from "../../../presentation/tadazz-v4/types"
-import { TADAZZ_SFX_BY_CUE } from "../../../presentation/audio-cue-player"
+import { useCatalogueAudio } from "./use-catalogue-audio"
 import { SiteButton } from "../shared/SiteButton"
 import {
   CatalogueMobileQuestion,
@@ -83,14 +83,28 @@ function CataloguePlayer({
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState("")
   const [sound, setSound] = useState(false)
-  const soundRef = useRef(false)
-  const audio = useRef<HTMLAudioElement | null>(null)
   const [reducedMotion, setReducedMotion] = useState(false)
   const mounted = useRef(true)
   const revealRef = useRef<(choice?: number) => Promise<void>>(() =>
     Promise.resolve(),
   )
   const question = questions[index]
+  const { playEffect, musicUrl } = useCatalogueAudio({
+    enabled: sound,
+    slot:
+      phase === "voting"
+        ? "voting"
+        : phase === "results"
+          ? "results"
+          : phase === "finish"
+            ? "finale"
+            : phase === "transition"
+              ? "question"
+              : "lobby",
+    screenKey: [demo.metadata.id, index, phase].join(":"),
+    selection: show.defaults?.showTheme,
+    cardAudioCues: question.audioCues,
+  })
   const compactControls = useCatalogueMobileControls()
   const showMobileQuestion =
     compactControls && (phase === "voting" || phase === "results")
@@ -143,26 +157,15 @@ function CataloguePlayer({
 
     return () => {
       mounted.current = false
-      audio.current?.pause()
       media.removeEventListener("change", update)
     }
   }, [])
-  const onCue = useCallback((cue: TadazzV4Cue) => {
-    const url = TADAZZ_SFX_BY_CUE[cue.name]
-
-    if (!soundRef.current || !url) {
-      return
-    }
-
-    const soundEffect = audio.current ?? new Audio()
-    audio.current = soundEffect
-    soundEffect.pause()
-    soundEffect.src = url
-    soundEffect.volume = 0.35
-    void soundEffect.play().catch(() => {
-      // Browsers may block optional audio until the next direct interaction.
-    })
-  }, [])
+  const onCue = useCallback(
+    (cue: TadazzV4Cue) => {
+      playEffect(cue.name)
+    },
+    [playEffect],
+  )
   const stageQuestion = (position: number): StageQuestion => {
     const card = questions[position]
 
@@ -268,6 +271,10 @@ function CataloguePlayer({
 
     setVotes((previous) => ({ ...previous, [index]: choice }))
     stage.current?.setSelectedOptions([choice])
+    playEffect(
+      "answer-submitted",
+      [demo.metadata.id, index, "submitted"].join(":"),
+    )
     run(() => reveal(choice))
   }
   const restart = async () => {
@@ -349,6 +356,7 @@ function CataloguePlayer({
         data-testid="catalogue-game-demo"
         data-catalogue-id={demo.metadata.id}
         data-game-phase={phase}
+        data-audio-url={musicUrl}
         data-question-index={index}
         data-question-count={questions.length}
         data-theme-id={demo.metadata.themeId}
@@ -422,14 +430,7 @@ function CataloguePlayer({
               disabled={busy || phase === "transition"}
               aria-pressed={sound}
               aria-label={t(sound ? "Mute game sounds" : "Enable game sounds")}
-              onClick={() => {
-                soundRef.current = !soundRef.current
-                setSound(soundRef.current)
-
-                if (!soundRef.current) {
-                  audio.current?.pause()
-                }
-              }}
+              onClick={() => setSound((value) => !value)}
             >
               {sound ? <Volume2 size={18} /> : <VolumeX size={18} />}
               {t(sound ? "Sound on" : "Sound off")}

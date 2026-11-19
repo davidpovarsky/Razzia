@@ -248,6 +248,7 @@ export const hostPresenceSnapshotSchema = z.strictObject({
   gameId: z.string().min(1),
   seq: z.number().int().nonnegative(),
   phoneInviteOnly: z.boolean(),
+  allowUnregisteredPlayers: z.boolean().optional(),
   registeredTotal: z.number().int().nonnegative(),
   connectedNow: z.number().int().nonnegative(),
   disconnectedNow: z.number().int().nonnegative(),

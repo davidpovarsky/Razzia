@@ -1,4 +1,6 @@
 import fs from "node:fs"
+import { createHash } from "node:crypto"
+import { PLATFORM_AUDIO_ASSETS } from "./platform-audio-assets"
 import path from "node:path"
 import { describe, expect, it } from "vitest"
 import {
@@ -32,7 +34,10 @@ describe("Gate 1: Canonical Built-In Sound Catalog & Asset Verification", () => 
       expect(sound.builtIn).toBe(true)
       expect(typeof sound.defaultLoop).toBe("boolean")
       expect(sound.label.trim().length).toBeGreaterThan(0)
-      expect(sound.url.startsWith("/sounds/")).toBe(true)
+      expect(
+        sound.url.startsWith("/sounds/") ||
+          PLATFORM_AUDIO_ASSETS.some((asset) => asset.url === sound.url),
+      ).toBe(true)
     }
 
     expect(cueIds.size).toBe(9)
@@ -47,7 +52,7 @@ describe("Gate 1: Canonical Built-In Sound Catalog & Asset Verification", () => 
     }
   })
 
-  it("asserts every canonical sound URL resolves to a real, non-empty file under packages/web/public/sounds", () => {
+  it("verifies every canonical public sound and the exact reviewed platform recording", () => {
     // Resolve workspace root deterministically from current test file location:
     // extensions/src/core/audio-catalog.test.ts -> ../../../
     const workspaceRoot = path.resolve(__dirname, "../../..")
@@ -70,6 +75,15 @@ describe("Gate 1: Canonical Built-In Sound Catalog & Asset Verification", () => 
         stat.size,
         `Expected non-empty file at ${fullPath}, got ${stat.size} bytes`,
       ).toBeGreaterThan(1000)
+      const approved = PLATFORM_AUDIO_ASSETS.find(
+        (asset) => asset.url === sound.url,
+      )
+      if (approved) {
+        expect(stat.size).toBe(approved.bytes)
+        expect(
+          createHash("sha256").update(fs.readFileSync(fullPath)).digest("hex"),
+        ).toBe(approved.sha256)
+      }
     }
   })
 })

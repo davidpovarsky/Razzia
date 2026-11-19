@@ -14,6 +14,7 @@ import { InstalledThemeCatalogProvider } from "./installed-theme-catalog"
 import { EditorWorkspace } from "@razzia/extensions/presentation"
 import { List } from "lucide-react"
 import { EditorGameBackdrop } from "./EditorGameBackdrop"
+import { EditorEditingModeProvider } from "./editor-editing-mode"
 import "./editor-workspace-native.css"
 
 const StudioContent = () => {
@@ -90,16 +91,18 @@ const StudioContent = () => {
 export const StudioShell = () => (
   <InstalledThemeCatalogProvider>
     <StudioEditorProvider>
-      <div className="native-editor-shell bg-muted relative flex max-w-full flex-col">
-        <EditorGameBackdrop />
-        <QuizzEditorHeader />
-        <div
-          id="studio-content"
-          className="flex min-h-0 min-w-0 flex-1 flex-col"
-        >
-          <StudioContent />
+      <EditorEditingModeProvider>
+        <div className="native-editor-shell bg-muted relative flex max-w-full flex-col">
+          <EditorGameBackdrop />
+          <QuizzEditorHeader />
+          <div
+            id="studio-content"
+            className="flex min-h-0 min-w-0 flex-1 flex-col"
+          >
+            <StudioContent />
+          </div>
         </div>
-      </div>
+      </EditorEditingModeProvider>
     </StudioEditorProvider>
   </InstalledThemeCatalogProvider>
 )

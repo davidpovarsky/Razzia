@@ -60,7 +60,7 @@
   },
   "audio": {
     "soundtrackTitle": "Colonna sonora del presentatore",
-    "soundtrackDesc": "Usa solo media autorizzati dell’account. I file candidati non sono inclusi.",
+    "soundtrackDesc": "La musica di sistema è pronta per ogni fase. Mantieni le impostazioni predefinite, scegli la tua musica o disattiva l’audio di una singola fase.",
     "slotOpeningIntro": "Introduzione (12 secondi)",
     "slotLobby": "Lobby / QR",
     "slotRoundStart": "Inizio turno",
@@ -70,7 +70,7 @@
     "slotLeaderboard": "Classifica / pareggio",
     "slotRecap": "Riepilogo turno / storia",
     "slotFinale": "Finale",
-    "inherit": "Usa segnale / eredita",
+    "inherit": "Usa le impostazioni predefinite del sistema e del tema",
     "none": "Nessuna musica di sottofondo",
     "fade": "Dissolvenza ms",
     "enableSound": "Attiva audio",
@@ -277,6 +277,9 @@
     "interludeTitle": "Anteprima diapositiva intermezzo"
   },
   "roster": {
+    "allowUnregisteredPlayers": "Consenti partecipanti non iscritti",
+    "allowUnregisteredPlayersDescription": "Gestisci i nuovi accessi dal Web e dal telefono di chi non è nell’elenco del gioco. I partecipanti iscritti e già ammessi possono riconnettersi. Il blocco della stanza resta valido.",
+    "allowUnregisteredPlayersPhoneRestricted": "La partecipazione telefonica dipende anche dall’impostazione degli inviti telefonici.",
     "title": "Partecipanti ed elenco telefonico",
     "description": "Pre-registra nomi e numeri completi (+972, +44, ecc.) per il riconoscimento chiamante.",
     "phoneInviteOnly": "Solo su invito telefonico",
@@ -365,6 +368,30 @@
     "showingPlayers": "{{shown}} di {{total}} giocatori"
   },
   "timeline": {
+    "sceneDescriptions": {
+      "opening": "Accoglie il pubblico e presenta il gioco.",
+      "closing": "Conclude il gioco e celebra il finale.",
+      "joinDirectory": "Mostra i rappresentanti dei tavoli e l’elenco dei partecipanti.",
+      "joinInstructions": "Spiega come partecipare per telefono.",
+      "joinReadiness": "Mostra quali partecipanti sono connessi e pronti.",
+      "roundIntro": "Presenta il prossimo turno di domande.",
+      "storyProgress": "Mostra l’avanzamento della storia e le domande completate.",
+      "tieBreak": "Risolve la parità tra le risposte in testa.",
+      "storyAssembly": "Compone la storia dalle risposte selezionate.",
+      "storyLive": "Presenta la storia composta e il suo conto alla rovescia.",
+      "winner": "Rivela la risposta selezionata o vincente.",
+      "roundRecap": "Riepiloga le risposte del turno completato.",
+      "interlude": "Mette in pausa il gioco tra le sezioni.",
+      "transition": "Passa da una sezione del gioco alla successiva.",
+      "leaderboard": "Mostra classifica e punteggi dei giocatori.",
+      "interimResults": "Mostra la distribuzione delle risposte all’ultima domanda.",
+      "answerRecap": "Riepiloga le risposte alle domande completate.",
+      "countdown": "Conta il tempo fino alla prossima parte del gioco.",
+      "media": "Mostra o riproduce i contenuti multimediali della scheda.",
+      "animation": "Riproduce un’animazione decorativa."
+    },
+    "waitForHost": "Avanza il conduttore",
+    "afterMedia": "Al termine del contenuto",
     "quiz": "Quiz",
     "survey": "Sondaggio",
     "transition": "Transizione",
@@ -389,6 +416,18 @@
     "deleteCardConfirm": "Eliminare questa scheda scena dalla sequenza?"
   },
   "studio": {
+    "editing": {
+      "modeLabel": "Modalità di modifica",
+      "simple": "Modifica semplice",
+      "advanced": "Modifica avanzata",
+      "simpleHint": "Concentrati su domande e risposte. Le impostazioni attuali del gioco restano attive.",
+      "advancedHint": "Configura punteggi, aspetto, suoni, animazioni e tutti i tipi di schede.",
+      "customSettings": "Sono attive impostazioni personalizzate",
+      "customSettingsHint": "Questa domanda ha impostazioni aggiuntive. La modifica semplice le mantiene.",
+      "advancedSettings": "Impostazioni avanzate",
+      "moreCardTypes": "Altri tipi di schede",
+      "advancedControls": "Punteggi, aspetto, suoni e animazioni"
+    },
     "tabs": {
       "questions": "Domande",
       "participants": "Partecipanti",

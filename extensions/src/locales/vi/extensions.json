@@ -60,7 +60,7 @@
   },
   "audio": {
     "soundtrackTitle": "Nhạc nền người dẫn",
-    "soundtrackDesc": "Chỉ dùng nội dung đa phương tiện đã được duyệt. Tệp ứng viên không được đóng gói.",
+    "soundtrackDesc": "Nhạc hệ thống đã sẵn sàng cho mọi giai đoạn. Giữ mặc định, chọn nhạc riêng hoặc tắt tiếng một giai đoạn cụ thể.",
     "slotOpeningIntro": "Mở đầu (12 giây)",
     "slotLobby": "Sảnh / QR",
     "slotRoundStart": "Bắt đầu vòng",
@@ -70,7 +70,7 @@
     "slotLeaderboard": "Bảng xếp hạng / hòa",
     "slotRecap": "Tóm tắt vòng / câu chuyện",
     "slotFinale": "Chung kết",
-    "inherit": "Dùng tín hiệu / kế thừa",
+    "inherit": "Dùng mặc định của hệ thống và chủ đề",
     "none": "Không có nhạc nền",
     "fade": "Mờ dần ms",
     "enableSound": "Bật âm thanh",
@@ -277,6 +277,9 @@
     "interludeTitle": "Xem trước trang chiếu chuyển tiếp"
   },
   "roster": {
+    "allowUnregisteredPlayers": "Cho phép người chơi chưa đăng ký",
+    "allowUnregisteredPlayersDescription": "Kiểm soát người mới tham gia qua web và điện thoại chưa có trong danh sách trò chơi. Người đã đăng ký hoặc đã được chấp nhận có thể kết nối lại. Khóa phòng vẫn có hiệu lực.",
+    "allowUnregisteredPlayersPhoneRestricted": "Việc tham gia qua điện thoại còn bị giới hạn bởi cài đặt lời mời qua điện thoại.",
     "title": "Người tham gia & Danh bạ điện thoại",
     "description": "Đăng ký trước tên và số điện thoại đầy đủ (+972, +44, v.v.) để nhận diện người gọi.",
     "phoneInviteOnly": "Chỉ cho phép số đã mời",
@@ -365,6 +368,30 @@
     "showingPlayers": "{{shown}} trong {{total}} người chơi"
   },
   "timeline": {
+    "sceneDescriptions": {
+      "opening": "Chào đón khán giả và giới thiệu trò chơi.",
+      "closing": "Kết thúc trò chơi và chào mừng phần kết.",
+      "joinDirectory": "Hiển thị đại diện các bàn và danh sách người chơi.",
+      "joinInstructions": "Hướng dẫn cách tham gia qua điện thoại.",
+      "joinReadiness": "Hiển thị người chơi đã kết nối và sẵn sàng.",
+      "roundIntro": "Giới thiệu vòng câu hỏi tiếp theo.",
+      "storyProgress": "Hiển thị tiến độ câu chuyện và các câu hỏi đã hoàn thành.",
+      "tieBreak": "Phân định các câu trả lời dẫn đầu có số phiếu bằng nhau.",
+      "storyAssembly": "Tạo câu chuyện từ những câu trả lời đã chọn.",
+      "storyLive": "Trình bày câu chuyện đã tạo và đồng hồ đếm ngược.",
+      "winner": "Công bố câu trả lời được chọn hoặc chiến thắng.",
+      "roundRecap": "Tổng kết câu trả lời của vòng vừa hoàn thành.",
+      "interlude": "Tạm dừng giữa các phần của trò chơi.",
+      "transition": "Chuyển trò chơi sang phần tiếp theo.",
+      "leaderboard": "Hiển thị thứ hạng và điểm số của người chơi.",
+      "interimResults": "Hiển thị phân bố câu trả lời của câu hỏi gần nhất.",
+      "answerRecap": "Ôn lại câu trả lời của các câu hỏi đã hoàn thành.",
+      "countdown": "Đếm ngược đến phần tiếp theo của trò chơi.",
+      "media": "Hiển thị hoặc phát nội dung đa phương tiện của thẻ.",
+      "animation": "Phát một hoạt ảnh trang trí."
+    },
+    "waitForHost": "Người dẫn chuyển tiếp",
+    "afterMedia": "Sau khi phát xong",
     "quiz": "Câu đố",
     "survey": "Khảo sát",
     "transition": "Chuyển cảnh",
@@ -389,6 +416,18 @@
     "deleteCardConfirm": "Xóa thẻ cảnh này khỏi dòng thời gian?"
   },
   "studio": {
+    "editing": {
+      "modeLabel": "Chế độ chỉnh sửa",
+      "simple": "Chỉnh sửa đơn giản",
+      "advanced": "Chỉnh sửa nâng cao",
+      "simpleHint": "Tập trung vào câu hỏi và câu trả lời. Cài đặt trò chơi hiện tại vẫn được áp dụng.",
+      "advancedHint": "Cấu hình điểm số, thiết kế, âm thanh, chuyển động và mọi loại thẻ.",
+      "customSettings": "Đang dùng cài đặt tùy chỉnh",
+      "customSettingsHint": "Câu hỏi này có cài đặt bổ sung. Chỉnh sửa đơn giản vẫn giữ nguyên các cài đặt đó.",
+      "advancedSettings": "Cài đặt nâng cao",
+      "moreCardTypes": "Thêm loại thẻ",
+      "advancedControls": "Điểm số, giao diện, âm thanh và chuyển động"
+    },
     "tabs": {
       "questions": "Câu hỏi",
       "participants": "Người tham gia",

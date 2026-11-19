@@ -1,3 +1,4 @@
+import { joinGame } from "../utils/player"
 import {
   expect,
   test,
@@ -21,6 +22,7 @@ async function openRoom(
   host: Page,
   request: APIRequestContext,
   theme: "tadazz-classic" | "razzia-original" | "legacy",
+  terminalFinale = false,
 ) {
   const legacy = theme === "legacy"
   const selectedTheme = legacy ? "razzia-original" : theme
@@ -35,7 +37,7 @@ async function openRoom(
         answers: ["One", "Two", "Three", "Four"],
         solutions: [0],
         cooldown: 3,
-        time: 30,
+        time: 3,
       },
     ],
   }
@@ -49,6 +51,24 @@ async function openRoom(
     version: "1.0.0",
     overrides: {},
   }
+  extras.defaults.advanceMode = "auto"
+
+  if (terminalFinale) {
+    const sceneId = crypto.randomUUID()
+    extras.scenes[sceneId] = {
+      id: sceneId,
+      kind: "animation",
+      preset: "grand-finale",
+      durationMs: 9200,
+      advance: "auto",
+    }
+    extras.timeline.push({
+      id: crypto.randomUUID(),
+      kind: "animation",
+      sceneId,
+    })
+  }
+
   const login = await request.post("/api/auth/manager", {
     data: { password: "e2e-password" },
   })
@@ -70,7 +90,10 @@ async function openRoom(
     data: { quizzId: quizId },
   })
   expect(created.ok(), await created.text()).toBe(true)
-  const { gameId } = (await created.json()) as { gameId: string }
+  const { gameId, inviteCode } = (await created.json()) as {
+    gameId: string
+    inviteCode: string
+  }
   await host.addInitScript(
     (tokenValue) => localStorage.setItem("token", tokenValue),
     token,
@@ -81,7 +104,7 @@ async function openRoom(
     "standby",
   )
 
-  return { gameId, quizId }
+  return { gameId, quizId, inviteCode }
 }
 
 test("shared product curtain, video, pause and reconnect return to the selected theme", async ({
@@ -91,6 +114,20 @@ test("shared product curtain, video, pause and reconnect return to the selected 
 }) => {
   const errors: string[] = []
   host.on("pageerror", (error) => errors.push(error.message))
+  await host.addInitScript(() => {
+    const media: HTMLMediaElement[] = []
+    ;(
+      window as Window & { __platformAudio?: HTMLMediaElement[] }
+    ).__platformAudio = media
+    const play = HTMLMediaElement.prototype.play
+    HTMLMediaElement.prototype.play = function () {
+      if (this instanceof HTMLAudioElement && !media.includes(this)) {
+        media.push(this)
+      }
+
+      return play.call(this)
+    }
+  })
   const { gameId } = await openRoom(host, request, "tadazz-classic")
   const displayContext = await browser.newContext({
     viewport: { width: 1280, height: 720 },
@@ -126,6 +163,27 @@ test("shared product curtain, video, pause and reconnect return to the selected 
       "data-platform-opening-stage",
       "opening",
     )
+    await expect(host.getByTestId("audio-cue-player-state")).toHaveAttribute(
+      "data-audio-url",
+      "/tadazz-show/music/platform/tadazz-production-intro-20261106.wav",
+    )
+    await expect
+      .poll(() =>
+        host.evaluate(
+          () =>
+            (
+              (window as Window & { __platformAudio?: HTMLMediaElement[] })
+                .__platformAudio ?? []
+            ).filter(
+              (audio) =>
+                !audio.paused &&
+                !audio.ended &&
+                audio.volume > 0 &&
+                audio.readyState >= 2,
+            ).length,
+        ),
+      )
+      .toBe(1)
     const hostVideo = host.getByTestId("tadazz-opening-video")
     const displayVideo = display.getByTestId("tadazz-opening-video")
     await expect
@@ -285,3 +343,81 @@ test("legacy imports get an in-memory original-theme launch and reduced motion k
   expect(fs.readFileSync(baseFile, "utf-8")).toBe(original)
   expect(fs.existsSync(sidecar)).toBe(false)
 })
+
+for (const theme of ["razzia-original", "tadazz-classic"] as const) {
+  test(`one product curtain closes ${theme}, including pause and audience reconnect`, async ({
+    page: host,
+    browser,
+    request,
+  }) => {
+    test.setTimeout(120000)
+    const errors: string[] = []
+    host.on("pageerror", (error) => errors.push(error.message))
+    const { gameId, inviteCode } = await openRoom(
+      host,
+      request,
+      theme,
+      theme === "tadazz-classic",
+    )
+    const playerContext = await browser.newContext()
+    const displayContext = await browser.newContext()
+    const player = await playerContext.newPage()
+    const display = await displayContext.newPage()
+    display.on("pageerror", (error) => errors.push(error.message))
+
+    try {
+      await host.getByTestId("platform-opening-start").click()
+      await host.getByTestId("platform-opening-skip").click()
+      await expect(host.getByTestId("platform-game-opening")).toHaveCount(0)
+      await joinGame(player, inviteCode, "Closing participant")
+      await display.goto(`/display/${gameId}`)
+      await host.getByTestId("host-next-screen-btn").click()
+      const curtain = host.getByTestId("platform-game-closing")
+      await expect(curtain).toBeVisible({ timeout: 60000 })
+      await expect(curtain).toHaveCount(1)
+      await expect(host.locator(".full-curtain")).toHaveCount(0)
+      await host.getByTestId("host-pause-resume-btn").click()
+      await host.waitForTimeout(200)
+      const frozen = Number(await curtain.getAttribute("data-elapsed-ms"))
+      await host.waitForTimeout(600)
+      expect(
+        Math.abs(
+          Number(await curtain.getAttribute("data-elapsed-ms")) - frozen,
+        ),
+      ).toBeLessThan(150)
+      await display.reload()
+      const audienceCurtain = display.getByTestId("platform-game-closing")
+      await expect(audienceCurtain).toBeVisible()
+      expect(
+        Math.abs(
+          Number(await audienceCurtain.getAttribute("data-elapsed-ms")) -
+            frozen,
+        ),
+      ).toBeLessThan(250)
+      await expect(display.locator(".full-curtain")).toHaveCount(0)
+      await host.screenshot({
+        path: join(evidenceDir, `${theme}-closing-paused.png`),
+      })
+      await host.getByTestId("host-pause-resume-btn").click()
+      await expect(
+        host.getByTestId("platform-closing-boundary"),
+      ).toHaveAttribute("data-closing-stage", "closed", { timeout: 15000 })
+      await expect(
+        display.getByTestId("platform-closing-boundary"),
+      ).toHaveAttribute("data-closing-stage", "closed")
+      await host.reload()
+      await expect(
+        host.getByTestId("platform-closing-boundary"),
+      ).toHaveAttribute("data-closing-stage", "closed")
+      await expect(host.getByTestId("platform-game-opening")).toHaveCount(0)
+      await expect(host.getByTestId("platform-game-closing")).toHaveCount(1)
+      await host.screenshot({
+        path: join(evidenceDir, `${theme}-closing-rejoined.png`),
+      })
+      expect(errors).toEqual([])
+    } finally {
+      await playerContext.close()
+      await displayContext.close()
+    }
+  })
+}

@@ -5,18 +5,30 @@ import { AlertDialog } from "./alert-dialog"
 import { IconButton } from "./button"
 import { Switch } from "./fields"
 
-/** The roster broadcast is the authoritative current phone policy. */
+/** The roster broadcast is the authoritative current admission policy. */
 export function hostRules<
-  Settings extends { phoneInviteOnly?: boolean },
+  Settings extends {
+    phoneInviteOnly?: boolean
+    allowUnregisteredPlayers?: boolean
+  },
 >(snapshot: {
   settings: Settings
-  hostPresence?: { phoneInviteOnly: boolean } | null
+  hostPresence?: {
+    phoneInviteOnly: boolean
+    allowUnregisteredPlayers?: boolean
+  } | null
 }): Settings {
   return {
     ...snapshot.settings,
     phoneInviteOnly:
       snapshot.hostPresence?.phoneInviteOnly ??
       snapshot.settings.phoneInviteOnly,
+    ...(snapshot.hostPresence?.allowUnregisteredPlayers !== undefined
+      ? {
+          allowUnregisteredPlayers:
+            snapshot.hostPresence.allowUnregisteredPlayers,
+        }
+      : {}),
   }
 }
 

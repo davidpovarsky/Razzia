@@ -60,7 +60,7 @@
   },
   "audio": {
     "soundtrackTitle": "Presenter soundtrack",
-    "soundtrackDesc": "Use only cleared tenant media URLs. Candidate source files are not bundled.",
+    "soundtrackDesc": "System music is ready to use for every stage. Keep the defaults, choose your own music, or mute an individual stage.",
     "slotOpeningIntro": "Opening intro (12 seconds)",
     "slotLobby": "Lobby / QR",
     "slotRoundStart": "Round start",
@@ -70,7 +70,7 @@
     "slotLeaderboard": "Leaderboard / tie",
     "slotRecap": "Round recap / story",
     "slotFinale": "Finale",
-    "inherit": "Use cue / inherit",
+    "inherit": "Use system and theme defaults",
     "none": "No background music",
     "fade": "Fade ms",
     "enableSound": "Enable sound",
@@ -277,6 +277,9 @@
     "interludeTitle": "Interlude Slide Preview"
   },
   "roster": {
+    "allowUnregisteredPlayers": "Allow unregistered participants",
+    "allowUnregisteredPlayersDescription": "Control new web and phone participants who are not in this game’s roster. Registered participants and players already admitted can reconnect. Room locking still applies.",
+    "allowUnregisteredPlayersPhoneRestricted": "Phone participation is also limited by the phone invitation setting.",
     "title": "Participants & Phone Roster",
     "description": "Pre-register participant names and full phone numbers (+972, +44, etc.) for instant caller recognition.",
     "phoneInviteOnly": "Phone Invite Only",
@@ -365,6 +368,30 @@
     "showingPlayers": "{{shown}} of {{total}} players"
   },
   "timeline": {
+    "sceneDescriptions": {
+      "opening": "Welcomes the audience and introduces the show.",
+      "closing": "Closes the show and celebrates the ending.",
+      "joinDirectory": "Shows the table representatives and participant directory.",
+      "joinInstructions": "Explains how participants join by phone.",
+      "joinReadiness": "Shows which participants are connected and ready.",
+      "roundIntro": "Introduces the next round of questions.",
+      "storyProgress": "Shows progress through the story and completed questions.",
+      "tieBreak": "Resolves a tie between the leading answers.",
+      "storyAssembly": "Builds the story from the selected answers.",
+      "storyLive": "Presents the assembled story and its live countdown.",
+      "winner": "Reveals the selected or winning answer.",
+      "roundRecap": "Recaps the answers from the completed round.",
+      "interlude": "Pauses the show between sections.",
+      "transition": "Moves the show from one section to the next.",
+      "leaderboard": "Displays player rankings and scores.",
+      "interimResults": "Shows the latest question's answer distribution.",
+      "answerRecap": "Reviews answers from completed questions.",
+      "countdown": "Counts down to the next part of the show.",
+      "media": "Displays or plays the card's selected media.",
+      "animation": "Plays a decorative animation."
+    },
+    "waitForHost": "Host advances",
+    "afterMedia": "After media",
     "quiz": "Quiz",
     "survey": "Survey",
     "transition": "Transition",
@@ -389,6 +416,18 @@
     "deleteCardConfirm": "Delete this scene card from the timeline?"
   },
   "studio": {
+    "editing": {
+      "modeLabel": "Editor mode",
+      "simple": "Simple editing",
+      "advanced": "Advanced editing",
+      "simpleHint": "Focus on questions and answers. Your current game settings stay in effect.",
+      "advancedHint": "Configure scoring, design, sound, motion and all card types.",
+      "customSettings": "Custom settings are active",
+      "customSettingsHint": "This question has additional settings. Simple editing keeps them unchanged.",
+      "advancedSettings": "Advanced settings",
+      "moreCardTypes": "More card types",
+      "advancedControls": "Scoring, appearance, sound and motion"
+    },
     "tabs": {
       "questions": "Questions",
       "participants": "Participants",

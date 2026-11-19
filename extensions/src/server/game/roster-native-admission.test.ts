@@ -87,6 +87,7 @@ function fixture() {
     controller,
     sentinelUnchanged,
     finishPhone,
+    settings,
   }
 }
 
@@ -340,4 +341,56 @@ it("preserves an unrelated native Player and its score during roster40 admission
   expect(f.fake.events("host", EVENTS.MANAGER.NEW_PLAYER)).toHaveLength(2)
   expect(f.admit).toHaveBeenCalledTimes(1)
   f.sentinelUnchanged()
+})
+
+it("blocks a new phone guest before admission, then preserves an admitted caller on redial", () => {
+  const f = fixture()
+  f.settings.allowUnregisteredPlayers = false
+  const denied = f.controller.joinOrRebindPhoneCaller({
+    phoneRaw: "+972503333333",
+    callId: "denied-new",
+    fallbackName: "Guest",
+  })
+  expect(denied).toEqual({ ok: false, error: "errors:game.locked" })
+  expect(f.admit).not.toHaveBeenCalled()
+  expect(f.players.count()).toBe(0)
+  expect(f.roster.entries.size).toBe(1)
+
+  f.settings.allowUnregisteredPlayers = true
+  const admitted = f.controller.joinOrRebindPhoneCaller({
+    phoneRaw: "+972503333333",
+    callId: "admitted",
+    fallbackName: "Guest",
+  })
+  expect(admitted.ok).toBe(true)
+  const [player] = f.players.getAll()
+  player.points = 88
+  player.streak = 3
+  f.settings.allowUnregisteredPlayers = false
+
+  expect(
+    f.controller.joinOrRebindPhoneCaller({
+      phoneRaw: "+972503333333",
+      callId: "redial",
+      fallbackName: "Changed",
+    }),
+  ).toMatchObject({ ok: true, reconnected: true, points: 88 })
+  expect(f.players.getAll()).toEqual([player])
+  expect(player).toMatchObject({ points: 88, streak: 3 })
+  expect(f.roster.entries.size).toBe(2)
+  f.sentinelUnchanged()
+})
+
+it("admits a pre-registered phone participant with guest admission disabled", () => {
+  const f = fixture()
+  f.settings.allowUnregisteredPlayers = false
+  f.settings.phoneInviteOnly = true
+  expect(
+    f.controller.joinOrRebindPhoneCaller({
+      phoneRaw: "+972501111111",
+      callId: "registered",
+      fallbackName: "Wrong",
+    }),
+  ).toMatchObject({ ok: true, displayName: "Untouched participant" })
+  expect(f.players.count()).toBe(1)
 })

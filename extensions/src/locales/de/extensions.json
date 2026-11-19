@@ -60,7 +60,7 @@
   },
   "audio": {
     "soundtrackTitle": "Moderator-Soundtrack",
-    "soundtrackDesc": "Nur freigegebene Mandantenmedien verwenden. Kandidatendateien werden nicht gebündelt.",
+    "soundtrackDesc": "Systemmusik steht für jeden Spielabschnitt bereit. Behalten Sie die Vorgaben bei, wählen Sie eigene Musik oder schalten Sie einzelne Abschnitte stumm.",
     "slotOpeningIntro": "Eröffnungsintro (12 Sekunden)",
     "slotLobby": "Lobby / QR",
     "slotRoundStart": "Rundenstart",
@@ -70,7 +70,7 @@
     "slotLeaderboard": "Bestenliste / Gleichstand",
     "slotRecap": "Rundenrückblick / Geschichte",
     "slotFinale": "Finale",
-    "inherit": "Cue verwenden / übernehmen",
+    "inherit": "System- und Designvorgaben verwenden",
     "none": "Keine Hintergrundmusik",
     "fade": "Überblendung ms",
     "enableSound": "Ton aktivieren",
@@ -277,6 +277,9 @@
     "interludeTitle": "Vorschau der Zwischenfolie"
   },
   "roster": {
+    "allowUnregisteredPlayers": "Nicht registrierte Teilnehmende zulassen",
+    "allowUnregisteredPlayersDescription": "Neue Web- und Telefonteilnehmende außerhalb der Spielliste zulassen oder sperren. Registrierte und bereits zugelassene Personen können sich erneut verbinden. Die Raumsperre gilt weiterhin.",
+    "allowUnregisteredPlayersPhoneRestricted": "Die Telefonteilnahme wird zusätzlich durch die Einladungseinstellung begrenzt.",
     "title": "Teilnehmer & Telefonliste",
     "description": "Registrieren Sie Namen und vollständige Telefonnummern (+972, +44 usw.) im Voraus.",
     "phoneInviteOnly": "Nur geladene Telefonnummern",
@@ -365,6 +368,30 @@
     "showingPlayers": "{{shown}} von {{total}} Spielern"
   },
   "timeline": {
+    "sceneDescriptions": {
+      "opening": "Begrüßt das Publikum und stellt das Spiel vor.",
+      "closing": "Beendet das Spiel und feiert den Abschluss.",
+      "joinDirectory": "Zeigt Tischvertretungen und die Teilnehmendenliste.",
+      "joinInstructions": "Erklärt die Teilnahme per Telefon.",
+      "joinReadiness": "Zeigt, welche Teilnehmenden verbunden und bereit sind.",
+      "roundIntro": "Leitet die nächste Fragerunde ein.",
+      "storyProgress": "Zeigt den Fortschritt der Geschichte und abgeschlossene Fragen.",
+      "tieBreak": "Entscheidet ein Unentschieden zwischen führenden Antworten.",
+      "storyAssembly": "Erstellt die Geschichte aus den ausgewählten Antworten.",
+      "storyLive": "Zeigt die fertige Geschichte mit ihrem Countdown.",
+      "winner": "Zeigt die ausgewählte oder gewinnende Antwort.",
+      "roundRecap": "Fasst die Antworten der abgeschlossenen Runde zusammen.",
+      "interlude": "Pausiert das Spiel zwischen Abschnitten.",
+      "transition": "Wechselt zum nächsten Spielabschnitt.",
+      "leaderboard": "Zeigt Rangliste und Punktestände.",
+      "interimResults": "Zeigt die Antwortverteilung der letzten Frage.",
+      "answerRecap": "Fasst Antworten auf abgeschlossene Fragen zusammen.",
+      "countdown": "Zählt bis zum nächsten Spielabschnitt herunter.",
+      "media": "Zeigt oder spielt die ausgewählten Medien der Karte.",
+      "animation": "Spielt eine dekorative Animation ab."
+    },
+    "waitForHost": "Weiter durch Moderation",
+    "afterMedia": "Nach Medienende",
     "quiz": "Quiz",
     "survey": "Umfrage",
     "transition": "Übergang",
@@ -389,6 +416,18 @@
     "deleteCardConfirm": "Diese Szenenkarte aus dem Ablauf löschen?"
   },
   "studio": {
+    "editing": {
+      "modeLabel": "Bearbeitungsmodus",
+      "simple": "Einfach bearbeiten",
+      "advanced": "Erweitert bearbeiten",
+      "simpleHint": "Konzentrieren Sie sich auf Fragen und Antworten. Die bisherigen Spieleinstellungen bleiben aktiv.",
+      "advancedHint": "Konfigurieren Sie Punkte, Gestaltung, Ton, Animationen und alle Kartentypen.",
+      "customSettings": "Angepasste Einstellungen sind aktiv",
+      "customSettingsHint": "Für diese Frage sind zusätzliche Einstellungen vorhanden. Die einfache Ansicht behält sie bei.",
+      "advancedSettings": "Erweiterte Einstellungen",
+      "moreCardTypes": "Weitere Kartentypen",
+      "advancedControls": "Punkte, Gestaltung, Ton und Animationen"
+    },
     "tabs": {
       "questions": "Fragen",
       "participants": "Teilnehmer",

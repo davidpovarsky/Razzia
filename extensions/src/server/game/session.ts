@@ -70,7 +70,7 @@ export interface ExtensionSessionDelegate {
   getAnswersCount?: () => number
   getParticipation?: () => { connected: number; answered: number }
   getPresentationLaunch?: () => {
-    stage: "standby" | "opening" | "lobby" | "running"
+    stage: "standby" | "opening" | "lobby" | "running" | "closing" | "closed"
     startedAt: number | null
   } | null
   pauseGame?: () => boolean

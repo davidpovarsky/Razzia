@@ -1,4 +1,8 @@
 import { PlatformButton } from "../../presentation/platform-controls"
+import {
+  createPlatformAudioExtras,
+  normalizePlatformAudioSettings,
+} from "@razzia/extensions/core"
 import type {
   AudioCueSetting,
   CueId,
@@ -8,7 +12,7 @@ import type {
 } from "@razzia/extensions/core"
 import { resolveAudioCue } from "@razzia/extensions/presentation"
 import { Play, Square } from "lucide-react"
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { clsx } from "./utils"
 
 interface Props {
@@ -18,7 +22,11 @@ interface Props {
 }
 
 export const AudioCuesSection = ({ extras, onChange, tr }: Props) => {
-  const audioExtras = extras.audio
+  const audioExtras = useMemo(
+    () => normalizePlatformAudioSettings(extras.audio),
+    [extras.audio],
+  )
+  const platformAudio = useMemo(() => createPlatformAudioExtras(), [])
   const [testingCue, setTestingCue] = useState<CueId | null>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
 
@@ -192,13 +200,14 @@ export const AudioCuesSection = ({ extras, onChange, tr }: Props) => {
     slot: SoundtrackSlotId,
     updates: Partial<SoundtrackSetting>,
   ) => {
-    const existing: SoundtrackSetting = audioExtras.soundtrack?.[slot] ?? {
-      mode: "inherit",
-      volume: 0.35,
-      loop: slot === "lobby" || slot === "voting",
-      fadeMs: 700,
-      startOffsetSeconds: 0,
-    }
+    const existing: SoundtrackSetting = audioExtras.soundtrack?.[slot] ??
+      platformAudio.soundtrack?.[slot] ?? {
+        mode: "inherit",
+        volume: 0.35,
+        loop: slot === "lobby" || slot === "voting",
+        fadeMs: 700,
+        startOffsetSeconds: 0,
+      }
     onChange({
       ...extras,
       audio: {
@@ -372,18 +381,19 @@ export const AudioCuesSection = ({ extras, onChange, tr }: Props) => {
           <p className="text-muted-foreground text-xs">
             {tr(
               "audio.soundtrackDesc",
-              "Use only cleared tenant media URLs. Candidate source files are not bundled.",
+              "System music is ready to use for every stage. Keep the defaults, choose your own music, or mute an individual stage.",
             )}
           </p>
         </div>
         {soundtrackSlots.map(({ id, labelKey, fallback }) => {
-          const setting = audioExtras.soundtrack?.[id] ?? {
-            mode: "inherit" as const,
-            volume: 0.35,
-            loop: id === "lobby" || id === "voting",
-            fadeMs: 700,
-            startOffsetSeconds: 0,
-          }
+          const setting = audioExtras.soundtrack?.[id] ??
+            platformAudio.soundtrack?.[id] ?? {
+              mode: "inherit" as const,
+              volume: 0.35,
+              loop: id === "lobby" || id === "voting",
+              fadeMs: 700,
+              startOffsetSeconds: 0,
+            }
 
           return (
             <div
@@ -405,7 +415,7 @@ export const AudioCuesSection = ({ extras, onChange, tr }: Props) => {
                   className="focus:ring-primary border-accent bg-background text-foreground rounded-lg border p-2 text-xs focus:ring-2 focus:outline-none"
                 >
                   <option value="inherit">
-                    {tr("audio.inherit", "Use cue / inherit")}
+                    {tr("audio.inherit", "Use system and theme defaults")}
                   </option>
                   <option value="mute">
                     {tr("audio.none", "No background music")}

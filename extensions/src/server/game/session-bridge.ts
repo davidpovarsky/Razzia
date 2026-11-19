@@ -90,6 +90,7 @@ export function createSessionDelegate(
       const ok = ctx.round.previousScreen()
 
       if (ok) {
+        ctx.presentationLaunch?.resumeRunning()
         ctx.syncRosterScoresFromPlayers()
         ctx.broadcastHostPresence()
         ctx.broadcastExtensionState()
@@ -112,6 +113,7 @@ export function createSessionDelegate(
       const ok = ctx.round.reopenQuestion(qIdx)
 
       if (ok) {
+        ctx.presentationLaunch?.resumeRunning()
         ctx.syncRosterScoresFromPlayers()
         ctx.broadcastHostPresence()
         ctx.broadcastExtensionState()
@@ -137,13 +139,20 @@ export function createSessionDelegate(
       // Restarting the live question keeps participants who joined after its
       // checkpoint. Earlier history replay retains its existing rewind semantics.
       if (qIdx !== ctx.round.currentQuestionIndex) {
-        return ctx.round.replayFromCheckpoint(qIdx)
+        const ok = ctx.round.replayFromCheckpoint(qIdx)
+
+        if (ok) {
+          ctx.presentationLaunch?.resumeRunning()
+        }
+
+        return ok
       }
 
       ctx.clearQuestionVerdicts(qIdx)
       const ok = ctx.round.reopenQuestion(qIdx)
 
       if (ok) {
+        ctx.presentationLaunch?.resumeRunning()
         ctx.syncRosterScoresFromPlayers()
         ctx.broadcastHostPresence()
         ctx.broadcastExtensionState()
@@ -160,6 +169,7 @@ export function createSessionDelegate(
       const ok = ctx.showCoordinator?.previousScene() ?? false
 
       if (ok) {
+        ctx.presentationLaunch?.resumeRunning()
         ctx.syncRosterScoresFromPlayers()
         ctx.broadcastHostPresence()
         ctx.broadcastExtensionState()
@@ -181,7 +191,7 @@ export function createSessionDelegate(
     pauseGame: () => {
       let ok = false
 
-      if (ctx.presentationLaunch?.isOpening) {
+      if (ctx.presentationLaunch?.isTransitioning) {
         ok = ctx.presentationLaunch.pause()
       } else if (ctx.showCoordinator?.isSceneActive()) {
         ok = ctx.showCoordinator.pauseGame()
@@ -198,7 +208,7 @@ export function createSessionDelegate(
     resumeGame: () => {
       let ok = false
 
-      if (ctx.presentationLaunch?.isOpening) {
+      if (ctx.presentationLaunch?.isTransitioning) {
         ok = ctx.presentationLaunch.resume()
       } else if (ctx.showCoordinator?.isSceneActive()) {
         ok = ctx.showCoordinator.resumeGame()
@@ -213,7 +223,7 @@ export function createSessionDelegate(
       return ok
     },
     getPauseSnapshot: () => {
-      if (ctx.presentationLaunch?.isOpening) {
+      if (ctx.presentationLaunch?.isTransitioning) {
         return ctx.presentationLaunch.getPauseSnapshot()
       }
 

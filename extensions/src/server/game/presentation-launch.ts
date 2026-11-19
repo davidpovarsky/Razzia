@@ -1,10 +1,13 @@
 import {
+  PLATFORM_CLOSING_DURATION_MS,
   PLATFORM_OPENING_DURATION_MS,
   type PlatformOpeningSnapshot,
 } from "../../core/platform-opening"
 
+/** Product-owned opening and ending; neither depends on a selected show theme. */
 export class PresentationLaunch {
-  private stage: "standby" | "opening" | "lobby" = "standby"
+  private stage: Exclude<PlatformOpeningSnapshot["stage"], "running"> =
+    "standby"
   private startedAt: number | null = null
   private pausedAt: number | null = null
   private timer: ReturnType<typeof setTimeout> | null = null
@@ -18,13 +21,17 @@ export class PresentationLaunch {
     return this.stage === "opening"
   }
 
+  get isTransitioning() {
+    return this.isOpening || this.stage === "closing"
+  }
+
   /** Only an explicit host advance starts or skips the product opening. */
   advance(): boolean {
     if (this.stage === "lobby") {
       return false
     }
 
-    if (this.pausedAt !== null) {
+    if (this.pausedAt !== null || this.stage === "closed") {
       return true
     }
 
@@ -40,8 +47,50 @@ export class PresentationLaunch {
     return true
   }
 
+  /**
+   * A terminal authored finale has already started the shared curtain timeline.
+   * Retain that timestamp at game completion instead of replaying a second ending.
+   */
+  close(authoredStartedAt?: number): void {
+    if (this.stage === "closing" || this.stage === "closed") {
+      return
+    }
+
+    this.dispose()
+    this.pausedAt = null
+    this.startedAt =
+      typeof authoredStartedAt === "number" &&
+      Number.isFinite(authoredStartedAt)
+        ? Math.min(Date.now(), authoredStartedAt)
+        : Date.now()
+    const remainingMs = Math.max(
+      0,
+      PLATFORM_CLOSING_DURATION_MS - (Date.now() - this.startedAt),
+    )
+    this.stage = remainingMs === 0 ? "closed" : "closing"
+
+    if (remainingMs > 0) {
+      this.scheduleFinish(remainingMs)
+    }
+
+    this.onChange()
+  }
+
+  /** History/replay returns to the same room without replaying the product ident. */
+  resumeRunning(): void {
+    if (this.stage !== "closing" && this.stage !== "closed") {
+      return
+    }
+
+    this.dispose()
+    this.stage = "lobby"
+    this.startedAt = null
+    this.pausedAt = null
+    this.onChange()
+  }
+
   pause(): boolean {
-    if (!this.isOpening || this.pausedAt !== null) {
+    if (!this.isTransitioning || this.pausedAt !== null) {
       return false
     }
 
@@ -53,7 +102,11 @@ export class PresentationLaunch {
   }
 
   resume(): boolean {
-    if (!this.isOpening || this.pausedAt === null || this.startedAt === null) {
+    if (
+      !this.isTransitioning ||
+      this.pausedAt === null ||
+      this.startedAt === null
+    ) {
       return false
     }
 
@@ -70,15 +123,18 @@ export class PresentationLaunch {
       this.startedAt === null
         ? 0
         : Math.max(0, (this.pausedAt ?? Date.now()) - this.startedAt)
-    const remainingMs = this.isOpening
-      ? Math.max(0, PLATFORM_OPENING_DURATION_MS - elapsed)
+    const durationMs = this.isOpening
+      ? PLATFORM_OPENING_DURATION_MS
+      : PLATFORM_CLOSING_DURATION_MS
+    const remainingMs = this.isTransitioning
+      ? Math.max(0, durationMs - elapsed)
       : null
 
     return {
       paused: this.pausedAt !== null,
       remainingMs,
       deadline:
-        this.isOpening && this.pausedAt === null && remainingMs !== null
+        this.isTransitioning && this.pausedAt === null && remainingMs !== null
           ? Date.now() + remainingMs
           : null,
     }
@@ -91,14 +147,19 @@ export class PresentationLaunch {
 
   private finish() {
     this.dispose()
-    this.stage = "lobby"
+    this.stage = this.stage === "closing" ? "closed" : "lobby"
     this.pausedAt = null
     this.onChange()
   }
 
   snapshot(running: boolean): PlatformOpeningSnapshot {
     return {
-      stage: running ? "running" : this.stage,
+      stage:
+        this.stage === "closing" || this.stage === "closed"
+          ? this.stage
+          : running
+            ? "running"
+            : this.stage,
       startedAt: this.startedAt,
     }
   }

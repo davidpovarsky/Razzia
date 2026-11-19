@@ -427,7 +427,11 @@ export class GamePhoneController {
       rosterEntry = id ? this.roster.entries.get(id) : undefined
     }
 
-    if (!rosterEntry && this._settings.phoneInviteOnly) {
+    if (
+      !rosterEntry &&
+      (this._settings.allowUnregisteredPlayers === false ||
+        this._settings.phoneInviteOnly)
+    ) {
       return {
         ok: false,
         error: "errors:game.locked",

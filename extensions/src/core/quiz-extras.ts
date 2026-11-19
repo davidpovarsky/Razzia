@@ -1,3 +1,4 @@
+import { createPlatformAudioExtras } from "./platform-audio-defaults"
 import { z } from "zod"
 import { scopedThemeOverridesSchema } from "./show-themes/selection"
 import {
@@ -268,20 +269,8 @@ export type QuizExtrasV1 = z.infer<typeof quizExtrasV1Schema>
 /**
  * Creates default AudioExtras with all 9 cues configured.
  */
-export const createDefaultAudioExtras = (): AudioExtras => {
-  const cues = {} as Record<CueId, AudioCueSetting>
-
-  for (const cueId of CUE_IDS) {
-    cues[cueId] = {
-      source: "default",
-      volume: 0.8,
-      enabled: true,
-      loop: cueId === "answersMusic",
-    }
-  }
-
-  return { cues }
-}
+export const createDefaultAudioExtras = (): AudioExtras =>
+  createPlatformAudioExtras()
 
 /**
  * Creates default QuizExtrasV1 for a given quiz ID, question UUIDs and base digest.

@@ -3,6 +3,9 @@ import assert from "node:assert/strict"
 import { createRequire } from "node:module"
 import { join } from "node:path"
 import { writeFileSync } from "node:fs"
+import { verifyEditorRefinements } from "../experience-refinement/editor-verify.mjs"
+import { verifyGuestAdmission } from "../experience-refinement/guest-verify.mjs"
+import { verifyPlatformDefaults } from "../experience-refinement/platform-verify.mjs"
 import {
   verifyNativePalette,
   verifyCatalogueCovers,
@@ -430,10 +433,52 @@ export async function verifyGalleryEditor(options) {
       passed: true,
       theme: "tadazz-discovery-lab",
     })
+    const guestReceipt = await verifyGuestAdmission({
+      ...options,
+      page,
+      browser,
+      context,
+      player,
+      playerContext,
+      room,
+      pin,
+    })
+    assert.equal(guestReceipt.passed, true)
+    report.push(...guestReceipt.results)
+
+    const refinementReceipt = await verifyEditorRefinements({
+      ...options,
+      page,
+    })
+    assert.equal(refinementReceipt.passed, true)
+    report.push(...refinementReceipt.results)
+
+    const platformReceipt = await verifyPlatformDefaults({
+      ...options,
+      browser,
+      context,
+    })
+    assert.equal(platformReceipt.passed, true)
+    report.push(...platformReceipt.results)
+
     assert.deepEqual(pageErrors, [], "No editor browser JavaScript errors")
     assert.deepEqual(failedAssets, [], "No editor asset failures")
     return { passed: true, results: report, pageErrors, failedAssets }
   } catch (error) {
+    writeFileSync(
+      join(options.evidence, "native-editor-partial-receipt.json"),
+      JSON.stringify(
+        {
+          passed: false,
+          results: report,
+          pageErrors,
+          failedAssets,
+          error: String(error?.stack ?? error),
+        },
+        null,
+        2,
+      ) + "\n",
+    )
     await page
       .screenshot({
         path: join(options.evidence, "native-editor-failure.png"),

@@ -14,6 +14,7 @@ export interface BrowserJoinInput {
   isCreatingWorldsShow: boolean
   temporaryGuestsAllowed: boolean
   phoneInviteOnly: boolean
+  allowUnregisteredPlayers?: boolean
 }
 
 export function resolveBrowserJoin(
@@ -25,6 +26,7 @@ export function resolveBrowserJoin(
     isCreatingWorldsShow,
     temporaryGuestsAllowed,
     phoneInviteOnly,
+    allowUnregisteredPlayers,
   }: BrowserJoinInput,
 ): { entry?: RosterEntry; normalizedPhone: string | null; error?: string } {
   const normalizedPhone = claimsExtra?.phoneE164
@@ -41,6 +43,17 @@ export function resolveBrowserJoin(
 
     if (matchedId) {
       rosterEntry = state.entries.get(matchedId)
+    }
+  }
+
+  // The authenticated session may reconnect to its own previously admitted row
+  // even after the host closes admission to new guests.
+  if (!rosterEntry) {
+    const existingId = state.clientIndex.get(clientId)
+    const existing = existingId ? state.entries.get(existingId) : undefined
+
+    if (existing?.clientId === clientId) {
+      rosterEntry = existing
     }
   }
 
@@ -68,12 +81,17 @@ export function resolveBrowserJoin(
     }
   }
 
-  // 2. Enforce phoneInviteOnly for unknown phone callers
-  if (
-    !rosterEntry &&
+  // Explicit live policy overrides only the event-specific default. Known
+  // identities still rejoin, and the independent phone/room constraints remain.
+  const legacyRosterOnly =
     isCreatingWorldsShow &&
     !temporaryGuestsAllowed &&
     [...state.entries.values()].some((entry) => entry.preRegistered)
+
+  if (
+    !rosterEntry &&
+    (allowUnregisteredPlayers === false ||
+      (allowUnregisteredPlayers === undefined && legacyRosterOnly))
   ) {
     return { error: "errors:game.locked", normalizedPhone }
   }

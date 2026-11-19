@@ -3,6 +3,7 @@ import { MAX_POINTS, NO_TIME_LIMIT } from "@razzia/common/constants"
 import { type ScoringMode } from "@razzia/common/types/game"
 import { isMultiOptions } from "@razzia/common/questions/options"
 import ToggleGroup from "@razzia/web/components/ToggleGroup"
+import Button from "@razzia/web/components/Button"
 import Switch from "@razzia/web/components/Switch"
 import { QUESTION_REGISTRY } from "@razzia/web/features/questions"
 import ConfigField from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigField"
@@ -12,7 +13,19 @@ import CardAudioConfig from "@razzia/web/features/quizz/components/QuestionEdito
 import CardBackgroundConfig from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/CardBackgroundConfig"
 import QuestionEntranceConfig from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/QuestionEntranceConfig"
 import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
-import { ArrowBigDownDash, Clock, ListChecks, Star, Timer } from "lucide-react"
+import {
+  ArrowBigDownDash,
+  ChevronDown,
+  Clock,
+  ListChecks,
+  Star,
+  Timer,
+} from "lucide-react"
+import { useId } from "react"
+import {
+  QuestionCustomSettingsNotice,
+  useEditorEditingMode,
+} from "@razzia/web/features/quizz/components/studio/editor-editing-mode"
 import { useTranslation } from "react-i18next"
 
 const DEFAULT_TIME = 20
@@ -22,6 +35,8 @@ const BaseConfig = () => {
   const { currentQuestion, currentIndex, gameMode, updateQuestion } =
     useQuizzEditor()
   const { t } = useTranslation()
+  const { advanced, setAdvanced } = useEditorEditingMode()
+  const advancedId = useId()
   const isTimeLimitEnabled = currentQuestion.time !== NO_TIME_LIMIT
   const isPenaltyEnabled = (currentQuestion.penalty ?? 0) > 0
   const { scoringModes } = QUESTION_REGISTRY[currentQuestion.type]
@@ -51,94 +66,7 @@ const BaseConfig = () => {
 
   return (
     <>
-      {resolveQuestionPlayMode(currentQuestion, gameMode) !== "survey" && (
-        <ConfigSection title={t("quizz:question.config.scoring")}>
-          <ConfigField>
-            <ConfigField.Label
-              icon={<Star className="size-4" />}
-              label={t("quizz:question.config.maxPoints")}
-              unit={t("extensions:tadazzShow.v4.points")}
-            />
-            <ConfigNumberInput
-              name="maxPoints"
-              label={t("quizz:question.config.maxPoints")}
-              fallback={MAX_POINTS}
-              min={0}
-            />
-            <ConfigField.Description>
-              {t("quizz:question.config.maxPointsHint")}
-            </ConfigField.Description>
-          </ConfigField>
-
-          <ConfigField>
-            <ConfigField.Label
-              icon={<ArrowBigDownDash className="size-4" />}
-              label={t("quizz:question.config.penalty")}
-              unit={
-                isPenaltyEnabled
-                  ? t("extensions:tadazzShow.v4.points")
-                  : undefined
-              }
-              action={
-                <Switch
-                  aria-label={t("quizz:question.config.penalty")}
-                  checked={isPenaltyEnabled}
-                  onCheckedChange={handleTogglePenalty}
-                />
-              }
-            />
-            {isPenaltyEnabled && (
-              <ConfigNumberInput
-                name="penalty"
-                label={t("quizz:question.config.penalty")}
-                fallback={DEFAULT_PENALTY}
-                min={1}
-              />
-            )}
-            <ConfigField.Description>
-              {t("quizz:question.config.penaltyHint")}
-            </ConfigField.Description>
-          </ConfigField>
-
-          {scoringModes && scoringMode && (
-            <ConfigField>
-              <ConfigField.Label
-                icon={<ListChecks className="size-4" />}
-                label={t("quizz:question.config.scoringMode")}
-              />
-              <ToggleGroup
-                aria-label={t("quizz:question.config.scoringMode")}
-                value={scoringMode}
-                onChange={handleScoringModeChange}
-                items={scoringOptions ?? []}
-                className="h-auto flex-wrap [&>button]:min-h-9 [&>button]:flex-1 [&>button]:justify-center [&>button]:px-2 [&>button]:text-xs"
-              />
-              <ConfigField.Description>
-                {t(`quizz:question.config.scoringModeHint.${scoringMode}`)}
-              </ConfigField.Description>
-            </ConfigField>
-          )}
-        </ConfigSection>
-      )}
-
       <ConfigSection title={t("quizz:question.config.timings")}>
-        <ConfigField>
-          <ConfigField.Label
-            icon={<Clock className="size-4" />}
-            label={t("quizz:question.config.questionDisplay")}
-            unit={t("common:seconds")}
-          />
-          <ConfigNumberInput
-            name="cooldown"
-            label={t("quizz:question.config.questionDisplay")}
-            min={3}
-            max={15}
-          />
-          <ConfigField.Description>
-            {t("quizz:question.config.questionDisplayHint")}
-          </ConfigField.Description>
-        </ConfigField>
-
         <ConfigField>
           <ConfigField.Label
             icon={<Timer className="size-4" />}
@@ -167,11 +95,137 @@ const BaseConfig = () => {
         </ConfigField>
       </ConfigSection>
 
-      <CardBackgroundConfig />
+      <div className="flex flex-col gap-2">
+        <Button
+          type="button"
+          size="sm"
+          data-testid="question-advanced-settings-toggle"
+          aria-expanded={advanced}
+          aria-controls={advancedId}
+          onClick={() => setAdvanced(!advanced)}
+          className="bg-accent text-accent-foreground w-full justify-between"
+        >
+          {t("extensions:studio.editing.advancedSettings")}
+          <ChevronDown
+            aria-hidden="true"
+            className={`size-4 transition-transform ${advanced ? "rotate-180" : ""}`}
+          />
+        </Button>
+        {!advanced && (
+          <>
+            <p className="text-muted-foreground text-xs leading-relaxed">
+              {t("extensions:studio.editing.advancedControls")}
+            </p>
+            <QuestionCustomSettingsNotice />
+          </>
+        )}
+      </div>
 
-      <CardAudioConfig kind="question" />
+      <div
+        id={advancedId}
+        data-testid="question-advanced-settings"
+        hidden={!advanced}
+      >
+        {advanced && (
+          <div className="flex flex-col gap-4">
+            {resolveQuestionPlayMode(currentQuestion, gameMode) !==
+              "survey" && (
+              <ConfigSection title={t("quizz:question.config.scoring")}>
+                <ConfigField>
+                  <ConfigField.Label
+                    icon={<Star className="size-4" />}
+                    label={t("quizz:question.config.maxPoints")}
+                    unit={t("extensions:tadazzShow.v4.points")}
+                  />
+                  <ConfigNumberInput
+                    name="maxPoints"
+                    label={t("quizz:question.config.maxPoints")}
+                    fallback={MAX_POINTS}
+                    min={0}
+                  />
+                  <ConfigField.Description>
+                    {t("quizz:question.config.maxPointsHint")}
+                  </ConfigField.Description>
+                </ConfigField>
 
-      <QuestionEntranceConfig kind="question" />
+                <ConfigField>
+                  <ConfigField.Label
+                    icon={<ArrowBigDownDash className="size-4" />}
+                    label={t("quizz:question.config.penalty")}
+                    unit={
+                      isPenaltyEnabled
+                        ? t("extensions:tadazzShow.v4.points")
+                        : undefined
+                    }
+                    action={
+                      <Switch
+                        aria-label={t("quizz:question.config.penalty")}
+                        checked={isPenaltyEnabled}
+                        onCheckedChange={handleTogglePenalty}
+                      />
+                    }
+                  />
+                  {isPenaltyEnabled && (
+                    <ConfigNumberInput
+                      name="penalty"
+                      label={t("quizz:question.config.penalty")}
+                      fallback={DEFAULT_PENALTY}
+                      min={1}
+                    />
+                  )}
+                  <ConfigField.Description>
+                    {t("quizz:question.config.penaltyHint")}
+                  </ConfigField.Description>
+                </ConfigField>
+
+                {scoringModes && scoringMode && (
+                  <ConfigField>
+                    <ConfigField.Label
+                      icon={<ListChecks className="size-4" />}
+                      label={t("quizz:question.config.scoringMode")}
+                    />
+                    <ToggleGroup
+                      aria-label={t("quizz:question.config.scoringMode")}
+                      value={scoringMode}
+                      onChange={handleScoringModeChange}
+                      items={scoringOptions ?? []}
+                      className="h-auto flex-wrap [&>button]:min-h-9 [&>button]:flex-1 [&>button]:justify-center [&>button]:px-2 [&>button]:text-xs"
+                    />
+                    <ConfigField.Description>
+                      {t(
+                        `quizz:question.config.scoringModeHint.${scoringMode}`,
+                      )}
+                    </ConfigField.Description>
+                  </ConfigField>
+                )}
+              </ConfigSection>
+            )}
+
+            <ConfigSection title={t("quizz:question.config.timings")}>
+              <ConfigField>
+                <ConfigField.Label
+                  icon={<Clock className="size-4" />}
+                  label={t("quizz:question.config.questionDisplay")}
+                  unit={t("common:seconds")}
+                />
+                <ConfigNumberInput
+                  name="cooldown"
+                  label={t("quizz:question.config.questionDisplay")}
+                  min={3}
+                  max={15}
+                />
+                <ConfigField.Description>
+                  {t("quizz:question.config.questionDisplayHint")}
+                </ConfigField.Description>
+              </ConfigField>
+            </ConfigSection>
+
+            <CardBackgroundConfig />
+            <CardAudioConfig kind="question" />
+            <QuestionEntranceConfig kind="question" />
+          </div>
+        )}
+      </div>
     </>
   )
 }

@@ -7,14 +7,17 @@ export const fetchGameRoster = (gameId: string) =>
 export const updateGameRosterSettings = ({
   gameId,
   phoneInviteOnly,
+  allowUnregisteredPlayers,
 }: {
   gameId: string
-  phoneInviteOnly: boolean
-}) =>
+} & (
+  | { phoneInviteOnly: boolean; allowUnregisteredPlayers?: boolean }
+  | { phoneInviteOnly?: boolean; allowUnregisteredPlayers: boolean }
+)) =>
   unwrap(
     api.games[":gameId"].roster.settings.$patch({
       param: { gameId },
-      json: { phoneInviteOnly },
+      json: { phoneInviteOnly, allowUnregisteredPlayers },
     }),
   )
 

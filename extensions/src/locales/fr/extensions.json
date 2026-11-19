@@ -60,7 +60,7 @@
   },
   "audio": {
     "soundtrackTitle": "Bande-son du présentateur",
-    "soundtrackDesc": "Utilisez uniquement des médias autorisés du compte. Les fichiers candidats ne sont pas inclus.",
+    "soundtrackDesc": "La musique du système est prête pour chaque étape. Gardez les réglages par défaut, choisissez votre musique ou coupez le son d’une étape.",
     "slotOpeningIntro": "Introduction (12 secondes)",
     "slotLobby": "Accueil / QR",
     "slotRoundStart": "Début de manche",
@@ -70,7 +70,7 @@
     "slotLeaderboard": "Classement / égalité",
     "slotRecap": "Récapitulatif / histoire",
     "slotFinale": "Finale",
-    "inherit": "Utiliser le son / hériter",
+    "inherit": "Utiliser les réglages par défaut du système et du thème",
     "none": "Sans musique de fond",
     "fade": "Fondu ms",
     "enableSound": "Activer le son",
@@ -277,6 +277,9 @@
     "interludeTitle": "Aperçu de la diapositive d'intermède"
   },
   "roster": {
+    "allowUnregisteredPlayers": "Autoriser les participants non inscrits",
+    "allowUnregisteredPlayersDescription": "Contrôlez les nouveaux participants sur le Web et par téléphone absents de la liste du jeu. Les personnes inscrites et déjà admises peuvent se reconnecter. Le verrouillage de la salle reste applicable.",
+    "allowUnregisteredPlayersPhoneRestricted": "La participation par téléphone dépend aussi du réglage des invitations téléphoniques.",
     "title": "Participants et liste téléphonique",
     "description": "Pré-enregistrez les noms et numéros complets (+972, +44, etc.) pour identifier les appelants.",
     "phoneInviteOnly": "Invitation téléphonique uniquement",
@@ -365,6 +368,30 @@
     "showingPlayers": "{{shown}} joueurs sur {{total}}"
   },
   "timeline": {
+    "sceneDescriptions": {
+      "opening": "Accueille le public et présente le jeu.",
+      "closing": "Termine le jeu et célèbre sa conclusion.",
+      "joinDirectory": "Affiche les représentants des tables et la liste des participants.",
+      "joinInstructions": "Explique comment participer par téléphone.",
+      "joinReadiness": "Indique quels participants sont connectés et prêts.",
+      "roundIntro": "Présente la prochaine manche de questions.",
+      "storyProgress": "Affiche la progression du récit et les questions terminées.",
+      "tieBreak": "Départage les réponses arrivées à égalité.",
+      "storyAssembly": "Compose le récit à partir des réponses sélectionnées.",
+      "storyLive": "Présente le récit composé et son compte à rebours.",
+      "winner": "Révèle la réponse sélectionnée ou gagnante.",
+      "roundRecap": "Récapitule les réponses de la manche terminée.",
+      "interlude": "Marque une pause entre les parties du jeu.",
+      "transition": "Passe d'une partie du jeu à la suivante.",
+      "leaderboard": "Affiche le classement et les scores des joueurs.",
+      "interimResults": "Affiche la répartition des réponses à la dernière question.",
+      "answerRecap": "Récapitule les réponses aux questions terminées.",
+      "countdown": "Décompte le temps avant la prochaine partie du jeu.",
+      "media": "Affiche ou lit le média choisi pour cette carte.",
+      "animation": "Affiche une animation décorative."
+    },
+    "waitForHost": "Avance par l’animateur",
+    "afterMedia": "Après le média",
     "quiz": "Quiz",
     "survey": "Sondage",
     "transition": "Transition",
@@ -389,6 +416,18 @@
     "deleteCardConfirm": "Supprimer cette carte de scène de la chronologie ?"
   },
   "studio": {
+    "editing": {
+      "modeLabel": "Mode d’édition",
+      "simple": "Édition simple",
+      "advanced": "Édition avancée",
+      "simpleHint": "Concentrez-vous sur les questions et les réponses. Les réglages du jeu restent actifs.",
+      "advancedHint": "Configurez les scores, l’apparence, le son, les animations et tous les types de cartes.",
+      "customSettings": "Des réglages personnalisés sont actifs",
+      "customSettingsHint": "Cette question comporte des réglages supplémentaires. L’édition simple les conserve.",
+      "advancedSettings": "Réglages avancés",
+      "moreCardTypes": "Autres types de cartes",
+      "advancedControls": "Scores, apparence, son et animations"
+    },
     "tabs": {
       "questions": "Questions",
       "participants": "Participants",

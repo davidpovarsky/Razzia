@@ -147,6 +147,39 @@ describe("StudioShowCoordinator", () => {
     },
   ]
   const questionIds = [q1Id, q2Id, q3Id]
+  it("hands the paused terminal finale clock to the product ending without replay", () => {
+    vi.setSystemTime(100000)
+    const finished = vi.fn()
+    const coordinator = new StudioShowCoordinator({
+      timeline: [{ id: "terminal-finale", kind: "animation", sceneId: animId }],
+      scenes: {
+        [animId]: {
+          id: animId,
+          kind: "animation",
+          preset: "grand-finale",
+          durationMs: 9200,
+          advance: "auto",
+        },
+      },
+      questionIds: [],
+      defaults: dummyDefaults,
+      callbacks: {
+        onStartQuestion: vi.fn(),
+        onFinish: finished,
+        onBroadcastState: vi.fn(),
+      },
+    })
+    coordinator.start()
+    vi.advanceTimersByTime(7000)
+    expect(coordinator.pauseGame()).toBe(true)
+    vi.advanceTimersByTime(20000)
+    expect(finished).not.toHaveBeenCalled()
+    expect(coordinator.resumeGame()).toBe(true)
+    vi.advanceTimersByTime(2200)
+    expect(finished).toHaveBeenCalledTimes(1)
+    expect(finished).toHaveBeenCalledWith(120000)
+    expect(coordinator.currentPhase).toBe("finished")
+  })
   it("skips every authored scene owned by a skipped question", () => {
     const startedQuestions: number[] = []
     let finished = false

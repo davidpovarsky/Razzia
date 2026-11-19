@@ -1,3 +1,5 @@
+import { PLATFORM_AUDIO_ASSETS } from "../../core/platform-audio-assets.ts"
+
 // Host-owned exact-byte allowlist for the existing private Tadazz deployment.
 // Native records match classic/razzia manifest declarations at milestone 2a9db28.
 // Five static SVG cards and purple background also match the original
@@ -12,6 +14,17 @@
 // alone never adds an entry. The two existing native family versions remain 1.0.0.
 
 export const REVIEWED_BUILTIN_ASSETS = [
+  // Exact platform defaults share the same existing native family grants.
+  ...PLATFORM_AUDIO_ASSETS.map((asset) => ({
+    assetId: asset.assetId,
+    sha256: asset.sha256,
+    bytes: asset.bytes,
+    url: asset.url,
+    mime: asset.mime,
+    purpose: "audio" as const,
+    label: "audio" as const,
+    families: ["tadazz-classic", "razzia-original"] as const,
+  })),
   {
     assetId: "classic-backdrop",
     sha256: "a76a50432f43313d29e78f625302a256e7e7b71db322612c4b66ee3aef0cf37e",

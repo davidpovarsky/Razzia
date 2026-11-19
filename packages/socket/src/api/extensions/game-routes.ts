@@ -135,7 +135,20 @@ export const gameExtensionRoutes = apiFactory
   .patch(
     "/:gameId/roster/settings",
     requireManager,
-    zValidator("json", z.object({ phoneInviteOnly: z.boolean() }), i18nHook),
+    zValidator(
+      "json",
+      z
+        .object({
+          phoneInviteOnly: z.boolean().optional(),
+          allowUnregisteredPlayers: z.boolean().optional(),
+        })
+        .refine(
+          (value) =>
+            value.phoneInviteOnly !== undefined ||
+            value.allowUnregisteredPlayers !== undefined,
+        ),
+      i18nHook,
+    ),
     (c) => {
       const game = Registry.getInstance().getGameById(c.req.param("gameId"))
 
@@ -143,7 +156,7 @@ export const gameExtensionRoutes = apiFactory
         return c.json({ error: "errors:game.notFound" }, StatusCodes.NOT_FOUND)
       }
 
-      game.setPhoneInviteOnly(c.req.valid("json").phoneInviteOnly)
+      game.setRosterJoinSettings(c.req.valid("json"))
 
       return c.json({ presence: game.getHostPresenceSnapshot() })
     },

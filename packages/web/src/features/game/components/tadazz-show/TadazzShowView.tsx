@@ -51,6 +51,7 @@ import HostShortcutsDialog from "@razzia/web/features/game/components/HostShortc
 import ManagerControlToolbar from "@razzia/web/features/game/components/ManagerControlToolbar"
 import QuestionDialog from "@razzia/web/features/game/components/QuestionDialog"
 import RoomLockButton from "@razzia/web/features/game/components/RoomLockButton"
+import HostGuestJoinToggle from "@razzia/web/features/game/components/HostGuestJoinToggle"
 import { ExtensionStateProvider } from "@razzia/web/features/game/contexts/extension-state-context"
 import {
   useEvent,
@@ -1749,6 +1750,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                   {props.statusName === STATUS.SHOW_ROOM && (
                     <RoomLockButton className="hover:bg-accent font-display bg-white text-black" />
                   )}
+                  <HostGuestJoinToggle />
                   <Tooltip
                     content={t(
                       "extensions:roster.liveModalTitle",

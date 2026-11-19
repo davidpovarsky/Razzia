@@ -1,9 +1,10 @@
 import { TimelineSceneCard } from "@razzia/extensions/editor"
 import type { Question } from "@razzia/common/types/game"
-import type { TimelineItemKind } from "@razzia/extensions/core"
+import type { SceneConfig, TimelineItemKind } from "@razzia/extensions/core"
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { useStudioEditor } from "./studio-editor-context"
+import { useEditorEditingMode } from "./editor-editing-mode"
 import AlertDialog from "@razzia/web/components/AlertDialog"
 import Button from "@razzia/web/components/Button"
 import {
@@ -38,6 +39,7 @@ export interface SortableItemProps {
 interface SortableSceneItemProps {
   id: string
   kind: string
+  scene?: SceneConfig
   title?: string
   durationText: string
   isActive: boolean
@@ -49,6 +51,7 @@ interface SortableSceneItemProps {
 const SortableSceneItem = ({
   id,
   kind,
+  scene,
   title,
   durationText,
   isActive,
@@ -92,6 +95,7 @@ const SortableSceneItem = ({
           fallback === undefined ? t(key) : t(key, fallback)
         }
         kind={kind}
+        scene={scene}
         title={title}
         durationText={durationText}
         isActive={isActive}
@@ -111,6 +115,7 @@ export function useStudioTimelineSidebar({
   QuestionItem: ComponentType<SortableItemProps>
 }) {
   const { questions, questionIds, addQuestion } = useQuizzEditor()
+  const { advanced, setAdvanced } = useEditorEditingMode()
   const {
     timeline,
     selectedTimelineId,
@@ -163,6 +168,16 @@ export function useStudioTimelineSidebar({
     },
   ]
 
+  const visibleKinds = advanced
+    ? timelineKinds
+    : timelineKinds.filter(
+        (item) => item.value === "quiz" || item.value === "survey",
+      )
+  const effectiveCardKind =
+    advanced || cardKindToAdd === "quiz" || cardKindToAdd === "survey"
+      ? cardKindToAdd
+      : defaults.newQuestionMode
+
   const items =
     timeline.length > 0
       ? timeline.map((item, index) => {
@@ -210,17 +225,11 @@ export function useStudioTimelineSidebar({
             )
           }
 
-          const scene = scenes[item.sceneId] as
-            | {
-                title?: string
-                durationMs?: number
-                durationSeconds?: number
-              }
-            | undefined
+          const scene = scenes[item.sceneId] as SceneConfig | undefined
 
           let durationText = `5 ${t("common:seconds")}`
 
-          if (scene?.durationSeconds) {
+          if (scene?.kind === "countdown") {
             durationText = `${scene.durationSeconds} ${t("common:seconds")}`
           } else if (scene?.durationMs) {
             durationText = `${Math.round(scene.durationMs / 1000)} ${t("common:seconds")}`
@@ -231,6 +240,7 @@ export function useStudioTimelineSidebar({
               key={item.id}
               id={item.id}
               kind={item.kind}
+              scene={scene}
               title={scene?.title}
               durationText={durationText}
               isActive={selectedTimelineId === item.id}
@@ -250,7 +260,7 @@ export function useStudioTimelineSidebar({
       <div className="flex items-center gap-1.5">
         <div className="min-w-0 flex-1">
           <Select
-            value={cardKindToAdd}
+            value={effectiveCardKind}
             onValueChange={(val) => setCardKindToAdd(val as TimelineItemKind)}
           >
             <SelectTrigger
@@ -262,7 +272,7 @@ export function useStudioTimelineSidebar({
               />
             </SelectTrigger>
             <SelectContent>
-              {timelineKinds.map((item) => (
+              {visibleKinds.map((item) => (
                 <SelectItem
                   key={item.value}
                   value={item.value}
@@ -279,7 +289,7 @@ export function useStudioTimelineSidebar({
           data-testid="studio-add-card-btn"
           onClick={() => {
             if (timeline.length > 0) {
-              addTimelineCard(cardKindToAdd)
+              addTimelineCard(effectiveCardKind)
             } else {
               addQuestion()
             }
@@ -290,6 +300,17 @@ export function useStudioTimelineSidebar({
           {t("extensions:studio.addCard", "Add card")}
         </Button>
       </div>
+      {!advanced && (
+        <Button
+          type="button"
+          size="sm"
+          data-testid="editor-add-more-card-types"
+          className="text-muted-foreground w-full justify-center bg-transparent text-xs"
+          onClick={() => setAdvanced(true)}
+        >
+          {t("extensions:studio.editing.moreCardTypes")}
+        </Button>
+      )}
     </div>
   )
 

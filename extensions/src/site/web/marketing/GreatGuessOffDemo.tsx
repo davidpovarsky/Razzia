@@ -11,10 +11,7 @@ import type {
   TadazzStageHandle,
 } from "../../../presentation/tadazz-show/TadazzStage"
 import type { TadazzV4Cue } from "../../../presentation/tadazz-v4/types"
-import {
-  TADAZZ_PHASE_SFX,
-  TADAZZ_SFX_BY_CUE,
-} from "../../../presentation/audio-cue-player"
+import { useCatalogueAudio } from "./use-catalogue-audio"
 import v4Css from "../../../presentation/tadazz-v4/tadazz-v4.css?inline"
 import v4LayoutCss from "../../../presentation/tadazz-v4/source-layout.css?inline"
 import v4FullShowCss from "../../../presentation/tadazz-v4/full-show.css?inline"
@@ -159,14 +156,11 @@ export function GreatGuessOffDemo() {
   const [busy, setBusy] = useState(false)
   const busyRef = useRef(false)
   const [soundOn, setSoundOn] = useState(true)
-  const soundOnRef = useRef(true)
   const [message, setMessage] = useState("")
   const deadlineRef = useRef(0)
   const revealRef = useRef<(chosenIndex?: number) => Promise<void>>(
     async () => {},
   )
-  const sfxRef = useRef<HTMLAudioElement | null>(null)
-  const musicRef = useRef<HTMLAudioElement | null>(null)
   const reducedMotion = useReducedMotion()
   const question = QUESTIONS[questionIndex]
   const selected = votes[questionIndex]
@@ -195,47 +189,29 @@ export function GreatGuessOffDemo() {
     [score],
   )
 
-  const playSfx = useCallback((url: string | undefined, volume = 0.75) => {
-    if (!url || !soundOnRef.current) return
-    const audio = sfxRef.current ?? new Audio()
-    sfxRef.current = audio
-    audio.pause()
-    audio.src = url
-    audio.volume = volume
-    audio.currentTime = 0
-    void audio.play().catch(() => {})
-  }, [])
-  const stopMusic = useCallback(() => {
-    musicRef.current?.pause()
-  }, [])
-  const startMusic = useCallback(() => {
-    if (!soundOnRef.current) return
-    const audio = musicRef.current ?? new Audio("/sounds/answersMusic.mp3")
-    musicRef.current = audio
-    audio.loop = true
-    audio.volume = 0.28
-    audio.currentTime = 0
-    void audio.play().catch(() => {})
-  }, [])
+  const { playEffect, musicUrl } = useCatalogueAudio({
+    enabled: soundOn,
+    slot:
+      phase === "voting" || phase === "locked"
+        ? "voting"
+        : phase === "results"
+          ? "results"
+          : phase === "leaderboard"
+            ? "leaderboard"
+            : phase === "winner" || phase === "closing"
+              ? "finale"
+              : phase === "question-transition"
+                ? "question"
+                : "lobby",
+    screenKey: [questionIndex, phase].join(":"),
+  })
   const onCue = useCallback(
     (cue: TadazzV4Cue) => {
-      playSfx(
-        TADAZZ_SFX_BY_CUE[cue.name],
-        cue.name.startsWith("timer-") ? 0.45 : 0.78,
-      )
+      playEffect(cue.name)
     },
-    [playSfx],
+    [playEffect],
   )
-  const toggleSound = () => {
-    soundOnRef.current = !soundOnRef.current
-    setSoundOn(soundOnRef.current)
-    if (!soundOnRef.current) {
-      stopMusic()
-      sfxRef.current?.pause()
-    } else if (currentPhase.current === "voting") {
-      startMusic()
-    }
-  }
+  const toggleSound = () => setSoundOn((value) => !value)
 
   const run = (action: () => Promise<void>) => {
     if (busyRef.current) return
@@ -260,11 +236,7 @@ export function GreatGuessOffDemo() {
 
   useEffect(() => {
     void showOpening()
-    return () => {
-      stopMusic()
-      sfxRef.current?.pause()
-    }
-  }, [stopMusic])
+  }, [])
 
   useEffect(() => {
     if (phase !== "voting") return
@@ -278,14 +250,13 @@ export function GreatGuessOffDemo() {
         // The deadline advances DIRECTLY to the same result presentation.
         // Never render the separate numbered "Votes Locked" screen.
         currentPhase.current = "locked"
-        stopMusic()
         run(() => revealRef.current())
       }
     }
     const interval = window.setInterval(tick, 160)
     tick()
     return () => window.clearInterval(interval)
-  }, [phase, questionIndex, stopMusic])
+  }, [phase, questionIndex])
 
   const startQuestion = async (index: number) => {
     const handle = stage.current
@@ -304,7 +275,6 @@ export function GreatGuessOffDemo() {
     void handle.openVoting(VOTING_SECONDS, deadlineRef.current).catch(() => {
       setMessage("Unable to start the native voting timer.")
     })
-    startMusic()
   }
 
   const reveal = async (chosenIndex?: number) => {
@@ -315,7 +285,6 @@ export function GreatGuessOffDemo() {
     // first appear in the tiny question font and jump to a larger size.
     currentPhase.current = "results"
     setPhase("results")
-    stopMusic()
     // Render results in place, on the same four cards. No vote-locked scene.
     await handle.revealResults({
       mode: q.kind,
@@ -338,7 +307,7 @@ export function GreatGuessOffDemo() {
     if (currentPhase.current !== "voting" || busyRef.current) return
     setVotes((previous) => ({ ...previous, [questionIndex]: index }))
     stage.current?.setSelectedOptions([index])
-    playSfx(TADAZZ_PHASE_SFX.answerPressed, 0.5)
+    playEffect("answer-submitted", [questionIndex, "submitted"].join(":"))
     run(() => reveal(index))
   }
 
@@ -346,14 +315,12 @@ export function GreatGuessOffDemo() {
     const handle = stage.current
     if (!handle) return
     if (questionIndex === 2) {
-      stopMusic()
-      playSfx("/sounds/snearRoll.mp3")
+      playEffect("phase-leaderboard")
       await handle.showLeaderboard(leaderboard)
       setPhase("leaderboard")
     } else if (questionIndex === 4) {
-      stopMusic()
       const winner = leaderboard[0]
-      playSfx("/sounds/first.mp3")
+      playEffect("phase-podium1")
       // Show the Z stage backdrop before the native confetti starts: one
       // unified winner reveal, not a separate confetti screen.
       currentPhase.current = "winner"
@@ -370,7 +337,6 @@ export function GreatGuessOffDemo() {
   const restoreResult = async (index: number) => {
     const handle = stage.current
     if (!handle) return
-    stopMusic()
     setQuestionIndex(index)
     currentPhase.current = "question-transition"
     setPhase("question-transition")
@@ -392,7 +358,6 @@ export function GreatGuessOffDemo() {
   const back = async () => {
     const handle = stage.current
     if (!handle || phase === "intro" || phase === "question-transition") return
-    stopMusic()
     if (phase === "closing") {
       const winner = leaderboard[0]
       // Show the Z stage backdrop before the native confetti starts: one
@@ -421,7 +386,6 @@ export function GreatGuessOffDemo() {
   }
 
   const restart = async () => {
-    stopMusic()
     setVotes({})
     setQuestionIndex(0)
     setSecondsLeft(VOTING_SECONDS)
@@ -485,6 +449,7 @@ export function GreatGuessOffDemo() {
       }
       data-ggo-mode={question.kind}
       data-ggo-phase={phase}
+      data-audio-url={musicUrl}
       aria-label="The Great Guess-off · Tadazz native stage"
     >
       <style>{nativeStageCss}</style>
