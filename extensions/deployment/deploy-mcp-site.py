@@ -39,6 +39,8 @@ import uuid
 
 
 CONFIG_ROOT = Path("/var/lib/tadazz-release-5312660/config")
+# Same runtime base qualified by stage-mcp-site.py; independent of the live rollback image.
+QUALIFIED_BUILD_BASE_IMAGE = "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346"
 PUBLIC_ORIGIN = "https://tadazz.com"
 LOCAL_ORIGIN = "http://127.0.0.1:3000"
 ENV_OVERRIDES = {
@@ -788,6 +790,15 @@ def qualify_backup(args, stage, original, image, others):
     return 0 if report["success"] else 1
 
 
+def validate_stage_identity(args, manifest):
+    # The build is qualified against a fixed runtime base. The independently
+    # pinned live image may be a newer release and remains the rollback target.
+    require(manifest.get("sourceSha") == args.revision and
+            manifest.get("baseImage") == QUALIFIED_BUILD_BASE_IMAGE, "STAGE_SOURCE_BASE_MISMATCH")
+    require(manifest.get("format") == "tadazz-mcp-stage" and manifest.get("version") == 2 and
+            manifest.get("imageId") == args.image_sha256, "STAGE_CANDIDATE_IMAGE_MISMATCH")
+
+
 def validate_stage(args):
     stage = plain_path(args.release_dir, root_owned=True)
     require(re.fullmatch(r"/home/ubuntu/tadazz-mcp-(?:candidate|release)-[a-zA-Z0-9-]+", str(stage)), "RELEASE_PATH_REJECTED")
@@ -795,8 +806,7 @@ def validate_stage(args):
     plain_path(file, directory=False)
     require(sha256(file) == args.stage_manifest_sha256, "STAGE_MANIFEST_PIN_MISMATCH")
     manifest = read_json(file)
-    require(manifest.get("sourceSha") == args.revision and manifest.get("baseImage") == args.expected_image, "STAGE_SOURCE_BASE_MISMATCH")
-    require(manifest.get("format") == "tadazz-mcp-stage" and manifest.get("version") == 2 and manifest.get("imageId") == args.image_sha256, "STAGE_CANDIDATE_IMAGE_MISMATCH")
+    validate_stage_identity(args, manifest)
     artifacts = manifest.get("artifacts")
     require(isinstance(artifacts, dict) and 1 <= len(artifacts) <= 10000, "STAGE_ARTIFACTS_INVALID")
     for name, expected in artifacts.items():
@@ -1047,9 +1057,97 @@ def game_count_self_tests():
     return checks
 
 
+def deployment_identity_self_tests():
+    """Synthetic stage and Docker facts exercise independent build/live pins."""
+    checks = []
+    args = argparse.Namespace(revision="b" * 40, image="tadazz:mcp-selftest",
+                              image_sha256="sha256:" + "c" * 64,
+                              expected_image="sha256:" + "d" * 64,
+                              expected_container="e" * 64,
+                              expected_gateway="f" * 64, expected_running_count=2)
+    manifest = {"sourceSha": args.revision, "baseImage": QUALIFIED_BUILD_BASE_IMAGE,
+                "format": "tadazz-mcp-stage", "version": 2, "imageId": args.image_sha256}
+
+    def rejected(operation, expected):
+        try:
+            operation()
+        except GateError as error:
+            require(str(error) == expected, "SELFTEST_DEPLOY_IDENTITY_WRONG_FAILURE")
+            return
+        raise GateError("SELFTEST_DEPLOY_IDENTITY_ACCEPTED_CHANGED_PIN")
+
+    require(args.expected_image != QUALIFIED_BUILD_BASE_IMAGE, "SELFTEST_DISTINCT_IMAGE_FIXTURE")
+    validate_stage_identity(args, manifest)
+    checks.append("qualified-build-base-independent-of-newer-live-rollback-image")
+    for field, value in (("baseImage", args.expected_image), ("baseImage", "sha256:" + "a" * 64),
+                         ("sourceSha", "a" * 40)):
+        changed = {**manifest, field: value}
+        rejected(lambda: validate_stage_identity(args, changed), "STAGE_SOURCE_BASE_MISMATCH")
+    checks.append("unqualified-base-rejected-even-when-it-matches-live-image")
+    checks.append("stage-source-revision-pin-preserved")
+    for field, value in (("format", "foreign-stage"), ("version", 1), ("imageId", args.expected_image)):
+        changed = {**manifest, field: value}
+        rejected(lambda: validate_stage_identity(args, changed), "STAGE_CANDIDATE_IMAGE_MISMATCH")
+    checks.append("stage-format-version-candidate-image-pins-preserved")
+
+    launch = {"User": "root", "Cmd": ["supervisord", "-c", "/etc/supervisord.conf"],
+              "Entrypoint": None, "WorkingDir": "/"}
+    original = {"Id": args.expected_container, "Image": args.expected_image,
+                "State": {"Running": True, "StartedAt": "synthetic-start"}, "Config": copy.deepcopy(launch),
+                "Mounts": [{"Type": "bind", "Source": str(CONFIG_ROOT), "Destination": "/app/config", "RW": True}],
+                "HostConfig": {"NetworkMode": "bridge", "PortBindings": {"3000/tcp": [{"HostIp": "127.0.0.1", "HostPort": "3000"}]}}}
+    gateway = {"Id": args.expected_gateway, "Image": "gateway-image", "Mounts": [],
+               "State": {"Running": True, "StartedAt": "synthetic-gateway-start"}}
+    candidate = {"Id": args.image_sha256,
+                 "Config": {**copy.deepcopy(launch), "Labels": {"org.opencontainers.image.revision": args.revision}}}
+    saved = {key: globals()[key] for key in ("inspect", "docker_api")}
+
+    def synthetic_inspect(name):
+        if name in ("tadazz", original["Id"]):
+            return copy.deepcopy(original)
+        if name in ("tadazz-phone-gateway", gateway["Id"]):
+            return copy.deepcopy(gateway)
+        raise GateError("SELFTEST_DEPLOY_IDENTITY_UNEXPECTED_CONTAINER")
+
+    def synthetic_docker(method, path, body=None):
+        require(method == "GET" and body is None, "SELFTEST_DEPLOY_IDENTITY_DOCKER_MUTATION")
+        if path == "/images/" + urllib.parse.quote(args.image, safe="") + "/json":
+            return copy.deepcopy(candidate)
+        if path == "/containers/json?all=0":
+            return [{"Id": original["Id"]}, {"Id": gateway["Id"]}]
+        raise GateError("SELFTEST_DEPLOY_IDENTITY_UNEXPECTED_DOCKER_READ")
+
+    try:
+        globals().update(inspect=synthetic_inspect, docker_api=synthetic_docker)
+        current, built, others = baseline(args)
+        require(current["Image"] == args.expected_image and built["Id"] == args.image_sha256 and
+                set(others) == {args.expected_gateway}, "SELFTEST_DEPLOY_IDENTITY_BASELINE")
+        checks.append("different-live-image-retained-as-exact-baseline")
+        for field, value, failure in (
+                ("expected_image", QUALIFIED_BUILD_BASE_IMAGE, "PRODUCTION_IDENTITY_CHANGED"),
+                ("expected_container", "a" * 64, "PRODUCTION_IDENTITY_CHANGED"),
+                ("image_sha256", "sha256:" + "a" * 64, "CANDIDATE_IMAGE_PIN_MISMATCH"),
+                ("expected_gateway", "a" * 64, "GATEWAY_IDENTITY_CHANGED"),
+                ("expected_running_count", 3, "RUNNING_CONTAINER_COUNT_CHANGED")):
+            changed_args = copy.copy(args)
+            setattr(changed_args, field, value)
+            rejected(lambda: baseline(changed_args), failure)
+        checks.append("live-container-image-candidate-gateway-count-pins-preserved")
+        original["Mounts"][0]["Source"] = "/synthetic-unapproved-config"
+        rejected(lambda: baseline(args), "PRODUCTION_MOUNTS_CHANGED")
+        original["Mounts"][0]["Source"] = str(CONFIG_ROOT)
+        checks.append("live-config-mount-gate-preserved")
+        candidate["Config"]["Cmd"] = ["unapproved-entrypoint"]
+        rejected(lambda: baseline(args), "CANDIDATE_LAUNCH_CONTRACT_CHANGED")
+        checks.append("candidate-launch-contract-gate-preserved")
+    finally:
+        globals().update(saved)
+    return checks
+
+
 def self_test():
     """Synthetic, no Docker/network/customer access; retained only in temp dir."""
-    checks = game_count_self_tests()
+    checks = game_count_self_tests() + deployment_identity_self_tests()
     original = {"Config": {"Env": ["SECRET=private-value", "SOCKET_PORT=9999", "PATH=/bin"], "Labels": {"existing": "yes"}}, "HostConfig": {"NetworkMode": "bridge"}}
     payload = replacement_payload(original, {"Id": "sha256:" + "a" * 64}, "b" * 40, "test")
     require(env_map(payload["Env"]) == {"SECRET": "private-value", "PATH": "/bin", **ENV_OVERRIDES}, "SELFTEST_ENV_PRESERVATION")
