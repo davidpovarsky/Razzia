@@ -1,0 +1,20 @@
+{
+  "remainingListeners": [],
+  "remainingProcesses": [],
+  "verifiedAndStopped": [
+    {
+      "processId": 30188,
+      "port": 4371,
+      "creationUnixMs": 1795045653576,
+      "commandLine": "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe --experimental-strip-types C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\packages\\web\\node_modules\\vite\\bin\\vite.js --config C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\extensions\\qa\\consolidation\\site.vite.config.ts --host 127.0.0.1 --port 4371 --strictPort"
+    },
+    {
+      "processId": 8616,
+      "port": 4372,
+      "creationUnixMs": 1795045653562,
+      "commandLine": "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe --import tsx src/index.ts"
+    }
+  ],
+  "verification": "Exact command line, creation timestamp and port ownership matched before Stop-Process. This separate read confirms termination completed; no second stop signal was sent.",
+  "verifiedAt": "2026-11-19T00:14:14.370848+00:00"
+}

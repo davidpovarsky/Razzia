@@ -1,0 +1,27 @@
+{
+  "observedAt": "2026-11-19T13:59:14.841859+00:00",
+  "containers": {
+    "tadazz": {
+      "id": "ce2deee99d7ba30717b8609a2138456d4834bee33cc2263031253d22d57c3081",
+      "image": "sha256:4489e57b83be163dfa8fc312a6ed38df277e48fa0016263f807ae8266ee30344",
+      "running": true,
+      "restarts": 0,
+      "revision": "d30a6d55389a85780fcb51d8c28ae607a7fd481c"
+    },
+    "tadazz-phone-gateway": {
+      "id": "c29ea46f10ff6da76428b2f296ff1468c512ec9e2af76eba552d7a144766b202",
+      "image": "sha256:db1888623e93a18cb9e4005a0142e01b3e6c503b029bbd7856144a5f41e7aa5e",
+      "running": true,
+      "restarts": 0,
+      "revision": null
+    },
+    "tadazz-phase2-20261116": {
+      "id": "07b64bb4f99518e306a2e3f5a693266a6ca543fdd1676627161af7077e818872",
+      "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+      "running": false,
+      "restarts": 0,
+      "revision": null
+    }
+  },
+  "runningCount": 6
+}

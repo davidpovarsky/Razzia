@@ -1,0 +1,79 @@
+{
+  "format": "tadazz-theme-worker-phase3-r2-transfer",
+  "files": {
+    "inputs/replacement/activate_and_verify_timer_r2.py": {
+      "sha256": "355d7f3fe46f54b1eed27e9cc9c2deb21c310318694e2e82a9e675ceedb13a84",
+      "bytes": 32703
+    },
+    "inputs/replacement/check_phase3_admission_r2.py": {
+      "sha256": "fc0fa824e3bf7d052457f04942467f7e7182caf9f78797bf55b6ae590aa2808e",
+      "bytes": 5641
+    },
+    "inputs/replacement/check_systemd_monotonic_r2.py": {
+      "sha256": "8dd72a60f74d861f9d6101553329846d372cfaad218af45728535839d499c8a0",
+      "bytes": 1664
+    },
+    "inputs/replacement/phase3-admission-r2.json": {
+      "sha256": "99f9145b6bbb190e71e4e8a6a005c890fb874368ff664b82ead77c53bb56372b",
+      "bytes": 1943
+    },
+    "inputs/replacement/phase3-admission-records-r2/deployment-deploy-execution.json": {
+      "sha256": "203298193f489c741bc599d17a4b19423a74cc1d811a48e80604cb2df4447315",
+      "bytes": 5524
+    },
+    "inputs/replacement/phase3-admission-records-r2/post-deploy-execution.json": {
+      "sha256": "0443a5034a55cd3c30571aab2e7fb9b5dfa0cc9c184fedf35ae9489eb681486b",
+      "bytes": 6153
+    },
+    "inputs/replacement/phase3-admission-records-r2/post-deploy-observation.json": {
+      "sha256": "910132378a99c1891e5e2d8d4a2f9d08dbf1914ca01a5104ebbf79bce0950816",
+      "bytes": 7955
+    },
+    "inputs/replacement/phase3-admission-records-r2/stage-execution.json": {
+      "sha256": "a6b63581f573f04a117fdf3d86062be18bfdc73ae0435a629eafc7fc23f34b62",
+      "bytes": 1475
+    },
+    "inputs/replacement/phase3-offline-guards-r2.json": {
+      "sha256": "f30fe7bd3ff38107e8e12f6aa51fe6deab9a0b454ad2771d4285a85a94679788",
+      "bytes": 995
+    },
+    "inputs/replacement/phase3-r2-helper.diff": {
+      "sha256": "51dd857104560d41f74c7df1f1a25703f49d476e277a9310f45895cb4dd722b6",
+      "bytes": 17169
+    },
+    "inputs/replacement/phase3-r2-independent-review.json": {
+      "sha256": "67517e122b80bd30ebe5f54ca01d4b4632b4b0bee7c6eb5af1327bb8d3aa0114",
+      "bytes": 7068
+    },
+    "inputs/replacement/phase3-r2-parser-tests.json": {
+      "sha256": "81b149af556be7302688caf4ac15b22eb18cc2f5269e220b426fcf7cc09758db",
+      "bytes": 1027
+    },
+    "inputs/replacement/phase3-retained-owned-result.json": {
+      "sha256": "9553fec3c6ecf313804467f369f372722331fe9ee93eb4270a7bfd1eb2a49c7e",
+      "bytes": 2027
+    },
+    "inputs/replacement/timer-fixture-r2/fixture-summary.json": {
+      "sha256": "27cbebb9d82a38f917c88a8041c6818f335540544802d0a84f15588a49396ed6",
+      "bytes": 739
+    },
+    "inputs/replacement/timer-fixture-r2/request.json": {
+      "sha256": "10c147d291e67d70081577c3622b8d61e3cf78fc44186b95cf5ccad6ddf5307b",
+      "bytes": 241
+    },
+    "inputs/replacement/timer-fixture-r2/source.tadazz": {
+      "sha256": "2d64baabbafa9dd12f07be4a97422167437f2d815b6363a62ec34e9de7eace4d",
+      "bytes": 520223
+    },
+    "inputs/replacement/timer-input-manifest-r2.json": {
+      "sha256": "8d9432822cb94d93fa6a461804a3760f1734e414f737376a34f9b8c1bf49b80f",
+      "bytes": 1470
+    }
+  },
+  "archiveSha256": "089764d48e639f4904284666fca23c7ed243ae5604b45ad4acb2251d18a48e6d",
+  "archiveBytes": 474413,
+  "status": "PASS",
+  "verifiedAt": "2026-11-19T16:13:49.127829+00:00",
+  "namespace": "/home/ubuntu/tadazz-theme-worker-ux-followup-20261119",
+  "historicalFilesOverwritten": false
+}

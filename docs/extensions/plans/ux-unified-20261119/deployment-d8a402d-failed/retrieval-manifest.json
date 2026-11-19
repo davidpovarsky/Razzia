@@ -1,0 +1,33 @@
+{
+  "kind": "failed-deployment-public-evidence-retrieval",
+  "sourceSha": "d8a402dd39bf3cd7e5b046c3bf3b955181815a62",
+  "deploymentRun": "20261119T054340Z-82d0d521",
+  "retrievedAt": "2026-11-19T05:48:14.298345+00:00",
+  "exactBytesPreserved": true,
+  "actualPublicResultMatchesCoordinator": true,
+  "remoteAllowlist": [
+    "deployment-result.json"
+  ],
+  "privateFilesRead": false,
+  "productionChangedByRetrieval": false,
+  "files": [
+    {
+      "sourcePath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\ux-unified-20261119\\deployment-deploy-execution.json",
+      "localPath": "docs/extensions/plans/ux-unified-20261119/deployment-d8a402d-failed/deployment-deploy-execution.json",
+      "sha256": "61573e022b7feeacbc9dc3a9969b628d3a944fd19a32e45624e2764223f8e15e",
+      "bytes": 3168
+    },
+    {
+      "sourcePath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\ux-unified-20261119\\deployment-rollback-observation.json",
+      "localPath": "docs/extensions/plans/ux-unified-20261119/deployment-d8a402d-failed/deployment-rollback-observation.json",
+      "sha256": "b119da9fd95393818fa1dd8added941ff8d97f9ebca22747ae9ffcb49c439dc8",
+      "bytes": 1623
+    },
+    {
+      "sourcePath": "/home/ubuntu/tadazz-mcp-release-d8a402dd39bf-20261119/deployment-20261119T054340Z-82d0d521/deployment-result.json",
+      "localPath": "docs/extensions/plans/ux-unified-20261119/deployment-d8a402d-failed/deployment-result.json",
+      "sha256": "7a4fe2b8784eb8d785fe53ca11c5ed3eb22d851bdccf023552da4471a7885ff1",
+      "bytes": 2049
+    }
+  ]
+}

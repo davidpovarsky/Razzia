@@ -1,0 +1,58 @@
+{
+  "candidateImage": "sha256:ca3717033dc0206e3b64f697e74b344637eb3b197f9910c1018c74e8b22c2001",
+  "collectedAt": "2026-11-19T13:12:58.642535+00:00",
+  "coordinators": {
+    "deployment": {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\ux-unified-20261119\\deployment-deploy-execution.json",
+      "sha256": "f80b1aaf9b7782b1b266beb472a1788fd38b4660e5a3d5edec538ba071ed22ee"
+    },
+    "qualification": {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\ux-unified-20261119\\deployment-qualify-backup-execution.json",
+      "sha256": "a51b6e669b351db47ff07d836ee4269ca09635f507b50d67a29666888c0c8f1e"
+    },
+    "stage": {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\ux-unified-20261119\\stage-execution.json",
+      "sha256": "d97b168bd0818e766e0e478b7d5e39613cdcf915fc49dd34af4529d3c0efc82c"
+    }
+  },
+  "copiedActualDiskBytes": true,
+  "files": [
+    {
+      "bytes": 711,
+      "localPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\ux-unified-20261119\\release-evidence\\stage-result.json",
+      "remotePath": "/home/ubuntu/tadazz-mcp-release-d8a402dd39bf-20261119/stage-result.json",
+      "sha256": "a113a2ded63de760bcbba21f867af00f9b63f14891adcf629f7a43eff3c8a043"
+    },
+    {
+      "bytes": 37098,
+      "localPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\ux-unified-20261119\\release-evidence\\stage-manifest.json",
+      "remotePath": "/home/ubuntu/tadazz-mcp-release-d8a402dd39bf-20261119/stage-manifest.json",
+      "sha256": "ed021d65a2663f408a8449afdbefe6a42c9b4159b462f062c81e27fe9dc3e209"
+    },
+    {
+      "bytes": 9918,
+      "localPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\ux-unified-20261119\\release-evidence\\synthetic-smoke-result.json",
+      "remotePath": "/home/ubuntu/tadazz-mcp-release-d8a402dd39bf-20261119/synthetic-smoke-result.json",
+      "sha256": "de38fa3a8814ae1e9b8102e4e7dd1a9c151ea51207ca70c1ebcbec984bd92576"
+    },
+    {
+      "bytes": 5874,
+      "localPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\ux-unified-20261119\\release-evidence\\backup-qualification-result.json",
+      "remotePath": "/home/ubuntu/tadazz-mcp-release-d8a402dd39bf-20261119/backup-qualification-20261119T054131Z-4f3f364d/backup-qualification-result.json",
+      "sha256": "a20d232084af90541c3f09dd3c1c783c2603641686623620ea5af1f33b164a16"
+    },
+    {
+      "bytes": 4308,
+      "localPath": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\ux-unified-20261119\\release-evidence\\deployment-result.json",
+      "remotePath": "/home/ubuntu/tadazz-mcp-release-d8a402dd39bf-20261119/deployment-20261119T060535Z-1c1a5275/deployment-result.json",
+      "sha256": "4fa6685362ca67086f57a71155e049ab0a9e0f531239231de9cdae0ca87bc673"
+    }
+  ],
+  "format": "tadazz-public-release-evidence-retrieval",
+  "privateFilesRead": false,
+  "productionChanged": false,
+  "releaseDir": "/home/ubuntu/tadazz-mcp-release-d8a402dd39bf-20261119",
+  "sourceRun": "tadazz-codex-d8a402dd39bf-eb615ffd",
+  "sourceSha": "d8a402dd39bf3cd7e5b046c3bf3b955181815a62",
+  "version": 1
+}

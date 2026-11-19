@@ -1,0 +1,27 @@
+{
+  "format": "tadazz-theme-worker-phase3-r2-execution",
+  "startedAt": "2026-11-19T16:13:50.261457+00:00",
+  "finishedAt": "2026-11-19T16:14:04.309369+00:00",
+  "exit": 0,
+  "helperStillRunning": false,
+  "pid": 1752491,
+  "helperSha256": "355d7f3fe46f54b1eed27e9cc9c2deb21c310318694e2e82a9e675ceedb13a84",
+  "admissionSha256": "99f9145b6bbb190e71e4e8a6a005c890fb874368ff664b82ead77c53bb56372b",
+  "reviewSha256": "67517e122b80bd30ebe5f54ca01d4b4632b4b0bee7c6eb5af1327bb8d3aa0114",
+  "stdout": "{\"status\": \"PASS\", \"receipt\": \"/home/ubuntu/tadazz-theme-worker-ux-followup-20261119/evidence/phase3-timer-4ef04ef7-r2/receipt.json\", \"workerImage\": \"sha256:4ef04ef752c23e5360399880f1bcf4c79c0f48900c9597bcaa68da8aa01d1411\", \"cleanup\": {\"removed\": true, \"tenant\": \"452af5625f3f00dd05982533702d0a98746b2d50294b544854f69399d904fd5e\", \"upload\": \"2692771b-32f8-445e-bf15-1947471fd6b3\"}, \"error\": null, \"rollback\": null}\n",
+  "stderr": "",
+  "retrievedFiles": {
+    "receipt.json": {
+      "sha256": "e9303029460cf83e7667d7bb0fcbe9748d061c64d0ab6b58c34e1a68af934e2f",
+      "bytes": 8958
+    },
+    "result.json": {
+      "sha256": "9f4d6ec7dd8a1fd166f57c1d7bcb2598ab876840ae2a825cd4c576b94d7455c8",
+      "bytes": 242
+    },
+    "bundle.json": {
+      "sha256": "a789c772a2ba73788ce9548568a72b017a37236a5d4efd3c5d24b088e4acade6",
+      "bytes": 752963
+    }
+  }
+}

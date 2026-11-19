@@ -1,0 +1,104 @@
+{
+  "format": "tadazz-theme-worker-inputs-v1",
+  "preparedAt": "2026-11-19T14:31:32.577105+00:00",
+  "sourceCandidate": "34568c5c937a51d236a440513adeb9bf93637525",
+  "image": "sha256:aea88c60c29d5160dfe5ae822179da4233ed882c3979b4d592f6cd86902e05c5",
+  "sourcePins": {
+    "extensions/src/testkit/package-fixtures.ts": "01938ea00a01468faac446d68708e49e6bad4397da36fb3afba6b2fc0768ba94",
+    "scripts/qa/package-build-worker.py": "7b591a69dd4aca951cf0f8224670c797696979085ae23c01d596ab99159d60d6",
+    "extensions/qa/package-builder.ts": "c62db06ab3dd72d3f55367bc6cff333270f903428ed609ab6c3fb1b6c81c3848",
+    "extensions/qa/package-media-probe.ts": "a72c916e9d8c12f1fa05f08fbbb9ab560da2898ff1ffc231e48b687426a0a100",
+    "extensions/src/presentation/package-runtime/sdk.tsx": "81ce066754d5c8211fdc436f1d1782856f5a9f982357ac681ecf0df085804b62",
+    "pnpm-lock.yaml": "3800f044abe28ace4d0480508ab3f081a1b20c5ff5dbd9e6153c5952b49e5952"
+  },
+  "fixtureGeneratorChanges": "Only module and generated-video paths rebased; reverse replacement equals the pinned source.",
+  "jobPath": "store/12b78d1c4abc50f53ebe86ac4a54af341418496cdb57d46d22766e6cced9619f/jobs/c4b4548a-b81f-4985-9b87-e5017e95439d",
+  "archiveSha256": "2d64baabbafa9dd12f07be4a97422167437f2d815b6363a62ec34e9de7eace4d",
+  "expectedCompiledThemeIds": [
+    "fixture-arcade"
+  ],
+  "fixture": {
+    "format": "tadazz-theme-worker-synthetic-fixture",
+    "tenant": "12b78d1c4abc50f53ebe86ac4a54af341418496cdb57d46d22766e6cced9619f",
+    "uploadId": "c4b4548a-b81f-4985-9b87-e5017e95439d",
+    "kind": "complete",
+    "style": "arcade",
+    "sourceDigest": "2d64baabbafa9dd12f07be4a97422167437f2d815b6363a62ec34e9de7eace4d",
+    "archiveBytes": 520223,
+    "packageId": "fixture-complete-arcade",
+    "packageVersion": "1.0.0",
+    "contents": [
+      {
+        "kind": "sandboxed-react-theme",
+        "id": "fixture-arcade",
+        "path": "theme/theme.json",
+        "demo": false
+      },
+      {
+        "kind": "game",
+        "id": "demo-game-1",
+        "path": "games/game-1.json",
+        "themeRef": "fixture-arcade@1.0.0",
+        "demo": false
+      },
+      {
+        "kind": "game",
+        "id": "demo-game-2",
+        "path": "games/game-2.json",
+        "themeRef": "fixture-arcade@1.0.0",
+        "demo": false
+      }
+    ],
+    "compiledThemes": [
+      {
+        "id": "fixture-arcade",
+        "entry": "theme/src/entry.tsx"
+      }
+    ],
+    "fileKinds": {
+      "image": 51,
+      "audio": 1,
+      "video": 1,
+      "lottie": 1,
+      "source": 1,
+      "style": 1,
+      "descriptor": 3
+    },
+    "generatedOnly": true,
+    "customerData": false,
+    "sourceCodeExecuted": false
+  },
+  "files": {
+    "fixture-generator.ts": {
+      "sha256": "6aeebf36784ed24e3795168543c23baf81be560eb8e078b375a39c0b0c580db9",
+      "bytes": 15037
+    },
+    "fixture-summary.json": {
+      "sha256": "3f86484d325a850dc1e30f46a81125cf1a9d859b5d46923ecfdbe3eb9d7f4b50",
+      "bytes": 1218
+    },
+    "generated-video.mp4": {
+      "sha256": "8e94de92d8154dc3d1daff31048698dfde212ff42eb2ce2c6ea2e76bc1f5e295",
+      "bytes": 1736
+    },
+    "original-package-build-worker.py": {
+      "sha256": "7b591a69dd4aca951cf0f8224670c797696979085ae23c01d596ab99159d60d6",
+      "bytes": 3325
+    },
+    "prepare-fixture.mts": {
+      "sha256": "6215017213daa873392a94ba91a8ee1583816c49f5821153113f966320830ff9",
+      "bytes": 1911
+    },
+    "store/12b78d1c4abc50f53ebe86ac4a54af341418496cdb57d46d22766e6cced9619f/jobs/c4b4548a-b81f-4985-9b87-e5017e95439d/request.json": {
+      "sha256": "ceb306b5f31639294e11804dea4a8ddd49ba12c2c28739fddc9c53e5ed72411b",
+      "bytes": 241
+    },
+    "store/12b78d1c4abc50f53ebe86ac4a54af341418496cdb57d46d22766e6cced9619f/jobs/c4b4548a-b81f-4985-9b87-e5017e95439d/source.tadazz": {
+      "sha256": "2d64baabbafa9dd12f07be4a97422167437f2d815b6363a62ec34e9de7eace4d",
+      "bytes": 520223
+    }
+  },
+  "productionMutation": false,
+  "linuxWorkerExecuted": false,
+  "credentialsUsedForFixture": false
+}

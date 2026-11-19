@@ -1,0 +1,1177 @@
+{
+  "passed": true,
+  "checks": [
+    "Actual question and answer edits update the native stage",
+    "Bounded canvas and controls 1440x900",
+    "Bounded canvas and controls 1024x768",
+    "Bounded canvas and controls 768x768",
+    "Bounded canvas and controls 390x844",
+    "Bounded canvas and controls 320x640",
+    "Bounded canvas and controls 844x390",
+    "Compact editor preserves edits across drawers and focus wraps inside drawer",
+    "Media library opens above its drawer and closes back to editing",
+    "Timeline adds a real second question and a scene without losing the first",
+    "Changing the actual theme updates the editor backdrop",
+    "RTL native editor remains bounded and drawers are reachable"
+  ],
+  "errors": [],
+  "httpErrors": [
+    {
+      "status": 404,
+      "path": "/branding/theme.json"
+    },
+    {
+      "status": 404,
+      "path": "/branding/theme.json"
+    },
+    {
+      "status": 404,
+      "path": "/api/themes/catalog"
+    },
+    {
+      "status": 404,
+      "path": "/api/themes/catalog"
+    },
+    {
+      "status": 404,
+      "path": "/branding/theme.json"
+    },
+    {
+      "status": 404,
+      "path": "/api/themes/catalog"
+    },
+    {
+      "status": 404,
+      "path": "/api/themes/catalog"
+    }
+  ],
+  "metrics": [
+    {
+      "label": "question",
+      "width": 1440,
+      "height": 900,
+      "aspect": "16:9",
+      "document": {
+        "width": 1440,
+        "height": 900,
+        "bodyWidth": 1440,
+        "bodyHeight": 900
+      },
+      "shell": {
+        "top": 0,
+        "bottom": 900,
+        "left": 0,
+        "right": 1440,
+        "width": 1440,
+        "height": 900
+      },
+      "workspace": {
+        "top": 101,
+        "bottom": 900,
+        "left": 0,
+        "right": 1440,
+        "width": 1440,
+        "height": 799
+      },
+      "frame": {
+        "top": 171,
+        "bottom": 846,
+        "left": 296,
+        "right": 1044,
+        "width": 748,
+        "height": 675
+      },
+      "stage": {
+        "top": 298.125,
+        "bottom": 718.875,
+        "left": 296,
+        "right": 1044,
+        "width": 748,
+        "height": 420.75
+      },
+      "viewport": {
+        "top": 298.125,
+        "bottom": 718.875,
+        "left": 296,
+        "right": 1044,
+        "width": 748,
+        "height": 420.75
+      },
+      "layout": "wide",
+      "direction": "ltr"
+    },
+    {
+      "label": "question",
+      "width": 1440,
+      "height": 900,
+      "aspect": "4:3",
+      "document": {
+        "width": 1440,
+        "height": 900,
+        "bodyWidth": 1440,
+        "bodyHeight": 900
+      },
+      "shell": {
+        "top": 0,
+        "bottom": 900,
+        "left": 0,
+        "right": 1440,
+        "width": 1440,
+        "height": 900
+      },
+      "workspace": {
+        "top": 101,
+        "bottom": 900,
+        "left": 0,
+        "right": 1440,
+        "width": 1440,
+        "height": 799
+      },
+      "frame": {
+        "top": 171,
+        "bottom": 846,
+        "left": 296,
+        "right": 1044,
+        "width": 748,
+        "height": 675
+      },
+      "stage": {
+        "top": 228,
+        "bottom": 789,
+        "left": 296,
+        "right": 1044,
+        "width": 748,
+        "height": 561
+      },
+      "viewport": {
+        "top": 228,
+        "bottom": 789,
+        "left": 296,
+        "right": 1044,
+        "width": 748,
+        "height": 561
+      },
+      "layout": "wide",
+      "direction": "ltr"
+    },
+    {
+      "label": "participants-tab",
+      "width": 1440,
+      "height": 900,
+      "document": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "label": "settings-tab",
+      "width": 1440,
+      "height": 900,
+      "document": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "label": "launch-tab",
+      "width": 1440,
+      "height": 900,
+      "document": {
+        "width": 1440,
+        "height": 900
+      }
+    },
+    {
+      "label": "question",
+      "width": 1024,
+      "height": 768,
+      "aspect": "16:9",
+      "document": {
+        "width": 1024,
+        "height": 768,
+        "bodyWidth": 1024,
+        "bodyHeight": 768
+      },
+      "shell": {
+        "top": 0,
+        "bottom": 768,
+        "left": 0,
+        "right": 1024,
+        "width": 1024,
+        "height": 768
+      },
+      "workspace": {
+        "top": 95,
+        "bottom": 768,
+        "left": 0,
+        "right": 1024,
+        "width": 1024,
+        "height": 673
+      },
+      "frame": {
+        "top": 161.28125,
+        "bottom": 717.71875,
+        "left": 60.28125,
+        "right": 963.71875,
+        "width": 903.4375,
+        "height": 556.4375
+      },
+      "stage": {
+        "top": 185.53125,
+        "bottom": 693.46875,
+        "left": 60.5,
+        "right": 963.5,
+        "width": 903,
+        "height": 507.9375
+      },
+      "viewport": {
+        "top": 185.53125,
+        "bottom": 693.46875,
+        "left": 60.5,
+        "right": 963.5,
+        "width": 903,
+        "height": 507.9375
+      },
+      "layout": "compact",
+      "direction": "ltr"
+    },
+    {
+      "label": "question",
+      "width": 1024,
+      "height": 768,
+      "aspect": "4:3",
+      "document": {
+        "width": 1024,
+        "height": 768,
+        "bodyWidth": 1024,
+        "bodyHeight": 768
+      },
+      "shell": {
+        "top": 0,
+        "bottom": 768,
+        "left": 0,
+        "right": 1024,
+        "width": 1024,
+        "height": 768
+      },
+      "workspace": {
+        "top": 95,
+        "bottom": 768,
+        "left": 0,
+        "right": 1024,
+        "width": 1024,
+        "height": 673
+      },
+      "frame": {
+        "top": 161.28125,
+        "bottom": 717.71875,
+        "left": 60.28125,
+        "right": 963.71875,
+        "width": 903.4375,
+        "height": 556.4375
+      },
+      "stage": {
+        "top": 161.5,
+        "bottom": 717.5,
+        "left": 141.328125,
+        "right": 882.65625,
+        "width": 741.328125,
+        "height": 556
+      },
+      "viewport": {
+        "top": 161.5,
+        "bottom": 717.484375,
+        "left": 141.328125,
+        "right": 882.65625,
+        "width": 741.328125,
+        "height": 555.984375
+      },
+      "layout": "compact",
+      "direction": "ltr"
+    },
+    {
+      "label": "participants-tab",
+      "width": 1024,
+      "height": 768,
+      "document": {
+        "width": 1024,
+        "height": 768
+      }
+    },
+    {
+      "label": "settings-tab",
+      "width": 1024,
+      "height": 768,
+      "document": {
+        "width": 1024,
+        "height": 768
+      }
+    },
+    {
+      "label": "launch-tab",
+      "width": 1024,
+      "height": 768,
+      "document": {
+        "width": 1024,
+        "height": 768
+      }
+    },
+    {
+      "label": "question",
+      "width": 768,
+      "height": 768,
+      "aspect": "16:9",
+      "document": {
+        "width": 768,
+        "height": 768,
+        "bodyWidth": 768,
+        "bodyHeight": 768
+      },
+      "shell": {
+        "top": 0,
+        "bottom": 768,
+        "left": 0,
+        "right": 768,
+        "width": 768,
+        "height": 768
+      },
+      "workspace": {
+        "top": 95,
+        "bottom": 768,
+        "left": 0,
+        "right": 768,
+        "width": 768,
+        "height": 673
+      },
+      "frame": {
+        "top": 158.203125,
+        "bottom": 720.796875,
+        "left": 57.203125,
+        "right": 710.796875,
+        "width": 653.59375,
+        "height": 562.59375
+      },
+      "stage": {
+        "top": 255.5625,
+        "bottom": 623.4375,
+        "left": 57.203125,
+        "right": 710.796875,
+        "width": 653.59375,
+        "height": 367.875
+      },
+      "viewport": {
+        "top": 255.5625,
+        "bottom": 623.203125,
+        "left": 57.203125,
+        "right": 710.796875,
+        "width": 653.59375,
+        "height": 367.640625
+      },
+      "layout": "compact",
+      "direction": "ltr"
+    },
+    {
+      "label": "question",
+      "width": 768,
+      "height": 768,
+      "aspect": "4:3",
+      "document": {
+        "width": 768,
+        "height": 768,
+        "bodyWidth": 768,
+        "bodyHeight": 768
+      },
+      "shell": {
+        "top": 0,
+        "bottom": 768,
+        "left": 0,
+        "right": 768,
+        "width": 768,
+        "height": 768
+      },
+      "workspace": {
+        "top": 95,
+        "bottom": 768,
+        "left": 0,
+        "right": 768,
+        "width": 768,
+        "height": 673
+      },
+      "frame": {
+        "top": 158.203125,
+        "bottom": 720.796875,
+        "left": 57.203125,
+        "right": 710.796875,
+        "width": 653.59375,
+        "height": 562.59375
+      },
+      "stage": {
+        "top": 194.25,
+        "bottom": 684.75,
+        "left": 57.203125,
+        "right": 710.796875,
+        "width": 653.59375,
+        "height": 490.5
+      },
+      "viewport": {
+        "top": 194.25,
+        "bottom": 684.4375,
+        "left": 57.203125,
+        "right": 710.796875,
+        "width": 653.59375,
+        "height": 490.1875
+      },
+      "layout": "compact",
+      "direction": "ltr"
+    },
+    {
+      "label": "participants-tab",
+      "width": 768,
+      "height": 768,
+      "document": {
+        "width": 768,
+        "height": 768
+      }
+    },
+    {
+      "label": "settings-tab",
+      "width": 768,
+      "height": 768,
+      "document": {
+        "width": 768,
+        "height": 768
+      }
+    },
+    {
+      "label": "launch-tab",
+      "width": 768,
+      "height": 768,
+      "document": {
+        "width": 768,
+        "height": 768
+      }
+    },
+    {
+      "label": "question",
+      "width": 390,
+      "height": 844,
+      "aspect": "16:9",
+      "document": {
+        "width": 390,
+        "height": 844,
+        "bodyWidth": 390,
+        "bodyHeight": 844
+      },
+      "shell": {
+        "top": 0,
+        "bottom": 844,
+        "left": 0,
+        "right": 390,
+        "width": 390,
+        "height": 844
+      },
+      "workspace": {
+        "top": 95,
+        "bottom": 844,
+        "left": 0,
+        "right": 390,
+        "width": 390,
+        "height": 749
+      },
+      "frame": {
+        "top": 195,
+        "bottom": 800,
+        "left": 54,
+        "right": 336,
+        "width": 282,
+        "height": 605
+      },
+      "stage": {
+        "top": 418.1875,
+        "bottom": 576.8125,
+        "left": 54,
+        "right": 336,
+        "width": 282,
+        "height": 158.625
+      },
+      "viewport": {
+        "top": 418.1875,
+        "bottom": 576.8125,
+        "left": 54,
+        "right": 336,
+        "width": 282,
+        "height": 158.625
+      },
+      "layout": "compact",
+      "direction": "ltr"
+    },
+    {
+      "label": "all-preview-controls-visible",
+      "width": 282,
+      "height": 844,
+      "aspect": "16:9",
+      "scrollWidth": 282,
+      "bounds": {
+        "left": 54,
+        "right": 336,
+        "top": 101,
+        "bottom": 189
+      },
+      "buttons": [
+        {
+          "id": "question-preview-phase-question",
+          "left": 60,
+          "right": 124.578125,
+          "top": 107,
+          "bottom": 139
+        },
+        {
+          "id": "question-preview-phase-answers",
+          "left": 126.578125,
+          "right": 189.21875,
+          "top": 107,
+          "bottom": 139
+        },
+        {
+          "id": "question-preview-phase-results",
+          "left": 191.21875,
+          "right": 247.90625,
+          "top": 107,
+          "bottom": 139
+        },
+        {
+          "id": "question-preview-aspect-16-9",
+          "left": 60,
+          "right": 98.328125,
+          "top": 149,
+          "bottom": 185
+        },
+        {
+          "id": "question-preview-aspect-4-3",
+          "left": 100.328125,
+          "right": 133.875,
+          "top": 149,
+          "bottom": 185
+        }
+      ]
+    },
+    {
+      "label": "question",
+      "width": 390,
+      "height": 844,
+      "aspect": "4:3",
+      "document": {
+        "width": 390,
+        "height": 844,
+        "bodyWidth": 390,
+        "bodyHeight": 844
+      },
+      "shell": {
+        "top": 0,
+        "bottom": 844,
+        "left": 0,
+        "right": 390,
+        "width": 390,
+        "height": 844
+      },
+      "workspace": {
+        "top": 95,
+        "bottom": 844,
+        "left": 0,
+        "right": 390,
+        "width": 390,
+        "height": 749
+      },
+      "frame": {
+        "top": 195,
+        "bottom": 800,
+        "left": 54,
+        "right": 336,
+        "width": 282,
+        "height": 605
+      },
+      "stage": {
+        "top": 391.75,
+        "bottom": 603.25,
+        "left": 54,
+        "right": 336,
+        "width": 282,
+        "height": 211.5
+      },
+      "viewport": {
+        "top": 391.75,
+        "bottom": 603.25,
+        "left": 54,
+        "right": 336,
+        "width": 282,
+        "height": 211.5
+      },
+      "layout": "compact",
+      "direction": "ltr"
+    },
+    {
+      "label": "all-preview-controls-visible",
+      "width": 282,
+      "height": 844,
+      "aspect": "4:3",
+      "scrollWidth": 282,
+      "bounds": {
+        "left": 54,
+        "right": 336,
+        "top": 101,
+        "bottom": 189
+      },
+      "buttons": [
+        {
+          "id": "question-preview-phase-question",
+          "left": 60,
+          "right": 124.578125,
+          "top": 107,
+          "bottom": 139
+        },
+        {
+          "id": "question-preview-phase-answers",
+          "left": 126.578125,
+          "right": 189.21875,
+          "top": 107,
+          "bottom": 139
+        },
+        {
+          "id": "question-preview-phase-results",
+          "left": 191.21875,
+          "right": 247.90625,
+          "top": 107,
+          "bottom": 139
+        },
+        {
+          "id": "question-preview-aspect-16-9",
+          "left": 60,
+          "right": 98.328125,
+          "top": 149,
+          "bottom": 185
+        },
+        {
+          "id": "question-preview-aspect-4-3",
+          "left": 100.328125,
+          "right": 133.875,
+          "top": 149,
+          "bottom": 185
+        }
+      ]
+    },
+    {
+      "label": "participants-tab",
+      "width": 390,
+      "height": 844,
+      "document": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "label": "settings-tab",
+      "width": 390,
+      "height": 844,
+      "document": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "label": "launch-tab",
+      "width": 390,
+      "height": 844,
+      "document": {
+        "width": 390,
+        "height": 844
+      }
+    },
+    {
+      "label": "question",
+      "width": 320,
+      "height": 640,
+      "aspect": "16:9",
+      "document": {
+        "width": 320,
+        "height": 640,
+        "bodyWidth": 320,
+        "bodyHeight": 640
+      },
+      "shell": {
+        "top": 0,
+        "bottom": 640,
+        "left": 0,
+        "right": 320,
+        "width": 320,
+        "height": 640
+      },
+      "workspace": {
+        "top": 95,
+        "bottom": 640,
+        "left": 0,
+        "right": 320,
+        "width": 320,
+        "height": 545
+      },
+      "frame": {
+        "top": 195,
+        "bottom": 596,
+        "left": 54,
+        "right": 266,
+        "width": 212,
+        "height": 401
+      },
+      "stage": {
+        "top": 335.875,
+        "bottom": 455.125,
+        "left": 54,
+        "right": 266,
+        "width": 212,
+        "height": 119.25
+      },
+      "viewport": {
+        "top": 335.875,
+        "bottom": 455.125,
+        "left": 54,
+        "right": 266,
+        "width": 212,
+        "height": 119.25
+      },
+      "layout": "compact",
+      "direction": "ltr"
+    },
+    {
+      "label": "all-preview-controls-visible",
+      "width": 212,
+      "height": 640,
+      "aspect": "16:9",
+      "scrollWidth": 212,
+      "bounds": {
+        "left": 54,
+        "right": 266,
+        "top": 101,
+        "bottom": 189
+      },
+      "buttons": [
+        {
+          "id": "question-preview-phase-question",
+          "left": 60,
+          "right": 124.578125,
+          "top": 107,
+          "bottom": 139
+        },
+        {
+          "id": "question-preview-phase-answers",
+          "left": 126.578125,
+          "right": 189.21875,
+          "top": 107,
+          "bottom": 139
+        },
+        {
+          "id": "question-preview-phase-results",
+          "left": 191.21875,
+          "right": 247.90625,
+          "top": 107,
+          "bottom": 139
+        },
+        {
+          "id": "question-preview-aspect-16-9",
+          "left": 60,
+          "right": 98.328125,
+          "top": 149,
+          "bottom": 185
+        },
+        {
+          "id": "question-preview-aspect-4-3",
+          "left": 100.328125,
+          "right": 133.875,
+          "top": 149,
+          "bottom": 185
+        }
+      ]
+    },
+    {
+      "label": "question",
+      "width": 320,
+      "height": 640,
+      "aspect": "4:3",
+      "document": {
+        "width": 320,
+        "height": 640,
+        "bodyWidth": 320,
+        "bodyHeight": 640
+      },
+      "shell": {
+        "top": 0,
+        "bottom": 640,
+        "left": 0,
+        "right": 320,
+        "width": 320,
+        "height": 640
+      },
+      "workspace": {
+        "top": 95,
+        "bottom": 640,
+        "left": 0,
+        "right": 320,
+        "width": 320,
+        "height": 545
+      },
+      "frame": {
+        "top": 195,
+        "bottom": 596,
+        "left": 54,
+        "right": 266,
+        "width": 212,
+        "height": 401
+      },
+      "stage": {
+        "top": 316,
+        "bottom": 475,
+        "left": 54,
+        "right": 266,
+        "width": 212,
+        "height": 159
+      },
+      "viewport": {
+        "top": 316,
+        "bottom": 475,
+        "left": 54,
+        "right": 266,
+        "width": 212,
+        "height": 159
+      },
+      "layout": "compact",
+      "direction": "ltr"
+    },
+    {
+      "label": "all-preview-controls-visible",
+      "width": 212,
+      "height": 640,
+      "aspect": "4:3",
+      "scrollWidth": 212,
+      "bounds": {
+        "left": 54,
+        "right": 266,
+        "top": 101,
+        "bottom": 189
+      },
+      "buttons": [
+        {
+          "id": "question-preview-phase-question",
+          "left": 60,
+          "right": 124.578125,
+          "top": 107,
+          "bottom": 139
+        },
+        {
+          "id": "question-preview-phase-answers",
+          "left": 126.578125,
+          "right": 189.21875,
+          "top": 107,
+          "bottom": 139
+        },
+        {
+          "id": "question-preview-phase-results",
+          "left": 191.21875,
+          "right": 247.90625,
+          "top": 107,
+          "bottom": 139
+        },
+        {
+          "id": "question-preview-aspect-16-9",
+          "left": 60,
+          "right": 98.328125,
+          "top": 149,
+          "bottom": 185
+        },
+        {
+          "id": "question-preview-aspect-4-3",
+          "left": 100.328125,
+          "right": 133.875,
+          "top": 149,
+          "bottom": 185
+        }
+      ]
+    },
+    {
+      "label": "participants-tab",
+      "width": 320,
+      "height": 640,
+      "document": {
+        "width": 320,
+        "height": 640
+      }
+    },
+    {
+      "label": "settings-tab",
+      "width": 320,
+      "height": 640,
+      "document": {
+        "width": 320,
+        "height": 640
+      }
+    },
+    {
+      "label": "launch-tab",
+      "width": 320,
+      "height": 640,
+      "document": {
+        "width": 320,
+        "height": 640
+      }
+    },
+    {
+      "label": "question",
+      "width": 844,
+      "height": 390,
+      "aspect": "16:9",
+      "document": {
+        "width": 844,
+        "height": 390,
+        "bodyWidth": 844,
+        "bodyHeight": 390
+      },
+      "shell": {
+        "top": 0,
+        "bottom": 390,
+        "left": 0,
+        "right": 844,
+        "width": 844,
+        "height": 390
+      },
+      "workspace": {
+        "top": 57,
+        "bottom": 390,
+        "left": 0,
+        "right": 844,
+        "width": 844,
+        "height": 333
+      },
+      "frame": {
+        "top": 121.125,
+        "bottom": 341.875,
+        "left": 58.125,
+        "right": 785.875,
+        "width": 727.75,
+        "height": 220.75
+      },
+      "stage": {
+        "top": 121.125,
+        "bottom": 341.875,
+        "left": 225.5625,
+        "right": 618.4375,
+        "width": 392.875,
+        "height": 220.75
+      },
+      "viewport": {
+        "top": 121.125,
+        "bottom": 342.109375,
+        "left": 225.5625,
+        "right": 618.4375,
+        "width": 392.875,
+        "height": 220.984375
+      },
+      "layout": "compact",
+      "direction": "ltr"
+    },
+    {
+      "label": "question",
+      "width": 844,
+      "height": 390,
+      "aspect": "4:3",
+      "document": {
+        "width": 844,
+        "height": 390,
+        "bodyWidth": 844,
+        "bodyHeight": 390
+      },
+      "shell": {
+        "top": 0,
+        "bottom": 390,
+        "left": 0,
+        "right": 844,
+        "width": 844,
+        "height": 390
+      },
+      "workspace": {
+        "top": 57,
+        "bottom": 390,
+        "left": 0,
+        "right": 844,
+        "width": 844,
+        "height": 333
+      },
+      "frame": {
+        "top": 121.125,
+        "bottom": 341.875,
+        "left": 58.125,
+        "right": 785.875,
+        "width": 727.75,
+        "height": 220.75
+      },
+      "stage": {
+        "top": 121.125,
+        "bottom": 341.875,
+        "left": 274.671875,
+        "right": 569.328125,
+        "width": 294.65625,
+        "height": 220.75
+      },
+      "viewport": {
+        "top": 121.125,
+        "bottom": 342.109375,
+        "left": 274.671875,
+        "right": 569.328125,
+        "width": 294.65625,
+        "height": 220.984375
+      },
+      "layout": "compact",
+      "direction": "ltr"
+    },
+    {
+      "label": "participants-tab",
+      "width": 844,
+      "height": 390,
+      "document": {
+        "width": 844,
+        "height": 390
+      }
+    },
+    {
+      "label": "settings-tab",
+      "width": 844,
+      "height": 390,
+      "document": {
+        "width": 844,
+        "height": 390
+      }
+    },
+    {
+      "label": "launch-tab",
+      "width": 844,
+      "height": 390,
+      "document": {
+        "width": 844,
+        "height": 390
+      }
+    },
+    {
+      "label": "media-dialog-return-focus",
+      "focus": {
+        "tag": "BUTTON",
+        "testId": null,
+        "text": "Media library",
+        "withinDrawer": true
+      }
+    },
+    {
+      "label": "opening-scene",
+      "width": 390,
+      "height": 844,
+      "aspect": "16:9",
+      "document": {
+        "width": 390,
+        "height": 844,
+        "bodyWidth": 390,
+        "bodyHeight": 844
+      },
+      "shell": {
+        "top": 0,
+        "bottom": 844,
+        "left": 0,
+        "right": 390,
+        "width": 390,
+        "height": 844
+      },
+      "workspace": {
+        "top": 95,
+        "bottom": 844,
+        "left": 0,
+        "right": 390,
+        "width": 390,
+        "height": 749
+      },
+      "frame": {
+        "top": 101,
+        "bottom": 838,
+        "left": 54,
+        "right": 336,
+        "width": 282,
+        "height": 737
+      },
+      "stage": {
+        "top": 390.1875,
+        "bottom": 548.8125,
+        "left": 54,
+        "right": 336,
+        "width": 282,
+        "height": 158.625
+      },
+      "viewport": null,
+      "layout": "compact",
+      "direction": "ltr"
+    },
+    {
+      "label": "theme-backdrop-change",
+      "from": "tadazz-classic",
+      "to": "razzia-original",
+      "beforeImage": "url(\"http://127.0.0.1:4371/tadazz-show/motion/backdrop.webp\")",
+      "afterImage": "url(\"http://127.0.0.1:4371/src/assets/background.png\")"
+    },
+    {
+      "label": "rtl-question",
+      "width": 320,
+      "height": 640,
+      "aspect": "16:9",
+      "document": {
+        "width": 320,
+        "height": 640,
+        "bodyWidth": 320,
+        "bodyHeight": 640
+      },
+      "shell": {
+        "top": 0,
+        "bottom": 640,
+        "left": 0,
+        "right": 320,
+        "width": 320,
+        "height": 640
+      },
+      "workspace": {
+        "top": 95,
+        "bottom": 640,
+        "left": 0,
+        "right": 320,
+        "width": 320,
+        "height": 545
+      },
+      "frame": {
+        "top": 195,
+        "bottom": 596,
+        "left": 54,
+        "right": 266,
+        "width": 212,
+        "height": 401
+      },
+      "stage": {
+        "top": 335.875,
+        "bottom": 455.125,
+        "left": 54,
+        "right": 266,
+        "width": 212,
+        "height": 119.25
+      },
+      "viewport": {
+        "top": 335.875,
+        "bottom": 455.125,
+        "left": 54,
+        "right": 266,
+        "width": 212,
+        "height": 119.25
+      },
+      "layout": "compact",
+      "direction": "rtl"
+    }
+  ]
+}

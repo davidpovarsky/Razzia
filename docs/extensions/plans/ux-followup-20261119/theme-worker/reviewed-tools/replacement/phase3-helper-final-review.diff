@@ -1,0 +1,30 @@
+--- activate_and_verify_timer.py reviewed-hardening
++++ activate_and_verify_timer.py final-evidence-checks
+@@ -77,7 +77,10 @@
+         require(time.monotonic()<deadline,"Existing broker remained busy; no running job killed and published inputs retained")
+         time.sleep(1)
+ def timer():
+-    return props(TIMER,["ActiveState","SubState","UnitFileState","LastTriggerUSec","LastTriggerUSecMonotonic"])
++    value=props(TIMER,["ActiveState","SubState","UnitFileState","LastTriggerUSec","LastTriggerUSecMonotonic","Triggers","Unit"])
++    require(value.get("Triggers","").split()==[SERVICE],"Named timer must trigger the reviewed broker service only")
++    if value.get("Unit"):require(value["Unit"]==SERVICE,"Timer target unit mismatch")
++    return value
+ def cache_stopped():
+     require(docker(["container","inspect","--format","{{.State.Status}}",CACHE])=="exited","Original QA cache must remain stopped")
+ def app_binding(admission):
+@@ -265,10 +268,14 @@
+             if changed or current_sha==UNIT_AFTER:
+                 rollback["attempted"]=True
+                 command(["/usr/bin/systemctl","stop",TIMER])
++                require(timer()["ActiveState"]=="inactive","Rollback could not stop future timer triggers")
+                 if current_sha==UNIT_AFTER:replace_unit(original,UNIT_AFTER)
+                 require(sha(regular(UNIT))==UNIT_BEFORE,"Unknown unit mutation; backup retained")
+                 command(["/usr/bin/systemctl","daemon-reload"])
+-                rollback.update({"unitRestored":True,"timerLeftStopped":True,"oldImageStillMissing":True,"serviceState":service()["ActiveState"],"ownedFixtureRetained":created})
++                restored=service()
++                require(restored["image"]==OLD_IMAGE and effective_static(restored)==effective_static(before_service),"Effective prior service properties were not restored")
++                require(timer()["ActiveState"]=="inactive" and sha(regular(UNIT))==UNIT_BEFORE,"Rollback state changed before confirmation")
++                rollback.update({"unitRestored":True,"timerLeftStopped":True,"oldImageStillMissing":True,"serviceState":restored["ActiveState"],"ownedFixtureRetained":created and tenant.exists()})
+             elif stopped:
+                 require(current_sha==UNIT_BEFORE and sha(regular(BROKER))==BROKER_SHA,"Unknown operator change; prior timer will not be restarted")
+                 prior_effective=service()

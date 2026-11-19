@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "helperSha256": "10192d4dbfa3fa0741b8d90fdc4d68f71fadb6c8b91ee4ab0bcafa56c8914062",
+  "singleContainerNameBinding": true,
+  "launchAndFinallyUseSameOwnedName": true,
+  "containerExecuted": false,
+  "guard": "Python AST binding and finally-call verification"
+}

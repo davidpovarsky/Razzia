@@ -1,0 +1,53 @@
+{
+  "verifiedAtUtc": "2026-11-19T14:24:15.466830+00:00",
+  "checks": [
+    {
+      "check": "manual-scope-browser",
+      "command": "node packages/e2e/node_modules/@playwright/test/cli.js test --config work/host-followup-20261119/manual-scope.playwright.config.ts",
+      "exit": 0,
+      "seconds": 48.97,
+      "receipt": "manual-scope-playwright.json",
+      "log": "manual-scope-browser.log",
+      "jobId": "job_07d891f2ec30"
+    },
+    {
+      "check": "manual-scope-lint",
+      "command": "node node_modules/oxlint/bin/oxlint extensions/src/presentation/audio-cue-player.tsx packages/web/src/features/game/components/tadazz-show/TadazzShowView.tsx extensions/src/presentation/host-audio-scope.test-fixture.tsx packages/e2e/tests/host-followup.spec.ts",
+      "exit": 0,
+      "seconds": 3.33,
+      "warnings": 0,
+      "errors": 0,
+      "log": "manual-scope-lint.log",
+      "jobId": "job_07d891f2ec30"
+    },
+    {
+      "check": "manual-scope-extension-types",
+      "command": "node node_modules/typescript/bin/tsc --noEmit --project extensions/tsconfig.json",
+      "exit": 0,
+      "seconds": 5.36,
+      "log": "manual-scope-extension-types.log",
+      "jobId": "job_07d891f2ec30"
+    },
+    {
+      "check": "manual-scope-web-types",
+      "command": "node node_modules/typescript/bin/tsc --noEmit --project packages/web/tsconfig.app.json",
+      "exit": 0,
+      "seconds": 4.45,
+      "log": "manual-scope-web-types.log",
+      "jobId": "job_06d6a5dcc14a"
+    }
+  ],
+  "portsClosed": {
+    "3260": true,
+    "3261": true
+  },
+  "sourceFilesFrozen": true,
+  "gitOperationsPerformed": false,
+  "productionActionsPerformed": false,
+  "sourceSha256": {
+    "extensions/src/presentation/audio-cue-player.tsx": "b3f7923282179e208bb7831aae77a9c9320ce42fc8e40c11ab412af162733c0f",
+    "packages/web/src/features/game/components/tadazz-show/TadazzShowView.tsx": "5b91181012406a7365fbb427240820ccf149bdb39c781ade0f35eafbbaed0198",
+    "packages/e2e/tests/host-followup.spec.ts": "0b2190a7d80acd0490f0f6186e39cf8d54ab951fde3e21ae196366a406c9407a",
+    "extensions/src/presentation/host-audio-scope.test-fixture.tsx": "346d8f5655d2318cdeecd36138cb7746988b6d5fb987e9bbe47a769ae1683771"
+  }
+}

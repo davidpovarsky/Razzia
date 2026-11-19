@@ -1,0 +1,13 @@
+{
+  "status": "TRANSFER_VERIFIED",
+  "archiveSha256": "1c67849778863b12fec0c3fd4f922be1267920ba0b8c70d2140abb65596e6fd3",
+  "fileCount": 101,
+  "reviewSha256": "7fe2500694af6c795c2c733399109020879520b2eddba0c3d718df90f399ba44",
+  "cacheStatus": "exited",
+  "namespace": "/home/ubuntu/tadazz-theme-worker-ux-followup-20261119",
+  "imageBuilt": false,
+  "containerStarted": false,
+  "serviceChanged": false,
+  "productionStoreAccessed": false,
+  "observedAt": "2026-11-19T15:21:27.005979+00:00"
+}

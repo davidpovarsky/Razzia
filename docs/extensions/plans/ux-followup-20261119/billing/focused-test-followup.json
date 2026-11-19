@@ -1,0 +1,15 @@
+{
+  "at": "2026-11-19T13:48:53.602958+00:00",
+  "results": [
+    {
+      "name": "format-followup",
+      "exit": 0,
+      "tail": "packages/socket/src/api/billing.test.ts 152ms\nextensions/qa/billing-public-server.ts 45ms\n"
+    },
+    {
+      "name": "billing-http-followup",
+      "exit": 0,
+      "tail": "\n\u001b[1m\u001b[30m\u001b[46m RUN \u001b[49m\u001b[39m\u001b[22m \u001b[36mv5.0.3 \u001b[39m\u001b[90mC:/Users/DAVID/Code/Razzia-worktrees/tadazz-ux-unified-20261119\u001b[39m\n\n \u001b[32m\u2713\u001b[39m \u001b[30m\u001b[43m socket \u001b[49m\u001b[39m packages/socket/src/api/extensions/billing-public.test.ts \u001b[2m(\u001b[22m\u001b[2m4 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[32m 29\u001b[2mms\u001b[22m\u001b[39m\n \u001b[32m\u2713\u001b[39m \u001b[30m\u001b[43m socket \u001b[49m\u001b[39m packages/socket/src/api/billing.test.ts \u001b[2m(\u001b[22m\u001b[2m5 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[33m 379\u001b[2mms\u001b[22m\u001b[39m\n\n\u001b[2m Test Files \u001b[22m \u001b[1m\u001b[32m2 passed\u001b[39m\u001b[22m\u001b[90m (2)\u001b[39m\n\u001b[2m      Tests \u001b[22m \u001b[1m\u001b[32m9 passed\u001b[39m\u001b[22m\u001b[90m (9)\u001b[39m\n\u001b[2m   Start at \u001b[22m 15:48:48\n\u001b[2m   Duration \u001b[22m 5.26s\u001b[2m (import 57%, transform 38%, tests 5%)\u001b[22m\n\n\u001b[2m  Transform \u001b[22m \u001b[30m\u001b[43m socket \u001b[49m\u001b[39m \u001b[33mtransforming modules took 3.42s\u001b[39m\u001b[2m \u00b7 38% of tracked time, re-done on every run\u001b[22m\n\u001b[2m            \u001b[22m \u001b[2mpersist transforms across runs with \u001b[22m\u001b[33mfsModuleCache: true\u001b[39m\n\u001b[2m            \u001b[22m \u001b[2mlearn more: https://vitest.dev/guide/improving-performance#caching-between-reruns\u001b[22m\n\n"
+    }
+  ]
+}

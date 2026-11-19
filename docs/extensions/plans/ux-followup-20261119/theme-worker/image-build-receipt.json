@@ -1,0 +1,32 @@
+{
+  "status": "BUILT_NOT_ACTIVATED",
+  "imageId": "sha256:4ef04ef752c23e5360399880f1bcf4c79c0f48900c9597bcaa68da8aa01d1411",
+  "baseImage": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+  "tag": "tadazz:package-builder-ux-followup-20261119",
+  "contextManifestSha256": "8873df14cdff05994fae0d3e67d8401de58f52a7fc6fb3866056240907d8962b",
+  "sourceManifestSha256": "751fa33e6591657fa40d14f99eb0f6eca775787e7ff5f0b18989bb69c73a89dd",
+  "verifierSha256": "18e47aa70d824c306713c0aeba199d400c0a6f1f191944b1c1d8097dd87ec22f",
+  "baseLayersRetained": true,
+  "sourceFiles": 82,
+  "buildNetwork": "none",
+  "dependencyInstall": false,
+  "runInstructions": false,
+  "mutableCacheBindUsed": false,
+  "serviceChanged": false,
+  "timerChanged": false,
+  "asanaTaskId": "1220708526935641",
+  "builtAt": "2026-11-19T15:23:35.423306+00:00",
+  "command": [
+    "/usr/bin/docker",
+    "build",
+    "--pull=false",
+    "--network=none",
+    "--no-cache",
+    "--rm",
+    "--tag",
+    "tadazz:package-builder-ux-followup-20261119",
+    "--file",
+    "/home/ubuntu/tadazz-theme-worker-ux-followup-20261119/inputs/replacement/context/Dockerfile",
+    "/home/ubuntu/tadazz-theme-worker-ux-followup-20261119/inputs/replacement/context"
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "kind": "installed-connector-post-deploy-smoke",
+  "status": "PASS",
+  "applicationSourceSha": "34568c5c937a51d236a440513adeb9bf93637525",
+  "applicationImage": "sha256:56de89dd9ca496595980af84a7187b49fbff8c0cb563c3393c269d2b7c09d82a",
+  "applicationContainer": "090d26a2fe7dd98a43226288932b7387bb9ec847cee5e5e2ff6ef48b6444bf40",
+  "serverIdentityEvidence": "deployment-deploy-execution.json",
+  "toolResponseContainsSourceSha": false,
+  "syntheticDraftId": "lfs8KwrER5ZophXvZ2Zc94B8pNw3_q3H",
+  "draftRevision": 1,
+  "beforeDeploymentCorrelationId": "dda27f8e-7296-481b-9c48-744534720ecb",
+  "afterDeploymentCorrelationId": "5289fb67-e082-41e7-85cd-ae7896738b59",
+  "canonicalDraftUnchanged": true,
+  "questionRefsUnchanged": true,
+  "draftSummary": {
+    "title": "Tadazz release verification (QA)",
+    "cardCount": 1,
+    "questionCount": 1,
+    "themeId": "tadazz-classic",
+    "themeVersion": "1.0.0",
+    "diagnostics": []
+  },
+  "previewCorrelationId": "40e905a9-bf6e-4720-ae5c-2c68c02be4d9",
+  "preview": {
+    "draftId": "lfs8KwrER5ZophXvZ2Zc94B8pNw3_q3H",
+    "revision": 1,
+    "title": "Tadazz release verification (QA)",
+    "selectedChapterId": "preview-card-a5e4ec3e86801c722ceb7b6937607f69d773ad9474ca8c0503aa45be871764f2:question",
+    "chapterCount": 5,
+    "frameDigest": "22f588e95938dccec0a140fac34105ea24da837e77f3b62b38d8239481e0559f"
+  },
+  "previewContext": {
+    "mode": "demo",
+    "role": "spectator",
+    "locale": "en",
+    "reducedMotion": false,
+    "join": "unavailable-demo",
+    "actions": "synthetic-only"
+  },
+  "newDraftCreated": false,
+  "librarySavePerformed": false,
+  "liveRoomCreated": false,
+  "realVotesSubmitted": false,
+  "customerGameChanged": false,
+  "hostRenderedVisuallyVerified": false,
+  "claimLimit": "Actual installed get_game_draft and preview_show calls succeeded; the ChatGPT-hosted widget was not visually inspected.",
+  "observedAt": "2026-11-19T15:37:57.370718+00:00",
+  "canonicalAuthoredShowSha256": "84668574e1e939b5b8c1ae864c5f0388fb54ebb5b5c978b80a56292bbf7d1911"
+}

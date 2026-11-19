@@ -1,0 +1,15 @@
+{
+  "backendSha256": "0dc4df7ee63129162c83b31de04c71b672c6192a80f6c56e8b4e7803041f3556",
+  "customerMountUsed": false,
+  "image": "tadazz:mcp-d8a402dd39bf-20261119",
+  "imageId": "sha256:ca3717033dc0206e3b64f697e74b344637eb3b197f9910c1018c74e8b22c2001",
+  "ok": true,
+  "payloadFiles": 207,
+  "productionTouched": false,
+  "releaseDir": "/home/ubuntu/tadazz-mcp-release-d8a402dd39bf-20261119",
+  "runningContainersUnchanged": true,
+  "sourceSha": "d8a402dd39bf3cd7e5b046c3bf3b955181815a62",
+  "stageManifestSha256": "ed021d65a2663f408a8449afdbefe6a42c9b4159b462f062c81e27fe9dc3e209",
+  "syntheticSmokePassed": true,
+  "widgetManifestSha256": "bff82669911e97b94a7cdc858d96a41c08e6062525f7d5a234b4f66f93b06659"
+}

@@ -1,0 +1,31 @@
+{
+  "observedAt": "2026-11-19T15:11:22.949444+00:00",
+  "source": "field-limited live metadata plus config-scope.ts/package-installation.ts",
+  "app": {
+    "id": "ce2deee99d7ba30717b8609a2138456d4834bee33cc2263031253d22d57c3081",
+    "image": "sha256:4489e57b83be163dfa8fc312a6ed38df277e48fa0016263f807ae8266ee30344",
+    "workingDir": "/"
+  },
+  "configPath": "/app/config",
+  "containerStore": "/app/config/extensions/packages",
+  "relevantMount": {
+    "type": "bind",
+    "source": "/var/lib/tadazz-release-5312660/config",
+    "destination": "/app/config",
+    "rw": true
+  },
+  "mappedHostStore": "/var/lib/tadazz-release-5312660/config/extensions/packages",
+  "workerStore": "/var/lib/tadazz-release-5312660/config/extensions/packages",
+  "workerImage": "sha256:aea88c60c29d5160dfe5ae822179da4233ed882c3979b4d592f6cd86902e05c5",
+  "workerBroker": "/opt/tadazz-package-runtime/package-build-worker.py",
+  "storeBindingMatches": true,
+  "timer": {
+    "LastTriggerUSec": "Thu 2026-11-19 15:11:18 UTC",
+    "ActiveState": "active",
+    "SubState": "waiting",
+    "UnitFileState": "enabled"
+  },
+  "customerStoreRead": false,
+  "scope": "Pre-deployment snapshot; must repeat after new app observer",
+  "asanaTaskId": "1220708526935641"
+}

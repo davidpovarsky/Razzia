@@ -1,0 +1,338 @@
+{
+  "container": "092241a1ee13b38161ed4a1db99b9f5869e6b26a637d726ed5698a08eae3ba22",
+  "customerMountUsed": false,
+  "engineIoOpenClose": true,
+  "image": "sha256:ca3717033dc0206e3b64f697e74b344637eb3b197f9910c1018c74e8b22c2001",
+  "indexAndEntryAssets": 33,
+  "nativeApplicationPreview": {
+    "authenticatedStudioRender": false,
+    "files": [
+      {
+        "bytes": 2570157,
+        "name": "renderer.mjs",
+        "sha256": "5d434a876a9974adbd2db617ea5b6518b26549602823ed5ed758d95f8da57ea2"
+      },
+      {
+        "bytes": 453992,
+        "name": "renderer.css",
+        "sha256": "175e926448f583a07839bf34ae4592f3951e5e27ba08a036fc86ef30fa779e26"
+      }
+    ],
+    "inlinePreviewEnabled": true,
+    "packagedHttpBytes": true,
+    "privateRuntimeUnauthorized": true,
+    "publicRuntimeDisabled": true
+  },
+  "network": "none",
+  "ok": true,
+  "packageCapabilities": {
+    "accountsEnabled": true,
+    "contentType": "application/json",
+    "expectedStatus": 404,
+    "installerEnabled": false,
+    "status": 404
+  },
+  "packagePolicy": {
+    "accountsEnabled": true,
+    "expectedStatus": 404,
+    "installerEnabled": false
+  },
+  "probeExitCode": 0,
+  "probeStderrBytes": 0,
+  "probeStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "productionTouched": false,
+  "retainedStopped": true,
+  "routes": {
+    "GET /": {
+      "contentType": "text/html",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /.well-known/oauth-authorization-server/oauth": {
+      "contentType": "application/json",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /.well-known/oauth-protected-resource": {
+      "contentType": "application/json",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /api/accounts/me": {
+      "contentType": "application/json",
+      "expectedStatus": 401,
+      "status": 401
+    },
+    "GET /api/auth/mode": {
+      "contentType": "application/json",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /api/billing": {
+      "contentType": "application/json",
+      "expectedStatus": 401,
+      "status": 401
+    },
+    "GET /api/billing/config": {
+      "contentType": "application/json",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /api/extensions/preview/public-runtime/175e926448f583a07839bf34ae4592f3951e5e27ba08a036fc86ef30fa779e26/renderer.css": {
+      "contentType": "application/json",
+      "expectedStatus": 404,
+      "status": 404
+    },
+    "GET /api/extensions/preview/public-runtime/5d434a876a9974adbd2db617ea5b6518b26549602823ed5ed758d95f8da57ea2/renderer.mjs": {
+      "contentType": "application/json",
+      "expectedStatus": 404,
+      "status": 404
+    },
+    "GET /api/extensions/preview/runtime/175e926448f583a07839bf34ae4592f3951e5e27ba08a036fc86ef30fa779e26/renderer.css": {
+      "contentType": "application/json",
+      "expectedStatus": 401,
+      "status": 401
+    },
+    "GET /api/extensions/preview/runtime/5d434a876a9974adbd2db617ea5b6518b26549602823ed5ed758d95f8da57ea2/renderer.mjs": {
+      "contentType": "application/json",
+      "expectedStatus": 401,
+      "status": 401
+    },
+    "GET /api/health": {
+      "contentType": "application/json",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /api/packages/capabilities": {
+      "contentType": "application/json",
+      "expectedStatus": 404,
+      "status": 404
+    },
+    "GET /api/quizz": {
+      "contentType": "application/json",
+      "expectedStatus": 401,
+      "status": 401
+    },
+    "GET /api/results": {
+      "contentType": "application/json",
+      "expectedStatus": 401,
+      "status": 401
+    },
+    "GET /assets/Card-DqJvG1es.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/Catalogue-DpjR4Ud5.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/QueryClientProvider-BKIUXFnv.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/SiteButton-BVBRgb2x.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/__root-DP4dRJtl.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/arrow-right-C1eHQhOd.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/branding-DkbCKomo.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/circle-x-BiTRxWUe.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/client-Bosr2oD9.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/clsx-DB0hHKMi.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/core-DDRQf67e.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/dist-1BwCVHqm.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/extensions-BOo0e9A3.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/game-ppoFp0iv.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/game-preview-surface-BBTn8aV7.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/index-C9t1GO5B.css": {
+      "contentType": "text/css",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/index-HeVfHVi0.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/link-BFfEsZah.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/locales-DCRLonFj.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/locales-d60oHGTN.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/login-handoff-BWg7jZ9T.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/mutation-DAKY54v-.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/platform-controls-C--EKVLd.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/platform-ui-B8V7na8r.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/preload-helper-0CzXyOe9.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/query-fiE78FBu.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/react-D9o7R0F_.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/removable-DFuYGxq4.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/rolldown-runtime-hePW80VL.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/rubik-latin-wght-normal-CnQIisVs.woff2": {
+      "contentType": "font/woff2",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/schemas-BJTHMcrP.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/socket-context-DfNHX2Bw.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /assets/useRouterState-DcyYiVRO.js": {
+      "contentType": "application/javascript",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /mcp": {
+      "contentType": "application/json",
+      "expectedStatus": 401,
+      "status": 401
+    },
+    "GET /oauth/jwks.json": {
+      "contentType": "application/json",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /studio/native-save-consent/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+      "contentType": "text/html",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /studio/oauth-consent": {
+      "contentType": "text/html",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /tadazz-application-runtime/renderer.css": {
+      "contentType": "text/css",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /tadazz-application-runtime/renderer.mjs": {
+      "contentType": "application/octet-stream",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "GET /ws/": {
+      "contentType": "text/plain",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "HEAD /studio/native-save-consent/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+      "contentType": "text/html",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "HEAD /studio/oauth-consent": {
+      "contentType": "text/html",
+      "expectedStatus": 200,
+      "status": 200
+    },
+    "POST /ws/": {
+      "contentType": "text/html",
+      "expectedStatus": 200,
+      "status": 200
+    }
+  },
+  "sourceSha": "d8a402dd39bf3cd7e5b046c3bf3b955181815a62"
+}

@@ -1,0 +1,1144 @@
+{
+  "format": "tadazz-followup-release-evidence-inventory",
+  "generatedAt": "2026-11-19T16:27:44.580212+00:00",
+  "status": "FROZEN_ACCEPTED_EVIDENCE",
+  "headAtCuration": "3a3c1d148bb49849080366d59f233e573549394f",
+  "applicationSourceSha": "34568c5c937a51d236a440513adeb9bf93637525",
+  "deploymentToolSourceSha": "3a3c1d148bb49849080366d59f233e573549394f",
+  "deploymentAccepted": true,
+  "allowlist": {
+    "path": "docs/extensions/plans/ux-followup-20261119/release-evidence-allowlist.txt",
+    "bytes": 19507,
+    "sha256": "1e6b842c9deadc0e8d9477305dfccd8cef32b1e3034a7749497bd0d220a77a16"
+  },
+  "allowlistEntryCount": 222,
+  "hashedEntryCount": 221,
+  "selfHashExcluded": true,
+  "selfExcludedPath": "docs/extensions/plans/ux-followup-20261119/release-evidence-inventory.json",
+  "files": [
+    {
+      "path": "docs/extensions/plans/editor-hebrew-20261118/tadazz-editor-pins-14b642e95d15-bbcf426a/input-manifest.json",
+      "bytes": 237421,
+      "sha256": "6b7eb87fd0e17e4de6999ccb99209df0c54b60c90a66fefa934d889c7fa606ce"
+    },
+    {
+      "path": "docs/extensions/plans/editor-hebrew-20261118/tadazz-editor-pins-14b642e95d15-bbcf426a/receipt.json",
+      "bytes": 1253,
+      "sha256": "a924a9d0f8bcb181b41fd8453d71d528f3cf5eb5db4f26f1c5435922a2627b08"
+    },
+    {
+      "path": "docs/extensions/plans/editor-hebrew-20261118/tadazz-editor-pins-d4f03cc87031-4fea2f00/input-manifest.json",
+      "bytes": 234484,
+      "sha256": "f43cef7abbae77cc486aa4b20ad8fc43b9cc81e6228ecc323f7d6a013899a424"
+    },
+    {
+      "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-34568c5c937a-7447a1b8/input-manifest.json",
+      "bytes": 237421,
+      "sha256": "f7ca42462fae1d9f1fca2a3134e24060332ff41ed4f8c7031f6a23189bf69ac6"
+    },
+    {
+      "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-34568c5c937a-7447a1b8/receipt.json",
+      "bytes": 1147581,
+      "sha256": "7dda33d4cd47cd8ca44851a1a4487c759e572c8f1f514ab57432a7f0274bfc65"
+    },
+    {
+      "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-browser-34568c5c937a-01036285/receipt.json",
+      "bytes": 45590,
+      "sha256": "d26a2680f8e37b38b22a4575a5d194e4b5cf1d5d5603fdea627f23a919b54cf9"
+    },
+    {
+      "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-34568c5c937a-0b72dd89/receipt.json",
+      "bytes": 2653991,
+      "sha256": "ad83bce867ee22c52b648d7d51d3fb6114c27cc142cc1293f20c9a9b6d0fbe2e"
+    },
+    {
+      "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-launch-34568c5c937a-80c36b12/receipt.json",
+      "bytes": 196794,
+      "sha256": "10f8422d573d4b50374d021740117d023badde87ed161385b99eedca9998df92"
+    },
+    {
+      "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-proxy-34568c5c937a-d751e9ca/receipt.json",
+      "bytes": 477542,
+      "sha256": "442b114acfb4dcc0e9cdc1ac73b36c7729a54bff4988d79f1954bffdc756dd56"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.link-check.json",
+      "bytes": 11832,
+      "sha256": "daea99cec9ac29470990b353f302a83d2590c37405f562865170f76d5ecc3121"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+      "bytes": 30664,
+      "sha256": "86fd7a1109b3e6370b3f5900f739ce76045f14cc1ba9811a192e1520e283d85b"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/asana-completion-checkpoint.json",
+      "bytes": 2779,
+      "sha256": "440668af761453e943c54888a7eb0a41193daac804c247e33425cccf1dff9c6f"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/asana-final-readback.json",
+      "bytes": 4590,
+      "sha256": "92e2b9a2dd469d01f4e805dc064c9e982ca78e9ab320bb6256bafccd83ddaafa"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/backup-qualification-reference.json",
+      "bytes": 454,
+      "sha256": "5deb6517f9f55f39fb940783a9ae07d0ed354dc487b2a077106a0727660b5ea4"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing-deployment-verifier-fix.json",
+      "bytes": 9328,
+      "sha256": "a1c5af853e2d91c246b5262388537ae75df86d9b7f64f8cdd6949c0d32f4db29"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/README.md",
+      "bytes": 11604,
+      "sha256": "fae513cdc785e579178383a3f69a9258683ec03bc5b876f781032e80910bff4d"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/asana-readback.json",
+      "bytes": 235,
+      "sha256": "5a2ac25c6b167608487cafff715c21752bc274476b4df7b7d0b1b3783741dc9b"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser-final/cleanup.json",
+      "bytes": 274,
+      "sha256": "64415a473d0f47e178c41bd7da4968c3b9137c5131cb0376827f40cc4beab04c"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser-final/disabled-desktop.png",
+      "bytes": 204804,
+      "sha256": "94d2cd09e4a5e39d6aed2f44ab4b9803b7b4d0de91ee82b596c5ab9977f8791e"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser-final/error-retry.png",
+      "bytes": 229635,
+      "sha256": "1c94a96be37070e1b23cf1755eb5650679e3491dde5836a7754d59d8a8142b0b"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser-final/live-catalog-currency.png",
+      "bytes": 282750,
+      "sha256": "a7b3056bfb11e2e3420873f123cb0d76734d29f0dc5be933cb21424d56cf1e2f"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser-final/live-catalog-hebrew.png",
+      "bytes": 192329,
+      "sha256": "b473da0bba9a48d2a9ca62f8e7fb9044480c5ceb44c488a2b5397a89471c80f1"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser-final/missing-token.png",
+      "bytes": 164862,
+      "sha256": "ca9b6a05e7191b3239d3991aa37db78fe9383abaa61aeea7ed6e55f637e65fd2"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser-final/receipt.json",
+      "bytes": 3755,
+      "sha256": "485af45bd9ed25f59211276596483d9604d6dc376f3ff98b609b62f8fe287237"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser-final/sandbox-mobile.png",
+      "bytes": 154409,
+      "sha256": "5f88a6457a4f7ab77ca06d50172121ff2e1b05279d0634803e24ba462d04fbda"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser/cleanup.json",
+      "bytes": 273,
+      "sha256": "3fdaf9ddeadfbfff09b1a4a329970afc32544bed23ef69b9debb256d0671ba45"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser/disabled-desktop-failure.png",
+      "bytes": 211002,
+      "sha256": "aa3b9ae8324528d15317ab0bb45478c349ad826743d7291eda7292beb004804a"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser/error-retry-failure.png",
+      "bytes": 212812,
+      "sha256": "c60fa933e266d7077192974d76873ab26e07d1f5374359ed9875fc39d5b2dd73"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser/live-catalog-currency-failure.png",
+      "bytes": 224813,
+      "sha256": "5431beb45e356fdbfe259050a073bc0a515e528a495fdb86905394837333e873"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser/live-catalog-hebrew-failure.png",
+      "bytes": 159054,
+      "sha256": "4612383d68e3a69ce485487bb0f2a9a8e92f49cf43bc458f6c14465f2a59a7be"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser/missing-token-failure.png",
+      "bytes": 156260,
+      "sha256": "e40470a2cb294ae73e7b063cf0a8374a23375249f3fd583ea114da59bf2341e0"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser/receipt.json",
+      "bytes": 6071,
+      "sha256": "93e9da105356856522fe8c1acb02e58be8757e7d6ee5cfc5b56714410d55d3c7"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/browser/sandbox-mobile-failure.png",
+      "bytes": 146603,
+      "sha256": "079d8c69c3583d7a0344ba9c4aa77bf477aaab5a9caffd1e0e2e59eceea23c88"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/evidence-allowlist.txt",
+      "bytes": 2593,
+      "sha256": "9adb506bf3a6cb21152e36048db16c85df21a247ffc8bf79baf71164e5732be8"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/focused-source-checks.json",
+      "bytes": 7666,
+      "sha256": "ed276bb969f349807dc14742ba0c586d52fc2752f2e1ff27822758aa355924c9"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/focused-source-final.json",
+      "bytes": 4492,
+      "sha256": "68994807987191f325de67f933069a75e109e52d70fd04efe2bf4588572918be"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/focused-test-execution.json",
+      "bytes": 5966,
+      "sha256": "17e4bb0a79649b95ec19d2dd13c4d101faaf46bddfc11c3fc293f6dafdb500d3"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/focused-test-followup.json",
+      "bytes": 1815,
+      "sha256": "4b33c0e0182ff203dd876699de3595579677b6fe79fd274ea6a25213543baab0"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/focused-typed-final.json",
+      "bytes": 2130,
+      "sha256": "cdea77bfbce817ba8cd04bb7d06a1645dbc3b66cb32d890719b8d0d19b78e198"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/harness/public-browser-check.mjs",
+      "bytes": 6862,
+      "sha256": "d508bd4bb1b10373eb5e3a0cc57caf38d8dae3bc99bb1fde6dd367bc0a0f9403"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/harness/run-public-browser.py",
+      "bytes": 4358,
+      "sha256": "4ebe6e74b563e871f35477e726c9f4c889b8b58b1f24edfed48b6ce9c8bcf1ee"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/source-allowlist.txt",
+      "bytes": 630,
+      "sha256": "4da62f30838dc923f5c7c4346dba60fd2dc4d9d9db443c8dd87f612a64f9ac74"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/billing/verification-manifest.json",
+      "bytes": 11614,
+      "sha256": "afb0a55d9f4e6e2958ca385a40f77a2346882a6630f566b8be8888ae4baf1d8f"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/candidate-files.json",
+      "bytes": 9147,
+      "sha256": "04e57b03db222d280abcbd259e166890596eb4bd3f87ee78c09c1ec463076049"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/contact-final-verification.json",
+      "bytes": 1875,
+      "sha256": "7fc73dc00c9d8da8eb3a064d63e52757f72a0290ee4552b1aa5ed920a535f2de"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/contact-prepare-validation.json",
+      "bytes": 1759,
+      "sha256": "d80c422ce0909721b55ecc50746245d946a2fcfa879178a98437f20e0aa2d8c8"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/current-release-source.json",
+      "bytes": 1182,
+      "sha256": "aad9ee8a353394b035842a37abe180fe719369344843166c0727ac78c7ce5c02"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/deployment-baseline.json",
+      "bytes": 974,
+      "sha256": "2185155278ecd4d6d2518b086dec71262fbe332b21ed18adc0a969e1807273ad"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/deployment-deploy-execution.json",
+      "bytes": 5524,
+      "sha256": "203298193f489c741bc599d17a4b19423a74cc1d811a48e80604cb2df4447315"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/deployment-first-attempt-failure-20261119/backup-qualification-reference.json",
+      "bytes": 461,
+      "sha256": "d88cfd049085e3797963f12935840032c22631797bc14a7df2623024020b9c67"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/deployment-first-attempt-failure-20261119/current-release-source.json",
+      "bytes": 782,
+      "sha256": "3eb1a6ce6b1aaf6f1ef9551a60c0a059b368f50f1b25c7424a9f9596b2f38734"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/deployment-first-attempt-failure-20261119/deployment-deploy-execution.json",
+      "bytes": 3348,
+      "sha256": "07cba776d9c7a55f5b92bd77b43b0aa00570b15b08089623f9ec8bd21afc8d3f"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/deployment-first-attempt-failure-20261119/deployment-preflight-execution.json",
+      "bytes": 2128,
+      "sha256": "fb48df8eedf4a9c52186a3f8b6d4c08dd275edf92ce8e6749038ecd102fef783"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/deployment-first-attempt-failure-20261119/deployment-qualify-backup-execution.json",
+      "bytes": 6854,
+      "sha256": "205ea4486c4daa2085767d4255ee333f565986447905f067ee51091cb0baa6ec"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/deployment-first-attempt-failure-20261119/preservation.json",
+      "bytes": 2105,
+      "sha256": "dc47a4d48740cdb405647bd937df8160ad605a7043c3d0e3482a7c61721f61e8"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/deployment-preflight-execution.json",
+      "bytes": 2279,
+      "sha256": "2ee601591eea33b23e021500daf859dc0ca647540128910d5323540a8af4d3d5"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/deployment-qualify-backup-execution.json",
+      "bytes": 7006,
+      "sha256": "0416c86dac509362e11b38cc09a1050f9c9b3735ad40c23b5a5ed33e6326e79f"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/deployment-tool-source.json",
+      "bytes": 1075,
+      "sha256": "3e37c2e736e6b788416341da40a0b7ec4936b7c242aa6cd81409416ffbb51096"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/deployment-verifier-independent-review.json",
+      "bytes": 4380,
+      "sha256": "8d29769acfc19f1ba0d79f01363ed3e712a58f42d6179a0cb2abfdadcce5e2fd"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/deployment-verifier-independent-review.md",
+      "bytes": 4016,
+      "sha256": "845632db004e2c858ec787f94e0123583433e4a25afc42d35553195f2268e652"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/email-provider-readiness.json",
+      "bytes": 4731,
+      "sha256": "07f9fa7f2a06e09001a463d66f50e12e5be1fbca71138c77d1ec955bae73efa0"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/final-operational-verification.json",
+      "bytes": 1371,
+      "sha256": "7172e42397494bc0220f783852c44cb75a8b71cceef72ad541db0287adea6337"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/host-controls/README.md",
+      "bytes": 6115,
+      "sha256": "3976d9f43dd513b336ffdffd14ff73c820bf22e1c54509c27a93263eb4fd0244"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/host-controls/audience-directory.png",
+      "bytes": 736674,
+      "sha256": "57e8b95336332a48159ed8eeb036b0f15c760c8b32844633372f3633a1e89aef"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/host-controls/browser-proof.json",
+      "bytes": 609,
+      "sha256": "b9395fdcf32a795b13c12a93bad6dd2136889f1b844889116f2b7a39dab2fe13"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/host-controls/host-directory-controls.png",
+      "bytes": 405966,
+      "sha256": "c458503f61ff6beb763145692764ad41f5c73d0c3afa778b42027c606364f14a"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/host-controls/host-directory-fullscreen.png",
+      "bytes": 589902,
+      "sha256": "7f08c1754908c8d2fb0b2c0bd0cf5fa7653a6cea1003b9f8289b5e79a8625ece"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/host-controls/manual-scope-checks.json",
+      "bytes": 2199,
+      "sha256": "26147f2383fb4dc275a5d97f0190631972fac9af1e10fc12645e890b3af0252f"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/host-controls/manual-scope-playwright.json",
+      "bytes": 5020,
+      "sha256": "52ef8aae48b6505695cdeb06893d6850e064b3693b8978696cc88e34ca160ab5"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/host-controls/playwright.json",
+      "bytes": 6133,
+      "sha256": "66f5b97d54e217097e5ae484b5e147735f0e9fd1937ddcef4cdbdcf9f4e93746"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/host-controls/roster-1440x900.png",
+      "bytes": 172636,
+      "sha256": "600318e8d7749a7b651b8fe29adeb7cd3810bb02f869beb784a3035490b82c10"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/host-controls/roster-320-hebrew.png",
+      "bytes": 37840,
+      "sha256": "8824f2b6326881b9181ab4d9fbe8dec2dd17ba38aef10cac2911def804241610"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/host-controls/roster-320x640.png",
+      "bytes": 39382,
+      "sha256": "0d538fcc7fa29d7757a206a4119927c47a333ee15868b5b4872ebcbd084c5497"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/host-controls/roster-390x844.png",
+      "bytes": 64961,
+      "sha256": "77b87fd24f5234157997da91c010dd66fbcac56b4188bcb22f036390f07bee0b"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/host-controls/roster-768x1024.png",
+      "bytes": 81792,
+      "sha256": "d264902928998e99b83346fe07f0ba4f87777696b55ff0374fab4ba8f62fdec7"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/host-controls/verification.json",
+      "bytes": 10490,
+      "sha256": "de434af1cd79ebcb977b0c0a3a34528950dfa616378d06797b52dcc0d85e737c"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/installed-connector-smoke.json",
+      "bytes": 2038,
+      "sha256": "a59be212c537d9024a1519c71cf66a35c72400abe845afe64faeb537c16f1cc6"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/post-deploy-execution.json",
+      "bytes": 6150,
+      "sha256": "802654edaeefde8c0e2d64cf86f486905f179514c428a5331c35fa1ace28db82"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/post-deploy-observation.json",
+      "bytes": 7952,
+      "sha256": "88a19398695dc5c9c35df81da90dffb9045dda1874487129051cf018cc410553"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/post-deploy-provider-public-readiness.json",
+      "bytes": 1952,
+      "sha256": "cb9893e33f7aa5980c062ddffeb57563b5ea270d14ee3054a3cb03d08f3fab58"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/post-deploy-worker-recovery-execution.json",
+      "bytes": 6153,
+      "sha256": "0443a5034a55cd3c30571aab2e7fb9b5dfa0cc9c184fedf35ae9489eb681486b"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/post-deploy-worker-recovery-observation.json",
+      "bytes": 7955,
+      "sha256": "910132378a99c1891e5e2d8d4a2f9d08dbf1914ca01a5104ebbf79bce0950816"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/prepare-idempotency/README.md",
+      "bytes": 1809,
+      "sha256": "057527a537ee88bd9fe343cf4521867314ea5f1b0f4f2b84ec569ba5b28faccd"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/prepare-idempotency/validation.json",
+      "bytes": 2003,
+      "sha256": "bd5eb4fa407e9cc07624adaf766078247dd50b2cf7d442449980ffdb94320c4b"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/production-public-smoke-anonymous-session/execution.json",
+      "bytes": 722,
+      "sha256": "15f80979800691fbfae358f5494b74bd333b5a07a58bc9fe39bcae82d928f603"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/production-public-smoke-anonymous-session/forgot-390.png",
+      "bytes": 94342,
+      "sha256": "382ff94fa388dc9ad4a1406bca62fd4454b03d884e4c4a9d5a61e4a922fa7cbf"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/production-public-smoke-anonymous-session/home-1440.png",
+      "bytes": 704296,
+      "sha256": "1bd7a8672e74f9c781fd1de422657275195debcceee57d9e0abd25652fa4797f"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/production-public-smoke-anonymous-session/home-390.png",
+      "bytes": 224151,
+      "sha256": "a3a08cb789a2e881bf99034b52851c7c7f80f54af3d686f83f4c8a76bfe92fff"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/production-public-smoke-anonymous-session/receipt.json",
+      "bytes": 42561,
+      "sha256": "7e95fc3b6af8ac0d8457dd4af335aae36bce16e5e0ba44b3d7ca5c1a8031d08b"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/production-public-smoke-policy-fix/diagnosis.json",
+      "bytes": 5143,
+      "sha256": "585550c2c75701e9637492fcc1d70bfbcd58e7bbf98a93268bfbe8c33515f98a"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/production-public-smoke-policy-fix/helper.diff",
+      "bytes": 21306,
+      "sha256": "af0ba25ceebf7c238c931c1e50708d6e75f7dc9c4c6f16573e22b20d1e99a148"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/production-public-smoke-policy-fix/original-production-public-smoke.mjs",
+      "bytes": 20496,
+      "sha256": "6f3a295f48861c4e4831d22d9d133afea272646fcb4640943393ace0a483d615"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/production-public-smoke-policy-fix/policy-self-test.json",
+      "bytes": 2659,
+      "sha256": "9377bb956539be2dd7829d0574f83c18b1311628e2491b27339c7d43e83f0cde"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/production-public-smoke-policy-fix/root-review.json",
+      "bytes": 410,
+      "sha256": "0cec8b4256ac20e6a6d78d74bc6a86ecd6e1a247895fab113caab9cb64813d6e"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/production-public-smoke-policy-fix/validation.json",
+      "bytes": 2201,
+      "sha256": "00495c74a262711db2591de92a63aa08f57b997074d6993bad7d468cccc82243"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/production-public-smoke/execution.json",
+      "bytes": 704,
+      "sha256": "4d7656c75b0fc978d4aca8c62e948a29581e121f3e5372f00e1ded8becf0f091"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/production-public-smoke/forgot-1440-failure.png",
+      "bytes": 144164,
+      "sha256": "d717aea9645799ec56eaf8cbb444720a2b7c840d0207e10d0683332052ce6678"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/production-public-smoke/forgot-390-failure.png",
+      "bytes": 94342,
+      "sha256": "382ff94fa388dc9ad4a1406bca62fd4454b03d884e4c4a9d5a61e4a922fa7cbf"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/production-public-smoke/home-1440-failure.png",
+      "bytes": 708765,
+      "sha256": "2eb4bf243e272e02263bdce6d6c7f8daa4914fc370cd9ba12c4b9181846cc8d7"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/production-public-smoke/home-390-failure.png",
+      "bytes": 223913,
+      "sha256": "feb38d3a36e5b04d90ade1aac41866455d3c1287f746edf3cc6aab33b6823757"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/production-public-smoke/receipt.json",
+      "bytes": 36122,
+      "sha256": "6196d8a2b73dd6bdcfe22f9448df0d79d251c52cab781b2d1c0f7f891a3487cd"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/provider-readiness.json",
+      "bytes": 5651,
+      "sha256": "8f63c9eb5ed8fdd430cb4fbe867229f279bcd03f09759e52fab73bc834b4cfdc"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/qa-cache-diagnosis.json",
+      "bytes": 6938,
+      "sha256": "7c835275a58420f387331c089676fc5e93d533a59a59483008cc3f9db255e85b"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/qa-cache-restoration.json",
+      "bytes": 668,
+      "sha256": "dba064bb5acc9eb827c5aa5a766fb0c5818fe0cb464001941059075d7cb90329"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/qualification-gate-evidence-paths.txt",
+      "bytes": 1157,
+      "sha256": "930a0418ba3a558f61cec3c811c876d67902ff7a08f589c4840f0868b79e2dd8"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/qualification-independent-review.json",
+      "bytes": 15835,
+      "sha256": "7b3ff3c9ab10435a4ca9690f49b2da6604136dcf34fe9418107e710e9e4b7fe7"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/qualification-retry.json",
+      "bytes": 429,
+      "sha256": "2f504275c75da0c86ed563055fb333ac13caa9724f0b18b4f482629cb7c979e2"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/qualification-setup-failure-34568c5c937a/input-manifest.json",
+      "bytes": 237421,
+      "sha256": "f7ca42462fae1d9f1fca2a3134e24060332ff41ed4f8c7031f6a23189bf69ac6"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/qualification-setup-failure-34568c5c937a/receipt.json",
+      "bytes": 2519,
+      "sha256": "d4b23097e553c237952d16c6d6626c0216990d2ceace20ac2f0432bddad47ce9"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/qualification-setup-failure-34568c5c937a/release-gates-progress.json",
+      "bytes": 547,
+      "sha256": "d2599414e1529aaff98a255f85652c5c06922e3f26bbf5623b19d6dbb8bb70b7"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-evidence-allowlist.txt",
+      "bytes": 19507,
+      "sha256": "1e6b842c9deadc0e8d9477305dfccd8cef32b1e3034a7749497bd0d220a77a16"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-evidence-curation-plan.json",
+      "bytes": 44428,
+      "sha256": "8b7f03822f2c5d4fdc9902d1bbd810a046ae03aef3d8497bfe0ebf0d24e354e0"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-evidence-curation.json",
+      "bytes": 70275,
+      "sha256": "b55be6b1c2aaaf94b00228b310268b4c698271e67a501ccbc37d61abf66e3e6e"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-evidence-staging-list.txt",
+      "bytes": 34797,
+      "sha256": "689dad7b5a5a93a7a4b1e26a25691b986498eea31aebe8e393b72a322e9f6fe0"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-gates-progress-34568c5c937a.json",
+      "bytes": 547,
+      "sha256": "d2599414e1529aaff98a255f85652c5c06922e3f26bbf5623b19d6dbb8bb70b7"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-gates-progress.json",
+      "bytes": 1333,
+      "sha256": "a71e95f0d93e883e96630339b6b526eb87c65e238ce9ca085f5a8b61efda2585"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-helper-review.json",
+      "bytes": 5417,
+      "sha256": "de8826ba1ce2b3c68aab94862af16dd874244046aa7717804ec79c22db906142"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-tools/check_email_provider_readiness.py",
+      "bytes": 5929,
+      "sha256": "1335739a3e1064e63fb4b47d5fb4b95b032c6d83c819888e0fcf7f05b06175fc"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-tools/deploy_current_candidate.py",
+      "bytes": 5649,
+      "sha256": "cf19dfabcee3657b60b10ae1cff1bc435ac07e6ec5758c0d58b42e50bff3a8ee"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-tools/deploy_current_candidate_with_tool.py",
+      "bytes": 7693,
+      "sha256": "4700e9ca1e0f0b9ff830e54cb1893bdc67d30403091ef338a845abb8f45e2c99"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-tools/observe_current_candidate.py",
+      "bytes": 4204,
+      "sha256": "1a4c772018039a0f648e37acb77e97f4fdb5e1c5d26cd4e2f12553c56e745492"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-tools/observe_worker_recovery.py",
+      "bytes": 4252,
+      "sha256": "9eb60c616a896cc779308751f84badf2e963a8671c7ecc714ce166b41566dcf6"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-tools/production-public-smoke-review.json",
+      "bytes": 3812,
+      "sha256": "eddfd3c6aba7cd6cfd350fd90d6762dad7f1e3d15e804733fd3d3bc3969f4219"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-tools/production-public-smoke.mjs",
+      "bytes": 32388,
+      "sha256": "8eb521e3178599246acaf6927735a61e458bc092ea4fcab10b82b8ec1b43f384"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-tools/qualify_current_candidate.py",
+      "bytes": 2785,
+      "sha256": "5916506d58421fb1b21d8d373257593b0f6e9b68dfb01aba5b9763ed3d319352"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-tools/review-input.json",
+      "bytes": 5494,
+      "sha256": "a01f77879dfdd362fd76ee0600c38bffab27e17c1f35c59c4c6658e3658df4b0"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-tools/run-production-public-smoke.py",
+      "bytes": 3086,
+      "sha256": "3f3bb4ed6fe97217ffd0e051d2c59ac76cb9cb4772e898846b1c77092f9ee651"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-tools/source-copy-manifest.json",
+      "bytes": 5668,
+      "sha256": "15b287185256585d6202ca78105aa18727b9cc50c51b92f99a082b8072aa3826"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-tools/stage_current_candidate.py",
+      "bytes": 8566,
+      "sha256": "819ed320b1c02ea0c297f826ef842b4c3cca043719ce20059c2d4a87a87bb48f"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/site-browser-with-fonts/contact-1440.png",
+      "bytes": 117840,
+      "sha256": "aefe8210500bf8737f68b58c0b3fe5affc091be6a0013240d8bfc8149fecfc1c"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/site-browser-with-fonts/contact-320.png",
+      "bytes": 79647,
+      "sha256": "b6a8173706053aa3afa09c6eef22e42bb192c6aa5a8b27d9d79a10909d546cdb"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/site-browser-with-fonts/contact-390.png",
+      "bytes": 87715,
+      "sha256": "53fcfeecdc1173488e38ce427717c3d47b66ea52a9afc8ac0645ff6c0e0c70bd"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/site-browser-with-fonts/contact-he-390.png",
+      "bytes": 64221,
+      "sha256": "aeaf707832b824cabfac99d0155bffe8a9269240c51c6bcf73f528fd7913dfbc"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/site-browser-with-fonts/prepare-retry.png",
+      "bytes": 166319,
+      "sha256": "bc8978c62db13fa21b2bbf892c5483a7c3f2c4fb05690116762b33601f33034b"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/site-browser-with-fonts/receipt.json",
+      "bytes": 1294,
+      "sha256": "1bccee73008cfd4c4fb041b9b2fbe71655ca1de8bbdf4ba097753ff5df508755"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/site-browser/receipt.json",
+      "bytes": 1294,
+      "sha256": "1bccee73008cfd4c4fb041b9b2fbe71655ca1de8bbdf4ba097753ff5df508755"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/site-qa-cleanup.json",
+      "bytes": 176,
+      "sha256": "924d5b6c5634ad186ce6f309c95a046ca42e1263a834201d7477030ee707be14"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/site-smoke-style-validation.json",
+      "bytes": 789,
+      "sha256": "e348ccc08c300233d11cfb9c3b701f10ba8238cc8de92b198ad09f9a777c1aa6"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/source-commit.json",
+      "bytes": 468,
+      "sha256": "8ff99e0b45039daa4f2904da56792c5bfe262fecb19393c4279a48a0e68eb558"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/source-push-final.json",
+      "bytes": 778,
+      "sha256": "bcff982a349263527bbf90948ee53b13c9e8fcf9fb0bc6c22c7f3c9d37559912"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/stage-execution.json",
+      "bytes": 1475,
+      "sha256": "a6b63581f573f04a117fdf3d86062be18bfdc73ae0435a629eafc7fc23f34b62"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/WORKER_REPAIR_PLAN.md",
+      "bytes": 8443,
+      "sha256": "2ef800a4bc0545cb083d3e24887ec18978b3b3f7d3565907c3d8bec063089c67"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/image-build-receipt.json",
+      "bytes": 1247,
+      "sha256": "1223c7c06a0c6d2246f5811bb83ac3336b60faeb44b4bfef0210c52d5a54f948"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/independent-phase12-acceptance.json",
+      "bytes": 5285,
+      "sha256": "6f43f16d97e8432da1560e422735387a9aa9f1f7daabf67f08295e3b90c68e9d"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/independent-replacement-review.json",
+      "bytes": 6923,
+      "sha256": "7fe2500694af6c795c2c733399109020879520b2eddba0c3d718df90f399ba44"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/independent-replacement-review.md",
+      "bytes": 4706,
+      "sha256": "5ae85c1eee55984f6a2020708afcd51015f90303ae0658eeef06a7c199d86eec"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/independent-smoke-review.json",
+      "bytes": 9732,
+      "sha256": "118dc1e9cf9feecbb4bf4e288761d7f2ace2f46b7128e303eb59ec9e10f9b05a"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/independent-smoke-review.md",
+      "bytes": 4757,
+      "sha256": "988613db0b4ce3069dc53255bec9f87e9627754e58e15a25ead10ae54ed6c4c6"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase1-2-transfer-receipt.json",
+      "bytes": 495,
+      "sha256": "a4c6c5a5a51032d0ebf6290d82e836be2e89da55c950c912c45136b5d325a607"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase1-build-execution.json",
+      "bytes": 2002,
+      "sha256": "9279611dcc6a50688609e3a25cbbb162c11f1aaaa65d8c78650497e7fda4d9f0"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase1-provenance-execution.json",
+      "bytes": 30571,
+      "sha256": "d0fe3387c3e6c1d8f21fe66272855cbeea429a5babf42c304b8efb3c28b98398"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase1-provenance-receipt.json",
+      "bytes": 28103,
+      "sha256": "d0fcdb86e5c2a45ce77fcdd810273f22ac67a5536237338b3cad83ae2c897bf0"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase2-compile-execution.json",
+      "bytes": 31239,
+      "sha256": "12f909fa7d263173fbe1c9196b547ed9cae268e0598f00a292ecc4340a219667"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase2-compile-receipt.json",
+      "bytes": 28257,
+      "sha256": "2e7f9f814b0b1c04a6d74c16760fdaced68075c0a88ec759f3e36dcff8b38bbe"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-execution.json",
+      "bytes": 6562,
+      "sha256": "291ad6723d60445664564765d712999cee1fd8e908f96c487de88d9434168ace"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-independent-review.json",
+      "bytes": 7233,
+      "sha256": "74772fce7e9e446c4466b89832b0298d1cf462d6719ff2444b52da7ed1328078"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-r2-execution.json",
+      "bytes": 1384,
+      "sha256": "020726f594525c70149889188f136da5eb87636cec836c9a1912c4967becb6ad"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-r2-independent-acceptance.json",
+      "bytes": 2783,
+      "sha256": "6e3a50ee1d85b44a623df6ddf6cb75eecde32bda514e92d837d1bf9973ae405b"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-r2-independent-review.json",
+      "bytes": 7068,
+      "sha256": "67517e122b80bd30ebe5f54ca01d4b4632b4b0bee7c6eb5af1327bb8d3aa0114"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-r2-timer-receipt.json",
+      "bytes": 8958,
+      "sha256": "e9303029460cf83e7667d7bb0fcbe9748d061c64d0ab6b58c34e1a68af934e2f"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-r2-transfer-receipt.json",
+      "bytes": 3348,
+      "sha256": "d54769752b8b4659a00a037e9084a698174a889041bbe03e500714e820d670c9"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-retained-owned-result.json",
+      "bytes": 2027,
+      "sha256": "9553fec3c6ecf313804467f369f372722331fe9ee93eb4270a7bfd1eb2a49c7e"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-timer-receipt.json",
+      "bytes": 4047,
+      "sha256": "d05873d0ad9c016e4e3e25f4e9787783ca04997b6a48c479c14f02b3aeeae6e4"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-transfer-receipt.json",
+      "bytes": 696,
+      "sha256": "0682fa0b5655e2f16e6ccf97b39058fbe8e81b16a6fb653eda8332512be4b1f1"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/fixture-summary.json",
+      "bytes": 1218,
+      "sha256": "3f86484d325a850dc1e30f46a81125cf1a9d859b5d46923ecfdbe3eb9d7f4b50"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/input-manifest.json",
+      "bytes": 3997,
+      "sha256": "60e57a577a69cd592c1fd2c81cbc902878206050126693fb27b06c94d2a54b09"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/phase1-2-transfer-manifest.json",
+      "bytes": 18676,
+      "sha256": "86a1c6314849f175cf10778ee3f4bfc461c83ee904d655d64e21b1c7c32c8aba"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/phase3-r2-transfer-manifest.json",
+      "bytes": 3165,
+      "sha256": "53ba5b60dc263087a3a3b817c0797843cd29a192e273e02535a2e055b5db8933"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/phase3-transfer-manifest.json",
+      "bytes": 2798,
+      "sha256": "ed778de4cc164030d19a4702677677549b9360f5592b4d2d0cbbaa9b940c587d"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/preparation-review.json",
+      "bytes": 733,
+      "sha256": "729c9bb7c721397aa8f9628bbbbbd954cbd555a7f7046d2ce260c70c73940b7b"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/activate_and_verify_timer.py",
+      "bytes": 27471,
+      "sha256": "09de7b35a792a784bac82816ac829e95b7a19f3cfae753700c266a3d90b13164"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/activate_and_verify_timer_r2.py",
+      "bytes": 32703,
+      "sha256": "355d7f3fe46f54b1eed27e9cc9c2deb21c310318694e2e82a9e675ceedb13a84"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/build_replacement_image.py",
+      "bytes": 5222,
+      "sha256": "301f43c692aab7593e16e8c401b25f5d7da7aa95f88710592752cadc3d48324e"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/check_phase3_admission.py",
+      "bytes": 5389,
+      "sha256": "f59056c5c4a138191c34b2eff10cf4b0cbd1e429671d875f8268b1419a627537"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/check_phase3_admission_r2.py",
+      "bytes": 5641,
+      "sha256": "fc0fa824e3bf7d052457f04942467f7e7182caf9f78797bf55b6ae590aa2808e"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/check_systemd_monotonic_r2.py",
+      "bytes": 1664,
+      "sha256": "8dd72a60f74d861f9d6101553329846d372cfaad218af45728535839d499c8a0"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/cleanup-target-check.json",
+      "bytes": 292,
+      "sha256": "932d1c4d917b11ee9f92273618f25fe57b73993b26f444002ed3eaf4c97bb998"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/context-manifest.json",
+      "bytes": 14795,
+      "sha256": "8873df14cdff05994fae0d3e67d8401de58f52a7fc6fb3866056240907d8962b"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/context/Dockerfile",
+      "bytes": 595,
+      "sha256": "dc008e7a7bb2fbe74bfcc56f2a189302dd1a20f988642db0a61e988ad6b41d0e"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/context/provenance/verify-and-build.mjs",
+      "bytes": 6443,
+      "sha256": "18e47aa70d824c306713c0aeba199d400c0a6f1f191944b1c1d8097dd87ec22f"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/context/provenance/worker-source-pins.json",
+      "bytes": 20102,
+      "sha256": "751fa33e6591657fa40d14f99eb0f6eca775787e7ff5f0b18989bb69c73a89dd"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-admission-r2.json",
+      "bytes": 1943,
+      "sha256": "99f9145b6bbb190e71e4e8a6a005c890fb874368ff664b82ead77c53bb56372b"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-admission.json",
+      "bytes": 1344,
+      "sha256": "2f8ec88584fb51d6fe2391a7f49a91f1a83484e9b6a12a47b7a577fdf0597e26"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-helper-final-health.diff",
+      "bytes": 1425,
+      "sha256": "3c10939ff430d7db859f83f398f11de1d554a79c9723fe0100007ee5ccb52445"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-helper-final-review.diff",
+      "bytes": 2422,
+      "sha256": "1fee4f8a1449a6fd1721b451b5c3fcbf0295f11465e033b64c543f735e21f6db"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-helper-review.diff",
+      "bytes": 20483,
+      "sha256": "554688acb9bab49f2fcce2301eb941da4efc3bd21cf519bddba925ba52dc4399"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-offline-guards-r2.json",
+      "bytes": 995,
+      "sha256": "f30fe7bd3ff38107e8e12f6aa51fe6deab9a0b454ad2771d4285a85a94679788"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-offline-guards.json",
+      "bytes": 942,
+      "sha256": "5c73ab9a1ed2b23e0875cf8a880de1f0436de4f9872507a6185e0b379b3751d2"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-r2-helper.diff",
+      "bytes": 17169,
+      "sha256": "51dd857104560d41f74c7df1f1a25703f49d476e277a9310f45895cb4dd722b6"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-r2-parser-tests.json",
+      "bytes": 1027,
+      "sha256": "81b149af556be7302688caf4ac15b22eb18cc2f5269e220b426fcf7cc09758db"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-retained-owned-result.json",
+      "bytes": 2027,
+      "sha256": "9553fec3c6ecf313804467f369f372722331fe9ee93eb4270a7bfd1eb2a49c7e"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-unit-review.json",
+      "bytes": 1155,
+      "sha256": "30ac1cbcbf5efb2d2c395cdd2a00d6c68409c05680df30d0d9bc3843e2c85336"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-unit.diff",
+      "bytes": 586,
+      "sha256": "6e34db709527baf30f0f8f210eb71de6ab94e1f567ad15637fbfa9fe822b0107"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/prepare-source-pins.mjs",
+      "bytes": 6890,
+      "sha256": "381eff1fa16c8fb0914452d7676bd10bdda21992e641500b5cb83258e434d454"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/replacement-review.json",
+      "bytes": 1283,
+      "sha256": "9059335b8ca45a01aabe54cc0a4ac7281bfa10d863303305d20ef8f66474d832"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/run_replacement_smoke.py",
+      "bytes": 17924,
+      "sha256": "10192d4dbfa3fa0741b8d90fdc4d68f71fadb6c8b91ee4ab0bcafa56c8914062"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/timer-fixture-r2/fixture-summary.json",
+      "bytes": 739,
+      "sha256": "27cbebb9d82a38f917c88a8041c6818f335540544802d0a84f15588a49396ed6"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/timer-fixture-r2/request.json",
+      "bytes": 241,
+      "sha256": "10c147d291e67d70081577c3622b8d61e3cf78fc44186b95cf5ccad6ddf5307b"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/timer-fixture/fixture-summary.json",
+      "bytes": 746,
+      "sha256": "fbfc55aa2d853847b825b2e51f326584a9592fa3cf3a5a9fe3bb01eab198d978"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/timer-fixture/request.json",
+      "bytes": 241,
+      "sha256": "facba34ed49354984a7dddea6df6e40edb6d7c18e769afc00a8a3e3a472ac053"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/timer-input-manifest-r2.json",
+      "bytes": 1470,
+      "sha256": "8d9432822cb94d93fa6a461804a3760f1734e414f737376a34f9b8c1bf49b80f"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/timer-input-manifest.json",
+      "bytes": 1374,
+      "sha256": "eac86d57c87ee80d7cfa008a81968126f424072fb86b65f40c3dd6a9028f82de"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/validate-cleanup-target.py",
+      "bytes": 2279,
+      "sha256": "5bab9269b5ab4ae577e69d031d79a6c6c331c3e5101b6b267cfb5c46c5eac61c"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/run_worker_smoke.py",
+      "bytes": 12024,
+      "sha256": "e656b7ea66bd6379829016b2426d8f206fdbf5ff6b66ecb0acb70bb79a5735a6"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/source-copy-manifest.json",
+      "bytes": 19425,
+      "sha256": "59c2bc33bc09ad9b659046a4bfbbd838abee22ffcb3e5a617f376c69a3640ef3"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/store-binding-readiness.json",
+      "bytes": 1242,
+      "sha256": "4a0363577b1eba110852032df2de81a4b87bf542b8e01e02b5aa2a47a6cdc776"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/worker-image-readiness.json",
+      "bytes": 5487,
+      "sha256": "4b71a80cb441a098aa26a10537e9688b6cf9c53a2bb92afff5c13d19082cc5fc"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/themes/README.md",
+      "bytes": 3820,
+      "sha256": "a8df8c6c29ad736cea098cf8f8632c37ca7f0a7ca152fbf93f6a4d433378a8a4"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/themes/qa-cleanup.json",
+      "bytes": 173,
+      "sha256": "8858c3d3d00df2439de304be9b5065dad80e560fef8b6e60a1d0e97e93f6f56d"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/themes/receipt.json",
+      "bytes": 2044,
+      "sha256": "6a1d61741f9fcd49c5035dfd45edb4bf23bf3c7911900eb9148a029936691fa3"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/themes/source-validation.json",
+      "bytes": 2602,
+      "sha256": "7032499a61c6317671dff57f16d9148c80e7d4c45c877201fb75be1174d07cc3"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/themes/studio-theme-entry.png",
+      "bytes": 223192,
+      "sha256": "36b2c4c3681f17a6cbcea3ca932fbcefd572dfa26b12dfe19f5c99e5f54707de"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/themes/theme-drawer-1024.png",
+      "bytes": 398318,
+      "sha256": "aa32e3a0278790a409e0e12975992f79180c31d10008056d7e5995d587462ad7"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/themes/theme-drawer-1440.png",
+      "bytes": 483580,
+      "sha256": "5e019a044d7a99958e1dc17874a3cfbaf8e0cdb7f7e0c587be6073c7c1825c0e"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/themes/theme-drawer-320.png",
+      "bytes": 58500,
+      "sha256": "3fdaeaf287e17ca0a214807f2847a7169310444001bf379e2c1a2ab3b099330e"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/themes/theme-drawer-390.png",
+      "bytes": 74888,
+      "sha256": "cd6296c0265070840394fba2ace5b9c2dd428c6f86bd59fe4888ea0f836ed7f8"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/themes/theme-drawer-hebrew-390.png",
+      "bytes": 65298,
+      "sha256": "7d980c8882fbdf8b7b2ce1aff9c959faa513aff2c1652fcf2aedfe2c5c90588d"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/themes/theme-imported-poster.png",
+      "bytes": 147472,
+      "sha256": "e0b944015b8a9fe0cb18f11afcd31de2ea9558ac72c6458e7111c334a5728921"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/themes/theme-scene-drawer.png",
+      "bytes": 141738,
+      "sha256": "75d13b910b1592852da1a2c99a94f7ef874b813c827139b5287fa561adbf1513"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/themes/theme-selected-desktop.png",
+      "bytes": 540156,
+      "sha256": "0f0819126415b1022c07aee909ebb52acf2585353b3122078e3837f8c6a10503"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/worker-recovery-observer-output-only.diff",
+      "bytes": 1839,
+      "sha256": "ae365af9a3501fd930e4ab63ed43cab7078198d2007f38fbe039bfe52fcb977b"
+    }
+  ],
+  "manifestSha256": "431d07c4e11f819a83003c474b2abd54300f12385c41340f8b9df603e1ef02b7",
+  "manifestEncoding": "UTF-8; ordered SHA256 + two spaces + repo-relative path + LF",
+  "originalInventory": {
+    "path": "docs/extensions/plans/ux-unified-20261119/release-verification-final-inventory.json",
+    "bytes": 37871,
+    "sha256": "b00e79550f8465248f817512607af5e4a4e8d818bcc915f32855171d72cece1e"
+  },
+  "curationReceipt": {
+    "path": "docs/extensions/plans/ux-followup-20261119/release-evidence-curation.json",
+    "bytes": 70275,
+    "sha256": "b55be6b1c2aaaf94b00228b310268b4c698271e67a501ccbc37d61abf66e3e6e"
+  },
+  "stagingList": {
+    "path": "docs/extensions/plans/ux-followup-20261119/release-evidence-staging-list.txt",
+    "bytes": 34797,
+    "sha256": "689dad7b5a5a93a7a4b1e26a25691b986498eea31aebe8e393b72a322e9f6fe0"
+  },
+  "sourceChangedByCuration": false,
+  "gitStagingOrCommitPerformed": false
+}

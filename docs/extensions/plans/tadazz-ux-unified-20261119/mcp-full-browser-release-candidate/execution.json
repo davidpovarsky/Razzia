@@ -1,0 +1,26 @@
+{
+  "sourceSha": "cf42da75b4009c2a79d1a1dbe66f0ef5ce993cda",
+  "nativeManifestSha256": "7c21e991be4126b11470b819a9706039c4d17219e7fe73403cde0948bcff25dc",
+  "steps": [
+    {
+      "name": "native-renderer",
+      "exit": 1,
+      "seconds": 24.46
+    },
+    {
+      "name": "widget-build",
+      "exit": 0,
+      "seconds": 18.34
+    },
+    {
+      "name": "browser",
+      "exit": 0,
+      "seconds": 277.35
+    }
+  ],
+  "started": 1795049020.030905,
+  "manifestUnchanged": true,
+  "browserSourceSha": "3fdcbff6390b3efe17949fcc7b84dcd90f2cdb71",
+  "nativeArtifactSource": "exact hash-verified Linux pin preparation41b546a",
+  "continued": 1795049259.0565777
+}

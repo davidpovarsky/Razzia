@@ -1,0 +1,57 @@
+{
+  "kind": "asana-verified-status-checkpoint",
+  "recordedAt": "2026-11-19T15:59:23.998584+00:00",
+  "applicationSourceSha": "34568c5c937a51d236a440513adeb9bf93637525",
+  "tasks": [
+    {
+      "taskId": "1220704938065711",
+      "name": "P1 | Tadazz — בקרת מוזיקה ברורה ופעילה במקום ״לפי המופע״ עמום",
+      "permalink": "https://app.asana.com/1/1219597879016953/project/1219846276680200/task/1220704938065711",
+      "completed": true,
+      "notesReadbackExact": true,
+      "notesSha256": "168c67fe997dfc78e35104e02fc9389207808cc0b0cc535b19924844522a9199"
+    },
+    {
+      "taskId": "1220705114721895",
+      "name": "P1 | Tadazz — ארגון חלון המשתתפים ללא כפילויות",
+      "permalink": "https://app.asana.com/1/1219597879016953/project/1219846276680200/task/1220705114721895",
+      "completed": true,
+      "notesReadbackExact": true,
+      "notesSha256": "bab6d60d8dcabf330daaf5a16a55c026afa3ab1c49bce1ff09b87aefed192422"
+    },
+    {
+      "taskId": "1220705114982885",
+      "name": "P0 | Tadazz — אחידות שלב המשחק במנחה, קהל ומסך מלא",
+      "permalink": "https://app.asana.com/1/1219597879016953/project/1219846276680200/task/1220705114982885",
+      "completed": true,
+      "notesReadbackExact": true,
+      "notesSha256": "334c10293f35979a6762cbecba4a72d27383ba9c35986b89389a21fcc0998bf4"
+    },
+    {
+      "taskId": "1220705107692510",
+      "name": "P0 | Tadazz — הכנת מופע ישירות מהמשחק שנבחר",
+      "permalink": "https://app.asana.com/1/1219597879016953/project/1219846276680200/task/1220705107692510",
+      "completed": true,
+      "notesReadbackExact": true,
+      "notesSha256": "2c4b73425ce55ef3e77c28d170246a5ed1ca234495b7f9f89bf4bb2aeb91a941"
+    },
+    {
+      "taskId": "1220720111240379",
+      "name": "P1 | Tadazz — חיבור טופס קשר ובדיקת דומיין ושירות הדוא״ל",
+      "permalink": "https://app.asana.com/1/1219597879016953/project/1219846276680200/task/1220720111240379",
+      "completed": false,
+      "notesReadbackExact": true,
+      "notesSha256": "52ef06566aaac40626e6f1ce0452ac68f48feb3988d96422a4f39e463f9e2230"
+    },
+    {
+      "taskId": "1220541896328538",
+      "name": "HQ-I4 | תשתית Oracle, Billing/Paddle ו־QA ספק",
+      "permalink": "https://app.asana.com/1/1219597879016953/project/1220541896326618/task/1220541896328538",
+      "completed": false,
+      "notesReadbackExact": true,
+      "notesSha256": "90e5e64ace21cb33ff1e25841d9a3c2d29b8866455214517e317711450a012f7"
+    }
+  ],
+  "workerAndThemeStatus": "still open pending worker activation completion",
+  "masterAndQaStatus": "still open pending final closeout and stated acceptance limits"
+}

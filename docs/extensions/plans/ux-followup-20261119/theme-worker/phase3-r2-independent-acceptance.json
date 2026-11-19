@@ -1,0 +1,67 @@
+{
+  "format": "tadazz-theme-worker-phase3-r2-independent-acceptance",
+  "status": "PASS",
+  "reviewedAt": "2026-11-19T16:18:09.228446+00:00",
+  "scope": "Read-only acceptance of exact executed receipts and retrieved synthetic output bytes; no new operator calls or test/activation execution.",
+  "sourceSha": "34568c5c937a51d236a440513adeb9bf93637525",
+  "workerImage": "sha256:4ef04ef752c23e5360399880f1bcf4c79c0f48900c9597bcaa68da8aa01d1411",
+  "helperSha256": "355d7f3fe46f54b1eed27e9cc9c2deb21c310318694e2e82a9e675ceedb13a84",
+  "admissionSha256": "99f9145b6bbb190e71e4e8a6a005c890fb874368ff664b82ead77c53bb56372b",
+  "staticReviewSha256": "67517e122b80bd30ebe5f54ca01d4b4632b4b0bee7c6eb5af1327bb8d3aa0114",
+  "evidence": [
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-r2-timer-receipt.json",
+      "sha256": "e9303029460cf83e7667d7bb0fcbe9748d061c64d0ab6b58c34e1a68af934e2f",
+      "bytes": 8958
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-r2-execution.json",
+      "sha256": "020726f594525c70149889188f136da5eb87636cec836c9a1912c4967becb6ad",
+      "bytes": 1384
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/theme-worker/phase3-r2-transfer-receipt.json",
+      "sha256": "d54769752b8b4659a00a037e9084a698174a889041bbe03e500714e820d670c9",
+      "bytes": 3348
+    },
+    {
+      "path": "work/ux-followup-20261119/theme-worker/replacement/phase3-r2-output/result.json",
+      "sha256": "9f4d6ec7dd8a1fd166f57c1d7bcb2598ab876840ae2a825cd4c576b94d7455c8",
+      "bytes": 242
+    },
+    {
+      "path": "work/ux-followup-20261119/theme-worker/replacement/phase3-r2-output/bundle.json",
+      "sha256": "a789c772a2ba73788ce9548568a72b017a37236a5d4efd3c5d24b088e4acade6",
+      "bytes": 752963
+    }
+  ],
+  "actualTimerBuild": true,
+  "newAndPriorOwnedFixturesRemoved": true,
+  "timerTriggerMicroseconds": {
+    "before": 1343961755332,
+    "after": 1345319387745
+  },
+  "finalTimer": {
+    "active": true,
+    "enabled": true
+  },
+  "finalBroker": {
+    "state": "inactive",
+    "result": "success",
+    "exit": 0
+  },
+  "sourceAndOutputDigestsVerified": true,
+  "actualCompiledThemeIds": [
+    "fixture-arcade"
+  ],
+  "phase2OutputDigestMatched": true,
+  "mediaValidated": true,
+  "effectiveServicePropertiesUnchanged": true,
+  "appGatewayStoreBindingsUnchanged": true,
+  "runtimeConfigHashUnchanged": true,
+  "cacheRestoredStopped": true,
+  "firstFailurePreserved": true,
+  "runtimeFlagsChanged": false,
+  "customerDataAccessed": false,
+  "claimLimit": "Accepts the live operator package build worker and actual timer-driven synthetic compile. It does not enable executable-theme runtime, install a theme into an account, or claim connected-host visual validation."
+}

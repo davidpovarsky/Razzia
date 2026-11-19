@@ -1,0 +1,1511 @@
+{
+  "kind": "anonymous-public-browse-with-stateless-player-bootstrap",
+  "version": 2,
+  "status": "PASS",
+  "startedAt": "2026-11-19T15:54:27.327Z",
+  "identity": {
+    "verified": true,
+    "sourceSha": "34568c5c937a51d236a440513adeb9bf93637525",
+    "sourceRun": "tadazz-codex-34568c5c937a-7447a1b8",
+    "image": "sha256:56de89dd9ca496595980af84a7187b49fbff8c0cb563c3393c269d2b7c09d82a",
+    "container": "090d26a2fe7dd98a43226288932b7387bb9ec847cee5e5e2ff6ef48b6444bf40",
+    "gateway": "c29ea46f10ff6da76428b2f296ff1468c512ec9e2af76eba552d7a144766b202",
+    "observedAt": "2026-11-19T15:37:40.963690+00:00",
+    "ageMs": 1006361,
+    "observationFile": "docs\\extensions\\plans\\ux-followup-20261119\\post-deploy-observation.json",
+    "observationSha256": "88a19398695dc5c9c35df81da90dffb9045dda1874487129051cf018cc410553",
+    "deploymentExecutionFile": "docs\\extensions\\plans\\ux-followup-20261119\\deployment-deploy-execution.json",
+    "deploymentExecutionSha256": "203298193f489c741bc599d17a4b19423a74cc1d811a48e80604cb2df4447315"
+  },
+  "nodePid": 37788,
+  "productionOrigin": "https://tadazz.com",
+  "installedChatGptVerified": false,
+  "authenticatedStudioVerified": false,
+  "accountLoginPerformed": false,
+  "formsSubmitted": false,
+  "emailsSent": false,
+  "gamesCreated": false,
+  "customerDataRequested": false,
+  "userBrowserProfileUsed": false,
+  "cspBypassed": false,
+  "browser": {
+    "engine": "chromium",
+    "executable": "Microsoft Edge",
+    "headless": true,
+    "nonpersistentContexts": true,
+    "pid": 19836,
+    "version": "157.0.4341.60"
+  },
+  "policy": {
+    "sameOriginPublicBrowse": true,
+    "anonymousStatelessBootstrap": "one exact empty-object POST per fresh context",
+    "otherNonGetHeadRequestsBlocked": true,
+    "privateApiRequestsBlocked": true,
+    "gameSocketRequestsBlocked": true,
+    "serviceWorkers": "blocked",
+    "traceHarVideoRecorded": false
+  },
+  "cases": [
+    {
+      "name": "home-1440",
+      "route": "/",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "PASS",
+      "startedAt": "2026-11-19T15:54:28.606Z",
+      "pageErrors": [],
+      "consoleErrors": [
+        {
+          "message": "Failed to load resource: the server responded with a status of 404 ()",
+          "url": "https://tadazz.com/branding/theme.json",
+          "exactOptionalBrandingSource": true
+        }
+      ],
+      "cspViolations": [],
+      "failedSameOriginRequests": [],
+      "sameOriginHttpErrors": [
+        {
+          "path": "/branding/theme.json",
+          "type": "fetch",
+          "status": 404,
+          "optionalBranding404": true
+        }
+      ],
+      "otherHttpErrors": [],
+      "blockedRequests": [],
+      "loadedSameOriginAssets": [
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "type": "font",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/index-DdSiaUoC.css",
+          "type": "stylesheet",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/game-ppoFp0iv.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/index-DSOHh1rr.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/locales-BgzNwbnP.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/branding-DkbCKomo.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/clsx-DB0hHKMi.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/i18next-CKBcTAyQ.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/core-DDRQf67e.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/Card-Cw16PsaP.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/dist-Ds4quwX5.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/useRouterState-mRRt9LJM.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/circle-x-CkIQXAj2.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/Button-DV3PjM8w.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/QueryClientProvider-DlEDXLe2.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/arrow-right-D49hgwzZ.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/mutation-DAKY54v-.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/SiteButton-Df9JqywA.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/query-fiE78FBu.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/login-handoff-BWg7jZ9T.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/Catalogue-CPOWkNit.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/removable-DFuYGxq4.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/schemas-BJTHMcrP.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/__root-DzaqllGU.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/game-preview-surface-30Jz4QWH.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/react-AD8xOYCg.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/client-C_TmQZEq.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/preload-helper-BU_Kwx8Q.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/link-BWnS0Xao.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/socket-context-znh-3Lkj.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/platform-ui-B37oJcw6.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/extensions-DDTpSHWW.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/locales-CD-aBdf0.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/MarketingSite-CRrVaBpl.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/application-session-nusVNi62.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/audio-ByRbSNxp.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/audio-cue-player-D-o_0PAN.css",
+          "type": "stylesheet",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/audio-cue-player-eQuYW3QF.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/pencil-BsegN4N6.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/arrow-left-DGRV2D2f.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/plus-BjYpCmwK.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/ui-strings-ByPNdzrK.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/SiteLink-CYU5lFBJ.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/search-xaN7cem5.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/platform-DjWkvVPb.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/ReferenceCanvas-Dabr4Be8.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-logo.webp",
+          "type": "image",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-zb.webp",
+          "type": "image",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-zl.webp",
+          "type": "image",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-stage.webp",
+          "type": "image",
+          "status": 200,
+          "optionalBranding404": false
+        }
+      ],
+      "findings": [
+        "The optional /branding/theme.json override returned HTTP 404; the built-in Tadazz logo and font loaded and rendered. The exact correlated resource error remains recorded."
+      ],
+      "anonymousSession": {
+        "requestsAllowed": 1,
+        "responsesValidated": 1,
+        "response": {
+          "status": 200,
+          "schemaValidated": true,
+          "playerRole": true,
+          "anonymousClaimsValidated": true,
+          "serverSessionPersistenceInSource": false,
+          "cookieSet": false,
+          "tokenOrClientIdRecorded": false
+        }
+      },
+      "document": {
+        "status": 200,
+        "path": "/",
+        "cspHeaderPresent": false,
+        "contentType": "text/html"
+      },
+      "builtInAssets": {
+        "logoDecoded": true,
+        "logoUrl": "https://tadazz.com/tadazz-design-reference/marketing-logo.webp",
+        "fontsLoaded": true
+      },
+      "layout": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "documentWidth": 1440,
+        "bodyWidth": 1440,
+        "fonts": "loaded",
+        "moduleEntries": [
+          "/assets/index-DSOHh1rr.js"
+        ]
+      },
+      "optionalBrandingFallback": {
+        "path": "/branding/theme.json",
+        "status": 404,
+        "responseCount": 1,
+        "consoleCount": 1,
+        "fallbackRendered": true
+      },
+      "screenshot": "home-1440.png",
+      "contextClosed": true,
+      "finishedAt": "2026-11-19T15:54:31.431Z"
+    },
+    {
+      "name": "forgot-1440",
+      "route": "/forgot",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "status": "PASS",
+      "startedAt": "2026-11-19T15:54:31.432Z",
+      "pageErrors": [],
+      "consoleErrors": [
+        {
+          "message": "Failed to load resource: the server responded with a status of 404 ()",
+          "url": "https://tadazz.com/branding/theme.json",
+          "exactOptionalBrandingSource": true
+        }
+      ],
+      "cspViolations": [],
+      "failedSameOriginRequests": [],
+      "sameOriginHttpErrors": [
+        {
+          "path": "/branding/theme.json",
+          "type": "fetch",
+          "status": 404,
+          "optionalBranding404": true
+        }
+      ],
+      "otherHttpErrors": [],
+      "blockedRequests": [],
+      "loadedSameOriginAssets": [
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "type": "font",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/game-ppoFp0iv.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/index-DdSiaUoC.css",
+          "type": "stylesheet",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/index-DSOHh1rr.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/locales-BgzNwbnP.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/i18next-CKBcTAyQ.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/clsx-DB0hHKMi.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/branding-DkbCKomo.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/core-DDRQf67e.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/Card-Cw16PsaP.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/circle-x-CkIQXAj2.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/dist-Ds4quwX5.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/useRouterState-mRRt9LJM.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/QueryClientProvider-DlEDXLe2.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/Button-DV3PjM8w.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/mutation-DAKY54v-.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/arrow-right-D49hgwzZ.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/SiteButton-Df9JqywA.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/query-fiE78FBu.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/client-C_TmQZEq.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/login-handoff-BWg7jZ9T.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/Catalogue-CPOWkNit.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/removable-DFuYGxq4.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/schemas-BJTHMcrP.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/preload-helper-BU_Kwx8Q.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/game-preview-surface-30Jz4QWH.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/__root-DzaqllGU.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/socket-context-znh-3Lkj.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/link-BWnS0Xao.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/platform-ui-B37oJcw6.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/react-AD8xOYCg.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/extensions-DDTpSHWW.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/locales-CD-aBdf0.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/AccountGateway-BgSvhmLk.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/arrow-left-DGRV2D2f.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/manager-CIj8gloc.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/SiteLink-CYU5lFBJ.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/ReferenceCanvas-Dabr4Be8.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-logo.webp",
+          "type": "image",
+          "status": 200,
+          "optionalBranding404": false
+        }
+      ],
+      "findings": [
+        "The optional /branding/theme.json override returned HTTP 404; the built-in Tadazz logo and font loaded and rendered. The exact correlated resource error remains recorded."
+      ],
+      "anonymousSession": {
+        "requestsAllowed": 1,
+        "responsesValidated": 1,
+        "response": {
+          "status": 200,
+          "schemaValidated": true,
+          "playerRole": true,
+          "anonymousClaimsValidated": true,
+          "serverSessionPersistenceInSource": false,
+          "cookieSet": false,
+          "tokenOrClientIdRecorded": false
+        }
+      },
+      "document": {
+        "status": 200,
+        "path": "/forgot",
+        "cspHeaderPresent": false,
+        "contentType": "text/html"
+      },
+      "accountService": {
+        "status": 200,
+        "accountsEnabled": true
+      },
+      "emailControl": {
+        "width": 426,
+        "height": 44,
+        "left": 507,
+        "right": 933,
+        "fontFamily": "\"Rubik Variable\", sans-serif",
+        "borderRadius": "12px",
+        "associatedLabelCount": 1,
+        "required": true,
+        "empty": true
+      },
+      "builtInAssets": {
+        "logoDecoded": true,
+        "logoUrl": "https://tadazz.com/tadazz-design-reference/marketing-logo.webp",
+        "fontsLoaded": true
+      },
+      "layout": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "documentWidth": 1440,
+        "bodyWidth": 1440,
+        "fonts": "loaded",
+        "moduleEntries": [
+          "/assets/index-DSOHh1rr.js"
+        ]
+      },
+      "optionalBrandingFallback": {
+        "path": "/branding/theme.json",
+        "status": 404,
+        "responseCount": 1,
+        "consoleCount": 1,
+        "fallbackRendered": true
+      },
+      "contextClosed": true,
+      "finishedAt": "2026-11-19T15:54:33.244Z"
+    },
+    {
+      "name": "home-390",
+      "route": "/",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": "PASS",
+      "startedAt": "2026-11-19T15:54:33.245Z",
+      "pageErrors": [],
+      "consoleErrors": [
+        {
+          "message": "Failed to load resource: the server responded with a status of 404 ()",
+          "url": "https://tadazz.com/branding/theme.json",
+          "exactOptionalBrandingSource": true
+        }
+      ],
+      "cspViolations": [],
+      "failedSameOriginRequests": [],
+      "sameOriginHttpErrors": [
+        {
+          "path": "/branding/theme.json",
+          "type": "fetch",
+          "status": 404,
+          "optionalBranding404": true
+        }
+      ],
+      "otherHttpErrors": [],
+      "blockedRequests": [],
+      "loadedSameOriginAssets": [
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "type": "font",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/index-DdSiaUoC.css",
+          "type": "stylesheet",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/game-ppoFp0iv.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/index-DSOHh1rr.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/locales-BgzNwbnP.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/i18next-CKBcTAyQ.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/branding-DkbCKomo.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/clsx-DB0hHKMi.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/extensions-DDTpSHWW.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/core-DDRQf67e.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/Card-Cw16PsaP.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/dist-Ds4quwX5.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/Button-DV3PjM8w.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/react-AD8xOYCg.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/schemas-BJTHMcrP.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/preload-helper-BU_Kwx8Q.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/useRouterState-mRRt9LJM.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/circle-x-CkIQXAj2.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/QueryClientProvider-DlEDXLe2.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/SiteButton-Df9JqywA.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/mutation-DAKY54v-.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/arrow-right-D49hgwzZ.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/client-C_TmQZEq.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/query-fiE78FBu.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/login-handoff-BWg7jZ9T.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/removable-DFuYGxq4.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/Catalogue-CPOWkNit.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/socket-context-znh-3Lkj.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/game-preview-surface-30Jz4QWH.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/__root-DzaqllGU.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/platform-ui-B37oJcw6.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/link-BWnS0Xao.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/locales-CD-aBdf0.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/MarketingSite-CRrVaBpl.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/audio-cue-player-D-o_0PAN.css",
+          "type": "stylesheet",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/application-session-nusVNi62.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/audio-cue-player-eQuYW3QF.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/audio-ByRbSNxp.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/arrow-left-DGRV2D2f.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/platform-DjWkvVPb.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/pencil-BsegN4N6.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/plus-BjYpCmwK.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/search-xaN7cem5.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/ui-strings-ByPNdzrK.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/SiteLink-CYU5lFBJ.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/ReferenceCanvas-Dabr4Be8.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-logo.webp",
+          "type": "image",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-stage.webp",
+          "type": "image",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-zb.webp",
+          "type": "image",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-zl.webp",
+          "type": "image",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-stage.webp",
+          "type": "image",
+          "status": 200,
+          "optionalBranding404": false
+        }
+      ],
+      "findings": [
+        "Mobile navigation opens and closes through the real React handler.",
+        "The optional /branding/theme.json override returned HTTP 404; the built-in Tadazz logo and font loaded and rendered. The exact correlated resource error remains recorded."
+      ],
+      "anonymousSession": {
+        "requestsAllowed": 1,
+        "responsesValidated": 1,
+        "response": {
+          "status": 200,
+          "schemaValidated": true,
+          "playerRole": true,
+          "anonymousClaimsValidated": true,
+          "serverSessionPersistenceInSource": false,
+          "cookieSet": false,
+          "tokenOrClientIdRecorded": false
+        }
+      },
+      "document": {
+        "status": 200,
+        "path": "/",
+        "cspHeaderPresent": false,
+        "contentType": "text/html"
+      },
+      "builtInAssets": {
+        "logoDecoded": true,
+        "logoUrl": "https://tadazz.com/tadazz-design-reference/marketing-logo.webp",
+        "fontsLoaded": true
+      },
+      "layout": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "documentWidth": 390,
+        "bodyWidth": 390,
+        "fonts": "loaded",
+        "moduleEntries": [
+          "/assets/index-DSOHh1rr.js"
+        ]
+      },
+      "optionalBrandingFallback": {
+        "path": "/branding/theme.json",
+        "status": 404,
+        "responseCount": 1,
+        "consoleCount": 1,
+        "fallbackRendered": true
+      },
+      "screenshot": "home-390.png",
+      "contextClosed": true,
+      "finishedAt": "2026-11-19T15:54:35.351Z"
+    },
+    {
+      "name": "forgot-390",
+      "route": "/forgot",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "status": "PASS",
+      "startedAt": "2026-11-19T15:54:35.352Z",
+      "pageErrors": [],
+      "consoleErrors": [
+        {
+          "message": "Failed to load resource: the server responded with a status of 404 ()",
+          "url": "https://tadazz.com/branding/theme.json",
+          "exactOptionalBrandingSource": true
+        }
+      ],
+      "cspViolations": [],
+      "failedSameOriginRequests": [],
+      "sameOriginHttpErrors": [
+        {
+          "path": "/branding/theme.json",
+          "type": "fetch",
+          "status": 404,
+          "optionalBranding404": true
+        }
+      ],
+      "otherHttpErrors": [],
+      "blockedRequests": [],
+      "loadedSameOriginAssets": [
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "type": "font",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/game-ppoFp0iv.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/index-DdSiaUoC.css",
+          "type": "stylesheet",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/index-DSOHh1rr.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/locales-BgzNwbnP.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/i18next-CKBcTAyQ.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/core-DDRQf67e.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/platform-ui-B37oJcw6.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/branding-DkbCKomo.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/clsx-DB0hHKMi.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/Card-Cw16PsaP.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/useRouterState-mRRt9LJM.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/circle-x-CkIQXAj2.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/QueryClientProvider-DlEDXLe2.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/dist-Ds4quwX5.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/arrow-right-D49hgwzZ.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/Button-DV3PjM8w.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/mutation-DAKY54v-.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/SiteButton-Df9JqywA.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/query-fiE78FBu.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/removable-DFuYGxq4.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/Catalogue-CPOWkNit.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/schemas-BJTHMcrP.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/client-C_TmQZEq.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/game-preview-surface-30Jz4QWH.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/login-handoff-BWg7jZ9T.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/__root-DzaqllGU.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/socket-context-znh-3Lkj.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/link-BWnS0Xao.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/preload-helper-BU_Kwx8Q.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/react-AD8xOYCg.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/extensions-DDTpSHWW.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/locales-CD-aBdf0.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/AccountGateway-BgSvhmLk.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/SiteLink-CYU5lFBJ.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/manager-CIj8gloc.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/arrow-left-DGRV2D2f.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/assets/ReferenceCanvas-Dabr4Be8.js",
+          "type": "script",
+          "status": 200,
+          "optionalBranding404": false
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-logo.webp",
+          "type": "image",
+          "status": 200,
+          "optionalBranding404": false
+        }
+      ],
+      "findings": [
+        "The optional /branding/theme.json override returned HTTP 404; the built-in Tadazz logo and font loaded and rendered. The exact correlated resource error remains recorded."
+      ],
+      "anonymousSession": {
+        "requestsAllowed": 1,
+        "responsesValidated": 1,
+        "response": {
+          "status": 200,
+          "schemaValidated": true,
+          "playerRole": true,
+          "anonymousClaimsValidated": true,
+          "serverSessionPersistenceInSource": false,
+          "cookieSet": false,
+          "tokenOrClientIdRecorded": false
+        }
+      },
+      "document": {
+        "status": 200,
+        "path": "/forgot",
+        "cspHeaderPresent": false,
+        "contentType": "text/html"
+      },
+      "accountService": {
+        "status": 200,
+        "accountsEnabled": true
+      },
+      "emailControl": {
+        "width": 314,
+        "height": 44,
+        "left": 38,
+        "right": 352,
+        "fontFamily": "\"Rubik Variable\", sans-serif",
+        "borderRadius": "12px",
+        "associatedLabelCount": 1,
+        "required": true,
+        "empty": true
+      },
+      "builtInAssets": {
+        "logoDecoded": true,
+        "logoUrl": "https://tadazz.com/tadazz-design-reference/marketing-logo.webp",
+        "fontsLoaded": true
+      },
+      "layout": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "documentWidth": 390,
+        "bodyWidth": 390,
+        "fonts": "loaded",
+        "moduleEntries": [
+          "/assets/index-DSOHh1rr.js"
+        ]
+      },
+      "optionalBrandingFallback": {
+        "path": "/branding/theme.json",
+        "status": 404,
+        "responseCount": 1,
+        "consoleCount": 1,
+        "fallbackRendered": true
+      },
+      "screenshot": "forgot-390.png",
+      "contextClosed": true,
+      "finishedAt": "2026-11-19T15:54:37.148Z"
+    }
+  ],
+  "failures": [],
+  "cleanup": {
+    "completed": true,
+    "browserPid": 19836,
+    "browserExitCode": 0,
+    "browserSignal": null
+  },
+  "finishedAt": "2026-11-19T15:54:37.448Z",
+  "seconds": 10.12
+}

@@ -1,0 +1,24 @@
+{
+  "status": "PREPARED_NOT_EXECUTED",
+  "asanaTaskId": "1220708526935641",
+  "sourceCandidate": "34568c5c937a51d236a440513adeb9bf93637525",
+  "baseImage": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+  "sourceManifestSha256": "751fa33e6591657fa40d14f99eb0f6eca775787e7ff5f0b18989bb69c73a89dd",
+  "verifierSha256": "18e47aa70d824c306713c0aeba199d400c0a6f1f191944b1c1d8097dd87ec22f",
+  "contextManifestSha256": "8873df14cdff05994fae0d3e67d8401de58f52a7fc6fb3866056240907d8962b",
+  "builderHelperSha256": "301f43c692aab7593e16e8c401b25f5d7da7aa95f88710592752cadc3d48324e",
+  "smokeHelperSha256": "10192d4dbfa3fa0741b8d90fdc4d68f71fadb6c8b91ee4ab0bcafa56c8914062",
+  "sourceFiles": 82,
+  "contextFiles": 86,
+  "phases": [
+    "build immutable derivative and fresh provenance-only verification",
+    "fresh synthetic compile admitted only by exact passing provenance receipt",
+    "service target change by coordinator only after application deployment and observation"
+  ],
+  "serviceCommandsInHelpers": false,
+  "oldHelperPreserved": true,
+  "imageBuilt": false,
+  "containerStarted": false,
+  "syntaxChecks": "Python ast.parse and Node --check only",
+  "reviewFix": "Executable loop variable renamed to preserve exact Docker container cleanup target."
+}

@@ -1,0 +1,205 @@
+{
+  "kind": "public-index-observation",
+  "at": "2026-11-19T13:17:46.946962+00:00",
+  "url": "https://tadazz.com/",
+  "status": 200,
+  "bytes": 3371,
+  "sha256": "c1525bc10e5b0085178cb147932180787cb375200cb4cd434e37d81db365a854",
+  "lastModified": "Thu, 19 Nov 2026 12:29:57 GMT",
+  "references": [
+    {
+      "tag": "link",
+      "rel": "preload",
+      "as": "font",
+      "type": "font/woff2",
+      "crossorigin": "anonymous",
+      "href": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2"
+    },
+    {
+      "tag": "script",
+      "type": "module",
+      "crossorigin": null,
+      "src": "/assets/index-B-bI6J0t.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/rolldown-runtime-hePW80VL.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/game-ppoFp0iv.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/extensions-BOo0e9A3.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/locales-DCRLonFj.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/platform-ui-B8V7na8r.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/locales-d60oHGTN.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/schemas-CtUkspTL.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/branding-BVUY1OO2.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/clsx-DB0hHKMi.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/Button-Bzst5v66.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/dist-1BwCVHqm.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/preload-helper-CxH0_oHv.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/react-sa_zaC7U.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/socket-context-DfNHX2Bw.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/Card-B1zFnEp-.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/link-BFfEsZah.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/useRouterState-DcyYiVRO.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/circle-x-BiTRxWUe.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/QueryClientProvider-BKIUXFnv.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/removable-DFuYGxq4.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/query-fiE78FBu.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/mutation-DAKY54v-.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/__root-UkKRLHpa.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/arrow-right-C1eHQhOd.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/SiteButton-BVBRgb2x.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/game-preview-surface-DrMCkrWy.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/Catalogue-C_JNoDvK.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/client-Bosr2oD9.js"
+    },
+    {
+      "tag": "link",
+      "rel": "modulepreload",
+      "crossorigin": null,
+      "href": "/assets/login-handoff-BWg7jZ9T.js"
+    },
+    {
+      "tag": "link",
+      "rel": "stylesheet",
+      "crossorigin": null,
+      "href": "/assets/index-Cw0uGzb_.css"
+    }
+  ]
+}

@@ -1,0 +1,215 @@
+--- activate_and_verify_timer.py draft1
++++ activate_and_verify_timer.py reviewed-hardening
+@@ -22,6 +22,13 @@
+ INPUT_MANIFEST_SHA="eac86d57c87ee80d7cfa008a81968126f424072fb86b65f40c3dd6a9028f82de"
+ RUN=NAMESPACE/"evidence/phase3-timer-4ef04ef7"
+ MAX_TIMER_WAIT=90
++APP_IMAGE="sha256:56de89dd9ca496595980af84a7187b49fbff8c0cb563c3393c269d2b7c09d82a"
++APP_CONTAINER="090d26a2fe7dd98a43226288932b7387bb9ec847cee5e5e2ff6ef48b6444bf40"
++GATEWAY="c29ea46f10ff6da76428b2f296ff1468c512ec9e2af76eba552d7a144766b202"
++STAGE_SHA="a6b63581f573f04a117fdf3d86062be18bfdc73ae0435a629eafc7fc23f34b62"
++RUNTIME=Path("/var/lib/tadazz-release-5312660/config/extensions/mcp-service/runtime.json")
++RUNTIME_SHA="6524e1e0a86be5e0ec497be239a7889f53ad4425e4d3aeec285364fc5db9e9b5"
++STATIC_PROPERTIES=["Type","WorkingDirectory","TimeoutStartUSec","TimeoutStopUSec","KillMode","PrivateTmp","ProtectSystem","ProtectHome","NoNewPrivileges","MemoryMax","TasksMax","CPUQuotaPerSecUSec","CapabilityBoundingSet","ReadWritePaths","ReadOnlyPaths","RuntimeDirectory","RootDirectory","UnitFileState"]
+ def sha(data): return hashlib.sha256(data).hexdigest()
+ def now(): return datetime.datetime.now(datetime.timezone.utc).isoformat()
+ def require(ok,message):
+@@ -50,7 +57,7 @@
+     for key in keys:args.extend(["-p",key])
+     return dict(line.split("=",1) for line in command(args).splitlines() if "=" in line)
+ def service():
+-    value=props(SERVICE,["FragmentPath","DropInPaths","ExecStart","User","Group","ActiveState","SubState","Result","ExecMainStatus"])
++    value=props(SERVICE,["FragmentPath","DropInPaths","ExecStart","User","Group","ActiveState","SubState","Result","ExecMainStatus",*STATIC_PROPERTIES])
+     require(value["FragmentPath"]==str(UNIT) and not value["DropInPaths"],"Effective service file/drop-ins changed")
+     require(value["User"] in ("","root") and value["Group"] in ("","root"),"Unexpected broker service identity")
+     match=re.search(r"/usr/bin/python3 /opt/tadazz-package-runtime/package-build-worker\.py ([^\s;]+) --image (sha256:[0-9a-f]{64})(?:\s|;|$)",value.pop("ExecStart"))
+@@ -58,6 +65,17 @@
+     value.update({"store":match[1],"image":match[2]})
+     require(value["store"]==str(STORE),"Effective worker store changed")
+     return value
++def effective_static(value):
++    return {key:value[key] for key in ["FragmentPath","DropInPaths","User","Group","store",*STATIC_PROPERTIES]}
++def runtime_unchanged():
++    require(sha(regular(RUNTIME))==RUNTIME_SHA,"Accepted runtime configuration hash changed")
++def drain_service(max_seconds=50):
++    deadline=time.monotonic()+max_seconds
++    while True:
++        value=service()
++        if value["ActiveState"] not in ("active","activating","deactivating"):return value
++        require(time.monotonic()<deadline,"Existing broker remained busy; no running job killed and published inputs retained")
++        time.sleep(1)
+ def timer():
+     return props(TIMER,["ActiveState","SubState","UnitFileState","LastTriggerUSec","LastTriggerUSecMonotonic"])
+ def cache_stopped():
+@@ -70,7 +88,8 @@
+     env=docker(["inspect","--format",'{{range .Config.Env}}{{if eq (index (split . "=") 0) "CONFIG_PATH"}}{{println .}}{{end}}{{end}}',"tadazz"])
+     require(env.startswith("CONFIG_PATH=") and "\n" not in env,"One explicit CONFIG_PATH required")
+     config=posixpath.normpath(posixpath.join(identity["workingDir"] or "/",env.partition("=")[2]))
+-    parents=[config];cursor=config
++    container_store=posixpath.join(config,"extensions/packages")
++    parents=[container_store];cursor=container_store
+     while cursor!="/":cursor=posixpath.dirname(cursor);parents.append(cursor)
+     predicate="(or "+" ".join("(eq .Destination "+json.dumps(p)+")" for p in parents)+")"
+     template="{{range .Mounts}}{{if "+predicate+"}}"+'{"type":{{json .Type}},"source":{{json .Source}},"destination":{{json .Destination}},"rw":{{json .RW}}}'+"{{println}}{{end}}{{end}}"
+@@ -101,23 +120,44 @@
+     require(sha(data)==expected_hash,"Admission digest mismatch")
+     a=json.loads(data)
+     require(a["status"]=="READY_FOR_REVIEWED_PHASE3" and a["sourceSha"]==SOURCE and a["workerImage"]==NEW_IMAGE,"Admission is pending or for a different release")
++    require(a["container"]==APP_CONTAINER and a["image"]==APP_IMAGE and a["gateway"]==GATEWAY,"Exact accepted app/gateway identity required")
+     require(a["helperSha256"]==sha(regular(Path(__file__))) and a["unitBeforeSha256"]==UNIT_BEFORE and a["unitAfterSha256"]==UNIT_AFTER,"Admission helper/unit pin mismatch")
+-    required={"deployment-deploy-execution.json","post-deploy-execution.json","post-deploy-observation.json"}
+-    require(set(a["records"])==required,"Exact three release guard records required")
++    required={"stage-execution.json","deployment-deploy-execution.json","post-deploy-execution.json","post-deploy-observation.json"}
++    require(set(a["records"])==required,"Exact four release guard records required")
+     records={}
+     for name,pin in a["records"].items():
+         blob=regular(confined(HERE/"phase3-admission-records",name),4_000_000)
+         require(sha(blob)==pin,"Release record changed: "+name)
++        if name=="stage-execution.json":require(pin==STAGE_SHA,"Qualified stage receipt changed")
+         records[name]=json.loads(blob)
++    stage_outer=records["stage-execution.json"]
++    require(stage_outer["exit"]==0,"Staging did not pass")
++    stage=json.loads(stage_outer["stdout"])
++    require(stage["exit"]==0 and stage["sourceSha"]==SOURCE and stage["candidateImage"]==APP_IMAGE and stage["gatewayContainer"]==GATEWAY and stage["runtimeConfigSha256"]==RUNTIME_SHA and stage["cacheRestoredStopped"] is True,"Qualified stage identity/runtime pin mismatch")
++    deployment=records["deployment-deploy-execution.json"]
++    require(deployment["exit"]==0 and deployment["action"]=="deploy","Deployment outer envelope did not pass")
++    remote=json.loads(deployment["stdout"])
++    require(remote["exit"]==remote["childExit"]==0 and remote["action"]=="deploy" and remote["deadlineExceeded"] is False and remote["stateRequiresInspection"] is False and remote["sourceSha"]==SOURCE,"Deployment remote envelope did not pass")
++    core=json.loads(remote["stdout"])
++    require(core["success"] is True and core["phase"]=="verified" and core["revision"]==SOURCE and core["image"]==APP_IMAGE and core["replacementContainer"]==APP_CONTAINER,"Deployment core did not verify exact release")
++    require(all(core[key] is True for key in ["mountsUnchanged","hostConfigurationUnchanged","otherContainersUnchanged"]) and core["dataRestorePerformed"] is False,"Deployment preservation gates failed")
++    require(core["previousContainer"]==stage["productionContainer"] and APP_CONTAINER!=stage["productionContainer"],"New release identity missing")
++    current=remote["observedContainers"]["tadazz"];gateway=remote["observedContainers"]["tadazz-phone-gateway"]
++    require(current["id"]==APP_CONTAINER and current["image"]==APP_IMAGE and current["running"] is True and current["restartCount"]==0 and gateway["id"]==GATEWAY and gateway["running"] is True,"Deployment observed containers mismatch")
+     observation=records["post-deploy-observation.json"]
+-    require(records["deployment-deploy-execution.json"]["exit"]==0 and records["post-deploy-execution.json"]["exit"]==0,"Successful deployment and observation required")
+-    require(json.loads(records["post-deploy-execution.json"]["stdout"])==observation,"Accepted observation envelope mismatch")
++    require(records["post-deploy-execution.json"]["exit"]==0 and json.loads(records["post-deploy-execution.json"]["stdout"])==observation,"Accepted observation envelope mismatch")
+     require(observation["passed"] is True and observation["runtimeConfigHashUnchanged"] is True and observation["cacheRestoredStopped"] is True,"Observer gates did not pass")
+-    require(observation["sourceSha"]==SOURCE and all(observation[key]==a[key] for key in ("container","image","gateway")),"Accepted source/container/image/gateway mismatch")
++    require(observation["sourceSha"]==SOURCE and observation["sourceRun"]==stage["sourceRun"] and all(observation[key]==a[key] for key in ("container","image","gateway")),"Accepted source/container/image/gateway mismatch")
++    inner=observation["observation"]
++    require(inner["passed"] is True and inner["restartsDuringWindow"]==0 and inner["endingSnapshot"]["releaseIdentityVerified"] is True and inner["endingSnapshot"]["gatewayIdentityVerified"] is True and all(inner[key]==a[key] for key in ("container","image","gateway")),"Inner observation did not verify the exact healthy release")
++    finished=datetime.datetime.fromisoformat(inner["finishedAt"].replace("Z","+00:00"))
++    require(finished.tzinfo is not None,"Timezone-aware accepted observer time required")
++    age=(datetime.datetime.now(datetime.timezone.utc)-finished).total_seconds()
++    require(0<=age<=1200,"Accepted observation is stale or in the future; bounded fresh observation required")
+     return a
+ def cleanup_owned(tenant,job,expected,created):
+     require(created and tenant==STORE/job.parent.parent.name and job.parent.parent==tenant,"Owned fixture path mismatch")
+-    require(tenant.stat().st_uid==0 and job.stat().st_uid==0 and not tenant.is_symlink() and not job.is_symlink(),"Owned directory identity changed")
++    require(tenant.stat().st_uid==0 and job.stat().st_uid==0 and not tenant.is_symlink() and not job.parent.is_symlink() and not job.is_symlink(),"Owned directory identity changed")
+     require(set(p.name for p in job.iterdir())==set(expected),"Unexpected files in owned synthetic job")
+     for name,pin in expected.items():
+         blob=regular(job/name,8_000_000)
+@@ -134,7 +174,7 @@
+         print(json.dumps({"status":"PREPARED_NOT_EXECUTED","phase":3,"workerImage":NEW_IMAGE,"requiresSuccessfulNewAppObservation":True}));return 0
+     require(sys.platform=="linux" and os.geteuid()==0 and Path(__file__).resolve().parent==HERE,"Reviewed Linux operator namespace required")
+     admission=load_admission(a.admission_sha256 or "")
+-    cache_stopped()
++    cache_stopped();runtime_unchanged()
+     prior=regular(COMPILE_RECEIPT)
+     require(sha(prior)==COMPILE_SHA,"Accepted phase 2 receipt changed")
+     compiled=json.loads(prior)
+@@ -167,17 +207,18 @@
+     report={"status":"FAIL","phase":3,"asanaTaskId":"1220708526935641","startedAt":now(),"sourceSha":SOURCE,"workerImage":NEW_IMAGE,"admissionSha256":a.admission_sha256,"unitBeforeSha256":UNIT_BEFORE,"unitAfterSha256":UNIT_AFTER,"beforeService":before_service,"beforeTimer":before_timer,"beforeBinding":before_binding,"tenant":fixture["tenant"],"uploadId":fixture["uploadId"],"customerDataAccessed":False,"runtimeFlagsChanged":False,"cleanup":{"removed":False},"serviceImageChanged":False}
+     stopped=False;changed=False;created=False;published=False;result_complete=False
+     try:
+-        load_admission(a.admission_sha256);app_binding(admission);cache_stopped()
+-        command(["/usr/bin/systemctl","stop",TIMER]);stopped=True
+-        deadline=time.monotonic()+50
+-        while service()["ActiveState"] in ("active","activating","deactivating"):
+-            require(time.monotonic()<deadline,"Existing broker remained busy; no running job killed")
+-            time.sleep(1)
++        load_admission(a.admission_sha256);app_binding(admission);cache_stopped();runtime_unchanged()
++        stopped=True;report["timerStopRequested"]=True
++        command(["/usr/bin/systemctl","stop",TIMER])
++        require(timer()["ActiveState"]=="inactive","Future timer triggers did not stop")
++        drained=drain_service()
++        require(effective_static(drained)==effective_static(before_service) and drained["image"]==OLD_IMAGE,"Prior effective service properties changed")
+         require(sha(regular(UNIT))==UNIT_BEFORE and sha(regular(BROKER))==BROKER_SHA,"Operator inputs changed before mutation")
+-        load_admission(a.admission_sha256);app_binding(admission)
++        load_admission(a.admission_sha256);app_binding(admission);runtime_unchanged()
+         replace_unit(replacement,UNIT_BEFORE);changed=True;report["serviceImageChanged"]=True
+         command(["/usr/bin/systemctl","daemon-reload"])
+-        require(service()["image"]==NEW_IMAGE and sha(regular(UNIT))==UNIT_AFTER,"Effective service did not adopt the exact new image")
++        effective=service()
++        require(effective["image"]==NEW_IMAGE and sha(regular(UNIT))==UNIT_AFTER and effective_static(effective)==effective_static(before_service),"Effective service changed beyond the exact image substitution")
+         tenant.mkdir(mode=0o700);created=True
+         (tenant/"jobs").mkdir(mode=0o700);job.mkdir(mode=0o700)
+         write_exclusive(job/"source.tadazz",inputs["source.tadazz"],0o444)
+@@ -190,6 +231,11 @@
+         while not (job/"result.json").exists():
+             require(time.monotonic()<deadline,"Timer result deadline expired; owned inputs retained")
+             time.sleep(1)
++        command(["/usr/bin/systemctl","stop",TIMER])
++        require(timer()["ActiveState"]=="inactive","Future timer triggers did not pause for completion proof")
++        completed_service=drain_service()
++        require(completed_service["ActiveState"]=="inactive" and completed_service["Result"]=="success" and completed_service["ExecMainStatus"]=="0","Completed broker did not succeed")
++        report["timerStoppedForCompletionProof"]=True
+         result_bytes=regular(job/"result.json",8_000_000)
+         result=json.loads(result_bytes);bundle_bytes=regular(job/"bundle.json",8_000_000);bundle=json.loads(bundle_bytes)
+         require(not result.get("error") and result["sourceDigest"]==fixture["archiveSha256"],"Real broker rejected or mismatched the synthetic source")
+@@ -197,15 +243,20 @@
+         require(sorted(bundle)==fixture["expectedCompiledThemeIds"] and all(isinstance(value.get("js"),str) and value["js"] and isinstance(value.get("css"),str) and isinstance(value.get("assets"),dict) for value in bundle.values()),"Actual compiled theme output missing")
+         require(sha(regular(job/"source.tadazz"))==fixture["archiveSha256"] and regular(job/"request.json")==inputs["request.json"],"Owned timer source/request changed")
+         after_timer=timer();after_service=service()
+-        require(after_timer["ActiveState"]=="active" and after_timer["UnitFileState"]=="enabled" and int(after_timer["LastTriggerUSecMonotonic"])>int(before_timer["LastTriggerUSecMonotonic"]),"Actual enabled timer did not advance")
+-        require(after_service["image"]==NEW_IMAGE and after_service["ActiveState"]!="failed" and after_service["Result"]=="success" and after_service["ExecMainStatus"]=="0","Broker service health failed")
++        require(after_timer["ActiveState"]=="inactive" and after_timer["UnitFileState"]=="enabled" and int(after_timer["LastTriggerUSecMonotonic"])>int(before_timer["LastTriggerUSecMonotonic"]),"Actual enabled timer did not advance")
++        require(after_service["image"]==NEW_IMAGE and after_service["ActiveState"]=="inactive" and after_service["Result"]=="success" and after_service["ExecMainStatus"]=="0" and effective_static(after_service)==effective_static(before_service),"Completed broker/static service health failed")
+         require(sha(regular(BROKER))==BROKER_SHA and sha(regular(UNIT))==UNIT_AFTER,"Operator pins changed after timer run")
+-        after_binding=app_binding(admission);cache_stopped()
++        after_binding=app_binding(admission);cache_stopped();runtime_unchanged()
+         write_exclusive(RUN/"result.json",result_bytes);write_exclusive(RUN/"bundle.json",bundle_bytes)
+         result_complete=True
+         expected={"source.tadazz":fixture["archiveSha256"],"request.json":sha(inputs["request.json"]),"result.json":sha(result_bytes),"bundle.json":sha(bundle_bytes)}
+         report["cleanup"]=cleanup_owned(tenant,job,expected,created)
+-        report.update({"status":"PASS","actualTimerBuild":True,"mediaValidated":True,"sourceUnchanged":True,"outputDigest":sha(bundle_bytes),"bundleBytes":len(bundle_bytes),"compiledThemeIds":sorted(bundle),"afterTimer":after_timer,"afterService":after_service,"afterBinding":after_binding,"cacheRestoredStopped":True})
++        command(["/usr/bin/systemctl","start",TIMER])
++        final_timer=timer();final_service=service()
++        require(final_timer["ActiveState"]=="active" and final_timer["UnitFileState"]=="enabled" and final_service["image"]==NEW_IMAGE and effective_static(final_service)==effective_static(before_service),"Final enabled timer/service state changed")
++        require(sha(regular(UNIT))==UNIT_AFTER and sha(regular(BROKER))==BROKER_SHA,"Final operator pins changed")
++        final_binding=app_binding(admission);cache_stopped();runtime_unchanged()
++        report.update({"status":"PASS","actualTimerBuild":True,"mediaValidated":True,"sourceUnchanged":True,"outputDigest":sha(bundle_bytes),"bundleBytes":len(bundle_bytes),"compiledThemeIds":sorted(bundle),"completedTimer":after_timer,"completedService":after_service,"afterTimer":final_timer,"afterService":final_service,"afterBinding":final_binding,"cacheRestoredStopped":True,"runtimeConfigHashUnchanged":True,"effectiveServicePropertiesUnchanged":True})
+     except BaseException as error:
+         report["error"]=type(error).__name__+": "+str(error)[:1200]
+         rollback={"attempted":False,"runningBrokerKilled":False,"customerJobsTouched":False}
+@@ -219,15 +270,28 @@
+                 command(["/usr/bin/systemctl","daemon-reload"])
+                 rollback.update({"unitRestored":True,"timerLeftStopped":True,"oldImageStillMissing":True,"serviceState":service()["ActiveState"],"ownedFixtureRetained":created})
+             elif stopped:
++                require(current_sha==UNIT_BEFORE and sha(regular(BROKER))==BROKER_SHA,"Unknown operator change; prior timer will not be restarted")
++                prior_effective=service()
++                require(prior_effective["image"]==OLD_IMAGE and effective_static(prior_effective)==effective_static(before_service),"Unknown effective service change; prior timer will not be restarted")
+                 command(["/usr/bin/systemctl","start",TIMER])
+                 rollback.update({"unitRestored":True,"priorTimerRestored":True})
+         except BaseException as rollback_error:rollback["error"]=type(rollback_error).__name__+": "+str(rollback_error)[:800]
+         report["rollback"]=rollback
+         if created and not published:
+             try:
+-                expected={p.name:sha(regular(p)) for p in job.iterdir()} if job.exists() else {}
+-                require(set(expected).issubset({"source.tadazz","request.ready"}),"Unexpected partial fixture files")
+-                if job.exists():report["cleanup"]=cleanup_owned(tenant,job,expected,created)
++                if job.exists():
++                    names=set(p.name for p in job.iterdir())
++                    require(names.issubset({"source.tadazz","request.ready"}),"Unexpected partial fixture files")
++                    original_pins={"source.tadazz":fixture["archiveSha256"],"request.ready":sha(inputs["request.json"])}
++                    report["cleanup"]=cleanup_owned(tenant,job,{name:original_pins[name] for name in names},created)
++                else:
++                    require(not tenant.is_symlink() and tenant.stat().st_uid==0,"Partial tenant ownership changed")
++                    jobs=tenant/"jobs"
++                    if jobs.exists():
++                        require(not jobs.is_symlink() and jobs.stat().st_uid==0,"Partial jobs ownership changed")
++                        jobs.rmdir()
++                    tenant.rmdir()
++                    report["cleanup"]={"removed":True,"partialBeforePublication":True}
+             except BaseException as cleanup_error:report["cleanup"]={"removed":False,"reason":str(cleanup_error)[:800]}
+         elif created and not result_complete:report["cleanup"]={"removed":False,"retainedForSafeFollowUp":True,"reason":"Published job outcome is incomplete or failed; no active inputs removed"}
+     finally:
+@@ -238,4 +302,4 @@
+ if __name__=="__main__":
+     try:raise SystemExit(main())
+     except (RuntimeError,OSError,ValueError,KeyError,subprocess.TimeoutExpired) as error:
+-        print(json.dumps({"status":"BLOCKED_PREFLIGHT","error":str(error)[:1200],"serviceChanged":False}));raise SystemExit(2)
++        print(json.dumps({"status":"ABORTED","error":str(error)[:1200],"serviceStateRequiresInspection":True}));raise SystemExit(2)

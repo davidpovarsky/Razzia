@@ -1,0 +1,41 @@
+{
+  "status": "PASS",
+  "helperSha256": "355d7f3fe46f54b1eed27e9cc9c2deb21c310318694e2e82a9e675ceedb13a84",
+  "validCases": {
+    "1343961755332": 1343961755332,
+    "2w 1d 13h 19min 21.755332s": 1343961755332,
+    "2w 1d 13h 19min 8.755471s": 1343948755471,
+    "745.122ms": 745122,
+    "1y 1month": 34187400000000,
+    "1us": 1,
+    "0": 0,
+    "18446744073709551614": 18446744073709551614
+  },
+  "rejectedCases": [
+    "n/a",
+    "infinity",
+    "-1s",
+    "1foo",
+    "1s 1s",
+    "1s 1min",
+    "1min  1s",
+    "1e3s",
+    "1.1us",
+    "18446744073709551615",
+    "18446744073709551616",
+    "1s trailing",
+    " 1s",
+    "1s ",
+    "1.5s 2ms"
+  ],
+  "validCount": 8,
+  "rejectedCount": 15,
+  "strictObservedOrdering": true,
+  "finiteUint64Only": true,
+  "linuxCommandExecuted": false,
+  "serviceChanged": false,
+  "sources": [
+    "https://github.com/systemd/systemd/blob/main/src/basic/time-util.c",
+    "https://github.com/systemd/systemd/blob/main/src/basic/time-util.h"
+  ]
+}

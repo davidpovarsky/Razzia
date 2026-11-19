@@ -1,0 +1,19 @@
+{
+  "ok": true,
+  "checks": [
+    "host/display/fullscreen shared directory",
+    "private host chrome removed",
+    "one host websocket across fullscreen",
+    "one audio engine across fullscreen",
+    "actual HTMLAudioElement time progression",
+    "manual selection overrides automatic cue policy",
+    "pause and explicit selection resumes music",
+    "automatic music return",
+    "missing track shows an error, is disabled, and permits recovery",
+    "authoritative add/edit/policy/reload",
+    "compact roster at 1440/768/390/320",
+    "Hebrew RTL"
+  ],
+  "browserErrors": [],
+  "syntheticOnly": true
+}

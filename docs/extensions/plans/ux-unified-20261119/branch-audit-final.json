@@ -1,0 +1,210 @@
+{
+  "sourceHead": "cf42da75b4009c2a79d1a1dbe66f0ef5ce993cda",
+  "recentRefs": 29,
+  "allIncluded": true,
+  "refs": [
+    {
+      "ref": "refs/heads/cez/1e96bb6f",
+      "sha": "f6fc33969bd59ca59cc030cd32d9fda4a801be79",
+      "committerDate": "2026-11-17T14:04:22+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/heads/cez/482771e7",
+      "sha": "dd6fd4392d44932fd63a80837abadece416e5ade",
+      "committerDate": "2026-11-17T05:30:10+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/heads/cez/8de82781",
+      "sha": "62a9cbea2846711a8392d695be02f9f82f635536",
+      "committerDate": "2026-11-17T12:02:01+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/heads/cez/999ed90c",
+      "sha": "34cfd464ac0bba432701b87f10f4f8388d665066",
+      "committerDate": "2026-11-17T14:27:04+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/heads/cez/fd341b34",
+      "sha": "a7c7c8f531fee3ad32416e8edf0b33ef01886b63",
+      "committerDate": "2026-11-17T12:17:16+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/heads/codex/great-guessoff-demo-final-20261118",
+      "sha": "f9861c630f65d592237f756fb1bf8089cf863fa9",
+      "committerDate": "2026-11-18T21:41:14+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/heads/codex/great-guessoff-live-20261118",
+      "sha": "f2ee7430b4075134362e0458a559c723bae228d4",
+      "committerDate": "2026-11-19T01:14:26+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/heads/codex/great-guessoff-public-demo-20261118",
+      "sha": "eb715d56cc7b64f9a05ecc471c76b384797eee79",
+      "committerDate": "2026-11-18T17:50:15+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-chat-preview-flow-p0-20261118",
+      "sha": "c9b2483b8719b4357852f105e91369e4ffb592e8",
+      "committerDate": "2026-11-18T14:04:43+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-editor-drafts-20261118",
+      "sha": "af1d879431d3461c7f937a6c5f580eee97b073e2",
+      "committerDate": "2026-11-18T16:30:13+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-editor-hebrew-20261118",
+      "sha": "eb715d56cc7b64f9a05ecc471c76b384797eee79",
+      "committerDate": "2026-11-18T17:50:15+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-editor-timer-20261118",
+      "sha": "567a145154b6b6710dea07b9c9524bd90ff1c910",
+      "committerDate": "2026-11-18T17:37:20+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-host-roster-hebrew-20261118",
+      "sha": "af1d879431d3461c7f937a6c5f580eee97b073e2",
+      "committerDate": "2026-11-18T16:30:13+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-host-roster-hebrew-20261118-ready",
+      "sha": "98386b361fbbc5f21ac8a4ce04274e6ccc20fb4b",
+      "committerDate": "2026-11-18T17:58:14+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-integration-all-20261118",
+      "sha": "b672eb2e972edcfca143c659acc88fbd2efb23e3",
+      "committerDate": "2026-11-18T19:18:30+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-mcp-connect-20261118",
+      "sha": "c9b2483b8719b4357852f105e91369e4ffb592e8",
+      "committerDate": "2026-11-18T14:04:43+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-oauth-compat-20261118",
+      "sha": "8b9463ee39c25086aa00afbc3e73a6ea6ae4504f",
+      "committerDate": "2026-11-18T15:37:52+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-phase3-takeover-20261117",
+      "sha": "9db0c9a0ec65b1162e5a32475e317b253265d64d",
+      "committerDate": "2026-11-18T00:24:17+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-save-consent-hotfix-20261118",
+      "sha": "b85975da0dc7970141350078db31427139e6709f",
+      "committerDate": "2026-11-18T19:53:33+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-save-consent-link-20261118",
+      "sha": "eb715d56cc7b64f9a05ecc471c76b384797eee79",
+      "committerDate": "2026-11-18T17:50:15+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-scope-discovery-20261118",
+      "sha": "574def589c620c0380f79281acebf4f13a88739a",
+      "committerDate": "2026-11-18T17:39:21+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-ux-unified-20261119",
+      "sha": "cf42da75b4009c2a79d1a1dbe66f0ef5ce993cda",
+      "committerDate": "2026-11-19T02:42:33+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/remotes/origin/codex/great-guessoff-demo-final-20261118",
+      "sha": "f9861c630f65d592237f756fb1bf8089cf863fa9",
+      "committerDate": "2026-11-18T21:41:14+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/remotes/origin/codex/great-guessoff-live-20261118",
+      "sha": "f2ee7430b4075134362e0458a559c723bae228d4",
+      "committerDate": "2026-11-19T01:14:26+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/remotes/origin/codex/tadazz-editor-hebrew-20261118",
+      "sha": "7ccd71a8cb20c5274c68051cbf0084a49286f9ca",
+      "committerDate": "2026-11-18T21:42:21+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/remotes/origin/codex/tadazz-mcp-connect-20261118",
+      "sha": "c9b2483b8719b4357852f105e91369e4ffb592e8",
+      "committerDate": "2026-11-18T14:04:43+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/remotes/origin/codex/tadazz-oauth-compat-20261118",
+      "sha": "8b9463ee39c25086aa00afbc3e73a6ea6ae4504f",
+      "committerDate": "2026-11-18T15:37:52+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/remotes/origin/codex/tadazz-save-consent-hotfix-20261118",
+      "sha": "b85975da0dc7970141350078db31427139e6709f",
+      "committerDate": "2026-11-18T19:53:33+02:00",
+      "isAncestor": true,
+      "exit": 0
+    },
+    {
+      "ref": "refs/remotes/origin/codex/tadazz-scope-discovery-20261118",
+      "sha": "574def589c620c0380f79281acebf4f13a88739a",
+      "committerDate": "2026-11-18T17:39:21+02:00",
+      "isAncestor": true,
+      "exit": 0
+    }
+  ]
+}

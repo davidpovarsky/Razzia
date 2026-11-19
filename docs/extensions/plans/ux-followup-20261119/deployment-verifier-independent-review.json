@@ -1,0 +1,109 @@
+{
+  "format": "tadazz-independent-deployment-verifier-review-v1",
+  "status": "ACCEPTED_NO_STATIC_BLOCKERS",
+  "reviewedAtUtc": "2026-11-19T15:33:04.825085+00:00",
+  "reviewer": "/root/host_controls_consistency",
+  "application": {
+    "sourceSha": "34568c5c937a51d236a440513adeb9bf93637525",
+    "image": "sha256:56de89dd9ca496595980af84a7187b49fbff8c0cb563c3393c269d2b7c09d82a",
+    "unchangedByThisFix": true
+  },
+  "deploymentTool": {
+    "path": "extensions/deployment/deploy-mcp-site.py",
+    "baselineSha256": "3cf6acd277c9c9f7322c21c17ad27da8ee10a8ab2dd76594f81bc7d5f707cc35",
+    "sha256": "6897dee11b1535172fd297c04c870449d361a25fc58b9a2764d39504b453a9f1",
+    "toolSourceCommit": "pending root one-file commit and deployment-tool-source.json"
+  },
+  "independentStaticChecks": {
+    "completeDiffReviewed": true,
+    "allOtherTopLevelNodesAndFunctionsUnchanged": true,
+    "onlyRuntimeChange": "billing_disabled_probe and its base_probes call",
+    "onlyOtherChange": "synthetic billing probe self-tests appended to existing self_test",
+    "genericJsonProbeEqualityUnchanged": true,
+    "requestStatusTypeBodyLimitTimeoutUnchanged": true,
+    "exactLegacyKeys": [
+      "enabled"
+    ],
+    "legacyEnabledIsExactFalse": true,
+    "exactCurrentKeys": [
+      "enabled",
+      "configured",
+      "environment",
+      "catalogAvailable"
+    ],
+    "enabledConfiguredCatalogAreExactFalse": true,
+    "numericZeroRejected": true,
+    "environments": [
+      "sandbox",
+      "live"
+    ],
+    "arrayObjectNullEnvironmentFailAsGateError": true,
+    "failureCodePreserved": "PROBE_JSON_VALUE",
+    "safeDiagnosticPreserved": true,
+    "responseBodyHeadersAndQueryExcludedFromDiagnostic": true,
+    "legacyBaselineRollbackCompatible": true,
+    "releaseIdentityBackupRuntimeConfigAndRollbackFunctionsUnchanged": true,
+    "deployerImports": "standard library only",
+    "adjacentFileOrCwdDependenciesFound": []
+  },
+  "reviewedTestEvidence": {
+    "path": "billing-deployment-verifier-fix.json",
+    "sha256": "a1c5af853e2d91c246b5262388537ae75df86d9b7f64f8cdd6949c0d32f4db29",
+    "linuxSelfTestNamedChecks": 79,
+    "linuxSelfTestExit": 0,
+    "acceptedBaseProbeCases": 6,
+    "strictSchemaRejections": 47,
+    "transportParserRejections": 6,
+    "genericEqualityPrivacyCases": 2,
+    "boundary": "synthetic HTTP opener; actual request/json_probe/base_probes paths",
+    "reviewerReranTests": false
+  },
+  "coordinator": {
+    "path": "work/ux-followup-20261119/release-plan/deploy_current_candidate_with_tool.py",
+    "sha256": "4700e9ca1e0f0b9ff830e54cb1893bdc67d30403091ef338a845abb8f45e2c99",
+    "outerSyntaxCompile": "PASS",
+    "embeddedRemoteSyntaxCompile": "PASS with dummy configuration only",
+    "executed": false,
+    "appAndToolPinsSeparated": true,
+    "guards": [
+      "exact tool HEAD",
+      "application ancestor of tool commit",
+      "exact one-file Git diff",
+      "Git blob SHA256",
+      "working bytes equal committed tool",
+      "remote decoded and stored bytes SHA256",
+      "exact staged state equality"
+    ],
+    "remoteToolNamespace": "owned release-receipts/deployment-tools/<toolSourceSha>/deploy-mcp-site.py",
+    "qualifiedApplicationSourceOverwritten": false,
+    "unchangedArguments": [
+      "application image/tag/revision",
+      "live container/image/gateway/count",
+      "stage/config pins",
+      "qualification receipt and SHA256",
+      "JWK/client/redirect pins"
+    ],
+    "sigtermAndRollbackTimingUnchanged": true,
+    "hardKillNotIntroduced": true,
+    "separateToolLogsAndSourceProof": true,
+    "pendingPrerequisite": "Root must create the separate one-file tool commit and matching deployment-tool-source.json; coordinator fails closed without these."
+  },
+  "claimLimits": [
+    "Static acceptance is not a successful redeployment.",
+    "The original failed attempt and successful rollback remain historical evidence and are not rewritten by this review.",
+    "No worker phase 3/service activation is covered by this deployment-verifier review."
+  ],
+  "actions": {
+    "readSourceAndReceipts": true,
+    "readGitObjectOnly": true,
+    "compareAST": true,
+    "compileSyntaxOnly": true,
+    "writeReviewArtifactsOnly": true,
+    "executeTests": false,
+    "executeDeployer": false,
+    "networkOrDockerCalls": false,
+    "editProductSource": false,
+    "gitMutation": false,
+    "productionMutation": false
+  }
+}

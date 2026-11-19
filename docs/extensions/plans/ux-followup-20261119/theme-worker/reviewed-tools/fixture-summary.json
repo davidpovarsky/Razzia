@@ -1,0 +1,51 @@
+{
+  "format": "tadazz-theme-worker-synthetic-fixture",
+  "tenant": "12b78d1c4abc50f53ebe86ac4a54af341418496cdb57d46d22766e6cced9619f",
+  "uploadId": "c4b4548a-b81f-4985-9b87-e5017e95439d",
+  "kind": "complete",
+  "style": "arcade",
+  "sourceDigest": "2d64baabbafa9dd12f07be4a97422167437f2d815b6363a62ec34e9de7eace4d",
+  "archiveBytes": 520223,
+  "packageId": "fixture-complete-arcade",
+  "packageVersion": "1.0.0",
+  "contents": [
+    {
+      "kind": "sandboxed-react-theme",
+      "id": "fixture-arcade",
+      "path": "theme/theme.json",
+      "demo": false
+    },
+    {
+      "kind": "game",
+      "id": "demo-game-1",
+      "path": "games/game-1.json",
+      "themeRef": "fixture-arcade@1.0.0",
+      "demo": false
+    },
+    {
+      "kind": "game",
+      "id": "demo-game-2",
+      "path": "games/game-2.json",
+      "themeRef": "fixture-arcade@1.0.0",
+      "demo": false
+    }
+  ],
+  "compiledThemes": [
+    {
+      "id": "fixture-arcade",
+      "entry": "theme/src/entry.tsx"
+    }
+  ],
+  "fileKinds": {
+    "image": 51,
+    "audio": 1,
+    "video": 1,
+    "lottie": 1,
+    "source": 1,
+    "style": 1,
+    "descriptor": 3
+  },
+  "generatedOnly": true,
+  "customerData": false,
+  "sourceCodeExecuted": false
+}

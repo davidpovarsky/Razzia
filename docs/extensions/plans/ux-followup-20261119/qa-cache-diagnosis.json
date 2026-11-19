@@ -1,0 +1,123 @@
+{
+  "kind": "read-only-linux-sdk-cache-diagnosis",
+  "observedAt": "2026-11-19T14:37:24.887Z",
+  "candidateSha": "34568c5c937a51d236a440513adeb9bf93637525",
+  "failedJob": "job_f4c66f64c952",
+  "failedRun": "tadazz-codex-34568c5c937a-348e4ae1",
+  "failedStage": "sdk_setup before matrix-container creation and before native tests",
+  "missingPath": "/tmp/phase3-999ed90c/deps/node_modules/@modelcontextprotocol/server/package.json",
+  "diagnosis": "The qualification runner requires the previously restored transient SDK cache at a fixed /tmp path. The known QA cache was stopped and restarted; the restored dependency precondition was not re-established before this candidate run. The same runner, MCP dependency declaration and lockfile are byte-for-byte unchanged from the accepted D8 release.",
+  "restartEvidence": [
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/deployment-baseline.json",
+      "observedAt": "2026-11-19T13:59:14.841859+00:00",
+      "cacheRunning": false
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/qa-cache-start.json",
+      "observedAt": "2026-11-19T14:07:26.211615+00:00",
+      "originalRunning": false,
+      "running": true
+    }
+  ],
+  "sourceUnchangedFromD8": [
+    {
+      "path": "extensions/qa/phase3-recovery/linux-verify.py",
+      "oldReadable": true,
+      "newReadable": true,
+      "same": true,
+      "oldSha256": "a57086e108c04926faf349428d0578ef98a6f094e290800d1b522f7992d4ad30",
+      "newSha256": "a57086e108c04926faf349428d0578ef98a6f094e290800d1b522f7992d4ad30"
+    },
+    {
+      "path": "extensions/src/mcp-app/package.json",
+      "oldReadable": true,
+      "newReadable": true,
+      "same": true,
+      "oldSha256": "6eb95ce747d27ac38497f8cc594bf922aa7a5586fe850dec8e3fe6666c229b8c",
+      "newSha256": "6eb95ce747d27ac38497f8cc594bf922aa7a5586fe850dec8e3fe6666c229b8c"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "oldReadable": true,
+      "newReadable": true,
+      "same": true,
+      "oldSha256": "3800f044abe28ace4d0480508ab3f081a1b20c5ff5dbd9e6153c5952b49e5952",
+      "newSha256": "3800f044abe28ace4d0480508ab3f081a1b20c5ff5dbd9e6153c5952b49e5952"
+    }
+  ],
+  "exactRestoreSource": {
+    "source": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-browser-c4125d58a746-8e0c29d3/mcp-deps",
+    "readOnly": true,
+    "exists": true,
+    "isSymlink": false,
+    "fileAndSymlinkEntries": 2042,
+    "directoriesExcluded": 318,
+    "symlinks": 97,
+    "totalFileBytes": 63587810,
+    "manifestSha256": "0d1e3e9c089b66a75ff0e6b284f58b94ddb4e4b47b55129d82865980f62d67de",
+    "matchesAccepted2042AndDigest": true,
+    "sdkVersions": {
+      "server": "2.4.0",
+      "client": "2.4.0",
+      "core": "2.4.0"
+    }
+  },
+  "acceptedD8RunLocalCopy": {
+    "source": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-browser-d8a402dd39bf-f580e59d/mcp-deps",
+    "readOnly": true,
+    "exists": false,
+    "isSymlink": false
+  },
+  "manifestConvention": "relative POSIX path -> SHA256(file bytes) or link:<literal target>; directories excluded; SHA256(json.dumps(mapping,sort_keys=True).encode())",
+  "historicalAcceptedReceipt": {
+    "fileCount": 2042,
+    "sha256": "0d1e3e9c089b66a75ff0e6b284f58b94ddb4e4b47b55129d82865980f62d67de",
+    "references": [
+      "docs/extensions/plans/ux-unified-20261119/qa-cache-restoration-after-staging.json",
+      "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-browser-d8a402dd39bf-f580e59d/receipt.json",
+      "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-d8a402dd39bf-aa4fea5c/receipt.json"
+    ]
+  },
+  "countDiscrepancy": {
+    "explanation": "The difference is 97 symlink entries, not directory entries. Regular files alone reproduce the earlier failed initial precheck exactly. The accepted manifest includes files and literal symlink targets and excludes 318 directories.",
+    "source": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-browser-c4125d58a746-8e0c29d3/mcp-deps",
+    "readOnly": true,
+    "canonical": {
+      "entries": 2042,
+      "sha256": "0d1e3e9c089b66a75ff0e6b284f58b94ddb4e4b47b55129d82865980f62d67de"
+    },
+    "regularFilesOnlyDiagnostic": {
+      "entries": 1945,
+      "sha256": "17af36f1a3747fe6914989b8a7c995b22fc0af353788c256fd11c5012e789b48",
+      "matchesHistoricalFailedPrecheck": true
+    },
+    "acceptanceUsesCanonicalOnly": true,
+    "historicalFailedPrecheck": "docs/extensions/plans/ux-unified-20261119/qa-cache-restoration-initial-precheck.json"
+  },
+  "manifestCodeReferences": [
+    "extensions/qa/phase3-recovery/linux-verify.py: dependency_hashes",
+    "extensions/qa/phase3-recovery/cleanup-owned-sdk.py: files map and digest calculation (read only; cleanup helper was not executed)"
+  ],
+  "smallestRepairForCoordinator": [
+    "Preserve the failed candidate run, input manifest and controller logs as a failed setup attempt; do not relabel it as a test run.",
+    "Using the established exact QA-cache identity and isolation guards, recheck that the expected /tmp dependency destination is absent or empty. Preserve and inspect any unexpected existing content instead of overwriting it.",
+    "Verify the c412 snapshot again against the original 2,042-entry / 0d1e3e9c... digest and SDK server/client/core 2.4.0 before copying.",
+    "Restore that exact snapshot into the QA cache's /tmp/phase3-999ed90c/deps through a fresh task-owned staging path. Preserve all literal symlinks; do not install or resolve new dependencies.",
+    "Require complete source/target manifest equality and the original count/digest after copying, verify source unchanged and the three SDK versions, and retain the existing container configuration/isolation.",
+    "Rerun the normal qualification on the same immutable candidate 34568c5c937a51d236a440513adeb9bf93637525 under a fresh run ID. The application source does not need to change for this repair."
+  ],
+  "limits": {
+    "restorePerformed": false,
+    "sourceModified": false,
+    "cacheModified": false,
+    "containersModified": false,
+    "gitMutated": false,
+    "testsRun": false,
+    "customerDataRead": false,
+    "secretValuesPrinted": false,
+    "privilegedInspectionScope": "Only the known c412 SDK snapshot and the explicitly named D8 browser snapshot path were read or hashed. No private container configuration or customer mount was inspected.",
+    "priorUnprivilegedRead": "A first read of the known root-owned snapshot returned PermissionError. Subsequent narrowly scoped sudo reads were explicitly authorized by the coordinator.",
+    "restorationHelper": "No persisted restoration helper was found in the searched work/docs source paths. The exact manifest convention was recovered from existing qualification/SDK cleanup source, and the historical accepted digest was reproduced directly."
+  }
+}

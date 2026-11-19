@@ -1,0 +1,19 @@
+{
+  "format": "tadazz-theme-worker-timer-fixture",
+  "asanaTaskId": "1220708526935641",
+  "tenant": "975cf0bc96ad9d54014b0cb115ae3a841ff1f80a72511a3ea428083ce3da4639",
+  "uploadId": "c1869a7e-4587-4edd-acc8-c28244723d52",
+  "kind": "complete",
+  "packageId": "fixture-complete-arcade",
+  "version": "1.0.0",
+  "themeId": "fixture-arcade",
+  "archiveSha256": "2d64baabbafa9dd12f07be4a97422167437f2d815b6363a62ec34e9de7eace4d",
+  "archiveBytes": 520223,
+  "expectedCompiledThemeIds": [
+    "fixture-arcade"
+  ],
+  "generatedOnly": true,
+  "customerData": false,
+  "sourceCodeExecutedDuringPreparation": false,
+  "archiveProvenance": "Pinned synthetic Complete sample, reused unchanged in a new unique timer job; never installed into any account"
+}

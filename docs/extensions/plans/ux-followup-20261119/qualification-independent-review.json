@@ -1,0 +1,412 @@
+{
+  "kind": "independent-exact-source-qualification-review",
+  "status": "PASS",
+  "observedAt": "2026-11-19T15:09:09.885424+00:00",
+  "reviewedAt": "2026-11-19T15:12:10.708Z",
+  "sourceSha": "34568c5c937a51d236a440513adeb9bf93637525",
+  "sourceRun": "tadazz-codex-34568c5c937a-7447a1b8",
+  "mode": "Read-only inspection of completed coordinator execution, immutable-source receipts, exact owned QA progress and resource output. This reviewer started no tests and made no product, container or Git changes.",
+  "checks": {
+    "coordinatorJob": true,
+    "coordinatorSteps": true,
+    "exactSource": true,
+    "nativeMatrix": true,
+    "launch": true,
+    "consent": true,
+    "fullShowMatrix": true,
+    "fullShowErrors": true,
+    "fullShowArtifacts": true,
+    "sdk": true,
+    "resources": true,
+    "proxy": true
+  },
+  "coordinatorExecution": {
+    "jobId": "job_308a8a4752ed",
+    "status": "succeeded",
+    "exitCode": 0,
+    "startedAt": "2026-11-19T14:37:40.273295+00:00",
+    "finishedAt": "2026-11-19T15:07:05.556159+00:00",
+    "durationSeconds": 1765.28,
+    "steps": [
+      {
+        "check": "native-launch",
+        "exit": 0,
+        "seconds": 205.8,
+        "log": "docs/extensions/plans/ux-followup-20261119/linux-native-launch-34568c5c937a.log"
+      },
+      {
+        "check": "native-consent",
+        "exit": 0,
+        "seconds": 277.7,
+        "log": "docs/extensions/plans/ux-followup-20261119/linux-native-consent-34568c5c937a.log"
+      },
+      {
+        "check": "full-show",
+        "exit": 0,
+        "seconds": 1270.8,
+        "log": "docs/extensions/plans/ux-followup-20261119/linux-full-show-34568c5c937a.log"
+      },
+      {
+        "check": "proxy",
+        "exit": 0,
+        "seconds": 9.9,
+        "log": "docs/extensions/plans/ux-followup-20261119/linux-proxy-34568c5c937a.log"
+      }
+    ]
+  },
+  "source": {
+    "manifestShaMatches": true,
+    "fileCount": 1868,
+    "nativeShaMatches": true,
+    "nativeBeforeAfterMatchesInput": true,
+    "nativeReportedUnchanged": true,
+    "nativeChangedPaths": [],
+    "consentUnchanged": true,
+    "consentSourceRunMatches": true,
+    "fullShowUnchanged": true,
+    "fullShowReadOnly": true,
+    "proxyBeforeAfterMatchesInput": true
+  },
+  "native": {
+    "gateCount": 16,
+    "allExitZero": true,
+    "gates": [
+      {
+        "label": "native-application-preview-build",
+        "exit": 0,
+        "seconds": 3.623
+      },
+      {
+        "label": "native-widget-build",
+        "exit": 0,
+        "seconds": 8.573
+      },
+      {
+        "label": "native-http",
+        "exit": 0,
+        "seconds": 51.107
+      },
+      {
+        "label": "native-types",
+        "exit": 0,
+        "seconds": 7.421
+      },
+      {
+        "label": "native-lint",
+        "exit": 0,
+        "seconds": 6.15
+      },
+      {
+        "label": "native-format",
+        "exit": 0,
+        "seconds": 3.705
+      },
+      {
+        "label": "semantic-types",
+        "exit": 0,
+        "seconds": 6.206
+      },
+      {
+        "label": "full-show-widget-types",
+        "exit": 0,
+        "seconds": 4.898
+      },
+      {
+        "label": "full-show-widget-lint",
+        "exit": 0,
+        "seconds": 5.348
+      },
+      {
+        "label": "full-show-widget-format",
+        "exit": 0,
+        "seconds": 1.999
+      },
+      {
+        "label": "semantic-lint",
+        "exit": 0,
+        "seconds": 6.213
+      },
+      {
+        "label": "semantic-format",
+        "exit": 0,
+        "seconds": 1.947
+      },
+      {
+        "label": "semantic-integration-lint-baseline",
+        "exit": 0,
+        "seconds": 6.171
+      },
+      {
+        "label": "native-launch-build",
+        "exit": 0,
+        "seconds": 1.357
+      },
+      {
+        "label": "native-site-build",
+        "exit": 0,
+        "seconds": 6.571
+      },
+      {
+        "label": "native-application-package",
+        "exit": 0,
+        "seconds": 0.147
+      }
+    ]
+  },
+  "launch": {
+    "sha": "34568c5c937a51d236a440513adeb9bf93637525",
+    "sourceFileCount": 1868,
+    "allSourceHashesVerifiedBeforeAfter": true,
+    "webArtifactsUnchanged": true,
+    "artifactHashUnchanged": true,
+    "exit": 0,
+    "seconds": 9.558,
+    "productionChanged": false,
+    "customerDataAccessed": false
+  },
+  "consent": {
+    "sha": "34568c5c937a51d236a440513adeb9bf93637525",
+    "exit": 0,
+    "testsPassed6": true,
+    "testNames": [
+      "✓  1 [chromium] › extensions/qa/phase3-native-consent/native-consent.spec.ts:621:3 › phase 3 native consent Studio integration › authenticated browser flow -> OAuth consent -> MCP draft -> native save consent -> retry -> Studio & editor reopen (29.1s)",
+      "✓  2 [chromium] › extensions/qa/phase3-native-consent/native-consent.spec.ts:995:3 › phase 3 native consent Studio integration › fail-closed negative cases: B consent denial, framing block, URL tamper, cancel, cross-tab switch, draft drift (25.2s)",
+      "✓  3 [chromium] › extensions/qa/phase3-native-consent/native-consent.spec.ts:1242:3 › phase 3 native consent Studio integration › renders native-save consent page across all 8 locales (14.9s)",
+      "✓  4 [webkit] › extensions/qa/phase3-native-consent/native-consent.spec.ts:621:3 › phase 3 native consent Studio integration › authenticated browser flow -> OAuth consent -> MCP draft -> native save consent -> retry -> Studio & editor reopen (1.7m)",
+      "✓  5 [webkit] › extensions/qa/phase3-native-consent/native-consent.spec.ts:995:3 › phase 3 native consent Studio integration › fail-closed negative cases: B consent denial, framing block, URL tamper, cancel, cross-tab switch, draft drift (58.5s)",
+      "✓  6 [webkit] › extensions/qa/phase3-native-consent/native-consent.spec.ts:1242:3 › phase 3 native consent Studio integration › renders native-save consent page across all 8 locales (32.6s)"
+    ],
+    "sourceFileCount": 1868,
+    "webArtifactsUnchanged": true,
+    "widgetArtifactsUnchanged": true,
+    "sdkCacheFileCount": 2042,
+    "sdkCacheHashesVerifiedBeforeAfter": true,
+    "sdkCacheManifestSha256": "0d1e3e9c089b66a75ff0e6b284f58b94ddb4e4b47b55129d82865980f62d67de"
+  },
+  "fullShow": {
+    "sha": "34568c5c937a51d236a440513adeb9bf93637525",
+    "exit": 0,
+    "seconds": 1266.891,
+    "sourceFileCount": 1868,
+    "gates": 40,
+    "allGatesPass": true,
+    "rendererFixtures": 44,
+    "engines": [
+      "chromium",
+      "webkit"
+    ],
+    "errors": 0,
+    "pageErrors": 0,
+    "requestFailures": 0,
+    "allWidgetHashesVerifiedBeforeAfter": true,
+    "widgetManifestSha256": "159e4fd5077db94ef33fcec26f0d71d410326f9e15b4f42ec97ce603922b6f55",
+    "widgetHtmlSha256": "764c11e7152bfa7973a29ed0e96e9f2167a4083b5508e40c720c2875cc5493ea",
+    "artifactShaMatchesWidgetHtml": true,
+    "sdkCacheFileCount": 2042,
+    "sdkCacheHashesVerifiedBeforeAfter": true,
+    "sdkCacheManifestSha256": "0d1e3e9c089b66a75ff0e6b284f58b94ddb4e4b47b55129d82865980f62d67de",
+    "resources": {
+      "before": {
+        "memoryLimitBytes": 3221225472,
+        "memoryCurrentBytes": 5328896,
+        "memoryPeakBytes": 5328896,
+        "memorySwapLimitBytes": 0,
+        "memoryEvents": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0,
+          "sock_throttled": 0
+        },
+        "cpuMax": [
+          100000,
+          100000
+        ]
+      },
+      "after": {
+        "memoryLimitBytes": 3221225472,
+        "memoryCurrentBytes": 86638592,
+        "memoryPeakBytes": 2711543808,
+        "memorySwapLimitBytes": 0,
+        "memoryEvents": {
+          "low": 0,
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0,
+          "oom_group_kill": 0,
+          "sock_throttled": 0
+        },
+        "cpuMax": [
+          100000,
+          100000
+        ]
+      },
+      "configuredMemoryLimitBytes": 3221225472,
+      "configuredNanoCpus": 1000000000,
+      "dockerOOMKilled": false
+    },
+    "diagnosticMode": null,
+    "failureCount": 0,
+    "rendererFixtureGroups": {
+      "chromium/tadazz-classic": 11,
+      "chromium/razzia-original": 11,
+      "webkit/tadazz-classic": 11,
+      "webkit/razzia-original": 11
+    }
+  },
+  "proxy": {
+    "sha": "34568c5c937a51d236a440513adeb9bf93637525",
+    "sourceRun": "tadazz-codex-34568c5c937a-7447a1b8",
+    "exactSourceSha": "34568c5c937a51d236a440513adeb9bf93637525",
+    "immutable": true,
+    "controllerSha256": "187354c776642905060094a43888769f67c3f8d9034606349cd5c32e5e7f07b1",
+    "sourceFileCount": 1868,
+    "sourceReadOnly": true,
+    "overlayReadOnly": true,
+    "baseHashesUnchanged": true,
+    "newFileHashesUnchanged": true,
+    "combinedImmutableGate": true,
+    "sdkCacheHashesVerifiedBeforeAfter": true,
+    "sdkCacheManifestSha256": "0d1e3e9c089b66a75ff0e6b284f58b94ddb4e4b47b55129d82865980f62d67de",
+    "network": "none",
+    "privacyProof": {
+      "version": 1,
+      "passed": true,
+      "ordinaryAccessControl": true,
+      "ordinaryUpstreamErrorControl": true,
+      "sensitiveAccessLogAbsent": true,
+      "sensitiveErrorLogAbsent": true,
+      "protectedSuccess": true,
+      "protectedDenial": true,
+      "protectedUpstreamFailure": true
+    },
+    "exit": 0,
+    "seconds": 5.727,
+    "productionChanged": false,
+    "customerDataAccessed": false
+  },
+  "ordinaryNativeEditorCoverage": {
+    "covered": true,
+    "engines": [
+      "chromium",
+      "webkit"
+    ],
+    "receipt": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-browser-34568c5c937a-01036285/receipt.json",
+    "entry": "/manager/quizz/${quizId}",
+    "builtWebDirectory": "/source/packages/web/dist",
+    "assertions": [
+      "The editor Save button is visible after a direct page.goto of the saved game's editor URL.",
+      "Saved subject and edited third-question text match.",
+      "All five saved answer-image URLs and alternative text match; each image completes decoding with naturalWidth > 0.",
+      "Saved theme music volume is visible as 0.25 in the actual settings control.",
+      "A different account cannot see the saved game through Studio or its editor URL."
+    ],
+    "supportingSources": [
+      {
+        "path": "extensions/qa/phase3-native-consent/native-consent.spec.ts",
+        "sha256": "9d6b1515bb9f8bb5580718ed6c3010fc25864d627128f1ec41ef0f1e6217ee40",
+        "matchesCandidateInputManifest": true
+      },
+      {
+        "path": "extensions/qa/phase3-native-consent/native-consent.playwright.config.ts",
+        "sha256": "4a4dabd1f45374dfda39ae62cf457b667dad3301a8a26ebb10a26aac83ce4447",
+        "matchesCandidateInputManifest": true
+      },
+      {
+        "path": "extensions/qa/phase3-native-consent/playwright-server.ts",
+        "fact": "Startup rejects a missing TADAZZ_SITE_DIST_DIR or missing built index.html."
+      },
+      {
+        "path": "extensions/qa/phase3-native-consent/browser-verify.py",
+        "fact": "Binds the built web artifact read-only, sets TADAZZ_SITE_DIST_DIR to /source/packages/web/dist, and verifies web artifacts unchanged."
+      }
+    ],
+    "limits": "This is the existing isolated built-artifact acceptance. It does not itself prove that the production deployment serves the same artifact."
+  },
+  "cacheRecovery": {
+    "sameCandidateRetried": true,
+    "sourceAndDependencyVersionsChanged": false,
+    "acceptedManifestEntries": 2042,
+    "acceptedManifestSha256": "0d1e3e9c089b66a75ff0e6b284f58b94ddb4e4b47b55129d82865980f62d67de",
+    "restorationReceipt": "docs/extensions/plans/ux-followup-20261119/qa-cache-restoration.json",
+    "diagnosis": "docs/extensions/plans/ux-followup-20261119/qa-cache-diagnosis.json",
+    "preservedFailure": "docs/extensions/plans/ux-followup-20261119/qualification-setup-failure-34568c5c937a/receipt.json",
+    "historicalFailureRemainsFailure": true
+  },
+  "qaCleanupObservation": {
+    "fullShowContainer": "tadazz-codex-fullshow-34568c5c937a-0b72dd89",
+    "running": false,
+    "oomKilled": false,
+    "sleepContainerExitCode": 143,
+    "explanation": "The full-show controller's finally block stops its sleep container after collecting the successful browser result. Test process and coordinator exits are zero."
+  },
+  "publication": {
+    "curatedGatePaths": "docs/extensions/plans/ux-followup-20261119/qualification-gate-evidence-paths.txt",
+    "rawLogsNotIncluded": true,
+    "privateConfigsNotIncluded": true,
+    "customerDataNotIncluded": true,
+    "secretValuesNotCopied": true,
+    "wholeDirectoryCopyAuthorized": false,
+    "mutableReceiptSnapshot": "current-release-source.json is hashed as observed at qualification review. Later deployment acceptance may legitimately update that coordinator-owned record; this historical review hash must not be rewritten."
+  },
+  "limitations": [
+    "Deployment and production observation are separate coordinator gates and are not accepted by this qualification receipt.",
+    "No real email delivery, LIVE payment, customer room or customer account operation is proved or performed.",
+    "The 16 native gates, 6 consent tests and 40 full-show checks are distinct scopes; no aggregate test count is fabricated."
+  ],
+  "inputReceipts": [
+    {
+      "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-34568c5c937a-7447a1b8/input-manifest.json",
+      "bytes": 237421,
+      "sha256": "f7ca42462fae1d9f1fca2a3134e24060332ff41ed4f8c7031f6a23189bf69ac6"
+    },
+    {
+      "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-34568c5c937a-7447a1b8/receipt.json",
+      "bytes": 1147581,
+      "sha256": "7dda33d4cd47cd8ca44851a1a4487c759e572c8f1f514ab57432a7f0274bfc65"
+    },
+    {
+      "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-launch-34568c5c937a-80c36b12/receipt.json",
+      "bytes": 196794,
+      "sha256": "10f8422d573d4b50374d021740117d023badde87ed161385b99eedca9998df92"
+    },
+    {
+      "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-browser-34568c5c937a-01036285/receipt.json",
+      "bytes": 45590,
+      "sha256": "d26a2680f8e37b38b22a4575a5d194e4b5cf1d5d5603fdea627f23a919b54cf9"
+    },
+    {
+      "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-34568c5c937a-0b72dd89/receipt.json",
+      "bytes": 2653991,
+      "sha256": "ad83bce867ee22c52b648d7d51d3fb6114c27cc142cc1293f20c9a9b6d0fbe2e"
+    },
+    {
+      "path": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-proxy-34568c5c937a-d751e9ca/receipt.json",
+      "bytes": 477542,
+      "sha256": "442b114acfb4dcc0e9cdc1ac73b36c7729a54bff4988d79f1954bffdc756dd56"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/release-gates-progress.json",
+      "bytes": 1333,
+      "sha256": "a71e95f0d93e883e96630339b6b526eb87c65e238ce9ca085f5a8b61efda2585"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/current-release-source.json",
+      "bytes": 782,
+      "sha256": "3eb1a6ce6b1aaf6f1ef9551a60c0a059b368f50f1b25c7424a9f9596b2f38734"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/qa-cache-restoration.json",
+      "bytes": 668,
+      "sha256": "dba064bb5acc9eb827c5aa5a766fb0c5818fe0cb464001941059075d7cb90329"
+    },
+    {
+      "path": "docs/extensions/plans/ux-followup-20261119/qualification-setup-failure-34568c5c937a/receipt.json",
+      "bytes": 2519,
+      "sha256": "d4b23097e553c237952d16c6d6626c0216990d2ceace20ac2f0432bddad47ce9"
+    }
+  ]
+}

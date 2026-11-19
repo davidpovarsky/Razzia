@@ -1,0 +1,35 @@
+{
+  "sourceSha": "34568c5c937a51d236a440513adeb9bf93637525",
+  "serialCpuBudget": true,
+  "fullShowMemoryLimitBytes": 3221225472,
+  "completed": [
+    {
+      "check": "native-launch",
+      "exit": 0,
+      "seconds": 205.8,
+      "log": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\ux-followup-20261119\\linux-native-launch-34568c5c937a.log"
+    },
+    {
+      "check": "native-consent",
+      "exit": 0,
+      "seconds": 277.7,
+      "log": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\ux-followup-20261119\\linux-native-consent-34568c5c937a.log"
+    },
+    {
+      "check": "full-show",
+      "exit": 0,
+      "seconds": 1270.8,
+      "log": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\ux-followup-20261119\\linux-full-show-34568c5c937a.log"
+    },
+    {
+      "check": "proxy",
+      "exit": 0,
+      "seconds": 9.9,
+      "log": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-ux-unified-20261119\\docs\\extensions\\plans\\ux-followup-20261119\\linux-proxy-34568c5c937a.log"
+    }
+  ],
+  "status": "passed",
+  "stepStartedAt": 1795100815.4910038,
+  "sourceRun": "tadazz-codex-34568c5c937a-7447a1b8",
+  "finishedAt": 1795100825.443627
+}

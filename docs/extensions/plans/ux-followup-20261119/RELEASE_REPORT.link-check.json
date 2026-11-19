@@ -1,0 +1,383 @@
+{
+  "report": "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+  "reportSha256": "86fd7a1109b3e6370b3f5900f739ce76045f14cc1ba9811a192e1520e283d85b",
+  "status": "PASS",
+  "checkedAtUtc": "2026-11-19T16:24:44.498226+00:00",
+  "internalLinksChecked": 72,
+  "uniqueInternalTargets": 54,
+  "missing": [],
+  "checks": [
+    {
+      "target": "current-release-source.json",
+      "exists": true
+    },
+    {
+      "target": "stage-execution.json",
+      "exists": true
+    },
+    {
+      "target": "qualification-independent-review.json",
+      "exists": true
+    },
+    {
+      "target": "stage-execution.json",
+      "exists": true
+    },
+    {
+      "target": "deployment-first-attempt-failure-20261119/deployment-deploy-execution.json",
+      "exists": true
+    },
+    {
+      "target": "deployment-first-attempt-failure-20261119/preservation.json",
+      "exists": true
+    },
+    {
+      "target": "deployment-tool-source.json",
+      "exists": true
+    },
+    {
+      "target": "billing-deployment-verifier-fix.json",
+      "exists": true
+    },
+    {
+      "target": "deployment-verifier-independent-review.json",
+      "exists": true
+    },
+    {
+      "target": "deployment-preflight-execution.json",
+      "exists": true
+    },
+    {
+      "target": "deployment-deploy-execution.json",
+      "exists": true
+    },
+    {
+      "target": "deployment-deploy-execution.json",
+      "exists": true
+    },
+    {
+      "target": "post-deploy-observation.json",
+      "exists": true
+    },
+    {
+      "target": "production-public-smoke-anonymous-session/receipt.json",
+      "exists": true
+    },
+    {
+      "target": "production-public-smoke-anonymous-session/execution.json",
+      "exists": true
+    },
+    {
+      "target": "installed-connector-smoke.json",
+      "exists": true
+    },
+    {
+      "target": "theme-worker/independent-phase12-acceptance.json",
+      "exists": true
+    },
+    {
+      "target": "theme-worker/phase3-r2-timer-receipt.json",
+      "exists": true
+    },
+    {
+      "target": "theme-worker/phase3-r2-execution.json",
+      "exists": true
+    },
+    {
+      "target": "theme-worker/phase3-r2-independent-acceptance.json",
+      "exists": true
+    },
+    {
+      "target": "final-operational-verification.json",
+      "exists": true
+    },
+    {
+      "target": "post-deploy-provider-public-readiness.json",
+      "exists": true
+    },
+    {
+      "target": "email-provider-readiness.json",
+      "exists": true
+    },
+    {
+      "target": "qualification-independent-review.json",
+      "exists": true
+    },
+    {
+      "target": "billing-deployment-verifier-fix.json",
+      "exists": true
+    },
+    {
+      "target": "deployment-verifier-independent-review.json",
+      "exists": true
+    },
+    {
+      "target": "production-public-smoke/receipt.json",
+      "exists": true
+    },
+    {
+      "target": "production-public-smoke-policy-fix/diagnosis.json",
+      "exists": true
+    },
+    {
+      "target": "production-public-smoke-policy-fix/policy-self-test.json",
+      "exists": true
+    },
+    {
+      "target": "production-public-smoke-anonymous-session/home-1440.png",
+      "exists": true
+    },
+    {
+      "target": "production-public-smoke-anonymous-session/forgot-390.png",
+      "exists": true
+    },
+    {
+      "target": "themes/README.md",
+      "exists": true
+    },
+    {
+      "target": "themes/receipt.json",
+      "exists": true
+    },
+    {
+      "target": "themes/source-validation.json",
+      "exists": true
+    },
+    {
+      "target": "theme-worker/phase3-r2-independent-acceptance.json",
+      "exists": true
+    },
+    {
+      "target": "host-controls/manual-scope-checks.json",
+      "exists": true
+    },
+    {
+      "target": "host-controls/manual-scope-playwright.json",
+      "exists": true
+    },
+    {
+      "target": "host-controls/browser-proof.json",
+      "exists": true
+    },
+    {
+      "target": "host-controls/verification.json",
+      "exists": true
+    },
+    {
+      "target": "host-controls/roster-320-hebrew.png",
+      "exists": true
+    },
+    {
+      "target": "host-controls/browser-proof.json",
+      "exists": true
+    },
+    {
+      "target": "site-browser-with-fonts/receipt.json",
+      "exists": true
+    },
+    {
+      "target": "prepare-idempotency/README.md",
+      "exists": true
+    },
+    {
+      "target": "prepare-idempotency/validation.json",
+      "exists": true
+    },
+    {
+      "target": "contact-final-verification.json",
+      "exists": true
+    },
+    {
+      "target": "site-browser-with-fonts/receipt.json",
+      "exists": true
+    },
+    {
+      "target": "billing/README.md",
+      "exists": true
+    },
+    {
+      "target": "billing/focused-test-execution.json",
+      "exists": true
+    },
+    {
+      "target": "billing/focused-typed-final.json",
+      "exists": true
+    },
+    {
+      "target": "billing/browser-final/receipt.json",
+      "exists": true
+    },
+    {
+      "target": "qualification-independent-review.json",
+      "exists": true
+    },
+    {
+      "target": "themes/qa-cleanup.json",
+      "exists": true
+    },
+    {
+      "target": "host-controls/verification.json",
+      "exists": true
+    },
+    {
+      "target": "site-qa-cleanup.json",
+      "exists": true
+    },
+    {
+      "target": "billing/browser-final/cleanup.json",
+      "exists": true
+    },
+    {
+      "target": "asana-final-readback.json",
+      "exists": true
+    },
+    {
+      "target": "asana-completion-checkpoint.json",
+      "exists": true
+    },
+    {
+      "target": "theme-worker/image-build-receipt.json",
+      "exists": true
+    },
+    {
+      "target": "theme-worker/phase1-provenance-receipt.json",
+      "exists": true
+    },
+    {
+      "target": "theme-worker/phase2-compile-receipt.json",
+      "exists": true
+    },
+    {
+      "target": "theme-worker/independent-phase12-acceptance.json",
+      "exists": true
+    },
+    {
+      "target": "theme-worker/phase3-execution.json",
+      "exists": true
+    },
+    {
+      "target": "theme-worker/phase3-retained-owned-result.json",
+      "exists": true
+    },
+    {
+      "target": "theme-worker/phase3-timer-receipt.json",
+      "exists": true
+    },
+    {
+      "target": "theme-worker/phase3-r2-timer-receipt.json",
+      "exists": true
+    },
+    {
+      "target": "theme-worker/phase3-r2-execution.json",
+      "exists": true
+    },
+    {
+      "target": "theme-worker/phase3-r2-independent-acceptance.json",
+      "exists": true
+    },
+    {
+      "target": "final-operational-verification.json",
+      "exists": true
+    },
+    {
+      "target": "provider-readiness.json",
+      "exists": true
+    },
+    {
+      "target": "post-deploy-provider-public-readiness.json",
+      "exists": true
+    },
+    {
+      "target": "email-provider-readiness.json",
+      "exists": true
+    },
+    {
+      "target": "billing/README.md",
+      "exists": true
+    }
+  ],
+  "productSourceChanged": false,
+  "extraTestsRun": false,
+  "productionActionsPerformed": false,
+  "releaseIdentity": "APPLICATION_AND_PACKAGE_WORKER_DEPLOYMENT_VALIDATION_COMPLETE_PROVIDER_ACTIVATION_PENDING",
+  "applicationSourceSha": "34568c5c937a51d236a440513adeb9bf93637525",
+  "applicationImage": "sha256:56de89dd9ca496595980af84a7187b49fbff8c0cb563c3393c269d2b7c09d82a",
+  "applicationContainer": "090d26a2fe7dd98a43226288932b7387bb9ec847cee5e5e2ff6ef48b6444bf40",
+  "deploymentToolSourceSha": "3a3c1d148bb49849080366d59f233e573549394f",
+  "pending": [
+    "contact recipient and active sending credential/domain validation",
+    "LIVE Paddle business/catalog/credentials and pilot-entitlement activation"
+  ],
+  "notVerified": [
+    "authenticated production Studio/gameplay",
+    "visual rendering in the installed ChatGPT host",
+    "real email delivery",
+    "LIVE payment",
+    "customer package installation",
+    "Resend domain status and sending capability"
+  ],
+  "acceptedOrPreservedProofSha256": {
+    "deployment-preflight-execution.json": "2ee601591eea33b23e021500daf859dc0ca647540128910d5323540a8af4d3d5",
+    "deployment-deploy-execution.json": "203298193f489c741bc599d17a4b19423a74cc1d811a48e80604cb2df4447315",
+    "post-deploy-observation.json": "88a19398695dc5c9c35df81da90dffb9045dda1874487129051cf018cc410553",
+    "installed-connector-smoke.json": "a59be212c537d9024a1519c71cf66a35c72400abe845afe64faeb537c16f1cc6",
+    "production-public-smoke-anonymous-session/receipt.json": "7e95fc3b6af8ac0d8457dd4af335aae36bce16e5e0ba44b3d7ca5c1a8031d08b",
+    "production-public-smoke-anonymous-session/execution.json": "15f80979800691fbfae358f5494b74bd333b5a07a58bc9fe39bcae82d928f603",
+    "post-deploy-provider-public-readiness.json": "cb9893e33f7aa5980c062ddffeb57563b5ea270d14ee3054a3cb03d08f3fab58",
+    "asana-completion-checkpoint.json": "440668af761453e943c54888a7eb0a41193daac804c247e33425cccf1dff9c6f",
+    "theme-worker/phase3-timer-receipt.json": "d05873d0ad9c016e4e3e25f4e9787783ca04997b6a48c479c14f02b3aeeae6e4",
+    "theme-worker/phase3-retained-owned-result.json": "9553fec3c6ecf313804467f369f372722331fe9ee93eb4270a7bfd1eb2a49c7e",
+    "email-provider-readiness.json": "07f9fa7f2a06e09001a463d66f50e12e5be1fbca71138c77d1ec955bae73efa0",
+    "theme-worker/phase3-r2-timer-receipt.json": "e9303029460cf83e7667d7bb0fcbe9748d061c64d0ab6b58c34e1a68af934e2f",
+    "theme-worker/phase3-r2-execution.json": "020726f594525c70149889188f136da5eb87636cec836c9a1912c4967becb6ad",
+    "theme-worker/phase3-r2-independent-acceptance.json": "6e3a50ee1d85b44a623df6ddf6cb75eecde32bda514e92d837d1bf9973ae405b",
+    "asana-final-readback.json": "92e2b9a2dd469d01f4e805dc064c9e982ca78e9ab320bb6256bafccd83ddaafa",
+    "final-operational-verification.json": "7172e42397494bc0220f783852c44cb75a8b71cceef72ad541db0287adea6337"
+  },
+  "visualInspection": {
+    "screenshots": [
+      {
+        "path": "production-public-smoke-anonymous-session/home-1440.png",
+        "sha256": "1bd7a8672e74f9c781fd1de422657275195debcceee57d9e0abd25652fa4797f",
+        "finding": "Visible, aligned desktop navigation, hero, artwork and actions; no overlap or horizontal clipping apparent."
+      },
+      {
+        "path": "production-public-smoke-anonymous-session/forgot-390.png",
+        "sha256": "382ff94fa388dc9ad4a1406bca62fd4454b03d884e4c4a9d5a61e4a922fa7cbf",
+        "finding": "Contained mobile card with visible email label, input, primary action and back controls; no horizontal overflow or clipped control apparent."
+      }
+    ],
+    "scope": "Two existing production screenshots inspected; no browser rerun."
+  },
+  "providerInputsPreservedExactly": true,
+  "evidenceInventoryRebuilt": false,
+  "changedPaths": [
+    "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.md",
+    "docs/extensions/plans/ux-followup-20261119/RELEASE_REPORT.link-check.json"
+  ],
+  "providerInputUpdate": "Authorized addition: explicit recipient plus active sending-credential/domain verification; replace an invalid/revoked RESEND_API_KEY through the existing secret mechanism if needed. No management-key requirement. All billing inputs unchanged.",
+  "billingInputsPreservedExactly": true,
+  "workerAcceptanceChanged": true,
+  "providerCallsPerformedDuringThisUpdate": false,
+  "emailMetadataFinding": {
+    "httpStatus": 401,
+    "outcome": "PROVIDER_AUTHENTICATION_REJECTED",
+    "inheritedNamedKeyPresent": true,
+    "exactAppIdentityBeforeAndAfter": true,
+    "domainStatusVerified": false,
+    "sendingCapabilityVerified": false,
+    "emailSendEndpointTested": false
+  },
+  "workerR2Accepted": true,
+  "finalOperationalReadbackAccepted": true,
+  "workerFirstFailurePreserved": true,
+  "firstDeploymentFailurePreserved": true,
+  "providerInputsPreservedFromEmailClarification": true,
+  "finalAsana": {
+    "completedCount": 7,
+    "openCount": 4,
+    "allNotesReadBack": true,
+    "newThemeWorkerQaNotesExact": true
+  },
+  "permanentRepositoryRelativeLinksOnly": true
+}

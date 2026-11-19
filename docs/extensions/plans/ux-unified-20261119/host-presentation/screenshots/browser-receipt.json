@@ -1,0 +1,82 @@
+{
+  "gameId": "01a1f130-2efe-7458-89f8-392e90ef7410",
+  "gameSocketConnections": 1,
+  "gameSocketConnectionsBeforePresentation": 1,
+  "cleanupMs": 1733,
+  "cleanupPages": [
+    [
+      "http://127.0.0.1:3260/party/01a1f130-2efe-7458-89f8-392e90ef7410"
+    ],
+    [
+      "http://127.0.0.1:3260/display/01a1f130-2efe-7458-89f8-392e90ef7410"
+    ]
+  ],
+  "browserErrors": [],
+  "commands": [
+    {
+      "action": "NEXT_SCREEN",
+      "requestId": "host-present-NEXT_SCREEN-0-5-1795047861790-6z147",
+      "epoch": 0
+    },
+    {
+      "action": "PAUSE_GAME",
+      "requestId": "host-present-PAUSE_GAME-1-10-1795047868346-an5lx",
+      "epoch": 1
+    },
+    {
+      "action": "RESUME_GAME",
+      "requestId": "host-present-RESUME_GAME-1-11-1795047870558-9fhtu",
+      "epoch": 1
+    },
+    {
+      "action": "END_ANSWER_TIMER",
+      "requestId": "host-present-END_ANSWER_TIMER-1-13-1795047871547-4xesk",
+      "epoch": 1
+    }
+  ],
+  "platformSetupCommands": [
+    {
+      "action": "NEXT_SCREEN",
+      "requestId": "2a0d03f0-150f-4358-a50b-b24793d6ab43",
+      "epoch": 0
+    },
+    {
+      "action": "NEXT_SCREEN",
+      "requestId": "76be15f9-fb9e-4895-b28e-bbc8292bbe9c",
+      "epoch": 0
+    }
+  ],
+  "displayLobbyElapsedMs": 2678,
+  "displayReloadStayedInLobby": true,
+  "authoritativePause": {
+    "paused": true,
+    "remainingMs": 7543,
+    "epoch": 1
+  },
+  "pausedTimer": "23",
+  "viewports": [
+    [
+      1920,
+      1080
+    ],
+    [
+      1366,
+      768
+    ],
+    [
+      1280,
+      720
+    ],
+    [
+      1024,
+      768
+    ]
+  ],
+  "playerViewport": {
+    "width": 390,
+    "height": 844
+  },
+  "actualFullscreen": true,
+  "submittedBrowserVote": true,
+  "shortcutContract": "Owner-requested November8 matching double press within500ms"
+}

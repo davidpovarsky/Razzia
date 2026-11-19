@@ -1,0 +1,13 @@
+docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-34568c5c937a-7447a1b8/input-manifest.json
+docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-34568c5c937a-7447a1b8/receipt.json
+docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-browser-34568c5c937a-01036285/receipt.json
+docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-34568c5c937a-0b72dd89/receipt.json
+docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-launch-34568c5c937a-80c36b12/receipt.json
+docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-proxy-34568c5c937a-d751e9ca/receipt.json
+docs/extensions/plans/ux-followup-20261119/current-release-source.json
+docs/extensions/plans/ux-followup-20261119/qa-cache-diagnosis.json
+docs/extensions/plans/ux-followup-20261119/qa-cache-restoration.json
+docs/extensions/plans/ux-followup-20261119/qualification-gate-evidence-paths.txt
+docs/extensions/plans/ux-followup-20261119/qualification-independent-review.json
+docs/extensions/plans/ux-followup-20261119/qualification-setup-failure-34568c5c937a/receipt.json
+docs/extensions/plans/ux-followup-20261119/release-gates-progress.json

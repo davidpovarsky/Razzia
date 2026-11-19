@@ -1,0 +1,11 @@
+{
+  "kind": "production-public-browser-smoke-execution",
+  "exit": 0,
+  "expectedRevision": "34568c5c937a51d236a440513adeb9bf93637525",
+  "seconds": 12.125,
+  "timedOut": false,
+  "ownedNodePid": 37788,
+  "forcedTreeCleanup": null,
+  "stdout": "{\"status\":\"PASS\",\"sourceSha\":\"34568c5c937a51d236a440513adeb9bf93637525\",\"cases\":[{\"name\":\"home-1440\",\"status\":\"PASS\"},{\"name\":\"forgot-1440\",\"status\":\"PASS\"},{\"name\":\"home-390\",\"status\":\"PASS\"},{\"name\":\"forgot-390\",\"status\":\"PASS\"}],\"failures\":0,\"cleanupCompleted\":true,\"receipt\":\"docs\\\\extensions\\\\plans\\\\ux-followup-20261119\\\\production-public-smoke-anonymous-session\\\\receipt.json\"}\n",
+  "stderr": ""
+}

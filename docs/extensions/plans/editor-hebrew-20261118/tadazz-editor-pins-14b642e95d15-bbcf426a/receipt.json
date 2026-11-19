@@ -1,0 +1,34 @@
+{
+  "kind": "editor-native-pin-preparation",
+  "sourceSha": "14b642e95d15fab3fd5b4577ca72e1aca568f283",
+  "run": "tadazz-editor-pins-14b642e95d15-bbcf426a",
+  "seconds": 3.845,
+  "qaImage": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+  "sourceUnchangedExceptGeneratedManifest": true,
+  "productionChanged": false,
+  "releaseQualified": false,
+  "verification": {
+    "format": "tadazz-application-preview-verification",
+    "mode": "generate-manifest",
+    "verifiedManifest": false,
+    "manifestSha256": "68430b4f7c2a4b04163810b6c22c556c69c486dce4ca284d2221621f9f47fe21",
+    "artifactSha256": "3c9b0e42a8b8d8017b1853a2b93315cece852761c395c20319075a93639a04a6",
+    "registrySha256": "d6b7dde2a706ed0d0f816b7fdbddc0bd56e43c0ea80bc26a236fc79d1ce8720f",
+    "files": [
+      {
+        "name": "renderer.mjs",
+        "bytes": 2590092,
+        "sha256": "34987ceda15ea43ef0f232edddcb7f060131486fb376bee782202c1dc9dfa005"
+      },
+      {
+        "name": "renderer.css",
+        "bytes": 451273,
+        "sha256": "47c357f7404af66b4a30788a017f8c6237c5f9ffbe98317e0319b59f655354e5"
+      }
+    ],
+    "inputFiles": 3641,
+    "generatedSourceChanged": true,
+    "liveAuthorityInputs": [],
+    "productionChanged": false
+  }
+}

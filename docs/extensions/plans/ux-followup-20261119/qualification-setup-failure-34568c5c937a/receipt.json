@@ -1,0 +1,45 @@
+{
+  "kind": "qualification-setup-failure",
+  "sourceSha": "34568c5c937a51d236a440513adeb9bf93637525",
+  "status": "FAIL_PRESERVED",
+  "phase": "SDK dependency setup before native matrix tests",
+  "missingPath": "/tmp/phase3-999ed90c/deps/node_modules/@modelcontextprotocol/server/package.json",
+  "testExecutionStarted": false,
+  "candidateCodeChanged": false,
+  "productionChanged": false,
+  "recoveryPending": true,
+  "preservedAt": "2026-11-19T14:31:22.711587+00:00",
+  "files": [
+    {
+      "originalPath": "docs/extensions/plans/ux-followup-20261119/release-gates-progress.json",
+      "retainedCopy": "docs/extensions/plans/ux-followup-20261119/qualification-setup-failure-34568c5c937a/release-gates-progress.json",
+      "bytes": 547,
+      "sha256": "d2599414e1529aaff98a255f85652c5c06922e3f26bbf5623b19d6dbb8bb70b7"
+    },
+    {
+      "originalPath": "docs/extensions/plans/ux-followup-20261119/linux-native-launch-34568c5c937a.log",
+      "retainedCopy": "docs/extensions/plans/ux-followup-20261119/qualification-setup-failure-34568c5c937a/linux-native-launch-34568c5c937a.log",
+      "bytes": 899,
+      "sha256": "08c421c1bcb45367de9835d9b715ff5b8fc2ac0e9e1d23f0dc2399f0e9016403"
+    },
+    {
+      "originalPath": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-34568c5c937a-348e4ae1/input-manifest.json",
+      "retainedCopy": "docs/extensions/plans/ux-followup-20261119/qualification-setup-failure-34568c5c937a/input-manifest.json",
+      "bytes": 237421,
+      "sha256": "f7ca42462fae1d9f1fca2a3134e24060332ff41ed4f8c7031f6a23189bf69ac6"
+    },
+    {
+      "originalPath": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-34568c5c937a-348e4ae1/controller.stdout.log",
+      "retainedCopy": "docs/extensions/plans/ux-followup-20261119/qualification-setup-failure-34568c5c937a/controller.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "originalPath": "docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-34568c5c937a-348e4ae1/controller.stderr.log",
+      "retainedCopy": "docs/extensions/plans/ux-followup-20261119/qualification-setup-failure-34568c5c937a/controller.stderr.log",
+      "bytes": 711,
+      "sha256": "b492f923399409e640973004f48e20a8fb4bb7cd170952eed1a10b9e9f84bc65"
+    }
+  ],
+  "note": "Raw progress retains its original absolute log path. This retained copy ledger binds the failed attempt bytes before any same-source retry; no passing test result is inferred."
+}

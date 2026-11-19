@@ -1,0 +1,344 @@
+{
+  "format": "tadazz-reviewed-operational-source-copy",
+  "createdAt": "2026-11-19T16:11:27.282864+00:00",
+  "applicationSourceSha": "34568c5c937a51d236a440513adeb9bf93637525",
+  "deploymentToolSourceSha": "3a3c1d148bb49849080366d59f233e573549394f",
+  "copyMode": "Exact named byte-for-byte source archives; no execution or source edits",
+  "count": 40,
+  "records": [
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/build_replacement_image.py",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/build_replacement_image.py",
+      "sha256": "301f43c692aab7593e16e8c401b25f5d7da7aa95f88710592752cadc3d48324e",
+      "bytes": 5222,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/run_replacement_smoke.py",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/run_replacement_smoke.py",
+      "sha256": "10192d4dbfa3fa0741b8d90fdc4d68f71fadb6c8b91ee4ab0bcafa56c8914062",
+      "bytes": 17924,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/activate_and_verify_timer.py",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/activate_and_verify_timer.py",
+      "sha256": "09de7b35a792a784bac82816ac829e95b7a19f3cfae753700c266a3d90b13164",
+      "bytes": 27471,
+      "sourceEqualsTarget": true,
+      "scope": "preserved first attempt"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/activate_and_verify_timer_r2.py",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/activate_and_verify_timer_r2.py",
+      "sha256": "355d7f3fe46f54b1eed27e9cc9c2deb21c310318694e2e82a9e675ceedb13a84",
+      "bytes": 32703,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/check_phase3_admission.py",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/check_phase3_admission.py",
+      "sha256": "f59056c5c4a138191c34b2eff10cf4b0cbd1e429671d875f8268b1419a627537",
+      "bytes": 5389,
+      "sourceEqualsTarget": true,
+      "scope": "preserved first attempt"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/check_phase3_admission_r2.py",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/check_phase3_admission_r2.py",
+      "sha256": "fc0fa824e3bf7d052457f04942467f7e7182caf9f78797bf55b6ae590aa2808e",
+      "bytes": 5641,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/check_systemd_monotonic_r2.py",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/check_systemd_monotonic_r2.py",
+      "sha256": "8dd72a60f74d861f9d6101553329846d372cfaad218af45728535839d499c8a0",
+      "bytes": 1664,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/validate-cleanup-target.py",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/validate-cleanup-target.py",
+      "sha256": "5bab9269b5ab4ae577e69d031d79a6c6c331c3e5101b6b267cfb5c46c5eac61c",
+      "bytes": 2279,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/prepare-source-pins.mjs",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/prepare-source-pins.mjs",
+      "sha256": "381eff1fa16c8fb0914452d7676bd10bdda21992e641500b5cb83258e434d454",
+      "bytes": 6890,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/context-manifest.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/context-manifest.json",
+      "sha256": "8873df14cdff05994fae0d3e67d8401de58f52a7fc6fb3866056240907d8962b",
+      "bytes": 14795,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/context/Dockerfile",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/context/Dockerfile",
+      "sha256": "dc008e7a7bb2fbe74bfcc56f2a189302dd1a20f988642db0a61e988ad6b41d0e",
+      "bytes": 595,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/context/provenance/worker-source-pins.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/context/provenance/worker-source-pins.json",
+      "sha256": "751fa33e6591657fa40d14f99eb0f6eca775787e7ff5f0b18989bb69c73a89dd",
+      "bytes": 20102,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/context/provenance/verify-and-build.mjs",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/context/provenance/verify-and-build.mjs",
+      "sha256": "18e47aa70d824c306713c0aeba199d400c0a6f1f191944b1c1d8097dd87ec22f",
+      "bytes": 6443,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/cleanup-target-check.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/cleanup-target-check.json",
+      "sha256": "932d1c4d917b11ee9f92273618f25fe57b73993b26f444002ed3eaf4c97bb998",
+      "bytes": 292,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/replacement-review.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/replacement-review.json",
+      "sha256": "9059335b8ca45a01aabe54cc0a4ac7281bfa10d863303305d20ef8f66474d832",
+      "bytes": 1283,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/timer-input-manifest.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/timer-input-manifest.json",
+      "sha256": "eac86d57c87ee80d7cfa008a81968126f424072fb86b65f40c3dd6a9028f82de",
+      "bytes": 1374,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/timer-input-manifest-r2.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/timer-input-manifest-r2.json",
+      "sha256": "8d9432822cb94d93fa6a461804a3760f1734e414f737376a34f9b8c1bf49b80f",
+      "bytes": 1470,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/phase3-admission.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-admission.json",
+      "sha256": "2f8ec88584fb51d6fe2391a7f49a91f1a83484e9b6a12a47b7a577fdf0597e26",
+      "bytes": 1344,
+      "sourceEqualsTarget": true,
+      "scope": "preserved first attempt"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/phase3-admission-r2.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-admission-r2.json",
+      "sha256": "99f9145b6bbb190e71e4e8a6a005c890fb874368ff664b82ead77c53bb56372b",
+      "bytes": 1943,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/phase3-unit-review.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-unit-review.json",
+      "sha256": "30ac1cbcbf5efb2d2c395cdd2a00d6c68409c05680df30d0d9bc3843e2c85336",
+      "bytes": 1155,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/phase3-unit.diff",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-unit.diff",
+      "sha256": "6e34db709527baf30f0f8f210eb71de6ab94e1f567ad15637fbfa9fe822b0107",
+      "bytes": 586,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/phase3-offline-guards.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-offline-guards.json",
+      "sha256": "5c73ab9a1ed2b23e0875cf8a880de1f0436de4f9872507a6185e0b379b3751d2",
+      "bytes": 942,
+      "sourceEqualsTarget": true,
+      "scope": "preserved first attempt"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/phase3-offline-guards-r2.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-offline-guards-r2.json",
+      "sha256": "f30fe7bd3ff38107e8e12f6aa51fe6deab9a0b454ad2771d4285a85a94679788",
+      "bytes": 995,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/phase3-r2-parser-tests.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-r2-parser-tests.json",
+      "sha256": "81b149af556be7302688caf4ac15b22eb18cc2f5269e220b426fcf7cc09758db",
+      "bytes": 1027,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/phase3-retained-owned-result.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-retained-owned-result.json",
+      "sha256": "9553fec3c6ecf313804467f369f372722331fe9ee93eb4270a7bfd1eb2a49c7e",
+      "bytes": 2027,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/phase3-helper-review.diff",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-helper-review.diff",
+      "sha256": "554688acb9bab49f2fcce2301eb941da4efc3bd21cf519bddba925ba52dc4399",
+      "bytes": 20483,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/phase3-helper-final-review.diff",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-helper-final-review.diff",
+      "sha256": "1fee4f8a1449a6fd1721b451b5c3fcbf0295f11465e033b64c543f735e21f6db",
+      "bytes": 2422,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/phase3-helper-final-health.diff",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-helper-final-health.diff",
+      "sha256": "3c10939ff430d7db859f83f398f11de1d554a79c9723fe0100007ee5ccb52445",
+      "bytes": 1425,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/phase3-r2-helper.diff",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/phase3-r2-helper.diff",
+      "sha256": "51dd857104560d41f74c7df1f1a25703f49d476e277a9310f45895cb4dd722b6",
+      "bytes": 17169,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/timer-fixture/request.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/timer-fixture/request.json",
+      "sha256": "facba34ed49354984a7dddea6df6e40edb6d7c18e769afc00a8a3e3a472ac053",
+      "bytes": 241,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/timer-fixture/fixture-summary.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/timer-fixture/fixture-summary.json",
+      "sha256": "fbfc55aa2d853847b825b2e51f326584a9592fa3cf3a5a9fe3bb01eab198d978",
+      "bytes": 746,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/timer-fixture-r2/request.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/timer-fixture-r2/request.json",
+      "sha256": "10c147d291e67d70081577c3622b8d61e3cf78fc44186b95cf5ccad6ddf5307b",
+      "bytes": 241,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/replacement/timer-fixture-r2/fixture-summary.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/timer-fixture-r2/fixture-summary.json",
+      "sha256": "27cbebb9d82a38f917c88a8041c6818f335540544802d0a84f15588a49396ed6",
+      "bytes": 739,
+      "sourceEqualsTarget": true,
+      "scope": "reviewed worker helper, recipe, manifest or synthetic-input metadata"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/run_worker_smoke.py",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/run_worker_smoke.py",
+      "sha256": "e656b7ea66bd6379829016b2426d8f206fdbf5ff6b66ecb0acb70bb79a5735a6",
+      "bytes": 12024,
+      "sourceEqualsTarget": true,
+      "scope": "named historical preparation or transfer proof"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/input-manifest.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/input-manifest.json",
+      "sha256": "60e57a577a69cd592c1fd2c81cbc902878206050126693fb27b06c94d2a54b09",
+      "bytes": 3997,
+      "sourceEqualsTarget": true,
+      "scope": "named historical preparation or transfer proof"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/fixture-summary.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/fixture-summary.json",
+      "sha256": "3f86484d325a850dc1e30f46a81125cf1a9d859b5d46923ecfdbe3eb9d7f4b50",
+      "bytes": 1218,
+      "sourceEqualsTarget": true,
+      "scope": "named historical preparation or transfer proof"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/preparation-review.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/preparation-review.json",
+      "sha256": "729c9bb7c721397aa8f9628bbbbbd954cbd555a7f7046d2ce260c70c73940b7b",
+      "bytes": 733,
+      "sourceEqualsTarget": true,
+      "scope": "named historical preparation or transfer proof"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/phase1-2-transfer-manifest.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/phase1-2-transfer-manifest.json",
+      "sha256": "86a1c6314849f175cf10778ee3f4bfc461c83ee904d655d64e21b1c7c32c8aba",
+      "bytes": 18676,
+      "sourceEqualsTarget": true,
+      "scope": "named historical preparation or transfer proof"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/phase3-transfer-manifest.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/phase3-transfer-manifest.json",
+      "sha256": "ed778de4cc164030d19a4702677677549b9360f5592b4d2d0cbbaa9b940c587d",
+      "bytes": 2798,
+      "sourceEqualsTarget": true,
+      "scope": "named historical preparation or transfer proof"
+    },
+    {
+      "source": "work/ux-followup-20261119/theme-worker/phase3-r2-transfer-manifest.json",
+      "target": "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/phase3-r2-transfer-manifest.json",
+      "sha256": "53ba5b60dc263087a3a3b817c0797843cd29a192e273e02535a2e055b5db8933",
+      "bytes": 3165,
+      "sourceEqualsTarget": true,
+      "scope": "exact completed R2 transfer proof; archive contents and private records are not duplicated"
+    }
+  ],
+  "originalSourcePathsPreserved": true,
+  "restorationNote": "Restore each exact source path from these archived bytes when reproducing the operational workflow. Do not execute directly from the documentation archive; namespace, source, image, admission and external runtime gates still apply.",
+  "omittedExistingGitInputs": {
+    "sourceSha": "34568c5c937a51d236a440513adeb9bf93637525",
+    "completeFixture": {
+      "path": "extensions/fixtures/packages/complete-arcade.tadazz",
+      "bytes": 520223,
+      "sha256": "2d64baabbafa9dd12f07be4a97422167437f2d815b6363a62ec34e9de7eace4d"
+    },
+    "workerSourceContext": "82 files referenced by the archived source/context manifests; not duplicated."
+  },
+  "finalReleaseInventoryPending": true,
+  "previousManifestSha256": "883fc385ec2888900510bb7b93aa877149fc8c473218671a4cb6c27b220f7ce2",
+  "updatedAt": "2026-11-19T16:24:27.988846+00:00"
+}

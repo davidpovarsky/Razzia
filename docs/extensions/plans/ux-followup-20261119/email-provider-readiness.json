@@ -1,0 +1,99 @@
+{
+  "kind": "read-only-resend-domain-metadata-readiness",
+  "startedAt": "2026-11-19T16:09:23.646686+00:00",
+  "finishedAt": "2026-11-19T16:09:26.775979+00:00",
+  "applicationSourceSha": "34568c5c937a51d236a440513adeb9bf93637525",
+  "expectedImage": "sha256:56de89dd9ca496595980af84a7187b49fbff8c0cb563c3393c269d2b7c09d82a",
+  "expectedContainer": "090d26a2fe7dd98a43226288932b7387bb9ec847cee5e5e2ff6ef48b6444bf40",
+  "runtimeKeyNameFromSource": "RESEND_API_KEY",
+  "keyAccessScope": "Only process.env.RESEND_API_KEY in a bounded non-root Node process inside the exact accepted application container. No key value, other environment value, provider raw response or private configuration file was emitted.",
+  "startupSourceReview": "The production Supervisor source runs node /app/socket/index.cjs directly and overrides only NODE_ENV, CONFIG_PATH and SOCKET_PORT. Mail code reads process.env; no dotenv loader appears in socket source. The root package's dotenv wrapper is not the production Supervisor command. A missing inherited exec variable would still be reported only as KEY_NOT_PRESENT_IN_EXEC_ENVIRONMENT; no separate application env file or live-process environment is inspected.",
+  "metadataRequest": {
+    "method": "GET",
+    "url": "https://api.resend.com/domains?limit=100",
+    "maximumRequests": 1,
+    "maximumBodyBytes": 262144,
+    "deadlineMilliseconds": 12000,
+    "redirectsFollowed": false,
+    "additionalPagesRequested": false,
+    "domainProjectionOnly": "send.goldypov.com"
+  },
+  "sourcePins": [
+    {
+      "path": "packages/socket/src/services/mail-provider.ts",
+      "sha256": "2f1d721c286f9e6e403e97bac5062dd6c7b9e9ef1d2920638b7368f00384d118",
+      "matchesApplicationRevision": true
+    },
+    {
+      "path": "packages/socket/src/services/account-mail.ts",
+      "sha256": "7c16d5c030f7449a2c083fc53aa928b8e2275b6147d6b32f4ab6d32318691b8f",
+      "matchesApplicationRevision": true
+    },
+    {
+      "path": "packages/socket/src/services/contact-mail.ts",
+      "sha256": "a69b5f6fd5f42636dd0ed97ae667efbbdcf2e6276ef207f4d43f6389544af712",
+      "matchesApplicationRevision": true
+    },
+    {
+      "path": "packages/socket/src/env.ts",
+      "sha256": "c3d4fd0b62615ceacf67fd10430aa0e37a7efa6ee858940af3e80298d0be2a63",
+      "matchesApplicationRevision": true
+    },
+    {
+      "path": "docker/supervisord.conf",
+      "sha256": "d58d111a1d4dfb0e936f0fa0048cc61ee120ff52979980bb57d8bbbee683c26b",
+      "matchesApplicationRevision": true
+    },
+    {
+      "path": "Dockerfile",
+      "sha256": "6342c24685c9f464fda637150ccfb477f0231f586f9557159f0bd715c7846e25",
+      "matchesApplicationRevision": true
+    },
+    {
+      "path": "extensions/deployment/unified-site.Dockerfile",
+      "sha256": "4055150a2e9c37a8d690debe5363ee5f9d66627ecb5e588356aabbef6ad36221",
+      "matchesApplicationRevision": true
+    },
+    {
+      "path": "packages/socket/package.json",
+      "sha256": "adfc10bc038bc2dbb919f21576034d83e7d94559041f609e83b8b453d521aa0f",
+      "matchesApplicationRevision": true
+    }
+  ],
+  "execution": {
+    "observedAt": "2026-11-19T16:09:25.582731+00:00",
+    "domain": "send.goldypov.com",
+    "providerRequestAttempted": true,
+    "identity": {
+      "id": "090d26a2fe7dd98a43226288932b7387bb9ec847cee5e5e2ff6ef48b6444bf40",
+      "image": "sha256:56de89dd9ca496595980af84a7187b49fbff8c0cb563c3393c269d2b7c09d82a",
+      "running": true
+    },
+    "identityUnchangedAfter": true,
+    "projection": {
+      "providerRequestAttempted": true,
+      "httpStatus": 401,
+      "domain": "send.goldypov.com",
+      "domainFound": null,
+      "domainStatus": null,
+      "sendingCapability": null,
+      "outcome": "PROVIDER_AUTHENTICATION_REJECTED"
+    },
+    "status": "COMPLETED_READ_ONLY"
+  },
+  "sourceAndPolicyReferences": [
+    "https://resend.com/docs/api-reference/domains/list-domains",
+    "https://resend.com/changelog/new-api-key-permissions"
+  ],
+  "helperSha256": "1335739a3e1064e63fb4b47d5fb4b95b032c6d83c819888e0fcf7f05b06175fc",
+  "nodeProbeSha256": "1a75939a47f8251880bd70e0397d0ce24c490b936eebfa9b050a0b76f2c82f43",
+  "emailSent": false,
+  "domainChanged": false,
+  "credentialsChanged": false,
+  "productSourceChanged": false,
+  "gitChanged": false,
+  "privateConfigurationScanned": false,
+  "integrationStoreAccessed": false,
+  "otherDomainMetadataEmitted": false,
+  "claimLimit": "Domain metadata, if available, does not establish message delivery or configured contact recipient. A 403 only establishes that the current runtime key cannot read domain metadata; it is not evidence that sending is disabled or that the domain is unverified. Missing exec environment access does not by itself prove a missing separately loaded application configuration."
+}

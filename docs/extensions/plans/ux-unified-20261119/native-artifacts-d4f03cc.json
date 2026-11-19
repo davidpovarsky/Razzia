@@ -1,0 +1,47 @@
+{
+  "kind": "exact-linux-native-artifact-copy",
+  "sourceSha": "d4f03cc8703115a2a869be050fc86e4b260dbda3",
+  "run": "tadazz-editor-pins-d4f03cc87031-4fea2f00",
+  "source": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-editor-pins-d4f03cc87031-4fea2f00/source",
+  "containerStopped": true,
+  "manifestSha256": "8d222b5bd76c0483c3b645b7f3df54064b9528548c71ae42af5e8722b53f9e9e",
+  "files": [
+    {
+      "name": "renderer.mjs",
+      "beforeSha256": "5d434a876a9974adbd2db617ea5b6518b26549602823ed5ed758d95f8da57ea2",
+      "sha256": "5d434a876a9974adbd2db617ea5b6518b26549602823ed5ed758d95f8da57ea2",
+      "bytes": 2570157,
+      "changed": false
+    },
+    {
+      "name": "renderer.css",
+      "beforeSha256": "175e926448f583a07839bf34ae4592f3951e5e27ba08a036fc86ef30fa779e26",
+      "sha256": "175e926448f583a07839bf34ae4592f3951e5e27ba08a036fc86ef30fa779e26",
+      "bytes": 453992,
+      "changed": false
+    },
+    {
+      "name": "artifact.json",
+      "beforeSha256": "0ac7c77047395983b2c808676a645ec2192f8637fc581946f840aa16b9810493",
+      "sha256": "ffd138c97f27dd5a31a6c5e8b0085e5a8477c78a07fe5560a1902697631e4fa3",
+      "bytes": 861534,
+      "changed": true
+    },
+    {
+      "name": "registry.json",
+      "beforeSha256": "d6b7dde2a706ed0d0f816b7fdbddc0bd56e43c0ea80bc26a236fc79d1ce8720f",
+      "sha256": "d6b7dde2a706ed0d0f816b7fdbddc0bd56e43c0ea80bc26a236fc79d1ce8720f",
+      "bytes": 101346,
+      "changed": false
+    },
+    {
+      "name": "verification.json",
+      "beforeSha256": "473cdbaf95d4c1f8e2569cc856ec9dea5fb1431012fa9ad8ab6323f058499265",
+      "sha256": "cc2f92372372ec4533a1d470590cbdd9ec37857753cc70e81f64c97a7931383f",
+      "bytes": 813,
+      "changed": true
+    }
+  ],
+  "releaseQualified": false,
+  "productionChanged": false
+}

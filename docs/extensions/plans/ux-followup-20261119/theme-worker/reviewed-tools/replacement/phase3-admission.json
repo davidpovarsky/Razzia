@@ -1,0 +1,22 @@
+{
+  "status": "READY_FOR_REVIEWED_PHASE3",
+  "preparedAt": "2026-11-19T15:42:08.418210+00:00",
+  "sourceSha": "34568c5c937a51d236a440513adeb9bf93637525",
+  "workerImage": "sha256:4ef04ef752c23e5360399880f1bcf4c79c0f48900c9597bcaa68da8aa01d1411",
+  "helperSha256": "09de7b35a792a784bac82816ac829e95b7a19f3cfae753700c266a3d90b13164",
+  "unitBeforeSha256": "64c191c2e03a28f134219b17295389e041d3e5ef71093a5912cd397f9ec69053",
+  "unitAfterSha256": "7bfd2b44f2409588f162e278e2b3eb5a8671f61d81f1609ad29292608231559c",
+  "container": "090d26a2fe7dd98a43226288932b7387bb9ec847cee5e5e2ff6ef48b6444bf40",
+  "image": "sha256:56de89dd9ca496595980af84a7187b49fbff8c0cb563c3393c269d2b7c09d82a",
+  "gateway": "c29ea46f10ff6da76428b2f296ff1468c512ec9e2af76eba552d7a144766b202",
+  "records": {
+    "stage-execution.json": "a6b63581f573f04a117fdf3d86062be18bfdc73ae0435a629eafc7fc23f34b62",
+    "deployment-deploy-execution.json": "203298193f489c741bc599d17a4b19423a74cc1d811a48e80604cb2df4447315",
+    "post-deploy-execution.json": "802654edaeefde8c0e2d64cf86f486905f179514c428a5331c35fa1ace28db82",
+    "post-deploy-observation.json": "88a19398695dc5c9c35df81da90dffb9045dda1874487129051cf018cc410553"
+  },
+  "asanaTaskId": "1220708526935641",
+  "observerFinishedAt": "2026-11-19T15:37:40.963690+00:00",
+  "preparedOnly": true,
+  "activationPerformed": false
+}

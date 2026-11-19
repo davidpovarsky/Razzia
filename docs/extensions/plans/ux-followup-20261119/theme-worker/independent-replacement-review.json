@@ -1,0 +1,156 @@
+{
+  "format": "tadazz-package-worker-independent-replacement-review-v1",
+  "reviewedAtUtc": "2026-11-19T15:18:43.895072+00:00",
+  "reviewer": "/root/host_controls_consistency",
+  "status": "STATIC_REVIEW_ACCEPTED_CORRECTED_PHASES_1_2",
+  "remainingStaticBlockers": [],
+  "runtimeExecutionStatus": "NOT_EXECUTED_BY_REVIEWER; fresh provenance and compile PASS receipts remain required",
+  "sourceCandidate": "34568c5c937a51d236a440513adeb9bf93637525",
+  "baseImage": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+  "reviewedArtifactsSha256": {
+    "build_replacement_image.py": "301f43c692aab7593e16e8c401b25f5d7da7aa95f88710592752cadc3d48324e",
+    "run_replacement_smoke.py": "10192d4dbfa3fa0741b8d90fdc4d68f71fadb6c8b91ee4ab0bcafa56c8914062",
+    "context-manifest.json": "8873df14cdff05994fae0d3e67d8401de58f52a7fc6fb3866056240907d8962b",
+    "context/provenance/verify-and-build.mjs": "18e47aa70d824c306713c0aeba199d400c0a6f1f191944b1c1d8097dd87ec22f",
+    "context/provenance/worker-source-pins.json": "751fa33e6591657fa40d14f99eb0f6eca775787e7ff5f0b18989bb69c73a89dd"
+  },
+  "historicalReview": {
+    "path": "independent-smoke-review.json",
+    "sha256": "118dc1e9cf9feecbb4bf4e288761d7f2ace2f46b7128e303eb59ec9e10f9b05a",
+    "preserved": true
+  },
+  "resolvedFinding": {
+    "id": "TW-REPLACEMENT-01",
+    "classification": "Pre-execution static defect, not execution failure",
+    "initialSmokeHelperSha256": "ad9c97e466b617411d5c41e7f47b7237de0374bc04f30affa2386dcc53c1350b",
+    "problem": "The executableVersions loop reused name, overwriting the exact Docker container name subsequently used by finally cleanup. A missing executable-named container could then be mistaken for owned cleanup.",
+    "resolution": "The executable loop now uses tool_name. AST inspection confirms one name binding in main, assigned to the owned container name; launch and finally cleanup retain that binding.",
+    "correctedSmokeHelperSha256": "10192d4dbfa3fa0741b8d90fdc4d68f71fadb6c8b91ee4ab0bcafa56c8914062",
+    "independentAstCheck": {
+      "nameStoreLines": [
+        163
+      ],
+      "singleBinding": true,
+      "cleanupUsesOwnedName": true
+    },
+    "heldBeforeExecution": true,
+    "resolved": true
+  },
+  "pinChecks": {
+    "contextFiles": 86,
+    "exactContextInventory": true,
+    "contextHashesAndSizesMatch": true,
+    "contextSymlinks": [],
+    "curatedSourceFiles": 82,
+    "curatedFilesEqualFrozenRepository": true,
+    "curatedFilesEqualSourcePins": true,
+    "fixtureManifestSha256": "60e57a577a69cd592c1fd2c81cbc902878206050126693fb27b06c94d2a54b09",
+    "fixtureFiles": 7,
+    "fixtureFilesUnchanged": true,
+    "fixtureArchiveSha256": "2d64baabbafa9dd12f07be4a97422167437f2d815b6363a62ec34e9de7eace4d",
+    "buildContextContainsNoNodeModulesOrMutableCache": true,
+    "sourceSelection": "Static value import/export closure of builder, media probe and SDK, plus explicit runtime manifests/configuration and broker reference. No cache filesystem copied."
+  },
+  "phaseReview": {
+    "build": {
+      "base": "Exact local immutable image ID; absence aborts before build",
+      "context": "Exact reviewed 86-file inventory; pins and symlinks checked before Docker",
+      "instructions": [
+        "FROM",
+        "COPY",
+        "LABEL",
+        "WORKDIR",
+        "USER"
+      ],
+      "dependencyInstall": false,
+      "runInstruction": false,
+      "networkArgument": "none",
+      "pullArgument": "false",
+      "freshTagRequired": true,
+      "serviceCommands": false,
+      "receipt": "Requires exact produced image ID, expected labels and retained pinned base layers; reports BUILT_NOT_ACTIVATED",
+      "mutableCacheCopyOrBind": false
+    },
+    "provenance": {
+      "freshContainer": true,
+      "compilePerformed": false,
+      "sourceHashesVerifiedInsideImage": 82,
+      "packageMetadataChecks": 36,
+      "actualExecutableVersions": {
+        "node": "24.22.2",
+        "ffmpeg": "5.1.9",
+        "ffprobe": "5.1.9",
+        "python": "3.11.2",
+        "esbuild": "0.28.2",
+        "freetype": "2.12.1"
+      },
+      "failureStopsBeforeCompile": true,
+      "verifierDigestAndManifestDigestChecked": true,
+      "hostRevalidatesFullProvenance": true
+    },
+    "compile": {
+      "matchingPriorProvenancePassRequired": true,
+      "matchingImageSourceAndContextRequired": true,
+      "priorOwnedCleanupRequired": true,
+      "freshContainer": true,
+      "freshInImageVerificationRepeated": true,
+      "realBuilderInvokedOnlyAfterVerification": true,
+      "exactFixtureSourceDigest": true,
+      "exactBundleSha256": true,
+      "mediaValidatedTrue": true,
+      "exactExpectedCompiledThemeInventory": true,
+      "regularBoundedOutputFiles": true,
+      "sourceRehashedAfter": true
+    },
+    "bothRuntimePhases": {
+      "network": "none",
+      "uidGid": "65534:65534",
+      "rootReadOnly": true,
+      "inputReadOnly": true,
+      "capabilitiesDropped": "ALL",
+      "noNewPrivileges": true,
+      "pull": "never",
+      "cpus": 1,
+      "memoryMiB": 768,
+      "extraSwap": false,
+      "pids": 48,
+      "workerTimeoutSeconds": 45,
+      "tmpfsMiB": 64,
+      "tmpfsNoexecNosuid": true,
+      "fileLimitBytes": 8388608,
+      "onlyBinds": [
+        "fresh synthetic input",
+        "dedicated disposable output"
+      ],
+      "exactOwnerLabelCheckedBeforeCleanup": true,
+      "cleanupAbsenceVerified": true,
+      "failedCleanupForcesFail": true,
+      "serviceOrTimerCommands": false
+    }
+  },
+  "claimLimits": [
+    "Static acceptance does not claim the derivative image has been built or any provenance/compiler smoke has passed.",
+    "The immutable base is an image; no mutable QA cache container filesystem is copied or bound. Fresh checks must actually pass before its toolchain is accepted.",
+    "The build helper's --network=none and no RUN/install instructions do not constitute a separately observed daemon-wide egress audit.",
+    "Production timer activation, post-deployment store binding and any timer-driven synthetic job are separate phase 3 work and are not reviewed or authorized by this receipt.",
+    "A successful real compiler smoke and the prior real API/synthetic-worker import test remain complementary component proofs, not one joined customer or production install.",
+    "Host capture buffers and aggregate bind-output storage have no independent quota; the scoped pinned fixture and worker bounds remain the intended workload. There is no font-decoder fixture coverage."
+  ],
+  "actionsPerformed": {
+    "readAndHashArtifacts": true,
+    "parsePythonAstOnly": true,
+    "writeReviewArtifactsOnly": true,
+    "executeWorker": false,
+    "executeContainer": false,
+    "executeTests": false,
+    "dockerOperation": false,
+    "inspectCustomerData": false,
+    "changeSource": false,
+    "changeGit": false,
+    "changeService": false
+  },
+  "staticInspectionJobs": [
+    "job_9d5701341bad",
+    "job_91a3c540ef2a"
+  ]
+}
