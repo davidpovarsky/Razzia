@@ -1,526 +1,201 @@
-.ggo-stage {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  isolation: isolate;
-  overflow: hidden;
+/* The Great Guess-off uses Creating Worlds' ORIGINAL Tadazz native projector.
+   Only the separate visitor/player controls below the projector are styled here.
+   Do not duplicate or override the canonical stage animations, timer or cards. */
+.ggo-native {
   width: 100%;
-  min-height: 560px;
-  height: 100%;
-  padding: clamp(16px, 2.4vw, 30px);
-  color: #fff8ed;
-  background: radial-gradient(
-    ellipse at 50% -40%,
-    #8730dc 0,
-    #320a77 44%,
-    #10052d 83%
-  );
-  font-family: "Rubik", "Nunito", system-ui, sans-serif;
+  color: #fff4e6;
+  background: #08011a;
+  border: 1px solid #ae71ec66;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 18px 70px #09001e75;
+  font-family: "Rubik", system-ui, sans-serif;
 }
-.ggo-stage * {
+.ggo-native * {
   box-sizing: border-box;
 }
-.ggo-stage button {
-  font: inherit;
-  cursor: pointer;
+.ggo-native-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #09021c;
+  overflow: hidden;
 }
-.ggo-stage button:focus-visible {
-  outline: 3px solid #e9ff48;
-  outline-offset: 3px;
-}
-.ggo-stage button:disabled {
-  cursor: default;
-}
-.ggo-orb {
+.ggo-native-frame .tz-viewport {
   position: absolute;
-  z-index: -1;
-  width: 27%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  filter: blur(56px);
-  opacity: 0.2;
-  pointer-events: none;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
-.ggo-orb-one {
-  top: 14%;
-  left: -13%;
-  background: #f93be5;
+.ggo-native-frame .tzv4-stage .stage-teaser {
+  display: none;
+} /* The teaser artwork specifically says Creating Worlds; this is a different show. */
+.ggo-native-console {
+  padding: clamp(14px, 2vw, 24px);
+  background: linear-gradient(160deg, #170538, #100328);
 }
-.ggo-orb-two {
-  bottom: -20%;
-  right: -6%;
-  background: #16d4ff;
-}
-.ggo-topline,
-.ggo-bottomline {
+.ggo-native-info {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
-  position: relative;
-  z-index: 2;
-  flex: 0 0 auto;
+  gap: 15px;
+  margin-bottom: 12px;
 }
-.ggo-topline {
-  padding-bottom: 14px;
-  border-bottom: 1px solid #ffffff29;
-}
-.ggo-logo {
-  font-size: 18px;
+.ggo-native-info strong {
+  color: #f0ff59;
   font-weight: 1000;
-  letter-spacing: -0.06em;
+  font-size: clamp(16px, 1.6vw, 22px);
+  letter-spacing: -0.025em;
 }
-.ggo-logo span {
-  color: #dfff36;
-}
-.ggo-demo-flag {
-  font-size: 10px;
-  letter-spacing: 0.14em;
+.ggo-native-info span {
+  color: #e4d9fa;
+  font-size: clamp(11px, 1.15vw, 14px);
   font-weight: 700;
-  color: #d4ceea;
   text-align: right;
 }
-.ggo-bottomline {
-  margin-top: auto;
-  padding-top: 14px;
-  border-top: 1px solid #ffffff29;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 0.13em;
-  color: #c5b5e6;
+.ggo-native-answerpad {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 10px 0 15px;
 }
-.ggo-content {
-  width: min(100%, 1020px);
-  margin: auto;
-  min-height: 0;
-  text-align: center;
-  animation: ggo-enter 0.45s ease both;
-}
-.ggo-eyebrow {
-  display: inline-flex;
+.ggo-native-answerpad button {
+  display: flex;
   align-items: center;
   gap: 8px;
-  font-size: clamp(10px, 1.1vw, 13px);
-  font-weight: 800;
-  letter-spacing: 0.17em;
-  color: #e6ff49;
-}
-.ggo-hero-title {
-  margin: 18px 0 10px;
-  font-size: clamp(40px, 6.3vw, 84px);
-  line-height: 0.99;
-  letter-spacing: -0.075em;
-  font-weight: 1000;
-  text-transform: uppercase;
-}
-.ggo-hero-title span {
-  display: block;
-  color: #e6ff49;
-  text-shadow: 0 6px 35px #daeb0040;
-}
-.ggo-description {
-  max-width: 610px;
-  margin: 13px auto 20px;
-  color: #eee8ff;
-  font-size: clamp(13px, 1.55vw, 18px);
-  line-height: 1.45;
-}
-.ggo-disclosure {
-  margin: 0 auto 20px;
-  max-width: 550px;
-  color: #c6b9de;
+  min-width: 0;
+  min-height: 52px;
+  padding: 9px;
+  font: inherit;
   font-size: 12px;
-}
-.ggo-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  min-height: 46px;
-  padding: 12px 23px;
-  border: 0;
-  border-radius: 999px;
-  color: #260650;
-  background: #e6ff49;
-  box-shadow: 0 9px 25px #0004;
-  font-weight: 900 !important;
-  font-size: 15px !important;
-  transition:
-    transform 0.18s,
-    background 0.18s;
-}
-.ggo-primary:not(:disabled):hover {
-  transform: translateY(-2px);
-  background: #f3ff9c;
-}
-.ggo-primary:disabled {
-  opacity: 0.45;
-}
-.ggo-question {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: clamp(10px, 1.2vw, 16px);
-  padding: 10px 0 18px;
-}
-.ggo-question-meta {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  font-size: clamp(10px, 1.1vw, 13px);
   font-weight: 800;
-  color: #e6ff49;
-  letter-spacing: 0.1em;
+  line-height: 1.2;
+  text-align: left;
+  background: #5121838f;
+  color: #fff7e5;
+  border: 2px solid #b773f177;
+  border-radius: 12px;
+  cursor: pointer;
 }
-.ggo-question-title {
-  font-size: clamp(21px, 3.2vw, 43px);
-  line-height: 1.12;
-  letter-spacing: -0.035em;
-  margin: 0 auto;
-  max-width: 900px;
+.ggo-native-answerpad button b {
+  display: grid;
+  flex: 0 0 27px;
+  width: 27px;
+  height: 27px;
+  place-items: center;
+  border-radius: 7px;
+  background: #eafa50;
+  color: #1b0935;
+  font-size: 14px;
   font-weight: 900;
 }
-.ggo-choices {
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(9px, 1.15vw, 15px);
-  text-align: left;
+.ggo-native-answerpad button span {
+  overflow-wrap: anywhere;
 }
-.ggo-image-choices {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+.ggo-native-answerpad button:hover {
+  border-color: #fff3b6;
 }
-.ggo-choice {
+.ggo-native-answerpad button.selected {
+  border-color: #eafa50;
+  box-shadow:
+    0 0 0 2px #eafa503d,
+    0 0 18px #eafa5030;
+}
+.ggo-native-actions {
   display: flex;
-  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.ggo-native button:focus-visible {
+  outline: 3px solid #eafa50;
+  outline-offset: 3px;
+}
+.ggo-native-actions button {
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
   gap: 9px;
-  min-width: 0;
-  padding: clamp(10px, 1.2vw, 15px);
-  color: #fff;
-  background: #ffffff12;
-  border: 2px solid #ffffff2e;
-  border-radius: 15px;
-  text-align: left;
-  transition:
-    transform 0.18s,
-    background 0.18s,
-    border-color 0.18s;
-}
-.ggo-choice:not(:disabled):hover {
-  transform: translateY(-3px);
-  background: #ffffff20;
-  border-color: #ffffff95;
-}
-.ggo-choice.ggo-picked {
-  border-color: #e6ff49;
-  background: #e6ff4927;
-}
-.ggo-choice.ggo-correct {
-  border-color: #7dffca;
-  box-shadow: 0 0 0 2px #7dffca40;
-}
-.ggo-choice img {
-  display: block;
-  margin: auto;
-  width: 100%;
-  height: clamp(100px, 15vw, 172px);
-  object-fit: contain;
-  border-radius: 10px;
-  background: #fff;
-}
-.ggo-choice-text {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-  font-weight: 700;
-  font-size: clamp(12px, 1.2vw, 16px);
-  line-height: 1.25;
-}
-.ggo-choice-text b {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 28px;
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  background: #dfff38;
-  color: #250648;
-}
-.ggo-vote-meter {
-  display: flex;
-  align-items: center;
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  height: 23px;
-  border-radius: 20px;
-  background: #05021855;
-}
-.ggo-vote-fill {
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, #aa58ff, #e4ff40);
-  animation: ggo-grow 1s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-.ggo-vote-meter strong {
-  position: absolute;
-  right: 8px;
-  top: 2px;
-  color: #fff;
-  font-weight: 900;
-  font-size: 12px;
-  text-shadow: 0 1px 4px #000;
-}
-.ggo-reveal-footer {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-}
-.ggo-reveal-footer p {
-  margin: 0;
+  min-height: 44px;
+  border-radius: 999px;
+  font: inherit;
   font-size: 13px;
-  color: #e6ff49;
-  font-weight: 700;
-}
-.ggo-score-scene {
-  max-width: 730px;
-  padding: 18px 0;
-}
-.ggo-scene-title {
-  margin: 10px 0 2px;
-  font-size: clamp(30px, 4vw, 52px);
-  letter-spacing: -0.06em;
-}
-.ggo-score-scene .ggo-description {
-  font-size: 13px;
-  margin: 8px auto 16px;
-}
-.ggo-ranks {
-  list-style: none;
-  margin: 0 auto 21px;
-  padding: 0;
-  display: grid;
-  gap: 10px;
-}
-.ggo-rank {
-  display: grid;
-  grid-template-columns: 40px minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 10px;
-  background: #ffffff16;
-  padding: 11px 18px;
-  border: 1px solid #ffffff35;
-  border-radius: 13px;
-  text-align: left;
-  font-size: clamp(13px, 1.6vw, 18px);
-  animation: ggo-rank-enter 0.55s ease both;
-}
-.ggo-rank-you {
-  background: #e6ff4925;
-  border-color: #e6ff49;
-}
-.ggo-rank-number {
-  color: #e6ff49;
   font-weight: 900;
-  font-size: 22px;
-}
-.ggo-rank-name {
-  font-weight: 700;
-}
-.ggo-rank strong {
-  color: #fff;
-  font-weight: 900;
-  white-space: nowrap;
-}
-.ggo-winner {
-  position: relative;
-  padding: 35px 0;
-}
-.ggo-crown {
-  color: #e6ff49;
-  margin-bottom: 15px;
-  filter: drop-shadow(0 0 20px #e6ff4980);
-  animation: ggo-bounce 0.85s ease both;
-}
-.ggo-winner-name {
-  margin: 7px 0;
-  font-size: clamp(52px, 9vw, 100px);
-  line-height: 1;
-  letter-spacing: -0.075em;
-  color: #e6ff49;
-  text-shadow: 0 5px 25px #16101090;
-}
-.ggo-champion-score {
-  margin: 4px auto;
-  font-weight: 900;
-  letter-spacing: 0.2em;
-}
-.ggo-confetti {
-  position: absolute;
-  inset: -10% 0 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-.ggo-confetti i {
-  position: absolute;
-  top: -30px;
-  width: 9px;
-  height: 20px;
-  background: #e6ff49;
-  border-radius: 2px;
-  animation: ggo-confetti 4s linear infinite;
-}
-.ggo-confetti i:nth-child(3n) {
-  background: #ff62b9;
-}
-.ggo-confetti i:nth-child(4n) {
-  background: #26c9ff;
-}
-.ggo-restart {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  border: 0;
-  background: none;
-  color: #ccc0eb;
-  font-size: 11px !important;
-  font-weight: 700;
-}
-.ggo-restart:hover {
-  color: #fff;
-}
-.ggo-catalogue-cover {
-  border: 0;
-  padding: 0;
-  width: 100%;
-  background: none;
+  border: 1px solid #aa73e68a;
+  padding: 10px 19px;
   cursor: pointer;
-  display: block;
 }
-.ggo-catalogue-cover > .game-cover {
-  width: 100%;
+.ggo-native-next {
+  background: #eaff4c;
+  color: #1c0939;
+  flex: 0 1 auto;
 }
-@keyframes ggo-enter {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.ggo-native-next:hover {
+  background: #f5ff9b;
 }
-@keyframes ggo-grow {
-  from {
-    width: 0;
-  }
+.ggo-native-sound {
+  background: #381369;
+  color: #fff4e9;
 }
-@keyframes ggo-rank-enter {
-  from {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+.ggo-native-sound:hover {
+  background: #532290;
 }
-@keyframes ggo-bounce {
-  from {
-    transform: translateY(25px) scale(0.6);
-    opacity: 0;
-  }
-  70% {
-    transform: translateY(-6px) scale(1.1);
-  }
-  to {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
+.ggo-native-actions button:disabled,
+.ggo-native-answerpad button:disabled {
+  opacity: 0.5;
+  cursor: progress;
 }
-@keyframes ggo-confetti {
-  from {
-    transform: translateY(-80px) rotate(0);
-  }
-  to {
-    transform: translateY(650px) rotate(700deg);
-  }
+.ggo-native-disclaimer {
+  text-align: center;
+  margin: 12px 0 0;
+  color: #bcafd5;
+  font-size: 11px;
+  line-height: 1.4;
 }
-@media (max-width: 680px) {
-  .ggo-stage {
-    padding: 13px;
-    min-height: 590px;
+.ggo-native-error {
+  margin: 12px auto 0;
+  color: #ffd0ca;
+  text-align: center;
+  font-weight: 700;
+}
+@media (max-width: 700px) {
+  .ggo-native {
+    border-radius: 10px;
   }
-  .ggo-topline {
-    padding-bottom: 9px;
+  .ggo-native-console {
+    padding: 11px;
   }
-  .ggo-logo {
-    font-size: 15px;
+  .ggo-native-info {
+    display: block;
+    text-align: center;
   }
-  .ggo-demo-flag {
-    font-size: 8px;
-    letter-spacing: 0.05em;
+  .ggo-native-info span {
+    display: block;
+    margin-top: 4px;
+    text-align: center;
   }
-  .ggo-question {
-    gap: 9px;
-    padding: 8px 0;
-  }
-  .ggo-question-title {
-    font-size: clamp(19px, 5.6vw, 28px);
-  }
-  .ggo-image-choices {
+  .ggo-native-answerpad {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .ggo-image-choices .ggo-choice {
-    padding: 6px;
-    gap: 4px;
+  .ggo-native-answerpad button {
+    min-height: 48px;
   }
-  .ggo-choice img {
-    height: clamp(70px, 22vw, 108px);
-  }
-  .ggo-choice-text {
-    font-size: 11px;
-    gap: 5px;
-  }
-  .ggo-choice-text b {
-    width: 23px;
-    height: 23px;
-    flex-basis: 23px;
-  }
-  .ggo-primary {
-    padding: 9px 17px;
-    min-height: 40px;
-    font-size: 13px !important;
-  }
-  .ggo-reveal-footer {
-    gap: 6px;
-  }
-  .ggo-reveal-footer p {
-    font-size: 11px;
-  }
-  .ggo-vote-meter {
-    height: 17px;
-  }
-  .ggo-vote-meter strong {
-    font-size: 10px;
-    top: 1px;
-  }
-  .ggo-rank {
+  .ggo-native-actions button {
     padding: 9px 12px;
+    min-height: 43px;
+    font-size: 12px;
   }
-  .ggo-description {
-    margin: 8px auto 12px;
+  .ggo-native-next {
+    order: -1;
+    width: 100%;
+  }
+  .ggo-native-disclaimer {
+    font-size: 10px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .ggo-stage *,
-  .ggo-stage *::before,
-  .ggo-stage *::after {
-    animation: none !important;
+  .ggo-native-console * {
     transition: none !important;
   }
 }

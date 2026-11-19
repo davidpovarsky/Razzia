@@ -504,7 +504,15 @@ export function MarketingSite() {
               <div
                 className="demo-stage marketing-native-demo"
                 data-testid="marketing-native-demo"
-                style={{ padding: 0, overflow: "hidden", position: "relative" }}
+                style={{
+                  padding: 0,
+                  overflow:
+                    selected.id === "great-guessoff" ? "visible" : "hidden",
+                  position: "relative",
+                  ...(selected.id === "great-guessoff"
+                    ? { aspectRatio: "auto", height: "auto" }
+                    : {}),
+                }}
               >
                 <style>
                   {

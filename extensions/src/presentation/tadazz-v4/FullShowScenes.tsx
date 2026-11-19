@@ -757,12 +757,17 @@ export function RoundLaunch({
       <div className="full-launch-glow" />
       <div className="full-round-plaque">
         <small className="full-round-mini">
-          {isRoundOne
-            ? text("fullShow.firstStory", "THE FIRST STORY")
-            : text("fullShow.newWorld", "A WHOLE NEW WORLD")}
+          {data.eyebrow ||
+            (isRoundOne
+              ? text("fullShow.firstStory", "THE FIRST STORY")
+              : text("fullShow.newWorld", "A WHOLE NEW WORLD"))}
         </small>
         <strong className="full-round-number">
-          {roundLabel} <bdi dir="ltr">{num(isRoundOne ? 1 : 2)}</bdi>
+          {data.title || (
+            <>
+              {roundLabel} <bdi dir="ltr">{num(isRoundOne ? 1 : 2)}</bdi>
+            </>
+          )}
         </strong>
       </div>
       <div className="full-launch-rule full-round-underline" />
