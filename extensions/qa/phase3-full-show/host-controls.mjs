@@ -4,6 +4,7 @@ import path from "node:path"
 import {
   closeWorkspaceDrawers,
   openWorkspacePanel,
+  prepareHostNavigation,
 } from "./workspace-controls.mjs"
 
 // Real AppBridge/UI behavior with explicitly synthetic save responses. Native
@@ -136,6 +137,7 @@ export async function verifyHostControls({
     path: path.join(evidence, `${engine}-${theme}-host-controls.png`),
     fullPage: true,
   })
+  await prepareHostNavigation(page, "unsupported host fixture")
   await page.goto(`${base}/host?scenario=${scenario.id}&unsupported=1`)
   await page.locator("html[data-host-ready=true]").waitFor()
   await iframe.locator("[data-full-show-chapter]").waitFor()
@@ -145,6 +147,7 @@ export async function verifyHostControls({
   const unsupported = await page.evaluate(() => window.__host.hostControls())
   assert.equal(unsupported.saveRequests.length, 0)
   assert.equal(unsupported.displayRequests.length, 0)
+  await prepareHostNavigation(page, "restore supported host")
   await page.goto(`${base}/host?scenario=${scenario.id}`)
   await page.locator("html[data-host-ready=true]").waitFor()
   await iframe.locator("[data-full-show-chapter]").waitFor()

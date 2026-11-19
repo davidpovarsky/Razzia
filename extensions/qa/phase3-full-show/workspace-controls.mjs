@@ -2,6 +2,70 @@ import assert from "node:assert/strict"
 import path from "node:path"
 import { FULL_SHOW_META_V3 } from "../../src/mcp-app/contracts/full-show-frame.ts"
 
+const lifecycleObservers = new WeakMap()
+
+export function observeHostLifecycle(page, observer) {
+  lifecycleObservers.set(page, observer)
+}
+
+export async function prepareHostNavigation(page, reason = "navigation") {
+  const event = {
+    at: new Date().toISOString(),
+    reason,
+    url: page.url(),
+    status: "waiting",
+  }
+
+  try {
+    if (event.url === "about:blank") {
+      event.status = "no-host"
+
+      return
+    }
+
+    event.receipt = await page.evaluate(async () => {
+      const owner = document
+      const host = window.__host
+
+      if (!host?.prepareNavigation) {
+        throw new Error("QA host lifecycle API missing")
+      }
+
+      const receipt = await host.prepareNavigation()
+
+      if (owner !== document || host !== window.__host) {
+        throw new Error("QA host changed during disposal")
+      }
+
+      return receipt
+    })
+    assert.equal(event.receipt.status, "drained")
+    assert.deepEqual(event.receipt.remaining, {
+      http: 0,
+      handlers: 0,
+      initialization: 0,
+      replies: 0,
+      connecting: false,
+    })
+    assert.deepEqual(event.receipt.errors, [])
+    event.status = "drained"
+  } catch (error) {
+    event.status = "failed"
+    event.error = String(error)
+
+    try {
+      event.snapshot = await page.evaluate(() => window.__host?.lifecycle())
+    } catch (snapshotError) {
+      event.snapshotError = String(snapshotError)
+    }
+
+    throw error
+  } finally {
+    event.finishedAt = new Date().toISOString()
+    lifecycleObservers.get(page)?.(event)
+  }
+}
+
 export async function closeWorkspaceDrawers(page) {
   const close = page
     .frameLocator("iframe")
@@ -66,6 +130,7 @@ export async function verifyWorkspaceControls({
   const nextCard = cards[cardIndex + 1]
   assert(results && voting && nextCard)
   scenario.selection.chapterId = results.id
+  await prepareHostNavigation(page, "workspace scenario")
   await page.goto(`${base}/host?scenario=${scenario.id}`)
   await page.locator("html[data-host-ready=true]").waitFor()
   const iframe = page.frameLocator("iframe")

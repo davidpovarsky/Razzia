@@ -1,6 +1,8 @@
 import {
   closeWorkspaceDrawers,
   openWorkspacePanel,
+  observeHostLifecycle,
+  prepareHostNavigation,
   verifyWorkspaceControls,
 } from "./workspace-controls.mjs"
 import { runLayoutDiagnostic } from "./layout-diagnostic.mjs"
@@ -252,7 +254,11 @@ const outboundDenied = []
 let sourceHashesUnchanged = false
 const network = []
 const requestFailures = []
+const pageErrorEvents = []
+const qaRequestEvents = []
+const activity = { check: null, step: null }
 function writeProgress(active) {
+  activity.step = active ?? activity.check
   fs.writeFileSync(
     path.join(evidence, "progress.json"),
     JSON.stringify(
@@ -267,6 +273,8 @@ function writeProgress(active) {
         errors,
         resources,
         requestFailures,
+        pageErrorEvents,
+        qaRequestEvents,
         requests: network,
       },
       null,
@@ -582,6 +590,7 @@ async function scenarioFor(theme, engine) {
   return scenario
 }
 async function run(name, operation, budgetMs = 120000) {
+  activity.check = name
   const start = Date.now()
   writeProgress(name)
   console.log(`START ${name}`)
@@ -615,6 +624,7 @@ async function run(name, operation, budgetMs = 120000) {
     }
   } finally {
     clearTimeout(timeout)
+    activity.check = null
     writeProgress(null)
   }
 }
@@ -672,22 +682,76 @@ try {
       const page = await context.newPage()
       page.setDefaultTimeout(10000)
       const caseErrors = []
-      page.on("pageerror", (error) => caseErrors.push(error.message))
+      observeHostLifecycle(page, (event) => {
+        observations.push({
+          engine,
+          theme,
+          check: "host document lifecycle",
+          ...event,
+        })
+        writeProgress(activity.step)
+      })
+      const qaRequests = new WeakMap()
+      page.on("pageerror", (error) => {
+        caseErrors.push(error.message)
+        pageErrorEvents.push({
+          at: new Date().toISOString(),
+          engine,
+          theme,
+          activeCheck: activity.check,
+          activeStep: activity.step,
+          url: page.url(),
+          message: error.message,
+          stack: error.stack,
+        })
+        writeProgress(activity.step)
+      })
       page.on("requestfailed", (request) => {
         requestFailures.push({
           engine,
           theme,
           failed: true,
+          at: new Date().toISOString(),
+          activeCheck: activity.check,
+          activeStep: activity.step,
+          documentUrl: page.url(),
+          requestStarted: qaRequests.get(request),
           url: request.url(),
           error: request.failure()?.errorText,
         })
       })
       page.on("request", (request) => {
+        if (request.url().startsWith(`${base}/qa/`)) {
+          const event = {
+            at: new Date().toISOString(),
+            engine,
+            theme,
+            activeCheck: activity.check,
+            activeStep: activity.step,
+            documentUrl: page.url(),
+            url: request.url(),
+            method: request.method(),
+          }
+          qaRequests.set(request, event)
+          qaRequestEvents.push(event)
+        }
+
         if (
           !request.url().startsWith(base) &&
           !request.url().startsWith("data:")
         ) {
           network.push({ engine, theme, url: request.url() })
+        }
+      })
+      page.on("response", (response) => {
+        const event = qaRequests.get(response.request())
+
+        if (event) {
+          const headers = response.headers()
+          event.responseAt = new Date().toISOString()
+          event.status = response.status()
+          event.contentType = headers["content-type"]
+          event.allowOrigin = headers["access-control-allow-origin"] ?? null
         }
       })
       await context.route("**/*", async (route) => {
@@ -737,6 +801,7 @@ try {
       const loadNativeChapter = async (chapter) => {
         assert(chapter)
         scenario.selection.chapterId = chapter.id
+        await prepareHostNavigation(page, "navigate host")
         await page.goto(`${base}/host?scenario=${scenario.id}`)
         await page.locator("html[data-host-ready=true]").waitFor()
         await page
@@ -791,9 +856,11 @@ try {
                   ),
               }),
             )
+            await prepareHostNavigation(page, "browser error assertion")
             assert.deepEqual(caseErrors, [])
           },
         )
+        await prepareHostNavigation(page, "close context")
         await context.close()
 
         continue
@@ -815,6 +882,7 @@ try {
             )
           },
         )
+        await prepareHostNavigation(page, "close context")
         await context.close()
 
         continue
@@ -824,6 +892,7 @@ try {
         await run(
           `${engine} / ${theme} synthetic host UI controls`,
           async () => {
+            await prepareHostNavigation(page, "navigate host")
             await page.goto(`${base}/host?scenario=${scenario.id}`)
             await page.locator("html[data-host-ready=true]").waitFor()
             await page
@@ -847,6 +916,7 @@ try {
             )
           },
         )
+        await prepareHostNavigation(page, "close context")
         await context.close()
 
         continue
@@ -1199,6 +1269,7 @@ try {
             ).question,
             "ACK_VERIFIED_QUESTION_THREE",
           )
+          await prepareHostNavigation(page, "reload host")
           await page.reload()
           await page.locator("html[data-host-ready=true]").waitFor()
           await waitRevision(afterLostAck)
@@ -2157,6 +2228,7 @@ try {
                   ? "reduce"
                   : "no-preference",
               })
+              await prepareHostNavigation(page, "reload host")
               await page.reload()
               await page.locator("html[data-host-ready=true]").waitFor()
               const iframe = page.frameLocator("iframe")
@@ -2572,6 +2644,7 @@ try {
             await page.emulateMedia({ reducedMotion: "reduce" })
           }
 
+          await prepareHostNavigation(page, "reload host")
           await page.reload()
           await page.locator("html[data-host-ready=true]").waitFor()
           await page
@@ -2650,6 +2723,7 @@ try {
       await run(
         `${engine} / ${theme} CSP, native media resources and browser errors`,
         async () => {
+          await prepareHostNavigation(page, "final CSP and browser errors")
           const violations = []
           for (const frame of page.frames()) {
             violations.push(
@@ -2676,6 +2750,9 @@ try {
           {
             browserVersion,
             caseErrors,
+            pageErrorEvents: pageErrorEvents.filter(
+              (event) => event.engine === engine && event.theme === theme,
+            ),
             entries: entries.filter((e) =>
               e.name.startsWith(`${engine} / ${theme}`),
             ),
@@ -2684,6 +2761,7 @@ try {
           2,
         ),
       )
+      await prepareHostNavigation(page, "close context")
       await context.close()
     }
     await browser.close()
@@ -2764,6 +2842,8 @@ try {
         errors,
         resources,
         requestFailures,
+        pageErrorEvents,
+        qaRequestEvents,
         requests: network,
       },
       null,

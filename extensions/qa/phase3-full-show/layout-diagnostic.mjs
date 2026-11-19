@@ -2,6 +2,7 @@ import assert from "node:assert/strict"
 import path from "node:path"
 import fs from "node:fs"
 import { randomUUID } from "node:crypto"
+import { prepareHostNavigation } from "./workspace-controls.mjs"
 
 // Development-only diagnosis of the exact existing artifact. No release gate
 // accepts the reduced membership of this mode.
@@ -23,16 +24,17 @@ export async function runLayoutDiagnostic({
       true,
       JSON.stringify(response.structuredContent),
     )
+
     return response.structuredContent.data
   }
   const record = await call("get_game_draft", {
     draftId: scenario.record.draftId,
   })
-  let revision = record.revision
-  const publicQuestionId = record.questionRefs.find(
+  let { revision } = record
+  const { publicQuestionId } = record.questionRefs.find(
     (question) => question.questionNumber === 3,
-  ).publicQuestionId
-  const assets = async (purpose) =>
+  )
+  const assets = (purpose) =>
     call("list_editing_assets", {
       draftId: record.draftId,
       expectedRevision: revision,
@@ -40,13 +42,13 @@ export async function runLayoutDiagnostic({
       locale: "en",
     })
   const patch = async (value) => {
-    const result = await call("apply_game_edit", {
+    const { revision: nextRevision } = await call("apply_game_edit", {
       draftId: record.draftId,
       expectedRevision: revision,
       idempotencyKey: randomUUID(),
       patch: value,
     })
-    revision = result.revision
+    revision = nextRevision
   }
   const backgrounds = await assets("background")
   await patch({
@@ -59,19 +61,18 @@ export async function runLayoutDiagnostic({
   await patch({
     kind: "set-answer-pictures",
     publicQuestionId,
-    pictures: pictures.assets
-      .slice(0, 5)
-      .map((item, index) => ({
-        answerNumber: index + 1,
-        asset: item.ref,
-        alt: item.alt,
-        display: "both",
-      })),
+    pictures: pictures.assets.slice(0, 5).map((item, index) => ({
+      answerNumber: index + 1,
+      asset: item.ref,
+      alt: item.alt,
+      display: "both",
+    })),
   })
   scenario.selection.chapterId = scenario.chapters.find(
     (chapter) =>
       chapter.questionOrdinal === 3 && chapter.kind === "answerCards",
   ).id
+  await prepareHostNavigation(page, "layout diagnostic")
   await page.goto(`${base}/host?scenario=${scenario.id}`)
   await page.locator("html[data-host-ready=true]").waitFor()
   const iframe = page.frameLocator("iframe")
@@ -83,13 +84,18 @@ export async function runLayoutDiagnostic({
       const viewport = shadow.querySelector(
         '[data-testid="native-stage-viewport"]',
       )
-      if (!viewport) return { missing: true }
+
+      if (!viewport) {
+        return { missing: true }
+      }
+
       const canvas = viewport.firstElementChild
       const native = canvas.querySelector(
         '[data-testid="native-razzia-preview-v2"]',
       )
       const rect = (node) => {
         const r = node.getBoundingClientRect()
+
         return {
           x: r.x,
           y: r.y,
@@ -100,9 +106,21 @@ export async function runLayoutDiagnostic({
           sw: node.scrollWidth,
           sh: node.scrollHeight,
           css: node.getAttribute("style"),
-          computed: Object.fromEntries(["width","height","max-width","max-height","min-width","min-height","transform","position"].map(key=>[key,getComputedStyle(node).getPropertyValue(key)])),
+          computed: Object.fromEntries(
+            [
+              "width",
+              "height",
+              "max-width",
+              "max-height",
+              "min-width",
+              "min-height",
+              "transform",
+              "position",
+            ].map((key) => [key, getComputedStyle(node).getPropertyValue(key)]),
+          ),
         }
       }
+
       return {
         factor: viewport.dataset.fitFactor,
         ready: viewport.dataset.fitReady,
@@ -116,9 +134,16 @@ export async function runLayoutDiagnostic({
     }
     const observer = new MutationObserver(() => {
       const snapshot = window.__fitSnapshot()
-      if (JSON.stringify(snapshot) !== JSON.stringify(window.__fitTrace.at(-1)))
+
+      if (
+        JSON.stringify(snapshot) !== JSON.stringify(window.__fitTrace.at(-1))
+      ) {
         window.__fitTrace.push(snapshot)
-      if (window.__fitTrace.length > 24) window.__fitTrace.shift()
+      }
+
+      if (window.__fitTrace.length > 24) {
+        window.__fitTrace.shift()
+      }
     })
     observer.observe(shadow, {
       attributes: true,
@@ -146,5 +171,6 @@ export async function runLayoutDiagnostic({
     fullPage: true,
   })
   assert.equal(diagnostic.current.ready, "true", JSON.stringify(diagnostic))
+
   return { engine, theme, check: "development viewport diagnostic", diagnostic }
 }
