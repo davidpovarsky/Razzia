@@ -644,61 +644,21 @@
   display: none !important;
 }
 
-/* A single balanced result label: centred above the question (never
-   repeated on the favourite/correct card). Keep the complete question
-   readable inside the native 1920x1080 stage and away from answer tiles. */
-.ggo-native[data-ggo-phase="results"] .tzv4-stage .q-frame {
-  top: 116px !important;
-  height: 216px !important;
-  padding: 13px 44px 16px !important;
-  gap: 9px !important;
-  justify-content: center;
-  overflow: visible !important;
-  border: 2px solid #b980edcc !important;
-  box-shadow:
-    0 15px 36px #09011da8,
-    inset 0 2px 0 #ffffff21 !important;
-}
+/* The question must not change position, size or typography on reveal.
+   The result belongs to the highlighted answer, never to the question. */
 .ggo-native[data-ggo-phase="results"] .tzv4-stage .q-frame .eyebrow {
-  display: flex !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  flex: 0 0 auto !important;
-  align-items: center;
-  justify-content: center;
-  width: max-content;
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 5px 23px 6px !important;
-  height: auto !important;
-  min-height: 39px !important;
-  border: 1px solid #cba1efba !important;
-  border-radius: 14px !important;
-  background: #25104cd6 !important;
-  box-shadow: 0 3px 12px #0e04274d !important;
-  color: #efff88 !important;
-  font-size: 31px !important;
-  font-weight: 900 !important;
-  line-height: 1.13 !important;
-  letter-spacing: 0.05em !important;
-  text-shadow: 0 1px 6px #07031b7a !important;
-  white-space: nowrap;
-}
-.ggo-native[data-ggo-phase="results"] .tzv4-stage .q-frame .q-text {
-  flex: 0 0 auto !important;
-  max-width: 1350px;
-  margin: 0 auto;
-  font-size: 54px !important;
-  line-height: 1.1 !important;
-  font-weight: 860 !important;
-  letter-spacing: -0.026em !important;
-  text-wrap: balance;
-}
-/* The result heading is the ONLY wording. The winning card is recognised
-   through its original selected outline and animated percentage, not a
-   second massive "AUDIENCE FAVOURITE" banner over its number/text. */
-.ggo-native[data-ggo-phase="results"] .tzv4-stage .winner-tag {
   display: none !important;
+}
+.ggo-native[data-ggo-phase="results"] .tzv4-stage .choice-slot:is(.is-favourite, .is-correct) .winner-tag {
+  display: block !important;
+  opacity: 1 !important;
+  top: 8px;
+  left: 54px;
+  right: 10px;
+  padding: 7px 5px;
+  font-size: 13px;
+  line-height: 1.1;
+  white-space: normal;
 }
 .ggo-native[data-ggo-phase="results"] .tzv4-stage .choice-slot {
   opacity: 1 !important;
