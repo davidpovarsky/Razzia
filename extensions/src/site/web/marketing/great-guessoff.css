@@ -701,3 +701,64 @@
 .ggo-native[data-ggo-phase="closing"] .tzv4-stage .full-final-zigzags {
   display: none !important;
 }
+
+/* Great Guess-off final result contract: these labels MUST be visible on the
+   stage, not merely present as hidden text. The native `eyebrow` is hidden by
+   a wider site rule, so explicitly restore it for this demo's result scenes. */
+.ggo-native[data-ggo-phase="results"] .tzv4-stage .q-frame {
+  top: 108px !important;
+  height: 223px !important;
+  padding: 16px 38px !important;
+  gap: 7px !important;
+}
+.ggo-native[data-ggo-phase="results"] .tzv4-stage .q-frame .eyebrow {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-height: 48px;
+  width: max-content;
+  max-width: 100%;
+  padding: 6px 26px !important;
+  font-size: 42px !important;
+  font-weight: 950 !important;
+  line-height: 1.12 !important;
+  letter-spacing: 0.045em !important;
+  white-space: nowrap;
+  background: #251052ed !important;
+  color: #f5ff8a !important;
+  border: 2px solid #c4deffae !important;
+  border-radius: 16px !important;
+  text-shadow: 0 2px 12px #0008 !important;
+  box-shadow: 0 4px 17px #09031d76 !important;
+}
+.ggo-native[data-ggo-phase="results"] .tzv4-stage .q-frame .q-text {
+  flex: 0 1 auto;
+  min-height: 0;
+}
+/* No second card entrance after choosing. Preserve the original answer
+   positions and reveal only the correct border or audience vote percentages. */
+.ggo-native[data-ggo-phase="results"] .tzv4-stage .choice-slot {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+}
+.ggo-native[data-ggo-phase="results"] .tzv4-stage .choice-slot.is-incorrect {
+  opacity: 0.44 !important;
+}
+.ggo-native[data-ggo-phase="results"][data-ggo-mode="survey"]
+  .tzv4-stage
+  .choice-slot.is-favourite
+  .winner-tag {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+/* The canonical Z-wipe remains visible. Hide ONLY the previous/native answer
+   scene for the duration of a question change. This also prevents the old
+   results from acquiring the NEXT question's header during transition. */
+.ggo-native[data-ggo-phase="question-transition"] .tzv4-stage .tzv4-scene-root {
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
