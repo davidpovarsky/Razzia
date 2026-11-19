@@ -2022,13 +2022,23 @@ try {
             ["opening", null],
           ]) {
             await scenario.go(kind, ordinal)
+            const beforeChapter = await stage.getAttribute(
+              "data-full-show-chapter",
+            )
             const beforeEpoch = await stage.getAttribute("data-playback-epoch")
             const node = await stage
               .locator(":scope > div")
               .first()
               .elementHandle()
             assert(node)
+            const replayFrame = await node.ownerFrame()
+            assert(replayFrame)
             await iframe.getByTestId("full-show-replay").click()
+            await replayFrame.waitForFunction(
+              (element) => !element.isConnected,
+              node,
+              { timeout: 10000, polling: 50 },
+            )
             await iframe
               .locator(
                 `[data-full-show-chapter]:not([data-playback-epoch="${beforeEpoch}"])`,
@@ -2038,6 +2048,11 @@ try {
               await node.evaluate((element) => element.isConnected),
               false,
               "Replay must remount the native question or scene",
+            )
+            assert.equal(
+              await stage.getAttribute("data-full-show-chapter"),
+              beforeChapter,
+              "Replay must remain on the original chapter",
             )
             assert(
               Number(await stage.getAttribute("data-playback-elapsed")) < 1000,

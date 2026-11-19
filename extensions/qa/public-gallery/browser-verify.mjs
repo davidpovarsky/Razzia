@@ -198,13 +198,209 @@ const attempt = async (name, operation) => {
 }
 
 const chooseNative = async (page, index) => {
-  const mobile = page.locator(".catalogue-mobile-answers button").nth(index)
+  const mobile = page
+    .getByTestId("catalogue-mobile-question")
+    .getByTestId("tadazz-pad-option-" + index)
   if (await mobile.isVisible()) await mobile.click()
   else
     await page
       .getByTestId("tadazz-card-" + index)
       .first()
       .click()
+}
+
+// Inspect the real native answer pad while voting is open. Capturing only this
+// stable element avoids spending the short voting window decoding the whole page.
+const verifyActiveMobileQuestion = async (page, question, id, mode, index) => {
+  const companion = page.getByTestId("catalogue-mobile-question")
+  const heading = companion.getByTestId("catalogue-mobile-question-heading")
+  const frame = page.getByTestId(
+    id === "great-guessoff"
+      ? "great-guessoff-native-stage"
+      : "catalogue-native-stage",
+  )
+  await expect(companion).toBeVisible()
+  await expect(companion).toHaveAttribute("data-question-key", question.key)
+  await expect(companion).toHaveAttribute("data-question-type", question.kind)
+  await expect(companion).toHaveAttribute("data-phase", "voting")
+  await expect(heading).toHaveText(question.question)
+  await expect(frame).toHaveAttribute("aria-hidden", "true")
+  const outsideStage = await companion.evaluate(
+    (element) => !element.closest(".catalogue-player-frame, .ggo-native-frame"),
+  )
+  assert(
+    outsideStage,
+    "Readable question and controls must be outside the scaled stage",
+  )
+  const questionBounds = await heading.evaluate((element) => {
+    const bounds = element.getBoundingClientRect()
+    const range = document.createRange()
+    range.selectNodeContents(element)
+    return {
+      width: bounds.width,
+      fontSize: Number.parseFloat(getComputedStyle(element).fontSize),
+      renderedTextHeight: range.getBoundingClientRect().height,
+      clipped:
+        element.scrollWidth > element.clientWidth + 1 ||
+        element.scrollHeight > element.clientHeight + 1,
+    }
+  })
+  assert(
+    questionBounds.fontSize >= 18,
+    "Mobile question must use readable typography",
+  )
+  assert(
+    questionBounds.renderedTextHeight >= 18,
+    "Question must not inherit the scaled host transform",
+  )
+  assert(
+    questionBounds.width > 200 && !questionBounds.clipped,
+    "Full authored question must fit",
+  )
+  const pad = companion.getByTestId("tadazz-answer-pad")
+  await expect(pad.getByRole("button")).toHaveCount(question.answers.length)
+  const optionMetrics = []
+  for (
+    let answerIndex = 0;
+    answerIndex < question.answers.length;
+    answerIndex++
+  ) {
+    const answer = question.answers[answerIndex]
+    const option = pad.getByTestId("tadazz-pad-option-" + answerIndex)
+    await expect(option).toBeVisible()
+    await expect(option).toBeEnabled()
+    await expect(option).toHaveAttribute("aria-pressed", "false")
+    await expect(option.locator("p")).toHaveText(answer.text)
+    await expect(frame.getByTestId("tadazz-card-" + answerIndex)).toBeDisabled()
+    const metrics = await option.evaluate((element) => {
+      const bounds = element.getBoundingClientRect()
+      const text = element.querySelector("p")
+      const range = document.createRange()
+      range.selectNodeContents(text)
+      return {
+        width: bounds.width,
+        height: bounds.height,
+        left: bounds.left,
+        right: bounds.right,
+        viewportWidth: innerWidth,
+        fontSize: Number.parseFloat(getComputedStyle(text).fontSize),
+        renderedTextHeight: range.getBoundingClientRect().height,
+        clipped:
+          text.scrollWidth > text.clientWidth + 1 ||
+          text.scrollHeight > text.clientHeight + 1,
+      }
+    })
+    assert(
+      metrics.height >= 56,
+      "Native mobile option needs a usable touch target",
+    )
+    assert(
+      metrics.width >= 120,
+      "Native mobile option must retain readable width",
+    )
+    assert(
+      metrics.fontSize >= 16 && metrics.renderedTextHeight >= 16,
+      "Actual answer text must be readable",
+    )
+    assert(!metrics.clipped, "Complete answer text must remain visible")
+    assert(
+      metrics.left >= -1 && metrics.right <= metrics.viewportWidth + 1,
+      "Native choice must fit the phone width",
+    )
+    const image = option.getByTestId("answer-visual-image")
+    if (answer.imageUrl) {
+      await expect(image).toHaveCount(1)
+      await expect(image).toBeVisible()
+      await expect
+        .poll(
+          () =>
+            image.evaluate((element) => ({
+              loaded: element.complete && element.naturalWidth > 0,
+              source: new URL(element.currentSrc || element.src).pathname,
+            })),
+          { timeout: 5_000 },
+        )
+        .toEqual({
+          loaded: true,
+          source: new URL(answer.imageUrl, origin).pathname,
+        })
+      const imageBounds = await image.boundingBox()
+      assert(
+        imageBounds && imageBounds.width >= 64 && imageBounds.height >= 64,
+        "Authored answer image must be recognisable on a phone",
+      )
+    } else {
+      await expect(image).toHaveCount(0)
+    }
+    optionMetrics.push({
+      index: answerIndex,
+      image: Boolean(answer.imageUrl),
+      ...metrics,
+    })
+  }
+  const questionImage = companion.getByTestId("catalogue-mobile-question-image")
+  if (question.media?.type === "image") {
+    await expect(questionImage).toBeVisible()
+    await expect
+      .poll(
+        () =>
+          questionImage.evaluate((element) => ({
+            loaded: element.complete && element.naturalWidth > 0,
+            source: new URL(element.currentSrc || element.src).pathname,
+          })),
+        { timeout: 5_000 },
+      )
+      .toEqual({
+        loaded: true,
+        source: new URL(question.media.url, origin).pathname,
+      })
+    const imageBounds = await questionImage.boundingBox()
+    assert(
+      imageBounds && imageBounds.width >= 200 && imageBounds.height >= 64,
+      "Authored question image must remain readable",
+    )
+  } else {
+    await expect(questionImage).toHaveCount(0)
+  }
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - innerWidth,
+  )
+  assert(overflow <= 1, "No active mobile game horizontal overflow")
+  await companion.screenshot({
+    path: join(evidence, "active-" + mode + "-" + id + "-" + index + ".png"),
+    timeout: 5_000,
+  })
+  await expect(companion).toHaveAttribute("data-phase", "voting")
+  return { questionBounds, options: optionMetrics }
+}
+
+const verifyMobileResult = async (page, question, selected) => {
+  const companion = page.getByTestId("catalogue-mobile-question")
+  await expect(companion).toHaveAttribute("data-phase", "results")
+  await expect(
+    companion.getByTestId("catalogue-mobile-question-heading"),
+  ).toHaveText(question.question)
+  const pad = companion.getByTestId("tadazz-answer-pad")
+  await expect(pad.getByRole("button")).toHaveCount(question.answers.length)
+  for (let index = 0; index < question.answers.length; index++) {
+    const option = pad.getByTestId("tadazz-pad-option-" + index)
+    await expect(option).toBeDisabled()
+    await expect(option).toHaveAttribute(
+      "aria-pressed",
+      String(index === selected),
+    )
+  }
+  await expect(
+    companion.getByTestId("catalogue-mobile-selected-answer"),
+  ).toContainText(question.answers[selected].text)
+  const correct = companion.getByTestId("catalogue-mobile-correct-answer")
+  if (question.kind === "quiz") {
+    await expect(correct).toBeVisible()
+    for (const answer of question.correctAnswers)
+      await expect(correct).toContainText(question.answers[answer - 1].text)
+  } else {
+    await expect(correct).toHaveCount(0)
+  }
 }
 
 try {
@@ -345,6 +541,12 @@ try {
           const phase = await gameRoot.getAttribute("data-ggo-phase")
           if (phase === "closing") break
           if (phase === "voting") {
+            await expect(
+              page.getByTestId("catalogue-mobile-question"),
+            ).toBeHidden()
+            await expect(
+              page.getByTestId("great-guessoff-native-stage"),
+            ).not.toHaveAttribute("aria-hidden", "true")
             if (votingRounds === 0)
               await verifyNativePalette(
                 page,
@@ -392,6 +594,12 @@ try {
           )
           await expect(next).toBeEnabled({ timeout: 30_000 })
           await expect(
+            page.getByTestId("catalogue-mobile-question"),
+          ).toBeHidden()
+          await expect(
+            page.getByTestId("catalogue-native-stage"),
+          ).not.toHaveAttribute("aria-hidden", "true")
+          await expect(
             page.getByTestId("tadazz-question-panel").first(),
           ).toContainText(questions[index].question)
 
@@ -432,34 +640,91 @@ try {
       const page = await context.newPage()
       activePage = page
       inspect(page)
-      await goto(page, "/?view=store" + (mode === "hebrew" ? "&lng=he" : ""))
-      await expect(page.locator("[data-catalogue-card]")).toHaveCount(10)
-      if (mode === "hebrew")
-        await expect(page.locator("html")).toHaveAttribute("dir", "rtl")
-      const overflow = await page.evaluate(
-        () => document.documentElement.scrollWidth - window.innerWidth,
-      )
-      assert(overflow <= 1, "No horizontal overflow: " + mode)
-      await imageDecode(page, true)
-      await verifyCatalogueCovers(page, "public-" + mode, evidence)
-      await screenshot(page, "gallery-" + mode)
-      const id = mode === "hebrew" ? "family" : "picture"
-      await page.locator('[data-catalogue-open="' + id + '"]').click()
-      await page.getByTestId("catalogue-play-sample").click()
-      const gameRoot = page.getByTestId("catalogue-game-demo")
-      await page.getByTestId("catalogue-next").click()
-      await expect(gameRoot).toHaveAttribute("data-game-phase", "voting", {
-        timeout: 30_000,
-      })
-      await expect(
-        page.locator(".catalogue-mobile-answers button"),
-      ).toHaveCount(4)
-      await page.locator(".catalogue-mobile-answers button").first().click()
-      await expect(gameRoot).toHaveAttribute("data-game-phase", "results")
-      await imageDecode(page)
-      await screenshot(page, "play-" + mode)
-      record(mode + "-gallery-and-real-vote")
-      await context.close()
+      try {
+        const languageQuery = mode === "hebrew" ? "&lng=he" : ""
+        await goto(page, "/?view=store" + languageQuery)
+        await expect(page.locator("[data-catalogue-card]")).toHaveCount(10)
+        if (mode === "hebrew")
+          await expect(page.locator("html")).toHaveAttribute("dir", "rtl")
+        const overflow = await page.evaluate(
+          () => document.documentElement.scrollWidth - window.innerWidth,
+        )
+        assert(overflow <= 1, "No horizontal overflow: " + mode)
+        await imageDecode(page, true)
+        await verifyCatalogueCovers(page, "public-" + mode, evidence)
+        await screenshot(page, "gallery-" + mode)
+        const priorFailures = observations.checkFailures.length
+        for (const id of ["family", "picture", "great-guessoff"]) {
+          await attempt("active-" + mode + "-" + id, async () => {
+            await goto(page, "/?view=store" + languageQuery)
+            await page.locator('[data-catalogue-open="' + id + '"]').click()
+            await page.getByTestId("catalogue-play-sample").click()
+            if (mode === "hebrew")
+              await expect(page.locator("html")).toHaveAttribute("dir", "rtl")
+            const isGuessoff = id === "great-guessoff"
+            const gameRoot = page.getByTestId(
+              isGuessoff ? "great-guessoff-demo" : "catalogue-game-demo",
+            )
+            const phaseAttribute = isGuessoff
+              ? "data-ggo-phase"
+              : "data-game-phase"
+            const next = page.getByTestId(
+              isGuessoff ? "ggo-main-action" : "catalogue-next",
+            )
+            const questions = previews
+              .get(id)
+              .show.cards.filter((card) =>
+                ["quiz", "survey"].includes(card.kind),
+              )
+              .slice(0, isGuessoff ? 2 : 1)
+            await expect(gameRoot).toHaveAttribute(phaseAttribute, "intro")
+            await next.click()
+            for (let index = 0; index < questions.length; index++) {
+              const question = questions[index]
+              await expect(gameRoot).toHaveAttribute(phaseAttribute, "voting", {
+                timeout: 30_000,
+              })
+              const metrics = await verifyActiveMobileQuestion(
+                page,
+                question,
+                id,
+                mode,
+                index,
+              )
+              const selected = question.correctAnswers[0]
+                ? question.correctAnswers[0] - 1
+                : 0
+              await chooseNative(page, selected)
+              await expect(gameRoot).toHaveAttribute(phaseAttribute, "results")
+              await verifyMobileResult(page, question, selected)
+              record("active-" + mode + "-" + id + "-" + index, {
+                questionKey: question.key,
+                chosenAnswer: selected,
+                realChoice: true,
+                ...metrics,
+              })
+              if (index + 1 < questions.length) {
+                await expect(next).toBeEnabled({ timeout: 30_000 })
+                await next.click()
+              }
+            }
+            await screenshot(page, "play-" + mode + "-" + id)
+            if (
+              (mode === "mobile" && id === "picture") ||
+              (mode === "hebrew" && id === "family")
+            )
+              await screenshot(page, "play-" + mode)
+          })
+        }
+        assert.equal(
+          observations.checkFailures.length,
+          priorFailures,
+          "Every active mobile game must pass",
+        )
+        record(mode + "-gallery-and-real-vote", { games: 3, rounds: 4 })
+      } finally {
+        await context.close()
+      }
     })
   }
   assert.deepEqual(

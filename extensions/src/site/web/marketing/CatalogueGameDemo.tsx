@@ -22,6 +22,10 @@ import type {
 import type { TadazzV4Cue } from "../../../presentation/tadazz-v4/types"
 import { TADAZZ_SFX_BY_CUE } from "../../../presentation/audio-cue-player"
 import { SiteButton } from "../shared/SiteButton"
+import {
+  CatalogueMobileQuestion,
+  useCatalogueMobileControls,
+} from "./CatalogueMobileQuestion"
 import { siteText as t } from "../../locales"
 import v4Css from "../../../presentation/tadazz-v4/tadazz-v4.css?inline"
 import v4LayoutCss from "../../../presentation/tadazz-v4/source-layout.css?inline"
@@ -87,6 +91,9 @@ function CataloguePlayer({
     Promise.resolve(),
   )
   const question = questions[index]
+  const compactControls = useCatalogueMobileControls()
+  const showMobileQuestion =
+    compactControls && (phase === "voting" || phase === "results")
   const quizCount = questions.filter((card) => card.kind === "quiz").length
   const score = questions.reduce(
     (sum, card, position) =>
@@ -354,7 +361,12 @@ function CataloguePlayer({
         style={showThemeStyle(theme)}
       >
         <style>{nativeStageCss}</style>
-        <div className="catalogue-player-frame" dir="ltr">
+        <div
+          className="catalogue-player-frame"
+          data-testid="catalogue-native-stage"
+          dir="ltr"
+          aria-hidden={showMobileQuestion || undefined}
+        >
           <TadazzV4StageAdapter
             ref={stage}
             labels={{
@@ -372,7 +384,7 @@ function CataloguePlayer({
               mostChosenAnswer: t("Your choice"),
             }}
             backdropUrl={themeAdapterAsset(theme, "questionBackdrop")}
-            interactive
+            interactive={!showMobileQuestion}
             onSelectOption={choose}
             onCue={onCue}
             reducedMotion={reducedMotion}
@@ -386,22 +398,20 @@ function CataloguePlayer({
               {phase === "voting" ? ` · ${seconds}s` : ""}
             </span>
           </div>
-          {phase === "voting" && (
-            <div
-              className="catalogue-mobile-answers"
-              aria-label={t("Choose an answer")}
-            >
-              {question.answers.map((answer, answerIndex) => (
-                <SiteButton
-                  key={answerIndex}
-                  disabled={busy}
-                  onClick={() => choose(answerIndex)}
-                >
-                  <b>{answerIndex + 1}</b>
-                  <span>{answer.text}</span>
-                </SiteButton>
-              ))}
-            </div>
+          {showMobileQuestion && (
+            <CatalogueMobileQuestion
+              question={stageQuestion(index)}
+              questionType={question.kind}
+              voting={phase === "voting"}
+              busy={busy}
+              selected={votes[index]}
+              correctAnswers={
+                phase === "results" && question.kind === "quiz"
+                  ? question.correctAnswers.map((answer) => answer - 1)
+                  : undefined
+              }
+              onChoose={choose}
+            />
           )}
           {phase === "results" && question.note && (
             <p className="catalogue-answer-note">{question.note}</p>

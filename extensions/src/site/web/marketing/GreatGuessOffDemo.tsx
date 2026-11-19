@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { ArrowLeft, ArrowRight, Volume2, VolumeX } from "lucide-react"
+import {
+  CatalogueMobileQuestion,
+  useCatalogueMobileControls,
+} from "./CatalogueMobileQuestion"
 import { TadazzV4StageAdapter } from "../../../presentation/tadazz-show/TadazzV4StageAdapter"
 import type {
   StageLeaderEntry,
@@ -166,6 +170,14 @@ export function GreatGuessOffDemo() {
   const reducedMotion = useReducedMotion()
   const question = QUESTIONS[questionIndex]
   const selected = votes[questionIndex]
+  const compactControls = useCatalogueMobileControls()
+  const showMobileQuestion =
+    compactControls && (phase === "voting" || phase === "results")
+  const resultCounts = displayedCounts(question, selected)
+  const audienceFavourite =
+    question.kind === "survey"
+      ? question.answers[resultCounts.indexOf(Math.max(...resultCounts))]?.label
+      : undefined
 
   const score = [1, 3].reduce(
     (total, index) =>
@@ -479,6 +491,7 @@ export function GreatGuessOffDemo() {
       <div
         className="ggo-native-frame"
         data-testid="great-guessoff-native-stage"
+        aria-hidden={showMobileQuestion || undefined}
       >
         <TadazzV4StageAdapter
           ref={stage}
@@ -494,7 +507,7 @@ export function GreatGuessOffDemo() {
                 ? "CORRECT ANSWER"
                 : "THE MOST CHOSEN ANSWER",
           }}
-          interactive
+          interactive={!showMobileQuestion}
           onSelectOption={choose}
           onCue={onCue}
           reducedMotion={reducedMotion}
@@ -514,6 +527,26 @@ export function GreatGuessOffDemo() {
           <strong>The Great Guess-off</strong>
           <span aria-live="polite">{captions[phase]}</span>
         </div>
+        {showMobileQuestion && (
+          <CatalogueMobileQuestion
+            question={stageQuestion(question, questionIndex)}
+            questionType={question.kind}
+            voting={phase === "voting"}
+            busy={busy}
+            selected={selected}
+            correctAnswers={
+              phase === "results" &&
+              question.kind === "quiz" &&
+              question.correct !== undefined
+                ? [question.correct]
+                : undefined
+            }
+            audienceFavourite={
+              phase === "results" ? audienceFavourite : undefined
+            }
+            onChoose={choose}
+          />
+        )}
         <div className="ggo-native-actions">
           <button
             className="ggo-native-sound"
