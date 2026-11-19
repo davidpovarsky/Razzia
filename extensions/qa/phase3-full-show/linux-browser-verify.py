@@ -2,8 +2,11 @@
 
 Reuses the existing local image and read-only source/dependency/browser caches.
 No network, published ports, customer mount, installs, old restart or deletion.
-The 1800s ceiling bounds all 40 checks and 44 renderer fixtures on one CPU. The 9fa
-run took 544.83s for 23 checks; the complete compound semantic case measured 147.562s.
+The 1800s ceiling bounds all 40 checks and 44 renderer fixtures. The fresh
+offline browser container uses a two-CPU quota for its renderer and fixture host.
+Behavioral assertions and their individual timeouts remain unchanged.
+The optional transport-race argument runs both browsers against the focused
+Classic transport proof in a separate diagnostic-only receipt namespace.
 """
 import json
 import pathlib
@@ -14,17 +17,24 @@ import uuid
 
 ROOT = pathlib.Path(__file__).resolve().parents[3]
 BASE = ROOT / "docs/extensions/plans/phase3-takeover-20261117"
-if len(sys.argv) != 2 or not re.fullmatch(r"tadazz-codex-[a-f0-9]{12}-[a-f0-9]{8}", sys.argv[1]):
-    raise SystemExit("Pass the qualified source run directory name")
+if len(sys.argv) not in (2, 3) or not re.fullmatch(r"tadazz-codex-[a-f0-9]{12}-[a-f0-9]{8}", sys.argv[1]):
+    raise SystemExit("Pass the qualified source run directory name and optional transport-race")
+if len(sys.argv) == 3 and sys.argv[2] != "transport-race":
+    raise SystemExit("The only optional mode is transport-race")
+mode = "transport-race" if len(sys.argv) == 3 else "full-show"
 source_run = sys.argv[1]
 inputs = json.loads((BASE / source_run / "input-manifest.json").read_text(encoding="utf8"))
-run = f"tadazz-codex-fullshow-{inputs['sha'][:12]}-{uuid.uuid4().hex[:8]}"
+run_kind = "transport" if mode == "transport-race" else "fullshow"
+run = f"tadazz-codex-{run_kind}-{inputs['sha'][:12]}-{uuid.uuid4().hex[:8]}"
 evidence = BASE / run
 evidence.mkdir()
-config = {"sha": inputs["sha"], "manifest": inputs["files"], "sourceRun": source_run, "run": run}
+config = {"sha": inputs["sha"], "manifest": inputs["files"], "sourceRun": source_run, "run": run, "mode": mode}
 REMOTE = r'''
 import hashlib,json,pathlib,shutil,subprocess,time
 c=CONFIG
+assert c["mode"] in ("full-show","transport-race")
+expected_prefix="tadazz-codex-"+("transport" if c["mode"]=="transport-race" else "fullshow")+"-"+c["sha"][:12]+"-"
+assert c["run"].startswith(expected_prefix),"QA_MODE_NAMESPACE_MISMATCH"
 old="tadazz-phase2-20261116"
 facts=json.loads(subprocess.check_output(["docker","inspect",old]))[0]
 assert facts["State"]["Running"] and facts["HostConfig"]["NetworkMode"]=="none"
@@ -55,7 +65,7 @@ assert dependency_hashes(deps)==expected_deps
 # The native browser and the real issuer/SDK harness share this bounded cgroup.
 # The 2 GiB run killed Chromium at ~1.5 GiB renderer RSS plus ~475 MiB harness RSS.
 memory_limit_bytes=3*1024**3
-command=["docker","run","--detach","--pull=never","--init","--read-only","--name",c["run"],"--network","none","--cpus","1","--memory",str(memory_limit_bytes),"--memory-swap",str(memory_limit_bytes),"--pids-limit","512","--shm-size","256m","--tmpfs","/tmp:rw,nosuid,nodev,size=536870912", "--label","codex.thread=01a1e9e9-ad5b-77a3-bafe-bcedce32246a"]
+command=["docker","run","--detach","--pull=never","--init","--read-only","--name",c["run"],"--network","none","--cpus","2","--memory",str(memory_limit_bytes),"--memory-swap",str(memory_limit_bytes),"--pids-limit","512","--shm-size","256m","--tmpfs","/tmp:rw,nosuid,nodev,size=536870912", "--label","codex.thread=01a1e9e9-ad5b-77a3-bafe-bcedce32246a"]
 for origin,target,readonly in [(str(source),"/source",True),(str(owned),"/evidence",False),(str(rootfs/"cleanup"),"/cleanup",True),(str(deps),"/tmp/phase3-999ed90c/deps",True),(str(rootfs/"root/.cache/ms-playwright"),"/root/.cache/ms-playwright",True)]:
     command += ["--mount",f"type=bind,source={origin},target={target}" + (",readonly" if readonly else "")]
 command += [facts["Image"],"sleep","infinity"]
@@ -85,7 +95,7 @@ def resources():
 try:
     resources_before=resources()
     assert resources_before["memoryLimitBytes"]==memory_limit_bytes and resources_before["memorySwapLimitBytes"]==0,"QA_RESOURCE_LIMIT_MISMATCH"
-    assert resources_before["cpuMax"][0]==resources_before["cpuMax"][1]>0,"QA_CPU_LIMIT_MISMATCH"
+    assert resources_before["cpuMax"][0]==2*resources_before["cpuMax"][1]>0,"QA_CPU_LIMIT_MISMATCH"
     before=hashes()
     assert before==c["manifest"],"Fresh browser source differs from committed input"
     widget=source/"extensions/src/mcp-app/widget/dist"
@@ -96,9 +106,12 @@ try:
     assert hashlib.sha256((widget/"full-show.html").read_bytes()).hexdigest()==artifact["sha256"]
     for item in artifact["physicalSources"]+artifact["publicAssets"]:
         assert item["path"] in c["manifest"] and c["manifest"][item["path"]]==item["sha256"]
-    # Preserve the one-CPU Docker quota and nice 19, but allow an idle CPU.
+    # Keep nice 19 and allow both cores within the two-CPU QA quota.
     # A CPU 0 pin starved native browser frames while CPU 1 was idle in QA.
     argv=["docker","exec","-w","/source","-e","TMPDIR=/tmp","-e","HOME=/tmp","-e","PLAYWRIGHT_BROWSERS_PATH=/root/.cache/ms-playwright","-e","TSX_DISABLE_CACHE=1","-e","NODE_OPTIONS=--max-old-space-size=1024","-e","TADAZZ_FULL_SHOW_EVIDENCE=/evidence/full-show","-e","TADAZZ_FULL_SHOW_SOURCE_SHA="+c["sha"],"-e","TADAZZ_FULL_SHOW_BROWSERS=chromium,webkit",container,"nice","-n","19","timeout","-k","5","1800","node","/cleanup/extensions/node_modules/tsx/dist/cli.mjs","--tsconfig","tsconfig.json","extensions/qa/phase3-full-show/browser-verify.mjs"]
+    if c["mode"]=="transport-race":
+        position=argv.index(container)
+        argv[position:position]=["-e","TADAZZ_FULL_SHOW_DIAGNOSTIC=transport-race","-e","TADAZZ_FULL_SHOW_THEMES=tadazz-classic"]
     started=time.time()
     result=subprocess.run(argv,capture_output=True,text=True,timeout=1815)
     # Preserve the primary browser failure even if a receipt gate rejects early.
@@ -112,7 +125,7 @@ try:
                        "dockerOOMKilled":container_after["State"]["OOMKilled"]}
     (owned/"browser-resource-evidence.json").write_text(json.dumps(resource_evidence,indent=2)+"\n")
     assert resources_after["memoryLimitBytes"]==memory_limit_bytes and resources_after["memorySwapLimitBytes"]==0,"QA_RESOURCE_LIMIT_CHANGED"
-    assert resources_after["cpuMax"]==resources_before["cpuMax"] and resource_evidence["configuredNanoCpus"]==1000000000,"QA_CPU_LIMIT_CHANGED"
+    assert resources_after["cpuMax"]==resources_before["cpuMax"] and resource_evidence["configuredNanoCpus"]==2000000000,"QA_CPU_LIMIT_CHANGED"
     assert not resource_evidence["dockerOOMKilled"] and all(resources_after["memoryEvents"][key]==0 for key in ("oom","oom_kill","oom_group_kill")),"FULLSHOW_QA_OOM"
     after=hashes()
     widget_after=widget_hashes()
@@ -125,8 +138,42 @@ try:
     assert engines=={"chromium","webkit"}, "Both browser engines are required"
     assert inner["entries"] and all(entry["status"]=="PASS" for entry in inner["entries"]), "A full-show browser gate failed"
     assert not inner["errors"]
+    assert result.returncode==0 and inner["failureCount"]==0,"BROWSER_EXECUTION_FAILED"
+    assert inner["sha"]==c["sha"] and inner["widgetManifestSha256"]==widget_before["full-show-artifact.json"] and inner["widgetHtmlSha256"]==artifact["sha256"],"BROWSER_RECEIPT_INPUT_MISMATCH"
+    assert inner["sourceHashesUnchanged"] is True and inner["network"]=="none" and inner["outboundDenied"]==[],"BROWSER_ISOLATION_FAILURE"
+    assert inner["productionChanged"] is False and inner["customerMountAccessed"] is False,"BROWSER_LIVE_DATA_ACCESSED"
+    transport_witnesses={}
+    if c["mode"]=="transport-race":
+        assert inner["diagnosticMode"]=="transport-race","TRANSPORT_MODE_MISSING"
+        expected_checks={engine+" / tadazz-classic readonly transport supersedes automatic preview" for engine in ("chromium","webkit")}
+        assert len(inner["entries"])==2 and {entry["name"] for entry in inner["entries"]}==expected_checks,"TRANSPORT_CHECKS_MISSING"
+        assert {engine["name"] for engine in inner["engines"]}=={"chromium","webkit"} and len(inner["engines"])==2,"TRANSPORT_ENGINES_MISSING"
+        expected_actions={"pause","replay","next","previous"}
+        expected_gates={"pause automatic","replay automatic","replay manual","next automatic","next manual","previous automatic","previous manual"}
+        for engine in ("chromium","webkit"):
+            witness_path=owned/"full-show"/(engine+"-tadazz-classic-transport-race.json")
+            witness_bytes=witness_path.read_bytes()
+            witness=json.loads(witness_bytes)
+            assert witness["engine"]==engine and witness["theme"]=="tadazz-classic" and witness["status"]=="PASS" and not witness.get("error"),"TRANSPORT_WITNESS_FAILED"
+            cases=witness["cases"]
+            assert len(cases)==4 and {case["action"] for case in cases}==expected_actions and all(case["status"]=="PASS" for case in cases),"TRANSPORT_ACTIONS_MISSING"
+            assert next(case for case in cases if case["action"]=="pause")["userPausePreserved"] is True,"TRANSPORT_PAUSE_NOT_PRESERVED"
+            gates=witness["gates"]
+            assert len(gates)==7 and {gate["label"] for gate in gates}==expected_gates and all(gate["claimed"] is True and gate["fulfilled"] is True for gate in gates),"TRANSPORT_REAL_ACKS_INCOMPLETE"
+            transport_witnesses[engine]={"path":witness_path.relative_to(owned).as_posix(),"sha256":hashlib.sha256(witness_bytes).hexdigest(),"witness":witness}
+    else:
+        assert inner["diagnosticMode"] is None,"FULL_SHOW_DIAGNOSTIC_MODE_FORBIDDEN"
+        assert len(inner["entries"])==40,"FULL_SHOW_40_CHECKS_REQUIRED"
+        assert len(inner["rendererFixtures"])==44 and all(fixture["observed"]["status"]=="PASS" for fixture in inner["rendererFixtures"]),"FULL_SHOW_44_FIXTURES_REQUIRED"
     receipt={"sha":c["sha"],"container":container,"network":"none","sourceReadOnly":True,"sourceFileCount":len(before),"allSourceHashesVerifiedBeforeAfter":before==after==c["manifest"],"widgetManifestSha256":widget_before["full-show-artifact.json"],"widgetHtmlSha256":artifact["sha256"],"widgetArtifacts":widget_before,"allWidgetHashesVerifiedBeforeAfter":widget_before==widget_after,"fullShow":inner,"sdkCacheFileCount":len(expected_deps),"sdkCacheHashesVerifiedBeforeAfter":dependency_hashes(deps)==expected_deps,"sdkCacheManifestSha256":hashlib.sha256(json.dumps(expected_deps,sort_keys=True).encode()).hexdigest(),"command":argv,"exit":result.returncode,"seconds":round(time.time()-started,3),"stdout":result.stdout,"stderr":result.stderr,"evidenceHostDirectory":str(owned),"customerMountAccessed":False,"productionChanged":False}
     receipt["resources"]=resource_evidence
+    receipt["sourceRun"]=c["sourceRun"]
+    if c["mode"]=="transport-race":
+        receipt["diagnosticOnly"]=True
+        receipt["diagnosticMode"]="transport-race"
+        receipt["releaseQualified"]=False
+        receipt["transportRace"]=receipt.pop("fullShow")
+        receipt["transportWitnesses"]=transport_witnesses
     print(json.dumps(receipt,indent=2))
 finally:
     subprocess.run(["docker","stop","--time","10",container],capture_output=True,check=True)
