@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { ArrowLeft, ArrowRight, Trophy, Volume2, VolumeX } from "lucide-react"
+import { ArrowLeft, ArrowRight, Volume2, VolumeX } from "lucide-react"
 import { TadazzV4StageAdapter } from "../../../presentation/tadazz-show/TadazzV4StageAdapter"
 import type {
   StageLeaderEntry,
@@ -32,7 +32,6 @@ type Phase =
   | "voting"
   | "locked"
   | "results"
-  | "top-pick"
   | "leaderboard"
   | "winner"
   | "closing"
@@ -241,9 +240,16 @@ export function GreatGuessOffDemo() {
       })
   }
 
-  // This is the SAME native opening composition as the original Creating Worlds game.
+  // Use the native Creating Worlds portal/logo opening without event artwork.
+  const showOpening = () =>
+    stage.current?.showFullShowScene?.("grand-opening", {
+      title: "THE GREAT GUESS-OFF",
+      subtitle: "FIVE ROUNDS OF SURPRISES",
+      eventArtworkUrl: "/tadazz-show/v4/show-stage.webp",
+    })
+
   useEffect(() => {
-    void stage.current?.showIntro()
+    void showOpening()
     return () => {
       stopMusic()
       sfxRef.current?.pause()
@@ -362,30 +368,20 @@ export function GreatGuessOffDemo() {
       stopMusic()
       const winner = leaderboard[0]
       playSfx("/sounds/first.mp3")
-      await handle.showFinale({ name: winner.name, score: winner.score })
+      // Show the Z stage backdrop before the native confetti starts: one
+      // unified winner reveal, not a separate confetti screen.
       currentPhase.current = "winner"
       setPhase("winner")
+      await handle.showFinale({ name: winner.name, score: winner.score })
     } else {
       await startQuestion(questionIndex + 1)
     }
   }
 
-  const showTopPick = async () => {
-    const q = QUESTIONS[questionIndex]
-    const counts = displayedCounts(q, votes[questionIndex])
-    const max = Math.max(...counts)
-    await stage.current?.showTopPick?.({
-      question: stageQuestion(q, questionIndex),
-      counts,
-      topIndex: counts.indexOf(max),
-    })
-    setPhase("top-pick")
-  }
-
   /** Restore the real previous scene, retaining the original vote and score.
    * There is no "restart" control in this demo; Back is genuine history.
    * Only visible scenes are navigable (not transient wipe/locked frames). */
-  const restoreResult = async (index: number, topPick: boolean) => {
+  const restoreResult = async (index: number) => {
     const handle = stage.current
     if (!handle) return
     stopMusic()
@@ -404,17 +400,8 @@ export function GreatGuessOffDemo() {
       ...(q.kind === "quiz" ? { solutions: [q.correct ?? 0] } : {}),
       showPercentages: q.kind === "survey",
     })
-    if (topPick) {
-      const counts = displayedCounts(q, votes[index])
-      const maximum = Math.max(...counts)
-      await handle.showTopPick?.({
-        question: stageQuestion(q, index),
-        counts,
-        topIndex: counts.indexOf(maximum),
-      })
-    }
-    currentPhase.current = topPick ? "top-pick" : "results"
-    setPhase(topPick ? "top-pick" : "results")
+    currentPhase.current = "results"
+    setPhase("results")
   }
 
   const back = async () => {
@@ -424,19 +411,20 @@ export function GreatGuessOffDemo() {
     lockPromiseRef.current = null
     if (phase === "closing") {
       const winner = leaderboard[0]
-      await handle.showFinale({ name: winner.name, score: winner.score })
+      // Show the Z stage backdrop before the native confetti starts: one
+      // unified winner reveal, not a separate confetti screen.
       currentPhase.current = "winner"
       setPhase("winner")
+      await handle.showFinale({ name: winner.name, score: winner.score })
       return
     }
-    if (phase === "winner") return restoreResult(4, true)
-    if (phase === "leaderboard") return restoreResult(2, true)
-    if (phase === "top-pick") return restoreResult(questionIndex, false)
+    if (phase === "winner") return restoreResult(4)
+    if (phase === "leaderboard") return restoreResult(2)
     if (phase === "results") return startQuestion(questionIndex)
     if (phase === "locked" || phase === "voting") {
       if (questionIndex === 0) return restart()
-      if (questionIndex === 1) return restoreResult(0, true)
-      if (questionIndex === 2) return restoreResult(1, false)
+      if (questionIndex === 1) return restoreResult(0)
+      if (questionIndex === 2) return restoreResult(1)
       if (questionIndex === 3) {
         await handle.showLeaderboard(leaderboard)
         setQuestionIndex(2)
@@ -444,7 +432,7 @@ export function GreatGuessOffDemo() {
         setPhase("leaderboard")
         return
       }
-      return restoreResult(3, false)
+      return restoreResult(3)
     }
   }
 
@@ -454,7 +442,8 @@ export function GreatGuessOffDemo() {
     setQuestionIndex(0)
     setSecondsLeft(VOTING_SECONDS)
     lockPromiseRef.current = null
-    await stage.current?.showIntro()
+    await showOpening()
+    currentPhase.current = "intro"
     setPhase("intro")
   }
 
@@ -467,9 +456,8 @@ export function GreatGuessOffDemo() {
       }
     if (phase === "voting" || phase === "locked")
       return { title: "Next", run: reveal }
-    if (phase === "results" && question.kind === "survey")
-      return { title: "Next", run: showTopPick }
-    if (phase === "results" || phase === "top-pick")
+    // The animated results are the ONLY reveal scene for this question.
+    if (phase === "results")
       return {
         title: "Next",
         run: next,
@@ -495,8 +483,7 @@ export function GreatGuessOffDemo() {
     "question-transition": `Question ${questionIndex + 1} · Get ready to vote`,
     voting: `Question ${questionIndex + 1} of 5 · ${secondsLeft}s remaining`,
     locked: `Question ${questionIndex + 1} of 5 · Time's up`,
-    results: `Question ${questionIndex + 1} · Original Tadazz results reveal`,
-    "top-pick": "The audience favourite · illustrative sample",
+    results: `Question ${questionIndex + 1} · ${question.kind === "quiz" ? "Correct answer" : "Audience favourite"}`,
     leaderboard: "Native Tadazz leaderboard · illustrative players",
     winner: "Native Tadazz finale and winner celebration",
     closing: "The Great Guess-off · Final curtain",
@@ -526,7 +513,9 @@ export function GreatGuessOffDemo() {
           v4Labels={{
             ...GUESS_OFF_STAGE_LABELS,
             audienceResults:
-              question.kind === "quiz" ? "CORRECT ANSWER" : "AUDIENCE RESULTS",
+              question.kind === "quiz"
+                ? "CORRECT ANSWER"
+                : "AUDIENCE FAVOURITE",
             mostChosenAnswer:
               question.kind === "quiz"
                 ? "CORRECT ANSWER"
@@ -539,19 +528,11 @@ export function GreatGuessOffDemo() {
           backdropUrl="/tadazz-show/v4/question-bg.webp"
         />
         {phase === "winner" && (
-          <div
-            className="ggo-winner-decoration"
-            data-testid="ggo-winner-trophy"
-            aria-hidden="true"
-          >
+          <div className="ggo-winner-decoration" aria-hidden="true">
             <div className="ggo-winner-light ggo-winner-light-left" />
             <div className="ggo-winner-light ggo-winner-light-right" />
             <span className="ggo-winner-z ggo-winner-z-left">Z</span>
             <span className="ggo-winner-z ggo-winner-z-right">Z</span>
-            <div className="ggo-winner-trophy">
-              <Trophy className="ggo-winner-trophy-icon" strokeWidth={1.75} />
-              <span className="ggo-winner-trophy-star">★</span>
-            </div>
           </div>
         )}
       </div>
