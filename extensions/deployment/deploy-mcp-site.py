@@ -56,6 +56,7 @@ ENV_OVERRIDES = {
     "TADAZZ_MCP_SERVICE_ENABLED": "true",
     "TADAZZ_INLINE_GAME_PREVIEW_ENABLED": "true",
 }
+PUBLIC_CATALOGUE_IDS = ("great-guessoff", "crowd", "quiz", "story", "picture", "truth", "finale", "family", "classroom", "team")
 MAX_TREE_BYTES = 16 * 1024**3
 MAX_FILES = 200000
 MAX_LOG_BYTES = 16 * 1024**2
@@ -382,25 +383,63 @@ def native_preview_files(stage):
     return files
 
 
-def native_preview_proof(files):
+def native_public_preview_enabled(environment):
+    require(environment.get("TADAZZ_INLINE_GAME_PREVIEW_ENABLED") == "true",
+            "NATIVE_PREVIEW_FLAG_REQUIRED")
+    return environment.get("TADAZZ_PUBLIC_GAME_PREVIEW_ENABLED") != "false"
+
+
+def native_preview_proof(files, public_enabled):
+    require(type(public_enabled) is bool, "NATIVE_PUBLIC_PREVIEW_POLICY_INVALID")
     return {"files": files, "inlinePreviewEnabled": True, "packagedHttpBytes": True,
-            "privateRuntimeUnauthorized": True, "publicRuntimeDisabled": True,
-            "authenticatedStudioRender": False}
+            "privateRuntimeUnauthorized": True, "publicRuntimeEnabled": public_enabled, "publicRuntimeBytesVerified": public_enabled,
+            "publicRuntimeInvalidDigestDenied": True, "publicRuntimeInvalidNameDenied": True,
+            "publicCatalogueIds": list(PUBLIC_CATALOGUE_IDS) if public_enabled else [],
+            "publicCatalogueUnknownIdDenied": True, "authenticatedStudioRender": False}
 
 
-def native_preview_probes(origin, stage):
-    files = native_preview_files(stage)
+def native_preview_probes(origin, stage, public_enabled):
+    expected = native_preview_proof(native_preview_files(stage), public_enabled)
+    files = expected["files"]
+    if public_enabled:
+        catalogue, _ = json_probe(origin, "/api/extensions/catalogue")
+        require(isinstance(catalogue, dict) and set(catalogue) == {"games"} and
+                isinstance(catalogue["games"], list) and
+                all(isinstance(game, dict) for game in catalogue["games"]) and
+                [game.get("id") for game in catalogue["games"]] == list(PUBLIC_CATALOGUE_IDS),
+                "PUBLIC_CATALOGUE_IDENTITIES_MISMATCH")
+    else:
+        json_probe(origin, "/api/extensions/catalogue", 404,
+                   expected={"error": "Public games unavailable"})
+    json_probe(origin, "/api/extensions/preview/public/unknown-release-example", 404,
+               expected={"error": "Preview unavailable"})
     for item in files:
         response = request(origin, "/tadazz-application-runtime/" + item["name"], max_bytes=item["bytes"])
         require(len(response["body"]) == item["bytes"] and
                 hashlib.sha256(response["body"]).hexdigest() == item["sha256"],
                 "NATIVE_PREVIEW_HTTP_BYTES_MISMATCH")
         request(origin, "/api/extensions/preview/runtime/" + item["sha256"] + "/" + item["name"], 401)
-        request(origin, "/api/extensions/preview/public-runtime/" + item["sha256"] + "/" + item["name"], 404)
-    return native_preview_proof(files)
+        public_path = "/api/extensions/preview/public-runtime/" + item["sha256"] + "/" + item["name"]
+        if public_enabled:
+            response = request(origin, public_path, max_bytes=item["bytes"])
+            require(len(response["body"]) == item["bytes"] and
+                    hashlib.sha256(response["body"]).hexdigest() == item["sha256"],
+                    "PUBLIC_NATIVE_PREVIEW_HTTP_BYTES_MISMATCH")
+            require(response["headers"].get("cache-control") == "no-store" and
+                    response["headers"].get("x-content-type-options") == "nosniff" and
+                    response["headers"].get("content-type", "").startswith(
+                        "text/css" if item["name"].endswith(".css") else "text/javascript"),
+                    "PUBLIC_NATIVE_PREVIEW_HEADERS_MISMATCH")
+        else:
+            json_probe(origin, public_path, 404, expected={"error": "Preview unavailable"})
+        wrong_digest = ("1" if item["sha256"][0] == "0" else "0") + item["sha256"][1:]
+        for suffix in (wrong_digest + "/" + item["name"], item["sha256"] + "/unreviewed-runtime.mjs"):
+            json_probe(origin, "/api/extensions/preview/public-runtime/" + suffix, 404,
+                       expected={"error": "Preview unavailable"})
+    return expected
 
 
-def mcp_probes(origin, stage, config, public_key_x):
+def mcp_probes(origin, stage, config, public_key_x, public_enabled):
     resource, _ = json_probe(origin, "/.well-known/oauth-protected-resource")
     require(resource.get("resource") == PUBLIC_ORIGIN + "/mcp" and resource.get("authorization_servers") == [PUBLIC_ORIGIN + "/oauth"], "RESOURCE_METADATA_MISMATCH")
     require(resource.get("scopes_supported") == list(MCP_SCOPES), "RESOURCE_SCOPES_MISMATCH")
@@ -434,7 +473,7 @@ def mcp_probes(origin, stage, config, public_key_x):
         require(hashlib.sha256(request(origin, path, max_bytes=8 * 1024**2)["body"]).hexdigest() == sha256(local), "WEB_ASSET_ARTIFACT_MISMATCH")
     socket_probe(origin)
     return {"oauthAndMcp": True, "consentGetHead": True, "indexAndEntryAssets": len(assets), "engineIoOpenClose": True,
-            "nativeApplicationPreview": native_preview_probes(origin, stage),
+            "nativeApplicationPreview": native_preview_probes(origin, stage, public_enabled),
             "installedHostTest": False, "authenticatedGameplayTest": False}
 
 
@@ -646,6 +685,7 @@ def clone_boot(args, original, image, work, run_id, result):
         mounts = candidate["Mounts"]
         require(len(mounts) == 1 and mounts[0]["Source"] == str(restored) and mounts[0]["Destination"] == "/app/config" and mounts[0]["RW"] is True, "CLONE_MOUNTS_NOT_ISOLATED")
         package_policy = package_probe_policy(candidate)
+        public_enabled = native_public_preview_enabled(env_map(candidate["Config"].get("Env")))
         result["packagePolicy"] = package_policy
         docker_api("POST", "/containers/" + container_id + "/start")
         # This program contains no credentials. Host/domain and public-key pins are
@@ -655,6 +695,7 @@ const origin = "https://tadazz.com";
 const expectedX = EXPECTED_PUBLIC_X;
 const expectedScopes = EXPECTED_MCP_SCOPES, expectedChallenge = EXPECTED_MCP_CHALLENGE;
 const nativeFiles = NATIVE_PREVIEW_FILES;
+const publicEnabled = PUBLIC_PREVIEW_ENABLED, publicCatalogueIds = PUBLIC_CATALOGUE_IDS;
 const packagePolicy = PACKAGE_PROBE_POLICY, routes = {};
 const crypto = require("node:crypto");
 let failureCode = "RESTORED_CANDIDATE_PROBE_FAILED";
@@ -702,17 +743,37 @@ function req(path, status=200, limit=1048576) {
   if(mcp.headers.get("www-authenticate")!==expectedChallenge)fail("MCP_CHALLENGE_MISMATCH");
   const consent=await req("/studio/oauth-consent?oauth_request=isolated-restore-proof");
   if(consent.headers.get("x-frame-options")!=="DENY"||consent.headers.get("cache-control")!=="no-store")fail();
-  if(process.env.TADAZZ_INLINE_GAME_PREVIEW_ENABLED!=="true")fail();
+  if(process.env.TADAZZ_INLINE_GAME_PREVIEW_ENABLED!=="true"||(process.env.TADAZZ_PUBLIC_GAME_PREVIEW_ENABLED!=="false")!==publicEnabled)fail();
+  const catalogueResponse=await req("/api/extensions/catalogue",publicEnabled?200:404);
+  if(!catalogueResponse.headers.get("content-type")?.startsWith("application/json"))fail();
+  const catalogue=await catalogueResponse.json();
+  if(publicEnabled){
+    if(!catalogue||Object.keys(catalogue).length!==1||!Array.isArray(catalogue.games)||JSON.stringify(catalogue.games.map(g=>g?.id))!==JSON.stringify(publicCatalogueIds))fail();
+  }else if(JSON.stringify(catalogue)!==JSON.stringify({error:"Public games unavailable"}))fail();
+  const unavailable=async path=>{
+    const r=await req(path,404);
+    if(!r.headers.get("content-type")?.startsWith("application/json")||JSON.stringify(await r.json())!==JSON.stringify({error:"Preview unavailable"}))fail();
+  };
+  await unavailable("/api/extensions/preview/public/unknown-release-example");
   for(const f of nativeFiles){
     const r=await req("/tadazz-application-runtime/"+f.name,200,f.bytes);
     if(r.body.length!==f.bytes||crypto.createHash("sha256").update(r.body).digest("hex")!==f.sha256)fail();
     await req("/api/extensions/preview/runtime/"+f.sha256+"/"+f.name,401);
-    await req("/api/extensions/preview/public-runtime/"+f.sha256+"/"+f.name,404);
+    const publicPath="/api/extensions/preview/public-runtime/"+f.sha256+"/"+f.name;
+    if(publicEnabled){
+      const p=await req(publicPath,200,f.bytes);
+      if(p.body.length!==f.bytes||crypto.createHash("sha256").update(p.body).digest("hex")!==f.sha256||
+         p.headers.get("cache-control")!=="no-store"||p.headers.get("x-content-type-options")!=="nosniff"||
+         !p.headers.get("content-type")?.startsWith(f.name.endsWith(".css")?"text/css":"text/javascript"))fail();
+    }else await unavailable(publicPath);
+    const wrongDigest=(f.sha256[0]==="0"?"1":"0")+f.sha256.slice(1);
+    for(const suffix of [wrongDigest+"/"+f.name,f.sha256+"/unreviewed-runtime.mjs"])
+      await unavailable("/api/extensions/preview/public-runtime/"+suffix);
   }
-  const nativeApplicationPreview={files:nativeFiles,inlinePreviewEnabled:true,packagedHttpBytes:true,privateRuntimeUnauthorized:true,publicRuntimeDisabled:true,authenticatedStudioRender:false};
+  const nativeApplicationPreview={files:nativeFiles,inlinePreviewEnabled:true,packagedHttpBytes:true,privateRuntimeUnauthorized:true,publicRuntimeEnabled:publicEnabled,publicRuntimeBytesVerified:publicEnabled,publicRuntimeInvalidDigestDenied:true,publicRuntimeInvalidNameDenied:true,publicCatalogueIds:publicEnabled?publicCatalogueIds:[],publicCatalogueUnknownIdDenied:true,authenticatedStudioRender:false};
   process.stdout.write(JSON.stringify({ok:true,nativeApplicationPreview,packageCapabilities,routes}));
 })().catch(()=>{process.stdout.write(JSON.stringify({ok:false,routes,failureCode}));process.exitCode=1;});
-'''.replace("EXPECTED_PUBLIC_X", json.dumps(args.expected_jwk_x)).replace("NATIVE_PREVIEW_FILES", json.dumps(native_files)).replace("PACKAGE_PROBE_POLICY", json.dumps(package_policy)).replace("EXPECTED_MCP_SCOPES", json.dumps(MCP_SCOPES)).replace("EXPECTED_MCP_CHALLENGE", json.dumps(MCP_CHALLENGE))
+'''.replace("EXPECTED_PUBLIC_X", json.dumps(args.expected_jwk_x)).replace("NATIVE_PREVIEW_FILES", json.dumps(native_files)).replace("PUBLIC_PREVIEW_ENABLED", json.dumps(public_enabled)).replace("PUBLIC_CATALOGUE_IDS", json.dumps(PUBLIC_CATALOGUE_IDS)).replace("PACKAGE_PROBE_POLICY", json.dumps(package_policy)).replace("EXPECTED_MCP_SCOPES", json.dumps(MCP_SCOPES)).replace("EXPECTED_MCP_CHALLENGE", json.dumps(MCP_CHALLENGE))
         execution = docker_api("POST", "/containers/" + container_id + "/exec", {
             "AttachStdout": True, "AttachStderr": True, "Tty": False, "Cmd": ["node", "-e", program],
         })
@@ -732,10 +793,10 @@ function req(path, status=200, limit=1048576) {
             result["probeFailureCode"] = proof["failureCode"]
         require(not status["Running"] and status["ExitCode"] == 0, "RESTORED_CANDIDATE_BOOT_FAILED")
         require(set(proof) == {"ok", "nativeApplicationPreview", "packageCapabilities", "routes"} and
-                proof["ok"] is True and proof["nativeApplicationPreview"] == native_preview_proof(native_files) and
+                proof["ok"] is True and proof["nativeApplicationPreview"] == native_preview_proof(native_files, public_enabled) and
                 proof["packageCapabilities"] == package_probe_proof(package_policy),
                 "RESTORED_CANDIDATE_PROBES_FAILED")
-        result["nativeApplicationPreview"] = native_preview_proof(native_files)
+        result["nativeApplicationPreview"] = native_preview_proof(native_files, public_enabled)
         result["packageCapabilities"] = package_probe_proof(package_policy)
         result["passed"] = True
     finally:
@@ -752,7 +813,9 @@ def validate_qualification(args, original, image):
     receipt = read_json(file)
     require(receipt.get("success") is True and receipt.get("candidateCloneBoot", {}).get("passed") is True, "CANDIDATE_RESTORE_QUALIFICATION_NOT_PASSED")
     require(receipt.get("candidateCloneBoot", {}).get("nativeApplicationPreview") ==
-            native_preview_proof(native_preview_files(Path(args.release_dir))), "NATIVE_PREVIEW_RESTORE_QUALIFICATION_MISSING")
+            native_preview_proof(native_preview_files(Path(args.release_dir)),
+                                 native_public_preview_enabled({**env_map(original["Config"].get("Env")), **ENV_OVERRIDES})),
+            "NATIVE_PREVIEW_RESTORE_QUALIFICATION_MISSING")
     require(receipt.get("candidateCloneBoot", {}).get("packageCapabilities") ==
             package_probe_proof(package_probe_policy(original)), "PACKAGE_POLICY_RESTORE_QUALIFICATION_MISSING")
     require(receipt.get("revision") == args.revision and receipt.get("image") == image["Id"] and receipt.get("sourceImage") == original["Image"] and receipt.get("sourceContainer") == original["Id"] and receipt.get("configSha256") == args.expected_config_sha256, "RESTORE_QUALIFICATION_IDENTITY")
@@ -853,7 +916,7 @@ def validate_stage(args):
     smoke = read_json(smoke_file)
     require(smoke.get("image") == args.image_sha256, "STAGE_SMOKE_IMAGE_MISMATCH")
     require(smoke.get("ok") is True and smoke.get("sourceSha") == args.revision and smoke.get("productionTouched") is False and smoke.get("customerMountUsed") is False and smoke.get("network") == "none", "SYNTHETIC_SMOKE_NOT_QUALIFIED")
-    require(smoke.get("nativeApplicationPreview") == native_preview_proof(native_preview_files(stage)),
+    require(smoke.get("nativeApplicationPreview") == native_preview_proof(native_preview_files(stage), True),
             "STAGE_NATIVE_PREVIEW_NOT_QUALIFIED")
     return stage
 
@@ -990,10 +1053,12 @@ def deploy(args, stage, config, original, image, others):
         docker_api("POST", "/containers/" + replacement_id + "/start")
         wait_health()
         verify_replacement(original, inspect(replacement_id), payload)
-        package_policy = package_probe_policy(inspect(replacement_id))
+        candidate = inspect(replacement_id)
+        package_policy = package_probe_policy(candidate)
+        public_enabled = native_public_preview_enabled(env_map(candidate["Config"].get("Env")))
         for origin, label in ((LOCAL_ORIGIN, "loopback"), (PUBLIC_ORIGIN, "publicHttps")):
             report[label] = {"baseProbes": base_probes(origin, package_policy)}
-            report[label].update(mcp_probes(origin, stage, config, args.expected_jwk_x))
+            report[label].update(mcp_probes(origin, stage, config, args.expected_jwk_x, public_enabled))
         report["phase"] = "fresh-private-restore-check-after-startup"
         qualify_private_archive(work, expected, report["backup"])
         validate_config(args)
@@ -1409,10 +1474,151 @@ def billing_probe_self_tests():
     return checks
 
 
+def public_preview_self_tests():
+    """Exercise the real candidate preview probes with pinned synthetic bytes."""
+    checks, routes, calls = [], {}, []
+    saved_http = globals()["HTTP"]
+    origin = "https://synthetic.invalid"
+    # Runtime fixtures exceed the small 404 JSON body so status and body-limit
+    # rejection cases remain independent.
+    content = {"renderer.mjs": b"export const synthetic = true;\n" * 4,
+               "renderer.css": b".synthetic { color: #123456; }\n" * 4}
+    files = [{"name": name, "bytes": len(body), "sha256": hashlib.sha256(body).hexdigest()}
+             for name, body in content.items()]
+
+    class SyntheticResponse(io.BytesIO):
+        def __init__(self, body, status, headers):
+            super().__init__(body)
+            self.status, self.headers = status, headers
+
+    class SyntheticHTTP:
+        def open(self, query, timeout):
+            parsed = urllib.parse.urlsplit(query.full_url)
+            require(parsed.scheme == "https" and parsed.netloc == "synthetic.invalid" and
+                    query.get_method() == "GET" and timeout == 10, "SELFTEST_PREVIEW_HTTP_SCOPE")
+            require(parsed.path in routes, "SELFTEST_PREVIEW_UNEXPECTED_PATH")
+            calls.append(parsed.path)
+            return SyntheticResponse(*routes[parsed.path])
+
+    def response(body, status=200, content_type="application/json"):
+        return (body if isinstance(body, bytes) else json.dumps(body).encode(), status,
+                {"content-type": content_type, "cache-control": "no-store",
+                 "x-content-type-options": "nosniff"})
+
+    def populate(enabled):
+        routes.clear()
+        routes["/api/extensions/catalogue"] = response(
+            {"games": [{"id": value} for value in PUBLIC_CATALOGUE_IDS]} if enabled
+            else {"error": "Public games unavailable"}, 200 if enabled else 404)
+        routes["/api/extensions/preview/public/unknown-release-example"] = response(
+            {"error": "Preview unavailable"}, 404)
+        for item in files:
+            body = content[item["name"]]
+            mime = "text/css" if item["name"].endswith(".css") else "text/javascript"
+            routes["/tadazz-application-runtime/" + item["name"]] = response(body, content_type=mime)
+            routes["/api/extensions/preview/runtime/" + item["sha256"] + "/" + item["name"]] = response(
+                {"error": "errors:auth.unauthorized"}, 401)
+            routes["/api/extensions/preview/public-runtime/" + item["sha256"] + "/" + item["name"]] = (
+                response(body, content_type=mime) if enabled
+                else response({"error": "Preview unavailable"}, 404))
+            wrong_digest = ("1" if item["sha256"][0] == "0" else "0") + item["sha256"][1:]
+            for suffix in (wrong_digest + "/" + item["name"], item["sha256"] + "/unreviewed-runtime.mjs"):
+                routes["/api/extensions/preview/public-runtime/" + suffix] = response(
+                    {"error": "Preview unavailable"}, 404)
+
+    with tempfile.TemporaryDirectory(prefix="tadazz-preview-selftest-") as temporary:
+        stage = Path(temporary)
+        runtime = stage / "web/tadazz-application-runtime"
+        runtime.mkdir(parents=True)
+        for name, body in content.items():
+            (runtime / name).write_bytes(body)
+        (stage / "stage-manifest.json").write_bytes(canonical({"nativeApplicationPreview": {"files": files}}))
+
+        def reject(path, value, code, enabled=True):
+            populate(enabled)
+            routes[path] = value
+            try:
+                native_preview_probes(origin, stage, enabled)
+            except GateError as error:
+                require(str(error) == code, "SELFTEST_PREVIEW_WRONG_FAILURE")
+                report = {}
+                record_probe_failure(report, error)
+                require("synthetic-private" not in json.dumps(report),
+                        "SELFTEST_PREVIEW_DIAGNOSTIC_DISCLOSURE")
+            else:
+                raise GateError("SELFTEST_PREVIEW_INVALID_ACCEPTED")
+
+        try:
+            globals()["HTTP"] = SyntheticHTTP()
+            for flag, enabled in ((None, True), ("true", True), ("false", False), ("", True)):
+                original = {"Config": {"Env": ["TADAZZ_ACCOUNTS_ENABLED=true"], "Labels": {}},
+                            "HostConfig": {}}
+                if flag is not None:
+                    original["Config"]["Env"].append("TADAZZ_PUBLIC_GAME_PREVIEW_ENABLED=" + flag)
+                payload = replacement_payload(original, {"Id": "sha256:" + "a" * 64}, "b" * 40, "test")
+                environment = env_map(payload["Env"])
+                require(native_public_preview_enabled(environment) is enabled and
+                        environment.get("TADAZZ_PUBLIC_GAME_PREVIEW_ENABLED") == flag,
+                        "SELFTEST_PREVIEW_ENV_POLICY_CHANGED")
+                populate(enabled)
+                before = len(calls)
+                proof = native_preview_probes(origin, stage, enabled)
+                require(proof == native_preview_proof(files, enabled) and
+                        len(calls) - before == 2 + 5 * len(files),
+                        "SELFTEST_PREVIEW_COMPLETE_PROOF")
+            checks.append("public-preview-exact-enabled-default-true-and-preserved-false-optout")
+            try:
+                native_public_preview_enabled({"TADAZZ_INLINE_GAME_PREVIEW_ENABLED": "false",
+                                               "TADAZZ_PUBLIC_GAME_PREVIEW_ENABLED": "true"})
+            except GateError as error:
+                require(str(error) == "NATIVE_PREVIEW_FLAG_REQUIRED", "SELFTEST_PREVIEW_FLAG_FAILURE")
+            else:
+                raise GateError("SELFTEST_PREVIEW_INLINE_DISABLED_ACCEPTED")
+            checks.append("public-preview-keeps-inline-preview-required")
+
+            item = files[0]
+            public_path = "/api/extensions/preview/public-runtime/" + item["sha256"] + "/" + item["name"]
+            body = content[item["name"]]
+            reject(public_path, response(b"x" * len(body), content_type="text/javascript"),
+                   "PUBLIC_NATIVE_PREVIEW_HTTP_BYTES_MISMATCH")
+            reject(public_path, response(body + b"x", content_type="text/javascript"),
+                   "PROBE_BODY_LIMIT")
+            reject(public_path, response(body, content_type="text/html"),
+                   "PUBLIC_NATIVE_PREVIEW_HEADERS_MISMATCH")
+            reject(public_path, response({"error": "Preview unavailable"}, 404),
+                   "PROBE_STATUS_404_EXPECTED_200")
+            reject(public_path, response(body, content_type="text/javascript"),
+                   "PROBE_STATUS_200_EXPECTED_404", False)
+            checks.append("public-preview-rejects-corrupt-size-hash-type-and-wrong-policy-status")
+
+            wrong_digest = ("1" if item["sha256"][0] == "0" else "0") + item["sha256"][1:]
+            for suffix in (wrong_digest + "/" + item["name"], item["sha256"] + "/unreviewed-runtime.mjs"):
+                reject("/api/extensions/preview/public-runtime/" + suffix,
+                       response(body, content_type="text/javascript"), "PROBE_STATUS_200_EXPECTED_404")
+            reject("/api/extensions/preview/runtime/" + item["sha256"] + "/" + item["name"],
+                   response(body, content_type="text/javascript"), "PROBE_STATUS_200_EXPECTED_401")
+            checks.append("public-preview-rejects-unpinned-digest-name-and-private-runtime-access")
+
+            for catalogue in ({"games": []}, {"games": [{"id": value} for value in PUBLIC_CATALOGUE_IDS[:-1]]},
+                              {"games": [{"id": value} for value in (*PUBLIC_CATALOGUE_IDS[:-1], "synthetic-private")]},
+                              {"games": [{"id": value} for value in PUBLIC_CATALOGUE_IDS],
+                               "private": "synthetic-private"}):
+                reject("/api/extensions/catalogue", response(catalogue),
+                       "PUBLIC_CATALOGUE_IDENTITIES_MISMATCH")
+            reject("/api/extensions/preview/public/unknown-release-example",
+                   response({"private": "synthetic-private"}), "PROBE_STATUS_200_EXPECTED_404")
+            reject("/api/extensions/catalogue", response({"games": []}),
+                   "PROBE_STATUS_200_EXPECTED_404", False)
+            checks.append("public-preview-rejects-unreviewed-catalogue-unknown-id-and-optout-leak")
+        finally:
+            globals()["HTTP"] = saved_http
+    return checks
+
+
 def self_test():
     """Synthetic, no Docker/network/customer access; retained only in temp dir."""
     checks = (game_count_self_tests() + deployment_identity_self_tests() +
-              host_config_self_tests() + billing_probe_self_tests())
+              host_config_self_tests() + billing_probe_self_tests() + public_preview_self_tests())
     original = {"Config": {"Env": ["SECRET=private-value", "SOCKET_PORT=9999", "PATH=/bin"], "Labels": {"existing": "yes"}}, "HostConfig": {"NetworkMode": "bridge"}}
     payload = replacement_payload(original, {"Id": "sha256:" + "a" * 64}, "b" * 40, "test")
     require(env_map(payload["Env"]) == {"SECRET": "private-value", "PATH": "/bin", **ENV_OVERRIDES}, "SELFTEST_ENV_PRESERVATION")

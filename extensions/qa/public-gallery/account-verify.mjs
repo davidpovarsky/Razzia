@@ -263,6 +263,37 @@ try {
       process.env.TADAZZ_SITE_DIST_DIR,
       "Built production site required for editor acceptance",
     )
+    let publicBrowserError
+    try {
+      await new Promise((resolve, reject) => {
+        const child = spawn(
+          process.execPath,
+          [fileURLToPath(new URL("./browser-verify.mjs", import.meta.url))],
+          {
+            env: {
+              ...process.env,
+              TADAZZ_GALLERY_ORIGIN: origin,
+              TADAZZ_GALLERY_EVIDENCE: join(evidence, "public-browser"),
+            },
+            stdio: "inherit",
+          },
+        )
+        child.once("error", reject)
+        child.once("exit", (code) =>
+          code === 0
+            ? resolve()
+            : reject(new Error("Candidate public browser exited " + code)),
+        )
+      })
+      record("candidate-all-ten-previews-full-play-mobile-and-hebrew")
+    } catch (error) {
+      publicBrowserError = error
+      results.push({
+        name: "candidate-all-ten-previews-full-play-mobile-and-hebrew",
+        passed: false,
+        error: String(error?.stack ?? error),
+      })
+    }
     const { verifyGalleryEditor } = await import("./editor-verify.mjs")
     const editorReceipt = await verifyGalleryEditor({
       origin,
@@ -284,27 +315,7 @@ try {
       "native-editor-eleven-themes-switch-save-reload-and-catalogue-links",
       { checks: editorReceipt.results.length },
     )
-    await new Promise((resolve, reject) => {
-      const child = spawn(
-        process.execPath,
-        [fileURLToPath(new URL("./browser-verify.mjs", import.meta.url))],
-        {
-          env: {
-            ...process.env,
-            TADAZZ_GALLERY_ORIGIN: origin,
-            TADAZZ_GALLERY_EVIDENCE: join(evidence, "public-browser"),
-          },
-          stdio: "inherit",
-        },
-      )
-      child.once("error", reject)
-      child.once("exit", (code) =>
-        code === 0
-          ? resolve()
-          : reject(new Error("Candidate public browser exited " + code)),
-      )
-    })
-    record("candidate-all-ten-previews-full-play-mobile-and-hebrew")
+    if (publicBrowserError) throw publicBrowserError
   }
   writeFileSync(
     join(evidence, "receipt.json"),

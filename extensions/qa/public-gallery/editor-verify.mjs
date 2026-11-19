@@ -2,6 +2,11 @@
 import assert from "node:assert/strict"
 import { createRequire } from "node:module"
 import { join } from "node:path"
+import { writeFileSync } from "node:fs"
+import {
+  verifyNativePalette,
+  verifyCatalogueCovers,
+} from "./palette-verify.mjs"
 
 const require = createRequire("/cleanup/extensions/package.json")
 const { chromium, expect } = require("@playwright/test")
@@ -66,8 +71,34 @@ export async function verifyGalleryEditor(options) {
       "data-editor-theme",
       "tadazz-midnight-club",
     )
+    await page.getByTestId("editor-question-card-0").click()
+    const initialGeometry = await verifyNativePalette(
+      page,
+      "tadazz-midnight-club",
+      "editor",
+      options.evidence,
+    )
     let panel = await openThemes()
     assert.equal(options.themeDefinitions.length, 11)
+    await expect
+      .poll(
+        () =>
+          panel.locator("img").evaluateAll((images) =>
+            images
+              .filter((image) => {
+                const bounds = image.getBoundingClientRect()
+                return (
+                  bounds.top < window.innerHeight &&
+                  bounds.bottom > 0 &&
+                  bounds.width > 0
+                )
+              })
+              .every((image) => image.complete && image.naturalWidth > 0),
+          ),
+        { timeout: 15000 },
+      )
+      .toBe(true)
+    await page.evaluate(() => window.scrollTo(0, 0))
     await page.screenshot({
       path: join(options.evidence, "native-editor-eleven-global-themes.png"),
       fullPage: true,
@@ -108,7 +139,8 @@ export async function verifyGalleryEditor(options) {
       )
       await page.getByTestId("editor-save-btn").click()
       assert.equal((await saved).status(), 200, "Native editor composite save")
-      await page.reload()
+      await page.waitForURL(options.origin + "/studio/games")
+      await openEditor()
       await expect(page.getByTestId("editor-save-btn")).toBeVisible()
       await expect(page.locator('input[name="subject"]')).toHaveValue(
         options.expectedTitle,
@@ -137,6 +169,18 @@ export async function verifyGalleryEditor(options) {
       await expect(
         page.locator('input[name="questions.0.question"]'),
       ).toHaveValue(options.expectedQuestions[0].question)
+      const geometry = await verifyNativePalette(
+        page,
+        themeId,
+        "editor",
+        options.evidence,
+      )
+      assert.deepEqual(
+        geometry,
+        initialGeometry,
+        "Theme colors preserve native question and answer geometry",
+      )
+      await page.evaluate(() => window.scrollTo(0, 0))
       await page.screenshot({
         path: join(options.evidence, "native-editor-saved-" + themeId + ".png"),
         fullPage: true,
@@ -155,6 +199,12 @@ export async function verifyGalleryEditor(options) {
 
     await page.goto(options.origin + "/studio/explore")
     await expect(page.locator("[data-catalogue-card]")).toHaveCount(10)
+    await verifyCatalogueCovers(page, "studio", options.evidence)
+    await page.evaluate(() => window.scrollTo(0, 0))
+    await page.screenshot({
+      path: join(options.evidence, "authenticated-gallery-covers.png"),
+      fullPage: true,
+    })
     await page
       .locator('[data-catalogue-card="family"] .game-preview-trigger')
       .click()
@@ -163,6 +213,7 @@ export async function verifyGalleryEditor(options) {
         .locator('[data-native-application-preview][data-preview-ready="true"]')
         .first(),
     ).toBeVisible({ timeout: 30_000 })
+    await page.evaluate(() => window.scrollTo(0, 0))
     await page.screenshot({
       path: join(options.evidence, "authenticated-explore-public-preview.png"),
       fullPage: true,
@@ -179,19 +230,41 @@ export async function verifyGalleryEditor(options) {
       options.expectedTitle,
     )
     await page.goto(options.origin + "/?view=product&game=family")
-    const roomCreated = page.waitForResponse(
-      (response) =>
-        new URL(response.url()).pathname === "/api/games" &&
-        response.request().method() === "POST",
-    )
+    let capturedRoom
+    await page.route(options.origin + "/api/games", async (route) => {
+      if (route.request().method() !== "POST") {
+        await route.continue()
+        return
+      }
+      const response = await route.fetch()
+      capturedRoom = {
+        status: response.status(),
+        quizId: route.request().postDataJSON().quizzId,
+        body: await response.json(),
+      }
+      await route.fulfill({ response })
+    })
     await page.getByTestId("catalogue-use-game").click()
-    const roomResponse = await roomCreated
-    assert([200, 201].includes(roomResponse.status()))
-    assert.equal(roomResponse.request().postDataJSON().quizzId, options.quizId)
-    const room = await roomResponse.json()
+    await expect.poll(() => Boolean(capturedRoom)).toBe(true)
+    assert([200, 201].includes(capturedRoom.status))
+    assert.equal(capturedRoom.quizId, options.quizId)
+    const room = capturedRoom.body
     await expect(page).toHaveURL(
       options.origin + "/party/manager/" + room.gameId,
     )
+    await expect(page.getByTestId("platform-opening-start")).toBeEnabled({
+      timeout: 30_000,
+    })
+    await page.getByTestId("platform-opening-start").click()
+    await expect(page.getByTestId("platform-game-opening")).toHaveAttribute(
+      "data-platform-opening-stage",
+      "opening",
+    )
+    await expect(page.getByTestId("platform-opening-skip")).toBeEnabled()
+    await page.getByTestId("platform-opening-skip").click()
+    await expect(page.getByTestId("platform-game-opening")).toBeHidden({
+      timeout: 30_000,
+    })
     const hostStage = page.getByTestId("tadazz-show")
     await expect(hostStage).toHaveAttribute(
       "data-show-theme",
@@ -201,7 +274,40 @@ export async function verifyGalleryEditor(options) {
     await expect(hostStage).toHaveAttribute("data-theme-fallback", "false")
     const toolbar = page.getByTestId("manager-control-toolbar")
     await expect(toolbar).toHaveAttribute("data-host-lobby", "true")
-    await toolbar.getByRole("button", { name: /^Start/i }).click()
+    const pin = (
+      await page
+        .getByText(/^\d{6}$/)
+        .first()
+        .textContent()
+    ).trim()
+    const playerContext = await browser.newContext({
+      viewport: { width: 390, height: 844 },
+      locale: "en-GB",
+      reducedMotion: "reduce",
+      ignoreHTTPSErrors: true,
+    })
+    await playerContext.addInitScript(() =>
+      localStorage.setItem("i18nextLng", "en"),
+    )
+    const player = await playerContext.newPage()
+    player.on("pageerror", (error) =>
+      pageErrors.push("player: " + error.message),
+    )
+    await player.goto(options.origin + "/game?pin=" + encodeURIComponent(pin))
+    await player.getByPlaceholder("Username here").fill("Gallery QA player")
+    await player.getByRole("button", { name: "Submit", exact: true }).click()
+    await expect(player).toHaveURL(options.origin + "/party/" + room.gameId)
+    await expect(
+      page
+        .getByRole("status")
+        .filter({ hasText: /CONNECTED:\s*1/i })
+        .first(),
+    ).toBeVisible({ timeout: 30_000 })
+    report.push({
+      name: "real-anonymous-player-joined-isolated-gallery-room",
+      passed: true,
+    })
+    await toolbar.getByRole("button", { name: "Start", exact: true }).click()
     await expect(toolbar).toHaveAttribute("data-host-lobby", "false", {
       timeout: 30_000,
     })
@@ -209,6 +315,108 @@ export async function verifyGalleryEditor(options) {
       "data-show-theme",
       "tadazz-discovery-lab",
     )
+    await expect(hostStage).toHaveAttribute("data-show-scene", "voting", {
+      timeout: 30_000,
+    })
+    await expect(hostStage).toHaveAttribute("data-voting-open", "true")
+    await expect(page.getByTestId("host-question-counter")).toHaveText("1 / 8")
+    await expect(player.locator('[data-native-layout="true"]')).toBeVisible()
+    const nativePhoneChoice = player
+      .locator("button")
+      .filter({ has: player.getByTestId("answer-badge-0") })
+    await expect(nativePhoneChoice).toBeVisible({ timeout: 10_000 })
+    await expect(nativePhoneChoice).toBeEnabled()
+    const playerDiagnostic = await player.evaluate(() => ({
+      url: location.origin + location.pathname,
+      viewport: {
+        width: innerWidth,
+        height: innerHeight,
+        coarsePointer: matchMedia("(pointer: coarse)").matches,
+      },
+      buttons: [...document.querySelectorAll("button")].map((button) => {
+        const bounds = button.getBoundingClientRect()
+        const style = getComputedStyle(button)
+        return {
+          text: button.innerText?.trim(),
+          firstAnswerBadge: Boolean(
+            button.querySelector('[data-testid="answer-badge-0"]'),
+          ),
+          testid: button.getAttribute("data-testid"),
+          ariaLabel: button.getAttribute("aria-label"),
+          disabled: button.disabled,
+          visible:
+            bounds.width > 0 &&
+            bounds.height > 0 &&
+            style.visibility !== "hidden" &&
+            style.display !== "none",
+        }
+      }),
+      surfaces: [
+        ...document.querySelectorAll(
+          "[data-show-theme], [data-native-layout], [data-testid='tadazz-show']",
+        ),
+      ].map((element) =>
+        Object.fromEntries(
+          [...element.attributes]
+            .filter((attribute) => attribute.name.startsWith("data-"))
+            .map((attribute) => [attribute.name, attribute.value]),
+        ),
+      ),
+    }))
+    writeFileSync(
+      join(options.evidence, "native-player-voting-controls.json"),
+      JSON.stringify(playerDiagnostic, null, 2) + "\n",
+    )
+    const observedChoice = playerDiagnostic.buttons.filter(
+      (button) => button.firstAnswerBadge && button.visible && !button.disabled,
+    )
+    assert.equal(
+      observedChoice.length,
+      1,
+      "Exactly one live native first-answer button",
+    )
+    assert(
+      (observedChoice[0].ariaLabel || observedChoice[0].text)
+        .replace(/\s+/g, " ")
+        .includes(options.expectedQuestions[0].answers[0]),
+      "Observed phone choice matches the actual authored first answer",
+    )
+    await nativePhoneChoice.click()
+    await expect(
+      player.getByRole("heading", {
+        name: "Thanks, that's noted",
+        exact: true,
+      }),
+    ).toBeVisible({ timeout: 30_000 })
+    await expect(hostStage).toHaveAttribute("data-show-scene", "results", {
+      timeout: 30_000,
+    })
+    await expect(
+      page.getByTestId("tadazz-card-0").locator(".result-percentage"),
+    ).toHaveAttribute("data-target-percentage", "100")
+    await expect(
+      page.getByTestId("tadazz-card-0").locator(".result-percentage"),
+    ).toHaveText("100%")
+    for (const index of [1, 2, 3])
+      await expect(
+        page.getByTestId("tadazz-card-" + index).locator(".result-percentage"),
+      ).toHaveAttribute("data-target-percentage", "0")
+    await player.screenshot({
+      path: join(options.evidence, "native-player-gallery-answer-sent.png"),
+      fullPage: true,
+    })
+    report.push({
+      name: "real-phone-player-voted-in-gallery-room",
+      passed: true,
+      acceptedVotes: 1,
+    })
+    await verifyNativePalette(
+      page,
+      "tadazz-discovery-lab",
+      "host",
+      options.evidence,
+    )
+    await page.evaluate(() => window.scrollTo(0, 0))
     await page.screenshot({
       path: join(options.evidence, "native-host-gallery-theme-started.png"),
       fullPage: true,

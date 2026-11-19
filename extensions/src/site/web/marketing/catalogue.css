@@ -56,22 +56,35 @@
   height: 80%;
 }
 .catalogue-cover .cover-title {
+  position: absolute;
+  z-index: 2;
   inset-inline: 24px;
-  bottom: 24px;
+  /* Reserve a separate row for the localized preview action below the title. */
+  bottom: 64px;
   max-width: 85%;
+  color: #fff8ed;
   font-size: clamp(25px, 2.5vw, 34px);
+  font-weight: 900;
   letter-spacing: -0.04em;
   line-height: 1.02;
   text-wrap: balance;
-  text-shadow: 0 2px 18px #0008;
+  text-shadow:
+    0 2px 4px #000c,
+    0 4px 20px #000b;
 }
 .catalogue-cover .cover-kicker {
+  position: absolute;
+  z-index: 2;
   inset-inline-start: 20px;
   top: 18px;
+  padding: 5px 9px;
   background: #0a0b1699;
-  border-color: #ffffff45;
+  border: 1px solid #ffffff45;
+  border-radius: 99px;
+  backdrop-filter: blur(6px);
   color: #fff;
   font-size: 10px;
+  font-weight: 800;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   max-width: 65%;
@@ -293,23 +306,6 @@
 }
 .catalogue-player .tzv4-stage .stage-teaser {
   display: none;
-}
-.catalogue-player .tzv4-stage .q-frame {
-  background: color-mix(
-    in srgb,
-    var(--show-theme-purple, #34056f) 88%,
-    transparent
-  );
-}
-.catalogue-player .tzv4-stage .answer-card {
-  background: linear-gradient(
-    145deg,
-    color-mix(in srgb, var(--show-theme-purple, #34056f) 85%, white),
-    var(--show-theme-night, #08001d)
-  );
-}
-.catalogue-player .tzv4-stage .answer-title {
-  color: var(--show-theme-foreground, #fff);
 }
 .catalogue-player[data-game-media="text"] .tzv4-stage .answers {
   top: 355px;

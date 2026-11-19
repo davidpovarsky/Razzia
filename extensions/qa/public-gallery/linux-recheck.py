@@ -59,7 +59,7 @@ if lint:run('lint-fix',['node','/cleanup/node_modules/oxlint/bin/oxlint','--fix'
 if c['formatFiles']:run('format',['node','/cleanup/node_modules/prettier/bin/prettier.cjs','--write',*c['formatFiles']],120)
 syntax_code="import ast,pathlib\nfor p in pathlib.Path('extensions/qa/public-gallery').glob('*.py'):\n tree=ast.parse(p.read_text(),filename=str(p));compile(tree,str(p),'exec')\n snippets=[tree]\n for node in ast.walk(tree):\n  if isinstance(node,ast.Constant) and isinstance(node.value,str) and node.value.lstrip().startswith('import ') and '\\n' in node.value:\n   nested=ast.parse(node.value,filename=str(p)+':remote');compile(nested,str(p)+':remote','exec');snippets.append(nested)\n for snippet in snippets:\n  for node in ast.walk(snippet):\n   if isinstance(node,ast.Call) and isinstance(node.func,ast.Attribute) and node.func.attr=='write_text' and node.args and isinstance(node.args[0],ast.BinOp) and isinstance(node.args[0].right,ast.Constant):\n    assert node.args[0].right.value!='\\\\n','Literal slash-n instead of newline'\n print(str(p)+' syntax and newline literals valid')\n"
 run('qa-controller-syntax',['python3','-c',syntax_code],30)
-for script in ['account-verify.mjs','browser-verify.mjs','editor-verify.mjs']:
+for script in ['account-verify.mjs','browser-verify.mjs','editor-verify.mjs','palette-verify.mjs']:
  run('qa-syntax-'+script.removesuffix('.mjs'),['node','--check','extensions/qa/public-gallery/'+script],30)
 formatted={p:hashlib.sha256((source/p).read_bytes()).hexdigest() for p in c['manifest']}
 tests=[]

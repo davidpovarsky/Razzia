@@ -34,6 +34,7 @@ MCP_SCOPES = (
 MCP_CHALLENGE = ('Bearer resource_metadata="' + ORIGIN +
                  '/.well-known/oauth-protected-resource", scope="' + " ".join(MCP_SCOPES) + '"')
 HASH = re.compile(r"[a-f0-9]{64}")
+PUBLIC_CATALOGUE_IDS = ("great-guessoff", "crowd", "quiz", "story", "picture", "truth", "finale", "family", "classroom", "team")
 MAX_FILE = 64 * 1024 * 1024
 MAX_TREE = 512 * 1024 * 1024
 FULL_SHOW_CHECKS = (
@@ -619,9 +620,22 @@ def safe_probe_routes(value):
     return result
 
 
+def native_preview_proof(files):
+    return {"files": files, "inlinePreviewEnabled": True, "packagedHttpBytes": True,
+            "privateRuntimeUnauthorized": True, "publicRuntimeEnabled": True,
+            "publicRuntimeBytesVerified": True, "publicRuntimeInvalidDigestDenied": True,
+            "publicRuntimeInvalidNameDenied": True, "publicCatalogueIds": list(PUBLIC_CATALOGUE_IDS),
+            "publicCatalogueUnknownIdDenied": True, "authenticatedStudioRender": False}
+
+
+def verify_native_preview_proof(proof, files):
+    need(proof == native_preview_proof(files), "SYNTHETIC_NATIVE_PREVIEW_NOT_QUALIFIED")
+
+
 SMOKE_JS = r'''
 const http=require('node:http'),fs=require('node:fs'),crypto=require('node:crypto');
 const origin='https://tadazz.com',routes={},nativeFiles=NATIVE_PREVIEW_FILES,packagePolicy=PACKAGE_PROBE_POLICY;
+const publicCatalogueIds=PUBLIC_CATALOGUE_IDS;
 const expectedScopes=EXPECTED_MCP_SCOPES,expectedChallenge=EXPECTED_MCP_CHALLENGE;
 let failureCode='SMOKE_PROBE_FAILED';
 function req(path,status=200,method='GET',body){return new Promise((resolve,reject)=>{
@@ -654,14 +668,21 @@ for(const p of ['/studio/oauth-consent?oauth_request=stage-smoke','/studio/nativ
 const index=fs.readFileSync('/app/web/index.html');ok(hash((await req('/')).body)===hash(index));
 const assets=[...new Set([...index.toString().matchAll(/(?:src|href)=["'](\/assets\/[^"'?#]+)/g)].map(m=>m[1]))];ok(assets.length>0&&assets.length<100);
 for(const p of assets)ok(hash((await req(p)).body)===hash(fs.readFileSync('/app/web'+p)));
-ok(process.env.TADAZZ_INLINE_GAME_PREVIEW_ENABLED==='true');
+ok(process.env.TADAZZ_INLINE_GAME_PREVIEW_ENABLED==='true'&&process.env.TADAZZ_PUBLIC_GAME_PREVIEW_ENABLED!=='false');
+const catalogue=await json('/api/extensions/catalogue');
+ok(catalogue&&Object.keys(catalogue).length===1&&Array.isArray(catalogue.games)&&JSON.stringify(catalogue.games.map(g=>g?.id))===JSON.stringify(publicCatalogueIds));
+ok(JSON.stringify(await json('/api/extensions/preview/public/unknown-release-example',404))===JSON.stringify({error:'Preview unavailable'}));
 for(const f of nativeFiles){
  const b=fs.readFileSync('/app/web/tadazz-application-runtime/'+f.name);ok(b.length===f.bytes&&hash(b)===f.sha256);
  const r=await req('/tadazz-application-runtime/'+f.name);ok(r.body.length===f.bytes&&hash(r.body)===f.sha256);
  await req('/api/extensions/preview/runtime/'+f.sha256+'/'+f.name,401);
- await req('/api/extensions/preview/public-runtime/'+f.sha256+'/'+f.name,404);
+ const p=await req('/api/extensions/preview/public-runtime/'+f.sha256+'/'+f.name);
+ ok(p.body.length===f.bytes&&hash(p.body)===f.sha256&&p.headers['cache-control']==='no-store'&&p.headers['x-content-type-options']==='nosniff'&&p.headers['content-type']?.startsWith(f.name.endsWith('.css')?'text/css':'text/javascript'));
+ const wrongDigest=(f.sha256[0]==='0'?'1':'0')+f.sha256.slice(1);
+ for(const suffix of [wrongDigest+'/'+f.name,f.sha256+'/unreviewed-runtime.mjs'])
+  ok(JSON.stringify(await json('/api/extensions/preview/public-runtime/'+suffix,404))===JSON.stringify({error:'Preview unavailable'}));
 }
-const nativeApplicationPreview={files:nativeFiles,inlinePreviewEnabled:true,packagedHttpBytes:true,privateRuntimeUnauthorized:true,publicRuntimeDisabled:true,authenticatedStudioRender:false};
+const nativeApplicationPreview={files:nativeFiles,inlinePreviewEnabled:true,packagedHttpBytes:true,privateRuntimeUnauthorized:true,publicRuntimeEnabled:true,publicRuntimeBytesVerified:true,publicRuntimeInvalidDigestDenied:true,publicRuntimeInvalidNameDenied:true,publicCatalogueIds,publicCatalogueUnknownIdDenied:true,authenticatedStudioRender:false};
 const query='/ws/?EIO=4&transport=polling&t=stage-smoke';const packet=(await req(query)).body.toString();ok(packet[0]==='0');const handshake=JSON.parse(packet.slice(1));ok(/^[A-Za-z0-9_-]{1,256}$/.test(handshake.sid));await req(query+'&sid='+handshake.sid,200,'POST','1');
 process.stdout.write(JSON.stringify({ok:true,routes,engineIoOpenClose:true,indexAndEntryAssets:assets.length,nativeApplicationPreview,packageCapabilities}));
 })().catch(()=>{process.stdout.write(JSON.stringify({ok:false,routes,failureCode}));process.exitCode=1});
@@ -709,6 +730,7 @@ def synthetic_smoke(stage, image, revision, suffix, native_files):
         result["packagePolicy"] = policy
         run(["docker", "start", identifier])
         program = SMOKE_JS.replace("NATIVE_PREVIEW_FILES", json.dumps(native_files)).replace(
+            "PUBLIC_CATALOGUE_IDS", json.dumps(PUBLIC_CATALOGUE_IDS)).replace(
             "PACKAGE_PROBE_POLICY", json.dumps(policy)).replace(
             "EXPECTED_MCP_SCOPES", json.dumps(MCP_SCOPES)).replace(
             "EXPECTED_MCP_CHALLENGE", json.dumps(MCP_CHALLENGE))
@@ -738,11 +760,7 @@ def synthetic_smoke(stage, image, revision, suffix, native_files):
         need(result["ok"] is True, "SYNTHETIC_SMOKE_FAILED")
         need(result.get("packageCapabilities") == {**policy, "status": policy["expectedStatus"],
                                                    "contentType": "application/json"}, "SMOKE_PACKAGE_POLICY_MISMATCH")
-        need(result.get("nativeApplicationPreview") == {
-            "files": native_files, "inlinePreviewEnabled": True, "packagedHttpBytes": True,
-            "privateRuntimeUnauthorized": True, "publicRuntimeDisabled": True,
-            "authenticatedStudioRender": False,
-        }, "SYNTHETIC_NATIVE_PREVIEW_NOT_QUALIFIED")
+        verify_native_preview_proof(result.get("nativeApplicationPreview"), native_files)
     except BaseException as error:
         result["failureCode"] = str(error) if isinstance(error, GateError) else type(error).__name__
         raise
@@ -1292,6 +1310,33 @@ def self_test_proxy_gate():
     return witnessed
 
 
+def self_test_public_preview_gate():
+    files = [{"name": "renderer.mjs", "bytes": 3, "sha256": "a" * 64},
+             {"name": "renderer.css", "bytes": 3, "sha256": "b" * 64}]
+    proof = native_preview_proof(files)
+    verify_native_preview_proof(proof, files)
+    rejected = []
+    for field in ("publicRuntimeEnabled", "publicRuntimeBytesVerified",
+                  "publicRuntimeInvalidDigestDenied", "publicRuntimeInvalidNameDenied",
+                  "publicCatalogueUnknownIdDenied", "privateRuntimeUnauthorized"):
+        invalid = {**proof, field: False}
+        try:
+            verify_native_preview_proof(invalid, files)
+        except GateError:
+            rejected.append("public-preview-missing-" + field)
+        else:
+            raise AssertionError("Incomplete public preview proof accepted")
+    for ids in ([], list(PUBLIC_CATALOGUE_IDS[:-1]),
+                [*PUBLIC_CATALOGUE_IDS[:-1], "unreviewed-example"]):
+        try:
+            verify_native_preview_proof({**proof, "publicCatalogueIds": ids}, files)
+        except GateError:
+            rejected.append("public-preview-reviewed-catalogue-required")
+        else:
+            raise AssertionError("Unreviewed public catalogue accepted")
+    return ["public-preview-enabled-default-proof"] + rejected
+
+
 def self_test():
     # Concrete gate witnesses: traversal, same-size tampering, and missing engine checks.
     for bad in ("../x", "/etc/passwd", "a/../b", "a\\b", "a//b"):
@@ -1348,7 +1393,7 @@ def self_test():
                 pass
             else:
                 raise AssertionError(name + " release gate accepted")
-    print(json.dumps({"selfTest": "PASS", "checks": ["traversal", "same-size-tamper", "changed-after-qualification-copy", "symlink", "tap-spec-summary"] + list(rejected) + self_test_semantic_gates() + self_test_application_gate() + self_test_proxy_gate()}))
+    print(json.dumps({"selfTest": "PASS", "checks": ["traversal", "same-size-tamper", "changed-after-qualification-copy", "symlink", "tap-spec-summary"] + list(rejected) + self_test_semantic_gates() + self_test_application_gate() + self_test_proxy_gate() + self_test_public_preview_gate()}))
 
 
 def main():

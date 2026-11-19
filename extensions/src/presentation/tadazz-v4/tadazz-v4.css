@@ -1752,3 +1752,229 @@
 .tzv4-stage[data-reduced-motion="true"] .vote-dot {
   animation: none !important;
 }
+
+/* Declarative native palettes. Code-backed stages retain the source artwork. */
+.tzv4-stage[data-theme-palette] .q-frame,
+.tzv4-stage[data-theme-palette] .photo-question-panel {
+  color: var(--cream);
+  border-color: var(--pink);
+  background: linear-gradient(150deg, var(--purple), var(--night));
+  box-shadow:
+    0 21px 57px color-mix(in srgb, var(--night) 60%, transparent),
+    inset 0 2px 0 #ffffff31,
+    0 0 46px color-mix(in srgb, var(--pink) 18%, transparent);
+}
+.tzv4-stage[data-theme-palette] .answer-card {
+  border-color: var(--pink);
+  background: linear-gradient(
+    165deg,
+    var(--violet),
+    var(--night) 49%,
+    var(--purple)
+  );
+  box-shadow:
+    0 22px 46px color-mix(in srgb, var(--night) 66%, transparent),
+    0 0 0 3px color-mix(in srgb, var(--purple) 30%, transparent),
+    0 0 29px color-mix(in srgb, var(--pink) 20%, transparent),
+    inset 0 2px 0 #fff3;
+}
+.tzv4-stage[data-theme-palette] .q-text,
+.tzv4-stage[data-theme-palette] .answer-card .answer-title,
+.tzv4-stage[data-theme-palette] .photo-question-head,
+.tzv4-stage[data-theme-palette] .photo-option,
+.tzv4-stage[data-theme-palette] .team-name,
+.tzv4-stage[data-theme-palette] .spotlight-name,
+.tzv4-stage[data-theme-palette] .interlude-title,
+.tzv4-stage[data-theme-palette] .countdown-value {
+  color: var(--cream);
+  text-shadow: 0 5px 20px color-mix(in srgb, var(--night) 70%, transparent);
+}
+.tzv4-stage[data-theme-palette] .q-frame::before,
+.tzv4-stage[data-theme-palette] .answer-card::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--blue),
+    var(--lime),
+    var(--pink),
+    transparent
+  );
+}
+.tzv4-stage[data-theme-palette] .q-frame::after,
+.tzv4-stage[data-theme-palette] .footer-orbit {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--gold),
+    var(--pink),
+    transparent
+  );
+  box-shadow: 0 0 17px color-mix(in srgb, var(--pink) 45%, transparent);
+}
+.tzv4-stage[data-theme-palette] .answer-card .tz-photo-frame,
+.tzv4-stage[data-theme-palette] .answer-card .answer-image {
+  background-color: var(--night);
+}
+.tzv4-stage[data-theme-palette] .answer-card .tz-photo-frame {
+  border-color: color-mix(in srgb, var(--gold) 60%, transparent);
+  box-shadow:
+    0 0 0 3px var(--night),
+    0 0 24px color-mix(in srgb, var(--gold) 14%, transparent);
+}
+.tzv4-stage[data-theme-palette] .answer-image-empty {
+  color: var(--cream);
+  background: linear-gradient(150deg, var(--purple), var(--night) 72%);
+}
+.tzv4-stage[data-theme-palette] .answer-index,
+.tzv4-stage[data-theme-palette] .photo-option,
+.tzv4-stage[data-theme-palette] .stage-round-pill {
+  border-color: var(--pink);
+  background: linear-gradient(160deg, var(--purple), var(--night));
+  box-shadow:
+    0 11px 24px color-mix(in srgb, var(--night) 55%, transparent),
+    inset 0 2px 0 #ffffff1f;
+}
+.tzv4-stage[data-theme-palette] .eyebrow,
+.tzv4-stage[data-theme-palette] .answer-monogram,
+.tzv4-stage[data-theme-palette] .answer-index,
+.tzv4-stage[data-theme-palette] .team-score,
+.tzv4-stage[data-theme-palette] .spotlight-top,
+.tzv4-stage[data-theme-palette] .interlude-mini,
+.tzv4-stage[data-theme-palette] .countdown-value.timer-low {
+  color: var(--lime);
+  text-shadow:
+    0 0 24px color-mix(in srgb, var(--lime) 28%, transparent),
+    0 5px 18px color-mix(in srgb, var(--night) 65%, transparent);
+}
+.tzv4-stage[data-theme-palette] .q-note,
+.tzv4-stage[data-theme-palette] .scene-kicker,
+.tzv4-stage[data-theme-palette] .footer-caption,
+.tzv4-stage[data-theme-palette] .countdown-label,
+.tzv4-stage[data-theme-palette] .stage-breadcrumb,
+.tzv4-stage[data-theme-palette] .team-rank,
+.tzv4-stage[data-theme-palette] .team-score small {
+  color: var(--pink);
+  text-shadow: 0 2px 12px color-mix(in srgb, var(--night) 65%, transparent);
+}
+.tzv4-stage[data-theme-palette] .answer-card .corner.answer-card-badge,
+.tzv4-stage[data-theme-palette] .result-percentage {
+  color: var(--cream);
+  background: var(--night);
+  border-color: color-mix(in srgb, var(--cream) 35%, transparent);
+  box-shadow: 0 5px 24px color-mix(in srgb, var(--night) 60%, transparent);
+}
+.tzv4-stage[data-theme-palette] .choice-slot.is-selected .answer-card,
+.tzv4-stage[data-theme-palette] .choice-slot.is-favourite .answer-card,
+.tzv4-stage[data-theme-palette] .photo-option.is-selected {
+  border-color: var(--lime);
+  box-shadow:
+    0 22px 46px color-mix(in srgb, var(--night) 75%, transparent),
+    0 0 0 4px color-mix(in srgb, var(--lime) 45%, transparent),
+    0 0 50px color-mix(in srgb, var(--lime) 45%, transparent);
+}
+.tzv4-stage[data-theme-palette] .choice-slot.is-selected .answer-index,
+.tzv4-stage[data-theme-palette] .choice-slot.is-favourite .answer-index,
+.tzv4-stage[data-theme-palette]
+  .choice-slot.is-selected
+  .corner.answer-card-badge,
+.tzv4-stage[data-theme-palette]
+  .choice-slot.is-favourite
+  .corner.answer-card-badge {
+  color: var(--lime);
+  border-color: var(--lime);
+}
+.tzv4-stage[data-theme-palette]
+  .choice-slot.is-selectable:focus-visible
+  .answer-card,
+.tzv4-stage[data-theme-palette] .photo-option.is-selectable:focus-visible {
+  outline-color: var(--lime);
+}
+.tzv4-stage[data-theme-palette] .winner-tag {
+  color: var(--ink);
+  background: var(--lime);
+  box-shadow: 0 6px 28px color-mix(in srgb, var(--lime) 45%, transparent);
+}
+.tzv4-stage[data-theme-palette] .result-track {
+  background: var(--night);
+  border-color: color-mix(in srgb, var(--pink) 35%, transparent);
+}
+.tzv4-stage[data-theme-palette] .result-track-fill,
+.tzv4-stage[data-theme-palette] .choice-slot.is-favourite .result-track-fill {
+  background: linear-gradient(90deg, var(--blue), var(--lime));
+  box-shadow: 0 0 13px color-mix(in srgb, var(--pink) 55%, transparent);
+}
+.tzv4-stage[data-theme-palette] .choice-slot.is-favourite .result-percentage {
+  color: var(--lime);
+}
+.tzv4-stage[data-theme-palette] .vote-status {
+  border-color: var(--lime);
+  background: linear-gradient(125deg, var(--night), var(--purple));
+  box-shadow:
+    0 0 45px color-mix(in srgb, var(--lime) 23%, transparent),
+    inset 0 2px 0 #ffffff38;
+}
+.tzv4-stage[data-theme-palette] .vote-dot {
+  background: var(--lime);
+  box-shadow:
+    0 0 17px var(--lime),
+    0 0 36px color-mix(in srgb, var(--lime) 50%, transparent);
+}
+.tzv4-stage[data-theme-palette] .vote-status strong,
+.tzv4-stage[data-theme-palette] .vote-status span,
+.tzv4-stage[data-theme-palette] .stage-round-pill {
+  color: var(--cream);
+}
+.tzv4-stage[data-theme-palette] .locked-status {
+  border-color: var(--gold);
+  box-shadow: 0 0 30px color-mix(in srgb, var(--gold) 33%, transparent);
+}
+.tzv4-stage[data-theme-palette] .locked-status .vote-dot {
+  background: var(--gold);
+  box-shadow: 0 0 25px color-mix(in srgb, var(--gold) 70%, transparent);
+}
+.tzv4-stage[data-theme-palette] .countdown-floater {
+  background: radial-gradient(
+    circle at 42% 40%,
+    var(--purple),
+    var(--night) 65%,
+    var(--ink)
+  );
+  border-color: var(--pink);
+  box-shadow:
+    0 0 0 8px color-mix(in srgb, var(--purple) 48%, transparent),
+    0 0 38px color-mix(in srgb, var(--pink) 45%, transparent),
+    inset 0 0 23px color-mix(in srgb, var(--purple) 80%, transparent),
+    0 16px 34px #0008;
+}
+.tzv4-stage[data-theme-palette] .countdown-ring .timer-track {
+  stroke: color-mix(in srgb, var(--pink) 45%, transparent);
+}
+.tzv4-stage[data-theme-palette] .countdown-ring .timer-progress {
+  stroke: var(--lime);
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--lime) 53%, transparent));
+}
+.tzv4-stage[data-theme-palette] .photo-question-img,
+.tzv4-stage[data-theme-palette] .spotlight-portrait {
+  border-color: var(--blue);
+  box-shadow:
+    0 0 0 11px var(--purple),
+    0 0 70px color-mix(in srgb, var(--blue) 40%, transparent),
+    0 29px 50px #0009;
+}
+.tzv4-stage[data-theme-palette] .team-row {
+  border-color: var(--pink);
+  background: linear-gradient(100deg, var(--purple), var(--night));
+  box-shadow: 0 11px 30px color-mix(in srgb, var(--night) 65%, transparent);
+}
+.tzv4-stage[data-theme-palette] .team-row:first-child {
+  border-color: var(--gold);
+  background: linear-gradient(110deg, var(--violet), var(--ink));
+  box-shadow:
+    0 0 31px color-mix(in srgb, var(--gold) 23%, transparent),
+    0 10px 30px color-mix(in srgb, var(--night) 65%, transparent);
+}
+.tzv4-stage[data-theme-palette] .team-icon {
+  color: var(--ink);
+  background: linear-gradient(120deg, var(--blue), var(--lime));
+  box-shadow: 0 0 26px color-mix(in srgb, var(--blue) 30%, transparent);
+}

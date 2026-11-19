@@ -3,6 +3,10 @@ import assert from "node:assert/strict"
 import { createRequire } from "node:module"
 import { mkdirSync, writeFileSync } from "node:fs"
 import { join, resolve } from "node:path"
+import {
+  verifyNativePalette,
+  verifyCatalogueCovers,
+} from "./palette-verify.mjs"
 
 assert.equal(
   process.platform,
@@ -37,6 +41,7 @@ const observations = {
   failedAssets: [],
   serverErrors: [],
   unexpectedWrites: [],
+  checkFailures: [],
 }
 const results = []
 let browser
@@ -106,26 +111,64 @@ const goto = async (page, path) => {
   assert.equal(response?.status(), 200, "Page must load: " + path)
 }
 const screenshot = async (page, name) => {
+  await page.evaluate(() => window.scrollTo(0, 0))
   await page.screenshot({ path: join(evidence, name + ".png"), fullPage: true })
 }
-const imageDecode = async (page) => {
-  const position = await page.evaluate(() => ({
-    x: window.scrollX,
-    y: window.scrollY,
-  }))
-  for (const image of await page.locator("img:visible").all()) {
-    await image.scrollIntoViewIfNeeded()
-    await expect
-      .poll(
-        () =>
-          image.evaluate(
-            (element) => element.complete && element.naturalWidth > 0,
-          ),
-        { timeout: 15_000 },
-      )
-      .toBe(true)
+const imageDecode = async (page, preloadCatalogue = false) => {
+  if (preloadCatalogue) {
+    const position = await page.evaluate(() => ({
+      x: window.scrollX,
+      y: window.scrollY,
+    }))
+    // Gallery covers are stable elements; preload lazy artwork without live nth locators.
+    const covers = await page
+      .locator("[data-catalogue-cover] img")
+      .elementHandles()
+    for (const cover of covers) {
+      await cover.scrollIntoViewIfNeeded()
+      await expect
+        .poll(
+          () =>
+            cover.evaluate((image) => image.complete && image.naturalWidth > 0),
+          {
+            timeout: 15_000,
+          },
+        )
+        .toBe(true)
+    }
+    await page.evaluate(({ x, y }) => window.scrollTo(x, y), position)
   }
-  await page.evaluate(({ x, y }) => window.scrollTo(x, y), position)
+  const preview = page.locator("[data-native-application-preview]").first()
+  const images = (await preview.count())
+    ? preview.locator("img")
+    : page.locator("img")
+  // Native frames may replace images while a chapter settles. Inspect one current DOM
+  // snapshot per poll and keep the mounted preview in place while it decodes.
+  await expect
+    .poll(
+      () =>
+        images.evaluateAll((mounted) =>
+          mounted
+            .filter((image) => {
+              const bounds = image.getBoundingClientRect()
+              const style = getComputedStyle(image)
+              return (
+                bounds.width > 0 &&
+                bounds.height > 0 &&
+                bounds.bottom > 0 &&
+                bounds.top < innerHeight &&
+                bounds.right > 0 &&
+                bounds.left < innerWidth &&
+                style.display !== "none" &&
+                style.visibility !== "hidden"
+              )
+            })
+            .filter((image) => !image.complete || image.naturalWidth === 0)
+            .map((image) => image.currentSrc || image.src),
+        ),
+      { timeout: 15_000 },
+    )
+    .toEqual([])
 }
 
 const readyPreview = async (page) => {
@@ -138,6 +181,22 @@ const readyPreview = async (page) => {
       .first(),
   ).toBeVisible({ timeout: 30_000 })
 }
+const attempt = async (name, operation) => {
+  try {
+    await operation()
+  } catch (error) {
+    const detail = { name, passed: false, error: String(error?.stack ?? error) }
+    results.push(detail)
+    observations.checkFailures.push(detail)
+    checkpoint()
+    console.error(name + ": " + String(error))
+    if (activePage)
+      await screenshot(activePage, "failure-" + name).catch(() => {
+        // The original assertion remains the recorded failure if capture is unavailable.
+      })
+  }
+}
+
 const chooseNative = async (page, index) => {
   const mobile = page.locator(".catalogue-mobile-answers button").nth(index)
   if (await mobile.isVisible()) await mobile.click()
@@ -213,157 +272,201 @@ try {
 
   await goto(page, "/?view=store")
   await expect(page.locator("[data-catalogue-card]")).toHaveCount(10)
-  await imageDecode(page)
+  await imageDecode(page, true)
+  await verifyCatalogueCovers(page, "public-desktop", evidence)
   await screenshot(page, "gallery-desktop")
   record("desktop-gallery-all-ten-cards")
 
   for (const game of games) {
-    await goto(page, "/?view=store")
-    await page.locator('[data-catalogue-preview="' + game.id + '"]').click()
-    await expect
-      .poll(() => new URL(page.url()).searchParams.get("game"))
-      .toBe(game.id)
-    await readyPreview(page)
-    const slider = page
-      .locator('.game-preview-timeline input[type="range"]')
-      .first()
-    await expect(slider).toBeEnabled()
-    const last = await slider.getAttribute("max")
-    assert(
-      Number(last) >= game.questionCount,
-      "Actual authored chapter timeline: " + game.id,
-    )
-    await slider.focus()
-    await page.keyboard.press("End")
-    await expect(slider).toHaveValue(last)
-    await readyPreview(page)
-    await page.keyboard.press("Home")
-    await expect(slider).toHaveValue("0")
-    await readyPreview(page)
-    await imageDecode(page)
-    await screenshot(page, "preview-" + game.id)
-    record("preview-" + game.id, { chapters: Number(last) + 1 })
-
-    await goto(page, "/?view=store")
-    await page.locator('[data-catalogue-open="' + game.id + '"]').click()
-    await expect(page.getByTestId("catalogue-play-sample")).toBeVisible()
-    await expect(page.getByTestId("catalogue-use-game")).toBeVisible()
-    await expect(page.getByTestId("catalogue-customise")).toBeVisible()
-    await page.getByTestId("catalogue-play-sample").click()
-    await expect
-      .poll(() => new URL(page.url()).searchParams.get("game"))
-      .toBe(game.id)
-
-    if (game.id === "great-guessoff") {
-      const gameRoot = page.getByTestId("great-guessoff-demo")
-      const next = page.getByTestId("ggo-main-action")
-      await expect(gameRoot).toHaveAttribute("data-ggo-phase", "intro")
-      let votingRounds = 0
-      for (let step = 0; step < 20; step++) {
-        await expect(next).toBeEnabled({ timeout: 30_000 })
-        const phase = await gameRoot.getAttribute("data-ggo-phase")
-        if (phase === "closing") break
-        if (phase === "voting") {
-          await chooseNative(page, 0)
-          votingRounds += 1
-        }
-        await next.click()
-        await expect(next).toBeEnabled({ timeout: 30_000 })
-      }
-      await expect(gameRoot).toHaveAttribute("data-ggo-phase", "closing")
-      assert.equal(votingRounds, 5)
-      await screenshot(page, "complete-" + game.id)
-      await next.click()
-      await expect(gameRoot).toHaveAttribute("data-ggo-phase", "intro")
-      record("play-complete-" + game.id, { rounds: votingRounds, replay: true })
-    } else {
-      const gameRoot = page.getByTestId("catalogue-game-demo")
-      const next = page.getByTestId("catalogue-next")
-      await expect(gameRoot).toHaveAttribute("data-catalogue-id", game.id)
-      await expect(gameRoot).toHaveAttribute("data-theme-id", game.themeId)
-      await expect(gameRoot).toHaveAttribute(
-        "data-question-count",
-        String(game.questionCount),
+    await attempt("preview-" + game.id, async () => {
+      await goto(page, "/?view=store")
+      await page.locator('[data-catalogue-preview="' + game.id + '"]').click()
+      await expect
+        .poll(() => new URL(page.url()).searchParams.get("game"))
+        .toBe(game.id)
+      await readyPreview(page)
+      const slider = page
+        .locator('.game-preview-timeline input[type="range"]')
+        .first()
+      await expect(slider).toBeEnabled()
+      const last = await slider.getAttribute("max")
+      assert(
+        Number(last) >= game.questionCount,
+        "Actual authored chapter timeline: " + game.id,
       )
-      await expect(gameRoot).toHaveAttribute("data-game-phase", "intro")
-      await next.click()
-      const questions = previews
+      await slider.focus()
+      await page.keyboard.press("End")
+      await expect(slider).toHaveValue(last)
+      await readyPreview(page)
+      await page.keyboard.press("Home")
+      await expect(slider).toHaveValue("0")
+      await readyPreview(page)
+      await slider.focus()
+      await page.keyboard.press("ArrowRight")
+      await readyPreview(page)
+      const firstQuestion = previews
         .get(game.id)
-        .show.cards.filter((card) => ["quiz", "survey"].includes(card.kind))
-      for (let index = 0; index < questions.length; index++) {
-        await expect(gameRoot).toHaveAttribute("data-game-phase", "voting", {
-          timeout: 30_000,
-        })
-        await expect(gameRoot).toHaveAttribute(
-          "data-question-index",
-          String(index),
-        )
-        await expect(next).toBeEnabled({ timeout: 30_000 })
-        await expect(
-          page.getByTestId("tadazz-question-panel").first(),
-        ).toContainText(questions[index].question)
-        const answer = questions[index].correctAnswers[0]
-          ? questions[index].correctAnswers[0] - 1
-          : 0
-        await chooseNative(page, answer)
-        await expect(gameRoot).toHaveAttribute("data-game-phase", "results")
-        await expect(next).toBeEnabled({ timeout: 30_000 })
-        if (index === 0) {
-          await imageDecode(page)
-          await screenshot(page, "play-" + game.id)
-        }
-        await next.click()
-      }
-      await expect(gameRoot).toHaveAttribute("data-game-phase", "finish")
-      await expect(next).toBeEnabled({ timeout: 30_000 })
-      await screenshot(page, "complete-" + game.id)
-      await next.click()
-      await expect(gameRoot).toHaveAttribute("data-game-phase", "intro")
-      record("play-complete-" + game.id, {
-        rounds: questions.length,
-        replay: true,
+        .show.cards.find((card) => ["quiz", "survey"].includes(card.kind))
+      await expect(
+        page.getByTestId("tadazz-question-panel").first(),
+      ).toContainText(firstQuestion.question)
+      await page.keyboard.press("ArrowRight")
+      await expect(slider).toHaveValue("2")
+      await readyPreview(page)
+      await verifyNativePalette(page, game.themeId, "preview", evidence)
+      await page.keyboard.press("Home")
+      await expect(slider).toHaveValue("0")
+      await readyPreview(page)
+      await imageDecode(page)
+      await page.screenshot({
+        path: join(evidence, "preview-" + game.id + ".png"),
+        fullPage: false,
       })
-    }
+      record("preview-" + game.id, { chapters: Number(last) + 1 })
+    })
+    await attempt("play-" + game.id, async () => {
+      await goto(page, "/?view=store")
+      await page.locator('[data-catalogue-open="' + game.id + '"]').click()
+      await expect(page.getByTestId("catalogue-play-sample")).toBeVisible()
+      await expect(page.getByTestId("catalogue-use-game")).toBeVisible()
+      await expect(page.getByTestId("catalogue-customise")).toBeVisible()
+      await page.getByTestId("catalogue-play-sample").click()
+      await expect
+        .poll(() => new URL(page.url()).searchParams.get("game"))
+        .toBe(game.id)
+
+      if (game.id === "great-guessoff") {
+        const gameRoot = page.getByTestId("great-guessoff-demo")
+        const next = page.getByTestId("ggo-main-action")
+        await expect(gameRoot).toHaveAttribute("data-ggo-phase", "intro")
+        let votingRounds = 0
+        for (let step = 0; step < 20; step++) {
+          await expect(next).toBeEnabled({ timeout: 30_000 })
+          const phase = await gameRoot.getAttribute("data-ggo-phase")
+          if (phase === "closing") break
+          if (phase === "voting") {
+            if (votingRounds === 0)
+              await verifyNativePalette(
+                page,
+                "tadazz-classic",
+                "solo",
+                evidence,
+                false,
+              )
+            await chooseNative(page, 0)
+            votingRounds += 1
+          }
+          await next.click()
+          await expect(next).toBeEnabled({ timeout: 30_000 })
+        }
+        await expect(gameRoot).toHaveAttribute("data-ggo-phase", "closing")
+        assert.equal(votingRounds, 5)
+        await screenshot(page, "complete-" + game.id)
+        await next.click()
+        await expect(gameRoot).toHaveAttribute("data-ggo-phase", "intro")
+        record("play-complete-" + game.id, {
+          rounds: votingRounds,
+          replay: true,
+        })
+      } else {
+        const gameRoot = page.getByTestId("catalogue-game-demo")
+        const next = page.getByTestId("catalogue-next")
+        await expect(gameRoot).toHaveAttribute("data-catalogue-id", game.id)
+        await expect(gameRoot).toHaveAttribute("data-theme-id", game.themeId)
+        await expect(gameRoot).toHaveAttribute(
+          "data-question-count",
+          String(game.questionCount),
+        )
+        await expect(gameRoot).toHaveAttribute("data-game-phase", "intro")
+        await next.click()
+        const questions = previews
+          .get(game.id)
+          .show.cards.filter((card) => ["quiz", "survey"].includes(card.kind))
+        for (let index = 0; index < questions.length; index++) {
+          await expect(gameRoot).toHaveAttribute("data-game-phase", "voting", {
+            timeout: 30_000,
+          })
+          await expect(gameRoot).toHaveAttribute(
+            "data-question-index",
+            String(index),
+          )
+          await expect(next).toBeEnabled({ timeout: 30_000 })
+          await expect(
+            page.getByTestId("tadazz-question-panel").first(),
+          ).toContainText(questions[index].question)
+
+          const answer = questions[index].correctAnswers[0]
+            ? questions[index].correctAnswers[0] - 1
+            : 0
+          await chooseNative(page, answer)
+          await expect(gameRoot).toHaveAttribute("data-game-phase", "results")
+          await expect(next).toBeEnabled({ timeout: 30_000 })
+          if (index === 0) {
+            await verifyNativePalette(page, game.themeId, "solo", evidence)
+            await imageDecode(page)
+            await screenshot(page, "play-" + game.id)
+          }
+          await next.click()
+        }
+        await expect(gameRoot).toHaveAttribute("data-game-phase", "finish")
+        await expect(next).toBeEnabled({ timeout: 30_000 })
+        await screenshot(page, "complete-" + game.id)
+        await next.click()
+        await expect(gameRoot).toHaveAttribute("data-game-phase", "intro")
+        record("play-complete-" + game.id, {
+          rounds: questions.length,
+          replay: true,
+        })
+      }
+    })
   }
 
   for (const mode of ["mobile", "hebrew"]) {
-    const context = await browser.newContext({
-      viewport: { width: 390, height: 844 },
-      locale: mode === "hebrew" ? "he-IL" : "en-GB",
-      reducedMotion: "reduce",
-      ignoreHTTPSErrors: url.hostname !== "tadazz.com",
+    await attempt("responsive-" + mode, async () => {
+      const context = await browser.newContext({
+        viewport: { width: 390, height: 844 },
+        locale: mode === "hebrew" ? "he-IL" : "en-GB",
+        reducedMotion: "reduce",
+        ignoreHTTPSErrors: url.hostname !== "tadazz.com",
+      })
+      const page = await context.newPage()
+      activePage = page
+      inspect(page)
+      await goto(page, "/?view=store" + (mode === "hebrew" ? "&lng=he" : ""))
+      await expect(page.locator("[data-catalogue-card]")).toHaveCount(10)
+      if (mode === "hebrew")
+        await expect(page.locator("html")).toHaveAttribute("dir", "rtl")
+      const overflow = await page.evaluate(
+        () => document.documentElement.scrollWidth - window.innerWidth,
+      )
+      assert(overflow <= 1, "No horizontal overflow: " + mode)
+      await imageDecode(page, true)
+      await verifyCatalogueCovers(page, "public-" + mode, evidence)
+      await screenshot(page, "gallery-" + mode)
+      const id = mode === "hebrew" ? "family" : "picture"
+      await page.locator('[data-catalogue-open="' + id + '"]').click()
+      await page.getByTestId("catalogue-play-sample").click()
+      const gameRoot = page.getByTestId("catalogue-game-demo")
+      await page.getByTestId("catalogue-next").click()
+      await expect(gameRoot).toHaveAttribute("data-game-phase", "voting", {
+        timeout: 30_000,
+      })
+      await expect(
+        page.locator(".catalogue-mobile-answers button"),
+      ).toHaveCount(4)
+      await page.locator(".catalogue-mobile-answers button").first().click()
+      await expect(gameRoot).toHaveAttribute("data-game-phase", "results")
+      await imageDecode(page)
+      await screenshot(page, "play-" + mode)
+      record(mode + "-gallery-and-real-vote")
+      await context.close()
     })
-    const page = await context.newPage()
-    activePage = page
-    inspect(page)
-    await goto(page, "/?view=store" + (mode === "hebrew" ? "&lng=he" : ""))
-    await expect(page.locator("[data-catalogue-card]")).toHaveCount(10)
-    if (mode === "hebrew")
-      await expect(page.locator("html")).toHaveAttribute("dir", "rtl")
-    const overflow = await page.evaluate(
-      () => document.documentElement.scrollWidth - window.innerWidth,
-    )
-    assert(overflow <= 1, "No horizontal overflow: " + mode)
-    await imageDecode(page)
-    await screenshot(page, "gallery-" + mode)
-    const id = mode === "hebrew" ? "family" : "picture"
-    await page.locator('[data-catalogue-open="' + id + '"]').click()
-    await page.getByTestId("catalogue-play-sample").click()
-    const gameRoot = page.getByTestId("catalogue-game-demo")
-    await page.getByTestId("catalogue-next").click()
-    await expect(gameRoot).toHaveAttribute("data-game-phase", "voting", {
-      timeout: 30_000,
-    })
-    await expect(page.locator(".catalogue-mobile-answers button")).toHaveCount(
-      4,
-    )
-    await imageDecode(page)
-    await screenshot(page, "play-" + mode)
-    await page.locator(".catalogue-mobile-answers button").first().click()
-    await expect(gameRoot).toHaveAttribute("data-game-phase", "results")
-    record(mode + "-gallery-and-real-vote")
-    await context.close()
   }
+  assert.deepEqual(
+    observations.checkFailures,
+    [],
+    "Every preview, game and responsive scenario must pass",
+  )
   assert.deepEqual(observations.pageErrors, [], "No browser JavaScript errors")
   assert.deepEqual(observations.failedAssets, [], "No failed asset requests")
   assert.deepEqual(observations.serverErrors, [], "No server HTTP errors")

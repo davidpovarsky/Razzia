@@ -15,6 +15,7 @@ import {
   StageSceneV4,
   ZWipeV4,
 } from "./components"
+import { showThemeStyle, useOptionalShowTheme } from "../show-themes/context"
 import "./full-show.css"
 import { TadazzV4Motion } from "./motion"
 import "./source-layout.css"
@@ -62,6 +63,12 @@ export const TadazzV4Stage = forwardRef<
   },
   ref,
 ) {
+  const theme = useOptionalShowTheme()
+  const paletteTheme =
+    theme?.definition.kind === "declarative" &&
+    theme.definition.rendererId === "tadazz-classic-stage"
+      ? theme
+      : null
   const viewportRef = useRef<HTMLDivElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
   const engineRef = useRef<TadazzV4Motion | null>(null)
@@ -396,6 +403,7 @@ export const TadazzV4Stage = forwardRef<
   const data = view?.data ?? initialData
   const isShow = view ? TADAZZ_V4_SHOW_SCENES.has(view.scene) : true
   const stageStyle: CSSProperties = {
+    ...(paletteTheme ? showThemeStyle(paletteTheme) : {}),
     width: 1920,
     height: 1080,
   }
@@ -411,6 +419,7 @@ export const TadazzV4Stage = forwardRef<
         className={["tzv4-stage", isShow && "stage-show"]
           .filter(Boolean)
           .join(" ")}
+        data-theme-palette={paletteTheme?.definition.id}
         data-v4-scene={view?.scene ?? "idle"}
         data-stage-mode={view?.scene ?? (customScreen ? "custom" : "idle")}
         data-question-key={data.questionKey ?? ""}
