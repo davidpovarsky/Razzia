@@ -35,25 +35,7 @@ const bounded = async (promise, label) => {
   }
 }
 
-/** Delay real loopback ACKs; preserve the issuer, SDK, AppBridge and native renderer. */
-export async function verifyPreferenceRace({
-  page,
-  base,
-  scenario,
-  engine,
-  theme,
-  evidence,
-  readRecord,
-}) {
-  const witness = {
-    engine,
-    theme,
-    mechanism:
-      "Unmodified real responses held at loopback HTTP before AppBridge ACK",
-    cases: [],
-    status: "RUNNING",
-  }
-  const before = await readRecord()
+export async function installHeldPreviewResponses(page, base, scenario) {
   const gates = []
   const active = new Set()
   const routeErrors = []
@@ -117,6 +99,44 @@ export async function verifyPreferenceRace({
     }
   }
   await page.route(pattern, handler)
+
+  return {
+    gates,
+    arm,
+    routeErrors,
+    async dispose() {
+      for (const gate of gates) {
+        gate.release.resolve()
+      }
+      await Promise.allSettled([...active])
+      await page.unroute(pattern, handler)
+    },
+  }
+}
+
+export { bounded as waitForHeldPreview }
+
+/** Delay real loopback ACKs; preserve the issuer, SDK, AppBridge and native renderer. */
+export async function verifyPreferenceRace({
+  page,
+  base,
+  scenario,
+  engine,
+  theme,
+  evidence,
+  readRecord,
+}) {
+  const witness = {
+    engine,
+    theme,
+    mechanism:
+      "Unmodified real responses held at loopback HTTP before AppBridge ACK",
+    cases: [],
+    status: "RUNNING",
+  }
+  const before = await readRecord()
+  const { gates, arm, routeErrors, dispose } =
+    await installHeldPreviewResponses(page, base, scenario)
 
   try {
     const question = scenario.chapters.find(
@@ -347,11 +367,7 @@ export async function verifyPreferenceRace({
     witness.error = String(error)
     throw error
   } finally {
-    for (const gate of gates) {
-      gate.release.resolve()
-    }
-    await Promise.allSettled([...active])
-    await page.unroute(pattern, handler)
+    await dispose()
     witness.gates = gates.map(({ label, input, claimed, fulfilled }) => ({
       label,
       input,

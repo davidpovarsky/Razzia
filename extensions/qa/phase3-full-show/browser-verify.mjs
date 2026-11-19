@@ -7,6 +7,7 @@ import {
 } from "./workspace-controls.mjs"
 import { runLayoutDiagnostic } from "./layout-diagnostic.mjs"
 import { verifyPreferenceRace } from "./preference-race.mjs"
+import { verifyTransportRace } from "./transport-race.mjs"
 import { verifyHostControls } from "./host-controls.mjs"
 import {
   installPhaseContinuityProbe,
@@ -858,6 +859,37 @@ try {
           chapter.id,
           { timeout: 10000 },
         )
+      }
+
+      if (process.env.TADAZZ_FULL_SHOW_DIAGNOSTIC === "transport-race") {
+        await run(
+          `${engine} / ${
+            theme
+          } readonly transport supersedes automatic preview`,
+          async () => {
+            observations.push(
+              await verifyTransportRace({
+                page,
+                base,
+                scenario,
+                engine,
+                theme,
+                evidence,
+                readRecord: async () =>
+                  scenario.repository.get(
+                    await qaSession.principal(),
+                    scenario.record.draftId,
+                  ),
+              }),
+            )
+            assert.deepEqual(caseErrors, [])
+          },
+          60000,
+        )
+        await prepareHostNavigation(page, "close transport race context")
+        await context.close()
+
+        continue
       }
 
       if (process.env.TADAZZ_FULL_SHOW_DIAGNOSTIC === "preference-race") {
@@ -2028,12 +2060,72 @@ try {
               .first()
               .elementHandle()
             assert(node)
+            const target = scenario.chapters.find(
+              (chapter) =>
+                chapter.kind === kind && chapter.questionOrdinal === ordinal,
+            )
+            assert(target)
+            const replayDeadline = Date.now() + 10000
+            const acknowledged = page.waitForResponse(
+              (response) => {
+                if (
+                  response.url() !==
+                    `${base}/qa/call?scenario=${scenario.id}` ||
+                  response.request().method() !== "POST"
+                ) {
+                  return false
+                }
+
+                const call = response.request().postDataJSON()
+
+                return (
+                  call.name === "preview_show" &&
+                  call.arguments.draftId === scenario.record.draftId &&
+                  call.arguments.chapterId === target.id
+                )
+              },
+              { timeout: 10000 },
+            )
+            // Keep the original wait budget even when click or ACK fails.
+            void acknowledged.catch(() => undefined)
             await iframe.getByTestId("full-show-replay").click()
-            await iframe
-              .locator(
-                `[data-full-show-chapter]:not([data-playback-epoch="${beforeEpoch}"])`,
-              )
-              .waitFor()
+            const response = await acknowledged
+            assert.equal(response.status(), 200)
+            const acknowledgement = await response.json()
+            assert.equal(acknowledgement.structuredContent.ok, true)
+            assert.equal(
+              acknowledgement.structuredContent.data.selectedChapterId,
+              target.id,
+            )
+            const remainingMs = replayDeadline - Date.now()
+            assert(
+              remainingMs > 0,
+              "Replay acknowledgement and native remount must finish within 10 seconds",
+            )
+            const child = page
+              .frames()
+              .find((value) => value.url().endsWith("/widget"))
+            assert(child)
+            await child.waitForFunction(
+              ({ oldNode, targetId, oldEpoch }) => {
+                const native = document.querySelector(
+                  '[data-testid="full-show-native-surface"]',
+                )?.shadowRoot
+                const current = native?.querySelector(
+                  "[data-full-show-chapter]",
+                )
+
+                return (
+                  current?.getAttribute("data-full-show-chapter") ===
+                    targetId &&
+                  current.getAttribute("data-playback-epoch") !== oldEpoch &&
+                  !oldNode.isConnected &&
+                  Boolean(current.innerText.trim())
+                )
+              },
+              { oldNode: node, targetId: target.id, oldEpoch: beforeEpoch },
+              { timeout: remainingMs },
+            )
             assert.equal(
               await node.evaluate((element) => element.isConnected),
               false,
