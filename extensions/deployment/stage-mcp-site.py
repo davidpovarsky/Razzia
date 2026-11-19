@@ -26,6 +26,13 @@ import uuid
 BASE_IMAGE = "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346"
 EVIDENCE_ROOT = Path("/home/ubuntu/tadazz-phase2-20261116/evidence")
 ORIGIN = "https://tadazz.com"
+# Initial consent advertises the ordered tool-scope union (server/http.ts).
+MCP_SCOPES = (
+    "tadazz.catalog.read", "tadazz.drafts.write", "tadazz.drafts.read",
+    "tadazz.library.write", "tadazz.exports.read",
+)
+MCP_CHALLENGE = ('Bearer resource_metadata="' + ORIGIN +
+                 '/.well-known/oauth-protected-resource", scope="' + " ".join(MCP_SCOPES) + '"')
 HASH = re.compile(r"[a-f0-9]{64}")
 MAX_FILE = 64 * 1024 * 1024
 MAX_TREE = 512 * 1024 * 1024
@@ -615,6 +622,8 @@ def safe_probe_routes(value):
 SMOKE_JS = r'''
 const http=require('node:http'),fs=require('node:fs'),crypto=require('node:crypto');
 const origin='https://tadazz.com',routes={},nativeFiles=NATIVE_PREVIEW_FILES,packagePolicy=PACKAGE_PROBE_POLICY;
+const expectedScopes=EXPECTED_MCP_SCOPES,expectedChallenge=EXPECTED_MCP_CHALLENGE;
+let failureCode='SMOKE_PROBE_FAILED';
 function req(path,status=200,method='GET',body){return new Promise((resolve,reject)=>{
 const q=http.request({host:'127.0.0.1',port:3000,path,method,
  headers:{Host:'tadazz.com',...(body?{'Content-Type':'text/plain;charset=UTF-8'}:{})},timeout:2500},r=>{
@@ -623,7 +632,7 @@ const q=http.request({host:'127.0.0.1',port:3000,path,method,
  if(r.statusCode!==status)return reject(Error('status'));const value={body:Buffer.concat(chunks),headers:r.headers};resolve(value)});
 });q.on('timeout',()=>q.destroy(Error('timeout')));q.on('error',reject);q.end(body);});}
 async function json(path,status=200){const r=await req(path,status);if(!r.headers['content-type']?.startsWith('application/json'))throw Error('type');return JSON.parse(r.body);}
-const ok=(v)=>{if(!v)throw Error('probe')}, hash=b=>crypto.createHash('sha256').update(b).digest('hex');
+const ok=(v,code='SMOKE_PROBE_FAILED')=>{if(!v){failureCode=code;throw Error('probe')}}, hash=b=>crypto.createHash('sha256').update(b).digest('hex');
 (async()=>{
 let ready=false;for(let i=0;i<120;i++){try{ready=(await json('/api/health')).status==='ok';if(ready)break}catch{}await new Promise(r=>setTimeout(r,250))}ok(ready);
 ok((await json('/api/auth/mode')).accountsEnabled===true);ok((await json('/api/billing/config')).enabled===false);
@@ -634,10 +643,12 @@ const capabilities=await json('/api/packages/capabilities',packagePolicy.expecte
 ok(capabilities?.error===(packagePolicy.installerEnabled?'errors:auth.unauthorized':'not-found')&&Object.keys(capabilities).length===1);
 const packageCapabilities={...packagePolicy,...routes['GET /api/packages/capabilities']};
 const resource=await json('/.well-known/oauth-protected-resource');ok(resource.resource===origin+'/mcp'&&JSON.stringify(resource.authorization_servers)===JSON.stringify([origin+'/oauth']));
+ok(JSON.stringify(resource.scopes_supported)===JSON.stringify(expectedScopes),'RESOURCE_SCOPES_MISMATCH');
 const issuer=await json('/.well-known/oauth-authorization-server/oauth');ok(issuer.issuer===origin+'/oauth'&&issuer.authorization_endpoint===origin+'/oauth/authorize'&&issuer.token_endpoint===origin+'/oauth/token'&&issuer.code_challenge_methods_supported.includes('S256'));
+ok(JSON.stringify(issuer.scopes_supported)===JSON.stringify(expectedScopes),'ISSUER_SCOPES_MISMATCH');
 const key=crypto.createPublicKey(JSON.parse(fs.readFileSync('/app/config/extensions/mcp-service/runtime.json')).signingPrivateKeyPem).export({format:'jwk'});
 const jwks=await json('/oauth/jwks.json');ok(jwks.keys?.length===1&&jwks.keys[0].x===key.x&&jwks.keys[0].crv==='Ed25519'&&!('d'in jwks.keys[0]));
-const mcp=await req('/mcp',401);ok(mcp.headers['www-authenticate']==='Bearer resource_metadata="'+origin+'/.well-known/oauth-protected-resource", scope="tadazz.catalog.read"');ok(mcp.headers['content-type'].startsWith('application/json'));JSON.parse(mcp.body);
+const mcp=await req('/mcp',401);ok(mcp.headers['www-authenticate']===expectedChallenge,'MCP_CHALLENGE_MISMATCH');ok(mcp.headers['content-type'].startsWith('application/json'));JSON.parse(mcp.body);
 for(const p of ['/studio/oauth-consent?oauth_request=stage-smoke','/studio/native-save-consent/'+'a'.repeat(54)])for(const method of ['GET','HEAD']){
  const r=await req(p,200,method);ok(r.headers['content-type'].startsWith('text/html')&&r.headers['cache-control']==='no-store'&&r.headers['x-frame-options']==='DENY'&&r.headers['referrer-policy']==='no-referrer'&&r.headers['content-security-policy'].includes("frame-ancestors 'none'"));ok(method==='GET'?r.body.length>0:r.body.length===0);}
 const index=fs.readFileSync('/app/web/index.html');ok(hash((await req('/')).body)===hash(index));
@@ -653,7 +664,7 @@ for(const f of nativeFiles){
 const nativeApplicationPreview={files:nativeFiles,inlinePreviewEnabled:true,packagedHttpBytes:true,privateRuntimeUnauthorized:true,publicRuntimeDisabled:true,authenticatedStudioRender:false};
 const query='/ws/?EIO=4&transport=polling&t=stage-smoke';const packet=(await req(query)).body.toString();ok(packet[0]==='0');const handshake=JSON.parse(packet.slice(1));ok(/^[A-Za-z0-9_-]{1,256}$/.test(handshake.sid));await req(query+'&sid='+handshake.sid,200,'POST','1');
 process.stdout.write(JSON.stringify({ok:true,routes,engineIoOpenClose:true,indexAndEntryAssets:assets.length,nativeApplicationPreview,packageCapabilities}));
-})().catch(()=>{process.stdout.write(JSON.stringify({ok:false,routes}));process.exitCode=1});
+})().catch(()=>{process.stdout.write(JSON.stringify({ok:false,routes,failureCode}));process.exitCode=1});
 '''
 
 
@@ -698,7 +709,9 @@ def synthetic_smoke(stage, image, revision, suffix, native_files):
         result["packagePolicy"] = policy
         run(["docker", "start", identifier])
         program = SMOKE_JS.replace("NATIVE_PREVIEW_FILES", json.dumps(native_files)).replace(
-            "PACKAGE_PROBE_POLICY", json.dumps(policy))
+            "PACKAGE_PROBE_POLICY", json.dumps(policy)).replace(
+            "EXPECTED_MCP_SCOPES", json.dumps(MCP_SCOPES)).replace(
+            "EXPECTED_MCP_CHALLENGE", json.dumps(MCP_CHALLENGE))
         completed = subprocess.run(["docker", "exec", "-i", identifier, "node", "-"],
                                    input=program.encode(), stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=65)
         result["probeExitCode"] = completed.returncode
@@ -713,6 +726,11 @@ def synthetic_smoke(stage, image, revision, suffix, native_files):
         # Capture only bounded status metadata before rejecting a failed process.
         # Response bodies, headers, stderr text and URL queries are never retained.
         result["routes"] = safe_probe_routes(probe.get("routes", {}))
+        if "failureCode" in probe:
+            need(probe["failureCode"] in ("SMOKE_PROBE_FAILED", "RESOURCE_SCOPES_MISMATCH",
+                                          "ISSUER_SCOPES_MISMATCH", "MCP_CHALLENGE_MISMATCH"),
+                 "SMOKE_PROBE_FAILURE_CODE_INVALID")
+            result["probeFailureCode"] = probe["failureCode"]
         need(completed.returncode == 0, "SYNTHETIC_SMOKE_PROCESS_FAILED")
         for field in ("ok", "engineIoOpenClose", "indexAndEntryAssets", "nativeApplicationPreview", "packageCapabilities"):
             if field in probe:

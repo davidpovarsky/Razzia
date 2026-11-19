@@ -42,6 +42,13 @@ CONFIG_ROOT = Path("/var/lib/tadazz-release-5312660/config")
 # Same runtime base qualified by stage-mcp-site.py; independent of the live rollback image.
 QUALIFIED_BUILD_BASE_IMAGE = "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346"
 PUBLIC_ORIGIN = "https://tadazz.com"
+# Initial consent advertises the ordered tool-scope union (server/http.ts).
+MCP_SCOPES = (
+    "tadazz.catalog.read", "tadazz.drafts.write", "tadazz.drafts.read",
+    "tadazz.library.write", "tadazz.exports.read",
+)
+MCP_CHALLENGE = ('Bearer resource_metadata="' + PUBLIC_ORIGIN +
+                 '/.well-known/oauth-protected-resource", scope="' + " ".join(MCP_SCOPES) + '"')
 LOCAL_ORIGIN = "http://127.0.0.1:3000"
 ENV_OVERRIDES = {
     "CONFIG_PATH": "/app/config",
@@ -379,17 +386,18 @@ def native_preview_probes(origin, stage):
 def mcp_probes(origin, stage, config, public_key_x):
     resource, _ = json_probe(origin, "/.well-known/oauth-protected-resource")
     require(resource.get("resource") == PUBLIC_ORIGIN + "/mcp" and resource.get("authorization_servers") == [PUBLIC_ORIGIN + "/oauth"], "RESOURCE_METADATA_MISMATCH")
+    require(resource.get("scopes_supported") == list(MCP_SCOPES), "RESOURCE_SCOPES_MISMATCH")
     issuer, _ = json_probe(origin, "/.well-known/oauth-authorization-server/oauth")
     require(issuer.get("issuer") == PUBLIC_ORIGIN + "/oauth", "ISSUER_METADATA_MISMATCH")
     require(issuer.get("authorization_endpoint") == PUBLIC_ORIGIN + "/oauth/authorize" and issuer.get("token_endpoint") == PUBLIC_ORIGIN + "/oauth/token", "OAUTH_ENDPOINT_MISMATCH")
     require("S256" in issuer.get("code_challenge_methods_supported", []), "PKCE_S256_MISSING")
+    require(issuer.get("scopes_supported") == list(MCP_SCOPES), "ISSUER_SCOPES_MISMATCH")
     jwks, _ = json_probe(origin, "/oauth/jwks.json")
     require(isinstance(jwks.get("keys"), list) and len(jwks["keys"]) == 1, "JWKS_COUNT")
     key = jwks["keys"][0]
     require(key.get("kid") == config["keyId"] and key.get("kty") == "OKP" and key.get("crv") == "Ed25519" and key.get("x") == public_key_x and "d" not in key, "JWKS_PUBLIC_KEY_MISMATCH")
-    challenge = 'Bearer resource_metadata="' + PUBLIC_ORIGIN + '/.well-known/oauth-protected-resource", scope="tadazz.catalog.read"'
     _, protected = json_probe(origin, "/mcp", 401)
-    require(protected["headers"].get("www-authenticate") == challenge, "MCP_CHALLENGE_MISMATCH")
+    require(protected["headers"].get("www-authenticate") == MCP_CHALLENGE, "MCP_CHALLENGE_MISMATCH")
     for path in ("/studio/oauth-consent?oauth_request=release-smoke", "/studio/native-save-consent/" + "a" * 54):
         for method in ("GET", "HEAD"):
             response = request(origin, path, method=method)
@@ -628,10 +636,12 @@ def clone_boot(args, original, image, work, run_id, result):
         program = r'''
 const origin = "https://tadazz.com";
 const expectedX = EXPECTED_PUBLIC_X;
+const expectedScopes = EXPECTED_MCP_SCOPES, expectedChallenge = EXPECTED_MCP_CHALLENGE;
 const nativeFiles = NATIVE_PREVIEW_FILES;
 const packagePolicy = PACKAGE_PROBE_POLICY, routes = {};
 const crypto = require("node:crypto");
-const fail = () => { throw new Error("clone probe failed"); };
+let failureCode = "RESTORED_CANDIDATE_PROBE_FAILED";
+const fail = (code="RESTORED_CANDIDATE_PROBE_FAILED") => { failureCode=code; throw new Error("clone probe failed"); };
 function req(path, status=200, limit=1048576) {
   // Undici may replace caller Host with the loopback transport host. The raw
   // request exercises the exact production Host boundary through local Nginx.
@@ -668,10 +678,11 @@ function req(path, status=200, limit=1048576) {
   const packageCapabilities={...packagePolicy,...routes['GET /api/packages/capabilities']};
   const metadata=await(await req("/.well-known/oauth-protected-resource")).json();
   if(metadata.resource!==origin+"/mcp")fail();
+  if(JSON.stringify(metadata.scopes_supported)!==JSON.stringify(expectedScopes))fail("RESOURCE_SCOPES_MISMATCH");
   const jwks=await(await req("/oauth/jwks.json")).json();
   if(jwks.keys?.length!==1||jwks.keys[0].x!==expectedX||"d" in jwks.keys[0])fail();
   const mcp=await req("/mcp",401);
-  if(mcp.headers.get("www-authenticate")!=='Bearer resource_metadata="'+origin+'/.well-known/oauth-protected-resource", scope="tadazz.catalog.read"')fail();
+  if(mcp.headers.get("www-authenticate")!==expectedChallenge)fail("MCP_CHALLENGE_MISMATCH");
   const consent=await req("/studio/oauth-consent?oauth_request=isolated-restore-proof");
   if(consent.headers.get("x-frame-options")!=="DENY"||consent.headers.get("cache-control")!=="no-store")fail();
   if(process.env.TADAZZ_INLINE_GAME_PREVIEW_ENABLED!=="true")fail();
@@ -683,8 +694,8 @@ function req(path, status=200, limit=1048576) {
   }
   const nativeApplicationPreview={files:nativeFiles,inlinePreviewEnabled:true,packagedHttpBytes:true,privateRuntimeUnauthorized:true,publicRuntimeDisabled:true,authenticatedStudioRender:false};
   process.stdout.write(JSON.stringify({ok:true,nativeApplicationPreview,packageCapabilities,routes}));
-})().catch(()=>{process.stdout.write(JSON.stringify({ok:false,routes}));process.exitCode=1;});
-'''.replace("EXPECTED_PUBLIC_X", json.dumps(args.expected_jwk_x)).replace("NATIVE_PREVIEW_FILES", json.dumps(native_files)).replace("PACKAGE_PROBE_POLICY", json.dumps(package_policy))
+})().catch(()=>{process.stdout.write(JSON.stringify({ok:false,routes,failureCode}));process.exitCode=1;});
+'''.replace("EXPECTED_PUBLIC_X", json.dumps(args.expected_jwk_x)).replace("NATIVE_PREVIEW_FILES", json.dumps(native_files)).replace("PACKAGE_PROBE_POLICY", json.dumps(package_policy)).replace("EXPECTED_MCP_SCOPES", json.dumps(MCP_SCOPES)).replace("EXPECTED_MCP_CHALLENGE", json.dumps(MCP_CHALLENGE))
         execution = docker_api("POST", "/containers/" + container_id + "/exec", {
             "AttachStdout": True, "AttachStderr": True, "Tty": False, "Cmd": ["node", "-e", program],
         })
@@ -697,6 +708,11 @@ function req(path, status=200, limit=1048576) {
             raise GateError("RESTORED_CANDIDATE_PROBE_OUTPUT_INVALID") from None
         require(isinstance(proof, dict), "RESTORED_CANDIDATE_PROBE_OUTPUT_INVALID")
         result["routes"] = safe_probe_routes(proof.get("routes", {}))
+        if "failureCode" in proof:
+            require(proof["failureCode"] in ("RESTORED_CANDIDATE_PROBE_FAILED",
+                                             "RESOURCE_SCOPES_MISMATCH", "MCP_CHALLENGE_MISMATCH"),
+                    "RESTORED_CANDIDATE_PROBE_FAILURE_CODE_INVALID")
+            result["probeFailureCode"] = proof["failureCode"]
         require(not status["Running"] and status["ExitCode"] == 0, "RESTORED_CANDIDATE_BOOT_FAILED")
         require(set(proof) == {"ok", "nativeApplicationPreview", "packageCapabilities", "routes"} and
                 proof["ok"] is True and proof["nativeApplicationPreview"] == native_preview_proof(native_files) and
