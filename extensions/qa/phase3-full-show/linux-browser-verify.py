@@ -52,7 +52,10 @@ if deps is None:
     deps=owned/"mcp-deps"
     shutil.copytree(original_deps,deps,symlinks=True)
 assert dependency_hashes(deps)==expected_deps
-command=["docker","run","--detach","--pull=never","--init","--read-only","--name",c["run"],"--network","none","--cpus","1","--memory","2g","--memory-swap","2g","--pids-limit","512","--shm-size","256m","--tmpfs","/tmp:rw,nosuid,nodev,size=536870912", "--label","codex.thread=01a1e9e9-ad5b-77a3-bafe-bcedce32246a"]
+# The native browser and the real issuer/SDK harness share this bounded cgroup.
+# The 2 GiB run killed Chromium at ~1.5 GiB renderer RSS plus ~475 MiB harness RSS.
+memory_limit_bytes=3*1024**3
+command=["docker","run","--detach","--pull=never","--init","--read-only","--name",c["run"],"--network","none","--cpus","1","--memory",str(memory_limit_bytes),"--memory-swap",str(memory_limit_bytes),"--pids-limit","512","--shm-size","256m","--tmpfs","/tmp:rw,nosuid,nodev,size=536870912", "--label","codex.thread=01a1e9e9-ad5b-77a3-bafe-bcedce32246a"]
 for origin,target,readonly in [(str(source),"/source",True),(str(owned),"/evidence",False),(str(rootfs/"cleanup"),"/cleanup",True),(str(deps),"/tmp/phase3-999ed90c/deps",True),(str(rootfs/"root/.cache/ms-playwright"),"/root/.cache/ms-playwright",True)]:
     command += ["--mount",f"type=bind,source={origin},target={target}" + (",readonly" if readonly else "")]
 command += [facts["Image"],"sleep","infinity"]
@@ -64,7 +67,25 @@ hash_code="import hashlib,json,pathlib,sys;root=pathlib.Path('/source');paths=js
 def hashes():
     result=subprocess.run(["docker","exec","-i",container,"python3","-c",hash_code],input=json.dumps(list(c["manifest"])),capture_output=True,text=True,check=True)
     return json.loads(result.stdout)
+resource_code="""from pathlib import Path
+import json
+root=Path('/sys/fs/cgroup')
+print(json.dumps({
+ 'memoryLimitBytes':int((root/'memory.max').read_text()),
+ 'memoryCurrentBytes':int((root/'memory.current').read_text()),
+ 'memoryPeakBytes':int((root/'memory.peak').read_text()),
+ 'memorySwapLimitBytes':int((root/'memory.swap.max').read_text()),
+ 'memoryEvents':{key:int(value) for key,value in (line.split() for line in (root/'memory.events').read_text().splitlines())},
+ 'cpuMax':[int(value) for value in (root/'cpu.max').read_text().split()],
+}))
+"""
+def resources():
+    result=subprocess.run(["docker","exec",container,"python3","-c",resource_code],capture_output=True,text=True,check=True,timeout=15)
+    return json.loads(result.stdout)
 try:
+    resources_before=resources()
+    assert resources_before["memoryLimitBytes"]==memory_limit_bytes and resources_before["memorySwapLimitBytes"]==0,"QA_RESOURCE_LIMIT_MISMATCH"
+    assert resources_before["cpuMax"][0]==resources_before["cpuMax"][1]>0,"QA_CPU_LIMIT_MISMATCH"
     before=hashes()
     assert before==c["manifest"],"Fresh browser source differs from committed input"
     widget=source/"extensions/src/mcp-app/widget/dist"
@@ -81,6 +102,16 @@ try:
     # Preserve the primary browser failure even if a receipt gate rejects early.
     (owned/"browser.stdout.log").write_text(result.stdout)
     (owned/"browser.stderr.log").write_text(result.stderr)
+    resources_after=resources()
+    container_after=json.loads(subprocess.check_output(["docker","inspect",container]))[0]
+    resource_evidence={"before":resources_before,"after":resources_after,
+                       "configuredMemoryLimitBytes":memory_limit_bytes,
+                       "configuredNanoCpus":container_after["HostConfig"]["NanoCpus"],
+                       "dockerOOMKilled":container_after["State"]["OOMKilled"]}
+    (owned/"browser-resource-evidence.json").write_text(json.dumps(resource_evidence,indent=2)+"\n")
+    assert resources_after["memoryLimitBytes"]==memory_limit_bytes and resources_after["memorySwapLimitBytes"]==0,"QA_RESOURCE_LIMIT_CHANGED"
+    assert resources_after["cpuMax"]==resources_before["cpuMax"] and resource_evidence["configuredNanoCpus"]==1000000000,"QA_CPU_LIMIT_CHANGED"
+    assert not resource_evidence["dockerOOMKilled"] and all(resources_after["memoryEvents"][key]==0 for key in ("oom","oom_kill","oom_group_kill")),"FULLSHOW_QA_OOM"
     after=hashes()
     widget_after=widget_hashes()
     inner_path=owned/"full-show/receipt.json"
@@ -93,6 +124,7 @@ try:
     assert inner["entries"] and all(entry["status"]=="PASS" for entry in inner["entries"]), "A full-show browser gate failed"
     assert not inner["errors"]
     receipt={"sha":c["sha"],"container":container,"network":"none","sourceReadOnly":True,"sourceFileCount":len(before),"allSourceHashesVerifiedBeforeAfter":before==after==c["manifest"],"widgetManifestSha256":widget_before["full-show-artifact.json"],"widgetHtmlSha256":artifact["sha256"],"widgetArtifacts":widget_before,"allWidgetHashesVerifiedBeforeAfter":widget_before==widget_after,"fullShow":inner,"sdkCacheFileCount":len(expected_deps),"sdkCacheHashesVerifiedBeforeAfter":dependency_hashes(deps)==expected_deps,"sdkCacheManifestSha256":hashlib.sha256(json.dumps(expected_deps,sort_keys=True).encode()).hexdigest(),"command":argv,"exit":result.returncode,"seconds":round(time.time()-started,3),"stdout":result.stdout,"stderr":result.stderr,"evidenceHostDirectory":str(owned),"customerMountAccessed":False,"productionChanged":False}
+    receipt["resources"]=resource_evidence
     print(json.dumps(receipt,indent=2))
 finally:
     subprocess.run(["docker","stop","--time","10",container],capture_output=True,check=True)

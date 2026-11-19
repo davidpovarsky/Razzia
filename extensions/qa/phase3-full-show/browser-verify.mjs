@@ -433,6 +433,9 @@ async function scenarioFor(theme, engine) {
       { key: "private-opening", kind: "opening", title: `Opening ${theme}` },
       ...original.cards.map((card, i) => ({
         ...card,
+        // Q3 hosts real audio edits across slower browser engines. Other cards
+        // retain their short authored timers for automatic progression checks.
+        timeSeconds: i === 2 ? 120 : card.timeSeconds,
         note: `PRIVATE_NOTE_${i}`,
         question: `SELECTED_QUESTION_${i}`,
         answers: ["A", "B", "C", "D", "E"].map((text) => ({ text })),
@@ -1632,6 +1635,24 @@ try {
             .locator('[data-testid="full-show-audio"][data-audio-playing=true]')
             .waitFor({ state: "attached" })
           await page.waitForTimeout(250)
+          const audioPhase = await iframe
+            .locator("[data-full-show-chapter]")
+            .evaluate((element) => ({
+              chapterId: element.getAttribute("data-full-show-chapter"),
+              elapsedMs: Number(element.getAttribute("data-playback-elapsed")),
+            }))
+          assert(
+            audioPhase.chapterId.endsWith(":voting") &&
+              audioPhase.elapsedMs < 120000,
+            "The authored audio fixture must remain in voting for media assertions",
+          )
+          observations.push({
+            engine,
+            theme,
+            check: "native audio remains in authored voting phase",
+            authoredDurationMs: 120000,
+            ...audioPhase,
+          })
           assert(
             await widgetFrame.evaluate(
               (expected) =>
