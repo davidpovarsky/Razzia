@@ -6,6 +6,7 @@ import {
   verifyWorkspaceControls,
 } from "./workspace-controls.mjs"
 import { runLayoutDiagnostic } from "./layout-diagnostic.mjs"
+import { verifyPreferenceRace } from "./preference-race.mjs"
 import { verifyHostControls } from "./host-controls.mjs"
 import {
   installPhaseContinuityProbe,
@@ -857,6 +858,35 @@ try {
           chapter.id,
           { timeout: 10000 },
         )
+      }
+
+      if (process.env.TADAZZ_FULL_SHOW_DIAGNOSTIC === "preference-race") {
+        await run(
+          `${engine} / ${theme} preferences supersede automatic preview`,
+          async () => {
+            observations.push(
+              await verifyPreferenceRace({
+                page,
+                base,
+                scenario,
+                engine,
+                theme,
+                evidence,
+                readRecord: async () =>
+                  scenario.repository.get(
+                    await qaSession.principal(),
+                    scenario.record.draftId,
+                  ),
+              }),
+            )
+            assert.deepEqual(caseErrors, [])
+          },
+          60000,
+        )
+        await prepareHostNavigation(page, "close preference race context")
+        await context.close()
+
+        continue
       }
 
       if (process.env.TADAZZ_FULL_SHOW_DIAGNOSTIC === "phase-continuity") {

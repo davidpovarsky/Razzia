@@ -60,17 +60,20 @@ const app = new App(
 )
 const consumer = createFullShowConsumerV3(__TADAZZ_FULL_SHOW_BUILD_ID__)
 const i18n = createWidgetI18n()
+type PreviewOrigin = "automatic" | "manual"
 interface State {
   frame: FullShowFrameV3 | null
   status: string
   selected: FullShowToolInputV3 | null
   replaySequence: number
+  previewOrigin: PreviewOrigin | null
 }
 let state: State = {
   frame: null,
   status: "waiting",
   selected: null,
   replaySequence: 0,
+  previewOrigin: null,
 }
 let closed = false,
   inputSeen = false,
@@ -93,7 +96,7 @@ const subscribe = (listener: () => void) => {
 }
 const unavailable = () => {
   consumer.cancel()
-  publish({ frame: null, status: "unavailable" })
+  publish({ frame: null, status: "unavailable", previewOrigin: null })
 }
 const accept = (ticket: object, raw: unknown, replay = false) => {
   try {
@@ -107,6 +110,7 @@ const accept = (ticket: object, raw: unknown, replay = false) => {
     publish({
       frame,
       status: "ready",
+      previewOrigin: null,
       replaySequence: state.replaySequence + Number(replay),
     })
   } catch {
@@ -119,7 +123,11 @@ const nextGeneration = () => {
   return generation
 }
 const remainsCurrent = (pending: number) => !closed && pending === generation
-async function preview(raw: unknown, replay = false) {
+async function preview(
+  raw: unknown,
+  replay = false,
+  origin: PreviewOrigin = "manual",
+) {
   if (closed || !app.getHostCapabilities()?.serverTools) {
     return
   }
@@ -128,7 +136,7 @@ async function preview(raw: unknown, replay = false) {
   const ticket = consumer.begin(args),
     pending = nextGeneration()
   hostTicket = null
-  publish({ status: "loading", selected: args })
+  publish({ status: "loading", selected: args, previewOrigin: origin })
 
   try {
     const result = await app.callServerTool(
@@ -158,6 +166,41 @@ function selection(
     ...(chapterId ? { chapterId } : {}),
   }
 }
+async function previewDisplayPreferences(patch: {
+  locale?: string
+  reducedMotion?: boolean
+}) {
+  // Read the latest request, since autoplay can start after the controls render.
+  const current = state
+  const { frame } = current
+
+  if (
+    closed ||
+    !frame ||
+    (current.status === "loading" && current.previewOrigin !== "automatic")
+  ) {
+    return
+  }
+
+  // Preserve the automatic destination instead of returning to its old frame.
+  const selected =
+    current.status === "loading"
+      ? current.selected
+      : selection(frame, frame.inventory.selectedChapterId)
+
+  if (
+    !selected ||
+    selected.draftId !== frame.inventory.draftId ||
+    selected.expectedRevision !== frame.inventory.revision
+  ) {
+    return
+  }
+
+  await preview({
+    ...selected,
+    context: { ...selected.context, ...patch },
+  })
+}
 app.addEventListener("toolinput", ({ arguments: args }) => {
   if (closed || inputSeen) {
     generation += 1
@@ -171,7 +214,7 @@ app.addEventListener("toolinput", ({ arguments: args }) => {
   try {
     const selected = fullShowToolInputV3Schema.parse(args)
     hostTicket = consumer.begin(selected)
-    publish({ selected, status: "loading" })
+    publish({ selected, status: "loading", previewOrigin: "manual" })
   } catch {
     unavailable()
   }
@@ -193,7 +236,7 @@ app.addEventListener("toolinputpartial", () => {
 app.addEventListener("toolcancelled", () => {
   generation += 1
   consumer.cancel()
-  publish({ frame: null, status: "cancelled" })
+  publish({ frame: null, status: "cancelled", previewOrigin: null })
 })
 const close = () => {
   if (closed) {
@@ -203,7 +246,12 @@ const close = () => {
   closed = true
   generation += 1
   consumer.dispose()
-  publish({ frame: null, status: "closed", selected: null })
+  publish({
+    frame: null,
+    status: "closed",
+    selected: null,
+    previewOrigin: null,
+  })
 }
 app.addEventListener("hostcontextchanged", (context) => {
   if (context.toolInfo) {
@@ -359,6 +407,7 @@ function FullShowWidget() {
   const { frame } = current
   const canCall = !closed && Boolean(app.getHostCapabilities()?.serverTools)
   const busy = current.status === "loading"
+  const displayBusy = busy && current.previewOrigin !== "automatic"
   const canExpand =
     !closed &&
     Boolean(app.getHostContext()?.availableDisplayModes?.includes("fullscreen"))
@@ -392,7 +441,13 @@ function FullShowWidget() {
   const navigation = frame ? fullShowCardNavigation(frame.inventory) : null
   const automaticAttempt = useRef("")
   useEffect(() => {
-    if (!frame || !canCall || busy) {
+    if (
+      !frame ||
+      !canCall ||
+      busy ||
+      state.frame !== frame ||
+      state.status === "loading"
+    ) {
       return
     }
 
@@ -412,7 +467,7 @@ function FullShowWidget() {
     }
 
     automaticAttempt.current = key
-    void preview(selection(frame, next.id))
+    void preview(selection(frame, next.id), false, "automatic")
   }, [frame, canCall, busy, playback, playbackOwner, current.replaySequence])
   useEffect(() => {
     if (!frame) {
@@ -476,7 +531,7 @@ function FullShowWidget() {
 
     const pending = nextGeneration()
     consumer.cancel()
-    publish({ frame: null, status: "loading" })
+    publish({ frame: null, status: "loading", previewOrigin: "manual" })
 
     try {
       const result = await app.callServerTool(
@@ -525,7 +580,7 @@ function FullShowWidget() {
     const pending = nextGeneration()
     consumer.cancel()
     setPendingMutation(request)
-    publish({ status: "loading" })
+    publish({ status: "loading", previewOrigin: "manual" })
 
     try {
       const result = await app.callServerTool(
@@ -558,7 +613,7 @@ function FullShowWidget() {
     } catch {
       if (remainsCurrent(pending)) {
         consumer.cancel()
-        publish({ frame: null, status: "conflict" })
+        publish({ frame: null, status: "conflict", previewOrigin: null })
       }
     }
   }
@@ -618,16 +673,10 @@ function FullShowWidget() {
         {t("language")}
         <select
           data-testid="full-show-language"
-          disabled={!canCall || busy}
+          disabled={!canCall || displayBusy}
           value={frame.inventory.context.locale}
           onChange={(event) =>
-            void preview({
-              ...selection(frame, frame.inventory.selectedChapterId),
-              context: {
-                ...frame.inventory.context,
-                locale: event.target.value,
-              },
-            })
+            void previewDisplayPreferences({ locale: event.target.value })
           }
         >
           {locales.map((locale) => (
@@ -640,14 +689,10 @@ function FullShowWidget() {
           data-testid="full-show-reduce-motion"
           type="checkbox"
           checked={frame.inventory.context.reducedMotion}
-          disabled={!canCall || busy}
+          disabled={!canCall || displayBusy}
           onChange={(event) =>
-            void preview({
-              ...selection(frame, frame.inventory.selectedChapterId),
-              context: {
-                ...frame.inventory.context,
-                reducedMotion: event.target.checked,
-              },
+            void previewDisplayPreferences({
+              reducedMotion: event.target.checked,
             })
           }
         />
