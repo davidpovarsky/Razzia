@@ -662,7 +662,7 @@ test("volume editor uses the effective native theme default and explicit overrid
       ...selection(projected.record),
       expectedRevision: revision,
     })
-    assert.equal(fullShowVotingVolume(frame), 0.35)
+    assert.equal(fullShowVotingVolume(frame), 0.38)
     assert.equal(
       fullShowVotingVolume({
         ...frame,

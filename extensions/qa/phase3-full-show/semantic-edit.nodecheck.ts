@@ -491,7 +491,11 @@ test("voting volume uses native theme/audio resolution and raw model replacement
   assert.equal(resolved.audio.answersMusic.volume, 0.15)
   const nativeAudio = applyThemeAudioDefaults(resolved)
   assert.equal(nativeAudio.cues.answersMusic.volume, 0.15)
-  assert.equal(nativeAudio.soundtrack?.voting?.volume, 0.15)
+  assert.equal(
+    nativeAudio.soundtrack?.voting,
+    undefined,
+    "A gain-only edit retains the single answersMusic owner",
+  )
   assert.throws(
     () => normalizeDraft(enhanced.authoredShowJson, authoring),
     /VALIDATION_FAILED/u,
@@ -508,10 +512,20 @@ test("voting volume uses native theme/audio resolution and raw model replacement
     mutation(admitted, enhanced),
   )
   assert.equal(next.summary.title, "Raw content change")
-  assert.deepEqual(
-    readSemanticShow(next.authoredShowJson).defaults,
-    source.defaults,
+  const preserved = readSemanticShow(next.authoredShowJson)
+  assert.deepEqual(preserved.defaults, source.defaults)
+  const preservedAudio = applyThemeAudioDefaults(
+    resolveShowTheme({
+      selection: preserved.defaults?.showTheme,
+      role: "spectator",
+    }),
   )
+  assert.equal(preservedAudio.cues.answersMusic.volume, 0.15)
+  assert.equal(
+    preservedAudio.cues.answersMusic.url,
+    "/tadazz-show/music/platform/tzila-determined-pursuit-20261105.mp3",
+  )
+  assert.equal(preservedAudio.soundtrack?.voting, undefined)
   assert.deepEqual(normalizeStoredDraft(next.authoredShowJson, authoring), {
     authoredShowJson: next.authoredShowJson,
     summary: next.summary,
