@@ -96,7 +96,9 @@ try:
     assert hashlib.sha256((widget/"full-show.html").read_bytes()).hexdigest()==artifact["sha256"]
     for item in artifact["physicalSources"]+artifact["publicAssets"]:
         assert item["path"] in c["manifest"] and c["manifest"][item["path"]]==item["sha256"]
-    argv=["docker","exec","-w","/source","-e","TMPDIR=/tmp","-e","HOME=/tmp","-e","PLAYWRIGHT_BROWSERS_PATH=/root/.cache/ms-playwright","-e","TSX_DISABLE_CACHE=1","-e","NODE_OPTIONS=--max-old-space-size=1024","-e","TADAZZ_FULL_SHOW_EVIDENCE=/evidence/full-show","-e","TADAZZ_FULL_SHOW_SOURCE_SHA="+c["sha"],"-e","TADAZZ_FULL_SHOW_BROWSERS=chromium,webkit",container,"nice","-n","19","taskset","-c","0","timeout","-k","5","1800","node","/cleanup/extensions/node_modules/tsx/dist/cli.mjs","--tsconfig","tsconfig.json","extensions/qa/phase3-full-show/browser-verify.mjs"]
+    # Preserve the one-CPU Docker quota and nice 19, but allow an idle CPU.
+    # A CPU 0 pin starved native browser frames while CPU 1 was idle in QA.
+    argv=["docker","exec","-w","/source","-e","TMPDIR=/tmp","-e","HOME=/tmp","-e","PLAYWRIGHT_BROWSERS_PATH=/root/.cache/ms-playwright","-e","TSX_DISABLE_CACHE=1","-e","NODE_OPTIONS=--max-old-space-size=1024","-e","TADAZZ_FULL_SHOW_EVIDENCE=/evidence/full-show","-e","TADAZZ_FULL_SHOW_SOURCE_SHA="+c["sha"],"-e","TADAZZ_FULL_SHOW_BROWSERS=chromium,webkit",container,"nice","-n","19","timeout","-k","5","1800","node","/cleanup/extensions/node_modules/tsx/dist/cli.mjs","--tsconfig","tsconfig.json","extensions/qa/phase3-full-show/browser-verify.mjs"]
     started=time.time()
     result=subprocess.run(argv,capture_output=True,text=True,timeout=1815)
     # Preserve the primary browser failure even if a receipt gate rejects early.
