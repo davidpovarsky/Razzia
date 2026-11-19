@@ -38,6 +38,7 @@ type Phase =
   | "grand-finale"
   | "final-leaderboard"
   | "winner"
+  | "closing"
 
 const MEDIA = "/tadazz-show/great-guessoff"
 const VOTING_SECONDS = 20
@@ -273,7 +274,31 @@ export function GreatGuessOffDemo() {
         currentPhase.current = "locked"
         setPhase("locked")
         stopMusic()
-        lockPromiseRef.current = stage.current?.lockVoting() ?? null
+        if (QUESTIONS[questionIndex].kind === "survey") {
+          lockPromiseRef.current = stage.current?.lockVoting() ?? null
+        } else {
+          // Trivia reveals the correct answer directly — no locked-vote scene
+          // and no survey percentages, including when the 20s clock expires.
+          busyRef.current = true
+          setBusy(true)
+          const q = QUESTIONS[questionIndex]
+          void stage.current
+            ?.revealResults({
+              mode: "quiz",
+              counts: q.answers.map(() => 0),
+              solutions: [q.correct ?? 0],
+              showPercentages: false,
+            })
+            .then(() => {
+              currentPhase.current = "results"
+              setPhase("results")
+            })
+            .catch(() => setMessage("Unable to reveal the correct answer."))
+            .finally(() => {
+              busyRef.current = false
+              setBusy(false)
+            })
+        }
       }
     }
     const interval = window.setInterval(tick, 160)
@@ -304,21 +329,26 @@ export function GreatGuessOffDemo() {
   const reveal = async () => {
     const handle = stage.current
     if (!handle) return
+    const q = QUESTIONS[questionIndex]
     if (currentPhase.current === "voting") {
       currentPhase.current = "locked"
       setPhase("locked")
       stopMusic()
-      await handle.lockVoting()
-    } else if (lockPromiseRef.current) {
+      // Only actual audience surveys have the intermediate Votes Locked scene.
+      if (q.kind === "survey") await handle.lockVoting()
+    } else if (q.kind === "survey" && lockPromiseRef.current) {
       await lockPromiseRef.current
     }
-    const q = QUESTIONS[questionIndex]
     await handle.revealResults({
       mode: q.kind,
-      counts: displayedCounts(q, votes[questionIndex]),
+      counts:
+        q.kind === "survey"
+          ? displayedCounts(q, votes[questionIndex])
+          : q.answers.map(() => 0),
       ...(q.kind === "quiz" ? { solutions: [q.correct ?? 0] } : {}),
-      showPercentages: true,
+      showPercentages: q.kind === "survey",
     })
+    currentPhase.current = "results"
     setPhase("results")
   }
 
@@ -356,6 +386,7 @@ export function GreatGuessOffDemo() {
     setVotes({})
     setQuestionIndex(0)
     setSecondsLeft(VOTING_SECONDS)
+    lockPromiseRef.current = null
     await stage.current?.showIntro()
     setPhase("intro")
   }
@@ -363,7 +394,7 @@ export function GreatGuessOffDemo() {
   const mainButton = (() => {
     if (phase === "intro")
       return {
-        title: "Start the show",
+        title: "Start",
         run: async () => {
           playSfx(TADAZZ_PHASE_SFX.start)
           await stage.current?.showFullShowScene?.("round-one", {
@@ -376,50 +407,57 @@ export function GreatGuessOffDemo() {
       }
     if (phase === "round-launch")
       return {
-        title: "Start round 1 · 20 seconds",
+        title: "Start",
         run: () => startQuestion(0),
       }
     if (phase === "voting" || phase === "locked")
-      return { title: "Reveal results", run: reveal }
+      return { title: "Next", run: reveal }
     if (phase === "results" && question.kind === "survey")
-      return { title: "Reveal the top pick", run: showTopPick }
+      return { title: "Next", run: showTopPick }
     if (phase === "results" || phase === "top-pick")
       return {
-        title:
-          questionIndex === 3
-            ? "Show leaderboard"
-            : questionIndex === 4
-              ? "Final leaderboard"
-              : "Next question",
+        title: "Next",
         run: next,
       }
     if (phase === "leaderboard")
       return {
-        title: "Grand finale!",
+        title: "Next",
         run: async () => {
           await stage.current?.showFullShowScene?.("grand-finale", { round: 2 })
           setPhase("grand-finale")
         },
       }
     if (phase === "grand-finale")
-      return { title: "Play the final question", run: () => startQuestion(4) }
+      return { title: "Next", run: () => startQuestion(4) }
     if (phase === "final-leaderboard")
       return {
-        title: "Announce the winner",
+        title: "Next",
         run: async () => {
           const winner = leaderboard[0]
+          playSfx("/sounds/first.mp3")
           await stage.current?.showFinale({
             name: winner.name,
             score: winner.score,
           })
-          playSfx("/sounds/first.mp3")
           setPhase("winner")
+        },
+      }
+    if (phase === "winner")
+      return {
+        title: "Next",
+        run: async () => {
+          await stage.current?.playZZWipe()
+          await stage.current?.showInterlude?.({
+            title: "THANKS FOR PLAYING!",
+            subtitle: "THE GREAT GUESS-OFF",
+          })
+          currentPhase.current = "closing"
+          setPhase("closing")
         },
       }
     return { title: "Play again", run: restart }
   })()
 
-  const showAnswers = phase === "voting"
   const captions = {
     intro: "The Great Guess-off · Five rounds of surprises",
     "round-launch":
@@ -433,12 +471,19 @@ export function GreatGuessOffDemo() {
     "grand-finale": "The grand finale",
     "final-leaderboard": "Final standings · illustrative players",
     winner: "Native Tadazz finale and winner celebration",
+    closing: "Thanks for playing The Great Guess-off",
   } satisfies Record<Phase, string>
 
   return (
     <section
       className="ggo-native"
       data-testid="great-guessoff-demo"
+      data-ggo-media={
+        question.answers.some((answer) => Boolean(answer.image))
+          ? "image"
+          : "text"
+      }
+      data-ggo-mode={question.kind}
       aria-label="The Great Guess-off · Tadazz native stage"
     >
       <style>{nativeStageCss}</style>
@@ -448,7 +493,11 @@ export function GreatGuessOffDemo() {
       >
         <TadazzV4StageAdapter
           ref={stage}
-          v4Labels={GUESS_OFF_STAGE_LABELS}
+          v4Labels={{
+            ...GUESS_OFF_STAGE_LABELS,
+            audienceResults:
+              question.kind === "quiz" ? "CORRECT ANSWER" : "AUDIENCE RESULTS",
+          }}
           interactive
           onSelectOption={choose}
           onCue={onCue}
@@ -461,24 +510,6 @@ export function GreatGuessOffDemo() {
           <strong>The Great Guess-off</strong>
           <span aria-live="polite">{captions[phase]}</span>
         </div>
-        {showAnswers && (
-          <div className="ggo-native-answerpad" aria-label="Choose your answer">
-            {question.answers.map((answer, index) => (
-              <button
-                type="button"
-                key={answer.label}
-                data-testid={`ggo-answer-${index}`}
-                aria-pressed={selected === index}
-                className={selected === index ? "selected" : ""}
-                onClick={() => choose(index)}
-                disabled={busy}
-              >
-                <b>{String.fromCharCode(65 + index)}</b>
-                <span>{answer.label}</span>
-              </button>
-            ))}
-          </div>
-        )}
         <div className="ggo-native-actions">
           <button
             className="ggo-native-sound"

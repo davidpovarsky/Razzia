@@ -53,54 +53,6 @@
   font-weight: 700;
   text-align: right;
 }
-.ggo-native-answerpad {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
-  margin: 10px 0 15px;
-}
-.ggo-native-answerpad button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-  min-height: 52px;
-  padding: 9px;
-  font: inherit;
-  font-size: 12px;
-  font-weight: 800;
-  line-height: 1.2;
-  text-align: left;
-  background: #5121838f;
-  color: #fff7e5;
-  border: 2px solid #b773f177;
-  border-radius: 12px;
-  cursor: pointer;
-}
-.ggo-native-answerpad button b {
-  display: grid;
-  flex: 0 0 27px;
-  width: 27px;
-  height: 27px;
-  place-items: center;
-  border-radius: 7px;
-  background: #eafa50;
-  color: #1b0935;
-  font-size: 14px;
-  font-weight: 900;
-}
-.ggo-native-answerpad button span {
-  overflow-wrap: anywhere;
-}
-.ggo-native-answerpad button:hover {
-  border-color: #fff3b6;
-}
-.ggo-native-answerpad button.selected {
-  border-color: #eafa50;
-  box-shadow:
-    0 0 0 2px #eafa503d,
-    0 0 18px #eafa5030;
-}
 .ggo-native-actions {
   display: flex;
   gap: 10px;
@@ -141,8 +93,7 @@
 .ggo-native-sound:hover {
   background: #532290;
 }
-.ggo-native-actions button:disabled,
-.ggo-native-answerpad button:disabled {
+.ggo-native-actions button:disabled {
   opacity: 0.5;
   cursor: progress;
 }
@@ -175,12 +126,6 @@
     margin-top: 4px;
     text-align: center;
   }
-  .ggo-native-answerpad {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .ggo-native-answerpad button {
-    min-height: 48px;
-  }
   .ggo-native-actions button {
     padding: 9px 12px;
     min-height: 43px;
@@ -198,4 +143,114 @@
   .ggo-native-console * {
     transition: none !important;
   }
+}
+
+/* Answer layout for this public demo ONLY. Reuse the exact V4 stage and motion;
+   the host's other games and Creating Worlds retain their existing CSS. */
+.ggo-native[data-ggo-media="text"] .tzv4-stage .choice-slot .answer-card {
+  height: 270px;
+  padding: 24px 18px;
+}
+.ggo-native[data-ggo-media="text"] .tzv4-stage .answer-card .tz-photo-frame {
+  display: none;
+}
+.ggo-native[data-ggo-media="text"]
+  .tzv4-stage
+  .answer-card
+  figure.answer-figure {
+  height: 100%;
+  justify-content: center;
+}
+.ggo-native[data-ggo-media="text"] .tzv4-stage .answer-card .answer-title {
+  height: 100%;
+  min-height: 200px;
+  font-size: 32px;
+  line-height: 1.2;
+  padding: 8px 12px 30px;
+  overflow: visible;
+}
+.ggo-native[data-ggo-media="text"] .tzv4-stage .choice-slot .answer-index {
+  margin-top: 12px;
+  width: 92px;
+  height: 70px;
+  font-size: 43px;
+}
+.ggo-native[data-ggo-media="text"] .tzv4-stage .choice-slot .result-percentage {
+  top: auto;
+  right: 16px;
+  bottom: 26px;
+  min-width: 84px;
+  font-size: 31px;
+}
+
+/* The image card contains the IMAGE only; its two adjacent elements underneath
+   are the original V4 answer number and its matching caption. */
+.ggo-native[data-ggo-media="image"] .tzv4-stage .choice-slot .answer-card {
+  height: 350px;
+  overflow: visible;
+}
+.ggo-native[data-ggo-media="image"] .tzv4-stage .answer-card .answer-title {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 98px;
+  right: -7px;
+  width: auto;
+  height: 75px;
+  min-height: 75px;
+  padding: 0 3px;
+  overflow: visible;
+  font-size: 26px;
+  line-height: 1.1;
+  text-align: left;
+  justify-content: flex-start;
+  align-items: center;
+}
+.ggo-native[data-ggo-media="image"] .tzv4-stage .choice-slot .answer-index {
+  align-self: flex-start;
+  width: 86px;
+  height: 75px;
+  font-size: 41px;
+  margin-top: 12px;
+}
+
+/* Scored multiple choice shows the correct choice with the canonical lime
+   highlight — never survey percentage bars, counters or audience winner tags.
+   The native correct-answer badge is retained. */
+.ggo-native[data-ggo-mode="quiz"]
+  .tzv4-stage[data-v4-scene="survey-results"]
+  .choice-slot
+  .result-track,
+.ggo-native[data-ggo-mode="quiz"]
+  .tzv4-stage[data-v4-scene="survey-results"]
+  .choice-slot
+  .result-percentage {
+  display: none !important;
+}
+.ggo-native[data-ggo-mode="quiz"]
+  .tzv4-stage[data-v4-scene="survey-results"]
+  .choice-slot.is-correct
+  .answer-card {
+  border-color: #eaff58;
+  box-shadow:
+    0 22px 44px #050011c2,
+    0 0 0 5px #eaff58a6,
+    0 0 53px #eaff58a8,
+    inset 0 2px 0 #fff9;
+}
+.ggo-native[data-ggo-mode="quiz"]
+  .tzv4-stage[data-v4-scene="survey-results"]
+  .choice-slot.is-incorrect {
+  opacity: 0.5;
+}
+
+/* In Hebrew/RTL layouts, the native answer number sits to the right.
+   Position its caption to the LEFT of the number, without overlap. */
+.ggo-native:dir(rtl)[data-ggo-media="image"]
+  .tzv4-stage
+  .answer-card
+  .answer-title {
+  left: -7px;
+  right: 98px;
+  text-align: right;
+  justify-content: flex-end;
 }

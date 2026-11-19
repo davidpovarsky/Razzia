@@ -38,9 +38,14 @@ try {
     "Native V4 source stage renders",
   )
   await page.screenshot({ path: resolve("qa/phase2/ggo-native-intro.png") })
+  assert.equal(
+    (await page.getByTestId("ggo-main-action").innerText()).trim(),
+    "Start",
+  )
   await page.getByTestId("ggo-main-action").click()
   await page
-    .getByRole("button", { name: /Start round 1/i })
+    .getByTestId("ggo-main-action")
+    .getByText("Start", { exact: true })
     .waitFor({ timeout: 20000 })
   assert.equal(
     await native.getAttribute("data-v4-scene"),
@@ -64,10 +69,25 @@ try {
   await page.waitForTimeout(1400)
   const later = Number((await clock.textContent())?.trim())
   assert.ok(later < initial, "Real 20-second WAAPI clock advances")
-  await page.getByTestId("ggo-answer-0").click()
+  const textCard = page.getByTestId("tadazz-card-0")
+  await textCard.waitFor()
   assert.equal(
-    await page.getByTestId("ggo-answer-0").getAttribute("aria-pressed"),
+    await page
+      .locator('[data-question-key="family-fun"] .tz-photo-frame')
+      .first()
+      .evaluate((el) => getComputedStyle(el).display),
+    "none",
+    "Text-only questions have no image placeholder",
+  )
+  assert.ok(
+    (await textCard.locator(".answer-card").boundingBox()).height < 310,
+    "Text cards fit content",
+  )
+  await textCard.click()
+  assert.equal(
+    await textCard.getAttribute("aria-pressed"),
     "true",
+    "Choose directly on the native card",
   )
   await page.getByTestId("ggo-main-action").click()
   await page
@@ -91,18 +111,73 @@ try {
         return img.naturalWidth > 0
       }),
   )
-  await page.getByTestId("ggo-answer-0").click()
+  const imageCard = page.getByTestId("tadazz-card-0")
+  const caption = await imageCard.locator(".answer-title").boundingBox()
+  const number = await imageCard.locator(".answer-index").boundingBox()
+  assert.ok(
+    caption &&
+      number &&
+      Math.abs(caption.y - number.y) < 30 &&
+      (caption.x + caption.width <= number.x + 5 ||
+        number.x + number.width <= caption.x + 5),
+    "Caption and answer number sit side by side below the image, without overlap",
+  )
+  assert.equal(await page.getByTestId("ggo-main-action").innerText(), "Next")
+  await page.evaluate(() => {
+    window.__ggoSceneTrace = []
+    const stage = document.querySelector(
+      '[data-question-key="picture-trivia"].tzv4-stage',
+    )
+    window.__ggoObserver = new MutationObserver(() =>
+      window.__ggoSceneTrace.push(stage?.getAttribute("data-v4-scene")),
+    )
+    if (stage)
+      window.__ggoObserver.observe(stage, {
+        attributes: true,
+        attributeFilter: ["data-v4-scene"],
+      })
+  })
+  await imageCard.click()
   await page.getByTestId("ggo-main-action").click()
   await page
     .locator(
       '[data-v4-scene="survey-results"][data-question-key="picture-trivia"]',
     )
     .waitFor({ timeout: 25000 })
+  assert.ok(
+    await page
+      .getByTestId("tadazz-card-0")
+      .evaluate((el) => el.classList.contains("is-correct")),
+    "Correct banana card highlighted",
+  )
+  assert.equal(
+    await page
+      .getByTestId("tadazz-card-0")
+      .locator(".result-percentage")
+      .evaluate((el) => getComputedStyle(el).display),
+    "none",
+    "No trivia percentages",
+  )
+  assert.equal(
+    await page
+      .getByTestId("tadazz-card-0")
+      .locator(".result-track")
+      .evaluate((el) => getComputedStyle(el).display),
+    "none",
+    "No trivia bar",
+  )
+  assert.ok(
+    !(await page.evaluate(() => window.__ggoSceneTrace)).includes(
+      "vote-locked",
+    ),
+    "No Votes Locked scene for trivia",
+  )
+  await page.evaluate(() => window.__ggoObserver?.disconnect())
   await page.getByTestId("ggo-main-action").click() // Q3
   await page
     .locator('[data-v4-scene="countdown"][data-question-key="at-work"]')
     .waitFor({ timeout: 25000 })
-  await page.getByTestId("ggo-answer-1").click()
+  await page.getByTestId("tadazz-card-1").click()
   await page.getByTestId("ggo-main-action").click()
   await page
     .locator('[data-v4-scene="survey-results"][data-question-key="at-work"]')
@@ -113,13 +188,21 @@ try {
   await page
     .locator('[data-v4-scene="countdown"][data-question-key="quick-trivia"]')
     .waitFor({ timeout: 25000 })
-  await page.getByTestId("ggo-answer-2").click()
+  await page.getByTestId("tadazz-card-2").click()
   await page.getByTestId("ggo-main-action").click()
   await page
     .locator(
       '[data-v4-scene="survey-results"][data-question-key="quick-trivia"]',
     )
     .waitFor({ timeout: 25000 })
+  assert.equal(
+    await page
+      .getByTestId("tadazz-card-2")
+      .locator(".result-track")
+      .evaluate((el) => getComputedStyle(el).display),
+    "none",
+    "Text trivia: no vote percentages",
+  )
   await page.getByTestId("ggo-main-action").click() // leaderboard
   await page
     .locator('[data-v4-scene="leaderboard"]')
@@ -156,7 +239,7 @@ try {
       item,
     )
   }
-  await page.getByTestId("ggo-answer-3").click()
+  await page.getByTestId("tadazz-card-3").click()
   await page.getByTestId("ggo-main-action").click()
   await page
     .locator(
@@ -175,10 +258,27 @@ try {
     (await page.getByTestId("tadazz-winner-name").textContent())?.trim(),
     "You",
   )
+  assert.ok(
+    (await page.locator(".tz-confetti-bit").count()) > 10,
+    "Native confetti on winner screen",
+  )
+  assert.equal(await page.getByTestId("ggo-main-action").innerText(), "Next")
   await page.screenshot({
     path: resolve("qa/phase2/ggo-native-winner.png"),
     fullPage: true,
   })
+  await page.getByTestId("ggo-main-action").click() // closing
+  await page.locator('[data-v4-scene="interlude"]').waitFor({ timeout: 25000 })
+  await page.getByText("THANKS FOR PLAYING!").waitFor()
+  assert.equal(
+    await page.getByTestId("ggo-main-action").innerText(),
+    "Play again",
+  )
+  await page.getByTestId("ggo-main-action").click()
+  await page
+    .getByTestId("ggo-main-action")
+    .getByText("Start", { exact: true })
+    .waitFor()
   const mobile = await browser.newPage({
     viewport: { width: 390, height: 844 },
     reducedMotion: "reduce",
@@ -189,20 +289,21 @@ try {
   })
   await mobile.getByTestId("ggo-main-action").click()
   await mobile
-    .getByRole("button", { name: /Start round 1/i })
+    .getByTestId("ggo-main-action")
+    .getByText("Start", { exact: true })
     .waitFor({ timeout: 25000 })
   await mobile.getByTestId("ggo-main-action").click()
   await mobile
     .locator('[data-v4-scene="countdown"]')
     .waitFor({ timeout: 25000 })
-  await mobile.getByTestId("ggo-answer-0").click()
-  const padBounds = await mobile.getByTestId("ggo-answer-0").boundingBox()
+  await mobile.getByTestId("tadazz-card-0").click()
+  const padBounds = await mobile.getByTestId("tadazz-card-0").boundingBox()
   assert.ok(
     padBounds &&
-      padBounds.width > 100 &&
+      padBounds.width >= 44 &&
       padBounds.x >= 0 &&
       padBounds.x + padBounds.width <= 390,
-    "Mobile answer pad fits",
+    "Mobile native answer card fits",
   )
   await mobile.screenshot({
     path: resolve("qa/phase2/ggo-native-mobile.png"),
