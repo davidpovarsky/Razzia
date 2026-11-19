@@ -872,7 +872,16 @@ try {
           await page.setViewportSize({ width: 1280, height: 1200 })
           const iframe = page.frameLocator("iframe")
           const stage = iframe.locator("[data-full-show-chapter]")
+          const nativePhaseEvidence = {
+            engine,
+            theme,
+            check: "native chapter rendering",
+            expectedPhases: scenario.chapters.length,
+            completedPhases: [],
+          }
+          observations.push(nativePhaseEvidence)
           for (const [index, chapter] of scenario.chapters.entries()) {
+            const phaseStarted = Date.now()
             await loadNativeChapter(chapter)
 
             await iframe
@@ -922,6 +931,16 @@ try {
                 path: path.join(evidence, `${engine}-${theme}-${index}.png`),
               })
             }
+
+            nativePhaseEvidence.completedPhases.push({
+              position: index + 1,
+              chapterId: chapter.id,
+              kind: chapter.kind,
+              milliseconds: Date.now() - phaseStarted,
+            })
+            writeProgress(
+              `${engine} / ${theme} native chapter ${index + 1}/${scenario.chapters.length}`,
+            )
           }
           assert.equal(
             await iframe.getByTestId("full-show-next").isDisabled(),
@@ -937,6 +956,9 @@ try {
             scenario.record.authoredShowJson,
           )
         },
+        // Twenty-eight fresh tool invocations plus responsive workspace checks
+        // need the same one-CPU budget as the compound semantic editing check.
+        300000,
       )
       await run(
         `${engine} / ${
