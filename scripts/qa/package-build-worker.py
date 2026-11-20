@@ -26,10 +26,12 @@ for request in store.glob('*/jobs/*/request.json'):
         shutil.copyfile(job/'source.tadazz', staged/'source.tadazz')
         (staged/'source.tadazz').chmod(0o444)
         container = 'tadazz-package-build-' + uuid.uuid4().hex
+        # Decoder staging must admit one manifest-valid media file (100,000,000 bytes).
+        # The 8,000,000-byte bundle/result budget is independently enforced below.
         command = ['docker','run','--rm','--name',container,'--network','none','--read-only',
             '--user','65534:65534','--cap-drop','ALL','--security-opt','no-new-privileges',
-            '--cpus','1','--memory','768m','--pids-limit','48','--ulimit','fsize=8388608:8388608',
-            '--tmpfs','/tmp:rw,noexec,nosuid,size=64m',
+            '--cpus','1','--memory','768m','--pids-limit','48','--ulimit','fsize=100000000:100000000',
+            '--tmpfs','/tmp:rw,noexec,nosuid,size=128m',
             '-e','TADAZZ_BUILD_SANDBOX=1',
             '--mount',f'type=bind,src={staged},dst=/input,readonly',
             '--mount',f'type=bind,src={out},dst=/output',

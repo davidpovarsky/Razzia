@@ -1,0 +1,11 @@
+{
+  "root": "/home/ubuntu/tadazz-package-worker-bms-c85690fffb02-20261120",
+  "image": "sha256:8295e3a3f00c78d0c5e0eb95679782d218db284e74dbff312d8607fb5b97140e",
+  "tag": "tadazz:package-builder-bms-c85690fffb02-20261120",
+  "revision": "c85690fffb0201ec09687f1ab0837c479853ec8e",
+  "appRevision": "f276c9cbf86a72ab6fc689a113d7d33a1c0d21af",
+  "sourceManifestSha256": "354842325651a66b24d23e946f7d511197b79d4914deb559a408abed1635a44d",
+  "workerSha256": "b5cb4f5d9c252ca1638613f4c9e8ebe0f0f983d9c3d800ee37bbc145efb9492f",
+  "sdkSha256": "8bd9244b3016d01865a133becc74fa6a1883eb968a216f483df0b38edee6f9e2",
+  "verifiedSourceFiles": 912
+}

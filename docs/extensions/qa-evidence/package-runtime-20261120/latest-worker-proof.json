@@ -1,0 +1,20 @@
+{
+  "run": "/home/ubuntu/tadazz-package-worker-bms-c85690fffb02-20261120/positive-53288406",
+  "store": "/home/ubuntu/tadazz-package-worker-bms-c85690fffb02-20261120/positive-53288406/synthetic-store",
+  "image": "sha256:8295e3a3f00c78d0c5e0eb95679782d218db284e74dbff312d8607fb5b97140e",
+  "sourceDigest": "041e64a214f6121b3492b736956884495147be061988ed9285b3f179b89204b0",
+  "workerExit": 0,
+  "nativeAcceptExit": 0,
+  "nativeAccept": {
+    "sourceDigest": "041e64a214f6121b3492b736956884495147be061988ed9285b3f179b89204b0",
+    "buildDigest": "25f6b9b8bd5bd79ddcd0510471113aeb5ef67cc410f53fd05da52ffaed20245d",
+    "phase": "preview-ready",
+    "revision": 2,
+    "bundleBytes": 943843,
+    "themes": [
+      "bms-memory-files"
+    ],
+    "mediaValidated": true,
+    "toolchain": "esbuild@0.28.2;react@19.3.0;ffmpeg@5.1.9"
+  }
+}
