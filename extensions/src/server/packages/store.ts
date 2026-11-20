@@ -6,6 +6,7 @@ import path from "node:path"
 import { createHmac, randomUUID } from "node:crypto"
 import { z } from "zod"
 import type { ShowThemeDefinition } from "../../core/show-themes/definition"
+import { showThemeSelectionSchema } from "../../core/show-themes/selection"
 import type { ThemePrincipal } from "../show-themes/review"
 import { inspectPackage, packageThemeDefinitions } from "./preflight"
 import {
@@ -60,6 +61,20 @@ const reviewSchema = z.strictObject({
 })
 
 export const packageReviewSchema = reviewSchema
+
+function installedThemeSelection(
+  current: unknown,
+  id: string,
+  version: string,
+) {
+  const selection = showThemeSelectionSchema.safeParse(current)
+
+  return selection.success &&
+    selection.data.id === id &&
+    selection.data.version === version
+    ? selection.data
+    : { id, version }
+}
 
 /** Metadata only in SQLite; archives, objects and builds are immutable files. */
 export class PackageStore {
@@ -541,15 +556,25 @@ export class PackageStore {
               : content.themeRef.split("@")
 
           if (doc.format === "tada-show") {
+            const defaults = (doc.defaults ?? {}) as Record<string, unknown>
             doc.defaults = {
-              ...(doc.defaults ?? {}),
-              showTheme: { id, version },
+              ...defaults,
+              showTheme: installedThemeSelection(
+                defaults.showTheme,
+                id,
+                version,
+              ),
             }
           } else if (doc.bundleVersion === 1) {
             const extras = doc.extras as Record<string, unknown>
+            const defaults = (extras.defaults ?? {}) as Record<string, unknown>
             extras.defaults = {
-              ...(extras.defaults ?? {}),
-              showTheme: { id, version },
+              ...defaults,
+              showTheme: installedThemeSelection(
+                defaults.showTheme,
+                id,
+                version,
+              ),
             }
           } else {
             throw new PackageError("PACKAGE_THEME_REQUIRES_ENHANCED_GAME")

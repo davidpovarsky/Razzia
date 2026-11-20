@@ -22,6 +22,12 @@ import {
 } from "./runtime-access"
 import type { ThemePrincipal } from "../show-themes/review"
 import { quizExtrasV2Schema } from "../../core/studio-timeline-schema"
+import { authoredShowToNativeBundleDraft } from "../../core/show-authoring-convert"
+import type { ShowThemeDefinition } from "../../core/show-themes/definition"
+import type { ShowThemeSelection } from "../../core/show-themes/selection"
+import { createShowThemeRegistry } from "../../core/show-themes/registry"
+import { resolveShowTheme } from "../../core/show-themes/resolve"
+import { applyThemeAudioDefaults } from "../../core/show-themes/audio"
 import { quizzValidator } from "@razzia/common/validators/quizz"
 
 const temporary: string[] = []
@@ -92,6 +98,97 @@ function preparedUpload(
   store.acceptBuild(p, draft.uploadId)
 
   return store.details(p, draft.uploadId)
+}
+
+function selectedThemeFixture(
+  format: "authored" | "enhanced",
+  identity = { id: "fixture-arcade", version: "1.0.0" },
+) {
+  const fixture = createPackageFixture("complete")
+  const theme = JSON.parse(
+    fixture.files.get("theme/theme.json")!.toString(),
+  ) as ShowThemeDefinition
+  const events = [
+    "lobby",
+    "showQuestion",
+    "answersMusic",
+    "revealResults",
+    "leaderboard",
+  ] as const
+  const audio = Object.fromEntries(
+    events.map((event) => {
+      const spec = theme.audioEvents[event]
+      const variant = spec.variants.find(
+        (item) => item.id === spec.defaultVariantId,
+      )!
+      Object.assign(variant, {
+        assetId: "music",
+        silent: false,
+        roles: ["manager", "spectator"],
+      })
+
+      return [event, { variantId: variant.id, volume: 0.23 }]
+    }),
+  )
+  const selection: ShowThemeSelection = {
+    ...identity,
+    legacyPolicy: "theme-defaults",
+    overrides: {
+      audio,
+      slots: {
+        question: { variantId: theme.slots.question.defaultVariantId },
+      },
+      roles: { spectator: { audio: { lobby: { volume: 0.17 } } } },
+    },
+  }
+  const show = {
+    format: "tada-show",
+    version: 1,
+    title: "Synthetic authored theme selection",
+    defaults: { showTheme: selection },
+    cards: [
+      {
+        key: "question-1",
+        kind: "quiz",
+        question: "Synthetic question",
+        questionType: "single",
+        timeSeconds: 20,
+        correctAnswers: [1],
+        answers: [{ text: "First" }, { text: "Second" }],
+      },
+    ],
+  }
+  let document: unknown = show
+
+  if (format === "enhanced") {
+    const converted = authoredShowToNativeBundleDraft(show)
+    expect(converted.ok).toBe(true)
+    expect(converted.bundleDraft).toBeDefined()
+    document = {
+      bundleVersion: 1,
+      quizz: converted.bundleDraft!.quizz,
+      extras: converted.bundleDraft!.extras,
+    }
+  }
+
+  fixture.files.set("theme/theme.json", Buffer.from(JSON.stringify(theme)))
+  fixture.files.set("games/game-1.json", Buffer.from(JSON.stringify(document)))
+  const manifest = {
+    ...fixture.manifest,
+    files: fixture.manifest.files.map((file) => {
+      const bytes = fixture.files.get(file.path)!
+
+      return { ...file, bytes: bytes.length, sha256: packageSha(bytes) }
+    }),
+  }
+
+  return {
+    bytes: packPackage(manifest, fixture.files),
+    selection,
+    musicDigest: manifest.files.find(
+      (file) => file.path === "shared/music.wav",
+    )!.sha256,
+  }
 }
 
 describe("portable package trust boundary", () => {
@@ -378,6 +475,115 @@ describe("portable package trust boundary", () => {
     expect(exported.report.type).toBe("game")
     expect(exported.report.games[0].summary?.answerImageCount).toBe(50)
   })
+  it.each(["authored", "enhanced"] as const)(
+    "preserves the matching %s theme selection and effective custom soundtracks",
+    (format) => {
+      const { store, dir } = setup()
+      const fixture = selectedThemeFixture(format)
+      const upload = preparedUpload(store, author, fixture.bytes)
+      const result = store.install(author, upload.uploadId, upload.revision, [
+        "fixture-arcade",
+        "demo-game-1",
+      ])
+      const sidecar = quizExtrasV2Schema.parse(
+        JSON.parse(
+          fs.readFileSync(
+            path.join(
+              dir,
+              author.tenantId,
+              `extensions/quizzes/${result.installedGames[0]}.json`,
+            ),
+            "utf8",
+          ),
+        ),
+      )
+      const registry = createShowThemeRegistry(store.catalog(author.tenantId))
+      const theme = resolveShowTheme({
+        selection: sidecar.defaults.showTheme,
+        role: "manager",
+        registry,
+      })
+      const resolved = applyThemeAudioDefaults(theme, sidecar.audio)
+      const expectedMusic = `/media/pkg_${upload.sourceDigest.slice(0, 24)}_${fixture.musicDigest}.wav`
+
+      for (const slot of [
+        "lobby",
+        "question",
+        "voting",
+        "results",
+        "leaderboard",
+      ] as const) {
+        expect(resolved.soundtrack?.[slot]).toMatchObject({
+          mode: "media",
+          url: expectedMusic,
+          volume: 0.23,
+        })
+      }
+
+      expect(resolved.cues.answersMusic.url).toBe(expectedMusic)
+      expect(sidecar.defaults.showTheme).toEqual(fixture.selection)
+      const spectator = applyThemeAudioDefaults(
+        resolveShowTheme({
+          selection: sidecar.defaults.showTheme,
+          role: "spectator",
+          registry,
+        }),
+        sidecar.audio,
+      )
+      expect(spectator.soundtrack?.lobby).toMatchObject({
+        url: expectedMusic,
+        volume: 0.17,
+      })
+    },
+  )
+  it.each([
+    ["authored", "id"],
+    ["enhanced", "id"],
+    ["authored", "version"],
+    ["enhanced", "version"],
+    ["authored", "classic"],
+    ["enhanced", "classic"],
+  ] as const)(
+    "clears incompatible %s selections when the selected theme changes by %s",
+    (format, change) => {
+      const { store, dir } = setup()
+      const identity = {
+        id: change === "id" ? "different-theme" : "fixture-arcade",
+        version: change === "version" ? "2.0.0" : "1.0.0",
+      }
+      const fixture = selectedThemeFixture(format, identity)
+      const upload = preparedUpload(store, author, fixture.bytes)
+      const classic = change === "classic"
+      const result = store.install(
+        author,
+        upload.uploadId,
+        upload.revision,
+        classic ? ["demo-game-1"] : ["fixture-arcade", "demo-game-1"],
+        classic,
+      )
+      const sidecar = quizExtrasV2Schema.parse(
+        JSON.parse(
+          fs.readFileSync(
+            path.join(
+              dir,
+              author.tenantId,
+              `extensions/quizzes/${result.installedGames[0]}.json`,
+            ),
+            "utf8",
+          ),
+        ),
+      )
+      expect(sidecar.defaults.showTheme).toEqual({
+        id: classic ? "tadazz-classic" : "fixture-arcade",
+        version: "1.0.0",
+        overrides: {},
+      })
+
+      if (classic) {
+        expect(store.catalog(author.tenantId)).toEqual([])
+      }
+    },
+  )
   it("retains independent exact review as optional, truthful metadata", () => {
     const { store } = setup()
     const draft = preparedUpload(
