@@ -656,9 +656,14 @@ export async function verifyPublicViewers({
         await page.setViewportSize({ width: 1440, height: 900 })
         for (const id of ["family", "picture"]) {
           await gotoDemo(page, origin, id, locale)
+          const dialog = openDialog(page)
+          await dialog.getByTestId("game-viewer-expand").click()
+          await verifyViewerGeometry(page, {
+            label: id + "/normal-motion-replay",
+          })
           const root = demoRoot(page, id)
           await watchQuestionSequence(root)
-          const controls = toolbar(openDialog(page))
+          const controls = toolbar(dialog)
           const rounds = []
           for (let replay = 0; replay < 2; replay++) {
             await controls.locator('[data-presentation-action="next"]').click()

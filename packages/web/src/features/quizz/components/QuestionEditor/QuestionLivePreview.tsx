@@ -610,14 +610,18 @@ export function QuestionLivePreview({
               }
             />
           </div>
-          {phase === "results" && (
-            <p className="text-muted-foreground text-xs" role="note">
-              {t(
-                "extensions:editorPreview.noResponses",
-                "Preview only — no responses have been collected.",
-              )}
-            </p>
-          )}
+          {/* Keep the canvas position stable when the results note appears. */}
+          <p
+            className="text-muted-foreground text-xs"
+            role="note"
+            aria-hidden={phase !== "results"}
+            style={{ visibility: phase === "results" ? "visible" : "hidden" }}
+          >
+            {t(
+              "extensions:editorPreview.noResponses",
+              "Preview only — no responses have been collected.",
+            )}
+          </p>
         </div>
       )}
     </section>
