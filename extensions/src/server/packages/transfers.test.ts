@@ -233,4 +233,113 @@ describe("MCP package staging", () => {
     f.store.approveInstall(f.owner, request.requestId, action)
     expect(calls).toBe(1)
   })
+  it("installs an explicit authorized request once without recording reviewer or browser consent", () => {
+    const f = setup()
+    const input = {
+      uploadId: randomUUID(),
+      revision: 2,
+      sourceDigest: digest(f.bytes),
+      buildDigest: "a".repeat(64),
+      selectedContentIds: ["custom-theme", "game"],
+      idempotencyKey: randomUUID(),
+    }
+    let calls = 0
+    const action = (selection: Omit<typeof input, "idempotencyKey">) => {
+      calls++
+      expect(selection.sourceDigest).toBe(input.sourceDigest)
+      expect(selection.buildDigest).toBe(input.buildDigest)
+      return {
+        uploadId: selection.uploadId,
+        revision: selection.revision,
+        installedGameIds: ["new-private-game"],
+      }
+    }
+    const first = f.store.installAuthorized(f.owner, input, action)
+    expect(first.installedGameIds).toEqual(["new-private-game"])
+    expect(f.store.installAuthorized(f.owner, input, action)).toEqual(first)
+    expect(calls).toBe(1)
+    expect(
+      f.store.db
+        .prepare("SELECT COUNT(*) AS n FROM package_install_consents")
+        .get()?.n,
+    ).toBe(0)
+    for (const changed of [
+      { revision: 3 },
+      { sourceDigest: "b".repeat(64) },
+      { buildDigest: "c".repeat(64) },
+      { selectedContentIds: ["game"] },
+    ])
+      expect(() =>
+        f.store.installAuthorized(f.owner, { ...input, ...changed }, action),
+      ).toThrow("IDEMPOTENCY_CONFLICT")
+    expect(calls).toBe(1)
+  })
+  it("resumes an interrupted direct installation using the same immutable intent", () => {
+    const f = setup()
+    const input = {
+      uploadId: randomUUID(),
+      revision: 2,
+      sourceDigest: digest(f.bytes),
+      buildDigest: null,
+      selectedContentIds: ["game"],
+      idempotencyKey: randomUUID(),
+    }
+    const result = {
+      uploadId: input.uploadId,
+      revision: 2,
+      installedGameIds: ["one-reserved-game"],
+    }
+    let attempts = 0
+    const native = () => {
+      attempts++
+      if (attempts === 1) throw new Error("interrupted after native commit")
+      return result
+    }
+    expect(() => f.store.installAuthorized(f.owner, input, native)).toThrow(
+      "interrupted",
+    )
+    expect(f.store.installAuthorized(f.owner, input, native)).toEqual(result)
+    expect(f.store.installAuthorized(f.owner, input, native)).toEqual(result)
+    expect(attempts).toBe(2)
+    let foreignCalls = 0
+    expect(() =>
+      f.store.installAuthorized(randomUUID(), input, () => {
+        foreignCalls++
+        throw new Error("native ownership rejected")
+      }),
+    ).toThrow("ownership")
+    expect(foreignCalls).toBe(1)
+  })
+  it("preserves the selection of a pre-upgrade pending install without inventing consent", () => {
+    const f = setup()
+    const input = {
+      uploadId: randomUUID(),
+      revision: 2,
+      sourceDigest: digest(f.bytes),
+      buildDigest: "c".repeat(64),
+      selectedContentIds: ["custom-theme", "game"],
+      idempotencyKey: randomUUID(),
+    }
+    const request = f.store.installIntent(f.owner, input)
+    expect(() =>
+      f.store.installAuthorized(
+        f.owner,
+        { ...input, selectedContentIds: ["game"] },
+        () => {
+          throw new Error("must not run")
+        },
+      ),
+    ).toThrow("IDEMPOTENCY_CONFLICT")
+    const result = {
+      uploadId: input.uploadId,
+      revision: 2,
+      installedGameIds: ["private-game"],
+    }
+    expect(f.store.installAuthorized(f.owner, input, () => result)).toEqual(
+      result,
+    )
+    expect(
+      f.store.readInstallIntent(f.owner, request.requestId).outcome,
+    ).toBeNull()
+  })
 })

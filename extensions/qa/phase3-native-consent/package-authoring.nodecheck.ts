@@ -1,10 +1,11 @@
 import assert from "node:assert/strict"
-import { existsSync, readFileSync } from "node:fs"
+import { existsSync, readFileSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 import { test } from "node:test"
 import { Hono } from "hono"
 import { z } from "zod"
 import { packPackage, packageSha } from "../../src/server/packages/archive.ts"
+import { createPackageFixture } from "../../src/testkit/package-fixtures.ts"
 import { packageManifestSchema } from "../../src/core/packages/manifest.ts"
 import {
   packageDataSchemas,
@@ -140,7 +141,7 @@ function syntheticArchive() {
 }
 
 test(
-  "real native MCP package staging and signed HTTP delivery stay account-bound without build or install",
+  "real native MCP package staging, signed delivery and direct installation stay account-bound",
   { timeout: 30000 },
   async (t) => {
     const f = await fixture()
@@ -150,6 +151,8 @@ test(
       TADAZZ_PACKAGE_RUNTIME_ENABLED:
         process.env.TADAZZ_PACKAGE_RUNTIME_ENABLED,
       TADAZZ_THEME_WORKSPACE_GRANTS: process.env.TADAZZ_THEME_WORKSPACE_GRANTS,
+      TADAZZ_PACKAGE_RUNTIME_ORIGIN: process.env.TADAZZ_PACKAGE_RUNTIME_ORIGIN,
+      TADAZZ_PACKAGE_PARENT_ORIGIN: process.env.TADAZZ_PACKAGE_PARENT_ORIGIN,
     }
     process.env.TADAZZ_PACKAGE_INSTALLER_ENABLED = "true"
     process.env.TADAZZ_PACKAGE_RUNTIME_ENABLED = "false"
@@ -487,6 +490,127 @@ test(
           for (const sentinel of sentinels) {
             assert.deepEqual(readFileSync(sentinel.path), sentinel.bytes)
           }
+        },
+      )
+      await t.test(
+        "explicit package install saves the custom theme and full game directly with exact retries",
+        async () => {
+          process.env.TADAZZ_PACKAGE_RUNTIME_ENABLED = "true"
+          process.env.TADAZZ_PACKAGE_RUNTIME_ORIGIN =
+            "https://runtime.example.invalid"
+          process.env.TADAZZ_PACKAGE_PARENT_ORIGIN = origin
+          const fixturePackage = createPackageFixture(
+            "complete",
+            "direct-install",
+          )
+          const transfer = await call(a, "begin_package_upload", {
+            totalBytes: fixturePackage.bytes.length,
+            sha256: packageSha(fixturePackage.bytes),
+            filename: "direct-install.tadazz",
+            idempotencyKey: key(),
+          })
+          assert(transfer.uploadUrl)
+          const uploaded = await request(transfer.uploadUrl, {
+            method: "POST",
+            headers: {
+              "content-type": "application/octet-stream",
+              "content-length": String(fixturePackage.bytes.length),
+            },
+            body: Uint8Array.from(fixturePackage.bytes),
+          })
+          assert.equal(uploaded.status, 200)
+          const draft = await call(a, "complete_package_upload", {
+            transferId: transfer.transferId,
+            idempotencyKey: key(),
+          })
+          const install = {
+            uploadId: draft.uploadId,
+            expectedRevision: 2,
+            selectedContentIds: ["fixture-direct-install", "demo-game-1"],
+            idempotencyKey: key(),
+          }
+          await assert.rejects(
+            call(a, "install_package", { ...install, expectedRevision: 1 }),
+            /VALIDATION_FAILED/u,
+          )
+          await call(a, "build_package", {
+            uploadId: draft.uploadId,
+            expectedRevision: 1,
+            idempotencyKey: key(),
+          })
+          // Trusted worker fixture for adapter integration only. Real source
+          // compilation/media decoding are exercised by package runtime QA.
+          const job = join(
+            store.tenantRoot(a.accountId),
+            "jobs",
+            draft.uploadId,
+          )
+          const bundle = Buffer.from("{}")
+          writeFileSync(join(job, "bundle.json"), bundle)
+          writeFileSync(
+            join(job, "result.json"),
+            JSON.stringify({
+              sourceDigest: draft.sourceDigest,
+              outputDigest: packageSha(bundle),
+              mediaValidated: true,
+            }),
+          )
+          const built = await call(a, "get_package_status", {
+            uploadId: draft.uploadId,
+          })
+          assert.equal(built.phase, "preview-ready")
+          assert.equal(built.reviewed, false)
+          await assert.rejects(
+            call(b, "install_package", install),
+            /NOT_FOUND/u,
+          )
+          await assert.rejects(
+            call(a, "install_package", { ...install, expectedRevision: 3 }),
+            /REVISION_CONFLICT/u,
+          )
+          const installed = await call(a, "install_package", install)
+          assert.equal(installed.installedGameIds.length, 1)
+          assert.equal(installed.studioUrl, `${origin}/studio/games`)
+          assert.deepEqual(await call(a, "install_package", install), installed)
+          await assert.rejects(
+            call(a, "install_package", {
+              ...install,
+              selectedContentIds: ["fixture-direct-install", "demo-game-2"],
+            }),
+            /REQUEST_KEY_REUSED/u,
+          )
+          const stored = await call(a, "get_package_status", {
+            uploadId: draft.uploadId,
+          })
+          assert.equal(stored.phase, "installed")
+          assert.equal(stored.reviewed, false)
+          assert.deepEqual(stored.installedGameIds, installed.installedGameIds)
+          assert.equal(
+            transfers.db
+              .prepare("SELECT COUNT(*) AS n FROM package_install_consents")
+              .get()?.n,
+            0,
+          )
+          assert.equal(
+            store.db
+              .prepare(
+                "SELECT COUNT(*) AS n FROM package_audit WHERE action='review-approved'",
+              )
+              .get()?.n,
+            0,
+          )
+          assert.equal(
+            store
+              .catalog(a.accountId)
+              .some((theme) => theme.id === "fixture-direct-install"),
+            true,
+          )
+          assert.equal(
+            store
+              .catalog(b.accountId)
+              .some((theme) => theme.id === "fixture-direct-install"),
+            false,
+          )
         },
       )
     } finally {

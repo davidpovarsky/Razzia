@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next"
 import Button from "@razzia/web/components/Button"
 import { packageJson, packageRequest, type PackageReceipt } from "./package-api"
 import { PackageRuntimePreview } from "./PackageRuntimePreview"
+import { packageSaveText } from "./package-save-strings"
 
 interface CatalogEntry {
   upload: string
@@ -30,7 +31,8 @@ export function PackageManager({
   initialGameId?: string
   fullPage?: boolean
 }) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const saveText = packageSaveText(i18n.resolvedLanguage ?? i18n.language)
   const [enabled, setEnabled] = useState(false)
   const [capabilityError, setCapabilityError] = useState(false)
   const [capabilityRevision, setCapabilityRevision] = useState(0)
@@ -382,14 +384,9 @@ export function PackageManager({
             <Button
               type="button"
               size="sm"
+              data-testid="package-install-selected"
               disabled={
-                busy ||
-                !selected.length ||
-                receipt.phase !== "preview-ready" ||
-                (receipt.manifest.contents.some(
-                  (c) => c.kind !== "game" && selected.includes(c.id),
-                ) &&
-                  !receipt.reviewed)
+                busy || !selected.length || receipt.phase !== "preview-ready"
               }
               onClick={() =>
                 void run(async () => {
@@ -440,31 +437,15 @@ export function PackageManager({
               {t("extensions:packages.export")}
             </Button>
           </div>
-          {receipt.manifest.contents.some((c) => c.kind !== "game") &&
-            !receipt.reviewed && (
-              <div className="space-y-2">
-                <p className="text-muted-foreground text-sm">
-                  {t("extensions:packages.reviewRequired")}
-                </p>
-                {receipt.phase === "preview-ready" && (
-                  <Button
-                    type="button"
-                    size="sm"
-                    disabled={busy}
-                    onClick={() =>
-                      void run(async () => {
-                        const latest = await packageJson<PackageReceipt>(
-                          `/uploads/${receipt.uploadId}`,
-                        )
-                        setReceipt(latest)
-                      })
-                    }
-                  >
-                    {t("extensions:conflict.reload")}
-                  </Button>
-                )}
-              </div>
-            )}
+          {!themesOnly && receipt.installedGames.length > 0 && (
+            <a
+              href="/studio/games"
+              className="inline-flex min-h-11 items-center font-semibold underline"
+              data-testid="package-open-games"
+            >
+              {saveText.games}
+            </a>
+          )}
           {!["installed", "building"].includes(receipt.phase) && (
             <Button
               type="button"

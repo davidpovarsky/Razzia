@@ -151,7 +151,7 @@ describe("native-host end-to-end consent integration", () => {
         enabled: true,
         configRoot: root,
         initializeNativeRuntime: true,
-        mcp: buildMcpOptions({ origin, keys }),
+        mcp: buildMcpOptions({ origin, keys, requireFirstPartyConsent: true }),
         webFallback: (request) => {
           const { pathname } = new URL(request.url)
 

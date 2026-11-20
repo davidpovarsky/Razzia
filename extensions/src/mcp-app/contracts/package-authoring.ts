@@ -280,7 +280,7 @@ export const packageDescriptions: Readonly<Record<PackageToolName, string>> = {
   delete_package_draft:
     "Delete only your uninstalled private package draft at its exact revision. Installed packages and in-progress builds/installations cannot be removed through this tool.",
   install_package:
-    "Request installation of selected package contents after native review and exact-revision first-party user consent. CONSENT_REQUIRED returns the first-party approval page; this tool cannot grant reviewer approval or consent itself.",
+    "Install selected contents of your validated, built package into your private account at the exact revision. An explicit request with library-write scope saves the custom theme and selected games directly; no separate reviewer or save approval page is required. Reuse the same idempotencyKey for retries.",
   export_package:
     "Export your exact package revision after native ownership and asset export-rights checks. A first-party download URL is returned when delivery is available. Export does not grant install approval or save a game.",
 }

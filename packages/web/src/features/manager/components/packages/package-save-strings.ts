@@ -6,7 +6,6 @@ const en = {
   expired:
     "This request or account session has expired. Sign in again and reopen the request.",
   ready: "Ready to save",
-  reviewPending: "The package is waiting for review before it can be saved.",
   notReady:
     "This package is not ready to save yet. Check its status again after the preview is ready.",
   contents: "Selected contents",
@@ -35,7 +34,6 @@ const translations: Record<string, Texts> = {
     failed: "לא ניתן לטעון את בקשת השמירה. בדקו שוב את מצבה.",
     expired: "תוקף הבקשה או החיבור לחשבון פג. התחברו שוב ופתחו את הבקשה מחדש.",
     ready: "מוכן לשמירה",
-    reviewPending: "החבילה ממתינה לבדיקה לפני שיהיה אפשר לשמור אותה.",
     notReady:
       "החבילה עדיין אינה מוכנה לשמירה. בדקו שוב את מצבה לאחר שהתצוגה המקדימה תהיה מוכנה.",
     contents: "התוכן שנבחר",
@@ -61,8 +59,6 @@ const translations: Record<string, Texts> = {
     expired:
       "Cette demande ou session a expiré. Reconnectez-vous et rouvrez la demande.",
     ready: "Prêt à enregistrer",
-    reviewPending:
-      "Le paquet attend une vérification avant de pouvoir être enregistré.",
     notReady:
       "Ce paquet n’est pas encore prêt. Vérifiez son état lorsque l’aperçu sera disponible.",
     contents: "Contenu sélectionné",
@@ -90,8 +86,6 @@ const translations: Record<string, Texts> = {
     expired:
       "Diese Anfrage oder Sitzung ist abgelaufen. Melde dich erneut an und öffne die Anfrage.",
     ready: "Bereit zum Speichern",
-    reviewPending:
-      "Das Paket wartet auf eine Prüfung, bevor es gespeichert werden kann.",
     notReady:
       "Dieses Paket ist noch nicht bereit. Prüfe den Status erneut, sobald die Vorschau verfügbar ist.",
     contents: "Ausgewählte Inhalte",
@@ -117,8 +111,6 @@ const translations: Record<string, Texts> = {
     expired:
       "La solicitud o la sesión ha caducado. Inicia sesión y abre la solicitud de nuevo.",
     ready: "Listo para guardar",
-    reviewPending:
-      "El paquete está pendiente de revisión antes de poder guardarse.",
     notReady:
       "Este paquete aún no está listo. Comprueba su estado cuando la vista previa esté disponible.",
     contents: "Contenido seleccionado",
@@ -146,8 +138,6 @@ const translations: Record<string, Texts> = {
     expired:
       "La richiesta o la sessione è scaduta. Accedi di nuovo e riapri la richiesta.",
     ready: "Pronto per il salvataggio",
-    reviewPending:
-      "Il pacchetto è in attesa di revisione prima di poter essere salvato.",
     notReady:
       "Il pacchetto non è ancora pronto. Ricontrolla lo stato quando l’anteprima sarà disponibile.",
     contents: "Contenuti selezionati",
@@ -175,8 +165,6 @@ const translations: Record<string, Texts> = {
     expired:
       "リクエストまたはログインの有効期限が切れました。再度ログインして開き直してください。",
     ready: "保存できます",
-    reviewPending:
-      "保存する前にパッケージの審査が必要です。現在、審査待ちです。",
     notReady:
       "まだ保存できません。プレビューの準備ができてから状態を確認してください。",
     contents: "選択した内容",
@@ -202,7 +190,6 @@ const translations: Record<string, Texts> = {
     expired:
       "İsteğin veya oturumun süresi doldu. Tekrar giriş yapıp isteği açın.",
     ready: "Kaydetmeye hazır",
-    reviewPending: "Paket, kaydedilebilmesi için inceleme bekliyor.",
     notReady:
       "Bu paket henüz hazır değil. Önizleme hazır olduğunda durumunu yeniden kontrol edin.",
     contents: "Seçilen içerikler",
@@ -229,7 +216,6 @@ const translations: Record<string, Texts> = {
     expired:
       "Yêu cầu hoặc phiên đăng nhập đã hết hạn. Hãy đăng nhập và mở lại yêu cầu.",
     ready: "Sẵn sàng lưu",
-    reviewPending: "Gói đang chờ xét duyệt trước khi có thể lưu.",
     notReady:
       "Gói này chưa sẵn sàng. Hãy kiểm tra lại khi bản xem trước đã sẵn sàng.",
     contents: "Nội dung đã chọn",

@@ -19,7 +19,7 @@ not activate a worker, enable a runtime, install a theme, or publish a game.
 | `build_package`              | Queue the existing isolated worker for an exact revision                      |
 | `preview_package`            | Open the bundled game using its package definitions and native preview clock  |
 | `delete_package_draft`       | Delete an owned uninstalled draft; reject installed/building packages         |
-| `install_package`            | Prepare or replay an immutable first-party save consent                       |
+| `install_package`            | Install selected owned contents directly with durable replay                  |
 | `export_package`             | Enforce native export rights and issue a purpose-specific download capability |
 
 The first-party wrapper validates an actually issued principal and its current
@@ -64,13 +64,27 @@ authority. Authored leaderboard scenes now project their actual standings and
 optional question/elapsed metadata. Old v1 renderers receive the old strict
 snapshot shape; new metadata is negotiated in a separate capabilities message.
 
-`/studio/package-save-consent/:requestId` shows the selected package contents.
-It binds approval to the owned revision, source/build hashes, and selection.
-Loading the page or preview never approves a save. The page receives the same
-no-store, no-referrer, and anti-framing headers as the existing consent pages.
-Only an explicit action in that page invokes native installation. The existing
-independent theme review requirement still applies. Private installation does
-not publish a package to a public gallery.
+## Direct private installation and saving
+
+An explicit authenticated `install_package` request installs the selected contents
+into the requesting account once the native build and package validation pass.
+The request binds the owned upload, exact revision, source/build digests, and
+selected content IDs. It no longer requires an independent reviewer or a second
+first-party confirmation. `save_game` likewise saves an explicitly requested
+owned draft through the durable native save ledger.
+
+A private theme can retain `reviewed: false` and run in its existing isolated
+runtime. Optional independent review remains truthful metadata; installation
+never fabricates a review or marks the package as published. Authentication,
+OAuth write scopes, ownership, revision checks, asset validation, and runtime
+isolation still apply. Private installation does not publish to the gallery.
+
+Installation records the exact content selection so replay returns the same game
+IDs without creating duplicates. A changed selection or revision is rejected.
+Older installed packages remain playable, and completed old save requests retain
+their outcomes. Existing `/studio/package-save-consent/:requestId` links remain
+compatible for pending requests. Merely opening a preview or an old save link
+does not write to the account.
 
 ## Release prerequisites
 

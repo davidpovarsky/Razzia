@@ -1,4 +1,5 @@
 import { defineConfig } from "@playwright/test"
+import { execFileSync } from "node:child_process"
 import { createHmac } from "node:crypto"
 import fs from "node:fs"
 import { join } from "node:path"
@@ -19,6 +20,39 @@ if (!/^\/evidence\/package-staging-[a-z0-9-]+$/u.test(configPath)) {
 for (const dir of ["quizz", "media", "extensions/quizzes"]) {
   fs.mkdirSync(join(configPath, dir), { recursive: true })
 }
+
+// The private package preview requires a real HTTPS runtime origin. These
+// short-lived certificates are only used inside the isolated package QA fixture.
+const tlsDirectory = join(configPath, "runtime-tls")
+const tlsKey = join(tlsDirectory, "runtime.key")
+const tlsCertificate = join(tlsDirectory, "runtime.crt")
+fs.mkdirSync(tlsDirectory, { recursive: true, mode: 0o700 })
+
+if (!fs.existsSync(tlsKey) || !fs.existsSync(tlsCertificate)) {
+  execFileSync(
+    "openssl",
+    [
+      "req",
+      "-x509",
+      "-newkey",
+      "rsa:2048",
+      "-nodes",
+      "-keyout",
+      tlsKey,
+      "-out",
+      tlsCertificate,
+      "-days",
+      "1",
+      "-subj",
+      "/CN=localhost",
+      "-addext",
+      "subjectAltName=DNS:localhost,IP:127.0.0.1",
+    ],
+    { stdio: "ignore", timeout: 30_000 },
+  )
+  fs.chmodSync(tlsKey, 0o600)
+}
+
 const secret = "remote-package-QA-only-not-production-20261109"
 const common = {
   CONFIG_PATH: configPath,
@@ -26,8 +60,13 @@ const common = {
   TADAZZ_ACCOUNTS_ENABLED: "true",
   TADAZZ_PACKAGE_INSTALLER_ENABLED: "true",
   TADAZZ_PACKAGE_RUNTIME_ENABLED: "true",
+  TADAZZ_INLINE_GAME_PREVIEW_ENABLED: "true",
+  TADAZZ_APPLICATION_PREVIEW_DIR: join(
+    root,
+    "packages/web/dist/tadazz-application-runtime",
+  ),
   TADAZZ_PACKAGE_PARENT_ORIGIN: "http://127.0.0.1:3190",
-  TADAZZ_PACKAGE_RUNTIME_ORIGIN: "http://localhost:3192",
+  TADAZZ_PACKAGE_RUNTIME_ORIGIN: "https://localhost:3192",
   JWT_SECRET: secret,
   SOCKET_PORT: "3191",
   GAME_SPEED: "1",
@@ -50,6 +89,7 @@ export default defineConfig({
   ],
   use: {
     baseURL: "http://127.0.0.1:3190",
+    ignoreHTTPSErrors: true,
     actionTimeout: 20_000,
     locale: "en-US",
     trace: "off",
@@ -79,7 +119,7 @@ export default defineConfig({
     },
     {
       command:
-        "node --experimental-strip-types node_modules/vite/bin/vite.js preview --port 3190 --strictPort",
+        "node --experimental-strip-types node_modules/vite/bin/vite.js preview --configLoader runner --port 3190 --strictPort",
       cwd: join(root, "packages/web"),
       url: "http://127.0.0.1:3190",
       reuseExistingServer: false,
@@ -87,10 +127,11 @@ export default defineConfig({
     },
     {
       command:
-        "node --import ./extensions/node_modules/tsx/dist/loader.mjs extensions/qa/package-runtime-server.ts",
+        "node --import ./extensions/node_modules/tsx/dist/loader.mjs extensions/qa/package-runtime-tls-server.ts",
       cwd: root,
       // A ready file is not needed: the server returns 404 at its unprivileged root.
-      url: "http://localhost:3192/health",
+      url: "https://localhost:3192/health",
+      ignoreHTTPSErrors: true,
       reuseExistingServer: false,
       env: {
         ...common,

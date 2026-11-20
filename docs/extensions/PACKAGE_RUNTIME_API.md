@@ -11,7 +11,7 @@ No production environment is changed by this implementation.
 
 Every management endpoint requires an existing verified manager Bearer session.
 Tenant is the session subject. Optional `X-Tadazz-Workspace` must match the
-server's assigned workspace grants; it never grants access by itself. Reviewers
+server's assigned workspace grants; it never grants access by itself. Optional reviewers
 use their own session and an assigned owner workspace. Never put account tokens
 in URLs, archives, source, screenshots or logs. Binary uploads are ZIP bytes,
 not base64 JSON, with a maximum compressed request of 180 MB. Manager operations
@@ -19,21 +19,21 @@ are limited to 30 writes and 180 reads per account per minute. Decoder/builder
 resources are bounded independently; private expanded inventory quota is 1 GB
 and 100 package versions per tenant.
 
-| Method / path under `/api/packages`              | Body / result                                                                                                                                       |
-| ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GET `/capabilities`                              | `{installer:true,runtime:boolean}`; 404 while OFF                                                                                                   |
-| POST `/preflight`                                | `.tadazz` bytes → manifest, contents, source digest, assets, bytes, review/build requirements; no writes                                            |
-| POST `/uploads`                                  | bytes + `Idempotency-Key` (8–128 alphanumeric/underscore/hyphen) → receipt, 201                                                                     |
-| GET `/uploads/:upload`                           | receipt, current phase/revision, exact source/build digest, independent review status, imported game IDs; accepts completed worker receipt          |
-| POST `/uploads/:upload/build`                    | queues exact source for isolated decoder/compiler; 202; retry allowed from `failed`                                                                 |
-| POST `/uploads/:upload/approval`                 | strict review receipt below; reviewer grant, every contributor excluded from self-review                                                            |
-| POST `/uploads/:upload/install`                  | `{expectedRevision:positiveInteger,selected:contentId[]}`; atomic private install, 201; exact approved source/build required for themes             |
-| GET `/`                                          | account-scoped versions/status/game IDs                                                                                                             |
-| POST `/uploads/:upload/rollback`                 | select a previously installed immutable version for future catalog choices; active room pins remain                                                 |
-| POST `/uploads/:upload/export`                   | original portable source archive, only if all rights permit export                                                                                  |
-| POST `/uploads/:upload/games/:quizId/export`     | current saved game as a new data-only portable pack, with original permitted assets; roster excluded; foreign/new unlicensed assets fail explicitly |
-| DELETE `/uploads/:upload`                        | delete an idle draft; 204. Installed versions are retained, 409, because games/history/rooms can reference them                                     |
-| GET `/runtime/:sourceDigest/:themeId?roomId=...` | management preview or public room-authorized read-only render capability; see below                                                                 |
+| Method / path under `/api/packages`              | Body / result                                                                                                                                                        |
+| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET `/capabilities`                              | `{installer:true,runtime:boolean}`; 404 while OFF                                                                                                                    |
+| POST `/preflight`                                | `.tadazz` bytes → manifest, contents, source digest, assets, bytes, review/build requirements; no writes                                                             |
+| POST `/uploads`                                  | bytes + `Idempotency-Key` (8–128 alphanumeric/underscore/hyphen) → receipt, 201                                                                                      |
+| GET `/uploads/:upload`                           | receipt, current phase/revision, exact source/build digest, independent review status, imported game IDs; accepts completed worker receipt                           |
+| POST `/uploads/:upload/build`                    | queues exact source for isolated decoder/compiler; 202; retry allowed from `failed`                                                                                  |
+| POST `/uploads/:upload/approval`                 | strict review receipt below; reviewer grant, every contributor excluded from self-review                                                                             |
+| POST `/uploads/:upload/install`                  | `{expectedRevision:positiveInteger,selected:contentId[]}`; atomic private install, 201; exact validated source/build required; no manual review for private installs |
+| GET `/`                                          | account-scoped versions/status/game IDs                                                                                                                              |
+| POST `/uploads/:upload/rollback`                 | select a previously installed immutable version for future catalog choices; active room pins remain                                                                  |
+| POST `/uploads/:upload/export`                   | original portable source archive, only if all rights permit export                                                                                                   |
+| POST `/uploads/:upload/games/:quizId/export`     | current saved game as a new data-only portable pack, with original permitted assets; roster excluded; foreign/new unlicensed assets fail explicitly                  |
+| DELETE `/uploads/:upload`                        | delete an idle draft; 204. Installed versions are retained, 409, because games/history/rooms can reference them                                                      |
+| GET `/runtime/:sourceDigest/:themeId?roomId=...` | management preview or public room-authorized read-only render capability; see below                                                                                  |
 
 Successful private installation is the package lane's publication boundary. It
 does not grant platform/marketplace publication. Existing platform publication
@@ -62,15 +62,20 @@ exact revision/source/build/evidence using a domain-separated server HMAC.
 Source versions are immutable. Correct source via a new version or delete an
 uninstalled failed draft and upload anew; failed decoder/build jobs can retry
 the same source. Build completion advances revision and invalidates stale
-receipts. Game-only installation still requires successful media decoding,
-but does not require a separate human theme review.
+receipts. Since 20 November 2026, private installation of games and themes
+requires successful validation and decoding/building, but no separate human
+review. A valid private installation may keep `reviewed: false`; optional review
+metadata is never fabricated or inferred from installation.
 
 Phases: `validated → building → preview-ready → installed`, or `failed`.
 `installing` is a private write-ahead state recovered before application traffic.
 Review readiness is a separate signed property, never inferred from phase or a
 claimed client digest. Demo/other contents can be deselected; selected games must
 include their bundled theme dependency. Installing a previously installed upload
-is idempotent and returns its immutable installed game IDs.
+is idempotent only for the exact revision and selected content IDs, and returns
+the same installed game IDs. Selection metadata is stored atomically. Older
+installed versions remain playable; their completed durable request outcomes
+remain replayable. A new install request cannot guess an older unrecorded selection.
 
 ## Runtime and renderer contract
 

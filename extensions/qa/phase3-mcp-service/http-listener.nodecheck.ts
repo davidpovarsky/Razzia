@@ -191,6 +191,7 @@ test("loopback TCP listener enforces pre-Request header/Host/URL limits and exec
       return baseLimiter(principal, toolName)
     },
     nativeSave: {
+      requireFirstPartyConsent: true,
       consentPageUrl: `${origin}/studio/native-save-consent`,
       operations: {
         lookup: () => ({ status: "absent" }),

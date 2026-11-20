@@ -386,32 +386,51 @@ export function createNativePackageAuthoring(
                 throw new ToolError("VALIDATION_FAILED")
               }
 
-              const request = transfers.installIntent(principal.accountId, {
-                uploadId: a.uploadId,
-                revision: a.expectedRevision,
-                sourceDigest: receipt.sourceDigest,
-                buildDigest: receipt.buildDigest,
-                selectedContentIds: a.selectedContentIds,
-                idempotencyKey: a.idempotencyKey,
-              })
-              const intent = transfers.readInstallIntent(
-                principal.accountId,
-                request.requestId,
-              )
-
-              if (intent.outcome) {
-                return {
-                  data: {
-                    ...intent.outcome,
-                    studioUrl: `${origin}/studio/games`,
-                  },
-                }
+              if (receipt.code && !runtime) {
+                throw new ToolError("DEPENDENCY_UNAVAILABLE")
               }
 
-              throw new ToolError("CONSENT_REQUIRED", {
-                consentRequestId: request.requestId,
-                consentUrl: `${origin}/studio/package-save-consent/${request.requestId}`,
-              })
+              const result = transfers.installAuthorized(
+                principal.accountId,
+                {
+                  uploadId: a.uploadId,
+                  revision: a.expectedRevision,
+                  sourceDigest: receipt.sourceDigest,
+                  buildDigest: receipt.buildDigest,
+                  selectedContentIds: a.selectedContentIds,
+                  idempotencyKey: a.idempotencyKey,
+                },
+                (selection) => {
+                  const current = store.details(native, selection.uploadId)
+                  sameRevision(current, selection.revision)
+
+                  if (
+                    current.sourceDigest !== selection.sourceDigest ||
+                    current.buildDigest !== selection.buildDigest
+                  ) {
+                    throw new ToolError("REVISION_CONFLICT", {
+                      currentRevision: current.revision,
+                    })
+                  }
+
+                  const saved = store.install(
+                    native,
+                    selection.uploadId,
+                    selection.revision,
+                    selection.selectedContentIds,
+                  )
+
+                  return {
+                    uploadId: selection.uploadId,
+                    revision: saved.revision,
+                    installedGameIds: saved.installedGames,
+                  }
+                },
+              )
+
+              return {
+                data: { ...result, studioUrl: `${origin}/studio/games` },
+              }
             }
 
             case "export_package": {

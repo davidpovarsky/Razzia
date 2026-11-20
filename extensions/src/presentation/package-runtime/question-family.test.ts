@@ -163,7 +163,140 @@ describe("package question content and lifetime", () => {
     ).toBe(true)
   })
 
-  it("keeps a native fallback for the remaining question after delayed readiness or failure", () => {
+  it.each([
+    {
+      name: STATUS.SHOW_QUESTION,
+      data: {
+        question: "Restored question",
+        questionType: "single",
+        totalAnswers: 2,
+        cooldown: 2,
+      },
+    },
+    {
+      name: STATUS.SHOW_RESPONSES,
+      data: {
+        question: "Restored results",
+        type: "single",
+        answers: ["A", "B"],
+        responses: {},
+      },
+    },
+  ])(
+    "admits a cold restored $name after its capability and media are ready",
+    (status) => {
+      const scene = computeShowScene({
+        role: "spectator",
+        isConnected: true,
+        status,
+        envelope: { questionId: "q1", extras: {} },
+        questionStates: { current: 1, total: 1 },
+      })
+      const supported = packageQuestionContentSupported(
+        "questionType" in scene
+          ? {
+              questionType: scene.questionType,
+              mediaType: scene.questionMediaType,
+            }
+          : undefined,
+      )
+      const admission = createPackageQuestionAdmission()
+      expect(supported).toBe(true)
+
+      // The capability may finish before media, or the other way around.
+      for (const pending of [true, true, false]) {
+        expect(
+          admission.select({
+            identity: "room/q1/theme/spectator",
+            supported,
+            available: !pending,
+            pending,
+          }),
+        ).toBe(!pending)
+      }
+
+      expect(
+        admission.select({
+          identity: "room/q1/theme/spectator",
+          supported: undefined,
+          available: true,
+        }),
+      ).toBe(true)
+    },
+  )
+
+  it("latches a settled dependency failure after initially pending acquisition", () => {
+    const admission = createPackageQuestionAdmission()
+    expect(
+      admission.select({
+        identity: "q1",
+        supported: true,
+        available: false,
+        pending: true,
+      }),
+    ).toBe(false)
+    expect(
+      admission.select({ identity: "q1", supported: true, available: false }),
+    ).toBe(false)
+    expect(
+      admission.select({ identity: "q1", supported: true, available: true }),
+    ).toBe(false)
+    expect(
+      admission.select({ identity: "q2", supported: true, available: true }),
+    ).toBe(true)
+  })
+
+  it.each([undefined, false])(
+    "does not defer the native decision for unknown or unsupported content: %s",
+    (supported) => {
+      const admission = createPackageQuestionAdmission()
+      expect(
+        admission.select({
+          identity: "q1",
+          supported,
+          available: false,
+          pending: true,
+        }),
+      ).toBe(false)
+      expect(
+        admission.select({ identity: "q1", supported: true, available: true }),
+      ).toBe(false)
+    },
+  )
+
+  it("keeps an admitted renderer while later phase media loads and latches real failure", () => {
+    const admission = createPackageQuestionAdmission()
+    expect(
+      admission.select({ identity: "q1", supported: true, available: true }),
+    ).toBe(true)
+    expect(
+      admission.select({
+        identity: "q1",
+        supported: undefined,
+        available: false,
+        pending: true,
+      }),
+    ).toBe(true)
+    expect(
+      admission.select({
+        identity: "q1",
+        supported: undefined,
+        available: true,
+      }),
+    ).toBe(true)
+    expect(
+      admission.select({
+        identity: "q1",
+        supported: undefined,
+        available: false,
+      }),
+    ).toBe(false)
+    expect(
+      admission.select({ identity: "q1", supported: true, available: true }),
+    ).toBe(false)
+  })
+
+  it("keeps a settled native fallback for the remaining question", () => {
     const admission = createPackageQuestionAdmission()
     expect(
       admission.select({ identity: "q1", supported: true, available: false }),

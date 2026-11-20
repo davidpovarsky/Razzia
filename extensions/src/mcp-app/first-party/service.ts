@@ -38,6 +38,7 @@ export interface PrincipalRateLimitOptions {
 
 export interface ProtectedMcpServiceNativeSaveOptions {
   readonly consentPageUrl: string
+  readonly requireFirstPartyConsent?: boolean
   readonly operations?: NativeCreationOperationPort
   readonly authoring?: AuthoringPolicy
 }
@@ -750,6 +751,7 @@ export async function createProtectedMcpService(
           ? cloneAuthoringPolicy(options.nativeSave.authoring)
           : authoring,
         consentPageUrl: options.nativeSave.consentPageUrl,
+        requireFirstPartyConsent: options.nativeSave.requireFirstPartyConsent,
         operations:
           options.nativeSave.operations ??
           (await createFirstPartyNativeSaveOperations(options.configRoot)),

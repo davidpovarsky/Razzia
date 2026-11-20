@@ -210,7 +210,7 @@ export const descriptions: Readonly<Record<ToolName, string>> = {
   preview_game:
     "Display an interactive demo only when the accepted shared SB renderer exists; otherwise report unavailable. No real votes or rooms.",
   preview_show:
-    "Open the native full-show demo for your exact draft revision. The interactive view retrieves only the selected chapter; no live room or real votes. If your host cannot render an MCP App, use the returned bounded text summary and continue edits in chat; save_game requires first-party approval. Use this versioned tool for the installed full-show widget. selectionVersion=3, context={mode:demo,role:spectator,locale:en,reducedMotion:false,join:unavailable-demo,actions:synthetic-only}.",
+    "Open the native full-show demo for your exact draft revision. The interactive view retrieves only the selected chapter; no live room or real votes. If your host cannot render an MCP App, use the returned bounded text summary and continue edits in chat; save_game saves the exact revision directly when requested. Use this versioned tool for the installed full-show widget. selectionVersion=3, context={mode:demo,role:spectator,locale:en,reducedMotion:false,join:unavailable-demo,actions:synthetic-only}.",
   apply_game_edit:
     "Apply one bounded semantic edit to your exact draft revision with a stable idempotencyKey. Supports title, selected question text, approved background, native theme, voting music/volume and five answer pictures. For question-specific edits, first read get_game_draft questionRefs to resolve the requested questionNumber. Discover exact asset refs with list_editing_assets; never invent question IDs, asset IDs, hashes or URLs. An acknowledged revision is still a private draft, not a library save.",
   undo_game_edit:
@@ -220,7 +220,7 @@ export const descriptions: Readonly<Record<ToolName, string>> = {
   update_game_title:
     "Change only a private draft title at the exact expectedRevision, preserving every card and all other content. This does not save the draft to the library.",
   save_game:
-    "Create a new account game only after exact-revision first-party save consent and durable safe storage. No overwrite.",
+    "Save the exact draft revision as a new private account game using your active library-write authorization and durable safe storage. No separate save approval page; no overwrite. Reuse the same idempotencyKey for retries.",
   export_game:
     "Export your exact revision after scope/ownership/rights checks. No new per-export consent; delivery may be unavailable.",
   ...packageDescriptions,

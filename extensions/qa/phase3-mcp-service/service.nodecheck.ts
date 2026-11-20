@@ -392,6 +392,7 @@ test("routes OAuth metadata, PKCE, remote SDK tools, catalog, export and native-
       canExport: () => true,
     },
     nativeSave: {
+      requireFirstPartyConsent: true,
       consentPageUrl: `${origin}/studio/native-save-consent`,
       operations: createSyntheticTestNativePort(),
     },
@@ -680,6 +681,7 @@ test("real C1 createNativeCreationPort commits tenant save/reopen/replay on Linu
   const ops = await createFirstPartyNativeSaveOperations(f.root)
   const service = await buildService({
     nativeSave: {
+      requireFirstPartyConsent: true,
       consentPageUrl: `${origin}/studio/native-save-consent`,
       operations: ops,
     },

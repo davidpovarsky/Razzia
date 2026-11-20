@@ -274,7 +274,7 @@ export function createOAuthProtocol(options: OAuthCryptoOptions) {
       }
     },
     nativeSaveMac(
-      purpose: "intent" | "consent" | "approval" | "outcome",
+      purpose: "intent" | "consent" | "approval" | "delegated-tool" | "outcome",
       value: unknown,
     ) {
       return createHmac("sha256", encryptionKey)
@@ -284,7 +284,7 @@ export function createOAuthProtocol(options: OAuthCryptoOptions) {
         .digest("hex")
     },
     checkNativeSaveMac(
-      purpose: "intent" | "consent" | "approval" | "outcome",
+      purpose: "intent" | "consent" | "approval" | "delegated-tool" | "outcome",
       value: unknown,
       proof: string,
     ) {

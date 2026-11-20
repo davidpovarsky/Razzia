@@ -45,6 +45,8 @@ export interface FirstPartyNativeSaveOptions {
   operations: NativeCreationOperationPort
   /** A real same-origin human exact-revision consent page. Request ID is a path segment. */
   consentPageUrl: string
+  /** Compatibility only: new private saves use the active delegated tool grant. */
+  requireFirstPartyConsent?: boolean
 }
 
 export interface NativeSaveLedgerAccess {
@@ -70,6 +72,14 @@ const approvalSchema = z.strictObject({
   proofDigest: digest,
   approvalMac: digest,
 })
+const delegatedAuthorizationSchema = z.strictObject({
+  kind: z.literal("delegated-tool"),
+  grantId: opaqueId,
+  clientId: z.string().min(1).max(256),
+  authorizedAt: z.number().int().positive(),
+  expiresAt: z.number().int().positive(),
+  authorizationMac: digest,
+})
 const nativeResultSchema = z.strictObject({
   quizId: z.string().regex(/^[A-Za-z0-9_-]{21}$/u),
   revision: z.literal(1),
@@ -77,7 +87,7 @@ const nativeResultSchema = z.strictObject({
 })
 const saveRecordSchema = z.strictObject({
   version: z.literal(1),
-  state: z.enum(["pending", "approved", "publishing", "saved"]),
+  state: z.enum(["pending", "authorized", "approved", "publishing", "saved"]),
   requestId,
   requestKey: opaqueId,
   inputDigest: digest,
@@ -88,6 +98,7 @@ const saveRecordSchema = z.strictObject({
   expiresAt: z.number().int().positive(),
   intentMac: digest,
   approved: approvalSchema.nullable(),
+  delegatedAuthorization: delegatedAuthorizationSchema.optional(),
   result: nativeResultSchema.nullable(),
   outcome: dataSchemas.save_game.nullable(),
   outcomeMac: digest.nullable(),
@@ -104,8 +115,9 @@ type SaveRecord = Omit<z.infer<typeof saveRecordSchema>, "draft"> & {
 }
 const unavailable = () => new ToolError("DEPENDENCY_UNAVAILABLE")
 
-// Private ledger consumer only. It cannot mint OAuth principals, bypass native
-// first-party consent, allocate an alternate native target, or repair a journal.
+// Private ledger consumer only. Explicit scoped tool saves use delegated grant
+// authority; historical browser consents remain readable. Neither path can mint
+// OAuth principals, allocate an alternate native target, or repair a journal.
 //
 export function createNativeSaveAdapter(
   ledger: NativeSaveLedgerAccess,
@@ -164,7 +176,50 @@ export function createNativeSaveAdapter(
 
     return { intentMac: record.intentMac, ...approved }
   }
+  const delegatedValue = (record: SaveRecord) => {
+    if (!record.delegatedAuthorization) {
+      throw unavailable()
+    }
+    const { authorizationMac: _mac, ...authorization } =
+      record.delegatedAuthorization
+    return { intentMac: record.intentMac, ...authorization }
+  }
+  const authorizeRequest = (
+    record: SaveRecord,
+    p: VerifiedPrincipal,
+  ): SaveRecord => {
+    const delegatedAuthorization = {
+      kind: "delegated-tool" as const,
+      grantId: p.grantId,
+      clientId: p.clientId,
+      authorizedAt: Date.now(),
+      expiresAt: Math.min(record.expiresAt, p.expiresAt),
+      authorizationMac: "0".repeat(64),
+    }
+    const authorized: SaveRecord = {
+      ...record,
+      state: "authorized",
+      approved: null,
+      delegatedAuthorization,
+    }
+    delegatedAuthorization.authorizationMac = protocol.nativeSaveMac(
+      "delegated-tool",
+      delegatedValue(authorized),
+    )
+    return authorized
+  }
   const binding = (record: SaveRecord): NativeCreationOperationBinding => {
+    if (record.delegatedAuthorization) {
+      return Object.freeze({
+        version: 1,
+        operationId: record.operationId,
+        authorizationDigest: hashJson({
+          domain: "tadazz-mcp-direct-save-authorization-v1",
+          ...intentValue(record),
+          delegatedAuthorizationDigest: hashJson(record.delegatedAuthorization),
+        }),
+      })
+    }
     if (!record.approved) {
       throw unavailable()
     }
@@ -219,6 +274,7 @@ export function createNativeSaveAdapter(
     if (record.state === "pending") {
       if (
         record.approved ||
+        record.delegatedAuthorization ||
         record.result ||
         record.outcome ||
         record.outcomeMac
@@ -226,19 +282,37 @@ export function createNativeSaveAdapter(
         throw unavailable()
       }
     } else {
-      if (
-        !record.approved ||
-        record.approved.expiresAt > record.expiresAt ||
-        record.approved.approvedAt > record.approved.expiresAt
-      ) {
-        throw unavailable()
+      if (record.delegatedAuthorization) {
+        if (
+          record.approved ||
+          record.state === "approved" ||
+          record.delegatedAuthorization.expiresAt > record.expiresAt ||
+          record.delegatedAuthorization.authorizedAt >
+            record.delegatedAuthorization.expiresAt ||
+          !record.requestId.startsWith(record.delegatedAuthorization.grantId)
+        ) {
+          throw unavailable()
+        }
+        protocol.checkNativeSaveMac(
+          "delegated-tool",
+          delegatedValue(record),
+          record.delegatedAuthorization.authorizationMac,
+        )
+      } else {
+        if (
+          record.state === "authorized" ||
+          !record.approved ||
+          record.approved.expiresAt > record.expiresAt ||
+          record.approved.approvedAt > record.approved.expiresAt
+        ) {
+          throw unavailable()
+        }
+        protocol.checkNativeSaveMac(
+          "approval",
+          approvalValue(record),
+          record.approved.approvalMac,
+        )
       }
-
-      protocol.checkNativeSaveMac(
-        "approval",
-        approvalValue(record),
-        record.approved.approvalMac,
-      )
 
       if (record.state === "saved") {
         if (!record.result || !record.outcome || !record.outcomeMac) {
@@ -353,12 +427,21 @@ export function createNativeSaveAdapter(
       throw unavailable()
     }
   }
-  const freshConsent = (
+  const freshAuthorization = (
     db: DatabaseSync,
     p: VerifiedPrincipal,
     record: SaveRecord,
   ) => {
-    if (
+    if (record.delegatedAuthorization) {
+      if (
+        record.delegatedAuthorization.grantId !== p.grantId ||
+        record.delegatedAuthorization.clientId !== p.clientId ||
+        record.delegatedAuthorization.expiresAt <= Date.now() ||
+        record.expiresAt <= Date.now()
+      ) {
+        throw new ToolError("SCOPE_REQUIRED")
+      }
+    } else if (
       !record.approved ||
       record.approved.expiresAt <= Date.now() ||
       record.expiresAt <= Date.now() ||
@@ -478,6 +561,74 @@ export function createNativeSaveAdapter(
                 throw unavailable()
               }
 
+              if (
+                !options.requireFirstPartyConsent &&
+                existing.state !== "saved" &&
+                (!existing.delegatedAuthorization ||
+                  existing.delegatedAuthorization.expiresAt <= Date.now() ||
+                  existing.expiresAt <= Date.now())
+              ) {
+                // An upgrade or refreshed token can authorize a still-unstarted
+                // request. Preserve any original committed native operation;
+                // uncertain/reserved publication must never become a new target.
+                if (existing.state !== "pending") {
+                  const status = options.operations.lookup(binding(existing))
+                  if (status.status === "committed") {
+                    return existing
+                  }
+                  if (status.status !== "absent") {
+                    throw unavailable()
+                  }
+                }
+                const current = currentDraft(db, p.accountId, selection.draftId)
+                if (current.revision !== selection.expectedRevision) {
+                  throw new ToolError("REVISION_CONFLICT", {
+                    currentRevision: current.revision,
+                  })
+                }
+                if (canonicalJson(current) !== canonicalJson(existing.draft)) {
+                  throw unavailable()
+                }
+                const {
+                  delegatedAuthorization: _previousAuthorization,
+                  ...historical
+                } = existing
+                const renewed: SaveRecord = {
+                  ...historical,
+                  state: "pending",
+                  approved: null,
+                  expiresAt: Math.min(Date.now() + 300_000, grant.expiresAt),
+                  intentMac: "0".repeat(64),
+                }
+                renewed.intentMac = protocol.nativeSaveMac(
+                  "intent",
+                  intentValue(renewed),
+                )
+                const authorized = checked(authorizeRequest(renewed, p))
+                freshAuthorization(db, p, authorized)
+                store(db, p.grantId, authorized)
+                // Existing browser URLs may still inspect their historical
+                // request. Retain the mapping, without recording an approval.
+                db.prepare(
+                  "UPDATE operations SET outcome=? WHERE grant_id=? AND kind='save-consent' AND request_key=? AND digest=?",
+                ).run(
+                  canonicalJson(
+                    mappingSchema.parse({
+                      version: 1,
+                      requestId: authorized.requestId,
+                      requestKey: authorized.requestKey,
+                      inputDigest: authorized.inputDigest,
+                      intentMac: authorized.intentMac,
+                    }),
+                  ),
+                  p.grantId,
+                  authorized.requestId.slice(32),
+                  authorized.inputDigest,
+                )
+                ledger.audit(db, p.grantId, "save-direct-requested", mutation)
+                authority(db, p)
+                return authorized
+              }
               return existing
             }
 
@@ -499,7 +650,7 @@ export function createNativeSaveAdapter(
 
             const id = p.grantId + randomBytes(16).toString("base64url")
             const nativeSnapshot = createExportBody(draft, "enhanced-bundle")
-            const record: SaveRecord = {
+            let record: SaveRecord = {
               version: 1,
               state: "pending",
               requestId: id,
@@ -520,13 +671,9 @@ export function createNativeSaveAdapter(
               "intent",
               intentValue(record),
             )
-            const mapping = mappingSchema.parse({
-              version: 1,
-              requestId: id,
-              requestKey: record.requestKey,
-              inputDigest: record.inputDigest,
-              intentMac: record.intentMac,
-            })
+            if (!options.requireFirstPartyConsent) {
+              record = authorizeRequest(record, p)
+            }
             db.prepare(
               "INSERT INTO operations(grant_id,kind,request_key,digest,outcome) VALUES(?,'save',?,?,?)",
             ).run(
@@ -535,15 +682,31 @@ export function createNativeSaveAdapter(
               record.inputDigest,
               canonicalJson(checked(record)),
             )
-            db.prepare(
-              "INSERT INTO operations(grant_id,kind,request_key,digest,outcome) VALUES(?,'save-consent',?,?,?)",
-            ).run(
+            if (options.requireFirstPartyConsent) {
+              const mapping = mappingSchema.parse({
+                version: 1,
+                requestId: id,
+                requestKey: record.requestKey,
+                inputDigest: record.inputDigest,
+                intentMac: record.intentMac,
+              })
+              db.prepare(
+                "INSERT INTO operations(grant_id,kind,request_key,digest,outcome) VALUES(?,'save-consent',?,?,?)",
+              ).run(
+                p.grantId,
+                id.slice(32),
+                record.inputDigest,
+                canonicalJson(mapping),
+              )
+            }
+            ledger.audit(
+              db,
               p.grantId,
-              id.slice(32),
-              record.inputDigest,
-              canonicalJson(mapping),
+              options.requireFirstPartyConsent
+                ? "save-consent-requested"
+                : "save-direct-requested",
+              mutation,
             )
-            ledger.audit(db, p.grantId, "save-consent-requested", mutation)
             authority(db, p)
 
             return record
@@ -587,7 +750,7 @@ export function createNativeSaveAdapter(
               throw unavailable()
             }
 
-            freshConsent(db, p, record)
+            freshAuthorization(db, p, record)
 
             if (record.state !== "publishing") {
               store(db, p.grantId, { ...record, state: "publishing" })
@@ -634,7 +797,7 @@ export function createNativeSaveAdapter(
               throw unavailable()
             }
 
-            freshConsent(db, p, record)
+            freshAuthorization(db, p, record)
             const bundle = nativeBundle(record)
             authority(db, p)
             // No SQL write in this transaction precedes native commit. Publishing
@@ -743,6 +906,8 @@ export function createNativeSaveAdapter(
             (record.approved !== null &&
               !auth.delegatedSessionActive(p.accountId, record.approved.sid)))
 
+        const visibleState =
+          record.state === "authorized" ? "publishing" : record.state
         return nativeSaveInspection.parse({
           version: 1,
           consentRequestId: id,
@@ -754,7 +919,7 @@ export function createNativeSaveAdapter(
           authoredShowJson: record.draft.authoredShowJson,
           authoredDigest: tokenDigest(record.draft.authoredShowJson),
           expiresAt,
-          state: expired ? "expired" : record.state,
+          state: expired ? "expired" : visibleState,
           ...(record.state === "pending" && !expired
             ? {
                 proof: protocol.nativeSaveMac(

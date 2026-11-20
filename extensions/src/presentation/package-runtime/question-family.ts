@@ -51,32 +51,38 @@ export function packageQuestionContentSupported(
   )
 }
 
-/** Admit once per question. A fallback never promotes back mid-question. */
+/** Await initial dependencies, then keep one renderer until the question ends. */
 export function createPackageQuestionAdmission() {
   let currentIdentity: string | null = null
-  let admitted = false
+  let state: "pending" | "admitted" | "rejected" = "rejected"
 
   return {
     select(input: {
       identity: string
       supported: boolean | undefined
       available: boolean
+      /** Unresolved acquisition is not a settled fallback decision. */
+      pending?: boolean
     }): boolean {
       if (input.identity !== currentIdentity) {
         currentIdentity = input.identity
-        admitted = input.supported === true && input.available
-      } else if (input.supported === false || !input.available) {
-        admitted = false
+        state = input.supported === true ? "pending" : "rejected"
       }
 
-      return admitted
+      if (input.supported === false || (!input.pending && !input.available)) {
+        state = "rejected"
+      } else if (state === "pending" && !input.pending) {
+        state = "admitted"
+      }
+
+      return state === "admitted"
     },
     reject(identity: string): boolean {
-      if (identity !== currentIdentity || !admitted) {
+      if (identity !== currentIdentity || state !== "admitted") {
         return false
       }
 
-      admitted = false
+      state = "rejected"
 
       return true
     },

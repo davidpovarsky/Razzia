@@ -35,8 +35,10 @@ no default persistence. Read/create/replace results are independently validated
 against canonical authored content and its recomputed summary. Save/export pass
 selection+revision+mutation identity to an authoritative replay-or-new adapter;
 a prior authorized outcome is reachable before any fresh-draft revision check.
-A NEW operation requires exact revision/content validation and, for save, original
-exact-save consent plus durable unique target/reservation/recovery guarantees.
+A NEW operation requires exact revision/content validation and a live authorized
+write request plus durable unique target/reservation/recovery guarantees.
+Production saves execute directly; legacy first-party confirmation is an explicit
+compatibility policy, not the default.
 The test-only volatile replay model establishes none of those durable guarantees. Exports use
 ordinary scope/ownership/rights checks, with no added per-action consent.
 Injected test export delivery is not actual account or download acceptance.
@@ -98,8 +100,8 @@ The public tool catalog includes an optional `PackageAuthoringPort` for the
 existing portable `.tadazz` engine. Eleven package tools cover actual capability
 discovery, paged account packages, staged upload/chunks/completion, status,
 isolated build, exact-revision preview, deletion of an uninstalled draft,
-consent-bound installation and authorized export. Existing OAuth scopes apply;
-tool discovery does not enable native deployment flags or grant review/consent.
+direct private installation and authorized export. Existing OAuth scopes apply;
+tool discovery does not enable native deployment flags or grant account authority.
 
 The package schemas share the native archive budget. Each base64 chunk is at
 most 24,000 decoded bytes, keeping normal MCP calls within the existing ingress
@@ -111,7 +113,8 @@ status returns content identities without source, files or the full manifest.
 
 The adapter owns live account/workspace grants, signed pagination, immutable
 upload identities, durable idempotency, exact revision checks, isolated worker
-execution, native review and installation. The dispatcher validates outputs,
+execution, and direct private installation. Optional reviews remain truthful
+metadata and are not prerequisites for private installation. The dispatcher validates outputs,
 binds result identities/revisions, and permits only configured first-party
 URLs. The new protocol tests exercise this boundary through the real SDK
 harness. They do not establish production worker, browser or installation
