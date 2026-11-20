@@ -63,6 +63,13 @@ MAX_LOG_BYTES = 16 * 1024**2
 IMAGE_RE = re.compile(r"^sha256:[a-f0-9]{64}$")
 SHA_RE = re.compile(r"^[a-f0-9]{40}$")
 HEX_RE = re.compile(r"^[a-f0-9]{64}$")
+PACKAGE_RUNTIME_SECRET = Path("/var/lib/tadazz-package-runtime/runtime-capability")
+PACKAGE_RUNTIME_ENTRYPOINT = ["node", "/app/runtime/bootstrap.mjs"]
+PACKAGE_RUNTIME_LABELS = (
+    "com.tadazz.package-runtime.source-manifest-sha256",
+    "com.tadazz.package-runtime.runtime-sha256",
+    "com.tadazz.package-runtime.bootstrap-sha256",
+)
 
 
 class GateError(RuntimeError):
@@ -157,6 +164,138 @@ def env_map(items):
     return result
 
 
+def package_runtime_origin(value):
+    """An explicit external HTTPS origin, never a URL/path or an alias spelling."""
+    require(isinstance(value, str) and 1 <= len(value) <= 256, "PACKAGE_RUNTIME_ORIGIN_INVALID")
+    try:
+        parsed = urllib.parse.urlsplit(value)
+        host, port = parsed.hostname, parsed.port
+    except ValueError:
+        raise GateError("PACKAGE_RUNTIME_ORIGIN_INVALID") from None
+    require(parsed.scheme == "https" and host and
+            re.fullmatch(r"[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+", host) and
+            not parsed.username and not parsed.password and not parsed.path and
+            not parsed.query and not parsed.fragment and
+            (port is None or 1 <= port <= 65535 and port != 443), "PACKAGE_RUNTIME_ORIGIN_INVALID")
+    canonical_origin = "https://" + host + (":" + str(port) if port is not None else "")
+    require(value == canonical_origin and value != PUBLIC_ORIGIN, "PACKAGE_RUNTIME_ORIGIN_INVALID")
+    return value
+
+
+def package_runtime_options(args):
+    origin = getattr(args, "package_runtime_origin", None)
+    container = getattr(args, "expected_package_runtime_container", None)
+    image = getattr(args, "expected_package_runtime_image", None)
+    revision = getattr(args, "expected_package_runtime_revision", None)
+    if origin is None:
+        require(container is None and image is None and revision is None, "PACKAGE_RUNTIME_PINS_WITHOUT_ORIGIN")
+        return None
+    origin = package_runtime_origin(origin)
+    require(isinstance(container, str) and HEX_RE.fullmatch(container) and
+            isinstance(image, str) and IMAGE_RE.fullmatch(image) and
+            isinstance(revision, str) and SHA_RE.fullmatch(revision), "PACKAGE_RUNTIME_PINS_REQUIRED")
+    return {"origin": origin, "parentOrigin": PUBLIC_ORIGIN, "container": container,
+            "image": image, "sourceRevision": revision}
+
+
+def deployment_env_overrides(origin=None):
+    result = dict(ENV_OVERRIDES)
+    if origin is not None:
+        result.update(TADAZZ_PACKAGE_RUNTIME_ENABLED="true",
+                      TADAZZ_PACKAGE_RUNTIME_ORIGIN=package_runtime_origin(origin),
+                      TADAZZ_PACKAGE_PARENT_ORIGIN=PUBLIC_ORIGIN)
+    return result
+
+
+def package_runtime_policy(container):
+    environment = env_map(container["Config"].get("Env"))
+    return {"enabled": environment.get("TADAZZ_PACKAGE_RUNTIME_ENABLED") == "true",
+            "origin": environment.get("TADAZZ_PACKAGE_RUNTIME_ORIGIN"),
+            "parentOrigin": environment.get("TADAZZ_PACKAGE_PARENT_ORIGIN")}
+
+
+def desired_package_container(original, origin=None):
+    previous = env_map(original["Config"].get("Env"))
+    if origin is not None:
+        require(previous.get("TADAZZ_ACCOUNTS_ENABLED") == "true" and
+                previous.get("TADAZZ_PACKAGE_INSTALLER_ENABLED") == "true",
+                "PACKAGE_RUNTIME_REQUIRES_ACCOUNTS_INSTALLER")
+    return {"Config": {"Env": [name + "=" + value for name, value in
+                               {**previous, **deployment_env_overrides(origin)}.items()]}}
+
+
+def package_runtime_identity(args):
+    options = package_runtime_options(args)
+    if options is None:
+        return None
+    return {**options, "operatorSha256": sha256(Path(__file__).resolve())}
+
+
+def validate_package_runtime_container(args, container):
+    """One separately pinned, read-only runtime; never a general mount exception."""
+    options = package_runtime_options(args)
+    require(options is not None and container["Id"] == options["container"] and
+            container["Image"] == options["image"] and
+            container.get("Name") == "/tadazz-package-runtime", "PACKAGE_RUNTIME_IDENTITY_CHANGED")
+    state = container["State"]
+    require(state.get("Running") is True and not state.get("Paused") and not state.get("Restarting"),
+            "PACKAGE_RUNTIME_NOT_STABLE_RUNNING")
+    image = docker_api("GET", "/images/" + options["image"] + "/json")
+    require(image["Id"] == options["image"], "PACKAGE_RUNTIME_IMAGE_CHANGED")
+    config, host = container["Config"], container["HostConfig"]
+    labels = image["Config"].get("Labels") or {}
+    container_labels = config.get("Labels") or {}
+    require(labels.get("org.opencontainers.image.revision") == options["sourceRevision"] and
+            container_labels.get("org.opencontainers.image.revision") == options["sourceRevision"] and
+            all(isinstance(labels.get(name), str) and HEX_RE.fullmatch(labels[name]) and
+                container_labels.get(name) == labels[name]
+                for name in PACKAGE_RUNTIME_LABELS), "PACKAGE_RUNTIME_SOURCE_PIN_MISMATCH")
+    require(config.get("User") == "0:0" and image["Config"].get("User") == "0:0" and
+            config.get("Entrypoint") == PACKAGE_RUNTIME_ENTRYPOINT and
+            image["Config"].get("Entrypoint") == PACKAGE_RUNTIME_ENTRYPOINT and
+            config.get("Cmd") in (None, []) and image["Config"].get("Cmd") in (None, []),
+            "PACKAGE_RUNTIME_LAUNCH_CONTRACT")
+    require(config.get("WorkingDir") == "/app/runtime" and image["Config"].get("WorkingDir") == "/app/runtime",
+            "PACKAGE_RUNTIME_LAUNCH_CONTRACT")
+    expected_env = {"TADAZZ_PACKAGE_STORE": "/runtime-store",
+                    "TADAZZ_PACKAGE_PARENT_ORIGIN": PUBLIC_ORIGIN,
+                    "TADAZZ_PACKAGE_RUNTIME_ORIGIN": options["origin"],
+                    "TADAZZ_PACKAGE_RUNTIME_PORT": "3192"}
+    environment = env_map(config.get("Env"))
+    image_env = env_map(image["Config"].get("Env"))
+    require(set(environment) <= set(expected_env) | {"PATH", "NODE_VERSION", "YARN_VERSION", "NODE_ENV"} and
+            environment == {**image_env, **expected_env}, "PACKAGE_RUNTIME_ENV_CHANGED")
+    require(host.get("ReadonlyRootfs") is True and not host.get("Privileged") and
+            host.get("CapDrop") == ["ALL"] and not host.get("CapAdd") and
+            host.get("SecurityOpt") in (["no-new-privileges"], ["no-new-privileges:true"], ["no-new-privileges=true"]) and
+            not host.get("AutoRemove") and not host.get("Tmpfs") and not host.get("Devices") and
+            not host.get("DeviceRequests") and not host.get("VolumesFrom") and
+            not host.get("PidMode") and not host.get("UTSMode") and
+            host.get("IpcMode") == "private", "PACKAGE_RUNTIME_SECURITY_CHANGED")
+    require(host.get("NetworkMode") == "bridge" and
+            host.get("PortBindings") == {"3192/tcp": [{"HostIp": "127.0.0.1", "HostPort": "3192"}]} and
+            not host.get("ExtraHosts") and not host.get("Links"), "PACKAGE_RUNTIME_NETWORK_CHANGED")
+    require(host.get("Memory") == 256 * 1024**2 and host.get("MemorySwap") == 256 * 1024**2 and
+            host.get("NanoCpus") == 500000000 and host.get("PidsLimit") == 64,
+            "PACKAGE_RUNTIME_RESOURCE_LIMITS_CHANGED")
+    store = CONFIG_ROOT / "extensions/packages"
+    expected_mounts = {"/runtime-store": str(store),
+                       "/run/secrets/runtime-capability": str(PACKAGE_RUNTIME_SECRET)}
+    mounts = container.get("Mounts", [])
+    require(len(mounts) == 2 and {m.get("Destination") for m in mounts} == set(expected_mounts),
+            "PACKAGE_RUNTIME_MOUNTS_CHANGED")
+    for mount in mounts:
+        require(mount.get("Type") == "bind" and mount.get("RW") is False and
+                mount.get("Source") == expected_mounts[mount["Destination"]] and
+                mount.get("Propagation") == "rprivate", "PACKAGE_RUNTIME_MOUNTS_CHANGED")
+    plain_path(store, root_owned=True)
+    secret = plain_path(PACKAGE_RUNTIME_SECRET, directory=False, root_owned=True)
+    info = secret.stat()
+    require(stat.S_IMODE(info.st_mode) in (0o400, 0o600) and info.st_nlink == 1 and
+            info.st_size in (64, 65), "PACKAGE_RUNTIME_SECRET_PERMISSIONS")
+    return package_runtime_identity(args)
+
+
 def package_probe_policy(container):
     # Docker Config.Env is immutable for this inspected container identity.
     # Accounts are mandatory here; the application's REMOTE_QA exception cannot
@@ -196,14 +335,14 @@ def safe_probe_routes(value):
     return result
 
 
-def replacement_payload(original, image, revision, run_id):
+def replacement_payload(original, image, revision, run_id, runtime_origin=None):
     payload = copy.deepcopy(original["Config"])
     previous = env_map(payload.get("Env"))
     for name in ("TMPDIR", "TEMP", "TMP"):
         value = previous.get(name)
         if value:
             require(value.startswith("/") and value != "/app/config" and not value.startswith("/app/config/"), "TEMP_INSIDE_CUSTOMER_CONFIG")
-    merged = {**previous, **ENV_OVERRIDES}
+    merged = env_map(desired_package_container(original, runtime_origin)["Config"]["Env"])
     payload["Env"] = [name + "=" + value for name, value in merged.items()]
     payload["Image"] = image["Id"]
     payload["Labels"] = {
@@ -275,9 +414,9 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 HTTP = urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect())
 
 
-def request(origin, path, expected_status=200, method="GET", data=None, max_bytes=4 * 1024**2):
+def request(origin, path, expected_status=200, method="GET", data=None, max_bytes=4 * 1024**2, host="tadazz.com"):
     require(path.startswith("/") and not path.startswith("//"), "PROBE_PATH_INVALID")
-    headers = {"Host": "tadazz.com", "Accept": "*/*", "Accept-Encoding": "identity", "User-Agent": "Tadazz-guarded-release/1"}
+    headers = {"Host": host, "Accept": "*/*", "Accept-Encoding": "identity", "User-Agent": "Tadazz-guarded-release/1"}
     if data is not None:
         headers["Content-Type"] = "text/plain;charset=UTF-8"
     query = urllib.request.Request(origin + path, headers=headers, method=method, data=data)
@@ -318,6 +457,52 @@ def json_probe(origin, path, expected_status=200, expected=None):
         error.probe = response["diagnostic"]
         raise
     return value, response
+
+
+def package_runtime_expected_proof(args):
+    identity = package_runtime_identity(args)
+    if identity is None:
+        return None
+    probes = {"health": 200, "missingTicketDenied": 403, "invalidTicketDenied": 403,
+              "privateNoStore": True, "noCookies": True, "denialBodiesEmpty": True,
+              "securityHeaders": True}
+    return {**identity, "readOnlyContainerVerified": True,
+            "loopback": dict(probes), "publicHttps": dict(probes)}
+
+
+def package_runtime_probes(args):
+    """Real bounded GETs plus inspected image/security identity; health is not an image attestation."""
+    options = package_runtime_options(args)
+    if options is None:
+        return None
+    validate_package_runtime_container(args, inspect(options["container"]))
+    host = urllib.parse.urlsplit(options["origin"]).netloc
+    expected_permissions = {"camera=()", "microphone=()", "geolocation=()", "autoplay=()"}
+    for origin in ("http://127.0.0.1:3192", options["origin"]):
+        for path, status in (("/health", 200), ("/render", 403), ("/render?ticket=invalid", 403)):
+            response = request(origin, path, status, max_bytes=1024, host=host)
+            headers = response["headers"]
+            try:
+                require({v.strip().lower() for v in headers.get("cache-control", "").split(",")} == {"private", "no-store"} and
+                        headers.get("x-content-type-options") == "nosniff" and
+                        headers.get("referrer-policy") == "no-referrer" and
+                        {v.strip() for v in headers.get("permissions-policy", "").split(",")} == expected_permissions and
+                        "set-cookie" not in headers and "location" not in headers and
+                        "access-control-allow-origin" not in headers, "PACKAGE_RUNTIME_SECURITY_HEADERS")
+                if status == 200:
+                    require(headers.get("content-type", "").split(";", 1)[0].strip() == "application/json",
+                            "PACKAGE_RUNTIME_HEALTH_NOT_JSON")
+                    try:
+                        value = json.loads(response["body"])
+                    except (ValueError, UnicodeError):
+                        raise GateError("PACKAGE_RUNTIME_HEALTH_JSON_INVALID") from None
+                    require(value == {"status": "ok"}, "PACKAGE_RUNTIME_HEALTH_INVALID")
+                else:
+                    require(response["body"] == b"", "PACKAGE_RUNTIME_DENIAL_BODY")
+            except GateError as error:
+                error.probe = response["diagnostic"]
+                raise
+    return package_runtime_expected_proof(args)
 
 
 def billing_disabled_probe(origin):
@@ -667,7 +852,9 @@ def clone_boot(args, original, image, work, run_id, result):
     restored = plain_path(work / "restore-private", root_owned=True)
     validate_config(args, restored)
     native_files = native_preview_files(work.parent)
-    payload = replacement_payload(original, image, args.revision, run_id)
+    runtime_options = package_runtime_options(args)
+    runtime_origin = runtime_options["origin"] if runtime_options else None
+    payload = replacement_payload(original, image, args.revision, run_id, runtime_origin)
     payload["HostConfig"] = {
         "NetworkMode": "none", "Binds": [str(restored) + ":/app/config:rw"],
         "PortBindings": {}, "RestartPolicy": {"Name": "no"}, "Memory": 1024**3,
@@ -685,6 +872,7 @@ def clone_boot(args, original, image, work, run_id, result):
         mounts = candidate["Mounts"]
         require(len(mounts) == 1 and mounts[0]["Source"] == str(restored) and mounts[0]["Destination"] == "/app/config" and mounts[0]["RW"] is True, "CLONE_MOUNTS_NOT_ISOLATED")
         package_policy = package_probe_policy(candidate)
+        runtime_policy = package_runtime_policy(candidate) if runtime_options else None
         public_enabled = native_public_preview_enabled(env_map(candidate["Config"].get("Env")))
         result["packagePolicy"] = package_policy
         docker_api("POST", "/containers/" + container_id + "/start")
@@ -697,6 +885,7 @@ const expectedScopes = EXPECTED_MCP_SCOPES, expectedChallenge = EXPECTED_MCP_CHA
 const nativeFiles = NATIVE_PREVIEW_FILES;
 const publicEnabled = PUBLIC_PREVIEW_ENABLED, publicCatalogueIds = PUBLIC_CATALOGUE_IDS;
 const packagePolicy = PACKAGE_PROBE_POLICY, routes = {};
+const packageRuntimePolicy = PACKAGE_RUNTIME_POLICY;
 const crypto = require("node:crypto");
 let failureCode = "RESTORED_CANDIDATE_PROBE_FAILED";
 const fail = (code="RESTORED_CANDIDATE_PROBE_FAILED") => { failureCode=code; throw new Error("clone probe failed"); };
@@ -729,6 +918,10 @@ function req(path, status=200, limit=1048576) {
   if(packagePolicy.accountsEnabled!==true||process.env.TADAZZ_ACCOUNTS_ENABLED!=="true"||
      packagePolicy.installerEnabled!==(process.env.TADAZZ_PACKAGE_INSTALLER_ENABLED==="true")||
      packagePolicy.expectedStatus!==(packagePolicy.installerEnabled?401:404))fail();
+  if(packageRuntimePolicy!==null&&(packageRuntimePolicy.enabled!==true||
+     process.env.TADAZZ_PACKAGE_RUNTIME_ENABLED!=="true"||
+     process.env.TADAZZ_PACKAGE_RUNTIME_ORIGIN!==packageRuntimePolicy.origin||
+     process.env.TADAZZ_PACKAGE_PARENT_ORIGIN!==packageRuntimePolicy.parentOrigin))fail();
   const capabilityResponse=await req("/api/packages/capabilities",packagePolicy.expectedStatus);
   if(!capabilityResponse.headers.get("content-type")?.startsWith("application/json"))fail();
   const capabilities=await capabilityResponse.json();
@@ -771,9 +964,10 @@ function req(path, status=200, limit=1048576) {
       await unavailable("/api/extensions/preview/public-runtime/"+suffix);
   }
   const nativeApplicationPreview={files:nativeFiles,inlinePreviewEnabled:true,packagedHttpBytes:true,privateRuntimeUnauthorized:true,publicRuntimeEnabled:publicEnabled,publicRuntimeBytesVerified:publicEnabled,publicRuntimeInvalidDigestDenied:true,publicRuntimeInvalidNameDenied:true,publicCatalogueIds:publicEnabled?publicCatalogueIds:[],publicCatalogueUnknownIdDenied:true,authenticatedStudioRender:false};
-  process.stdout.write(JSON.stringify({ok:true,nativeApplicationPreview,packageCapabilities,routes}));
+  process.stdout.write(JSON.stringify({ok:true,nativeApplicationPreview,packageCapabilities,routes,
+    ...(packageRuntimePolicy===null?{}:{packageRuntimePolicy})}));
 })().catch(()=>{process.stdout.write(JSON.stringify({ok:false,routes,failureCode}));process.exitCode=1;});
-'''.replace("EXPECTED_PUBLIC_X", json.dumps(args.expected_jwk_x)).replace("NATIVE_PREVIEW_FILES", json.dumps(native_files)).replace("PUBLIC_PREVIEW_ENABLED", json.dumps(public_enabled)).replace("PUBLIC_CATALOGUE_IDS", json.dumps(PUBLIC_CATALOGUE_IDS)).replace("PACKAGE_PROBE_POLICY", json.dumps(package_policy)).replace("EXPECTED_MCP_SCOPES", json.dumps(MCP_SCOPES)).replace("EXPECTED_MCP_CHALLENGE", json.dumps(MCP_CHALLENGE))
+'''.replace("EXPECTED_PUBLIC_X", json.dumps(args.expected_jwk_x)).replace("NATIVE_PREVIEW_FILES", json.dumps(native_files)).replace("PUBLIC_PREVIEW_ENABLED", json.dumps(public_enabled)).replace("PUBLIC_CATALOGUE_IDS", json.dumps(PUBLIC_CATALOGUE_IDS)).replace("PACKAGE_PROBE_POLICY", json.dumps(package_policy)).replace("PACKAGE_RUNTIME_POLICY", json.dumps(runtime_policy)).replace("EXPECTED_MCP_SCOPES", json.dumps(MCP_SCOPES)).replace("EXPECTED_MCP_CHALLENGE", json.dumps(MCP_CHALLENGE))
         execution = docker_api("POST", "/containers/" + container_id + "/exec", {
             "AttachStdout": True, "AttachStderr": True, "Tty": False, "Cmd": ["node", "-e", program],
         })
@@ -792,7 +986,13 @@ function req(path, status=200, limit=1048576) {
                     "RESTORED_CANDIDATE_PROBE_FAILURE_CODE_INVALID")
             result["probeFailureCode"] = proof["failureCode"]
         require(not status["Running"] and status["ExitCode"] == 0, "RESTORED_CANDIDATE_BOOT_FAILED")
-        require(set(proof) == {"ok", "nativeApplicationPreview", "packageCapabilities", "routes"} and
+        expected_keys = {"ok", "nativeApplicationPreview", "packageCapabilities", "routes"}
+        if runtime_options:
+            expected_keys.add("packageRuntimePolicy")
+            require(proof.get("packageRuntimePolicy") == runtime_policy,
+                    "PACKAGE_RUNTIME_RESTORE_POLICY_MISMATCH")
+            result["packageRuntimePolicy"] = runtime_policy
+        require(set(proof) == expected_keys and
                 proof["ok"] is True and proof["nativeApplicationPreview"] == native_preview_proof(native_files, public_enabled) and
                 proof["packageCapabilities"] == package_probe_proof(package_policy),
                 "RESTORED_CANDIDATE_PROBES_FAILED")
@@ -811,13 +1011,23 @@ def validate_qualification(args, original, image):
     file = plain_path(args.qualification_receipt, directory=False, root_owned=True)
     require(stat.S_IMODE(file.stat().st_mode) == 0o600 and HEX_RE.fullmatch(args.qualification_sha256) and sha256(file) == args.qualification_sha256, "QUALIFICATION_RECEIPT_PIN")
     receipt = read_json(file)
+    runtime_options = package_runtime_options(args)
+    runtime_origin = runtime_options["origin"] if runtime_options else None
+    desired = desired_package_container(original, runtime_origin)
     require(receipt.get("success") is True and receipt.get("candidateCloneBoot", {}).get("passed") is True, "CANDIDATE_RESTORE_QUALIFICATION_NOT_PASSED")
     require(receipt.get("candidateCloneBoot", {}).get("nativeApplicationPreview") ==
             native_preview_proof(native_preview_files(Path(args.release_dir)),
-                                 native_public_preview_enabled({**env_map(original["Config"].get("Env")), **ENV_OVERRIDES})),
+                                 native_public_preview_enabled(env_map(desired["Config"]["Env"]))),
             "NATIVE_PREVIEW_RESTORE_QUALIFICATION_MISSING")
     require(receipt.get("candidateCloneBoot", {}).get("packageCapabilities") ==
-            package_probe_proof(package_probe_policy(original)), "PACKAGE_POLICY_RESTORE_QUALIFICATION_MISSING")
+            package_probe_proof(package_probe_policy(desired)), "PACKAGE_POLICY_RESTORE_QUALIFICATION_MISSING")
+    if runtime_options:
+        require(receipt.get("packageRuntime") == package_runtime_expected_proof(args) and
+                receipt.get("candidateCloneBoot", {}).get("packageRuntimePolicy") == package_runtime_policy(desired),
+                "PACKAGE_RUNTIME_RESTORE_QUALIFICATION_MISSING")
+    else:
+        require("packageRuntime" not in receipt and "packageRuntimePolicy" not in receipt.get("candidateCloneBoot", {}),
+                "PACKAGE_RUNTIME_RESTORE_QUALIFICATION_UNEXPECTED")
     require(receipt.get("revision") == args.revision and receipt.get("image") == image["Id"] and receipt.get("sourceImage") == original["Image"] and receipt.get("sourceContainer") == original["Id"] and receipt.get("configSha256") == args.expected_config_sha256, "RESTORE_QUALIFICATION_IDENTITY")
     when = dt.datetime.fromisoformat(receipt["finishedAt"])
     age = (dt.datetime.now(dt.timezone.utc) - when).total_seconds()
@@ -839,6 +1049,8 @@ def qualify_backup(args, stage, original, image, others):
     for sig in (signal.SIGTERM, signal.SIGINT):
         handlers[sig] = signal.signal(sig, lambda signum, frame: (_ for _ in ()).throw(GateError("OPERATOR_INTERRUPTED")))
     try:
+        if package_runtime_options(args):
+            report["packageRuntime"] = package_runtime_probes(args)
         fresh, _, fresh_others = baseline(args)
         require(fresh["Config"] == original["Config"] and fresh["HostConfig"] == original["HostConfig"] and fresh_others == others, "PREFLIGHT_CHANGED_BEFORE_STOP")
         report["roomGate"] = game_count_evidence(fresh)
@@ -858,7 +1070,7 @@ def qualify_backup(args, stage, original, image, others):
         if args.qualify_candidate:
             report["phase"] = "isolated-candidate-clone-boot"
             clone_boot(args, original, image, work, run_id, report["candidateCloneBoot"])
-        other_containers_unchanged(others, original["Id"])
+        other_containers_unchanged(others, original["Id"], args)
         report.update(success=True, phase="qualified", oldContainerRetained=True,
                       releaseEligible=report["candidateCloneBoot"].get("passed") is True)
     except BaseException as error:
@@ -922,6 +1134,7 @@ def validate_stage(args):
 
 
 def baseline(args):
+    runtime_options = package_runtime_options(args)
     original = inspect("tadazz")
     require(original["Id"] == args.expected_container and original["Image"] == args.expected_image, "PRODUCTION_IDENTITY_CHANGED")
     require(original["State"]["Running"] and not original["State"].get("Paused") and not original["State"].get("Restarting"), "PRODUCTION_NOT_STABLE_RUNNING")
@@ -942,22 +1155,30 @@ def baseline(args):
         if entry["Id"] == original["Id"]:
             continue
         other = inspect(entry["Id"])
-        for mount in other.get("Mounts", []):
-            if mount.get("Type") == "bind":
-                source = Path(mount["Source"]).resolve()
-                require(source != CONFIG_ROOT and source not in CONFIG_ROOT.parents and CONFIG_ROOT not in source.parents, "OTHER_CONTAINER_CUSTOMER_MOUNT")
+        if runtime_options and other["Id"] == runtime_options["container"]:
+            validate_package_runtime_container(args, other)
+        else:
+            for mount in other.get("Mounts", []):
+                if mount.get("Type") == "bind":
+                    source = Path(mount["Source"]).resolve()
+                    require(source != CONFIG_ROOT and source not in CONFIG_ROOT.parents and CONFIG_ROOT not in source.parents, "OTHER_CONTAINER_CUSTOMER_MOUNT")
         others[other["Id"]] = (other["Image"], other["State"]["StartedAt"])
     gateway = inspect("tadazz-phone-gateway")
     require(gateway["Id"] == args.expected_gateway and gateway["Id"] in others and gateway["State"]["Running"], "GATEWAY_IDENTITY_CHANGED")
+    if runtime_options:
+        require(runtime_options["container"] in others, "PACKAGE_RUNTIME_NOT_RUNNING")
     return original, image, others
 
 
-def other_containers_unchanged(others, current_id):
+def other_containers_unchanged(others, current_id, args=None):
     running = docker_api("GET", "/containers/json?all=0")
     require({entry["Id"] for entry in running} == set(others) | {current_id}, "OTHER_RUNNING_CONTAINERS_CHANGED")
     for container_id, expected in others.items():
         current = inspect(container_id)
         require(current["State"]["Running"] and (current["Image"], current["State"]["StartedAt"]) == expected, "OTHER_CONTAINER_RESTARTED")
+        runtime_options = package_runtime_options(args) if args is not None else None
+        if runtime_options and container_id == runtime_options["container"]:
+            validate_package_runtime_container(args, current)
 
 
 def canonical_host_config(host):
@@ -1011,7 +1232,9 @@ def deploy(args, stage, config, original, image, others):
     work.mkdir(mode=0o700)
     backup_name = "tadazz-pre-mcp-" + args.revision[:12] + "-" + run_id
     failed_name = "tadazz-failed-mcp-" + args.revision[:12] + "-" + run_id
-    payload = replacement_payload(original, image, args.revision, run_id)
+    runtime_options = package_runtime_options(args)
+    runtime_origin = runtime_options["origin"] if runtime_options else None
+    payload = replacement_payload(original, image, args.revision, run_id, runtime_origin)
     report = {"version": 1, "revision": args.revision, "image": image["Id"], "previousImage": original["Image"],
               "previousContainer": original["Id"], "rollbackContainer": backup_name, "success": False,
               "customerContentPrinted": False, "dataRestorePerformed": False, "phase": "pre-stop",
@@ -1021,6 +1244,8 @@ def deploy(args, stage, config, original, image, others):
     for sig in (signal.SIGTERM, signal.SIGINT):
         handlers[sig] = signal.signal(sig, lambda signum, frame: (_ for _ in ()).throw(GateError("OPERATOR_INTERRUPTED")))
     try:
+        if runtime_options:
+            report["packageRuntime"] = package_runtime_probes(args)
         # Re-read mutable identity/config and all running-container invariants under lock.
         fresh, fresh_image, fresh_others = baseline(args)
         require(fresh["Config"] == original["Config"] and fresh["HostConfig"] == original["HostConfig"] and fresh_others == others and fresh_image["Id"] == image["Id"], "PREFLIGHT_CHANGED_BEFORE_STOP")
@@ -1054,6 +1279,10 @@ def deploy(args, stage, config, original, image, others):
         wait_health()
         verify_replacement(original, inspect(replacement_id), payload)
         candidate = inspect(replacement_id)
+        if runtime_options:
+            require(package_runtime_policy(candidate) == package_runtime_policy(desired_package_container(original, runtime_origin)),
+                    "PACKAGE_RUNTIME_REPLACEMENT_POLICY_MISMATCH")
+            report["packageRuntimeAfterStartup"] = package_runtime_probes(args)
         package_policy = package_probe_policy(candidate)
         public_enabled = native_public_preview_enabled(env_map(candidate["Config"].get("Env")))
         for origin, label in ((LOCAL_ORIGIN, "loopback"), (PUBLIC_ORIGIN, "publicHttps")):
@@ -1062,8 +1291,8 @@ def deploy(args, stage, config, original, image, others):
         report["phase"] = "fresh-private-restore-check-after-startup"
         qualify_private_archive(work, expected, report["backup"])
         validate_config(args)
-        other_containers_unchanged(others, replacement_id)
-        report.update(success=True, phase="verified", environmentPreservedExcept=sorted(ENV_OVERRIDES),
+        other_containers_unchanged(others, replacement_id, args)
+        report.update(success=True, phase="verified", environmentPreservedExcept=sorted(deployment_env_overrides(runtime_origin)),
                       hostConfigurationUnchanged=True,
                       hostConfigurationComparison="exact-except-present-null-OomKillDisable-equals-false",
                       mountsUnchanged=True, otherContainersUnchanged=True,
@@ -1077,7 +1306,7 @@ def deploy(args, stage, config, original, image, others):
                 signal.signal(sig, signal.SIG_IGN)
             try:
                 rollback_container(original, replacement_id, failed_name, report)
-                other_containers_unchanged(others, original["Id"])
+                other_containers_unchanged(others, original["Id"], args)
             except BaseException as rollback_error:
                 report["rolledBack"] = False
                 report["rollbackFailureCode"] = str(rollback_error) if isinstance(rollback_error, GateError) else type(rollback_error).__name__
@@ -1733,7 +1962,13 @@ def main():
     parser.add_argument("--qualify-candidate", action="store_true", help="In qualify-backup mode only, boot the candidate on restored private data with no network/ports")
     parser.add_argument("--qualification-receipt", help="Pinned successful candidate-on-restored-data receipt required for deploy")
     parser.add_argument("--qualification-sha256")
+    parser.add_argument("--package-runtime-origin", help="Explicit optional HTTPS sandbox origin; preserves original runtime config when omitted")
+    parser.add_argument("--expected-package-runtime-container", help="Exact running read-only sandbox container ID, required with --package-runtime-origin")
+    parser.add_argument("--expected-package-runtime-image", help="Immutable sandbox image sha256, required with --package-runtime-origin")
+    parser.add_argument("--expected-package-runtime-revision", help="Independent qualified 40-hex sandbox source revision, required with --package-runtime-origin")
     args = parser.parse_args()
+    runtime_options = package_runtime_options(args)
+    runtime_origin = runtime_options["origin"] if runtime_options else None
     os.umask(0o077)
     require(sys.platform == "linux" and os.geteuid() == 0, "LINUX_ROOT_REQUIRED")
     require(SHA_RE.fullmatch(args.revision) and IMAGE_RE.fullmatch(args.image_sha256) and IMAGE_RE.fullmatch(args.expected_image), "SHA_ARGUMENT_INVALID")
@@ -1743,11 +1978,12 @@ def main():
     stage = validate_stage(args)
     config = validate_config(args) if args.action != "qualify-backup" or args.qualify_candidate else None
     original, image, others = baseline(args)
-    replacement_payload(original, image, args.revision, "preflight")
+    desired = replacement_payload(original, image, args.revision, "preflight", runtime_origin)
     room = game_count_evidence(original)
     package_policy = package_probe_policy(original)
     base_results = {"loopback": base_probes(LOCAL_ORIGIN, package_policy),
                     "publicHttps": base_probes(PUBLIC_ORIGIN, package_policy)}
+    runtime_proof = package_runtime_probes(args) if runtime_options else None
     if args.action == "qualify-backup":
         return qualify_backup(args, stage, original, image, others)
     if args.action == "preflight":
@@ -1755,6 +1991,8 @@ def main():
                           "productionChanged": False, "roomGate": room, "runningContainers": len(others) + 1,
                           "configPinnedAndPrivate": True, "candidateStagePinned": True,
                           "baseProbes": base_results,
+                          **({"packageRuntime": runtime_proof,
+                              "desiredPackageRuntimePolicy": package_runtime_policy({"Config": desired})} if runtime_options else {}),
                           "backupRestoreProof": "performed-only-after-stop-in-deploy", "installedHostVerified": False}))
         return 0
     return deploy(args, stage, config, original, image, others)
