@@ -94,7 +94,9 @@ with tarfile.open(fileobj=sys.stdin.buffer,mode="r|gz") as archive:
                               f"/evidence/{RUN}/source", f"/evidence/{RUN}/fixtures",
                               str(source_bytes + 128*1024*1024 if SUITE.startswith("full-show-") or SUITE == "native-launch" else 512*1024*1024)])
     with ARCHIVE.open("rb") as archive_stream:
-        transferred = subprocess.run([*SSH, extraction], stdin=archive_stream, capture_output=True, timeout=120)
+        # Media-rich source archives can exceed two minutes on the SSH uplink.
+        # This bound covers transport only; every build/test timeout is unchanged.
+        transferred = subprocess.run([*SSH, extraction], stdin=archive_stream, capture_output=True, timeout=600)
     if transferred.returncode:
         (EVIDENCE / "transfer.stderr.log").write_bytes(transferred.stderr)
         raise SystemExit(transferred.stderr.decode(errors="replace"))
