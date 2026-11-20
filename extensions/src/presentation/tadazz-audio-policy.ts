@@ -129,3 +129,21 @@ export function resolveTadazzAudioPolicy({
 
   return { slot: "lobby", continuityKey: "lobby" }
 }
+
+/** Native status and extension snapshots arrive separately; use one question attempt. */
+export function isNativeQuestionAudioReady({
+  extensionPhase,
+  questionId,
+  statusQuestionId,
+}: {
+  extensionPhase?: string | null
+  questionId?: string | null
+  statusQuestionId?: string | null
+}): boolean {
+  // The authoritative epoch still identifies real restarts downstream. This only
+  // defers an early native status until its matching question snapshot arrives.
+  return (
+    extensionPhase === "question" &&
+    (!statusQuestionId || statusQuestionId === questionId)
+  )
+}

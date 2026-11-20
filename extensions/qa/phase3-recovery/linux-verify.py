@@ -279,6 +279,7 @@ else:
         cases.extend("extensions/src/mcp-app/tests/server/" + name for name in ["protocol.nodecheck.ts", "http.nodecheck.ts", "access-token.nodecheck.ts", "drafts.nodecheck.ts", "integrity.nodecheck.ts", "boundaries.nodecheck.ts"])
         cases.append(native + "oauth-client-isolation.nodecheck.ts")
         cases.append(native + "account-preview-builtins.nodecheck.ts")
+        cases.append("extensions/qa/phase3-native-host-static/static-site.node.mjs")
     http_ok = check("native-http", 180, tsx + cases)
     check("native-types", 120, ["node", "/cleanup/node_modules/typescript/bin/tsc", "--noEmit", "-p", native + "tsconfig.json"])
     check("native-lint", 120, ["node", "--experimental-strip-types", "/cleanup/node_modules/oxlint/bin/oxlint", "-c", "oxlint.config.ts", "extensions/src/mcp-app/native-host", native])

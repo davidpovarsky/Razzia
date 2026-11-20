@@ -139,6 +139,23 @@ export function shouldSuppressAudioEffect({
   )
 }
 
+/** Interrupted or superseded effects are not browser autoplay denials. */
+export function audioEffectFailureDisposition(
+  error: unknown,
+  currentAttempt: boolean,
+): "ignore" | "blocked" | "error" {
+  const name =
+    typeof error === "object" && error !== null && "name" in error
+      ? error.name
+      : undefined
+
+  if (!currentAttempt || name === "AbortError") {
+    return "ignore"
+  }
+
+  return name === "NotAllowedError" ? "blocked" : "error"
+}
+
 /** Resume a timed recording at the same media position, including authored offsets. */
 export function resolveTimedAudioOffset(
   elapsedMs: number,
@@ -394,12 +411,15 @@ export const AudioCuePlayer = ({
 
     return suppliedSceneAudio
   }, [theme, suppliedSceneAudio, activeThemeAudioEvent])
+  const effectAttemptsRef = useRef(new WeakMap<HTMLAudioElement, symbol>())
   const pendingEffectRef = useRef<{
     element: HTMLAudioElement
     volume: number
+    attempt: symbol
   } | null>(null)
   useEffect(() => {
     pendingEffectRef.current = null
+    effectAttemptsRef.current = new WeakMap()
     lastEffectRef.current = { url: "", at: 0 }
   }, [gameId, activeCardKey, epoch])
   const callbacksRef = useRef({
@@ -885,6 +905,7 @@ export const AudioCuePlayer = ({
     tickRef.current = tick
 
     return () => {
+      effectAttemptsRef.current = new WeakMap()
       generationRef.current += 1
 
       if (rampRef.current) {
@@ -1556,6 +1577,13 @@ export const AudioCuePlayer = ({
         return
       }
 
+      const attempt = Symbol(identity)
+      effectAttemptsRef.current.set(sfx, attempt)
+
+      if (pendingEffectRef.current?.element === sfx) {
+        pendingEffectRef.current = null
+      }
+
       sfx.pause()
 
       if (sfx.getAttribute("src") !== url || sfx.error) {
@@ -1595,21 +1623,35 @@ export const AudioCuePlayer = ({
         pendingEffectRef.current = {
           element: sfx,
           volume: level * masterVolume,
+          attempt,
         }
 
         return
       }
 
       void sfx.play().catch((error: unknown) => {
+        const disposition = audioEffectFailureDisposition(
+          error,
+          effectAttemptsRef.current.get(sfx) === attempt,
+        )
+
+        if (disposition === "ignore") {
+          return
+        }
+
         if (isTimerEnd) {
           setTimerEnding(false)
         }
 
-        pendingEffectRef.current = {
-          element: sfx,
-          volume: level * masterVolume,
+        if (disposition === "blocked") {
+          pendingEffectRef.current = {
+            element: sfx,
+            volume: level * masterVolume,
+            attempt,
+          }
+          setAudioBlocked(true)
         }
-        setAudioBlocked(true)
+
         onError(error)
       })
     }
@@ -1676,17 +1718,29 @@ export const AudioCuePlayer = ({
     const pending = pendingEffectRef.current
 
     if (pending && !paused) {
+      // Consume only this pending effect; its promise cannot clear a newer cue.
+      pendingEffectRef.current = null
+      const attempt = Symbol("audio-unlock")
+      effectAttemptsRef.current.set(pending.element, attempt)
       pending.element.currentTime = 0
       pending.element.volume = pending.volume
-      void pending.element
-        .play()
-        .then(() => {
-          pendingEffectRef.current = null
-        })
-        .catch((error: unknown) => {
+      void pending.element.play().catch((error: unknown) => {
+        const disposition = audioEffectFailureDisposition(
+          error,
+          effectAttemptsRef.current.get(pending.element) === attempt,
+        )
+
+        if (disposition === "ignore") {
+          return
+        }
+
+        if (disposition === "blocked") {
+          pendingEffectRef.current = { ...pending, attempt }
           setAudioBlocked(true)
-          onError(error)
-        })
+        }
+
+        onError(error)
+      })
     }
 
     const { current } = currentRef

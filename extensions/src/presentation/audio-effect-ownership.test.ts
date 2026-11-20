@@ -4,6 +4,7 @@ import { createPlatformAudioExtras } from "../core/platform-audio-defaults"
 import { describe, expect, it } from "vitest"
 import {
   AudioCuePlayer,
+  audioEffectFailureDisposition,
   resolveTimedAudioOffset,
   shouldSuppressAudioEffect,
 } from "./audio-cue-player"
@@ -132,5 +133,34 @@ describe("default audio playback ownership", () => {
         now: 1100,
       }),
     ).toBe(false)
+  })
+})
+
+describe("sound effect promise ownership", () => {
+  it("ignores interrupted playback and stale rejections without blocking new music", () => {
+    expect(audioEffectFailureDisposition({ name: "AbortError" }, true)).toBe(
+      "ignore",
+    )
+    expect(audioEffectFailureDisposition({ name: "AbortError" }, false)).toBe(
+      "ignore",
+    )
+    expect(
+      audioEffectFailureDisposition({ name: "NotAllowedError" }, false),
+    ).toBe("ignore")
+    expect(
+      audioEffectFailureDisposition(new Error("old source failed"), false),
+    ).toBe("ignore")
+  })
+
+  it("retains genuine autoplay denial and reports current media failures separately", () => {
+    expect(
+      audioEffectFailureDisposition({ name: "NotAllowedError" }, true),
+    ).toBe("blocked")
+    expect(
+      audioEffectFailureDisposition({ name: "NotSupportedError" }, true),
+    ).toBe("error")
+    expect(
+      audioEffectFailureDisposition(new Error("media unavailable"), true),
+    ).toBe("error")
   })
 })

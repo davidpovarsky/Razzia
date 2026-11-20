@@ -9,7 +9,10 @@ import {
   type ExtensionStateEnvelope,
   type TadazzShowBackground,
 } from "@razzia/extensions/core"
-import { TADAZZ_IMAGE_URL } from "@razzia/extensions/presentation"
+import {
+  TADAZZ_IMAGE_URL,
+  isNativeQuestionAudioReady,
+} from "@razzia/extensions/presentation"
 import type { TadazzMotionScene } from "@razzia/web/features/game/components/TadazzMotionStage"
 import { usePlayerStore } from "@razzia/web/features/game/stores/player"
 import type { ViewRole } from "@razzia/web/features/game/contexts/view-role-context"
@@ -105,7 +108,18 @@ export function useLegacyPresentation({
     }
 
     if (statusName === STATUS.SHOW_QUESTION) {
-      return "showQuestion"
+      const statusQuestionId = (
+        activeStatus?.data as { questionId?: unknown } | undefined
+      )?.questionId
+
+      return isNativeQuestionAudioReady({
+        extensionPhase: extensionState.phase,
+        questionId: extensionState.questionId,
+        statusQuestionId:
+          typeof statusQuestionId === "string" ? statusQuestionId : undefined,
+      })
+        ? "showQuestion"
+        : undefined
     }
 
     if (statusName === STATUS.SELECT_ANSWER) {
@@ -121,7 +135,7 @@ export function useLegacyPresentation({
     }
 
     return undefined
-  }, [extensionState, statusName, currentSceneObj])
+  }, [extensionState, statusName, currentSceneObj, activeStatus])
 
   const hasCompetingMediaAudio =
     activeStatusMediaType === MEDIA_TYPES.VIDEO ||

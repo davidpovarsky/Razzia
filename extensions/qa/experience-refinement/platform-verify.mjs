@@ -17,18 +17,66 @@ const CONFIRM = "/sounds/tadazz-confirm-20261108.mp3"
 function recordMedia() {
   const trace = { elements: [], plays: [], events: [] }
   window.__platformAudioTrace = trace
+  const snapshot = (element) => ({
+    requestedSrc: element.getAttribute("src") ?? "",
+    currentSrc: element.currentSrc,
+    paused: element.paused,
+    ended: element.ended,
+    muted: element.muted,
+    volume: element.volume,
+    loop: element.loop,
+    currentTime: element.currentTime,
+    duration: Number.isFinite(element.duration) ? element.duration : null,
+    readyState: element.readyState,
+    networkState: element.networkState,
+    error: element.error
+      ? { code: element.error.code, message: element.error.message }
+      : null,
+  })
   const play = HTMLMediaElement.prototype.play
   HTMLMediaElement.prototype.play = function () {
+    let attempt
     if (this instanceof HTMLAudioElement) {
       if (!trace.elements.includes(this)) trace.elements.push(this)
-      trace.plays.push({
+      attempt = {
         url: new URL(this.currentSrc || this.src, location.href).pathname,
+        requestedUrl: new URL(this.src || location.href, location.href)
+          .pathname,
+        element: trace.elements.indexOf(this),
         at: performance.now(),
         volume: this.volume,
         loop: this.loop,
-      })
+        outcome: "pending",
+        before: snapshot(this),
+      }
+      trace.plays.push(attempt)
     }
-    return play.call(this)
+    try {
+      const result = play.call(this)
+      if (attempt) {
+        result.then(
+          () => {
+            attempt.outcome = "fulfilled"
+            attempt.settledAt = performance.now()
+            attempt.after = snapshot(this)
+          },
+          (error) => {
+            attempt.outcome = "rejected"
+            attempt.settledAt = performance.now()
+            attempt.error = { name: error?.name, message: error?.message }
+            attempt.after = snapshot(this)
+          },
+        )
+      }
+      return result
+    } catch (error) {
+      if (attempt) {
+        attempt.outcome = "threw"
+        attempt.error = { name: error?.name, message: error?.message }
+        attempt.after = snapshot(this)
+      }
+      throw error
+    }
   }
   window.addEventListener(
     "tadazz:sfx",
@@ -46,19 +94,32 @@ function recordMedia() {
 const mediaState = (page) =>
   page.evaluate(() => {
     const trace = window.__platformAudioTrace
+    const elements = (trace?.elements ?? []).map((element, index) => ({
+      element: index,
+      url: new URL(
+        element.currentSrc || element.src || location.href,
+        location.href,
+      ).pathname,
+      requestedSrc: element.getAttribute("src") ?? "",
+      currentSrc: element.currentSrc,
+      paused: element.paused,
+      ended: element.ended,
+      muted: element.muted,
+      time: element.currentTime,
+      duration: Number.isFinite(element.duration) ? element.duration : null,
+      volume: element.volume,
+      loop: element.loop,
+      ready: element.readyState,
+      network: element.networkState,
+      error: element.error
+        ? { code: element.error.code, message: element.error.message }
+        : null,
+    }))
     return {
-      active: (trace?.elements ?? [])
-        .filter(
-          (element) => !element.paused && !element.ended && element.volume > 0,
-        )
-        .map((element) => ({
-          url: new URL(element.currentSrc || element.src, location.href)
-            .pathname,
-          time: element.currentTime,
-          volume: element.volume,
-          loop: element.loop,
-          ready: element.readyState,
-        })),
+      active: elements.filter(
+        (element) => !element.paused && !element.ended && element.volume > 0,
+      ),
+      elements,
       plays: trace?.plays ?? [],
       events: trace?.events ?? [],
     }
@@ -81,7 +142,9 @@ export async function verifyPlatformDefaults(options) {
   const created = []
   const errors = []
   const failedMedia = []
+  const mediaResponses = []
   const pages = []
+  const pageRoles = new Map()
   const contexts = []
   const { computeCanonicalBaseDigest } =
     await import("../../src/core/digest.ts")
@@ -101,16 +164,37 @@ export async function verifyPlatformDefaults(options) {
   }
   const watch = async (page, role) => {
     pages.push(page)
+    pageRoles.set(page, role)
     await page.addInitScript(recordMedia)
     await page.emulateMedia({ reducedMotion: "no-preference" })
     page.on("pageerror", (error) => errors.push(role + ": " + error.message))
     page.on("response", (response) => {
       const path = new URL(response.url()).pathname
+      if (/^\/(?:sounds|tadazz-show\/music)\//u.test(path)) {
+        const headers = response.headers()
+        mediaResponses.push({
+          role,
+          path,
+          status: response.status(),
+          contentType: headers["content-type"],
+          contentLength: headers["content-length"],
+        })
+      }
       if (
         response.status() >= 400 &&
         /^\/(?:sounds|tadazz-show\/music)\//u.test(path)
       ) {
         failedMedia.push({ role, path, status: response.status() })
+      }
+    })
+    page.on("requestfailed", (request) => {
+      const path = new URL(request.url()).pathname
+      if (/^\/(?:sounds|tadazz-show\/music)\//u.test(path)) {
+        mediaResponses.push({
+          role,
+          path,
+          failure: request.failure()?.errorText,
+        })
       }
     })
     return page
@@ -355,6 +439,36 @@ export async function verifyPlatformDefaults(options) {
       }
 
       const player = await enter(room, "Platform " + theme)
+
+      if (legacy) {
+        const previousPlays = (await mediaState(host)).plays.length
+        await host.evaluate(() => {
+          for (const suffix of ["first", "second"]) {
+            window.dispatchEvent(
+              new CustomEvent("tadazz:sfx", {
+                detail: {
+                  name: "answer-submitted",
+                  identity: "platform-qa-interruption-" + suffix,
+                },
+              }),
+            )
+          }
+        })
+        const confirmations = async () =>
+          (await mediaState(host)).plays
+            .slice(previousPlays)
+            .filter((item) => item.requestedUrl === CONFIRM)
+        await expect
+          .poll(async () => (await confirmations()).map((item) => item.outcome))
+          .toEqual(["rejected", "fulfilled"])
+        assert.equal((await confirmations())[0].error?.name, "AbortError")
+        await expect(
+          host.getByTestId("audio-cue-player-state"),
+        ).toHaveAttribute("data-audio-blocked", "false")
+        await expect(host.getByTestId("host-enable-audio")).toHaveCount(0)
+        await expect.poll(() => activeUrls(host)).toEqual([LOBBY])
+        record("interrupted-stale-effect-keeps-live-background-audio-unblocked")
+      }
       await host
         .getByTestId("manager-control-toolbar")
         .getByRole("button", { name: "Start", exact: true })
@@ -368,6 +482,14 @@ export async function verifyPlatformDefaults(options) {
         VOTING,
       )
       await expect.poll(() => activeUrls(host)).toEqual([VOTING])
+
+      if (legacy) {
+        const phaseCues = (await mediaState(host)).events
+          .filter((event) => event.name === "phase-showQuestion")
+          .map((event) => event.identity)
+        assert.deepEqual(phaseCues, [room.gameId + ":1:phase:showQuestion"])
+        record("native-question-handoff-emits-one-authoritative-phase-cue")
+      }
       await choice.click()
       await expect
         .poll(
@@ -493,6 +615,48 @@ export async function verifyPlatformDefaults(options) {
     )
     return output
   } catch (error) {
+    const diagnosticPages = []
+    for (const [index, page] of pages.entries()) {
+      if (page.isClosed()) continue
+      const role = pageRoles.get(page) ?? "unknown"
+      const media = await mediaState(page).catch((failure) => ({
+        error: String(failure),
+      }))
+      const state = await page
+        .evaluate(() => ({
+          visibility: document.visibilityState,
+          focused: document.hasFocus(),
+          activation: navigator.userActivation
+            ? {
+                isActive: navigator.userActivation.isActive,
+                hasBeenActive: navigator.userActivation.hasBeenActive,
+              }
+            : null,
+          controls: [
+            ...document.querySelectorAll(
+              '[data-testid="audio-cue-player-state"], [data-testid="host-audio-controls"], [data-testid="host-toggle-audio-mute"], [data-testid="host-toggle-audio-pause"], [data-testid="host-enable-audio"], [data-testid="manager-control-toolbar"], [data-testid="platform-game-opening"], [data-testid="platform-closing-boundary"], [data-testid="tadazz-show"]',
+            ),
+          ].map((element) => ({
+            attributes: Object.fromEntries(
+              [...element.attributes]
+                .filter((attribute) =>
+                  /^(data-|aria-|disabled)/u.test(attribute.name),
+                )
+                .map((attribute) => [attribute.name, attribute.value]),
+            ),
+            text:
+              element.getAttribute("data-testid") === "audio-cue-player-state"
+                ? ""
+                : element.textContent?.trim().slice(0, 800),
+          })),
+        }))
+        .catch((failure) => ({ error: String(failure) }))
+      const screenshot = "failure-page-" + index + ".png"
+      await page
+        .screenshot({ path: join(evidence, screenshot) })
+        .catch(() => {})
+      diagnosticPages.push({ role, url: page.url(), screenshot, media, state })
+    }
     writeFileSync(
       join(evidence, "failure.json"),
       JSON.stringify(
@@ -503,6 +667,8 @@ export async function verifyPlatformDefaults(options) {
           created,
           errors,
           failedMedia,
+          mediaResponses,
+          diagnosticPages,
           pages: pages
             .filter((page) => !page.isClosed())
             .map((page) => page.url()),

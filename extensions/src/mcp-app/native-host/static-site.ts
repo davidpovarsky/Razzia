@@ -13,6 +13,7 @@ const CONTENT_TYPES: Readonly<Record<string, string>> = {
   ".json": "application/json; charset=utf-8",
   ".mjs": "text/javascript; charset=utf-8",
   ".mp3": "audio/mpeg",
+  ".mp4": "video/mp4",
   ".ogg": "audio/ogg",
   ".png": "image/png",
   ".svg": "image/svg+xml",
@@ -84,17 +85,69 @@ function resolveInsideDist(
   return realCandidate
 }
 
+type ByteRange = { readonly start: number; readonly end: number }
+
+/** One byte range is enough for browser media seeking; ignore multipart requests. */
+function singleByteRange(
+  value: string | null | undefined,
+  size: number,
+): ByteRange | "unsatisfiable" | null {
+  if (!value) {
+    return null
+  }
+
+  const unit = /^bytes=(.*)$/iu.exec(value.trim())
+
+  if (!unit || unit[1].includes(",")) {
+    return null
+  }
+
+  const range = /^(\d*)-(\d*)$/u.exec(unit[1].trim())
+
+  if (!range || (!range[1] && !range[2]) || size === 0) {
+    return "unsatisfiable"
+  }
+
+  // Decimal offsets can exceed Number.MAX_SAFE_INTEGER. Compare before narrowing.
+  const length = BigInt(size)
+
+  if (!range[1]) {
+    const suffix = BigInt(range[2])
+
+    return suffix === 0n
+      ? "unsatisfiable"
+      : {
+          start: Number(suffix >= length ? 0n : length - suffix),
+          end: size - 1,
+        }
+  }
+
+  const start = BigInt(range[1])
+  const end = range[2] ? BigInt(range[2]) : length - 1n
+
+  if (start >= length || end < start) {
+    return "unsatisfiable"
+  }
+
+  return {
+    start: Number(start),
+    end: Number(end >= length ? length - 1n : end),
+  }
+}
+
 function fileResponse(options: {
   readonly method: string
   readonly bytes: Buffer
   readonly contentType: string
   readonly consentPage: boolean
+  readonly allowRanges?: boolean
+  readonly range?: string | null
 }): Response {
+  const size = options.bytes.byteLength
   const headers = new Headers({
     "Content-Type": options.contentType,
-    "Content-Length": String(options.bytes.byteLength),
+    "Content-Length": String(size),
   })
-  const body = options.method === "HEAD" ? null : new Uint8Array(options.bytes)
 
   if (options.consentPage && options.contentType.startsWith("text/html;")) {
     for (const [name, value] of Object.entries(oauthConsentSecurityHeaders)) {
@@ -102,10 +155,37 @@ function fileResponse(options: {
     }
   }
 
-  return new Response(body, {
-    status: 200,
-    headers,
-  })
+  if (options.allowRanges) {
+    headers.set("Accept-Ranges", "bytes")
+  }
+
+  // Range applies only to GET. HEAD always describes the complete representation.
+  const range =
+    options.allowRanges && options.method === "GET"
+      ? singleByteRange(options.range, size)
+      : null
+
+  if (range === "unsatisfiable") {
+    headers.set("Content-Range", `bytes */${size}`)
+    headers.set("Content-Length", "0")
+
+    return new Response(null, { status: 416, headers })
+  }
+
+  if (range) {
+    headers.set("Content-Range", `bytes ${range.start}-${range.end}/${size}`)
+    headers.set("Content-Length", String(range.end - range.start + 1))
+
+    return new Response(
+      new Uint8Array(options.bytes.subarray(range.start, range.end + 1)),
+      { status: 206, headers },
+    )
+  }
+
+  return new Response(
+    options.method === "HEAD" ? null : new Uint8Array(options.bytes),
+    { status: 200, headers },
+  )
 }
 
 export function createSiteDistHandler(
@@ -193,6 +273,11 @@ export function createSiteDistHandler(
         bytes: readFileSync(assetPath),
         contentType,
         consentPage,
+        allowRanges: true,
+        // No validator is emitted here, so If-Range cannot authorize a partial copy.
+        range: request.headers.has("if-range")
+          ? null
+          : request.headers.get("range"),
       })
     }
 

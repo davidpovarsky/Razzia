@@ -10,7 +10,10 @@ import {
   resolveAudioCue,
   TADAZZ_SFX_BY_CUE,
 } from "./audio-cue-player"
-import { resolveTadazzAudioPolicy } from "./tadazz-audio-policy"
+import {
+  resolveTadazzAudioPolicy,
+  isNativeQuestionAudioReady,
+} from "./tadazz-audio-policy"
 
 describe("P0 Tadazz soundtrack policy", () => {
   it("starts the active voting music despite a delayed previous-scene cue and music payload", () => {
@@ -384,5 +387,56 @@ describe("P0 Tadazz soundtrack policy", () => {
       loop: true,
       isDefault: false,
     })
+  })
+})
+
+describe("native question audio handoff", () => {
+  it("defers the native SHOW_QUESTION cue while its extension snapshot is still prepared", () => {
+    expect(
+      isNativeQuestionAudioReady({
+        extensionPhase: "prepared",
+        questionId: "question-a",
+        statusQuestionId: "question-a",
+      }),
+    ).toBe(false)
+    expect(
+      isNativeQuestionAudioReady({
+        extensionPhase: "question",
+        questionId: "question-a",
+        statusQuestionId: "question-a",
+      }),
+    ).toBe(true)
+  })
+
+  it("rejects mismatched question snapshots in either arrival order", () => {
+    expect(
+      isNativeQuestionAudioReady({
+        extensionPhase: "question",
+        questionId: "question-a",
+        statusQuestionId: "question-b",
+      }),
+    ).toBe(false)
+    expect(
+      isNativeQuestionAudioReady({
+        extensionPhase: "question",
+        questionId: "question-b",
+        statusQuestionId: "question-a",
+      }),
+    ).toBe(false)
+  })
+
+  it("permits the same question again after replay preparation and preserves legacy missing IDs", () => {
+    const attempt = { questionId: "question-a", statusQuestionId: "question-a" }
+    expect(
+      ["question", "prepared", "question"].map((extensionPhase) =>
+        isNativeQuestionAudioReady({ ...attempt, extensionPhase }),
+      ),
+    ).toEqual([true, false, true])
+    expect(isNativeQuestionAudioReady({ extensionPhase: "question" })).toBe(
+      true,
+    )
+    expect(isNativeQuestionAudioReady({ extensionPhase: "answers" })).toBe(
+      false,
+    )
   })
 })
