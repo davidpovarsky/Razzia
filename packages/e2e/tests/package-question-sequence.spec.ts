@@ -37,6 +37,7 @@ interface PresentationProof {
   newQuestionRetry: ProofGroup
   currentStep: string
   failure?: string
+  failureState?: Record<string, unknown>
 }
 declare global {
   interface Window {
@@ -406,27 +407,63 @@ test("package question sequence, persistent iframe and real SDK failure recovery
     )
     expect(admission.ok(), "Synthetic player admission").toBe(true)
 
-    proof.currentStep = "root-opening-and-player-join"
+    proof.currentStep = "root-platform-opening"
     save()
     await page.goto(`/party/manager/${game.gameId}?lng=en`)
+    const opening = page.getByTestId("platform-game-opening")
+    await expect(opening).toHaveAttribute(
+      "data-platform-opening-stage",
+      "standby",
+    )
     await page.getByTestId("platform-opening-start").click()
-    await page.getByTestId("platform-opening-skip").click()
-    await expect(page.getByTestId("platform-game-opening")).toHaveCount(0)
+    await expect(opening).toHaveAttribute(
+      "data-platform-opening-stage",
+      "opening",
+    )
+    // Let the real root-owned ceremony finish; joining happens only in its lobby.
+    await expect(opening).toHaveCount(0)
+
+    proof.currentStep = "root-lobby-and-player-join"
+    save()
+    const hostStage = page.getByTestId("tadazz-show")
+    const hostToolbar = page.getByTestId("manager-control-toolbar")
+    const packageFrame = page.frameLocator(
+      '[data-testid="package-runtime-frame"]',
+    )
+    await expect(hostStage).toHaveAttribute("data-show-scene", "lobby")
+    await expect(hostToolbar).toHaveAttribute("data-host-lobby", "true")
+    await expect(packageFrame.locator("main")).toHaveAttribute(
+      "data-phase",
+      "lobby",
+    )
+    await expect(packageFrame.locator("header h1")).toHaveText("Lobby")
     const player = await playerContext.newPage()
     await player.goto(
       `http://127.0.0.1:3190/game?pin=${game.inviteCode}&lng=en`,
     )
     await player.getByPlaceholder("Username here").fill("Sequence QA Player")
     await player.getByRole("button", { name: "Submit", exact: true }).click()
-    await expect(player.getByTestId("tadazz-show")).toBeVisible()
+    await expect(player).toHaveURL(
+      new URL(game.gameId, "http://127.0.0.1:3190/party/").href,
+    )
+    await expect(player.getByTestId("tadazz-show")).toHaveAttribute(
+      "data-show-scene",
+      "lobby",
+    )
+    await expect(page.getByTestId("host-connected-counter")).toHaveText(
+      /^1\s*\/\s*1$/u,
+    )
     await page.bringToFront()
+
+    proof.currentStep = "root-start-leaves-ready-lobby"
+    save()
+    await hostToolbar
+      .getByRole("button", { name: "Start", exact: true })
+      .click()
+    await expect(hostStage).not.toHaveAttribute("data-show-scene", "lobby")
 
     proof.currentStep = "visible-question-two-second-sequence"
     save()
-    await page
-      .getByTestId("manager-control-toolbar")
-      .getByRole("button", { name: "Start", exact: true })
-      .click()
     const first = await getQuestionFrame(page, "Question 1")
     await expect(first.frame.locator(".answers button")).toHaveCount(0)
     await expect(first.frame.locator('aside[aria-label="timer"]')).toHaveCount(
@@ -608,6 +645,48 @@ test("package question sequence, persistent iframe and real SDK failure recovery
     })
     save()
   } catch (error) {
+    proof.failureState = await page
+      .evaluate(() => ({
+        platformOpeningStage:
+          document
+            .querySelector('[data-testid="platform-game-opening"]')
+            ?.getAttribute("data-platform-opening-stage") ?? null,
+        hostScene:
+          document
+            .querySelector('[data-testid="tadazz-show"]')
+            ?.getAttribute("data-show-scene") ?? null,
+        hostLobby:
+          document
+            .querySelector('[data-testid="manager-control-toolbar"]')
+            ?.getAttribute("data-host-lobby") ?? null,
+        connected:
+          document.querySelector('[data-testid="host-connected-counter"]')
+            ?.textContent ?? null,
+        iframeCount: document.querySelectorAll(
+          '[data-testid="package-runtime-frame"]',
+        ).length,
+      }))
+      .catch(() => ({ unavailable: true }))
+    proof.failureState.frames = await Promise.all(
+      page
+        .frames()
+        .filter((frame) => frame.parentFrame() !== null)
+        .map((frame) =>
+          frame
+            .evaluate(() => ({
+              phase:
+                document
+                  .querySelector("main[data-theme-layout]")
+                  ?.getAttribute("data-phase") ?? null,
+              heading:
+                document
+                  .querySelector("main[data-theme-layout] header h1")
+                  ?.textContent.slice(0, 100) ?? null,
+              observation: window.__packageQuestionProbe?.read() ?? null,
+            }))
+            .catch(() => ({ unavailable: true })),
+        ),
+    )
     proof.failure = (
       error instanceof Error ? error.message : "Unknown browser failure"
     )
