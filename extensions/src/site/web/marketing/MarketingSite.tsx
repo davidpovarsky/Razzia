@@ -683,40 +683,44 @@ export function MarketingSite() {
                 )}
               </div>
               <details className="catalogue-viewer-details">
-                <summary>{presentationControlText(language, "details")}</summary>
+                <summary>
+                  {presentationControlText(language, "details")}
+                </summary>
                 <p className="prose">
                   {view === "preview"
                     ? demonstration("demo")
-                    : t("Play the rounds, choose your answers and discover the theme in action.")}
+                    : t(
+                        "Play the rounds, choose your answers and discover the theme in action.",
+                      )}
                 </p>
-              <div className="button-row" style={{ marginTop: 24 }}>
-                <SiteButton
-                  className="btn btn-outline"
-                  onClick={() => open(selected)}
-                >
-                  <ArrowRight size={16} />
-                  {t("View game")}
-                </SiteButton>
-                <SiteButton
-                  className="btn btn-primary"
-                  onClick={() =>
-                    view === "preview"
-                      ? openDemo(selected)
-                      : void useGame(selected, "play")
-                  }
-                  disabled={installing !== null}
-                >
-                  {t(view === "preview" ? "Play this game" : useGameLabel)}
-                  <Play size={16} />
-                </SiteButton>
-                <SiteButton
-                  className="btn btn-quiet"
-                  onClick={() => go("store")}
-                >
-                  {t("Explore games")}
-                  <ArrowRight size={16} />
-                </SiteButton>
-              </div>
+                <div className="button-row" style={{ marginTop: 24 }}>
+                  <SiteButton
+                    className="btn btn-outline"
+                    onClick={() => open(selected)}
+                  >
+                    <ArrowRight size={16} />
+                    {t("View game")}
+                  </SiteButton>
+                  <SiteButton
+                    className="btn btn-primary"
+                    onClick={() =>
+                      view === "preview"
+                        ? openDemo(selected)
+                        : void useGame(selected, "play")
+                    }
+                    disabled={installing !== null}
+                  >
+                    {t(view === "preview" ? "Play this game" : useGameLabel)}
+                    <Play size={16} />
+                  </SiteButton>
+                  <SiteButton
+                    className="btn btn-quiet"
+                    onClick={() => go("store")}
+                  >
+                    {t("Explore games")}
+                    <ArrowRight size={16} />
+                  </SiteButton>
+                </div>
               </details>
               {installError && (
                 <p role="alert" className="catalogue-player-error">

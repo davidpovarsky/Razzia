@@ -16,6 +16,7 @@ import type {
 } from "../../../presentation/tadazz-show/TadazzStage"
 import type { TadazzV4Cue } from "../../../presentation/tadazz-v4/types"
 import { useCatalogueAudio } from "./use-catalogue-audio"
+import type { SoundtrackSlotId } from "../../../core/constants"
 import { createQuestionLeadIn } from "../../../presentation/question-lead-in"
 import {
   CatalogueMobileQuestion,
@@ -35,7 +36,17 @@ const nativeStageCss = [
   v4LayoutCss,
   v4Css,
 ].join("\n")
-type Phase = "intro" | "transition" | "question" | "voting" | "results" | "finish"
+type Phase =
+  "intro" | "transition" | "question" | "voting" | "results" | "finish"
+
+const soundtrackByPhase: Record<Phase, SoundtrackSlotId> = {
+  intro: "lobby",
+  transition: "question",
+  question: "question",
+  voting: "voting",
+  results: "results",
+  finish: "finale",
+}
 
 // Public solo play consumes the same authored questions and global theme as
 // installation. It uses the production stage; votes and score live in this tab.
@@ -87,23 +98,15 @@ function CataloguePlayer({
   const question = questions[index]
   const { playEffect, musicUrl } = useCatalogueAudio({
     enabled: sound,
-    slot:
-      phase === "voting"
-        ? "voting"
-        : phase === "results"
-          ? "results"
-          : phase === "finish"
-            ? "finale"
-            : phase === "transition" || phase === "question"
-              ? "question"
-              : "lobby",
+    slot: soundtrackByPhase[phase],
     screenKey: [demo.metadata.id, index, phase].join(":"),
     selection: show.defaults?.showTheme,
     cardAudioCues: question.audioCues,
   })
   const compactControls = useCatalogueMobileControls()
   const showMobileQuestion =
-    compactControls && (phase === "question" || phase === "voting" || phase === "results")
+    compactControls &&
+    (phase === "question" || phase === "voting" || phase === "results")
   const quizCount = questions.filter((card) => card.kind === "quiz").length
   const score = questions.reduce(
     (sum, card, position) =>
@@ -204,12 +207,14 @@ function CataloguePlayer({
         Object.entries(previous).filter(([key]) => Number(key) !== position),
       ),
     )
-    const question = stageQuestion(position)
+    const stageCard = stageQuestion(position)
     const ready = leadIn.wait()
     // Enter the question once. The platform clock, not the entrance animation,
     // decides when answer cards and their voting deadline appear.
-    void handle.showQuestion({ ...question, options: [] }).catch(() => {
-      if (mounted.current) setError(t("The game could not continue. Please try again."))
+    void handle.showQuestion({ ...stageCard, options: [] }).catch(() => {
+      if (mounted.current) {
+        setError(t("The game could not continue. Please try again."))
+      }
     })
     const opensAt = await ready
 
@@ -221,7 +226,7 @@ function CataloguePlayer({
     setSeconds(duration)
     deadline.current = opensAt + duration * 1000
     transition("voting")
-    void handle.openVoting(duration, deadline.current, question).catch(() => {
+    void handle.openVoting(duration, deadline.current, stageCard).catch(() => {
       // Revealing an answer or leaving the player cancels the voting animation.
     })
   }
@@ -344,6 +349,14 @@ function CataloguePlayer({
       : t("You shared {{count}} choices", { count: Object.keys(votes).length })
   }
 
+  let nextState: "start" | "replay" | "next" = "next"
+
+  if (phase === "intro") {
+    nextState = "start"
+  } else if (phase === "finish") {
+    nextState = "replay"
+  }
+
   return (
     <ShowThemeScope theme={theme}>
       <section
@@ -377,60 +390,103 @@ function CataloguePlayer({
                   showAnswers={phase !== "question"}
                   busy={busy}
                   selected={votes[index]}
-                  correctAnswers={phase === "results" && question.kind === "quiz" ? question.correctAnswers.map((answer) => answer - 1) : undefined}
+                  correctAnswers={
+                    phase === "results" && question.kind === "quiz"
+                      ? question.correctAnswers.map((answer) => answer - 1)
+                      : undefined
+                  }
                   onChoose={choose}
                 />
               )}
               <PresentationControls
-                previous={{ disabled: busy || phase === "intro" || phase === "transition" || phase === "question", onClick: () => run(back), testId: "catalogue-back" }}
-                next={{ state: phase === "intro" ? "start" : phase === "finish" ? "replay" : "next", disabled: busy || phase === "transition" || phase === "question", onClick: () => run(next), testId: "catalogue-next" }}
-                replay={phase === "finish" ? undefined : { disabled: busy || phase === "transition" || phase === "question", onClick: () => run(restart), testId: "catalogue-replay" }}
-                sound={{ enabled: sound, onClick: () => setSound((value) => !value), testId: "catalogue-sound" }}
+                previous={{
+                  disabled:
+                    busy ||
+                    phase === "intro" ||
+                    phase === "transition" ||
+                    phase === "question",
+                  onClick: () => run(back),
+                  testId: "catalogue-back",
+                }}
+                next={{
+                  state: nextState,
+                  disabled:
+                    busy || phase === "transition" || phase === "question",
+                  onClick: () => run(next),
+                  testId: "catalogue-next",
+                }}
+                replay={
+                  phase === "finish"
+                    ? undefined
+                    : {
+                        disabled:
+                          busy ||
+                          phase === "transition" ||
+                          phase === "question",
+                        onClick: () => run(restart),
+                        testId: "catalogue-replay",
+                      }
+                }
+                sound={{
+                  enabled: sound,
+                  onClick: () => setSound((value) => !value),
+                  testId: "catalogue-sound",
+                }}
               />
-              {error && <p role="alert" className="catalogue-player-error">{error}</p>}
+              {error && (
+                <p role="alert" className="catalogue-player-error">
+                  {error}
+                </p>
+              )}
             </>
           }
           details={
             <>
-              {phase === "results" && question.note && <p className="catalogue-answer-note">{question.note}</p>}
+              {phase === "results" && question.note && (
+                <p className="catalogue-answer-note">{question.note}</p>
+              )}
               <p className="catalogue-player-note">
                 {quizCount
                   ? t("Play solo. Your answers and score stay in this tab.")
-                  : t("Play solo. Survey results show only your own choice.")}{" "}
-                {t("Use this game to host the complete show with your audience.")}
+                  : t(
+                      "Play solo. Survey results show only your own choice.",
+                    )}{" "}
+                {t(
+                  "Use this game to host the complete show with your audience.",
+                )}
               </p>
             </>
           }
         >
-        <div
-          className="catalogue-player-frame"
-          data-testid="catalogue-native-stage"
-          dir="ltr"
-          aria-hidden={showMobileQuestion || undefined}
-        >
-          <TadazzV4StageAdapter
-            ref={stage}
-            labels={{
-              introCaption: demo.metadata.title,
-              footer: demo.metadata.title,
-              correctAnswer: t("Correct answer"),
-              audienceFavourite: t("Your choice"),
-              audienceResults: t("Your choice"),
-            }}
-            v4Labels={{
-              audienceResults:
-                question.kind === "quiz"
-                  ? t("Correct answer")
-                  : t("Your choice"),
-              mostChosenAnswer: t("Your choice"),
-            }}
-            backdropUrl={themeAdapterAsset(theme, "questionBackdrop")}
-            interactive={!showMobileQuestion}
-            onSelectOption={choose}
-            onCue={onCue}
-            reducedMotion={reducedMotion}
-          />
-        </div>
+          <div
+            className="catalogue-player-frame"
+            data-testid="catalogue-native-stage"
+            dir="ltr"
+            aria-hidden={showMobileQuestion || undefined}
+          >
+            <TadazzV4StageAdapter
+              ref={stage}
+              labels={{
+                introCaption: demo.metadata.title,
+                footer: demo.metadata.title,
+                correctAnswer: t("Correct answer"),
+                audienceFavourite: t("Your choice"),
+                audienceResults: t("Your choice"),
+              }}
+              v4Labels={{
+                audienceResults:
+                  question.kind === "quiz"
+                    ? t("Correct answer")
+                    : t("Your choice"),
+                mostChosenAnswer: t("Your choice"),
+              }}
+              backdropUrl={themeAdapterAsset(theme, "questionBackdrop")}
+              interactive={!showMobileQuestion}
+              onSelectOption={choose}
+              onCue={onCue}
+              reducedMotion={reducedMotion}
+            />
+          </div>
         </GameViewer>
       </section>
     </ShowThemeScope>

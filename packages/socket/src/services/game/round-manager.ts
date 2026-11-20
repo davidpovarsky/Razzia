@@ -899,6 +899,8 @@ export class RoundManager {
         ? this.question.media
         : undefined
     this.opts.broadcast(STATUS.SHOW_QUESTION, {
+      questionType: this.question.type,
+      questionMediaType: this.question.media?.type,
       totalAnswers: this.question.answers.length,
       questionNumber: this.currentQuestion + 1,
       questionId: this.opts.getQuestionId?.(this.currentQuestion),

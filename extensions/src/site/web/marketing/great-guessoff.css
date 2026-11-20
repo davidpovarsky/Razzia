@@ -477,7 +477,6 @@
   }
 }
 @media (max-width: 700px) {
-
   .ggo-winner-z {
     font-size: 7vw;
   }
@@ -504,7 +503,10 @@
 .ggo-native[data-ggo-phase="results"] .tzv4-stage .q-frame .eyebrow {
   display: none !important;
 }
-.ggo-native[data-ggo-phase="results"] .tzv4-stage .choice-slot:is(.is-favourite, .is-correct) .winner-tag {
+.ggo-native[data-ggo-phase="results"]
+  .tzv4-stage
+  .choice-slot:is(.is-favourite, .is-correct)
+  .winner-tag {
   display: block !important;
   opacity: 1 !important;
   top: 8px;

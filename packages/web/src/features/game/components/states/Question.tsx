@@ -12,7 +12,10 @@ interface Props {
   hideHeading?: boolean
 }
 
-const Question = ({ data: { question, media, cooldown }, hideHeading }: Props) => {
+const Question = ({
+  data: { question, media, cooldown },
+  hideHeading,
+}: Props) => {
   const [sfxShow] = useSound(SFX.SHOW_SOUND, { volume: 0.5 })
   const {
     effectiveExtensionState,

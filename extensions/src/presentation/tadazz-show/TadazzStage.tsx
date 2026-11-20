@@ -129,7 +129,11 @@ export interface TadazzStageHandle {
   /** Adds/updates option cards for the question already on stage (SHOW_QUESTION → SELECT_ANSWER). */
   presentOptions(data: StageQuestion): Promise<void>
   /** Commit answer cards and the authoritative voting clock in one frame. */
-  openVoting(seconds: number | null, deadlineMs?: number, question?: StageQuestion): Promise<void>
+  openVoting(
+    seconds: number | null,
+    deadlineMs?: number,
+    question?: StageQuestion,
+  ): Promise<void>
   lockVoting(): Promise<void>
   revealResults(input: StageRevealInput): Promise<StageRevealResult | null>
   showLeaderboard(entries: StageLeaderEntry[]): Promise<StageLeaderEntry[]>
@@ -718,7 +722,10 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
           )
         },
         async openVoting(seconds, deadlineMs, question) {
-          if ((!question && !modelRef.current.question) || (!question && modeRef.current === "results")) {
+          if (
+            (!question && !modelRef.current.question) ||
+            (!question && modeRef.current === "results")
+          ) {
             return
           }
 
@@ -733,11 +740,13 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
             statusText: labelsRef.current.votingOpen,
             statusMode: "voting",
             timerDisplay: timed ? "block" : "none",
-            flags: (question?.options ?? m.question?.options ?? m.flags).map((_, i) => ({
-              ...m.flags[i],
-              locked: false,
-              open: true,
-            })),
+            flags: (question?.options ?? m.question?.options ?? m.flags).map(
+              (_, i) => ({
+                ...m.flags[i],
+                locked: false,
+                open: true,
+              }),
+            ),
           }))
 
           /* oxlint-enable max-nested-callbacks */

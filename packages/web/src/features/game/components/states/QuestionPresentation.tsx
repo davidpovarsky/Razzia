@@ -37,7 +37,7 @@ export function NativeQuestionHeading({
       entrance={{
         ...stageAnimations.questionEntrance,
         durationMs: Math.min(
-          stageAnimations.questionEntrance?.durationMs ?? 800,
+          stageAnimations.questionEntrance.durationMs,
           QUESTION_LEAD_IN_MS,
         ),
       }}
@@ -50,11 +50,17 @@ export function NativeQuestionHeading({
         data-native-question-heading
         className={clsx(
           "max-w-5xl text-center leading-tight font-bold break-words text-white drop-shadow-lg",
-          isUltraCompact
-            ? "text-lg sm:text-xl"
-            : compact || isCompact
-              ? "text-xl sm:text-2xl md:text-3xl"
-              : "text-2xl sm:text-3xl md:text-4xl lg:text-5xl",
+          (() => {
+            if (isUltraCompact) {
+              return "text-lg sm:text-xl"
+            }
+
+            if (compact || isCompact) {
+              return "text-xl sm:text-2xl md:text-3xl"
+            }
+
+            return "text-2xl sm:text-3xl md:text-4xl lg:text-5xl"
+          })(),
         )}
       >
         {question}

@@ -7,7 +7,7 @@ export interface PreviewStageIdentity {
   role: string
 }
 
-const order: Record<string, number> = {
+const order: Partial<Record<string, number>> = {
   question: 0,
   answerCards: 1,
   voting: 2,
@@ -20,23 +20,42 @@ const order: Record<string, number> = {
 export function createPreviewStageContinuity() {
   let previous: PreviewStageIdentity | null = null
   let generation = 0
+
   return {
     select(next: PreviewStageIdentity): number {
+      const previousOrder = previous ? order[previous.phase] : undefined
+      const nextOrder = order[next.phase]
       const sameQuestion = Boolean(
-        previous && next.cardKey && previous.cardKey === next.cardKey &&
+        previous &&
+        next.cardKey &&
+        previous.cardKey === next.cardKey &&
         previous.appearanceRevision === next.appearanceRevision &&
-        previous.renderer === next.renderer && previous.role === next.role &&
-        order[previous.phase] !== undefined && order[next.phase] !== undefined,
+        previous.renderer === next.renderer &&
+        previous.role === next.role &&
+        previousOrder !== undefined &&
+        nextOrder !== undefined,
       )
-      const forward = sameQuestion && previous !== null &&
-        order[next.phase] > order[previous.phase]
-      const sameRequest = previous !== null &&
+      const forward =
+        sameQuestion &&
+        previous !== null &&
+        previousOrder !== undefined &&
+        nextOrder !== undefined &&
+        nextOrder > previousOrder
+      const sameRequest =
+        previous !== null &&
         previous.clockEpoch === next.clockEpoch &&
-        previous.cardKey === next.cardKey && previous.phase === next.phase &&
+        previous.cardKey === next.cardKey &&
+        previous.phase === next.phase &&
         previous.appearanceRevision === next.appearanceRevision &&
-        previous.renderer === next.renderer && previous.role === next.role
-      if (!sameRequest && !forward) generation += 1
+        previous.renderer === next.renderer &&
+        previous.role === next.role
+
+      if (!sameRequest && !forward) {
+        generation += 1
+      }
+
       previous = next
+
       return generation
     },
   }

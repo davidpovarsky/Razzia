@@ -8,7 +8,8 @@ import {
 import { siteText as t } from "../../locales"
 import mobileQuestionCss from "./catalogue-mobile-question.css?inline"
 
-const MOBILE_CONTROLS_QUERY = "(max-width: 700px)"
+const MOBILE_CONTROLS_QUERY =
+  "(max-width: 700px), (max-height: 500px) and (orientation: landscape)"
 
 function subscribeToMobileControls(onChange: () => void) {
   const media = window.matchMedia(MOBILE_CONTROLS_QUERY)
@@ -65,13 +66,19 @@ export function CatalogueMobileQuestion({
     ?.map((index) => question.options[index]?.label)
     .filter((label): label is string => Boolean(label))
 
+  let phase = voting ? "voting" : "results"
+
+  if (!showAnswers) {
+    phase = "question"
+  }
+
   return (
     <section
       className="catalogue-mobile-question"
       data-testid="catalogue-mobile-question"
       data-question-key={question.key}
       data-question-type={questionType}
-      data-phase={!showAnswers ? "question" : voting ? "voting" : "results"}
+      data-phase={phase}
       data-theme-id={theme.definition.id}
       aria-label={t("Choose an answer")}
       dir="auto"
@@ -89,26 +96,28 @@ export function CatalogueMobileQuestion({
           alt={question.photoAlt ?? question.question}
         />
       )}
-      {showAnswers && <TadazzAnswerPad
-        question={question}
-        questionType="single"
-        selected={selected === undefined ? [] : [selected]}
-        submitted={false}
-        disabled={!voting || busy}
-        onToggle={onChoose}
-        onSubmit={(keys) => {
-          const [choice] = keys
+      {showAnswers && (
+        <TadazzAnswerPad
+          question={question}
+          questionType="single"
+          selected={selected === undefined ? [] : [selected]}
+          submitted={false}
+          disabled={!voting || busy}
+          onToggle={onChoose}
+          onSubmit={(keys) => {
+            const [choice] = keys
 
-          if (
-            keys.length === 1 &&
-            Number.isInteger(choice) &&
-            choice >= 0 &&
-            choice < question.options.length
-          ) {
-            onChoose(choice)
-          }
-        }}
-      />}
+            if (
+              keys.length === 1 &&
+              Number.isInteger(choice) &&
+              choice >= 0 &&
+              choice < question.options.length
+            ) {
+              onChoose(choice)
+            }
+          }}
+        />
+      )}
       {showAnswers && !voting && (
         <div className="catalogue-mobile-feedback" role="status">
           <p data-testid="catalogue-mobile-selected-answer" dir="auto">

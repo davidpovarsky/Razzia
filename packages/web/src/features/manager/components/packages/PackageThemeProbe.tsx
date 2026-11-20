@@ -72,7 +72,11 @@ export function PackageThemeProbe({ receipt }: { receipt: PackageReceipt }) {
   }
 
   return (
-    <div className="space-y-2" data-testid="package-preview" data-package-preview-kind="theme-inspection">
+    <div
+      className="space-y-2"
+      data-testid="package-preview"
+      data-package-preview-kind="theme-inspection"
+    >
       <GameViewer
         title={receipt.manifest.displayName}
         status={t(`extensions:packages.phases.${phase}`)}

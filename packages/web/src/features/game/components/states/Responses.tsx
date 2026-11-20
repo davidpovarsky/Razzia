@@ -13,7 +13,11 @@ interface Props {
   hideHeading?: boolean
 }
 
-const Responses = ({ data, extensionState: propExtensionState, hideHeading = false }: Props) => {
+const Responses = ({
+  data,
+  extensionState: propExtensionState,
+  hideHeading = false,
+}: Props) => {
   const { question, type } = data
   const { ResponsesComponent } = QUESTION_REGISTRY[type]
   const contextExtensionState = useExtensionState()

@@ -2,14 +2,22 @@ import { runSteps, type StageStep } from "../tadazz-show/show-director"
 import type { TadazzStageHandle } from "../tadazz-show/TadazzStage"
 
 /** Owns one mounted stage. Invalidation must precede unmount or replacement. */
-export function createPreviewTransitionOwner(stage: TadazzStageHandle, latestVoting?: (questionKey: string | null) => { seconds: number | null; deadlineMs?: number } | null) {
+export function createPreviewTransitionOwner(
+  stage: TadazzStageHandle,
+  latestVoting?: (
+    questionKey: string | null,
+  ) => { seconds: number | null; deadlineMs?: number } | null,
+) {
   let generation = 0
   let disposed = false
   const unsafe = new Set<Promise<unknown>>()
 
   function track<T>(promise: Promise<T>): Promise<T> {
     unsafe.add(promise)
-    void promise.then(() => unsafe.delete(promise), () => unsafe.delete(promise))
+    void promise.then(
+      () => unsafe.delete(promise),
+      () => unsafe.delete(promise),
+    )
     return promise
   }
 
@@ -18,7 +26,19 @@ export function createPreviewTransitionOwner(stage: TadazzStageHandle, latestVot
   }
 
   async function run(steps: StageStep[]): Promise<boolean> {
-    if (steps.some((step) => !["showQuestion", "presentOptions", "nextQuestion", "openVoting", "lockVoting", "revealResults"].includes(step.op))) {
+    if (
+      steps.some(
+        (step) =>
+          ![
+            "showQuestion",
+            "presentOptions",
+            "nextQuestion",
+            "openVoting",
+            "lockVoting",
+            "revealResults",
+          ].includes(step.op),
+      )
+    ) {
       throw new Error("show-preview:unsupported-step")
     }
     const captured = ++generation
@@ -31,25 +51,39 @@ export function createPreviewTransitionOwner(stage: TadazzStageHandle, latestVot
     const guarded = new Proxy(stage, {
       get(target, property) {
         if (property === "nextQuestion") {
-          return (question: Parameters<TadazzStageHandle["nextQuestion"]>[0]) => track((async () => {
-            if (!current()) return
-            let entrance: Promise<void> | undefined
-            await target.playZZWipe(async () => {
-              if (current()) {
-                entrance = target.showQuestion(question)
-                await entrance
-              }
-            })
-            if (entrance) await entrance
-            else if (current()) throw new Error("show-preview:wipe-not-covered")
-          })())
+          return (question: Parameters<TadazzStageHandle["nextQuestion"]>[0]) =>
+            track(
+              (async () => {
+                if (!current()) {
+                  return
+                }
+
+                const entrance: { promise?: Promise<void> } = {}
+                await target.playZZWipe(async () => {
+                  if (current()) {
+                    entrance.promise = target.showQuestion(question)
+                    await entrance.promise
+                  }
+                })
+
+                if (entrance.promise) {
+                  await entrance.promise
+                } else if (current()) {
+                  throw new Error("show-preview:wipe-not-covered")
+                }
+              })(),
+            )
         }
         if (property === "openVoting" && latestVoting) {
           return (...args: Parameters<TadazzStageHandle["openVoting"]>) => {
             if (!current()) return Promise.resolve()
-            const question = args[2]
+
+            const [, , question] = args
             const timing = latestVoting(question?.key ?? target.questionKey)
-            return timing ? target.openVoting(timing.seconds, timing.deadlineMs, question) : Promise.resolve()
+
+            return timing
+              ? target.openVoting(timing.seconds, timing.deadlineMs, question)
+              : Promise.resolve()
           }
         }
         const value = Reflect.get(target, property, target)
@@ -65,7 +99,11 @@ export function createPreviewTransitionOwner(stage: TadazzStageHandle, latestVot
               : arg,
           )
           const result = Reflect.apply(value, target, safeArgs)
-          return (property === "lockVoting" || property === "playZZWipe") && result instanceof Promise ? track(result) : result
+
+          return (property === "lockVoting" || property === "playZZWipe") &&
+            result instanceof Promise
+            ? track(result)
+            : result
         }
       },
     })
@@ -81,7 +119,9 @@ export function createPreviewTransitionOwner(stage: TadazzStageHandle, latestVot
     run,
     invalidate,
     hasUnsafe: () => unsafe.size > 0,
-    async drain() { await Promise.allSettled([...unsafe]) },
+    async drain() {
+      await Promise.allSettled([...unsafe])
+    },
     capture() {
       const captured = generation
       return () => !disposed && captured === generation

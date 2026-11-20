@@ -92,6 +92,8 @@ export type ShowScene =
       kind: "question"
       key: string
       question: StageQuestion
+      questionType?: string
+      questionMediaType?: string
       media?: QuestionMediaRef
     }
   | {
@@ -99,6 +101,7 @@ export type ShowScene =
       key: string
       question: StageQuestion
       questionType: string
+      questionMediaType?: string
       seconds: number | null
       remainingSeconds: number | null
       votingStartsAt?: number
@@ -115,6 +118,7 @@ export type ShowScene =
       key: string
       question: StageQuestion
       questionType: string
+      questionMediaType?: string
       reveal: StageRevealInput
       estimation?: RevealDistributionSnapshot["estimation"]
       responders?: { responders: number; eligible: number }
@@ -205,7 +209,9 @@ export function buildStageQuestion(input: {
     number,
     totalQuestions: questionStates?.total ?? null,
     answerCount: input.answerCount ?? answers.length,
-    hasAnswerImages: Boolean(visuals?.some((visual) => visual.url && visual.display !== "text")),
+    hasAnswerImages: Boolean(
+      visuals?.some((visual) => visual.url && visual.display !== "text"),
+    ),
     round,
     ...(note ? { note } : {}),
     ...(questionImage ? { questionImage, photoAlt: photoAlt || text } : {}),
@@ -494,13 +500,21 @@ export function computeShowScene(input: ShowInput): ShowScene {
       const media = asRecord(data.media)
       const answerCount = Number(data.totalAnswers) || 0
       const visuals = currentAnswerVisuals(envelope, answerCount)
-      const hasAnswerImages = visuals?.some((visual) => visual.url && visual.display !== "text")
+      const hasAnswerImages = visuals?.some(
+        (visual) => visual.url && visual.display !== "text",
+      )
       const question = buildStageQuestion({
         text: legacyText(data.question ?? ""),
         answers: [],
         answerCount,
         visuals,
-        questionImage: media.type === "image" && answerCount === 4 && !hasAnswerImages && typeof media.url === "string" ? media.url : undefined,
+        questionImage:
+          media.type === "image" &&
+          answerCount === 4 &&
+          !hasAnswerImages &&
+          typeof media.url === "string"
+            ? media.url
+            : undefined,
         questionId: envelope?.questionId,
         questionStates,
       })
@@ -509,6 +523,12 @@ export function computeShowScene(input: ShowInput): ShowScene {
         kind: "question",
         key: `question:${question.key}`,
         question,
+        questionType:
+          typeof data.questionType === "string" ? data.questionType : undefined,
+        questionMediaType:
+          typeof data.questionMediaType === "string"
+            ? data.questionMediaType
+            : undefined,
         media:
           typeof media.url === "string"
             ? { type: legacyText(media.type ?? ""), url: media.url }
@@ -573,6 +593,8 @@ export function computeShowScene(input: ShowInput): ShowScene {
         key: `voting:${question.key}`,
         question,
         questionType: legacyText(data.questionType ?? "single"),
+        questionMediaType:
+          typeof media.type === "string" ? media.type : undefined,
         seconds:
           time !== NO_TIME_LIMIT &&
           Number.isFinite(timedSeconds) &&
@@ -597,6 +619,7 @@ export function computeShowScene(input: ShowInput): ShowScene {
     }
 
     case "SHOW_RESPONSES": {
+      const media = asRecord(data.media)
       const answers = Array.isArray(data.answers)
         ? (data.answers as string[])
         : []
@@ -626,6 +649,8 @@ export function computeShowScene(input: ShowInput): ShowScene {
         key: `results:${question.key}`,
         question,
         questionType: legacyText(data.type ?? "single"),
+        questionMediaType:
+          typeof media.type === "string" ? media.type : undefined,
         reveal: buildReveal({
           answersCount: answers.length,
           responses: asRecord(data.responses) as Record<number, number>,

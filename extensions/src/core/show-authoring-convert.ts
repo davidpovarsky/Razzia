@@ -846,7 +846,10 @@ export function nativeBundleToAuthoredShow(
           category: q.category ? legacyText(q.category) : undefined,
           note: q.note ? legacyText(q.note) : undefined,
           timeSeconds: typeof q.time === "number" ? q.time : 20,
-          cooldownSeconds: typeof q.cooldown === "number" ? q.cooldown : QUESTION_LEAD_IN_SECONDS,
+          cooldownSeconds:
+            typeof q.cooldown === "number"
+              ? q.cooldown
+              : QUESTION_LEAD_IN_SECONDS,
           maxPoints: typeof q.maxPoints === "number" ? q.maxPoints : 0,
           penalty: typeof q.penalty === "number" ? q.penalty : 0,
           media: q.media as AuthoredQuizCard["media"],
@@ -872,7 +875,10 @@ export function nativeBundleToAuthoredShow(
           category: q.category ? legacyText(q.category) : undefined,
           note: q.note ? legacyText(q.note) : undefined,
           timeSeconds: typeof q.time === "number" ? q.time : 20,
-          cooldownSeconds: typeof q.cooldown === "number" ? q.cooldown : QUESTION_LEAD_IN_SECONDS,
+          cooldownSeconds:
+            typeof q.cooldown === "number"
+              ? q.cooldown
+              : QUESTION_LEAD_IN_SECONDS,
           maxPoints: typeof q.maxPoints === "number" ? q.maxPoints : 1000,
           penalty: typeof q.penalty === "number" ? q.penalty : 0,
           media: q.media as AuthoredQuizCard["media"],

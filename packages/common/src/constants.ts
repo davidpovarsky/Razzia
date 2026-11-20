@@ -58,6 +58,7 @@ export const NO_TIME_LIMIT = -1
 
 /** System-owned question reading time before answers and voting open together. */
 export const QUESTION_LEAD_IN_SECONDS = 2
+
 export const QUESTION_LEAD_IN_MS = QUESTION_LEAD_IN_SECONDS * 1000
 
 export const AUTO_ADVANCE_DELAY = { MIN: 3, MAX: 600 } as const

@@ -157,31 +157,40 @@ export function GamePreviewSurface({
 
   const closePreview = () => {
     controller.close(false)
-    requestAnimationFrame(() => controller.triggerRef.current?.focus({ preventScroll: true }))
+    requestAnimationFrame(() =>
+      controller.triggerRef.current?.focus({ preventScroll: true }),
+    )
   }
 
   const snapshot = state.status === "ready" ? state.snapshot : null
   // Transport follows authored cards; phase snapshots remain available in the timeline.
   const authoredKeys = new Set<string>()
-  const cardChapters = session?.chapters.filter((chapter) => {
-    if (authoredKeys.has(chapter.authoredKey)) {
-      return false
-    }
+  const cardChapters =
+    session?.chapters.filter((chapter) => {
+      if (authoredKeys.has(chapter.authoredKey)) {
+        return false
+      }
 
-    authoredKeys.add(chapter.authoredKey)
-    return true
-  }) ?? []
-  const selectedChapter = snapshot?.screenPhase === "lobby"
-    ? undefined
-    : session?.chapters.find((chapter) => chapter.id === snapshot?.chapterId)
+      authoredKeys.add(chapter.authoredKey)
+
+      return true
+    }) ?? []
+  const selectedChapter =
+    snapshot?.screenPhase === "lobby"
+      ? undefined
+      : session?.chapters.find((chapter) => chapter.id === snapshot?.chapterId)
   const cardIndex = selectedChapter
-    ? cardChapters.findIndex((chapter) => chapter.authoredKey === selectedChapter.authoredKey)
+    ? cardChapters.findIndex(
+        (chapter) => chapter.authoredKey === selectedChapter.authoredKey,
+      )
     : -1
   const previous = cardIndex > 0 ? cardChapters[cardIndex - 1] : undefined
   const next = cardIndex >= 0 ? cardChapters[cardIndex + 1] : undefined
   const seek = (chapter: typeof previous) => {
     if (session && chapter && canSeekChapter(session, chapter)) {
-      void controller.run((current, signal) => current.seekChapter(chapter.id, signal))
+      void controller.run((current, signal) =>
+        current.seekChapter(chapter.id, signal),
+      )
     }
   }
 
@@ -193,15 +202,23 @@ export function GamePreviewSurface({
       {...gesture}
     >
       <style>{gamePreviewCss}</style>
-      <div className="game-preview-poster" aria-hidden={active || undefined} inert={active || undefined}>
+      <div
+        className="game-preview-poster"
+        aria-hidden={active || undefined}
+        inert={active || undefined}
+      >
         {onOpen ? (
           <SiteButton
             className="game-preview-cover-action"
             data-preview-cover-action
             onClick={onOpen}
             aria-label={label}
-          >{children}</SiteButton>
-        ) : <div data-preview-cover-action>{children}</div>}
+          >
+            {children}
+          </SiteButton>
+        ) : (
+          <div data-preview-cover-action>{children}</div>
+        )}
       </div>
       {controller.enabled && text && !active && (
         <SiteButton
@@ -217,93 +234,164 @@ export function GamePreviewSurface({
       <div className="game-preview-overlay" hidden={!active}>
         <GameViewer
           title={label}
-          status={text && (session?.sampleData ? text("sample") : text("preview"))}
+          status={
+            text && (session?.sampleData ? text("sample") : text("preview"))
+          }
           open={active}
           modal
           dismissOnOutside={dismissOnOutside}
           busy={state.status === "loading" || controller.pending}
           onClose={closePreview}
           closeRef={controller.closeRef}
-          controls={text && snapshot && (
-            <div className="game-preview-bottom">
-              <PreviewTimeline controller={controller} />
-              <PresentationControls
-                previous={session?.coverage === "full-show" ? {
-                  disabled: controller.pending || !previous || !canSeekChapter(session, previous),
-                  onClick: () => seek(previous),
-                  testId: "game-preview-previous",
-                } : undefined}
-                playback={{
-                  state: snapshot.clock.paused ? "paused" : "playing",
-                  disabled: controller.pending || snapshot.screenPhase === "lobby",
-                  onClick: () => void controller.run((s, signal) => snapshot.clock.paused ? s.play(signal) : s.pause()),
-                  testId: "game-preview-play-pause",
-                }}
-                next={session?.coverage === "full-show" ? {
-                  disabled: controller.pending || !next || !canSeekChapter(session, next),
-                  onClick: () => seek(next),
-                  testId: "game-preview-next",
-                } : undefined}
-                replay={{
-                  disabled: controller.pending || snapshot.screenPhase === "lobby",
-                  onClick: () => void controller.run((s, signal) => s.replay(signal)),
-                  testId: "game-preview-replay",
-                }}
-                sound={session?.setSoundEnabled ? {
-                  enabled: soundEnabled,
-                  disabled: controller.pending,
-                  onClick: () => void controller.run(async (s, signal) => {
-                    await requireLibraryValue(s.setSoundEnabled?.bind(s))(!soundEnabled, signal)
-                    setSoundEnabled(!soundEnabled)
-                  }),
-                  testId: "game-preview-sound",
-                } : undefined}
-                reveal={session?.setMediaRevealed && snapshot.manualImageReveal !== undefined ? {
-                  revealed: snapshot.manualImageReveal,
-                  disabled: controller.pending,
-                  onClick: () => void controller.run((current, signal) =>
-                    requireLibraryValue(current.setMediaRevealed)(!snapshot.manualImageReveal, signal)),
-                  testId: "game-preview-reveal",
-                } : undefined}
-              />
-            </div>
-          )}
-          details={audioAudition && session?.auditionAudioEvent && (
-            <div className="game-preview-audition">
-              <label>
-                {audioAudition.label}
-                <select
-                  aria-label={audioAudition.label}
-                  value={auditionEvent}
-                  onChange={(event) => setAuditionEvent(event.target.value as ShowThemeAudioEvent)}
+          controls={
+            text &&
+            snapshot && (
+              <div className="game-preview-bottom">
+                <PreviewTimeline controller={controller} />
+                <PresentationControls
+                  previous={
+                    session?.coverage === "full-show"
+                      ? {
+                          disabled:
+                            controller.pending ||
+                            !previous ||
+                            !canSeekChapter(session, previous),
+                          onClick: () => seek(previous),
+                          testId: "game-preview-previous",
+                        }
+                      : undefined
+                  }
+                  playback={{
+                    state: snapshot.clock.paused ? "paused" : "playing",
+                    disabled:
+                      controller.pending || snapshot.screenPhase === "lobby",
+                    onClick: () =>
+                      void controller.run((s, signal) =>
+                        snapshot.clock.paused ? s.play(signal) : s.pause(),
+                      ),
+                    testId: "game-preview-play-pause",
+                  }}
+                  next={
+                    session?.coverage === "full-show"
+                      ? {
+                          disabled:
+                            controller.pending ||
+                            !next ||
+                            !canSeekChapter(session, next),
+                          onClick: () => seek(next),
+                          testId: "game-preview-next",
+                        }
+                      : undefined
+                  }
+                  replay={{
+                    disabled:
+                      controller.pending || snapshot.screenPhase === "lobby",
+                    onClick: () =>
+                      void controller.run((s, signal) => s.replay(signal)),
+                    testId: "game-preview-replay",
+                  }}
+                  sound={
+                    session?.setSoundEnabled
+                      ? {
+                          enabled: soundEnabled,
+                          disabled: controller.pending,
+                          onClick: () =>
+                            void controller.run(async (s, signal) => {
+                              await requireLibraryValue(
+                                s.setSoundEnabled?.bind(s),
+                              )(!soundEnabled, signal)
+                              setSoundEnabled(!soundEnabled)
+                            }),
+                          testId: "game-preview-sound",
+                        }
+                      : undefined
+                  }
+                  reveal={
+                    session?.setMediaRevealed &&
+                    snapshot.manualImageReveal !== undefined
+                      ? {
+                          revealed: snapshot.manualImageReveal,
+                          disabled: controller.pending,
+                          onClick: () =>
+                            void controller.run((current, signal) =>
+                              requireLibraryValue(current.setMediaRevealed)(
+                                !snapshot.manualImageReveal,
+                                signal,
+                              ),
+                            ),
+                          testId: "game-preview-reveal",
+                        }
+                      : undefined
+                  }
+                />
+              </div>
+            )
+          }
+          details={
+            audioAudition &&
+            session?.auditionAudioEvent && (
+              <div className="game-preview-audition">
+                <label>
+                  {audioAudition.label}
+                  <select
+                    aria-label={audioAudition.label}
+                    value={auditionEvent}
+                    onChange={(event) =>
+                      setAuditionEvent(
+                        event.target.value as ShowThemeAudioEvent,
+                      )
+                    }
+                  >
+                    {audioAudition.events.map((event) => (
+                      <option key={event.id} value={event.id}>
+                        {event.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <SiteButton
+                  disabled={controller.pending}
+                  onClick={() =>
+                    void controller.run(async (s, signal) => {
+                      await requireLibraryValue(s.auditionAudioEvent)(
+                        auditionEvent,
+                        signal,
+                      )
+                      setSoundEnabled(true)
+                    })
+                  }
                 >
-                  {audioAudition.events.map((event) => <option key={event.id} value={event.id}>{event.label}</option>)}
-                </select>
-              </label>
-              <SiteButton
-                disabled={controller.pending}
-                onClick={() => void controller.run(async (s, signal) => {
-                  await requireLibraryValue(s.auditionAudioEvent)(auditionEvent, signal)
-                  setSoundEnabled(true)
-                })}
-              >{audioAudition.listen}</SiteButton>
-              <SiteButton
-                disabled={controller.pending}
-                onClick={() => void controller.run(async (s, signal) => {
-                  await requireLibraryValue(s.auditionAudioEvent)(null, signal)
-                  setSoundEnabled(false)
-                })}
-              >{audioAudition.stop}</SiteButton>
-            </div>
-          )}
+                  {audioAudition.listen}
+                </SiteButton>
+                <SiteButton
+                  disabled={controller.pending}
+                  onClick={() =>
+                    void controller.run(async (s, signal) => {
+                      await requireLibraryValue(s.auditionAudioEvent)(
+                        null,
+                        signal,
+                      )
+                      setSoundEnabled(false)
+                    })
+                  }
+                >
+                  {audioAudition.stop}
+                </SiteButton>
+              </div>
+            )
+          }
         >
           <div ref={controller.hostRef} className="game-preview-stage" />
           {text && state.status === "loading" && (
-            <p className="game-preview-message" role="status">{text("loading")}</p>
+            <p className="game-preview-message" role="status">
+              {text("loading")}
+            </p>
           )}
           {text && state.status === "unavailable" && (
             <p className="game-preview-message" role="status">
-              {text("unavailable")}<br />{text(state.reason)}
+              {text("unavailable")}
+              <br />
+              {text(state.reason)}
             </p>
           )}
         </GameViewer>

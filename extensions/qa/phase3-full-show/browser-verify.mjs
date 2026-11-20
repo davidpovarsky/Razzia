@@ -59,6 +59,7 @@ import {
 import { normalizeDraft } from "../../src/mcp-app/server/authoring.ts"
 import { hashJson } from "../../src/mcp-app/contracts/canonical.ts"
 import { tadaShowV1Schema } from "../../src/core/show-authoring-schema.ts"
+import { presentationControlText } from "../../src/platform-ui/presentation-control-labels.ts"
 
 const expectedLocaleText = {
   he: { previous: "הכרטיס הקודם", editing: "עריכת הטיוטה הזו" },
@@ -1572,7 +1573,7 @@ try {
             await iframe.getByTestId("full-show-language").selectOption(locale)
             await iframe
               .locator(
-                `[data-testid="full-show-next"][aria-label=${JSON.stringify(widgetLabels[locale].widget.nextChapter)}]`,
+                `[data-testid="full-show-next"][aria-label=${JSON.stringify(presentationControlText(locale, "next"))}]`,
               )
               .waitFor()
             assert.equal(
@@ -1597,7 +1598,7 @@ try {
               await iframe
                 .getByTestId("full-show-previous")
                 .getAttribute("aria-label"),
-              expectedLocaleText[locale].previous,
+              presentationControlText(locale, "previous"),
             )
             assert.equal(
               await iframe.locator(".widget-editor").getAttribute("aria-label"),
@@ -1607,7 +1608,7 @@ try {
               await iframe
                 .getByTestId("full-show-pause")
                 .getAttribute("aria-label"),
-              expectedTransportText[locale][0],
+              presentationControlText(locale, "pause"),
             )
             assert.equal(
               await iframe
@@ -1636,7 +1637,9 @@ try {
           await openWorkspacePanel(page, "display")
           await iframe.getByTestId("full-show-language").selectOption("en")
           await iframe
-            .locator('[data-testid="full-show-next"][aria-label="Next card"]')
+            .locator(
+              `[data-testid="full-show-next"][aria-label=${JSON.stringify(presentationControlText("en", "next"))}]`,
+            )
             .waitFor()
           await closeWorkspaceDrawers(page)
 

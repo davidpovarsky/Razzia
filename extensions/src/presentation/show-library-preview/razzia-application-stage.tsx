@@ -194,10 +194,14 @@ export function RazziaApplicationStage({
       <NativeQuestionHeading
         question={card.question}
         stageAnimations={animations}
-        questionDecoration={resolveQuestionDecoration({ cardDecoration: card.questionDecoration })}
+        questionDecoration={resolveQuestionDecoration({
+          cardDecoration: card.questionDecoration,
+        })}
         epoch={questionEpoch ?? card.key}
         titleTestId="show-question-title"
-        controlledTimeMs={chapter.phase === "question" ? frame.clock.elapsedMs : undefined}
+        controlledTimeMs={
+          chapter.phase === "question" ? frame.clock.elapsedMs : undefined
+        }
         controlledPaused={frame.clock.paused}
       />
     )
@@ -420,7 +424,10 @@ export function RazziaApplicationStage({
             widthOverride={fit.width}
             heightOverride={fit.height}
           >
-            <NativeGameSurface theme={theme}>{heading}{content}</NativeGameSurface>
+            <NativeGameSurface theme={theme}>
+              {heading}
+              {content}
+            </NativeGameSurface>
           </StageFitContainer>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { createRoot } from "react-dom/client"
 import { createDefaultQuizExtras } from "../core"
+import { Button } from "../platform-ui/button"
 import { AudioCuePlayer, type AudioControlState } from "./audio-cue-player"
 
 const { audio } = createDefaultQuizExtras("manual-scope", [], "a".repeat(64))
@@ -51,15 +52,27 @@ function Fixture() {
       data-screen-key={screenKey}
       data-redraw={redraw}
     >
-      <button type="button" onClick={() => setScreenKey("authored-scene-a")}>
+      <Button
+        type="button"
+        variant="unstyled"
+        onClick={() => setScreenKey("authored-scene-a")}
+      >
         First scene
-      </button>
-      <button type="button" onClick={() => setScreenKey("authored-scene-b")}>
+      </Button>
+      <Button
+        type="button"
+        variant="unstyled"
+        onClick={() => setScreenKey("authored-scene-b")}
+      >
         Second scene
-      </button>
-      <button type="button" onClick={() => setRedraw((value) => value + 1)}>
+      </Button>
+      <Button
+        type="button"
+        variant="unstyled"
+        onClick={() => setRedraw((value) => value + 1)}
+      >
         Same screen
-      </button>
+      </Button>
       <AudioCuePlayer
         gameId="synthetic-scope-game"
         activeCardKey="same-question"

@@ -113,13 +113,7 @@ export function LiveEditorStagePreview({
   ) as ApplicationPreviewFrame["locale"]
   // Source revision is independent of the playback clock.
   const revision = useMemo(
-    () =>
-      JSON.stringify([
-        snapshot?.show,
-        authoredKey,
-        selectedLocale,
-        replay,
-      ]),
+    () => JSON.stringify([snapshot?.show, authoredKey, selectedLocale, replay]),
     [snapshot, authoredKey, selectedLocale, replay],
   )
   const fallback = (

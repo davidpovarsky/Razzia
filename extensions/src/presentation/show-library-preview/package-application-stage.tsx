@@ -19,7 +19,14 @@ import { resolveShowTheme } from "../../core/show-themes/resolve"
 import type { ShowThemeAudioEvent } from "../../core/show-themes/selection"
 import { createDefaultShowTheme } from "../../core/show-themes/selection"
 import { ThemeSandboxHost } from "../package-runtime/ThemeSandboxHost"
-import { projectPackageScene } from "../package-runtime/projection"
+import {
+  projectPackageClock,
+  projectPackageScene,
+} from "../package-runtime/projection"
+import {
+  packageQuestionContentSupported,
+  packageUsesSandboxForPhase,
+} from "../package-runtime/question-family"
 import type { RuntimeSnapshot } from "../../core/packages/protocol"
 import { ShowThemeScope, showThemeStyle } from "../show-themes/context"
 import { AudioCuePlayer } from "../audio-cue-player"
@@ -105,11 +112,20 @@ export function PackageApplicationPreviewStage({
   callbacks.current = { onCommitted, onUnavailable }
   const runtimeUrl = context?.runtimeUrls[theme.definition.id]
   const sandbox = theme.definition.kind === "sandboxed-react"
+  const unsupportedQuestion =
+    !frame.stagePhase &&
+    card &&
+    (card.kind === "quiz" || card.kind === "survey") &&
+    packageQuestionContentSupported({
+      questionType: card.questionType,
+      mediaType: card.media?.type,
+    }) !== true
   const platformSlot =
     sandbox &&
     (phase === "opening" ||
       phase === "closing" ||
-      theme.definition.sandbox?.slots[phase] === "classic")
+      unsupportedQuestion ||
+      !packageUsesSandboxForPhase(theme.definition.sandbox?.slots, phase))
   const [readyUrl, setReadyUrl] = useState("")
   const imagesKey = JSON.stringify(
     card && (card.kind === "quiz" || card.kind === "survey")
@@ -268,8 +284,11 @@ export function PackageApplicationPreviewStage({
     locale: frame.locale,
     reducedMotion: frame.reducedMotion,
     serverTime: now,
-    deadline: frame.clock.deadlineMs === null ? null : now + remainingMs,
-    remainingMs,
+    ...projectPackageClock({
+      phase,
+      deadline: frame.clock.deadlineMs === null ? null : now + remainingMs,
+      remainingMs,
+    }),
     paused: frame.clock.paused,
     canAnswer: false,
     labels: {

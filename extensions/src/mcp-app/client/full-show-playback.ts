@@ -22,7 +22,9 @@ export function createFullShowPlayback(now?: () => number) {
       clock.startVoting(frame.content.frame.seconds)
     }
 
-    if (carryMs > 0) clock.seek(carryMs)
+    if (carryMs > 0) {
+      clock.seek(carryMs)
+    }
 
     if (!userPaused) {
       clock.play()
@@ -51,16 +53,23 @@ export function createFullShowPlayback(now?: () => number) {
           audioEpoch += 1
         }
 
-        const continuedQuestion = !replay &&
+        const continuedQuestion =
+          !replay &&
           previousFrame?.inventory.draftId === frame.inventory.draftId &&
-          previousFrame.content.kind === "question" && frame.content.kind === "question" &&
-          previousFrame.content.frame.question.id === frame.content.frame.question.id &&
-          previousFrame.content.frame.phase === "question" && frame.content.frame.phase === "voting"
-        const carryMs = continuedQuestion ? Math.max(0, clock.snapshot().elapsedMs - QUESTION_LEAD_IN_MS) : 0
+          previousFrame.content.kind === "question" &&
+          frame.content.kind === "question" &&
+          previousFrame.content.frame.question.id ===
+            frame.content.frame.question.id &&
+          previousFrame.content.frame.phase === "question" &&
+          frame.content.frame.phase === "voting"
+        const carryMs = continuedQuestion
+          ? Math.max(0, clock.snapshot().elapsedMs - QUESTION_LEAD_IN_MS)
+          : 0
         reset(frame, carryMs)
       }
 
       previousFrame = frame
+
       return snapshot()
     },
     pause() {

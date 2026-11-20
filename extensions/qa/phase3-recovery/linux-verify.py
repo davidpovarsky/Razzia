@@ -283,11 +283,18 @@ else:
         cases.append(native + "oauth-client-isolation.nodecheck.ts")
         cases.append(native + "account-preview-builtins.nodecheck.ts")
         cases.append("extensions/qa/phase3-native-host-static/static-site.node.mjs")
+        cases.append(native + "package-authoring.nodecheck.ts")
+        cases.append("extensions/src/mcp-app/tests/first-party/packages.nodecheck.ts")
+        cases.append("extensions/src/mcp-app/tests/server/package-authoring.nodecheck.ts")
     http_ok = check("native-http", 180, tsx + cases)
     check("native-types", 120, ["node", "/cleanup/node_modules/typescript/bin/tsc", "--noEmit", "-p", native + "tsconfig.json"])
     check("native-lint", 120, ["node", "--experimental-strip-types", "/cleanup/node_modules/oxlint/bin/oxlint", "-c", "oxlint.config.ts", "extensions/src/mcp-app/native-host", native])
     check("native-format", 60, ["node", "/cleanup/node_modules/prettier/bin/prettier.cjs", "--check", "extensions/src/mcp-app/native-host", native, "extensions/src/site/web/studio/Studio.tsx"])
     if c["suite"] == "native-launch":
+        # Runtime-preserving deployment is part of this exact release source.
+        # Both checks use synthetic data only, without Docker or network access.
+        check("package-runtime-deploy-self-test", 60, ["python3", "-B", "extensions/deployment/deploy-mcp-site.py", "--self-test"])
+        check("package-runtime-operator-tests", 60, ["python3", "-B", "extensions/deployment/test-deploy-mcp-site-runtime.py"])
         # This project includes the real issuer tests and their contract/store
         # dependencies, which the native-host-only project does not include.
         check("semantic-types", 120, ["node", "/cleanup/node_modules/typescript/bin/tsc", "--noEmit", "-p", "extensions/qa/phase3-full-show/tsconfig.json"])
@@ -335,7 +342,7 @@ print(json.dumps({"sha": SHA, "evidence": str(EVIDENCE), "sourceFilesVerified": 
 required_gate = SUITE if SUITE.startswith("full-show-") else "ext4-full8" if SUITE == "recovery" else "native-http" if SUITE == "native-proxy" else "native-launch-build" if SUITE == "native-launch" else "native-site-build"
 passed = receipt["allHashesVerifiedBeforeAfter"] and all(item["exit"] == 0 for item in receipt["checks"]) and any(item["label"] == required_gate for item in receipt["checks"])
 if SUITE == "native-launch":
-    passed = passed and {"native-site-build", "native-application-preview-build", "native-application-package", "semantic-types", "full-show-widget-types", "full-show-widget-lint", "full-show-widget-format", "semantic-lint", "semantic-format", "semantic-integration-lint-baseline"}.issubset({item["label"] for item in receipt["checks"] if item["exit"] == 0})
+    passed = passed and {"package-runtime-deploy-self-test", "package-runtime-operator-tests", "native-site-build", "native-application-preview-build", "native-application-package", "semantic-types", "full-show-widget-types", "full-show-widget-lint", "full-show-widget-format", "semantic-lint", "semantic-format", "semantic-integration-lint-baseline"}.issubset({item["label"] for item in receipt["checks"] if item["exit"] == 0})
 if SUITE == "full-show-selection":
     passed = passed and {"semantic-edits", "semantic-integration-lint-baseline"}.issubset({item["label"] for item in receipt["checks"] if item["exit"] == 0})
 if LINT_BASELINE is not None:

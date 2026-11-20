@@ -35,6 +35,15 @@ export type PackageSceneProjection = Pick<
   | "personalResult"
 >
 
+/** Reading time is root-owned and must not appear as a voting countdown. */
+export function projectPackageClock(
+  clock: Pick<RuntimeSnapshot, "phase" | "deadline" | "remainingMs">,
+): Pick<RuntimeSnapshot, "deadline" | "remainingMs"> {
+  return clock.phase === "question"
+    ? { deadline: null, remainingMs: 0 }
+    : { deadline: clock.deadline, remainingMs: clock.remainingMs }
+}
+
 /** Match native authored scene semantics instead of flattening every card to interlude. */
 export function packageRuntimePhase(
   scene: ShowScene,

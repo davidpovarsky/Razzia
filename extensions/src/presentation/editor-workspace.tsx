@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState, type ReactNode } from "react"
 import { PanelLeft, PanelRight, X } from "lucide-react"
 import NativeButton from "../../../packages/web/src/components/Button"
+import { Button } from "../platform-ui/button"
 import "./editor-workspace.css"
 
 export interface EditorWorkspacePanel {
@@ -203,8 +204,9 @@ export function EditorWorkspace({
         </div>
       </div>
       {modalPanel && (
-        <button
+        <Button
           type="button"
+          variant="unstyled"
           className="editor-workspace-scrim"
           aria-label={closeLabel}
           tabIndex={-1}

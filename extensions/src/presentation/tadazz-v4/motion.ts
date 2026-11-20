@@ -505,6 +505,7 @@ export class TadazzV4Motion {
       if (!data.questionAlreadyOnStage) {
         this.questionMotion(40)
       }
+
       this.cardsMotion(data.questionAlreadyOnStage ? 0 : 230)
     }
 
@@ -575,6 +576,7 @@ export class TadazzV4Motion {
       if (!data.questionAlreadyOnStage) {
         this.questionMotion(0)
       }
+
       this.cardsMotion(data.questionAlreadyOnStage ? 0 : 75)
     }
 
@@ -700,6 +702,7 @@ export class TadazzV4Motion {
       if (!data.questionAlreadyOnStage) {
         this.questionMotion(40)
       }
+
       this.cardsMotion(data.questionAlreadyOnStage ? 0 : 230)
     }
 
@@ -1117,6 +1120,7 @@ export class TadazzV4Motion {
         },
       )
     })
+
     if (data.questionAlreadyOnStage) {
       return
     }
@@ -1479,8 +1483,10 @@ export class TadazzV4Motion {
       case "question":
         if (data.photoLayout) {
           this.questionImage(data)
+
           break
         }
+
         this.questionMotion(100)
         this.animate(
           query(root, ".rail.top"),
@@ -1531,13 +1537,19 @@ export class TadazzV4Motion {
         break
 
       case "voting-open":
-        if (data.photoLayout) this.questionImage(data)
+        if (data.photoLayout) {
+          this.questionImage(data)
+        }
+
         this.voting(false, data)
 
         break
 
       case "countdown":
-        if (data.photoLayout) this.questionImage(data)
+        if (data.photoLayout) {
+          this.questionImage(data)
+        }
+
         this.countdown(data)
 
         break

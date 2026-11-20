@@ -45,8 +45,6 @@ function timerFixture(withTimeline = false, initialEndOnAllAnswered = false) {
     },
     onNewQuestion: () => undefined,
     onGameFinished: () => undefined,
-    skipQuestionPreview: () => true,
-    votingEntranceMs: () => 4000,
     skipShowStartCountdown: () => true,
     onShowStart: (proceed) => proceed(),
     ...(withTimeline
@@ -73,20 +71,27 @@ function timerFixture(withTimeline = false, initialEndOnAllAnswered = false) {
   }
 }
 
-it("opens the complete 20-second window after entrance when nobody answers", async () => {
+it("opens the complete 20-second window after the system reading interval", async () => {
   const { round, statuses } = timerFixture()
   const start = Date.now()
+  expect(statuses.at(-1)?.name).toBe(STATUS.SHOW_PREPARED)
+  await vi.advanceTimersByTimeAsync(2000)
+  expect(statuses.at(-1)).toMatchObject({
+    name: STATUS.SHOW_QUESTION,
+    data: { cooldown: 2 },
+  })
+  expect(statuses.at(-1)?.data).not.toHaveProperty("answers")
+  expect(round.isCurrentlyAcceptingAnswers).toBe(false)
+  await vi.advanceTimersByTimeAsync(1999)
+  expect(round.isCurrentlyAcceptingAnswers).toBe(false)
+  await vi.advanceTimersByTimeAsync(1)
+  expect(round.isCurrentlyAcceptingAnswers).toBe(true)
+  expect(round.getRemainingSeconds()).toBe(20)
   expect(statuses.at(-1)?.data).toMatchObject({
     votingStartsAt: start + 4000,
     votingEndsAt: start + 24000,
     time: 20,
   })
-  expect(round.isCurrentlyAcceptingAnswers).toBe(false)
-  await vi.advanceTimersByTimeAsync(3999)
-  expect(round.isCurrentlyAcceptingAnswers).toBe(false)
-  await vi.advanceTimersByTimeAsync(1)
-  expect(round.isCurrentlyAcceptingAnswers).toBe(true)
-  expect(round.getRemainingSeconds()).toBe(20)
   await vi.advanceTimersByTimeAsync(19999)
   expect(round.isCurrentlyAcceptingAnswers).toBe(true)
   expect(statuses.at(-1)?.name).toBe(STATUS.SELECT_ANSWER)
@@ -162,12 +167,20 @@ it("defers early completion while paused and applies it on resume", async () => 
 
 it("pauses both entrance and voting and publishes the new server deadline on resume", async () => {
   const { round, statuses } = timerFixture()
-  await vi.advanceTimersByTimeAsync(1000)
+  await vi.advanceTimersByTimeAsync(2750)
+  expect(statuses.at(-1)?.name).toBe(STATUS.SHOW_QUESTION)
   round.pauseGame()
   await vi.advanceTimersByTimeAsync(9000)
   round.resumeGame()
-  expect(statuses.at(-1)?.data.votingStartsAt).toBe(Date.now() + 3000)
-  await vi.advanceTimersByTimeAsync(3000)
+  expect(statuses.at(-1)?.name).toBe(STATUS.SHOW_QUESTION)
+  expect(statuses.at(-1)?.data).not.toHaveProperty("votingStartsAt")
+  expect(round.isCurrentlyAcceptingAnswers).toBe(false)
+  await vi.advanceTimersByTimeAsync(1249)
+  expect(round.isCurrentlyAcceptingAnswers).toBe(false)
+  await vi.advanceTimersByTimeAsync(1)
+  expect(statuses.at(-1)?.name).toBe(STATUS.SELECT_ANSWER)
+  expect(statuses.at(-1)?.data.votingStartsAt).toBe(Date.now())
+  expect(statuses.at(-1)?.data.votingEndsAt).toBe(Date.now() + 20000)
   expect(round.getRemainingSeconds()).toBe(20)
   await vi.advanceTimersByTimeAsync(5000)
   round.pauseGame()

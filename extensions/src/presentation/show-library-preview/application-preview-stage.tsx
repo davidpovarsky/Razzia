@@ -185,7 +185,12 @@ function NativeApplicationPreviewStage({
   const key = `${frame.clock.epoch}:${frame.chapterIndex}:${frame.appearanceRevision}`
   const [continuity] = useState(() => createPreviewStageContinuity())
   const stageIdentity = continuity.select({
-    cardKey: !frame.stagePhase && card && (card.kind === "quiz" || card.kind === "survey") ? card.key : null,
+    cardKey:
+      !frame.stagePhase &&
+      card &&
+      (card.kind === "quiz" || card.kind === "survey")
+        ? card.key
+        : null,
     phase,
     clockEpoch: frame.clock.epoch,
     appearanceRevision: frame.appearanceRevision,
@@ -323,7 +328,9 @@ function NativeApplicationPreviewStage({
       const question: StageQuestion = {
         key: card.key,
         answerCount: card.answers.length,
-        hasAnswerImages: card.answers.some((answer) => Boolean(answer.imageUrl) && answer.display !== "text"),
+        hasAnswerImages: card.answers.some(
+          (answer) => Boolean(answer.imageUrl) && answer.display !== "text",
+        ),
         question: card.question,
         number:
           questionPosition?.number ??
@@ -350,10 +357,13 @@ function NativeApplicationPreviewStage({
           ? { questionImage: card.media.url, photoAlt: card.question }
           : {}),
       }
+
       if (chapter.phase !== "voting") {
         steps.push({
-          op: handle.questionKey === question.key && chapter.phase !== "question"
-            ? "presentOptions" : "showQuestion",
+          op:
+            handle.questionKey === question.key && chapter.phase !== "question"
+              ? "presentOptions"
+              : "showQuestion",
           question,
         })
       }
@@ -416,11 +426,13 @@ function NativeApplicationPreviewStage({
           return
         }
 
-        void handle.openVoting(last.seconds, last.deadlineMs, last.question).catch(() => {
-          if (current) {
-            callbacks.current.onUnavailable()
-          }
-        })
+        void handle
+          .openVoting(last.seconds, last.deadlineMs, last.question)
+          .catch(() => {
+            if (current) {
+              callbacks.current.onUnavailable()
+            }
+          })
         await new Promise<void>((resolve) => {
           requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
         })
@@ -584,7 +596,8 @@ function NativeApplicationPreviewStage({
                 ...showThemeStyle(theme),
                 width: "100%",
                 height: "100%",
-                visibility: committedStage === stageIdentity ? "visible" : "hidden",
+                visibility:
+                  committedStage === stageIdentity ? "visible" : "hidden",
               }}
             >
               {original ? (

@@ -87,8 +87,16 @@ export * from "./show-themes/native-composition"
 export * from "./tadazz-show/native-question-media"
 
 export { ThemeSandboxHost } from "./package-runtime/ThemeSandboxHost"
+
+export {
+  createPackageQuestionAdmission,
+  packageQuestionContentSupported,
+  packageUsesSandboxForPhase,
+} from "./package-runtime/question-family"
+
 export {
   packageRuntimePhase,
+  projectPackageClock,
   projectPackageScene,
   type PackageSceneProjection,
   type PackageSceneProjectionInput,
@@ -110,7 +118,11 @@ export {
   NativeClassicLobbyPanel,
 } from "./show-library-preview/native-room-panel"
 
-export { NativeRazziaQuestion, NativeQuestionHeading } from "./show-library-preview/native-question"
+export {
+  NativeRazziaQuestion,
+  NativeQuestionHeading,
+} from "./show-library-preview/native-question"
 
 export { LiveEditorStagePreview } from "./show-library-preview/live-editor-stage"
+
 export { createDemoClock } from "./show-library-preview/demo-clock"

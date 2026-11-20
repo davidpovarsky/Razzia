@@ -95,7 +95,13 @@ export const QuestionEntrance = ({
 
   if (!preset || preset === "none") {
     return (
-      <div className={clsx("flex min-h-0 w-full flex-col", fill && "h-full", className)}>
+      <div
+        className={clsx(
+          "flex min-h-0 w-full flex-col",
+          fill && "h-full",
+          className,
+        )}
+      >
         {children}
       </div>
     )

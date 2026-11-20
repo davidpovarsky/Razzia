@@ -1,5 +1,9 @@
 import { createAdaptorServer } from "@hono/node-server"
-import { EVENTS, SESSION_ROLES } from "@razzia/common/constants"
+import {
+  EVENTS,
+  QUESTION_LEAD_IN_SECONDS,
+  SESSION_ROLES,
+} from "@razzia/common/constants"
 import type {
   AnswerSubmissionAck,
   ClientToServerEvents,
@@ -13,6 +17,8 @@ import {
   createDefaultQuizExtras,
   generateQuestionIds,
   extensionStateEnvelopeSchema,
+  readPlatformOpening,
+  type PlatformOpeningSnapshot,
 } from "@razzia/extensions/core"
 import { writeSidecar } from "@razzia/extensions/server"
 import { app, createSocketServer } from "@razzia/socket/app"
@@ -77,6 +83,24 @@ function waitStatus(client: Client, name: Status) {
   })
 }
 
+function waitLaunch(client: Client, stage: "opening" | "lobby") {
+  return new Promise<PlatformOpeningSnapshot>((resolve) => {
+    const listener = (state: unknown) => {
+      const launch = readPlatformOpening(
+        extensionStateEnvelopeSchema.parse(state).extras.presentationLaunch,
+      )
+
+      if (launch?.stage !== stage) {
+        return
+      }
+
+      client.off(EVENTS.EXTENSIONS.STATE, listener)
+      resolve(launch)
+    }
+    client.on(EVENTS.EXTENSIONS.STATE, listener)
+  })
+}
+
 function command(
   client: Client,
   gameId: string,
@@ -137,7 +161,7 @@ afterAll(async () => {
 it("authorizes End Timer over real Socket.IO and delivers one reveal before a tick", async () => {
   const quizz = {
     ...createQuizz([
-      createQuestion({ cooldown: 0, time: 20 }),
+      createQuestion({ cooldown: QUESTION_LEAD_IN_SECONDS, time: 20 }),
       createQuestion(),
     ]),
     id: crypto.randomUUID(),
@@ -189,8 +213,23 @@ it("authorizes End Timer over real Socket.IO and delivers one reveal before a ti
     expect(await rejected).toBe("errors:auth.unauthorized")
   }
 
+  // Host Start first opens the product intro, then skips it to the lobby.
+  // Only the next Start begins the question; use the real socket lifecycle.
+  for (const stage of ["opening", "lobby"] as const) {
+    const launch = waitLaunch(manager, stage)
+    manager.emit(EVENTS.MANAGER.START_GAME, { gameId: game.gameId })
+    expect(await launch).toMatchObject({ stage })
+    expect(game.roundManager.isCurrentlyAcceptingAnswers).toBe(false)
+  }
+
+  const question = waitStatus(manager, STATUS.SHOW_QUESTION)
   const voting = waitStatus(manager, STATUS.SELECT_ANSWER)
   manager.emit(EVENTS.MANAGER.START_GAME, { gameId: game.gameId })
+  expect(await question).toMatchObject({
+    name: STATUS.SHOW_QUESTION,
+    data: { cooldown: QUESTION_LEAD_IN_SECONDS },
+  })
+  expect(game.roundManager.isCurrentlyAcceptingAnswers).toBe(false)
   await voting
   const epoch = states.at(-1)?.epoch
   expect(epoch).toBeGreaterThan(0)

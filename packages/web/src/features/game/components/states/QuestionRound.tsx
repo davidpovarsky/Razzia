@@ -18,24 +18,41 @@ type QuestionRoundData =
  * during an automatic transition. Re-entering the lead-in deliberately replays it.
  */
 export default function QuestionRound({ data }: { data: QuestionRoundData }) {
-  const phase =
-    "responses" in data ? "results" : "answers" in data ? "voting" : "question"
-  const {
-    effectiveExtensionState,
-    stageAnimations,
-    questionDecoration,
-  } = useQuestionPresentation(data.question, phase === "question" ? "show" : "answers")
-  const identity = String(data.questionId ?? effectiveExtensionState?.questionId ?? data.questionNumber ?? data.question)
+  const phase = (() => {
+    if ("responses" in data) {
+      return "results" as const
+    }
+
+    if ("answers" in data) {
+      return "voting" as const
+    }
+
+    return "question" as const
+  })()
+  const { effectiveExtensionState, stageAnimations, questionDecoration } =
+    useQuestionPresentation(
+      data.question,
+      phase === "question" ? "show" : "answers",
+    )
+  const identity = String(
+    data.questionId ?? data.questionNumber ?? data.question,
+  )
+  // Status and extension packets are separate. Do not bind the previous question's
+  // decoration/entrance while its successor is waiting for the matching envelope.
+  const presentationReady =
+    !data.questionId || effectiveExtensionState?.questionId === data.questionId
   const [presentation, setPresentation] = useState(() => ({
     identity,
     phase,
+    ready: presentationReady,
     sequence: 0,
     stageAnimations: {
       ...stageAnimations,
       // A reconnect already in voting/results must render the current state directly.
-      questionEntrance: phase === "question"
-        ? stageAnimations.questionEntrance
-        : { preset: "none" as const },
+      questionEntrance:
+        phase === "question"
+          ? stageAnimations.questionEntrance
+          : { ...stageAnimations.questionEntrance, preset: "none" as const },
     },
     questionDecoration,
   }))
@@ -45,22 +62,29 @@ export default function QuestionRound({ data }: { data: QuestionRoundData }) {
   // the heading, while a new question or intentional return to its lead-in can animate.
   if (
     presentation.identity !== identity ||
-    (phase === "question" && presentation.phase !== "question")
+    (phase === "question" && presentation.phase !== "question") ||
+    (!presentation.ready && presentationReady)
   ) {
     setPresentation({
       identity,
       phase,
+      ready: presentationReady,
       sequence: presentation.sequence + 1,
       stageAnimations: {
         ...stageAnimations,
-        questionEntrance: phase === "question"
-          ? stageAnimations.questionEntrance
-          : { preset: "none" as const },
+        questionEntrance:
+          phase === "question"
+            ? stageAnimations.questionEntrance
+            : { ...stageAnimations.questionEntrance, preset: "none" as const },
       },
       questionDecoration,
     })
   } else if (presentation.phase !== phase) {
     setPresentation({ ...presentation, phase })
+  }
+
+  if (!presentation.ready) {
+    return null
   }
 
   const questionOnly = phase === "question"
@@ -84,18 +108,26 @@ export default function QuestionRound({ data }: { data: QuestionRoundData }) {
           question={data.question}
           stageAnimations={presentation.stageAnimations}
           questionDecoration={presentation.questionDecoration}
-          epoch={presentation.identity + ":" + presentation.sequence}
+          epoch={[presentation.identity, presentation.sequence].join(":")}
           compact={!questionOnly}
-          titleTestId={questionOnly ? "show-question-title" : "game-question-title"}
+          titleTestId={
+            questionOnly ? "show-question-title" : "game-question-title"
+          }
           controlledPaused={effectiveExtensionState?.pause?.paused}
         />
         {!("answers" in data) && <Question data={data} hideHeading />}
       </div>
-      {"responses" in data ? (
-        <Responses data={data} hideHeading />
-      ) : "answers" in data ? (
-        <Answers data={data} hideHeading />
-      ) : null}
+      {(() => {
+        if ("responses" in data) {
+          return <Responses data={data} hideHeading />
+        }
+
+        if ("answers" in data) {
+          return <Answers data={data} hideHeading />
+        }
+
+        return null
+      })()}
     </section>
   )
 }

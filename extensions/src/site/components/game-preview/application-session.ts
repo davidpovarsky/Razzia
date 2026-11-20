@@ -164,7 +164,10 @@ export function createApplicationPreviewSession(options: {
     if (chapter.phase === "voting" && chapter.duration.kind === "known") {
       clock.startVoting(chapter.duration.milliseconds / 1000)
     }
-    if (carryMs > 0) clock.seek(carryMs)
+
+    if (carryMs > 0) {
+      clock.seek(carryMs)
+    }
   }
   const stop = () => {
     clear()
@@ -185,7 +188,7 @@ export function createApplicationPreviewSession(options: {
     }
 
     const chapter = chapters[chapterIndex]
-    const elapsedMs = clock.snapshot().elapsedMs
+    const { elapsedMs } = clock.snapshot()
     const media = native?.mediaElement()
     const mediaEnded =
       chapter.duration.kind === "unknown" && media?.ended && !media.loop
@@ -200,10 +203,27 @@ export function createApplicationPreviewSession(options: {
         ended = true
         stop()
       } else {
-        const nextPhase = chapter.phase === "question" ? "voting" : chapter.phase === "voting" ? "results" : null
-        const phaseIndex = nextPhase === null ? -1 : chapters.findIndex((candidate) => candidate.cardIndex === chapter.cardIndex && candidate.phase === nextPhase)
+        let nextPhase: "voting" | "results" | null = null
+
+        if (chapter.phase === "question") {
+          nextPhase = "voting"
+        } else if (chapter.phase === "voting") {
+          nextPhase = "results"
+        }
+
+        const phaseIndex =
+          nextPhase === null
+            ? -1
+            : chapters.findIndex(
+                (candidate) =>
+                  candidate.cardIndex === chapter.cardIndex &&
+                  candidate.phase === nextPhase,
+              )
         chapterIndex = phaseIndex >= 0 ? phaseIndex : chapterIndex + 1
-        const carryMs = chapter.duration.kind === "known" ? Math.max(0, elapsedMs - chapter.duration.milliseconds) : 0
+        const carryMs =
+          chapter.duration.kind === "known"
+            ? Math.max(0, elapsedMs - chapter.duration.milliseconds)
+            : 0
         beginChapter(carryMs)
         clock.play()
       }
@@ -213,11 +233,17 @@ export function createApplicationPreviewSession(options: {
     emit()
 
     if (!disposed && !clock.snapshot().paused) {
-      const duration = chapters[chapterIndex].duration
-      const remaining = !stagePhase && duration.kind === "known" ? Math.max(0, duration.milliseconds - clock.snapshot().elapsedMs) : 100
-      timer = setTimeout(() => {
-        void tick().catch(fail)
-      }, Math.min(100, remaining))
+      const { duration } = chapters[chapterIndex]
+      const remaining =
+        !stagePhase && duration.kind === "known"
+          ? Math.max(0, duration.milliseconds - clock.snapshot().elapsedMs)
+          : 100
+      timer = setTimeout(
+        () => {
+          void tick().catch(fail)
+        },
+        Math.min(100, remaining),
+      )
     }
   }
   const fail = () => {
@@ -350,11 +376,17 @@ export function createApplicationPreviewSession(options: {
 
       emit()
       clear()
-      const duration = chapters[chapterIndex].duration
-      const remaining = !stagePhase && duration.kind === "known" ? Math.max(0, duration.milliseconds - clock.snapshot().elapsedMs) : 100
-      timer = setTimeout(() => {
-        void tick().catch(fail)
-      }, Math.min(100, remaining))
+      const { duration } = chapters[chapterIndex]
+      const remaining =
+        !stagePhase && duration.kind === "known"
+          ? Math.max(0, duration.milliseconds - clock.snapshot().elapsedMs)
+          : 100
+      timer = setTimeout(
+        () => {
+          void tick().catch(fail)
+        },
+        Math.min(100, remaining),
+      )
     },
     async pause() {
       generation += 1
@@ -398,11 +430,17 @@ export function createApplicationPreviewSession(options: {
       }
 
       emit()
-      const duration = chapters[chapterIndex].duration
-      const remaining = !stagePhase && duration.kind === "known" ? Math.max(0, duration.milliseconds - clock.snapshot().elapsedMs) : 100
-      timer = setTimeout(() => {
-        void tick().catch(fail)
-      }, Math.min(100, remaining))
+      const { duration } = chapters[chapterIndex]
+      const remaining =
+        !stagePhase && duration.kind === "known"
+          ? Math.max(0, duration.milliseconds - clock.snapshot().elapsedMs)
+          : 100
+      timer = setTimeout(
+        () => {
+          void tick().catch(fail)
+        },
+        Math.min(100, remaining),
+      )
     },
     async seekChapter(id, signal) {
       const index = chapters.findIndex((chapter) => chapter.id === id)

@@ -1,5 +1,9 @@
 /** Built-candidate acceptance. Creates only disposable quizzes and rooms on the isolated Linux host. */
 import assert from "node:assert/strict"
+import {
+  watchNativeQuestionSequence,
+  readNativeQuestionSequence,
+} from "./question-sequence-verify.mjs"
 import { randomUUID } from "node:crypto"
 import { mkdirSync, writeFileSync } from "node:fs"
 import { createRequire } from "node:module"
@@ -480,6 +484,11 @@ export async function verifyPlatformDefaults(options) {
         await expect.poll(() => activeUrls(host)).toEqual([LOBBY])
         record("interrupted-stale-effect-keeps-live-background-audio-unblocked")
       }
+      if (legacy) {
+        await watchNativeQuestionSequence(host)
+        await watchNativeQuestionSequence(display)
+        await watchNativeQuestionSequence(player)
+      }
       await host
         .getByTestId("manager-control-toolbar")
         .getByRole("button", { name: "Start", exact: true })
@@ -500,6 +509,24 @@ export async function verifyPlatformDefaults(options) {
           .map((event) => event.identity)
         assert.deepEqual(phaseCues, [room.gameId + ":1:phase:showQuestion"])
         record("native-question-handoff-emits-one-authoritative-phase-cue")
+      }
+      if (legacy) {
+        for (const [role, surface] of [
+          ["host", host],
+          ["display", display],
+          ["player", player],
+        ]) {
+          const sequence = await readNativeQuestionSequence(surface)
+          writeFileSync(
+            join(evidence, "native-question-" + role + "-voting.json"),
+            JSON.stringify(sequence, null, 2) + String.fromCharCode(10),
+          )
+          record(
+            "native-" +
+              role +
+              "-question-2s-then-answers-and-timer-with-stable-heading",
+          )
+        }
       }
       await choice.click()
       await expect
@@ -527,6 +554,24 @@ export async function verifyPlatformDefaults(options) {
         RESULTS,
         { timeout: 15_000 },
       )
+      if (legacy) {
+        for (const [role, surface] of [
+          ["host", host],
+          ["display", display],
+        ]) {
+          await expect(
+            surface.locator("[data-native-question-round]"),
+          ).toHaveAttribute("data-question-phase", "results")
+          const sequence = await readNativeQuestionSequence(surface, {
+            results: true,
+          })
+          writeFileSync(
+            join(evidence, "native-question-" + role + "-results.json"),
+            JSON.stringify(sequence, null, 2) + String.fromCharCode(10),
+          )
+          record("native-" + role + "-question-heading-remains-through-results")
+        }
+      }
       record(theme + "-shared-voting-results-and-single-accepted-answer-effect")
 
       const curtain = host.getByTestId("platform-game-closing")

@@ -10,7 +10,11 @@ import { useTranslation } from "react-i18next"
 /* oxlint-disable eslint/no-nested-ternary -- A finite scene union is projected into public phase/result fields, never arbitrary server extras. */
 import {
   ThemeSandboxHost,
+  createPackageQuestionAdmission,
+  packageQuestionContentSupported,
   packageRuntimePhase,
+  packageUsesSandboxForPhase,
+  projectPackageClock,
   projectPackageScene,
   useShowTheme,
   type ShowScene,
@@ -202,25 +206,57 @@ export function PackageStage({
     }
   }, [sourceDigest, imageUrls])
   const phase = packageRuntimePhase(scene, voteLocked)
-  const usingSandbox = Boolean(
+  const [questionAdmission] = useState(() => createPackageQuestionAdmission())
+  const available = Boolean(
     pin &&
     url &&
     !assetsUnavailable &&
-    theme.definition.sandbox?.slots[phase] === "implemented" &&
-    theme.definition.sandbox.roles.includes(role) &&
-    !(scene.kind === "voting" && scene.questionType === "estimation") &&
-    !(
-      (scene.kind === "voting" || scene.kind === "question") &&
-      scene.media?.type === "video"
-    ),
+    packageUsesSandboxForPhase(theme.definition.sandbox?.slots, phase) &&
+    theme.definition.sandbox?.roles.includes(role),
   )
+  const questionFamily =
+    scene.kind === "question" ||
+    scene.kind === "voting" ||
+    scene.kind === "results" ||
+    scene.kind === "player-result" ||
+    (scene.kind === "wait" && phase === "voteLocked")
+  const content =
+    "questionType" in scene
+      ? {
+          questionType: scene.questionType,
+          mediaType: scene.questionMediaType,
+        }
+      : undefined
+  const questionIdentity = JSON.stringify([
+    roomId,
+    questionId,
+    theme.definition.id,
+    sourceDigest,
+    pin?.buildDigest,
+    role,
+  ])
+  const [, setRuntimeFailure] = useState(0)
+  const runtimeFallbackPending = useRef(false)
+  const usingSandbox = questionFamily
+    ? questionAdmission.select({
+        identity: questionIdentity,
+        supported: questionId
+          ? packageQuestionContentSupported(content)
+          : undefined,
+        available,
+      })
+    : available
   const wasSandbox = useRef(false)
   const fallbackCallback = useRef(onFallback)
   useLayoutEffect(() => {
     fallbackCallback.current = onFallback
   }, [onFallback])
   useEffect(() => {
-    if (!usingSandbox && wasSandbox.current) {
+    if (
+      !usingSandbox &&
+      (wasSandbox.current || runtimeFallbackPending.current)
+    ) {
+      runtimeFallbackPending.current = false
       fallbackCallback.current()
     }
 
@@ -250,8 +286,7 @@ export function PackageStage({
       locale: i18n.language,
       reducedMotion: matchMedia("(prefers-reduced-motion: reduce)").matches,
       serverTime,
-      deadline,
-      remainingMs,
+      ...projectPackageClock({ phase, deadline, remainingMs }),
       paused,
       canAnswer,
       labels: {
@@ -267,6 +302,7 @@ export function PackageStage({
       sequence,
       role,
       scene,
+      phase,
       voteLocked,
       backgroundUrl,
       images,
@@ -300,7 +336,7 @@ export function PackageStage({
   return (
     <div className="relative h-full w-full">
       <ThemeSandboxHost
-        key={roomId}
+        key={questionFamily ? questionIdentity : roomId}
         url={url}
         snapshot={snapshot}
         title={t("extensions:packages.theme")}
@@ -326,7 +362,19 @@ export function PackageStage({
             }),
           )
         }}
-        onFallback={onFallback}
+        onFallback={() => {
+          if (questionFamily) {
+            if (questionAdmission.reject(questionIdentity)) {
+              // Notify the host after its replacement native stage mounts.
+              runtimeFallbackPending.current = true
+              setRuntimeFailure((value) => value + 1)
+            }
+
+            return
+          }
+
+          onFallback()
+        }}
         fallback={children}
       />
       {trustedOverlay}

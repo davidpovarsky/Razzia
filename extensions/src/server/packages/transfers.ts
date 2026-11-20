@@ -42,10 +42,12 @@ export interface PackageInstallIntent {
  * The optional upload ticket grants only one exact hash/size write, never reads. */
 export class PackageTransferStore {
   readonly db: DatabaseSync
-  constructor(
-    readonly root: string,
-    private readonly secret: string,
-  ) {
+  readonly root: string
+  private readonly secret: string
+
+  constructor(root: string, secret: string) {
+    this.root = root
+    this.secret = secret
     fs.mkdirSync(root, { recursive: true, mode: 0o700 })
     this.db = new DatabaseSync(path.join(root, "transfers.sqlite"))
     this.db.exec(`PRAGMA journal_mode=WAL; PRAGMA busy_timeout=5000;

@@ -1,4 +1,8 @@
-import { EVENTS, NO_TIME_LIMIT } from "@razzia/common/constants"
+import {
+  EVENTS,
+  NO_TIME_LIMIT,
+  QUESTION_LEAD_IN_SECONDS,
+} from "@razzia/common/constants"
 import { STATUS } from "@razzia/common/types/game/status"
 import { CooldownTimer } from "@razzia/socket/services/game/cooldown-timer"
 import { PlayerManager } from "@razzia/socket/services/game/player-manager"
@@ -15,8 +19,9 @@ const activeRounds: RoundManager[] = []
 function setup({
   time = 10,
   endOnAllAnswered = false,
-  skipPreview = true,
+  enterVoting = true,
 } = {}) {
+  const preparationMs = (2 + QUESTION_LEAD_IN_SECONDS) * SECOND_MS
   const fake = createFakeIo()
   const quizz = createQuizz([
     createQuestion({ time, cooldown: 1 }),
@@ -69,7 +74,6 @@ function setup({
       endOnAllAnswered,
       autoAdvance: { enable: false, responsesDelay: 5, leaderboardDelay: 5 },
     }),
-    skipQuestionPreview: () => skipPreview,
     getQuestionId: (index) => ids[index],
     onResultsCalculated: (distribution) =>
       session.setRevealDistribution(distribution),
@@ -109,7 +113,18 @@ function setup({
     fake,
     end,
     results,
-    start: () => round.startQuestionAtIndex(0),
+    preparationMs,
+    start: async () => {
+      round.startQuestionAtIndex(0)
+
+      if (enterVoting) {
+        await vi.advanceTimersByTimeAsync(preparationMs)
+        expect(round.isCurrentlyAcceptingAnswers).toBe(true)
+        expect(round.getRemainingSeconds()).toBe(
+          time === NO_TIME_LIMIT ? 0 : time,
+        )
+      }
+    },
   }
 }
 
@@ -127,7 +142,7 @@ describe("End Answer Timer — Asana 1219846387458576", () => {
     "locks answers synchronously and reveals before time advances (time=%s)",
     async (time) => {
       const game = setup({ time })
-      game.start()
+      await game.start()
       game.round.selectAnswer(game.alice, [0])
       const epoch = game.session.currentEpoch
       const now = Date.now()
@@ -159,7 +174,7 @@ describe("End Answer Timer — Asana 1219846387458576", () => {
 
   it("deduplicates the same command and rejects a second click without scoring twice", async () => {
     const game = setup()
-    game.start()
+    await game.start()
     game.round.selectAnswer(game.alice, [0])
     expect(game.end()).toMatchObject({ success: true })
     expect(game.end()).toMatchObject({ success: true, deduplicated: true })
@@ -182,7 +197,7 @@ describe("End Answer Timer — Asana 1219846387458576", () => {
     "resolves the %s race exactly once before the next tick",
     async (order) => {
       const game = setup({ endOnAllAnswered: true })
-      game.start()
+      await game.start()
       game.round.selectAnswer(game.alice, [0])
 
       if (order === "all-answered-first") {
@@ -212,7 +227,7 @@ describe("End Answer Timer — Asana 1219846387458576", () => {
 
   it("wins immediately before the natural deadline without a duplicate reveal", async () => {
     const game = setup({ time: 2 })
-    game.start()
+    await game.start()
     await vi.advanceTimersByTimeAsync(2 * SECOND_MS - 1)
     expect(game.end()).toMatchObject({ success: true })
     const endedAt = Date.now()
@@ -227,7 +242,7 @@ describe("End Answer Timer — Asana 1219846387458576", () => {
 
   it("leaves a natural completion authoritative when its reveal wins first", async () => {
     const game = setup({ time: 2 })
-    game.start()
+    await game.start()
     await vi.advanceTimersByTimeAsync(2 * SECOND_MS)
     expect(game.results()).toHaveLength(1)
     expect(game.round.endTimer()).toBe(false)
@@ -239,7 +254,7 @@ describe("End Answer Timer — Asana 1219846387458576", () => {
 
   it("rejects ending while paused and completes promptly after resume", async () => {
     const game = setup()
-    game.start()
+    await game.start()
     await vi.advanceTimersByTimeAsync(SECOND_MS / 2)
     expect(game.round.pauseGame()).toBe(true)
     const remaining = game.cooldown.remainingMs
@@ -256,16 +271,16 @@ describe("End Answer Timer — Asana 1219846387458576", () => {
   })
 
   it("does not end the lobby, preparation, or question-preview countdown", async () => {
-    const game = setup({ skipPreview: false })
+    const game = setup({ enterVoting: false })
     expect(game.round.endTimer()).toBe(false)
     expect(() => game.end()).toThrow("cannotEndTimerOutsideAnswerPhase")
-    game.start()
+    await game.start()
     expect(game.round.endTimer()).toBe(false)
     await vi.advanceTimersByTimeAsync(2 * SECOND_MS)
     expect(game.fake.lastStatus("timer-game")?.name).toBe(STATUS.SHOW_QUESTION)
     expect(game.round.endTimer()).toBe(false)
     expect(game.results()).toHaveLength(0)
-    await vi.advanceTimersByTimeAsync(SECOND_MS)
+    await vi.advanceTimersByTimeAsync(QUESTION_LEAD_IN_SECONDS * SECOND_MS)
     expect(game.round.isCurrentlyAcceptingAnswers).toBe(true)
     expect(game.end()).toMatchObject({ success: true })
     await Promise.resolve()
@@ -274,7 +289,7 @@ describe("End Answer Timer — Asana 1219846387458576", () => {
 
   it("does not reveal or score after disposal in the completion microtask race", async () => {
     const game = setup()
-    game.start()
+    await game.start()
     game.round.selectAnswer(game.alice, [0])
     game.end()
     game.round.dispose()
@@ -289,10 +304,12 @@ describe("End Answer Timer — Asana 1219846387458576", () => {
 
   it("does not let a completed old waiter close a newly opened question", async () => {
     const game = setup()
-    game.start()
+    await game.start()
     const epoch = game.session.currentEpoch
     game.end()
     game.round.startQuestionAtIndex(1)
+    expect(game.round.isCurrentlyAcceptingAnswers).toBe(false)
+    await vi.advanceTimersByTimeAsync(game.preparationMs)
     expect(game.round.isCurrentlyAcceptingAnswers).toBe(true)
     await Promise.resolve()
     expect(game.round.currentQuestionIndex).toBe(1)
@@ -309,7 +326,7 @@ describe("End Answer Timer — Asana 1219846387458576", () => {
 
   it("settles a natural-tick/manual race in the same turn without double results", async () => {
     const game = setup({ time: 1 })
-    game.start()
+    await game.start()
     // Execute the deadline callback, leaving its promise continuation queued.
     vi.advanceTimersByTime(SECOND_MS)
     expect(game.results()).toHaveLength(0)
@@ -325,12 +342,12 @@ describe("End Answer Timer — Asana 1219846387458576", () => {
 
   it("keeps an older deferred abort separate from a newly started countdown", async () => {
     const game = setup({ endOnAllAnswered: true })
-    game.start()
+    await game.start()
     game.round.selectAnswer(game.alice, [0])
     game.round.selectAnswer(game.bob, [1])
     expect(game.round.getVoteCompletionReason()).toBe("allAnswered")
     game.round.startQuestionAtIndex(1)
-    await vi.advanceTimersByTimeAsync(SECOND_MS)
+    await vi.advanceTimersByTimeAsync(game.preparationMs + SECOND_MS)
     expect(game.results()).toHaveLength(0)
     expect(game.round.isCurrentlyAcceptingAnswers).toBe(true)
     expect(game.cooldown.remaining).toBe(9)
@@ -345,7 +362,7 @@ describe("End Answer Timer — Asana 1219846387458576", () => {
 
   it("preserves the historical deferred abort for ordinary manager advance", async () => {
     const game = setup()
-    game.start()
+    await game.start()
     game.round.advance()
     expect(game.round.isCurrentlyAcceptingAnswers).toBe(false)
     await Promise.resolve()

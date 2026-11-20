@@ -29,6 +29,9 @@ export interface CommonStatusDataMap {
     questionType: QuestionType
   }
   SHOW_QUESTION: {
+    /** Public renderer capability metadata; no answers or protected media URLs. */
+    questionType?: QuestionType
+    questionMediaType?: QuestionMedia["type"]
     totalAnswers?: number
     questionNumber?: number
     questionId?: string

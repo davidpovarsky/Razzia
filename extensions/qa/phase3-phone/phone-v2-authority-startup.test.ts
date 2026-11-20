@@ -439,7 +439,7 @@ try {
     expect(probe.status).toBe(0)
     expect(probe.json).toEqual({
       showQuestionHasTime: false,
-      showQuestionCooldown: 1,
+      showQuestionCooldown: 2,
       selectAnswerTime: 20,
     })
   })

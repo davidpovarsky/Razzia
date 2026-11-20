@@ -208,26 +208,30 @@ const Answers = ({
 
   return (
     <QuestionEntrance
-      entrance={hideHeading ? { preset: "none" } : stageAnimations.questionEntrance}
+      entrance={
+        hideHeading
+          ? { preset: "none", durationMs: 0 }
+          : stageAnimations.questionEntrance
+      }
       epoch={animationEpochKey}
       className="relative flex h-full min-h-0 w-full flex-1 flex-col justify-between overflow-hidden"
     >
       {/* A retained platform question must not be covered by a second legacy iframe question. */}
       {!hideHeading && (
-      <LegacyVotingMotion
-        showTadazzCards={showTadazzCards}
-        defaultsObj={defaultsObj}
-        viewRole={viewRole}
-        isSpectator={isSpectator}
-        currentVisuals={currentVisuals}
-        effectiveExtensionState={effectiveExtensionState}
-        gameId={gameId}
-        animationEpochKey={animationEpochKey}
-        question={question}
-        questionStates={questionStates}
-        answers={answers}
-        time={time}
-      />
+        <LegacyVotingMotion
+          showTadazzCards={showTadazzCards}
+          defaultsObj={defaultsObj}
+          viewRole={viewRole}
+          isSpectator={isSpectator}
+          currentVisuals={currentVisuals}
+          effectiveExtensionState={effectiveExtensionState}
+          gameId={gameId}
+          animationEpochKey={animationEpochKey}
+          question={question}
+          questionStates={questionStates}
+          answers={answers}
+          time={time}
+        />
       )}
       {/* Question Header & Media Area */}
       <div
@@ -240,32 +244,31 @@ const Answers = ({
       >
         {!hideHeading && (
           <>
-        <h2
-          data-testid="game-question-title"
-          className={clsx(
-            "text-center leading-tight font-bold break-words text-white drop-shadow-lg",
-            (() => {
-              if (isUltraCompact) {
-                return "text-sm sm:text-base"
-              }
+            <h2
+              data-testid="game-question-title"
+              className={clsx(
+                "text-center leading-tight font-bold break-words text-white drop-shadow-lg",
+                (() => {
+                  if (isUltraCompact) {
+                    return "text-sm sm:text-base"
+                  }
 
-              if (showAnswersOnly || currentVisuals) {
-                return "text-base sm:text-xl md:text-2xl"
-              }
+                  if (showAnswersOnly || currentVisuals) {
+                    return "text-base sm:text-xl md:text-2xl"
+                  }
 
-              return "text-lg sm:text-2xl md:text-3xl lg:text-4xl"
-            })(),
-          )}
-        >
-          {question}
-        </h2>
+                  return "text-lg sm:text-2xl md:text-3xl lg:text-4xl"
+                })(),
+              )}
+            >
+              {question}
+            </h2>
 
-        <QuestionUnderline
-          decoration={questionDecoration}
-          className="mx-auto mt-1 flex w-40 items-center justify-center sm:w-56"
-          playerClassName="h-4 w-full"
-        />
-
+            <QuestionUnderline
+              decoration={questionDecoration}
+              className="mx-auto mt-1 flex w-40 items-center justify-center sm:w-56"
+              playerClassName="h-4 w-full"
+            />
           </>
         )}
 

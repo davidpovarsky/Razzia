@@ -14,17 +14,13 @@ import {
   PlatformScope,
   HostDisplayControls,
   PresentationControls,
+  type PresentationControlsProps,
 } from "@razzia/extensions/platform-ui"
 import HistoryDialog from "@razzia/web/features/game/components/HistoryDialog"
 import HostShortcutsDialog from "@razzia/web/features/game/components/HostShortcutsDialog"
 import RoomLockButton from "@razzia/web/features/game/components/RoomLockButton"
 import { useSocket } from "@razzia/web/features/game/contexts/socket-context"
-import {
-  History,
-  LogOut,
-  SkipForward,
-  Timer,
-} from "lucide-react"
+import { History, LogOut, SkipForward } from "lucide-react"
 import { useCallback, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
@@ -430,6 +426,38 @@ export const ManagerControlToolbar = ({
     isInterlude ||
     isScene
   const canViewHistory = currentQuestionIdx > 0 && !isLobby && !isFinished
+  const resolveNextAction = (): PresentationControlsProps["next"] => {
+    if (isLobby && onStartGame) {
+      return {
+        state: "start",
+        onClick: onStartGame,
+        disabled: isPending,
+      }
+    }
+
+    if (canEndTimer) {
+      return {
+        state: "endTimer",
+        onClick: handleEndTimer,
+        disabled: isPending,
+        testId: "host-end-timer-btn",
+      }
+    }
+
+    if (canNextScreen) {
+      return {
+        onClick: handleNextScreen,
+        disabled: isPending,
+        testId: "host-next-screen-btn",
+        progress:
+          countdown && countdown.total > 0
+            ? 1 - countdown.seconds / countdown.total
+            : undefined,
+      }
+    }
+
+    return undefined
+  }
 
   return (
     <PlatformScope
@@ -611,39 +639,45 @@ export const ManagerControlToolbar = ({
         )}
 
         <PresentationControls
-          previous={gameId && !isPreLobby ? {
-            onClick: handlePreviousScreen,
-            disabled: !canPrevious || isPending,
-            description: !canPrevious ? previousReason || t("extensions:host.cannotPrevious", "Cannot navigate to previous screen") : undefined,
-            testId: "host-previous-screen-btn",
-          } : undefined}
-          playback={launch?.stage === "opening" || launch?.stage === "closing" || (!isLobby && !isFinished) ? {
-            state: isPaused ? "paused" : "playing",
-            onClick: handlePauseToggle,
-            disabled: isPending,
-            testId: "host-pause-resume-btn",
-          } : undefined}
-          next={isLobby && onStartGame ? {
-            state: "start",
-            onClick: onStartGame,
-            disabled: isPending,
-          } : canEndTimer ? {
-            state: "endTimer",
-            onClick: handleEndTimer,
-            disabled: isPending,
-            testId: "host-end-timer-btn",
-          } : canNextScreen ? {
-            onClick: handleNextScreen,
-            disabled: isPending,
-            testId: "host-next-screen-btn",
-            progress: countdown && countdown.total > 0 ? 1 - countdown.seconds / countdown.total : undefined,
-          } : undefined}
-          replay={canRestartQuestion ? {
-            question: true,
-            onClick: () => setRestartConfirmOpen(true),
-            disabled: isPending,
-            testId: "host-restart-question-btn",
-          } : undefined}
+          previous={
+            gameId && !isPreLobby
+              ? {
+                  onClick: handlePreviousScreen,
+                  disabled: !canPrevious || isPending,
+                  description: !canPrevious
+                    ? previousReason ||
+                      t(
+                        "extensions:host.cannotPrevious",
+                        "Cannot navigate to previous screen",
+                      )
+                    : undefined,
+                  testId: "host-previous-screen-btn",
+                }
+              : undefined
+          }
+          playback={
+            launch?.stage === "opening" ||
+            launch?.stage === "closing" ||
+            (!isLobby && !isFinished)
+              ? {
+                  state: isPaused ? "paused" : "playing",
+                  onClick: handlePauseToggle,
+                  disabled: isPending,
+                  testId: "host-pause-resume-btn",
+                }
+              : undefined
+          }
+          next={resolveNextAction()}
+          replay={
+            canRestartQuestion
+              ? {
+                  question: true,
+                  onClick: () => setRestartConfirmOpen(true),
+                  disabled: isPending,
+                  testId: "host-restart-question-btn",
+                }
+              : undefined
+          }
         />
       </div>
 

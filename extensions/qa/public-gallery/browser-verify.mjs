@@ -4,6 +4,15 @@ import { createRequire } from "node:module"
 import { mkdirSync, writeFileSync } from "node:fs"
 import { join, resolve } from "node:path"
 import {
+  verifyPublicViewers,
+  verifyViewerGeometry,
+} from "./viewer-controls-verify.mjs"
+import {
+  watchQuestionSequence,
+  readQuestionSequence,
+  stopQuestionSequence,
+} from "./question-sequence-verify.mjs"
+import {
   verifyNativePalette,
   verifyCatalogueCovers,
 } from "./palette-verify.mjs"
@@ -481,6 +490,7 @@ try {
         .poll(() => new URL(page.url()).searchParams.get("game"))
         .toBe(game.id)
       await readyPreview(page)
+      await verifyViewerGeometry(page, { label: "preview-" + game.id })
       const slider = page
         .locator('.game-preview-timeline input[type="range"]')
         .first()
@@ -535,6 +545,10 @@ try {
         const gameRoot = page.getByTestId("great-guessoff-demo")
         const next = page.getByTestId("ggo-main-action")
         await expect(gameRoot).toHaveAttribute("data-ggo-phase", "intro")
+        await watchQuestionSequence(gameRoot, {
+          phaseAttribute: "data-ggo-phase",
+        })
+        const questionSequences = []
         let votingRounds = 0
         for (let step = 0; step < 20; step++) {
           await expect(next).toBeEnabled({ timeout: 30_000 })
@@ -556,6 +570,10 @@ try {
                 false,
               )
             await chooseNative(page, 0)
+            await expect(gameRoot).toHaveAttribute("data-ggo-phase", "results")
+            questionSequences.push(
+              await readQuestionSequence(gameRoot, votingRounds),
+            )
             votingRounds += 1
           }
           await next.click()
@@ -563,12 +581,18 @@ try {
         }
         await expect(gameRoot).toHaveAttribute("data-ggo-phase", "closing")
         assert.equal(votingRounds, 5)
+        await stopQuestionSequence(gameRoot)
+        writeFileSync(
+          join(evidence, "question-sequence-" + game.id + ".json"),
+          JSON.stringify(questionSequences, null, 2) + "\n",
+        )
         await screenshot(page, "complete-" + game.id)
         await next.click()
         await expect(gameRoot).toHaveAttribute("data-ggo-phase", "intro")
         record("play-complete-" + game.id, {
           rounds: votingRounds,
           replay: true,
+          questionSequences: questionSequences.length,
         })
       } else {
         const gameRoot = page.getByTestId("catalogue-game-demo")
@@ -580,6 +604,8 @@ try {
           String(game.questionCount),
         )
         await expect(gameRoot).toHaveAttribute("data-game-phase", "intro")
+        await watchQuestionSequence(gameRoot)
+        const questionSequences = []
         await next.click()
         const questions = previews
           .get(game.id)
@@ -609,6 +635,7 @@ try {
           await chooseNative(page, answer)
           await expect(gameRoot).toHaveAttribute("data-game-phase", "results")
           await expect(next).toBeEnabled({ timeout: 30_000 })
+          questionSequences.push(await readQuestionSequence(gameRoot, index))
           if (index === 0) {
             await verifyNativePalette(page, game.themeId, "solo", evidence)
             await imageDecode(page)
@@ -617,6 +644,11 @@ try {
           await next.click()
         }
         await expect(gameRoot).toHaveAttribute("data-game-phase", "finish")
+        await stopQuestionSequence(gameRoot)
+        writeFileSync(
+          join(evidence, "question-sequence-" + game.id + ".json"),
+          JSON.stringify(questionSequences, null, 2) + "\n",
+        )
         await expect(next).toBeEnabled({ timeout: 30_000 })
         await screenshot(page, "complete-" + game.id)
         await next.click()
@@ -624,6 +656,7 @@ try {
         record("play-complete-" + game.id, {
           rounds: questions.length,
           replay: true,
+          questionSequences: questionSequences.length,
         })
       }
     })
@@ -727,6 +760,19 @@ try {
       }
     })
   }
+  await verifyPublicViewers({
+    browser,
+    origin,
+    ids,
+    previews,
+    evidence,
+    inspect,
+    record,
+    onPage: (page) => {
+      activePage = page
+    },
+  })
+
   assert.deepEqual(
     observations.checkFailures,
     [],

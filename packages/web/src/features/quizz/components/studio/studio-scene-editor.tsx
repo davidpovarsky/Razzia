@@ -52,7 +52,6 @@ import {
   DoorOpen,
   Flag,
   FolderOpen,
-  Play,
   Plus,
   Sparkles,
   Trash2,
@@ -2949,9 +2948,13 @@ export const StudioSceneEditor = () => {
                   state: isPreviewPlaying ? "playing" : "paused",
                   testId: "studio-preview-play-pause",
                   onClick: () => {
-                    if (!isPreviewPlaying && previewTimeMs >= effectivePreviewDurationMs) {
+                    if (
+                      !isPreviewPlaying &&
+                      previewTimeMs >= effectivePreviewDurationMs
+                    ) {
                       setPreviewTimeMs(0)
                     }
+
                     setIsPreviewPlaying((previous) => !previous)
                   },
                 }}

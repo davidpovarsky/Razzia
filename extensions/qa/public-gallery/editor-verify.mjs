@@ -6,6 +6,7 @@ import { writeFileSync } from "node:fs"
 import { verifyEditorRefinements } from "../experience-refinement/editor-verify.mjs"
 import { verifyGuestAdmission } from "../experience-refinement/guest-verify.mjs"
 import { verifyPlatformDefaults } from "../experience-refinement/platform-verify.mjs"
+import { verifyStudioViewer } from "./viewer-controls-verify.mjs"
 import {
   verifyNativePalette,
   verifyCatalogueCovers,
@@ -433,6 +434,14 @@ export async function verifyGalleryEditor(options) {
       passed: true,
       theme: "tadazz-discovery-lab",
     })
+    const viewerReceipt = await verifyStudioViewer({
+      ...options,
+      browser,
+      context,
+    })
+    assert.equal(viewerReceipt.passed, true)
+    report.push(...viewerReceipt.results)
+
     const guestReceipt = await verifyGuestAdmission({
       ...options,
       page,

@@ -1,6 +1,15 @@
-import { useLayoutEffect, useRef, useState, type ReactNode, type Ref } from "react"
+import {
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ReactNode,
+  type Ref,
+} from "react"
 import { useTranslation } from "react-i18next"
-import { PresentationControls, presentationControlText } from "../../../platform-ui"
+import {
+  PresentationControls,
+  presentationControlText,
+} from "../../../platform-ui"
 import { gameViewerCss } from "./styles"
 
 export interface GameViewerProps {
@@ -19,8 +28,17 @@ export interface GameViewerProps {
 
 /** A permanent dialog node keeps the same renderer, audio owner and session when expanded. */
 export function GameViewer({
-  title, status, children, controls, details, open = true, modal = false,
-  busy = false, dismissOnOutside = true, onClose, closeRef,
+  title,
+  status,
+  children,
+  controls,
+  details,
+  open = true,
+  modal = false,
+  busy = false,
+  dismissOnOutside = true,
+  onClose,
+  closeRef,
 }: GameViewerProps) {
   const { i18n } = useTranslation()
   const dialog = useRef<HTMLDialogElement>(null)
@@ -29,28 +47,52 @@ export function GameViewer({
 
   useLayoutEffect(() => {
     const element = dialog.current
-    if (!element) return
-    if (!open) {
-      if (element.open) element.close()
-      setExpanded(false)
+
+    if (!element) {
       return
     }
+
+    if (!open) {
+      if (element.open) {
+        element.close()
+      }
+
+      setExpanded(false)
+
+      return
+    }
+
     const currentlyModal = element.matches(":modal")
-    if (element.open && currentlyModal !== isExpanded) element.close()
+
+    if (element.open && currentlyModal !== isExpanded) {
+      element.close()
+    }
+
     if (!element.open) {
-      if (isExpanded) element.showModal()
-      else element.show()
+      if (isExpanded) {
+        element.showModal()
+      } else {
+        element.show()
+      }
     }
   }, [open, isExpanded])
 
   useLayoutEffect(() => {
     const element = dialog.current
-    return () => { if (element?.open) element.close() }
+
+    return () => {
+      if (element?.open) {
+        element.close()
+      }
+    }
   }, [])
 
   const dismiss = () => {
-    if (modal) onClose?.()
-    else setExpanded(false)
+    if (modal) {
+      onClose?.()
+    } else {
+      setExpanded(false)
+    }
   }
 
   return (
@@ -64,7 +106,10 @@ export function GameViewer({
         aria-label={title}
         aria-busy={busy || undefined}
         dir={i18n.dir()}
-        onCancel={(event) => { event.preventDefault(); dismiss() }}
+        onCancel={(event) => {
+          event.preventDefault()
+          dismiss()
+        }}
         onKeyDown={(event) => {
           if (isExpanded && event.key === "Escape" && !event.defaultPrevented) {
             event.preventDefault()
@@ -73,9 +118,24 @@ export function GameViewer({
           }
         }}
         onClick={(event) => {
-          if (event.target !== event.currentTarget || !isExpanded || !dismissOnOutside) return
+          if (
+            event.target !== event.currentTarget ||
+            !isExpanded ||
+            !dismissOnOutside
+          ) {
+            return
+          }
+
           const bounds = event.currentTarget.getBoundingClientRect()
-          if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) dismiss()
+
+          if (
+            event.clientX < bounds.left ||
+            event.clientX > bounds.right ||
+            event.clientY < bounds.top ||
+            event.clientY > bounds.bottom
+          ) {
+            dismiss()
+          }
         }}
       >
         <section className="game-viewer" data-expanded={isExpanded}>
@@ -85,15 +145,36 @@ export function GameViewer({
               {status && <div role="status">{status}</div>}
             </div>
             <PresentationControls
-              expand={modal ? undefined : { expanded: isExpanded, onClick: () => setExpanded((value) => !value), testId: "game-viewer-expand" }}
-              close={onClose || isExpanded ? { onClick: dismiss, ref: closeRef, testId: "game-viewer-close" } : undefined}
+              expand={
+                modal
+                  ? undefined
+                  : {
+                      expanded: isExpanded,
+                      onClick: () => setExpanded((value) => !value),
+                      testId: "game-viewer-expand",
+                    }
+              }
+              close={
+                onClose || isExpanded
+                  ? {
+                      onClick: dismiss,
+                      ref: closeRef,
+                      testId: "game-viewer-close",
+                    }
+                  : undefined
+              }
             />
           </header>
           <div className="game-viewer-stage">{children}</div>
           {controls && <div className="game-viewer-controls">{controls}</div>}
           {details && (
             <details className="game-viewer-details">
-              <summary>{presentationControlText(i18n.resolvedLanguage ?? i18n.language ?? "en", "details")}</summary>
+              <summary>
+                {presentationControlText(
+                  i18n.resolvedLanguage ?? i18n.language,
+                  "details",
+                )}
+              </summary>
               <div>{details}</div>
             </details>
           )}

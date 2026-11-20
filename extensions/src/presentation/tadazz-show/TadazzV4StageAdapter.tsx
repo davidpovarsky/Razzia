@@ -299,16 +299,18 @@ export const TadazzV4StageAdapter = forwardRef<
           await v4Ref.current?.play("question", buildQuestionData(data))
         }
       },
-      async presentOptions(data) {
+      async presentOptions(input) {
         const { current } = questionRef
-        if (current?.key === data.key) {
-          data = {
-            ...data,
-            questionImage: data.questionImage ?? current.questionImage,
-            answerCount: data.answerCount ?? current.answerCount,
-            hasAnswerImages: data.hasAnswerImages ?? current.hasAnswerImages,
-          }
-        }
+        const data =
+          current?.key === input.key
+            ? {
+                ...input,
+                questionImage: input.questionImage ?? current.questionImage,
+                answerCount: input.answerCount ?? current.answerCount,
+                hasAnswerImages:
+                  input.hasAnswerImages ?? current.hasAnswerImages,
+              }
+            : input
         const questionAlreadyOnStage =
           current?.key === data.key &&
           ["question", "voting", "locked", "results"].includes(modeRef.current)
@@ -349,7 +351,9 @@ export const TadazzV4StageAdapter = forwardRef<
         const previous = questionRef.current
         const q = question ?? previous
         const questionAlreadyOnStage = Boolean(
-          previous && q && previous.key === q.key &&
+          previous &&
+          q &&
+          previous.key === q.key &&
           ["question", "voting", "locked", "results"].includes(modeRef.current),
         )
 
@@ -359,7 +363,8 @@ export const TadazzV4StageAdapter = forwardRef<
 
         questionRef.current = q
         setScreenMode("none")
-        const isAlreadyVoting = modeRef.current === "voting" && previous?.key === q.key
+        const isAlreadyVoting =
+          modeRef.current === "voting" && previous?.key === q.key
         setMode("voting")
         const alreadyOnStage = cardsOnStageKeyRef.current === q.key
         cardsOnStageKeyRef.current = q.key

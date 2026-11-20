@@ -1,5 +1,9 @@
 import { resolveQuestionPlayMode } from "@razzia/extensions/core"
-import { MAX_POINTS, NO_TIME_LIMIT, QUESTION_LEAD_IN_SECONDS } from "@razzia/common/constants"
+import {
+  MAX_POINTS,
+  NO_TIME_LIMIT,
+  QUESTION_LEAD_IN_SECONDS,
+} from "@razzia/common/constants"
 import { type ScoringMode } from "@razzia/common/types/game"
 import { isMultiOptions } from "@razzia/common/questions/options"
 import ToggleGroup from "@razzia/web/components/ToggleGroup"

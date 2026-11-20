@@ -103,17 +103,33 @@ export function StudioPublicGallery({ search }: { search: string }) {
                   data-catalogue-customise={game.id}
                 >
                   <Pencil size={15} />
-                  {t(installing === game.id ? "Adding your game…" : "Customise a copy")}
+                  {t(
+                    installing === game.id
+                      ? "Adding your game…"
+                      : "Customise a copy",
+                  )}
                 </SiteButton>
               </div>
               <details className="catalogue-studio-details">
-                <summary>{presentationControlText(i18n.resolvedLanguage ?? i18n.language ?? "en", "details")}</summary>
+                <summary>
+                  {presentationControlText(
+                    i18n.resolvedLanguage ?? i18n.language,
+                    "details",
+                  )}
+                </summary>
                 <p>{t(game.desc)}</p>
                 <div className="catalogue-audiences">
-                  {game.audience.map((item) => <span key={item}>{t(item)}</span>)}
-                  <span>{t("{{count}} rounds", { count: game.questionCount })}</span>
+                  {game.audience.map((item) => (
+                    <span key={item}>{t(item)}</span>
+                  ))}
+                  <span>
+                    {t("{{count}} rounds", { count: game.questionCount })}
+                  </span>
                 </div>
-                <SiteLink className="btn ghost" href={`/?view=product&game=${encodeURIComponent(game.id)}`}>
+                <SiteLink
+                  className="btn ghost"
+                  href={`/?view=product&game=${encodeURIComponent(game.id)}`}
+                >
                   {t("View game")}
                   <ArrowRight size={15} />
                 </SiteLink>

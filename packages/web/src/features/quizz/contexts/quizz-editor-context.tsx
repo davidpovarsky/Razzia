@@ -1,6 +1,10 @@
 import { useQuizzExtras } from "./extensions/use-quizz-extras"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { QUESTION_LEAD_IN_SECONDS, QUESTION_TYPES, QUIZZ_MODES } from "@razzia/common/constants"
+import {
+  QUESTION_LEAD_IN_SECONDS,
+  QUESTION_TYPES,
+  QUIZZ_MODES,
+} from "@razzia/common/constants"
 import type {
   Question,
   QuizzMode,

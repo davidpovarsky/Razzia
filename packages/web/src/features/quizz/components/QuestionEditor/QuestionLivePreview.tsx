@@ -17,7 +17,10 @@ import {
   showViewportStyle,
 } from "@razzia/extensions/presentation"
 import { STATUS } from "@razzia/common/types/game/status"
-import { QUESTION_LEAD_IN_MS, QUESTION_LEAD_IN_SECONDS } from "@razzia/common/constants"
+import {
+  QUESTION_LEAD_IN_MS,
+  QUESTION_LEAD_IN_SECONDS,
+} from "@razzia/common/constants"
 import AnswerCountdown from "@razzia/web/features/game/components/AnswerCountdown"
 import defaultBackground from "@razzia/web/assets/background.png"
 import { getBranding } from "@razzia/web/branding"
@@ -79,13 +82,15 @@ export function QuestionLivePreview({
   useEffect(() => {
     if (animatedQuestion !== question) {
       previewClock.pause()
+
       return
     }
 
-    let timer: ReturnType<typeof setTimeout>
+    let timer: ReturnType<typeof setTimeout> | undefined = undefined
     const tick = () => {
       const current = previewClock.snapshot()
       setPlayback(current)
+
       if (current.elapsedMs >= QUESTION_LEAD_IN_MS) {
         setPhase(
           current.deadlineMs !== null && current.elapsedMs >= current.deadlineMs
@@ -93,21 +98,34 @@ export function QuestionLivePreview({
             : "answers",
         )
       }
-      if (current.deadlineMs === null || current.elapsedMs < current.deadlineMs) {
-        const boundary = current.elapsedMs < QUESTION_LEAD_IN_MS
-          ? QUESTION_LEAD_IN_MS
-          : current.deadlineMs
-        timer = setTimeout(tick, boundary === null ? 50 : Math.min(50, Math.max(0, boundary - current.elapsedMs)))
+
+      if (
+        current.deadlineMs === null ||
+        current.elapsedMs < current.deadlineMs
+      ) {
+        const boundary =
+          current.elapsedMs < QUESTION_LEAD_IN_MS
+            ? QUESTION_LEAD_IN_MS
+            : current.deadlineMs
+        timer = setTimeout(
+          tick,
+          boundary === null
+            ? 50
+            : Math.min(50, Math.max(0, boundary - current.elapsedMs)),
+        )
       }
     }
     tick()
+
     return () => clearTimeout(timer)
   }, [animatedQuestion, question, previewClock, replay])
   const replayQuestion = () => {
     previewClock.replay()
+
     if (question.time > 0) {
       previewClock.startVoting(question.time, QUESTION_LEAD_IN_MS)
     }
+
     previewClock.play()
     setPlayback(previewClock.snapshot())
     setPhase("question")
@@ -206,6 +224,29 @@ export function QuestionLivePreview({
   ])
   const authoredKey = `Q${String(timeline.slice(0, selectedTimelineIndex + 1).filter((item) => item.kind === "question").length).padStart(2, "0")}`
 
+  let votingDeadlineMs = question.time > 0 ? question.time * 1000 : null
+
+  if (animatedQuestion === question) {
+    votingDeadlineMs = playback.deadlineMs
+  }
+
+  if (phase !== "answers") {
+    votingDeadlineMs = null
+  }
+
+  let votingSeconds = question.time > 0 ? question.time : null
+
+  if (
+    votingSeconds !== null &&
+    animatedQuestion === question &&
+    playback.deadlineMs !== null
+  ) {
+    votingSeconds = Math.max(
+      0,
+      Math.ceil((playback.deadlineMs - playback.elapsedMs) / 1000),
+    )
+  }
+
   const stageContent = (
     <ShowThemeScope theme={theme}>
       <div
@@ -247,7 +288,7 @@ export function QuestionLivePreview({
             timeline={timeline}
             paused={animatedQuestion !== question}
             elapsedMs={animatedQuestion === question ? playback.elapsedMs : 0}
-            deadlineMs={phase === "answers" ? (animatedQuestion === question ? playback.deadlineMs : (question.time > 0 ? question.time * 1000 : null)) : null}
+            deadlineMs={votingDeadlineMs}
             replay={replay}
             mediaRevealed={revealed}
           >
@@ -348,7 +389,7 @@ export function QuestionLivePreview({
                     readOnly
                   />
                   <AnswerCountdown
-                    seconds={question.time > 0 ? (animatedQuestion === question && playback.deadlineMs !== null ? Math.max(0, Math.ceil((playback.deadlineMs - playback.elapsedMs) / 1000)) : question.time) : null}
+                    seconds={votingSeconds}
                     totalSeconds={question.time}
                     variant="display"
                   />
@@ -493,12 +534,19 @@ export function QuestionLivePreview({
             }
           >
             <PresentationControls
-              replay={{ onClick: replayQuestion, testId: "question-preview-replay" }}
-              reveal={reveal && reveal.effect !== "none" && phase !== "results" ? {
-                revealed,
-                onClick: () => setRevealed((value) => !value),
-                testId: "question-preview-reveal",
-              } : undefined}
+              replay={{
+                onClick: replayQuestion,
+                testId: "question-preview-replay",
+              }}
+              reveal={
+                reveal && reveal.effect !== "none" && phase !== "results"
+                  ? {
+                      revealed,
+                      onClick: () => setRevealed((value) => !value),
+                      testId: "question-preview-reveal",
+                    }
+                  : undefined
+              }
             />
           </div>
           {phase === "results" && (

@@ -2151,7 +2151,9 @@ export function exportTadaShowWorkbook(
         card.category ?? "",
         card.note ?? "",
         card.timeSeconds !== undefined ? String(card.timeSeconds) : "20",
-        card.cooldownSeconds !== undefined ? String(card.cooldownSeconds) : String(QUESTION_LEAD_IN_SECONDS),
+        card.cooldownSeconds !== undefined
+          ? String(card.cooldownSeconds)
+          : String(QUESTION_LEAD_IN_SECONDS),
         (() => {
           if (card.maxPoints !== undefined) {
             return String(card.maxPoints)

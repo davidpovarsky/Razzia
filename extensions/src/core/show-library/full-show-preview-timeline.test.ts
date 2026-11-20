@@ -28,7 +28,7 @@ describe("authored full-show preview inventory", () => {
       "results",
     ])
     expect(chapters[5].duration).toEqual({ kind: "manual" })
-    expect(chapters[0].duration).toEqual({ kind: "known", milliseconds: 3000 })
+    expect(chapters[0].duration).toEqual({ kind: "known", milliseconds: 2000 })
     const reordered = compileFullShowPreviewTimeline({
       ...mixed,
       cards: [...mixed.cards].reverse(),
@@ -40,6 +40,22 @@ describe("authored full-show preview inventory", () => {
     // oxlint-disable-next-line typescript/no-unnecessary-condition -- Deliberate runtime assertion of the serialized contract.
     expect(chapters.every((c) => c.seek === "unavailable")).toBe(true)
   })
+
+  it.each([2, 3, 5, 15])(
+    "uses the fixed system interval while retaining stored cooldown%s",
+    (cooldownSeconds) => {
+      const show = authoredFixture(2, 2)
+      const legacy = { ...show, cards: [{ ...show.cards[0], cooldownSeconds }] }
+      const chapters = compileFullShowPreviewTimeline(legacy)
+      expect(chapters[0].duration).toEqual({
+        kind: "known",
+        milliseconds: 2000,
+      })
+      expect(legacy.cards[0]).toMatchObject({ cooldownSeconds })
+      expect(chapters[1].phase).toBe("answerCards")
+      expect(chapters[2].phase).toBe("voting")
+    },
+  )
   it("never invents media duration or finite voting time", () => {
     const show = authoredFixture(2, 2)
     const chapters = compileFullShowPreviewTimeline({

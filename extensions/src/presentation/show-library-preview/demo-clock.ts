@@ -46,6 +46,7 @@ export function createDemoClock(now: () => number = () => performance.now()) {
       if (!Number.isFinite(startsAtMs) || startsAtMs < 0) {
         throw new Error("show-preview:invalid-time")
       }
+
       deadline = startsAtMs + seconds * 1000
       sequence += 1
 

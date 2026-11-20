@@ -198,11 +198,14 @@ export async function verifyEditorRefinements(options) {
     const advancedSettings = page.getByTestId("question-advanced-settings")
     await expect(advancedSettings).toBeVisible()
     await expect(
+      advancedSettings.getByTestId("system-question-lead-in"),
+    ).toHaveText("2")
+    await expect(
       advancedSettings.getByRole("spinbutton", {
         name: "Question display",
         exact: true,
       }),
-    ).toHaveValue("8")
+    ).toHaveCount(0)
     await expect(
       advancedSettings.getByRole("spinbutton", {
         name: "Max points",

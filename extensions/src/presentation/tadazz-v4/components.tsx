@@ -594,9 +594,10 @@ export function QuestionImageV4({ data }: { data: TadazzV4Data }) {
               onClick={canSelect ? () => data.onSelectOption?.(i) : undefined}
             >
               {`${String.fromCharCode(65 + i)}  ·  ${title}`}
-              {data.showPercentages !== false && data.percentages?.[i] !== undefined && (
-                <span className="ml-2">{`${data.percentages[i]}%`}</span>
-              )}
+              {data.showPercentages !== false &&
+                data.percentages?.[i] !== undefined && (
+                  <span className="ml-2">{`${data.percentages[i]}%`}</span>
+                )}
             </PlatformButton>
           )
         })}
@@ -805,7 +806,9 @@ export function StageSceneV4({
       {scene === "chosen" && <VoteStatusV4 data={data} chosen />}
       {scene === "countdown" && <CountdownFloaterV4 data={data} />}
       {scene === "top-pick" && <TopPickV4 data={data} />}
-      {(scene === "question-image" || (data.photoLayout && showFrame)) && <QuestionImageV4 data={data} />}
+      {(scene === "question-image" || (data.photoLayout && showFrame)) && (
+        <QuestionImageV4 data={data} />
+      )}
       {scene === "leaderboard" && <LeaderboardV4 data={data} />}
       {scene === "round-recap" && <RoundRecapV4 data={data} />}
       {scene === "interlude" && <InterludeV4 data={data} />}
