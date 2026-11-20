@@ -8,19 +8,19 @@ not activate a worker, enable a runtime, install a theme, or publish a game.
 
 ## Tool-to-native mapping
 
-| MCP tool | Native operation |
-| --- | --- |
-| `get_authoring_capabilities` | Read installer/runtime flags and validate runtime origin configuration |
-| `list_packages` | Owner-scoped `PackageStore.list/details`, signed snapshot pagination |
-| `begin_package_upload` | Durable exact-size/SHA-256 staging reservation |
-| `write_package_upload_chunk` | Sequential, resumable, digest-checked staging |
-| `complete_package_upload` | Verify complete bytes and invoke native archive preflight/upload |
-| `get_package_status` | Accept a completed isolated worker receipt and read native status |
-| `build_package` | Queue the existing isolated worker for an exact revision |
-| `preview_package` | Open the bundled game using its package definitions and native preview clock |
-| `delete_package_draft` | Delete an owned uninstalled draft; reject installed/building packages |
-| `install_package` | Prepare or replay an immutable first-party save consent |
-| `export_package` | Enforce native export rights and issue a purpose-specific download capability |
+| MCP tool                     | Native operation                                                              |
+| ---------------------------- | ----------------------------------------------------------------------------- |
+| `get_authoring_capabilities` | Read installer/runtime flags and validate runtime origin configuration        |
+| `list_packages`              | Owner-scoped `PackageStore.list/details`, signed snapshot pagination          |
+| `begin_package_upload`       | Durable exact-size/SHA-256 staging reservation                                |
+| `write_package_upload_chunk` | Sequential, resumable, digest-checked staging                                 |
+| `complete_package_upload`    | Verify complete bytes and invoke native archive preflight/upload              |
+| `get_package_status`         | Accept a completed isolated worker receipt and read native status             |
+| `build_package`              | Queue the existing isolated worker for an exact revision                      |
+| `preview_package`            | Open the bundled game using its package definitions and native preview clock  |
+| `delete_package_draft`       | Delete an owned uninstalled draft; reject installed/building packages         |
+| `install_package`            | Prepare or replay an immutable first-party save consent                       |
+| `export_package`             | Enforce native export rights and issue a purpose-specific download capability |
 
 The first-party wrapper validates an actually issued principal and its current
 account, session, client, grant, and scopes before and after every awaited
