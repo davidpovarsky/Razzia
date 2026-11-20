@@ -29,18 +29,18 @@ No package scripts or customer code execute in the server process.
 
 ## Immutable artifacts
 
-| Artifact | Pin |
-| --- | --- |
-| BMS source archive | `041e64a214f6121b3492b736956884495147be061988ed9285b3f179b89204b0` |
-| Corrected operator worker | `b5cb4f5d9c252ca1638613f4c9e8ebe0f0f983d9c3d800ee37bbc145efb9492f` |
-| Worker image | `sha256:8295e3a3f00c78d0c5e0eb95679782d218db284e74dbff312d8607fb5b97140e` |
-| Worker source manifest | `354842325651a66b24d23e946f7d511197b79d4914deb559a408abed1635a44d` |
-| Current SDK source | `8bd9244b3016d01865a133becc74fa6a1883eb968a216f483df0b38edee6f9e2` |
-| Native accepted BMS build | `25f6b9b8bd5bd79ddcd0510471113aeb5ef67cc410f53fd05da52ffaed20245d` |
-| Runtime image | `sha256:56c4e4cffc30d77e1f9828078071880590a0bb9ecc1379f66020e842e1fa2819` |
-| Runtime JS | `cc97def60deefe4b6854a9a3bc85d5720d47d38a25671bf784593ca1ca2deb22` |
-| Runtime bootstrap | `c84d9df7702379667a2744d9447dc909ec8d063203eb7bd86169817e3bb0079b` |
-| Runtime source/dependency manifest | `a6e128e56af63ec6b793ffeab0be393703b419e86495a3d2b45fc28c9867a978` |
+| Artifact                           | Pin                                                                       |
+| ---------------------------------- | ------------------------------------------------------------------------- |
+| BMS source archive                 | `041e64a214f6121b3492b736956884495147be061988ed9285b3f179b89204b0`        |
+| Corrected operator worker          | `b5cb4f5d9c252ca1638613f4c9e8ebe0f0f983d9c3d800ee37bbc145efb9492f`        |
+| Worker image                       | `sha256:8295e3a3f00c78d0c5e0eb95679782d218db284e74dbff312d8607fb5b97140e` |
+| Worker source manifest             | `354842325651a66b24d23e946f7d511197b79d4914deb559a408abed1635a44d`        |
+| Current SDK source                 | `8bd9244b3016d01865a133becc74fa6a1883eb968a216f483df0b38edee6f9e2`        |
+| Native accepted BMS build          | `25f6b9b8bd5bd79ddcd0510471113aeb5ef67cc410f53fd05da52ffaed20245d`        |
+| Runtime image                      | `sha256:56c4e4cffc30d77e1f9828078071880590a0bb9ecc1379f66020e842e1fa2819` |
+| Runtime JS                         | `cc97def60deefe4b6854a9a3bc85d5720d47d38a25671bf784593ca1ca2deb22`        |
+| Runtime bootstrap                  | `c84d9df7702379667a2744d9447dc909ec8d063203eb7bd86169817e3bb0079b`        |
+| Runtime source/dependency manifest | `a6e128e56af63ec6b793ffeab0be393703b419e86495a3d2b45fc28c9867a978`        |
 
 ## Build recipe
 

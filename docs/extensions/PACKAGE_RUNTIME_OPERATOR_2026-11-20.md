@@ -27,11 +27,11 @@ This option does not enable either prerequisite.
 
 The candidate receives only these three additional environment overrides:
 
-| Variable | Desired value |
-|---|---|
-| `TADAZZ_PACKAGE_RUNTIME_ENABLED` | `true` |
-| `TADAZZ_PACKAGE_RUNTIME_ORIGIN` | The explicitly supplied origin |
-| `TADAZZ_PACKAGE_PARENT_ORIGIN` | `https://tadazz.com` |
+| Variable                         | Desired value                  |
+| -------------------------------- | ------------------------------ |
+| `TADAZZ_PACKAGE_RUNTIME_ENABLED` | `true`                         |
+| `TADAZZ_PACKAGE_RUNTIME_ORIGIN`  | The explicitly supplied origin |
+| `TADAZZ_PACKAGE_PARENT_ORIGIN`   | `https://tadazz.com`           |
 
 All other environment preservation, app image/revision pins, room checks,
 running-container count, gateway identity, private config pins, app host settings,
@@ -43,19 +43,19 @@ Only the explicitly pinned `tadazz-package-runtime` container may mount the
 following customer subtree. Every other container retains the blanket customer
 mount prohibition, including read-only mounts.
 
-| Boundary | Required contract |
-|---|---|
-| Image | Exact immutable ID; image and container source labels both equal the explicit independently qualified runtime revision |
-| Image metadata | SHA-256 labels for source manifest, bundled runtime and bootstrap |
-| Process | User `0:0`, working directory `/app/runtime`, entrypoint `node /app/runtime/bootstrap.mjs`, no command arguments |
-| Package store | `/var/lib/tadazz-release-5312660/config/extensions/packages` → `/runtime-store`, read-only, private propagation |
-| Derived secret | `/var/lib/tadazz-package-runtime/runtime-capability` → `/run/secrets/runtime-capability`, read-only, private propagation |
+| Boundary               | Required contract                                                                                                                                   |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Image                  | Exact immutable ID; image and container source labels both equal the explicit independently qualified runtime revision                              |
+| Image metadata         | SHA-256 labels for source manifest, bundled runtime and bootstrap                                                                                   |
+| Process                | User `0:0`, working directory `/app/runtime`, entrypoint `node /app/runtime/bootstrap.mjs`, no command arguments                                    |
+| Package store          | `/var/lib/tadazz-release-5312660/config/extensions/packages` → `/runtime-store`, read-only, private propagation                                     |
+| Derived secret         | `/var/lib/tadazz-package-runtime/runtime-capability` → `/run/secrets/runtime-capability`, read-only, private propagation                            |
 | Host secret protection | Canonical nonsymlink path, root-owned file, mode `0400` or `0600`, one hard link, 64 or 65 bytes; contents are not read or printed by this operator |
-| Additional mounts | None; no Docker socket, devices, volumes-from or writable tmpfs |
-| Privileges | Read-only root filesystem, drop all capabilities, no-new-privileges, not privileged, no host PID/IPC/UTS namespaces |
-| Network | Bridge; only `127.0.0.1:3192` → `3192/tcp`; no extra hosts or links |
-| Resources | 256 MiB memory and memory+swap, 0.5 CPU, 64 PIDs |
-| Environment | Exact image defaults plus store, parent origin, runtime origin and port; no JWT, capability secret or arbitrary Node options |
+| Additional mounts      | None; no Docker socket, devices, volumes-from or writable tmpfs                                                                                     |
+| Privileges             | Read-only root filesystem, drop all capabilities, no-new-privileges, not privileged, no host PID/IPC/UTS namespaces                                 |
+| Network                | Bridge; only `127.0.0.1:3192` → `3192/tcp`; no extra hosts or links                                                                                 |
+| Resources              | 256 MiB memory and memory+swap, 0.5 CPU, 64 PIDs                                                                                                    |
+| Environment            | Exact image defaults plus store, parent origin, runtime origin and port; no JWT, capability secret or arbitrary Node options                        |
 
 The root UID is required by the existing root-owned private package database;
 the two read-only mounts and other restrictions remain mandatory. The runtime
