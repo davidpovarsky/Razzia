@@ -13,6 +13,8 @@ const VOTING =
 const LOBBY = "/tadazz-show/music/platform/tadazz-exploration-20261106.mp3"
 const RESULTS = "/tadazz-show/music/cutie-patootie.mp3"
 const CONFIRM = "/sounds/tadazz-confirm-20261108.mp3"
+const TRANSITION = "/sounds/tadazz-silky-transition-20261108.mp3"
+const REVEAL = "/sounds/tadazz-reveal-bright-20261108.mp3"
 
 function recordMedia() {
   const trace = { elements: [], plays: [], events: [] }
@@ -443,25 +445,34 @@ export async function verifyPlatformDefaults(options) {
       if (legacy) {
         const previousPlays = (await mediaState(host)).plays.length
         await host.evaluate(() => {
-          for (const suffix of ["first", "second"]) {
+          for (const [name, suffix] of [
+            ["story-begin", "first"],
+            ["story-assembled", "second"],
+          ]) {
             window.dispatchEvent(
               new CustomEvent("tadazz:sfx", {
                 detail: {
-                  name: "answer-submitted",
+                  name,
                   identity: "platform-qa-interruption-" + suffix,
                 },
               }),
             )
           }
         })
-        const confirmations = async () =>
-          (await mediaState(host)).plays
-            .slice(previousPlays)
-            .filter((item) => item.requestedUrl === CONFIRM)
+        const interruptedEffects = async () =>
+          (await mediaState(host)).plays.slice(previousPlays)
         await expect
-          .poll(async () => (await confirmations()).map((item) => item.outcome))
+          .poll(async () =>
+            (await interruptedEffects()).map((item) => item.outcome),
+          )
           .toEqual(["rejected", "fulfilled"])
-        assert.equal((await confirmations())[0].error?.name, "AbortError")
+        const interrupted = await interruptedEffects()
+        assert.deepEqual(
+          interrupted.map((item) => item.requestedUrl),
+          [TRANSITION, REVEAL],
+        )
+        assert.equal(interrupted[0].element, interrupted[1].element)
+        assert.equal(interrupted[0].error?.name, "AbortError")
         await expect(
           host.getByTestId("audio-cue-player-state"),
         ).toHaveAttribute("data-audio-blocked", "false")
