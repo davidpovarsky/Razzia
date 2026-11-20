@@ -161,8 +161,8 @@ test("one-file complete React installation without review, independent layouts, 
   const version = `1.0.${Math.floor(Date.now() / 1000)}`
   const style = `${browserName}-arcade`,
     fixture = createPackageFixture("complete", style, version)
-  await page.goto("/manager/config")
-  await page.getByRole("button", { name: "Quizz", exact: true }).click()
+  await page.goto("/studio/games")
+  await page.getByTestId("package-tools-toggle").click()
   await page.getByTestId("package-file-input").setInputFiles({
     name: "complete.tadazz",
     mimeType: "application/zip",
@@ -204,24 +204,74 @@ test("one-file complete React installation without review, independent layouts, 
   const previewFrame = page
     .getByTestId("package-preview")
     .frameLocator("iframe")
-  await expect(previewFrame.locator("main")).toHaveAttribute(
-    "data-theme-layout",
-    style,
-  )
-  for (const phase of ["Opening", "Voting", "Results", "Closing"]) {
-    await page
-      .getByTestId("package-preview")
-      .getByRole("button", { name: phase, exact: true })
-      .click()
-    await expect(previewFrame.locator("main")).toHaveAttribute(
-      "data-phase",
-      phase.toLowerCase(),
-    )
-  }
-  await page
+  const previewNativeStage = page
     .getByTestId("package-preview")
-    .getByRole("button", { name: "Voting", exact: true })
-    .click()
+    .locator("[data-native-application-preview][data-preview-phase]")
+  const previewTimeline = page
+    .getByTestId("package-preview")
+    .getByRole("slider", { name: "Chapters", exact: true })
+  const previewPlayback = page
+    .getByTestId("package-preview")
+    .getByTestId("game-preview-play-pause")
+
+  if ((await previewPlayback.getAttribute("aria-label")) === "Pause") {
+    await previewPlayback.click()
+  }
+
+  await expect(previewPlayback).toHaveAttribute("aria-label", "Resume")
+  const seekPreviewChapter = async (target: number | "last") => {
+    await previewTimeline.press(target === "last" ? "End" : "Home")
+    await expect(previewTimeline).toHaveAttribute("aria-busy", "false")
+
+    if (target !== "last") {
+      await expect(previewTimeline).toHaveValue("0")
+
+      for (let index = 1; index <= target; index += 1) {
+        await previewTimeline.press("ArrowRight")
+        await expect(previewTimeline).toHaveValue(String(index))
+        await expect(previewTimeline).toHaveAttribute("aria-busy", "false")
+      }
+    }
+
+    await expect(previewTimeline).toHaveAttribute("aria-busy", "false")
+  }
+
+  // The fixture starts with its opening, then question/cards/vote/lock/results.
+  for (const [phase, chapter] of [
+    ["Opening", 0],
+    ["Voting", 3],
+    ["Results", 5],
+    ["Closing", "last"],
+  ] as const) {
+    await seekPreviewChapter(chapter)
+
+    if (phase === "Opening" || phase === "Closing") {
+      // Full-game previews retain the shared platform intro and curtain.
+      await expect(previewNativeStage).toHaveAttribute(
+        "data-preview-phase",
+        phase.toLowerCase(),
+      )
+      await expect(previewNativeStage).toHaveAttribute(
+        "data-preview-ready",
+        "true",
+      )
+    } else {
+      await expect(previewFrame.locator("main")).toHaveAttribute(
+        "data-theme-layout",
+        style,
+      )
+      await expect(previewFrame.locator("main")).toHaveAttribute(
+        "data-phase",
+        phase.toLowerCase(),
+      )
+    }
+  }
+
+  await seekPreviewChapter(3)
+  await expect(previewFrame.locator("main")).toHaveAttribute(
+    "data-phase",
+    "voting",
+  )
   await page
     .getByTestId("package-preview")
     .locator("iframe")
@@ -229,6 +279,10 @@ test("one-file complete React installation without review, independent layouts, 
   await page.screenshot({
     path: join(info.outputDir, "package-preflight-preview.png"),
   })
+  await page
+    .getByTestId("package-preview")
+    .getByTestId("game-viewer-close")
+    .click()
   await installButton.click()
   await expect(page.getByTestId("package-preflight")).toContainText(
     "Installed privately",
@@ -341,13 +395,17 @@ test("one-file complete React installation without review, independent layouts, 
   expect(room.ok(), await room.text()).toBe(true)
   const game = (await room.json()) as { gameId: string; inviteCode: string }
   await page.goto(`/party/manager/${game.gameId}`)
+  await page.getByTestId("platform-opening-start").click()
+  await page.getByTestId("platform-opening-skip").click()
   await expect(
     page.frameLocator("[data-testid=package-runtime-frame]").locator("main"),
   ).toHaveAttribute("data-theme-layout", style)
   const playerContext = await browser.newContext({
+    ignoreHTTPSErrors: true,
     viewport: { width: 390, height: 844 },
   })
   const displayContext = await browser.newContext({
+    ignoreHTTPSErrors: true,
     viewport: { width: 800, height: 600 },
     reducedMotion: "reduce",
   })
@@ -470,12 +528,21 @@ test("one-file complete React installation without review, independent layouts, 
     await expect(
       display.frameLocator("iframe").locator("main"),
     ).toHaveAttribute("data-theme-layout", style)
+    const playerRoomUrl = player.url()
     await child.evaluate(() => {
       window.dispatchEvent(
         new ErrorEvent("error", { message: "synthetic renderer failure" }),
       )
     })
-    await expect(player.getByTestId("package-runtime-fallback")).toBeVisible()
+    // Question failure unmounts the sandbox host and retains the native stage.
+    await expect(player.getByTestId("package-runtime-frame")).toHaveCount(0)
+    await expect(player.getByTestId("tadazz-stage")).toBeVisible()
+    await expect(player.getByTestId("tadazz-custom-screen")).toBeVisible()
+    await expect(player.getByTestId("tadazz-show")).toHaveAttribute(
+      "data-show-scene",
+      "player-result",
+    )
+    await expect(player).toHaveURL(playerRoomUrl)
     await expect(player.getByTestId("tadazz-show")).toHaveAttribute(
       "data-show-theme",
       themeId,

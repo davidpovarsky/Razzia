@@ -66,8 +66,16 @@ export function PackageStage({
   const sourceDigest = pin?.sourceDigest
   const [url, setUrl] = useState("")
   const capability = useRef<{ key: string; issuedAt: number } | null>(null)
+  const [capabilityState, setCapabilityState] = useState<{
+    key: string
+    unavailable: boolean
+  } | null>(null)
   const [images, setImages] = useState<Record<string, string>>({})
-  const [assetsUnavailable, setAssetsUnavailable] = useState(false)
+  const [assetState, setAssetState] = useState<{
+    key: string
+    unavailable: boolean
+  } | null>(null)
+  const capabilityKey = `${roomId}/${sourceDigest}/${theme.definition.id}`
   const question = "question" in scene ? scene.question : null
   const questionImage =
     question?.questionImage ??
@@ -90,15 +98,14 @@ export function PackageStage({
     () => [...new Set(imageKey.split("|").filter(Boolean))],
     [imageKey],
   )
+  const assetKey = JSON.stringify([sourceDigest, imageKey])
   useEffect(() => {
     if (!sourceDigest) {
       return
     }
 
-    const key = `${roomId}/${sourceDigest}/${theme.definition.id}`
-
     if (
-      capability.current?.key === key &&
+      capability.current?.key === capabilityKey &&
       Date.now() - capability.current.issuedAt < 240_000
     ) {
       return
@@ -124,21 +131,23 @@ export function PackageStage({
       })
       .then((r) => {
         if (alive) {
-          capability.current = { key, issuedAt: Date.now() }
+          capability.current = { key: capabilityKey, issuedAt: Date.now() }
           setUrl(r.url)
+          setCapabilityState({ key: capabilityKey, unavailable: false })
         }
       })
       .catch(() => {
         if (alive) {
           capability.current = null
           setUrl("")
+          setCapabilityState({ key: capabilityKey, unavailable: true })
         }
       })
 
     return () => {
       alive = false
     }
-  }, [sourceDigest, theme.definition.id, roomId, scene.key])
+  }, [sourceDigest, theme.definition.id, roomId, scene.key, capabilityKey])
   useEffect(() => {
     if (!sourceDigest) {
       return
@@ -186,7 +195,10 @@ export function PackageStage({
     )
       .then((items) => {
         if (alive) {
-          setAssetsUnavailable(items.some((item) => !item?.[1]))
+          setAssetState({
+            key: assetKey,
+            unavailable: items.some((item) => !item?.[1]),
+          })
           setImages(
             Object.fromEntries(
               items.filter((v): v is [string, string] => Boolean(v)),
@@ -196,7 +208,7 @@ export function PackageStage({
       })
       .catch(() => {
         if (alive) {
-          setAssetsUnavailable(true)
+          setAssetState({ key: assetKey, unavailable: true })
         }
       })
 
@@ -204,15 +216,31 @@ export function PackageStage({
       alive = false
       controller.abort()
     }
-  }, [sourceDigest, imageUrls])
+  }, [sourceDigest, imageUrls, assetKey])
   const phase = packageRuntimePhase(scene, voteLocked)
   const [questionAdmission] = useState(() => createPackageQuestionAdmission())
-  const available = Boolean(
+  const sandboxSupported = Boolean(
     pin &&
-    url &&
-    !assetsUnavailable &&
     packageUsesSandboxForPhase(theme.definition.sandbox?.slots, phase) &&
     theme.definition.sandbox?.roles.includes(role),
+  )
+  const capabilityPending = capabilityState?.key !== capabilityKey
+  const capabilityUnavailable =
+    capabilityState?.key === capabilityKey && capabilityState.unavailable
+  const assetsPending = imageUrls.length > 0 && assetState?.key !== assetKey
+  const assetsUnavailable =
+    assetState?.key === assetKey && assetState.unavailable
+  const pending =
+    sandboxSupported &&
+    !capabilityUnavailable &&
+    !assetsUnavailable &&
+    (capabilityPending || assetsPending)
+  const available = Boolean(
+    sandboxSupported &&
+    !pending &&
+    !capabilityUnavailable &&
+    !assetsUnavailable &&
+    url,
   )
   const questionFamily =
     scene.kind === "question" ||
@@ -244,6 +272,7 @@ export function PackageStage({
           ? packageQuestionContentSupported(content)
           : undefined,
         available,
+        pending,
       })
     : available
   const wasSandbox = useRef(false)
