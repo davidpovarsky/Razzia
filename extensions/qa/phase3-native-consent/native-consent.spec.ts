@@ -976,6 +976,9 @@ test.describe("phase 3 native consent Studio integration", () => {
         await expect(votingAudio.getByRole("slider")).toBeVisible()
         await expect(votingAudio.getByRole("slider")).toHaveValue("0.25")
 
+        // Release Alice's completed editor before Bob's account-isolation check.
+        await page.goto("about:blank")
+
         const contextB = await browser.newContext({ ignoreHTTPSErrors: true })
 
         try {
