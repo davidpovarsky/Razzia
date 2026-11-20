@@ -559,7 +559,7 @@ export async function dispatch(
           type: "text",
           text:
             name === "preview_show"
-              ? `Native demo data is ready for draft ${dataSchemas.preview_show.parse(data).draftId}, revision ${dataSchemas.preview_show.parse(data).revision}: ${dataSchemas.preview_show.parse(data).title}. There are ${dataSchemas.preview_show.parse(data).chapterCount} chapters. An MCP App capable host can display the selected chapter. If this host has no interactive view, continue with get_game_draft_summary and apply_game_edit in chat. To save the same revision, use save_game and approve the first-party Tadazz consent page; export_game requires separate asset export rights.`
+              ? `Native demo data is ready for draft ${dataSchemas.preview_show.parse(data).draftId}, revision ${dataSchemas.preview_show.parse(data).revision}: ${dataSchemas.preview_show.parse(data).title}. There are ${dataSchemas.preview_show.parse(data).chapterCount} chapters. An MCP App capable host can display the selected chapter. If this host has no interactive view, continue with get_game_draft_summary and apply_game_edit in chat. To save the same revision, request save_game with the same revision; export_game requires separate asset export rights.`
               : JSON.stringify({ ok: true, tool: name }),
         },
       ],

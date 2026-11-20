@@ -284,6 +284,7 @@ else:
         cases.append(native + "account-preview-builtins.nodecheck.ts")
         cases.append("extensions/qa/phase3-native-host-static/static-site.node.mjs")
         cases.append(native + "package-authoring.nodecheck.ts")
+        cases.append(native + "direct-save.nodecheck.ts")
         cases.append("extensions/src/mcp-app/tests/first-party/packages.nodecheck.ts")
         cases.append("extensions/src/mcp-app/tests/server/package-authoring.nodecheck.ts")
     http_ok = check("native-http", 180, tsx + cases)

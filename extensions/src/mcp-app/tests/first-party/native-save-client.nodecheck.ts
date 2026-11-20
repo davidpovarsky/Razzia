@@ -86,6 +86,7 @@ before(async () => {
     consentPageUrl: `${origin}/studio/oauth-consent`,
     clients: [{ clientId, redirectUris: [callback], scopes }],
     nativeSave: {
+      requireFirstPartyConsent: true,
       authoring: policy,
       operations: port.operations,
       consentPageUrl: `${origin}/studio/native-save-consent`,

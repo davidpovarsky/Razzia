@@ -318,9 +318,7 @@ app.get("/save-consents/:requestId", (c) => {
     contents: contents.map(({ id, kind }) => ({ id, kind })),
     reviewed: receipt.reviewed,
     canInstall:
-      receipt.phase === "installed" ||
-      (receipt.phase === "preview-ready" &&
-        (receipt.reviewed || contents.every((item) => item.kind === "game"))),
+      receipt.phase === "installed" || receipt.phase === "preview-ready",
     expiresAt: intent.expiresAt,
     outcome: intent.outcome,
   })

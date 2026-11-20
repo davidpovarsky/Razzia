@@ -222,6 +222,7 @@ export function buildMcpOptions(options: {
   readonly redirectUris?: readonly string[]
   readonly scopes?: readonly string[]
   readonly operations?: NativeCreationOperationPort
+  readonly requireFirstPartyConsent?: boolean
 }): Omit<ProtectedMcpServiceOptions, "enabled" | "configRoot"> & {
   readonly nativeSave: NonNullable<ProtectedMcpServiceOptions["nativeSave"]>
 } {
@@ -255,6 +256,7 @@ export function buildMcpOptions(options: {
     }),
     nativeSave: {
       consentPageUrl: `${origin}/studio/native-save-consent`,
+      requireFirstPartyConsent: options.requireFirstPartyConsent,
       ...(options.operations ? { operations: options.operations } : {}),
     },
   }

@@ -43,6 +43,7 @@ interface Row {
   games: string
   targets: string
   report: string
+  installed_selection: string | null
 }
 const reviewSchema = z.strictObject({
   revision: z.number().int().positive(),
@@ -87,7 +88,7 @@ export class PackageStore {
     this.db.exec(`PRAGMA journal_mode=WAL; PRAGMA busy_timeout=5000;
       CREATE TABLE IF NOT EXISTS packages(tenant TEXT, upload TEXT PRIMARY KEY, package_id TEXT, version TEXT,
       source TEXT, phase TEXT, revision INTEGER, author TEXT, review TEXT, build TEXT,
-      definitions TEXT, games TEXT, targets TEXT, report TEXT, UNIQUE(tenant,package_id,version));
+      definitions TEXT, games TEXT, targets TEXT, report TEXT, installed_selection TEXT, UNIQUE(tenant,package_id,version));
       CREATE TABLE IF NOT EXISTS package_active(tenant TEXT, package_id TEXT, upload TEXT, PRIMARY KEY(tenant,package_id));
       CREATE TABLE IF NOT EXISTS package_audit(sequence INTEGER PRIMARY KEY, tenant TEXT, actor TEXT, upload TEXT, action TEXT, at INTEGER);
       CREATE TABLE IF NOT EXISTS package_requests(tenant TEXT, key TEXT, digest TEXT, upload TEXT, PRIMARY KEY(tenant,key));`)
@@ -99,6 +100,15 @@ export class PackageStore {
         .some((r) => r.name === "report")
     ) {
       this.db.exec("ALTER TABLE packages ADD COLUMN report TEXT")
+    }
+
+    if (
+      !this.db
+        .prepare("PRAGMA table_info(packages)")
+        .all()
+        .some((r) => r.name === "installed_selection")
+    ) {
+      this.db.exec("ALTER TABLE packages ADD COLUMN installed_selection TEXT")
     }
 
     // Recover before a server using this enabled store can accept requests.
@@ -425,11 +435,11 @@ export class PackageStore {
     PackageStore.require(p, "author")
     const row = this.own(p, upload)
 
-    if (row.phase === "installed") {
-      return this.details(p, upload)
+    if (row.revision !== expectedRevision) {
+      throw new PackageError("PACKAGE_INSTALL_STATE", 409)
     }
 
-    if (row.phase !== "preview-ready" || row.revision !== expectedRevision) {
+    if (!["preview-ready", "installed"].includes(row.phase)) {
       throw new PackageError("PACKAGE_INSTALL_STATE", 409)
     }
 
@@ -443,12 +453,25 @@ export class PackageStore {
       throw new PackageError("PACKAGE_SELECTION", 400)
     }
 
-    const items = pkg.manifest.contents.filter((c) => selected.includes(c.id))
+    if (row.phase === "installed") {
+      // Older installations did not record their content selection. They remain
+      // usable, but a new install request cannot guess which subset was saved.
+      if (!row.installed_selection) {
+        throw new PackageError("PACKAGE_INSTALL_SELECTION_UNAVAILABLE", 409)
+      }
 
-    if (items.some((c) => c.kind !== "game") && !this.approved(row)) {
-      throw new PackageError("PACKAGE_REVIEW_REQUIRED", 409)
+      if (JSON.stringify([...selected].sort()) !== row.installed_selection) {
+        throw new PackageError("PACKAGE_INSTALL_SELECTION_CONFLICT", 409)
+      }
+
+      return this.details(p, upload)
     }
 
+    const items = pkg.manifest.contents.filter((c) => selected.includes(c.id))
+
+    // Private installation is the authenticated author's action. The completed
+    // build and package validation remain required; a separate review is optional
+    // metadata and must never be fabricated just to make a private theme usable.
     const existing = this.catalog(p.tenantId)
 
     if (
@@ -559,11 +582,12 @@ export class PackageStore {
       this.db.exec("BEGIN IMMEDIATE")
       this.db
         .prepare(
-          "UPDATE packages SET phase='installed',definitions=?,games=? WHERE upload=?",
+          "UPDATE packages SET phase='installed',definitions=?,games=?,installed_selection=? WHERE upload=?",
         )
         .run(
           JSON.stringify(definitions),
           JSON.stringify(games.map((g) => g.quizId)),
+          JSON.stringify([...selected].sort()),
           upload,
         )
       this.db
@@ -598,7 +622,7 @@ export class PackageStore {
     }
     this.db
       .prepare(
-        "UPDATE packages SET phase='preview-ready',targets='[]' WHERE upload=?",
+        "UPDATE packages SET phase='preview-ready',targets='[]',installed_selection=NULL WHERE upload=?",
       )
       .run(row.upload)
   }

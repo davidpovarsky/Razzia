@@ -1,5 +1,20 @@
 # Portable packages and isolated renderers (ADR 2026-11-09)
 
+## Policy update — 20 November 2026
+
+The owner has replaced the original private-install approval policy. Validated,
+built private themes and complete packages can now be installed by their
+account owner without an independent reviewer. Explicit authenticated MCP save
+and install requests write directly to that account without another confirmation.
+Optional review metadata stays truthful; private installation is still separate
+from public/platform publication. Exact revisions, ownership, atomic replay,
+media validation and isolated execution remain required. See
+[the current API contract](PACKAGE_RUNTIME_API.md) and
+[the MCP authoring contract](MCP_PACKAGE_AUTHORING_2026-11-20.md).
+
+The original decisions below record the initial implementation; this update
+supersedes their manual private-install approval requirement.
+
 Base: `origin/codex/sync-all-20261109`, `a489197`, fetched 9 November.
 The old `tadazz-next-20261105` dirty worktree is preserved. Implementation is
 in `codex/tadazz-package-runtime-20261109`. The supplied development plan

@@ -8,7 +8,6 @@ import {
   type TestInfo,
   type Response as PwResponse,
 } from "@playwright/test"
-import { nativeSaveConsentText } from "../../src/components/native-save-consent/strings"
 import { presentationControlText } from "../../src/platform-ui/presentation-control-labels"
 import {
   Client,
@@ -55,7 +54,7 @@ interface ToolOutcome {
   }
 }
 
-const LOCALES = ["en", "fr", "de", "es", "it", "ja", "tr", "vi"] as const
+const LOCALES = ["en", "fr", "de", "es", "it", "ja", "tr", "vi", "he"] as const
 
 function loadFixtureMeta(): FixtureMeta {
   const runDir = process.env.TADAZZ_QA_RUN_DIR
@@ -206,6 +205,7 @@ async function authorizeBrowserOAuth(options: {
   readonly fetchImpl: typeof globalThis.fetch
 }): Promise<{
   readonly accessToken: string
+  readonly refreshToken: string
   readonly oauthDocumentHeaders: Record<string, string>
 }> {
   const { verifier, challenge } = createPkcePair()
@@ -288,10 +288,14 @@ async function authorizeBrowserOAuth(options: {
 
   expect(tokenRes.status).toBe(200)
 
-  const tokenJson = (await tokenRes.json()) as { readonly access_token: string }
+  const tokenJson = (await tokenRes.json()) as {
+    readonly access_token: string
+    readonly refresh_token: string
+  }
 
   return {
     accessToken: tokenJson.access_token,
+    refreshToken: tokenJson.refresh_token,
     oauthDocumentHeaders,
   }
 }
@@ -332,7 +336,7 @@ async function connectMcpSession(options: {
   return { client, transport }
 }
 
-async function editDraftBeforeConsent(
+async function editDraftBeforeSave(
   client: Awaited<ReturnType<typeof connectMcpSession>>["client"],
   draftId: string,
   title: string,
@@ -449,7 +453,7 @@ async function verifySavedStudioPreview(
     readonly quizId: string
     readonly title: string
     readonly restored: ReturnType<typeof tadaShowV1Schema.parse>
-    readonly edited: Awaited<ReturnType<typeof editDraftBeforeConsent>>
+    readonly edited: Awaited<ReturnType<typeof editDraftBeforeSave>>
   },
   testInfo: TestInfo,
 ) {
@@ -625,8 +629,8 @@ async function verifySavedStudioPreview(
   return source.source.immutableRevision
 }
 
-test.describe("phase 3 native consent Studio integration", () => {
-  test("authenticated browser flow -> OAuth consent -> MCP draft -> native save consent -> retry -> Studio & editor reopen", async ({
+test.describe("phase 3 authenticated direct save Studio integration", () => {
+  test("authenticated browser flow -> OAuth consent -> MCP draft -> direct save -> retry -> Studio & editor reopen", async ({
     browser,
     page,
   }, testInfo) => {
@@ -714,14 +718,16 @@ test.describe("phase 3 native consent Studio integration", () => {
       expect(draft.ok).toBe(true)
 
       const draftId = draft.data?.draftId as string
-      const editedSnapshot = await editDraftBeforeConsent(
+      const editedSnapshot = await editDraftBeforeSave(
         mcp.client,
         draftId,
         showTitle,
       )
       const { revision } = editedSnapshot
+      await page.goto("/studio/games")
+      await expect(page.getByText(showTitle)).toHaveCount(0)
       const saveKey = randomBytes(18).toString("base64url")
-      const challenge = (
+      const saved = (
         await mcp.client.callTool({
           name: "save_game",
           arguments: {
@@ -734,20 +740,12 @@ test.describe("phase 3 native consent Studio integration", () => {
         })
       ).structuredContent as ToolOutcome
 
-      expect(challenge.ok).toBe(false)
-      expect(challenge.error?.code).toBe("CONSENT_REQUIRED")
-      expect(JSON.stringify(challenge)).not.toContain(nativeTokenA)
-
-      const consentUrl = challenge.error?.consentUrl ?? ""
-      const requestId = challenge.error?.consentRequestId ?? ""
-
-      expect(requestId).toHaveLength(54)
-      expect(consentUrl).toBe(
-        `${meta.origin}/studio/native-save-consent/${requestId}`,
-      )
+      expect(saved.ok, JSON.stringify(saved.error)).toBe(true)
+      expect(saved.error).toBeUndefined()
+      expect(JSON.stringify(saved)).not.toContain(nativeTokenA)
+      expect(saved.data?.quizId).toMatch(/^[A-Za-z0-9_-]{21}$/u)
 
       let gamesDocHeaders: Record<string, string> = {}
-      let nativeConsentDocHeaders: Record<string, string> = {}
       let editorDocHeaders: Record<string, string> = {}
       const trackDocs = (response: PwResponse) => {
         if (response.request().resourceType() !== "document") {
@@ -758,8 +756,6 @@ test.describe("phase 3 native consent Studio integration", () => {
 
         if (path === "/studio/games") {
           gamesDocHeaders = response.headers()
-        } else if (path === `/studio/native-save-consent/${requestId}`) {
-          nativeConsentDocHeaders = response.headers()
         } else if (path.startsWith("/manager/quizz/")) {
           editorDocHeaders = response.headers()
         }
@@ -771,63 +767,12 @@ test.describe("phase 3 native consent Studio integration", () => {
         await page.goto("/studio/games")
         expect(gamesDocHeaders["x-frame-options"]).toBeUndefined()
         expect(gamesDocHeaders["cache-control"]).toBeUndefined()
-        await expect(page.getByText(showTitle)).toHaveCount(0)
-
-        const headConsent = await tlsFetch(consentUrl, { method: "HEAD" })
-
-        expect(headConsent.status).toBe(200)
-        expect(await headConsent.text()).toBe("")
-        assertConsentSecurityHeaders(headConsent.headers)
-
-        await page.goto(consentUrl)
-        assertConsentSecurityHeaders(nativeConsentDocHeaders)
-
-        await expect(page.getByTestId("native-save-account")).toContainText(
-          emailA,
-        )
-        await expect(page.getByTestId("native-save-revision")).toContainText(
-          String(revision),
-        )
-        await expect(page.getByTestId("native-save-summary")).toContainText(
-          showTitle,
-        )
-
-        const locationSnapshot = await page.evaluate(() => ({
-          search: window.location.search,
-          hash: window.location.hash,
-        }))
-
-        expect(locationSnapshot).toEqual({ search: "", hash: "" })
-
-        const approveButton = page.getByRole("button", {
-          name: "Approve this revision",
-          exact: true,
-        })
-
-        // Untrusted synthetic DOM click must be ignored by NativeSaveConsentPage.
-        await approveButton.evaluate((button) => {
-          ;(button as HTMLButtonElement).click()
-        })
-        await expect(approveButton).toBeVisible()
         await expect(
-          page.getByRole("status").filter({
-            hasText:
-              "Approval recorded. Return to the connected application to finish saving.",
-          }),
-        ).toHaveCount(0)
-
-        await approveButton.click()
-        await expect(
-          page.getByRole("status").filter({
-            hasText:
-              "Approval recorded. Return to the connected application to finish saving.",
-          }),
+          page.getByRole("heading", { name: showTitle, exact: true }),
         ).toBeVisible()
+        await expect(page.getByTestId("native-save-snapshot")).toHaveCount(0)
 
-        // Browser approval alone never creates a game before MCP retry.
-        await page.goto("/studio/games")
-        await expect(page.getByText(showTitle)).toHaveCount(0)
-
+        // Retrying the explicit save returns the same game, with no second copy.
         const retried = (
           await mcp.client.callTool({
             name: "save_game",
@@ -842,7 +787,12 @@ test.describe("phase 3 native consent Studio integration", () => {
         ).structuredContent as ToolOutcome
 
         expect(retried.ok, JSON.stringify(retried.error)).toBe(true)
+        expect(retried.data).toEqual(saved.data)
         expect(JSON.stringify(retried)).not.toContain(nativeTokenA)
+        await page.reload()
+        await expect(
+          page.getByRole("heading", { name: showTitle, exact: true }),
+        ).toHaveCount(1)
 
         const quizId = retried.data?.quizId as string
 
@@ -1008,7 +958,7 @@ test.describe("phase 3 native consent Studio integration", () => {
     }
   })
 
-  test("fail-closed negative cases: B consent denial, framing block, URL tamper, cancel, cross-tab switch, draft drift", async ({
+  test("direct saves enforce ownership, exact revision, idempotency and grant revocation", async ({
     browser,
     page,
   }, testInfo) => {
@@ -1019,8 +969,10 @@ test.describe("phase 3 native consent Studio integration", () => {
     const emailB = `bob-neg-${tag}@example.invalid`
     const password = "Passphrase-Negative-1234"
     const title = `Negative Show ${tag}`
+    const editedTitle = `Edited ${tag}`
+    const revokedTitle = `Revoked ${tag}`
 
-    await signupVerifyAndLoginUi({
+    const nativeTokenA = await signupVerifyAndLoginUi({
       page,
       mailFile: meta.mailFile,
       email: emailA,
@@ -1034,11 +986,12 @@ test.describe("phase 3 native consent Studio integration", () => {
       password,
     })
 
-    const { accessToken: mcpTokenA } = await authorizeBrowserOAuth({
-      page,
-      origin: meta.origin,
-      fetchImpl: tlsFetch,
-    })
+    const { accessToken: mcpTokenA, refreshToken } =
+      await authorizeBrowserOAuth({
+        page,
+        origin: meta.origin,
+        fetchImpl: tlsFetch,
+      })
     const mcp = await connectMcpSession({
       origin: meta.origin,
       accessToken: mcpTokenA,
@@ -1052,173 +1005,46 @@ test.describe("phase 3 native consent Studio integration", () => {
           arguments: buildCreateDraftInput(title),
         })
       ).structuredContent as ToolOutcome
+      expect(draft.ok).toBe(true)
       const draftId = draft.data?.draftId as string
-      const saveKey = randomBytes(18).toString("base64url")
-      const challenge = (
-        await mcp.client.callTool({
-          name: "save_game",
-          arguments: {
-            contractVersion: "0.1.0",
-            draftId,
-            expectedRevision: 1,
-            intent: "createNew",
-            idempotencyKey: saveKey,
-          },
-        })
-      ).structuredContent as ToolOutcome
-      const consentUrl = challenge.error?.consentUrl ?? ""
-
-      expect(consentUrl).toContain("/studio/native-save-consent/")
-
       const contextB = await browser.newContext({ ignoreHTTPSErrors: true })
-
       try {
         const pageB = await contextB.newPage()
-
         await loginUi({ page: pageB, email: emailB, password })
-        const deniedInspection = pageB.waitForResponse(
-          (response) =>
-            new URL(response.url()).pathname === "/oauth/native-save/inspect" &&
-            response.request().method() === "POST",
-        )
-        await pageB.goto(consentUrl)
-        const denied = await deniedInspection
-        expect(denied.status()).toBe(503)
-        const denial: unknown = await denied.json()
-        expect(denial).toMatchObject({
-          ok: false,
-          error: { code: "DEPENDENCY_UNAVAILABLE" },
+        const grantB = await authorizeBrowserOAuth({
+          page: pageB,
+          origin: meta.origin,
+          fetchImpl: tlsFetch,
         })
-        expect(JSON.stringify(denial)).not.toContain(title)
-        await expect(pageB.getByRole("alert")).toHaveText(
-          "This revision could not be approved. Reopen the save request.",
-        )
-        await expect(
-          pageB.getByRole("button", {
-            name: "Approve this revision",
-            exact: true,
-          }),
-        ).toBeDisabled()
-        await expect(pageB.getByTestId("native-save-snapshot")).toHaveCount(0)
+        const mcpB = await connectMcpSession({
+          origin: meta.origin,
+          accessToken: grantB.accessToken,
+          fetchImpl: tlsFetch,
+        })
+        try {
+          const foreign = (
+            await mcpB.client.callTool({
+              name: "save_game",
+              arguments: {
+                contractVersion: "0.1.0",
+                draftId,
+                expectedRevision: 1,
+                intent: "createNew",
+                idempotencyKey: randomBytes(18).toString("base64url"),
+              },
+            })
+          ).structuredContent as ToolOutcome
+          expect(foreign.ok).toBe(false)
+          expect(foreign.error?.code).toBe("NOT_FOUND")
+          expect(JSON.stringify(foreign)).not.toContain(title)
+        } finally {
+          await mcpB.transport.close()
+        }
+        await pageB.goto("/studio/games")
         await expect(pageB.getByText(title)).toHaveCount(0)
       } finally {
         await contextB.close()
       }
-
-      // Framing an approval route must stay blocked by CSP frame-ancestors 'none' and XFO DENY.
-      await page.goto("/studio/games")
-      await page.evaluate((targetUrl) => {
-        const frame = document.createElement("iframe")
-
-        frame.id = "blocked-consent-frame"
-        frame.src = targetUrl
-        document.body.appendChild(frame)
-      }, consentUrl)
-      await page.waitForTimeout(500)
-
-      const frameAccessibleText = await page.evaluate(() => {
-        const frame = document.getElementById(
-          "blocked-consent-frame",
-        ) as HTMLIFrameElement | null
-
-        try {
-          return frame?.contentDocument?.body.innerText ?? ""
-        } catch {
-          return ""
-        }
-      })
-
-      expect(frameAccessibleText).not.toContain("Approve this revision")
-
-      for (const badUrl of [
-        `${consentUrl}?tamper=1`,
-        `${consentUrl}#fragment`,
-        `${meta.origin}/studio/native-save-consent/invalid-short-id`,
-      ]) {
-        await page.goto(badUrl)
-        await expect(
-          page.getByText("Save approval is unavailable on this page."),
-        ).toBeVisible()
-      }
-
-      await page.goto(consentUrl)
-      await expect(
-        page.getByRole("button", { name: "Cancel", exact: true }),
-      ).toBeVisible()
-      await page.getByRole("button", { name: "Cancel", exact: true }).click()
-      await expect(page.getByText("Review canceled.")).toBeVisible()
-
-      const afterCancel = (
-        await mcp.client.callTool({
-          name: "save_game",
-          arguments: {
-            contractVersion: "0.1.0",
-            draftId,
-            expectedRevision: 1,
-            intent: "createNew",
-            idempotencyKey: saveKey,
-          },
-        })
-      ).structuredContent as ToolOutcome
-
-      expect(afterCancel.ok).toBe(false)
-      expect(afterCancel.error?.code).toBe("CONSENT_REQUIRED")
-
-      // Cross-tab session swap must prevent stale consent approval from succeeding.
-      await page.goto(consentUrl)
-
-      const approveBtn = page.getByRole("button", {
-        name: "Approve this revision",
-        exact: true,
-      })
-
-      await expect(approveBtn).toBeVisible()
-
-      const tabB = await page.context().newPage()
-
-      try {
-        await loginUi({ page: tabB, email: emailB, password })
-      } finally {
-        await tabB.close()
-      }
-
-      await page.bringToFront()
-      await approveBtn.click({ timeout: 2_000 }).catch(() => undefined)
-      await expect(
-        page.getByRole("status").filter({
-          hasText:
-            "Approval recorded. Return to the connected application to finish saving.",
-        }),
-      ).toHaveCount(0)
-
-      const afterCrossTab = (
-        await mcp.client.callTool({
-          name: "save_game",
-          arguments: {
-            contractVersion: "0.1.0",
-            draftId,
-            expectedRevision: 1,
-            intent: "createNew",
-            idempotencyKey: saveKey,
-          },
-        })
-      ).structuredContent as ToolOutcome
-
-      expect(afterCrossTab.ok).toBe(false)
-      expect(afterCrossTab.error?.code).toBe("CONSENT_REQUIRED")
-
-      // Log back in as Account A, approve revision 1, then edit to revision 2 before MCP retry.
-      await loginUi({ page, email: emailA, password })
-      await page.goto(consentUrl)
-      await page
-        .getByRole("button", { name: "Approve this revision", exact: true })
-        .click()
-      await expect(
-        page.getByRole("status").filter({
-          hasText:
-            "Approval recorded. Return to the connected application to finish saving.",
-        }),
-      ).toBeVisible()
 
       const edited = (
         await mcp.client.callTool({
@@ -1227,15 +1053,15 @@ test.describe("phase 3 native consent Studio integration", () => {
             contractVersion: "0.1.0",
             draftId,
             expectedRevision: 1,
-            authoredShowJson: JSON.stringify(buildDraftShow(`Edited ${tag}`)),
+            authoredShowJson: JSON.stringify(buildDraftShow(editedTitle)),
             idempotencyKey: randomBytes(18).toString("base64url"),
           },
         })
       ).structuredContent as ToolOutcome
-
       expect(edited.ok).toBe(true)
+      expect(edited.data?.revision).toBe(2)
 
-      const staleRetry = (
+      const stale = (
         await mcp.client.callTool({
           name: "save_game",
           arguments: {
@@ -1243,19 +1069,102 @@ test.describe("phase 3 native consent Studio integration", () => {
             draftId,
             expectedRevision: 1,
             intent: "createNew",
-            idempotencyKey: saveKey,
+            idempotencyKey: randomBytes(18).toString("base64url"),
           },
         })
       ).structuredContent as ToolOutcome
+      expect(stale.ok).toBe(false)
+      expect(stale.error?.code).toBe("REVISION_CONFLICT")
+      await page.goto("/studio/games")
+      await expect(page.getByText(editedTitle)).toHaveCount(0)
 
-      expect(staleRetry.ok).toBe(false)
-      expect(staleRetry.error?.code).toBe("REVISION_CONFLICT")
+      const saveArguments = {
+        contractVersion: "0.1.0",
+        draftId,
+        expectedRevision: 2,
+        intent: "createNew",
+        idempotencyKey: randomBytes(18).toString("base64url"),
+      }
+      const saved = (
+        await mcp.client.callTool({
+          name: "save_game",
+          arguments: saveArguments,
+        })
+      ).structuredContent as ToolOutcome
+      expect(saved.ok, JSON.stringify(saved.error)).toBe(true)
+      const replay = (
+        await mcp.client.callTool({
+          name: "save_game",
+          arguments: saveArguments,
+        })
+      ).structuredContent as ToolOutcome
+      expect(replay.ok).toBe(true)
+      expect(replay.data).toEqual(saved.data)
+      await page.reload()
+      await expect(
+        page.getByRole("heading", { name: editedTitle, exact: true }),
+      ).toHaveCount(1)
+
+      const revokedDraft = (
+        await mcp.client.callTool({
+          name: "create_game_draft",
+          arguments: buildCreateDraftInput(revokedTitle),
+        })
+      ).structuredContent as ToolOutcome
+      expect(revokedDraft.ok).toBe(true)
+      const revoked = await tlsFetch(`${meta.origin}/oauth/revoke`, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          client_id: "tadazz-chatgpt-client",
+          token: refreshToken,
+          token_type_hint: "refresh_token",
+        }),
+      })
+      expect(revoked.status).toBe(200)
+      const rejected = await tlsFetch(`${meta.origin}/mcp`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${mcpTokenA}`,
+          "Content-Type": "application/json",
+          Accept: "application/json, text/event-stream",
+        },
+        body: JSON.stringify({
+          jsonrpc: "2.0",
+          id: 1,
+          method: "tools/call",
+          params: {
+            name: "save_game",
+            arguments: {
+              contractVersion: "0.1.0",
+              draftId: revokedDraft.data?.draftId,
+              expectedRevision: 1,
+              intent: "createNew",
+              idempotencyKey: randomBytes(18).toString("base64url"),
+            },
+          },
+        }),
+      })
+      expect(rejected.status).toBe(401)
+      const list = await tlsFetch(`${meta.origin}/api/quizz`, {
+        headers: { Authorization: `Bearer ${nativeTokenA}` },
+      })
+      expect(list.status).toBe(200)
+      const library = (await list.json()) as {
+        quizz: Array<{ subject: string }>
+      }
+      expect(
+        library.quizz.filter((game) => game.subject === editedTitle),
+      ).toHaveLength(1)
+      expect(library.quizz.some((game) => game.subject === revokedTitle)).toBe(
+        false,
+      )
     } finally {
       await mcp.transport.close()
     }
   })
 
-  test("renders native-save consent page across all 8 locales", async ({
+  test("directly saved games are accessible in Studio across all 9 locales", async ({
     page,
   }, testInfo) => {
     const meta = loadFixtureMeta()
@@ -1289,7 +1198,7 @@ test.describe("phase 3 native consent Studio integration", () => {
           arguments: buildCreateDraftInput(`Locale Show ${tag}`),
         })
       ).structuredContent as ToolOutcome
-      const challenge = (
+      const saved = (
         await mcp.client.callTool({
           name: "save_game",
           arguments: {
@@ -1301,21 +1210,30 @@ test.describe("phase 3 native consent Studio integration", () => {
           },
         })
       ).structuredContent as ToolOutcome
-      const consentUrl = challenge.error?.consentUrl ?? ""
+      expect(saved.ok, JSON.stringify(saved.error)).toBe(true)
+      const quizId = saved.data?.quizId as string
+      expect(quizId).toMatch(/^[A-Za-z0-9_-]{21}$/u)
 
       for (const locale of LOCALES) {
-        const expected = nativeSaveConsentText(locale)
-
+        const labels = JSON.parse(
+          readFileSync(
+            new URL(`../../src/site/locales/${locale}.json`, import.meta.url),
+            "utf8",
+          ),
+        ) as Record<string, string>
         await page.evaluate((lng) => {
           localStorage.setItem("i18nextLng", lng)
         }, locale)
-        await page.goto(consentUrl)
+        await page.goto("/studio/games")
+        const card = page.locator(`[data-game-id="${quizId}"]`)
+        await expect(card).toBeVisible()
         await expect(
-          page.getByRole("heading", { name: expected("title"), exact: true }),
-        ).toBeVisible()
+          card.getByRole("link", { name: labels["Edit game"], exact: true }),
+        ).toHaveAttribute("href", `/manager/quizz/${quizId}`)
         await expect(
-          page.getByRole("button", { name: expected("allow"), exact: true }),
-        ).toBeVisible()
+          card.getByRole("link", { name: labels["Prepare show"], exact: true }),
+        ).toHaveAttribute("href", `/studio/prepare?quiz=${quizId}`)
+        await expect(page.getByTestId("native-save-snapshot")).toHaveCount(0)
       }
     } finally {
       await mcp.transport.close()

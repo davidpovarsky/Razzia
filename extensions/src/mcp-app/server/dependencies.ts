@@ -133,9 +133,10 @@ export interface Dependencies {
   // Authoritative atomic replay-or-new decision: recheck owner/grant/tool/key/
   // digest and return a prior authorized outcome BEFORE current-draft lookup.
   // NEW operation must read/validate canonical content+summary, exact revision and
-  // consent in the same durable decision, reserve one collision-safe target and
+  // live delegated authorization in the same durable decision, reserve one collision-safe target and
   // reconcile crashes. Missing real adapter remains unavailable.
   storage?: {
+    /** Historical port name; the native adapter defaults to direct scoped save. */
     createNewWithConsent(
       principal: VerifiedPrincipal,
       selection: DraftSelection,

@@ -50,7 +50,7 @@ const en = {
   dirty: "Unsubmitted edit",
   revision: "Revision {{revision}}",
   noSave:
-    "Saving to your library requires approval in Tadazz. This widget cannot approve it.",
+    "Draft changes are not saved to your account automatically. Use Save in Tadazz, or ask to save in chat.",
 }
 type Keys = keyof typeof en
 // The same complete namespace in every supported product language.
@@ -87,7 +87,7 @@ const rows: Record<Exclude<Locale, "en">, string[]> = {
     "החלת העריכה בטיוטה",
     "עריכה שטרם נשלחה",
     "גרסה {{revision}}",
-    "שמירה בספרייה דורשת אישור ב־Tadazz. אי אפשר לתת את האישור מתוך הרכיב הזה.",
+    "שינויים בטיוטה אינם נשמרים אוטומטית בחשבון. לחצו על שמירה ב־Tadazz, או בקשו לשמור בצ׳אט.",
   ],
   fr: [
     "Aperçu Tadazz",
@@ -121,7 +121,7 @@ const rows: Record<Exclude<Locale, "en">, string[]> = {
     "Appliquer la modification",
     "Modification non envoyée",
     "Révision {{revision}}",
-    "L’enregistrement dans votre bibliothèque nécessite une approbation dans Tadazz. Ce widget ne peut pas l’accorder.",
+    "Les modifications du brouillon ne sont pas enregistrées automatiquement. Utilisez Enregistrer dans Tadazz ou demandez-le dans le chat.",
   ],
   de: [
     "Tadazz-Vorschau",
@@ -155,7 +155,7 @@ const rows: Record<Exclude<Locale, "en">, string[]> = {
     "Entwurfsänderung anwenden",
     "Nicht gesendete Änderung",
     "Version {{revision}}",
-    "Speichern in der Bibliothek erfordert eine Freigabe in Tadazz. Dieses Widget kann sie nicht erteilen.",
+    "Entwurfsänderungen werden nicht automatisch in deinem Konto gespeichert. Wähle In Tadazz speichern oder bitte im Chat darum.",
   ],
   es: [
     "Vista previa de Tadazz",
@@ -189,7 +189,7 @@ const rows: Record<Exclude<Locale, "en">, string[]> = {
     "Aplicar edición",
     "Edición sin enviar",
     "Revisión {{revision}}",
-    "Guardar en tu biblioteca requiere aprobación en Tadazz. Este widget no puede aprobarlo.",
+    "Los cambios del borrador no se guardan automáticamente en tu cuenta. Usa Guardar en Tadazz o pídelo en el chat.",
   ],
   it: [
     "Anteprima Tadazz",
@@ -223,7 +223,7 @@ const rows: Record<Exclude<Locale, "en">, string[]> = {
     "Applica modifica",
     "Modifica non inviata",
     "Revisione {{revision}}",
-    "Il salvataggio nella libreria richiede un’approvazione in Tadazz. Questo widget non può approvarlo.",
+    "Le modifiche alla bozza non vengono salvate automaticamente nel tuo account. Usa Salva in Tadazz o chiedilo nella chat.",
   ],
   ja: [
     "Tadazz プレビュー",
@@ -257,7 +257,7 @@ const rows: Record<Exclude<Locale, "en">, string[]> = {
     "下書きの編集を適用",
     "未送信の編集",
     "リビジョン {{revision}}",
-    "ライブラリへの保存には Tadazz での承認が必要です。このウィジェットでは承認できません。",
+    "下書きの変更はアカウントに自動保存されません。「Tadazzに保存」を使うか、チャットで保存を依頼してください。",
   ],
   tr: [
     "Tadazz önizlemesi",
@@ -291,7 +291,7 @@ const rows: Record<Exclude<Locale, "en">, string[]> = {
     "Taslak düzenlemesini uygula",
     "Gönderilmemiş düzenleme",
     "Sürüm {{revision}}",
-    "Kitaplığınıza kaydetmek Tadazz’da onay gerektirir. Bu widget onay veremez.",
+    "Taslak değişiklikleri hesabınıza otomatik kaydedilmez. Tadazz’a kaydet seçeneğini kullanın veya sohbette kaydetmeyi isteyin.",
   ],
   vi: [
     "Xem trước Tadazz",
@@ -325,7 +325,7 @@ const rows: Record<Exclude<Locale, "en">, string[]> = {
     "Áp dụng chỉnh sửa",
     "Chỉnh sửa chưa gửi",
     "Phiên bản {{revision}}",
-    "Lưu vào thư viện cần phê duyệt trong Tadazz. Tiện ích này không thể phê duyệt.",
+    "Các thay đổi bản nháp không tự động lưu vào tài khoản. Chọn Lưu vào Tadazz hoặc yêu cầu lưu trong cuộc trò chuyện.",
   ],
 }
 
@@ -630,7 +630,7 @@ const nativeActionLabels: Record<Locale, readonly string[]> = {
     "השלמת השמירה",
     "נשמר ב־Tadazz (גרסה {{revision}} בספרייה).",
     "פתיחת המשחק השמור",
-    "השמירה לא אושרה. נסו שוב את אותה בקשה, או רעננו אם חל שינוי סותר.",
+    "לא ניתן לאמת שהשמירה הושלמה. נסו שוב את אותה בקשה, או רעננו אם חל שינוי סותר.",
     "האפליקציה המארחת אינה יכולה לפתוח קישורים. העתיקו את הכתובת הזו:",
     "האפליקציה המארחת לא פתחה את הקישור. נסו שוב.",
     "בחרו תשובה בהדגמה הזו.",

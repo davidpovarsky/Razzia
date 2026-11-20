@@ -174,7 +174,7 @@ function sameSession(bound: SessionBinding | null, requestId: string) {
   )
 }
 
-/** First-party review and explicit save. Loading or previewing never approves. */
+/** Compatibility page for earlier save links. Opening a link never saves. */
 export function PackageSaveConsent({ requestId }: { requestId: string }) {
   const { i18n } = useTranslation()
   const language =
@@ -337,6 +337,7 @@ export function PackageSaveConsent({ requestId }: { requestId: string }) {
       snapshot.current = saved
       setInspection(saved)
       setState("saved")
+      window.dispatchEvent(new Event("tadazz:packages-changed"))
     } catch {
       // A lost response is reconciled with a read; never retry approval automatically.
       if (!controller.signal.aborted) setState("uncertain")
@@ -350,17 +351,11 @@ export function PackageSaveConsent({ requestId }: { requestId: string }) {
     inspection && game
       ? `/studio/package-preview/${inspection.uploadId}/${inspection.revision}/${game.id}`
       : null
-  const reviewPending =
-    inspection &&
-    !inspection.reviewed &&
-    inspection.contents.some((item) => item.kind !== "game")
   const status =
     state === "ready"
       ? inspection?.canInstall
         ? text.ready
-        : reviewPending
-          ? text.reviewPending
-          : text.notReady
+        : text.notReady
       : text[state]
 
   return (

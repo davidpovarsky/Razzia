@@ -145,14 +145,13 @@ test("declarative package previews decoded private assets before installation", 
     await context.close()
   }
 })
-test("one-file complete React installation, independent layouts, live core and sandbox boundary", async ({
+test("one-file complete React installation without review, independent layouts, live core and sandbox boundary", async ({
   page,
   request,
   browser,
   browserName,
 }, info) => {
   const author = await login(page.request, "author"),
-    reviewer = await login(request, "reviewer"),
     stranger = await login(request, "stranger")
   const headers = { Authorization: `Bearer ${author.token}` }
   await page.addInitScript(
@@ -185,24 +184,18 @@ test("one-file complete React installation, independent layouts, live core and s
   )!.upload
   const receipt = (await (
     await request.get(`/api/packages/uploads/${id}`, { headers })
-  ).json()) as { revision: number; sourceDigest: string; buildDigest: string }
-  const review = {
-    revision: receipt.revision,
-    sourceDigest: receipt.sourceDigest,
-    buildDigest: receipt.buildDigest,
-    qaEvidenceSha256: createHash("sha256")
-      .update("synthetic QA approval fixture, NOT human rights approval")
-      .digest("hex"),
-    rightsReviewed: true,
-    contentReviewed: true,
-    accessibilityReviewed: true,
-    performanceReviewed: true,
+  ).json()) as {
+    revision: number
+    sourceDigest: string
+    buildDigest: string
+    reviewed: boolean
   }
-  const self = await request.post(`/api/packages/uploads/${id}/approval`, {
-    headers,
-    data: review,
-  })
-  expect(self.status()).toBe(403)
+  expect(receipt.reviewed).toBe(false)
+  const installButton = page.getByTestId("package-install-selected")
+  await expect(installButton).toBeEnabled()
+  await expect(page.getByTestId("package-preflight")).not.toContainText(
+    "An assigned independent reviewer",
+  )
   const other = await request.get(`/api/packages/uploads/${id}`, {
     headers: { Authorization: `Bearer ${stranger.token}` },
   })
@@ -233,36 +226,31 @@ test("one-file complete React installation, independent layouts, live core and s
     .getByTestId("package-preview")
     .locator("iframe")
     .screenshot({ path: join(info.outputDir, "independent-arcade-layout.png") })
-  const proof = await page.screenshot({
+  await page.screenshot({
     path: join(info.outputDir, "package-preflight-preview.png"),
   })
-  review.qaEvidenceSha256 = createHash("sha256").update(proof).digest("hex")
-  const approved = await request.post(`/api/packages/uploads/${id}/approval`, {
-    headers: {
-      Authorization: `Bearer ${reviewer.token}`,
-      "X-Tadazz-Workspace": author.clientId,
-    },
-    data: review,
-  })
-  expect(approved.ok(), await approved.text()).toBe(true)
-  await page.reload()
-  await page.getByRole("button", { name: "Quizz", exact: true }).click()
-  await page
-    .getByRole("button", {
-      name: `${fixture.manifest.id} · ${version}`,
-      exact: true,
-    })
-    .click()
-  await page
-    .getByRole("button", { name: "Install selected", exact: true })
-    .click()
+  await installButton.click()
   await expect(page.getByTestId("package-preflight")).toContainText(
     "Installed privately",
   )
   const installed = (await (
     await request.get(`/api/packages/uploads/${id}`, { headers })
-  ).json()) as { installedGames: string[] }
+  ).json()) as { installedGames: string[]; reviewed: boolean }
   expect(installed.installedGames).toHaveLength(2)
+  expect(installed.reviewed).toBe(false)
+  await expect(page.getByTestId("package-open-games")).toHaveAttribute(
+    "href",
+    "/studio/games",
+  )
+  const installedCatalog = await request.get("/api/themes/catalog", { headers })
+  expect(installedCatalog.ok(), await installedCatalog.text()).toBe(true)
+  const availableThemes = (await installedCatalog.json()) as {
+    available: Array<{ id: string; version: string }>
+  }
+  expect(availableThemes.available).toContainEqual({
+    id: `fixture-${style}`,
+    version,
+  })
   const privateAsset = fixture.manifest.files.find((f) => f.kind === "image")!
   const assetName = `pkg_${receipt.sourceDigest.slice(0, 24)}_${privateAsset.sha256}.png`
   const ownAsset = await page.request.get(`/api/media/raw/${assetName}`, {

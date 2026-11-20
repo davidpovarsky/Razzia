@@ -29,6 +29,11 @@ interface TransferRow {
 const sha = (bytes: Uint8Array) =>
   createHash("sha256").update(bytes).digest("hex")
 const denied = () => new PackageError("PACKAGE_NOT_FOUND", 404)
+export interface PackageInstallOutcome {
+  uploadId: string
+  revision: number
+  installedGameIds: string[]
+}
 export interface PackageInstallIntent {
   uploadId: string
   revision: number
@@ -65,7 +70,10 @@ export class PackageTransferStore {
       CREATE TABLE IF NOT EXISTS package_install_consents(id TEXT PRIMARY KEY,
         owner TEXT NOT NULL,request_key TEXT NOT NULL,digest TEXT NOT NULL,
         selection TEXT NOT NULL,expires INTEGER NOT NULL,outcome TEXT,
-        UNIQUE(owner,request_key));`)
+        UNIQUE(owner,request_key));
+      CREATE TABLE IF NOT EXISTS package_direct_installs(owner TEXT NOT NULL,
+        request_key TEXT NOT NULL,digest TEXT NOT NULL,selection TEXT NOT NULL,
+        outcome TEXT,PRIMARY KEY(owner,request_key));`)
   }
   close() {
     this.db.close()
@@ -143,6 +151,62 @@ export class PackageTransferStore {
         "UPDATE package_install_consents SET outcome=? WHERE owner=? AND id=?",
       )
       .run(JSON.stringify(result), owner, id)
+    return result
+  }
+  /** Explicit scoped tool requests are sufficient for private installation. This
+   * journal records the requested source/build/selection, not reviewer approval
+   * or a browser consent event. Native installation owns durable crash recovery. */
+  installAuthorized(
+    owner: string,
+    input: PackageInstallIntent & { idempotencyKey: string },
+    action: (selection: PackageInstallIntent) => PackageInstallOutcome,
+  ): PackageInstallOutcome {
+    const { idempotencyKey, ...selection } = input
+    if (!owner || !keyPattern.test(idempotencyKey)) {
+      throw new PackageError("PACKAGE_TRANSFER_INPUT", 422)
+    }
+    const serialized = JSON.stringify(selection)
+    const digest = sha(Buffer.from(serialized))
+    const old = this.db
+      .prepare(
+        "SELECT digest,selection,outcome FROM package_direct_installs WHERE owner=? AND request_key=?",
+      )
+      .get(owner, idempotencyKey) as
+      { digest: string; selection: string; outcome: string | null } | undefined
+    if (old && (old.digest !== digest || old.selection !== serialized)) {
+      throw new PackageError("PACKAGE_IDEMPOTENCY_CONFLICT", 409)
+    }
+    if (old?.outcome) {
+      return JSON.parse(old.outcome) as PackageInstallOutcome
+    }
+    if (!old) {
+      // A retry of a pre-upgrade request retains its original selection. A
+      // completed legacy request remains a replay; no consent is fabricated.
+      const legacy = this.db
+        .prepare(
+          "SELECT digest,outcome FROM package_install_consents WHERE owner=? AND request_key=?",
+        )
+        .get(owner, idempotencyKey) as
+        { digest: string; outcome: string | null } | undefined
+      if (legacy && legacy.digest !== digest) {
+        throw new PackageError("PACKAGE_IDEMPOTENCY_CONFLICT", 409)
+      }
+      if (legacy?.outcome) {
+        return JSON.parse(legacy.outcome) as PackageInstallOutcome
+      }
+      this.db
+        .prepare("INSERT INTO package_direct_installs VALUES(?,?,?,?,NULL)")
+        .run(owner, idempotencyKey, digest, serialized)
+    }
+    // An interrupted call reuses the same exact selection. PackageStore.install
+    // checks immutable revision/selection and reconciles its write-ahead journal,
+    // so replay cannot allocate a second account game.
+    const result = action(JSON.parse(serialized) as PackageInstallIntent)
+    this.db
+      .prepare(
+        "UPDATE package_direct_installs SET outcome=? WHERE owner=? AND request_key=? AND digest=?",
+      )
+      .run(JSON.stringify(result), owner, idempotencyKey, digest)
     return result
   }
   operation<T>(

@@ -378,27 +378,54 @@ describe("portable package trust boundary", () => {
     expect(exported.report.type).toBe("game")
     expect(exported.report.games[0].summary?.answerImageCount).toBe(50)
   })
-  it("declarative theme needs independent exact review, persists and supports immutable rollback", () => {
+  it("retains independent exact review as optional, truthful metadata", () => {
+    const { store } = setup()
+    const draft = preparedUpload(
+      store,
+      author,
+      createPackageFixture("declarative").bytes,
+    )
+    const review = {
+      revision: draft.revision,
+      sourceDigest: draft.sourceDigest,
+      buildDigest: draft.buildDigest,
+      qaEvidenceSha256: packageSha("synthetic fixture review"),
+      rightsReviewed: true,
+      contentReviewed: true,
+      accessibilityReviewed: true,
+      performanceReviewed: true,
+    }
+    expect(() =>
+      store.approve({ ...author, grants: ["review"] }, draft.uploadId, review),
+    ).toThrow("PACKAGE_REVIEW_STALE_OR_SELF")
+    expect(() =>
+      store.approve(reviewer, draft.uploadId, {
+        ...review,
+        revision: draft.revision + 1,
+      }),
+    ).toThrow("PACKAGE_REVIEW_STALE_OR_SELF")
+    expect(store.details(author, draft.uploadId).reviewed).toBe(false)
+    approve(store, draft.uploadId)
+    expect(store.details(author, draft.uploadId).reviewed).toBe(true)
+  })
+  it("privately installs an unreviewed declarative theme, persists and supports immutable rollback", () => {
     const { store, dir } = setup()
     const one = preparedUpload(
       store,
       author,
       createPackageFixture("declarative").bytes,
     )
-    expect(() =>
-      store.install(author, one.uploadId, one.revision, ["fixture-arcade"]),
-    ).toThrow("PACKAGE_REVIEW_REQUIRED")
-    expect(() =>
-      store.approve({ ...author, grants: ["review"] }, one.uploadId, {}),
-    ).toThrow()
-    approve(store, one.uploadId)
-    store.install(author, one.uploadId, one.revision, ["fixture-arcade"])
+    expect(one.reviewed).toBe(false)
+    const installed = store.install(author, one.uploadId, one.revision, [
+      "fixture-arcade",
+    ])
+    expect(installed.phase).toBe("installed")
+    expect(installed.reviewed).toBe(false)
     const two = preparedUpload(
       store,
       author,
       createPackageFixture("declarative", "arcade", "2.0.0").bytes,
     )
-    approve(store, two.uploadId)
     store.install(author, two.uploadId, two.revision, ["fixture-arcade"])
     expect(store.catalog(author.tenantId, true)[0].version).toBe("2.0.0")
     store.rollback(author, one.uploadId)
@@ -411,6 +438,7 @@ describe("portable package trust boundary", () => {
     )
     databases.push(reopened)
     expect(reopened.catalog(author.tenantId, true)[0].version).toBe("1.0.0")
+    expect(reopened.details(author, one.uploadId).reviewed).toBe(false)
   })
   it("prevents replayed idempotency keys changing bytes and retains revisions", () => {
     const { store } = setup(),
@@ -431,20 +459,42 @@ describe("portable package trust boundary", () => {
       store.install(author, first.uploadId, 100, ["demo-game-1"]),
     ).toThrow("PACKAGE_INSTALL_STATE")
   })
-  it("complete packs install two games and one runtime pin atomically", () => {
+  it("privately installs an unreviewed complete pack with its custom runtime and exact replay", () => {
     const { store, dir } = setup()
     const upload = preparedUpload(
       store,
       author,
       createPackageFixture("complete").bytes,
     )
-    approve(store, upload.uploadId)
+    expect(upload.reviewed).toBe(false)
+    const selected = ["fixture-arcade", "demo-game-1", "demo-game-2"]
+    expect(() =>
+      store.install(
+        { ...author, tenantId: "tenant-b" },
+        upload.uploadId,
+        upload.revision,
+        selected,
+      ),
+    ).toThrow("PACKAGE_NOT_FOUND")
+    expect(() =>
+      store.install(
+        { ...author, grants: [] },
+        upload.uploadId,
+        upload.revision,
+        selected,
+      ),
+    ).toThrow("PACKAGE_FORBIDDEN")
+    expect(() =>
+      store.install(author, upload.uploadId, upload.revision + 1, selected),
+    ).toThrow("PACKAGE_INSTALL_STATE")
     const result = store.install(author, upload.uploadId, upload.revision, [
       "fixture-arcade",
       "demo-game-1",
       "demo-game-2",
     ])
     expect(result.installedGames).toHaveLength(2)
+    expect(result.phase).toBe("installed")
+    expect(result.reviewed).toBe(false)
     expect(store.catalog(author.tenantId)[0].runtime?.sourceDigest).toBe(
       upload.sourceDigest,
     )
@@ -459,6 +509,104 @@ describe("portable package trust boundary", () => {
       )
       expect(sidecar.defaults.showTheme?.id).toBe("fixture-arcade")
     }
+    const secret = "isolated-runtime-capability-test-secret"
+    const access = issueRuntimeAccess(store, author, upload.uploadId, secret)
+    expect(readRuntimeAccess(store, access, secret).row.build).toBe(
+      upload.buildDigest,
+    )
+    const replay = store.install(
+      author,
+      upload.uploadId,
+      upload.revision,
+      [...selected].reverse(),
+    )
+    expect(replay.installedGames).toEqual(result.installedGames)
+    expect(store.catalog(author.tenantId)).toHaveLength(1)
+    expect(
+      fs.readdirSync(path.join(dir, author.tenantId, "quizz")),
+    ).toHaveLength(2)
+    expect(() =>
+      store.install(author, upload.uploadId, upload.revision + 1, selected),
+    ).toThrow("PACKAGE_INSTALL_STATE")
+    expect(() =>
+      store.install(author, upload.uploadId, upload.revision, ["demo-game-1"]),
+    ).toThrow("PACKAGE_INSTALL_SELECTION_CONFLICT")
+    const reopened = new PackageStore(
+      path.join(dir, "store"),
+      "fixture-secret-at-least-32-characters",
+      (tenant) => path.join(dir, tenant),
+    )
+    databases.push(reopened)
+    expect(
+      reopened.install(author, upload.uploadId, upload.revision, selected)
+        .installedGames,
+    ).toEqual(result.installedGames)
+    expect(reopened.details(author, upload.uploadId).reviewed).toBe(false)
+    expect(reopened.catalog("tenant-b")).toEqual([])
+  })
+  it("retains older installed games and runtime pins when migrating install selection metadata", () => {
+    const { store, dir } = setup()
+    const upload = preparedUpload(
+      store,
+      author,
+      createPackageFixture("complete").bytes,
+    )
+    const selected = ["fixture-arcade", "demo-game-1", "demo-game-2"]
+    const installed = store.install(
+      author,
+      upload.uploadId,
+      upload.revision,
+      selected,
+    )
+    store.db.exec("ALTER TABLE packages DROP COLUMN installed_selection")
+    const reopened = new PackageStore(
+      path.join(dir, "store"),
+      "fixture-secret-at-least-32-characters",
+      (tenant) => path.join(dir, tenant),
+    )
+    databases.push(reopened)
+    expect(reopened.details(author, upload.uploadId).installedGames).toEqual(
+      installed.installedGames,
+    )
+    expect(reopened.catalog(author.tenantId)[0].runtime?.buildDigest).toBe(
+      upload.buildDigest,
+    )
+    expect(() =>
+      reopened.install(author, upload.uploadId, upload.revision, selected),
+    ).toThrow("PACKAGE_INSTALL_SELECTION_UNAVAILABLE")
+    expect(
+      fs.readdirSync(path.join(dir, author.tenantId, "quizz")),
+    ).toHaveLength(2)
+  })
+  it("requires a completed valid build even when private installation needs no review", () => {
+    const { store } = setup()
+    const upload = store.upload(
+      author,
+      createPackageFixture("complete").bytes,
+      randomUUID(),
+    )
+    const selected = ["fixture-arcade", "demo-game-1", "demo-game-2"]
+    expect(() =>
+      store.install(author, upload.uploadId, upload.revision, selected),
+    ).toThrow("PACKAGE_INSTALL_STATE")
+    store.requestBuild(author, upload.uploadId)
+    expect(() =>
+      store.install(author, upload.uploadId, upload.revision, selected),
+    ).toThrow("PACKAGE_INSTALL_STATE")
+    const job = path.join(
+      store.tenantRoot(author.tenantId),
+      "jobs",
+      upload.uploadId,
+    )
+    fs.writeFileSync(
+      path.join(job, "result.json"),
+      JSON.stringify({ error: "Synthetic build failure" }),
+    )
+    expect(store.acceptBuild(author, upload.uploadId)).toBe("failed")
+    expect(() =>
+      store.install(author, upload.uploadId, upload.revision, selected),
+    ).toThrow("PACKAGE_INSTALL_STATE")
+    expect(store.catalog(author.tenantId)).toEqual([])
   })
   it("a failed second game leaves no imported games or installed theme", () => {
     const { store, dir } = setup()
@@ -467,7 +615,6 @@ describe("portable package trust boundary", () => {
       author,
       createPackageFixture("complete").bytes,
     )
-    approve(store, upload.uploadId)
     const original = fs.writeFileSync
     let writes = 0
     const spy = vi
