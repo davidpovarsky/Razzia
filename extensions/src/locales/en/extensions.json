@@ -417,6 +417,7 @@
   },
   "studio": {
     "editing": {
+      "fixedQuestionLeadIn": "The question appears first. Answers and the timer open together after 2 seconds in every game and theme.",
       "modeLabel": "Editor mode",
       "simple": "Simple editing",
       "advanced": "Advanced editing",

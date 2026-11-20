@@ -51,6 +51,7 @@ import { AudioCuePlayer } from "../audio-cue-player"
 import { resolveTadazzAudioPolicy } from "../tadazz-audio-policy"
 import type { CueId } from "../../core/constants"
 import { NativeQuestionMedia } from "../tadazz-show/native-question-media"
+import { createPreviewStageContinuity } from "./preview-stage-continuity"
 
 // First-party native stage only. The host admits exact built bytes and account assets
 // before mounting. This component has no room/socket/score/telephone transport.
@@ -154,7 +155,17 @@ export function ApplicationPreviewStage({
         }
       : authoredBackground
   const key = `${frame.clock.epoch}:${frame.chapterIndex}:${frame.appearanceRevision}`
+  const [continuity] = useState(() => createPreviewStageContinuity())
+  const stageIdentity = continuity.select({
+    cardKey: !frame.stagePhase && card && (card.kind === "quiz" || card.kind === "survey") ? card.key : null,
+    phase,
+    clockEpoch: frame.clock.epoch,
+    appearanceRevision: frame.appearanceRevision,
+    renderer: original ? "razzia" : "cinematic",
+    role: frame.role,
+  })
   const [committed, setCommitted] = useState("")
+  const [committedStage, setCommittedStage] = useState<number | null>(null)
   const callbacks = useRef({ onCommitted, onUnavailable })
   callbacks.current = { onCommitted, onUnavailable }
   const native = bundle.bundleDraft
@@ -283,6 +294,8 @@ export function ApplicationPreviewStage({
     } else if (card.kind === "quiz" || card.kind === "survey") {
       const question: StageQuestion = {
         key: card.key,
+        answerCount: card.answers.length,
+        hasAnswerImages: card.answers.some((answer) => Boolean(answer.imageUrl) && answer.display !== "text"),
         question: card.question,
         number:
           questionPosition?.number ??
@@ -309,11 +322,18 @@ export function ApplicationPreviewStage({
           ? { questionImage: card.media.url, photoAlt: card.question }
           : {}),
       }
-      steps.push({ op: "showQuestion", question })
+      if (chapter.phase !== "voting") {
+        steps.push({
+          op: handle.questionKey === question.key && chapter.phase !== "question"
+            ? "presentOptions" : "showQuestion",
+          question,
+        })
+      }
 
       if (chapter.phase === "voting") {
         steps.push({
           op: "openVoting",
+          question,
           seconds: card.timeSeconds > 0 ? card.timeSeconds : null,
           ...(frame.clock.deadlineMs === null
             ? {}
@@ -355,6 +375,7 @@ export function ApplicationPreviewStage({
       const publish = () => {
         if (current) {
           setCommitted(key)
+          setCommittedStage(stageIdentity)
           callbacks.current.onCommitted()
         }
       }
@@ -367,7 +388,7 @@ export function ApplicationPreviewStage({
           return
         }
 
-        void handle.openVoting(last.seconds, last.deadlineMs).catch(() => {
+        void handle.openVoting(last.seconds, last.deadlineMs, last.question).catch(() => {
           if (current) {
             callbacks.current.onUnavailable()
           }
@@ -535,12 +556,13 @@ export function ApplicationPreviewStage({
                 ...showThemeStyle(theme),
                 width: "100%",
                 height: "100%",
-                visibility: committed === key ? "visible" : "hidden",
+                visibility: committedStage === stageIdentity ? "visible" : "hidden",
               }}
             >
               {original ? (
                 <RazziaApplicationStage
-                  key={key}
+                  key={stageIdentity}
+                  questionEpoch={stageIdentity}
                   frame={frame}
                   chapter={chapter}
                   theme={theme}
@@ -558,12 +580,13 @@ export function ApplicationPreviewStage({
                   backdropOverlayOpacity={backdrop.overlayOpacity}
                   onCommitted={() => {
                     setCommitted(key)
+                    setCommittedStage(stageIdentity)
                     callbacks.current.onCommitted()
                   }}
                 />
               ) : (
                 <TadazzV4StageAdapter
-                  key={key}
+                  key={stageIdentity}
                   ref={stage}
                   labels={labels.labels}
                   v4Labels={labels.v4Labels}

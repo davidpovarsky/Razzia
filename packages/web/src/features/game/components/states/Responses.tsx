@@ -10,9 +10,10 @@ import useSound from "use-sound"
 interface Props {
   data: ManagerStatusDataMap["SHOW_RESPONSES"]
   extensionState?: ExtensionStateEnvelope | null
+  hideHeading?: boolean
 }
 
-const Responses = ({ data, extensionState: propExtensionState }: Props) => {
+const Responses = ({ data, extensionState: propExtensionState, hideHeading = false }: Props) => {
   const { question, type } = data
   const { ResponsesComponent } = QUESTION_REGISTRY[type]
   const contextExtensionState = useExtensionState()
@@ -33,9 +34,11 @@ const Responses = ({ data, extensionState: propExtensionState }: Props) => {
   if (ResponsesComponent) {
     return (
       <div className="flex h-full flex-1 flex-col items-center justify-center gap-8 pb-4">
-        <h2 className="text-center text-2xl font-bold text-white drop-shadow-lg md:text-4xl lg:text-5xl">
-          {question}
-        </h2>
+        {!hideHeading && (
+          <h2 className="text-center text-2xl font-bold text-white drop-shadow-lg md:text-4xl lg:text-5xl">
+            {question}
+          </h2>
+        )}
         <ResponsesComponent data={data} />
       </div>
     )
@@ -46,6 +49,7 @@ const Responses = ({ data, extensionState: propExtensionState }: Props) => {
       data={data}
       extensionState={extensionState}
       reveal={reveal}
+      hideHeading={hideHeading}
     />
   )
 }

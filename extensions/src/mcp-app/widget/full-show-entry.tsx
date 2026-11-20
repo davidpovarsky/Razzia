@@ -1,17 +1,13 @@
 import NativeButton from "../../../../packages/web/src/components/Button"
 import {
-  ArrowLeft,
-  ArrowRight,
   Maximize,
-  Pause,
-  Play,
   RefreshCw,
-  RotateCcw,
   Save,
   SlidersHorizontal,
   SquarePen,
 } from "lucide-react"
 import { EditorWorkspace } from "../../presentation/editor-workspace"
+import { PresentationControls } from "../../platform-ui"
 import { restoreNativeCspConfiguration } from "../../presentation/show-library-preview/renderer-csp-admission.ts"
 import { App } from "@modelcontextprotocol/ext-apps"
 import { createRoot, type Root } from "react-dom/client"
@@ -770,61 +766,32 @@ function FullShowWidget() {
   const transport =
     frame && navigation ? (
       <nav className="widget-transport" aria-label={t("title")}>
-        <NativeButton
-          classNameContent="contents"
-          data-control-source="razzia"
-          type="button"
-          data-testid="full-show-previous"
-          aria-label={t("previousChapter")}
-          title={t("previousChapter")}
-          disabled={!canCall || manualBusy || !navigation.previous}
-          onClick={() => void previewCard("previous")}
-        >
-          <ArrowLeft aria-hidden="true" />
-        </NativeButton>
+        <PresentationControls
+          previous={{
+            testId: "full-show-previous",
+            disabled: !canCall || manualBusy || !navigation.previous,
+            onClick: () => void previewCard("previous"),
+          }}
+          playback={{
+            testId: "full-show-pause",
+            state: playback.clock.paused ? "paused" : "playing",
+            disabled: manualBusy,
+            onClick: togglePlayback,
+          }}
+          next={{
+            testId: "full-show-next",
+            disabled: !canCall || manualBusy || !navigation.next,
+            onClick: () => void previewCard("next"),
+          }}
+          replay={{
+            testId: "full-show-replay",
+            disabled: !canCall || manualBusy,
+            onClick: () => void previewCard("replay"),
+          }}
+        />
         <output data-testid="full-show-position">
           {navigation.index + 1} / {navigation.cards.length}
         </output>
-        <NativeButton
-          classNameContent="contents"
-          data-control-source="razzia"
-          type="button"
-          data-testid="full-show-next"
-          aria-label={t("nextChapter")}
-          title={t("nextChapter")}
-          disabled={!canCall || manualBusy || !navigation.next}
-          onClick={() => void previewCard("next")}
-        >
-          <ArrowRight aria-hidden="true" />
-        </NativeButton>
-        <NativeButton
-          classNameContent="contents"
-          data-control-source="razzia"
-          type="button"
-          data-testid="full-show-pause"
-          aria-label={t(playback.clock.paused ? "resumeShow" : "pauseShow")}
-          title={t(playback.clock.paused ? "resumeShow" : "pauseShow")}
-          disabled={manualBusy}
-          onClick={togglePlayback}
-        >
-          {playback.clock.paused ? (
-            <Play aria-hidden="true" />
-          ) : (
-            <Pause aria-hidden="true" />
-          )}
-        </NativeButton>
-        <NativeButton
-          classNameContent="contents"
-          data-control-source="razzia"
-          type="button"
-          data-testid="full-show-replay"
-          aria-label={t("replay")}
-          title={t("replay")}
-          disabled={!canCall || manualBusy}
-          onClick={() => void previewCard("replay")}
-        >
-          <RotateCcw aria-hidden="true" />
-        </NativeButton>
         <div ref={setDemoControlsTarget} className="widget-demo-controls" />
       </nav>
     ) : undefined

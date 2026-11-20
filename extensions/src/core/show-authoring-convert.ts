@@ -1,3 +1,4 @@
+import { QUESTION_LEAD_IN_SECONDS } from "@razzia/common/constants"
 // oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 // Preserve legacy wire text coercion while keeping unknown values at the boundary.
 function legacyText(value: unknown): string {
@@ -845,7 +846,7 @@ export function nativeBundleToAuthoredShow(
           category: q.category ? legacyText(q.category) : undefined,
           note: q.note ? legacyText(q.note) : undefined,
           timeSeconds: typeof q.time === "number" ? q.time : 20,
-          cooldownSeconds: typeof q.cooldown === "number" ? q.cooldown : 3,
+          cooldownSeconds: typeof q.cooldown === "number" ? q.cooldown : QUESTION_LEAD_IN_SECONDS,
           maxPoints: typeof q.maxPoints === "number" ? q.maxPoints : 0,
           penalty: typeof q.penalty === "number" ? q.penalty : 0,
           media: q.media as AuthoredQuizCard["media"],
@@ -871,7 +872,7 @@ export function nativeBundleToAuthoredShow(
           category: q.category ? legacyText(q.category) : undefined,
           note: q.note ? legacyText(q.note) : undefined,
           timeSeconds: typeof q.time === "number" ? q.time : 20,
-          cooldownSeconds: typeof q.cooldown === "number" ? q.cooldown : 3,
+          cooldownSeconds: typeof q.cooldown === "number" ? q.cooldown : QUESTION_LEAD_IN_SECONDS,
           maxPoints: typeof q.maxPoints === "number" ? q.maxPoints : 1000,
           penalty: typeof q.penalty === "number" ? q.penalty : 0,
           media: q.media as AuthoredQuizCard["media"],

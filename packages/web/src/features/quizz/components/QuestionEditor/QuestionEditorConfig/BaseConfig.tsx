@@ -1,5 +1,5 @@
 import { resolveQuestionPlayMode } from "@razzia/extensions/core"
-import { MAX_POINTS, NO_TIME_LIMIT } from "@razzia/common/constants"
+import { MAX_POINTS, NO_TIME_LIMIT, QUESTION_LEAD_IN_SECONDS } from "@razzia/common/constants"
 import { type ScoringMode } from "@razzia/common/types/game"
 import { isMultiOptions } from "@razzia/common/questions/options"
 import ToggleGroup from "@razzia/web/components/ToggleGroup"
@@ -208,14 +208,15 @@ const BaseConfig = () => {
                   label={t("quizz:question.config.questionDisplay")}
                   unit={t("common:seconds")}
                 />
-                <ConfigNumberInput
-                  name="cooldown"
-                  label={t("quizz:question.config.questionDisplay")}
-                  min={3}
-                  max={15}
-                />
+                <output
+                  data-testid="system-question-lead-in"
+                  aria-label={t("quizz:question.config.questionDisplay")}
+                  className="text-sm font-semibold"
+                >
+                  {QUESTION_LEAD_IN_SECONDS}
+                </output>
                 <ConfigField.Description>
-                  {t("quizz:question.config.questionDisplayHint")}
+                  {t("extensions:studio.editing.fixedQuestionLeadIn")}
                 </ConfigField.Description>
               </ConfigField>
             </ConfigSection>

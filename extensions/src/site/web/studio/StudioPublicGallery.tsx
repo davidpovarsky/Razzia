@@ -1,4 +1,6 @@
 import { useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
+import { presentationControlText } from "../../../platform-ui"
 import { ArrowRight, Play, Pencil } from "lucide-react"
 import { publicDemoCatalogue } from "../../../core/show-library/public-demo-catalogue"
 import { createPublicPreviewProvider } from "../../components/game-preview/public-provider"
@@ -13,6 +15,7 @@ import { useSiteText } from "../../locales"
 
 export function StudioPublicGallery({ search }: { search: string }) {
   const t = useSiteText()
+  const { i18n } = useTranslation()
   const provider = useMemo(createPublicPreviewProvider, [])
   const [installing, setInstalling] = useState<string | null>(null)
   const [error, setError] = useState("")
@@ -85,15 +88,6 @@ export function StudioPublicGallery({ search }: { search: string }) {
             </GamePreviewSurface>
             <div className="site-game-body">
               <h3>{t(game.title)}</h3>
-              <p>{t(game.desc)}</p>
-              <div className="catalogue-audiences">
-                {game.audience.map((item) => (
-                  <span key={item}>{t(item)}</span>
-                ))}
-                <span>
-                  {t("{{count}} rounds", { count: game.questionCount })}
-                </span>
-              </div>
               <div className="catalogue-studio-actions">
                 <SiteLink
                   className="btn primary"
@@ -109,20 +103,21 @@ export function StudioPublicGallery({ search }: { search: string }) {
                   data-catalogue-customise={game.id}
                 >
                   <Pencil size={15} />
-                  {t(
-                    installing === game.id
-                      ? "Adding your game…"
-                      : "Customise a copy",
-                  )}
+                  {t(installing === game.id ? "Adding your game…" : "Customise a copy")}
                 </SiteButton>
-                <SiteLink
-                  className="btn ghost"
-                  href={`/?view=product&game=${encodeURIComponent(game.id)}`}
-                >
+              </div>
+              <details className="catalogue-studio-details">
+                <summary>{presentationControlText(i18n.resolvedLanguage ?? i18n.language ?? "en", "details")}</summary>
+                <p>{t(game.desc)}</p>
+                <div className="catalogue-audiences">
+                  {game.audience.map((item) => <span key={item}>{t(item)}</span>)}
+                  <span>{t("{{count}} rounds", { count: game.questionCount })}</span>
+                </div>
+                <SiteLink className="btn ghost" href={`/?view=product&game=${encodeURIComponent(game.id)}`}>
                   {t("View game")}
                   <ArrowRight size={15} />
                 </SiteLink>
-              </div>
+              </details>
             </div>
           </article>
         ))}

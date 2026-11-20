@@ -4,6 +4,7 @@ import {
   MAX_POINTS,
   MEDIA_TYPES,
   NO_TIME_LIMIT,
+  QUESTION_LEAD_IN_SECONDS,
   QUIZZ_MODES,
 } from "@razzia/common/constants"
 import { isEstimationOptions } from "@razzia/common/questions/options"
@@ -880,65 +881,44 @@ export class RoundManager {
       total: this.opts.quizz.questions.length,
     })
 
-    // Tzila's picture-led show has ONE question screen: the question with its
-    // five answer cards. Skip legacy prepared/question-only preview broadcasts.
-    // All other quizzes retain their original prep and question cooldowns.
-    if (!this.opts.skipQuestionPreview?.()) {
-      this.opts.broadcast(STATUS.SHOW_PREPARED, {
-        totalAnswers: this.question.answers.length,
-        questionNumber: this.currentQuestion + 1,
-        questionType: this.question.type,
-      })
-      const ok1 = await this.cancellableSleep(2, gen)
+    this.opts.broadcast(STATUS.SHOW_PREPARED, {
+      totalAnswers: this.question.answers.length,
+      questionNumber: this.currentQuestion + 1,
+      questionType: this.question.type,
+    })
+    const prepared = await this.cancellableSleep(2, gen)
 
-      if (!ok1 || this.generation !== gen || !this.started) {
-        return
-      }
-
-      const imageMedia =
-        this.question.media?.type === MEDIA_TYPES.IMAGE
-          ? this.question.media
-          : undefined
-      this.opts.broadcast(STATUS.SHOW_QUESTION, {
-        questionNumber: this.currentQuestion + 1,
-        questionId: this.opts.getQuestionId?.(this.currentQuestion),
-        question: this.question.question,
-        media: imageMedia,
-        cooldown: this.question.cooldown,
-      })
-      const ok2 = await this.cancellableSleep(this.question.cooldown, gen)
-
-      if (!ok2 || this.generation !== gen || !this.started) {
-        return
-      }
+    if (!prepared || this.generation !== gen || !this.started) {
+      return
     }
 
-    const entranceMs = this.opts.votingEntranceMs?.() ?? 0
+    // The reading interval belongs to the platform, never to a theme or an
+    // authored cooldown. Acceptance, answer cards and the clock open together.
+    const imageMedia =
+      this.question.media?.type === MEDIA_TYPES.IMAGE
+        ? this.question.media
+        : undefined
+    this.opts.broadcast(STATUS.SHOW_QUESTION, {
+      totalAnswers: this.question.answers.length,
+      questionNumber: this.currentQuestion + 1,
+      questionId: this.opts.getQuestionId?.(this.currentQuestion),
+      question: this.question.question,
+      media: imageMedia,
+      cooldown: QUESTION_LEAD_IN_SECONDS,
+    })
+    const ready = await this.cancellableSleep(QUESTION_LEAD_IN_SECONDS, gen)
 
-    if (entranceMs > 0) {
-      this.votingStartsAt = Date.now() + entranceMs
-      this.votingEndsAt =
-        this.question.time === NO_TIME_LIMIT
-          ? null
-          : this.votingStartsAt + this.question.time * SECOND_MS
-      this.broadcastVotingQuestion()
-      const ready = await this.cancellableSleep(entranceMs / SECOND_MS, gen)
-
-      if (!ready || this.generation !== gen || !this.started) {
-        return
-      }
+    if (!ready || this.generation !== gen || !this.started) {
+      return
     }
 
     this.startTime = Date.now()
     this.acceptingAnswers = true
-
-    if (entranceMs > 0) {
-      this.votingStartsAt = this.startTime
-      this.votingEndsAt =
-        this.question.time === NO_TIME_LIMIT
-          ? null
-          : this.startTime + this.question.time * SECOND_MS
-    }
+    this.votingStartsAt = this.startTime
+    this.votingEndsAt =
+      this.question.time === NO_TIME_LIMIT
+        ? null
+        : this.startTime + this.question.time * SECOND_MS
 
     this.broadcastVotingQuestion()
     await this.opts.cooldown.start(this.question.time)

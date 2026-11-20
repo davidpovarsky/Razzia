@@ -417,6 +417,7 @@
   },
   "studio": {
     "editing": {
+      "fixedQuestionLeadIn": "最初に問題が表示されます。すべてのゲームとテーマで、2秒後に回答とタイマーが同時に表示されます。",
       "modeLabel": "編集モード",
       "simple": "シンプル編集",
       "advanced": "詳細編集",

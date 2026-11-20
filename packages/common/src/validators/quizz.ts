@@ -2,6 +2,7 @@ import {
   MAX_MEDIA_SIZE,
   MEDIA_TYPES,
   MEDIA_URL_PREFIX,
+  QUESTION_LEAD_IN_SECONDS,
   QUESTION_TYPES,
   QUIZZ_MODES,
   SCORING_MODES,
@@ -42,7 +43,7 @@ const questionSchema = z.object({
   cooldown: z
     .number()
     .int()
-    .min(3, "errors:quizz.cooldownTooShort")
+    .min(QUESTION_LEAD_IN_SECONDS, "errors:quizz.cooldownTooShort")
     .max(15, "errors:quizz.cooldownTooLong"),
   time: z.number().int().min(-1),
   maxPoints: z

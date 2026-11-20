@@ -41,6 +41,7 @@ const MOBILE_BREAKPOINT = 640
 
 interface Props {
   data: CommonStatusDataMap["SELECT_ANSWER"]
+  hideHeading?: boolean
 }
 
 const Answers = ({
@@ -57,6 +58,7 @@ const Answers = ({
     votingStartsAt,
   },
   data,
+  hideHeading = false,
 }: Props & { data?: { remainingTime?: number } }) => {
   const { socket } = useSocket()
   const { player, gameId } = usePlayerStore()
@@ -206,10 +208,12 @@ const Answers = ({
 
   return (
     <QuestionEntrance
-      entrance={stageAnimations.questionEntrance}
+      entrance={hideHeading ? { preset: "none" } : stageAnimations.questionEntrance}
       epoch={animationEpochKey}
       className="relative flex h-full min-h-0 w-full flex-1 flex-col justify-between overflow-hidden"
     >
+      {/* A retained platform question must not be covered by a second legacy iframe question. */}
+      {!hideHeading && (
       <LegacyVotingMotion
         showTadazzCards={showTadazzCards}
         defaultsObj={defaultsObj}
@@ -224,6 +228,7 @@ const Answers = ({
         answers={answers}
         time={time}
       />
+      )}
       {/* Question Header & Media Area */}
       <div
         className={clsx("mx-auto w-full max-w-7xl px-2 text-center", {
@@ -233,6 +238,8 @@ const Answers = ({
             !showAnswersOnly && !currentVisuals,
         })}
       >
+        {!hideHeading && (
+          <>
         <h2
           data-testid="game-question-title"
           className={clsx(
@@ -258,6 +265,9 @@ const Answers = ({
           className="mx-auto mt-1 flex w-40 items-center justify-center sm:w-56"
           playerClassName="h-4 w-full"
         />
+
+          </>
+        )}
 
         {showAnswersOnly ? (
           <>

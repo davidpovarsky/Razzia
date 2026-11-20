@@ -29,6 +29,7 @@ export interface CommonStatusDataMap {
     questionType: QuestionType
   }
   SHOW_QUESTION: {
+    totalAnswers?: number
     questionNumber?: number
     questionId?: string
     question: string
@@ -47,7 +48,7 @@ export interface CommonStatusDataMap {
     options?: QuestionOptions
     answersOnly: boolean
     playMode?: "quiz" | "survey"
-    /** Opt-in show entrance; the server accepts votes only after this instant. */
+    /** Authoritative instant at which answer cards, voting and the clock open. */
     votingStartsAt?: number
     votingEndsAt?: number
   }

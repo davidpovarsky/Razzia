@@ -170,11 +170,9 @@
   font-size: 12px;
 }
 .catalogue-full-preview {
-  aspect-ratio: 16 / 9;
   position: relative;
-  border: 1px solid #8b6eaa66;
-  border-radius: 16px;
-  overflow: hidden;
+  width: 100%;
+  min-width: 0;
 }
 .catalogue-full-preview > .game-preview-surface,
 .catalogue-full-preview .game-preview-poster,
@@ -185,8 +183,8 @@
 .catalogue-demo-shell {
   width: 100%;
 }
-.product-preview .game-preview-surface {
-  aspect-ratio: 16 / 10;
+.product-preview .game-preview-poster {
+  aspect-ratio: 16 / 9;
 }
 .product-preview .game-preview-poster,
 .product-preview .game-cover {
@@ -229,11 +227,9 @@
   padding: 6px 10px;
 }
 .catalogue-player {
-  overflow: hidden;
-  border: 1px solid #ab82da66;
-  border-radius: 18px;
+  width: 100%;
+  min-width: 0;
   color: #fff6ea;
-  box-shadow: 0 18px 70px #09001e75;
 }
 .catalogue-player-frame {
   position: relative;
@@ -247,38 +243,7 @@
   width: 100%;
   height: 100%;
 }
-.catalogue-player-console {
-  padding: clamp(16px, 2.5vw, 26px);
-  background: #110923;
-  color: #f6edff;
-}
-.catalogue-player-status {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
-  margin-bottom: 17px;
-}
-.catalogue-player-status strong {
-  font-size: clamp(16px, 2vw, 22px);
-  color: var(--show-theme-accent, #dfff66);
-}
-.catalogue-player-status span {
-  font-size: 13px;
-  color: #ddd0ef;
-}
-.catalogue-player-actions {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.catalogue-player-actions .btn {
-  min-height: 44px;
-  min-width: 140px;
-  justify-content: center;
-}
+
 .catalogue-player-note {
   text-align: center;
   color: #bdaed1;
@@ -357,14 +322,6 @@
 .catalogue-player[data-game-phase="results"] .tzv4-stage .winner-tag {
   display: none;
 }
-.catalogue-player[data-game-phase="results"] .tzv4-stage .q-frame .eyebrow {
-  font-size: 32px;
-  line-height: 1.2;
-}
-.catalogue-player[data-game-phase="results"] .tzv4-stage .q-frame .q-text {
-  font-size: 54px;
-  line-height: 1.12;
-}
 .catalogue-player[data-game-phase="transition"] .tzv4-stage .tzv4-scene-root {
   visibility: hidden;
   pointer-events: none;
@@ -410,31 +367,9 @@
   .catalogue-player {
     border-radius: 10px;
   }
-  .catalogue-player-status {
-    gap: 6px;
-  }
-  .catalogue-player-status strong {
-    width: 100%;
-  }
-  .catalogue-player-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-  .catalogue-player-actions .btn {
-    min-width: 0;
-    width: 100%;
-    font-size: 12px;
-    padding: 11px 10px;
-  }
-  .catalogue-player-actions .btn-primary {
-    grid-column: 1 / -1;
-    grid-row: 1;
-  }
+
   .catalogue-player-note {
     font-size: 11px;
-  }
-  .catalogue-full-preview {
-    aspect-ratio: 4 / 3;
   }
   .catalogue-count {
     width: 100%;
@@ -456,4 +391,144 @@
   .catalogue-cover-art {
     transition: none;
   }
+}
+
+/* Viewer pages give the game the available width; details follow the stage. */
+.catalogue-viewer-page,
+.catalogue-product-page.wrap {
+  width: calc(100% - 24px);
+  max-width: none;
+  min-width: 0;
+  margin-inline: auto;
+}
+.catalogue-viewer-page {
+  padding-block: 12px 24px;
+}
+.catalogue-viewer-page > :is(.eyebrow, .h1, .prose) {
+  margin-block: 0 8px;
+}
+.catalogue-viewer-page > .h1 {
+  font-size: clamp(20px, 2vw, 28px);
+  line-height: 1.2;
+}
+.catalogue-product-page .breadcrumb {
+  margin-block: 12px;
+}
+.catalogue-product-page .product-grid {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  align-items: stretch;
+  padding-block-end: 16px;
+}
+.catalogue-product-page .product-preview {
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: auto;
+}
+.catalogue-product-page .product-side > h1 {
+  font-size: clamp(22px, 2.5vw, 32px);
+  line-height: 1.2;
+  margin-block: 0 12px;
+}
+.catalogue-product-page .product-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-block: 12px;
+}
+.catalogue-product-page .product-actions .btn {
+  width: auto;
+  min-height: 44px;
+}
+.site-header:has(~ main .catalogue-viewer-page) .header-inner {
+  height: 56px;
+}
+.site-header:has(~ main .catalogue-viewer-page) {
+  position: relative;
+  top: auto;
+}
+.studio-public-gallery .site-game-body {
+  display: grid;
+  gap: 10px;
+  padding: 14px 16px;
+}
+.studio-public-gallery .site-game-body h3 {
+  margin: 0;
+}
+.studio-public-gallery .site-game-body p {
+  min-height: 0;
+  margin: 0;
+  line-height: 1.5;
+}
+.studio-public-gallery .catalogue-audiences {
+  margin: 0;
+}
+.studio-public-gallery .catalogue-studio-actions {
+  gap: 8px;
+}
+.catalogue-studio-details {
+  min-width: 0;
+  font-size: 13px;
+  color: var(--tds-muted-text, #c6b7d8);
+}
+.catalogue-studio-details > summary {
+  min-height: 44px;
+  padding-block: 11px;
+  cursor: pointer;
+  color: var(--tds-text, #fff);
+}
+.catalogue-studio-details[open] > summary {
+  margin-bottom: 8px;
+}
+.catalogue-studio-details > summary:focus-visible {
+  outline: 2px solid var(--tds-focus, #e7ff37);
+  outline-offset: 2px;
+}
+@media (max-width: 700px) {
+  .catalogue-viewer-page,
+  .catalogue-product-page.wrap {
+    width: calc(100% - 12px);
+  }
+  .catalogue-viewer-page {
+    padding-block: 6px 16px;
+  }
+  .catalogue-product-page .product-actions .btn {
+    flex: 1 1 10rem;
+  }
+}
+
+/* Secondary route actions stay available without competing with the viewer. */
+.catalogue-viewer-details {
+  margin-block: 8px 0;
+  padding-inline: 12px;
+  border: 1px solid var(--tds-border, #654579);
+  border-radius: 12px;
+  color: var(--tds-muted-text, #c6b7d8);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.catalogue-viewer-details > summary {
+  box-sizing: border-box;
+  min-height: 44px;
+  padding-block: 11px;
+  color: var(--tds-text, #fff);
+  cursor: pointer;
+}
+.catalogue-viewer-details > summary:focus-visible {
+  outline: 2px solid var(--tds-focus, #e7ff37);
+  outline-offset: -2px;
+}
+.catalogue-viewer-details[open] {
+  padding-bottom: 12px;
+}
+.catalogue-viewer-details > .prose {
+  margin-block: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.catalogue-viewer-details .button-row {
+  gap: 8px;
+}
+.catalogue-studio-details[open] > :not(summary) {
+  margin-block: 8px;
 }

@@ -100,6 +100,8 @@ export interface TadazzV4Data {
   remainingSeconds?: number | null
   deadlineMs?: number
   questionImage?: string | null
+  /** The same photo heading survives every phase of this question. */
+  photoLayout?: boolean
   questionImageText?: string
   questionOptions?: Array<string | { title: string }>
   teams?: TadazzV4Team[]
@@ -130,6 +132,7 @@ export interface TadazzV4Data {
 
 const questionScenes = new Set<TadazzV4Scene>([
   "question",
+  "question-image",
   "picture-answers",
   "voting-open",
   "countdown",

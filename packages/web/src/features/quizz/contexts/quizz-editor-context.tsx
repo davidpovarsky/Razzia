@@ -1,6 +1,6 @@
 import { useQuizzExtras } from "./extensions/use-quizz-extras"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { QUESTION_TYPES, QUIZZ_MODES } from "@razzia/common/constants"
+import { QUESTION_LEAD_IN_SECONDS, QUESTION_TYPES, QUIZZ_MODES } from "@razzia/common/constants"
 import type {
   Question,
   QuizzMode,
@@ -79,7 +79,7 @@ const defaultQuestion = (): Question => ({
   question: "",
   answers: ["", ""],
   solutions: [0],
-  cooldown: 5,
+  cooldown: QUESTION_LEAD_IN_SECONDS,
   time: 20,
 })
 

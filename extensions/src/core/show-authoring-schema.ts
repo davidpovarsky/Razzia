@@ -30,7 +30,7 @@ import { rosterExtrasSchema } from "./phone-roster"
 import { questionMediaValidator } from "@razzia/common/validators/quizz"
 import { multiOptionsValidator } from "@razzia/common/validators/questions/choice"
 import { estimationOptionsValidator } from "@razzia/common/validators/questions/estimation"
-import { MAX_ANSWERS } from "@razzia/common/constants"
+import { MAX_ANSWERS, QUESTION_LEAD_IN_SECONDS } from "@razzia/common/constants"
 
 export const TADA_SHOW_FORMAT = "tada-show" as const
 
@@ -82,7 +82,7 @@ export const authoredQuizCardSchema = z
     category: z.string().optional(),
     note: z.string().optional(),
     timeSeconds: z.number().int().min(-1).default(20),
-    cooldownSeconds: z.number().int().min(3).max(15).default(3),
+    cooldownSeconds: z.number().int().min(QUESTION_LEAD_IN_SECONDS).max(15).default(QUESTION_LEAD_IN_SECONDS),
     maxPoints: z.number().int().min(0).default(1000),
     penalty: z.number().int().min(0).default(0),
     media: questionMediaValidator.optional(),
@@ -140,7 +140,7 @@ export const authoredSurveyCardSchema = z
     category: z.string().optional(),
     note: z.string().optional(),
     timeSeconds: z.number().int().min(-1).default(20),
-    cooldownSeconds: z.number().int().min(3).max(15).default(3),
+    cooldownSeconds: z.number().int().min(QUESTION_LEAD_IN_SECONDS).max(15).default(QUESTION_LEAD_IN_SECONDS),
     maxPoints: z.number().int().min(0).default(0),
     penalty: z.number().int().min(0).default(0),
     media: questionMediaValidator.optional(),

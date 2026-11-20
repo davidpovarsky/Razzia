@@ -1,5 +1,6 @@
 import marketing from "../../../../site-assets/marketing.css?inline"
 import { SiteLink } from "../shared/SiteLink"
+import { presentationControlText } from "../../../platform-ui"
 import { asset, catalogue, Cover, GameCard, type Game } from "./Catalogue"
 import { corrections } from "../../themes/corrections"
 import { sitePlatformStyle } from "../../themes/platform"
@@ -531,7 +532,7 @@ export function MarketingSite() {
             </div>
           )}
           {view === "product" && (
-            <div className="wrap">
+            <div className="wrap catalogue-product-page">
               <div className="breadcrumb">
                 <SiteButton onClick={() => go("store")}>
                   {t("Games")}
@@ -652,22 +653,7 @@ export function MarketingSite() {
             </div>
           )}
           {(view === "demo" || view === "preview") && (
-            <section className="section wrap">
-              <div className="eyebrow">
-                {t(
-                  view === "preview"
-                    ? "FULL SHOW PREVIEW"
-                    : "PLAY A FREE SAMPLE",
-                )}
-              </div>
-              <h1 className="h1">{t(selected.title)}</h1>
-              <p className="prose">
-                {view === "preview"
-                  ? demonstration("demo")
-                  : t(
-                      "Play the rounds, choose your answers and discover the theme in action.",
-                    )}
-              </p>
+            <section className="catalogue-viewer-page">
               <div
                 className={`catalogue-demo-shell ${view === "preview" ? "catalogue-full-preview" : ""}`}
                 data-testid="marketing-native-demo"
@@ -679,7 +665,7 @@ export function MarketingSite() {
                       kind: "published-demo",
                       catalogueId: selected.id,
                     }}
-                    label={t("Preview")}
+                    label={t(selected.title)}
                     initiallyOpen
                     dismissOnOutside={false}
                   >
@@ -696,6 +682,13 @@ export function MarketingSite() {
                   />
                 )}
               </div>
+              <details className="catalogue-viewer-details">
+                <summary>{presentationControlText(language, "details")}</summary>
+                <p className="prose">
+                  {view === "preview"
+                    ? demonstration("demo")
+                    : t("Play the rounds, choose your answers and discover the theme in action.")}
+                </p>
               <div className="button-row" style={{ marginTop: 24 }}>
                 <SiteButton
                   className="btn btn-outline"
@@ -724,6 +717,7 @@ export function MarketingSite() {
                   <ArrowRight size={16} />
                 </SiteButton>
               </div>
+              </details>
               {installError && (
                 <p role="alert" className="catalogue-player-error">
                   {installError}

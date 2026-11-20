@@ -56,7 +56,8 @@ function toV4Answers(options: StageOption[]): TadazzV4Answer[] {
 function isPhotoQuestion(q: StageQuestion): boolean {
   return Boolean(
     q.questionImage &&
-    q.options.length === 4 &&
+    (q.answerCount ?? q.options.length) === 4 &&
+    q.hasAnswerImages !== true &&
     q.options.every((opt) => !opt.image),
   )
 }
@@ -221,6 +222,7 @@ export const TadazzV4StageAdapter = forwardRef<
         totalQuestions: q.totalQuestions,
         answers: toV4Answers(q.options),
         questionImage: q.questionImage,
+        photoLayout: isPhotoQuestion(q),
         questionImageText: q.question,
         questionOptions: q.options.map((o) => o.label),
         photoAlt: q.photoAlt ?? q.question,
@@ -299,6 +301,14 @@ export const TadazzV4StageAdapter = forwardRef<
       },
       async presentOptions(data) {
         const { current } = questionRef
+        if (current?.key === data.key) {
+          data = {
+            ...data,
+            questionImage: data.questionImage ?? current.questionImage,
+            answerCount: data.answerCount ?? current.answerCount,
+            hasAnswerImages: data.hasAnswerImages ?? current.hasAnswerImages,
+          }
+        }
         const questionAlreadyOnStage =
           current?.key === data.key &&
           ["question", "voting", "locked", "results"].includes(modeRef.current)
@@ -335,15 +345,21 @@ export const TadazzV4StageAdapter = forwardRef<
           buildQuestionData(data, { questionAlreadyOnStage }),
         )
       },
-      async openVoting(seconds, deadlineMs) {
-        const q = questionRef.current
+      async openVoting(seconds, deadlineMs, question) {
+        const previous = questionRef.current
+        const q = question ?? previous
+        const questionAlreadyOnStage = Boolean(
+          previous && q && previous.key === q.key &&
+          ["question", "voting", "locked", "results"].includes(modeRef.current),
+        )
 
-        if (!q || modeRef.current === "results") {
+        if (!q || (!question && modeRef.current === "results")) {
           return
         }
 
+        questionRef.current = q
         setScreenMode("none")
-        const isAlreadyVoting = modeRef.current === "voting"
+        const isAlreadyVoting = modeRef.current === "voting" && previous?.key === q.key
         setMode("voting")
         const alreadyOnStage = cardsOnStageKeyRef.current === q.key
         cardsOnStageKeyRef.current = q.key
@@ -354,9 +370,7 @@ export const TadazzV4StageAdapter = forwardRef<
                 Math.max(0, (deadlineMs - Date.now()) / 1000),
               )
             : seconds
-        const scene = isPhotoQuestion(q)
-          ? "question-image"
-          : votingPresentation(seconds)
+        const scene = votingPresentation(seconds)
 
         if (
           isAlreadyVoting &&
@@ -376,31 +390,6 @@ export const TadazzV4StageAdapter = forwardRef<
           return
         }
 
-        if (isPhotoQuestion(q)) {
-          votingSceneRef.current = scene
-
-          if (alreadyOnStage) {
-            v4Ref.current?.patchData(
-              buildQuestionData(q, {
-                seconds,
-                remainingSeconds: remaining,
-                deadlineMs,
-              }),
-            )
-          } else {
-            await v4Ref.current?.play(
-              "question-image",
-              buildQuestionData(q, {
-                seconds,
-                remainingSeconds: remaining,
-                deadlineMs,
-              }),
-            )
-          }
-
-          return
-        }
-
         votingSceneRef.current = scene
         await v4Ref.current?.play(
           scene,
@@ -409,6 +398,7 @@ export const TadazzV4StageAdapter = forwardRef<
             remainingSeconds: remaining,
             deadlineMs,
             cardsAlreadyOnStage: alreadyOnStage,
+            questionAlreadyOnStage,
           }),
         )
       },

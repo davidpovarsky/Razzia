@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { ArrowLeft, ArrowRight, Volume2, VolumeX } from "lucide-react"
+import { PresentationControls } from "../../../platform-ui"
+import { GameViewer } from "../../components/game-viewer/GameViewer"
 import {
   CatalogueMobileQuestion,
   useCatalogueMobileControls,
@@ -12,6 +13,7 @@ import type {
 } from "../../../presentation/tadazz-show/TadazzStage"
 import type { TadazzV4Cue } from "../../../presentation/tadazz-v4/types"
 import { useCatalogueAudio } from "./use-catalogue-audio"
+import { createQuestionLeadIn } from "../../../presentation/question-lead-in"
 import v4Css from "../../../presentation/tadazz-v4/tadazz-v4.css?inline"
 import v4LayoutCss from "../../../presentation/tadazz-v4/source-layout.css?inline"
 import v4FullShowCss from "../../../presentation/tadazz-v4/full-show.css?inline"
@@ -30,6 +32,7 @@ type Question = {
 type Phase =
   | "intro"
   | "question-transition"
+  | "question"
   | "voting"
   | "locked"
   | "results"
@@ -147,6 +150,8 @@ function useReducedMotion() {
 
 export function GreatGuessOffDemo() {
   const stage = useRef<TadazzStageHandle>(null)
+  const [leadIn] = useState(() => createQuestionLeadIn())
+  const mounted = useRef(true)
   const [phase, setPhase] = useState<Phase>("intro")
   const currentPhase = useRef<Phase>("intro")
   currentPhase.current = phase
@@ -155,7 +160,7 @@ export function GreatGuessOffDemo() {
   const [secondsLeft, setSecondsLeft] = useState(VOTING_SECONDS)
   const [busy, setBusy] = useState(false)
   const busyRef = useRef(false)
-  const [soundOn, setSoundOn] = useState(true)
+  const [soundOn, setSoundOn] = useState(false)
   const [message, setMessage] = useState("")
   const deadlineRef = useRef(0)
   const revealRef = useRef<(chosenIndex?: number) => Promise<void>>(
@@ -166,7 +171,7 @@ export function GreatGuessOffDemo() {
   const selected = votes[questionIndex]
   const compactControls = useCatalogueMobileControls()
   const showMobileQuestion =
-    compactControls && (phase === "voting" || phase === "results")
+    compactControls && (phase === "question" || phase === "voting" || phase === "results")
   const resultCounts = displayedCounts(question, selected)
   const audienceFavourite =
     question.kind === "survey"
@@ -200,7 +205,7 @@ export function GreatGuessOffDemo() {
             ? "leaderboard"
             : phase === "winner" || phase === "closing"
               ? "finale"
-              : phase === "question-transition"
+              : phase === "question-transition" || phase === "question"
                 ? "question"
                 : "lobby",
     screenKey: [questionIndex, phase].join(":"),
@@ -219,14 +224,14 @@ export function GreatGuessOffDemo() {
     setBusy(true)
     setMessage("")
     void action()
-      .catch(() =>
-        setMessage(
-          "The stage could not complete that transition. Please restart the sample.",
-        ),
-      )
+      .catch(() => {
+        if (mounted.current) {
+          setMessage("The stage could not complete that transition. Please restart the sample.")
+        }
+      })
       .finally(() => {
         busyRef.current = false
-        setBusy(false)
+        if (mounted.current) setBusy(false)
       })
   }
 
@@ -235,8 +240,13 @@ export function GreatGuessOffDemo() {
   const showOpening = () => stage.current?.showIntro()
 
   useEffect(() => {
+    mounted.current = true
     void showOpening()
-  }, [])
+    return () => {
+      mounted.current = false
+      leadIn.cancel()
+    }
+  }, [leadIn])
 
   useEffect(() => {
     if (phase !== "voting") return
@@ -263,17 +273,21 @@ export function GreatGuessOffDemo() {
     if (!handle) return
     setQuestionIndex(index)
     setSecondsLeft(VOTING_SECONDS)
-    setPhase("question-transition")
-    currentPhase.current = "question-transition"
+    setPhase("question")
+    currentPhase.current = "question"
     const q = stageQuestion(QUESTIONS[index], index)
-    await handle.nextQuestion(q) // Native Z-wipe/next-question choreography.
-    deadlineRef.current = Date.now() + VOTING_SECONDS * 1000
+    const ready = leadIn.wait()
+    void handle.showQuestion({ ...q, options: [] }).catch(() => {
+      if (mounted.current) setMessage("Unable to display the question.")
+    })
+    const opensAt = await ready
+    if (!mounted.current || opensAt === null || stage.current !== handle) return
+    deadlineRef.current = opensAt + VOTING_SECONDS * 1000
     currentPhase.current = "voting"
     setPhase("voting")
-    // The native countdown Promise resolves only after its actual 20-second sweep.
-    // Keep voting interactive while that canonical WAAPI clock runs.
-    void handle.openVoting(VOTING_SECONDS, deadlineRef.current).catch(() => {
-      setMessage("Unable to start the native voting timer.")
+    // The complete answer set and the authoritative timer enter together.
+    void handle.openVoting(VOTING_SECONDS, deadlineRef.current, q).catch(() => {
+      if (mounted.current) setMessage("Unable to start the native voting timer.")
     })
   }
 
@@ -332,7 +346,7 @@ export function GreatGuessOffDemo() {
   }
 
   /** Restore the real previous scene, retaining the original vote and score.
-   * There is no "restart" control in this demo; Back is genuine history.
+   * Back keeps genuine history; the platform Replay control restarts the sample.
    * Only visible scenes are navigable (not transient wipe/locked frames). */
   const restoreResult = async (index: number) => {
     const handle = stage.current
@@ -386,50 +400,32 @@ export function GreatGuessOffDemo() {
   }
 
   const restart = async () => {
+    leadIn.cancel()
+    currentPhase.current = "intro"
+    setPhase("intro")
     setVotes({})
     setQuestionIndex(0)
     setSecondsLeft(VOTING_SECONDS)
     await showOpening()
-    currentPhase.current = "intro"
-    setPhase("intro")
   }
 
-  const mainButton = (() => {
-    if (phase === "intro")
-      return {
-        title: "Start",
-        // No additional question/number-only round launch before Q1.
-        run: () => startQuestion(0),
-      }
-    if (phase === "voting" || phase === "locked")
-      return { title: "Next", run: reveal }
-    // The animated results are the ONLY reveal scene for this question.
-    if (phase === "results")
-      return {
-        title: "Next",
-        run: next,
-      }
-    if (phase === "leaderboard")
-      return { title: "Next", run: () => startQuestion(3) }
-    if (phase === "winner")
-      return {
-        title: "Next",
-        run: async () => {
-          // The actual Creating Worlds curtains and effects are the closing
-          // sequence; they never appear midway through this five-round demo.
-          // Hide the two decorative Zs from the first frame of the curtain,
-          // not only after the closing animation resolves.
-          currentPhase.current = "closing"
-          setPhase("closing")
-          await stage.current?.showFullShowScene?.("grand-finale", { round: 2 })
-        },
-      }
-    return { title: "Play again", run: restart }
+  const mainAction = (() => {
+    if (phase === "intro") return () => startQuestion(0)
+    if (phase === "voting" || phase === "locked") return reveal
+    if (phase === "results") return next
+    if (phase === "leaderboard") return () => startQuestion(3)
+    if (phase === "winner") return async () => {
+      currentPhase.current = "closing"
+      setPhase("closing")
+      await stage.current?.showFullShowScene?.("grand-finale", { round: 2 })
+    }
+    return restart
   })()
 
   const captions = {
     intro: "The Great Guess-off · Five rounds of surprises",
     "question-transition": `Question ${questionIndex + 1} · Get ready to vote`,
+    question: `Question ${questionIndex + 1} of 5`,
     voting: `Question ${questionIndex + 1} of 5 · ${secondsLeft}s remaining`,
     locked: `Question ${questionIndex + 1} of 5 · Time's up`,
     results: `Question ${questionIndex + 1} · ${question.kind === "quiz" ? "Correct answer" : "Audience favourite"}`,
@@ -453,6 +449,41 @@ export function GreatGuessOffDemo() {
       aria-label="The Great Guess-off · Tadazz native stage"
     >
       <style>{nativeStageCss}</style>
+      <GameViewer
+        title="The Great Guess-off"
+        status={captions[phase]}
+        controls={
+          <>
+            {showMobileQuestion && (
+              <CatalogueMobileQuestion
+                question={stageQuestion(question, questionIndex)}
+                questionType={question.kind}
+                voting={phase === "voting"}
+                showAnswers={phase !== "question"}
+                busy={busy}
+                selected={selected}
+                correctAnswers={phase === "results" && question.kind === "quiz" && question.correct !== undefined ? [question.correct] : undefined}
+                audienceFavourite={phase === "results" ? audienceFavourite : undefined}
+                onChoose={choose}
+              />
+            )}
+            <PresentationControls
+              previous={{ disabled: busy || phase === "intro" || phase === "question-transition" || phase === "question", onClick: () => run(back), testId: "ggo-back-action" }}
+              next={{ state: phase === "intro" ? "start" : phase === "closing" ? "replay" : "next", disabled: busy || phase === "question-transition" || phase === "question", onClick: () => run(mainAction), testId: "ggo-main-action" }}
+              replay={phase === "closing" ? undefined : { disabled: busy || phase === "question-transition" || phase === "question", onClick: () => run(restart), testId: "ggo-replay" }}
+              sound={{ enabled: soundOn, onClick: toggleSound, testId: "ggo-sound" }}
+            />
+            {message && <p role="alert" className="ggo-native-error">{message}</p>}
+          </>
+        }
+        details={
+          <p className="ggo-native-disclaimer">
+            Demo only: survey totals and other players are illustrative, not live
+            audience data. The stage, 20-second countdown, transitions, reveal and
+            winner are Tadazz's original components.
+          </p>
+        }
+      >
       <div
         className="ggo-native-frame"
         data-testid="great-guessoff-native-stage"
@@ -487,78 +518,7 @@ export function GreatGuessOffDemo() {
           </div>
         )}
       </div>
-      <div className="ggo-native-console">
-        <div className="ggo-native-info">
-          <strong>The Great Guess-off</strong>
-          <span aria-live="polite">{captions[phase]}</span>
-        </div>
-        {showMobileQuestion && (
-          <CatalogueMobileQuestion
-            question={stageQuestion(question, questionIndex)}
-            questionType={question.kind}
-            voting={phase === "voting"}
-            busy={busy}
-            selected={selected}
-            correctAnswers={
-              phase === "results" &&
-              question.kind === "quiz" &&
-              question.correct !== undefined
-                ? [question.correct]
-                : undefined
-            }
-            audienceFavourite={
-              phase === "results" ? audienceFavourite : undefined
-            }
-            onChoose={choose}
-          />
-        )}
-        <div className="ggo-native-actions">
-          <button
-            className="ggo-native-sound"
-            type="button"
-            aria-label={soundOn ? "Mute game sounds" : "Enable game sounds"}
-            aria-pressed={soundOn}
-            onClick={toggleSound}
-          >
-            {soundOn ? <Volume2 size={18} /> : <VolumeX size={18} />}
-            <span>{soundOn ? "Sound on" : "Sound off"}</span>
-          </button>
-          <div className="ggo-native-back-slot">
-            {phase !== "intro" && (
-              <button
-                className="ggo-native-back"
-                type="button"
-                data-testid="ggo-back-action"
-                disabled={busy}
-                onClick={() => run(back)}
-              >
-                <ArrowLeft size={18} />
-                <span>Back</span>
-              </button>
-            )}
-          </div>
-          <button
-            type="button"
-            className="ggo-native-next"
-            disabled={busy}
-            onClick={() => run(mainButton.run)}
-            data-testid="ggo-main-action"
-          >
-            {mainButton.title}
-            <ArrowRight size={18} />
-          </button>
-        </div>
-        {message && (
-          <p role="alert" className="ggo-native-error">
-            {message}
-          </p>
-        )}
-        <p className="ggo-native-disclaimer">
-          Demo only: survey totals and other players are illustrative, not live
-          audience data. The stage, 20-second countdown, transitions, reveal and
-          winner are Tadazz's original components.
-        </p>
-      </div>
+      </GameViewer>
     </section>
   )
 }

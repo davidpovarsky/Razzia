@@ -43,11 +43,8 @@ export interface ShowRoundHooks {
   }
   onPreviousTimelineStep?: () => boolean
   hasAuthoredResultsScene?: (questionIndex: number) => boolean
-  /** Picture-led shows open the answers directly, without two preview statuses. */
-  skipQuestionPreview?: () => boolean
   /** Automatically hold one normal results reveal before the next scene (seconds). */
   quickResultsHoldSeconds?: () => number | null
-  votingEntranceMs?: () => number
 }
 
 export interface ShowRoundPolicyContext {
@@ -211,9 +208,6 @@ export function createShowRoundHooks(
       ? (qIdx) =>
           ctx.showCoordinator?.hasNextSceneResultsForQuestion(qIdx) ?? false
       : undefined,
-    skipQuestionPreview: () => ctx.isCreatingWorldsShow,
-    // Five answer cards (~2s), then the existing 1.12s clock entrance.
-    votingEntranceMs: () => (ctx.isCreatingWorldsShow ? 4000 : 0),
     // The server hold includes up to ~2 seconds of queued card/result
     // choreography, leaving the completed percentages readable for ~5 seconds.
     quickResultsHoldSeconds: () => (ctx.isCreatingWorldsShow ? 7 : null),

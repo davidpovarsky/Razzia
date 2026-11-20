@@ -1265,7 +1265,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     isPlayer && isMobilePhone && isPopupMedia && !playerAnswersOnly
   // V4 question-image layout paints the question photo itself (left panel), so no full-stage underlay.
   const v4PhotoQuestion =
-    useV4 && scene.kind === "voting" && Boolean(scene.question.questionImage)
+    useV4 && (scene.kind === "question" || scene.kind === "voting") && Boolean(scene.question.questionImage)
   const statusCooldown = (status?.data as { cooldown?: unknown } | undefined)
     ?.cooldown
   let questionDurationMs: number | null = null

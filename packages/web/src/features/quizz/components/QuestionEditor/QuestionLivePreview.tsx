@@ -9,16 +9,20 @@ import {
 import {
   calculateRevealState,
   NativeRazziaQuestion,
+  NativeQuestionHeading,
   LiveEditorStagePreview,
-  QuestionUnderline,
+  createDemoClock,
   ShowThemeScope,
   showThemeStyle,
   showViewportStyle,
 } from "@razzia/extensions/presentation"
 import { STATUS } from "@razzia/common/types/game/status"
+import { QUESTION_LEAD_IN_MS, QUESTION_LEAD_IN_SECONDS } from "@razzia/common/constants"
+import AnswerCountdown from "@razzia/web/features/game/components/AnswerCountdown"
 import defaultBackground from "@razzia/web/assets/background.png"
 import { getBranding } from "@razzia/web/branding"
 import Button from "@razzia/web/components/Button"
+import { PresentationControls } from "@razzia/extensions/platform-ui"
 import QuestionMedia from "@razzia/web/components/QuestionMedia"
 import ToggleGroup from "@razzia/web/components/ToggleGroup"
 import { NativeGameSurface } from "@razzia/web/features/game/components/tadazz-show/NativeGameLayout"
@@ -30,9 +34,9 @@ import {
 } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 import { useInstalledThemeCatalog } from "../studio/installed-theme-catalog"
 import { useStudioEditor } from "../studio/studio-editor-context"
-import { Eye, EyeOff, RotateCcw } from "lucide-react"
+import { Eye, EyeOff } from "lucide-react"
 import { useReducedMotion } from "motion/react"
-import { useId, useMemo, useState } from "react"
+import { useEffect, useId, useMemo, useState } from "react"
 import { useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { EditorPreviewViewport } from "./EditorPreviewViewport"
@@ -62,7 +66,7 @@ export function QuestionLivePreview({
   const subject = useWatch({ control, name: "subject" })
   const registry = useInstalledThemeCatalog()
   const reducedMotion = useReducedMotion()
-  const [phase, setPhase] = useState<PreviewPhase>("answers")
+  const [phase, setPhase] = useState<PreviewPhase>("question")
   const [aspect, setAspect] = useState<"16:9" | "4:3">("16:9")
   const [visible, setVisible] = useState(true)
   const [revealed, setRevealed] = useState(false)
@@ -70,6 +74,51 @@ export function QuestionLivePreview({
   const [animatedQuestion, setAnimatedQuestion] = useState<
     typeof question | null
   >(null)
+  const [previewClock] = useState(() => createDemoClock())
+  const [playback, setPlayback] = useState(() => previewClock.snapshot())
+  useEffect(() => {
+    if (animatedQuestion !== question) {
+      previewClock.pause()
+      return
+    }
+
+    let timer: ReturnType<typeof setTimeout>
+    const tick = () => {
+      const current = previewClock.snapshot()
+      setPlayback(current)
+      if (current.elapsedMs >= QUESTION_LEAD_IN_MS) {
+        setPhase(
+          current.deadlineMs !== null && current.elapsedMs >= current.deadlineMs
+            ? "results"
+            : "answers",
+        )
+      }
+      if (current.deadlineMs === null || current.elapsedMs < current.deadlineMs) {
+        const boundary = current.elapsedMs < QUESTION_LEAD_IN_MS
+          ? QUESTION_LEAD_IN_MS
+          : current.deadlineMs
+        timer = setTimeout(tick, boundary === null ? 50 : Math.min(50, Math.max(0, boundary - current.elapsedMs)))
+      }
+    }
+    tick()
+    return () => clearTimeout(timer)
+  }, [animatedQuestion, question, previewClock, replay])
+  const replayQuestion = () => {
+    previewClock.replay()
+    if (question.time > 0) {
+      previewClock.startVoting(question.time, QUESTION_LEAD_IN_MS)
+    }
+    previewClock.play()
+    setPlayback(previewClock.snapshot())
+    setPhase("question")
+    setAnimatedQuestion(question)
+    setReplay((value) => value + 1)
+  }
+  const selectPhase = (next: PreviewPhase) => {
+    previewClock.pause()
+    setAnimatedQuestion(null)
+    setPhase(next)
+  }
   const perQuestion = extras?.perQuestion[currentQuestionId]
   const visuals = perQuestion?.answerVisuals
   const animations = resolveCardStageAnimations({
@@ -113,7 +162,7 @@ export function QuestionLivePreview({
   )
   const survey = (question.playMode ?? gameMode) === "survey"
   const Answer = QUESTION_PRESENTATIONS[question.type].AnswerComponent
-  const key = `${currentQuestionId}:${phase}:${replay}`
+  const key = `${currentQuestionId}:${replay}`
   const resultData = {
     question: title,
     answers,
@@ -193,21 +242,33 @@ export function QuestionLivePreview({
           <LiveEditorStagePreview
             source={authoredSource}
             authoredKey={authoredKey}
-            phase={phase === "answers" ? "answerCards" : phase}
+            phase={phase === "answers" ? "voting" : phase}
             locale={i18n.language}
             timeline={timeline}
-            paused={Boolean(reducedMotion) || animatedQuestion !== question}
+            paused={animatedQuestion !== question}
+            elapsedMs={animatedQuestion === question ? playback.elapsedMs : 0}
+            deadlineMs={phase === "answers" ? (animatedQuestion === question ? playback.deadlineMs : (question.time > 0 ? question.time * 1000 : null)) : null}
             replay={replay}
             mediaRevealed={revealed}
           >
             <NativeGameSurface theme={theme}>
+              <NativeQuestionHeading
+                question={title}
+                stageAnimations={animations}
+                questionDecoration={decoration}
+                epoch={key}
+                titleTestId="question-preview-title"
+                controlledTimeMs={playback.elapsedMs}
+                controlledPaused={animatedQuestion !== question}
+              />
               {phase === "question" && (
                 <>
                   <NativeRazziaQuestion
+                    hideHeading
                     data={{
                       question: title,
                       media: question.media,
-                      cooldown: question.cooldown,
+                      cooldown: QUESTION_LEAD_IN_SECONDS,
                     }}
                     stageAnimations={animations}
                     questionDecoration={decoration}
@@ -236,6 +297,7 @@ export function QuestionLivePreview({
                   />
                 ) : (
                   <ChoiceResultsView
+                    hideHeading
                     data={resultData}
                     extensionState={{
                       epoch: replay,
@@ -263,19 +325,6 @@ export function QuestionLivePreview({
               {phase === "answers" && (
                 <>
                   <div className="relative flex min-h-0 flex-1 flex-col items-center justify-center gap-3 px-6 py-3">
-                    <h2
-                      data-testid="question-preview-title"
-                      className="max-w-5xl text-center text-4xl leading-tight font-bold break-words text-white drop-shadow-lg"
-                    >
-                      {title}
-                    </h2>
-                    <QuestionUnderline
-                      decoration={decoration}
-                      controlledTimeMs={0}
-                      controlledPaused
-                      className="flex w-64 items-center justify-center"
-                      playerClassName="h-5 w-full"
-                    />
                     {question.media && (
                       <QuestionMedia
                         media={question.media}
@@ -297,6 +346,11 @@ export function QuestionLivePreview({
                     animationEpochKey={key}
                     onSubmit={() => undefined}
                     readOnly
+                  />
+                  <AnswerCountdown
+                    seconds={question.time > 0 ? (animatedQuestion === question && playback.deadlineMs !== null ? Math.max(0, Math.ceil((playback.deadlineMs - playback.elapsedMs) / 1000)) : question.time) : null}
+                    totalSeconds={question.time}
+                    variant="display"
                   />
                 </>
               )}
@@ -378,7 +432,7 @@ export function QuestionLivePreview({
           >
             <ToggleGroup
               value={phase}
-              onChange={setPhase}
+              onChange={selectPhase}
               className={
                 workspace
                   ? "h-9 shrink-0"
@@ -438,34 +492,14 @@ export function QuestionLivePreview({
                 : "flex flex-wrap items-center gap-2"
             }
           >
-            <Button
-              type="button"
-              size="sm"
-              className="bg-accent text-foreground"
-              onClick={() => {
-                setAnimatedQuestion(question)
-                setReplay((value) => value + 1)
-              }}
-              disabled={Boolean(reducedMotion)}
-              data-testid="question-preview-replay"
-            >
-              <RotateCcw className="size-4" />
-              {t("extensions:editorPreview.replay", "Replay animation")}
-            </Button>
-            {reveal && reveal.effect !== "none" && phase !== "results" && (
-              <Button
-                type="button"
-                size="sm"
-                className="bg-accent text-foreground"
-                aria-pressed={revealed}
-                data-testid="question-preview-reveal"
-                onClick={() => setRevealed((value) => !value)}
-              >
-                {revealed
-                  ? t("extensions:editorPreview.resetImage", "Reset image")
-                  : t("extensions:editorPreview.showImage", "Reveal image")}
-              </Button>
-            )}
+            <PresentationControls
+              replay={{ onClick: replayQuestion, testId: "question-preview-replay" }}
+              reveal={reveal && reveal.effect !== "none" && phase !== "results" ? {
+                revealed,
+                onClick: () => setRevealed((value) => !value),
+                testId: "question-preview-reveal",
+              } : undefined}
+            />
           </div>
           {phase === "results" && (
             <p className="text-muted-foreground text-xs" role="note">

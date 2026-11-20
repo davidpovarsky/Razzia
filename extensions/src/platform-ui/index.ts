@@ -19,3 +19,7 @@ export * from "./portal"
 export * from "./host-controls"
 
 export * from "./roster-controls"
+
+export * from "./presentation-controls"
+
+export * from "./presentation-control-labels"

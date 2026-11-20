@@ -110,5 +110,19 @@ export const platformComponentCss = `
 .tds-scope .tds-roster-policy [role="status"]{color:var(--tds-success)}
 .tds-scope .tds-roster-dialog .tds-roster-table-scroll table{min-width:46rem}
 @media(max-width:48rem){.tds-scope .tds-roster-dialog{padding:var(--tds-space-4)!important}.tds-scope .tds-roster-dialog .tds-roster-table-scroll table{min-width:34rem}.tds-scope .tds-roster-dialog .tds-roster-table-scroll :is(th,td):is(:nth-child(3),:nth-child(5),:nth-child(6)){display:none}}
+
+/* Root-owned presentation transport; game themes do not style these controls. */
+.tds-scope.tds-presentation-controls{box-sizing:border-box;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:var(--tds-space-2);min-width:0;color:var(--tds-text);font-family:var(--tds-font-family)}
+.tds-scope.tds-presentation-controls .tds-presentation-control{box-sizing:border-box;position:relative;isolation:isolate;overflow:hidden;flex:0 0 auto;min-width:44px;min-height:44px;padding:8px 14px;border-radius:var(--tds-radius-round);font:700 14px/20px var(--tds-font-family);white-space:nowrap;letter-spacing:normal;text-transform:none}
+.tds-scope.tds-presentation-controls .tds-presentation-control[data-variant="primary"]{background:var(--tds-action);color:var(--tds-action-text);border-color:transparent}
+.tds-scope.tds-presentation-controls .tds-presentation-control:not([data-variant="primary"]){background:var(--tds-elevated);color:var(--tds-text);border-color:var(--tds-border)}
+.tds-scope.tds-presentation-controls .tds-presentation-control[aria-pressed="true"]:not([data-variant="primary"]){border-color:var(--tds-action)}
+.tds-scope.tds-presentation-controls .tds-presentation-control:focus-visible{outline:2px solid var(--tds-focus);outline-offset:2px}
+.tds-scope.tds-presentation-controls .tds-presentation-control-icon{display:inline-flex;align-items:center;justify-content:center;flex:0 0 18px;width:18px;height:18px}
+.tds-scope.tds-presentation-controls .tds-presentation-control-icon svg{display:block;width:18px;height:18px}
+.tds-scope.tds-presentation-controls .tds-presentation-control-label{min-width:0}
+.tds-scope.tds-presentation-controls .tds-presentation-control-progress{position:absolute;inset-inline:0;inset-block-end:0;height:3px;background:currentColor;opacity:.45;transform-origin:left center;pointer-events:none}
+.tds-scope.tds-presentation-controls[dir="rtl"] .tds-presentation-control-progress{transform-origin:right center}
+@media(max-width:40rem){.tds-scope.tds-presentation-controls{gap:4px}.tds-scope.tds-presentation-controls .tds-presentation-control{padding-inline:10px}.tds-scope.tds-presentation-controls .tds-presentation-control-label{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}}
 @media(prefers-reduced-motion:reduce){.tds-scope :is(.tds-spinner,.tds-overlay,.tds-dialog-surface,.tds-menu-surface,.tds-tooltip,[data-platform-motion="feedback"],[data-platform-motion="selection"]){animation:none!important}.tds-scope :is(.tds-button,.tds-switch-thumb,.tds-tab,.tds-card[data-interactive="true"]){transition-duration:.001ms!important}.tds-scope :is(.tds-button:not(:disabled):active,.tds-card[data-interactive="true"]:hover){transform:none}}
 `

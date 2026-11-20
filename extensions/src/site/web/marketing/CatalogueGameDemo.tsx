@@ -1,11 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import {
-  ArrowLeft,
-  ArrowRight,
-  RotateCcw,
-  Volume2,
-  VolumeX,
-} from "lucide-react"
+import { PresentationControls } from "../../../platform-ui"
+import { GameViewer } from "../../components/game-viewer/GameViewer"
 import { getPublicDemo } from "../../../core/show-library/public-demo-catalogue"
 import { tadaShowV1Schema } from "../../../core/show-authoring-schema"
 import { resolveShowTheme } from "../../../core/show-themes"
@@ -21,7 +16,7 @@ import type {
 } from "../../../presentation/tadazz-show/TadazzStage"
 import type { TadazzV4Cue } from "../../../presentation/tadazz-v4/types"
 import { useCatalogueAudio } from "./use-catalogue-audio"
-import { SiteButton } from "../shared/SiteButton"
+import { createQuestionLeadIn } from "../../../presentation/question-lead-in"
 import {
   CatalogueMobileQuestion,
   useCatalogueMobileControls,
@@ -40,7 +35,7 @@ const nativeStageCss = [
   v4LayoutCss,
   v4Css,
 ].join("\n")
-type Phase = "intro" | "transition" | "voting" | "results" | "finish"
+type Phase = "intro" | "transition" | "question" | "voting" | "results" | "finish"
 
 // Public solo play consumes the same authored questions and global theme as
 // installation. It uses the production stage; votes and score live in this tab.
@@ -73,6 +68,7 @@ function CataloguePlayer({
     [show],
   )
   const stage = useRef<TadazzStageHandle>(null)
+  const [leadIn] = useState(() => createQuestionLeadIn())
   const phaseRef = useRef<Phase>("intro")
   const [phase, setPhase] = useState<Phase>("intro")
   const [index, setIndex] = useState(0)
@@ -98,7 +94,7 @@ function CataloguePlayer({
           ? "results"
           : phase === "finish"
             ? "finale"
-            : phase === "transition"
+            : phase === "transition" || phase === "question"
               ? "question"
               : "lobby",
     screenKey: [demo.metadata.id, index, phase].join(":"),
@@ -107,7 +103,7 @@ function CataloguePlayer({
   })
   const compactControls = useCatalogueMobileControls()
   const showMobileQuestion =
-    compactControls && (phase === "voting" || phase === "results")
+    compactControls && (phase === "question" || phase === "voting" || phase === "results")
   const quizCount = questions.filter((card) => card.kind === "quiz").length
   const score = questions.reduce(
     (sum, card, position) =>
@@ -157,6 +153,7 @@ function CataloguePlayer({
 
     return () => {
       mounted.current = false
+      leadIn.cancel()
       media.removeEventListener("change", update)
     }
   }, [])
@@ -171,6 +168,8 @@ function CataloguePlayer({
 
     return {
       key: card.key,
+      answerCount: card.answers.length,
+      hasAnswerImages: card.answers.some((answer) => Boolean(answer.imageUrl)),
       question: card.question,
       number: position + 1,
       totalQuestions: questions.length,
@@ -198,24 +197,31 @@ function CataloguePlayer({
       return
     }
 
-    transition("transition")
+    transition("question")
     setIndex(position)
     setVotes((previous) =>
       Object.fromEntries(
         Object.entries(previous).filter(([key]) => Number(key) !== position),
       ),
     )
-    await handle.nextQuestion(stageQuestion(position))
+    const question = stageQuestion(position)
+    const ready = leadIn.wait()
+    // Enter the question once. The platform clock, not the entrance animation,
+    // decides when answer cards and their voting deadline appear.
+    void handle.showQuestion({ ...question, options: [] }).catch(() => {
+      if (mounted.current) setError(t("The game could not continue. Please try again."))
+    })
+    const opensAt = await ready
 
-    if (!mounted.current) {
+    if (!mounted.current || opensAt === null || stage.current !== handle) {
       return
     }
 
     const duration = Math.max(5, questions[position].timeSeconds)
     setSeconds(duration)
-    deadline.current = Date.now() + duration * 1000
+    deadline.current = opensAt + duration * 1000
     transition("voting")
-    void handle.openVoting(duration, deadline.current).catch(() => {
+    void handle.openVoting(duration, deadline.current, question).catch(() => {
       // Revealing an answer or leaving the player cancels the voting animation.
     })
   }
@@ -278,6 +284,7 @@ function CataloguePlayer({
     run(() => reveal(choice))
   }
   const restart = async () => {
+    leadIn.cancel()
     setVotes({})
     setIndex(0)
     transition("intro")
@@ -324,18 +331,6 @@ function CataloguePlayer({
 
     await startQuestion(index - 1)
   }
-  let mainLabel = "Next round"
-
-  if (phase === "intro") {
-    mainLabel = "Start game"
-  } else if (phase === "finish") {
-    mainLabel = "Play again"
-  } else if (phase === "voting") {
-    mainLabel = "Reveal answer"
-  } else if (index === questions.length - 1) {
-    mainLabel = quizCount ? "See your score" : "Finish game"
-  }
-
   let status = t("Round {{current}} of {{total}}", {
     current: index + 1,
     total: questions.length,
@@ -369,6 +364,44 @@ function CataloguePlayer({
         style={showThemeStyle(theme)}
       >
         <style>{nativeStageCss}</style>
+        <GameViewer
+          title={t(demo.metadata.title)}
+          status={`${status}${phase === "voting" ? ` · ${seconds}s` : ""}`}
+          controls={
+            <>
+              {showMobileQuestion && (
+                <CatalogueMobileQuestion
+                  question={stageQuestion(index)}
+                  questionType={question.kind}
+                  voting={phase === "voting"}
+                  showAnswers={phase !== "question"}
+                  busy={busy}
+                  selected={votes[index]}
+                  correctAnswers={phase === "results" && question.kind === "quiz" ? question.correctAnswers.map((answer) => answer - 1) : undefined}
+                  onChoose={choose}
+                />
+              )}
+              <PresentationControls
+                previous={{ disabled: busy || phase === "intro" || phase === "transition" || phase === "question", onClick: () => run(back), testId: "catalogue-back" }}
+                next={{ state: phase === "intro" ? "start" : phase === "finish" ? "replay" : "next", disabled: busy || phase === "transition" || phase === "question", onClick: () => run(next), testId: "catalogue-next" }}
+                replay={phase === "finish" ? undefined : { disabled: busy || phase === "transition" || phase === "question", onClick: () => run(restart), testId: "catalogue-replay" }}
+                sound={{ enabled: sound, onClick: () => setSound((value) => !value), testId: "catalogue-sound" }}
+              />
+              {error && <p role="alert" className="catalogue-player-error">{error}</p>}
+            </>
+          }
+          details={
+            <>
+              {phase === "results" && question.note && <p className="catalogue-answer-note">{question.note}</p>}
+              <p className="catalogue-player-note">
+                {quizCount
+                  ? t("Play solo. Your answers and score stay in this tab.")
+                  : t("Play solo. Survey results show only your own choice.")}{" "}
+                {t("Use this game to host the complete show with your audience.")}
+              </p>
+            </>
+          }
+        >
         <div
           className="catalogue-player-frame"
           data-testid="catalogue-native-stage"
@@ -398,80 +431,7 @@ function CataloguePlayer({
             reducedMotion={reducedMotion}
           />
         </div>
-        <div className="catalogue-player-console">
-          <div className="catalogue-player-status" aria-live="polite">
-            <strong>{t(demo.metadata.title)}</strong>
-            <span>
-              {status}
-              {phase === "voting" ? ` · ${seconds}s` : ""}
-            </span>
-          </div>
-          {showMobileQuestion && (
-            <CatalogueMobileQuestion
-              question={stageQuestion(index)}
-              questionType={question.kind}
-              voting={phase === "voting"}
-              busy={busy}
-              selected={votes[index]}
-              correctAnswers={
-                phase === "results" && question.kind === "quiz"
-                  ? question.correctAnswers.map((answer) => answer - 1)
-                  : undefined
-              }
-              onChoose={choose}
-            />
-          )}
-          {phase === "results" && question.note && (
-            <p className="catalogue-answer-note">{question.note}</p>
-          )}
-          <div className="catalogue-player-actions">
-            <SiteButton
-              className="btn btn-outline"
-              disabled={busy || phase === "transition"}
-              aria-pressed={sound}
-              aria-label={t(sound ? "Mute game sounds" : "Enable game sounds")}
-              onClick={() => setSound((value) => !value)}
-            >
-              {sound ? <Volume2 size={18} /> : <VolumeX size={18} />}
-              {t(sound ? "Sound on" : "Sound off")}
-            </SiteButton>
-            {phase !== "intro" && (
-              <SiteButton
-                className="btn btn-outline"
-                disabled={busy || phase === "transition"}
-                onClick={() => run(back)}
-                data-testid="catalogue-back"
-              >
-                <ArrowLeft size={18} />
-                {t("Back")}
-              </SiteButton>
-            )}
-            <SiteButton
-              className="btn btn-primary"
-              disabled={busy || phase === "transition"}
-              onClick={() => run(next)}
-              data-testid="catalogue-next"
-            >
-              {phase === "finish" ? (
-                <RotateCcw size={18} />
-              ) : (
-                <ArrowRight size={18} />
-              )}
-              {t(mainLabel)}
-            </SiteButton>
-          </div>
-          {error && (
-            <p role="alert" className="catalogue-player-error">
-              {error}
-            </p>
-          )}
-          <p className="catalogue-player-note">
-            {quizCount
-              ? t("Play solo. Your answers and score stay in this tab.")
-              : t("Play solo. Survey results show only your own choice.")}{" "}
-            {t("Use this game to host the complete show with your audience.")}
-          </p>
-        </div>
+        </GameViewer>
       </section>
     </ShowThemeScope>
   )

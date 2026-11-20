@@ -24,6 +24,7 @@ interface StageProps {
   locale: string
   timeline?: readonly TimelineItem[]
   elapsedMs?: number
+  deadlineMs?: number | null
   paused?: boolean
   replay?: number
   mediaRevealed?: boolean
@@ -87,6 +88,7 @@ export function LiveEditorStagePreview({
   locale,
   timeline,
   elapsedMs = 0,
+  deadlineMs = null,
   paused = true,
   replay = 0,
   mediaRevealed = false,
@@ -115,11 +117,10 @@ export function LiveEditorStagePreview({
       JSON.stringify([
         snapshot?.show,
         authoredKey,
-        phase,
         selectedLocale,
         replay,
       ]),
-    [snapshot, authoredKey, phase, selectedLocale, replay],
+    [snapshot, authoredKey, selectedLocale, replay],
   )
   const fallback = (
     <div
@@ -156,7 +157,7 @@ export function LiveEditorStagePreview({
       epoch: replay,
       sequence: 0,
       elapsedMs,
-      deadlineMs: null,
+      deadlineMs,
       paused,
     },
   }

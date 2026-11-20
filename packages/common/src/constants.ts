@@ -56,6 +56,10 @@ export const SESSION_ROLES = {
 
 export const NO_TIME_LIMIT = -1
 
+/** System-owned question reading time before answers and voting open together. */
+export const QUESTION_LEAD_IN_SECONDS = 2
+export const QUESTION_LEAD_IN_MS = QUESTION_LEAD_IN_SECONDS * 1000
+
 export const AUTO_ADVANCE_DELAY = { MIN: 3, MAX: 600 } as const
 
 export const createDefaultGameSettings = (): GameSettings => ({
@@ -128,7 +132,7 @@ export const EXAMPLE_QUIZZ = {
       question: "What is good answer ?",
       answers: ["No", "Good answer", "No", "No"],
       solutions: [1],
-      cooldown: 5,
+      cooldown: QUESTION_LEAD_IN_SECONDS,
       time: 15,
     },
     {
@@ -139,7 +143,7 @@ export const EXAMPLE_QUIZZ = {
         url: "https://placehold.co/600x400.png",
       },
       solutions: [3],
-      cooldown: 5,
+      cooldown: QUESTION_LEAD_IN_SECONDS,
       time: 20,
     },
     {
@@ -150,14 +154,14 @@ export const EXAMPLE_QUIZZ = {
         url: "https://placehold.co/600x400.png",
       },
       solutions: [0],
-      cooldown: 5,
+      cooldown: QUESTION_LEAD_IN_SECONDS,
       time: 20,
     },
     {
       question: "Which of these are primary colors ?",
       answers: ["Red", "Green", "Blue", "Yellow"],
       solutions: [0, 2, 3],
-      cooldown: 5,
+      cooldown: QUESTION_LEAD_IN_SECONDS,
       time: 20,
     },
   ],

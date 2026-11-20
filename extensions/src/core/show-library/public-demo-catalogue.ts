@@ -1,3 +1,4 @@
+import { QUESTION_LEAD_IN_SECONDS } from "@razzia/common/constants"
 import type {
   TadaShowV1,
   AuthoredQuizCard,
@@ -47,7 +48,7 @@ const quiz = (
   questionType: "single",
   question,
   timeSeconds: 25,
-  cooldownSeconds: 5,
+  cooldownSeconds: QUESTION_LEAD_IN_SECONDS,
   maxPoints: 1000,
   penalty: 0,
   correctAnswers: [correct],
@@ -80,7 +81,7 @@ const poll = (
   questionType: "single",
   question,
   timeSeconds: 25,
-  cooldownSeconds: 5,
+  cooldownSeconds: QUESTION_LEAD_IN_SECONDS,
   maxPoints: 0,
   penalty: 0,
   correctAnswers: [],

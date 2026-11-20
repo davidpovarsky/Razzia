@@ -63,6 +63,9 @@ export interface StageQuestion {
   totalQuestions: number | null
   round?: number | null
   options: StageOption[]
+  /** Layout metadata is safe before answer text is disclosed. */
+  answerCount?: number
+  hasAnswerImages?: boolean
   note?: string
   /** Optional question image URL for question-image (photo-question) layout when options are text-only. */
   questionImage?: string
@@ -125,7 +128,8 @@ export interface TadazzStageHandle {
   showQuestion(data: StageQuestion): Promise<void>
   /** Adds/updates option cards for the question already on stage (SHOW_QUESTION → SELECT_ANSWER). */
   presentOptions(data: StageQuestion): Promise<void>
-  openVoting(seconds: number | null, deadlineMs?: number): Promise<void>
+  /** Commit answer cards and the authoritative voting clock in one frame. */
+  openVoting(seconds: number | null, deadlineMs?: number, question?: StageQuestion): Promise<void>
   lockVoting(): Promise<void>
   revealResults(input: StageRevealInput): Promise<StageRevealResult | null>
   showLeaderboard(entries: StageLeaderEntry[]): Promise<StageLeaderEntry[]>
@@ -713,8 +717,8 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
             ),
           )
         },
-        async openVoting(seconds, deadlineMs) {
-          if (!modelRef.current.question || modeRef.current === "results") {
+        async openVoting(seconds, deadlineMs, question) {
+          if ((!question && !modelRef.current.question) || (!question && modeRef.current === "results")) {
             return
           }
 
@@ -725,10 +729,11 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
           await commit((m) => ({
             screen: "none",
             stageState: "tz-voting",
+            question: question ?? m.question,
             statusText: labelsRef.current.votingOpen,
             statusMode: "voting",
             timerDisplay: timed ? "block" : "none",
-            flags: (m.question?.options ?? m.flags).map((_, i) => ({
+            flags: (question?.options ?? m.question?.options ?? m.flags).map((_, i) => ({
               ...m.flags[i],
               locked: false,
               open: true,
@@ -736,6 +741,10 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
           }))
 
           /* oxlint-enable max-nested-callbacks */
+          if (question && cardsRowRef.current) {
+            cardsRowRef.current.style.opacity = "1"
+          }
+
           if (!timed) {
             if (progressRef.current) {
               progressRef.current.style.transform = "scaleX(1)"

@@ -1,5 +1,5 @@
 import type { CommonStatusDataMap } from "@razzia/common/types/game/status"
-import { MEDIA_TYPES } from "@razzia/common/constants"
+import { MEDIA_TYPES, QUESTION_LEAD_IN_MS } from "@razzia/common/constants"
 import clsx from "clsx"
 import type {
   QuestionReveal,
@@ -10,9 +10,69 @@ import { QuestionUnderline, useStageFit } from "@razzia/extensions/presentation"
 import QuestionMedia from "@razzia/web/components/QuestionMedia"
 import QuestionEntrance from "@razzia/web/features/game/components/QuestionEntrance"
 
-/** Exact original question markup, with live effects kept in its host wrapper. */
+/** One heading node for every phase of a question. Its epoch changes only for a new question/replay. */
+export function NativeQuestionHeading({
+  question,
+  stageAnimations,
+  questionDecoration,
+  epoch,
+  compact = false,
+  titleTestId = "game-question-title",
+  controlledTimeMs,
+  controlledPaused,
+}: {
+  question: string
+  stageAnimations: ReturnType<typeof resolveCardStageAnimations>
+  questionDecoration: QuestionDecoration
+  epoch: string | number
+  compact?: boolean
+  titleTestId?: string
+  controlledTimeMs?: number
+  controlledPaused?: boolean
+}) {
+  const { isUltraCompact, isCompact } = useStageFit()
+
+  return (
+    <QuestionEntrance
+      entrance={{
+        ...stageAnimations.questionEntrance,
+        durationMs: Math.min(
+          stageAnimations.questionEntrance?.durationMs ?? 800,
+          QUESTION_LEAD_IN_MS,
+        ),
+      }}
+      epoch={epoch}
+      fill={false}
+      className="shrink-0 items-center justify-center gap-2 px-2 text-center"
+    >
+      <h2
+        data-testid={titleTestId}
+        data-native-question-heading
+        className={clsx(
+          "max-w-5xl text-center leading-tight font-bold break-words text-white drop-shadow-lg",
+          isUltraCompact
+            ? "text-lg sm:text-xl"
+            : compact || isCompact
+              ? "text-xl sm:text-2xl md:text-3xl"
+              : "text-2xl sm:text-3xl md:text-4xl lg:text-5xl",
+        )}
+      >
+        {question}
+      </h2>
+      <QuestionUnderline
+        decoration={questionDecoration}
+        controlledTimeMs={controlledTimeMs}
+        controlledPaused={controlledPaused}
+        className="flex w-48 items-center justify-center sm:w-64"
+        playerClassName="h-5 w-full"
+      />
+    </QuestionEntrance>
+  )
+}
+
+/** Question-only body; the live round owner retains its heading across phases. */
 export function NativeRazziaQuestion({
-  data: { question, media, cooldown },
+  data: { question, media },
   stageAnimations,
   questionDecoration,
   epoch: activeKey,
@@ -24,6 +84,7 @@ export function NativeRazziaQuestion({
   controlledTimeMs,
   controlledPaused,
   revealTimeMs,
+  hideHeading = false,
 }: {
   data: CommonStatusDataMap["SHOW_QUESTION"]
   stageAnimations: ReturnType<typeof resolveCardStageAnimations>
@@ -37,43 +98,28 @@ export function NativeRazziaQuestion({
   controlledTimeMs?: number
   controlledPaused?: boolean
   revealTimeMs?: number
+  hideHeading?: boolean
 }) {
   const { isUltraCompact, isCompact } = useStageFit()
 
+  if (hideHeading && media?.type !== MEDIA_TYPES.IMAGE) {
+    return null
+  }
+
   return (
     <section className="relative mx-auto flex h-full min-h-0 w-full max-w-7xl flex-1 flex-col items-center justify-between overflow-hidden px-2 py-1 sm:px-4 sm:py-2">
-      <QuestionEntrance
-        entrance={stageAnimations.questionEntrance}
-        epoch={activeKey}
-        className="flex min-h-0 w-full flex-1 flex-col items-center justify-center gap-2 overflow-hidden sm:gap-4"
-      >
-        <h2
-          data-testid="show-question-title"
-          className={clsx(
-            "anim-show max-w-5xl text-center leading-tight font-bold break-words text-white drop-shadow-lg",
-            (() => {
-              if (isUltraCompact) {
-                return "text-lg sm:text-xl"
-              }
-
-              if (isCompact) {
-                return "text-xl sm:text-2xl md:text-3xl"
-              }
-
-              return "text-2xl sm:text-3xl md:text-4xl lg:text-5xl"
-            })(),
-          )}
-        >
-          {question}
-        </h2>
-
-        <QuestionUnderline
-          decoration={questionDecoration}
-          controlledTimeMs={controlledTimeMs}
-          controlledPaused={controlledPaused}
-          className="flex w-48 items-center justify-center sm:w-64"
-          playerClassName="h-5 w-full"
-        />
+      <div className="flex min-h-0 w-full flex-1 flex-col items-center justify-center gap-2 overflow-hidden sm:gap-4">
+        {!hideHeading && (
+          <NativeQuestionHeading
+            question={question}
+            stageAnimations={stageAnimations}
+            questionDecoration={questionDecoration}
+            epoch={activeKey}
+            titleTestId="show-question-title"
+            controlledTimeMs={controlledTimeMs}
+            controlledPaused={controlledPaused}
+          />
+        )}
 
         {media?.type === MEDIA_TYPES.IMAGE && (
           <div
@@ -104,20 +150,7 @@ export function NativeRazziaQuestion({
             />
           </div>
         )}
-      </QuestionEntrance>
-      <div
-        data-preview-clock={controlledTimeMs === undefined ? undefined : true}
-        className="bg-primary mb-2 h-3 shrink-0 self-start justify-self-end rounded-full sm:mb-6 sm:h-4"
-        style={{
-          animation: `progressBar ${cooldown}s linear forwards`,
-          ...(controlledTimeMs === undefined
-            ? {}
-            : {
-                animationPlayState: "paused",
-                animationDelay: `-${Math.min(controlledTimeMs, cooldown * 1000)}ms`,
-              }),
-        }}
-      ></div>
+      </div>
     </section>
   )
 }

@@ -38,6 +38,7 @@ interface CatalogueMobileQuestionProps {
   question: StageQuestion
   questionType: "quiz" | "survey"
   voting: boolean
+  showAnswers?: boolean
   busy: boolean
   selected: number | undefined
   correctAnswers?: readonly number[]
@@ -50,6 +51,7 @@ export function CatalogueMobileQuestion({
   question,
   questionType,
   voting,
+  showAnswers = true,
   busy,
   selected,
   correctAnswers,
@@ -69,7 +71,7 @@ export function CatalogueMobileQuestion({
       data-testid="catalogue-mobile-question"
       data-question-key={question.key}
       data-question-type={questionType}
-      data-phase={voting ? "voting" : "results"}
+      data-phase={!showAnswers ? "question" : voting ? "voting" : "results"}
       data-theme-id={theme.definition.id}
       aria-label={t("Choose an answer")}
       dir="auto"
@@ -87,7 +89,7 @@ export function CatalogueMobileQuestion({
           alt={question.photoAlt ?? question.question}
         />
       )}
-      <TadazzAnswerPad
+      {showAnswers && <TadazzAnswerPad
         question={question}
         questionType="single"
         selected={selected === undefined ? [] : [selected]}
@@ -106,8 +108,8 @@ export function CatalogueMobileQuestion({
             onChoose(choice)
           }
         }}
-      />
-      {!voting && (
+      />}
+      {showAnswers && !voting && (
         <div className="catalogue-mobile-feedback" role="status">
           <p data-testid="catalogue-mobile-selected-answer" dir="auto">
             {t("Your choice")}: <bdi>{selectedLabel ?? "—"}</bdi>

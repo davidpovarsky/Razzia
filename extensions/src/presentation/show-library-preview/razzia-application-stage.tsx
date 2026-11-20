@@ -1,5 +1,4 @@
-import { NativeRazziaQuestion } from "./native-question"
-import { QuestionUnderline } from "../question-underline"
+import { NativeRazziaQuestion, NativeQuestionHeading } from "./native-question"
 import { NativeRazziaRoomPanel } from "./native-room-panel"
 import { NativeRazziaPlayerResult } from "./native-player-result"
 import { resolveRoomJoin } from "../room-join/contract"
@@ -18,7 +17,6 @@ import { ChoiceResultsView } from "../../../../packages/web/src/features/game/co
 import AnswerCountdown from "../../../../packages/web/src/features/game/components/AnswerCountdown"
 import AnswerNote from "../../../../packages/web/src/features/game/components/AnswerNote"
 import QuestionMedia from "../../../../packages/web/src/components/QuestionMedia"
-import QuestionEntrance from "../../../../packages/web/src/features/game/components/QuestionEntrance"
 import type { ManagerStatusDataMap } from "../../../../packages/common/src/types/game/status"
 import { StageFitContainer } from "../stage-fit"
 import { ScenePresenter, type ScenePresenterProps } from "../scene-presenter"
@@ -38,6 +36,7 @@ import { previewNativeLabels } from "./i18n"
 export function RazziaApplicationStage({
   frame,
   chapter,
+  questionEpoch,
   theme,
   scene,
   activeSceneData,
@@ -49,6 +48,7 @@ export function RazziaApplicationStage({
 }: {
   frame: ApplicationPreviewFrame
   chapter: AuthoredPreviewChapter
+  questionEpoch?: number | string
   theme: ResolvedShowTheme
   scene?: SceneConfig
   activeSceneData?: ScenePresenterProps["activeSceneData"]
@@ -156,6 +156,7 @@ export function RazziaApplicationStage({
   }, [key, frame.clock.paused, frame.clock.sequence, frame.reducedMotion])
 
   let content: ReactNode = null
+  let heading: ReactNode = null
 
   if (frame.stagePhase === "lobby") {
     content = (
@@ -189,6 +190,17 @@ export function RazziaApplicationStage({
       questionEntrance: card.questionEntrance,
       stageAnimations: card.stageAnimations,
     })
+    heading = (
+      <NativeQuestionHeading
+        question={card.question}
+        stageAnimations={animations}
+        questionDecoration={resolveQuestionDecoration({ cardDecoration: card.questionDecoration })}
+        epoch={questionEpoch ?? card.key}
+        titleTestId="show-question-title"
+        controlledTimeMs={chapter.phase === "question" ? frame.clock.elapsedMs : undefined}
+        controlledPaused={frame.clock.paused}
+      />
+    )
     const visuals = card.answers.map((answer, answerIndex) => ({
       answerIndex,
       display: answer.display,
@@ -220,6 +232,7 @@ export function RazziaApplicationStage({
     if (phase === "question") {
       content = (
         <NativeRazziaQuestion
+          hideHeading
           data={{
             question: card.question,
             media: card.media,
@@ -256,6 +269,7 @@ export function RazziaApplicationStage({
             />
           ) : (
             <ChoiceResultsView
+              hideHeading
               data={resultData}
               extensionState={{
                 epoch: frame.clock.epoch,
@@ -289,26 +303,7 @@ export function RazziaApplicationStage({
     } else {
       content = (
         <>
-          <QuestionEntrance
-            entrance={animations.questionEntrance}
-            epoch={key}
-            className="flex min-h-0 w-full flex-1 flex-col items-center justify-center gap-2 overflow-hidden sm:gap-4"
-          >
-            <h2
-              data-testid="show-question-title"
-              className="max-w-5xl text-center text-2xl leading-tight font-bold break-words text-white drop-shadow-lg sm:text-3xl md:text-4xl lg:text-5xl"
-            >
-              {card.question}
-            </h2>
-            <QuestionUnderline
-              decoration={resolveQuestionDecoration({
-                cardDecoration: card.questionDecoration,
-              })}
-              controlledTimeMs={frame.clock.elapsedMs}
-              controlledPaused={frame.clock.paused}
-              className="flex w-48 items-center justify-center sm:w-64"
-              playerClassName="h-5 w-full"
-            />
+          <div className="flex min-h-0 w-full flex-1 flex-col items-center justify-center gap-2 overflow-hidden sm:gap-4">
             {card.media?.type === "image" && (
               <QuestionMedia
                 media={card.media}
@@ -346,7 +341,7 @@ export function RazziaApplicationStage({
                 labels={labels.sceneLabels}
               />
             )}
-          </QuestionEntrance>
+          </div>
           <Answer
             answers={answers}
             options={card.options}
@@ -425,7 +420,7 @@ export function RazziaApplicationStage({
             widthOverride={fit.width}
             heightOverride={fit.height}
           >
-            <NativeGameSurface theme={theme}>{content}</NativeGameSurface>
+            <NativeGameSurface theme={theme}>{heading}{content}</NativeGameSurface>
           </StageFitContainer>
         </div>
       </div>

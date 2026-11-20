@@ -38,12 +38,15 @@ export function createDemoClock(now: () => number = () => performance.now()) {
 
       return snapshot()
     },
-    startVoting(seconds: number) {
+    startVoting(seconds: number, startsAtMs = currentElapsed()) {
       if (!Number.isFinite(seconds) || seconds <= 0 || seconds > 86400) {
         throw new Error("show-preview:invalid-duration")
       }
 
-      deadline = currentElapsed() + seconds * 1000
+      if (!Number.isFinite(startsAtMs) || startsAtMs < 0) {
+        throw new Error("show-preview:invalid-time")
+      }
+      deadline = startsAtMs + seconds * 1000
       sequence += 1
 
       return snapshot()

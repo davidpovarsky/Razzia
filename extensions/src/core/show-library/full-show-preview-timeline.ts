@@ -1,3 +1,4 @@
+import { QUESTION_LEAD_IN_MS } from "@razzia/common/constants"
 import { tadaShowV1Schema } from "../show-authoring-schema"
 import {
   previewPhaseSchema,
@@ -44,7 +45,7 @@ export function compileFullShowPreviewTimeline(input: unknown) {
     if (card.kind === "quiz" || card.kind === "survey") {
       add("question", {
         kind: "known",
-        milliseconds: card.cooldownSeconds * 1000,
+        milliseconds: QUESTION_LEAD_IN_MS,
       })
       add("answerCards", { kind: "manual" })
       add(

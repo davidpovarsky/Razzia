@@ -417,6 +417,7 @@
   },
   "studio": {
     "editing": {
+      "fixedQuestionLeadIn": "Primero aparece la pregunta. Las respuestas y el temporizador se abren juntos después de 2 segundos en todos los juegos y temas.",
       "modeLabel": "Modo de edición",
       "simple": "Edición sencilla",
       "advanced": "Edición avanzada",

@@ -28,6 +28,7 @@ import {
   recapPageSize,
 } from "@razzia/extensions/presentation"
 import { EditorPreviewViewport } from "../QuestionEditor/EditorPreviewViewport"
+import { PresentationControls } from "@razzia/extensions/platform-ui"
 import Button from "@razzia/web/components/Button"
 import Input from "@razzia/web/components/Input"
 import ToggleGroup from "@razzia/web/components/ToggleGroup"
@@ -51,10 +52,8 @@ import {
   DoorOpen,
   Flag,
   FolderOpen,
-  Pause,
   Play,
   Plus,
-  RotateCcw,
   Sparkles,
   Trash2,
   Upload,
@@ -2945,58 +2944,25 @@ export const StudioSceneEditor = () => {
 
           {hasTimedPreview && (
             <div className="flex flex-wrap items-center gap-2">
-              <Button
-                size="sm"
-                type="button"
-                data-testid="studio-preview-play-pause"
-                onClick={() => {
-                  if (
-                    !isPreviewPlaying &&
-                    previewTimeMs >= effectivePreviewDurationMs
-                  ) {
+              <PresentationControls
+                playback={{
+                  state: isPreviewPlaying ? "playing" : "paused",
+                  testId: "studio-preview-play-pause",
+                  onClick: () => {
+                    if (!isPreviewPlaying && previewTimeMs >= effectivePreviewDurationMs) {
+                      setPreviewTimeMs(0)
+                    }
+                    setIsPreviewPlaying((previous) => !previous)
+                  },
+                }}
+                replay={{
+                  testId: "studio-preview-replay",
+                  onClick: () => {
+                    setIsPreviewPlaying(false)
                     setPreviewTimeMs(0)
-                  }
-
-                  setIsPreviewPlaying((prev) => !prev)
+                  },
                 }}
-                className="bg-primary text-primary-foreground inline-flex items-center gap-1 rounded-md px-2.5 py-1 font-bold shadow-xs transition hover:opacity-90"
-              >
-                {isPreviewPlaying ? (
-                  <>
-                    <Pause className="size-3.5" />
-                    <span>
-                      {t("extensions:studio.scene.overlays.pause", "Pause")}
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <Play className="size-3.5" />
-                    <span>
-                      {t("extensions:studio.scene.overlays.play", "Play")}
-                    </span>
-                  </>
-                )}
-              </Button>
-              <Button
-                size="sm"
-                type="button"
-                data-testid="studio-preview-replay"
-                aria-label={t(
-                  "extensions:studio.scene.overlays.replay",
-                  "Replay from 0:00",
-                )}
-                onClick={() => {
-                  setIsPreviewPlaying(false)
-                  setPreviewTimeMs(0)
-                }}
-                title={t(
-                  "extensions:studio.scene.overlays.replay",
-                  "Replay from 0:00",
-                )}
-                className="bg-accent text-accent-foreground inline-flex items-center gap-1 rounded-md px-2 py-1 font-semibold transition hover:opacity-85"
-              >
-                <RotateCcw className="size-3.5" />
-              </Button>
+              />
               <span
                 data-testid="studio-preview-time-readout"
                 dir="ltr"

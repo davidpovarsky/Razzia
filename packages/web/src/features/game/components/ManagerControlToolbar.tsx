@@ -13,20 +13,15 @@ import {
   Button,
   PlatformScope,
   HostDisplayControls,
+  PresentationControls,
 } from "@razzia/extensions/platform-ui"
 import HistoryDialog from "@razzia/web/features/game/components/HistoryDialog"
 import HostShortcutsDialog from "@razzia/web/features/game/components/HostShortcutsDialog"
 import RoomLockButton from "@razzia/web/features/game/components/RoomLockButton"
 import { useSocket } from "@razzia/web/features/game/contexts/socket-context"
-import clsx from "clsx"
 import {
-  ChevronLeft,
-  ChevronRight,
   History,
   LogOut,
-  Pause,
-  Play,
-  RotateCcw,
   SkipForward,
   Timer,
 } from "lucide-react"
@@ -129,6 +124,7 @@ export const ManagerControlToolbar = ({
   const { socket } = useSocket()
   const [isPending, setIsPending] = useState(false)
   const [historyOpen, setHistoryOpen] = useState(false)
+  const [restartConfirmOpen, setRestartConfirmOpen] = useState(false)
   const [selectedHistoryIndex, setSelectedHistoryIndex] = useState<
     number | null
   >(null)
@@ -516,36 +512,9 @@ export const ManagerControlToolbar = ({
           />
         )}
 
-        {/* Previous Screen Button (authoritative one-click step back, permanently at upper LEFT) */}
+        {/* Confirmation for authoritative previous-screen navigation. */}
         {gameId && !isPreLobby && (
           <>
-            <Button
-              size="sm"
-              onClick={handlePreviousScreen}
-              disabled={!canPrevious || isPending}
-              title={
-                !canPrevious
-                  ? previousReason ||
-                    t(
-                      "extensions:host.cannotPrevious",
-                      "Cannot navigate to previous screen",
-                    )
-                  : t("extensions:host.previousScreen", "Previous Screen")
-              }
-              className={clsx(
-                "tds-host-previous relative flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-bold shadow-md transition-all active:scale-95 sm:px-4 sm:py-2 sm:text-base",
-                canPrevious && !isPending
-                  ? "bg-white text-black hover:bg-white/90"
-                  : "border border-white/10 bg-white/10 text-white/40 opacity-40",
-              )}
-              data-testid="host-previous-screen-btn"
-            >
-              <ChevronLeft className="size-5 shrink-0" />
-              <span>
-                {t("extensions:host.previousScreen", "Previous Screen")}
-              </span>
-            </Button>
-
             <AlertDialog
               open={reopenConfirmOpen}
               onOpenChange={setReopenConfirmOpen}
@@ -586,21 +555,13 @@ export const ManagerControlToolbar = ({
       <div className="flex min-w-0 flex-wrap items-center gap-1.5 sm:ml-auto sm:gap-2">
         {canRestartQuestion && (
           <AlertDialog
-            trigger={
-              <Button
-                size="sm"
-                disabled={isPending}
-                className="flex shrink-0 items-center gap-1.5 rounded-lg border border-white/10 bg-white/20 px-3 py-1.5 text-sm font-bold text-white hover:bg-white/30"
-                data-testid="host-restart-question-btn"
-              >
-                <RotateCcw className="size-4" />
-                {t("extensions:host.restartQuestion")}
-              </Button>
-            }
+            open={restartConfirmOpen}
+            onOpenChange={setRestartConfirmOpen}
             title={t("extensions:host.restartQuestion")}
             description={t("extensions:host.restartQuestionDesc")}
             confirmLabel={t("extensions:host.restartQuestion")}
             confirmTestId="confirm-restart-question-btn"
+            returnFocusTo='[data-testid="host-restart-question-btn"]'
             onConfirm={() =>
               sendCommand({
                 action: "REPLAY_FROM_CHECKPOINT",
@@ -612,18 +573,6 @@ export const ManagerControlToolbar = ({
               })
             }
           />
-        )}
-        {/* Lobby Start Game */}
-        {isLobby && onStartGame && (
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={onStartGame}
-            className="hover:bg-accent flex shrink-0 items-center gap-2 rounded-lg bg-white px-5 py-2 text-base font-bold text-black shadow-lg sm:px-6 sm:py-2.5 sm:text-lg"
-          >
-            <Play className="size-5 shrink-0 fill-black" />
-            <span>{t("game:startGame")}</span>
-          </Button>
         )}
 
         {/* History button (retained separately on the right) */}
@@ -661,74 +610,41 @@ export const ManagerControlToolbar = ({
           />
         )}
 
-        {(launch?.stage === "opening" ||
-          launch?.stage === "closing" ||
-          (!isLobby && !isFinished)) && (
-          <Button
-            size="sm"
-            onClick={handlePauseToggle}
-            disabled={isPending}
-            className="flex shrink-0 items-center gap-1.5 rounded-lg border border-white/10 bg-white/20 px-3 py-1.5 text-sm font-bold text-white shadow-md hover:bg-white/30 sm:px-4 sm:py-2"
-            data-testid="host-pause-resume-btn"
-          >
-            {isPaused ? (
-              <Play className="size-4" />
-            ) : (
-              <Pause className="size-4" />
-            )}
-            <span>
-              {isPaused
-                ? t("extensions:host.resumeGame", "Resume")
-                : t("extensions:host.pauseGame", "Pause")}
-            </span>
-          </Button>
-        )}
-
-        {/* End Timer button during answering */}
-        {canEndTimer && (
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={handleEndTimer}
-            disabled={isPending}
-            className={clsx(
-              "bg-primary flex shrink-0 items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold text-white shadow-lg transition-transform hover:brightness-105 active:scale-95 sm:px-5 sm:py-2.5 sm:text-base",
-              isPending && "pointer-events-none opacity-60",
-            )}
-            data-testid="host-end-timer-btn"
-          >
-            <Timer className="size-5 shrink-0" />
-            <span>{t("extensions:host.endTimer")}</span>
-          </Button>
-        )}
-
-        {/* Next Screen / Advance button during results, leaderboard, or interlude */}
-        {canNextScreen && (
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={handleNextScreen}
-            disabled={isPending}
-            className={clsx(
-              "hover:bg-accent relative flex shrink-0 items-center gap-2 overflow-hidden rounded-lg bg-white px-5 py-2 text-sm font-bold text-black shadow-lg active:scale-95 sm:px-6 sm:py-2.5 sm:text-base",
-              isPending && "pointer-events-none opacity-60",
-            )}
-            data-testid="host-next-screen-btn"
-          >
-            {countdown && (
-              <span
-                className="bg-primary/30 absolute inset-y-0 left-0"
-                style={{
-                  animation: `progressBar ${countdown.total}s linear forwards`,
-                }}
-              />
-            )}
-            <span className="relative flex items-center gap-1.5">
-              <span>{t("extensions:host.nextScreen")}</span>
-              <ChevronRight className="size-5 shrink-0" />
-            </span>
-          </Button>
-        )}
+        <PresentationControls
+          previous={gameId && !isPreLobby ? {
+            onClick: handlePreviousScreen,
+            disabled: !canPrevious || isPending,
+            description: !canPrevious ? previousReason || t("extensions:host.cannotPrevious", "Cannot navigate to previous screen") : undefined,
+            testId: "host-previous-screen-btn",
+          } : undefined}
+          playback={launch?.stage === "opening" || launch?.stage === "closing" || (!isLobby && !isFinished) ? {
+            state: isPaused ? "paused" : "playing",
+            onClick: handlePauseToggle,
+            disabled: isPending,
+            testId: "host-pause-resume-btn",
+          } : undefined}
+          next={isLobby && onStartGame ? {
+            state: "start",
+            onClick: onStartGame,
+            disabled: isPending,
+          } : canEndTimer ? {
+            state: "endTimer",
+            onClick: handleEndTimer,
+            disabled: isPending,
+            testId: "host-end-timer-btn",
+          } : canNextScreen ? {
+            onClick: handleNextScreen,
+            disabled: isPending,
+            testId: "host-next-screen-btn",
+            progress: countdown && countdown.total > 0 ? 1 - countdown.seconds / countdown.total : undefined,
+          } : undefined}
+          replay={canRestartQuestion ? {
+            question: true,
+            onClick: () => setRestartConfirmOpen(true),
+            disabled: isPending,
+            testId: "host-restart-question-btn",
+          } : undefined}
+        />
       </div>
 
       <HostShortcutsDialog />

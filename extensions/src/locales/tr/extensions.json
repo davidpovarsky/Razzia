@@ -417,6 +417,7 @@
   },
   "studio": {
     "editing": {
+      "fixedQuestionLeadIn": "Önce soru görünür. Tüm oyun ve temalarda yanıtlar ile sayaç 2 saniye sonra birlikte açılır.",
       "modeLabel": "Düzenleme modu",
       "simple": "Basit düzenleme",
       "advanced": "Gelişmiş düzenleme",

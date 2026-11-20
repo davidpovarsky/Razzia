@@ -66,7 +66,6 @@ function useHasQuestionCustomSettings() {
   return (
     (currentQuestion.maxPoints ?? MAX_POINTS) !== MAX_POINTS ||
     (currentQuestion.penalty ?? 0) > 0 ||
-    currentQuestion.cooldown !== 5 ||
     customScoring ||
     Object.entries(perQuestion ?? {}).some(
       ([key, value]) => key !== "answerVisuals" && hasConfiguredValue(value),

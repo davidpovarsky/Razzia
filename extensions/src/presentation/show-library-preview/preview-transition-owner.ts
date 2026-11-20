@@ -45,10 +45,11 @@ export function createPreviewTransitionOwner(stage: TadazzStageHandle, latestVot
           })())
         }
         if (property === "openVoting" && latestVoting) {
-          return () => {
+          return (...args: Parameters<TadazzStageHandle["openVoting"]>) => {
             if (!current()) return Promise.resolve()
-            const timing = latestVoting(target.questionKey)
-            return timing ? target.openVoting(timing.seconds, timing.deadlineMs) : Promise.resolve()
+            const question = args[2]
+            const timing = latestVoting(question?.key ?? target.questionKey)
+            return timing ? target.openVoting(timing.seconds, timing.deadlineMs, question) : Promise.resolve()
           }
         }
         const value = Reflect.get(target, property, target)

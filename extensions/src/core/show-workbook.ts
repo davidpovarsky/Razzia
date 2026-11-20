@@ -37,7 +37,7 @@ import {
 import { questionEntranceSchema, type QuestionEntrance } from "./quiz-extras"
 import { cinematicOverlayAnimationsArraySchema } from "./cinematic-overlays"
 import type { AnyQuizExtras } from "./index"
-import { MAX_ANSWERS } from "@razzia/common/constants"
+import { MAX_ANSWERS, QUESTION_LEAD_IN_SECONDS } from "@razzia/common/constants"
 
 // 5 MB
 const MAX_WORKBOOK_BYTES = 5 * 1024 * 1024
@@ -1153,7 +1153,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
       category,
       note: noteVal,
       timeSeconds: parseNumOrDefault(timeVal, 20),
-      cooldownSeconds: parseNumOrDefault(cooldownVal, 3),
+      cooldownSeconds: parseNumOrDefault(cooldownVal, QUESTION_LEAD_IN_SECONDS),
       maxPoints: parseNumOrDefault(
         maxPointsVal,
         playModeStr === "survey" ? 0 : 1000,
@@ -2151,7 +2151,7 @@ export function exportTadaShowWorkbook(
         card.category ?? "",
         card.note ?? "",
         card.timeSeconds !== undefined ? String(card.timeSeconds) : "20",
-        card.cooldownSeconds !== undefined ? String(card.cooldownSeconds) : "3",
+        card.cooldownSeconds !== undefined ? String(card.cooldownSeconds) : String(QUESTION_LEAD_IN_SECONDS),
         (() => {
           if (card.maxPoints !== undefined) {
             return String(card.maxPoints)
@@ -2690,7 +2690,7 @@ export function generateTadaShowWorkbookTemplate(): Uint8Array {
         question: "Which landmark is in Paris?",
         category: "Geography",
         timeSeconds: 20,
-        cooldownSeconds: 3,
+        cooldownSeconds: QUESTION_LEAD_IN_SECONDS,
         maxPoints: 1000,
         penalty: 0,
         answers: [
@@ -2730,7 +2730,7 @@ export function generateTadaShowWorkbookTemplate(): Uint8Array {
         question: "What is your favorite weekend activity?",
         category: "Lifestyle",
         timeSeconds: 15,
-        cooldownSeconds: 3,
+        cooldownSeconds: QUESTION_LEAD_IN_SECONDS,
         maxPoints: 0,
         penalty: 0,
         answers: [
@@ -2774,7 +2774,7 @@ export function generateTadaShowWorkbookTemplate(): Uint8Array {
         question: "How many days are in a leap year?",
         category: "Trivia",
         timeSeconds: 15,
-        cooldownSeconds: 3,
+        cooldownSeconds: QUESTION_LEAD_IN_SECONDS,
         maxPoints: 1000,
         penalty: 0,
         answers: [

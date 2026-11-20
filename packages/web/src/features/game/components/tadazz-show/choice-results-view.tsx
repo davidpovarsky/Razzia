@@ -24,6 +24,7 @@ export function ChoiceResultsView({
   data,
   extensionState,
   reveal,
+  hideHeading = false,
 }: {
   data: ManagerStatusDataMap["SHOW_RESPONSES"]
   extensionState: Pick<
@@ -31,6 +32,7 @@ export function ChoiceResultsView({
     "extras" | "questionId" | "epoch"
   > | null
   reveal: ReturnType<typeof useResponseReveal>
+  hideHeading?: boolean
 }) {
   const { question, answers, responses, solutions, type } = data
   const {
@@ -99,9 +101,11 @@ export function ChoiceResultsView({
   return (
     <div className="flex h-full min-h-0 w-full flex-1 flex-col justify-between overflow-hidden px-3 py-2 sm:p-4">
       <div className="mx-auto flex h-full min-h-0 w-full max-w-7xl flex-1 flex-col items-center justify-center gap-2 overflow-hidden sm:gap-4">
-        <h2 className="max-w-4xl shrink-0 text-center text-lg leading-tight font-black tracking-tight break-words text-white drop-shadow-2xl sm:text-2xl md:text-3xl lg:text-4xl">
-          {question}
-        </h2>
+        {!hideHeading && (
+          <h2 className="max-w-4xl shrink-0 text-center text-lg leading-tight font-black tracking-tight break-words text-white drop-shadow-2xl sm:text-2xl md:text-3xl lg:text-4xl">
+            {question}
+          </h2>
+        )}
 
         {/* Responders count badge */}
         {revealDistribution && (

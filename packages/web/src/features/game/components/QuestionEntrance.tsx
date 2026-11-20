@@ -11,6 +11,7 @@ export interface QuestionEntranceProps {
   epoch?: number | string
   className?: string
   children: React.ReactNode
+  fill?: boolean
 }
 
 export const QUESTION_ENTRANCE_PRESET_OPTIONS: Array<{
@@ -81,6 +82,7 @@ export const QuestionEntrance = ({
   epoch,
   className,
   children,
+  fill = true,
 }: QuestionEntranceProps) => {
   const preset = entrance?.preset ?? "none"
   const durationMs = entrance?.durationMs ?? 800
@@ -93,7 +95,7 @@ export const QuestionEntrance = ({
 
   if (!preset || preset === "none") {
     return (
-      <div className={clsx("flex h-full min-h-0 w-full flex-col", className)}>
+      <div className={clsx("flex min-h-0 w-full flex-col", fill && "h-full", className)}>
         {children}
       </div>
     )
@@ -106,7 +108,8 @@ export const QuestionEntrance = ({
       key={animationKey}
       data-tada-entrance={preset}
       className={clsx(
-        "flex h-full min-h-0 w-full flex-col",
+        "flex min-h-0 w-full flex-col",
+        fill && "h-full",
         animationClass,
         className,
       )}

@@ -45,6 +45,7 @@ export type StageStep =
     }
   | {
       op: "openVoting"
+      question?: StageQuestion
       seconds: number | null
       deadlineMs?: number
     }
@@ -185,33 +186,11 @@ function planTransition(
 
     case "voting": {
       const steps: StageStep[] = []
-      const onStage =
-        stage.questionKey === next.question.key &&
-        stage.mode !== "custom" &&
-        stage.mode !== "leaderboard"
-
-      if (onStage) {
-        steps.push({
-          op: "presentOptions",
-          question: next.question,
-        })
-      } else {
-        steps.push(
-          leavingQuestion && stage.mode !== "custom"
-            ? {
-                op: "nextQuestion",
-                question: next.question,
-              }
-            : {
-                op: "showQuestion",
-                question: next.question,
-              },
-        )
-      }
-
+      // Answers and the clock enter together; never await card choreography.
       const remaining = next.remainingSeconds ?? next.seconds
       steps.push({
         op: "openVoting",
+        question: next.question,
         seconds: next.seconds,
         deadlineMs:
           next.votingEndsAt ??
@@ -964,7 +943,7 @@ export async function runSteps(
         break
 
       case "openVoting":
-        await handle.openVoting(step.seconds, step.deadlineMs)
+        await handle.openVoting(step.seconds, step.deadlineMs, step.question)
 
         break
 

@@ -1,5 +1,5 @@
 // oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
-import { QUIZZ_MODES } from "@razzia/common/constants"
+import { QUESTION_LEAD_IN_SECONDS, QUIZZ_MODES } from "@razzia/common/constants"
 import type { Question } from "@razzia/common/types/game"
 import {
   createDefaultRosterExtras,
@@ -697,7 +697,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           question: oldSceneTitle ?? "",
           answers: ["", ""],
           solutions: toKind === "quiz" ? [0] : [],
-          cooldown: 5,
+          cooldown: QUESTION_LEAD_IN_SECONDS,
           time: 20,
         }
         const nextQuestions = [...currentQuestions, newQuestion]
@@ -885,7 +885,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           question: "",
           answers: ["", ""],
           solutions: targetKind === "quiz" ? [0] : [],
-          cooldown: 5,
+          cooldown: QUESTION_LEAD_IN_SECONDS,
           time: 20,
         }
         const nextQuestions = [...currentQuestions, newQuestion]

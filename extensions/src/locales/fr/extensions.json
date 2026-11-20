@@ -417,6 +417,7 @@
   },
   "studio": {
     "editing": {
+      "fixedQuestionLeadIn": "La question s’affiche d’abord. Les réponses et le minuteur apparaissent ensemble après 2 secondes, dans chaque jeu et chaque thème.",
       "modeLabel": "Mode d’édition",
       "simple": "Édition simple",
       "advanced": "Édition avancée",

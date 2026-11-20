@@ -417,6 +417,7 @@
   },
   "studio": {
     "editing": {
+      "fixedQuestionLeadIn": "Zuerst erscheint die Frage. Antworten und Timer werden in jedem Spiel und Design nach 2 Sekunden gemeinsam eingeblendet.",
       "modeLabel": "Bearbeitungsmodus",
       "simple": "Einfach bearbeiten",
       "advanced": "Erweitert bearbeiten",

@@ -417,6 +417,7 @@
   },
   "studio": {
     "editing": {
+      "fixedQuestionLeadIn": "Câu hỏi xuất hiện trước. Sau 2 giây, câu trả lời và bộ đếm giờ xuất hiện cùng lúc trong mọi trò chơi và giao diện.",
       "modeLabel": "Chế độ chỉnh sửa",
       "simple": "Chỉnh sửa đơn giản",
       "advanced": "Chỉnh sửa nâng cao",

@@ -502,8 +502,10 @@ export class TadazzV4Motion {
     const keepCards = Boolean(data.cardsAlreadyOnStage)
 
     if (!keepCards) {
-      this.questionMotion(40)
-      this.cardsMotion(230)
+      if (!data.questionAlreadyOnStage) {
+        this.questionMotion(40)
+      }
+      this.cardsMotion(data.questionAlreadyOnStage ? 0 : 230)
     }
 
     const status = query(this.root(), ".vote-status")
@@ -570,8 +572,10 @@ export class TadazzV4Motion {
     const keepCards = Boolean(data.cardsAlreadyOnStage)
 
     if (!keepCards) {
-      this.questionMotion(0)
-      this.cardsMotion(75)
+      if (!data.questionAlreadyOnStage) {
+        this.questionMotion(0)
+      }
+      this.cardsMotion(data.questionAlreadyOnStage ? 0 : 75)
     }
 
     const wrap = query(this.root(), ".countdown-floater")
@@ -693,8 +697,10 @@ export class TadazzV4Motion {
     const keepCards = Boolean(data.cardsAlreadyOnStage)
 
     if (!keepCards) {
-      this.questionMotion(40)
-      this.cardsMotion(230)
+      if (!data.questionAlreadyOnStage) {
+        this.questionMotion(40)
+      }
+      this.cardsMotion(data.questionAlreadyOnStage ? 0 : 230)
     }
 
     const status = query(this.root(), ".vote-status")
@@ -1107,10 +1113,14 @@ export class TadazzV4Motion {
         ],
         {
           duration: 850,
-          delay: 740 + i * 90,
+          delay: data.questionAlreadyOnStage ? i * 90 : 740 + i * 90,
         },
       )
     })
+    if (data.questionAlreadyOnStage) {
+      return
+    }
+
     this.animate(
       query(root, ".photo-question-img"),
       [
@@ -1467,6 +1477,10 @@ export class TadazzV4Motion {
 
     switch (scene) {
       case "question":
+        if (data.photoLayout) {
+          this.questionImage(data)
+          break
+        }
         this.questionMotion(100)
         this.animate(
           query(root, ".rail.top"),
@@ -1517,11 +1531,13 @@ export class TadazzV4Motion {
         break
 
       case "voting-open":
+        if (data.photoLayout) this.questionImage(data)
         this.voting(false, data)
 
         break
 
       case "countdown":
+        if (data.photoLayout) this.questionImage(data)
         this.countdown(data)
 
         break

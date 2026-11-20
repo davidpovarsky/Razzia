@@ -417,6 +417,7 @@
   },
   "studio": {
     "editing": {
+      "fixedQuestionLeadIn": "Prima appare la domanda. Risposte e timer si aprono insieme dopo 2 secondi in tutti i giochi e temi.",
       "modeLabel": "Modalità di modifica",
       "simple": "Modifica semplice",
       "advanced": "Modifica avanzata",

@@ -177,6 +177,7 @@ export function buildStageQuestion(input: {
   text: string
   keyText?: string
   answers: string[]
+  answerCount?: number
   visuals?: AnswerVisual[]
   questionId?: string | null
   questionStates: ShowInput["questionStates"]
@@ -203,6 +204,8 @@ export function buildStageQuestion(input: {
     question: text,
     number,
     totalQuestions: questionStates?.total ?? null,
+    answerCount: input.answerCount ?? answers.length,
+    hasAnswerImages: Boolean(visuals?.some((visual) => visual.url && visual.display !== "text")),
     round,
     ...(note ? { note } : {}),
     ...(questionImage ? { questionImage, photoAlt: photoAlt || text } : {}),
@@ -488,13 +491,19 @@ export function computeShowScene(input: ShowInput): ShowScene {
       }
 
     case "SHOW_QUESTION": {
+      const media = asRecord(data.media)
+      const answerCount = Number(data.totalAnswers) || 0
+      const visuals = currentAnswerVisuals(envelope, answerCount)
+      const hasAnswerImages = visuals?.some((visual) => visual.url && visual.display !== "text")
       const question = buildStageQuestion({
         text: legacyText(data.question ?? ""),
         answers: [],
+        answerCount,
+        visuals,
+        questionImage: media.type === "image" && answerCount === 4 && !hasAnswerImages && typeof media.url === "string" ? media.url : undefined,
         questionId: envelope?.questionId,
         questionStates,
       })
-      const media = asRecord(data.media)
 
       return {
         kind: "question",

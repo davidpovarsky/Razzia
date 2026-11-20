@@ -9,9 +9,10 @@ import useSound from "use-sound"
 
 interface Props {
   data: CommonStatusDataMap["SHOW_QUESTION"]
+  hideHeading?: boolean
 }
 
-const Question = ({ data: { question, media, cooldown } }: Props) => {
+const Question = ({ data: { question, media, cooldown }, hideHeading }: Props) => {
   const [sfxShow] = useSound(SFX.SHOW_SOUND, { volume: 0.5 })
   const {
     effectiveExtensionState,
@@ -43,6 +44,7 @@ const Question = ({ data: { question, media, cooldown } }: Props) => {
   return (
     <NativeRazziaQuestion
       data={{ question, media, cooldown }}
+      hideHeading={hideHeading}
       stageAnimations={stageAnimations}
       questionDecoration={questionDecoration}
       epoch={activeKey}

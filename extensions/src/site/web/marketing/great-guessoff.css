@@ -1,14 +1,9 @@
-/* The Great Guess-off uses Creating Worlds' ORIGINAL Tadazz native projector.
-   Only the separate visitor/player controls below the projector are styled here.
-   Do not duplicate or override the canonical stage animations, timer or cards. */
+/* The native stage artwork remains here. Viewer chrome and presentation
+   controls are owned by GameViewer and the root platform component. */
 .ggo-native {
   width: 100%;
+  min-width: 0;
   color: #fff4e6;
-  background: #08011a;
-  border: 1px solid #ae71ec66;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 18px 70px #09001e75;
   font-family: "Rubik", system-ui, sans-serif;
 }
 .ggo-native * {
@@ -29,74 +24,13 @@
 }
 .ggo-native-frame .tzv4-stage .stage-teaser {
   display: none;
-} /* The teaser artwork specifically says Creating Worlds; this is a different show. */
-.ggo-native-console {
-  padding: clamp(14px, 2vw, 24px);
-  background: linear-gradient(160deg, #170538, #100328);
-}
-.ggo-native-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 12px;
-}
-.ggo-native-info strong {
-  color: #f0ff59;
-  font-weight: 1000;
-  font-size: clamp(16px, 1.6vw, 22px);
-  letter-spacing: -0.025em;
-}
-.ggo-native-info span {
-  color: #e4d9fa;
-  font-size: clamp(11px, 1.15vw, 14px);
-  font-weight: 700;
-  text-align: right;
-}
-.ggo-native-actions {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.ggo-native button:focus-visible {
+} /* This sample does not use the Creating Worlds teaser artwork. */
+
+.ggo-native-frame button:focus-visible {
   outline: 3px solid #eafa50;
   outline-offset: 3px;
 }
-.ggo-native-actions button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 9px;
-  min-height: 44px;
-  border-radius: 999px;
-  font: inherit;
-  font-size: 13px;
-  font-weight: 900;
-  border: 1px solid #aa73e68a;
-  padding: 10px 19px;
-  cursor: pointer;
-}
-.ggo-native-next {
-  background: #eaff4c;
-  color: #1c0939;
-  flex: 0 1 auto;
-}
-.ggo-native-next:hover {
-  background: #f5ff9b;
-}
-.ggo-native-sound {
-  background: #381369;
-  color: #fff4e9;
-}
-.ggo-native-sound:hover {
-  background: #532290;
-}
-.ggo-native-actions button:disabled {
-  opacity: 0.5;
-  cursor: progress;
-}
+
 .ggo-native-disclaimer {
   text-align: center;
   margin: 12px 0 0;
@@ -114,34 +48,9 @@
   .ggo-native {
     border-radius: 10px;
   }
-  .ggo-native-console {
-    padding: 11px;
-  }
-  .ggo-native-info {
-    display: block;
-    text-align: center;
-  }
-  .ggo-native-info span {
-    display: block;
-    margin-top: 4px;
-    text-align: center;
-  }
-  .ggo-native-actions button {
-    padding: 9px 12px;
-    min-height: 43px;
-    font-size: 12px;
-  }
-  .ggo-native-next {
-    order: -1;
-    width: 100%;
-  }
+
   .ggo-native-disclaimer {
     font-size: 10px;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .ggo-native-console * {
-    transition: none !important;
   }
 }
 
@@ -397,42 +306,6 @@
   display: none !important;
 }
 
-/* Guess-off controls: the old Restart position becomes Start/Next, while
-   Back sits in the middle; preserve the sound control at the other edge. */
-.ggo-native-actions {
-  display: grid !important;
-  grid-template-columns: repeat(3, minmax(120px, 174px));
-  justify-content: center;
-  align-items: stretch;
-  column-gap: 14px;
-  width: 100%;
-  max-width: 600px;
-  margin-inline: auto;
-}
-.ggo-native-actions > button,
-.ggo-native-actions .ggo-native-back-slot > button {
-  width: 100%;
-  min-width: 0;
-  min-height: 49px;
-}
-.ggo-native-back-slot {
-  min-height: 49px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.ggo-native-back {
-  background: linear-gradient(135deg, #542286, #341056);
-  color: #f9eafa;
-  border-color: #c48dff99 !important;
-}
-.ggo-native-back:hover {
-  background: #7132a5;
-}
-.ggo-native-next {
-  order: initial !important;
-}
-
 /* Vote identifiers should be the first thing the participant spots.
    For text cards, retain 2 × 2 wide layout and legible, less-heavy answers. */
 .ggo-native[data-ggo-media="text"] .tzv4-stage .answer-card .answer-title {
@@ -604,25 +477,7 @@
   }
 }
 @media (max-width: 700px) {
-  .ggo-native-actions {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 9px;
-    max-width: none;
-  }
-  .ggo-native-next {
-    order: initial !important;
-    grid-column: 1/-1;
-    grid-row: 1;
-    width: 100%;
-  }
-  .ggo-native-back-slot {
-    grid-column: 1;
-    grid-row: 2;
-  }
-  .ggo-native-actions > .ggo-native-sound {
-    grid-column: 2;
-    grid-row: 2;
-  }
+
   .ggo-winner-z {
     font-size: 7vw;
   }
