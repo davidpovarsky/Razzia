@@ -62,9 +62,12 @@ if deps is None:
     deps=owned/"mcp-deps"
     shutil.copytree(original_deps,deps,symlinks=True)
 assert dependency_hashes(deps)==expected_deps
-# The native browser and the real issuer/SDK harness share this bounded cgroup.
-# The 2 GiB run killed Chromium at ~1.5 GiB renderer RSS plus ~475 MiB harness RSS.
-memory_limit_bytes=3*1024**3
+# The full real-media matrix and issuer/SDK harness share this bounded cgroup.
+# The 3 GiB run hit its cgroup limit during repeated native parity reloads.
+# Keep two GiB of currently available host memory outside this QA allocation.
+memory_limit_bytes=6*1024**3
+host_memory={line.split()[0].rstrip(":"):int(line.split()[1]) for line in pathlib.Path("/proc/meminfo").read_text().splitlines()}
+assert host_memory["MemAvailable"]*1024 >= memory_limit_bytes+2*1024**3,"INSUFFICIENT_QA_MEMORY_HEADROOM"
 command=["docker","run","--detach","--pull=never","--init","--read-only","--name",c["run"],"--network","none","--cpus","2","--memory",str(memory_limit_bytes),"--memory-swap",str(memory_limit_bytes),"--pids-limit","512","--shm-size","256m","--tmpfs","/tmp:rw,nosuid,nodev,size=536870912", "--label","codex.thread=01a1e9e9-ad5b-77a3-bafe-bcedce32246a"]
 for origin,target,readonly in [(str(source),"/source",True),(str(owned),"/evidence",False),(str(rootfs/"cleanup"),"/cleanup",True),(str(deps),"/tmp/phase3-999ed90c/deps",True),(str(rootfs/"root/.cache/ms-playwright"),"/root/.cache/ms-playwright",True)]:
     command += ["--mount",f"type=bind,source={origin},target={target}" + (",readonly" if readonly else "")]
