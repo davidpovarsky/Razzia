@@ -844,7 +844,7 @@ def qualify_inputs(args):
     need(re.search(r"\b[1-9][0-9]* passed\b", output) and not re.search(r"\b[1-9][0-9]* (?:failed|skipped|flaky)\b", output),
          "NATIVE_BROWSER_NOT_ALL_PASSED")
     for engine in ("chromium", "webkit"):
-        for scenario in ("authenticated browser flow", "fail-closed negative cases", "all 8 locales"):
+        for scenario in ("authenticated browser flow", "direct saves enforce ownership, exact revision, idempotency and grant revocation", "directly saved games are accessible in Studio across all 9 locales"):
             need(any("[" + engine + "]" in line and scenario in line and "✓" in line for line in output.splitlines()),
                  "NATIVE_BROWSER_SCENARIO_MISSING")
     web_root = web_source / "packages/web/dist"
