@@ -10,6 +10,8 @@ import { useTranslation } from "react-i18next"
 /* oxlint-disable eslint/no-nested-ternary -- A finite scene union is projected into public phase/result fields, never arbitrary server extras. */
 import {
   ThemeSandboxHost,
+  packageRuntimePhase,
+  projectPackageScene,
   useShowTheme,
   type ShowScene,
 } from "@razzia/extensions/presentation"
@@ -72,6 +74,11 @@ export function PackageStage({
   const options = useMemo(() => question?.options ?? [], [question?.options])
   const imageKey = [
     ...options.map((a) => a.image ?? ""),
+    ...(scene.kind === "scene" && scene.scene.kind === "interimResults"
+      ? (scene.activeSceneData?.interimResults?.options ?? []).map(
+          (option) => option.imageUrl ?? "",
+        )
+      : []),
     questionImage ?? "",
     backgroundUrl ?? "",
   ].join("|")
@@ -194,32 +201,7 @@ export function PackageStage({
       controller.abort()
     }
   }, [sourceDigest, imageUrls])
-  const phase: RuntimeSnapshot["phase"] =
-    (scene.kind === "wait" || scene.kind === "voting") && voteLocked
-      ? "voteLocked"
-      : scene.kind === "scene" && scene.scene.kind === "opening"
-        ? "opening"
-        : scene.kind === "scene" && scene.scene.kind === "closing"
-          ? "closing"
-          : scene.kind === "start"
-            ? "opening"
-            : scene.kind === "prepared"
-              ? "answerCards"
-              : scene.kind === "player-result"
-                ? "personalResult"
-                : scene.kind === "finale" || scene.kind === "summary"
-                  ? "closing"
-                  : scene.kind === "scene" || scene.kind === "interlude"
-                    ? "interlude"
-                    : [
-                          "voting",
-                          "results",
-                          "question",
-                          "leaderboard",
-                          "lobby",
-                        ].includes(scene.kind)
-                      ? (scene.kind as RuntimeSnapshot["phase"])
-                      : "lobby"
+  const phase = packageRuntimePhase(scene, voteLocked)
   const usingSandbox = Boolean(
     pin &&
     url &&
@@ -251,59 +233,20 @@ export function PackageStage({
       epoch,
       sequence,
       role,
-      phase,
-      title:
-        (scene.kind === "scene"
-          ? scene.scene.title
-          : "subject" in scene
-            ? scene.subject
-            : "") ?? "",
-      question: question?.question ?? "",
-      ...(questionImage && images[questionImage]
-        ? { questionImage: images[questionImage] }
-        : {}),
-      ...(backgroundUrl && images[backgroundUrl]
-        ? { backgroundImage: images[backgroundUrl] }
-        : {}),
+      ...projectPackageScene({
+        scene,
+        voteLocked,
+        serverTime,
+        paused,
+        images,
+        backgroundUrl,
+      }),
       ...(scene.kind === "lobby"
         ? {
             joinCode: scene.inviteCode ?? "",
             joinUrl: `${window.location.origin}/game`,
           }
         : {}),
-      answers: options.map((answer, i) => ({
-        id: String(i),
-        label: answer.label,
-        ...(answer.image && images[answer.image]
-          ? { image: images[answer.image] }
-          : {}),
-        ...(scene.kind === "results"
-          ? {
-              percent:
-                scene.reveal.percentages?.[i] ??
-                (scene.reveal.counts.reduce((n, v) => n + v, 0) > 0
-                  ? ((scene.reveal.counts[i] ?? 0) * 100) /
-                    scene.reveal.counts.reduce((n, v) => n + v, 0)
-                  : 0),
-              votes: scene.reveal.counts[i] ?? 0,
-              ...(scene.reveal.mode === "quiz"
-                ? { correct: scene.reveal.solutions?.includes(i) ?? false }
-                : {}),
-            }
-          : {}),
-      })),
-      leaders:
-        scene.kind === "leaderboard"
-          ? scene.entries
-              .slice(0, 100)
-              .map((e, i) => ({ label: e.name, score: e.score, rank: i + 1 }))
-          : scene.kind === "finale" && scene.winner
-            ? [{ label: scene.winner.name, score: scene.winner.score, rank: 1 }]
-            : [],
-      personalResult:
-        scene.kind === "player-result"
-          ? { correct: scene.correct, points: scene.points, rank: scene.rank }
-          : null,
       locale: i18n.language,
       reducedMotion: matchMedia("(prefers-reduced-motion: reduce)").matches,
       serverTime,
@@ -323,12 +266,9 @@ export function PackageStage({
       epoch,
       sequence,
       role,
-      phase,
       scene,
-      question,
-      questionImage,
+      voteLocked,
       backgroundUrl,
-      options,
       images,
       i18n.language,
       deadline,

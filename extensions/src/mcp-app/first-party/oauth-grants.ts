@@ -27,6 +27,8 @@ import { createSemanticDraftPort } from "./oauth-semantic-drafts.ts"
 import { checkedDraft } from "../server/drafts.ts"
 import { canonicalJson, hashJson, utf8Bytes } from "../contracts/canonical.ts"
 import { inputs } from "../contracts/tools.ts"
+import { packageScopes } from "../contracts/package-authoring.ts"
+import type { PackageAuthoringPort } from "../server/package-authoring.ts"
 import { CONTRACT_VERSION, digest, opaqueId } from "../contracts/schemas.ts"
 import { ToolError } from "../server/errors.ts"
 import {
@@ -542,6 +544,55 @@ export class FirstPartyOAuthGrants {
       this.auth.assertActive(p)
     })
     this.auth.assertActive(p)
+  }
+  packages(
+    adapter: PackageAuthoringPort,
+    assertIssued: (p: VerifiedPrincipal) => void,
+  ): PackageAuthoringPort {
+    return Object.freeze<PackageAuthoringPort>({
+      call: async (principal, name, input) => {
+        let db: DatabaseSync | undefined
+        const authority = () => {
+          assertIssued(principal)
+          if (!db) throw invalid()
+          const grant = this.row(db, principal.accountId, principal.grantId)
+          if (
+            principal.issuer !== this.protocol.config.issuer ||
+            principal.audience !== this.protocol.config.resource ||
+            principal.subject !== grant.subject ||
+            principal.clientId !== grant.clientId ||
+            packageScopes[name].some(
+              (scope) =>
+                !principal.scopes.includes(scope) ||
+                !grant.scopes.includes(scope),
+            )
+          ) {
+            throw new ToolError("SCOPE_REQUIRED")
+          }
+        }
+        try {
+          assertIssued(principal)
+          db = this.open(principal.accountId, false)
+          authority()
+          const result = await adapter.call(principal, name, input)
+          authority()
+          return result
+        } catch (error) {
+          if (error instanceof ToolError) throw error
+          throw new ToolError(
+            error instanceof OAuthError && error.code === "invalid_grant"
+              ? "SCOPE_REQUIRED"
+              : "DEPENDENCY_UNAVAILABLE",
+          )
+        } finally {
+          try {
+            db?.close()
+          } catch {
+            throw new ToolError("DEPENDENCY_UNAVAILABLE")
+          }
+        }
+      },
+    })
   }
   catalog(
     options: FirstPartyCatalogOptions,

@@ -124,6 +124,9 @@ export function mount(
       assets = { ...embeddedAssets, ...value.assetMap }
       latest = value.snapshot
       send({ type: "READY", runtimeApi: 1 })
+      // Keep READY and heartbeats v1-compatible. Older hosts ignore this
+      // optional message and continue sending the original snapshot fields.
+      send({ type: "RUNTIME_CAPABILITIES", snapshotMetadataVersion: 1 })
     }
 
     latest = value.snapshot

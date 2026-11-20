@@ -91,3 +91,28 @@ Shared Vitest configuration and parent test scripts remain unchanged.
 Current commands, failed attempts and final validation results are retained in
 docs/extensions/qa-evidence/mcp-foundation-20261115. Foundation test results do
 not establish the unavailable real integrations or original host acceptance.
+
+## Native package authoring port
+
+The public tool catalog includes an optional `PackageAuthoringPort` for the
+existing portable `.tadazz` engine. Eleven package tools cover actual capability
+discovery, paged account packages, staged upload/chunks/completion, status,
+isolated build, exact-revision preview, deletion of an uninstalled draft,
+consent-bound installation and authorized export. Existing OAuth scopes apply;
+tool discovery does not enable native deployment flags or grant review/consent.
+
+The package schemas share the native archive budget. Each base64 chunk is at
+most 24,000 decoded bytes, keeping normal MCP calls within the existing ingress
+budget. An adapter may provide an expiring first-party binary upload URL for the
+declared bytes. Completion must independently verify their exact length and
+digest before native package validation. Uploading or building creates no
+saved account game. Package lists return bounded summaries in pages of 20;
+status returns content identities without source, files or the full manifest.
+
+The adapter owns live account/workspace grants, signed pagination, immutable
+upload identities, durable idempotency, exact revision checks, isolated worker
+execution, native review and installation. The dispatcher validates outputs,
+binds result identities/revisions, and permits only configured first-party
+URLs. The new protocol tests exercise this boundary through the real SDK
+harness. They do not establish production worker, browser or installation
+acceptance, which must be verified against the composed candidate separately.

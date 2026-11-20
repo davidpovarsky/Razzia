@@ -22,6 +22,7 @@ import type { FirstPartyNativeSaveOptions } from "./oauth-native-save.ts"
 import type { FirstPartyCatalogOptions } from "./oauth-catalog.ts"
 import { safeError, ToolError } from "../server/errors.ts"
 import { CONTRACT_VERSION } from "../contracts/schemas.ts"
+import type { PackageAuthoringPort } from "../server/package-authoring.ts"
 import {
   nativeSaveInspectInput,
   nativeSaveApproveInput,
@@ -180,6 +181,8 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
 
   return Object.freeze({
     verifyAccessToken,
+    packages: (adapter: PackageAuthoringPort) =>
+      grants.packages(adapter, assertIssued),
     catalog: (catalogOptions: FirstPartyCatalogOptions) =>
       grants.catalog(catalogOptions, assertIssued),
     draftRepository: (policy: AuthoringPolicy) =>

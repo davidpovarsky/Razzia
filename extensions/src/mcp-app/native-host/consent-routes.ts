@@ -9,6 +9,7 @@ export const CONSENT_SECURITY_HEADERS: Readonly<Record<string, string>> =
 export interface ConsentRouteMatcherOptions {
   readonly consentPageUrl: string
   readonly nativeSaveConsentPageUrl?: string
+  readonly packageSaveConsentPageUrl?: string
 }
 
 function hasControls(value: string, includeSpace = false): boolean {
@@ -210,9 +211,24 @@ export function createConsentRouteMatcher(
     )
   }
 
+  const packageSavePrefix = options.packageSaveConsentPageUrl
+    ? normalizePathname(options.packageSaveConsentPageUrl)
+    : null
+  if (options.packageSaveConsentPageUrl && !packageSavePrefix) {
+    throw new Error(
+      "Package-save consent page URL must define a non-root pathname",
+    )
+  }
+
   return (pathname: string): boolean => {
     if (pathname === oauthConsentPath) {
       return true
+    }
+
+    if (packageSavePrefix && pathname.startsWith(`${packageSavePrefix}/`)) {
+      return /^[A-Za-z0-9_-]{22,64}$/u.test(
+        pathname.slice(packageSavePrefix.length + 1),
+      )
     }
 
     if (!nativeSavePrefix) {

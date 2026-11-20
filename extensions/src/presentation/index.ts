@@ -87,6 +87,12 @@ export * from "./show-themes/native-composition"
 export * from "./tadazz-show/native-question-media"
 
 export { ThemeSandboxHost } from "./package-runtime/ThemeSandboxHost"
+export {
+  packageRuntimePhase,
+  projectPackageScene,
+  type PackageSceneProjection,
+  type PackageSceneProjectionInput,
+} from "./package-runtime/projection"
 
 export { OpenThemeBuilderLink } from "../components/theme-builder/OpenThemeBuilderLink"
 

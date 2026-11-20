@@ -16,11 +16,19 @@ export function PackageManager({
   onImported,
   onFileConsumed,
   themesOnly = false,
+  initialUploadId,
+  initialExpectedRevision,
+  initialGameId,
+  fullPage = false,
 }: {
   file: File | null
   themesOnly?: boolean
   onImported: () => unknown
   onFileConsumed: () => void
+  initialUploadId?: string
+  initialExpectedRevision?: number
+  initialGameId?: string
+  fullPage?: boolean
 }) {
   const { t } = useTranslation()
   const [enabled, setEnabled] = useState(false)
@@ -49,14 +57,28 @@ export function PackageManager({
 
         setEnabled(true)
         setCapabilityError(false)
-        const initial = new URLSearchParams(window.location.search).get(
-          "packageUpload",
-        )
+        const initial =
+          initialUploadId ??
+          new URLSearchParams(window.location.search).get("packageUpload")
 
         if (initial && !themesOnly) {
           const result = await packageJson<PackageReceipt>(
             `/uploads/${encodeURIComponent(initial)}`,
           )
+          if (!active) return
+          if (
+            result.uploadId !== initial ||
+            (initialExpectedRevision !== undefined &&
+              result.revision !== initialExpectedRevision) ||
+            (initialGameId &&
+              !result.manifest.contents.some(
+                (content) =>
+                  content.kind === "game" && content.id === initialGameId,
+              ))
+          ) {
+            setError("PACKAGE_PREVIEW_STALE")
+            return
+          }
           setReceipt(result)
           setSelected(result.manifest.contents.map((c) => c.id))
           setPreview(true)
@@ -75,7 +97,13 @@ export function PackageManager({
     return () => {
       active = false
     }
-  }, [themesOnly, capabilityRevision])
+  }, [
+    themesOnly,
+    capabilityRevision,
+    initialUploadId,
+    initialExpectedRevision,
+    initialGameId,
+  ])
   const run = async (task: () => Promise<void>) => {
     if (running.current) {
       return
@@ -194,7 +222,7 @@ export function PackageManager({
     )
   }
 
-  if (!enabled && !file && !error) {
+  if (!enabled && !file && !error && !fullPage) {
     return null
   }
 
@@ -203,7 +231,7 @@ export function PackageManager({
       className={
         themesOnly
           ? "border-accent font-display space-y-3 rounded-xl border p-3"
-          : "border-accent font-display mb-4 max-h-[60dvh] shrink-0 space-y-3 overflow-y-auto rounded-xl border p-3"
+          : `border-accent font-display mb-4 shrink-0 space-y-3 overflow-y-auto rounded-xl border p-3 ${fullPage ? "" : "max-h-[60dvh]"}`
       }
       data-testid="package-manager"
     >
@@ -341,7 +369,7 @@ export function PackageManager({
                   {t("extensions:packages.build")}
                 </Button>
               )}
-            {receipt.manifest.contents.some((c) => c.kind !== "game") &&
+            {receipt.manifest.contents.length > 0 &&
               ["preview-ready", "installed"].includes(receipt.phase) && (
                 <Button
                   type="button"
@@ -456,7 +484,13 @@ export function PackageManager({
               {t("common:delete")}
             </Button>
           )}
-          {preview && <PackageRuntimePreview receipt={receipt} />}
+          {preview && (
+            <PackageRuntimePreview
+              key={`${receipt.uploadId}:${receipt.revision}`}
+              receipt={receipt}
+              initialGameId={initialGameId}
+            />
+          )}
           {!themesOnly &&
             receipt.installedGames.map((quizId) => (
               <Button

@@ -15,6 +15,7 @@ import { tadaShowV1Schema } from "@razzia/extensions/core"
 import { CONTRACT_VERSION, PREVIEW_RESOURCE } from "../contracts/schemas.ts"
 import {
   descriptions,
+  destructiveTools,
   inputs,
   mutations,
   outputs,
@@ -121,7 +122,7 @@ function registeredServer(
       outputSchema: outputs[name],
       annotations: {
         readOnlyHint: !mutations.has(name),
-        destructiveHint: false,
+        destructiveHint: destructiveTools.has(name),
         idempotentHint:
           name !== "update_game_title" || Boolean(deps.semanticDrafts),
         openWorldHint: false,

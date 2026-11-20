@@ -34,13 +34,17 @@ export function InlineGamePreviewBoundary({
   enabled,
   provider,
   routeKey,
+  isolate = false,
 }: {
   children: ReactNode
   enabled?: boolean
   provider?: GamePreviewProvider
   routeKey?: string | object
+  /** Explicitly scoped private adapters must not inherit another account source. */
+  isolate?: boolean
 }) {
-  const parent = useContext(Context)
+  const inherited = useContext(Context)
+  const parent = isolate ? null : inherited
   const [coordinator] = useState(createPreviewCoordinator)
   const { i18n } = useTranslation()
   const reducedMotion = useReducedMotion()

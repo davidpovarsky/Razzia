@@ -10,6 +10,13 @@ import {
 } from "./semantic-edit.ts"
 import { fullShowToolInputV3Schema } from "./full-show-frame.ts"
 import {
+  packageInputs,
+  packageDataSchemas,
+  packageScopes,
+  packageMutations,
+  packageDescriptions,
+} from "./package-authoring.ts"
+import {
   authoredJson,
   baseInput,
   diagnostics,
@@ -68,6 +75,7 @@ export const inputs = {
     ...key,
     format: z.enum(["tada-json", "enhanced-bundle"]),
   }),
+  ...packageInputs,
 }
 
 const pageResult = <T extends z.ZodType>(item: T) =>
@@ -131,6 +139,7 @@ export const dataSchemas = {
     sha256: digest,
     bytes: z.number().int().min(1).max(262_144),
   }),
+  ...packageDataSchemas,
 }
 
 export type ToolName = keyof typeof inputs
@@ -152,6 +161,7 @@ export const scopes: Readonly<Record<ToolName, readonly string[]>> = {
   update_game_title: ["tadazz.drafts.read", "tadazz.drafts.write"],
   save_game: ["tadazz.drafts.read", "tadazz.library.write"],
   export_game: ["tadazz.drafts.read", "tadazz.exports.read"],
+  ...packageScopes,
 }
 
 // Raw authored JSON is model-only; the UI receives selected frames and bounded summaries.
@@ -175,7 +185,10 @@ export const mutations = new Set<ToolName>([
   "update_game_title",
   "save_game",
   "export_game",
+  ...packageMutations,
 ])
+
+export const destructiveTools = new Set<ToolName>(["delete_package_draft"])
 
 export const outputs = Object.fromEntries(
   toolNames.map((name) => [name, outputSchema(dataSchemas[name])]),
@@ -210,6 +223,7 @@ export const descriptions: Readonly<Record<ToolName, string>> = {
     "Create a new account game only after exact-revision first-party save consent and durable safe storage. No overwrite.",
   export_game:
     "Export your exact revision after scope/ownership/rights checks. No new per-export consent; delivery may be unavailable.",
+  ...packageDescriptions,
 }
 
 export { diagnostics }

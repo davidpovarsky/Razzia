@@ -541,7 +541,14 @@ export class ExtensionGameSession {
                 points: e.points,
               }))
             const activeSceneData: ActiveSceneData = {
-              leaderboard: { entries },
+              leaderboard: {
+                entries,
+                isFinal:
+                  currentStep !== null &&
+                  !this.extras.timeline
+                    .slice(currentStep.index + 1)
+                    .some((item) => item.kind === "leaderboard"),
+              },
             }
 
             extrasPayload.activeSceneData = activeSceneData

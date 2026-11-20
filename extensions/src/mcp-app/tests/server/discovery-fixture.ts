@@ -32,6 +32,32 @@ const expected = [
   ],
   ["save_game", ["tadazz.drafts.read", "tadazz.library.write"], true, true],
   ["export_game", ["tadazz.drafts.read", "tadazz.exports.read"], true, false],
+  ["get_authoring_capabilities", ["tadazz.catalog.read"], false, false],
+  ["list_packages", ["tadazz.drafts.read"], false, false],
+  ["begin_package_upload", ["tadazz.drafts.write"], true, false],
+  ["write_package_upload_chunk", ["tadazz.drafts.write"], true, false],
+  ["complete_package_upload", ["tadazz.drafts.write"], true, false],
+  ["get_package_status", ["tadazz.drafts.read"], false, false],
+  ["build_package", ["tadazz.drafts.read", "tadazz.drafts.write"], true, false],
+  ["preview_package", ["tadazz.drafts.read"], false, false],
+  [
+    "delete_package_draft",
+    ["tadazz.drafts.read", "tadazz.drafts.write"],
+    true,
+    false,
+  ],
+  [
+    "install_package",
+    ["tadazz.drafts.read", "tadazz.library.write"],
+    true,
+    false,
+  ],
+  [
+    "export_package",
+    ["tadazz.drafts.read", "tadazz.exports.read"],
+    true,
+    false,
+  ],
 ] as const
 
 function record(value: unknown): Record<string, unknown> {
@@ -82,7 +108,7 @@ export function assertCurrentToolDiscovery(
     )
     assert.deepEqual(tool.annotations, {
       readOnlyHint: !mutates,
-      destructiveHint: false,
+      destructiveHint: tool.name === "delete_package_draft",
       idempotentHint: tool.name !== "update_game_title",
       openWorldHint: false,
     })

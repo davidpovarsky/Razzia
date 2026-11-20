@@ -25,6 +25,7 @@ import {
   type FirstPartyExportPolicy,
 } from "./oauth.ts"
 import type { OAuthCryptoOptions } from "./oauth-protocol.ts"
+import type { PackageAuthoringPort } from "../server/package-authoring.ts"
 
 export const PROTECTED_MCP_SERVICE_ENV = "TADAZZ_MCP_SERVICE_ENABLED"
 
@@ -57,6 +58,7 @@ export interface ProtectedMcpServiceOptions extends OAuthCryptoOptions {
   readonly authoring: AuthoringPolicy
   readonly rateLimit: NonNullable<Dependencies["rateLimit"]>
   readonly catalog?: FirstPartyCatalogOptions
+  readonly packages?: PackageAuthoringPort
   readonly exportPolicy?: FirstPartyExportPolicy
   readonly nativeSave?: ProtectedMcpServiceNativeSaveOptions
   readonly preview?: Dependencies["preview"]
@@ -779,6 +781,9 @@ export async function createProtectedMcpService(
   const rawCatalog = options.catalog
     ? oauth.catalog(options.catalog)
     : undefined
+  const rawPackages = options.packages
+    ? oauth.packages(options.packages)
+    : undefined
 
   const trackedRateLimit: NonNullable<Dependencies["rateLimit"]> = (
     principal,
@@ -798,6 +803,9 @@ export async function createProtectedMcpService(
         }
       : {}),
     rateLimit: trackedRateLimit,
+    ...(rawPackages
+      ? { packages: wrapTrackedObject(rawPackages, unscopedTracker) }
+      : {}),
     ...(rawCatalog
       ? { catalog: wrapTrackedObject(rawCatalog, unscopedTracker) }
       : {}),

@@ -36,6 +36,14 @@ const AccountGateway = lazyRouteComponent(
   "AccountGateway",
 )
 const Studio = lazyRouteComponent(() => import("./web/studio/Studio"), "Studio")
+const StudioPackagePreview = lazyRouteComponent(
+  () => import("./web/studio/StudioPackagePreview"),
+  "StudioPackagePreview",
+)
+const StudioPackageSaveConsent = lazyRouteComponent(
+  () => import("./web/studio/StudioPackagePreview"),
+  "StudioPackageSaveConsent",
+)
 // The generated native tree eagerly imports the editor, XLSX, show and checkout.
 // Load it only for native entry paths. Site -> native links use normal navigation.
 const nativeEntry = /^\/(?:manager|party|display|game)(?:\/|$)/u.test(
@@ -109,6 +117,8 @@ const pages = [
   "/site/signup",
   "/studio",
   "/studio/$section",
+  "/studio/package-preview/$uploadId/$revision/$gameId",
+  "/studio/package-save-consent/$requestId",
   ...(import.meta.env.VITE_TADAZZ_NATIVE_CONSENT_ENABLED === "true"
     ? ["/studio/native-save-consent/$requestId" as const]
     : []),
@@ -144,6 +154,10 @@ const routes = pages.map((path) =>
       }
     },
     component: (() => {
+      if (path === "/studio/package-preview/$uploadId/$revision/$gameId")
+        return StudioPackagePreview
+      if (path === "/studio/package-save-consent/$requestId")
+        return StudioPackageSaveConsent
       if (path.includes("studio")) {
         return Studio
       }
