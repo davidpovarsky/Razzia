@@ -580,8 +580,11 @@ async function verifySavedStudioPreview(
   await expect(
     card.getByRole("button", { name: "Enable sound", exact: true }),
   ).toBeVisible()
+  const viewer = card.getByTestId("game-viewer-dialog")
+  await expect(viewer).toBeVisible()
+  await expect(viewer).toHaveAttribute("data-expanded", "true")
   await testInfo.attach("saved-studio-native-stage.png", {
-    body: await card.screenshot(),
+    body: await viewer.screenshot(),
     contentType: "image/png",
   })
   await testInfo.attach("saved-studio-native-stage.json", {
@@ -627,6 +630,11 @@ test.describe("phase 3 native consent Studio integration", () => {
     browser,
     page,
   }, testInfo) => {
+    // This full flow hydrates real chapters and uses two auth contexts on one CPU.
+    if (testInfo.project.name === "webkit") {
+      testInfo.setTimeout(135_000)
+    }
+
     const meta = loadFixtureMeta()
     const tlsFetch = createPinnedCaFetch(meta.certPem)
     const tag = `${testInfo.project.name}-${randomBytes(4).toString("hex")}`
