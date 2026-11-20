@@ -595,6 +595,14 @@ export function createRemoteMcpApp(options: RemoteMcpOptions) {
               Promise.resolve().then(() => server?.close()),
               serving,
             ])
+
+            // Request construction transfers the scoped body here. Early
+            // refusals must cancel this owned stream so the outer body tracker
+            // can settle before graceful shutdown waits for real active work.
+            if (request.body && !request.bodyUsed && !request.body.locked) {
+              await request.body.cancel().catch(() => undefined)
+            }
+
             await work.drain()
             release!()
             active.delete(lifetime)

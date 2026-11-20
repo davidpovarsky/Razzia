@@ -22,7 +22,7 @@ import type { NativeCreationOperationPort } from "../../src/server/storage/creat
 import { hashJson } from "../../src/mcp-app/contracts/canonical.ts"
 import { ToolError } from "../../src/mcp-app/server/errors.ts"
 
-type Outcome = {
+interface Outcome {
   ok: boolean
   data?: Record<string, unknown>
   error?: { code: string; consentUrl?: string }
@@ -45,12 +45,13 @@ test(
     }
     process.env.CONFIG_PATH = root
     process.env.TADAZZ_ACCOUNTS_ENABLED = "true"
-    process.env.JWT_SECRET = "synthetic-direct-save-test-key-" + "s".repeat(48)
+    process.env.JWT_SECRET = `synthetic-direct-save-test-key-${"s".repeat(48)}`
     process.env.RESEND_API_KEY = "test-not-a-real-api-key"
     process.env.TADAZZ_AUTH_EMAIL_FROM = "Tadazz Test <auth@example.invalid>"
     const mailTrap = installResendVerificationTrap()
     let close: (() => Promise<void>) | undefined = undefined
     const clients: Array<{ close(): Promise<void> }> = []
+
     try {
       const [nativeHost, service, sdk, flow] = await Promise.all([
         import("../../src/mcp-app/native-host/index.ts"),
@@ -75,14 +76,17 @@ test(
             interruptBeforeCommit = false
             throw new Error("Synthetic interruption before native commit")
           }
-          creates++
+
+          creates += 1
           const result = nativeOperations.create(binding, input, extras)
+
           if (interruptAfterCommit) {
             interruptAfterCommit = false
             throw new Error(
               "Synthetic interruption after the real native commit",
             )
           }
+
           return result
         },
       }
@@ -137,6 +141,7 @@ test(
         )
         await client.connect(transport)
         clients.push(client)
+
         return {
           grant,
           call: async (name: string, args: Record<string, unknown>) =>
@@ -178,9 +183,10 @@ test(
       assert.equal(creates, 0)
       const saved = await a.call("save_game", selection)
       assert.equal(saved.ok, true)
-      assert.match(String(saved.data?.quizId), /^[A-Za-z0-9_-]{21}$/u)
-      assert.equal(saved.data?.revision, 1)
-      assert.equal(saved.data?.savedRevision, 1)
+      assert(saved.data)
+      assert.match(String(saved.data.quizId), /^[A-Za-z0-9_-]{21}$/u)
+      assert.equal(saved.data.revision, 1)
+      assert.equal(saved.data.savedRevision, 1)
       assert.equal(saved.error, undefined)
       assert.equal(creates, 1)
       assert.deepEqual((await a.call("save_game", selection)).data, saved.data)
@@ -231,8 +237,9 @@ test(
       )
       const recovered = await a.call("save_game", interruptedSelection)
       assert.equal(recovered.ok, true)
-      assert.equal(recovered.data?.revision, 2)
-      assert.notEqual(recovered.data?.quizId, saved.data?.quizId)
+      assert(recovered.data)
+      assert.equal(recovered.data.revision, 2)
+      assert.notEqual(recovered.data.quizId, saved.data.quizId)
       assert.equal(creates, 2)
       assert.deepEqual(
         (await a.call("save_game", interruptedSelection)).data,
@@ -243,11 +250,12 @@ test(
           headers: { authorization: `Bearer ${token}` },
         })
         assert.equal(response.status, 200)
+
         return (await response.json()) as { quizz: Array<{ id: string }> }
       }
       assert.deepEqual(
         new Set((await list(accounts[0].token)).quizz.map((quiz) => quiz.id)),
-        new Set([saved.data?.quizId, recovered.data?.quizId]),
+        new Set([saved.data.quizId, recovered.data.quizId]),
       )
       assert.equal((await list(accounts[1].token)).quizz.length, 0)
       const ledger = new DatabaseSync(
@@ -261,6 +269,7 @@ test(
         ),
         { readOnly: true },
       )
+
       try {
         assert.equal(
           ledger
@@ -291,6 +300,7 @@ test(
       } finally {
         ledger.close()
       }
+
       // Exercise an actual policy upgrade with the same OAuth keys/account ledger.
       // Only the synthetic clock is advanced relative to request creation; no
       // approval, native journal, or authorization receipt is forged in storage.
@@ -345,6 +355,7 @@ test(
         const realNow = Date.now
         let oldRequestId: string | undefined = undefined
         Date.now = () => realNow() - 600_000
+
         try {
           if (mode === "direct-expired") {
             interruptBeforeCommit = true
@@ -372,6 +383,7 @@ test(
               oldRequestId = error.details.consentRequestId
               assert(oldRequestId)
             }
+
             if (mode === "approved") {
               const login = await fetchImpl(`${origin}/api/accounts/login`, {
                 method: "POST",
@@ -416,7 +428,8 @@ test(
         } finally {
           Date.now = realNow
         }
-        const before = creates
+
+        const before: number = creates
         const migrated = await a.call("save_game", args)
         assert.equal(
           migrated.ok,
@@ -437,6 +450,7 @@ test(
           ),
           { readOnly: true },
         )
+
         try {
           const row = journal
             .prepare(
@@ -481,7 +495,7 @@ test(
       mailTrap.restore()
       for (const [name, value] of Object.entries(previous)) {
         if (value === undefined) {
-          delete process.env[name]
+          Reflect.deleteProperty(process.env, name)
         } else {
           process.env[name] = value
         }

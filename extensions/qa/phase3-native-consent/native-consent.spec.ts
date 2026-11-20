@@ -1008,6 +1008,7 @@ test.describe("phase 3 authenticated direct save Studio integration", () => {
       expect(draft.ok).toBe(true)
       const draftId = draft.data?.draftId as string
       const contextB = await browser.newContext({ ignoreHTTPSErrors: true })
+
       try {
         const pageB = await contextB.newPage()
         await loginUi({ page: pageB, email: emailB, password })
@@ -1021,6 +1022,7 @@ test.describe("phase 3 authenticated direct save Studio integration", () => {
           accessToken: grantB.accessToken,
           fetchImpl: tlsFetch,
         })
+
         try {
           const foreign = (
             await mcpB.client.callTool({
@@ -1040,6 +1042,7 @@ test.describe("phase 3 authenticated direct save Studio integration", () => {
         } finally {
           await mcpB.transport.close()
         }
+
         await pageB.goto("/studio/games")
         await expect(pageB.getByText(title)).toHaveCount(0)
       } finally {

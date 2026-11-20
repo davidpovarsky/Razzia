@@ -389,6 +389,7 @@ export function createNativePackageAuthoring(
               if (receipt.code && !runtime) {
                 throw new ToolError("DEPENDENCY_UNAVAILABLE")
               }
+
               const result = transfers.installAuthorized(
                 principal.accountId,
                 {
@@ -402,6 +403,7 @@ export function createNativePackageAuthoring(
                 (selection) => {
                   const current = store.details(native, selection.uploadId)
                   sameRevision(current, selection.revision)
+
                   if (
                     current.sourceDigest !== selection.sourceDigest ||
                     current.buildDigest !== selection.buildDigest
@@ -410,12 +412,14 @@ export function createNativePackageAuthoring(
                       currentRevision: current.revision,
                     })
                   }
+
                   const saved = store.install(
                     native,
                     selection.uploadId,
                     selection.revision,
                     selection.selectedContentIds,
                   )
+
                   return {
                     uploadId: selection.uploadId,
                     revision: saved.revision,
@@ -423,6 +427,7 @@ export function createNativePackageAuthoring(
                   }
                 },
               )
+
               return {
                 data: { ...result, studioUrl: `${origin}/studio/games` },
               }
