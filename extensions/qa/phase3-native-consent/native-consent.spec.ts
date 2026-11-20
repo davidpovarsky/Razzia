@@ -9,6 +9,7 @@ import {
   type Response as PwResponse,
 } from "@playwright/test"
 import { nativeSaveConsentText } from "../../src/components/native-save-consent/strings"
+import { presentationControlText } from "../../src/platform-ui/presentation-control-labels"
 import {
   Client,
   StreamableHTTPClientTransport,
@@ -611,7 +612,11 @@ async function verifySavedStudioPreview(
     ),
     contentType: "application/json",
   })
-  await card.getByRole("button", { name: "Close preview", exact: true }).click()
+  const closePreview = card.getByTestId("game-viewer-close")
+  await expect(closePreview).toHaveAccessibleName(
+    presentationControlText("en", "close"),
+  )
+  await closePreview.click()
   await expect(card.locator(".game-preview-overlay")).toBeHidden()
 
   return source.source.immutableRevision

@@ -528,6 +528,8 @@ export function TopPickV4({ data }: { data: TadazzV4Data }) {
 export function QuestionImageV4({ data }: { data: TadazzV4Data }) {
   const tx = labelsFor(data)
   const canSelect = Boolean(data.interactive)
+  const options = data.questionOptions ?? []
+  const rows = Math.max(1, Math.ceil(options.length / 2))
   const selectedSet = new Set<number>(
     (() => {
       if (Array.isArray(data.selectedIndices)) {
@@ -559,8 +561,12 @@ export function QuestionImageV4({ data }: { data: TadazzV4Data }) {
           {data.questionImageText ?? data.question ?? ""}
         </div>
       </div>
-      <div className="photo-options" role={canSelect ? "group" : undefined}>
-        {(data.questionOptions ?? []).slice(0, 4).map((o, i) => {
+      <div
+        className="photo-options"
+        role={canSelect ? "group" : undefined}
+        style={{ gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))` }}
+      >
+        {options.map((o, i) => {
           const title = typeof o === "string" ? o : o.title
           const isSelected = selectedSet.has(i)
           const cls = [
@@ -593,11 +599,13 @@ export function QuestionImageV4({ data }: { data: TadazzV4Data }) {
               }
               onClick={canSelect ? () => data.onSelectOption?.(i) : undefined}
             >
-              {`${String.fromCharCode(65 + i)}  ·  ${title}`}
-              {data.showPercentages !== false &&
-                data.percentages?.[i] !== undefined && (
-                  <span className="ml-2">{`${data.percentages[i]}%`}</span>
-                )}
+              <span className="photo-option-label">
+                {`${String.fromCharCode(65 + i)}  ·  ${title}`}
+                {data.showPercentages !== false &&
+                  data.percentages?.[i] !== undefined && (
+                    <span className="ml-2">{`${data.percentages[i]}%`}</span>
+                  )}
+              </span>
             </PlatformButton>
           )
         })}

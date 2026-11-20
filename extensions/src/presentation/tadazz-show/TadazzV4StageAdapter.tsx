@@ -55,9 +55,11 @@ function toV4Answers(options: StageOption[]): TadazzV4Answer[] {
   }))
 }
 function isPhotoQuestion(q: StageQuestion): boolean {
+  const answerCount = q.answerCount ?? q.options.length
+
   return Boolean(
     q.questionImage &&
-    (q.answerCount ?? q.options.length) === 4 &&
+    [2, 3, 4, 5].includes(answerCount) &&
     q.hasAnswerImages !== true &&
     q.options.every((opt) => !opt.image),
   )

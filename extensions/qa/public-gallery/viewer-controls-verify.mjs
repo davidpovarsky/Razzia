@@ -813,32 +813,46 @@ export async function verifyStudioViewer(options) {
     }
     const { computeCanonicalBaseDigest } =
       await import("../../src/core/digest.ts")
-    const questionId = randomUUID()
+    const photoCases = [
+      {
+        question: "Which fruit is shown in this photograph?",
+        answers: ["Banana", "Apple", "Orange", "Pear"],
+        screenshot: "private-question-image-results.png",
+      },
+      {
+        question: "Which fruit appears in this photograph?",
+        answers: ["Banana", "Apple", "Orange", "Pear", "Peach"],
+        screenshot: "private-question-image-five-results.png",
+      },
+    ]
+    const questionIds = photoCases.map(() => randomUUID())
     const quizz = {
       subject: "Private viewer question-image acceptance " + randomUUID(),
       gameMode: "quiz",
-      questions: [
-        {
-          type: "single",
-          question: "Which fruit is shown in this photograph?",
-          answers: ["Banana", "Apple", "Orange", "Pear"],
-          solutions: [0],
-          cooldown: 9,
-          time: 5,
-          media: {
-            type: "image",
-            url: origin + "/tadazz-show/great-guessoff/banana.webp",
-          },
+      questions: photoCases.map(({ question, answers }) => ({
+        type: "single",
+        question,
+        answers,
+        solutions: [0],
+        cooldown: 9,
+        time: 5,
+        media: {
+          type: "image",
+          url: origin + "/tadazz-show/great-guessoff/banana.webp",
         },
-      ],
+      })),
     }
     const extras = {
       schemaVersion: 2,
       revision: 1,
       quizId: "draft",
       baseDigest: computeCanonicalBaseDigest(quizz),
-      questionIds: [questionId],
-      timeline: [{ id: randomUUID(), kind: "question", questionId }],
+      questionIds,
+      timeline: questionIds.map((questionId) => ({
+        id: randomUUID(),
+        kind: "question",
+        questionId,
+      })),
       scenes: {},
       defaults: {
         showTheme: { id: "tadazz-classic", version: "1.0.0", overrides: {} },
@@ -853,7 +867,7 @@ export async function verifyStudioViewer(options) {
     assert.equal(
       saved.status(),
       201,
-      "Create one isolated private photo question",
+      "Create one isolated private quiz with four- and five-answer photos",
     )
     const created = await saved.json()
     ownedQuizId = created.quizId ?? created.id
@@ -865,51 +879,219 @@ export async function verifyStudioViewer(options) {
     )
     const preview = page.getByTestId("question-live-preview")
     await expect(preview).toBeVisible({ timeout: 30_000 })
-    await expect(
-      preview.getByTestId("tadazz-question-image-scene"),
-    ).toBeVisible({ timeout: 30_000 })
-    await expect
-      .poll(() =>
-        preview
-          .locator(".photo-question-img")
-          .evaluate((image) => image.complete && image.naturalWidth > 0),
-      )
-      .toBe(true)
-    await watchQuestionSequence(preview, {
-      phaseAttribute: "data-preview-phase",
-      votingPhase: "answers",
-      startAction: '[data-testid="question-preview-replay"]',
-      allowInitialReplayRemount: true,
-    })
+    const inspectPhotoAnswers = (labels) =>
+      preview
+        .locator(".photo-option[data-v4-choice]")
+        .evaluateAll((cards, expectedLabels) => {
+          const rect = (node) => {
+            const box = node.getBoundingClientRect()
+            return {
+              x: box.x,
+              y: box.y,
+              width: box.width,
+              height: box.height,
+              right: box.right,
+              bottom: box.bottom,
+            }
+          }
+          const inside = (inner, outer) =>
+            inner.width > 0 &&
+            inner.height > 0 &&
+            inner.x >= outer.x - 1 &&
+            inner.y >= outer.y - 1 &&
+            inner.right <= outer.right + 1 &&
+            inner.bottom <= outer.bottom + 1
+          const painted = (node) => {
+            let current = node
+            while (current instanceof Element) {
+              const style = getComputedStyle(current)
+              if (
+                style.display === "none" ||
+                style.visibility === "hidden" ||
+                Number(style.opacity) < 0.99
+              )
+                return false
+              current = current.parentElement ?? current.getRootNode().host
+            }
+            return node.isConnected
+          }
+          const stage = cards[0]?.closest(".tzv4-stage")
+          const grid = cards[0]?.closest(".photo-options")
+          if (!stage || !grid)
+            return {
+              passed: false,
+              count: cards.length,
+              reason: "Missing photo grid",
+            }
+          const stageBounds = rect(stage)
+          const gridBounds = rect(grid)
+          const viewport = {
+            x: 0,
+            y: 0,
+            right: window.innerWidth,
+            bottom: window.innerHeight,
+          }
+          const image = stage.querySelector(".photo-question-img")
+          const imageVisible = Boolean(
+            image?.complete &&
+            image.naturalWidth > 0 &&
+            painted(image) &&
+            inside(rect(image), stageBounds) &&
+            inside(rect(image), viewport),
+          )
+          const choices = cards.map((card, index) => {
+            const cardBounds = rect(card)
+            const label = expectedLabels[index]
+            const renderedLabel = card.querySelector(".photo-option-label")
+            const labelBounds = []
+            const walker = document.createTreeWalker(
+              renderedLabel ?? card,
+              NodeFilter.SHOW_TEXT,
+            )
+            let node = walker.nextNode()
+            while (node) {
+              if (node.textContent.trim()) {
+                const range = document.createRange()
+                range.selectNodeContents(node)
+                for (const box of range.getClientRects()) {
+                  labelBounds.push({
+                    x: box.x,
+                    y: box.y,
+                    width: box.width,
+                    height: box.height,
+                    right: box.right,
+                    bottom: box.bottom,
+                  })
+                }
+              }
+              node = walker.nextNode()
+            }
+            const passed = Boolean(
+              painted(card) &&
+              label &&
+              renderedLabel?.textContent.includes(label) &&
+              painted(renderedLabel) &&
+              card.getAttribute("data-v4-choice") === String(index) &&
+              inside(cardBounds, stageBounds) &&
+              inside(cardBounds, gridBounds) &&
+              inside(cardBounds, viewport) &&
+              labelBounds.length > 0 &&
+              labelBounds.every(
+                (box) =>
+                  inside(box, cardBounds) &&
+                  inside(box, stageBounds) &&
+                  inside(box, viewport),
+              ),
+            )
+            return { index, label, cardBounds, labelBounds, passed }
+          })
+          return {
+            passed:
+              imageVisible &&
+              choices.length === expectedLabels.length &&
+              choices.every((choice) => choice.passed),
+            at: performance.now(),
+            stageBounds,
+            gridBounds,
+            viewport,
+            imageVisible,
+            choices,
+          }
+        }, labels)
+    const verifyPhotoAnswers = async (labels, replay, phase) => {
+      let observed
+      try {
+        // The sequence observer still checks the first answers/timer paint.
+        // Here every settled card and its actual text lines must fit; a DOM
+        // count or visibility of only the first option cannot satisfy this.
+        await expect
+          .poll(
+            async () => {
+              observed = await inspectPhotoAnswers(labels)
+              return observed.passed
+            },
+            { timeout: 3000 },
+          )
+          .toBe(true)
+        await expect(preview).toHaveAttribute("data-preview-phase", phase)
+        return observed
+      } finally {
+        writeFileSync(
+          join(
+            evidence,
+            `private-photo-${labels.length}-${replay}-${phase}-bounds.json`,
+          ),
+          JSON.stringify({ phase, expectedLabels: labels, observed }, null, 2) +
+            "\n",
+        )
+      }
+    }
     const rounds = []
-    for (let replay = 0; replay < 2; replay++) {
-      await preview.getByTestId("question-preview-replay").click()
-      await expect(preview).toHaveAttribute("data-preview-phase", "answers", {
-        timeout: 10_000,
-      })
-      await expect(preview.locator("[data-v4-choice]")).toHaveCount(4)
+    for (const [questionIndex, photoCase] of photoCases.entries()) {
+      await page.getByTestId(`editor-question-card-${questionIndex}`).click()
       await expect(
         preview.getByTestId("tadazz-question-image-scene"),
-      ).toBeVisible()
-      await expect(preview).toHaveAttribute("data-preview-phase", "results", {
-        timeout: 10_000,
+      ).toBeVisible({ timeout: 30_000 })
+      await expect(preview.locator(".photo-question-head")).toHaveText(
+        photoCase.question,
+      )
+      await expect
+        .poll(() =>
+          preview
+            .locator(".photo-question-img")
+            .evaluate((image) => image.complete && image.naturalWidth > 0),
+        )
+        .toBe(true)
+      await watchQuestionSequence(preview, {
+        phaseAttribute: "data-preview-phase",
+        votingPhase: "answers",
+        startAction: '[data-testid="question-preview-replay"]',
+        allowInitialReplayRemount: true,
       })
-      rounds.push(await readQuestionSequence(preview, replay, { photo: true }))
+      for (let replay = 0; replay < 2; replay++) {
+        await preview.getByTestId("question-preview-replay").click()
+        await expect(preview).toHaveAttribute("data-preview-phase", "answers", {
+          timeout: 10_000,
+        })
+        await expect(preview.locator("[data-v4-choice]")).toHaveCount(
+          photoCase.answers.length,
+        )
+        await expect(
+          preview.getByTestId("tadazz-question-image-scene"),
+        ).toBeVisible()
+        const answers = await verifyPhotoAnswers(
+          photoCase.answers,
+          replay,
+          "answers",
+        )
+        await expect(preview).toHaveAttribute("data-preview-phase", "results", {
+          timeout: 10_000,
+        })
+        const resultsBounds = await verifyPhotoAnswers(
+          photoCase.answers,
+          replay,
+          "results",
+        )
+        rounds.push({
+          ...(await readQuestionSequence(preview, replay, { photo: true })),
+          answerCount: photoCase.answers.length,
+          answerVisibility: { answers, results: resultsBounds },
+        })
+      }
+      await stopQuestionSequence(preview)
+      writeFileSync(
+        join(evidence, "private-question-image-sequence.json"),
+        JSON.stringify({ quizId: ownedQuizId, rounds }, null, 2) + "\n",
+      )
+      await page.screenshot({ path: join(evidence, photoCase.screenshot) })
     }
-    await stopQuestionSequence(preview)
-    writeFileSync(
-      join(evidence, "private-question-image-sequence.json"),
-      JSON.stringify({ quizId: ownedQuizId, rounds }, null, 2) + "\n",
-    )
-    await page.screenshot({
-      path: join(evidence, "private-question-image-results.png"),
-    })
     results.push({
       name: "private-photo-question-two-second-lead-in-retained-node-and-replay",
       passed: true,
-      rounds: 2,
-      textAnswers: 4,
+      rounds: rounds.length,
+      textAnswerCounts: photoCases.map(({ answers }) => answers.length),
       questionImage: true,
+      allAnswerCardsAndLabelsWithinBounds: true,
     })
     assert.deepEqual(errors, [], "No Studio viewer JavaScript errors")
     assert.deepEqual(failedAssets, [], "No Studio viewer asset failures")
