@@ -126,3 +126,4 @@ export {
 export { LiveEditorStagePreview } from "./show-library-preview/live-editor-stage"
 
 export { createDemoClock } from "./show-library-preview/demo-clock"
+export { observeQuestionPresentation } from "./question-lead-in"

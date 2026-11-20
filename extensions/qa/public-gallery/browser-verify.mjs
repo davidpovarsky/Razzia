@@ -180,15 +180,71 @@ const imageDecode = async (page, preloadCatalogue = false) => {
     .toEqual([])
 }
 
-const readyPreview = async (page) => {
+const readyPreview = async (page, chapterIndex, questionText) => {
   await expect(page.locator(".game-preview-bottom").first()).toBeVisible({
     timeout: 30_000,
   })
-  await expect(
-    page
-      .locator('[data-native-application-preview][data-preview-ready="true"]')
-      .first(),
-  ).toBeVisible({ timeout: 30_000 })
+  const slider = page
+    .locator('.game-preview-timeline input[type="range"]')
+    .first()
+  await expect(slider).toHaveValue(String(chapterIndex))
+  // The thumb follows the latest intent before its asynchronous seek commits.
+  // Neither that optimistic value nor an old ready stage proves the new frame.
+  await expect(slider).toHaveAttribute("aria-busy", "false", {
+    timeout: 30_000,
+  })
+  const stage = page
+    .locator('[data-native-application-preview][data-preview-ready="true"]')
+    .first()
+  await expect(stage).toBeVisible({ timeout: 30_000 })
+  await expect(stage).toHaveAttribute(
+    "data-preview-chapter-index",
+    String(chapterIndex),
+  )
+  if (questionText || chapterIndex === 0) {
+    await expect
+      .poll(
+        () =>
+          stage.evaluate((root, expected) => {
+            const candidates = root.querySelectorAll(
+              expected
+                ? ".q-text, .photo-question-head, [data-native-question-heading]"
+                : '[data-testid="tadazz-intro-screen"] img',
+            )
+            return Array.from(candidates).some((element) => {
+              if (expected && element.textContent?.trim() !== expected)
+                return false
+              if (
+                element instanceof HTMLImageElement &&
+                (!element.complete || !element.naturalWidth)
+              )
+                return false
+              const bounds = element.getBoundingClientRect()
+              if (bounds.width <= 0 || bounds.height <= 0) return false
+              let current = element
+              while (current) {
+                const style = getComputedStyle(current)
+                if (
+                  style.display === "none" ||
+                  style.visibility === "hidden" ||
+                  Number(style.opacity) <= 0.01
+                )
+                  return false
+                const tree = current.getRootNode()
+                current =
+                  current.parentElement ??
+                  (tree instanceof ShadowRoot ? tree.host : null)
+              }
+              return true
+            })
+          }, questionText ?? null),
+        {
+          timeout: 30_000,
+          message: "Requested preview content is actually painted",
+        },
+      )
+      .toBe(true)
+  }
 }
 const attempt = async (name, operation) => {
   try {
@@ -483,13 +539,19 @@ try {
   record("desktop-gallery-all-ten-cards")
 
   for (const game of games) {
+    const animatedPreview = ["great-guessoff", "family", "picture"].includes(
+      game.id,
+    )
+    await page.emulateMedia({
+      reducedMotion: animatedPreview ? "no-preference" : "reduce",
+    })
     await attempt("preview-" + game.id, async () => {
       await goto(page, "/?view=store")
       await page.locator('[data-catalogue-preview="' + game.id + '"]').click()
       await expect
         .poll(() => new URL(page.url()).searchParams.get("game"))
         .toBe(game.id)
-      await readyPreview(page)
+      await readyPreview(page, 0)
       await verifyViewerGeometry(page, { label: "preview-" + game.id })
       const slider = page
         .locator('.game-preview-timeline input[type="range"]')
@@ -503,33 +565,68 @@ try {
       await slider.focus()
       await page.keyboard.press("End")
       await expect(slider).toHaveValue(last)
-      await readyPreview(page)
+      await readyPreview(page, Number(last))
       await page.keyboard.press("Home")
       await expect(slider).toHaveValue("0")
-      await readyPreview(page)
-      await slider.focus()
-      await page.keyboard.press("ArrowRight")
-      await readyPreview(page)
+      await readyPreview(page, 0)
       const firstQuestion = previews
         .get(game.id)
         .show.cards.find((card) => ["quiz", "survey"].includes(card.kind))
+      await slider.focus()
+      await page.keyboard.press("ArrowRight")
+      await readyPreview(page, 1, firstQuestion.question)
       await expect(
         page.getByTestId("tadazz-question-panel").first(),
       ).toContainText(firstQuestion.question)
       await page.keyboard.press("ArrowRight")
       await expect(slider).toHaveValue("2")
-      await readyPreview(page)
+      await readyPreview(page, 2, firstQuestion.question)
       await verifyNativePalette(page, game.themeId, "preview", evidence)
       await page.keyboard.press("Home")
       await expect(slider).toHaveValue("0")
-      await readyPreview(page)
+      await readyPreview(page, 0)
+      let nativeQuestionSequence
+      if (animatedPreview) {
+        const nativeStage = page
+          .locator("[data-native-application-preview]")
+          .first()
+        await watchQuestionSequence(nativeStage, {
+          phaseAttribute: "data-preview-phase",
+        })
+        await page.getByTestId("game-preview-play-pause").click()
+        await expect(nativeStage).toHaveAttribute("data-preview-phase", "question", {
+          timeout: 30_000,
+        })
+        await expect(nativeStage).toHaveAttribute("data-preview-chapter-index", "1")
+        nativeQuestionSequence = await readQuestionSequence(nativeStage, 0, {
+          throughResults: false,
+          photo:
+            firstQuestion.media?.type === "image" &&
+            firstQuestion.answers.length === 4 &&
+            firstQuestion.answers.every((answer) => !answer.imageUrl),
+          evidencePath: join(
+            evidence,
+            "full-preview-question-sequence-" + game.id + ".json",
+          ),
+        })
+        await stopQuestionSequence(nativeStage)
+        await page.getByTestId("game-preview-play-pause").click()
+        await expect(slider).toHaveAttribute("aria-busy", "false")
+        await slider.focus()
+        await page.keyboard.press("Home")
+        await readyPreview(page, 0)
+      }
       await imageDecode(page)
       await page.screenshot({
         path: join(evidence, "preview-" + game.id + ".png"),
         fullPage: false,
       })
-      record("preview-" + game.id, { chapters: Number(last) + 1 })
+      record("preview-" + game.id, {
+        chapters: Number(last) + 1,
+        ...(nativeQuestionSequence ? { nativeQuestionSequence } : {}),
+      })
     })
+    await page.emulateMedia({ reducedMotion: "reduce" })
     await attempt("play-" + game.id, async () => {
       await goto(page, "/?view=store")
       await page.locator('[data-catalogue-open="' + game.id + '"]').click()

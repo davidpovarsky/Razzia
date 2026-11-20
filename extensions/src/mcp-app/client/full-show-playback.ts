@@ -2,6 +2,14 @@ import { QUESTION_LEAD_IN_MS } from "@razzia/common/constants"
 import { createDemoClock } from "../../presentation/show-library-preview/demo-clock.ts"
 import type { FullShowFrameV3 } from "../contracts/full-show-frame.ts"
 
+export interface FullShowQuestionPresentation {
+  readonly draftId: string
+  readonly chapterId: string
+  readonly questionId: string
+  readonly revision: number
+  readonly epoch: number
+}
+
 /** The native demo clock owns elapsed time; React only observes its snapshots. */
 export function createFullShowPlayback(now?: () => number) {
   const clock = createDemoClock(now)
@@ -10,9 +18,28 @@ export function createFullShowPlayback(now?: () => number) {
   let userPaused = false
   let replaySequence = 0
   let audioEpoch = 0
-  const snapshot = () => ({ clock: clock.snapshot(), audioEpoch })
+  let questionPresentation: FullShowQuestionPresentation | null = null
+  const snapshot = () => ({
+    clock: clock.snapshot(),
+    audioEpoch,
+    userPaused,
+    questionPresentation,
+  })
+  function presentationFor(frame: FullShowFrameV3) {
+    return frame.content.kind === "question" &&
+      frame.content.frame.phase === "question"
+      ? {
+          draftId: frame.inventory.draftId,
+          chapterId: frame.inventory.selectedChapterId,
+          questionId: frame.content.frame.question.id,
+          revision: frame.inventory.revision,
+          epoch: clock.snapshot().epoch,
+        }
+      : null
+  }
   function reset(frame: FullShowFrameV3, carryMs = 0) {
     clock.replay()
+    questionPresentation = presentationFor(frame)
 
     if (
       frame.content.kind === "question" &&
@@ -26,7 +53,9 @@ export function createFullShowPlayback(now?: () => number) {
       clock.seek(carryMs)
     }
 
-    if (!userPaused) {
+    // Rendering and entrance time must not consume a new question's reading
+    // interval. Explicit non-question chapter selections keep their own clock.
+    if (!userPaused && !questionPresentation) {
       clock.play()
     }
   }
@@ -37,6 +66,7 @@ export function createFullShowPlayback(now?: () => number) {
       if (!frame) {
         selected = ""
         previousFrame = null
+        questionPresentation = null
         clock.pause()
 
         return snapshot()
@@ -66,9 +96,31 @@ export function createFullShowPlayback(now?: () => number) {
           ? Math.max(0, clock.snapshot().elapsedMs - QUESTION_LEAD_IN_MS)
           : 0
         reset(frame, carryMs)
+      } else if (
+        questionPresentation &&
+        questionPresentation.revision !== frame.inventory.revision
+      ) {
+        // An edit while the first frame is pending replaces its readiness
+        // ticket without restarting an already presented question's clock.
+        questionPresentation = presentationFor(frame)
       }
 
       previousFrame = frame
+
+      return snapshot()
+    },
+    questionPresented(presentation: FullShowQuestionPresentation) {
+      // Object ownership rejects stale same-key replay, revision, navigation
+      // and teardown acknowledgements from the independently rendered root.
+      if (presentation !== questionPresentation) {
+        return snapshot()
+      }
+
+      questionPresentation = null
+
+      if (!userPaused && selected) {
+        clock.play()
+      }
 
       return snapshot()
     },
@@ -81,7 +133,7 @@ export function createFullShowPlayback(now?: () => number) {
     resume() {
       userPaused = false
 
-      if (selected) {
+      if (selected && !questionPresentation) {
         clock.play()
       }
 

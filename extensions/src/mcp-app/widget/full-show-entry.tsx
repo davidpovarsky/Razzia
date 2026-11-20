@@ -12,6 +12,7 @@ import { restoreNativeCspConfiguration } from "../../presentation/show-library-p
 import { App } from "@modelcontextprotocol/ext-apps"
 import { createRoot, type Root } from "react-dom/client"
 import {
+  useCallback,
   useEffect,
   useLayoutEffect,
   useRef,
@@ -24,6 +25,7 @@ import { createFullShowConsumerV3 } from "../client/full-show-frame.ts"
 import {
   createFullShowPlayback,
   type FullShowPlaybackSnapshot,
+  type FullShowQuestionPresentation,
 } from "../client/full-show-playback.ts"
 import {
   fullShowAutomaticChapter,
@@ -297,6 +299,7 @@ app.onteardown = () => {
 function Surface({
   frame,
   playback,
+  onQuestionPresented,
   aspect,
   audioControlsTarget,
   demoControlsTarget,
@@ -307,6 +310,7 @@ function Surface({
 }: {
   frame: FullShowFrameV3
   playback: FullShowPlaybackSnapshot
+  onQuestionPresented: (presentation: FullShowQuestionPresentation) => void
   aspect: "16 / 9" | "4 / 3"
   audioControlsTarget: HTMLDivElement | null
   demoControlsTarget: HTMLDivElement | null
@@ -371,6 +375,7 @@ function Surface({
       <FullShowNativeStageV3
         value={frame}
         playback={playback}
+        onQuestionPresented={onQuestionPresented}
         audioControlsTarget={audioControlsTarget}
         demoControlsTarget={demoControlsTarget}
         onDemoReveal={onDemoReveal}
@@ -384,6 +389,7 @@ function Surface({
   }, [
     frame,
     playback,
+    onQuestionPresented,
     soundEnabled,
     onSoundEnabled,
     audioControlsTarget,
@@ -424,6 +430,12 @@ function FullShowWidget() {
   const [aspect, setAspect] = useState<"16 / 9" | "4 / 3">("16 / 9")
   const [playbackOwner] = useState(() => createFullShowPlayback())
   const [playback, setPlayback] = useState(() => playbackOwner.snapshot())
+  const questionPresented = useCallback(
+    (presentation: FullShowQuestionPresentation) => {
+      setPlayback(playbackOwner.questionPresented(presentation))
+    },
+    [playbackOwner],
+  )
   const [undoId, setUndoId] = useState<string>()
   const [pendingMutation, setPendingMutation] =
     useState<PendingMutation | null>(null)
@@ -552,9 +564,7 @@ function FullShowWidget() {
 
     const livePlayback = playbackOwner.snapshot()
     setPlayback(
-      livePlayback.clock.paused
-        ? playbackOwner.resume()
-        : playbackOwner.pause(),
+      livePlayback.userPaused ? playbackOwner.resume() : playbackOwner.pause(),
     )
   }
 
@@ -774,7 +784,7 @@ function FullShowWidget() {
           }}
           playback={{
             testId: "full-show-pause",
-            state: playback.clock.paused ? "paused" : "playing",
+            state: playback.userPaused ? "paused" : "playing",
             disabled: manualBusy,
             onClick: togglePlayback,
           }}
@@ -921,6 +931,7 @@ function FullShowWidget() {
           <Surface
             frame={frame}
             playback={playback}
+            onQuestionPresented={questionPresented}
             aspect={aspect}
             audioControlsTarget={audioControlsTarget}
             demoControlsTarget={demoControlsTarget}

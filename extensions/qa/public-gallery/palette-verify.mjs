@@ -47,6 +47,15 @@ export async function verifyNativePalette(
     .filter({ has: page.locator(".q-frame") })
     .first()
   await expect(stage.locator(".q-frame")).toBeVisible({ timeout: 30_000 })
+  if (context === "editor") {
+    // The static Question tab intentionally contains no answers. Palette
+    // comparisons inspect the explicit Answers tab, without starting playback.
+    const preview = page.getByTestId("question-live-preview")
+    await expect(preview).toHaveAttribute("data-preview-phase", "question")
+    await expect(stage.locator(".answer-card")).toHaveCount(0)
+    await preview.getByTestId("question-preview-phase-answers").click()
+    await expect(preview).toHaveAttribute("data-preview-phase", "answers")
+  }
   await expect(stage.locator(".answer-card").first()).toBeVisible({
     timeout: 30_000,
   })

@@ -1,4 +1,5 @@
 import NativeButton from "../../../../packages/web/src/components/Button"
+import { flushSync } from "react-dom"
 import { I18nextProvider } from "react-i18next"
 import { NativeClassicLobbyPanel } from "./native-room-panel"
 import { NativeClassicPlayerResult } from "./native-player-result"
@@ -54,6 +55,7 @@ import { NativeQuestionMedia } from "../tadazz-show/native-question-media"
 import { createPreviewStageContinuity } from "./preview-stage-continuity"
 import { createShowThemeRegistry } from "../../core/show-themes/registry"
 import { PackageApplicationPreviewStage } from "./package-application-stage"
+import { observeQuestionPresentation } from "../question-lead-in"
 
 // First-party native stage only. The host admits exact built bytes and account assets
 // before mounting. This component has no room/socket/score/telephone transport.
@@ -198,7 +200,9 @@ function NativeApplicationPreviewStage({
     role: frame.role,
   })
   const [committed, setCommitted] = useState("")
+  const [prepared, setPrepared] = useState("")
   const [committedStage, setCommittedStage] = useState<number | null>(null)
+  const presentationRoot = useRef<HTMLDivElement>(null)
   const callbacks = useRef({ onCommitted, onUnavailable })
   callbacks.current = { onCommitted, onUnavailable }
   const native = bundle.bundleDraft
@@ -412,9 +416,8 @@ function NativeApplicationPreviewStage({
       const last = plan.at(-1)
       const publish = () => {
         if (current) {
-          setCommitted(key)
+          setPrepared(key)
           setCommittedStage(stageIdentity)
-          callbacks.current.onCommitted()
         }
       }
 
@@ -487,6 +490,29 @@ function NativeApplicationPreviewStage({
     original,
     questionPosition,
   ])
+  useLayoutEffect(() => {
+    const element = presentationRoot.current
+
+    if (prepared !== key || !element) {
+      return
+    }
+
+    const publish = () => {
+      setCommitted(key)
+      callbacks.current.onCommitted()
+    }
+
+    // Reveal the committed scene before measuring its text. Its entrance may
+    // still be at opacity zero; no local reading clock starts until it is shown.
+    if (phase === "question") {
+      return observeQuestionPresentation(element, () => {
+        flushSync(() => setCommitted(key))
+        callbacks.current.onCommitted()
+      })
+    }
+
+    publish()
+  }, [prepared, key, phase])
   useLayoutEffect(() => {
     const handle = stage.current
 
@@ -590,8 +616,13 @@ function NativeApplicationPreviewStage({
             template={template}
           >
             <div
+              ref={presentationRoot}
               data-native-application-preview
               data-preview-ready={committed === key}
+              data-preview-chapter-index={frame.chapterIndex}
+              data-preview-phase={
+                phase === "question" && committed !== key ? "preparing" : phase
+              }
               style={{
                 ...showThemeStyle(theme),
                 width: "100%",
@@ -620,9 +651,8 @@ function NativeApplicationPreviewStage({
                   backdropPosition={backdrop.position}
                   backdropOverlayOpacity={backdrop.overlayOpacity}
                   onCommitted={() => {
-                    setCommitted(key)
+                    setPrepared(key)
                     setCommittedStage(stageIdentity)
-                    callbacks.current.onCommitted()
                   }}
                 />
               ) : (

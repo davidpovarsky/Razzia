@@ -42,6 +42,7 @@ export interface TadazzV4StageAdapterProps extends TadazzStageProps {
   v4Labels?: Partial<TadazzV4Labels>
   fitRevision?: number
   onCue?: (cue: TadazzV4Cue) => void
+  onQuestionPresented?: (questionKey: string) => void
   onResolveStoryTie?: (contestantIndex: number) => void
 }
 
@@ -91,6 +92,7 @@ export const TadazzV4StageAdapter = forwardRef<
     className,
     onModeChange,
     onCue,
+    onQuestionPresented,
   },
   ref,
 ) {
@@ -846,6 +848,7 @@ export const TadazzV4StageAdapter = forwardRef<
       overlay={overlay}
       customScreen={customSlot}
       onCue={onCue}
+      onQuestionPresented={onQuestionPresented}
     />
   )
 })

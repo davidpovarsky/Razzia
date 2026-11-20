@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { flushSync } from "react-dom"
 import { PresentationControls } from "../../../platform-ui"
 import { GameViewer } from "../../components/game-viewer/GameViewer"
 import {
@@ -33,6 +34,7 @@ type Question = {
 type Phase =
   | "intro"
   | "question-transition"
+  | "preparing"
   | "question"
   | "voting"
   | "locked"
@@ -44,6 +46,7 @@ type Phase =
 const soundtrackByPhase: Record<Phase, SoundtrackSlotId> = {
   intro: "lobby",
   "question-transition": "question",
+  preparing: "question",
   question: "question",
   voting: "voting",
   locked: "voting",
@@ -219,6 +222,21 @@ export function GreatGuessOffDemo() {
     },
     [playEffect],
   )
+  const onQuestionPresented = useCallback(
+    (questionKey: string) => {
+      if (!mounted.current) {
+        return
+      }
+
+      leadIn.present(questionKey, () => {
+        flushSync(() => {
+          currentPhase.current = "question"
+          setPhase("question")
+        })
+      })
+    },
+    [leadIn],
+  )
   const toggleSound = () => setSoundOn((value) => !value)
 
   const run = (action: () => Promise<void>) => {
@@ -282,11 +300,13 @@ export function GreatGuessOffDemo() {
     if (!handle) return
     setQuestionIndex(index)
     setSecondsLeft(VOTING_SECONDS)
-    setPhase("question")
-    currentPhase.current = "question"
+    setPhase("preparing")
+    currentPhase.current = "preparing"
     const q = stageQuestion(QUESTIONS[index], index)
-    const ready = leadIn.wait()
+    const ready = leadIn.wait(q.key)
     void handle.showQuestion({ ...q, options: [] }).catch(() => {
+      leadIn.cancel()
+
       if (mounted.current) {
         setMessage("Unable to display the question.")
       }
@@ -457,6 +477,7 @@ export function GreatGuessOffDemo() {
   const captions = {
     intro: "The Great Guess-off · Five rounds of surprises",
     "question-transition": `Question ${questionIndex + 1} · Get ready to vote`,
+    preparing: `Question ${questionIndex + 1} of 5`,
     question: `Question ${questionIndex + 1} of 5`,
     voting: `Question ${questionIndex + 1} of 5 · ${secondsLeft}s remaining`,
     locked: `Question ${questionIndex + 1} of 5 · Time's up`,
@@ -592,6 +613,7 @@ export function GreatGuessOffDemo() {
             interactive={!showMobileQuestion}
             onSelectOption={choose}
             onCue={onCue}
+            onQuestionPresented={onQuestionPresented}
             reducedMotion={reducedMotion}
             backdropUrl="/tadazz-show/v4/question-bg.webp"
           />

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { flushSync } from "react-dom"
 import { PresentationControls } from "../../../platform-ui"
 import { GameViewer } from "../../components/game-viewer/GameViewer"
 import { getPublicDemo } from "../../../core/show-library/public-demo-catalogue"
@@ -37,11 +38,18 @@ const nativeStageCss = [
   v4Css,
 ].join("\n")
 type Phase =
-  "intro" | "transition" | "question" | "voting" | "results" | "finish"
+  | "intro"
+  | "transition"
+  | "preparing"
+  | "question"
+  | "voting"
+  | "results"
+  | "finish"
 
 const soundtrackByPhase: Record<Phase, SoundtrackSlotId> = {
   intro: "lobby",
   transition: "question",
+  preparing: "question",
   question: "question",
   voting: "voting",
   results: "results",
@@ -166,6 +174,21 @@ function CataloguePlayer({
     },
     [playEffect],
   )
+  const onQuestionPresented = useCallback(
+    (questionKey: string) => {
+      if (!mounted.current) {
+        return
+      }
+
+      leadIn.present(questionKey, () => {
+        flushSync(() => {
+          phaseRef.current = "question"
+          setPhase("question")
+        })
+      })
+    },
+    [leadIn],
+  )
   const stageQuestion = (position: number): StageQuestion => {
     const card = questions[position]
 
@@ -200,7 +223,7 @@ function CataloguePlayer({
       return
     }
 
-    transition("question")
+    transition("preparing")
     setIndex(position)
     setVotes((previous) =>
       Object.fromEntries(
@@ -208,10 +231,12 @@ function CataloguePlayer({
       ),
     )
     const stageCard = stageQuestion(position)
-    const ready = leadIn.wait()
-    // Enter the question once. The platform clock, not the entrance animation,
-    // decides when answer cards and their voting deadline appear.
+    const ready = leadIn.wait(stageCard.key)
+    // The first presented question frame starts the shared two-second reading
+    // interval. Pending React work must never consume the visible reading time.
     void handle.showQuestion({ ...stageCard, options: [] }).catch(() => {
+      leadIn.cancel()
+
       if (mounted.current) {
         setError(t("The game could not continue. Please try again."))
       }
@@ -484,6 +509,7 @@ function CataloguePlayer({
               interactive={!showMobileQuestion}
               onSelectOption={choose}
               onCue={onCue}
+              onQuestionPresented={onQuestionPresented}
               reducedMotion={reducedMotion}
             />
           </div>

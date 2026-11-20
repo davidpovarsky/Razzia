@@ -667,7 +667,14 @@ export async function verifyPublicViewers({
             })
             await page.getByTestId("tadazz-card-0").first().click()
             await expect(root).toHaveAttribute("data-game-phase", "results")
-            rounds.push(await readQuestionSequence(root, replay))
+            rounds.push(
+              await readQuestionSequence(root, replay, {
+                evidencePath: join(
+                  directory,
+                  `normal-motion-replay-${id}-${replay}.json`,
+                ),
+              }),
+            )
             if (replay === 0) {
               await controls
                 .locator('[data-presentation-action="replay"]')

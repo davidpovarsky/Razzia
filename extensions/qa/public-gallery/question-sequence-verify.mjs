@@ -1,5 +1,6 @@
 /** Browser-only observation of the real stage clock, paint and retained question nodes. */
 import assert from "node:assert/strict"
+import { writeFileSync } from "node:fs"
 import { createRequire } from "node:module"
 const require = createRequire("/cleanup/extensions/package.json")
 const { expect } = require("@playwright/test")
@@ -63,6 +64,21 @@ export async function watchQuestionSequence(root, options = {}) {
         opacity: style.opacity,
       }
     }
+    const layout = (panel) => {
+      const stage = panel.closest(".tzv4-stage")
+      const dialog = all(".game-viewer-dialog")[0]
+      return {
+        stage: stage ? geometry(stage) : null,
+        root: geometry(element),
+        scroll: {
+          x: window.scrollX,
+          y: window.scrollY,
+          dialogLeft: dialog?.scrollLeft ?? null,
+          dialogTop: dialog?.scrollTop ?? null,
+        },
+        viewport: { width: window.innerWidth, height: window.innerHeight },
+      }
+    }
     const snapshot = (record) => ({
       number: record.number,
       question: record.question,
@@ -81,6 +97,7 @@ export async function watchQuestionSequence(root, options = {}) {
       newQuestionAnimations: record.newQuestionAnimations,
       stableTypography: record.stableTypography,
       stableGeometry: record.stableGeometry,
+      geometryEvidence: record.geometryEvidence,
       photo: record.photo,
       samples: record.samples,
       explicitReplay: record.explicitReplay,
@@ -136,7 +153,10 @@ export async function watchQuestionSequence(root, options = {}) {
           panel: null,
           heading: null,
           baseline: null,
+          baselineAt: null,
           panelBaseline: null,
+          layoutBaseline: null,
+          geometryEvidence: null,
           animations: new WeakSet(),
           samples: [],
           explicitReplay: pendingExplicitReplay,
@@ -204,7 +224,9 @@ export async function watchQuestionSequence(root, options = {}) {
           }
           if (phase === "question" && now - current.questionAt >= 1600) {
             current.baseline = geometry(heading)
+            current.baselineAt = now
             current.panelBaseline = geometry(panel)
+            current.layoutBaseline = layout(panel)
           }
           if (phase !== "question" && current.baseline) {
             const actual = geometry(heading)
@@ -218,9 +240,32 @@ export async function watchQuestionSequence(root, options = {}) {
               if (actual[key] !== current.baseline[key])
                 current.stableTypography = false
             }
+            const changedGeometry = []
             for (const key of ["x", "y", "width", "height"]) {
-              if (Math.abs(actual[key] - current.baseline[key]) > 2)
+              if (Math.abs(actual[key] - current.baseline[key]) > 2) {
                 current.stableGeometry = false
+                changedGeometry.push(key)
+              }
+            }
+            if (changedGeometry.length > 0 && !current.geometryEvidence) {
+              current.geometryEvidence = {
+                phase,
+                at: now,
+                questionAt: current.questionAt,
+                changed: changedGeometry,
+                baseline: {
+                  phase: "question",
+                  at: current.baselineAt,
+                  heading: current.baseline,
+                  panel: current.panelBaseline,
+                  ...current.layoutBaseline,
+                },
+                actual: {
+                  heading: actual,
+                  panel: geometry(panel),
+                  ...layout(panel),
+                },
+              }
             }
             const actualPanel = geometry(panel)
             if (
@@ -280,7 +325,7 @@ export async function watchQuestionSequence(root, options = {}) {
 export async function readQuestionSequence(
   root,
   index,
-  { photo = false, throughResults = true } = {},
+  { photo = false, throughResults = true, evidencePath } = {},
 ) {
   await expect
     .poll(
@@ -304,6 +349,8 @@ export async function readQuestionSequence(
     (element, index) => element.__questionSequence.read()[index],
     index,
   )
+  if (evidencePath)
+    writeFileSync(evidencePath, JSON.stringify(result, null, 2) + "\n")
   assert(result.question, "Observed the actual question heading")
   const lead = result.votingAt - result.questionAt
   assert(
@@ -368,7 +415,12 @@ export async function readQuestionSequence(
     true,
     "Question typography, transform and opacity remain stable",
   )
-  assert.equal(result.stableGeometry, true, "Question geometry remains stable")
+  assert.equal(
+    result.stableGeometry,
+    true,
+    "Question geometry remains stable: " +
+      JSON.stringify(result.geometryEvidence),
+  )
   if (photo)
     assert.equal(result.photo, true, "Actual question-image layout exercised")
   return {

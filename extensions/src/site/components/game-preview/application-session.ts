@@ -130,8 +130,16 @@ export function createApplicationPreviewSession(options: {
       ? { packageContext: options.getPackageContext() }
       : {}),
   })
-  const render = async () => {
-    await native?.update(frame())
+  const render = async (presentQuestion = false) => {
+    const nextFrame = frame()
+
+    if (presentQuestion) {
+      // Entrance motion can run while the one reading clock waits for the
+      // renderer's visible-question acknowledgement.
+      nextFrame.clock = { ...nextFrame.clock, paused: false }
+    }
+
+    await native?.update(nextFrame)
     const media = native?.mediaElement() ?? null
 
     if (media === watchedMedia || disposed) {
@@ -165,7 +173,9 @@ export function createApplicationPreviewSession(options: {
       clock.startVoting(chapter.duration.milliseconds / 1000)
     }
 
-    if (carryMs > 0) {
+    // A previous scene's late tick cannot consume a new question's reading
+    // interval. Carry remains authoritative for voting and all other phases.
+    if (carryMs > 0 && chapter.phase !== "question") {
       clock.seek(carryMs)
     }
   }
@@ -173,16 +183,42 @@ export function createApplicationPreviewSession(options: {
     clear()
     clock.pause()
   }
+  const playAfterQuestionPresentation = async (
+    ticket: number,
+    signal: AbortSignal = abort.signal,
+  ) => {
+    if (
+      !stagePhase &&
+      chapters[chapterIndex].phase === "question" &&
+      clock.snapshot().paused
+    ) {
+      await render(true)
+    }
+
+    if (
+      disposed ||
+      ticket !== generation ||
+      signal.aborted ||
+      document.hidden
+    ) {
+      return false
+    }
+
+    clock.play()
+
+    return true
+  }
   const tick = async () => {
     if (disposed || clock.snapshot().paused) {
       return
     }
 
+    const ticket = generation
+
     if (
       options.getPackageContext &&
       Date.now() - lastPackageValidation > 240_000
     ) {
-      const ticket = generation
       await revalidate(abort.signal)
       if (disposed || ticket !== generation || clock.snapshot().paused) return
     }
@@ -225,11 +261,19 @@ export function createApplicationPreviewSession(options: {
             ? Math.max(0, elapsedMs - chapter.duration.milliseconds)
             : 0
         beginChapter(carryMs)
-        clock.play()
+
+        if (!(await playAfterQuestionPresentation(ticket))) {
+          return
+        }
       }
     }
 
     await render()
+
+    if (disposed || ticket !== generation) {
+      return
+    }
+
     emit()
 
     if (!disposed && !clock.snapshot().paused) {
@@ -256,6 +300,7 @@ export function createApplicationPreviewSession(options: {
   }
   const visibility = () => {
     if (document.hidden) {
+      generation += 1
       stop()
       void render().then(emit).catch(fail)
     }
@@ -367,7 +412,10 @@ export function createApplicationPreviewSession(options: {
         beginChapter()
       }
 
-      clock.play()
+      if (!(await playAfterQuestionPresentation(ticket, combined))) {
+        return
+      }
+
       await render()
 
       if (disposed || ticket !== generation || combined.aborted) {
@@ -422,7 +470,10 @@ export function createApplicationPreviewSession(options: {
         beginChapter()
       }
 
-      clock.play()
+      if (!(await playAfterQuestionPresentation(ticket, combined))) {
+        return
+      }
+
       await render()
 
       if (disposed || ticket !== generation || combined.aborted) {

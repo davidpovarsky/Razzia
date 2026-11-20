@@ -12,6 +12,7 @@ import {
   NativeQuestionHeading,
   LiveEditorStagePreview,
   createDemoClock,
+  observeQuestionPresentation,
   ShowThemeScope,
   showThemeStyle,
   showViewportStyle,
@@ -39,7 +40,8 @@ import { useInstalledThemeCatalog } from "../studio/installed-theme-catalog"
 import { useStudioEditor } from "../studio/studio-editor-context"
 import { Eye, EyeOff } from "lucide-react"
 import { useReducedMotion } from "motion/react"
-import { useEffect, useId, useMemo, useState } from "react"
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react"
+import { flushSync } from "react-dom"
 import { useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { EditorPreviewViewport } from "./EditorPreviewViewport"
@@ -77,10 +79,16 @@ export function QuestionLivePreview({
   const [animatedQuestion, setAnimatedQuestion] = useState<
     typeof question | null
   >(null)
+  const previewRoot = useRef<HTMLDivElement>(null)
+  const currentQuestionRef = useRef(question)
+  currentQuestionRef.current = question
+  const cancelPresentation = useRef<() => void>(() => undefined)
+  const [presentedReplay, setPresentedReplay] = useState<number | null>(null)
   const [previewClock] = useState(() => createDemoClock())
   const [playback, setPlayback] = useState(() => previewClock.snapshot())
   useEffect(() => {
     if (animatedQuestion !== question) {
+      cancelPresentation.current()
       previewClock.pause()
 
       return
@@ -119,20 +127,65 @@ export function QuestionLivePreview({
 
     return () => clearTimeout(timer)
   }, [animatedQuestion, question, previewClock, replay])
+  useEffect(() => () => cancelPresentation.current(), [])
+  useEffect(() => {
+    if (!visible) {
+      cancelPresentation.current()
+    }
+  }, [visible])
+  const onQuestionCommitted = useCallback(
+    (committedReplay: number) => {
+      const root = previewRoot.current
+
+      if (
+        !root ||
+        !visible ||
+        animatedQuestion !== question ||
+        phase !== "question" ||
+        committedReplay !== replay ||
+        !previewClock.snapshot().paused
+      ) {
+        return
+      }
+
+      cancelPresentation.current()
+      cancelPresentation.current = observeQuestionPresentation(
+        root,
+        () => {
+          if (
+            currentQuestionRef.current !== question ||
+            previewClock.snapshot().epoch !== committedReplay
+          ) {
+            return
+          }
+
+          // Commit the visible reading phase before starting its one clock.
+          // Renderer loading and opacity-zero entrance frames consume no reading time.
+          flushSync(() => setPresentedReplay(committedReplay))
+          previewClock.play()
+          setPlayback(previewClock.snapshot())
+        },
+        { packageReady: true },
+      )
+    },
+    [animatedQuestion, phase, previewClock, question, replay, visible],
+  )
   const replayQuestion = () => {
+    cancelPresentation.current()
+    setPresentedReplay(null)
     previewClock.replay()
 
     if (question.time > 0) {
       previewClock.startVoting(question.time, QUESTION_LEAD_IN_MS)
     }
 
-    previewClock.play()
     setPlayback(previewClock.snapshot())
     setPhase("question")
     setAnimatedQuestion(question)
     setReplay((value) => value + 1)
   }
   const selectPhase = (next: PreviewPhase) => {
+    cancelPresentation.current()
     previewClock.pause()
     setAnimatedQuestion(null)
     setPhase(next)
@@ -250,6 +303,7 @@ export function QuestionLivePreview({
   const stageContent = (
     <ShowThemeScope theme={theme}>
       <div
+        ref={previewRoot}
         data-testid="question-preview-native-stage"
         data-show-theme={theme.definition.id}
         style={showThemeStyle(theme)}
@@ -291,6 +345,7 @@ export function QuestionLivePreview({
             deadlineMs={votingDeadlineMs}
             replay={replay}
             mediaRevealed={revealed}
+            onQuestionCommitted={onQuestionCommitted}
           >
             <NativeGameSurface theme={theme}>
               <NativeQuestionHeading
@@ -406,7 +461,13 @@ export function QuestionLivePreview({
     <section
       data-testid="question-live-preview"
       data-question-id={currentQuestionId}
-      data-preview-phase={phase}
+      data-preview-phase={
+        phase === "question" &&
+        animatedQuestion === question &&
+        presentedReplay !== replay
+          ? "preparing"
+          : phase
+      }
       className={
         workspace
           ? "native-question-preview relative z-10"

@@ -39,6 +39,8 @@ function playback(elapsedMs: number, paused = false): FullShowPlaybackSnapshot {
   return {
     clock: { epoch: 1, sequence: 1, elapsedMs, paused, deadlineMs: null },
     audioEpoch: 0,
+    userPaused: paused,
+    questionPresentation: null,
   }
 }
 

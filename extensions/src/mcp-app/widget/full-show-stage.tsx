@@ -24,7 +24,11 @@ import {
 } from "../../presentation/tadazz-show/show-director.ts"
 import { previewNativeLabels } from "../../presentation/show-library-preview/i18n.ts"
 import { StageFitContainer } from "../../presentation/stage-fit.tsx"
-import type { FullShowPlaybackSnapshot } from "../client/full-show-playback.ts"
+import type {
+  FullShowPlaybackSnapshot,
+  FullShowQuestionPresentation,
+} from "../client/full-show-playback.ts"
+import { observeQuestionPresentation } from "../../presentation/question-lead-in.ts"
 import {
   FullShowDemoQuestionV3,
   type FullShowDemoLabels,
@@ -199,6 +203,7 @@ export function FullShowNativeStageV3({
   soundEnabled = false,
   onSoundEnabled = () => undefined,
   playback,
+  onQuestionPresented,
   audioControlsTarget,
   demoControlsTarget,
   onDemoReveal,
@@ -210,6 +215,7 @@ export function FullShowNativeStageV3({
   soundEnabled?: boolean
   onSoundEnabled?: (enabled: boolean) => void
   playback: FullShowPlaybackSnapshot
+  onQuestionPresented: (presentation: FullShowQuestionPresentation) => void
   audioControlsTarget: HTMLDivElement | null
   demoControlsTarget?: HTMLDivElement | null
   onDemoReveal?: () => void
@@ -217,6 +223,29 @@ export function FullShowNativeStageV3({
   onWorkspaceAppearance?: (appearance: CSSProperties) => void
 }) {
   const input = useMemo(() => fullShowFrameV3Schema.parse(value), [value])
+  const stageElement = useRef<HTMLDivElement>(null)
+  const presentation = playback.questionPresentation
+  useLayoutEffect(() => {
+    const root = stageElement.current
+
+    if (
+      !root ||
+      !presentation ||
+      input.content.kind !== "question" ||
+      input.content.frame.phase !== "question" ||
+      presentation.draftId !== input.inventory.draftId ||
+      presentation.chapterId !== input.inventory.selectedChapterId ||
+      presentation.revision !== input.inventory.revision ||
+      presentation.questionId !== input.content.frame.question.id ||
+      presentation.epoch !== playback.clock.epoch
+    ) {
+      return
+    }
+
+    return observeQuestionPresentation(root, () => {
+      onQuestionPresented(presentation)
+    })
+  }, [input, presentation, playback.clock.epoch, onQuestionPresented])
   const theme = useMemo(() => resolved(input), [input])
   // The native stage has its own React root, so it needs the same private
   // translation provider as the native scene and question components.
@@ -253,12 +282,14 @@ export function FullShowNativeStageV3({
     <I18nextProvider i18n={nativeI18n}>
       <ShowThemeScope theme={theme}>
         <div
+          ref={stageElement}
           data-full-show-stage={content.kind}
           data-full-show-theme={input.theme.id}
           data-full-show-chapter={input.inventory.selectedChapterId}
           data-playback-elapsed={Math.round(playback.clock.elapsedMs)}
           data-playback-epoch={playback.clock.epoch}
-          data-playback-paused={playback.clock.paused}
+          data-playback-paused={playback.userPaused}
+          data-question-presentation-pending={Boolean(presentation)}
           style={{
             ...showThemeStyle(theme),
             width: "100%",

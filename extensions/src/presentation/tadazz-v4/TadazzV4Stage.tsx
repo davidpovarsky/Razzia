@@ -18,6 +18,7 @@ import {
 import { showThemeStyle, useOptionalShowTheme } from "../show-themes/context"
 import "./full-show.css"
 import { TadazzV4Motion } from "./motion"
+import { observeQuestionPresentation } from "../question-lead-in"
 import "./source-layout.css"
 import "./tadazz-v4.css"
 import {
@@ -60,6 +61,7 @@ export const TadazzV4Stage = forwardRef<
     customScreen,
     onCue,
     onComplete,
+    onQuestionPresented,
   },
   ref,
 ) {
@@ -92,10 +94,12 @@ export const TadazzV4Stage = forwardRef<
   const callbackRef = useRef({
     onCue,
     onComplete,
+    onQuestionPresented,
   })
   callbackRef.current = {
     onCue,
     onComplete,
+    onQuestionPresented,
   }
   const motionScaleRef = useRef(motionScale)
   motionScaleRef.current = motionScale
@@ -385,6 +389,27 @@ export const TadazzV4Stage = forwardRef<
         engineRef.current = null
       }
     }
+  }, [view?.revision, view?.scene])
+  useLayoutEffect(() => {
+    const element = stageRef.current
+
+    if (
+      !element ||
+      !view ||
+      view.scene !== "question" ||
+      !view.data.questionKey ||
+      !callbackRef.current.onQuestionPresented
+    ) {
+      return
+    }
+
+    const questionKey = view.data.questionKey
+
+    return observeQuestionPresentation(element, () => {
+      if (sequence.current === view.revision) {
+        callbackRef.current.onQuestionPresented?.(questionKey)
+      }
+    })
   }, [view?.revision, view?.scene])
   useEffect(
     () => () => {

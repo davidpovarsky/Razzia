@@ -2,7 +2,9 @@ import {
   Component,
   lazy,
   Suspense,
+  useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react"
@@ -28,18 +30,23 @@ interface StageProps {
   paused?: boolean
   replay?: number
   mediaRevealed?: boolean
+  onQuestionCommitted?: (replay: number) => void
   activeSceneData?: ScenePresenterProps["activeSceneData"]
   children: ReactNode
 }
 
 class PreviewFailureBoundary extends Component<
-  { children: ReactNode; fallback: ReactNode },
+  { children: ReactNode; fallback: ReactNode; onFallback?: () => void },
   { failed: boolean }
 > {
   state = { failed: false }
 
   static getDerivedStateFromError() {
     return { failed: true }
+  }
+
+  componentDidCatch() {
+    this.props.onFallback?.()
   }
 
   render() {
@@ -52,11 +59,13 @@ function ReadyEditorStage({
   fallback,
   questionPosition,
   activeSceneData,
+  onQuestionCommitted,
 }: {
   frame: ApplicationPreviewFrame
   fallback: ReactNode
   questionPosition?: { number: number; total: number }
   activeSceneData?: ScenePresenterProps["activeSceneData"]
+  onQuestionCommitted?: () => void
 }) {
   const [unavailable, setUnavailable] = useState(false)
 
@@ -70,8 +79,11 @@ function ReadyEditorStage({
         frame={frame}
         questionPosition={questionPosition}
         activeSceneData={activeSceneData}
-        onCommitted={() => undefined}
-        onUnavailable={() => setUnavailable(true)}
+        onCommitted={() => onQuestionCommitted?.()}
+        onUnavailable={() => {
+          setUnavailable(true)
+          onQuestionCommitted?.()
+        }}
       />
     </Suspense>
   )
@@ -92,6 +104,7 @@ export function LiveEditorStagePreview({
   paused = true,
   replay = 0,
   mediaRevealed = false,
+  onQuestionCommitted,
   activeSceneData,
   children,
 }: StageProps) {
@@ -116,6 +129,19 @@ export function LiveEditorStagePreview({
     () => JSON.stringify([snapshot?.show, authoredKey, selectedLocale, replay]),
     [snapshot, authoredKey, selectedLocale, replay],
   )
+  const usesApplicationStage = Boolean(
+    enabled &&
+    snapshot &&
+    chapterIndex >= 0 &&
+    !snapshot.show.defaults?.showComposition,
+  )
+  const committedCallback = useRef(onQuestionCommitted)
+  committedCallback.current = onQuestionCommitted
+  useEffect(() => {
+    if (!usesApplicationStage && phase === "question") {
+      committedCallback.current?.(replay)
+    }
+  }, [usesApplicationStage, phase, replay, revision])
   const fallback = (
     <div
       data-editor-preview-fallback
@@ -163,12 +189,25 @@ export function LiveEditorStagePreview({
       lang={selectedLocale}
       dir={selectedLocale === "he" ? "rtl" : "ltr"}
     >
-      <PreviewFailureBoundary key={revision} fallback={fallback}>
+      <PreviewFailureBoundary
+        key={revision}
+        fallback={fallback}
+        onFallback={
+          phase === "question"
+            ? () => committedCallback.current?.(replay)
+            : undefined
+        }
+      >
         <ReadyEditorStage
           frame={frame}
           fallback={fallback}
           questionPosition={snapshot.questionPosition}
           activeSceneData={activeSceneData}
+          onQuestionCommitted={
+            phase === "question"
+              ? () => committedCallback.current?.(replay)
+              : undefined
+          }
         />
       </PreviewFailureBoundary>
     </div>

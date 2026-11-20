@@ -1,5 +1,5 @@
 import NativeButton from "../../../../packages/web/src/components/Button"
-import { useCallback, useRef, useState } from "react"
+import { useCallback, useLayoutEffect, useRef, useState } from "react"
 import { createPortal } from "react-dom"
 import type { FullShowFrameV3 } from "../contracts/full-show-frame.ts"
 import type { FullShowPlaybackSnapshot } from "../client/full-show-playback.ts"
@@ -40,9 +40,26 @@ export function FullShowDemoQuestionV3({
 }) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const stage = useRef<TadazzStageHandle | null>(null)
+  // A question first presented while paused is a settled snapshot. Keep that
+  // choice through its phases so resuming cannot replay a CSS entrance.
+  const staticPresentation = useRef(playback.userPaused)
+
+  if (playback.questionPresentation && playback.userPaused) {
+    staticPresentation.current = true
+  }
+
+  const reducedMotion =
+    input.inventory.context.reducedMotion || staticPresentation.current
   const attachStage = useCallback((handle: TadazzStageHandle | null) => {
     stage.current = handle
   }, [])
+  useLayoutEffect(() => {
+    if (playback.questionPresentation && playback.userPaused) {
+      // A pause can arrive after the cinematic entrance started but before its
+      // heading became visible. Settle that entrance while its clock stays held.
+      stage.current?.finishAnimations()
+    }
+  }, [playback.questionPresentation, playback.userPaused])
   const { content } = input
 
   if (content.kind !== "question") {
@@ -79,7 +96,9 @@ export function FullShowDemoQuestionV3({
     clock: {
       elapsedMs: playback.clock.elapsedMs,
       deadlineMs: playback.clock.deadlineMs,
-      paused: playback.clock.paused,
+      // The clock's internal readiness hold must not freeze the entrance that
+      // supplies its acknowledgement. Only the user's pause stops visuals.
+      paused: playback.userPaused,
     },
   }
   // Phase clocks reset at question/answers/results boundaries. The parent owns
@@ -109,7 +128,7 @@ export function FullShowDemoQuestionV3({
         <NativePreviewStage
           frame={nativeFrame}
           locale={input.inventory.context.locale}
-          reducedMotion={input.inventory.context.reducedMotion}
+          reducedMotion={reducedMotion}
           fitRevision={0}
           resolvedTheme={theme}
           presentation={input.presentation}
@@ -130,7 +149,7 @@ export function FullShowDemoQuestionV3({
               inputVersion: 2,
               frame: nativeFrame,
               locale: input.inventory.context.locale,
-              reducedMotion: input.inventory.context.reducedMotion,
+              reducedMotion,
               themeBinding: {
                 format: "tadazz-native-preview-theme",
                 schemaVersion: 2,

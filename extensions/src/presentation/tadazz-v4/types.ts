@@ -260,6 +260,8 @@ export interface TadazzV4StageProps {
   customScreen?: unknown
   onCue?: (cue: TadazzV4Cue) => void
   onComplete?: (scene: TadazzV4Scene) => void
+  /** First presented question frame, independent of entrance-animation completion. */
+  onQuestionPresented?: (questionKey: string) => void
 }
 
 export function percentagesFor(data: TadazzV4Data, length: number): number[] {

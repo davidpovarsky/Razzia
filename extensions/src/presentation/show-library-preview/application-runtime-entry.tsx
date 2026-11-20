@@ -12,6 +12,7 @@ import { applicationPackagePreviewSchema } from "../../core/show-library/applica
 import "../legacy-effects.css"
 import "@fontsource-variable/rubik/wght.css"
 import { acquireNativePreviewFonts } from "./native-fonts"
+import { createApplicationFrameCommitOwner } from "./application-frame-commit"
 
 // Only immutable application CSS is shared. No frame, source, grant or root is retained.
 const compiledStyles = new WeakMap<
@@ -62,11 +63,18 @@ export function mount(
   }
 
   shadow.append(target)
+  const commits = createApplicationFrameCommitOwner()
   const root = createRoot(target, {
-    onUncaughtError: () => queueMicrotask(onUnavailable),
+    onUncaughtError: () =>
+      queueMicrotask(() => {
+        try {
+          onUnavailable()
+        } finally {
+          commits.dispose()
+        }
+      }),
   })
-  let disposed = false,
-    generation = 0
+  let disposed = false
   let previousShow: unknown = undefined,
     parsedShow:
       | ReturnType<typeof applicationPreviewFrameSchema.parse>["show"]
@@ -75,8 +83,6 @@ export function mount(
     parsedAppearance: ApplicationPreviewFrame["appearance"] = undefined
   let previousPackageContext: unknown = undefined,
     parsedPackageContext: ApplicationPreviewFrame["packageContext"] = undefined
-  const pending = new Set<() => void>()
-  let previousKey = ""
 
   return {
     update(value: unknown) {
@@ -132,67 +138,44 @@ export function mount(
       previousPackageContext = raw.packageContext
       parsedPackageContext = frame.packageContext
       const key = `${frame.clock.epoch}:${frame.chapterIndex}:${frame.appearanceRevision}`
-      const sameChapter = key === previousKey
-      previousKey = key
-      generation += 1
-
-      const ticket = generation
-      for (const resolve of pending) {
-        resolve()
-      }
-      pending.clear()
-
-      return new Promise<void>((resolve) => {
-        pending.add(resolve)
-        const done = () => {
-          pending.delete(resolve)
-          resolve()
+      const commit = commits.request(key)
+      const unavailable = () => {
+        if (commit.isCurrent()) {
+          try {
+            // Notify the existing failure owner before resolving its waiters.
+            onUnavailable()
+          } finally {
+            commit.unavailable()
+          }
         }
-        void fonts.ready.then(
-          () => {
-            if (disposed || ticket !== generation) {
-              done()
+      }
+      void fonts.ready.then(() => {
+        if (!commit.isCurrent()) {
+          // A newer update of this same chapter inherits its pending visible
+          // acknowledgement. Different chapters/disposal already settled it.
+          return
+        }
 
-              return
-            }
+        try {
+          flushSync(() =>
+            root.render(
+              <ApplicationPreviewStage
+                frame={frame}
+                onCommitted={commit.acknowledge}
+                onUnavailable={unavailable}
+              />,
+            ),
+          )
 
-            try {
-              flushSync(() =>
-                root.render(
-                  <ApplicationPreviewStage
-                    frame={frame}
-                    onCommitted={done}
-                    onUnavailable={() => {
-                      if (!disposed && ticket === generation) {
-                        onUnavailable()
-                      }
+          if (commit.isPresented()) {
+            queueMicrotask(commit.settle)
+          }
+        } catch {
+          unavailable()
+        }
+      }, unavailable)
 
-                      done()
-                    }}
-                  />,
-                ),
-              )
-
-              if (sameChapter) {
-                queueMicrotask(done)
-              }
-            } catch {
-              if (ticket === generation) {
-                onUnavailable()
-              }
-
-              done()
-            }
-          },
-          () => {
-            if (!disposed && ticket === generation) {
-              onUnavailable()
-            }
-
-            done()
-          },
-        )
-      })
+      return commit.promise
     },
     mediaElement: () => shadow.querySelector<HTMLMediaElement>("video, audio"),
     dispose() {
@@ -201,11 +184,7 @@ export function mount(
       }
 
       disposed = true
-      generation += 1
-      for (const resolve of pending) {
-        resolve()
-      }
-      pending.clear()
+      commits.dispose()
 
       if ("adoptedStyleSheets" in shadow) {
         shadow.adoptedStyleSheets = previousSheets
