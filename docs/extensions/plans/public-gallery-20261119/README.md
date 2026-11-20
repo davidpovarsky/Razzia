@@ -1,5 +1,121 @@
 # Public games and shared themes — 19 November 2026
 
+## Current status — 20 November 2026
+
+**DEPLOYMENT AND PUBLIC LIVE ACCEPTANCE PASSED.** cd1 is running the verified 4bc image. Actual public Linux Chromium passed 63/63: ten games, 77 rounds and replay for every game, with all five error lists empty. Candidate qualification also passed all six gates, 44 aggregate editor checks, native 18/18 checks plus 201/201 HTTP tests and package presentation 4/4. Backup/isolated restore, release observation and post-live state readback are verified. All 13 scoped Asana tasks remain open pending report publication and separate evidence-backed closure; historical failures remain retained.
+
+| Current evidence | Verified state | Binding / pending proof |
+| --- | --- | --- |
+| Native and launch | **PASS:** 18/18 checks, 201/201 HTTP tests across 27 case paths; zero failed/cancelled/skipped/TODO; all 2,017 source hashes unchanged | Source `tadazz-codex-cd1f14270a9c-458b96a8`; launch `tadazz-codex-launch-cd1f14270a9c-11da76b6` |
+| Targeted consent | **PASS: 6/6** in 303.86s | `tadazz-codex-browser-cd1f14270a9c-8945142c`; exact source/SDK/web/widget pins unchanged |
+| Supplementary package presentation | **PASS: 4/4** in 55.67s | `tadazz-gallery-package-cd1f14270a9c-0fb587a9`; real sequence, iframe continuity/vote, SDK-failure latch and next-question retry; cleanup complete and source/services unchanged |
+| Canonical full-show | **PASS: 40/40 checks and 44/44 fixtures** | `tadazz-codex-fullshow-cd1f14270a9c-dad99fa9`, 884.127s; same source, assertions, 10s click/300s case budgets and resources. Zero errors/OOM; source/widget/SDK unchanged. First attempt remains failed. |
+| Preference race | **PASS: 4/4 outcomes, 8 races, 16 real ACKs** | `284bb2bd`, 69.442s; diagnosticOnly=true/releaseQualified=false, a supplement rather than standalone release qualification |
+| Transport race | **PASS: both browser witnesses** | `ba6100f9`, 62.318s; diagnosticOnly=true/releaseQualified=false |
+| Proxy | **PASS** | `0fe6521a`, exit 0 in 5.963s; privacy proof passed and exact source hash maps equal |
+| Six canonical gates | **PASS: all 6** | `job_a2a855e11795`, pipeline a0a38638 completed at 11:14:25 UTC in 2258.28s. First pipeline 47c61244 remains failed. |
+| Gallery/editor/photo containment | **PASS: public 63/63, editor 44/44** | `tadazz-gallery-candidate-cd1f14270a9c-6a8ad632`, 882.53s; all 10 games / 77 rounds, reduced-motion versus normal-motion coverage distinguished below; all eight photo containment checks passed |
+| Consent within the canonical pipeline | **PASS: 6/6** | `tadazz-codex-browser-cd1f14270a9c-c53a60e6`, 314.823s; both engines, source 2017/SDK 2042/web/widget unchanged, no customer or production change |
+| Source publication | **PASS** | Normal push and remote readback verified cd1 at 11:16:21 UTC; publication is not deployment |
+| Staging | **PASS** | cd1 image `sha256:4bc2b3f23988cbdf20f891b7ec4d9cf414626bb2e7d6bed18152756936d03f3e`; synthetic smoke passed, production untouched; stage receipt `6895a4e555ce46b75fa2a1a6ae1a6ed54e3122a8150cfd0ea19e729c719097e4` |
+| Post-deployment cache and SDK | **PASS** | New stop/start receipts `efca2bed…` / `1b9589a6…` completed; SDK 2,042 entries, tree `0d1e3e9c…`, restored and verified. Earlier failed stop `588eac8b…` remains failed in history |
+| Backup qualification and deployment | **PASS — verified** | Qualification `8c0b46ef…`, deploy `174234ad…`; exact cd1 / image 4bc / container e74e. Backup restore and isolated clone boot verified; config, mounts and package runtime preserved |
+| Release observation | **PASS — recorded outcome** | Exit 0 and observationPassed=true; not authenticated production gameplay or Studio acceptance |
+| Public live gallery | **PASS — 63/63** | Linux Chromium on actual cd1/e74e/4bc at `https://tadazz.com`; ten games, 77 rounds, ten replays; all five error lists empty |
+| Handoff / Asana closure | **PENDING — publication and evidence updates** | Deployment and public-live acceptance passed. All 13 scoped tasks remain open until separate verified closure; this document performs no task mutation |
+
+The independently verified current summary is `docs/extensions/experience-refinement-20261119/native-qualification-cd1f14270a9c.json`, SHA-256 `f506f1095520000ba392bce4881173f85a00803764e87f2fd907af320ba9e9a1`. Actual native receipt SHA-256: `0819647ed978a4a43ac7b0959108763ca28648f4e9b2eb68ea4ddb321dbf3751`; launch receipt SHA-256: `417aac9290b3c74cf7db9d19c3950de5557dc5402b6f396882891c09235d0279`. Counts and exact before/after hash maps were checked against the current receipts, not copied from earlier candidates. Both isolated runs used network none and recorded no customer access or production change.
+
+The independently read consent receipt is `docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-browser-cd1f14270a9c-8945142c/receipt.json`, SHA-256 `8d9cd0c4523d14be3db61a71c1c499bda9bd71923024e9dcf8b6e15cb68b2216`. Its embedded Playwright output records six passes: Chromium 33.9/26.6/16.3s, WebKit positive 2.0m as rounded in the output, negative 59.7s and locales 35.4s. All 2,017 source hashes and 2,042 SDK files, plus web/widget artifacts, stayed unchanged; no customer or production state was changed. Earlier 0d/23c five-of-six failures remain failed. This targeted pass does not constitute a complete pipeline or deployment acceptance.
+
+The independently verified package receipt is `docs/extensions/experience-refinement-20261119/tadazz-gallery-package-cd1f14270a9c-0fb587a9/receipt.json`, SHA-256 `8ef97b9943b07ea9264b2a5150c7142707a0b4294ab95b732b50839198227a20`. All four inner proof groups passed, cleanup completed, and all source/widget/SDK/runtime/service guards passed with no OOM or customer/production change. The first pipeline progress file is `docs/extensions/plans/public-gallery-20261119/final-qualification-cd1f14270a9c-47c61244/progress.json`, SHA-256 `645dd0cb46b33ea2ddb660572425eab2e6911fb787d210f1fbddd8bef73164e0`: terminal failed/full-show, deploymentPerformed=false. No outer full-show receipt was created because that controller requires every check to pass. The failed inner receipt remains on the server, SHA-256 `2111ca795956bff0ceaf7b0df680ecba90cf42533336ad32de81f18beef5d173`.
+
+The current full-show outer receipt is `docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-fullshow-cd1f14270a9c-dad99fa9/receipt.json`, SHA-256 `e387cd8246a5732613509c70f40cfe3ca114bd74adbd77c0a0dd8a07d1539459`. Its nested proof contains 40 PASS entries and 44 PASS fixtures, zero recorded/page/request errors, 2,017 unchanged source hashes and 2,042 unchanged SDK files, unchanged widget and no OOM/customer/production change. Runtime was 884.127s. The previously failing WebKit/Classic case passed in 143,316ms within the unchanged 300,000ms case budget; the click limit stayed 10s. Terminal pipeline proof is `docs/extensions/plans/public-gallery-20261119/final-qualification-cd1f14270a9c-a0a38638/progress.json`, SHA-256 `d08a1cf32c97f1a912829a0ceb7b32421ba71272dae131a362061ef9080253f8`: all six stages passed/exit 0, status passed and deploymentPerformed=false. Canonical consent receipt `docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-browser-cd1f14270a9c-c53a60e6/receipt.json`, SHA-256 `4d7aa6e457b631f7deab64f91a8b2cf8113054d02289cbbec8c82d2f4df25423`, independently confirms 6/6 tests in 314.823s and unchanged source 2017/SDK 2042/web/widget.
+
+The three subsequent gate receipts were independently checked: preference `docs/extensions/plans/public-gallery-20261119/tadazz-codex-prefrace-cd1f14270a9c-284bb2bd/receipt.json`, SHA-256 `c00a0738069b4682be5d9eec45f3c150de605850205f714ad7542c1cca2aa82b`; transport `docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-transport-cd1f14270a9c-ba6100f9/receipt.json`, SHA-256 `f812cd8c5b4e9258af92743c68d70f3444aaf78ab9a342e7a785a3d1309f6bc5`; proxy `docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-proxy-cd1f14270a9c-0fe6521a/receipt.json`, SHA-256 `233ec57cc7db9dcb69af2c6af54d0776a974cb6ba7519f97114bdf50f1f3a89f`. The race receipts intentionally remain diagnostic supplements with releaseQualified=false; they do not replace full-show or the full release pipeline. Proxy privacyProof.passed and exact before/after source-map equality were verified. All three bind to current cd1/source 458b96a8 and record no production/customer change.
+
+The sanitized local diagnosis `docs/extensions/experience-refinement-20261119/fullshow-pause-dispatch-cd1f14270a9c.json`, SHA-256 `fb825f2af17c3800faf9ffdff4e7845fb795fdb2228750c0f987db08924f5602`, records a visible/enabled/stable Pause button followed by a click-dispatch stall; zero page/request errors, no OOM and unchanged source. Cause remains unproven. The single-rerun intent `docs/extensions/experience-refinement-20261119/fullshow-unchanged-rerun-intent-cd1f14270a9c.json`, SHA-256 `9b0da982cac10885b5e0f1620f5dc29b668d8e17375589a1ff9c7185decd2ae5`, records twelve relevant source/harness files identical to passing c8 and an initial plain five-text-answer question outside the changed photo branch. Eight-service idle review passed at 10:36:35 UTC. The single authorized unchanged canonical rerun has now passed. The decision did not allow an automatic retry loop and required targeted input/readiness diagnostics if the failure repeated. Neither flakiness nor a cure has been established; the first failed attempt remains failed.
+
+### Verified deployment
+
+The contiguous release completed at 12:28:33–12:30:18 UTC with nine `passed/exit 0` steps: input bindings, cache stop, preflight, backup qualification, deploy, verified deployment identity, cache start, SDK restore and observation. Receipt: `docs/extensions/experience-refinement-20261119/contiguous-presentation-release-cd1f14270a9c-7f28c3a1/receipt.json`, SHA-256 `277e593da8e001cd5a3623f26738cec728af035c4335d98bfc3585dea267eca6`.
+
+Canonical deployment is `success=true/phase=verified`: source `cd1f14270a9c8634136b087104a5b32f92ee8e7e`, image `sha256:4bc2b3f23988cbdf20f891b7ec4d9cf414626bb2e7d6bed18152756936d03f3e`, replacement container `e74eb7e608f9bd93cdf68fad9d927c178729ca9251c63b6f0e51b7ea7c555aff`, verified since 12:29:40 UTC. Local receipts are under `docs/extensions/experience-refinement-20261119/deployed-presentation-canonical-cd1f14270a9c/`: `deployment-result.json` SHA-256 `174234ad573a3470d2be3afe7128989332b9612220252214a985eda0c96593f7`; `backup-qualification-result.json` SHA-256 `8c0b46efd3e6224171a8ff8aebd9fd04942b65cc9c926d8d274db8e6c38bbf99`.
+
+The backup contains 360 files, 171,464,840 bytes and four SQLite databases. Restored bytes/modes were verified, and the isolated clone boot passed with network none, no published ports and no live-config mount. No production data restore was performed. Host configuration, mounts and other services were preserved; package runtime stayed `fdee747c… / 56c4e4cf… / f276c9cb…`. The new cache stop and start both completed. SDK restore verified 2,042 entries / 63,587,810 bytes, tree SHA-256 `0d1e3e9c089b66a75ff0e6b284f58b94ddb4e4b47b55129d82865980f62d67de`.
+
+Release observation recorded `exit 0` and `observationPassed=true`. Separate public-browser job `job_2ca89bc0ed45` finished after waiting for parallel QA; actual live PUBLIC63 passed as detailed below. Authenticated editor/guest/audio 44-case coverage and targeted server tests remain isolated-candidate evidence. Deployment probes are not represented as production Studio writes, authenticated gameplay, or installed ChatGPT/Claude acceptance. All 13 scoped tasks remain open pending report publication and separate evidence-backed closure.
+
+### Public live acceptance — 63/63 PASS
+
+Linux Chromium against `https://tadazz.com` passed all 63 checks on exact cd1 / e74e / image 4bc: ten games, 77 rounds and replay for all ten. Readiness was verified at 12:46:05 UTC after read-only waiting; the subsequent browser run took 490.86s and the controller finished at 12:54:23 UTC. All five error lists are empty. Source was read-only/hash-verified, with no OOM, customer mount or production mutation by the test. Outer receipt `docs/extensions/plans/public-gallery-20261119/tadazz-gallery-live-cd1f14270a9c-d69fde9c/receipt.json` SHA-256 `eb443f5d5a0f45ae4f7040dec8fcacf3bb60d9d05b18146235742d38991d80ac` embeds the identical `browser/receipt.json`, SHA-256 `ed4553e29f00544bfc653fc9f9ce6833a8434654b0ad304668512e221215c1b3`.
+
+Coverage is 77 reduced-motion sequences, four explicit normal-motion Family/Picture sequences and three native preview sequences. All 84 retain heading/panel/geometry/typography, with no early answers/timer, duplicate heading or new question entrance; answers and timer appear in the same observed frame. The 77+4 reach results; the three previews stop at voting. Nominal reading time is 2000ms; observed ranges were 1908.9–2132.6ms (regular, median 1993.4), 1914.4–1982.8ms (normal motion), and 1810.9–1967.2ms (native previews), within the browser acceptance tolerances.
+
+Twenty game/locale cases produce 40 desktop observations: stage 1031.109×579.984 at 1366×768, and 1265.766×711.984 at 1440×900, 16:9, zero overflow and one shared control-style signature. Four audio-continuity cases cover Great Guessoff/Family in EN/HE. Six actual PNGs were independently reviewed: two 1440×1000 wide full previews and four mobile views. Picture 360×461 is an answer-panel crop; the active Hebrew landscape view is intentionally scrolled, so all controls are not visible simultaneously. Visual review: `docs/extensions/experience-refinement-20261119/live-gallery-visual-review-cd1f14270a9c.json`, SHA-256 `5a5b6541ab31b1b7c82e85c154f8156ec3380eb130c2c25af0f05f21835365da`.
+
+Post-live readback at 12:59:38 UTC confirms exact cd1/e74e/4bc running, restart count 0/no OOM, eight expected services running and the owned QA container stopped. Its exit 143 is the helper stop after browser exit 0. Proof: `docs/extensions/experience-refinement-20261119/post-live-presentation-state-cd1f14270a9c.json`, SHA-256 `50045729c168095286b77bacb636c99d80e357c73547b2a90fd7fe7b14979ba3`. Authenticated 44, targeted server cases and private 4/5-answer question-photo fixtures remain separate same-candidate evidence; public Picture covers answer images. The fresh 12:59:47 UTC Asana review found the same 87 open tasks, all 13 scoped tasks open, and no new requirement. Closure awaits publication and evidence updates.
+
+### Isolated-candidate gallery/editor coverage and visual review
+
+The gallery gate passed all six groups: four actual account/server checks, the complete public 63/63 run and editor 44/44. All ten games and 77 rounds completed. **All 77 deep question-sequence records use reducedMotion:reduce**, as explicitly configured before each play-complete loop. They check the two-second interval within scheduling tolerance, no early answers/timer, at most 34ms answer/timer pairing, retained heading/panel/content/geometry/typography, and no duplicate or repeated question entrance. Their observed lead range is 1819.5–2024.9ms, with 0ms pairing differences.
+
+**Four separate public normal-motion sequence/replay rounds** use no-preference: Family 2 and Picture 2. They are distinct from the 77 reduced-motion rounds. Separately, the private image fixture runs four normal-motion replays with answerCounts [4,4,5,5]; all eight answers/results containment measurements passed, with retained question nodes and no repeated entrance. Observed private-photo lead range is 1999–2043.3ms, with 0ms pairing differences. Source assertions accept 1800–2500ms for question phase and 1800–2600ms for answer/timer first paint, pairing<=34ms; the product's nominal interval remains 2000ms.
+
+The editor's 44 includes global themes/save/reload, modal/keyboard checks, photo bounds, guest policy, 16 semantic roles, simple/advanced persistence, platform ceremony/audio and native question sequencing. These subproofs are not additional tests beyond 44. Public error lists and editor page/asset errors are empty.
+
+Eight canonical Linux screenshots received a documented visual review: two desktop previews, two photo-result screens and four mobile screens. Copied PNG hashes match the collected canonical files. EN 1366×768 stage geometry was 1109.328×623.984; HE 1440×900 was 1344×756. Header 53px and controls 57px sit outside the stage, details are collapsed and overflow is zero. The active mobile-landscape screenshot deliberately scrolls to answers; it does not show every control at once. The photo screenshots show results; answers-phase containment is proved by the bounds records. This is candidate QA, not live acceptance.
+
+Current gallery receipts:
+
+- Outer `docs/extensions/plans/public-gallery-20261119/tadazz-gallery-candidate-cd1f14270a9c-6a8ad632/receipt.json` — `e9b9a74928eb16ba4cfa9cf4a6153f53c818f2856736a6ea5e2ee4ad84059049`.
+- Public `docs/extensions/plans/public-gallery-20261119/tadazz-gallery-candidate-cd1f14270a9c-6a8ad632/browser/public-browser/receipt.json` — `0fd89f0d9e7315c16dad3e98f7145b336afc2afcfb3313cd7297651cb8c94b87`.
+- Editor `docs/extensions/plans/public-gallery-20261119/tadazz-gallery-candidate-cd1f14270a9c-6a8ad632/browser/editor-receipt.json` — `662f25bf9dfe2ed23557027f025f46c8d3116309a56897a28bbd40c1f5115fdd`.
+- Photo sequence `docs/extensions/plans/public-gallery-20261119/tadazz-gallery-candidate-cd1f14270a9c-6a8ad632/browser/studio-viewer/private-question-image-sequence.json` — `e52f2da8b0f6339d1a6475d99047eeb4f7705b273adc47817e655334929d7ec2`.
+- Visual review `docs/extensions/experience-refinement-20261119/gallery-visual-review-cd1f14270a9c/review.json` — `1939360df12721b8b293c6f064a39b36e8f0ad76a2331be131af1a7983ccdd08`.
+
+### Current QA policy and evidence capture
+
+The reviewed and disclosed cd1 exception gives **only the complete positive WebKit test 135 seconds**. All other cases stay at 120 seconds; expect 15s, preview 30s, six cases, all assertions, motion, one CPU/2GiB, the outer 360s cap and the product's 2000ms reading interval remain unchanged. The 120-second default is an aggregate Playwright test budget, not a product SLA. Earlier statements that all budgets were unchanged apply to 23c; cd1 has this explicit limited exception.
+
+The same QA-only commit also replaces a cropped card screenshot with an actual `game-viewer-dialog` screenshot after visibility and expanded-state assertions. Both changes are confined to `native-consent.spec.ts`, SHA-256 `a0f4dccfa68d5cc8cbf849146c82f2d86986b0423dd2d82af45d9ef5544c940e`. Both consent runs passed, and the new photo containment cases passed in the canonical gallery. Actual modal visual review is now documented using the canonical gallery screenshots above; the PNG previously retrieved from consent was a brand resource and is not modal evidence.
+
+### Retained staging and concurrency history
+
+This section preserves intermediate states before the successful deployment. Current deployment and PUBLIC63 status are recorded above.
+
+Stage `job_02d47162d85d` failed before creating the release directory with `INSUFFICIENT_STAGING_SPACE`: 2,014,318,592 bytes observed against a requirement of more than 2,147,483,648. Application and production state were unchanged. External QA restarted the dependency cache at 11:30:54 UTC; the two preservation attempts were stopped by guards before archive writes or deletion. The later `codex/tadazz-private-package-save-20261120` branch at eaf descends from cd1 with two direct-save commits; its own native attempt failed at 10/14. That separate branch is outside this qualified cd1 candidate and its results are not inherited here. Later read-only evidence from the parallel worktree confirms d991c0e82602, a descendant of cd1, passed 18/18 native checks, 6/6 browser checks and proxy verification. The earlier eaf failure remains historical. These are separate later-revision results, without full gallery qualification for d991 or inclusion in the deployed cd1 image.
+
+After a fresh idle check, preservation v2 passed at 11:46:12–11:48:20 UTC in 128.45s. Eight retired source snapshots were archived and member/hash-verified before each exact source-only removal. Archives total 916,671,582 bytes; final free space was 3,459,162,112 bytes. All eight results have `backupVerified/sourceRemoved=true`, identical before/after service proofs and `productionUnchanged=true`. Current cd1/458b96a8, QA evidence, production baselines, SDK and customer data were retained. Receipt: `docs/extensions/experience-refinement-20261119/source-preservation-staging-space-cd1-20261120-v2/receipt.json`, SHA-256 `c0a6bfd4f839035b930d2da5e1c833f70b02f612d613cfbbc1c1b54e3be0f232`.
+
+The new cache stop completed at 11:49:39 UTC: `cacheRunningAfter=false` and all seven other services were unchanged. Receipt: `docs/extensions/experience-refinement-20261119/presentation-cache-stop-after-restart-cd1f14270a9c-de0118e6/cache-stop.json`, SHA-256 `0d08d8d0745669404d515d3968277d1a096aed5dc9836737b3b09329d68eb361`. This is the historical 11:49 stop receipt; the later continuation result is distinguished below.
+
+Staging passed: `stage-result.json` confirms `ok=true`, source cd1, `syntheticSmokePassed=true`, `productionTouched=false` and image `sha256:4bc2b3f23988cbdf20f891b7ec4d9cf414626bb2e7d6bed18152756936d03f3e`. Receipt: `docs/extensions/experience-refinement-20261119/presentation-stage-and-preflight-history-cd1f14270a9c/stage-result.json`, SHA-256 `6895a4e555ce46b75fa2a1a6ae1a6ed54e3122a8150cfd0ea19e729c719097e4`; stage manifest `7511646905403494d27a561889a8ed52d98b34b8aeccd9f93e2addbc27619697`.
+
+Another external cache restart at 11:52:45 UTC caused the retained `OTHER_CONTAINER_CUSTOMER_MOUNT` preflight failure. The contiguous continuation from 12:09:59 stopped at the cache-stop post-action guard with `RUNNING_SERVICE_SET_CHANGED` after another branch's QA browser started at 12:10:11. Canonical receipt SHA-256 `588eac8b0a2f4ce06b20ae591831f667580ab0d068e230c18e2bf0b1b33bc8e9` remains **FAILED**, not a successful canonical stop. This attempt did not reach preflight or deploy and did not change production.
+
+A separate observation at 12:15:06 UTC confirmed the cache was actually stopped, without OOM, and the exact seven baseline service IDs/images/start times/restart counts were unchanged. Observation: `docs/extensions/experience-refinement-20261119/contiguous-cache-stop-outcome-inspection-cd1f14270a9c/observation.json`, SHA-256 `635b6f949ab05f5346ce4649025a8f6ece20e4024a6b5028ac8345fc27e70211`. The freshly read `docs/extensions/plans/public-gallery-20261119/release-state.json`, SHA-256 `70c4fc0d6d90809dc0cb6655a1c095919b15cffcd2b7df8bbddcb51281d71055`, records `deploymentPerformed=false` and `staged-cache-stopped-continuation-under-review`. A staged image and an observed stopped cache do not constitute deployment or live acceptance.
+
+Final acceptance boundary: authenticated editor/guest/audio coverage is the 44-case isolated Linux candidate gate plus targeted server cases. Planned post-deployment coverage is the 63 public gallery checks, with production bound to the exact qualified artifacts and verified private-configuration backup/restore. It does not include authenticated production fixture creation, editor writes or owner guest-toggle interactions. All 13 scoped tasks remain open until actual release and live receipts are accepted.
+
+### Concise retained history
+
+| Candidate / evidence | Historical outcome and limit |
+| --- | --- |
+| cd1 first pipeline | **FAILED at full-show**, 39/40 checks plus 44/44 fixtures. Initial WebKit/Classic Pause click exceeded 10s; no page/request errors, OOM or source/production change. The one unchanged rerun subsequently passed 40/40 plus 44/44; the first failure's cause remains unproven. |
+| 23c378 | Native 18/18 checks + 201/201 HTTP tests PASS; targeted consent **FAILED, 5/6** (`dd49ef3c`, receipt `27b67c826e13027194f8b1f56bab1a3ebfa280009f74833be9536814987292e1`). Alice cleanup alone was insufficient; 278 recorded actions place the final Bob check beyond the cumulative 120s budget. No animation leak is established. |
+| 0d0af900 | Native 18/18 checks + 201/201 HTTP tests PASS; targeted consent **FAILED, 5/6** (`220124ee`, receipt `8fd508e30f8e20b39673270d497a0c2e18d7f1ef50f117679a07143692a185a7`). The new Close action worked in both engines; 277 recorded actions and the final assertion about 1.29s past deadline led to QA lifecycle cleanup, not a claimed product fix. |
+| c8c536 | Native and package presentation PASS. Five canonical gates PASS: full-show 40/40 and 44/44 fixtures, preference 4/4 with eight races/16 ACKs, transport, proxy, gallery 63/63 public and 44 editor checks plus four account checks/ten installs. Overall pipeline **FAILED** on the stale Close preview locator in consent (`f5abac64`, exit124 after 360.929s). Historical counts do not qualify later candidates. |
+| c8 photo evidence | Two photo replays retained the heading/panel and geometry. This did not prove answer containment: a separate inherited 432px card height clipped row two, and the generic five-choice route lost the image. The bounded 2–5 text-answer photo fix and stronger assertions subsequently passed in the current cd1 gallery; the original c8 geometry check alone did not prove containment. |
+| 004810 | Native PASS; gallery **FAILED** after 46/46 recorded public checks and four account checks. An unexpanded public-viewer QA setup caused a 414px window-scroll displacement; the actual editor bug was a conditional 22px results note shifting the centered stage 11px. QA setup and application layout were corrected separately. |
+| fa5 / ef077 | Earlier native 18/18 checks + 201/201 HTTP tests and supplementary passes remain historical. fa5 gallery **FAILED** with 44 recorded PASS and two short-reading FAIL (1787.3/1751.5ms), then geometry and editor palette failures; consent was **NOT RUN**. |
+| Separate source QA runs | f06451b2: 61/61 tests in nine suites; 020647e0: 4/4 continuity; 5cbffe0c: 4/4 continuity. Each also passed its recorded type/format commands on Linux. These are separate snapshot-bound results, not an accumulated test total. |
+| a23 delivery | The older `DELIVERY_ACCEPTANCE.md` remains unchanged; it does not accept the later four presentation requirements. |
+
+All historical receipts and diagnostics remain retained. The current acceptance report keeps their exact paths/hashes as plain references; raw bulk artifacts are not copied into Git. Current implementation remains ten games, 77 editable English question/poll rounds and 11 built-in shared themes (nine new). Nine interface locales do not imply nine translated question sets. Application/browser tests run on Linux, not Windows. The last bounded Asana read found 87 open tasks and the same 13 scoped tasks, with no new requirement. The 11:14:38 UTC prepublish readback verified five integration tips plus the gallery branch itself: all six refs matched expected tips and were ancestors of cd1. Proof: `docs/extensions/experience-refinement-20261119/presentation-prepublish-readback-cd1f14270a9c.json`, SHA-256 `21dd2168a4e6be8e474a9ba5ca4e5c7487b85bcf33b98d3773966cf62b231088`. Source publication then passed normal push/readback at 11:16:21 UTC: [published commit](https://github.com/davidpovarsky/Razzia/commit/cd1f14270a9c8634136b087104a5b32f92ee8e7e), proof `docs/extensions/experience-refinement-20261119/presentation-source-push-cd1f14270a9c.json`, SHA-256 `cdcd47b1ba858b34a40c4e05557e50646eb0f1b6a3398e055e4518a4ac102c3b`. These are five integrated branch tips plus the gallery ref, not six newly merged branches. No Git operation was performed for this documentation update.
+
+See the [current acceptance report](../../experience-refinement-20261119/PRESENTATION_ACCEPTANCE_CURRENT.md) for the user requirements, exact game/theme mapping, click paths and final evidence table. Application, deployment and live-gallery receipts are complete; only report publication and verified Asana closure remain pending.
+
 ## Owner request
 
 Populate the entire Tadazz example gallery with real, attractive games for
@@ -14,7 +130,10 @@ never on the Windows workstation.
 The feature branch is `codex/tadazz-public-gallery-20261119`, based on unified
 commit `34a9e0a59482fa035ab98338f7c977589e46287d`. The initial live server was
 application revision `34568c5c937a51d236a440513adeb9bf93637525` on
-`https://tadazz.com`.
+`https://tadazz.com`. The branch subsequently integrated unified revisions
+`730cb4579d22589e1a7fc96a6873df9cb273e479` and
+`e66317a5385862a3a756a18a5646fad4e64e5c26` to preserve concurrent native
+phase-continuity and preference changes.
 
 - One source-controlled catalogue supplies marketing, Studio Explore, public
   preview and authenticated installation: `public-demo-catalogue.ts`.
@@ -40,6 +159,38 @@ application revision `34568c5c937a51d236a440513adeb9bf93637525` on
 - Use this game opens preparation for the installed ID; Customise opens its
   native editor. Login preserves the exact selected public product without
   performing any automatic account write.
+
+## Native palette and cover corrections
+
+Visual acceptance found that the native V4 panels still used hardcoded Classic
+colors even though the new theme backgrounds and saved selections were correct.
+The declarative palette now reaches the native stage itself: question panels,
+answer cards, picture frames, number badges, selection highlights, timers,
+results and leaderboards use the selected theme's colors. Separate solo-player
+color overrides were removed so the native surfaces share one implementation.
+
+These rules apply only to declarative themes using the native Classic renderer.
+Classic, code-backed themes and Razzia retain their original appearance. Native
+composition, typography, animation, controls and the platform opening remain
+unchanged.
+
+Studio cover titles and category labels now carry their own positioning and
+typography, without depending on marketing-page CSS. The title reserves a row
+for the localized Preview control. The public gallery intentionally shows its
+title below the artwork; its duplicate overlay title remains hidden.
+
+Linux browser evidence verified the exact question/card gradients, borders,
+answer accents and text colors for Midnight Club, Family Fiesta and Discovery
+Lab, with identical native geometry. All three editor captures passed visual
+review. A real hosted question with a connected anonymous player also showed
+Discovery Lab without fallback. Studio's ten cover titles and Preview controls,
+and the public desktop gallery, passed visual review.
+
+The earlier immutable candidate `f3896d2c89f398a40821271608e2b6d3e6276d55`
+is a superseded functional baseline. Its receipts do not qualify these changes.
+Its full-show gate recorded 39/40 passing combinations and one WebKit Classic
+pause-button timeout; that failure remains recorded and its assertion is intact.
+Fresh immutable qualification is required for the corrected candidate.
 
 ## Availability correction
 
@@ -67,7 +218,8 @@ media. No production credential or runtime environment change is required.
 
 The sample questions are authored in English and can be edited after copying.
 Platform controls and theme names/descriptions support the existing nine
-locales, including Hebrew.
+locales: English, French, German, Spanish, Italian, Japanese, Turkish,
+Vietnamese and Hebrew. The questions themselves are not nine translated editions.
 
 ## Acceptance and evidence
 
@@ -82,9 +234,7 @@ through room creation into each role's shared registry. Bundled themes require
 no account installation record. Native responsive player controls and the
 platform opening remain governed by the existing application.
 
-Immutable release qualification, real-browser acceptance and deployed-site
-verification are still pending in this entry. The final revision and release
-receipts must be recorded before treating this as a deployment-success claim.
+The immutable 845b2ae baseline and its real-browser acceptance passed as recorded below. These are historical receipts. The subsequent mobile, transport, viewer and question-timing changes require their own final qualification; the current candidate and release state are recorded in the current acceptance report.
 
 Required focused coverage includes exact public theme resolution for every
 sample, valid authored/imported content, image/hash validation, all eleven
@@ -92,6 +242,66 @@ themes selectable in the editor, authentication and per-account isolation,
 idempotent repeated clicks, preserved customer edits, recreated deleted copies,
 login return selection, all gallery actions, native solo play, responsive/RTL
 layout and saved/reopened theme selections.
+
+## Historical verified pre-release milestones
+
+The palette and cover fixes were committed as `a1a93ddc3e3edd2e0d8583d58d3b4fb282c1c341`. After merging e66317a, native renderer pins were generated on Linux and committed/pushed in `845b2ae6cba51dea87ff33b568e27355331e74c7`. All 1,933 source files were checked against that immutable snapshot.
+
+| 845b2ae baseline gate | Result | Receipt SHA-256 |
+|---|---|---|
+| Native launch | 16/16; source unchanged | `290b505a888490742e30bd973608292140f084aefa7e8550e0d20843728c1a7a` |
+| Production launch | PASS | `a4b7a2fb452d9ce0af23ebdd48c53886efec0e2b203741a0284eb00f943667dd` |
+| Native consent/browser | 6/6; 2,042 SDK entries verified | `472689afa8ff8d459b0e5c7cee7b533b4bbe7b790bf570d4b0bd55585e38fd4a` |
+| Complete gallery | 77 rounds, ten replays, ten previews, eight editor/host checks, one accepted browser participant vote | `e7eb0b1131dea1b34b867242819762ba1b5517339400d201567e7494072fdc32` |
+| Standard full-show | 40/40 and 44/44 renderer fixtures; no failures or source changes | `7d1e845df1d0bcec6b36e065159c95170d4359e1e4d48b2e0271f665a80c4d86` |
+
+The gallery's page errors, failed assets, server errors, unexpected writes and check failures were all zero. The standard full-show receipt contains no diagnostic substitution. Both previously problematic WebKit/Classic Pause and Replay cases passed without changing their harness on this baseline.
+
+The following earlier WIP records remain historical and do not replace the immutable baseline:
+
+| Scope | Linux evidence | Outcome |
+|---|---|---|
+| All ten solo games | `tadazz-gallery-palette-wip-f3896d2c89f3-2a10d4a3/acceptance-d4a172b0` | All 77 actual rounds and every replay passed; mobile/RTL choices passed; no page, asset, server or unexpected-write errors |
+| Corrected preview capture and native integration | `tadazz-gallery-palette-wip-f3896d2c89f3-2a10d4a3/focused-b42e64d6` | Ten real previews, mobile/RTL, eleven editor themes, save/reopen, catalogue links and a real joined participant vote passed |
+| Release-script qualification | `tadazz-gallery-release-selftest-f3896d2c89f3-7d65bb8b/adequate-tmp-ca999362/receipt.json` | All six checks passed: both Python self-tests, Python syntax, both embedded JavaScript syntax checks and public-proof parity |
+
+The first run remains recorded as failed overall: eight preview captures used
+changing `img:visible` indices, and the phone assertion required an aria-label
+on a correctly labelled native text button. These QA assumptions were corrected.
+The focused run uses a separately hashed derived harness; it does not claim to
+rerun the 77-round loop. The full immutable gallery gate remains mandatory.
+
+The participant proof records one accepted vote: the host shows 100% for the
+chosen answer and 0% for the other three. The saved Discovery Lab theme has no
+fallback and all eight questions remain present. Public desktop, mobile, Hebrew
+RTL, native editor palette and host-result screenshots were visually reviewed.
+
+## Historical mobile improvement and first verification attempt
+
+This section records the earlier mobile implementation and its acceptance plan. At that checkpoint the first Linux WIP attempt stopped during a read-only preflight because another workflow held the release lease; no build or browser run began. Later work and the current candidate are recorded separately above.
+
+The nine new demos already offered voting-only external text choices; their question and answer pictures remained inside the scaled host frame. Great Guess-off lacked the external controls. The new shared companion uses the existing native `TadazzAnswerPad`, the exact current `StageQuestion` and each player's existing choose handler. It exposes the question, optional question picture and native text/image options while preserving scoring, timing, replay and history.
+
+At widths up to 700px, voting/results show a 20px question, 16px actual answer text, at least 56px-high targets and 80px answer images. Results preserve the chosen option and show readable selected/correct feedback. The duplicate host choices become noninteractive and hidden from assistive navigation only while the equivalent companion is present. Desktop and the native opening/leaderboard/finale remain unchanged. These were the source-reviewed properties for that mobile checkpoint. Current active-state bounds and screenshots must be evaluated on the new candidate; the earlier description is not a new browser-pass claim.
+
+The updated gallery gate preserves the 77-round desktop loop and adds eight active mobile rounds: Family first question, Picture first question and Great Guess-off's first two, in English and Hebrew UI. It verifies exact API question/option/image content, real text bounds, target sizes, loaded images, duplicate-control disabling, actual selection and final disabled/selected results. Mobile viewport automation is not a physical-device claim.
+
+The unified DCC transport correction was subsequently integrated, retaining its stronger Replay request/ACK/chapter/remount predicate. The current renderer pins were generated from the combined source. The old GGO alternative branches were reconciled by their historical application changes; that equivalence does not mean the current viewer/timing files are byte-identical to those old tips. The canonical standard 40/44 gate remains mandatory; separate preference/transport race diagnostics cannot replace it.
+
+## Public-runtime release checks
+
+Staging now qualifies the intended public-gallery default with exact packaged
+runtime bytes, sizes, SHA-256 digests, MIME and security headers. Restored-clone
+and live checks derive the expected availability from the candidate environment.
+An explicit public `false` remains an opt-out; the probes never accept 200 and
+404 interchangeably. Private runtime requests still require authentication;
+altered digests, unknown filenames and unknown public example IDs must return
+the exact unavailable response. The public catalogue must contain the ten
+reviewed IDs.
+
+The synthetic backup self-test runs in its own private temporary directory on
+the task-owned evidence mount. The existing one-GiB reserve and all production
+backup, identity, rollback and container-isolation protections remain intact.
 
 ## Asana tracking
 
