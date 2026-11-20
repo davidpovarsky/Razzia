@@ -85,7 +85,10 @@ function resolveInsideDist(
   return realCandidate
 }
 
-type ByteRange = { readonly start: number; readonly end: number }
+interface ByteRange {
+  readonly start: number
+  readonly end: number
+}
 
 /** One byte range is enough for browser media seeking; ignore multipart requests. */
 function singleByteRange(
