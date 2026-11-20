@@ -33,6 +33,7 @@ EVIDENCE.mkdir()
 ARCHIVE = pathlib.Path(tempfile.mkdtemp(prefix=RUN)) / "source.tar.gz"
 SOURCE_PATHS = ["extensions", "packages", "package.json", "tsconfig.json",
                 "pnpm-workspace.yaml", "pnpm-lock.yaml", "oxlint.config.ts",
+                ".gitignore", ".prettierignore",
                 ".prettierrc.json", ".prettierrc", "prettier.config.mjs"]
 tracked = subprocess.check_output(["git", "ls-files", *SOURCE_PATHS], cwd=ROOT, text=True).splitlines()
 LINT_BASELINE = None

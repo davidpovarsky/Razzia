@@ -50,6 +50,8 @@ describe("native-host consent routes and security headers", () => {
       consentPageUrl: "https://localhost:8443/studio/oauth-consent",
       nativeSaveConsentPageUrl:
         "https://localhost:8443/studio/native-save-consent",
+      packageSaveConsentPageUrl:
+        "https://localhost:8443/studio/package-save-consent",
     })
 
     assert.equal(matcher("/studio/oauth-consent"), true)
@@ -71,6 +73,19 @@ describe("native-host consent routes and security headers", () => {
       false,
     )
     assert.equal(matcher("/studio/games"), false)
+    assert.equal(
+      matcher(`/studio/package-save-consent/${"a".repeat(36)}`),
+      true,
+    )
+    for (const id of [
+      "",
+      "too-short",
+      "a".repeat(65),
+      `${"a".repeat(36)}/extra`,
+      `${"a".repeat(35)}%2f`,
+    ]) {
+      assert.equal(matcher(`/studio/package-save-consent/${id}`), false)
+    }
     assert.equal(matcher("/manager/quizz/quiz123"), false)
     assert.equal(matcher("/"), false)
   })
@@ -340,6 +355,7 @@ describe("native-host consent routes and security headers", () => {
         for (const consentPath of [
           "/studio/oauth-consent?oauth_request=test-ticket",
           `/studio/native-save-consent/${VALID_ID_54}`,
+          `/studio/package-save-consent/${"a".repeat(36)}`,
         ]) {
           const getRes = await tlsFetch(`${alignedServer.origin}${consentPath}`)
 
@@ -392,6 +408,7 @@ describe("native-host consent routes and security headers", () => {
           "/manager/quizz/quiz123",
           "/studio/native-save-consent",
           "/studio/native-save-consent/too-short",
+          "/studio/package-save-consent/too-short",
           "/assets/app.js",
           "/api/health",
         ]) {

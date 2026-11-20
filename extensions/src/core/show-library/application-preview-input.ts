@@ -1,6 +1,7 @@
 import { z } from "zod"
 import { tadaShowV1Schema } from "../show-authoring-schema"
-import { showThemeRegistry } from "../show-themes/registry"
+import { createShowThemeRegistry } from "../show-themes/registry"
+import { applicationPackagePreviewSchema } from "./application-package-preview"
 import { deriveAuthoredShowPreviewIdentityMap } from "./identity"
 import { assertBoundedJson, freeze } from "./primitives"
 import { canonicalJson } from "./digest"
@@ -23,6 +24,7 @@ const sourceSchema = z.strictObject({
     }),
   ]),
   show: tadaShowV1Schema,
+  packageContext: applicationPackagePreviewSchema.optional(),
   assets: z
     .array(
       z.strictObject({
@@ -53,6 +55,7 @@ export interface ApplicationPreviewDraft {
   readonly assets: z.infer<typeof sourceSchema>["assets"]
   readonly identityMap: ReturnType<typeof deriveAuthoredShowPreviewIdentityMap>
   readonly context: z.infer<typeof preferencesSchema>
+  readonly packageContext?: z.infer<typeof applicationPackagePreviewSchema>
 }
 
 // Account HTTP authorization is owned by the provider, not by this pure parser.
@@ -74,6 +77,7 @@ export function normalizeApplicationPreviewDraft(
       source.show.note ||
       source.show.settings.length ||
       source.show.defaults?.showComposition ||
+      source.packageContext ||
       source.show.cards.some((card) => "note" in card && card.note))
   ) {
     throw new Error("Private fields in public demonstration")
@@ -99,9 +103,18 @@ export function normalizeApplicationPreviewDraft(
 
   assertReviewedPreviewBindings(source.show, source.assets)
 
+  if (
+    source.packageContext &&
+    canonicalJson(source.packageContext.assets) !== canonicalJson(source.assets)
+  ) {
+    throw new Error("Package preview media receipt changed")
+  }
+
+  const registry = createShowThemeRegistry(source.packageContext?.definitions)
+
   const permitted = new Set([
     ...source.assets.map((asset) => asset.url),
-    ...showThemeRegistry
+    ...registry
       .list()
       .flatMap((theme) => theme.assets.map((asset) => asset.url)),
   ])

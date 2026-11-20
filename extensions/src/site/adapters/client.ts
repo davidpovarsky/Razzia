@@ -105,6 +105,15 @@ export function safeReturnTo(value: string | null): string {
   }
 
   if (
+    /^\/studio\/package-preview\/[A-Za-z0-9_-]{1,160}\/[1-9][0-9]{0,15}\/[A-Za-z0-9._-]{1,160}$/u.test(
+      url.pathname,
+    ) ||
+    /^\/studio\/package-save-consent\/[A-Za-z0-9_-]{1,160}$/u.test(url.pathname)
+  ) {
+    return url.pathname
+  }
+
+  if (
     import.meta.env.VITE_TADAZZ_NATIVE_CONSENT_ENABLED === "true" &&
     /^\/studio\/native-save-consent\/[A-Za-z0-9_-]{54}$/u.test(value)
   ) {

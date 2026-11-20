@@ -52,23 +52,40 @@ import { resolveTadazzAudioPolicy } from "../tadazz-audio-policy"
 import type { CueId } from "../../core/constants"
 import { NativeQuestionMedia } from "../tadazz-show/native-question-media"
 import { createPreviewStageContinuity } from "./preview-stage-continuity"
+import { createShowThemeRegistry } from "../../core/show-themes/registry"
+import { PackageApplicationPreviewStage } from "./package-application-stage"
 
 // First-party native stage only. The host admits exact built bytes and account assets
 // before mounting. This component has no room/socket/score/telephone transport.
 //
-export function ApplicationPreviewStage({
-  frame,
-  questionPosition,
-  activeSceneData,
-  onCommitted,
-  onUnavailable,
-}: {
+type ApplicationPreviewStageProps = {
   frame: ApplicationPreviewFrame
   questionPosition?: { number: number; total: number }
   activeSceneData?: ScenePresenterProps["activeSceneData"]
   onCommitted: () => void
   onUnavailable: () => void
-}) {
+}
+
+export function ApplicationPreviewStage(props: ApplicationPreviewStageProps) {
+  return props.frame.packageContext ? (
+    <PackageApplicationPreviewStage
+      {...props}
+      renderNative={(frame) => (
+        <NativeApplicationPreviewStage {...props} frame={frame} />
+      )}
+    />
+  ) : (
+    <NativeApplicationPreviewStage {...props} />
+  )
+}
+
+function NativeApplicationPreviewStage({
+  frame,
+  questionPosition,
+  activeSceneData,
+  onCommitted,
+  onUnavailable,
+}: ApplicationPreviewStageProps) {
   const stage = useRef<TadazzStageHandle>(null)
   const chapters = useMemo(
     () => compileFullShowPreviewTimeline(frame.show),
@@ -101,14 +118,25 @@ export function ApplicationPreviewStage({
   const rootFit = template?.nodes.find(
     (node) => node.nodeId === template.rootNodeId,
   )?.props.fit
+  const registry = useMemo(
+    () => createShowThemeRegistry(frame.packageContext?.definitions),
+    [frame.packageContext?.definitions],
+  )
   const theme = useMemo(
     () =>
       resolveShowTheme({
         selection: frame.show.defaults?.showTheme,
         scope: frame.stagePhase ? undefined : card?.themeOverrides,
         role: frame.role,
+        registry,
       }),
-    [frame.show.defaults?.showTheme, card, frame.role, frame.stagePhase],
+    [
+      frame.show.defaults?.showTheme,
+      card,
+      frame.role,
+      frame.stagePhase,
+      registry,
+    ],
   )
   const labels = useMemo(
     () => previewNativeLabels(frame.locale),

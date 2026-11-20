@@ -12,13 +12,27 @@ export interface PackageReceipt {
     version: string
     displayName: string
     author: string
-    contents: Array<{ id: string; kind: string; path: string; demo: boolean }>
+    contents: Array<{
+      id: string
+      kind: string
+      path: string
+      demo: boolean
+      themeRef?: string
+    }>
   }
   code: boolean
   type: string
   assetCount: number
   totalBytes: number
   installedGames: string[]
+}
+
+export class PackageRequestError extends Error {
+  readonly status: number
+  constructor(status: number, message: string) {
+    super(message)
+    this.status = status
+  }
 }
 
 export async function packageRequest(path: string, options: RequestInit = {}) {
@@ -46,7 +60,10 @@ export async function packageRequest(path: string, options: RequestInit = {}) {
 
   if (!response.ok) {
     const body = (await response.json().catch(() => ({}))) as { error?: string }
-    throw new Error(body.error ?? `PACKAGE_HTTP_${response.status}`)
+    throw new PackageRequestError(
+      response.status,
+      body.error ?? `PACKAGE_HTTP_${response.status}`,
+    )
   }
 
   return response

@@ -47,6 +47,13 @@ export const runtimeSnapshotSchema = z.strictObject({
   reducedMotion: z.boolean(),
   title: text,
   question: text,
+  // Additive public presentation metadata. Older packages/snapshots may omit it.
+  questionNumber: z.number().int().positive().optional(),
+  questionCount: z.number().int().nonnegative().nullable().optional(),
+  cardKind: z.string().max(80).optional(),
+  cardTitle: text.optional(),
+  finalLeaderboard: z.boolean().optional(),
+  phaseElapsedMs: z.number().min(0).max(86_400_000).optional(),
   questionImage: z
     .string()
     .max(7_000_000)
@@ -108,6 +115,26 @@ export const runtimeSnapshotSchema = z.strictObject({
 
 export type RuntimeSnapshot = z.infer<typeof runtimeSnapshotSchema>
 
+/** Old SDK bundles validate snapshots strictly; only send additions after negotiation. */
+export function runtimeSnapshotForCapabilities(
+  snapshot: RuntimeSnapshot,
+  snapshotMetadataVersion?: 1,
+): RuntimeSnapshot {
+  if (snapshotMetadataVersion === 1) {
+    return snapshot
+  }
+
+  const legacy = { ...snapshot }
+  delete legacy.questionNumber
+  delete legacy.questionCount
+  delete legacy.cardKind
+  delete legacy.cardTitle
+  delete legacy.finalLeaderboard
+  delete legacy.phaseElapsedMs
+
+  return legacy
+}
+
 const envelope = {
   v: z.literal(1),
   channel: z.string().regex(/^[a-f0-9]{64}$/u),
@@ -125,6 +152,12 @@ export const rendererMessageSchema = z.discriminatedUnion("type", [
     runtimeApi: z.literal(1),
   }),
   z.strictObject({ ...envelope, type: z.literal("RENDER_HEALTH") }),
+  // Separate from READY so a new SDK still handshakes with an older host.
+  z.strictObject({
+    ...envelope,
+    type: z.literal("RUNTIME_CAPABILITIES"),
+    snapshotMetadataVersion: z.literal(1),
+  }),
   z.strictObject({
     ...envelope,
     type: z.literal("ANSWER_INTENT"),

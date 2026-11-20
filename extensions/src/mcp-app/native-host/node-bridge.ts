@@ -2,6 +2,7 @@ import type { IncomingMessage, ServerResponse } from "node:http"
 import { Readable } from "node:stream"
 import { pipeline } from "node:stream/promises"
 import { MAX_MEDIA_SIZE } from "@razzia/common/constants"
+import { PACKAGE_LIMITS } from "../../core/packages/manifest.ts"
 import { extractRawPathname } from "./consent-routes.ts"
 
 const DEFAULT_MAX_NON_MCP_BODY_BYTES = 16 * 1024 * 1024
@@ -232,15 +233,22 @@ export function runNativeNodeRequest(options: {
   const isMediaUpload =
     req.method === "POST" &&
     (pathname === "/api/media" || pathname === "/api/media/")
+  const isPackageUpload =
+    req.method === "POST" &&
+    pathname !== null &&
+    /^\/api\/packages\/(?:preflight|uploads|mcp-transfer\/[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+)$/u.test(
+      pathname,
+    )
+  const isLargeUpload = isMediaUpload || isPackageUpload
   const activeMedia = mediaRequests.get(inFlight) ?? 0
 
-  if (inFlight.size >= 16 || (isMediaUpload && activeMedia >= 2)) {
+  if (inFlight.size >= 16 || (isLargeUpload && activeMedia >= 2)) {
     writeSimpleNodeError(res, 503, "SERVICE_BUSY")
 
     return
   }
 
-  if (isMediaUpload) {
+  if (isLargeUpload) {
     mediaRequests.set(inFlight, activeMedia + 1)
   }
 
@@ -261,16 +269,22 @@ export function runNativeNodeRequest(options: {
       { once: true },
     )
   })
-  const timer = setTimeout(() => {
-    controller.abort(new Error("RESPONSE_TIMEOUT"))
-    req.destroy()
-    res.destroy()
-  }, timeoutMs)
+  const timer = setTimeout(
+    () => {
+      controller.abort(new Error("RESPONSE_TIMEOUT"))
+      req.destroy()
+      res.destroy()
+    },
+    isPackageUpload ? Math.max(timeoutMs, 120000) : timeoutMs,
+  )
   timer.unref()
   const exchange = async () => {
+    const mediaBodyLimit = isMediaUpload
+      ? MAX_NATIVE_MEDIA_BODY_BYTES
+      : undefined
     const converted = nodeRequestToWebRequest(
       req,
-      isMediaUpload ? MAX_NATIVE_MEDIA_BODY_BYTES : undefined,
+      isPackageUpload ? PACKAGE_LIMITS.archiveBytes : mediaBodyLimit,
       controller.signal,
     )
     controller.signal.throwIfAborted()
@@ -325,7 +339,7 @@ export function runNativeNodeRequest(options: {
         terminate.unref()
       }
 
-      if (isMediaUpload) {
+      if (isLargeUpload) {
         mediaRequests.set(inFlight, (mediaRequests.get(inFlight) ?? 1) - 1)
       }
 

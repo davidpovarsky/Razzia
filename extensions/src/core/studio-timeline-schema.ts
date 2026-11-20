@@ -452,7 +452,11 @@ export interface PublicFullShowData {
 }
 
 export interface ActiveSceneData {
-  leaderboard?: { entries: PublicRankEntry[] }
+  leaderboard?: {
+    entries: PublicRankEntry[]
+    /** Server-derived authored timeline fact; never inferred from a title. */
+    isFinal?: boolean
+  }
   interimResults?: PublicInterimResults | null
   answerRecap?: PublicAnswerRecap | null
   fullShow?: PublicFullShowData | null

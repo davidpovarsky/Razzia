@@ -99,6 +99,7 @@ test("a slow non-machine body is torn down before consumption completes and drai
 
 test("native media preserves its existing upload cap; generic bodies keep 16 MiB", async () => {
   const { MAX_MEDIA_SIZE } = await import("@razzia/common/constants")
+  const { PACKAGE_LIMITS } = await import("../../src/core/packages/manifest.ts")
   let consumed = 0
   const host = await createNativeConsentHost({
     enabled: false,
@@ -157,9 +158,23 @@ test("native media preserves its existing upload cap; generic bodies keep 16 MiB
     const chunked = await send("/api/media/", 17 * 1024 * 1024, false)
     assert.equal(chunked.status, 200)
     assert.deepEqual(await chunked.json(), { bytes: 17 * 1024 * 1024 })
+    for (const path of [
+      "/api/packages/uploads",
+      "/api/packages/preflight",
+      "/api/packages/mcp-transfer/body.signature",
+    ]) {
+      const response = await send(path, 17 * 1024 * 1024, true)
+      assert.equal(response.status, 200)
+      assert.deepEqual(await response.json(), { bytes: 17 * 1024 * 1024 })
+    }
     for (const [path, cap] of [
       ["/api/other", 16 * 1024 * 1024],
       ["/api/media", limit],
+      [
+        "/api/packages/mcp-transfer/body.signature",
+        PACKAGE_LIMITS.archiveBytes,
+      ],
+      ["/api/packages/mcp-transfer/body.signature/extra", 16 * 1024 * 1024],
     ] as const) {
       const response = await send(path, cap + 1, false)
       assert.equal(response.status, 413)
@@ -182,7 +197,7 @@ test("native media preserves its existing upload cap; generic bodies keep 16 MiB
         socket.destroy()
       }
     }
-    assert.equal(consumed, 2)
+    assert.equal(consumed, 5)
   } finally {
     await listener.close()
   }

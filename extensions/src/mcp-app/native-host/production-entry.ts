@@ -24,12 +24,14 @@ async function start() {
     { createProductionMcpCapabilities },
     { readProductionFullShowArtifacts },
     { createFullShowPreviewPortV3 },
+    { createNativePackageAuthoring },
   ] = await Promise.all([
     import("./index.ts"),
     import("../first-party/index.ts"),
     import("./production-capabilities.ts"),
     import("./production-artifacts.ts"),
     import("../server/full-show-frame.ts"),
+    import("./package-authoring.ts"),
   ])
   const { origin } = new URL(crypto.config.issuer)
   const preview = readProductionFullShowArtifacts({
@@ -59,6 +61,7 @@ async function start() {
       consentPageUrl: `${origin}/studio/oauth-consent`,
       allowedOrigins: [origin],
       ...capabilities,
+      packages: createNativePackageAuthoring(origin),
       fullShowPreviewV3: (drafts) =>
         createFullShowPreviewPortV3(
           { drafts, authoring: capabilities.authoring },

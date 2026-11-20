@@ -51,17 +51,17 @@ export function failureResult(
       {
         type: "text" as const,
         // Some MCP hosts surface only text when isError=true. Include the
-        // already origin-validated, first-party consent URL for this one
-        // owner-reviewed save action, never private draft data or tokens.
+        // already origin-validated, exact first-party consent route for the
+        // requested save action, never private draft data or approval grants.
         text: JSON.stringify({
           ok: false,
           code: failure.code,
-          ...(name === "save_game" &&
+          ...((name === "save_game" || name === "install_package") &&
           failure.code === "CONSENT_REQUIRED" &&
           failure.consentRequestId &&
           failure.consentUrl &&
           failure.consentUrl ===
-            `${new URL(failure.consentUrl).origin}/studio/native-save-consent/${failure.consentRequestId}`
+            `${new URL(failure.consentUrl).origin}/studio/${name === "save_game" ? "native-save-consent" : "package-save-consent"}/${failure.consentRequestId}`
             ? {
                 consentRequestId: failure.consentRequestId,
                 consentUrl: failure.consentUrl,

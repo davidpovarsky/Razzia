@@ -88,7 +88,7 @@ function setup(overrides: Dependencies = {}, responseTimeoutMs?: number) {
   return { app, a, b, tokens, request, connect }
 }
 const list = { jsonrpc: "2.0", id: 1, method: "tools/list", params: {} }
-test("official HTTP client discovers fourteen strict tools without a missing UI artifact", async () => {
+test("official HTTP client discovers twenty-five strict tools without a missing UI artifact", async () => {
   const h = setup()
   const client = await h.connect()
   try {
@@ -166,7 +166,7 @@ test("HTTP draft CAS preserves tenant boundaries, revoked token denial and safe 
     await b.close()
   }
 })
-test("metadata and initial OAuth challenge advertise all 14 tools' scopes", async () => {
+test("metadata and initial OAuth challenge advertise all current tool scopes", async () => {
   const h = setup()
   const response = await h.app.fetch(
     h.request(
@@ -187,7 +187,7 @@ test("metadata and initial OAuth challenge advertise all 14 tools' scopes", asyn
     "tadazz.library.write",
     "tadazz.exports.read",
   ]
-  assert.equal(toolNames.length, 14)
+  assert.equal(toolNames.length, 25)
   assert.deepEqual(
     [...new Set(toolNames.flatMap((tool) => scopes[tool]))],
     expected,

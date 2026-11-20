@@ -1,8 +1,8 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "tadazz",
-  "version": "0.1.0",
-  "description": "Connect your Tadazz account to create, edit, preview, save, and export quiz drafts.",
+  "version": "0.2.0",
+  "description": "Create quiz drafts and custom theme/game packages, preview their native show, and choose when to save them to your Tadazz account.",
   "author": {
     "name": "Tadazz",
     "url": "https://tadazz.com"
@@ -13,7 +13,7 @@
       "interface": {
         "displayName": "Tadazz",
         "shortDescription": "Create interactive quiz shows",
-        "longDescription": "Create and edit quiz drafts in your Tadazz account, preview them in the conversation, and save a selected draft after approving it in Tadazz. Preview interactions are demonstrations and do not cast live votes.",
+        "longDescription": "Create and edit quiz drafts or complete packages with custom themes and bundled media. Check the live authoring capabilities, upload a package, build it with the native isolated worker, and preview its game in Tadazz before approving a save. Account access, native package review, and exact-version save approval remain in place. Preview interactions are demonstrations and do not cast live votes.",
         "developerName": "Tadazz",
         "capabilities": ["Interactive"],
         "websiteURL": "https://tadazz.com",

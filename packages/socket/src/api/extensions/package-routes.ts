@@ -9,12 +9,15 @@ import {
   PackageError,
   inspectPackage,
   issueRuntimeAccess,
+  normalizePackageDocument,
+  packageMediaName,
   packageReviewSchema,
   CompositeStorageService,
   packageThemeDefinitions,
   ThemeInstallationError,
 } from "@razzia/extensions/server"
 import { PACKAGE_LIMITS } from "@razzia/extensions/core"
+import { tadaShowV1Schema } from "@razzia/extensions/core"
 import { requireManager, readClaims } from "@razzia/socket/api/middleware"
 import type { ApiEnv } from "@razzia/socket/api/factory"
 import {
@@ -24,6 +27,7 @@ import {
   packageStore,
 } from "@razzia/socket/services/package-installation"
 import { themeWorkspacePrincipal } from "@razzia/socket/services/theme-installation"
+import { packageTransfers } from "@razzia/socket/services/package-transfers"
 import Registry from "@razzia/socket/services/registry"
 import { verifyMediaAccess } from "@razzia/socket/services/media-access"
 import {
@@ -187,6 +191,51 @@ app.get("/runtime/:source/:themeId", async (c) => {
     url: `${new URL(origin).origin}/render?ticket=${encodeURIComponent(ticket)}&theme=${encodeURIComponent(theme.id)}`,
   })
 })
+// A five-minute ticket stages only the exact bytes declared by an authenticated
+// MCP call. It has no read, build, install, or account authority.
+app.post(
+  "/mcp-transfer/:ticket",
+  bodyLimit({ maxSize: PACKAGE_LIMITS.archiveBytes }),
+  async (c) => {
+    const transfers = packageTransfers()
+    const expectedBytes = transfers.ticketUploadSize(c.req.param("ticket"))
+    const declared = c.req.header("Content-Length")
+    if (
+      declared &&
+      (!/^[0-9]+$/u.test(declared) || Number(declared) !== expectedBytes)
+    ) {
+      return c.json({ error: "PACKAGE_TRANSFER_INPUT" }, 422)
+    }
+    if (activeImports >= 2) return c.json({ error: "PACKAGE_IMPORT_BUSY" }, 429)
+    activeImports += 1
+    try {
+      return c.json(
+        transfers.receiveTicket(
+          c.req.param("ticket"),
+          Buffer.from(await c.req.arrayBuffer()),
+        ),
+      )
+    } finally {
+      activeImports -= 1
+    }
+  },
+)
+app.get("/mcp-export/:ticket", (c) => {
+  const store = packageStore()
+  const ticket = packageTransfers().readExportTicket(c.req.param("ticket"))
+  const p = { tenantId: ticket.owner, userId: ticket.owner, grants: [] }
+  const receipt = store.details(p, ticket.uploadId)
+  if (
+    receipt.sourceDigest !== ticket.sourceDigest ||
+    receipt.revision !== ticket.revision
+  )
+    throw new PackageError("PACKAGE_DIGEST_CHANGED", 409)
+  const bytes = store.export(p, ticket.uploadId)
+  return c.body(Uint8Array.from(bytes).buffer, 200, {
+    "Content-Type": "application/zip",
+    "Content-Disposition": 'attachment; filename="package.tadazz"',
+  })
+})
 app.use("*", requireManager)
 app.use("*", async (c, next) => {
   const importBody =
@@ -240,6 +289,193 @@ const principal = (c: import("hono").Context<ApiEnv>) =>
     c.req.header("X-Tadazz-Workspace") ?? c.get("claims").sub,
   )
 app.get("/", (c) => c.json({ packages: packageStore().list(principal(c)) }))
+app.get("/save-consents/:requestId", (c) => {
+  const p = themeWorkspacePrincipal(c.get("claims").sub, c.get("claims").sub)
+  const intent = packageTransfers().readInstallIntent(
+    p.tenantId,
+    c.req.param("requestId"),
+  )
+  const receipt = packageStore().details(p, intent.uploadId)
+  if (
+    receipt.revision !== intent.revision ||
+    receipt.sourceDigest !== intent.sourceDigest ||
+    receipt.buildDigest !== intent.buildDigest
+  ) {
+    return c.json({ error: "PACKAGE_CONSENT_STALE" }, 409)
+  }
+  const contents = receipt.manifest.contents.filter((item) =>
+    intent.selectedContentIds.includes(item.id),
+  )
+  if (contents.length !== intent.selectedContentIds.length)
+    return c.json({ error: "PACKAGE_SELECTION" }, 409)
+  return c.json({
+    requestId: intent.requestId,
+    uploadId: intent.uploadId,
+    revision: intent.revision,
+    sourceDigest: intent.sourceDigest,
+    buildDigest: intent.buildDigest,
+    title: receipt.manifest.displayName,
+    contents: contents.map(({ id, kind }) => ({ id, kind })),
+    reviewed: receipt.reviewed,
+    canInstall:
+      receipt.phase === "installed" ||
+      (receipt.phase === "preview-ready" &&
+        (receipt.reviewed || contents.every((item) => item.kind === "game"))),
+    expiresAt: intent.expiresAt,
+    outcome: intent.outcome,
+  })
+})
+app.post(
+  "/save-consents/:requestId/approve",
+  bodyLimit({ maxSize: 4000 }),
+  zValidator(
+    "json",
+    z.strictObject({
+      decision: z.literal("approve"),
+      expectedRevision: z.number().int().positive(),
+      sourceDigest: z.string().regex(/^[a-f0-9]{64}$/u),
+    }),
+  ),
+  (c) => {
+    const p = themeWorkspacePrincipal(c.get("claims").sub, c.get("claims").sub),
+      input = c.req.valid("json"),
+      transfers = packageTransfers()
+    const intent = transfers.readInstallIntent(
+      p.tenantId,
+      c.req.param("requestId"),
+    )
+    if (
+      intent.revision !== input.expectedRevision ||
+      intent.sourceDigest !== input.sourceDigest
+    )
+      return c.json({ error: "PACKAGE_CONSENT_STALE" }, 409)
+    const result = transfers.approveInstall(
+      p.tenantId,
+      intent.requestId,
+      (selection) => {
+        const store = packageStore(),
+          receipt = store.details(p, selection.uploadId)
+        if (
+          receipt.revision !== selection.revision ||
+          receipt.sourceDigest !== selection.sourceDigest ||
+          receipt.buildDigest !== selection.buildDigest
+        )
+          throw new PackageError("PACKAGE_CONSENT_STALE", 409)
+        const saved = store.install(
+          p,
+          selection.uploadId,
+          selection.revision,
+          selection.selectedContentIds,
+        )
+        return {
+          uploadId: selection.uploadId,
+          revision: saved.revision,
+          installedGameIds: saved.installedGames,
+        }
+      },
+    )
+    return c.json(result)
+  },
+)
+app.get("/uploads/:upload/games/:gameId/preview", (c) => {
+  const p = principal(c),
+    store = packageStore(),
+    id = c.req.param("upload")
+  store.acceptBuild(p, id)
+  const receipt = store.details(p, id)
+  if (
+    !["preview-ready", "installed"].includes(receipt.phase) ||
+    !receipt.buildDigest ||
+    (receipt.code && !packageRuntimeEnabled())
+  ) {
+    return c.json({ error: "PACKAGE_RUNTIME_NOT_READY" }, 409)
+  }
+  const content = receipt.manifest.contents.find(
+    (item) => item.kind === "game" && item.id === c.req.param("gameId"),
+  )
+  if (!content) return c.json({ error: "PACKAGE_NOT_FOUND" }, 404)
+  const row = store.own(p, id),
+    pkg = store.readPackage(row)
+  const definitions = packageThemeDefinitions(pkg).map((definition) => ({
+    ...definition,
+    ...(definition.sandbox
+      ? {
+          runtime: {
+            packageId: pkg.manifest.id,
+            version: pkg.manifest.version,
+            sourceDigest: receipt.sourceDigest,
+            buildDigest: receipt.buildDigest,
+          },
+        }
+      : {}),
+  }))
+  const show = tadaShowV1Schema.parse(
+    normalizePackageDocument(pkg, content.path),
+  )
+  if (content.themeRef) {
+    const [themeId, version] = content.themeRef.split("@")
+    if (
+      !definitions.some(
+        (definition) =>
+          definition.id === themeId && definition.version === version,
+      )
+    )
+      return c.json({ error: "PACKAGE_DEPENDENCY" }, 409)
+    show.defaults = {
+      ...show.defaults,
+      showTheme: {
+        overrides: {},
+        ...show.defaults?.showTheme,
+        id: themeId,
+        version,
+      },
+    }
+  }
+  // Only the verified manager receives authored source. Raw roster/settings and
+  // executable code are never posted to the isolated theme frame.
+  show.settings = []
+  const ticket = issueRuntimeAccess(store, p, id, packageRuntimeSecret())
+  const runtimeUrls: Record<string, string> = {}
+  const origin = process.env.TADAZZ_PACKAGE_RUNTIME_ORIGIN
+  const parent = process.env.TADAZZ_PACKAGE_PARENT_ORIGIN
+  if (definitions.some((definition) => definition.sandbox)) {
+    if (
+      !origin ||
+      !parent ||
+      new URL(origin).protocol !== "https:" ||
+      new URL(origin).origin === new URL(parent).origin
+    )
+      return c.json({ error: "PACKAGE_RUNTIME_ORIGIN" }, 409)
+    for (const definition of definitions)
+      if (definition.sandbox) {
+        runtimeUrls[definition.id] =
+          `${new URL(origin).origin}/render?ticket=${encodeURIComponent(ticket)}&theme=${encodeURIComponent(definition.id)}`
+      }
+  }
+  setCookie(c, "tdz_theme_preview", `pkg.${ticket}`, {
+    httpOnly: true,
+    sameSite: "Lax",
+    secure: new URL(c.req.url).protocol === "https:",
+    path: "/media",
+    maxAge: 300,
+  })
+  return c.json({
+    uploadId: id,
+    revision: receipt.revision,
+    sourceDigest: receipt.sourceDigest,
+    buildDigest: receipt.buildDigest,
+    show,
+    definitions,
+    runtimeUrls,
+    assets: pkg.manifest.files
+      .filter((file) => !["source", "style", "descriptor"].includes(file.kind))
+      .map((file) => ({
+        url: `/media/${packageMediaName(pkg, file.path)}`,
+        sha256: file.sha256,
+        bytes: file.bytes,
+      })),
+  })
+})
 app.post(
   "/preflight",
   bodyLimit({ maxSize: PACKAGE_LIMITS.archiveBytes }),

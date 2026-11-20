@@ -23,7 +23,11 @@
       },
       "role": {
         "type": "string",
-        "enum": ["manager", "player", "spectator"]
+        "enum": [
+          "manager",
+          "player",
+          "spectator"
+        ]
       },
       "phase": {
         "type": "string",
@@ -55,6 +59,39 @@
       "question": {
         "type": "string",
         "maxLength": 1000
+      },
+      "questionNumber": {
+        "type": "integer",
+        "exclusiveMinimum": 0,
+        "maximum": 9007199254740991
+      },
+      "questionCount": {
+        "anyOf": [
+          {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "cardKind": {
+        "type": "string",
+        "maxLength": 80
+      },
+      "cardTitle": {
+        "type": "string",
+        "maxLength": 1000
+      },
+      "finalLeaderboard": {
+        "type": "boolean"
+      },
+      "phaseElapsedMs": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 86400000
       },
       "questionImage": {
         "type": "string",
@@ -108,7 +145,10 @@
               "maximum": 9007199254740991
             }
           },
-          "required": ["id", "label"],
+          "required": [
+            "id",
+            "label"
+          ],
           "additionalProperties": false
         }
       },
@@ -131,7 +171,11 @@
               "maximum": 9007199254740991
             }
           },
-          "required": ["label", "score", "rank"],
+          "required": [
+            "label",
+            "score",
+            "rank"
+          ],
           "additionalProperties": false
         }
       },
@@ -152,7 +196,11 @@
                 "maximum": 9007199254740991
               }
             },
-            "required": ["correct", "points", "rank"],
+            "required": [
+              "correct",
+              "points",
+              "rank"
+            ],
             "additionalProperties": false
           },
           {
@@ -164,7 +212,10 @@
         "type": "number"
       },
       "deadline": {
-        "type": ["number", "null"]
+        "type": [
+          "number",
+          "null"
+        ]
       },
       "remainingMs": {
         "type": "number",
@@ -193,7 +244,11 @@
             "maxLength": 1000
           }
         },
-        "required": ["submit", "waiting", "results"],
+        "required": [
+          "submit",
+          "waiting",
+          "results"
+        ],
         "additionalProperties": false
       }
     },
@@ -244,7 +299,11 @@
           },
           "role": {
             "type": "string",
-            "enum": ["manager", "player", "spectator"]
+            "enum": [
+              "manager",
+              "player",
+              "spectator"
+            ]
           },
           "sequence": {
             "type": "integer",
@@ -299,7 +358,11 @@
           },
           "role": {
             "type": "string",
-            "enum": ["manager", "player", "spectator"]
+            "enum": [
+              "manager",
+              "player",
+              "spectator"
+            ]
           },
           "sequence": {
             "type": "integer",
@@ -349,7 +412,70 @@
           },
           "role": {
             "type": "string",
-            "enum": ["manager", "player", "spectator"]
+            "enum": [
+              "manager",
+              "player",
+              "spectator"
+            ]
+          },
+          "sequence": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "epoch": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "type": {
+            "type": "string",
+            "const": "RUNTIME_CAPABILITIES"
+          },
+          "snapshotMetadataVersion": {
+            "type": "number",
+            "const": 1
+          }
+        },
+        "required": [
+          "v",
+          "channel",
+          "roomId",
+          "questionId",
+          "role",
+          "sequence",
+          "epoch",
+          "type",
+          "snapshotMetadataVersion"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "number",
+            "const": 1
+          },
+          "channel": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "roomId": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "questionId": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "manager",
+              "player",
+              "spectator"
+            ]
           },
           "sequence": {
             "type": "integer",
@@ -409,7 +535,11 @@
           },
           "role": {
             "type": "string",
-            "enum": ["manager", "player", "spectator"]
+            "enum": [
+              "manager",
+              "player",
+              "spectator"
+            ]
           },
           "sequence": {
             "type": "integer",
@@ -464,7 +594,11 @@
           },
           "role": {
             "type": "string",
-            "enum": ["manager", "player", "spectator"]
+            "enum": [
+              "manager",
+              "player",
+              "spectator"
+            ]
           },
           "sequence": {
             "type": "integer",
@@ -482,7 +616,10 @@
           },
           "code": {
             "type": "string",
-            "enum": ["RENDER_FAILED", "UNSUPPORTED_SLOT"]
+            "enum": [
+              "RENDER_FAILED",
+              "UNSUPPORTED_SLOT"
+            ]
           }
         },
         "required": [
@@ -524,7 +661,11 @@
           },
           "role": {
             "type": "string",
-            "enum": ["manager", "player", "spectator"]
+            "enum": [
+              "manager",
+              "player",
+              "spectator"
+            ]
           },
           "sequence": {
             "type": "integer",
@@ -563,7 +704,11 @@
               },
               "role": {
                 "type": "string",
-                "enum": ["manager", "player", "spectator"]
+                "enum": [
+                  "manager",
+                  "player",
+                  "spectator"
+                ]
               },
               "phase": {
                 "type": "string",
@@ -595,6 +740,39 @@
               "question": {
                 "type": "string",
                 "maxLength": 1000
+              },
+              "questionNumber": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "questionCount": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "cardKind": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "cardTitle": {
+                "type": "string",
+                "maxLength": 1000
+              },
+              "finalLeaderboard": {
+                "type": "boolean"
+              },
+              "phaseElapsedMs": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 86400000
               },
               "questionImage": {
                 "type": "string",
@@ -648,7 +826,10 @@
                       "maximum": 9007199254740991
                     }
                   },
-                  "required": ["id", "label"],
+                  "required": [
+                    "id",
+                    "label"
+                  ],
                   "additionalProperties": false
                 }
               },
@@ -671,7 +852,11 @@
                       "maximum": 9007199254740991
                     }
                   },
-                  "required": ["label", "score", "rank"],
+                  "required": [
+                    "label",
+                    "score",
+                    "rank"
+                  ],
                   "additionalProperties": false
                 }
               },
@@ -692,7 +877,11 @@
                         "maximum": 9007199254740991
                       }
                     },
-                    "required": ["correct", "points", "rank"],
+                    "required": [
+                      "correct",
+                      "points",
+                      "rank"
+                    ],
                     "additionalProperties": false
                   },
                   {
@@ -704,7 +893,10 @@
                 "type": "number"
               },
               "deadline": {
-                "type": ["number", "null"]
+                "type": [
+                  "number",
+                  "null"
+                ]
               },
               "remainingMs": {
                 "type": "number",
@@ -733,7 +925,11 @@
                     "maxLength": 1000
                   }
                 },
-                "required": ["submit", "waiting", "results"],
+                "required": [
+                  "submit",
+                  "waiting",
+                  "results"
+                ],
                 "additionalProperties": false
               }
             },
@@ -807,7 +1003,11 @@
           },
           "role": {
             "type": "string",
-            "enum": ["manager", "player", "spectator"]
+            "enum": [
+              "manager",
+              "player",
+              "spectator"
+            ]
           },
           "sequence": {
             "type": "integer",
@@ -846,7 +1046,11 @@
               },
               "role": {
                 "type": "string",
-                "enum": ["manager", "player", "spectator"]
+                "enum": [
+                  "manager",
+                  "player",
+                  "spectator"
+                ]
               },
               "phase": {
                 "type": "string",
@@ -878,6 +1082,39 @@
               "question": {
                 "type": "string",
                 "maxLength": 1000
+              },
+              "questionNumber": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "maximum": 9007199254740991
+              },
+              "questionCount": {
+                "anyOf": [
+                  {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "cardKind": {
+                "type": "string",
+                "maxLength": 80
+              },
+              "cardTitle": {
+                "type": "string",
+                "maxLength": 1000
+              },
+              "finalLeaderboard": {
+                "type": "boolean"
+              },
+              "phaseElapsedMs": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 86400000
               },
               "questionImage": {
                 "type": "string",
@@ -931,7 +1168,10 @@
                       "maximum": 9007199254740991
                     }
                   },
-                  "required": ["id", "label"],
+                  "required": [
+                    "id",
+                    "label"
+                  ],
                   "additionalProperties": false
                 }
               },
@@ -954,7 +1194,11 @@
                       "maximum": 9007199254740991
                     }
                   },
-                  "required": ["label", "score", "rank"],
+                  "required": [
+                    "label",
+                    "score",
+                    "rank"
+                  ],
                   "additionalProperties": false
                 }
               },
@@ -975,7 +1219,11 @@
                         "maximum": 9007199254740991
                       }
                     },
-                    "required": ["correct", "points", "rank"],
+                    "required": [
+                      "correct",
+                      "points",
+                      "rank"
+                    ],
                     "additionalProperties": false
                   },
                   {
@@ -987,7 +1235,10 @@
                 "type": "number"
               },
               "deadline": {
-                "type": ["number", "null"]
+                "type": [
+                  "number",
+                  "null"
+                ]
               },
               "remainingMs": {
                 "type": "number",
@@ -1016,7 +1267,11 @@
                     "maxLength": 1000
                   }
                 },
-                "required": ["submit", "waiting", "results"],
+                "required": [
+                  "submit",
+                  "waiting",
+                  "results"
+                ],
                 "additionalProperties": false
               }
             },
@@ -1078,7 +1333,11 @@
           },
           "role": {
             "type": "string",
-            "enum": ["manager", "player", "spectator"]
+            "enum": [
+              "manager",
+              "player",
+              "spectator"
+            ]
           },
           "sequence": {
             "type": "integer",

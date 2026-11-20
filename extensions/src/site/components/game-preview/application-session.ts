@@ -41,6 +41,7 @@ export function createApplicationPreviewSession(options: {
     urls: string[],
     signal: AbortSignal,
   ) => Promise<Array<{ url: string; sha256: string; bytes: number }>>
+  getPackageContext?: () => ApplicationPreviewFrame["packageContext"]
 }): GamePreviewSession {
   assertApplicationPreviewPlan(options.show, options.plan)
   const clock = createDemoClock()
@@ -80,8 +81,10 @@ export function createApplicationPreviewSession(options: {
   let audioAudition: ApplicationPreviewFrame["audioAudition"] = undefined,
     auditionSequence = 0
   let appearanceAssets: Awaited<ReturnType<typeof options.authorizeMedia>> = []
+  let lastPackageValidation = Date.now()
   const revalidate = async (signal: AbortSignal) => {
     await options.revalidate(signal)
+    lastPackageValidation = Date.now()
 
     if (
       appearanceAssets.length &&
@@ -123,6 +126,9 @@ export function createApplicationPreviewSession(options: {
     ...options.preferences,
     appearanceRevision,
     ...(appearance ? { appearance } : {}),
+    ...(options.getPackageContext
+      ? { packageContext: options.getPackageContext() }
+      : {}),
   })
   const render = async () => {
     await native?.update(frame())
@@ -169,6 +175,15 @@ export function createApplicationPreviewSession(options: {
       return
     }
 
+    if (
+      options.getPackageContext &&
+      Date.now() - lastPackageValidation > 240_000
+    ) {
+      const ticket = generation
+      await revalidate(abort.signal)
+      if (disposed || ticket !== generation || clock.snapshot().paused) return
+    }
+
     const chapter = chapters[chapterIndex]
     const elapsedMs = clock.snapshot().elapsedMs
     const media = native?.mediaElement()
@@ -176,9 +191,10 @@ export function createApplicationPreviewSession(options: {
       chapter.duration.kind === "unknown" && media?.ended && !media.loop
 
     if (
-      mediaEnded ||
-      (chapter.duration.kind === "known" &&
-        elapsedMs >= chapter.duration.milliseconds)
+      !stagePhase &&
+      (mediaEnded ||
+        (chapter.duration.kind === "known" &&
+          elapsedMs >= chapter.duration.milliseconds))
     ) {
       if (chapterIndex + 1 === chapters.length) {
         ended = true
@@ -198,7 +214,7 @@ export function createApplicationPreviewSession(options: {
 
     if (!disposed && !clock.snapshot().paused) {
       const duration = chapters[chapterIndex].duration
-      const remaining = duration.kind === "known" ? Math.max(0, duration.milliseconds - clock.snapshot().elapsedMs) : 100
+      const remaining = !stagePhase && duration.kind === "known" ? Math.max(0, duration.milliseconds - clock.snapshot().elapsedMs) : 100
       timer = setTimeout(() => {
         void tick().catch(fail)
       }, Math.min(100, remaining))
@@ -321,7 +337,7 @@ export function createApplicationPreviewSession(options: {
 
       audioAudition = undefined
 
-      if (stagePhase) {
+      if (stagePhase && !options.getPackageContext) {
         beginChapter()
       }
 
@@ -335,7 +351,7 @@ export function createApplicationPreviewSession(options: {
       emit()
       clear()
       const duration = chapters[chapterIndex].duration
-      const remaining = duration.kind === "known" ? Math.max(0, duration.milliseconds - clock.snapshot().elapsedMs) : 100
+      const remaining = !stagePhase && duration.kind === "known" ? Math.max(0, duration.milliseconds - clock.snapshot().elapsedMs) : 100
       timer = setTimeout(() => {
         void tick().catch(fail)
       }, Math.min(100, remaining))
@@ -366,11 +382,11 @@ export function createApplicationPreviewSession(options: {
         return
       }
 
-      chapterIndex = 0
       ended = false
-      beginChapter()
-
-      if (stagePhase) {
+      if (stagePhase === "lobby" && options.getPackageContext) {
+        clock.replay()
+      } else {
+        chapterIndex = 0
         beginChapter()
       }
 
@@ -383,7 +399,7 @@ export function createApplicationPreviewSession(options: {
 
       emit()
       const duration = chapters[chapterIndex].duration
-      const remaining = duration.kind === "known" ? Math.max(0, duration.milliseconds - clock.snapshot().elapsedMs) : 100
+      const remaining = !stagePhase && duration.kind === "known" ? Math.max(0, duration.milliseconds - clock.snapshot().elapsedMs) : 100
       timer = setTimeout(() => {
         void tick().catch(fail)
       }, Math.min(100, remaining))
@@ -623,6 +639,7 @@ export function createApplicationPreviewSession(options: {
       }
 
       stagePhase = "lobby"
+      if (options.getPackageContext) clock.replay()
       audioAudition = undefined
       mediaRevealed = false
       appearanceRevision += 1

@@ -8,6 +8,7 @@ import {
 } from "react"
 import {
   RendererMessageGuard,
+  runtimeSnapshotForCapabilities,
   runtimeSnapshotSchema,
   type RuntimeSnapshot,
 } from "../../core/packages/protocol"
@@ -17,6 +18,7 @@ export function ThemeSandboxHost({
   snapshot,
   onAnswer,
   onAudioCue,
+  onReady,
   onFallback,
   fallback,
   title,
@@ -25,15 +27,23 @@ export function ThemeSandboxHost({
   snapshot: RuntimeSnapshot
   onAnswer: (ids: string[]) => void
   onAudioCue?: (id: string) => void
+  /** Fires once after the frame's authenticated READY, not its load event. */
+  onReady?: () => void
   fallback: ReactNode
   title: string
   onFallback?: () => void
 }) {
   const frame = useRef<HTMLIFrameElement>(null)
-  const current = useRef({ snapshot, onAnswer, onAudioCue, onFallback })
+  const current = useRef({
+    snapshot,
+    onAnswer,
+    onAudioCue,
+    onReady,
+    onFallback,
+  })
   useLayoutEffect(() => {
-    current.current = { snapshot, onAnswer, onAudioCue, onFallback }
-  }, [snapshot, onAnswer, onAudioCue, onFallback])
+    current.current = { snapshot, onAnswer, onAudioCue, onReady, onFallback }
+  }, [snapshot, onAnswer, onAudioCue, onReady, onFallback])
   const [failed, setFailed] = useState(false)
   const [failureCode, setFailureCode] = useState("")
   const fail = useCallback((code: string) => {
@@ -49,6 +59,7 @@ export function ThemeSandboxHost({
     channel: string
     sequence: number
     ready: boolean
+    snapshotMetadataVersion?: 1
   } | null>(null)
   useLayoutEffect(() => {
     const { origin } = new URL(url)
@@ -85,7 +96,10 @@ export function ThemeSandboxHost({
         return
       }
 
-      const { data: publicState } = parsed
+      const publicState = runtimeSnapshotForCapabilities(
+        parsed.data,
+        state.snapshotMetadataVersion,
+      )
       state.sequence += 1
       frame.current.contentWindow.postMessage(
         {
@@ -123,7 +137,11 @@ export function ThemeSandboxHost({
       (b) => b.toString(16).padStart(2, "0"),
     ).join("")
     const guard = new RendererMessageGuard(channel)
-    const connectionState = { channel, sequence: 0, ready: false }
+    const connectionState: NonNullable<typeof connection.current> = {
+      channel,
+      sequence: 0,
+      ready: false,
+    }
     connection.current = connectionState
     let lastHealth = Date.now()
     const listener = (event: MessageEvent) => {
@@ -145,11 +163,22 @@ export function ThemeSandboxHost({
       }
 
       if (data.type === "READY") {
+        const firstReady = !connectionState.ready
         connectionState.ready = true
         lastHealth = Date.now()
         send()
+
+        if (firstReady) {
+          current.current.onReady?.()
+        }
       } else if (data.type === "RENDER_HEALTH") {
         lastHealth = Date.now()
+      } else if (data.type === "RUNTIME_CAPABILITIES") {
+        connectionState.snapshotMetadataVersion = data.snapshotMetadataVersion
+
+        if (connectionState.ready) {
+          send()
+        }
       } else if (data.type === "RUNTIME_ERROR") {
         fail("RENDER_FAILED")
       } else if (data.type === "ANSWER_INTENT") {

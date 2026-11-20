@@ -4,6 +4,7 @@ import { demoClockSnapshotSchema } from "./preview-schemas"
 import { compositionDocumentSchema } from "./composition-document"
 import { libraryRegistrySchema } from "./schemas"
 import { SHOW_THEME_AUDIO_EVENTS } from "../show-themes/selection"
+import { applicationPackagePreviewSchema } from "./application-package-preview"
 
 export const applicationAppearanceSchema = z.strictObject({
   registry: libraryRegistrySchema,
@@ -30,6 +31,7 @@ export const applicationPreviewFrameSchema = z.strictObject({
   appearance: applicationAppearanceSchema.optional(),
   appearanceRevision: z.number().int().nonnegative().default(0),
   scopeIds: z.record(z.string().max(160), z.uuid()).optional(),
+  packageContext: applicationPackagePreviewSchema.optional(),
 })
 
 export type ApplicationPreviewFrame = z.infer<

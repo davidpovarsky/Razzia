@@ -8,6 +8,7 @@ import {
   type ApplicationPreviewFrame,
 } from "../../core/show-library/application-preview-schema"
 import { ApplicationPreviewStage } from "./application-preview-stage"
+import { applicationPackagePreviewSchema } from "../../core/show-library/application-package-preview"
 import "../legacy-effects.css"
 import "@fontsource-variable/rubik/wght.css"
 import { acquireNativePreviewFonts } from "./native-fonts"
@@ -72,6 +73,8 @@ export function mount(
       | undefined = undefined
   let previousAppearance: unknown = undefined,
     parsedAppearance: ApplicationPreviewFrame["appearance"] = undefined
+  let previousPackageContext: unknown = undefined,
+    parsedPackageContext: ApplicationPreviewFrame["packageContext"] = undefined
   const pending = new Set<() => void>()
   let previousKey = ""
 
@@ -82,13 +85,18 @@ export function mount(
       }
 
       assertBoundedJson(value)
-      const raw = value as { show: unknown; appearance?: unknown }
+      const raw = value as {
+        show: unknown
+        appearance?: unknown
+        packageContext?: unknown
+      }
       const core = applicationPreviewFrameSchema
-        .omit({ show: true, appearance: true })
+        .omit({ show: true, appearance: true, packageContext: true })
         .parse(
           Object.fromEntries(
             Object.entries(raw).filter(
-              ([key]) => key !== "show" && key !== "appearance",
+              ([key]) =>
+                !["show", "appearance", "packageContext"].includes(key),
             ),
           ),
         )
@@ -107,11 +115,22 @@ export function mount(
                   ? requireLibraryValue(parsedAppearance)
                   : applicationAppearanceSchema.parse(raw.appearance),
             }),
+        ...(raw.packageContext === undefined
+          ? {}
+          : {
+              packageContext:
+                raw.packageContext === previousPackageContext &&
+                Object.isFrozen(raw.packageContext)
+                  ? requireLibraryValue(parsedPackageContext)
+                  : applicationPackagePreviewSchema.parse(raw.packageContext),
+            }),
       }
       previousShow = raw.show
       parsedShow = frame.show
       previousAppearance = raw.appearance
       parsedAppearance = frame.appearance
+      previousPackageContext = raw.packageContext
+      parsedPackageContext = frame.packageContext
       const key = `${frame.clock.epoch}:${frame.chapterIndex}:${frame.appearanceRevision}`
       const sameChapter = key === previousKey
       previousKey = key

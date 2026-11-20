@@ -12,6 +12,7 @@ import type { PreviewIdentityEnvelope } from "../contracts/canonical.ts"
 import type { CandidatePreviewPortV2 } from "./preview-candidate-v2.ts"
 import type { FullShowPreviewPortV3 } from "./full-show-frame.ts"
 import type { PreviewUiResource } from "./preview-resource.ts"
+import type { PackageAuthoringPort } from "./package-authoring.ts"
 
 export interface VerifiedPrincipal {
   issuer: string
@@ -104,6 +105,8 @@ export interface Dependencies {
   semanticDrafts?: SemanticDraftPort
   authoring?: AuthoringPolicy
   catalog?: Catalog
+  /** Existing native package engine; absent adapters remain unavailable. */
+  packages?: PackageAuthoringPort
   /** Optional data-only V2 development seam. Never an accepted V1 renderer. */
   previewCandidateV2?: CandidatePreviewPortV2
   /** G's reviewed static widget artifact + explicit host CSP/permission. */

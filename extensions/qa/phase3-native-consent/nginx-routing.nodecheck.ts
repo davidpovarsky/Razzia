@@ -219,6 +219,7 @@ http {
       for (const path of [
         "/studio/oauth-consent?oauth_request=synthetic",
         `/studio/native-save-consent/${"a".repeat(54)}`,
+        `/studio/package-save-consent/${"a".repeat(36)}`,
       ]) {
         for (const method of ["GET", "HEAD"]) {
           const response = await request(origin + path, { method })
@@ -254,14 +255,19 @@ http {
         `/oauth/downloads/${protectedMarker}`,
         `/studio/oauth-consent?oauth_request=${protectedMarker}`,
         `/studio/native-save-consent/${protectedMarker.padEnd(54, "a")}`,
+        `/studio/package-save-consent/${protectedMarker.padEnd(36, "a")}`,
+        `/api/packages/mcp-export/${protectedMarker}`,
+        `/api/packages/mcp-transfer/${protectedMarker}.signature`,
+        `/api/packages/save-consents/${protectedMarker}`,
       ]
       for (const path of protectedTargets) {
         const response = await request(origin + path, {
           headers: { Referer: `${origin}/${protectedMarker}` },
         })
+        const expectedStatus = path.startsWith("/api/") ? 401 : 200
         assert.equal(
           response.status,
-          path.startsWith("/oauth/downloads/") ? 404 : 200,
+          path.startsWith("/oauth/downloads/") ? 404 : expectedStatus,
         )
         await response.text()
       }

@@ -1,6 +1,7 @@
 import build from "./application-preview-build.json" with { type: "json" }
 import { resolveShowTheme } from "../show-themes/resolve"
-import { showThemeRegistry } from "../show-themes/registry"
+import { createShowThemeRegistry } from "../show-themes/registry"
+import { canonicalJson, sha256 } from "./digest"
 import { getPreviewIdentityId } from "./identity"
 import {
   assertApplicationPreviewDraft,
@@ -33,18 +34,43 @@ export function resolveApplicationPreviewPlan(
 ): Readonly<PreviewPlan> {
   assertApplicationPreviewDraft(draft)
   const { role } = draft.context
+  const registry = createShowThemeRegistry(draft.packageContext?.definitions)
   const theme = resolveShowTheme({
     selection: draft.show.defaults?.showTheme,
     role,
+    registry,
   })
-  const pin = manifest.pins.find(
+  const nativePin = manifest.pins.find(
     (candidate) => candidate.renderer.id === theme.definition.rendererId,
   )
+  const packagePin =
+    theme.definition.kind === "sandboxed-react" &&
+    draft.packageContext &&
+    theme.definition.runtime &&
+    manifest.pins.some(
+      (candidate) => candidate.renderer.id === "tadazz-classic-stage",
+    )
+      ? {
+          portVersion: 3 as const,
+          identityRuleVersion: 2 as const,
+          registry: {
+            id: theme.definition.runtime.packageId,
+            version: theme.definition.runtime.version,
+          },
+          registrySha256: sha256(
+            canonicalJson(draft.packageContext.definitions),
+          ),
+          renderer: { id: "tadazz-sandbox-stage", version: "1.0.0" },
+          rendererBuildSha256: theme.definition.runtime.buildDigest,
+        }
+      : undefined
+  const pin = packagePin ?? nativePin
   const supported = draft.show.cards.every((card) => {
     const scoped = resolveShowTheme({
       selection: draft.show.defaults?.showTheme,
       scope: card.themeOverrides,
       role,
+      registry,
     })
 
     return (
@@ -57,7 +83,7 @@ export function resolveApplicationPreviewPlan(
   })
   const ready = Boolean(
     pin &&
-    showThemeRegistry.get(theme.definition.id, theme.definition.version) &&
+    registry.get(theme.definition.id, theme.definition.version) &&
     theme.requested.id === theme.definition.id &&
     theme.diagnostics.length === 0 &&
     supported,

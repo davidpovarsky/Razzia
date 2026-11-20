@@ -315,6 +315,10 @@ export async function createNativeConsentHost(
   const consentMatcher = createConsentRouteMatcher({
     consentPageUrl: resolvedConfig.mcp.consentPageUrl,
     nativeSaveConsentPageUrl: resolvedConfig.mcp.nativeSave.consentPageUrl,
+    packageSaveConsentPageUrl: new URL(
+      "/studio/package-save-consent",
+      resolvedConfig.mcp.consentPageUrl,
+    ).href,
   })
   const machineMatcher = createMachineRouteMatcher(resolvedConfig.mcp.config)
   const { callNativeApp, serveWeb } = createAppDispatcher(options)
@@ -531,7 +535,9 @@ export async function listenNativeConsentHost(
 
   server.maxConnections = options.maxConnections ?? 128
   server.headersTimeout = 10000
-  server.requestTimeout = 30000
+  // Ordinary and MCP handlers retain their shorter response deadlines. The
+  // exact package upload route can stream a native-size archive for two minutes.
+  server.requestTimeout = 120000
   server.keepAliveTimeout = 5000
 
   const sockets = new Set<Socket>()
