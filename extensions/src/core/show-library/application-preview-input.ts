@@ -109,6 +109,7 @@ export function normalizeApplicationPreviewDraft(
   ) {
     throw new Error("Package preview media receipt changed")
   }
+
   const registry = createShowThemeRegistry(source.packageContext?.definitions)
 
   const permitted = new Set([

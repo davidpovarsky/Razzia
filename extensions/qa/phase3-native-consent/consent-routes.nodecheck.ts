@@ -82,7 +82,7 @@ describe("native-host consent routes and security headers", () => {
       "too-short",
       "a".repeat(65),
       `${"a".repeat(36)}/extra`,
-      "a".repeat(35) + "%2f",
+      `${"a".repeat(35)}%2f`,
     ]) {
       assert.equal(matcher(`/studio/package-save-consent/${id}`), false)
     }

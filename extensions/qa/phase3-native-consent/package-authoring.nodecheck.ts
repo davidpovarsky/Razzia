@@ -3,6 +3,7 @@ import { existsSync, readFileSync } from "node:fs"
 import { join } from "node:path"
 import { test } from "node:test"
 import { Hono } from "hono"
+import { z } from "zod"
 import { packPackage, packageSha } from "../../src/server/packages/archive.ts"
 import { packageManifestSchema } from "../../src/core/packages/manifest.ts"
 import {
@@ -36,6 +37,7 @@ const callback = "https://client.example.invalid/package-callback"
 async function authorize(issuer: Issuer, origin: string, session: Session) {
   const api = (path: string, body?: Record<string, string>) => {
     const firstParty = path === "/oauth/inspect" || path === "/oauth/approve"
+
     return issuer.fetch(
       new Request(origin + path, {
         method: body ? "POST" : "GET",
@@ -61,17 +63,16 @@ async function authorize(issuer: Issuer, origin: string, session: Session) {
   }
   const pkce = createPkcePair()
   const started = await api(
-    "/oauth/authorize?" +
-      new URLSearchParams({
-        response_type: "code",
-        client_id: clientId,
-        redirect_uri: callback,
-        resource: origin + "/mcp",
-        scope: ALL_MCP_SCOPES.join(" "),
-        state: key(),
-        code_challenge: pkce.challenge,
-        code_challenge_method: "S256",
-      }),
+    `/oauth/authorize?${new URLSearchParams({
+      response_type: "code",
+      client_id: clientId,
+      redirect_uri: callback,
+      resource: `${origin}/mcp`,
+      scope: ALL_MCP_SCOPES.join(" "),
+      state: key(),
+      code_challenge: pkce.challenge,
+      code_challenge_method: "S256",
+    })}`,
   )
   assert.equal(started.status, 302)
   const location = started.headers.get("location")
@@ -80,26 +81,33 @@ async function authorize(issuer: Issuer, origin: string, session: Session) {
   assert(ticket)
   const inspected = await api("/oauth/inspect", { ticket })
   assert.equal(inspected.status, 200)
-  const inspection = await inspected.json()
+  const inspection = z
+    .object({ proof: z.string().min(1) })
+    .parse(await inspected.json())
   const approved = await api("/oauth/approve", {
     ticket,
     decision: "allow",
     proof: inspection.proof,
   })
   assert.equal(approved.status, 200)
-  const approval = await approved.json()
+  const approval = z
+    .object({ redirectUrl: z.url() })
+    .parse(await approved.json())
   const code = new URL(approval.redirectUrl).searchParams.get("code")
   assert(code)
   const exchanged = await api("/oauth/token", {
     grant_type: "authorization_code",
     client_id: clientId,
     redirect_uri: callback,
-    resource: origin + "/mcp",
+    resource: `${origin}/mcp`,
     code,
     code_verifier: pkce.verifier,
   })
   assert.equal(exchanged.status, 200)
-  const tokens = await exchanged.json()
+  const tokens = z
+    .object({ access_token: z.string().min(1) })
+    .parse(await exchanged.json())
+
   return issuer.verifyAccessToken(tokens.access_token)
 }
 
@@ -127,6 +135,7 @@ function syntheticArchive() {
       },
     ],
   })
+
   return packPackage(manifest, new Map([[path, document]]))
 }
 
@@ -145,14 +154,15 @@ test(
     process.env.TADAZZ_PACKAGE_INSTALLER_ENABLED = "true"
     process.env.TADAZZ_PACKAGE_RUNTIME_ENABLED = "false"
     process.env.TADAZZ_THEME_WORKSPACE_GRANTS = "{}"
-    let closeListener: (() => Promise<void>) | undefined
-    let closeStores: (() => void) | undefined
+    let closeListener: (() => Promise<void>) | undefined = undefined
+    let closeStores: (() => void) | undefined = undefined
     const sentinels = [
       f.root,
       ...f.sessions.map((s) => join(f.root, "tenants", s.owner)),
     ]
       .map((root) => join(root, "native-sentinels/quiz.json"))
       .map((path) => ({ path, bytes: readFileSync(path) }))
+
     try {
       // Actual env/auth/store modules load only after the isolated fixture is active.
       const { createFirstPartyOAuth: createIssuer } =
@@ -183,19 +193,18 @@ test(
       })
       const listener = await listenNativeConsentHost(host, { port: 0, tls })
       closeListener = () => listener.close()
-      const origin = listener.origin
+      const { origin } = listener
       const request = createPinnedCaFetch(tls.cert)
       const issuer = await createIssuer({
         config: {
-          issuer: origin + "/oauth",
-          resource: origin + "/mcp",
-          resourceMetadataUrl:
-            origin + "/.well-known/oauth-protected-resource/mcp",
+          issuer: `${origin}/oauth`,
+          resource: `${origin}/mcp`,
+          resourceMetadataUrl: `${origin}/.well-known/oauth-protected-resource/mcp`,
           firstPartyOrigins: [origin],
         },
         configRoot: f.root,
         ...createEphemeralOAuthKeys(),
-        consentPageUrl: origin + "/studio/oauth-consent",
+        consentPageUrl: `${origin}/studio/oauth-consent`,
         clients: [
           { clientId, redirectUris: [callback], scopes: [...ALL_MCP_SCOPES] },
         ],
@@ -213,6 +222,7 @@ test(
           ...input,
         })
         const result = await port.call(principal, name, args)
+
         return packageDataSchemas[name].parse(result.data) as PackageToolData<N>
       }
       const bytes = syntheticArchive()
@@ -232,7 +242,8 @@ test(
       const uploadUrl = new URL(begun.uploadUrl)
       assert.equal(uploadUrl.origin, origin)
       assert.match(uploadUrl.pathname, /^\/api\/packages\/mcp-transfer\//u)
-      const uploadTicket = uploadUrl.pathname.split("/").at(-1)!
+      const uploadTicket = uploadUrl.pathname.split("/").at(-1)
+      assert(uploadTicket)
       assert.equal(
         (await call(a, "begin_package_upload", beginInput)).transferId,
         begun.transferId,
@@ -264,7 +275,7 @@ test(
           assert.deepEqual(await rejected.json(), {
             error: "PACKAGE_DIGEST_CHANGED",
           })
-          for (let retry = 0; retry < 2; retry++) {
+          for (let retry = 0; retry < 2; retry += 1) {
             const received = await request(uploadUrl, {
               method: "POST",
               headers: {
@@ -367,7 +378,8 @@ test(
       const exported = await call(a, "export_package", exportInput)
       assert(exported.downloadUrl)
       const downloadUrl = new URL(exported.downloadUrl)
-      const exportTicket = downloadUrl.pathname.split("/").at(-1)!
+      const exportTicket = downloadUrl.pathname.split("/").at(-1)
+      assert(exportTicket)
       await t.test(
         "native export round-trips the archive and rejects upload/runtime capability confusion",
         async () => {
@@ -472,16 +484,20 @@ test(
               .get()?.n,
             0,
           )
-          for (const sentinel of sentinels)
+          for (const sentinel of sentinels) {
             assert.deepEqual(readFileSync(sentinel.path), sentinel.bytes)
+          }
         },
       )
     } finally {
       await closeListener?.()
       closeStores?.()
       for (const [name, value] of Object.entries(previous)) {
-        if (value === undefined) delete process.env[name]
-        else process.env[name] = value
+        if (value === undefined) {
+          Reflect.deleteProperty(process.env, name)
+        } else {
+          process.env[name] = value
+        }
       }
       f.close()
     }

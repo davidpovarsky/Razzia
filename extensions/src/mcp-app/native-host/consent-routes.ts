@@ -214,6 +214,7 @@ export function createConsentRouteMatcher(
   const packageSavePrefix = options.packageSaveConsentPageUrl
     ? normalizePathname(options.packageSaveConsentPageUrl)
     : null
+
   if (options.packageSaveConsentPageUrl && !packageSavePrefix) {
     throw new Error(
       "Package-save consent page URL must define a non-root pathname",

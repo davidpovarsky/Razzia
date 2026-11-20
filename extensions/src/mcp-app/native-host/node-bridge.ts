@@ -279,13 +279,12 @@ export function runNativeNodeRequest(options: {
   )
   timer.unref()
   const exchange = async () => {
+    const mediaBodyLimit = isMediaUpload
+      ? MAX_NATIVE_MEDIA_BODY_BYTES
+      : undefined
     const converted = nodeRequestToWebRequest(
       req,
-      isPackageUpload
-        ? PACKAGE_LIMITS.archiveBytes
-        : isMediaUpload
-          ? MAX_NATIVE_MEDIA_BODY_BYTES
-          : undefined,
+      isPackageUpload ? PACKAGE_LIMITS.archiveBytes : mediaBodyLimit,
       controller.signal,
     )
     controller.signal.throwIfAborted()

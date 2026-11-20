@@ -264,13 +264,10 @@ http {
         const response = await request(origin + path, {
           headers: { Referer: `${origin}/${protectedMarker}` },
         })
+        const expectedStatus = path.startsWith("/api/") ? 401 : 200
         assert.equal(
           response.status,
-          path.startsWith("/oauth/downloads/")
-            ? 404
-            : path.startsWith("/api/")
-              ? 401
-              : 200,
+          path.startsWith("/oauth/downloads/") ? 404 : expectedStatus,
         )
         await response.text()
       }

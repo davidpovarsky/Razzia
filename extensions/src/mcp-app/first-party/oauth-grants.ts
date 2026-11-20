@@ -551,11 +551,16 @@ export class FirstPartyOAuthGrants {
   ): PackageAuthoringPort {
     return Object.freeze<PackageAuthoringPort>({
       call: async (principal, name, input) => {
-        let db: DatabaseSync | undefined
+        let db: DatabaseSync | undefined = undefined
         const authority = () => {
           assertIssued(principal)
-          if (!db) throw invalid()
+
+          if (!db) {
+            throw invalid()
+          }
+
           const grant = this.row(db, principal.accountId, principal.grantId)
+
           if (
             principal.issuer !== this.protocol.config.issuer ||
             principal.audience !== this.protocol.config.resource ||
@@ -570,26 +575,29 @@ export class FirstPartyOAuthGrants {
             throw new ToolError("SCOPE_REQUIRED")
           }
         }
+
         try {
-          assertIssued(principal)
-          db = this.open(principal.accountId, false)
-          authority()
-          const result = await adapter.call(principal, name, input)
-          authority()
-          return result
+          try {
+            assertIssued(principal)
+            db = this.open(principal.accountId, false)
+            authority()
+            const result = await adapter.call(principal, name, input)
+            authority()
+
+            return result
+          } finally {
+            db?.close()
+          }
         } catch (error) {
-          if (error instanceof ToolError) throw error
+          if (error instanceof ToolError) {
+            throw error
+          }
+
           throw new ToolError(
             error instanceof OAuthError && error.code === "invalid_grant"
               ? "SCOPE_REQUIRED"
               : "DEPENDENCY_UNAVAILABLE",
           )
-        } finally {
-          try {
-            db?.close()
-          } catch {
-            throw new ToolError("DEPENDENCY_UNAVAILABLE")
-          }
         }
       },
     })
