@@ -7,6 +7,7 @@ import { verifyEditorRefinements } from "../experience-refinement/editor-verify.
 import { verifyGuestAdmission } from "../experience-refinement/guest-verify.mjs"
 import { verifyPlatformDefaults } from "../experience-refinement/platform-verify.mjs"
 import { verifyStudioViewer } from "./viewer-controls-verify.mjs"
+import { verifyEditorMutations } from "./editor-mutations-verify.mjs"
 import {
   verifyNativePalette,
   verifyCatalogueCovers,
@@ -469,6 +470,14 @@ export async function verifyGalleryEditor(options) {
     })
     assert.equal(platformReceipt.passed, true)
     report.push(...platformReceipt.results)
+
+    const mutationReceipt = await verifyEditorMutations({
+      ...options,
+      browser,
+      context,
+    })
+    assert.equal(mutationReceipt.passed, true)
+    report.push(...mutationReceipt.results)
 
     assert.deepEqual(pageErrors, [], "No editor browser JavaScript errors")
     assert.deepEqual(failedAssets, [], "No editor asset failures")
