@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react"
+import React, { useState } from "react"
 import type { ThemeSDK } from "@tadazz/theme-sdk"
 import { copy } from "./messages"
 import "./style.css"
@@ -72,21 +72,6 @@ function Brand() {
   )
 }
 
-const AmbientStage = memo(function AmbientStage({ still }: { still: boolean }) {
-  return (
-    <div className="bms-ambient" data-still={still} aria-hidden="true">
-      <span className="bms-glow bms-glow-a" />
-      <span className="bms-glow bms-glow-b" />
-      <span className="bms-mote bms-mote-1" />
-      <span className="bms-mote bms-mote-2" />
-      <span className="bms-mote bms-mote-3" />
-      <span className="bms-mote bms-mote-4" />
-      <span className="bms-mote bms-mote-5" />
-      <span className="bms-mote bms-mote-6" />
-    </div>
-  )
-})
-
 function ArchiveFolder({ compact = false }: { compact?: boolean }) {
   return (
     <div
@@ -128,7 +113,7 @@ function TitleScene({ s }: { s: DisplaySnapshot }) {
     >
       <header className="bms-scene-header">
         <Brand />
-        <span className="bms-pill-tag">{copy.edition}</span>
+
       </header>
       <div className="bms-title-body">
         <div className="bms-title-copy">
@@ -146,8 +131,8 @@ function TitleScene({ s }: { s: DisplaySnapshot }) {
           )}
         </div>
         <div className="bms-title-art">
-          <StarIcon className="bms-sparkle bms-sparkle-1" />
-          <StarIcon className="bms-sparkle bms-sparkle-2" />
+
+
           <ArchiveFolder />
         </div>
       </div>
@@ -298,6 +283,7 @@ function QuestionScene({ sdk }: { sdk: ThemeSDK }) {
       data-question-density={density}
       data-answer-density={answerDensity}
       data-answer-count={count}
+      data-photo-sheet={s.answers.some((answer) => Boolean(answer.image))}
       data-answers-visible={s.phase !== "question"}
       data-audience-revealed={audienceRevealed}
       data-correct-revealed={correctnessRevealed}
@@ -580,7 +566,7 @@ export default function BmsStage(sdk: ThemeSDK) {
       data-paused={s.paused}
       data-role={s.role}
     >
-      <AmbientStage still={s.reducedMotion || s.paused} />
+
       {questionFamily ? (
         <QuestionScene key={s.questionId} sdk={sdk} />
       ) : s.phase === "lobby" ? (
