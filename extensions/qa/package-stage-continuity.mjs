@@ -8,16 +8,32 @@ const dependencies = process.env.TADAZZ_CONTINUITY_DEPS
 const themeSource = process.env.TADAZZ_CONTINUITY_THEME
 const evidence = process.env.TADAZZ_CONTINUITY_EVIDENCE
 if (!source || !dependencies || !themeSource || !evidence) {
-  throw new Error("Explicit isolated source, dependency, fixture and evidence paths required")
+  throw new Error(
+    "Explicit isolated source, dependency, fixture and evidence paths required",
+  )
 }
-const require = createRequire(path.join(dependencies, "extensions/package.json"))
+const require = createRequire(
+  path.join(dependencies, "extensions/package.json"),
+)
 const { build } = require("esbuild")
-const { chromium } = createRequire(path.join(dependencies, "packages/e2e/package.json"))("@playwright/test")
+const { chromium } = createRequire(
+  path.join(dependencies, "packages/e2e/package.json"),
+)("@playwright/test")
 await fs.mkdir(evidence, { recursive: true })
-const stage = process.env.TADAZZ_CONTINUITY_STAGE || path.join(source, "packages/web/src/features/game/components/tadazz-show/PackageStage.tsx")
+const stage =
+  process.env.TADAZZ_CONTINUITY_STAGE ||
+  path.join(
+    source,
+    "packages/web/src/features/game/components/tadazz-show/PackageStage.tsx",
+  )
 const runtime = path.join(source, "extensions/src/presentation/package-runtime")
 const js = JSON.stringify
-const result = { fixture: "actual PackageStage, ThemeSandboxHost, SDK and BMS source", checks: [], network: "loopback-only", customerData: false }
+const result = {
+  fixture: "actual PackageStage, ThemeSandboxHost, SDK and BMS source",
+  checks: [],
+  network: "loopback-only",
+  customerData: false,
+}
 const hostEntry = `
 import React from 'react';
 import {createRoot} from 'react-dom/client';
@@ -47,49 +63,116 @@ export function useShowTheme(){return window.__theme}
 `
 const aliases = {
   "@razzia/extensions/presentation": presentationStub,
-  "@razzia/web/lib/session": "export async function ensureSession(){return {token:'fixture-only'}}",
-  "react-i18next": "const t=(key)=>({ 'game:confirm':'Confirm','extensions:packages.phases.lobby':'Waiting','extensions:packages.phases.results':'Results','extensions:packages.theme':'Game' }[key]??key);const i18n={language:'en'};export function useTranslation(){return {t,i18n}}",
+  "@razzia/web/lib/session":
+    "export async function ensureSession(){return {token:'fixture-only'}}",
+  "react-i18next":
+    "const t=(key)=>({ 'game:confirm':'Confirm','extensions:packages.phases.lobby':'Waiting','extensions:packages.phases.results':'Results','extensions:packages.theme':'Game' }[key]??key);const i18n={language:'en'};export function useTranslation(){return {t,i18n}}",
 }
 const plugin = {
   name: "isolated-platform-services",
   setup(builder) {
-    builder.onResolve({ filter: /^(?:react(?:-dom)?(?:\/.*)?|zod)$/ }, args => ({ path: createRequire(path.join(dependencies, "packages/web/package.json")).resolve(args.path) }))
-    builder.onResolve({ filter: /^(?:@razzia\/extensions\/presentation|@razzia\/web\/lib\/session|react-i18next)$/ }, args => ({ path: args.path, namespace: "service" }))
-    builder.onLoad({ filter: /.*/, namespace: "service" }, args => ({ contents: aliases[args.path], loader: "ts", resolveDir: source }))
+    builder.onResolve(
+      { filter: /^(?:react(?:-dom)?(?:\/.*)?|zod)$/ },
+      (args) => ({
+        path: createRequire(
+          path.join(dependencies, "packages/web/package.json"),
+        ).resolve(args.path),
+      }),
+    )
+    builder.onResolve(
+      {
+        filter:
+          /^(?:@razzia\/extensions\/presentation|@razzia\/web\/lib\/session|react-i18next)$/,
+      },
+      (args) => ({ path: args.path, namespace: "service" }),
+    )
+    builder.onLoad({ filter: /.*/, namespace: "service" }, (args) => ({
+      contents: aliases[args.path],
+      loader: "ts",
+      resolveDir: source,
+    }))
   },
 }
-const common = { bundle: true, format: "iife", platform: "browser", jsx: "automatic", plugins: [plugin], logLevel: "silent" }
-await build({ ...common, stdin: { contents: hostEntry, loader: "tsx", resolveDir: source }, outfile: path.join(evidence, "host.js") })
-await build({ ...common, stdin: { contents: `import Theme from ${js(path.join(themeSource, "entry.tsx"))};import {mount} from ${js(path.join(runtime, "sdk.tsx"))};window.__questionAnimations=0;document.addEventListener("animationstart",event=>{if(event.target?.matches?.(".bms-question-paper,.bms-question-title"))window.__questionAnimations++});mount(Theme);`, loader: "tsx", resolveDir: source }, outfile: path.join(evidence, "theme.js") })
+const common = {
+  bundle: true,
+  format: "iife",
+  platform: "browser",
+  jsx: "automatic",
+  plugins: [plugin],
+  logLevel: "silent",
+}
+await build({
+  ...common,
+  stdin: { contents: hostEntry, loader: "tsx", resolveDir: source },
+  outfile: path.join(evidence, "host.js"),
+})
+await build({
+  ...common,
+  stdin: {
+    contents: `import Theme from ${js(path.join(themeSource, "entry.tsx"))};import {mount} from ${js(path.join(runtime, "sdk.tsx"))};window.__questionAnimations=0;document.addEventListener("animationstart",event=>{if(event.target?.matches?.(".bms-question-paper,.bms-question-title"))window.__questionAnimations++});mount(Theme);`,
+    loader: "tsx",
+    resolveDir: source,
+  },
+  outfile: path.join(evidence, "theme.js"),
+})
 const bundle = await fs.readFile(path.join(evidence, "host.js"))
 const theme = await fs.readFile(path.join(evidence, "theme.js"))
 const themeCss = await fs.readFile(path.join(evidence, "theme.css"))
 let capabilityRequests = 0
 let childPort
 const child = http.createServer((request, response) => {
-  if (request.url.startsWith("/theme.js")) { response.writeHead(200, { "Content-Type": "text/javascript" }); response.end(theme); return }
-  if (request.url.startsWith("/theme.css")) { response.writeHead(200, { "Content-Type": "text/css" }); response.end(themeCss); return }
+  if (request.url.startsWith("/theme.js")) {
+    response.writeHead(200, { "Content-Type": "text/javascript" })
+    response.end(theme)
+    return
+  }
+  if (request.url.startsWith("/theme.css")) {
+    response.writeHead(200, { "Content-Type": "text/css" })
+    response.end(themeCss)
+    return
+  }
   response.writeHead(200, { "Content-Type": "text/html" })
-  response.end('<!doctype html><link rel="stylesheet" href="/theme.css"><div id="root"></div><script src="/theme.js"></script>')
+  response.end(
+    '<!doctype html><link rel="stylesheet" href="/theme.css"><div id="root"></div><script src="/theme.js"></script>',
+  )
 })
-await new Promise(resolve => child.listen(0, "127.0.0.1", resolve))
+await new Promise((resolve) => child.listen(0, "127.0.0.1", resolve))
 childPort = child.address().port
 const parent = http.createServer((request, response) => {
   if (request.url.startsWith("/api/packages/runtime/")) {
     capabilityRequests++
-    setTimeout(() => { response.writeHead(200, { "Content-Type": "application/json" }); response.end(JSON.stringify({ url: `http://127.0.0.1:${childPort}/?ticket=${capabilityRequests}` })) }, 250)
+    setTimeout(() => {
+      response.writeHead(200, { "Content-Type": "application/json" })
+      response.end(
+        JSON.stringify({
+          url: `http://127.0.0.1:${childPort}/?ticket=${capabilityRequests}`,
+        }),
+      )
+    }, 250)
     return
   }
-  if (request.url === "/host.js") { response.writeHead(200, { "Content-Type": "text/javascript" }); response.end(bundle); return }
+  if (request.url === "/host.js") {
+    response.writeHead(200, { "Content-Type": "text/javascript" })
+    response.end(bundle)
+    return
+  }
   response.writeHead(200, { "Content-Type": "text/html" })
-  response.end('<!doctype html><style>html,body{margin:0}#root{width:1200px;height:675px}.h-full{height:100%}.w-full{width:100%}.relative{position:relative}iframe{display:block;border:0}</style><div id="root"></div><script src="/host.js"></script>')
+  response.end(
+    '<!doctype html><style>html,body{margin:0}#root{width:1200px;height:675px}.h-full{height:100%}.w-full{width:100%}.relative{position:relative}iframe{display:block;border:0}</style><div id="root"></div><script src="/host.js"></script>',
+  )
 })
-await new Promise(resolve => parent.listen(0, "127.0.0.1", resolve))
-const browser = await chromium.launch({ headless: true, args: ["--no-sandbox"] })
+await new Promise((resolve) => parent.listen(0, "127.0.0.1", resolve))
+const browser = await chromium.launch({
+  headless: true,
+  args: ["--no-sandbox"],
+})
 const page = await browser.newPage({ viewport: { width: 1200, height: 675 } })
 await page.clock.install()
 const errors = []
-page.on("pageerror", error => { if (!error.message.includes("intentional-fixture-failure")) errors.push(error.message) })
+page.on("pageerror", (error) => {
+  if (!error.message.includes("intentional-fixture-failure"))
+    errors.push(error.message)
+})
 async function frame() {
   const iframe = page.locator('[data-testid="package-runtime-frame"]')
   await iframe.waitFor({ state: "visible" })
@@ -106,31 +189,71 @@ async function capture() {
     const box = heading.getBoundingClientRect()
     window.__originalHeading ??= heading
     window.__originalPanel ??= panel
-    window.__originalAnswers ??= [...document.querySelectorAll(".bms-answer-card")]
-    if (!window.__originalAnswers.length) window.__originalAnswers = [...document.querySelectorAll(".bms-answer-card")]
+    window.__originalAnswers ??= [
+      ...document.querySelectorAll(".bms-answer-card"),
+    ]
+    if (!window.__originalAnswers.length)
+      window.__originalAnswers = [
+        ...document.querySelectorAll(".bms-answer-card"),
+      ]
     window.__documentIdentity ??= crypto.randomUUID()
-    return { document: window.__documentIdentity, questionAnimations: window.__questionAnimations, sameHeading: heading === window.__originalHeading, samePanel: panel === window.__originalPanel, sameAnswers: [...document.querySelectorAll(".bms-answer-card")].every((node, i) => node === window.__originalAnswers[i]), question: heading.textContent, geometry: [box.x, box.y, box.width, box.height].map(n => Math.round(n * 10) / 10), correct: [...document.querySelectorAll('[data-correct="true"]')].length }
+    return {
+      document: window.__documentIdentity,
+      questionAnimations: window.__questionAnimations,
+      sameHeading: heading === window.__originalHeading,
+      samePanel: panel === window.__originalPanel,
+      sameAnswers: [...document.querySelectorAll(".bms-answer-card")].every(
+        (node, i) => node === window.__originalAnswers[i],
+      ),
+      question: heading.textContent,
+      geometry: [box.x, box.y, box.width, box.height].map(
+        (n) => Math.round(n * 10) / 10,
+      ),
+      correct: [...document.querySelectorAll('[data-correct="true"]')].length,
+    }
   })
 }
-function check(name, pass, details) { result.checks.push({ name, passed: Boolean(pass), ...details }) }
+function check(name, pass, details) {
+  result.checks.push({ name, passed: Boolean(pass), ...details })
+}
 try {
   await page.goto(`http://127.0.0.1:${parent.address().port}`)
   await frame()
   await page.waitForTimeout(600)
   const reading = await capture()
   const nativeFrames = await page.evaluate(() => window.__nativeFrames)
-  check("loading does not paint then replace a native question", nativeFrames === 0, { nativeFrames })
-  check("no correctness before reveal", reading.correct === 0, { correct: reading.correct })
+  check(
+    "loading does not paint then replace a native question",
+    nativeFrames === 0,
+    { nativeFrames },
+  )
+  check("no correctness before reveal", reading.correct === 0, {
+    correct: reading.correct,
+  })
   await page.evaluate(() => window.__render("voting"))
   await page.waitForTimeout(600)
   const voting = await capture()
-  check("question and geometry persist when answers arrive", voting.document === reading.document && voting.sameHeading && voting.samePanel && voting.questionAnimations === reading.questionAnimations && JSON.stringify(voting.geometry) === JSON.stringify(reading.geometry), { reading, voting })
+  check(
+    "question and geometry persist when answers arrive",
+    voting.document === reading.document &&
+      voting.sameHeading &&
+      voting.samePanel &&
+      voting.questionAnimations === reading.questionAnimations &&
+      JSON.stringify(voting.geometry) === JSON.stringify(reading.geometry),
+    { reading, voting },
+  )
   await page.evaluate(() => window.__render("wait", "q2", { epoch: 2 }))
   await page.waitForTimeout(80)
   await page.evaluate(() => window.__render("voting"))
   await page.waitForTimeout(600)
   const coherent = await capture()
-  check("staggered socket messages do not replace iframe or question", coherent.document === voting.document && coherent.sameHeading && coherent.sameAnswers, { coherent })
+  check(
+    "staggered socket messages do not replace iframe or question",
+    coherent.document === voting.document &&
+      coherent.sameHeading &&
+      coherent.sameAnswers,
+    { coherent },
+  )
   // Advance both parent and real SDK clocks together, flushing each heartbeat.
   // An instant wall-clock jump would intentionally trip runtime health checks.
   for (let second = 0; second < 241; second++) {
@@ -144,18 +267,46 @@ try {
   await page.evaluate(() => window.__render("results"))
   await page.waitForTimeout(600)
   const revealed = await capture()
-  check("expired launch ticket is not renewed inside question or reveal", capabilityRequests === 1 && locked.document === coherent.document && revealed.document === locked.document, { capabilityRequests, beforeRevealRequests })
-  check("answers and question persist on correct reveal", revealed.document === coherent.document && revealed.sameHeading && revealed.samePanel && revealed.sameAnswers && revealed.questionAnimations === reading.questionAnimations && JSON.stringify(revealed.geometry) === JSON.stringify(reading.geometry) && revealed.correct === 1, { revealed })
+  check(
+    "expired launch ticket is not renewed inside question or reveal",
+    capabilityRequests === 1 &&
+      locked.document === coherent.document &&
+      revealed.document === locked.document,
+    { capabilityRequests, beforeRevealRequests },
+  )
+  check(
+    "answers and question persist on correct reveal",
+    revealed.document === coherent.document &&
+      revealed.sameHeading &&
+      revealed.samePanel &&
+      revealed.sameAnswers &&
+      revealed.questionAnimations === reading.questionAnimations &&
+      JSON.stringify(revealed.geometry) === JSON.stringify(reading.geometry) &&
+      revealed.correct === 1,
+    { revealed },
+  )
   await page.evaluate(() => window.__render("results", "q1", { paused: true }))
   await page.waitForTimeout(80)
   await page.evaluate(() => window.__render("results"))
   const resumed = await capture()
-  check("pause resume preserves question tree", resumed.document === revealed.document && resumed.sameHeading && resumed.sameAnswers, {})
+  check(
+    "pause resume preserves question tree",
+    resumed.document === revealed.document &&
+      resumed.sameHeading &&
+      resumed.sameAnswers,
+    {},
+  )
   await page.evaluate(() => window.__render("question", "q2", { epoch: 3 }))
   await page.waitForTimeout(750)
   const next = await capture()
-  check("new question can renew expired capability", capabilityRequests === 2 && next.document !== resumed.document, { capabilityRequests })
-  await (await frame()).evaluate(() => {
+  check(
+    "new question can renew expired capability",
+    capabilityRequests === 2 && next.document !== resumed.document,
+    { capabilityRequests },
+  )
+  await (
+    await frame()
+  ).evaluate(() => {
     const broken = document.createElement("script")
     broken.textContent = 'throw new Error("intentional-fixture-failure")'
     document.head.append(broken)
@@ -163,12 +314,28 @@ try {
   await page.locator("[data-native-fixture]").waitFor({ state: "visible" })
   await page.evaluate(() => window.__render("voting", "q2", { epoch: 3 }))
   await page.waitForTimeout(100)
-  check("real SDK failure activates native fallback and stays latched", await page.locator('[data-testid="package-runtime-frame"]').count() === 0 && await page.evaluate(() => window.__fallbacks > 0), {})
+  check(
+    "real SDK failure activates native fallback and stays latched",
+    (await page.locator('[data-testid="package-runtime-frame"]').count()) ===
+      0 && (await page.evaluate(() => window.__fallbacks > 0)),
+    {},
+  )
   check("no unexpected browser errors", errors.length === 0, { errors })
-  result.passed = result.checks.every(item => item.passed)
+  result.passed = result.checks.every((item) => item.passed)
   await page.screenshot({ path: path.join(evidence, "fallback.png") })
-} catch (error) { result.error = String(error); result.errors = errors; result.dom = await page.locator("#root").innerHTML(); result.passed = false }
-finally { await browser.close(); await new Promise(resolve => parent.close(resolve)); await new Promise(resolve => child.close(resolve)) }
-await fs.writeFile(path.join(evidence, "receipt.json"), JSON.stringify(result, null, 2))
+} catch (error) {
+  result.error = String(error)
+  result.errors = errors
+  result.dom = await page.locator("#root").innerHTML()
+  result.passed = false
+} finally {
+  await browser.close()
+  await new Promise((resolve) => parent.close(resolve))
+  await new Promise((resolve) => child.close(resolve))
+}
+await fs.writeFile(
+  path.join(evidence, "receipt.json"),
+  JSON.stringify(result, null, 2),
+)
 console.log(JSON.stringify(result))
 if (!result.passed) process.exitCode = 1
