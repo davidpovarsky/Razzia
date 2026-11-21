@@ -75,7 +75,7 @@ describe("reconciled branch seating directory", () => {
     extras.defaults.lobby = { joinMode: "phone-only", showRoster: true }
     const first = entry("Same name", 5)
     const second = entry("Same name", 5, "not_joined")
-    const guest = entry("Unlisted guest", 5)
+    const guest = { ...entry("Unlisted guest", 5), preRegistered: false }
     extras.roster.participants = [first, second].map((person) => ({
       rosterPlayerId: person.rosterPlayerId,
       displayName: person.displayName,
@@ -98,6 +98,28 @@ describe("reconciled branch seating directory", () => {
     ).toEqual([false, true])
     extras.defaults.lobby.showRoster = false
     expect(buildLobbyDirectory(extras, getLive)).not.toHaveProperty("roster")
+  })
+  it("tracks registers attached, replaced and removed after the room has opened", () => {
+    const extras = fixture(23, false)
+    extras.defaults.lobby = { joinMode: "phone-only", showRoster: true }
+    const first = entry("Attached during the lobby")
+    const guest = { ...entry("Unregistered guest"), preRegistered: false }
+    const second = entry("Replacement register", undefined, "not_joined")
+    let liveEntries = [first, guest]
+    const getLive = () => buildFullShowDirectory(extras, liveEntries)
+    expect(buildLobbyDirectory(extras, getLive)?.roster).toEqual([
+      { id: first.rosterPlayerId, label: first.displayName, connected: true },
+    ])
+    liveEntries = [second, guest]
+    expect(buildLobbyDirectory(extras, getLive)?.roster).toEqual([
+      {
+        id: second.rosterPlayerId,
+        label: second.displayName,
+        connected: false,
+      },
+    ])
+    liveEntries = [guest]
+    expect(buildLobbyDirectory(extras, getLive)?.roster).toEqual([])
   })
   it("accepts old explicit seating metadata and projects authored names before anyone connects", () => {
     const extras = quizExtrasV2Schema.parse(fixture())

@@ -21,7 +21,7 @@ function directoryScene(extras: AnyQuizExtras | null) {
 /** Only a show that opts into a public register publishes these three fields. */
 function attendanceRows(
   extras: AnyQuizExtras | null,
-  entries: readonly RosterEntry[] = [],
+  entries?: readonly RosterEntry[],
 ): PublicFullShowData["roster"] {
   if (
     !extras ||
@@ -31,14 +31,20 @@ function attendanceRows(
     return undefined
   }
 
-  const presence = new Map(
-    entries.map((entry) => [entry.rosterPlayerId, entry.status]),
-  )
+  // A host can attach, replace or remove the register after the room opens.
+  // Live pre-registration is authoritative; guests never become register rows.
+  const participants =
+    entries === undefined
+      ? extras.roster.participants.map((person) => ({
+          ...person,
+          status: "not_joined",
+        }))
+      : entries.filter((person) => person.preRegistered)
 
-  return extras.roster.participants.slice(0, 2000).map((entry) => ({
+  return participants.slice(0, 2000).map((entry) => ({
     id: entry.rosterPlayerId,
     label: entry.displayName,
-    connected: presence.get(entry.rosterPlayerId) === "connected",
+    connected: entry.status === "connected",
   }))
 }
 
