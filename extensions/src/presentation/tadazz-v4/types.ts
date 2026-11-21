@@ -117,6 +117,8 @@ export interface TadazzV4Data {
   title?: string
   subtitle?: string
   photoAlt?: string
+  /** Event branding belongs to the authored game, never the shared default. */
+  eventArtworkUrl?: string
   emptyMessage?: string
   /** The same question is visible; enter only newly presented answers. */
   questionAlreadyOnStage?: boolean
