@@ -134,3 +134,107 @@ test("a real cross-tab native session replacement cancels the pending handoff", 
   await login(page)
   expect(new URL(page.url()).search).toBe("")
 })
+
+test.describe("small iPhone account access", () => {
+  test.use({
+    viewport: { width: 320, height: 568 },
+    isMobile: true,
+    hasTouch: true,
+  })
+
+  test("the primary login action fits the initial viewport and completes the real consent handoff", async ({
+    page,
+  }, testInfo) => {
+    await openLogin(page)
+    const submit = page.getByRole("button", { name: "Log in", exact: true })
+    await expect(submit).toBeInViewport({ ratio: 1 })
+    expect(
+      await submit.evaluate((button) => button.getBoundingClientRect().height),
+    ).toBeGreaterThanOrEqual(44)
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= window.innerWidth,
+      ),
+    ).toBe(true)
+    await page.screenshot({
+      path: testInfo.outputPath("iphone-small-login.png"),
+    })
+    await login(page)
+  })
+
+  test("Hebrew login keeps its action visible without horizontal overflow", async ({
+    page,
+  }, testInfo) => {
+    await page.goto("/login?lng=he")
+    const submit = page.locator(".account-submit")
+    await expect(submit).toBeEnabled()
+    await expect(submit).toBeInViewport({ ratio: 1 })
+    await expect(page.locator("html")).toHaveAttribute("dir", "rtl")
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= window.innerWidth,
+      ),
+    ).toBe(true)
+    expect(
+      await page
+        .locator('input[type="password"]')
+        .evaluate((input) =>
+          Number.parseFloat(getComputedStyle(input).fontSize),
+        ),
+    ).toBeGreaterThanOrEqual(16)
+    await page.screenshot({
+      path: testInfo.outputPath("iphone-small-login-hebrew.png"),
+    })
+  })
+
+  test("focused fields and all account actions remain reachable in a keyboard-sized viewport", async ({
+    page,
+  }, testInfo) => {
+    await openLogin(page)
+    await page.getByLabel("Email address", { exact: true }).fill(address)
+    await page.getByLabel("Password", { exact: true }).fill(password)
+    await page.setViewportSize({ width: 320, height: 300 })
+    const submit = page.getByRole("button", { name: "Log in", exact: true })
+    await submit.scrollIntoViewIfNeeded()
+    await expect(submit).toBeInViewport({ ratio: 1 })
+    expect(await page.evaluate(() => window.scrollY)).toBeGreaterThan(0)
+    expect(
+      await page
+        .locator("body")
+        .evaluate((body) => getComputedStyle(body).touchAction),
+    ).toBe("auto")
+    await page.screenshot({
+      path: testInfo.outputPath("iphone-keyboard-login.png"),
+    })
+    await submit.tap()
+    await expect(
+      page.getByRole("heading", {
+        name: "Connect an application",
+        exact: true,
+      }),
+    ).toBeVisible()
+    await expect(page.getByTestId("oauth-native-account")).toContainText(
+      address,
+    )
+
+    // Longer recovery forms can scroll in either direction without hiding
+    // controls in a centered fixed-height panel. This models reduced viewport
+    // space, rather than pretending Playwright opens a physical iOS keyboard.
+    for (const route of ["signup", "verify", "forgot", "reset"]) {
+      await page.goto(`/${route}?lng=en`)
+      const action = page.locator(".account-submit")
+      await expect(action).toBeEnabled()
+      await action.scrollIntoViewIfNeeded()
+      await expect(action).toBeInViewport({ ratio: 1 })
+      expect(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= window.innerWidth,
+        ),
+      ).toBe(true)
+      await page.locator(".account-card h1").scrollIntoViewIfNeeded()
+      await expect(page.locator(".account-card h1")).toBeInViewport({
+        ratio: 1,
+      })
+    }
+  })
+})
