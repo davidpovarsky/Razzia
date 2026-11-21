@@ -1,0 +1,157 @@
+.tds-scope .managed-clients,
+.tds-scope .client-card,
+.tds-scope .client-code,
+.tds-scope .client-access-form,
+.tds-scope .client-game-card {
+  display: grid;
+  gap: var(--tds-space-4);
+  min-width: 0;
+}
+.tds-scope .managed-clients :is(h1, h2, h3, p),
+.tds-scope .client-portal :is(h1, h2, p) {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.tds-scope .client-muted {
+  color: var(--tds-muted-text);
+}
+.tds-scope .client-actions,
+.tds-scope .client-card-heading,
+.tds-scope .client-assignment {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--tds-space-3);
+}
+.tds-scope .client-card-heading,
+.tds-scope .client-assignment {
+  justify-content: space-between;
+}
+.tds-scope .client-card-heading h2 {
+  font-size: var(--tds-type-title);
+}
+.tds-scope .client-create-form,
+.tds-scope .client-assign-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: var(--tds-space-3);
+}
+.tds-scope .client-list {
+  display: grid;
+  gap: var(--tds-space-5);
+}
+.tds-scope .client-assignment-list {
+  display: grid;
+  gap: var(--tds-space-3);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.tds-scope .client-assignment {
+  padding-block: var(--tds-space-2);
+  border-block-end: 1px solid var(--tds-border);
+}
+.tds-scope .client-assignment > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.tds-scope .client-code {
+  border: 1px solid var(--tds-action);
+  border-radius: var(--tds-radius-card);
+  padding: var(--tds-space-5);
+  background: var(--tds-elevated);
+}
+.tds-scope .client-code-digits {
+  display: block;
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(2rem, 8vw, 3rem);
+  letter-spacing: 0.18em;
+  font-weight: var(--tds-weight-label);
+  user-select: all;
+}
+.tds-scope .client-entry-url {
+  display: block;
+  direction: ltr;
+  unicode-bidi: isolate;
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+.tds-scope .client-portal {
+  box-sizing: border-box;
+  width: min(100%, 72rem);
+  min-height: 100dvh;
+  margin-inline: auto;
+  padding: max(var(--tds-space-5), env(safe-area-inset-top))
+    max(var(--tds-space-5), env(safe-area-inset-right))
+    max(var(--tds-space-6), env(safe-area-inset-bottom))
+    max(var(--tds-space-5), env(safe-area-inset-left));
+}
+.tds-scope .client-portal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--tds-space-4);
+  margin-block-end: var(--tds-space-8);
+}
+.tds-scope .client-portal-logo {
+  width: 8rem;
+  height: auto;
+}
+.tds-scope .client-entry {
+  max-width: 30rem;
+  margin-inline: auto;
+  margin-block: clamp(0.5rem, 3vh, 2rem);
+  gap: var(--tds-space-3);
+}
+.tds-scope .client-entry h1,
+.tds-scope .client-library h1 {
+  font-size: clamp(1.5rem, 4vw, 2.4rem);
+}
+.tds-scope .client-access-code {
+  direction: ltr;
+  unicode-bidi: isolate;
+  font-variant-numeric: tabular-nums;
+  font-size: 1.6rem;
+  letter-spacing: 0.24em;
+  text-align: center;
+  min-height: 3.5rem;
+}
+.tds-scope .client-library {
+  display: grid;
+  gap: var(--tds-space-5);
+}
+.tds-scope .client-library-header {
+  display: grid;
+  gap: var(--tds-space-3);
+}
+.tds-scope .client-game-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  align-items: stretch;
+  gap: var(--tds-space-5);
+}
+.tds-scope .client-game-card {
+  grid-template-rows: auto 1fr auto;
+}
+.tds-scope .client-game-card .tds-badge {
+  justify-self: start;
+}
+.tds-scope .client-portal .tds-button,
+.tds-scope .managed-clients .tds-button {
+  min-height: 2.75rem;
+  max-width: 100%;
+  white-space: normal;
+}
+@media (max-width: 540px) {
+  .tds-scope .client-create-form,
+  .tds-scope .client-assign-form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .tds-scope .client-actions > .tds-button {
+    flex: 1 1 auto;
+  }
+}

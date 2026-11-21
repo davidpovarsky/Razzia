@@ -6,6 +6,7 @@ import { useEffect, useState, type SubmitEvent } from "react"
 import { useQueryClient } from "@tanstack/react-query"
 import { ArrowLeft, ArrowRight, ShieldCheck } from "lucide-react"
 import { setToken } from "@razzia/web/lib/session"
+import { leaveManagedClientMode } from "@razzia/web/lib/managed-client-session"
 import { socketClient } from "@razzia/web/features/game/contexts/socket-context"
 import { ReferenceCanvas } from "../shared/ReferenceCanvas"
 import { accountStyle } from "../../themes/account"
@@ -195,6 +196,7 @@ export function AccountGateway() {
         socketClient.disconnect()
         useManagerStore.getState().resetManager()
         setToken(result.token)
+        leaveManagedClientMode()
         const pending = browserConsentLoginHandoff().resume({
           pathname: returnTo,
           searchStr: "",

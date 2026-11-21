@@ -6,6 +6,11 @@ import {
   getToken,
 } from "@razzia/web/lib/session"
 import { SESSION_ROLES } from "@razzia/common/constants"
+import {
+  isManagedClientMode,
+  managedClientHeaders,
+  notifyManagedClientExpired,
+} from "@razzia/web/lib/managed-client-session"
 
 export class SiteApiError extends Error {
   readonly status: number
@@ -36,8 +41,11 @@ export async function siteRequest<T>(
     throw new Error("Invalid API path")
   }
 
-  const headers = new Headers(options.headers)
-  const token = getToken()
+  const managed = isManagedClientMode()
+  const headers = managed
+    ? managedClientHeaders(options.headers)
+    : new Headers(options.headers)
+  const token = managed ? null : getToken()
 
   if (token) {
     headers.set("Authorization", `Bearer ${token}`)
@@ -54,8 +62,12 @@ export async function siteRequest<T>(
     cache: "no-store",
   })
 
-  if (response.status === 401 && getToken() === token) {
-    clearToken()
+  if (response.status === 401) {
+    if (managed) {
+      notifyManagedClientExpired()
+    } else if (getToken() === token) {
+      clearToken()
+    }
   }
 
   if (!response.ok) {
@@ -69,7 +81,9 @@ export async function siteRequest<T>(
 }
 
 export const hasManagerSession = () =>
-  getRole() === SESSION_ROLES.MANAGER && Boolean(getClientId())
+  !isManagedClientMode() &&
+  getRole() === SESSION_ROLES.MANAGER &&
+  Boolean(getClientId())
 
 export const currentAccount = (signal?: AbortSignal) =>
   siteRequest<Account>("/api/accounts/me", { signal })
@@ -120,7 +134,7 @@ export function safeReturnTo(value: string | null): string {
     return value
   }
 
-  return /^\/(?:studio(?:\/(?:games|events|account|explore|prepare|oauth-consent))?|manager\/quizz(?:\/[a-zA-Z0-9_-]+)?)\/?$/u.test(
+  return /^\/(?:studio(?:\/(?:games|events|account|explore|prepare|clients|oauth-consent))?|manager\/quizz(?:\/[a-zA-Z0-9_-]+)?)\/?$/u.test(
     url.pathname,
   )
     ? url.pathname

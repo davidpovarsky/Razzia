@@ -20,7 +20,7 @@ import {
   type ShowScene,
 } from "@razzia/extensions/presentation"
 import type { RuntimeSnapshot } from "@razzia/extensions/core"
-import { ensureSession } from "@razzia/web/lib/session"
+import { requestAuthHeaders } from "@razzia/web/lib/request-auth"
 
 /** Public fields are copied explicitly; never post raw status/envelope/extras. */
 export function PackageStage({
@@ -112,12 +112,12 @@ export function PackageStage({
     }
 
     let alive = true
-    void ensureSession()
-      .then(async ({ token }) => {
+    void requestAuthHeaders()
+      .then(async (headers) => {
         const response = await fetch(
           `/api/packages/runtime/${sourceDigest}/${theme.definition.id}?roomId=${encodeURIComponent(roomId)}`,
           {
-            headers: { Authorization: `Bearer ${token}` },
+            headers,
             redirect: "error",
             cache: "no-store",
           },
