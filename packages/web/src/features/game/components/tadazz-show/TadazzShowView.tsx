@@ -1066,6 +1066,17 @@ function TadazzShowContent(props: TadazzShowViewProps) {
           )
         }
 
+        if (
+          s.kind === "leaderboard" &&
+          (scene.activeSceneData?.leaderboard?.entries?.length ?? 0) > 0
+        ) {
+          return null
+        }
+
+        if (s.kind === "interimResults" && scene.activeSceneData?.interimResults) {
+          return null
+        }
+
         if (s.kind === "interimResults" || s.kind === "leaderboard") {
           return (
             <TadazzMessageScreen
