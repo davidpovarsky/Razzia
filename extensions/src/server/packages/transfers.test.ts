@@ -3,7 +3,7 @@ import { createHash, createHmac, randomUUID } from "node:crypto"
 import fs from "node:fs"
 import os from "node:os"
 import path from "node:path"
-import { PackageTransferStore } from "./transfers"
+import { PackageTransferStore, type PackageInstallIntent } from "./transfers"
 
 const secret = "synthetic-package-transfer-test-key".repeat(2)
 const digest = (bytes: Buffer) =>
@@ -244,7 +244,7 @@ describe("MCP package staging", () => {
       idempotencyKey: randomUUID(),
     }
     let calls = 0
-    const action = (selection: Omit<typeof input, "idempotencyKey">) => {
+    const action = (selection: PackageInstallIntent) => {
       calls++
       expect(selection.sourceDigest).toBe(input.sourceDigest)
       expect(selection.buildDigest).toBe(input.buildDigest)

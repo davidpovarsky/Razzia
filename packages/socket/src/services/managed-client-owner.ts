@@ -86,7 +86,11 @@ function validateGames(ids: string[]): void {
 
 /** Owner API and the documented operator CLI use this same validated service. */
 export class ManagedClientOwnerService {
-  constructor(private readonly store = new ManagedClientStore()) {}
+  private readonly store: ManagedClientStore
+
+  constructor(store = new ManagedClientStore()) {
+    this.store = store
+  }
 
   async list(ownerId: string): Promise<ManagedClientListResponse> {
     requireEnabled()
