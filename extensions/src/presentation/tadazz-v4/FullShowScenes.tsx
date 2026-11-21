@@ -43,7 +43,6 @@ export interface FullShowInput extends TadazzV4Data {
   onResolveTie?: (contestantIndex: number) => void
   isLive?: boolean
   storyRoles?: string[]
-  eventArtworkUrl?: string
   curtainLeftUrl?: string
   curtainRightUrl?: string
   groupPage?: number
@@ -687,20 +686,15 @@ export function Finale({ data }: { data: FullShowInput }) {
 }
 
 export function CompanyOpening({ data }: { data: FullShowInput }) {
-  const text = useFullShowText()
-  const artwork =
-    data.eventArtworkUrl ||
-    "/tadazz-show/second-library/creating-worlds-intro.png"
-
   return (
     <div className="full-company">
-      <img
-        src={artwork}
-        alt={
-          data.photoAlt || text("fullShow.companyArtwork", "Creating Worlds")
-        }
-        className="full-company-event"
-      />
+      {data.eventArtworkUrl && (
+        <img
+          src={data.eventArtworkUrl}
+          alt={data.photoAlt || ""}
+          className="full-company-event"
+        />
+      )}
       <div className="full-company-glow" />
       <div className="full-company-brand">
         <BrandLogo className="full-company-logo" />
@@ -711,20 +705,16 @@ export function CompanyOpening({ data }: { data: FullShowInput }) {
 
 export function GrandOpening({ data }: { data: FullShowInput }) {
   const text = useFullShowText()
-  const teaserSrc =
-    data.eventArtworkUrl ||
-    "/tadazz-show/second-library/teaser-screen-source.jpg"
 
   return (
     <div className="full-grand-opening">
-      <img
-        src={teaserSrc}
-        alt={
-          data.photoAlt ||
-          text("fullShow.openingArtwork", "Grand Opening Teaser")
-        }
-        className="full-opening-event"
-      />
+      {data.eventArtworkUrl && (
+        <img
+          src={data.eventArtworkUrl}
+          alt={data.photoAlt || ""}
+          className="full-opening-event"
+        />
+      )}
       <div className="full-opening-warm-veil" />
       <div className="full-portal full-opening-portal" />
       <div className="full-portal full-opening-portal portal-two" />

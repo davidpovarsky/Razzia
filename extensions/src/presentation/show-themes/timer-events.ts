@@ -15,6 +15,7 @@ export function themeTimerTransition(
     questionId: string | null
     epoch: number
     voting: boolean
+    awaitingCompletion?: boolean
     results: boolean
     paused: boolean
     deadline?: number
@@ -35,6 +36,11 @@ export function themeTimerTransition(
     previous.questionId === input.questionId &&
     previous.epoch === input.epoch
 
+  // Native status can close voting before the matching extension result arrives.
+  if (same && input.awaitingCompletion && !input.results) {
+    return { state: previous }
+  }
+
   if (input.results) {
     if (!same || previous.emitted) {
       return { state: previous }
@@ -46,7 +52,10 @@ export function themeTimerTransition(
       return { state }
     }
 
-    const event = input.reason === "elapsed" ? "timer-ended" : "vote-locked"
+    const event =
+      input.reason === "elapsed" || input.reason === "manual"
+        ? "timer-ended"
+        : "vote-locked"
 
     return {
       state,

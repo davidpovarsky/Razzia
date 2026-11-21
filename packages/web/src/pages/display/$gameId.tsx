@@ -7,6 +7,11 @@ import {
   useSocket,
 } from "@razzia/web/features/game/contexts/socket-context"
 import { useSocketConnection } from "@razzia/web/features/game/hooks/useSocketConnection"
+import {
+  isManagedClientMode,
+  managedClientHeaders,
+  notifyManagedClientExpired,
+} from "@razzia/web/lib/managed-client-session"
 import { createFileRoute, useParams } from "@tanstack/react-router"
 import { Tv } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
@@ -45,12 +50,26 @@ const AudienceDisplayPage = () => {
     // Obtain temporary room-media authorization before joining the public display.
     // This uses the active room ID and never requires a manager account.
     let disposed = false
+    const managed = isManagedClientMode()
     void fetch(`/api/games/${encodeURIComponent(gameId)}/display-media`, {
+      headers: managed ? managedClientHeaders() : undefined,
       credentials: "same-origin",
       cache: "no-store",
     })
       .then((response) => {
         if (!response.ok) {
+          if (!disposed && managed && response.status === 401) {
+            notifyManagedClientExpired()
+
+            return
+          }
+
+          if (!disposed && managed && response.status === 404) {
+            window.location.replace("/client")
+
+            return
+          }
+
           throw new Error("Room no longer exists")
         }
 
@@ -90,6 +109,15 @@ const AudienceDisplayPage = () => {
 
   useEvent(EVENTS.GAME.RESET, (message: string) => {
     setResetMessage(message || "errors:game.notFound")
+  })
+
+  useEvent(EVENTS.GAME.ERROR_MESSAGE, (message) => {
+    if (
+      isManagedClientMode() &&
+      ["errors:auth.unauthorized", "errors:game.notFound"].includes(message)
+    ) {
+      window.location.replace("/client")
+    }
   })
 
   if (resetMessage) {

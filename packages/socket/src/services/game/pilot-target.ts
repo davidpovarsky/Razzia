@@ -3,6 +3,7 @@ export function selectQuizPilotTarget<
   T extends {
     quizId?: string
     started: boolean
+    contentOwnerId?: string
     manager: { connected: boolean; clientId: string }
   },
 >(
@@ -12,7 +13,8 @@ export function selectQuizPilotTarget<
 ): { game: T | null; error?: string } {
   const matching = games.filter(
     (game) =>
-      game.quizId === quizId && (!ownerId || game.manager.clientId === ownerId),
+      game.quizId === quizId &&
+      (!ownerId || (game.contentOwnerId ?? game.manager.clientId) === ownerId),
   )
   const connected = matching.filter((game) => game.manager.connected)
   const candidates = connected.length ? connected : matching
