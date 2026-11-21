@@ -85,7 +85,7 @@ import {
   useRef,
   useState,
 } from "react"
-import { useTranslation } from "react-i18next"
+import { I18nextProvider, useTranslation } from "react-i18next"
 import { resolveMonotonicCooldownDeadline } from "./cooldown-sync"
 import { useTimerBeeps } from "./use-timer-beeps"
 import { useTadazzRawStatus } from "./raw-status-context"
@@ -113,6 +113,7 @@ import {
   useTadazzV4Labels,
 } from "./useTadazzLabels"
 import { PackageStage } from "./PackageStage"
+import { readPublicLobbyDirectory } from "./lobby-directory"
 
 export interface TadazzShowViewProps {
   nativeContent?: React.ReactNode
@@ -167,6 +168,31 @@ function isCinematicScene(scene: SceneDescriptor): boolean {
  * authoritative state, and keeps every host/player capability.
  */
 export function TadazzShowView(props: TadazzShowViewProps) {
+  const { i18n } = useTranslation()
+  const defaults = props.extensionState?.extras.defaults as
+    { presentationLocale?: unknown } | undefined
+  const requestedLocale = defaults?.presentationLocale
+  const locale =
+    typeof requestedLocale === "string" &&
+    ["en", "fr", "de", "es", "it", "ja", "tr", "vi", "he"].includes(
+      requestedLocale,
+    )
+      ? requestedLocale
+      : undefined
+  const presentationI18n = useMemo(
+    () =>
+      locale ? i18n.cloneInstance({ lng: locale, initAsync: false }) : i18n,
+    [i18n, locale],
+  )
+
+  return (
+    <I18nextProvider i18n={presentationI18n}>
+      <TadazzShowContent {...props} />
+    </I18nextProvider>
+  )
+}
+
+function TadazzShowContent(props: TadazzShowViewProps) {
   const {
     manager,
     role,
@@ -1473,6 +1499,9 @@ export function TadazzShowView(props: TadazzShowViewProps) {
             >
               <PackageStage
                 scene={scene}
+                lobbyData={readPublicLobbyDirectory(
+                  extensionState?.extras.lobbyFullShow,
+                )}
                 roomId={extensionState?.gameId ?? ""}
                 backgroundUrl={backdrop?.url}
                 trustedOverlay={overlay}

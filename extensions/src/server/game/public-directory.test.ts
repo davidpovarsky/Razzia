@@ -49,6 +49,56 @@ function entry(
 }
 
 describe("reconciled branch seating directory", () => {
+  it("supports a phone-only 23-question lobby without inventing or requiring a roster", () => {
+    const extras = fixture(23, false)
+    extras.scenes = {}
+    extras.defaults.presentationLocale = "en"
+    extras.defaults.lobby = {
+      joinMode: "phone-only",
+      dialNumber: "+44 20 0000 0000",
+      showRoster: true,
+      instructions: ["Stay on the line."],
+    }
+    expect(quizExtrasV2Schema.parse(extras).defaults.presentationLocale).toBe(
+      "en",
+    )
+    expect(buildLobbyDirectory(extras)).toEqual({
+      isLive: false,
+      joinMode: "phone-only",
+      dialNumber: "+44 20 0000 0000",
+      instructions: ["Stay on the line."],
+      roster: [],
+    })
+  })
+  it("publishes only explicitly attached names and stable individual presence, including disconnects", () => {
+    const extras = fixture(23, false)
+    extras.defaults.lobby = { joinMode: "phone-only", showRoster: true }
+    const first = entry("Same name", 5)
+    const second = entry("Same name", 5, "not_joined")
+    const guest = entry("Unlisted guest", 5)
+    extras.roster.participants = [first, second].map((person) => ({
+      rosterPlayerId: person.rosterPlayerId,
+      displayName: person.displayName,
+      phoneE164: person.phoneE164,
+      tableNumber: person.tableNumber,
+    }))
+    const getLive = () => buildFullShowDirectory(extras, [first, second, guest])
+    const result = buildLobbyDirectory(extras, getLive)
+    expect(result?.roster).toEqual([
+      { id: first.rosterPlayerId, label: "Same name", connected: true },
+      { id: second.rosterPlayerId, label: "Same name", connected: false },
+    ])
+    expect(JSON.stringify(result)).not.toContain("Unlisted guest")
+    expect(JSON.stringify(result)).not.toContain("PRIVATE-CONTACT")
+    expect(JSON.stringify(result)).not.toContain("+10000000000")
+    first.status = "disconnected"
+    second.status = "connected"
+    expect(
+      buildLobbyDirectory(extras, getLive)?.roster?.map((row) => row.connected),
+    ).toEqual([false, true])
+    extras.defaults.lobby.showRoster = false
+    expect(buildLobbyDirectory(extras, getLive)).not.toHaveProperty("roster")
+  })
   it("accepts old explicit seating metadata and projects authored names before anyone connects", () => {
     const extras = quizExtrasV2Schema.parse(fixture())
     const session = new ExtensionGameSession("test-directory", extras)

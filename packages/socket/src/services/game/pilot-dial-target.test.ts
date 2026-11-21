@@ -37,3 +37,46 @@ it("fails closed for unknown numbers or invalid configuration", () => {
     selectDialedPilotTarget([game("customer")], "0772263533", "broken").game,
   ).toBeNull()
 })
+
+it("routes an approved shared line to its owner's newest connected show", () => {
+  const original = game("customer")
+  const bms = { ...game("customer"), quizId: "bms" }
+  const disconnected = {
+    ...bms,
+    manager: { connected: false, clientId: "customer" },
+  }
+  const otherOwner = { ...game("test"), quizId: "bms" }
+  const unapproved = { ...game("customer"), quizId: "private-other-show" }
+  const config = JSON.stringify({
+    "443306131984": {
+      ownerId: "customer",
+      quizId: "tzila",
+      quizIds: ["tzila", "bms"],
+    },
+  })
+  expect(
+    selectDialedPilotTarget(
+      [original, bms, otherOwner, unapproved, disconnected],
+      "+44 330 613 1984",
+      config,
+    ).game,
+  ).toBe(bms)
+  expect(
+    selectDialedPilotTarget([bms, original], "443306131984", config).game,
+  ).toBe(original)
+  expect(
+    selectDialedPilotTarget([otherOwner, unapproved], "443306131984", config)
+      .game,
+  ).toBeNull()
+})
+
+it("fails closed for malformed explicit show allowlists", () => {
+  for (const quizIds of [[], [""], [null], "bms", Array(33).fill("bms")]) {
+    const config = JSON.stringify({
+      "443306131984": { ownerId: "customer", quizId: "tzila", quizIds },
+    })
+    expect(
+      selectDialedPilotTarget([game("customer")], "443306131984", config).game,
+    ).toBeNull()
+  }
+})

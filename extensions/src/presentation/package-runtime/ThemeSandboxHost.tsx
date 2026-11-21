@@ -59,7 +59,7 @@ export function ThemeSandboxHost({
     channel: string
     sequence: number
     ready: boolean
-    snapshotMetadataVersion?: 1
+    snapshotMetadataVersion?: 1 | 2
   } | null>(null)
   useLayoutEffect(() => {
     const { origin } = new URL(url)

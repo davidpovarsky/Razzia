@@ -443,6 +443,10 @@ export interface PublicFullShowData {
   dialNumber?: string
   seatingPlan?: boolean
   representatives?: Array<{ table: number; name: string }>
+  /** Explicitly published attendance rows. Contacts and call identifiers never leave the host. */
+  roster?: Array<{ id: string; label: string; connected: boolean }>
+  joinMode?: "standard" | "phone-only"
+  instructions?: string[]
   isLive?: boolean
   tieCandidates?: PublicInterimOption[]
   tieResolvedIndex?: number | null
@@ -465,6 +469,27 @@ export interface ActiveSceneData {
 // ── Studio Defaults Schema ────────────────────────────────────────────────
 
 export const studioDefaultsSchema = z.strictObject({
+  /** The show's language is independent of the editor/account language. */
+  presentationLocale: z
+    .enum(["en", "fr", "de", "es", "it", "ja", "tr", "vi", "he"])
+    .optional(),
+  /** Public lobby presentation is an explicit per-show choice. */
+  lobby: z
+    .strictObject({
+      joinMode: z.enum(["standard", "phone-only"]).default("standard"),
+      dialNumber: z
+        .string()
+        .trim()
+        .max(32)
+        .regex(/^[+0-9 ()-]+$/u)
+        .optional(),
+      instructions: z
+        .array(z.string().trim().min(1).max(500))
+        .max(8)
+        .optional(),
+      showRoster: z.boolean().default(false),
+    })
+    .optional(),
   showTheme: showThemeSelectionSchema.optional(),
   showComposition: applicationCompositionPinSchema.optional(),
   /** Native UUIDs in storage; authored card keys during friendly show export. */

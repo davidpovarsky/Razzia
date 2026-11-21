@@ -127,6 +127,8 @@ export function mount(
       // Keep READY and heartbeats v1-compatible. Older hosts ignore this
       // optional message and continue sending the original snapshot fields.
       send({ type: "RUNTIME_CAPABILITIES", snapshotMetadataVersion: 1 })
+      // A second additive announcement keeps older hosts on v1 metadata.
+      send({ type: "RUNTIME_CAPABILITIES", snapshotMetadataVersion: 2 })
     }
 
     latest = value.snapshot

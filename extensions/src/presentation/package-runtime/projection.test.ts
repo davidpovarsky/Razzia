@@ -207,6 +207,42 @@ describe("public package scene projection", () => {
     ])
   })
 
+  it("reveals audience counts and correctness only at their host-owned stages", () => {
+    const scene: ShowScene = {
+      kind: "results",
+      key: "results-8",
+      question,
+      questionType: "single",
+      reveal: { mode: "quiz", counts: [2, 6, 2], solutions: [1] },
+    }
+    const at = (revealStage: "pending" | "audience" | "correct") =>
+      projectPackageScene({
+        scene,
+        serverTime: 18_000,
+        paused: false,
+        revealStage,
+      })
+    const pending = at("pending")
+    expect(pending.revealStage).toBe("pending")
+    expect(pending.answers).toEqual(
+      question.options.map((option, index) => ({
+        id: String(index),
+        label: option.label,
+      })),
+    )
+    const audience = at("audience")
+    expect(audience.answers[1]).toEqual({
+      id: "1",
+      label: "Second",
+      percent: 60,
+      votes: 6,
+    })
+    expect(audience.answers.every((answer) => !("correct" in answer))).toBe(
+      true,
+    )
+    expect(at("correct").answers[1].correct).toBe(true)
+  })
+
   it("retains the previous snapshot contract and accepts additive presentation metadata", () => {
     const previousSnapshot = {
       roomId: "room",
@@ -327,8 +363,76 @@ describe("public package scene projection", () => {
     expect(
       rendererMessageSchema.safeParse({
         ...capability,
-        snapshotMetadataVersion: 2,
+        snapshotMetadataVersion: 3,
       }).success,
     ).toBe(false)
+  })
+
+  it("negotiates phone/register fields only with a v2 SDK and never spreads private roster data", () => {
+    const lobby = projectPackageScene({
+      scene: { kind: "lobby", key: "lobby" },
+      serverTime: 0,
+      paused: false,
+      lobby: {
+        dialNumber: "+44 20 0000 0000",
+        instructions: ["Stay on the line."],
+        roster: [
+          {
+            id: "attendee-1",
+            label: "Alex",
+            connected: true,
+            phoneE164: "PRIVATE",
+          } as never,
+        ],
+      },
+    })
+    expect(lobby).toMatchObject({
+      joinPhoneNumber: "+44 20 0000 0000",
+      lobbyInstructions: ["Stay on the line."],
+      roster: [{ id: "attendee-1", label: "Alex", connected: true }],
+    })
+    expect(JSON.stringify(lobby)).not.toContain("PRIVATE")
+    const snapshot = runtimeSnapshotSchema.parse({
+      ...lobby,
+      roomId: "room",
+      questionId: "",
+      epoch: 0,
+      sequence: 1,
+      role: "spectator",
+      locale: "en",
+      reducedMotion: false,
+      serverTime: 0,
+      deadline: null,
+      remainingMs: 0,
+      paused: false,
+      canAnswer: false,
+      revealStage: "pending",
+      labels: { submit: "Submit", waiting: "Waiting", results: "Results" },
+    })
+    const v1 = runtimeSnapshotSchema.omit({
+      joinPhoneNumber: true,
+      lobbyInstructions: true,
+      roster: true,
+      revealStage: true,
+    })
+    expect(v1.safeParse(snapshot).success).toBe(false)
+    expect(
+      v1.safeParse(runtimeSnapshotForCapabilities(snapshot, 1)).success,
+    ).toBe(true)
+    expect(runtimeSnapshotForCapabilities(snapshot, 2)).toEqual(snapshot)
+    expect(runtimeSnapshotForCapabilities(snapshot)).not.toHaveProperty(
+      "roster",
+    )
+    expect(runtimeSnapshotForCapabilities(snapshot, 1)).not.toHaveProperty(
+      "revealStage",
+    )
+    expect(
+      projectPackageScene({
+        scene: { kind: "question", key: "q1", question },
+        serverTime: 0,
+        paused: false,
+        lobby: { roster: lobby.roster },
+      }),
+    ).not.toHaveProperty("roster")
   })
 })
