@@ -1,3 +1,4 @@
+import type { IncomingMessage } from "node:http"
 import type { SessionClaims } from "@razzia/common/types/auth"
 import type { ManagedClientSessionResponse } from "@razzia/common/types/managed-clients"
 import type { Context } from "hono"
@@ -41,6 +42,43 @@ export function sameOriginManagedTransport(
       source.host === host &&
       (source.protocol === "https:" ||
         (process.env.NODE_ENV !== "production" && source.protocol === "http:"))
+    )
+  } catch {
+    return false
+  }
+}
+
+/** Same-origin browser polling omits Origin on its initial read-only GET. */
+export function sameOriginManagedSocketRequest(
+  request: Pick<IncomingMessage, "method" | "url" | "headers">,
+): boolean {
+  const { origin, host } = request.headers
+
+  // A supplied Origin always remains authoritative, even when metadata claims
+  // same-origin. WebSocket handshakes continue through this strict branch.
+  if (origin !== undefined) {
+    return sameOriginManagedTransport(origin, host)
+  }
+
+  if (
+    request.method !== "GET" ||
+    !request.url ||
+    !host ||
+    request.headers["sec-fetch-site"] !== "same-origin" ||
+    request.headers["sec-fetch-mode"] !== "cors" ||
+    request.headers["sec-fetch-dest"] !== "empty"
+  ) {
+    return false
+  }
+
+  try {
+    const target = new URL(request.url, `https://${host}`)
+
+    return (
+      target.host === host &&
+      target.username === "" &&
+      target.password === "" &&
+      target.searchParams.get("transport") === "polling"
     )
   } catch {
     return false

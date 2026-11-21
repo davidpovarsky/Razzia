@@ -15,7 +15,7 @@ import {
 } from "@razzia/socket/services/managed-clients"
 import {
   managedClientCookieToken,
-  sameOriginManagedTransport,
+  sameOriginManagedSocketRequest,
 } from "@razzia/socket/services/managed-client-session"
 import { canHostGame } from "@razzia/socket/services/managed-client-authorization"
 import Registry from "@razzia/socket/services/registry"
@@ -146,13 +146,7 @@ export const createSocketServer = (server: ServerType): Server => {
       ? managedClientCookieToken(socket.handshake.headers.cookie)
       : (socket.handshake.auth.token as string | undefined)
 
-    if (
-      managed &&
-      !sameOriginManagedTransport(
-        socket.handshake.headers.origin,
-        socket.handshake.headers.host,
-      )
-    ) {
+    if (managed && !sameOriginManagedSocketRequest(socket.request)) {
       next(authError("TOKEN_INVALID", "errors:auth.tokenInvalid"))
 
       return
