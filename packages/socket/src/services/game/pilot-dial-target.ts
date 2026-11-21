@@ -6,6 +6,7 @@ export function selectDialedPilotTarget<
   T extends {
     quizId?: string
     started: boolean
+    contentOwnerId?: string
     manager: { connected: boolean; clientId: string }
   },
 >(
@@ -39,7 +40,7 @@ export function selectDialedPilotTarget<
       const approved = new Set(target.quizIds)
       const matching = games.filter(
         (game) =>
-          game.manager.clientId === target.ownerId &&
+          (game.contentOwnerId ?? game.manager.clientId) === target.ownerId &&
           game.quizId !== undefined &&
           approved.has(game.quizId),
       )

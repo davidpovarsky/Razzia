@@ -80,3 +80,90 @@ it("fails closed for malformed explicit show allowlists", () => {
     ).toBeNull()
   }
 })
+
+const managedTargets = JSON.stringify({
+  "443306131984": {
+    ownerId: "customer",
+    quizId: "tzila",
+    quizIds: ["tzila", "bms"],
+  },
+})
+
+it("routes an approved BMS show hosted by its owner's managed client", () => {
+  const managedBms = {
+    ...game("managed-client"),
+    quizId: "bms",
+    contentOwnerId: "customer",
+  }
+  expect(
+    selectDialedPilotTarget(
+      [game("customer"), managedBms],
+      "+44 330 613 1984",
+      managedTargets,
+    ).game,
+  ).toBe(managedBms)
+})
+
+it("uses the content owner for allowlists even when the manager ID matches", () => {
+  for (const contentOwnerId of ["other-owner", ""]) {
+    const foreignBms = {
+      ...game("customer"),
+      quizId: "bms",
+      contentOwnerId,
+    }
+    expect(
+      selectDialedPilotTarget([foreignBms], "443306131984", managedTargets)
+        .game,
+    ).toBeNull()
+  }
+})
+
+it("does not admit an unapproved show hosted by the correct owner's client", () => {
+  const unapproved = {
+    ...game("managed-client"),
+    quizId: "private-other-show",
+    contentOwnerId: "customer",
+  }
+  expect(
+    selectDialedPilotTarget([unapproved], "443306131984", managedTargets)
+      .game,
+  ).toBeNull()
+})
+
+it("preserves owner fallback and newest connected precedence across host types", () => {
+  const original = game("customer")
+  const managedBms = {
+    ...game("managed-client"),
+    quizId: "bms",
+    contentOwnerId: "customer",
+  }
+  const disconnected = {
+    ...managedBms,
+    manager: { connected: false, clientId: "managed-client" },
+  }
+  expect(
+    selectDialedPilotTarget(
+      [original, managedBms, disconnected],
+      "443306131984",
+      managedTargets,
+    ).game,
+  ).toBe(managedBms)
+  expect(
+    selectDialedPilotTarget(
+      [managedBms, original, disconnected],
+      "443306131984",
+      managedTargets,
+    ).game,
+  ).toBe(original)
+  const latestDisconnected = {
+    ...disconnected,
+    manager: { connected: false, clientId: "new-managed-client" },
+  }
+  expect(
+    selectDialedPilotTarget(
+      [disconnected, latestDisconnected],
+      "443306131984",
+      managedTargets,
+    ).game,
+  ).toBe(latestDisconnected)
+})
