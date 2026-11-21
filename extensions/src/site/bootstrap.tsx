@@ -23,6 +23,11 @@ import { SiteLoading } from "./web/shared/SiteLoading"
 import { SiteMetadata } from "./web/shared/SiteMetadata"
 import { hasManagerSession } from "./adapters/client"
 import {
+  enterManagedClientMode,
+  isManagedClientMode,
+  isManagedClientRoomPath,
+} from "@razzia/web/lib/managed-client-session"
+import {
   browserConsentLoginHandoff,
   CONSENT_PATH,
 } from "../components/oauth-consent/login-handoff"
@@ -36,6 +41,10 @@ const AccountGateway = lazyRouteComponent(
   "AccountGateway",
 )
 const Studio = lazyRouteComponent(() => import("./web/studio/Studio"), "Studio")
+const ManagedClientPortal = lazyRouteComponent(
+  () => import("./web/clients/ManagedClientPortal"),
+  "ManagedClientPortal",
+)
 const StudioPackagePreview = lazyRouteComponent(
   () => import("./web/studio/StudioPackagePreview"),
   "StudioPackagePreview",
@@ -44,8 +53,17 @@ const StudioPackageSaveConsent = lazyRouteComponent(
   () => import("./web/studio/StudioPackagePreview"),
   "StudioPackageSaveConsent",
 )
+
 // The generated native tree eagerly imports the editor, XLSX, show and checkout.
 // Load it only for native entry paths. Site -> native links use normal navigation.
+if (
+  /^\/client\/?$/u.test(window.location.pathname) ||
+  (isManagedClientRoomPath(window.location.pathname) &&
+    new URLSearchParams(window.location.search).get("client") === "1")
+) {
+  enterManagedClientMode()
+}
+
 const nativeEntry = /^\/(?:manager|party|display|game)(?:\/|$)/u.test(
   window.location.pathname,
 )
@@ -54,6 +72,21 @@ const nativeTheme = nativeEntry ? await branding : null
 const routeTree: AnyRoute = nativeEntry
   ? (await import("@razzia/web/route.gen")).routeTree
   : rootRoute
+
+// A managed hosting session has its own library. Existing owner credentials in
+// another context must never be reached through a host exit or legacy URL.
+routeTree.options.beforeLoad = ({
+  location,
+}: {
+  location: { pathname: string }
+}) => {
+  if (
+    isManagedClientMode() &&
+    /^\/(?:studio|site\/studio|manager)(?:\/|$)/u.test(location.pathname)
+  ) {
+    return redirect({ href: "/client", replace: true, throw: true })
+  }
+}
 
 // Generated routes remain unmodified. Compose with public router APIs, once,
 // before creating the router. Legacy manager/editor/game children are retained.
@@ -115,6 +148,7 @@ const pages = [
   "/reset",
   "/site/login",
   "/site/signup",
+  "/client",
   "/studio",
   "/studio/$section",
   "/studio/package-preview/$uploadId/$revision/$gameId",
@@ -154,10 +188,18 @@ const routes = pages.map((path) =>
       }
     },
     component: (() => {
-      if (path === "/studio/package-preview/$uploadId/$revision/$gameId")
+      if (path === "/client") {
+        return ManagedClientPortal
+      }
+
+      if (path === "/studio/package-preview/$uploadId/$revision/$gameId") {
         return StudioPackagePreview
-      if (path === "/studio/package-save-consent/$requestId")
+      }
+
+      if (path === "/studio/package-save-consent/$requestId") {
         return StudioPackageSaveConsent
+      }
+
       if (path.includes("studio")) {
         return Studio
       }

@@ -47,6 +47,8 @@ export function resolveSiteMetadata({
     games: "My Games",
     account: "Account & licences",
     prepare: "Prepare show",
+    clients: "Clients",
+    client: "Client access",
   }
   const product =
     products.find((game) => game.id === params.get("game")) ?? products.at(0)
@@ -85,10 +87,19 @@ export function resolveSiteMetadata({
     }
   }
 
+  let clientTitleKey: "entryTitle" | "ownerTitle" | null = null
+
+  if (path === "/client") {
+    clientTitleKey = "entryTitle"
+  } else if (path === "/studio/clients") {
+    clientTitleKey = "ownerTitle"
+  }
+
   return {
     native,
     brand,
     titleKey,
+    clientTitleKey,
     isHome: !native && label === "home",
     canonical: canonical.href,
   }

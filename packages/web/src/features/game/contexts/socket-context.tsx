@@ -3,6 +3,13 @@ import type {
   ServerToClientEvents,
 } from "@razzia/common/types/game/socket"
 import { clearToken, ensureSession } from "@razzia/web/lib/session"
+import type { ManagedClientSessionResponse } from "@razzia/common/types/managed-clients"
+import {
+  isManagedClientMode,
+  isManagedClientRoomPath,
+  managedClientHeaders,
+  notifyManagedClientExpired,
+} from "@razzia/web/lib/managed-client-session"
 import React, {
   createContext,
   useCallback,
@@ -35,9 +42,23 @@ export const socketClient: TypedSocket = io("/", {
   reconnectionDelay: 1000,
   closeOnBeforeunload: true,
   auth: (cb) => {
+    if (isManagedClientMode()) {
+      cb({ managedClient: true })
+
+      return
+    }
+
     ensureSession()
-      .then((session) => cb({ token: session.token }))
-      .catch(() => cb({ token: "" }))
+      .then((session) =>
+        cb(
+          isManagedClientMode()
+            ? { managedClient: true }
+            : { token: session.token },
+        ),
+      )
+      .catch(() =>
+        cb(isManagedClientMode() ? { managedClient: true } : { token: "" }),
+      )
   },
 })
 
@@ -67,7 +88,46 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const { t } = useTranslation()
 
   useEffect(() => {
-    ensureSession().then((session) => setClientId(session.clientId))
+    const controller = new AbortController()
+
+    if (isManagedClientMode()) {
+      void fetch("/api/client-access/session", {
+        headers: managedClientHeaders(),
+        credentials: "same-origin",
+        cache: "no-store",
+        signal: controller.signal,
+      })
+        .then(async (response) => {
+          if (!response.ok) {
+            if (
+              response.status === 401 &&
+              isManagedClientRoomPath(window.location.pathname)
+            ) {
+              notifyManagedClientExpired()
+            }
+
+            return
+          }
+
+          const session =
+            (await response.json()) as ManagedClientSessionResponse
+
+          if (!controller.signal.aborted) {
+            setClientId(session.client.id)
+          }
+        })
+        .catch(() => undefined)
+    } else {
+      void ensureSession()
+        .then((session) => {
+          if (!controller.signal.aborted && !isManagedClientMode()) {
+            setClientId(session.clientId)
+          }
+        })
+        .catch(() => undefined)
+    }
+
+    return () => controller.abort()
   }, [])
 
   useEffect(() => {
@@ -78,12 +138,31 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
       setIsConnected(true)
     }
 
-    const handleDisconnect = () => setIsConnected(false)
+    const handleDisconnect = (reason: string) => {
+      setIsConnected(false)
+
+      if (isManagedClientMode() && reason === "io server disconnect") {
+        notifyManagedClientExpired()
+      }
+    }
 
     const handleError = (err: Error & { data?: { code?: string } }) => {
       console.error("Connection error:", err.message)
 
       const code = err.data?.code
+
+      if (isManagedClientMode()) {
+        if (
+          code?.startsWith("TOKEN_") ||
+          code?.startsWith("CLIENT_") ||
+          code === "client-session-expired"
+        ) {
+          socketClient.disconnect()
+          notifyManagedClientExpired()
+        }
+
+        return
+      }
 
       if (!code?.startsWith("TOKEN_")) {
         return
@@ -100,10 +179,17 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
 
       ensureSession()
         .then((session) => {
-          setClientId(session.clientId)
+          if (!isManagedClientMode()) {
+            setClientId(session.clientId)
+          }
+
           socketClient.connect()
         })
-        .catch(() => toast.error(t("errors:auth.sessionFailed")))
+        .catch(() => {
+          if (!isManagedClientMode()) {
+            toast.error(t("errors:auth.sessionFailed"))
+          }
+        })
     }
 
     socketClient.on("connect", handleConnect)
