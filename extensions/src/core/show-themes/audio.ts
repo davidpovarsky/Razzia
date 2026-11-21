@@ -1,4 +1,5 @@
 import type { ResolvedShowTheme } from "./resolve"
+import { isPlatformAudioUrl, platformThemeAudio } from "./platform-audio"
 import { isSafeThemeAssetUrl, type ShowThemeAudioEvent } from "./selection"
 import type { CueId, SoundtrackSlotId } from "../constants"
 import type { AudioExtras } from "../quiz-extras"
@@ -43,7 +44,7 @@ const EFFECT_EVENTS: Readonly<Partial<Record<string, ShowThemeAudioEvent>>> = {
   "vote-locked": "voteLocked",
   "countdown-ended": "voteLocked",
   "survey-reveal": "revealResults",
-  "top-pick-reveal": "answerSubmitted",
+  "top-pick-reveal": "revealResults",
   "timer-tick": "timerWarning",
   "timer-urgent": "timerWarning",
   "timer-final": "timerWarning",
@@ -53,11 +54,11 @@ const EFFECT_EVENTS: Readonly<Partial<Record<string, ShowThemeAudioEvent>>> = {
   "tadazz-welcome": "zzTransition",
   "opening-portal": "zzTransition",
   "opening-logo": "zzTransition",
-  "directory-loaded": "answerSubmitted",
-  "phone-ready": "answerSubmitted",
-  "readiness-grid": "answerSubmitted",
+  "directory-loaded": "lobby",
+  "phone-ready": "lobby",
+  "readiness-grid": "lobby",
   "round-launch": "zzTransition",
-  "story-progress-update": "answerSubmitted",
+  "story-progress-update": "lobby",
   "story-assembled": "revealResults",
   "story-live-hold": "zzTransition",
   "finale-impact": "closing",
@@ -71,6 +72,10 @@ export function themeAllowsAudioUrl(
 ): boolean {
   if (!isSafeThemeAssetUrl(url)) {
     return false
+  }
+
+  if (isPlatformAudioUrl(url)) {
+    return true
   }
 
   const spec = theme.definition.audioEvents[event]
@@ -102,13 +107,18 @@ export function defaultThemeAudioUrl(
     (value) => value.id === spec.defaultVariantId,
   )
 
-  if (!variant || variant.silent || !variant.roles.includes(theme.role)) {
+  const inherited = variant?.inheritPlatform
+    ? platformThemeAudio(event)
+    : undefined
+  const effective = inherited ?? variant
+
+  if (!effective || effective.silent || !effective.roles.includes(theme.role)) {
     return undefined
   }
 
-  const url = theme.definition.assets.find(
-    (asset) => asset.id === variant.assetId,
-  )?.url
+  const url =
+    inherited?.url ??
+    theme.definition.assets.find((asset) => asset.id === variant?.assetId)?.url
   const cueId = (Object.keys(CUE_THEME_EVENTS) as CueId[]).find(
     (id) => CUE_THEME_EVENTS[id] === event,
   )
@@ -142,7 +152,8 @@ export function applyThemeAudioDefaults(
         themeAllowsAudioUrl(theme, event, saved.url)
       const selection = theme.audioSelections[event]
       const explicitRecording = Boolean(
-        selection?.variantId || selection?.mediaUrl,
+        selection?.mediaUrl ||
+        (selection?.variantId && !theme.audio[event].inheritPlatform),
       )
 
       if (
@@ -166,7 +177,8 @@ export function applyThemeAudioDefaults(
       const inheritsPlatformCue =
         !explicitRecording &&
         saved?.source !== "media" &&
-        isInheritedPlatformCueUrl(cueId as CueId, effective.url)
+        (effective.inheritPlatform ||
+          isInheritedPlatformCueUrl(cueId as CueId, effective.url))
       const inheritedCue = platformAudio.cues[cueId as CueId]
 
       return [
@@ -198,7 +210,8 @@ export function applyThemeAudioDefaults(
     const selected = theme.audio[event]
     const selection = theme.audioSelections[event]
     const explicitRecording = Boolean(
-      selection?.variantId || selection?.mediaUrl,
+      selection?.mediaUrl ||
+      (selection?.variantId && !theme.audio[event].inheritPlatform),
     )
 
     if (explicitRecording) {
@@ -249,18 +262,28 @@ export function resolveThemeEffect(theme: ResolvedShowTheme, name: string) {
 
   const resolved = theme.audio[event]
   const selection = theme.audioSelections[event]
-  const explicitRecording = Boolean(selection?.variantId || selection?.mediaUrl)
+  const explicitRecording = Boolean(
+    selection?.mediaUrl || (selection?.variantId && !resolved.inheritPlatform),
+  )
   const variant =
     !explicitRecording && choreography
       ? (theme.definition.audioEvents[event].variants.find(
           (value) => value.id === choreography.variantId,
         ) ?? resolved)
       : resolved
+  const effectiveVariant =
+    variant.inheritPlatform && !explicitRecording
+      ? {
+          ...variant,
+          ...platformThemeAudio(event, name),
+        }
+      : variant
   let url =
-    "url" in variant && typeof variant.url === "string"
-      ? variant.url
-      : theme.definition.assets.find((asset) => asset.id === variant.assetId)
-          ?.url
+    "url" in effectiveVariant && typeof effectiveVariant.url === "string"
+      ? effectiveVariant.url
+      : theme.definition.assets.find(
+          (asset) => asset.id === effectiveVariant.assetId,
+        )?.url
 
   const cueId = (Object.keys(CUE_THEME_EVENTS) as CueId[]).find(
     (id) => CUE_THEME_EVENTS[id] === event,
@@ -279,9 +302,11 @@ export function resolveThemeEffect(theme: ResolvedShowTheme, name: string) {
   return {
     event,
     url:
-      selection?.muted || variant.silent || !variant.roles.includes(theme.role)
+      selection?.muted ||
+      effectiveVariant.silent ||
+      !effectiveVariant.roles.includes(theme.role)
         ? undefined
         : url,
-    volume: selection?.volume ?? variant.volume,
+    volume: selection?.volume ?? effectiveVariant.volume,
   }
 }
