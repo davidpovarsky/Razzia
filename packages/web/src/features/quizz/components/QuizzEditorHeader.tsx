@@ -31,7 +31,11 @@ const QuizzEditorHeader = () => {
   const { t } = useTranslation()
 
   return (
-    <header className="bg-background border-border z-20 flex w-full max-w-full flex-col overflow-x-hidden border-b shadow-sm">
+    <header
+      inert={isSaving}
+      aria-busy={isSaving}
+      className="bg-background border-border z-20 flex w-full max-w-full flex-col overflow-x-hidden border-b shadow-sm"
+    >
       {/* Row 1 / Top: Quiz Title + Studio Navigation Tabs + Exit / Save */}
       <div className="editor-primary-row flex min-h-14 w-full flex-wrap items-center justify-between gap-2 px-3 py-1.5 sm:gap-4 sm:px-4">
         {/* Title input */}
@@ -45,7 +49,7 @@ const QuizzEditorHeader = () => {
                   {...field}
                   variant="sm"
                   dir="auto"
-                  disabled={!canSave}
+                  disabled={isSaving || !canSave}
                   aria-invalid={fieldState.invalid}
                   aria-describedby={
                     fieldState.invalid ? `${field.name}-error` : undefined
@@ -96,6 +100,7 @@ const QuizzEditorHeader = () => {
 
       <ConflictDialog
         open={Boolean(conflict)}
+        busy={isSaving}
         serverRevision={conflict?.serverRevision}
         expectedRevision={conflict?.expectedRevision}
         onReload={handleReloadConflict}

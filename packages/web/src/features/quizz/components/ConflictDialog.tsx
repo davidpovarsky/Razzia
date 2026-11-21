@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next"
 
 export interface ConflictDialogProps {
   open: boolean
+  busy?: boolean
   serverRevision?: number
   expectedRevision?: number | null
   onReload: () => void
@@ -23,6 +24,7 @@ export interface ConflictDialogProps {
  */
 export const ConflictDialog = ({
   open,
+  busy = false,
   serverRevision,
   expectedRevision,
   onReload,
@@ -34,7 +36,7 @@ export const ConflictDialog = ({
   const [confirmingOverwrite, setConfirmingOverwrite] = useState(false)
 
   const handleOpenChange = (isOpen: boolean) => {
-    if (!isOpen) {
+    if (!isOpen && !busy) {
       setConfirmingOverwrite(false)
       onCancel()
     }
@@ -45,6 +47,7 @@ export const ConflictDialog = ({
       <Dialog.Overlay className="data-[state=open]:animate-fade fixed inset-0 z-50 bg-black/60 backdrop-blur-sm" />
       <Dialog.Content
         aria-describedby="conflict-dialog-desc"
+        aria-busy={busy}
         className="bg-background border-border data-[state=open]:animate-fade fixed top-1/2 left-1/2 z-50 flex max-h-[85vh] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 flex-col rounded-2xl border p-6 shadow-2xl"
         data-testid="conflict-modal"
       >
@@ -72,6 +75,7 @@ export const ConflictDialog = ({
             </div>
           </div>
           <Dialog.Close
+            disabled={busy}
             aria-label={t("common:close", "Close")}
             className="text-muted-foreground hover:bg-muted hover:text-foreground rounded-lg p-1 transition-colors"
           >
@@ -114,6 +118,7 @@ export const ConflictDialog = ({
             <div className="flex justify-end gap-2">
               <Button
                 type="button"
+                disabled={busy}
                 size="sm"
                 className="bg-accent text-accent-foreground px-3 py-1.5 text-xs font-semibold"
                 onClick={() => setConfirmingOverwrite(false)}
@@ -122,6 +127,7 @@ export const ConflictDialog = ({
               </Button>
               <Button
                 type="button"
+                disabled={busy}
                 size="sm"
                 className="bg-red-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-red-700"
                 onClick={onOverwrite}
@@ -135,6 +141,7 @@ export const ConflictDialog = ({
           <div className="flex flex-col gap-2.5 sm:flex-row sm:justify-end">
             <Button
               type="button"
+              disabled={busy}
               className="bg-accent text-accent-foreground px-4 py-2.5 text-sm font-semibold"
               onClick={onCancel}
               data-testid="conflict-cancel-button"
@@ -144,6 +151,7 @@ export const ConflictDialog = ({
 
             <Button
               type="button"
+              disabled={busy}
               onClick={onReload}
               className="bg-primary hover:bg-primary/90 flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-bold text-white shadow-sm"
               data-testid="conflict-reload-button"
@@ -154,6 +162,7 @@ export const ConflictDialog = ({
 
             <Button
               type="button"
+              disabled={busy}
               onClick={() => setConfirmingOverwrite(true)}
               className="flex items-center justify-center gap-2 border border-red-300 bg-red-50 px-4 py-2.5 text-sm font-bold text-red-700 hover:bg-red-100 dark:border-red-800 dark:bg-red-950/40 dark:text-red-300"
               data-testid="conflict-overwrite-button"

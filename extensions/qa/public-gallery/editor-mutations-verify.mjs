@@ -107,6 +107,68 @@ export async function verifyEditorMutations(options) {
     assert.equal((await saved).status(), 200, "Editor composite save")
     await page.waitForURL(/\/(studio\/games|manager\/config)$/)
   }
+  const saveWithPendingCheck = async (overwrite = false) => {
+    const apiUrl = options.origin + "/api/extensions/quizzes/" + quizId
+    let requestArrived = false
+    let release
+    const released = new Promise((resolve) => {
+      release = resolve
+    })
+    const field = page.locator('input[name$=".question"]').first()
+    const previousQuestion = await field.inputValue()
+    const previousTitle = await page
+      .locator('input[name="subject"]')
+      .inputValue()
+    const delayedSave = async (route) => {
+      if (route.request().method() !== "PUT") {
+        await route.continue()
+        return
+      }
+      const response = await route.fetch()
+      assert.equal(response.status(), 200)
+      requestArrived = true
+      await released
+      await route.fulfill({ response })
+    }
+    await page.route(apiUrl, delayedSave)
+    try {
+      await page
+        .getByTestId(
+          overwrite ? "conflict-confirm-overwrite-button" : "editor-save-btn",
+        )
+        .click({ noWaitAfter: true })
+      await expect.poll(() => requestArrived, { timeout: 30_000 }).toBe(true)
+      await expect(page.getByTestId("editor-save-btn")).toHaveAttribute(
+        "aria-busy",
+        "true",
+      )
+      await expect(page.locator("#studio-content")).toHaveAttribute("inert", "")
+      await expect(page.locator('input[name="subject"]')).toBeDisabled()
+      if (overwrite) {
+        await expect(
+          page.getByTestId("conflict-confirm-overwrite-button"),
+        ).toBeDisabled()
+        await page.keyboard.press("Escape")
+        await expect(page.getByTestId("conflict-modal")).toBeVisible()
+      } else {
+        await page.keyboard.type("Must not become an unsaved edit")
+        await expect(field).toHaveValue(previousQuestion)
+        await expect(page.locator('input[name="subject"]')).toHaveValue(
+          previousTitle,
+        )
+      }
+      release()
+      await page.waitForURL(/\/(studio\/games|manager\/config)$/)
+    } finally {
+      release()
+      await page.unroute(apiUrl, delayedSave)
+    }
+    record(
+      overwrite
+        ? "pending-conflict-overwrite-locks-editor-and-resolution-actions"
+        : "pending-save-locks-editor-and-preserves-submitted-content",
+    )
+  }
   try {
     const created = await page.request.post(
       options.origin + "/api/extensions/quizzes",
@@ -131,7 +193,7 @@ export async function verifyEditorMutations(options) {
     ).toHaveValue("Middle converted question")
     await page.getByTestId("answer-text-0").fill("Middle first answer")
     await page.getByTestId("answer-text-1").fill("Middle second answer")
-    await save()
+    await saveWithPendingCheck()
 
     let stored = await read("/api/quizz/" + quizId)
     let storedExtras = (await read("/api/extensions/quizzes/" + quizId)).extras
@@ -182,6 +244,64 @@ export async function verifyEditorMutations(options) {
     assert.deepEqual(stored.questions[0], quizz.questions[0])
     assert.deepEqual(stored.questions[2].options, quizz.questions[1].options)
     record("bulk-conversion-saves-valid-choice-and-estimation-with-authored-key")
+
+    await openEditor()
+    await openPanel("edit")
+    const failedSaveUrl = options.origin + "/api/extensions/quizzes/" + quizId
+    const failSave = async (route) => {
+      if (route.request().method() === "PUT") {
+        await route.fulfill({
+          status: 503,
+          contentType: "application/json",
+          body: '{"error":"temporary QA failure"}',
+        })
+      } else {
+        await route.continue()
+      }
+    }
+    await page.route(failedSaveUrl, failSave)
+    try {
+      const failedResponse = page.waitForResponse(
+        (response) =>
+          response.url() === failedSaveUrl &&
+          response.request().method() === "PUT",
+      )
+      await page.getByTestId("editor-save-btn").click()
+      assert.equal((await failedResponse).status(), 503)
+      await expect(page.getByTestId("editor-save-btn")).toBeEnabled()
+      await expect(page.locator('input[name="subject"]')).toBeEnabled()
+      await expect(page.locator("#studio-content")).not.toHaveAttribute(
+        "inert",
+        "",
+      )
+      await expect(
+        page.locator('input[name$=".question"]').first(),
+      ).toHaveValue("First authored question")
+    } finally {
+      await page.unroute(failedSaveUrl, failSave)
+    }
+    record("failed-save-unlocks-editing-and-retains-form-content")
+
+    const { id: _id, ...cleanQuiz } = stored
+    const newerRevision = await page.request.put(failedSaveUrl, {
+      headers,
+      data: {
+        expectedRevision: storedExtras.revision,
+        quizz: cleanQuiz,
+        extras: storedExtras,
+      },
+    })
+    assert.equal(newerRevision.status(), 200)
+    await page.getByTestId("editor-save-btn").click()
+    await expect(page.getByTestId("conflict-modal")).toBeVisible()
+    await page.getByTestId("conflict-overwrite-button").click()
+    await saveWithPendingCheck(true)
+    stored = await read("/api/quizz/" + quizId)
+    assert.deepEqual(stored.questions.map((question) => question.solutions), [
+      [1],
+      [0],
+      [10],
+    ])
 
     await openEditor()
     await page.getByTestId("studio-tab-launch").click()
