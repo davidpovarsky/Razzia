@@ -9,3 +9,5 @@ export * from "./resolve"
 export * from "./media"
 
 export * from "./audio"
+
+export * from "./change"

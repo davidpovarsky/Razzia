@@ -7,6 +7,7 @@ import {
   isLegacyShowRollback,
   resetThemeScope,
   resolveShowTheme,
+  preserveCompatibleThemeAudio,
   showThemeText,
   type ShowThemeSelection,
   type ThemeOverrides,
@@ -81,8 +82,18 @@ export function ShowThemeSettings({ compact = false }: { compact?: boolean }) {
       return false
     }
 
+    const nextDefinition = registry.get(next.id, next.version)
+    const nextSelection: ShowThemeSelection = nextDefinition
+      ? preserveCompatibleThemeAudio({
+          current: selected,
+          next,
+          previousDefinition: theme.definition,
+          nextDefinition,
+        })
+      : { ...next, legacyPolicy: next.legacyPolicy ?? "preserve-saved" }
+
     updateDefaults({
-      showTheme: { ...next, legacyPolicy: "theme-defaults" },
+      showTheme: nextSelection,
       showComposition: composition,
       showCompositionScopeAliases: undefined,
       motionKit: undefined,
