@@ -102,6 +102,7 @@ export function QuestionFrameV4({
       </div>
       <div
         className="q-text"
+        dir="auto"
         style={
           size
             ? {
@@ -113,7 +114,7 @@ export function QuestionFrameV4({
         {question}
       </div>
       {note && results && (
-        <div className="q-note" data-testid="tadazz-question-note">
+        <div className="q-note" data-testid="tadazz-question-note" dir="auto">
           {note}
         </div>
       )}
