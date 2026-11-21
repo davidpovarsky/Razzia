@@ -300,6 +300,21 @@ export function isAccountSessionValid(userId: string, sid?: string): boolean {
   return Boolean(row)
 }
 
+// A consented external connection survives ordinary browser-session expiry.
+// The retained session remains its revocation anchor: logout/password reset
+// deletes it, and disabled or unverified accounts cannot use the connection.
+// This never authorizes a native browser session or extends its JWT lifetime.
+export function isAccountConnectionValid(userId: string, sid: string): boolean {
+  const row = getAccountDb()
+    .prepare(
+      `SELECT 1 AS present FROM sessions s JOIN accounts a ON a.id=s.user_id
+    WHERE s.id=? AND s.user_id=? AND a.disabled=0 AND a.verified_at IS NOT NULL`,
+    )
+    .get(sid, userId)
+
+  return Boolean(row)
+}
+
 export function revokeAccountSession(sid: string): void {
   getAccountDb().prepare("DELETE FROM sessions WHERE id=?").run(sid)
 }

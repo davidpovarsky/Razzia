@@ -6,7 +6,7 @@ import {
 import { deleteCookie } from "hono/cookie"
 import { zValidator } from "@hono/zod-validator"
 import { SESSION_ROLES } from "@razzia/common/constants"
-import type { SessionResponse } from "@razzia/common/types/auth"
+import type { SessionClaims, SessionResponse } from "@razzia/common/types/auth"
 import {
   managerLoginValidator,
   sessionRequestValidator,
@@ -14,6 +14,7 @@ import {
 import { readClaims } from "@razzia/socket/api/middleware"
 import { i18nHook } from "@razzia/socket/api/validation"
 import { managerPassword } from "@razzia/socket/env"
+import { isAccountConnectionValid } from "@razzia/socket/services/account-auth"
 import {
   mintToken,
   newClientId,
@@ -45,6 +46,42 @@ const readRequestToken = async (c: Context): Promise<string | undefined> => {
 const freshPlayerSession = (): Promise<SessionResponse> =>
   mintToken(newClientId(), SESSION_ROLES.PLAYER)
 
+const readLogoutClaims = async (
+  c: Context,
+): Promise<SessionClaims | undefined> => {
+  const active = await readClaims(c)
+
+  if (active) {
+    return active
+  }
+
+  const header = c.req.header("Authorization")
+
+  if (!accountsEnabled() || !header?.startsWith("Bearer ")) {
+    return undefined
+  }
+
+  try {
+    // An expired signed owner session can retire only its own retained anchor.
+    // This fallback is exclusive to logout and never grants owner access.
+    const expired = await verifyIgnoringExpiry(header.slice("Bearer ".length))
+
+    if (
+      expired.role === SESSION_ROLES.MANAGER &&
+      !("managedClientId" in expired) &&
+      expired.exp * 1000 <= Date.now() &&
+      expired.sid &&
+      isAccountConnectionValid(expired.sub, expired.sid)
+    ) {
+      return expired
+    }
+  } catch {
+    /* Empty */
+  }
+
+  return undefined
+}
+
 const routes = new Hono()
   .get("/mode", (c) => c.json({ accountsEnabled: accountsEnabled() }))
   .post("/session", async (c) => {
@@ -72,7 +109,9 @@ const routes = new Hono()
             return c.json(await mintToken(claims.sub, SESSION_ROLES.PLAYER))
           }
 
-          retireManagerClaims(claims)
+          // Native manager access has expired, so return a fresh player below.
+          // Keep its retained session row as an external connection's revocation
+          // anchor; ordinary expiry must not act like an explicit logout.
         } catch {
           /* Empty */
         }
@@ -111,7 +150,7 @@ const routes = new Hono()
     },
   )
   .post("/logout", async (c) => {
-    const claims = await readClaims(c)
+    const claims = await readLogoutClaims(c)
 
     if (!claims) {
       return c.json(

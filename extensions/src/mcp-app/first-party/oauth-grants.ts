@@ -38,10 +38,12 @@ import {
 } from "./bindings.ts"
 import {
   OAuthError,
+  PERSISTENT_GRANT_EXPIRES_AT,
   pkceChallenge,
   randomOpaque,
   tokenDigest,
   type OAuthProtocol,
+  type OAuthTokenResponse,
 } from "./oauth-protocol.ts"
 import {
   createExportBody,
@@ -96,7 +98,8 @@ const missing = (error: unknown) =>
   error instanceof Error && "code" in error && error.code === "ENOENT"
 
 /** Tenant-owned grant/code/rotating-refresh authority. Tokens/codes are stored
- * only as SHA256 digests. This owns no draft/native database or ambient account.
+ * as SHA256 digests, with one encrypted short retry capsule per connection.
+ * This owns no draft/native database or ambient account.
  * Existing first-party account/session authority is checked at every decision.
  */
 export class FirstPartyOAuthGrants {
@@ -240,6 +243,20 @@ export class FirstPartyOAuthGrants {
     accountId: string,
     grantId: string,
   ): StoredGrant {
+    return this.grantRow(db, { accountId, grantId })
+  }
+  private grantRow(
+    db: DatabaseSync,
+    {
+      accountId,
+      grantId,
+      allowLegacyRenewal = false,
+    }: {
+      accountId: string
+      grantId: string
+      allowLegacyRenewal?: boolean
+    },
+  ): StoredGrant {
     const raw = db
       .prepare("SELECT * FROM grants WHERE owner=? AND id=?")
       .get(accountId, grantId)
@@ -258,8 +275,11 @@ export class FirstPartyOAuthGrants {
     if (
       !result.success ||
       result.data.subject !== accountId ||
-      result.data.expiresAt <= Date.now() ||
-      !this.auth.delegatedSessionActive(accountId, result.data.sid)
+      (!allowLegacyRenewal && result.data.expiresAt <= Date.now()) ||
+      !(result.data.expiresAt === PERSISTENT_GRANT_EXPIRES_AT ||
+      allowLegacyRenewal
+        ? this.auth.delegatedConnectionActive(accountId, result.data.sid)
+        : this.auth.delegatedSessionActive(accountId, result.data.sid))
     )
       throw invalid()
     const allowed = this.protocol.client(result.data.clientId).scopes
@@ -335,7 +355,7 @@ export class FirstPartyOAuthGrants {
       )
         throw invalid()
       const grantId = randomOpaque()
-      const expiresAt = Math.min(p.expiresAt, Date.now() + 24 * 60 * 60 * 1000)
+      const expiresAt = PERSISTENT_GRANT_EXPIRES_AT
       db.prepare(
         "INSERT INTO grants(id,owner,subject,client_id,sid,scope,expires_ms,state) VALUES(?,?,?,?,?,?,?,'active')",
       ).run(
@@ -382,19 +402,145 @@ export class FirstPartyOAuthGrants {
     return result
   }
   private tokens(db: DatabaseSync, grant: StoredGrant) {
-    const count = db.prepare("SELECT count(*) AS n FROM refresh").get()?.n
-    if (typeof count !== "number" || count >= 5000) throw unavailable()
+    // A refresh response is returned only after this transaction commits. Each
+    // grant keeps one digest; an issuer-authentic prior token remains detectable
+    // as replay through its sealed grant/client identity even after replacement.
+    // This avoids exhausting a lifetime quota through ordinary token renewal.
+    db.prepare("UPDATE grants SET expires_ms=? WHERE owner=? AND id=?").run(
+      PERSISTENT_GRANT_EXPIRES_AT,
+      grant.accountId,
+      grant.grantId,
+    )
+    db.prepare("DELETE FROM refresh WHERE grant_id=?").run(grant.grantId)
     const refresh = this.protocol.refresh({
+      version: 2,
       accountId: grant.accountId,
       grantId: grant.grantId,
       clientId: grant.clientId,
       nonce: randomOpaque(),
-      expiresAt: Math.floor(grant.expiresAt / 1000),
     })
     db.prepare(
       "INSERT INTO refresh(digest,grant_id,expires_ms,used) VALUES(?,?,?,0)",
-    ).run(tokenDigest(refresh), grant.grantId, grant.expiresAt)
-    return { ...this.protocol.access(grant), refresh_token: refresh }
+    ).run(tokenDigest(refresh), grant.grantId, PERSISTENT_GRANT_EXPIRES_AT)
+
+    return {
+      ...this.protocol.access({
+        ...grant,
+        expiresAt: PERSISTENT_GRANT_EXPIRES_AT,
+      }),
+      refresh_token: refresh,
+    }
+  }
+  private storedTokenRetry(db: DatabaseSync, grant: StoredGrant) {
+    const row = db
+      .prepare(
+        "SELECT digest,outcome FROM operations WHERE grant_id=? AND kind='oauth-token-retry' AND request_key='latest'",
+      )
+      .get(grant.grantId)
+
+    if (!row) {
+      return undefined
+    }
+
+    if (typeof row.outcome !== "string") {
+      throw unavailable()
+    }
+
+    const retry = this.protocol.readTokenRetry(row.outcome)
+
+    if (
+      retry.accountId !== grant.accountId ||
+      retry.grantId !== grant.grantId ||
+      retry.clientId !== grant.clientId ||
+      retry.resource !== this.protocol.config.resource ||
+      retry.requestDigest !== row.digest ||
+      retry.tokens.scope !== grant.scopes.join(" ") ||
+      retry.expiresAt - retry.issuedAt !== 30_000 ||
+      retry.accessExpiresAt > retry.issuedAt + 300_000
+    ) {
+      throw unavailable()
+    }
+
+    return retry
+  }
+  private tokenRetry(
+    db: DatabaseSync,
+    grant: StoredGrant,
+    inputDigest: string,
+  ): OAuthTokenResponse | undefined {
+    const retry = this.storedTokenRetry(db, grant)
+
+    if (!retry || retry.requestDigest !== inputDigest) {
+      return undefined
+    }
+
+    const now = Date.now()
+
+    if (
+      retry.issuedAt > now ||
+      retry.expiresAt <= now ||
+      retry.accessExpiresAt <= now ||
+      !db
+        .prepare(
+          "SELECT digest FROM refresh WHERE digest=? AND grant_id=? AND used=0 AND expires_ms=?",
+        )
+        .get(
+          tokenDigest(retry.tokens.refresh_token),
+          grant.grantId,
+          PERSISTENT_GRANT_EXPIRES_AT,
+        )
+    ) {
+      return undefined
+    }
+
+    return {
+      ...retry.tokens,
+      expires_in: Math.floor((retry.accessExpiresAt - now) / 1000),
+    }
+  }
+  private rememberTokenRetry(
+    db: DatabaseSync,
+    grant: StoredGrant,
+    {
+      inputDigest,
+      tokens,
+      refreshed,
+    }: {
+      inputDigest: string
+      tokens: OAuthTokenResponse
+      refreshed: boolean
+    },
+  ) {
+    const now = Date.now()
+    const prior = this.storedTokenRetry(db, grant)
+    const refreshCount = (prior?.refreshCount ?? 0) + (refreshed ? 1 : 0)
+    const accessExpiresAt =
+      z
+        .object({ exp: z.number().int().positive() })
+        .parse(
+          JSON.parse(
+            Buffer.from(
+              tokens.access_token.split(".")[1] ?? "",
+              "base64url",
+            ).toString("utf8"),
+          ) as unknown,
+        ).exp * 1000
+    const outcome = this.protocol.tokenRetry({
+      version: 1,
+      accountId: grant.accountId,
+      grantId: grant.grantId,
+      clientId: grant.clientId,
+      resource: this.protocol.config.resource,
+      requestDigest: inputDigest,
+      refreshCount,
+      issuedAt: now,
+      expiresAt: now + 30_000,
+      accessExpiresAt,
+      tokens,
+    })
+    db.prepare(
+      "INSERT INTO operations(grant_id,kind,request_key,digest,outcome) VALUES(?,'oauth-token-retry','latest',?,?) ON CONFLICT(grant_id,kind,request_key) DO UPDATE SET digest=excluded.digest,outcome=excluded.outcome",
+    ).run(grant.grantId, inputDigest, outcome)
   }
   exchange(input: {
     client_id: string
@@ -413,6 +559,7 @@ export class FirstPartyOAuthGrants {
     )
       throw invalid()
     const challenge = pkceChallenge(input.code_verifier)
+    const inputDigest = hashJson({ grantType: "authorization_code", ...input })
     const outcome = this.transaction(code.accountId, false, (db) => {
       const grant = this.row(db, code.accountId, code.grantId)
       if (grant.clientId !== code.clientId) throw invalid()
@@ -429,6 +576,14 @@ export class FirstPartyOAuthGrants {
       )
         throw invalid()
       if (row.used !== 0) {
+        const retry = this.tokenRetry(db, grant, inputDigest)
+
+        if (retry) {
+          this.row(db, code.accountId, code.grantId)
+
+          return { denied: false as const, tokens: retry }
+        }
+
         db.prepare(
           "UPDATE grants SET state='revoked' WHERE owner=? AND id=?",
         ).run(code.accountId, code.grantId)
@@ -439,6 +594,11 @@ export class FirstPartyOAuthGrants {
         tokenDigest(input.code),
       )
       const result = this.tokens(db, grant)
+      this.rememberTokenRetry(db, grant, {
+        inputDigest,
+        tokens: result,
+        refreshed: false,
+      })
       this.audit(db, grant.grantId, "code-exchanged")
       this.row(db, code.accountId, code.grantId)
       return { denied: false as const, tokens: result }
@@ -451,36 +611,68 @@ export class FirstPartyOAuthGrants {
     refresh_token: string
     resource: string
   }) {
-    const token = this.protocol.readRefresh(input.refresh_token)
+    // Legacy expiry is inspected only after proving possession of the exact
+    // stored unused credential and its still-active native revocation anchor.
+    const token = this.protocol.readRefresh(input.refresh_token, false)
     if (
       token.clientId !== input.client_id ||
       input.resource !== this.protocol.config.resource
     )
       throw invalid()
+
+    const inputDigest = hashJson({ grantType: "refresh_token", ...input })
     const result = this.transaction(token.accountId, false, (db) => {
-      const grant = this.row(db, token.accountId, token.grantId)
+      const grant = this.grantRow(db, {
+        accountId: token.accountId,
+        grantId: token.grantId,
+        allowLegacyRenewal: true,
+      })
       if (grant.clientId !== token.clientId) throw invalid()
       const row = db
         .prepare("SELECT * FROM refresh WHERE digest=? AND grant_id=?")
         .get(tokenDigest(input.refresh_token), grant.grantId)
+      const retry = this.tokenRetry(db, grant, inputDigest)
+
+      if (retry) {
+        this.row(db, token.accountId, token.grantId)
+
+        return { denied: false as const, tokens: retry }
+      }
       if (
-        !row ||
-        typeof row.expires_ms !== "number" ||
-        row.expires_ms <= Date.now()
-      )
-        throw invalid()
-      if (row.used !== 0) {
+        (row && row.used !== 0) ||
+        (!row && grant.expiresAt === PERSISTENT_GRANT_EXPIRES_AT)
+      ) {
         db.prepare(
           "UPDATE grants SET state='revoked' WHERE owner=? AND id=?",
         ).run(token.accountId, token.grantId)
         this.audit(db, grant.grantId, "refresh-replay-revoked")
         return { denied: true as const }
       }
-      db.prepare("UPDATE refresh SET used=1 WHERE digest=? AND used=0").run(
-        tokenDigest(input.refresh_token),
-      )
+
+      if (
+        !row ||
+        typeof row.expires_ms !== "number" ||
+        ("version" in token
+          ? grant.expiresAt !== PERSISTENT_GRANT_EXPIRES_AT ||
+            row.expires_ms !== PERSISTENT_GRANT_EXPIRES_AT
+          : Math.floor(row.expires_ms / 1000) !== token.expiresAt)
+      ) {
+        throw invalid()
+      }
+
       const tokens = this.tokens(db, grant)
-      this.audit(db, grant.grantId, "refresh-rotated")
+      this.rememberTokenRetry(db, grant, {
+        inputDigest,
+        tokens,
+        refreshed: true,
+      })
+      // Routine refresh telemetry stays in the bounded current summary above.
+      // Preserve historical/security audit rows and record a legacy upgrade once.
+
+      if (!("version" in token)) {
+        this.audit(db, grant.grantId, "connection-upgraded")
+      }
+
       this.row(db, token.accountId, token.grantId)
       return { denied: false as const, tokens }
     })
@@ -517,15 +709,17 @@ export class FirstPartyOAuthGrants {
     this.protocol.client(clientId)
     let token: ReturnType<OAuthProtocol["readRefresh"]>
     try {
-      token = this.protocol.readRefresh(encoded)
+      token = this.protocol.readRefresh(encoded, false)
     } catch {
       return
     }
     if (token.clientId !== clientId) return
     this.transaction(token.accountId, false, (db) => {
+      // Any issuer-authentic refresh credential for this exact connection can
+      // revoke it, including an old rotated token. No token plaintext is stored.
       const row = db
-        .prepare("SELECT grant_id FROM refresh WHERE digest=? AND grant_id=?")
-        .get(tokenDigest(encoded), token.grantId)
+        .prepare("SELECT id FROM grants WHERE owner=? AND id=? AND client_id=?")
+        .get(token.accountId, token.grantId, clientId)
       if (!row) return
       db.prepare(
         "UPDATE grants SET state='revoked' WHERE owner=? AND id=? AND client_id=?",

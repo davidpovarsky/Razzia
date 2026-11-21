@@ -75,8 +75,49 @@ export const authorizationCodeSchema = z.strictObject({
   nonce: opaque,
   expiresAt: seconds,
 })
-export const refreshTokenSchema = authorizationCodeSchema
+
+const persistentRefreshTokenSchema = authorizationCodeSchema
+  .omit({ expiresAt: true })
+  .extend({ version: z.literal(2) })
+
+export const refreshTokenSchema = z.union([
+  persistentRefreshTokenSchema,
+  authorizationCodeSchema,
+])
 export type OAuthCode = z.infer<typeof authorizationCodeSchema>
+
+export type OAuthRefreshToken = z.infer<typeof refreshTokenSchema>
+// The existing durable grant/delegation interfaces use a numeric deadline.
+// This reserved value denotes a connection with no time-based expiry; access
+// tokens and individual save/export authorizations still have short deadlines.
+
+export const PERSISTENT_GRANT_EXPIRES_AT = Number.MAX_SAFE_INTEGER
+
+const tokenResponseSchema = z.strictObject({
+  access_token: z.string().min(40).max(8192),
+  refresh_token: z.string().min(40).max(8192),
+  token_type: z.literal("Bearer"),
+  expires_in: z.number().int().min(1).max(300),
+  scope: z.string().min(1).max(1024),
+})
+
+export type OAuthTokenResponse = z.infer<typeof tokenResponseSchema>
+
+const tokenRetrySchema = z.strictObject({
+  version: z.literal(1),
+  accountId: z.uuid(),
+  grantId: opaque,
+  clientId: bounded,
+  resource: z.url().max(2048),
+  requestDigest: z.string().regex(/^[a-f0-9]{64}$/u),
+  refreshCount: z.number().int().nonnegative().max(Number.MAX_SAFE_INTEGER),
+  issuedAt: z.number().int().positive().max(Number.MAX_SAFE_INTEGER),
+  expiresAt: z.number().int().positive().max(Number.MAX_SAFE_INTEGER),
+  accessExpiresAt: z.number().int().positive().max(Number.MAX_SAFE_INTEGER),
+  tokens: tokenResponseSchema,
+})
+
+export type OAuthTokenRetry = z.infer<typeof tokenRetrySchema>
 const downloadTicketSchema = z.strictObject({
   accountId: z.uuid(),
   grantId: opaque,
@@ -152,7 +193,7 @@ export function createOAuthProtocol(options: OAuthCryptoOptions) {
   }
   const client = (id: string) => clients.get(id) ?? fail("invalid_client")
   const seal = (
-    purpose: "request" | "code" | "refresh" | "download",
+    purpose: "request" | "code" | "refresh" | "download" | "token-retry",
     value: unknown,
   ) => {
     const iv = randomBytes(12)
@@ -165,7 +206,7 @@ export function createOAuthProtocol(options: OAuthCryptoOptions) {
     return Buffer.concat([iv, body, cipher.getAuthTag()]).toString("base64url")
   }
   const open = (
-    purpose: "request" | "code" | "refresh" | "download",
+    purpose: "request" | "code" | "refresh" | "download" | "token-retry",
     value: string,
   ): unknown => {
     try {
@@ -371,10 +412,31 @@ export function createOAuthProtocol(options: OAuthCryptoOptions) {
       return seal("code", authorizationCodeSchema.parse(value))
     },
     readCode: (value: string) => readCode("code", value),
-    refresh(value: OAuthCode) {
+    refresh(value: OAuthRefreshToken) {
       return seal("refresh", refreshTokenSchema.parse(value))
     },
-    readRefresh: (value: string) => readCode("refresh", value),
+    readRefresh(value: string, requireFresh = true): OAuthRefreshToken {
+      const parsed = refreshTokenSchema.safeParse(open("refresh", value))
+
+      if (
+        !parsed.success ||
+        (requireFresh &&
+          "expiresAt" in parsed.data &&
+          parsed.data.expiresAt * 1000 <= Date.now())
+      ) {
+        return fail("invalid_grant")
+      }
+
+      client(parsed.data.clientId)
+
+      return parsed.data
+    },
+    tokenRetry(value: OAuthTokenRetry) {
+      return seal("token-retry", tokenRetrySchema.parse(value))
+    },
+    readTokenRetry(value: string): OAuthTokenRetry {
+      return tokenRetrySchema.parse(open("token-retry", value))
+    },
     access(grant: {
       grantId: string
       accountId: string

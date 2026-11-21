@@ -30,8 +30,12 @@ For issuer https://example.invalid/oauth, the fetch routes are:
 - POST /oauth/token: standard form authorization_code or refresh_token grant,
   including exact resource/client binding. Authorization codes require the
   original PKCE verifier/redirect and expire after at most120seconds. Access
-  tokens expire after at most300seconds; refresh rotation/grant expiry cannot
-  outlive the consenting native manager session or24hours.
+  tokens expire after at most300seconds. A consented connection and its rotating
+  refresh credential have no time-based expiry. The original native session row
+  is retained as a revocation anchor: ordinary browser/JWT expiry does not
+  disconnect MCP, but explicit session logout, password reset, account disabling
+  and OAuth revocation still deny the connection. Native browser sessions keep
+  their existing twelve-hour expiry and are not extended by OAuth refresh.
 - POST /oauth/revoke: registered client plus possessed refresh token revokes the
   entire associated grant. Unknown tokens do not disclose grant existence.
 
@@ -54,21 +58,44 @@ created by access verification or get. Service-owned paths are assumed; this
 does not promise safety against an actor racing filesystem replacements.
 
 Only digests of codes, pending consent requests and rotating refresh credentials
-are stored. Tenant DBs use rollback journals, FULL synchronous transactions and
-exclusive mode0600 creation. Correct-proof code replay and refresh replay
-durably revoke their grant. OAuth-grant revocation, draft CAS, idempotency and
+are stored, plus one issuer-encrypted token-response retry capsule per grant.
+An identical, fully validated code or refresh exchange can recover that response
+for30seconds while its refresh head is still current. Retries do not rotate
+again, extend the access token, or cross client/resource/account bindings.
+Correct-proof replay outside that window or after the head advances durably
+revokes the grant. Tenant DBs use rollback journals, FULL synchronous transactions
+and exclusive mode0600 creation. OAuth-grant revocation, draft CAS, idempotency and
 audit are checked atomically in the same tenant DB. Native account/session state
 is in the preexisting separate DB, so cross-DB logout is not linearizable.
 Blocking SQLite cannot be instantly interrupted; postcommit cancellation can
 withhold a response without undoing committed data. Unknown close/IO failures
 never report a successful write.
 
-The verifier checks the live native account/session and grant on every call.
+The verifier checks the live native account, retained revocation anchor and grant
+on every call. Persistent refresh tokens are versioned and encrypted with the
+existing deployment-owned key. Each connection retains one current refresh
+digest, so ordinary rotation cannot exhaust the historical5000-row lifetime
+quota. Routine refresh count/time is updated in the same bounded encrypted
+summary instead of appending an audit row every five minutes. Existing consent,
+security, migration and revocation history is preserved. The existing numeric
+grant deadline uses a reserved maximum-safe-integer
+sentinel for an unexpired connection; issued access/save/export deadlines remain
+short and independent.
+
+An existing legacy connection upgrades on an actual refresh exchange only after
+validating the exact unused stored credential, client, resource, active grant,
+allowed scopes and retained native account/session anchor. Expiry caused only by
+the old session/24-hour cap may be renewed. Manually revoked grants, deleted
+anchors, replayed credentials and inactive accounts cannot be resurrected. A
+client that has already discarded its credential must connect once again; the
+server cannot recover client-side secrets. No schema rewrite or fabricated
+consent is used for this migration.
+
 An issuer-private WeakSet binds real verified principals to validated SDK copies
 through a synchronous trusted callback; structural caller copies cannot invoke
 the real DraftRepository. Draft writes revalidate canonical authored content,
 summary, actual dispatcher digest and precise scopes before their atomic CAS.
-There are100drafts/5000draft operations/1000grants/5000refresh records per tenant;
+There are100drafts/5000draft operations/1000grants per tenant;
 no automatic data deletion or recovery loop is introduced.
 
 Use `oauth.remote({allowedOrigins,dependencies:{authoring,drafts,rateLimit,...}})`
