@@ -325,13 +325,15 @@ test("managed client code opens only assigned canonical games with the native cu
     // Keep at most three rendered app pages alive for the native host/player/display.
     await page.goto("about:blank")
     await client.setViewportSize({ width: 390, height: 844 })
-    const launchResponse = client.waitForResponse((response) =>
-      new URL(response.url()).pathname.endsWith(`/games/${quizId}/launch`),
-    )
+    const launchResponse = client
+      .waitForResponse((response) =>
+        new URL(response.url()).pathname.endsWith(`/games/${quizId}/launch`),
+      )
+      .then(
+        async (response) => (await response.json()) as ManagedClientLaunchResponse,
+      )
     await client.getByRole("button", { name: "Open game", exact: true }).click()
-    const launched = (await (
-      await launchResponse
-    ).json()) as ManagedClientLaunchResponse
+    const launched = await launchResponse
     await expect(client).toHaveURL(`${baseURL}${launched.hostUrl}?client=1`)
     await client.getByTestId("platform-opening-start").click()
     await client.getByTestId("platform-opening-skip").click()
@@ -379,6 +381,9 @@ test("managed client code opens only assigned canonical games with the native cu
     await player.goto(`/game?pin=${launched.inviteCode}`)
     await player.getByPlaceholder("Username here").fill("Client Game Player")
     await player.getByRole("button", { name: "Submit", exact: true }).click()
+    await expect(client.getByTestId("host-connected-counter")).toHaveText(
+      "1 / 1",
+    )
     await client.getByRole("button", { name: "Start", exact: true }).click()
     await expect(client.getByTestId("tadazz-show")).toHaveAttribute(
       "data-voting-open",
