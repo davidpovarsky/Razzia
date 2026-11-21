@@ -18,12 +18,45 @@ function directoryScene(extras: AnyQuizExtras | null) {
   return scene?.kind === "animation" ? scene : undefined
 }
 
+/** Only a show that opts into a public register publishes these three fields. */
+function attendanceRows(
+  extras: AnyQuizExtras | null,
+  entries?: readonly RosterEntry[],
+): PublicFullShowData["roster"] {
+  if (
+    !extras ||
+    !isQuizExtrasV2(extras) ||
+    !extras.defaults.lobby?.showRoster
+  ) {
+    return undefined
+  }
+
+  // A host can attach, replace or remove the register after the room opens.
+  // Live pre-registration is authoritative; guests never become register rows.
+  const participants =
+    entries === undefined
+      ? extras.roster.participants.map((person) => ({
+          ...person,
+          status: "not_joined",
+        }))
+      : entries.filter((person) => person.preRegistered)
+
+  return participants.slice(0, 2000).map((entry) => ({
+    id: entry.rosterPlayerId,
+    label: entry.displayName,
+    connected: entry.status === "connected",
+  }))
+}
+
 /** Public projection only. Explicit roster table identity wins over old name matching. */
 export function buildFullShowDirectory(
   extras: AnyQuizExtras | null,
   entries: readonly RosterEntry[],
 ): PublicFullShowData {
   const directory = directoryScene(extras)
+  const lobby =
+    extras && isQuizExtrasV2(extras) ? extras.defaults.lobby : undefined
+  const roster = attendanceRows(extras, entries)
   const authored = directory?.seatingPlan
     ? (directory.representatives ?? [])
     : []
@@ -50,7 +83,8 @@ export function buildFullShowDirectory(
 
   return {
     isLive: true,
-    dialNumber: directory?.dialNumber,
+    dialNumber: lobby?.dialNumber ?? directory?.dialNumber,
+    ...(roster ? { roster } : {}),
     ...(directory?.seatingPlan === true ? { seatingPlan: true } : {}),
     connectedTables: [...connectedTables],
     representatives:
@@ -73,6 +107,21 @@ export function buildLobbyDirectory(
   }
 
   const directory = directoryScene(extras)
+  const { lobby } = extras.defaults
+
+  if (lobby) {
+    const live = getLive?.()
+
+    return {
+      isLive: live?.isLive ?? false,
+      joinMode: lobby.joinMode,
+      dialNumber: lobby.dialNumber ?? live?.dialNumber ?? directory?.dialNumber,
+      ...(lobby.instructions ? { instructions: lobby.instructions } : {}),
+      ...(lobby.showRoster
+        ? { roster: live?.roster ?? attendanceRows(extras) ?? [] }
+        : {}),
+    }
+  }
 
   if (
     !directory ||

@@ -1,0 +1,50 @@
+{
+  "candidateBase": "26eb0e2b8051a795786f62d327d48e25b2c795a9",
+  "base": "b959a5b1faf2616ce6316612146dfdcfd4fb000a",
+  "checks": [
+    {
+      "label": "format",
+      "exit": 0,
+      "seconds": 5.98
+    },
+    {
+      "label": "lobby-regressions",
+      "exit": 0,
+      "seconds": 7.43
+    },
+    {
+      "label": "types",
+      "exit": 0,
+      "seconds": 12.8
+    },
+    {
+      "label": "lint",
+      "exit": 1,
+      "seconds": 5.78
+    },
+    {
+      "label": "baseline-lint",
+      "exit": 1,
+      "seconds": 5.78
+    }
+  ],
+  "problem": null,
+  "network": "none",
+  "productionChanged": false,
+  "evidenceHostDirectory": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-bms-lobby-2e07b109",
+  "sourceHashes": {
+    "extensions/src/core/studio-timeline-schema.ts": "d2d81c047750ee9bbdbbfc6f91e21f7ca3b0067652eeb0e88ed0b7d3c83b1ca8",
+    "extensions/src/core/packages/protocol.ts": "5d82e0e455fa099d24a0c94517fd555545e71d2b3f5ca43fbcf34328656798ff",
+    "extensions/src/presentation/package-runtime/ThemeSandboxHost.tsx": "81e0698764ee11f65d28e965a7080a2bc8a236c14e9e27ffe042cec2a8247f0b",
+    "extensions/src/presentation/package-runtime/sdk.tsx": "22bf4af28352911d7edb5007f5371856bcc5a2e614dba7a7ddf6419cf9c16f76",
+    "extensions/src/presentation/package-runtime/projection.ts": "e9bd42c89949d071855009074e826bd98a297f4c4b3e7c340ca49fd6ccca2637",
+    "extensions/src/presentation/package-runtime/projection.test.ts": "cdac35f5b10aad190459ac73879c478bdc256b24ee449b83a787fc5319e18642",
+    "extensions/src/server/game/public-directory.ts": "d1f90b9d5da2933d3c32078af89626ddcdd6dccb4464124ff0a485ca86b7c420",
+    "extensions/src/server/game/public-directory.test.ts": "5792c354134e872aca2eccb678de32178934c94162738e02ed947c840fd7c66b",
+    "packages/web/src/features/game/components/tadazz-show/lobby-directory.ts": "6281aadd6dfb9164eca1e000f4b244423e9337cc887c191b1e3701c4bb66219b",
+    "packages/web/src/features/game/components/tadazz-show/lobby-directory.test.ts": "996a6c4712c5d3607fd3062ab05099b5dfb2eb323504cb50cf55657ca4d882a6",
+    "packages/web/src/features/game/components/tadazz-show/TadazzShowView.tsx": "d3ac4947f9152cf930da12450ff1f7dbbfd0deeaab3f5403660c4fdd67d3c137",
+    "packages/socket/src/services/game/pilot-dial-target.ts": "f698879f3b828b200bd98ac9b9a5af48b2f3bbde35903a827938011ade425e69",
+    "packages/socket/src/services/game/pilot-dial-target.test.ts": "2e479851ac875735c93c05268cdde7eda67c291efcc196b50686bff3e49e091f"
+  }
+}

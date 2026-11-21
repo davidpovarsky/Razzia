@@ -1,6 +1,30 @@
 import { describe, expect, it } from "vitest"
 import { readPublicLobbyDirectory } from "./lobby-directory"
 
+it("keeps public register presence without private contacts or caller records", () => {
+  expect(
+    readPublicLobbyDirectory({
+      dialNumber: "+44 20 0000 0000",
+      joinMode: "phone-only",
+      instructions: ["Stay on the line.", 4],
+      roster: [
+        { id: "a", label: "Alex", connected: true, phoneE164: "PRIVATE" },
+        { id: "b", label: "Bea", connected: false },
+        { id: "bad", label: 1, connected: true },
+      ],
+      activeCallId: "PRIVATE-CALL",
+    }),
+  ).toEqual({
+    dialNumber: "+44 20 0000 0000",
+    joinMode: "phone-only",
+    instructions: ["Stay on the line."],
+    roster: [
+      { id: "a", label: "Alex", connected: true },
+      { id: "b", label: "Bea", connected: false },
+    ],
+  })
+})
+
 describe("public lobby directory boundary", () => {
   it("keeps public tables and names without copying private contact fields", () => {
     expect(

@@ -16,7 +16,7 @@ import {
 import { authoredShowToNativeBundleDraft } from "../../core/show-authoring-convert"
 import { createShowThemeRegistry } from "../../core/show-themes/registry"
 import { resolveShowTheme } from "../../core/show-themes/resolve"
-import type { ShowThemeAudioEvent } from "../../core/show-themes/selection"
+import type { CueId } from "../../core/constants"
 import { createDefaultShowTheme } from "../../core/show-themes/selection"
 import { ThemeSandboxHost } from "../package-runtime/ThemeSandboxHost"
 import {
@@ -33,19 +33,14 @@ import { AudioCuePlayer } from "../audio-cue-player"
 import { resolveTadazzAudioPolicy } from "../tadazz-audio-policy"
 import { previewNativeLabels } from "./i18n"
 import { packagePreviewScene } from "./package-preview-scene"
+import { packageRevealStage } from "../package-runtime/reveal-clock"
+import { PackagePreviewAudioEffects } from "../package-runtime/use-package-reveal"
 
-const musicEvents: Partial<
-  Record<RuntimeSnapshot["phase"], ShowThemeAudioEvent>
-> = {
-  lobby: "lobby",
+const phaseCues: Partial<Record<RuntimeSnapshot["phase"], CueId>> = {
   question: "showQuestion",
-  answerCards: "showQuestion",
   voting: "answersMusic",
-  voteLocked: "voteLocked",
   results: "revealResults",
-  personalResult: "revealResults",
   leaderboard: "leaderboard",
-  interlude: "zzTransition",
 }
 
 /** The verified native host owns all media, clocks and read-only sample data. */
@@ -61,6 +56,8 @@ export function PackageApplicationPreviewStage({
   renderNative: (nativeFrame: ApplicationPreviewFrame) => ReactNode
 }) {
   const context = frame.packageContext
+  const effectiveLocale =
+    frame.show.defaults?.presentationLocale ?? frame.locale
   const registry = useMemo(
     () => createShowThemeRegistry(context?.definitions),
     [context?.definitions],
@@ -91,8 +88,8 @@ export function PackageApplicationPreviewStage({
     ],
   )
   const labels = useMemo(
-    () => previewNativeLabels(frame.locale),
-    [frame.locale],
+    () => previewNativeLabels(effectiveLocale),
+    [effectiveLocale],
   )
   const native = useMemo(
     () => authoredShowToNativeBundleDraft(frame.show, "preview"),
@@ -235,14 +232,18 @@ export function PackageApplicationPreviewStage({
     theme.diagnostics.length
   )
     return null
-  if (!sandbox) return renderNative(frame)
+  if (!sandbox) return renderNative({ ...frame, locale: effectiveLocale })
   if (platformSlot) {
     const {
       packageContext: _packageContext,
       appearance: _appearance,
       ...nativeFrame
     } = frame
-    return renderNative({ ...nativeFrame, show: platformShow })
+    return renderNative({
+      ...nativeFrame,
+      show: platformShow,
+      locale: effectiveLocale,
+    })
   }
   if (!runtimeUrl || images.key !== imagesKey) return null
   const now = Date.now()
@@ -253,6 +254,16 @@ export function PackageApplicationPreviewStage({
   const questionNumber = frame.show.cards
     .slice(0, chapter.cardIndex + 1)
     .filter((item) => item.kind === "quiz" || item.kind === "survey").length
+  const revealStage =
+    phase === "results" && scene.kind === "results"
+      ? packageRevealStage({
+          elapsedMs: frame.clock.elapsedMs,
+          hasCorrectAnswer:
+            scene.reveal.mode === "quiz" &&
+            (scene.reveal.solutions?.length ?? 0) > 0,
+          reducedMotion: frame.reducedMotion,
+        })
+      : undefined
   const projection = projectPackageScene({
     scene,
     serverTime: now,
@@ -262,6 +273,11 @@ export function PackageApplicationPreviewStage({
     questionNumber,
     questionCount: count,
     phaseElapsedMs: frame.clock.elapsedMs,
+    revealStage,
+    lobby: {
+      dialNumber: frame.show.defaults?.lobby?.dialNumber,
+      instructions: frame.show.defaults?.lobby?.instructions,
+    },
     finalLeaderboard:
       card.kind === "leaderboard" &&
       !frame.show.cards
@@ -281,7 +297,7 @@ export function PackageApplicationPreviewStage({
     epoch: frame.clock.epoch,
     sequence: frame.clock.sequence,
     role: frame.role,
-    locale: frame.locale,
+    locale: effectiveLocale,
     reducedMotion: frame.reducedMotion,
     serverTime: now,
     ...projectPackageClock({
@@ -297,48 +313,53 @@ export function PackageApplicationPreviewStage({
       results: labels.i18n.t("extensions:packages.phases.results"),
     },
   }
-  const event = frame.audioAudition?.event ?? musicEvents[phase]
-  const selectedAudio = event ? theme.audio[event] : undefined
+  const audition = frame.audioAudition
+  const selectedAudio = audition ? theme.audio[audition.event] : undefined
   const sceneAudio =
     !frame.stagePhase && card.kind !== "quiz" && card.kind !== "survey"
       ? card.audio
       : undefined
-  const authoredTrack =
-    sceneAudio?.mode === "custom" && sceneAudio.url ? sceneAudio : undefined
-  const music =
-    frame.role === "player"
-      ? undefined
-      : frame.audioAudition
-        ? selectedAudio && !selectedAudio.silent
-          ? selectedAudio
-          : undefined
-        : sceneAudio?.mode === "mute"
-          ? undefined
-          : (authoredTrack ??
-            (selectedAudio && !selectedAudio.silent
-              ? selectedAudio
-              : undefined))
-  const durationMs = frame.audioAudition
-    ? 10_000
-    : !frame.stagePhase && chapter.duration.kind === "known"
-      ? chapter.duration.milliseconds
-      : 86_400_000
-  const showTrack = music?.url
-    ? {
-        key: `${card.key}:${frame.clock.epoch}:${frame.audioAudition?.sequence ?? phase}`,
-        url: music.url,
-        volume: music.volume ?? 0.8,
-        loop: music.loop ?? false,
-        startedAt:
-          frame.audioAudition?.startedAt ?? now - frame.clock.elapsedMs,
-        elapsedMs: frame.audioAudition
-          ? Math.max(0, now - frame.audioAudition.startedAt)
-          : frame.clock.elapsedMs,
-        durationMs,
-      }
-    : null
+  // Undefined follows the normal platform mixer. Null is reserved for an
+  // explicitly silent audition; a theme event is never a replacement music bed.
+  let showTrack: Parameters<typeof AudioCuePlayer>[0]["showTrack"] = undefined
+
+  if (audition) {
+    showTrack =
+      selectedAudio?.url && !selectedAudio.silent && frame.role !== "player"
+        ? {
+            key: `${card.key}:${frame.clock.epoch}:audition:${audition.sequence}`,
+            url: selectedAudio.url,
+            volume: selectedAudio.volume,
+            loop: selectedAudio.loop,
+            startedAt: audition.startedAt,
+            elapsedMs: Math.max(0, now - audition.startedAt),
+            durationMs: 10_000,
+          }
+        : null
+  }
+
+  const audioSceneKind = (() => {
+    if (phase === "answerCards") {
+      return "question"
+    }
+
+    if (phase === "voteLocked" || phase === "personalResult") {
+      return "results"
+    }
+
+    if (scene.kind === "scene") {
+      return scene.scene.kind
+    }
+
+    if (phase === "interlude") {
+      return "transition"
+    }
+
+    return phase
+  })()
   const audioPolicy = resolveTadazzAudioPolicy({
-    sceneKind: phase === "answerCards" ? "question" : phase,
+    sceneKind: audioSceneKind,
+    scenePreset: scene.kind === "scene" ? scene.scene.preset : undefined,
   })
   return (
     <I18nextProvider i18n={labels.i18n}>
@@ -380,7 +401,16 @@ export function PackageApplicationPreviewStage({
             }
           />
           <AudioCuePlayer
+            eventOnly={frame.role === "player"}
+            stageOwnsReveal
             showTrack={showTrack}
+            cueId={phaseCues[phase]}
+            cardAudioCues={
+              card.kind === "quiz" || card.kind === "survey"
+                ? card.audioCues
+                : undefined
+            }
+            sceneAudio={sceneAudio}
             audioExtras={native.bundleDraft.extras.audio}
             gameId="read-only-package-preview"
             activeCardKey={card.key}
@@ -393,7 +423,6 @@ export function PackageApplicationPreviewStage({
               !frame.soundEnabled
             }
             autoPlay={frame.soundEnabled}
-            onError={() => callbacks.current.onUnavailable()}
             showControls
             renderControls={(controls) =>
               controls.blocked && frame.soundEnabled ? (
@@ -413,6 +442,21 @@ export function PackageApplicationPreviewStage({
                 </NativeButton>
               ) : null
             }
+          />
+          <PackagePreviewAudioEffects
+            cardKey={card.key}
+            epoch={frame.clock.epoch}
+            phase={phase}
+            remainingMs={remainingMs}
+            elapsedMs={frame.clock.elapsedMs}
+            stage={revealStage}
+            enabled={
+              frame.role !== "player" &&
+              frame.soundEnabled &&
+              !frame.audioAudition
+            }
+            paused={frame.clock.paused}
+            reducedMotion={frame.reducedMotion}
           />
         </div>
       </ShowThemeScope>

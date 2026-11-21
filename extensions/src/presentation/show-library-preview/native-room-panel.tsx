@@ -137,6 +137,9 @@ export function NativeClassicLobbyPanel({
   text?: string
   fullShowData?: {
     dialNumber?: string
+    joinMode?: "standard" | "phone-only"
+    instructions?: string[]
+    roster?: Array<{ id: string; label: string; connected: boolean }>
     representatives?: Array<{ table: number; name: string }>
     connectedTables?: number[]
   }
@@ -151,6 +154,139 @@ export function NativeClassicLobbyPanel({
   // Creating Worlds is a hosted table show: show join code AND the full live
   // 40-representative roster in ONE public screen, without four follow-up pages.
   const representatives = fullShowData?.representatives
+
+  if (fullShowData?.joinMode === "phone-only") {
+    const roster = fullShowData.roster ?? []
+    const instructions = fullShowData.instructions ?? []
+
+    return (
+      <div
+        className="tz-x-fill"
+        data-testid="tadazz-screen-lobby"
+        data-join-mode="phone-only"
+      >
+        <div className="tz-x-eyebrow" style={{ top: 70 }}>
+          {tx("seating.call", "CALL TO JOIN")}
+        </div>
+        <div
+          className="tz-lobby-pin"
+          data-testid="tadazz-lobby-phone"
+          dir="ltr"
+          style={{
+            position: "absolute",
+            top: 130,
+            left: 80,
+            right: 80,
+            textAlign: "center",
+            fontSize: 112,
+          }}
+        >
+          {join.dialNumber || tx("seating.noPhone", "NUMBER NOT CONFIGURED")}
+        </div>
+        <div
+          style={{
+            position: "absolute",
+            top: 320,
+            left: 100,
+            right: 100,
+            bottom: 90,
+            display: "grid",
+            gridTemplateColumns:
+              instructions.length && roster.length ? "1fr 1fr" : "1fr",
+            gap: 40,
+          }}
+        >
+          {instructions.length > 0 && (
+            <section
+              className="tz-x-panel"
+              style={{ padding: 32, overflow: "auto" }}
+            >
+              <h2 className="tz-lobby-label" style={{ marginBottom: 24 }}>
+                {tx("lobbyInstructions", "HOW TO PLAY")}
+              </h2>
+              <ol
+                data-testid="tadazz-lobby-instructions"
+                style={{
+                  margin: 0,
+                  paddingInlineStart: 36,
+                  fontSize: 28,
+                  lineHeight: 1.6,
+                }}
+              >
+                {instructions.map((line, index) => (
+                  <li key={index}>{line}</li>
+                ))}
+              </ol>
+            </section>
+          )}
+          {roster.length > 0 && (
+            <section
+              data-testid="tadazz-lobby-register"
+              style={{
+                minHeight: 0,
+                overflow: "auto",
+                padding: 28,
+                background: "#fff8ec",
+                color: "#17233b",
+                border: "2px solid #cbbda5",
+                borderRadius: 12,
+              }}
+            >
+              <h2 style={{ margin: "0 0 10px", fontSize: 28 }}>
+                {tx("lobbyRegister", "CLASS REGISTER")}
+              </h2>
+              <p style={{ margin: "0 0 18px", fontSize: 22 }}>
+                {tx(
+                  "lobbyRegisteredConnected",
+                  "{{connected}} / {{total}} CONNECTED",
+                  {
+                    connected: roster.filter((player) => player.connected)
+                      .length,
+                    total: roster.length,
+                  },
+                )}
+              </p>
+              <ol style={{ listStyle: "none", margin: 0, padding: 0 }}>
+                {roster.map((player, index) => (
+                  <li
+                    key={player.id}
+                    data-connected={player.connected}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 14,
+                      minHeight: 48,
+                      padding: "8px 12px",
+                      borderBottom: "1px solid #cbbda5",
+                      borderInlineStart: `6px solid ${player.connected ? "#15803d" : "transparent"}`,
+                      background: player.connected ? "#dcfce7" : "transparent",
+                      fontWeight: player.connected ? 800 : 500,
+                      fontSize: 25,
+                    }}
+                  >
+                    <span
+                      aria-hidden="true"
+                      style={{ width: 36, fontVariantNumeric: "tabular-nums" }}
+                    >
+                      {index + 1}.
+                    </span>
+                    <span style={{ flex: 1 }}>{player.label}</span>
+                    {player.connected && (
+                      <span
+                        aria-label={tx("lobbyPlayerConnected", "Connected")}
+                      >
+                        ✓
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ol>
+            </section>
+          )}
+        </div>
+      </div>
+    )
+  }
 
   if (representatives?.length) {
     const tables = [
