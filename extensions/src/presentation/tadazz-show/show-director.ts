@@ -272,6 +272,26 @@ function planTransition(
     }
 
     case "finale":
+      // An authored closing may already own this exact winner screen. Keep its
+      // painted finale when the server commits FINISHED after the closing hold.
+      if (
+        stage.mode === "finale" &&
+        prev?.kind === "scene" &&
+        prev.scene.kind === "closing" &&
+        !hasAuthoredCinematicContent(prev.scene)
+      ) {
+        const previousWinner = topWinner(
+          prev.activeSceneData?.leaderboard?.entries,
+        )
+
+        if (
+          previousWinner?.name === next.winner?.name &&
+          previousWinner?.score === next.winner?.score
+        ) {
+          return []
+        }
+      }
+
       return [
         {
           op: "showFinale",
