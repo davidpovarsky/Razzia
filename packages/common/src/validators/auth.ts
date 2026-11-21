@@ -10,13 +10,23 @@ export const inviteCodeValidator = z
   .string()
   .length(6, "errors:auth.invalidInviteCode")
 
-export const sessionClaimsValidator = z.object({
-  sub: z.string().min(1),
-  role: z.enum(SESSION_ROLES),
-  iat: z.number(),
-  exp: z.number(),
-  sid: z.uuid().optional(),
-})
+export const sessionClaimsValidator = z
+  .object({
+    sub: z.string().min(1),
+    role: z.enum(SESSION_ROLES),
+    iat: z.number(),
+    exp: z.number(),
+    sid: z.uuid().optional(),
+    managedClientId: z.uuid().optional(),
+  })
+  .refine(
+    (claims) =>
+      !claims.managedClientId ||
+      (claims.role === SESSION_ROLES.MANAGER &&
+        claims.sub === claims.managedClientId &&
+        Boolean(claims.sid)),
+    "Invalid managed-client claims",
+  )
 
 export const joinTicketClaimsValidator = z.object({
   sub: z.string().min(1),

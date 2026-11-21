@@ -12,6 +12,7 @@ import {
   sessionRequestValidator,
 } from "@razzia/common/validators/auth"
 import { readClaims } from "@razzia/socket/api/middleware"
+import { isManagedClientRequest } from "@razzia/socket/services/managed-client-session"
 import { i18nHook } from "@razzia/socket/api/validation"
 import { managerPassword } from "@razzia/socket/env"
 import {
@@ -48,6 +49,10 @@ const freshPlayerSession = (): Promise<SessionResponse> =>
 const routes = new Hono()
   .get("/mode", (c) => c.json({ accountsEnabled: accountsEnabled() }))
   .post("/session", async (c) => {
+    if (isManagedClientRequest(c)) {
+      return c.json({ error: "client-session-expired" }, 401)
+    }
+
     const token = await readRequestToken(c)
 
     if (!token) {
@@ -56,6 +61,10 @@ const routes = new Hono()
 
     try {
       const claims = await verifyToken(token)
+
+      if (claims.managedClientId) {
+        return c.json({ error: "client-session-expired" }, 401)
+      }
 
       return c.json({
         token,
@@ -111,6 +120,10 @@ const routes = new Hono()
     },
   )
   .post("/logout", async (c) => {
+    if (isManagedClientRequest(c)) {
+      return c.json({ error: "client-session-expired" }, 401)
+    }
+
     const claims = await readClaims(c)
 
     if (!claims) {

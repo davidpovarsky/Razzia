@@ -48,3 +48,19 @@ it("never routes to another quiz or guesses between active Tzila shows", () => {
     "errors:game.ambiguousTargetGame",
   )
 })
+
+it("binds delegated direct dial to the resource owner, never to the client host identity", () => {
+  const delegated = {
+    ...game("assigned", "managed-host"),
+    contentOwnerId: "content-owner",
+  }
+  expect(
+    selectQuizPilotTarget([delegated], "assigned", "content-owner").game,
+  ).toBe(delegated)
+  expect(
+    selectQuizPilotTarget([delegated], "assigned", "managed-host").game,
+  ).toBeNull()
+  expect(
+    selectQuizPilotTarget([delegated], "assigned", "other-owner").game,
+  ).toBeNull()
+})

@@ -6,6 +6,7 @@ import Game from "@razzia/socket/services/game"
 import Registry from "@razzia/socket/services/registry"
 import { withManagerGame, withPlayerGame } from "@razzia/socket/utils/game"
 import { getClientId } from "@razzia/socket/utils/socket"
+import { canSocketHostGame } from "@razzia/socket/services/managed-client-authorization"
 
 export const gameSocketHandlers = ({ io, socket }: SocketContext) => {
   const registry = Registry.getInstance()
@@ -68,7 +69,7 @@ export const gameSocketHandlers = ({ io, socket }: SocketContext) => {
   socket.on(EVENTS.MANAGER.RECONNECT, ({ gameId }) => {
     const game = registry.getManagerGame(gameId, clientId)
 
-    if (game) {
+    if (game && canSocketHostGame(socket, game)) {
       game.reconnect(socket)
 
       return
@@ -139,7 +140,7 @@ export const gameSocketHandlers = ({ io, socket }: SocketContext) => {
   socket.on(EVENTS.MANAGER.LEAVE, ({ gameId }) => {
     const game = registry.getManagerGame(gameId, clientId)
 
-    if (game) {
+    if (game && canSocketHostGame(socket, game)) {
       console.log(`Manager left game ${game.inviteCode}`)
       handleManagerLeave(game)
     }
