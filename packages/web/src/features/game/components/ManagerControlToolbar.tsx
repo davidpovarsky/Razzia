@@ -20,6 +20,7 @@ import HistoryDialog from "@razzia/web/features/game/components/HistoryDialog"
 import HostShortcutsDialog from "@razzia/web/features/game/components/HostShortcutsDialog"
 import RoomLockButton from "@razzia/web/features/game/components/RoomLockButton"
 import { useSocket } from "@razzia/web/features/game/contexts/socket-context"
+import { isManagedClientMode } from "@razzia/web/lib/managed-client-session"
 import { History, LogOut, SkipForward } from "lucide-react"
 import { useCallback, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -133,7 +134,8 @@ export const ManagerControlToolbar = ({
       return
     }
 
-    window.open(`/display/${gameId}`, "_blank")
+    const mode = isManagedClientMode() ? "?client=1" : ""
+    window.open(`/display/${encodeURIComponent(gameId)}${mode}`, "_blank")
   }, [gameId])
 
   const handleCopyDisplayUrl = useCallback(async () => {
