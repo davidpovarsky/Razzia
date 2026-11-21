@@ -1,0 +1,59 @@
+{
+  "fixture": "Actual BMS theme source and vendored libraries; synthetic public snapshots and roster; real game questions",
+  "checks": [
+    {
+      "name": "BMS stays English under Hebrew account locale",
+      "pass": true
+    },
+    {
+      "name": "phone only; room code and URL absent",
+      "pass": true
+    },
+    {
+      "name": "register can scroll an uploaded class list",
+      "pass": true
+    },
+    {
+      "name": "connected rows carry a real Rough Notation marker",
+      "pass": true
+    },
+    {
+      "name": "desktop lobby text fits",
+      "pass": true,
+      "overflow": []
+    },
+    {
+      "name": "new connection updates attendance once without replaying existing marks",
+      "pass": true
+    },
+    {
+      "name": "unattached roster is omitted",
+      "pass": true
+    },
+    {
+      "name": "phone-only lobby with four actual steps fits",
+      "pass": true,
+      "overflow": []
+    },
+    {
+      "name": "phone-only mobile lobby with four actual steps fits",
+      "pass": true,
+      "overflow": []
+    },
+    {
+      "name": "no unexpected browser errors",
+      "pass": true
+    }
+  ],
+  "screenshots": [
+    "title-1920.png",
+    "lobby-register-1920.png",
+    "lobby-phone-only-1920.png",
+    "lobby-phone-only-390.png"
+  ],
+  "network": "none (container loopback only)",
+  "errors": [],
+  "passed": true,
+  "fixtureRun": "tadazz-bms-design-d79aac0c",
+  "scope": "Targeted validation after balancing four supplied no-roster instructions into two columns, following full 23-check run."
+}
