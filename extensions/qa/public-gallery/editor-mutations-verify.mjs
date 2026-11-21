@@ -231,19 +231,19 @@ export async function verifyEditorMutations(options) {
     await save()
     stored = await read("/api/quizz/" + quizId)
     storedExtras = (await read("/api/extensions/quizzes/" + quizId)).extras
-    assert.deepEqual(stored.questions.map((question) => question.playMode), [
-      "quiz",
-      "quiz",
-      "quiz",
-    ])
-    assert.deepEqual(stored.questions.map((question) => question.solutions), [
-      [1],
-      [0],
-      [10],
-    ])
+    assert.deepEqual(
+      stored.questions.map((question) => question.playMode),
+      ["quiz", "quiz", "quiz"],
+    )
+    assert.deepEqual(
+      stored.questions.map((question) => question.solutions),
+      [[1], [0], [10]],
+    )
     assert.deepEqual(stored.questions[0], quizz.questions[0])
     assert.deepEqual(stored.questions[2].options, quizz.questions[1].options)
-    record("bulk-conversion-saves-valid-choice-and-estimation-with-authored-key")
+    record(
+      "bulk-conversion-saves-valid-choice-and-estimation-with-authored-key",
+    )
 
     await openEditor()
     await openPanel("edit")
@@ -297,11 +297,10 @@ export async function verifyEditorMutations(options) {
     await page.getByTestId("conflict-overwrite-button").click()
     await saveWithPendingCheck(true)
     stored = await read("/api/quizz/" + quizId)
-    assert.deepEqual(stored.questions.map((question) => question.solutions), [
-      [1],
-      [0],
-      [10],
-    ])
+    assert.deepEqual(
+      stored.questions.map((question) => question.solutions),
+      [[1], [0], [10]],
+    )
 
     await openEditor()
     await page.getByTestId("studio-tab-launch").click()
@@ -341,7 +340,12 @@ export async function verifyEditorMutations(options) {
     player.on("pageerror", (error) => errors.push("player: " + error.message))
     const pin =
       room.inviteCode ??
-      (await page.getByText(/^\d{6}$/).first().textContent()).trim()
+      (
+        await page
+          .getByText(/^\d{6}$/)
+          .first()
+          .textContent()
+      ).trim()
     await player.goto(options.origin + "/game?pin=" + encodeURIComponent(pin))
     await player
       .getByPlaceholder("Username here")

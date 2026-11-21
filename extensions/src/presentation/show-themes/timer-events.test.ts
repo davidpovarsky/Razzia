@@ -3,16 +3,23 @@ import { startCountdownCue, themeTimerTransition } from "./timer-events"
 
 describe("shared start countdown audio", () => {
   const start = {
-    gameId: "game", epoch: 3, seconds: 5,
-    role: "manager" as const, paused: false,
+    gameId: "game",
+    epoch: 3,
+    seconds: 5,
+    role: "manager" as const,
+    paused: false,
   }
 
   it("uses one identity for duplicate server ticks and re-renders", () => {
     const initial = startCountdownCue(start)
     expect(initial?.name).toBe("timer-start")
     expect(startCountdownCue({ ...start })?.identity).toBe(initial?.identity)
-    expect(startCountdownCue({ ...start, seconds: 4 })?.identity).not.toBe(initial?.identity)
-    expect(startCountdownCue({ ...start, epoch: 4 })?.identity).not.toBe(initial?.identity)
+    expect(startCountdownCue({ ...start, seconds: 4 })?.identity).not.toBe(
+      initial?.identity,
+    )
+    expect(startCountdownCue({ ...start, epoch: 4 })?.identity).not.toBe(
+      initial?.identity,
+    )
   })
 
   it("keeps player views, paused shows and expired ticks silent", () => {

@@ -26,16 +26,19 @@ function snapshot(
       rendererBuildSha256: "2".repeat(64),
     }
   }
-  return new ExtensionGameSession("theme-precedence", extras)
-    .getStateSnapshot(role, []).extras
+  return new ExtensionGameSession("theme-precedence", extras).getStateSnapshot(
+    role,
+    [],
+  ).extras
 }
 
 describe.each(["manager", "player"] as const)(
   "explicit presentation selection for %s",
   (role) => {
     it("retains the accepted BMS look for its stored Classic version", () => {
-      expect(snapshot(role, { id: "tadazz-classic", version: "1.0.0" }))
-        .toHaveProperty("stageLook", "guess-off")
+      expect(
+        snapshot(role, { id: "tadazz-classic", version: "1.0.0" }),
+      ).toHaveProperty("stageLook", "guess-off")
     })
 
     it.each([
@@ -43,9 +46,12 @@ describe.each(["manager", "player"] as const)(
       { id: "tadazz-classic", version: "2.0.0" },
       { id: "bms-memory-files", version: "1.1.2" },
       undefined,
-    ])("lets the selected theme control the same original quiz: %j", (theme) => {
-      expect(snapshot(role, theme)).not.toHaveProperty("stageLook")
-    })
+    ])(
+      "lets the selected theme control the same original quiz: %j",
+      (theme) => {
+        expect(snapshot(role, theme)).not.toHaveProperty("stageLook")
+      },
+    )
 
     it("keeps an explicit composition authoritative even while its package is unavailable", () => {
       const result = snapshot(

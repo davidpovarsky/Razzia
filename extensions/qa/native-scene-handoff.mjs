@@ -22,8 +22,14 @@ const director = path.join(
   source,
   "extensions/src/presentation/tadazz-show/show-director.ts",
 )
-const audioOwner = path.join(source, "extensions/src/presentation/audio-cue-player.tsx")
-const timerEvents = path.join(source, "extensions/src/presentation/show-themes/timer-events.ts")
+const audioOwner = path.join(
+  source,
+  "extensions/src/presentation/audio-cue-player.tsx",
+)
+const timerEvents = path.join(
+  source,
+  "extensions/src/presentation/show-themes/timer-events.ts",
+)
 await fs.mkdir(evidence, { recursive: true })
 const entry = `
 import React,{useRef,useState} from 'react';
@@ -127,7 +133,9 @@ const plugins = [
         }
         throw new Error("Unresolved candidate workspace import " + args.path)
       })
-      builder.onResolve({ filter: /^[^./]/ }, (args) => ({ path: resolveModule.resolve(args.path) }))
+      builder.onResolve({ filter: /^[^./]/ }, (args) => ({
+        path: resolveModule.resolve(args.path),
+      }))
       if (adapterOverride)
         builder.onLoad(
           { filter: /TadazzV4StageAdapter\.tsx$/ },
@@ -162,7 +170,10 @@ const server = http.createServer(async (request, response) => {
     let file
     if (url.pathname === "/fixture.js" || url.pathname === "/fixture.css")
       file = path.join(evidence, url.pathname.slice(1))
-    else if (url.pathname.startsWith("/tadazz-show/") || url.pathname.startsWith("/sounds/"))
+    else if (
+      url.pathname.startsWith("/tadazz-show/") ||
+      url.pathname.startsWith("/sounds/")
+    )
       file = path.join(source, "packages/web/public", url.pathname.slice(1))
     else {
       response.writeHead(200, { "Content-Type": "text/html" })
@@ -175,15 +186,15 @@ const server = http.createServer(async (request, response) => {
       ? "text/javascript"
       : file.endsWith(".css")
         ? "text/css"
-          : file.endsWith(".mp3")
-            ? "audio/mpeg"
+        : file.endsWith(".mp3")
+          ? "audio/mpeg"
           : file.endsWith(".png")
-          ? "image/png"
-          : file.endsWith(".svg")
-            ? "image/svg+xml"
-            : file.endsWith(".woff2")
-              ? "font/woff2"
-              : "image/jpeg"
+            ? "image/png"
+            : file.endsWith(".svg")
+              ? "image/svg+xml"
+              : file.endsWith(".woff2")
+                ? "font/woff2"
+                : "image/jpeg"
     response.writeHead(200, { "Content-Type": mime })
     response.end(await fs.readFile(file))
   } catch {
@@ -219,35 +230,67 @@ try {
     HTMLMediaElement.prototype.play = function (...args) {
       if (this instanceof HTMLAudioElement) {
         window.audioAttempts.push({ src: this.src, volume: this.volume })
-        if (!window.startAudioElements.includes(this)) window.startAudioElements.push(this)
+        if (!window.startAudioElements.includes(this))
+          window.startAudioElements.push(this)
       }
       return play.apply(this, args)
     }
   })
   await page.goto("http://127.0.0.1:" + server.address().port)
   await page.waitForFunction(() => window.handoff?.mode())
-  const startAttemptCount = () => page.evaluate(() => window.audioAttempts.filter(item => item.src.endsWith('/sounds/boump.mp3')).length)
+  const startAttemptCount = () =>
+    page.evaluate(
+      () =>
+        window.audioAttempts.filter((item) =>
+          item.src.endsWith("/sounds/boump.mp3"),
+        ).length,
+    )
   await page.getByTestId("start-audio-tick").click()
-  await page.waitForFunction(() => window.startAudioElements.some(audio => audio.src.endsWith('/sounds/boump.mp3') && audio.currentTime > 0))
-  check("start countdown retains the original recording through the shared owner", (await startAttemptCount()) === 1)
+  await page.waitForFunction(() =>
+    window.startAudioElements.some(
+      (audio) =>
+        audio.src.endsWith("/sounds/boump.mp3") && audio.currentTime > 0,
+    ),
+  )
+  check(
+    "start countdown retains the original recording through the shared owner",
+    (await startAttemptCount()) === 1,
+  )
   await page.getByTestId("start-audio-tick").click()
   await page.evaluate(() => window.handoff.rerenderCustom())
   await page.getByTestId("start-audio-tick").click()
-  check("duplicate server start ticks and re-renders do not replay the effect", (await startAttemptCount()) === 1)
+  check(
+    "duplicate server start ticks and re-renders do not replay the effect",
+    (await startAttemptCount()) === 1,
+  )
   await page.getByTestId("host-toggle-audio-mute").click()
   await page.evaluate(() => window.handoff.audioState({ seconds: 4 }))
   await page.getByTestId("start-audio-tick").click()
-  check("master mute silences the start countdown", (await startAttemptCount()) === 1)
+  check(
+    "master mute silences the start countdown",
+    (await startAttemptCount()) === 1,
+  )
   await page.getByTestId("host-toggle-audio-mute").click()
   await page.evaluate(() => window.handoff.audioState({ paused: true }))
   await page.getByTestId("start-audio-tick").click()
-  check("paused shows emit no start countdown playback", (await startAttemptCount()) === 1)
-  await page.evaluate(() => window.handoff.audioState({ paused: false, role: "player" }))
+  check(
+    "paused shows emit no start countdown playback",
+    (await startAttemptCount()) === 1,
+  )
+  await page.evaluate(() =>
+    window.handoff.audioState({ paused: false, role: "player" }),
+  )
   await page.getByTestId("start-audio-tick").click()
-  check("player views do not start a second countdown sound", (await startAttemptCount()) === 1)
+  check(
+    "player views do not start a second countdown sound",
+    (await startAttemptCount()) === 1,
+  )
   await page.evaluate(() => window.handoff.audioState({ role: "manager" }))
   await page.getByTestId("start-audio-tick").click()
-  check("resumed host plays the next current tick once", (await startAttemptCount()) === 2)
+  check(
+    "resumed host plays the next current tick once",
+    (await startAttemptCount()) === 2,
+  )
   await page.evaluate(() => window.handoff.results())
   await page
     .locator('[data-testid="tadazz-question-panel"] .q-text')
@@ -333,72 +376,169 @@ try {
     {
       name: "populated leaderboard",
       scene: { kind: "leaderboard", title: "LEADERBOARD" },
-      data: { leaderboard: { entries: [{ displayName: "Player A", points: 120 }] } },
+      data: {
+        leaderboard: { entries: [{ displayName: "Player A", points: 120 }] },
+      },
       expectedMode: "leaderboard",
     },
     {
       name: "interim results",
       scene: { kind: "interimResults", title: "RESULTS" },
-      data: { interimResults: { questionText: "Which choice?", options: [{ label: "Alpha", count: 2, percentage: 67 }, { label: "Bravo", count: 1, percentage: 33 }] } },
+      data: {
+        interimResults: {
+          questionText: "Which choice?",
+          options: [
+            { label: "Alpha", count: 2, percentage: 67 },
+            { label: "Bravo", count: 1, percentage: 33 },
+          ],
+        },
+      },
       expectedMode: "results",
     },
-    { name: "interlude", scene: { kind: "interlude", title: "NEXT ROUND" }, expectedMode: "custom" },
-    { name: "transition title", scene: { kind: "transition", title: "NEXT ROUND" }, expectedMode: "custom" },
-    { name: "recap", scene: { kind: "answerRecap", recapItems: [{ label: "Alpha" }, { label: "Bravo" }] }, expectedMode: "custom" },
+    {
+      name: "interlude",
+      scene: { kind: "interlude", title: "NEXT ROUND" },
+      expectedMode: "custom",
+    },
+    {
+      name: "transition title",
+      scene: { kind: "transition", title: "NEXT ROUND" },
+      expectedMode: "custom",
+    },
+    {
+      name: "recap",
+      scene: {
+        kind: "answerRecap",
+        recapItems: [{ label: "Alpha" }, { label: "Bravo" }],
+      },
+      expectedMode: "custom",
+    },
     {
       name: "closing",
       scene: { kind: "closing" },
-      data: { leaderboard: { entries: [{ displayName: "Player A", points: 120 }] } },
+      data: {
+        leaderboard: { entries: [{ displayName: "Player A", points: 120 }] },
+      },
       expectedMode: "finale",
     },
   ]
   for (const testCase of authoredCases) {
-    await page.evaluate((testCase) => window.handoff.authored({
-      kind: "scene", key: "authored:" + testCase.name,
-      scene: testCase.scene, activeSceneData: testCase.data,
-    }), testCase)
+    await page.evaluate(
+      (testCase) =>
+        window.handoff.authored({
+          kind: "scene",
+          key: "authored:" + testCase.name,
+          scene: testCase.scene,
+          activeSceneData: testCase.data,
+        }),
+      testCase,
+    )
     await page.evaluate(() => window.handoff.rerenderCustom())
-    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))))
+    await page.evaluate(
+      () =>
+        new Promise((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(resolve)),
+        ),
+    )
     const painted = await page.evaluate(() => ({
       mode: window.handoff.mode(),
-      customVisible: document.querySelector('[data-testid="tadazz-custom-screen"]')?.classList.contains("is-visible"),
-      nativeScene: document.querySelector("[data-v4-scene]")?.getAttribute("data-v4-scene"),
+      customVisible: document
+        .querySelector('[data-testid="tadazz-custom-screen"]')
+        ?.classList.contains("is-visible"),
+      nativeScene: document
+        .querySelector("[data-v4-scene]")
+        ?.getAttribute("data-v4-scene"),
     }))
-    check("native " + testCase.name + " retains sole ownership after a parent re-render",
+    check(
+      "native " +
+        testCase.name +
+        " retains sole ownership after a parent re-render",
       painted.mode === testCase.expectedMode && painted.customVisible === false,
-      { painted })
+      { painted },
+    )
   }
   for (const guessOff of [false, true]) {
     for (const count of [3, 4, 5]) {
-      await page.evaluate(({ count, guessOff }) => window.handoff.choices(count, guessOff), { count, guessOff })
+      await page.evaluate(
+        ({ count, guessOff }) => window.handoff.choices(count, guessOff),
+        { count, guessOff },
+      )
       const geometry = await page.evaluate(() => {
-        const cards = [...document.querySelectorAll('[data-testid^="tadazz-card-"]')]
-        return cards.map(card => {
-          const rect = card.getBoundingClientRect(), title = card.querySelector('.answer-title')
-          const range = document.createRange(); range.selectNodeContents(title)
+        const cards = [
+          ...document.querySelectorAll('[data-testid^="tadazz-card-"]'),
+        ]
+        return cards.map((card) => {
+          const rect = card.getBoundingClientRect(),
+            title = card.querySelector(".answer-title")
+          const range = document.createRange()
+          range.selectNodeContents(title)
           const text = range.getBoundingClientRect()
-          return { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom, width: rect.width, height: rect.height,
-            textFits: text.left >= rect.left - 1 && text.right <= rect.right + 1 && text.top >= rect.top - 1 && text.bottom <= rect.bottom + 1,
-            withinViewport: rect.left >= -1 && rect.right <= innerWidth + 1 && rect.top >= -1 && rect.bottom <= innerHeight + 1,
+          return {
+            left: rect.left,
+            right: rect.right,
+            top: rect.top,
+            bottom: rect.bottom,
+            width: rect.width,
+            height: rect.height,
+            textFits:
+              text.left >= rect.left - 1 &&
+              text.right <= rect.right + 1 &&
+              text.top >= rect.top - 1 &&
+              text.bottom <= rect.bottom + 1,
+            withinViewport:
+              rect.left >= -1 &&
+              rect.right <= innerWidth + 1 &&
+              rect.top >= -1 &&
+              rect.bottom <= innerHeight + 1,
           }
         })
       })
-      const overlaps = geometry.some((a, i) => geometry.slice(i + 1).some(b =>
-        Math.min(a.right, b.right) - Math.max(a.left, b.left) > 1 &&
-        Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 1))
-      check(`${guessOff ? "Guess-off" : "native"} ${count} answer cards fit without overlap or clipped text`,
-        geometry.length === count && !overlaps && geometry.every(card => card.width > 0 && card.height > 0 && card.textFits && card.withinViewport),
-        { geometry, overlaps })
+      const overlaps = geometry.some((a, i) =>
+        geometry
+          .slice(i + 1)
+          .some(
+            (b) =>
+              Math.min(a.right, b.right) - Math.max(a.left, b.left) > 1 &&
+              Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 1,
+          ),
+      )
+      check(
+        `${guessOff ? "Guess-off" : "native"} ${count} answer cards fit without overlap or clipped text`,
+        geometry.length === count &&
+          !overlaps &&
+          geometry.every(
+            (card) =>
+              card.width > 0 &&
+              card.height > 0 &&
+              card.textFits &&
+              card.withinViewport,
+          ),
+        { geometry, overlaps },
+      )
       await page.evaluate(() => window.handoff.choiceResults())
       const cuesBefore = await page.evaluate(() => window.handoff.cues())
       await page.evaluate(() => window.handoff.rerenderCustom())
-      await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))))
-      const afterRefresh = await page.evaluate(() => ({ cues: window.handoff.cues(), mode: window.handoff.mode(),
-        visibleCustom: document.querySelector('[data-testid="tadazz-custom-screen"]')?.classList.contains('is-visible') }))
-      check(`${guessOff ? "Guess-off" : "native"} ${count} choices retain one reveal after re-render`,
-        afterRefresh.mode === "results" && afterRefresh.visibleCustom === false &&
-        cuesBefore.filter(name => name === "survey-reveal").length === 1 &&
-        JSON.stringify(afterRefresh.cues) === JSON.stringify(cuesBefore), { cuesBefore, afterRefresh })
+      await page.evaluate(
+        () =>
+          new Promise((resolve) =>
+            requestAnimationFrame(() => requestAnimationFrame(resolve)),
+          ),
+      )
+      const afterRefresh = await page.evaluate(() => ({
+        cues: window.handoff.cues(),
+        mode: window.handoff.mode(),
+        visibleCustom: document
+          .querySelector('[data-testid="tadazz-custom-screen"]')
+          ?.classList.contains("is-visible"),
+      }))
+      check(
+        `${guessOff ? "Guess-off" : "native"} ${count} choices retain one reveal after re-render`,
+        afterRefresh.mode === "results" &&
+          afterRefresh.visibleCustom === false &&
+          cuesBefore.filter((name) => name === "survey-reveal").length === 1 &&
+          JSON.stringify(afterRefresh.cues) === JSON.stringify(cuesBefore),
+        { cuesBefore, afterRefresh },
+      )
     }
   }
   check("no browser runtime errors", errors.length === 0, { errors })

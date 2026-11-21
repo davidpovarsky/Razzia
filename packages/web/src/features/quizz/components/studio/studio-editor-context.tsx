@@ -1300,9 +1300,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
   const bulkApplyQuestionMode = useCallback(
     (mode: "quiz" | "survey") => {
       const currentQuestions = getValues("questions")
-      const updated = currentQuestions.map((q) =>
-        withQuestionPlayMode(q, mode),
-      )
+      const updated = currentQuestions.map((q) => withQuestionPlayMode(q, mode))
       setValue("questions", updated, {
         shouldDirty: true,
       })

@@ -328,12 +328,18 @@ test("managed client code opens only assigned canonical games with the native cu
     const launchResponses: ManagedClientLaunchResponse[] = []
     // Read the real response before forwarding it to the page: the subsequent
     // document navigation can evict Chromium's response body from its cache.
-    await client.route(`**/api/client-access/games/${quizId}/launch`, async (route) => {
-      const response = await route.fetch()
-      expect(response.status()).toBe(201)
-      launchResponses.push((await response.json()) as ManagedClientLaunchResponse)
-      await route.fulfill({ response })
-    }, { times: 1 })
+    await client.route(
+      `**/api/client-access/games/${quizId}/launch`,
+      async (route) => {
+        const response = await route.fetch()
+        expect(response.status()).toBe(201)
+        launchResponses.push(
+          (await response.json()) as ManagedClientLaunchResponse,
+        )
+        await route.fulfill({ response })
+      },
+      { times: 1 },
+    )
     await client.getByRole("button", { name: "Open game", exact: true }).click()
     await expect.poll(() => launchResponses.length).toBe(1)
     const [launched] = launchResponses
