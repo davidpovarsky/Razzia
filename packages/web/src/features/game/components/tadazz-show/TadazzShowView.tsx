@@ -87,7 +87,8 @@ import {
   useRef,
   useState,
 } from "react"
-import { I18nextProvider, useTranslation } from "react-i18next"
+import { useTranslation } from "react-i18next"
+import { PresentationLocale } from "./presentation-locale"
 import { resolveMonotonicCooldownDeadline } from "./cooldown-sync"
 import { useTimerBeeps } from "./use-timer-beeps"
 import { useTadazzRawStatus } from "./raw-status-context"
@@ -170,27 +171,13 @@ function isCinematicScene(scene: SceneDescriptor): boolean {
  * authoritative state, and keeps every host/player capability.
  */
 export function TadazzShowView(props: TadazzShowViewProps) {
-  const { i18n } = useTranslation()
   const defaults = props.extensionState?.extras.defaults as
     { presentationLocale?: unknown } | undefined
-  const requestedLocale = defaults?.presentationLocale
-  const locale =
-    typeof requestedLocale === "string" &&
-    ["en", "fr", "de", "es", "it", "ja", "tr", "vi", "he"].includes(
-      requestedLocale,
-    )
-      ? requestedLocale
-      : undefined
-  const presentationI18n = useMemo(
-    () =>
-      locale ? i18n.cloneInstance({ lng: locale, initAsync: false }) : i18n,
-    [i18n, locale],
-  )
 
   return (
-    <I18nextProvider i18n={presentationI18n}>
+    <PresentationLocale locale={defaults?.presentationLocale}>
       <TadazzShowContent {...props} />
-    </I18nextProvider>
+    </PresentationLocale>
   )
 }
 
