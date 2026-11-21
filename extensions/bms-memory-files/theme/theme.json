@@ -1,0 +1,640 @@
+{
+  "manifestVersion": 1,
+  "id": "bms-memory-files",
+  "version": "1.1.0",
+  "nameKey": "bms-memory-files.name",
+  "descriptionKey": "bms-memory-files.description",
+  "category": "show",
+  "kind": "sandboxed-react",
+  "rendererApiVersion": 1,
+  "rendererId": "tadazz-sandbox-stage",
+  "provenance": "BMS English gameshow stage incorporating React Bits LightRays and Rough Notation. See third-party-notices.json.",
+  "capabilities": {
+    "playModes": ["quiz", "survey"],
+    "questionTypes": ["single"],
+    "roles": ["manager", "player", "spectator"],
+    "minAnswers": 2,
+    "maxAnswers": 5,
+    "reducedMotion": "same-theme-static",
+    "animationPresets": [
+      "company-opening",
+      "grand-opening",
+      "representative-directory",
+      "phone-instructions",
+      "connection-readiness",
+      "round-one",
+      "story-progress",
+      "tie-break",
+      "story-assembly",
+      "story-live",
+      "round-two",
+      "grand-finale",
+      "top-pick",
+      "round-recap",
+      "interlude",
+      "z-wipe"
+    ]
+  },
+  "tokens": {
+    "background": "#091323",
+    "foreground": "#f4f1e7",
+    "accent": "#9dc2fa",
+    "fontId": "rubik",
+    "stageAspect": "16:9",
+    "imageSizing": "square-cover",
+    "palette": {
+      "night": "#091323",
+      "purple": "#243b56",
+      "violet": "#657fab",
+      "pink": "#ff7752",
+      "blue": "#9dc2fa",
+      "royal": "#2a4872",
+      "lime": "#a4e9bc",
+      "gold": "#ffad88",
+      "cream": "#f4f1e7",
+      "ink": "#17283e"
+    },
+    "effects": "goldy-canonical-v4",
+    "contrast": "light-on-dark-with-selected-outline"
+  },
+  "slots": {
+    "firstPaint": {
+      "defaultVariantId": "bms-memory-files.firstPaint.memory-files",
+      "variants": [
+        {
+          "id": "bms-memory-files.firstPaint.memory-files",
+          "labelKey": "bms-memory-files.visual",
+          "rendererId": "classic-shell",
+          "backgroundAssetId": "bms-stage-backdrop"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "opening": {
+      "defaultVariantId": "bms-memory-files.opening.memory-files",
+      "variants": [
+        {
+          "id": "bms-memory-files.opening.memory-files",
+          "labelKey": "bms-memory-files.visual",
+          "rendererId": "classic-opening"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "lobby": {
+      "defaultVariantId": "bms-memory-files.lobby.memory-files",
+      "variants": [
+        {
+          "id": "bms-memory-files.lobby.memory-files",
+          "labelKey": "bms-memory-files.visual",
+          "rendererId": "classic-lobby",
+          "backgroundAssetId": "bms-stage-backdrop"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "question": {
+      "defaultVariantId": "bms-memory-files.question.memory-files",
+      "variants": [
+        {
+          "id": "bms-memory-files.question.memory-files",
+          "labelKey": "bms-memory-files.visual",
+          "rendererId": "classic-question",
+          "backgroundAssetId": "bms-stage-backdrop"
+        }
+      ],
+      "customMedia": "background"
+    },
+    "answerCards": {
+      "defaultVariantId": "bms-memory-files.answerCards.memory-files",
+      "variants": [
+        {
+          "id": "bms-memory-files.answerCards.memory-files",
+          "labelKey": "bms-memory-files.visual",
+          "rendererId": "classic-cards",
+          "backgroundAssetId": "bms-stage-backdrop"
+        }
+      ],
+      "customMedia": "background"
+    },
+    "voting": {
+      "defaultVariantId": "bms-memory-files.voting.memory-files",
+      "variants": [
+        {
+          "id": "bms-memory-files.voting.memory-files",
+          "labelKey": "bms-memory-files.visual",
+          "rendererId": "classic-voting",
+          "backgroundAssetId": "bms-stage-backdrop"
+        }
+      ],
+      "customMedia": "background"
+    },
+    "timer": {
+      "defaultVariantId": "bms-memory-files.timer.memory-files",
+      "variants": [
+        {
+          "id": "bms-memory-files.timer.memory-files",
+          "labelKey": "bms-memory-files.visual",
+          "rendererId": "classic-timer"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "voteLock": {
+      "defaultVariantId": "bms-memory-files.voteLock.memory-files",
+      "variants": [
+        {
+          "id": "bms-memory-files.voteLock.memory-files",
+          "labelKey": "bms-memory-files.visual",
+          "rendererId": "classic-lock"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "resultsReveal": {
+      "defaultVariantId": "bms-memory-files.resultsReveal.memory-files",
+      "variants": [
+        {
+          "id": "bms-memory-files.resultsReveal.memory-files",
+          "labelKey": "bms-memory-files.visual",
+          "rendererId": "classic-results",
+          "backgroundAssetId": "bms-stage-backdrop"
+        }
+      ],
+      "customMedia": "background"
+    },
+    "leaderboard": {
+      "defaultVariantId": "bms-memory-files.leaderboard.memory-files",
+      "variants": [
+        {
+          "id": "bms-memory-files.leaderboard.memory-files",
+          "labelKey": "bms-memory-files.visual",
+          "rendererId": "classic-leaderboard",
+          "backgroundAssetId": "bms-stage-backdrop"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "rankUpdate": {
+      "defaultVariantId": "bms-memory-files.rankUpdate.memory-files",
+      "variants": [
+        {
+          "id": "bms-memory-files.rankUpdate.memory-files",
+          "labelKey": "bms-memory-files.visual",
+          "rendererId": "classic-rank"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "zzTransition": {
+      "defaultVariantId": "bms-memory-files.zzTransition.memory-files",
+      "variants": [
+        {
+          "id": "bms-memory-files.zzTransition.memory-files",
+          "labelKey": "bms-memory-files.visual",
+          "rendererId": "classic-zz"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "interlude": {
+      "defaultVariantId": "bms-memory-files.interlude.memory-files",
+      "variants": [
+        {
+          "id": "bms-memory-files.interlude.memory-files",
+          "labelKey": "bms-memory-files.visual",
+          "rendererId": "classic-interlude",
+          "backgroundAssetId": "bms-stage-backdrop"
+        }
+      ],
+      "customMedia": "background"
+    },
+    "closing": {
+      "defaultVariantId": "bms-memory-files.closing.memory-files",
+      "variants": [
+        {
+          "id": "bms-memory-files.closing.memory-files",
+          "labelKey": "bms-memory-files.visual",
+          "rendererId": "classic-closing"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "personalResult": {
+      "defaultVariantId": "bms-memory-files.personalResult.memory-files",
+      "variants": [
+        {
+          "id": "bms-memory-files.personalResult.memory-files",
+          "labelKey": "bms-memory-files.visual",
+          "rendererId": "classic-personal-result"
+        }
+      ],
+      "customMedia": "none"
+    }
+  },
+  "audioEvents": {
+    "opening": {
+      "defaultVariantId": "bms-memory-files.opening.default",
+      "variants": [
+        {
+          "id": "bms-memory-files.opening.default",
+          "labelKey": "bms-memory-files.audio.default",
+          "silent": false,
+          "volume": 1,
+          "loop": false,
+          "priority": 40,
+          "fadeMs": 600,
+          "restart": "epoch",
+          "roles": ["manager", "spectator"],
+          "inheritPlatform": true
+        }
+      ],
+      "customMedia": true
+    },
+    "lobby": {
+      "defaultVariantId": "bms-memory-files.lobby.default",
+      "variants": [
+        {
+          "id": "bms-memory-files.lobby.default",
+          "labelKey": "bms-memory-files.audio.default",
+          "silent": false,
+          "volume": 1,
+          "loop": true,
+          "priority": 40,
+          "fadeMs": 600,
+          "restart": "epoch",
+          "roles": ["manager", "spectator"],
+          "inheritPlatform": true
+        }
+      ],
+      "customMedia": true
+    },
+    "showQuestion": {
+      "defaultVariantId": "bms-memory-files.showQuestion.default",
+      "variants": [
+        {
+          "id": "bms-memory-files.showQuestion.default",
+          "labelKey": "bms-memory-files.audio.default",
+          "silent": false,
+          "volume": 1,
+          "loop": true,
+          "priority": 40,
+          "fadeMs": 600,
+          "restart": "epoch",
+          "roles": ["manager", "spectator"],
+          "inheritPlatform": true
+        }
+      ],
+      "customMedia": true
+    },
+    "answersMusic": {
+      "defaultVariantId": "bms-memory-files.answersMusic.default",
+      "variants": [
+        {
+          "id": "bms-memory-files.answersMusic.default",
+          "labelKey": "bms-memory-files.audio.default",
+          "silent": false,
+          "volume": 1,
+          "loop": false,
+          "priority": 40,
+          "fadeMs": 600,
+          "restart": "epoch",
+          "roles": ["manager", "spectator"],
+          "inheritPlatform": true
+        }
+      ],
+      "customMedia": true
+    },
+    "answerSelected": {
+      "defaultVariantId": "bms-memory-files.answerSelected.default",
+      "variants": [
+        {
+          "id": "bms-memory-files.answerSelected.default",
+          "labelKey": "bms-memory-files.audio.default",
+          "silent": false,
+          "volume": 1,
+          "loop": false,
+          "priority": 40,
+          "fadeMs": 600,
+          "restart": "epoch",
+          "roles": ["player"],
+          "inheritPlatform": true
+        }
+      ],
+      "customMedia": true
+    },
+    "answerSubmitted": {
+      "defaultVariantId": "bms-memory-files.answerSubmitted.default",
+      "variants": [
+        {
+          "id": "bms-memory-files.answerSubmitted.default",
+          "labelKey": "bms-memory-files.audio.default",
+          "silent": false,
+          "volume": 1,
+          "loop": false,
+          "priority": 40,
+          "fadeMs": 600,
+          "restart": "epoch",
+          "roles": ["player"],
+          "inheritPlatform": true
+        }
+      ],
+      "customMedia": true
+    },
+    "timerWarning": {
+      "defaultVariantId": "bms-memory-files.timerWarning.default",
+      "variants": [
+        {
+          "id": "bms-memory-files.timerWarning.default",
+          "labelKey": "bms-memory-files.audio.default",
+          "silent": false,
+          "volume": 1,
+          "loop": false,
+          "priority": 40,
+          "fadeMs": 600,
+          "restart": "epoch",
+          "roles": ["manager", "spectator"],
+          "inheritPlatform": true
+        }
+      ],
+      "customMedia": true
+    },
+    "timerExpired": {
+      "defaultVariantId": "bms-memory-files.timerExpired.default",
+      "variants": [
+        {
+          "id": "bms-memory-files.timerExpired.default",
+          "labelKey": "bms-memory-files.audio.default",
+          "silent": false,
+          "volume": 1,
+          "loop": false,
+          "priority": 40,
+          "fadeMs": 600,
+          "restart": "epoch",
+          "roles": ["manager", "spectator"],
+          "inheritPlatform": true
+        }
+      ],
+      "customMedia": true
+    },
+    "voteLocked": {
+      "defaultVariantId": "bms-memory-files.voteLocked.default",
+      "variants": [
+        {
+          "id": "bms-memory-files.voteLocked.default",
+          "labelKey": "bms-memory-files.audio.default",
+          "silent": false,
+          "volume": 1,
+          "loop": false,
+          "priority": 40,
+          "fadeMs": 600,
+          "restart": "epoch",
+          "roles": ["manager", "spectator"],
+          "inheritPlatform": true
+        }
+      ],
+      "customMedia": true
+    },
+    "revealResults": {
+      "defaultVariantId": "bms-memory-files.revealResults.default",
+      "variants": [
+        {
+          "id": "bms-memory-files.revealResults.default",
+          "labelKey": "bms-memory-files.audio.default",
+          "silent": false,
+          "volume": 1,
+          "loop": true,
+          "priority": 40,
+          "fadeMs": 600,
+          "restart": "epoch",
+          "roles": ["manager", "spectator"],
+          "inheritPlatform": true
+        }
+      ],
+      "customMedia": true
+    },
+    "leaderboard": {
+      "defaultVariantId": "bms-memory-files.leaderboard.default",
+      "variants": [
+        {
+          "id": "bms-memory-files.leaderboard.default",
+          "labelKey": "bms-memory-files.audio.default",
+          "silent": false,
+          "volume": 1,
+          "loop": false,
+          "priority": 40,
+          "fadeMs": 600,
+          "restart": "epoch",
+          "roles": ["manager", "spectator"],
+          "inheritPlatform": true
+        }
+      ],
+      "customMedia": true
+    },
+    "zzTransition": {
+      "defaultVariantId": "bms-memory-files.zzTransition.default",
+      "variants": [
+        {
+          "id": "bms-memory-files.zzTransition.default",
+          "labelKey": "bms-memory-files.audio.default",
+          "silent": false,
+          "volume": 1,
+          "loop": false,
+          "priority": 40,
+          "fadeMs": 600,
+          "restart": "epoch",
+          "roles": ["manager", "spectator"],
+          "inheritPlatform": true
+        }
+      ],
+      "customMedia": true
+    },
+    "podium1": {
+      "defaultVariantId": "bms-memory-files.podium1.default",
+      "variants": [
+        {
+          "id": "bms-memory-files.podium1.default",
+          "labelKey": "bms-memory-files.audio.default",
+          "silent": false,
+          "volume": 1,
+          "loop": false,
+          "priority": 40,
+          "fadeMs": 600,
+          "restart": "epoch",
+          "roles": ["manager", "spectator"],
+          "inheritPlatform": true
+        }
+      ],
+      "customMedia": true
+    },
+    "podium2": {
+      "defaultVariantId": "bms-memory-files.podium2.default",
+      "variants": [
+        {
+          "id": "bms-memory-files.podium2.default",
+          "labelKey": "bms-memory-files.audio.default",
+          "silent": false,
+          "volume": 1,
+          "loop": false,
+          "priority": 40,
+          "fadeMs": 600,
+          "restart": "epoch",
+          "roles": ["manager", "spectator"],
+          "inheritPlatform": true
+        }
+      ],
+      "customMedia": true
+    },
+    "podium3": {
+      "defaultVariantId": "bms-memory-files.podium3.default",
+      "variants": [
+        {
+          "id": "bms-memory-files.podium3.default",
+          "labelKey": "bms-memory-files.audio.default",
+          "silent": false,
+          "volume": 1,
+          "loop": false,
+          "priority": 40,
+          "fadeMs": 600,
+          "restart": "epoch",
+          "roles": ["manager", "spectator"],
+          "inheritPlatform": true
+        }
+      ],
+      "customMedia": true
+    },
+    "closing": {
+      "defaultVariantId": "bms-memory-files.closing.default",
+      "variants": [
+        {
+          "id": "bms-memory-files.closing.default",
+          "labelKey": "bms-memory-files.audio.default",
+          "silent": false,
+          "volume": 1,
+          "loop": false,
+          "priority": 40,
+          "fadeMs": 600,
+          "restart": "epoch",
+          "roles": ["manager", "spectator"],
+          "inheritPlatform": true
+        }
+      ],
+      "customMedia": true
+    }
+  },
+  "choreographyCues": {},
+  "assets": [
+    {
+      "id": "bms-stage-backdrop",
+      "url": "../shared/art/stage-backdrop.webp",
+      "kind": "image",
+      "sha256": "50c25ef41f2a3c9f1bde4d96fbaa0179f6287dc40c1d925d2177a939c01f202a",
+      "bytes": 12242,
+      "provenance": "Screenshot of the incorporated BMS game stage: React Bits LightRays (ed33ebe4acfe29e60fb759bcccc70a138ce2dcef) and Barlow fonts. Full third-party notices retained in third-party-notices.json. Application artwork, not a standalone component.",
+      "rights": "licensed",
+      "preload": "critical"
+    },
+    {
+      "id": "bms-stage-poster",
+      "url": "../shared/art/stage-poster.webp",
+      "kind": "image",
+      "sha256": "09a4687f7dea664b194df9fc66a0c80cba144b5455d3153c5c69d21ff2ecccd6",
+      "bytes": 38662,
+      "provenance": "Screenshot of the incorporated BMS game stage: React Bits LightRays (ed33ebe4acfe29e60fb759bcccc70a138ce2dcef) and Barlow fonts. Full third-party notices retained in third-party-notices.json. Application artwork, not a standalone component.",
+      "rights": "licensed",
+      "preload": "slot"
+    }
+  ],
+  "adapterAssets": {
+    "showBackdrop": "bms-stage-backdrop",
+    "questionBackdrop": "bms-stage-backdrop"
+  },
+  "sandbox": {
+    "runtimeApi": 1,
+    "entry": "theme/src/entry.tsx",
+    "slots": {
+      "opening": "classic",
+      "lobby": "implemented",
+      "question": "implemented",
+      "answerCards": "implemented",
+      "voting": "implemented",
+      "voteLocked": "implemented",
+      "results": "implemented",
+      "leaderboard": "implemented",
+      "interlude": "implemented",
+      "closing": "classic",
+      "personalResult": "implemented"
+    },
+    "roles": ["manager", "player", "spectator"],
+    "assetPaths": [
+      "shared/fonts/barlow-condensed-latin-700-normal.woff2",
+      "shared/fonts/barlow-latin-500-normal.woff2"
+    ]
+  },
+  "localizations": {
+    "en": {
+      "bms-memory-files.name": "BMS: The Most Quizzical Quiz EVER!",
+      "bms-memory-files.description": "BMS reunion quiz.",
+      "bms-memory-files.visual": "BMS stage",
+      "bms-memory-files.silent": "Silent",
+      "bms-memory-files.audio.default": "Creating Worlds default"
+    },
+    "he": {
+      "bms-memory-files.name": "BMS: The Most Quizzical Quiz EVER!",
+      "bms-memory-files.description": "BMS reunion quiz.",
+      "bms-memory-files.visual": "BMS stage",
+      "bms-memory-files.silent": "Silent",
+      "bms-memory-files.audio.default": "Creating Worlds default"
+    },
+    "fr": {
+      "bms-memory-files.name": "BMS: The Most Quizzical Quiz EVER!",
+      "bms-memory-files.description": "BMS reunion quiz.",
+      "bms-memory-files.visual": "BMS stage",
+      "bms-memory-files.silent": "Silent",
+      "bms-memory-files.audio.default": "Creating Worlds default"
+    },
+    "de": {
+      "bms-memory-files.name": "BMS: The Most Quizzical Quiz EVER!",
+      "bms-memory-files.description": "BMS reunion quiz.",
+      "bms-memory-files.visual": "BMS stage",
+      "bms-memory-files.silent": "Silent",
+      "bms-memory-files.audio.default": "Creating Worlds default"
+    },
+    "es": {
+      "bms-memory-files.name": "BMS: The Most Quizzical Quiz EVER!",
+      "bms-memory-files.description": "BMS reunion quiz.",
+      "bms-memory-files.visual": "BMS stage",
+      "bms-memory-files.silent": "Silent",
+      "bms-memory-files.audio.default": "Creating Worlds default"
+    },
+    "it": {
+      "bms-memory-files.name": "BMS: The Most Quizzical Quiz EVER!",
+      "bms-memory-files.description": "BMS reunion quiz.",
+      "bms-memory-files.visual": "BMS stage",
+      "bms-memory-files.silent": "Silent",
+      "bms-memory-files.audio.default": "Creating Worlds default"
+    },
+    "ja": {
+      "bms-memory-files.name": "BMS: The Most Quizzical Quiz EVER!",
+      "bms-memory-files.description": "BMS reunion quiz.",
+      "bms-memory-files.visual": "BMS stage",
+      "bms-memory-files.silent": "Silent",
+      "bms-memory-files.audio.default": "Creating Worlds default"
+    },
+    "tr": {
+      "bms-memory-files.name": "BMS: The Most Quizzical Quiz EVER!",
+      "bms-memory-files.description": "BMS reunion quiz.",
+      "bms-memory-files.visual": "BMS stage",
+      "bms-memory-files.silent": "Silent",
+      "bms-memory-files.audio.default": "Creating Worlds default"
+    },
+    "vi": {
+      "bms-memory-files.name": "BMS: The Most Quizzical Quiz EVER!",
+      "bms-memory-files.description": "BMS reunion quiz.",
+      "bms-memory-files.visual": "BMS stage",
+      "bms-memory-files.silent": "Silent",
+      "bms-memory-files.audio.default": "Creating Worlds default"
+    }
+  },
+  "posterAssetId": "bms-stage-poster"
+}
