@@ -457,6 +457,7 @@ export const TadazzV4Stage = forwardRef<
         {underlay as ReactNode}
         <StageAmbientV4 />
         {view &&
+          data.eventArtworkUrl &&
           ![
             "company-opening",
             "grand-opening",
@@ -466,8 +467,8 @@ export const TadazzV4Stage = forwardRef<
           ].includes(view.scene) && (
             <img
               className="stage-teaser"
-              src="/tadazz-show/second-library/teaser-screen-source.jpg"
-              alt="Creating Worlds"
+              src={data.eventArtworkUrl}
+              alt={data.photoAlt || ""}
             />
           )}
         <div className="tzv4-scene-root" key={view?.contentRevision}>
