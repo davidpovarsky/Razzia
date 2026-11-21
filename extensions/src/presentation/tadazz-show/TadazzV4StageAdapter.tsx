@@ -25,6 +25,7 @@ import { votingPresentation } from "./voting-presentation"
 import { FINALE, INTRO, confettiBit } from "./motion-spec"
 import "./tadazz-motion-kit.css"
 import "./tadazz-show-adaptations.css"
+import "./guess-off-stage.css"
 import {
   TADAZZ_LOGO_URL,
   type StageLeaderEntry,
@@ -40,10 +41,22 @@ import {
 
 export interface TadazzV4StageAdapterProps extends TadazzStageProps {
   v4Labels?: Partial<TadazzV4Labels>
+  guessOffLook?: boolean
   fitRevision?: number
   onCue?: (cue: TadazzV4Cue) => void
   onQuestionPresented?: (questionKey: string) => void
   onResolveStoryTie?: (contestantIndex: number) => void
+}
+
+export function GuessOffWinnerDecoration() {
+  return (
+    <div className="ggo-winner-decoration" aria-hidden="true">
+      <div className="ggo-winner-light ggo-winner-light-left" />
+      <div className="ggo-winner-light ggo-winner-light-right" />
+      <span className="ggo-winner-z ggo-winner-z-left">Z</span>
+      <span className="ggo-winner-z ggo-winner-z-right">Z</span>
+    </div>
+  )
 }
 
 function toV4Answers(options: StageOption[]): TadazzV4Answer[] {
@@ -78,6 +91,7 @@ export const TadazzV4StageAdapter = forwardRef<
   {
     labels: stageLabelOverrides,
     v4Labels: v4LabelOverrides,
+    guessOffLook = false,
     backdropUrl,
     backdropFit = "cover",
     backdropPosition = "center",
@@ -774,6 +788,7 @@ export const TadazzV4StageAdapter = forwardRef<
         data-testid="tadazz-finale-screen"
       >
         <div className="tz-screen-inner">
+          {guessOffLook && <GuessOffWinnerDecoration />}
           <div className="tz-confetti">
             {confettiKey > 0 &&
               Array.from(

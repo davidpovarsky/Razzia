@@ -372,6 +372,15 @@ function TadazzShowContent(props: TadazzShowViewProps) {
     compositionRoot?.component.id === "native.cinematic-stage" ||
     isTadazzV4Active(extensionState)
   const v4Labels = useTadazzV4Labels()
+  const guessOffLook = useV4 && extensionState?.extras.stageLook === "guess-off"
+  const guessOffTextAnswers =
+    guessOffLook &&
+    (scene.kind === "question" ||
+      scene.kind === "voting" ||
+      scene.kind === "results") &&
+    !scene.question.questionImage &&
+    !scene.question.hasAnswerImages &&
+    scene.question.options.every((option) => !option.image)
 
   if (typeof document !== "undefined") {
     document.documentElement.style.background =
@@ -1430,6 +1439,8 @@ function TadazzShowContent(props: TadazzShowViewProps) {
               : "false"
           }
           data-show-scene={scene.kind}
+          data-guess-off-stage={guessOffLook || undefined}
+          data-guess-off-media={guessOffTextAnswers ? "text" : undefined}
           data-role={role}
           data-host-presenting={isHostPresenting ? "true" : "false"}
           data-game-paused={isPaused ? "true" : "false"}
@@ -1562,7 +1573,12 @@ function TadazzShowContent(props: TadazzShowViewProps) {
                   <TadazzV4StageAdapter
                     ref={stageRef}
                     labels={labels}
-                    v4Labels={v4Labels}
+                    v4Labels={
+                      guessOffLook
+                        ? { ...v4Labels, teamLeaderboard: "LEADERBOARD" }
+                        : v4Labels
+                    }
+                    guessOffLook={guessOffLook}
                     onCue={handleStageCue}
                     onResolveStoryTie={
                       role === "manager" ? resolveStoryTie : undefined

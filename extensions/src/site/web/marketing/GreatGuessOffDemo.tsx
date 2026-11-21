@@ -6,7 +6,10 @@ import {
   CatalogueMobileQuestion,
   useCatalogueMobileControls,
 } from "./CatalogueMobileQuestion"
-import { TadazzV4StageAdapter } from "../../../presentation/tadazz-show/TadazzV4StageAdapter"
+import {
+  GuessOffWinnerDecoration,
+  TadazzV4StageAdapter,
+} from "../../../presentation/tadazz-show/TadazzV4StageAdapter"
 import type {
   StageLeaderEntry,
   StageQuestion,
@@ -617,14 +620,7 @@ export function GreatGuessOffDemo() {
             reducedMotion={reducedMotion}
             backdropUrl="/tadazz-show/v4/question-bg.webp"
           />
-          {phase === "winner" && (
-            <div className="ggo-winner-decoration" aria-hidden="true">
-              <div className="ggo-winner-light ggo-winner-light-left" />
-              <div className="ggo-winner-light ggo-winner-light-right" />
-              <span className="ggo-winner-z ggo-winner-z-left">Z</span>
-              <span className="ggo-winner-z ggo-winner-z-right">Z</span>
-            </div>
-          )}
+          {phase === "winner" && <GuessOffWinnerDecoration />}
         </div>
       </GameViewer>
     </section>
