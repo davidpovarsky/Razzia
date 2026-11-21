@@ -33,6 +33,8 @@ import {
   resolveTadazzAudioPolicy,
   acceptsQuestionMilestone,
   themeTimerTransition,
+  usePackageRevealClock,
+  usePackageRevealAudio,
   type ThemeTimerEndState,
   runSteps,
   NativeCompositionBoundary,
@@ -724,6 +726,29 @@ function TadazzShowContent(props: TadazzShowViewProps) {
   const [answerPending, setAnswerPending] = useState(false)
   const selectionSoundSequence = useRef(0)
   const questionKey = "question" in scene ? scene.question.key : null
+  const packageRevealIdentity = `${showGameId}:${questionKey ?? extensionState?.questionId ?? scene.key}:${extensionState?.epoch ?? 0}:results`
+  const packageReveal = usePackageRevealClock({
+    active: Boolean(theme.definition.sandbox) && scene.kind === "results",
+    identity: packageRevealIdentity,
+    startedAt:
+      extensionState?.phase === "responses"
+        ? extensionState.startedAt - serverClockOffset
+        : undefined,
+    paused: isPaused,
+    hasCorrectAnswer:
+      scene.kind === "results" &&
+      scene.reveal.mode === "quiz" &&
+      (scene.reveal.solutions?.length ?? 0) > 0,
+    reducedMotion: reduced,
+  })
+  usePackageRevealAudio({
+    identity: packageRevealIdentity,
+    stage: packageReveal.stage,
+    elapsedMs: packageReveal.elapsedMs,
+    enabled: Boolean(theme.definition.sandbox) && role !== "player",
+    paused: isPaused,
+    reducedMotion: reduced,
+  })
   const revealAttemptRef = useRef(0)
 
   if (scene.kind === "voting") {
@@ -733,7 +758,8 @@ function TadazzShowContent(props: TadazzShowViewProps) {
   const timerEndRef = useRef<ThemeTimerEndState | null>(null)
   useEffect(() => {
     const next = themeTimerTransition(timerEndRef.current, {
-      enabled: useV4 && role !== "player",
+      enabled:
+        (useV4 || Boolean(theme.definition.sandbox)) && role !== "player",
       gameId: showGameId,
       questionId: extensionState?.questionId ?? questionKey,
       epoch: extensionState?.epoch ?? 0,
@@ -760,6 +786,7 @@ function TadazzShowContent(props: TadazzShowViewProps) {
     }
   }, [
     useV4,
+    theme.definition.sandbox,
     role,
     showGameId,
     extensionState?.questionId,
@@ -773,7 +800,7 @@ function TadazzShowContent(props: TadazzShowViewProps) {
   ])
   useTimerBeeps({
     enabled:
-      useV4 &&
+      (useV4 || Boolean(theme.definition.sandbox)) &&
       role !== "player" &&
       scene.kind === "voting" &&
       (votingStartsAt === undefined ||
@@ -1525,6 +1552,8 @@ function TadazzShowContent(props: TadazzShowViewProps) {
                       scene.key !== "wait:question-content" &&
                       scene.text === "game:waitingForAnswers"))
                 }
+                phaseElapsedMs={packageReveal.elapsedMs}
+                revealStage={packageReveal.stage}
                 remainingMs={runtimeRemainingMs}
                 serverTime={Date.now() + serverClockOffset}
                 deadline={
@@ -1683,7 +1712,7 @@ function TadazzShowContent(props: TadazzShowViewProps) {
             <AudioCuePlayer
               eventOnly={role === "player" || scene.kind === "wait"}
               showTrack={referenceStoryTrack}
-              stageOwnsReveal={useV4 && !theme.definition.sandbox}
+              stageOwnsReveal={useV4 || Boolean(theme.definition.sandbox)}
               cueId={props.audioCueId}
               audioExtras={
                 extensionState.extras.audio as QuizExtrasV1["audio"] | undefined

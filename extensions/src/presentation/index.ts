@@ -90,6 +90,11 @@ export { ThemeSandboxHost } from "./package-runtime/ThemeSandboxHost"
 export { createPackageSceneContinuity } from "./package-runtime/scene-continuity"
 
 export {
+  usePackageRevealClock,
+  usePackageRevealAudio,
+} from "./package-runtime/use-package-reveal"
+
+export {
   createPackageQuestionAdmission,
   packageQuestionContentSupported,
   packageUsesSandboxForPhase,

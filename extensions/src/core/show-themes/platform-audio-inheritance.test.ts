@@ -1,3 +1,7 @@
+import { createElement } from "react"
+import { renderToString } from "react-dom/server"
+import { AudioCuePlayer } from "../../presentation/audio-cue-player"
+import { ShowThemeScope } from "../../presentation/show-themes/context"
 import { describe, expect, it } from "vitest"
 import classicManifest from "./classic.manifest.json" with { type: "json" }
 import { showThemeDefinitionSchema } from "./definition"
@@ -214,6 +218,33 @@ describe("imported theme platform audio inheritance", () => {
       PLATFORM_SOUNDTRACK_DEFAULTS.results?.url,
     )
     expect(audio.soundtrack?.recap?.url).toBe(PLATFORM_AUDIO_URLS.recap)
+  })
+
+  it("keeps results music playing when inherited reveal volume or its default variant is selected", () => {
+    const definition = inheritedTheme()
+    for (const selection of [
+      { volume: 0.25 },
+      { variantId: definition.audioEvents.revealResults.defaultVariantId },
+    ]) {
+      const theme = resolved("manager", { audio: { revealResults: selection } })
+      const output = renderToString(
+        createElement(ShowThemeScope, {
+          theme,
+          children: createElement(AudioCuePlayer, {
+            soundtrackSlot: "results",
+            cueId: "revealResults",
+            stageOwnsReveal: true,
+            autoPlay: false,
+          }),
+        }),
+      )
+      expect(output).toContain(
+        `data-audio-url="${PLATFORM_SOUNDTRACK_DEFAULTS.results?.url ?? ""}"`,
+      )
+      expect(output).not.toContain(
+        `data-audio-url="${PLATFORM_CUE_URLS.revealResults}"`,
+      )
+    }
   })
 
   it("rejects contradictory inheritance and retains intentional legacy silent variants", () => {

@@ -650,7 +650,9 @@ export const AudioCuePlayer = ({
       stageOwnsReveal &&
       (selectedSoundtrackSlot === "results" ||
         selectedSoundtrackSlot === "recap") &&
-      Object.keys(theme.audioSelections.revealResults ?? {}).length > 0 &&
+      (theme.audioSelections.revealResults?.mediaUrl ||
+        (theme.audioSelections.revealResults?.variantId &&
+          !theme.audio.revealResults.inheritPlatform)) &&
       !theme.audio.revealResults.loop
     ) {
       return null
