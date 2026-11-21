@@ -589,7 +589,7 @@ export const AudioCuePlayer = ({
     : null
   const soundtrack = resolveSoundtrack(selectedSoundtrackSlot, audioExtras)
   const desired = useMemo<DesiredTrack | null>(() => {
-    if (eventOnly || platformClosed) {
+    if (eventOnly || (platformClosed && selectedSoundtrackSlot !== "finale")) {
       return null
     }
 
@@ -751,9 +751,11 @@ export const AudioCuePlayer = ({
         // Continuous stage beds must repeat until the show changes phase.
         // The deliberately timed 12-second opening ident is the only exception.
         loop:
-          theme || selectedSoundtrackSlot === "openingIntro"
-            ? soundtrack.loop
-            : true,
+          selectedSoundtrackSlot === "finale"
+            ? true
+            : theme || selectedSoundtrackSlot === "openingIntro"
+              ? soundtrack.loop
+              : true,
         fadeMs: soundtrack.fadeMs,
         startOffsetSeconds: soundtrack.startOffsetSeconds,
         maxDurationMs:
