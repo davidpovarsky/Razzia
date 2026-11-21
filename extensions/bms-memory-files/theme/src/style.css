@@ -1,0 +1,1264 @@
+@font-face {
+  font-family: BmsDisplay;
+  src: url("../../shared/fonts/barlow-condensed-latin-700-normal.woff2")
+    format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: BmsText;
+  src: url("../../shared/fonts/barlow-latin-500-normal.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+body {
+  overflow: hidden;
+  background: #1b132b;
+}
+button {
+  font: inherit;
+}
+
+/* ==========================================================================
+   BMS MEMORY FILES — REFINED ARCHIVE STAGE
+   ========================================================================== */
+.bms-stage {
+  --night: #1b132b;
+  --plum: #2c1e45;
+  --violet: #5a3d8a;
+  --lilac: #cbb4f6;
+  --paper: #fff8ec;
+  --paper-soft: #f5ebdc;
+  --ink: #231735;
+  --ink-muted: #65527a;
+  --coral: #ff7e67;
+  --gold: #f7c86d;
+  --mint: #6ee2bc;
+  --mint-deep: #157a5b;
+  --manila: #f3d299;
+  --manila-dark: #dca960;
+  --shadow-hard: 0.45cqw 0.6cqw 0 #140c22;
+
+  container-type: size;
+  isolation: isolate;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 20% 10%, #4b3175 0%, transparent 55%),
+    radial-gradient(ellipse at 85% 90%, #3b245f 0%, transparent 55%),
+    linear-gradient(155deg, #27193f 0%, var(--night) 100%);
+  color: var(--paper);
+  font-family: BmsText, "Segoe UI", system-ui, sans-serif;
+  font-weight: 500;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Ambient Velvet Glow & Floating Archive Motes */
+.bms-ambient {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.bms-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(8cqw);
+  opacity: 0.34;
+}
+.bms-glow-a {
+  width: 48cqw;
+  height: 48cqw;
+  top: -18cqw;
+  left: -10cqw;
+  background: #8758c9;
+  animation: bms-drift 16s ease-in-out infinite alternate;
+}
+.bms-glow-b {
+  width: 44cqw;
+  height: 44cqw;
+  bottom: -20cqw;
+  right: -8cqw;
+  background: #d86e82;
+  animation: bms-drift 19s ease-in-out infinite alternate-reverse;
+}
+.bms-mote {
+  position: absolute;
+  width: 0.55cqw;
+  height: 0.55cqw;
+  border-radius: 50%;
+  background: var(--gold);
+  opacity: 0.45;
+  animation: bms-mote-float 11s ease-in-out infinite;
+}
+.bms-mote-1 { left: 10%; top: 22%; animation-delay: 0s; background: var(--gold); }
+.bms-mote-2 { left: 28%; top: 78%; animation-delay: -2.2s; background: var(--lilac); width: 0.4cqw; height: 0.4cqw; }
+.bms-mote-3 { left: 54%; top: 15%; animation-delay: -4.5s; background: var(--mint); }
+.bms-mote-4 { left: 76%; top: 34%; animation-delay: -6.1s; background: var(--coral); width: 0.45cqw; height: 0.45cqw; }
+.bms-mote-5 { left: 88%; top: 72%; animation-delay: -8.3s; background: var(--gold); }
+.bms-mote-6 { left: 42%; top: 88%; animation-delay: -3.4s; background: var(--lilac); }
+.bms-ambient[data-still="true"] * {
+  animation: none !important;
+}
+
+/* Masking Tape Accent */
+.bms-tape {
+  position: absolute;
+  width: 8.5cqw;
+  height: 2.1cqh;
+  background: linear-gradient(135deg, rgba(247, 200, 109, 0.72), rgba(255, 224, 158, 0.55));
+  border-left: 2px dashed rgba(255, 255, 255, 0.35);
+  border-right: 2px dashed rgba(255, 255, 255, 0.35);
+  box-shadow: 0 2px 6px rgba(20, 10, 35, 0.16);
+  pointer-events: none;
+  z-index: 3;
+}
+.bms-tape-top {
+  top: -1cqh;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2.2deg);
+}
+.bms-tape-register {
+  top: -1cqh;
+  right: 12%;
+  transform: rotate(3.2deg);
+  background: linear-gradient(135deg, rgba(110, 226, 188, 0.72), rgba(169, 245, 218, 0.52));
+}
+.bms-tape-q {
+  top: -1cqh;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1.4deg);
+}
+.bms-tape-score {
+  top: -1cqh;
+  left: 50%;
+  transform: translateX(-50%) rotate(1.8deg);
+}
+
+/* Shared Scene Layout & Header */
+.bms-scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 2.8cqh 3.8cqw 3.2cqh;
+  display: flex;
+  flex-direction: column;
+  gap: 2.2cqh;
+  animation: bms-scene-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.bms-scene-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5cqw;
+  flex-shrink: 0;
+}
+
+.bms-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75cqw;
+}
+.bms-brand b {
+  font-family: BmsDisplay, Georgia, serif;
+  font-size: 2.1cqw;
+  letter-spacing: 0.06em;
+  background: var(--coral);
+  color: var(--ink);
+  padding: 0.25cqh 0.85cqw;
+  border-radius: 0.55cqw;
+  box-shadow: 0.2cqw 0.25cqw 0 #140c22;
+}
+.bms-brand span {
+  font-family: BmsDisplay, sans-serif;
+  font-size: 1.35cqw;
+  letter-spacing: 0.16em;
+  color: var(--lilac);
+}
+
+.bms-pill-tag {
+  font-family: BmsDisplay, sans-serif;
+  font-size: 1.25cqw;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.45cqh 1.25cqw;
+  border-radius: 999px;
+  background: rgba(255, 248, 236, 0.12);
+  border: 1px solid rgba(203, 180, 246, 0.35);
+  color: var(--gold);
+}
+
+/* ==========================================================================
+   TACTILE ARCHIVE FOLDER STACK
+   ========================================================================== */
+.bms-folder-stack {
+  position: relative;
+  width: 24cqw;
+  height: 29cqh;
+  transform: rotate(3.5deg);
+  animation: bms-folder-float 5.5s ease-in-out infinite;
+}
+.bms-folder-compact {
+  width: 17cqw;
+  height: 20cqh;
+  transform: rotate(-3.5deg);
+}
+.bms-folder-tab {
+  position: absolute;
+  top: -2.6cqh;
+  left: 1.2cqw;
+  width: 8.5cqw;
+  height: 3.4cqh;
+  background: var(--manila-dark);
+  border-radius: 0.9cqw 0.9cqw 0 0;
+}
+.bms-folder-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 1.3cqw;
+  background: var(--manila-dark);
+  box-shadow: 0.8cqw 1.1cqw 0 #140c22;
+}
+.bms-folder-page {
+  position: absolute;
+  inset: 0.8cqh 1.1cqw 1.2cqh;
+  border-radius: 0.9cqw;
+  background: var(--paper);
+  transform: rotate(-3.5deg) translateY(-1.2cqh);
+  box-shadow: 0 3px 10px rgba(20, 10, 35, 0.25);
+}
+.bms-folder-page-2 {
+  background: #f2e4ff;
+  transform: rotate(2.8deg) translateY(-1.8cqh);
+}
+.bms-folder-front {
+  position: absolute;
+  inset: 1.6cqh 0 0;
+  border-radius: 1.3cqw;
+  background: linear-gradient(155deg, #f8dea9 0%, var(--manila) 55%, #e5b870 100%);
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2cqh;
+  overflow: hidden;
+  box-shadow: inset 0 -0.8cqh 1.4cqh rgba(114, 70, 18, 0.16);
+}
+.bms-folder-tag {
+  font-family: BmsDisplay, sans-serif;
+  font-size: 1.05cqw;
+  letter-spacing: 0.22em;
+  color: #7c5220;
+  border-bottom: 1.5px solid rgba(124, 82, 32, 0.3);
+  padding-bottom: 0.3cqh;
+}
+.bms-folder-stamp {
+  font-family: BmsDisplay, Georgia, serif;
+  font-size: 2.75cqw;
+  line-height: 0.96;
+  text-align: center;
+  color: var(--ink);
+  letter-spacing: 0.04em;
+  border: 0.22cqw solid rgba(35, 23, 53, 0.65);
+  padding: 0.8cqh 1.4cqw;
+  border-radius: 0.6cqw;
+  transform: rotate(-4deg);
+}
+.bms-folder-compact .bms-folder-stamp {
+  font-size: 1.9cqw;
+  padding: 0.5cqh 0.9cqw;
+}
+.bms-folder-sheen {
+  position: absolute;
+  inset: -40% -80%;
+  background: linear-gradient(
+    115deg,
+    transparent 42%,
+    rgba(255, 255, 255, 0.45) 50%,
+    transparent 58%
+  );
+  animation: bms-sheen 4.8s ease-in-out infinite;
+}
+.bms-sticker {
+  position: absolute;
+  right: -1.8cqw;
+  bottom: -1.4cqh;
+  width: 7.4cqw;
+  height: 7.4cqw;
+  border-radius: 50%;
+  background: var(--coral);
+  color: var(--ink);
+  font-family: BmsDisplay, sans-serif;
+  font-size: 1.15cqw;
+  line-height: 1.05;
+  text-align: center;
+  display: grid;
+  place-items: center;
+  transform: rotate(12deg);
+  border: 0.22cqw dashed var(--paper);
+  box-shadow: 0.28cqw 0.35cqw 0 #140c22;
+  animation: bms-pop-in 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.25s both;
+}
+.bms-folder-compact .bms-sticker {
+  width: 5.2cqw;
+  height: 5.2cqw;
+  font-size: 0.82cqw;
+  right: -1.2cqw;
+}
+
+/* ==========================================================================
+   TITLE / OPENING SCENE
+   ========================================================================== */
+.bms-title-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4cqw;
+  padding: 0 2cqw;
+}
+.bms-title-copy {
+  flex: 1;
+  min-width: 0;
+}
+.bms-show-title {
+  margin: 0;
+  font-family: BmsDisplay, Georgia, serif;
+  display: flex;
+  flex-direction: column;
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+}
+.bms-title-the {
+  font-size: 3.6cqw;
+  letter-spacing: 0.18em;
+  color: var(--mint);
+  animation: bms-rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both;
+}
+.bms-title-main {
+  font-size: 10.2cqw;
+  color: var(--paper);
+  text-shadow: 0.45cqw 0.55cqw 0 #140c22;
+  animation: bms-rise 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.16s both;
+}
+.bms-title-last {
+  display: flex;
+  align-items: baseline;
+  gap: 1.6cqw;
+  font-size: 8.6cqw;
+  animation: bms-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.26s both;
+}
+.bms-title-last span {
+  color: var(--gold);
+  text-shadow: 0.4cqw 0.5cqw 0 #140c22;
+}
+.bms-title-last em {
+  font-style: normal;
+  color: var(--coral);
+  text-shadow: 0.4cqw 0.5cqw 0 #140c22;
+  transform: rotate(-2deg);
+  display: inline-block;
+}
+.bms-transition-title {
+  margin: 0;
+  font-family: BmsDisplay, Georgia, serif;
+  font-size: 7.2cqw;
+  line-height: 1.02;
+  color: var(--paper);
+  text-shadow: 0.4cqw 0.5cqw 0 #140c22;
+  animation: bms-rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.bms-title-art {
+  position: relative;
+  flex-shrink: 0;
+  padding: 2cqw;
+}
+.bms-sparkle {
+  position: absolute;
+  color: var(--gold);
+  animation: bms-twinkle 2.8s ease-in-out infinite;
+}
+.bms-sparkle-1 {
+  width: 2.8cqw;
+  height: 2.8cqw;
+  top: -1cqh;
+  left: -1.2cqw;
+}
+.bms-sparkle-2 {
+  width: 2cqw;
+  height: 2cqw;
+  bottom: 2cqh;
+  left: -2.2cqw;
+  color: var(--mint);
+  animation-delay: -1.4s;
+}
+
+/* ==========================================================================
+   LOBBY SCENE (PHONE-ONLY + LIVE CLASS REGISTER)
+   ========================================================================== */
+.bms-lobby-layout {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1.12fr 0.88fr;
+  gap: 2.8cqw;
+  align-items: stretch;
+}
+.bms-lobby[data-has-roster="false"] .bms-lobby-layout {
+  grid-template-columns: 1.35fr 0.65fr;
+  align-items: center;
+}
+
+.bms-join-paper {
+  position: relative;
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 1.6cqw;
+  padding: 3.4cqh 3cqw 3cqh;
+  box-shadow: var(--shadow-hard);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2.8cqh;
+  transform: rotate(-0.6deg);
+  animation: bms-card-settle 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.bms-call-panel {
+  background: linear-gradient(135deg, #2b1d45 0%, #3d2864 100%);
+  color: var(--paper);
+  border-radius: 1.2cqw;
+  padding: 2.4cqh 2.2cqw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7cqh;
+  box-shadow: 0.3cqw 0.4cqw 0 rgba(35, 23, 53, 0.25);
+  border: 2px solid rgba(247, 200, 109, 0.35);
+}
+.bms-call-label {
+  font-family: BmsDisplay, sans-serif;
+  font-size: 1.25cqw;
+  letter-spacing: 0.2em;
+  color: var(--mint);
+  text-transform: uppercase;
+}
+.bms-phone {
+  font-family: BmsDisplay, sans-serif;
+  font-size: 4.9cqw;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  color: var(--gold);
+  text-shadow: 0 0 1.8cqw rgba(247, 200, 109, 0.35);
+  font-variant-numeric: tabular-nums;
+}
+.bms-phone-waiting {
+  font-size: 2.4cqw;
+  color: var(--lilac);
+}
+
+.bms-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25cqh;
+}
+.bms-steps li {
+  display: flex;
+  align-items: center;
+  gap: 1.1cqw;
+  font-size: 1.48cqw;
+  line-height: 1.25;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--paper-soft);
+  padding: 1.05cqh 1.3cqw;
+  border-radius: 0.85cqw;
+  border-left: 0.35cqw solid var(--coral);
+  animation: bms-step-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--step-i) * 75ms + 120ms) both;
+}
+.bms-step-num {
+  width: 2.2cqw;
+  height: 2.2cqw;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--gold);
+  font-family: BmsDisplay, sans-serif;
+  font-size: 1.35cqw;
+  display: grid;
+  place-items: center;
+}
+
+.bms-lobby-art {
+  display: grid;
+  place-items: center;
+}
+
+/* Live Class Attendance Register */
+.bms-register {
+  position: relative;
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 1.6cqw;
+  padding: 2.6cqh 2.1cqw 2.2cqh;
+  box-shadow: var(--shadow-hard);
+  display: flex;
+  flex-direction: column;
+  gap: 1.4cqh;
+  min-height: 0;
+  transform: rotate(0.6deg);
+  animation: bms-card-settle 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+}
+.bms-register-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1cqh;
+  border-bottom: 2px dashed rgba(90, 61, 138, 0.25);
+}
+.bms-register-heading h2 {
+  margin: 0;
+  font-family: BmsDisplay, sans-serif;
+  font-size: 2.1cqw;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.bms-present-pill {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3cqw;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.4cqh 1cqw;
+  border-radius: 999px;
+  font-family: BmsDisplay, sans-serif;
+  font-size: 1.45cqw;
+}
+.bms-present-pill strong {
+  color: var(--mint);
+  font-size: 1.75cqw;
+}
+
+.bms-register-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+  gap: 0.7cqh 0.9cqw;
+  overflow: hidden;
+}
+.bms-register-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.55cqw;
+  padding: 0.45cqh 0.75cqw;
+  border-radius: 0.65cqw;
+  background: var(--paper-soft);
+  border: 1.5px solid transparent;
+  transition:
+    background 0.35s ease,
+    border-color 0.35s ease,
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  min-width: 0;
+}
+.bms-register-list li[data-connected="true"] {
+  background: #dff8ee;
+  border-color: var(--mint);
+  animation: bms-join-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.bms-register-index {
+  font-family: BmsDisplay, sans-serif;
+  font-size: 1.05cqw;
+  color: var(--ink-muted);
+  flex-shrink: 0;
+}
+.bms-register-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 1.18cqw;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bms-register-check {
+  width: 1.65cqw;
+  height: 1.65cqw;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1.5px solid rgba(90, 61, 138, 0.28);
+  display: grid;
+  place-items: center;
+  color: var(--mint-deep);
+  background: rgba(255, 255, 255, 0.6);
+}
+.bms-register-list li[data-connected="true"] .bms-register-check {
+  background: var(--mint);
+  border-color: var(--mint-deep);
+  color: var(--ink);
+}
+.bms-register-check svg {
+  width: 1.1cqw;
+  height: 1.1cqw;
+}
+
+/* ==========================================================================
+   QUESTION & ANSWERS SCENE (WITH 2-STAGE DRAMATIC REVEALS)
+   ========================================================================== */
+.bms-round-pill {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5cqw;
+  background: rgba(255, 248, 236, 0.12);
+  border: 1px solid rgba(203, 180, 246, 0.3);
+  border-radius: 999px;
+  padding: 0.45cqh 1.4cqw;
+  font-family: BmsDisplay, sans-serif;
+  font-size: 1.3cqw;
+  letter-spacing: 0.12em;
+  color: var(--lilac);
+}
+.bms-round-pill strong {
+  font-size: 1.85cqw;
+  color: var(--gold);
+}
+.bms-round-pill small {
+  font-size: 1.25cqw;
+  color: rgba(255, 248, 236, 0.72);
+}
+
+.bms-timer {
+  min-width: 7.4cqw;
+  text-align: center;
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 0.45cqh 1.4cqw;
+  box-shadow: 0.25cqw 0.32cqw 0 #140c22;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+.bms-timer strong {
+  font-family: BmsDisplay, sans-serif;
+  font-size: 2.15cqw;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums;
+}
+.bms-timer[data-urgent="true"] {
+  background: var(--coral);
+  color: var(--ink);
+  animation: bms-timer-pulse 0.65s ease-in-out infinite;
+}
+.bms-timer[data-locked="true"] {
+  background: rgba(255, 248, 236, 0.14);
+  color: var(--lilac);
+  box-shadow: none;
+}
+
+/* Question Paper Card */
+.bms-question-paper {
+  position: relative;
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 1.5cqw;
+  padding: 2.8cqh 3.4cqw;
+  box-shadow: var(--shadow-hard);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2.4cqw;
+  min-height: 22cqh;
+  flex-shrink: 0;
+  animation: bms-q-enter 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.bms-question {
+  margin: 0;
+  font-family: BmsDisplay, Georgia, serif;
+  font-size: 3.5cqw;
+  line-height: 1.12;
+  text-align: center;
+  color: var(--ink);
+  letter-spacing: 0.01em;
+}
+.bms-quiz[data-question-density="medium"] .bms-question {
+  font-size: 2.95cqw;
+}
+.bms-quiz[data-question-density="long"] .bms-question {
+  font-size: 2.45cqw;
+}
+.bms-question-image {
+  max-height: 18cqh;
+  max-width: 24cqw;
+  border-radius: 0.9cqw;
+  object-fit: contain;
+  border: 2px solid var(--paper-soft);
+}
+
+/* Answer Cards Grid */
+.bms-answers {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.65cqh;
+}
+.bms-quiz[data-answer-count="4"] .bms-answers,
+.bms-quiz[data-answer-count="5"] .bms-answers {
+  gap: 1.15cqh;
+}
+
+.bms-answer {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  border: 0.22cqw solid rgba(255, 248, 236, 0.22);
+  border-radius: 1.25cqw;
+  background: var(--paper);
+  color: var(--ink);
+  padding: 1.65cqh 2cqw;
+  display: flex;
+  align-items: center;
+  gap: 1.6cqw;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: var(--shadow-hard);
+  transition:
+    transform 0.42s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.4s ease,
+    border-color 0.35s ease,
+    background 0.35s ease,
+    box-shadow 0.35s ease;
+}
+.bms-quiz[data-answers-visible="false"] .bms-answer {
+  opacity: 0;
+  transform: translateY(2.2cqh) scale(0.96);
+  pointer-events: none;
+}
+.bms-quiz[data-answers-visible="true"] .bms-answer {
+  animation: bms-ans-in 0.48s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--ans-i) * 85ms) both;
+}
+
+/* Animated Audience Percentage Fill Bar */
+.bms-answer-bar {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: var(--share, 0%);
+  background: linear-gradient(90deg, rgba(203, 180, 246, 0.42), rgba(203, 180, 246, 0.22));
+  transition: width 0.85s cubic-bezier(0.22, 1, 0.36, 1), background 0.4s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+.bms-answer[data-audience="true"] .bms-answer-bar {
+  background: linear-gradient(90deg, rgba(247, 200, 109, 0.48), rgba(255, 126, 103, 0.24));
+}
+.bms-answer[data-correct="true"] .bms-answer-bar {
+  background: linear-gradient(90deg, rgba(110, 226, 188, 0.52), rgba(110, 226, 188, 0.22));
+}
+
+.bms-answer > *:not(.bms-answer-bar):not(.bms-burst) {
+  position: relative;
+  z-index: 1;
+}
+
+.bms-answer-number {
+  width: 3.6cqw;
+  height: 3.6cqw;
+  flex-shrink: 0;
+  border-radius: 0.9cqw;
+  background: var(--plum);
+  color: var(--gold);
+  font-family: BmsDisplay, sans-serif;
+  font-size: 2.1cqw;
+  display: grid;
+  place-items: center;
+  box-shadow: 0.18cqw 0.22cqw 0 rgba(20, 12, 34, 0.35);
+  transition: background 0.35s ease, color 0.35s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.bms-answer-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35cqh;
+}
+.bms-answer-text {
+  font-size: 2.05cqw;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--ink);
+}
+.bms-quiz[data-answer-density="long"] .bms-answer-text,
+.bms-quiz[data-answer-count="4"] .bms-answer-text,
+.bms-quiz[data-answer-count="5"] .bms-answer-text {
+  font-size: 1.65cqw;
+}
+
+/* Badges on Reveal */
+.bms-answer-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.6cqw;
+}
+.bms-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35cqw;
+  font-family: BmsDisplay, sans-serif;
+  font-size: 1.02cqw;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.22cqh 0.75cqw;
+  border-radius: 999px;
+  animation: bms-pop-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.bms-badge svg {
+  width: 0.95cqw;
+  height: 0.95cqw;
+}
+.bms-badge-audience {
+  background: var(--gold);
+  color: var(--ink);
+}
+.bms-badge-correct {
+  background: var(--mint);
+  color: var(--ink);
+}
+.bms-badge-picked {
+  background: var(--lilac);
+  color: var(--ink);
+}
+
+.bms-answer-share {
+  font-family: BmsDisplay, sans-serif;
+  font-size: 2.35cqw;
+  font-variant-numeric: tabular-nums;
+  color: var(--plum);
+  flex-shrink: 0;
+  min-width: 4.8cqw;
+  text-align: right;
+  animation: bms-pop-in 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.bms-answer-image {
+  width: 4.6cqw;
+  height: 4.6cqw;
+  border-radius: 0.6cqw;
+  object-fit: contain;
+}
+
+/* Stage 1: Audience Choice Highlight */
+.bms-answer[data-audience="true"]:not([data-correct="true"]):not([data-incorrect="true"]) {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 0.22cqw rgba(247, 200, 109, 0.55), var(--shadow-hard);
+}
+
+/* Stage 2: Dramatic Correct Answer Celebration */
+.bms-answer[data-correct="true"] {
+  background: #ebfff6;
+  border-color: var(--mint);
+  transform: scale(1.018);
+  box-shadow:
+    0 0 0 0.3cqw rgba(110, 226, 188, 0.65),
+    0 0 2.4cqw rgba(110, 226, 188, 0.42),
+    var(--shadow-hard);
+  animation: bms-correct-win 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.bms-answer[data-correct="true"] .bms-answer-number {
+  background: var(--mint);
+  color: var(--ink);
+  transform: scale(1.1) rotate(-4deg);
+}
+.bms-win-check {
+  width: 2.1cqw;
+  height: 2.1cqw;
+}
+.bms-win-check .bms-check-path {
+  stroke-dasharray: 28;
+  stroke-dashoffset: 28;
+  animation: bms-draw-check 0.45s ease-out 0.12s forwards;
+}
+
+/* Sparkle Burst on Correct Reveal */
+.bms-burst {
+  position: absolute;
+  left: 3.6cqw;
+  top: 50%;
+  pointer-events: none;
+  z-index: 3;
+}
+.bms-burst i {
+  position: absolute;
+  width: 0.55cqw;
+  height: 0.55cqw;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: bms-burst-fly 0.75s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.bms-burst i:nth-child(1) { --tx: -3.2cqw; --ty: -3.8cqh; background: var(--gold); }
+.bms-burst i:nth-child(2) { --tx: 2.8cqw; --ty: -4.2cqh; background: var(--mint); }
+.bms-burst i:nth-child(3) { --tx: 4.5cqw; --ty: -0.6cqh; background: var(--coral); }
+.bms-burst i:nth-child(4) { --tx: 2.6cqw; --ty: 3.8cqh; background: var(--gold); }
+.bms-burst i:nth-child(5) { --tx: -3.0cqw; --ty: 3.5cqh; background: var(--mint); }
+.bms-burst i:nth-child(6) { --tx: -4.2cqw; --ty: 0.2cqh; background: var(--lilac); }
+
+/* Non-correct answers dim smoothly */
+.bms-answer[data-incorrect="true"] {
+  opacity: 0.46;
+  transform: scale(0.985);
+}
+
+/* Bottom Progress Bar */
+.bms-question-progress {
+  height: 0.55cqh;
+  width: 100%;
+  border-radius: 999px;
+  background: rgba(255, 248, 236, 0.14);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.bms-question-progress i {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--coral), var(--gold), var(--mint));
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ==========================================================================
+   LEADERBOARD / SCORES SCENE
+   ========================================================================== */
+.bms-scores-layout {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 0.72fr 1.28fr;
+  gap: 3cqw;
+  align-items: center;
+}
+.bms-scores-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3cqh;
+}
+.bms-scores-left h1 {
+  margin: 0;
+  font-family: BmsDisplay, Georgia, serif;
+  font-size: 6.4cqw;
+  line-height: 0.92;
+  color: var(--paper);
+  text-shadow: 0.38cqw 0.48cqw 0 #140c22;
+  animation: bms-rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.bms-scores-left h1 em {
+  font-style: normal;
+  color: var(--coral);
+}
+
+.bms-score-paper {
+  position: relative;
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 1.6cqw;
+  padding: 3cqh 2.8cqw;
+  box-shadow: var(--shadow-hard);
+  transform: rotate(0.7deg);
+  animation: bms-card-settle 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.bms-leaders {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.35cqh;
+}
+.bms-score-entry {
+  display: flex;
+  align-items: center;
+  gap: 1.3cqw;
+  padding: 1.3cqh 1.6cqw;
+  border-radius: 1cqw;
+  background: var(--paper-soft);
+  color: var(--ink);
+  font-weight: 700;
+  animation: bms-rank-in 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) var(--rank-delay, 0ms) both;
+}
+.bms-score-entry[data-rank="1"] {
+  background: linear-gradient(135deg, #ffe799 0%, #f9d16e 100%);
+  box-shadow: 0 0 0 0.2cqw rgba(247, 200, 109, 0.7), 0.25cqw 0.35cqw 0 rgba(35, 23, 53, 0.22);
+}
+.bms-score-entry[data-rank="2"] {
+  background: #e9dcff;
+}
+.bms-score-entry[data-rank="3"] {
+  background: #d8f6ea;
+}
+.bms-rank {
+  width: 3.1cqw;
+  height: 3.1cqw;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: BmsDisplay, sans-serif;
+  font-size: 1.7cqw;
+  display: grid;
+  place-items: center;
+}
+.bms-score-entry[data-rank="1"] .bms-rank {
+  background: var(--ink);
+  color: var(--gold);
+}
+.bms-crown {
+  width: 1.7cqw;
+  height: 1.7cqw;
+}
+.bms-leader-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 1.85cqw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bms-leader-score {
+  font-family: BmsDisplay, sans-serif;
+  font-size: 2.15cqw;
+  font-variant-numeric: tabular-nums;
+  color: var(--plum);
+}
+.bms-score-empty {
+  margin: 0;
+  text-align: center;
+  font-size: 1.8cqw;
+  color: var(--ink-muted);
+  padding: 6cqh 0;
+}
+
+/* ==========================================================================
+   CLOSING / FINALE SCENE
+   ========================================================================== */
+.bms-finale {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.bms-finale-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.4cqh;
+}
+.bms-rosette {
+  width: 13cqw;
+  height: 13cqw;
+  border-radius: 50%;
+  background: var(--coral);
+  color: var(--paper);
+  display: grid;
+  place-items: center;
+  outline: 0.35cqw dashed var(--gold);
+  outline-offset: 0.7cqw;
+  box-shadow: 0 0 0 1.4cqw var(--lilac), 0.6cqw 0.9cqw 0 #140c22;
+  animation: bms-medal-in 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.bms-rosette-star {
+  width: 6.2cqw;
+  height: 6.2cqw;
+  color: var(--gold);
+  animation: bms-twinkle 2.6s ease-in-out infinite;
+}
+.bms-finale-title {
+  margin: 0;
+  font-family: BmsDisplay, Georgia, serif;
+  font-size: 7.4cqw;
+  letter-spacing: 0.04em;
+  color: var(--paper);
+  text-shadow: 0.4cqw 0.55cqw 0 #140c22;
+  animation: bms-rise 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.18s both;
+}
+.bms-finale-tag {
+  animation: bms-rise 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.32s both;
+}
+
+.bms-confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.bms-confetti i {
+  position: absolute;
+  top: -4cqh;
+  width: 0.9cqw;
+  height: 1.5cqh;
+  border-radius: 0.25cqw;
+  animation: bms-confetti-fall 5.2s linear infinite;
+}
+.bms-confetti i:nth-child(1) { left: 10%; background: var(--gold); animation-delay: 0s; }
+.bms-confetti i:nth-child(2) { left: 22%; background: var(--coral); animation-delay: -1.1s; }
+.bms-confetti i:nth-child(3) { left: 36%; background: var(--mint); animation-delay: -2.4s; }
+.bms-confetti i:nth-child(4) { left: 50%; background: var(--lilac); animation-delay: -0.6s; }
+.bms-confetti i:nth-child(5) { left: 64%; background: var(--gold); animation-delay: -3.2s; }
+.bms-confetti i:nth-child(6) { left: 76%; background: var(--coral); animation-delay: -1.8s; }
+.bms-confetti i:nth-child(7) { left: 86%; background: var(--mint); animation-delay: -4.1s; }
+.bms-confetti i:nth-child(8) { left: 93%; background: var(--lilac); animation-delay: -2.9s; }
+
+/* Personal Result Scene */
+.bms-personal-paper {
+  margin: auto;
+  background: var(--paper);
+  color: var(--ink);
+  border-radius: 1.6cqw;
+  padding: 4cqh 5cqw;
+  text-align: center;
+  box-shadow: var(--shadow-hard);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.4cqh;
+  animation: bms-pop-in 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.bms-personal-paper h1 {
+  margin: 0;
+  font-family: BmsDisplay, sans-serif;
+  font-size: 3.6cqw;
+}
+.bms-personal-points {
+  font-family: BmsDisplay, sans-serif;
+  font-size: 5.4cqw;
+  color: var(--mint-deep);
+}
+.bms-personal-points span {
+  font-size: 2cqw;
+  margin-left: 0.6cqw;
+  color: var(--ink-muted);
+}
+.bms-personal-rank {
+  margin: 0;
+  font-size: 1.8cqw;
+  font-weight: 700;
+  color: var(--plum);
+}
+
+/* ==========================================================================
+   KEYFRAMES
+   ========================================================================== */
+@keyframes bms-scene-in {
+  from { opacity: 0; transform: scale(0.985); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes bms-rise {
+  from { opacity: 0; transform: translateY(2.6cqh); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes bms-card-settle {
+  from { opacity: 0; transform: translateY(3cqh) scale(0.97) rotate(0deg); }
+  to { opacity: 1; }
+}
+@keyframes bms-q-enter {
+  from { opacity: 0; transform: translateY(-2cqh) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes bms-ans-in {
+  from { opacity: 0; transform: translateX(-2.2cqw) scale(0.97); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes bms-step-in {
+  from { opacity: 0; transform: translateX(-1.4cqw); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes bms-pop-in {
+  from { opacity: 0; transform: scale(0.75); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes bms-join-pop {
+  0% { transform: scale(0.94); }
+  55% { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+@keyframes bms-correct-win {
+  0% { transform: scale(0.98); }
+  45% { transform: scale(1.035); }
+  100% { transform: scale(1.018); }
+}
+@keyframes bms-draw-check {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes bms-burst-fly {
+  0% { opacity: 1; transform: translate(0, 0) scale(1.2); }
+  100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0.2); }
+}
+@keyframes bms-rank-in {
+  from { opacity: 0; transform: translateX(3.5cqw) scale(0.96); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes bms-timer-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+@keyframes bms-folder-float {
+  0%, 100% { transform: rotate(3.5deg) translateY(0); }
+  50% { transform: rotate(2.2deg) translateY(-1.2cqh); }
+}
+@keyframes bms-sheen {
+  0%, 60% { transform: translateX(-110%); }
+  100% { transform: translateX(130%); }
+}
+@keyframes bms-twinkle {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.9; }
+  50% { transform: scale(1.22) rotate(16deg); opacity: 1; }
+}
+@keyframes bms-drift {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(4cqw, 3cqh) scale(1.1); }
+}
+@keyframes bms-mote-float {
+  0%, 100% { transform: translateY(0); opacity: 0.25; }
+  50% { transform: translateY(-3.5cqh); opacity: 0.65; }
+}
+@keyframes bms-medal-in {
+  from { opacity: 0; transform: translateY(-4cqh) scale(0.7) rotate(-24deg); }
+  to { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+}
+@keyframes bms-confetti-fall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0.95; }
+  100% { transform: translateY(108cqh) rotate(540deg); opacity: 0.2; }
+}
+
+/* Reduced Motion Accessibility */
+.bms-stage[data-reduced-motion="true"] *,
+.bms-stage[data-paused="true"] * {
+  animation: none !important;
+  transition: none !important;
+}
