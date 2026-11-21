@@ -120,6 +120,13 @@ export const TadazzV4StageAdapter = forwardRef<
   const v4LabelsRef = useRef(v4Labels)
   v4LabelsRef.current = v4Labels
   const v4Ref = useRef<TadazzV4StageHandle>(null)
+  // The director owns the painted mode. Split socket updates can temporarily
+  // remove custom content while it deliberately holds the current scene.
+  const heldCustomScreenRef = useRef(customScreen)
+
+  if (customScreen) {
+    heldCustomScreenRef.current = customScreen
+  }
   const modeRef = useRef<StageMode>(customScreen ? "custom" : "idle")
   const questionRef = useRef<StageQuestion | null>(null)
   const cardsOnStageKeyRef = useRef<string | null>(null)
@@ -827,7 +834,7 @@ export const TadazzV4StageAdapter = forwardRef<
         data-testid="tadazz-custom-screen"
       >
         <div className="tz-screen-inner">
-          {screenMode === "custom" ? customScreen : null}
+          {screenMode === "custom" ? heldCustomScreenRef.current : null}
         </div>
       </div>
     </>
