@@ -4,8 +4,8 @@
   "files": [
     {
       "name": "renderer.mjs",
-      "bytes": 2683888,
-      "sha256": "87cb5004fa2a81701cb852ef86c1cb175d12168a952fc5894718a4563edae4bd"
+      "bytes": 2683910,
+      "sha256": "9664d77f1afe072abc446d291a8b9d468e1e6698de414fa352bc7e2908f438d3"
     },
     {
       "name": "renderer.css",
@@ -26,7 +26,7 @@
         "id": "tadazz-classic-stage",
         "version": "1.0.0"
       },
-      "rendererBuildSha256": "a2e9cbee7de58b2773d8c82bbd5c9259fff55892d009bd6991cf52de3008b51b"
+      "rendererBuildSha256": "20d3ece3ba7f8f649b2f81301c001019ec2cb2bebbc170cf6a4e1057f60c31c2"
     },
     {
       "portVersion": 3,
@@ -40,7 +40,7 @@
         "id": "razzia-native-stage",
         "version": "1.0.0"
       },
-      "rendererBuildSha256": "a2e9cbee7de58b2773d8c82bbd5c9259fff55892d009bd6991cf52de3008b51b"
+      "rendererBuildSha256": "20d3ece3ba7f8f649b2f81301c001019ec2cb2bebbc170cf6a4e1057f60c31c2"
     }
   ]
 }
