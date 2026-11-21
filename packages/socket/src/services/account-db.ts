@@ -546,6 +546,31 @@ export function getAccountDb(): DatabaseSync {
       period_at INTEGER NOT NULL,
       attempts INTEGER NOT NULL
     );
+    CREATE TABLE IF NOT EXISTS managed_clients (
+      id TEXT PRIMARY KEY,
+      owner_id TEXT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+      name TEXT NOT NULL,
+      code_digest TEXT UNIQUE,
+      enabled INTEGER NOT NULL DEFAULT 1 CHECK(enabled IN (0,1)),
+      create_request_id TEXT NOT NULL,
+      created_at INTEGER NOT NULL,
+      updated_at INTEGER NOT NULL,
+      UNIQUE(owner_id,create_request_id)
+    );
+    CREATE INDEX IF NOT EXISTS managed_clients_owner ON managed_clients(owner_id);
+    CREATE TABLE IF NOT EXISTS managed_client_games (
+      client_id TEXT NOT NULL REFERENCES managed_clients(id) ON DELETE CASCADE,
+      quiz_id TEXT NOT NULL,
+      assigned_at INTEGER NOT NULL,
+      PRIMARY KEY(client_id,quiz_id)
+    );
+    CREATE TABLE IF NOT EXISTS managed_client_sessions (
+      digest TEXT PRIMARY KEY,
+      client_id TEXT NOT NULL REFERENCES managed_clients(id) ON DELETE CASCADE,
+      expires_at INTEGER NOT NULL,
+      created_at INTEGER NOT NULL
+    );
+    CREATE INDEX IF NOT EXISTS managed_client_sessions_client ON managed_client_sessions(client_id);
   `)
   } finally {
     if (priorUmask !== null) {

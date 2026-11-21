@@ -26,6 +26,8 @@ describe("site metadata policy", () => {
     ["/studio/games", "My Games"],
     ["/studio/account", "Account & licences"],
     ["/studio/prepare", "Prepare show"],
+    ["/studio/clients", "Clients"],
+    ["/client", "Client access"],
     ["/manager/quizz/abc", "Editor"],
     ["/manager", "Manager"],
     ["/party/manager/abc", "Host"],
@@ -54,6 +56,9 @@ describe("site metadata policy", () => {
   })
 
   it("never places private query parameters in canonical URLs", () => {
+    expect(resolve("/client", "?code=012345&expired=1").canonical).toBe(
+      "https://example.test/client",
+    )
     expect(resolve("/game", "?pin=1234&token=secret").canonical).toBe(
       "https://example.test/game",
     )

@@ -16,8 +16,7 @@ import {
   packageThemeDefinitions,
   ThemeInstallationError,
 } from "@razzia/extensions/server"
-import { PACKAGE_LIMITS } from "@razzia/extensions/core"
-import { tadaShowV1Schema } from "@razzia/extensions/core"
+import { PACKAGE_LIMITS, tadaShowV1Schema } from "@razzia/extensions/core"
 import { requireManager, readClaims } from "@razzia/socket/api/middleware"
 import type { ApiEnv } from "@razzia/socket/api/factory"
 import {
@@ -30,6 +29,8 @@ import { themeWorkspacePrincipal } from "@razzia/socket/services/theme-installat
 import { packageTransfers } from "@razzia/socket/services/package-transfers"
 import Registry from "@razzia/socket/services/registry"
 import { verifyMediaAccess } from "@razzia/socket/services/media-access"
+import { canHostGame } from "@razzia/socket/services/managed-client-authorization"
+import { isManagedClientRequest } from "@razzia/socket/services/managed-client-session"
 import {
   getPath,
   getQuizzById,
@@ -106,7 +107,17 @@ app.get("/runtime/:source/:themeId", async (c) => {
   const roomId = c.req.query("roomId")
   const game = roomId ? Registry.getInstance().getGameById(roomId) : null
 
-  if (claims?.role === SESSION_ROLES.MANAGER) {
+  if (isManagedClientRequest(c)) {
+    if (!claims?.managedClientId) {
+      return c.json({ error: "client-session-expired" }, 401)
+    }
+
+    if (!game || !canHostGame(claims, game)) {
+      return c.json({ error: "not-found" }, 404)
+    }
+
+    owner = game.contentOwnerId
+  } else if (claims?.role === SESSION_ROLES.MANAGER) {
     owner = themeWorkspacePrincipal(
       claims.sub,
       c.req.header("X-Tadazz-Workspace") ?? claims.sub,
@@ -116,7 +127,7 @@ app.get("/runtime/:source/:themeId", async (c) => {
   // Same public unguessable-room boundary as /games/:id/display-media; below
   // we additionally require that room to reference this exact package's media.
   if (game) {
-    owner = game.manager.clientId
+    owner = game.contentOwnerId
   }
 
   if (!owner) {
@@ -128,7 +139,7 @@ app.get("/runtime/:source/:themeId", async (c) => {
 
     try {
       if ((await verifyMediaAccess(token)).gameId === roomId) {
-        owner = game.manager.clientId
+        owner = game.contentOwnerId
       }
     } catch {
       /* Fail closed */
@@ -200,14 +211,20 @@ app.post(
     const transfers = packageTransfers()
     const expectedBytes = transfers.ticketUploadSize(c.req.param("ticket"))
     const declared = c.req.header("Content-Length")
+
     if (
       declared &&
       (!/^[0-9]+$/u.test(declared) || Number(declared) !== expectedBytes)
     ) {
       return c.json({ error: "PACKAGE_TRANSFER_INPUT" }, 422)
     }
-    if (activeImports >= 2) return c.json({ error: "PACKAGE_IMPORT_BUSY" }, 429)
+
+    if (activeImports >= 2) {
+      return c.json({ error: "PACKAGE_IMPORT_BUSY" }, 429)
+    }
+
     activeImports += 1
+
     try {
       return c.json(
         transfers.receiveTicket(
@@ -225,12 +242,16 @@ app.get("/mcp-export/:ticket", (c) => {
   const ticket = packageTransfers().readExportTicket(c.req.param("ticket"))
   const p = { tenantId: ticket.owner, userId: ticket.owner, grants: [] }
   const receipt = store.details(p, ticket.uploadId)
+
   if (
     receipt.sourceDigest !== ticket.sourceDigest ||
     receipt.revision !== ticket.revision
-  )
+  ) {
     throw new PackageError("PACKAGE_DIGEST_CHANGED", 409)
+  }
+
   const bytes = store.export(p, ticket.uploadId)
+
   return c.body(Uint8Array.from(bytes).buffer, 200, {
     "Content-Type": "application/zip",
     "Content-Disposition": 'attachment; filename="package.tadazz"',
@@ -296,6 +317,7 @@ app.get("/save-consents/:requestId", (c) => {
     c.req.param("requestId"),
   )
   const receipt = packageStore().details(p, intent.uploadId)
+
   if (
     receipt.revision !== intent.revision ||
     receipt.sourceDigest !== intent.sourceDigest ||
@@ -303,11 +325,15 @@ app.get("/save-consents/:requestId", (c) => {
   ) {
     return c.json({ error: "PACKAGE_CONSENT_STALE" }, 409)
   }
+
   const contents = receipt.manifest.contents.filter((item) =>
     intent.selectedContentIds.includes(item.id),
   )
-  if (contents.length !== intent.selectedContentIds.length)
+
+  if (contents.length !== intent.selectedContentIds.length) {
     return c.json({ error: "PACKAGE_SELECTION" }, 409)
+  }
+
   return c.json({
     requestId: intent.requestId,
     uploadId: intent.uploadId,
@@ -342,29 +368,36 @@ app.post(
       p.tenantId,
       c.req.param("requestId"),
     )
+
     if (
       intent.revision !== input.expectedRevision ||
       intent.sourceDigest !== input.sourceDigest
-    )
+    ) {
       return c.json({ error: "PACKAGE_CONSENT_STALE" }, 409)
+    }
+
     const result = transfers.approveInstall(
       p.tenantId,
       intent.requestId,
       (selection) => {
         const store = packageStore(),
           receipt = store.details(p, selection.uploadId)
+
         if (
           receipt.revision !== selection.revision ||
           receipt.sourceDigest !== selection.sourceDigest ||
           receipt.buildDigest !== selection.buildDigest
-        )
+        ) {
           throw new PackageError("PACKAGE_CONSENT_STALE", 409)
+        }
+
         const saved = store.install(
           p,
           selection.uploadId,
           selection.revision,
           selection.selectedContentIds,
         )
+
         return {
           uploadId: selection.uploadId,
           revision: saved.revision,
@@ -372,6 +405,7 @@ app.post(
         }
       },
     )
+
     return c.json(result)
   },
 )
@@ -381,6 +415,7 @@ app.get("/uploads/:upload/games/:gameId/preview", (c) => {
     id = c.req.param("upload")
   store.acceptBuild(p, id)
   const receipt = store.details(p, id)
+
   if (
     !["preview-ready", "installed"].includes(receipt.phase) ||
     !receipt.buildDigest ||
@@ -388,10 +423,15 @@ app.get("/uploads/:upload/games/:gameId/preview", (c) => {
   ) {
     return c.json({ error: "PACKAGE_RUNTIME_NOT_READY" }, 409)
   }
+
   const content = receipt.manifest.contents.find(
     (item) => item.kind === "game" && item.id === c.req.param("gameId"),
   )
-  if (!content) return c.json({ error: "PACKAGE_NOT_FOUND" }, 404)
+
+  if (!content) {
+    return c.json({ error: "PACKAGE_NOT_FOUND" }, 404)
+  }
+
   const row = store.own(p, id),
     pkg = store.readPackage(row)
   const definitions = packageThemeDefinitions(pkg).map((definition) => ({
@@ -410,15 +450,19 @@ app.get("/uploads/:upload/games/:gameId/preview", (c) => {
   const show = tadaShowV1Schema.parse(
     normalizePackageDocument(pkg, content.path),
   )
+
   if (content.themeRef) {
     const [themeId, version] = content.themeRef.split("@")
+
     if (
       !definitions.some(
         (definition) =>
           definition.id === themeId && definition.version === version,
       )
-    )
+    ) {
       return c.json({ error: "PACKAGE_DEPENDENCY" }, 409)
+    }
+
     show.defaults = {
       ...show.defaults,
       showTheme: {
@@ -429,6 +473,7 @@ app.get("/uploads/:upload/games/:gameId/preview", (c) => {
       },
     }
   }
+
   // Only the verified manager receives authored source. Raw roster/settings and
   // executable code are never posted to the isolated theme frame.
   show.settings = []
@@ -436,20 +481,25 @@ app.get("/uploads/:upload/games/:gameId/preview", (c) => {
   const runtimeUrls: Record<string, string> = {}
   const origin = process.env.TADAZZ_PACKAGE_RUNTIME_ORIGIN
   const parent = process.env.TADAZZ_PACKAGE_PARENT_ORIGIN
+
   if (definitions.some((definition) => definition.sandbox)) {
     if (
       !origin ||
       !parent ||
       new URL(origin).protocol !== "https:" ||
       new URL(origin).origin === new URL(parent).origin
-    )
+    ) {
       return c.json({ error: "PACKAGE_RUNTIME_ORIGIN" }, 409)
-    for (const definition of definitions)
+    }
+
+    for (const definition of definitions) {
       if (definition.sandbox) {
         runtimeUrls[definition.id] =
           `${new URL(origin).origin}/render?ticket=${encodeURIComponent(ticket)}&theme=${encodeURIComponent(definition.id)}`
       }
+    }
   }
+
   setCookie(c, "tdz_theme_preview", `pkg.${ticket}`, {
     httpOnly: true,
     sameSite: "Lax",
@@ -457,6 +507,7 @@ app.get("/uploads/:upload/games/:gameId/preview", (c) => {
     path: "/media",
     maxAge: 300,
   })
+
   return c.json({
     uploadId: id,
     revision: receipt.revision,

@@ -16,6 +16,7 @@ import {
   Search,
   Settings2,
   Store,
+  Users,
 } from "lucide-react"
 import { clearToken, getClientId } from "@razzia/web/lib/session"
 import { socketClient } from "@razzia/web/features/game/contexts/socket-context"
@@ -33,6 +34,7 @@ import {
   type Account,
 } from "../../adapters/client"
 import { useSiteText } from "../../locales"
+import { useManagedClientText } from "../../locales/clients"
 import { AccountPanel } from "./AccountPanel"
 import type { QuizMeta } from "./MyGames"
 import type { ResultMeta } from "./Events"
@@ -68,6 +70,11 @@ const StudioThemes = lazy(() =>
 const MyGames = lazy(() =>
   import("./MyGames").then((module) => ({ default: module.MyGames })),
 )
+const ManagedClients = lazy(() =>
+  import("./ManagedClients").then((module) => ({
+    default: module.ManagedClients,
+  })),
+)
 const Events = lazy(() =>
   import("./Events").then((module) => ({ default: module.Events })),
 )
@@ -81,6 +88,7 @@ const navigation = [
   ["themes", "Game themes", Palette],
   ["explore", "Explore Games", Store],
   ["events", "My Events", CalendarDays],
+  ["clients", "Client accounts", Users],
   ["account", "Account & licences", Settings2],
 ] as const
 const studioPath = (section: string) =>
@@ -222,6 +230,7 @@ function StudioWorkspace({ account }: { account: Account }) {
   )
   const publicPreviewProvider = useMemo(createPublicPreviewProvider, [])
   const t = useSiteText()
+  const clientText = useManagedClientText()
   const queryClient = useQueryClient()
   const path = useRouterState({ select: (state) => state.location.pathname })
   const requestedQuizId = useRouterState({
@@ -372,7 +381,7 @@ function StudioWorkspace({ account }: { account: Account }) {
                   aria-current={section === id ? "page" : undefined}
                 >
                   <Icon size={18} />
-                  {t(label)}
+                  {id === "clients" ? clientText("ownerTitle") : t(label)}
                 </SiteLink>
               ))}
             </nav>
@@ -409,19 +418,23 @@ function StudioWorkspace({ account }: { account: Account }) {
                 >
                   <Menu />
                 </SiteButton>
-                <strong>{t(title)}</strong>
+                <strong>
+                  {section === "clients" ? clientText("ownerTitle") : t(title)}
+                </strong>
               </div>
               <div className="top-actions">
-                <label className="search-mini">
-                  <Search size={16} />
-                  <input
-                    type="search"
-                    placeholder={t("Search games")}
-                    aria-label={t("Search games")}
-                    value={search}
-                    onChange={(event) => setSearch(event.target.value)}
-                  />
-                </label>
+                {section !== "clients" && (
+                  <label className="search-mini">
+                    <Search size={16} />
+                    <input
+                      type="search"
+                      placeholder={t("Search games")}
+                      aria-label={t("Search games")}
+                      value={search}
+                      onChange={(event) => setSearch(event.target.value)}
+                    />
+                  </label>
+                )}
                 <SiteButton
                   className="circle-btn"
                   aria-label={t("Help")}
@@ -651,6 +664,9 @@ function StudioWorkspace({ account }: { account: Account }) {
                   <StudioPublicGallery search={search} />
                 )}
                 {section === "account" && <AccountPanel account={account} />}
+                {section === "clients" && (
+                  <ManagedClients accountId={account.id} />
+                )}
               </Suspense>
             </main>
           </div>

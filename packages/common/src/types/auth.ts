@@ -8,6 +8,8 @@ export interface SessionClaims {
   iat: number
   exp: number
   sid?: string
+  /** Play-only delegated principal, never an owner account or general manager. */
+  managedClientId?: string
 }
 
 export interface SessionResponse {

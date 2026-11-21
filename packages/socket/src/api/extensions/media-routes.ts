@@ -80,7 +80,7 @@ export const readRoomMedia = async (c: Context<ApiEnv, "/raw/:name">) => {
           return c.json({ error: "not-found" }, 404)
         }
 
-        ownerId = game.manager.clientId
+        ownerId = game.contentOwnerId
       } catch {
         return c.json({ error: "unauthorized" }, 401)
       }
