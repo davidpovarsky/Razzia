@@ -8,22 +8,24 @@ import {
 } from "@razzia/common/validators/game"
 import { resolveGameJoin } from "@razzia/socket/api/extensions/join-policy"
 import { apiFactory } from "@razzia/socket/api/factory"
-import { requireManager, requireSession } from "@razzia/socket/api/middleware"
+import {
+  readClaims,
+  requireManager,
+  requireRoomHost,
+  requireSession,
+} from "@razzia/socket/api/middleware"
 import { i18nHook } from "@razzia/socket/api/validation"
 import { mintJoinTicket } from "@razzia/socket/services/auth"
 import { grantMediaForGuest } from "@razzia/socket/services/media-access"
 import { getQuizz } from "@razzia/socket/services/config"
-import Game from "@razzia/socket/services/game"
-import { getIo } from "@razzia/socket/services/io"
+import {
+  GameCreationRequestConflict,
+  launchNativeGame,
+} from "@razzia/socket/services/game-launch"
 import Registry from "@razzia/socket/services/registry"
+import { isManagedClientRequest } from "@razzia/socket/services/managed-client-session"
+import { canHostGame } from "@razzia/socket/services/managed-client-authorization"
 import { StatusCodes } from "http-status-codes"
-
-// Retry identities live only as long as their in-memory rooms. No request can
-// discover another manager's room or reserve a key after its room is removed.
-const creationRequests = new WeakMap<
-  Game,
-  { requestId: string; quizzId: string }
->()
 
 const routes = apiFactory
   .createApp()
@@ -39,52 +41,29 @@ const routes = apiFactory
         return c.json({ error: "errors:quizz.notFound" }, StatusCodes.NOT_FOUND)
       }
 
-      const registry = Registry.getInstance()
-      const ownerId = c.get("claims").sub
+      try {
+        const game = launchNativeGame({
+          managerId: c.get("claims").sub,
+          quiz: quizz,
+          requestId,
+        })
 
-      if (requestId) {
-        const existing = registry
-          .getAllGames()
-          .find(
-            (game) =>
-              game.manager.clientId === ownerId &&
-              creationRequests.get(game)?.requestId === requestId,
-          )
-
-        if (existing) {
-          if (creationRequests.get(existing)?.quizzId !== quizzId) {
-            return c.json(
-              { error: "game-creation-request-conflict" },
-              StatusCodes.CONFLICT,
-            )
-          }
-
-          return c.json(
-            { gameId: existing.gameId, inviteCode: existing.inviteCode },
-            StatusCodes.CREATED,
-          )
+        return c.json(
+          { gameId: game.gameId, inviteCode: game.inviteCode },
+          StatusCodes.CREATED,
+        )
+      } catch (error) {
+        if (error instanceof GameCreationRequestConflict) {
+          return c.json({ error: error.message }, StatusCodes.CONFLICT)
         }
+
+        throw error
       }
-
-      // This handler stays synchronous through registration, so concurrent
-      // retries cannot both pass the lookup before a room is registered.
-      const game = new Game(getIo(), ownerId, quizz)
-      registry.addGame(game)
-      registry.markGameAsEmpty(game)
-
-      if (requestId) {
-        creationRequests.set(game, { requestId, quizzId })
-      }
-
-      return c.json(
-        { gameId: game.gameId, inviteCode: game.inviteCode },
-        StatusCodes.CREATED,
-      )
     },
   )
   .patch(
     "/:gameId/settings",
-    requireManager,
+    requireRoomHost,
     zValidator("json", gameSettingsValidator, i18nHook),
     (c) => {
       const game = Registry.getInstance().getGameById(c.req.param("gameId"))
@@ -108,9 +87,18 @@ const routes = apiFactory
     zValidator("json", checkGameValidator, i18nHook),
     async (c) => {
       const { inviteCode } = c.req.valid("json")
+      const claims = isManagedClientRequest(c) ? await readClaims(c) : undefined
+
+      if (isManagedClientRequest(c) && !claims?.managedClientId) {
+        return c.json(
+          { error: "client-session-expired" },
+          StatusCodes.UNAUTHORIZED,
+        )
+      }
+
       const game = Registry.getInstance().getGameByInviteCode(inviteCode)
 
-      if (!game) {
+      if (!game || (claims && !canHostGame(claims, game))) {
         return c.json({ error: "errors:game.notFound" }, StatusCodes.NOT_FOUND)
       }
 

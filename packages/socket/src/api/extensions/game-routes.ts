@@ -6,7 +6,9 @@ import {
   rosterParticipantSchema,
 } from "@razzia/extensions/core"
 import { apiFactory } from "@razzia/socket/api/factory"
-import { requireManager } from "@razzia/socket/api/middleware"
+import { readClaims, requireRoomHost } from "@razzia/socket/api/middleware"
+import { isManagedClientRequest } from "@razzia/socket/services/managed-client-session"
+import { canHostGame } from "@razzia/socket/services/managed-client-authorization"
 import { isPhoneLifecycleV2Adopted } from "@razzia/extensions/server"
 import { i18nHook } from "@razzia/socket/api/validation"
 import { grantMediaForGuest } from "@razzia/socket/services/media-access"
@@ -109,9 +111,18 @@ export const gameExtensionRoutes = apiFactory
   .createApp()
   // Public projector displays use an unguessable live game ID, never account credentials.
   .get("/:gameId/display-media", async (c) => {
+    const claims = isManagedClientRequest(c) ? await readClaims(c) : undefined
+
+    if (isManagedClientRequest(c) && !claims?.managedClientId) {
+      return c.json(
+        { error: "client-session-expired" },
+        StatusCodes.UNAUTHORIZED,
+      )
+    }
+
     const game = Registry.getInstance().getGameById(c.req.param("gameId"))
 
-    if (!game) {
+    if (!game || (claims && !canHostGame(claims, game))) {
       return c.json({ error: "errors:game.notFound" }, StatusCodes.NOT_FOUND)
     }
 
@@ -119,7 +130,7 @@ export const gameExtensionRoutes = apiFactory
 
     return c.json({ status: "ready" })
   })
-  .get("/:gameId/roster", requireManager, async (c) => {
+  .get("/:gameId/roster", requireRoomHost, async (c) => {
     const game = Registry.getInstance().getGameById(c.req.param("gameId"))
 
     if (!game || game.manager.clientId !== c.get("claims").sub) {
@@ -134,7 +145,7 @@ export const gameExtensionRoutes = apiFactory
   })
   .patch(
     "/:gameId/roster/settings",
-    requireManager,
+    requireRoomHost,
     zValidator(
       "json",
       z
@@ -163,7 +174,7 @@ export const gameExtensionRoutes = apiFactory
   )
   .post(
     "/:gameId/roster",
-    requireManager,
+    requireRoomHost,
     zValidator("json", upsertRosterBodySchema, i18nHook),
     (c) => {
       const game = Registry.getInstance().getGameById(c.req.param("gameId"))
@@ -190,7 +201,7 @@ export const gameExtensionRoutes = apiFactory
       }
     },
   )
-  .delete("/:gameId/roster/:rosterPlayerId", requireManager, (c) => {
+  .delete("/:gameId/roster/:rosterPlayerId", requireRoomHost, (c) => {
     const game = Registry.getInstance().getGameById(c.req.param("gameId"))
 
     if (!game || game.manager.clientId !== c.get("claims").sub) {
@@ -207,7 +218,7 @@ export const gameExtensionRoutes = apiFactory
   })
   .post(
     "/:gameId/roster/import",
-    requireManager,
+    requireRoomHost,
     zValidator("json", importRosterBodySchema, i18nHook),
     (c) => {
       const game = Registry.getInstance().getGameById(c.req.param("gameId"))
@@ -259,7 +270,7 @@ export const gameExtensionRoutes = apiFactory
   )
   .put(
     "/:gameId/roster/participants",
-    requireManager,
+    requireRoomHost,
     zValidator("json", commitParsedRosterBodySchema, i18nHook),
     (c) => {
       const game = Registry.getInstance().getGameById(c.req.param("gameId"))

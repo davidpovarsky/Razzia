@@ -1,5 +1,5 @@
 import { EVENTS } from "@razzia/common/constants"
-import type { SessionRole } from "@razzia/common/types/auth"
+import type { SessionClaims, SessionRole } from "@razzia/common/types/auth"
 import type {
   GameSettings,
   GameUpdateQuestion,
@@ -18,6 +18,10 @@ import type { z } from "zod"
 export interface SocketData {
   clientId: string
   role: SessionRole
+  /** Server-only verified claims; never serialized to players or room state. */
+  claims?: SessionClaims
+  /** Server-only room bindings for delegated host/display revocation. */
+  managedRoomIds?: string[]
   gameId?: string
 }
 

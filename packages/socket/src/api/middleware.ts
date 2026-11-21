@@ -6,6 +6,13 @@ import { verifyToken } from "@razzia/socket/services/auth"
 import type { Context } from "hono"
 import { createMiddleware } from "hono/factory"
 import { StatusCodes } from "http-status-codes"
+import {
+  isManagedClientRequest,
+  validManagedClientRequest,
+  readManagedClientClaims,
+} from "@razzia/socket/services/managed-client-session"
+import { canHostGame } from "@razzia/socket/services/managed-client-authorization"
+import Registry from "@razzia/socket/services/registry"
 
 const UNAUTHORIZED = { error: "errors:auth.unauthorized" } as const
 
@@ -22,6 +29,11 @@ const getBearerToken = (c: Context): string | undefined => {
 export const readClaims = async (
   c: Context,
 ): Promise<SessionClaims | undefined> => {
+  if (isManagedClientRequest(c)) {
+    // Explicit client mode never falls back to another browser account.
+    return validManagedClientRequest(c) ? readManagedClientClaims(c) : undefined
+  }
+
   const token = getBearerToken(c)
 
   if (!token) {
@@ -29,7 +41,9 @@ export const readClaims = async (
   }
 
   try {
-    return await verifyToken(token)
+    const claims = await verifyToken(token)
+
+    return claims.managedClientId ? undefined : claims
   } catch {
     return undefined
   }
@@ -38,7 +52,7 @@ export const readClaims = async (
 export const requireSession = createMiddleware<ApiEnv>(async (c, next) => {
   const claims = await readClaims(c)
 
-  if (!claims) {
+  if (!claims || claims.managedClientId) {
     return c.json(UNAUTHORIZED, StatusCodes.UNAUTHORIZED)
   }
 
@@ -50,11 +64,39 @@ export const requireSession = createMiddleware<ApiEnv>(async (c, next) => {
 export const requireManager = createMiddleware<ApiEnv>(async (c, next) => {
   const claims = await readClaims(c)
 
-  if (!claims || claims.role !== SESSION_ROLES.MANAGER) {
+  if (
+    !claims ||
+    claims.role !== SESSION_ROLES.MANAGER ||
+    claims.managedClientId
+  ) {
     return c.json(UNAUTHORIZED, StatusCodes.UNAUTHORIZED)
   }
 
   c.set("claims", claims)
 
   await withAccount(claims.sub, next)
+})
+
+/** Only existing, assigned rooms may enter the delegated content-owner scope. */
+export const requireRoomHost = createMiddleware<ApiEnv>(async (c, next) => {
+  const claims = await readClaims(c)
+
+  if (!claims || claims.role !== SESSION_ROLES.MANAGER) {
+    return c.json(
+      isManagedClientRequest(c)
+        ? { error: "client-session-expired" }
+        : UNAUTHORIZED,
+      StatusCodes.UNAUTHORIZED,
+    )
+  }
+
+  const id = c.req.param("gameId")
+  const game = id ? Registry.getInstance().getGameById(id) : undefined
+
+  if (!game || !canHostGame(claims, game)) {
+    return c.json({ error: "errors:game.notFound" }, StatusCodes.NOT_FOUND)
+  }
+
+  c.set("claims", claims)
+  await withAccount(game.contentOwnerId, next)
 })

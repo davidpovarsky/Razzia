@@ -51,6 +51,7 @@ import {
 } from "@razzia/extensions/server"
 import {
   accountsEnabled,
+  activeAccount,
   withAccount,
 } from "@razzia/socket/services/account-scope"
 import { getPath, saveResult } from "@razzia/socket/services/config"
@@ -114,12 +115,40 @@ class Game {
 
   private readonly phone: GamePhoneController
   private readonly roster: GameRoster
+  readonly contentOwnerId: string
+  readonly managedClientId?: string
+  readonly sourceQuizId?: string
 
-  constructor(io: Server, managerClientId: string, quizz: Quizz) {
+  // oxlint-disable-next-line max-params -- Optional trusted delegation preserves existing native three-argument callers.
+  constructor(
+    io: Server,
+    managerClientId: string,
+    quizz: Quizz,
+    delegation?: {
+      contentOwnerId: string
+      managedClientId: string
+      sourceQuizId: string
+    },
+  ) {
     this.io = io
     this.quizz = quizz
+    this.contentOwnerId = delegation?.contentOwnerId ?? managerClientId
+    this.managedClientId = delegation?.managedClientId
+    this.sourceQuizId =
+      delegation?.sourceQuizId ?? (quizz as { id?: string }).id
+
+    if (
+      delegation &&
+      (delegation.managedClientId !== managerClientId ||
+        delegation.sourceQuizId !== (quizz as { id?: string }).id ||
+        !accountsEnabled() ||
+        activeAccount() !== delegation.contentOwnerId)
+    ) {
+      throw new Error("Invalid delegated game identity")
+    }
+
     this.gameId = uuid()
-    reserveBilledGame(managerClientId, this.gameId)
+    reserveBilledGame(this.contentOwnerId, this.gameId)
     this.inviteCode = createInviteCode()
     this.gameMode = quizz.gameMode
     this._manager = {
@@ -169,7 +198,7 @@ class Game {
     this.isCreatingWorldsShow = isCreatingWorlds
     this.temporaryGuestsAllowed = allowsTemporaryGuests(
       quizzId,
-      managerClientId,
+      this.contentOwnerId,
       process.env,
     )
     this.extensionSession = runtimeExtras
@@ -177,13 +206,13 @@ class Game {
           this.gameId,
           runtimeExtras,
           installedThemeForSelection(
-            managerClientId,
+            this.contentOwnerId,
             "defaults" in runtimeExtras
               ? runtimeExtras.defaults.showTheme
               : undefined,
           ),
           publishedCompositionForPin(
-            managerClientId,
+            this.contentOwnerId,
             "defaults" in runtimeExtras
               ? runtimeExtras.defaults.showComposition
               : undefined,
@@ -261,8 +290,9 @@ class Game {
       },
       onGameFinished: (result) => {
         this.presentationLaunch?.close()
+
         if (accountsEnabled()) {
-          void withAccount(managerClientId, () => saveResult(result))
+          void withAccount(this.contentOwnerId, () => saveResult(result))
         } else {
           saveResult(result)
         }
@@ -309,7 +339,7 @@ class Game {
       coordinator: () => this.showCoordinator,
       admitPhone: (identity, callId, join) =>
         admitBilledPhone(
-          this._manager.clientId,
+          this.contentOwnerId,
           this.gameId,
           identity,
           callId,
@@ -622,22 +652,30 @@ class Game {
   joinSpectator(socket: Socket) {
     socket.join(this.gameId)
     this.spectatorSocketIds.add(socket.id)
-    connectAudience({
-      socket,
-      gameId: this.gameId,
-      inviteCode: this.inviteCode,
-      gameMode: this.gameMode,
-      clientId: getClientId(socket),
-      managerStatus: this.managerStatus,
-      lastBroadcastStatus: this.lastBroadcastStatus,
-      started: this.started,
-      acceptingAnswers: this.round.isCurrentlyAcceptingAnswers,
-      remainingSeconds: this.round.getRemainingSeconds(),
-      reconnectInfo: this.round.getReconnectInfo(),
-      survey: this.round.isSurvey(),
-      session: this.extensionSession,
-      players: this.players,
-    })
+    const { claims, managedRoomIds } = socket.data
+
+    try {
+      connectAudience({
+        socket,
+        gameId: this.gameId,
+        inviteCode: this.inviteCode,
+        gameMode: this.gameMode,
+        clientId: getClientId(socket),
+        managerStatus: this.managerStatus,
+        lastBroadcastStatus: this.lastBroadcastStatus,
+        started: this.started,
+        acceptingAnswers: this.round.isCurrentlyAcceptingAnswers,
+        remainingSeconds: this.round.getRemainingSeconds(),
+        reconnectInfo: this.round.getReconnectInfo(),
+        survey: this.round.isSurvey(),
+        session: this.extensionSession,
+        players: this.players,
+      })
+    } finally {
+      // Audience presentation changes role/data, never authenticated identity.
+      socket.data.claims = claims
+      socket.data.managedRoomIds = managedRoomIds
+    }
   }
 
   leaveSpectator(socket: Socket) {
@@ -895,7 +933,7 @@ class Game {
         ? `roster:${billingRosterId}`
         : `client:${clientId}`
     const error = admitBilledParticipant(
-      this._manager.clientId,
+      this.contentOwnerId,
       this.gameId,
       billingIdentity,
       () => this.playerManager.join(socket, finalUsername),
@@ -1239,7 +1277,7 @@ class Game {
       this.playerManager.count() > 0 &&
       socket.id === this._manager.id
     ) {
-      const error = startBilledGame(this._manager.clientId, this.gameId)
+      const error = startBilledGame(this.contentOwnerId, this.gameId)
 
       if (error) {
         socket.emit(EVENTS.GAME.ERROR_MESSAGE, error)
