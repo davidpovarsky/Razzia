@@ -87,6 +87,7 @@ export * from "./show-themes/native-composition"
 export * from "./tadazz-show/native-question-media"
 
 export { ThemeSandboxHost } from "./package-runtime/ThemeSandboxHost"
+export { createPackageSceneContinuity } from "./package-runtime/scene-continuity"
 
 export {
   createPackageQuestionAdmission,
