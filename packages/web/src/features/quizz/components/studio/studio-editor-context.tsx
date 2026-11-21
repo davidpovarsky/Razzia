@@ -699,14 +699,14 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           nextQuestions,
           nextQuestionIds: nextQIds,
           nextCurrentIndex,
-        } = insertQuestionForScene(
-          currentQuestions,
-          currentQIds,
-          currentTimeline,
-          itemIdx,
-          newQuestion,
-          newQId,
-        )
+        } = insertQuestionForScene({
+          questions: currentQuestions,
+          questionIds: currentQIds,
+          timeline: currentTimeline,
+          sceneIndex: itemIdx,
+          question: newQuestion,
+          questionId: newQId,
+        })
         const nextTimeline = currentTimeline.map((entry) =>
           entry.id === item.id
             ? {

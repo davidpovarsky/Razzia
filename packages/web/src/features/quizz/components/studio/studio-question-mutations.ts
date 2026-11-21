@@ -22,14 +22,23 @@ export const withQuestionPlayMode = (
 })
 
 /** Native round numbers and persisted question arrays follow the authored timeline. */
-export const insertQuestionForScene = (
-  questions: Question[],
-  questionIds: string[],
-  timeline: TimelineItem[],
-  sceneIndex: number,
-  question: Question,
-  questionId: string,
-) => {
+interface InsertQuestionForSceneInput {
+  questions: Question[]
+  questionIds: string[]
+  timeline: TimelineItem[]
+  sceneIndex: number
+  question: Question
+  questionId: string
+}
+
+export const insertQuestionForScene = ({
+  questions,
+  questionIds,
+  timeline,
+  sceneIndex,
+  question,
+  questionId,
+}: InsertQuestionForSceneInput) => {
   const questionIndex = timeline
     .slice(0, sceneIndex)
     .filter((item) => item.kind === "question").length

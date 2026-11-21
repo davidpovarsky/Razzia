@@ -1,5 +1,6 @@
 import {
   ESTIMATION_INPUT_MODES,
+  QUESTION_LEAD_IN_SECONDS,
   QUESTION_TYPES,
   QUIZZ_MODES,
   SCORING_MODES,
@@ -99,10 +100,18 @@ describe("quizzValidator", () => {
     )
   })
 
-  it("bounds the cooldown between 3 and 15 seconds", () => {
-    expect(issues(quizz([choiceQuestion({ cooldown: 2 })]))).toContain(
-      "errors:quizz.cooldownTooShort",
-    )
+  it("bounds the cooldown between the shared question lead-in and 15 seconds", () => {
+    expect(
+      issues(
+        quizz([
+          choiceQuestion({ cooldown: QUESTION_LEAD_IN_SECONDS - 1 }),
+        ]),
+      ),
+    ).toContain("errors:quizz.cooldownTooShort")
+    expect(
+      issues(quizz([choiceQuestion({ cooldown: QUESTION_LEAD_IN_SECONDS })])),
+    ).toEqual([])
+    expect(issues(quizz([choiceQuestion({ cooldown: 15 })]))).toEqual([])
     expect(issues(quizz([choiceQuestion({ cooldown: 16 })]))).toContain(
       "errors:quizz.cooldownTooLong",
     )

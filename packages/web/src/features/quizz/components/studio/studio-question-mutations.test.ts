@@ -24,7 +24,7 @@ describe("Studio question mutations", () => {
       const originalQuestions = [question("Before"), question("After")]
       const originalIds = ["before", "after"]
       const timeline: TimelineItem[] = originalIds.map((id) => ({
-        id: "card-" + id,
+        id: `card-${id}`,
         kind: "question",
         questionId: id,
       }))
@@ -33,14 +33,14 @@ describe("Studio question mutations", () => {
         kind: "transition",
         sceneId: "scene",
       })
-      const inserted = insertQuestionForScene(
-        originalQuestions,
-        originalIds,
+      const inserted = insertQuestionForScene({
+        questions: originalQuestions,
+        questionIds: originalIds,
         timeline,
-        position,
-        question("Converted"),
-        "converted",
-      )
+        sceneIndex: position,
+        question: question("Converted"),
+        questionId: "converted",
+      })
       const authoredQuestionIds = timeline.map((item) =>
         item.kind === "question" ? item.questionId : "converted",
       )
