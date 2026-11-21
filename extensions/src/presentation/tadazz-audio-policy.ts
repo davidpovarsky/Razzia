@@ -1,4 +1,9 @@
-import type { SoundtrackSlotId } from "@razzia/extensions/core"
+import type { CueId, SoundtrackSlotId } from "@razzia/extensions/core"
+
+/** Native start ticks own the start effect; the phase still owns its music bed. */
+export function resolveNativePhaseAudioCue(sceneKind: string, cueId?: CueId): CueId | undefined {
+  return sceneKind === "start" ? undefined : cueId
+}
 
 export interface TadazzAudioPolicyInput {
   statusName?: string | null

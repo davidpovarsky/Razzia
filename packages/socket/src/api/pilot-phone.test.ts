@@ -480,7 +480,7 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
     }>(acceptKey4On4Options)
     expect(acceptData.accepted).toBe(true)
 
-    // Advance Q4 to reveal, advance past leaderboard, then advance to Question 3 (Estimation)
+    // Persisted legacy quizzes use the runtime card-only leaderboard policy.
     ;(
       game as unknown as {
         round: {
@@ -489,11 +489,16 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
       }
     ).round.endTimer()
     await vi.advanceTimersByTimeAsync(1000)
-    // Reveal -> leaderboard
+    const state = runtimeIo.lastEvent("manager", EXTENSION_EVENTS.STATE)
+      ?.data as ExtensionStateEnvelope | undefined
+    expect(state?.extras).toMatchObject({
+      defaults: { leaderboardPolicy: "cardOnly" },
+    })
+    expect(game.roundManager.currentStepName).toBe("reveal")
+    // No authored leaderboard card: one host advance starts the estimation.
     game.advance()
-    expect(game.roundManager.currentStepName).toBe("leaderboard")
-    // Leaderboard -> next question
-    game.advance()
+    expect(game.roundManager.currentQuestionIndex).toBe(2)
+    expect(game.roundManager.currentStepName).toBeNull()
     await vi.advanceTimersByTimeAsync(
       NEXT_QUESTION_DELAY_MS + QUESTION_LEAD_IN_MS,
     )

@@ -164,17 +164,35 @@ it("keeps start-countdown recordings within their event and host roles", () => {
   const selection = createDefaultShowTheme()
   for (const role of ["manager", "spectator"] as const) {
     const theme = resolveShowTheme({ selection, role })
-    expect(resolveThemeEffect(theme, "timer-start")?.url).toBe("/sounds/boump.mp3")
-    expect(themeAllowsAudioUrl(theme, "timerWarning", "/sounds/boump.mp3")).toBe(true)
-    expect(themeAllowsAudioUrl(theme, "opening", "/sounds/boump.mp3")).toBe(true)
-    expect(themeAllowsAudioUrl(theme, "answersMusic", "/sounds/boump.mp3")).toBe(false)
-    expect(themeAllowsAudioUrl(theme, "revealResults", "/sounds/boump.mp3")).toBe(false)
+    expect(resolveThemeEffect(theme, "timer-start")?.url).toBe(
+      "/sounds/boump.mp3",
+    )
+    expect(
+      themeAllowsAudioUrl(theme, "timerWarning", "/sounds/boump.mp3"),
+    ).toBe(false)
+    expect(themeAllowsAudioUrl(theme, "opening", "/sounds/boump.mp3")).toBe(
+      true,
+    )
+    expect(
+      themeAllowsAudioUrl(theme, "answersMusic", "/sounds/boump.mp3"),
+    ).toBe(false)
+    expect(
+      themeAllowsAudioUrl(theme, "revealResults", "/sounds/boump.mp3"),
+    ).toBe(false)
   }
   const player = resolveShowTheme({ selection, role: "player" })
   expect(resolveThemeEffect(player, "timer-start")?.url).toBeUndefined()
   const muted = resolveShowTheme({
-    selection: { ...selection, overrides: { audio: { timerWarning: { muted: true } } } },
+    selection: {
+      ...selection,
+      overrides: { audio: { opening: { muted: true } } },
+    },
     role: "manager",
   })
   expect(resolveThemeEffect(muted, "timer-start")?.url).toBeUndefined()
+  const custom = resolveShowTheme({
+    selection: { ...selection, overrides: { audio: { opening: { mediaUrl: "/media/custom-start.mp3" } } } },
+    role: "manager",
+  })
+  expect(resolveThemeEffect(custom, "timer-start")?.url).toBe("/media/custom-start.mp3")
 })

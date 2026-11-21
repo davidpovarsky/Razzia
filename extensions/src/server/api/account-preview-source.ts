@@ -164,7 +164,17 @@ export function projectAccountPreviewContent(
         baseDigest,
       )
 
-  if (extras.quizId !== id || extras.baseDigest !== baseDigest) {
+  // Stored sidecars historically hashed either the logical payload or the full
+  // record including its storage ID. Match the storage reader's compatibility
+  // contract without normalizing or rewriting any persisted bytes. Keep the
+  // normalized form already admitted by preview for legacy default fields.
+  const { id: _storageId, ...storedPayload } = input
+  const matchesBaseDigest =
+    extras.baseDigest === baseDigest ||
+    extras.baseDigest === computeCanonicalBaseDigest(storedPayload) ||
+    extras.baseDigest === computeCanonicalBaseDigest(input)
+
+  if (extras.quizId !== id || !matchesBaseDigest) {
     throw new PreviewSourceError(409)
   }
 

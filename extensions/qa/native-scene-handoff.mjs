@@ -7,7 +7,8 @@ const source = process.env.TADAZZ_HANDOFF_SOURCE
 const deps = process.env.TADAZZ_HANDOFF_DEPS
 const evidence = process.env.TADAZZ_HANDOFF_EVIDENCE
 const adapterOverride = process.env.TADAZZ_HANDOFF_ADAPTER
-const legacySceneIdentity = process.env.TADAZZ_HANDOFF_LEGACY_SCENE_IDENTITY === "1"
+const legacySceneIdentity =
+  process.env.TADAZZ_HANDOFF_LEGACY_SCENE_IDENTITY === "1"
 if (!source || !deps || !evidence)
   throw new Error("Explicit isolated source/deps/evidence required")
 const require = createRequire(path.join(deps, "extensions/package.json"))
@@ -31,6 +32,11 @@ const timerEvents = path.join(
   source,
   "extensions/src/presentation/show-themes/timer-events.ts",
 )
+const themeContext = path.join(source, "extensions/src/presentation/show-themes/context.tsx")
+const themeResolver = path.join(source, "extensions/src/core/show-themes/resolve.ts")
+const audioDefaults = path.join(source, "extensions/src/core/platform-audio-defaults.ts")
+const audioPolicy = path.join(source, "extensions/src/presentation/tadazz-audio-policy.ts")
+const closingBoundary = path.join(source, "extensions/src/presentation/platform-closing.tsx")
 await fs.mkdir(evidence, { recursive: true })
 const entry = `
 import React,{useRef,useState} from 'react';
@@ -40,14 +46,24 @@ import {TadazzV4StageAdapter} from ${JSON.stringify(adapter)};
 import {planTransition,runSteps,showSceneTransitionIdentity} from ${JSON.stringify(director)};
 import {AudioCuePlayer} from ${JSON.stringify(audioOwner)};
 import {startCountdownCue} from ${JSON.stringify(timerEvents)};
+import {ShowThemeScope} from ${JSON.stringify(themeContext)};
+import {resolveShowTheme} from ${JSON.stringify(themeResolver)};
+import {createPlatformAudioExtras} from ${JSON.stringify(audioDefaults)};
+import {resolveNativePhaseAudioCue,resolveTadazzAudioPolicy} from ${JSON.stringify(audioPolicy)};
+import {PlatformClosingBoundary} from ${JSON.stringify(closingBoundary)};
 const q1={key:'first#1',question:'FIRST QUESTION',number:1,totalQuestions:23,answerCount:3,options:[]};
 const options=[{label:'Alpha'},{label:'Bravo'},{label:'Charlie'}];
 const transitionIdentity=${legacySceneIdentity ? "scene=>JSON.stringify(scene)" : "showSceneTransitionIdentity"};
+const audioExtras=createPlatformAudioExtras();
 function App(){
  const stage=useRef(null);const previous=useRef(null);const [custom,setCustom]=useState(null);
  const previousIdentity=useRef(null);
  const [guessOff,setGuessOff]=useState(false);const cues=useRef([]);
- const [audio,setAudio]=useState({gameId:'start-audio',epoch:1,seconds:5,role:'manager',paused:false});
+ const [audio,setAudio]=useState({gameId:'start-audio',epoch:1,seconds:5,role:'manager',paused:false,sceneKind:'start',closingElapsed:null});
+ const theme=React.useMemo(()=>resolveShowTheme({role:audio.role}),[audio.role]);
+ const statusName=audio.sceneKind==='start'?'SHOW_START':'FINISHED';
+ const policy=resolveTadazzAudioPolicy({sceneKind:audio.sceneKind,statusName});
+ const cueId=resolveNativePhaseAudioCue(audio.sceneKind,audio.sceneKind==='start'?'start':'podium1');
  const startTick=()=>{const detail=startCountdownCue(audio);if(detail)window.dispatchEvent(new CustomEvent('tadazz:sfx',{detail}))};
  const drive=async(next)=>{
    // The live director intentionally ignores this split-delivery placeholder.
@@ -110,13 +126,10 @@ function App(){
   audioState:(next)=>flushSync(()=>setAudio(current=>({...current,...next}))),
   mode:()=>stage.current?.mode,
  };
- return <div style={{width:'100%',height:'100%'}} data-guess-off-stage={guessOff?'true':undefined} data-guess-off-media={guessOff?'text':undefined}><TadazzV4StageAdapter ref={stage} customScreen={custom} guessOffLook={guessOff} onCue={cue=>cues.current.push(cue)}/><div style={{position:'fixed',top:0,left:0,zIndex:1000,background:'white',color:'black'}}><AudioCuePlayer eventOnly={audio.role==='player'} paused={audio.paused} autoPlay={false} showControls/><button data-testid="start-audio-tick" onClick={startTick}>Server start tick</button></div></div>;
+ return <ShowThemeScope theme={theme}><div style={{width:'100%',height:'100%'}} data-guess-off-stage={guessOff?'true':undefined} data-guess-off-media={guessOff?'text':undefined}><TadazzV4StageAdapter ref={stage} customScreen={custom} guessOffLook={guessOff} onCue={cue=>cues.current.push(cue)}/><div style={{position:'fixed',top:0,left:0,zIndex:1000,background:'white',color:'black'}}><PlatformClosingBoundary elapsedMs={audio.closingElapsed}><AudioCuePlayer gameId={audio.gameId} epoch={audio.epoch} phase={statusName} cueId={cueId} soundtrackSlot={policy.slot} continuityKey={policy.continuityKey} audioExtras={audioExtras} stageOwnsReveal eventOnly={audio.role==='player'} paused={audio.paused} autoPlay showControls/></PlatformClosingBoundary><button data-testid="start-audio-tick" onClick={startTick}>Server start tick</button></div></div></ShowThemeScope>;
 }
 createRoot(document.getElementById('root')).render(<App/>);
 `
-const resolveModule = createRequire(
-  path.join(deps, "packages/web/package.json"),
-)
 const plugins = [
   {
     name: "isolated-native-source",
@@ -136,23 +149,26 @@ const plugins = [
         }
         throw new Error("Unresolved candidate workspace import " + args.path)
       })
-      builder.onResolve({ filter: /^[^./]/ }, (args) => {
+      builder.onResolve({ filter: /^[^./]/ }, async (args) => {
         const relative = path.relative(source, args.resolveDir)
         if (
           relative === ".." ||
           relative.startsWith(".." + path.sep) ||
           path.isAbsolute(relative)
-        ) return undefined
+        )
+          return undefined
         // Candidate code uses the matching installed workspace. Once resolved
         // into that dependency tree, esbuild follows each real importer itself
         // (including pnpm's private transitive dependencies).
-        const fromImporter = createRequire(path.join(deps, relative, "package.json"))
-        try {
-          return { path: fromImporter.resolve(args.path) }
-        } catch {
-          // Presentation peers are supplied by the web host.
-          return { path: resolveModule.resolve(args.path) }
-        }
+        const resolved = await builder.resolve(args.path, {
+          resolveDir: path.join(deps, relative), kind: args.kind,
+        })
+        if (!resolved.errors.length) return resolved
+        // Presentation peers are supplied by the web host. Use esbuild here,
+        // too, so conditional package exports retain their browser branch.
+        return builder.resolve(args.path, {
+          resolveDir: path.join(deps, "packages/web"), kind: args.kind,
+        })
       })
       if (adapterOverride)
         builder.onLoad(
@@ -179,7 +195,11 @@ await build({
   external: ["/tadazz-show/*"],
   loader: { ".woff2": "file", ".png": "file", ".jpg": "file", ".svg": "file" },
   define: { "process.env.NODE_ENV": '"production"' },
-  stdin: { contents: entry, loader: "tsx", resolveDir: path.join(source, "packages/web") },
+  stdin: {
+    contents: entry,
+    loader: "tsx",
+    resolveDir: path.join(source, "packages/web"),
+  },
   outfile: path.join(evidence, "fixture.js"),
 })
 const server = http.createServer(async (request, response) => {
@@ -270,6 +290,10 @@ try {
           item.src.endsWith("/sounds/boump.mp3"),
         ).length,
     )
+  const unlock = page.getByTestId("host-enable-audio")
+  if (await unlock.isVisible()) await unlock.click()
+  check("SHOW_START phase does not duplicate the countdown's first effect", (await startAttemptCount()) === 0)
+  check("SHOW_START keeps its round-start music bed", await page.getByTestId("audio-cue-player-state").getAttribute("data-soundtrack-slot") === "roundStart")
   await page.getByTestId("start-audio-tick").click()
   await page.waitForFunction(() =>
     window.startAudioElements.some(
@@ -490,10 +514,12 @@ try {
       animationStarts: window.animationStarts,
       cues: window.handoff.cues(),
     }))
-    check(`native ${testCase.name} ignores an elapsed-only authored snapshot`,
+    check(
+      `native ${testCase.name} ignores an elapsed-only authored snapshot`,
       afterClock.animationStarts === beforeClock.animationStarts &&
-      JSON.stringify(afterClock.cues) === JSON.stringify(beforeClock.cues),
-      { beforeClock, afterClock })
+        JSON.stringify(afterClock.cues) === JSON.stringify(beforeClock.cues),
+      { beforeClock, afterClock },
+    )
   }
   for (const guessOff of [false, true]) {
     for (const count of [3, 4, 5]) {
@@ -555,9 +581,13 @@ try {
         { geometry, overlaps },
       )
       const caseName = `${guessOff ? "guess-off" : "native"}-${count}-answers`
-      await page.screenshot({ path: path.join(evidence, `${caseName}-voting.png`) })
+      await page.screenshot({
+        path: path.join(evidence, `${caseName}-voting.png`),
+      })
       await page.evaluate(() => window.handoff.choiceResults())
-      await page.screenshot({ path: path.join(evidence, `${caseName}-reveal.png`) })
+      await page.screenshot({
+        path: path.join(evidence, `${caseName}-reveal.png`),
+      })
       const cuesBefore = await page.evaluate(() => window.handoff.cues())
       await page.evaluate(() => window.handoff.rerenderCustom())
       await page.evaluate(
@@ -583,6 +613,30 @@ try {
       )
     }
   }
+  await page.evaluate(() => window.handoff.audioState({ sceneKind: "finale", closingElapsed: 0 }))
+  await page.waitForFunction(() => {
+    const state = document.querySelector('[data-testid="audio-cue-player-state"]')
+    const url = state?.getAttribute('data-audio-url')
+    const audio = window.startAudioElements.findLast(item => item.src.endsWith(url || 'missing'))
+    if (!audio || audio.currentTime <= 0.05 || audio.paused) return false
+    window.finaleAudio = audio
+    window.finaleBeforeClose = { url, time: audio.currentTime, plays: window.audioAttempts.filter(item => item.src === audio.src).length,
+      identity: state.getAttribute('data-audio-identity') }
+    return true
+  })
+  await page.evaluate(() => window.handoff.audioState({ closingElapsed: 100000 }))
+  await page.waitForTimeout(500)
+  const finale = await page.evaluate(() => {
+    const state = document.querySelector('[data-testid="audio-cue-player-state"]')
+    const before = window.finaleBeforeClose, audio = window.finaleAudio
+    return { before, time: audio.currentTime, paused: audio.paused, loop: audio.loop,
+      desiredLoop: state.getAttribute('data-audio-loop'), identity: state.getAttribute('data-audio-identity'),
+      plays: window.audioAttempts.filter(item => item.src === audio.src).length,
+      closed: document.querySelector('[data-testid="platform-closing-boundary"]')?.getAttribute('data-closing-stage') }
+  })
+  check("finale music continues as one loop after the platform curtains close", finale.closed === "closed" &&
+    finale.loop && finale.desiredLoop === "true" && !finale.paused && finale.time >= finale.before.time &&
+    finale.identity === finale.before.identity && finale.plays === finale.before.plays, { finale })
   check("no browser runtime errors", errors.length === 0, { errors })
   await page.screenshot({ path: path.join(evidence, "completed.png") })
   result.passed = result.checks.every((x) => x.passed)

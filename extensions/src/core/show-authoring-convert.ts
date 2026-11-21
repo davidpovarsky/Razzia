@@ -29,6 +29,7 @@ import {
 } from "./show-authoring-schema"
 import { isQuizExtrasV2, upgradeLegacyExtrasToV2 } from "./studio-migrate"
 import type { PerQuestionItem } from "./quiz-extras"
+import { normalizeLegacyStageLook } from "./stage-look"
 
 export interface ConversionDiagnostic {
   path: string[]
@@ -783,12 +784,14 @@ export function nativeBundleToAuthoredShow(
   ) as Array<Record<string, unknown>>
 
   // Ensure V2 extras for timeline processing
-  const extrasV2: QuizExtrasV2 = isQuizExtrasV2(bundle.extras)
-    ? bundle.extras
-    : upgradeLegacyExtrasToV2(quizz, bundle.extras, {
-        quizId: bundle.extras.quizId,
-        baseDigest: bundle.extras.baseDigest,
-      })
+  const extrasV2: QuizExtrasV2 = normalizeLegacyStageLook(
+    isQuizExtrasV2(bundle.extras)
+      ? bundle.extras
+      : upgradeLegacyExtrasToV2(quizz, bundle.extras, {
+          quizId: bundle.extras.quizId,
+          baseDigest: bundle.extras.baseDigest,
+        }),
+  )
   const cards: AuthoredCard[] = []
   const questionMap = new Map<string, Record<string, unknown>>()
   const questionIdToCardKey = new Map<string, string>()

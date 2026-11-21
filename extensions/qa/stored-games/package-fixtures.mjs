@@ -25,7 +25,9 @@ function checkedPath(root, relative) {
       !relative.includes("\\") &&
       !relative.includes("\0") &&
       !path.posix.isAbsolute(relative) &&
-      relative.split("/").every((part) => part && part !== "." && part !== ".."),
+      relative
+        .split("/")
+        .every((part) => part && part !== "." && part !== ".."),
     "RELATIVE_PATH",
   )
   const parts = relative.split("/")
@@ -68,10 +70,7 @@ function copyVerified(root, relative, bytes, expectedSha256) {
   } else {
     writeFileSync(target, bytes, { flag: "wx", mode: 0o600 })
   }
-  requireFixture(
-    sha256(readFileSync(target)) === expectedSha256,
-    "COPY_DIGEST",
-  )
+  requireFixture(sha256(readFileSync(target)) === expectedSha256, "COPY_DIGEST")
 }
 
 function summary(media, status) {
@@ -79,6 +78,71 @@ function summary(media, status) {
     referenceDigest: sha256(String(media.url)),
     ...(media.sha256 ? { sha256: media.sha256, bytes: media.bytes } : {}),
     status,
+  }
+}
+
+function seedExternalMirror(fixtureRoot, config, tenantRelative, media) {
+  const manifestPath = checkedPath(fixtureRoot, "external-assets.json")
+  if (!existsSync(manifestPath)) {
+    return summary(media, "external-not-fetched")
+  }
+  const manifestBytes = readFileSync(manifestPath)
+  const manifestSha256 = sha256(manifestBytes)
+  requireFixture(
+    manifestSha256 === process.env.TADAZZ_PRIVATE_EXTERNAL_MEDIA_SHA256,
+    "EXTERNAL_MANIFEST_PIN",
+  )
+  const manifest = JSON.parse(manifestBytes.toString("utf8"))
+  requireFixture(
+    manifest.schemaVersion === 1 &&
+      Array.isArray(manifest.assets) &&
+      manifest.sourceFixtureSha256 === process.env.TADAZZ_PRIVATE_GAME_FIXTURES_SHA256 &&
+      manifest.originalGameUrlsChanged === false &&
+      manifest.productionChanged === false,
+    "EXTERNAL_MANIFEST_SCHEMA",
+  )
+  const matches = manifest.assets.filter((asset) => asset.sourceUrl === media.url)
+  if (matches.length === 0) {
+    return summary(media, "external-not-fetched")
+  }
+  requireFixture(matches.length === 1, "EXTERNAL_MANIFEST_DUPLICATE")
+  const asset = matches[0]
+  const source = new URL(asset.sourceUrl)
+  requireFixture(
+    source.protocol === "https:" &&
+      source.hostname === "placehold.co" &&
+      /^\/[1-9][0-9]*x[1-9][0-9]*\.png$/u.test(source.pathname) &&
+      !source.username && !source.password && !source.search && !source.hash &&
+      asset.finalUrl === asset.sourceUrl &&
+      asset.publicSource === true &&
+      asset.sourceHttpStatus === 200 &&
+      asset.contentType === "image/png" &&
+      Number.isFinite(Date.parse(asset.verifiedAt)) &&
+      asset.targetRelativePath === "media/qa-external-" + asset.sha256 + ".png",
+    "EXTERNAL_PROVENANCE",
+  )
+  const bytes = fixtureBytes(fixtureRoot, asset)
+  requireFixture(
+    bytes.length >= 24 &&
+      bytes.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])) &&
+      bytes.readUInt32BE(16) === asset.width &&
+      bytes.readUInt32BE(20) === asset.height,
+    "EXTERNAL_IMAGE_FORMAT",
+  )
+  copyVerified(config, tenantRelative + "/" + asset.targetRelativePath, bytes, asset.sha256)
+  return {
+    ...summary(media, "offline-mirror-seeded"),
+    mirror: {
+      sourceUrl: asset.sourceUrl,
+      nativeUrl: "/" + asset.targetRelativePath,
+      sha256: asset.sha256,
+      bytes: asset.bytes,
+      contentType: asset.contentType,
+      verifiedAt: asset.verifiedAt,
+      sourceHttpStatus: asset.sourceHttpStatus,
+      manifestSha256,
+      originalUrlPlayedOverInternet: false,
+    },
   }
 }
 
@@ -130,13 +194,12 @@ export async function seedStoredGameMedia({
   }
   const packages = []
   for (const media of fixture.sourceSummary.media) {
-    if (media.kind === "external" || media.kind === "embedded") {
-      result.externalAssets.push(
-        summary(
-          media,
-          media.kind === "embedded" ? "embedded" : "external-not-fetched",
-        ),
-      )
+    if (media.kind === "external") {
+      result.externalAssets.push(seedExternalMirror(fixtures, config, tenantRelative, media))
+      continue
+    }
+    if (media.kind === "embedded") {
+      result.externalAssets.push(summary(media, "embedded"))
       continue
     }
     const bytes = fixtureBytes(fixtures, media)

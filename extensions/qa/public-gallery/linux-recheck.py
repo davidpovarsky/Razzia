@@ -13,6 +13,8 @@ import uuid
 ROOT = pathlib.Path(__file__).resolve().parents[3]
 RUN = sys.argv[1]
 MODE = sys.argv[2] if len(sys.argv) > 2 else '--focused'
+FIX_LINT = '--fix-lint' in sys.argv[3:]
+assert all(option == '--fix-lint' for option in sys.argv[3:]), 'Unknown verification option'
 assert MODE in {'--focused', '--repair-regressions', '--all-unit-tests'}, 'Unknown verification mode'
 assert RUN.startswith('tadazz-gallery-wip-') and '/' not in RUN and '\\' not in RUN
 EVIDENCE = ROOT / 'docs/extensions/plans/public-gallery-20261119' / RUN
@@ -21,7 +23,7 @@ BASE = original.get('formatBase', 'HEAD')
 previous = EVIDENCE / 'working-manifest.json'
 if not previous.exists(): previous = EVIDENCE / 'formatted-manifest.json'
 expected = json.loads(previous.read_text(encoding='utf8'))
-names = subprocess.check_output(['git','ls-files','--cached','--others','--exclude-standard','-z','--','extensions','packages','package.json','tsconfig.json','vitest.config.ts','pnpm-workspace.yaml','pnpm-lock.yaml','oxlint.config.ts','.prettierrc.json','.gitignore','.prettierignore','docs/extensions/references/TADAZZ_Motion_Showcase_One_Click_20261105.html'],cwd=ROOT).decode().split('\0')
+names = subprocess.check_output(['git','ls-files','--cached','--others','--exclude-standard','-z','--','extensions','packages','package.json','tsconfig.json','vitest.config.ts','pnpm-workspace.yaml','pnpm-lock.yaml','oxlint.config.ts','.prettierrc.json','.gitignore','.prettierignore','scripts/tadazz/extract-motion-assets.mjs','docs/extensions/references/TADAZZ_Motion_Showcase_One_Click_20261105.html'],cwd=ROOT).decode().split('\0')
 names = sorted({name for name in names if name and '.bak.' not in name and (ROOT/name).is_file()})
 manifest = {name:hashlib.sha256((ROOT/name).read_bytes()).hexdigest() for name in names}
 delta = {name:base64.b64encode((ROOT/name).read_bytes()).decode() for name in names if expected.get(name)!=manifest[name]}
@@ -32,7 +34,7 @@ local.mkdir(exist_ok=False)
 changed = subprocess.check_output(['git','diff','--name-only','-z',BASE],cwd=ROOT).decode().split('\0')
 untracked = subprocess.check_output(['git','ls-files','--others','--exclude-standard','-z','--','extensions','packages'],cwd=ROOT).decode().split('\0')
 format_files = sorted({name for name in changed+untracked if name in manifest and pathlib.Path(name).suffix in {'.ts','.tsx','.mjs','.js','.json','.css'}})
-config = {'mode':MODE,'run':RUN,'remote':original['remote'],'head':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT).decode().strip(),'iteration':iteration,'expected':expected,'manifest':manifest,'deltas':delta,'formatFiles':format_files}
+config = {'fixLint':FIX_LINT,'mode':MODE,'run':RUN,'remote':original['remote'],'head':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT).decode().strip(),'iteration':iteration,'expected':expected,'manifest':manifest,'deltas':delta,'formatFiles':format_files}
 (local/'input-manifest.json').write_text(json.dumps({k:v for k,v in config.items() if k!='deltas'},indent=2)+'\n',encoding='utf8')
 SSH=['ssh','-i',str(pathlib.Path.home()/'.ssh/tadazz_oracle_2026'),'-o','BatchMode=yes','-o','StrictHostKeyChecking=yes','-o','ConnectTimeout=10','ubuntu@132.145.25.168']
 remote=r'''
@@ -58,9 +60,12 @@ def run(label,argv,seconds,cwd='/evidence/source'):
  (out/'progress.json').write_text(json.dumps(checks,indent=2)+'\n');print(json.dumps(row),flush=True)
  return q.returncode==0
 lint=[p for p in c['formatFiles'] if pathlib.PurePosixPath(p).suffix in {'.ts','.tsx'}]
-# Keep imported branch source intact; explicit fixes are reviewed before this run.
-# The unchanged full lint report is compared separately against the exact deployed baseline.
+# Autofix is opt-in and limited to changed TypeScript files. Final lint still gates
+# the run; source changes are reviewed and copied back only with input hash guards.
 if c['formatFiles']:run('format',['node','/cleanup/node_modules/prettier/bin/prettier.cjs','--write',*c['formatFiles']],120)
+if c['fixLint'] and lint:
+ run('lint-fix',['node','/cleanup/node_modules/oxlint/bin/oxlint','--fix','--format','json',*lint],180)
+ run('format-after-lint',['node','/cleanup/node_modules/prettier/bin/prettier.cjs','--write',*c['formatFiles']],120)
 syntax_code="import ast,pathlib\nfor p in pathlib.Path('extensions/qa/public-gallery').glob('*.py'):\n tree=ast.parse(p.read_text(),filename=str(p));compile(tree,str(p),'exec')\n snippets=[tree]\n for node in ast.walk(tree):\n  if isinstance(node,ast.Constant) and isinstance(node.value,str) and node.value.lstrip().startswith('import ') and '\\n' in node.value:\n   nested=ast.parse(node.value,filename=str(p)+':remote');compile(nested,str(p)+':remote','exec');snippets.append(nested)\n for snippet in snippets:\n  for node in ast.walk(snippet):\n   if isinstance(node,ast.Call) and isinstance(node.func,ast.Attribute) and node.func.attr=='write_text' and node.args and isinstance(node.args[0],ast.BinOp) and isinstance(node.args[0].right,ast.Constant):\n    assert node.args[0].right.value!='\\\\n','Literal slash-n instead of newline'\n print(str(p)+' syntax and newline literals valid')\n"
 run('qa-controller-syntax',['python3','-c',syntax_code],30)
 for script in ['account-verify.mjs','browser-verify.mjs','editor-verify.mjs','palette-verify.mjs']:

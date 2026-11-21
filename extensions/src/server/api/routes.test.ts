@@ -37,7 +37,6 @@ describe("Hono Composite REST Routes (/api/extensions) (SEC01, CORE01, CORE04)",
 
   const baseQuizzes = new Map<string, Record<string, unknown>>()
   let tempDir = ""
-  let app: ReturnType<typeof createExtensionRoutes>
 
   const injections: StorageInjections = {
     getPath: (subPath = "") => path.join(tempDir, subPath),
@@ -73,6 +72,7 @@ describe("Hono Composite REST Routes (/api/extensions) (SEC01, CORE01, CORE04)",
       baseQuizzes.delete(id)
     },
   }
+  let app = createExtensionRoutes(injections)
 
   beforeEach(() => {
     // The callback-backed base adapter still persists real sidecars and journals.

@@ -31,6 +31,7 @@ import {
   showSceneTransitionIdentity,
   resolveStageBackdrop,
   resolveTadazzAudioPolicy,
+  resolveNativePhaseAudioCue,
   acceptsQuestionMilestone,
   themeTimerTransition,
   startCountdownCue,
@@ -1739,7 +1740,7 @@ function TadazzShowContent(props: TadazzShowViewProps) {
               eventOnly={role === "player" || scene.kind === "wait"}
               showTrack={referenceStoryTrack}
               stageOwnsReveal={useV4 || Boolean(theme.definition.sandbox)}
-              cueId={props.audioCueId}
+              cueId={resolveNativePhaseAudioCue(scene.kind, props.audioCueId)}
               audioExtras={
                 extensionState.extras.audio as QuizExtrasV1["audio"] | undefined
               }

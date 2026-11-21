@@ -32,6 +32,8 @@ export * from "./quiz-extras"
 
 export * from "./studio-timeline-schema"
 
+export * from "./stage-look"
+
 export * from "./studio-migrate"
 
 export * from "./reveal"

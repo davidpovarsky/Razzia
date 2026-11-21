@@ -3,6 +3,7 @@ import path from "node:path"
 import {
   quizExtrasV1Schema,
   quizExtrasV2Schema,
+  normalizeLegacyStageLook,
   type AnyQuizExtras,
 } from "../../core/index"
 
@@ -80,7 +81,7 @@ export const readSidecar = (
       const v2 = quizExtrasV2Schema.safeParse(parsed)
 
       if (v2.success) {
-        return v2.data
+        return normalizeLegacyStageLook(v2.data)
       }
 
       console.warn(

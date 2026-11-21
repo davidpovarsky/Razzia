@@ -456,7 +456,9 @@ describe("planTransition — the ten reference methods are driven by real events
     )
     expect(ops(steps)).toEqual(["openVoting"])
     expect(steps[0]).toMatchObject({
-      question: q("k1"), seconds: 20, deadlineMs: 1_012_000,
+      question: q("k1"),
+      seconds: 20,
+      deadlineMs: 1_012_000,
     })
   })
 

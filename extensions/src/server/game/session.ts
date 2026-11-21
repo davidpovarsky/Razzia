@@ -3,6 +3,8 @@ import { buildLobbyDirectory } from "./public-directory"
 import {
   extensionCommandSchema,
   isQuizExtrasV2,
+  normalizeLegacyStageLook,
+  resolveStageLook,
   type ActiveSceneData,
   type AnyQuizExtras,
   type ExtensionCommand,
@@ -128,7 +130,7 @@ export class ExtensionGameSession {
     this.compositionMediaNames = new Set(
       appearance ? publicApplicationCompositionMediaNames(appearance) : [],
     )
-    this.extras = extras
+    this.extras = extras && isQuizExtrasV2(extras) ? normalizeLegacyStageLook(extras) : extras
     this.themeDefinition = themeDefinition
       ? (createShowThemeRegistry([themeDefinition]).get(
           themeDefinition.id,
@@ -367,11 +369,9 @@ export class ExtensionGameSession {
     const extrasPayload: Record<string, unknown> = {}
 
     if (
-      this.extras?.quizId === "6369bf77-c3d4-40ee-8a67-0476434b562f" &&
+      this.extras &&
       isQuizExtrasV2(this.extras) &&
-      this.extras.defaults.showTheme?.id === "tadazz-classic" &&
-      this.extras.defaults.showTheme.version === "1.0.0" &&
-      !this.extras.defaults.showComposition
+      resolveStageLook(this.extras.defaults) === "guess-off"
     ) {
       extrasPayload.stageLook = "guess-off"
     }

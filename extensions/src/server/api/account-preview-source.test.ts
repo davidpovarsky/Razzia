@@ -15,9 +15,11 @@ import { readPublicPreviewSource } from "./public-preview-source"
 import { publicDemoCatalogue } from "../../core/show-library/public-demo-catalogue"
 import { authoredShowToNativeBundleDraft } from "../../core/show-authoring-convert"
 import { authoredFixture } from "../../core/show-library/preview-fixtures"
+import { computeCanonicalBaseDigest } from "../../core/digest"
 import {
   readAccountPreviewSource,
   readAccountPreviewAssets,
+  PreviewSourceError,
 } from "./account-preview-source"
 
 const directories: string[] = []
@@ -156,6 +158,47 @@ describe("account-owned preview source is a read-only projection", () => {
       "Preview source unavailable",
     )
   })
+  it.each(["logical", "legacy-full"] as const)(
+    "accepts the stored %s digest without rewriting bytes, and still rejects drift",
+    (form) => {
+      const f = fixture(true)
+      const baseFile = f.getPath("quizz/source.json")
+      const sideFile = f.getPath("extensions/quizzes/owned-game.json")
+      const storedPayload = { ...f.bundle.quizz, legacyMetadata: "preserved" }
+      const storedRecord = { id: "owned-game", ...storedPayload }
+      const extras = {
+        ...f.bundle.extras,
+        baseDigest: computeCanonicalBaseDigest(
+          form === "logical" ? storedPayload : storedRecord,
+        ),
+      }
+      writeFileSync(baseFile, JSON.stringify(storedRecord))
+      writeFileSync(sideFile, JSON.stringify(extras))
+      const before = [digest(baseFile), digest(sideFile)]
+      const first = readAccountPreviewSource(f, "owned-game")
+
+      expect(first.show.cards.map((card) => card.kind)).toEqual(["quiz", "quiz"])
+      expect(readAccountPreviewSource(f, "owned-game")).toEqual(first)
+      expect([digest(baseFile), digest(sideFile)]).toEqual(before)
+
+      const changed = structuredClone(storedRecord)
+      changed.questions[0].question = "Changed after the saved sidecar"
+      writeFileSync(baseFile, JSON.stringify(changed))
+      const changedBytes = readFileSync(baseFile)
+
+      expect(() => readAccountPreviewSource(f, "owned-game")).toThrowError(
+        expect.objectContaining({ status: 409 }),
+      )
+      expect(readFileSync(baseFile)).toEqual(changedBytes)
+      expect(digest(sideFile)).toBe(before[1])
+
+      writeFileSync(baseFile, JSON.stringify(storedRecord))
+      writeFileSync(sideFile, JSON.stringify({ ...extras, quizId: "foreign-game" }))
+      expect(() => readAccountPreviewSource(f, "owned-game")).toThrowError(
+        PreviewSourceError,
+      )
+    },
+  )
   it("never returns private directory numbers/representatives from authored scenes", () => {
     const f = fixture(true)
     const sceneId = crypto.randomUUID()

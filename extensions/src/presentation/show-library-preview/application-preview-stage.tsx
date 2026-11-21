@@ -18,6 +18,7 @@ import {
   compileFullShowPreviewTimeline,
 } from "../../core/show-library/full-show-preview-timeline"
 import { resolveShowTheme } from "../../core/show-themes/resolve"
+import { resolveStageLook } from "../../core/stage-look"
 import type { ApplicationPreviewFrame } from "../../core/show-library/application-preview-schema"
 import {
   ShowThemeScope,
@@ -148,6 +149,11 @@ function NativeApplicationPreviewStage({
     rootComponent === "native.original-stage" ||
     (rootComponent !== "native.cinematic-stage" &&
       theme.definition.rendererId === "razzia-native-stage")
+  const guessOffLook = !original && resolveStageLook(frame.show.defaults) === "guess-off"
+  const guessOffTextAnswers = guessOffLook &&
+    (card?.kind === "quiz" || card?.kind === "survey") &&
+    !(card.media?.type === "image" && (!card.reveal || card.reveal.effect === "none")) &&
+    card.answers.every(answer => answer.display === "text" || !answer.imageUrl)
   const slot: ShowThemeSlotId =
     !frame.stagePhase && card && card.kind !== "quiz" && card.kind !== "survey"
       ? themeSlotForSceneKind(card.kind)
@@ -618,6 +624,8 @@ function NativeApplicationPreviewStage({
             <div
               ref={presentationRoot}
               data-native-application-preview
+              data-guess-off-stage={guessOffLook || undefined}
+              data-guess-off-media={guessOffTextAnswers ? "text" : undefined}
               data-preview-ready={committed === key}
               data-preview-chapter-index={frame.chapterIndex}
               data-preview-phase={
@@ -660,7 +668,8 @@ function NativeApplicationPreviewStage({
                   key={stageIdentity}
                   ref={stage}
                   labels={labels.labels}
-                  v4Labels={labels.v4Labels}
+                  v4Labels={guessOffLook ? { ...labels.v4Labels, teamLeaderboard: "LEADERBOARD" } : labels.v4Labels}
+                  guessOffLook={guessOffLook}
                   reducedMotion={frame.reducedMotion || frame.clock.paused}
                   interactive={false}
                   backdropUrl={backdrop.url}

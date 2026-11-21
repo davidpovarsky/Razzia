@@ -76,7 +76,11 @@ describe("question stage continuity", () => {
         { ...question, data: { questionKey: "q1", photoLayout: true } },
         {
           scene: "question-image",
-          data: { questionKey: "q1", photoLayout: true, questionAlreadyOnStage: true },
+          data: {
+            questionKey: "q1",
+            photoLayout: true,
+            questionAlreadyOnStage: true,
+          },
         },
       ),
     ).toBe(true)

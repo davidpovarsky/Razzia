@@ -31,7 +31,8 @@ export function verifyStoredStructure(games) {
       check("stored game has questions", Array.isArray(base?.questions) && base.questions.length > 0)
       if (extras) {
         check("sidecar belongs to the original game", extras.quizId === base.id)
-        check("sidecar digest matches the stored questions", extras.baseDigest === computeCanonicalBaseDigest(base))
+        const { id: _storageId, ...logicalBase } = base
+        check("sidecar digest matches the stored questions", extras.baseDigest === computeCanonicalBaseDigest(logicalBase) || extras.baseDigest === computeCanonicalBaseDigest(base))
         check("question identity count matches the base game", extras.questionIds?.length === base.questions.length)
         check("question identities are unique", new Set(extras.questionIds ?? []).size === (extras.questionIds?.length ?? 0))
         if (fixture.expected?.questionIds) {
@@ -148,7 +149,7 @@ export function verifyStoredStructure(games) {
     schemaVersion: 1,
     layer: "structural-only",
     fixtureCount: rows.length,
-    passed: rows.length === games.length && rows.every(row => row.passed),
+    passed: games.length > 0 && rows.length === games.length && rows.every(row => row.passed),
     games: rows,
   }
 }

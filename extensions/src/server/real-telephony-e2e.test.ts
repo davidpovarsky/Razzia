@@ -13,7 +13,10 @@ import Registry from "@razzia/socket/services/registry"
 import { sign } from "hono/jwt"
 import { io as connect, type Socket } from "socket.io-client"
 import { afterAll, beforeAll, describe, expect, it } from "vitest"
-import { extensionStateEnvelopeSchema, readPlatformOpening } from "../core/index"
+import {
+  extensionStateEnvelopeSchema,
+  readPlatformOpening,
+} from "../core/index"
 import {
   KeypadSimulatorCore,
   MockProvider,
@@ -137,7 +140,10 @@ describe("GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real S
 
   // Use the same three host actions as the UI: intro, lobby, then the round.
   // Waiting for server state prevents a second action racing the first one.
-  const startRealGame = async (manager: Socket, gameId: string): Promise<void> => {
+  const startRealGame = async (
+    manager: Socket,
+    gameId: string,
+  ): Promise<void> => {
     for (const stage of ["opening", "lobby"] as const) {
       await new Promise<void>((resolve, reject) => {
         const listener = (state: unknown) => {
@@ -147,7 +153,9 @@ describe("GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real S
             return
           }
 
-          const launch = readPlatformOpening(parsed.data.extras.presentationLaunch)
+          const launch = readPlatformOpening(
+            parsed.data.extras.presentationLaunch,
+          )
 
           if (launch?.stage !== stage) {
             return

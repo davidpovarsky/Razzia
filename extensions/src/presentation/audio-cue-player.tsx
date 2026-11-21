@@ -744,18 +744,16 @@ export const AudioCuePlayer = ({
     }
 
     if (soundtrack?.url) {
+      const loop = selectedSoundtrackSlot === "finale" ||
+        (!theme && selectedSoundtrackSlot !== "openingIntro") || soundtrack.loop
+
       return {
         identity: `${gameId ?? "g"}:soundtrack:${continuityKey ?? selectedSoundtrackSlot}:${soundtrack.url}`,
         url: soundtrack.url,
         volume: soundtrack.volume,
         // Continuous stage beds must repeat until the show changes phase.
         // The deliberately timed 12-second opening ident is the only exception.
-        loop:
-          selectedSoundtrackSlot === "finale"
-            ? true
-            : theme || selectedSoundtrackSlot === "openingIntro"
-              ? soundtrack.loop
-              : true,
+        loop,
         fadeMs: soundtrack.fadeMs,
         startOffsetSeconds: soundtrack.startOffsetSeconds,
         maxDurationMs:

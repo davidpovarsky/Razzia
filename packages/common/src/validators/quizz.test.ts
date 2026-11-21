@@ -103,9 +103,7 @@ describe("quizzValidator", () => {
   it("bounds the cooldown between the shared question lead-in and 15 seconds", () => {
     expect(
       issues(
-        quizz([
-          choiceQuestion({ cooldown: QUESTION_LEAD_IN_SECONDS - 1 }),
-        ]),
+        quizz([choiceQuestion({ cooldown: QUESTION_LEAD_IN_SECONDS - 1 })]),
       ),
     ).toContain("errors:quizz.cooldownTooShort")
     expect(

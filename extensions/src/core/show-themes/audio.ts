@@ -46,7 +46,7 @@ const EFFECT_EVENTS: Readonly<Partial<Record<string, ShowThemeAudioEvent>>> = {
   "countdown-ended": "voteLocked",
   "survey-reveal": "revealResults",
   "top-pick-reveal": "revealResults",
-  "timer-start": "timerWarning",
+  "timer-start": "opening",
   "timer-tick": "timerWarning",
   "timer-urgent": "timerWarning",
   "timer-final": "timerWarning",
@@ -195,12 +195,14 @@ export function applyThemeAudioDefaults(
         (effective.inheritPlatform ||
           isInheritedPlatformCueUrl(cueId as CueId, effective.url))
       const inheritedCue = platformAudio.cues[cueId as CueId]
-      let volume = saved?.volume ?? effective.volume
+      const { volume: themeVolume } = effective
+      const { volume: inheritedVolume } = inheritedCue
+      let volume = saved?.volume ?? themeVolume
 
       if (selection?.volume !== undefined || explicitRecording) {
-        volume = effective.volume
+        volume = themeVolume
       } else if (inheritsPlatformCue) {
-        volume = inheritedCue.volume
+        volume = inheritedVolume
       }
 
       return [

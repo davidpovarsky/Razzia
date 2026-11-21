@@ -17,11 +17,13 @@ parser = argparse.ArgumentParser()
 parser.add_argument("source_run")
 parser.add_argument("fixture_dir")
 parser.add_argument("--fixture-sha256", required=True)
+parser.add_argument("--external-media-sha256", required=True)
 parser.add_argument("--fixture-name", default="games.runtime-v2.json")
 args = parser.parse_args()
 sha = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT).decode().strip()
 assert re.fullmatch("tadazz-codex-" + sha[:12] + "-[a-f0-9]{8}", args.source_run)
 assert re.fullmatch("[a-f0-9]{64}", args.fixture_sha256)
+assert re.fullmatch("[a-f0-9]{64}", args.external_media_sha256)
 assert re.fullmatch(r"games(?:\.runtime-v[0-9]+)?\.json", args.fixture_name)
 fixture = pathlib.PurePosixPath(args.fixture_dir)
 assert fixture.is_absolute() and ".." not in fixture.parts
@@ -42,6 +44,7 @@ config = {
     "sha": sha, "sourceRun": args.source_run, "manifest": source["files"],
     "run": run, "fixtureDir": str(fixture), "fixtureSha256": args.fixture_sha256,
     "fixtureName": args.fixture_name,
+    "externalMediaSha256": args.external_media_sha256,
 }
 (evidence / "input-manifest.json").write_text(json.dumps(config, indent=2) + "\n", encoding="utf8")
 SSH = [
@@ -58,6 +61,7 @@ fixtures=pathlib.Path(c['fixtureDir'])
 assert not source.is_symlink() and source.is_dir()
 assert not fixtures.is_symlink() and fixtures.is_dir()
 assert hashlib.sha256((fixtures/c['fixtureName']).read_bytes()).hexdigest()==c['fixtureSha256']
+assert hashlib.sha256((fixtures/'external-assets.json').read_bytes()).hexdigest()==c['externalMediaSha256']
 def source_hashes():return {p:hashlib.sha256((source/p).read_bytes()).hexdigest() for p in c['manifest']}
 assert source_hashes()==c['manifest'],'Candidate source differs from immutable Git archive'
 facts=json.loads(subprocess.check_output(['docker','inspect','tadazz-phase2-20261116']))[0]
@@ -73,7 +77,7 @@ for origin,target,readonly in mounts:argv+=['--mount','type=bind,source='+str(or
 argv+=['--entrypoint','/bin/sleep',facts['Image'],'infinity']
 subprocess.run(argv,check=True,stdout=subprocess.DEVNULL)
 atexit.register(lambda:subprocess.run(['docker','stop','--time','10',name],check=True,stdout=subprocess.DEVNULL,timeout=25))
-env={'TMPDIR':'/tmp','TSX_DISABLE_CACHE':'1','NODE_OPTIONS':'--max-old-space-size=1400','TADAZZ_GALLERY_SOURCE_SHA':c['sha'],'TADAZZ_STORED_GAMES_EVIDENCE':'/evidence/browser','TADAZZ_INLINE_GAME_PREVIEW_ENABLED':'true','TADAZZ_PUBLIC_GAME_PREVIEW_ENABLED':'true','TADAZZ_SITE_ENABLED':'true','TADAZZ_REMOTE_QA':'1','TADAZZ_QA_OWNED_RUN_DIR':'1','TADAZZ_PRIVATE_GAME_FIXTURES':'/fixtures/'+c['fixtureName'],'TADAZZ_PRIVATE_GAME_FIXTURES_SHA256':c['fixtureSha256'],'TADAZZ_SITE_DIST_DIR':'/source/packages/web/dist'}
+env={'TMPDIR':'/tmp','TSX_DISABLE_CACHE':'1','NODE_OPTIONS':'--max-old-space-size=1400','TADAZZ_GALLERY_SOURCE_SHA':c['sha'],'TADAZZ_STORED_GAMES_EVIDENCE':'/evidence/browser','TADAZZ_INLINE_GAME_PREVIEW_ENABLED':'true','TADAZZ_PUBLIC_GAME_PREVIEW_ENABLED':'true','TADAZZ_SITE_ENABLED':'true','TADAZZ_REMOTE_QA':'1','TADAZZ_QA_OWNED_RUN_DIR':'1','TADAZZ_PRIVATE_GAME_FIXTURES':'/fixtures/'+c['fixtureName'],'TADAZZ_PRIVATE_GAME_FIXTURES_SHA256':c['fixtureSha256'],'TADAZZ_PRIVATE_EXTERNAL_MEDIA_SHA256':c['externalMediaSha256'],'TADAZZ_SITE_DIST_DIR':'/source/packages/web/dist'}
 prefix=['docker','exec','-w','/source']
 for key,value in env.items():prefix+=['-e',key+'='+value]
 command=['node','/cleanup/extensions/node_modules/tsx/dist/cli.mjs','--tsconfig','tsconfig.json','extensions/qa/stored-games/verify.mjs']
@@ -83,9 +87,10 @@ with (owned/'browser.stdout.log').open('wb') as out,(owned/'browser.stderr.log')
  result=subprocess.run(prefix+command,stdout=out,stderr=err,timeout=3320)
 assert source_hashes()==c['manifest'],'Browser changed source'
 assert hashlib.sha256((fixtures/c['fixtureName']).read_bytes()).hexdigest()==c['fixtureSha256'],'Browser changed private fixtures'
+assert hashlib.sha256((fixtures/'external-assets.json').read_bytes()).hexdigest()==c['externalMediaSha256'],'Browser changed external media manifest'
 receipt_path=owned/'browser/receipt.json';inner=json.loads(receipt_path.read_text()) if receipt_path.exists() else None
 state=json.loads(subprocess.check_output(['docker','inspect',name]))[0]['State']
-report={'sha':c['sha'],'sourceRun':c['sourceRun'],'run':c['run'],'exit':result.returncode,'seconds':round(time.time()-start,2),'passed':result.returncode==0 and inner is not None and inner.get('passed') is True,'allSourceHashesVerified':True,'sourceReadOnly':True,'fixturesReadOnly':True,'productionMountUsed':False,'productionChanged':False,'network':'none','oomKilled':state.get('OOMKilled',False),'browserReceipt':inner}
+report={'sha':c['sha'],'sourceRun':c['sourceRun'],'run':c['run'],'exit':result.returncode,'seconds':round(time.time()-start,2),'passed':result.returncode==0 and inner is not None and inner.get('passed') is True,'allSourceHashesVerified':True,'sourceReadOnly':True,'fixturesReadOnly':True,'externalMediaSha256':c['externalMediaSha256'],'productionMountUsed':False,'productionChanged':False,'network':'none','oomKilled':state.get('OOMKilled',False),'browserReceipt':inner}
 (owned/'receipt.json').write_text(json.dumps(report,indent=2)+'\n')
 print(json.dumps({'run':c['run'],'passed':report['passed'],'seconds':report['seconds'],'receipt':str(owned/'receipt.json')}),flush=True)
 '''.replace("c=CONFIG", "c=" + repr(config))

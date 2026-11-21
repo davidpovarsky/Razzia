@@ -9,8 +9,10 @@ import {
   computeCanonicalBaseDigest,
   ensureQuestionIds,
   isEnhancedBundle,
+  isQuizExtrasV2,
   isSafeMediaUrl,
   nextRevision,
+  normalizeLegacyStageLook,
   quizExtrasV1Schema,
   quizExtrasV2Schema,
   remapQuestionIds,
@@ -264,7 +266,9 @@ export class CompositeStorageService {
       )
     }
 
-    const validatedExtras = extrasValidation.data
+    const validatedExtras = isQuizExtrasV2(extrasValidation.data)
+      ? normalizeLegacyStageLook(extrasValidation.data)
+      : extrasValidation.data
     const questionsCount = Array.isArray(quizz.questions)
       ? quizz.questions.length
       : 0
@@ -475,7 +479,10 @@ export class CompositeStorageService {
         )
       }
 
-      const { quizz, extras } = effectivePayload
+      const { quizz } = effectivePayload
+      const extras = isQuizExtrasV2(effectivePayload.extras)
+        ? normalizeLegacyStageLook(effectivePayload.extras)
+        : effectivePayload.extras
       const quizzValidation = quizzValidator.safeParse(quizz)
 
       if (!quizzValidation.success) {
