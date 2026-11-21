@@ -53,6 +53,7 @@ import {
   getResultsMeta,
   saveQuizz,
 } from "@razzia/socket/services/config"
+import { selectDialedPilotTarget } from "@razzia/socket/services/game/pilot-dial-target"
 import { canHostGame } from "@razzia/socket/services/managed-client-authorization"
 import { executeManagedClientOwnerCommand } from "@razzia/socket/services/managed-client-owner-cli"
 import { ManagedClientStore } from "@razzia/socket/services/managed-clients"
@@ -514,6 +515,49 @@ describe("managed-client HTTP/native boundaries", () => {
         })
       ).status,
     ).toBe(401)
+  })
+
+  it("routes an assigned native room only through its content owner's explicit shared phone line", async () => {
+    const created = await createClient()
+    const { cookie } = await exchange(created.code)
+    const response = await launch(cookie)
+    expect(response.status).toBe(201)
+    const room = (await response.json()) as ManagedClientLaunchResponse
+    const delegated = Registry.getInstance().getGameById(room.gameId)
+    expect(delegated).toBeDefined()
+    expect(delegated?.manager.clientId).toBe(created.client.id)
+    expect(delegated?.contentOwnerId).toBe(owner)
+
+    const foreignResponse = await request("/games", {
+      method: "POST",
+      bearer: strangerToken,
+      body: { quizzId: strangerQuizId },
+    })
+    expect(foreignResponse.status).toBe(201)
+    const foreignRoom = (await foreignResponse.json()) as { gameId: string }
+    const foreign = Registry.getInstance().getGameById(foreignRoom.gameId)
+    expect(foreign).toBeDefined()
+
+    if (!delegated || !foreign) {
+      throw new Error("Expected both native phone-routing fixture rooms")
+    }
+
+    const dialed = "441234000001"
+    const config = (ownerId: string, quizIds = [quizId, strangerQuizId]) =>
+      JSON.stringify({ [dialed]: { ownerId, quizIds } })
+    const games = Registry.getInstance().getAllGames()
+    expect(selectDialedPilotTarget(games, dialed, config(owner)).game).toBe(
+      delegated,
+    )
+    expect(
+      selectDialedPilotTarget([foreign], dialed, config(owner)).game,
+    ).toBeNull()
+    expect(
+      selectDialedPilotTarget(games, dialed, config(created.client.id)).game,
+    ).toBeNull()
+    expect(
+      selectDialedPilotTarget(games, dialed, config(owner, [secondId])).game,
+    ).toBeNull()
   })
 
   it("charges incorrect and malformed login attempts against a durable bound", async () => {
