@@ -1,3 +1,27 @@
+/** Route a server start tick through the shared audio owner; this owns no timer. */
+export function startCountdownCue(input: {
+  gameId: string
+  epoch: number
+  seconds: number
+  role: "manager" | "spectator" | "player"
+  paused: boolean
+}): { name: "timer-start"; identity: string; volume: number } | null {
+  if (
+    input.role === "player" ||
+    input.paused ||
+    !Number.isFinite(input.seconds) ||
+    input.seconds <= 0
+  ) {
+    return null
+  }
+
+  return {
+    name: "timer-start",
+    identity: `${input.gameId}:${input.epoch}:start-countdown:${input.seconds}`,
+    volume: 0.2,
+  }
+}
+
 export interface ThemeTimerEndState {
   gameId: string
   questionId: string

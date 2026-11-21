@@ -1,5 +1,29 @@
 import { describe, expect, it } from "vitest"
-import { themeTimerTransition } from "./timer-events"
+import { startCountdownCue, themeTimerTransition } from "./timer-events"
+
+describe("shared start countdown audio", () => {
+  const start = {
+    gameId: "game", epoch: 3, seconds: 5,
+    role: "manager" as const, paused: false,
+  }
+
+  it("uses one identity for duplicate server ticks and re-renders", () => {
+    const initial = startCountdownCue(start)
+    expect(initial?.name).toBe("timer-start")
+    expect(startCountdownCue({ ...start })?.identity).toBe(initial?.identity)
+    expect(startCountdownCue({ ...start, seconds: 4 })?.identity).not.toBe(initial?.identity)
+    expect(startCountdownCue({ ...start, epoch: 4 })?.identity).not.toBe(initial?.identity)
+  })
+
+  it("keeps player views, paused shows and expired ticks silent", () => {
+    expect(startCountdownCue({ ...start, role: "player" })).toBeNull()
+    expect(startCountdownCue({ ...start, paused: true })).toBeNull()
+    for (const seconds of [0, -1, Number.NaN, Number.POSITIVE_INFINITY]) {
+      expect(startCountdownCue({ ...start, seconds })).toBeNull()
+    }
+    expect(startCountdownCue({ ...start, role: "spectator" })).not.toBeNull()
+  })
+})
 
 const input = {
   enabled: true,

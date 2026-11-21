@@ -33,6 +33,7 @@ import {
   resolveTadazzAudioPolicy,
   acceptsQuestionMilestone,
   themeTimerTransition,
+  startCountdownCue,
   usePackageRevealClock,
   usePackageRevealAudio,
   type ThemeTimerEndState,
@@ -975,7 +976,25 @@ function TadazzShowContent(props: TadazzShowViewProps) {
         )
 
       case "start":
-        return <TadazzStartScreen subject={scene.subject} time={scene.time} />
+        return (
+          <TadazzStartScreen
+            subject={scene.subject}
+            time={scene.time}
+            onTick={(seconds) => {
+              const detail = startCountdownCue({
+                gameId: showGameId,
+                epoch: extensionState?.epoch ?? 0,
+                seconds,
+                role,
+                paused: isPaused,
+              })
+
+              if (detail) {
+                window.dispatchEvent(new CustomEvent("tadazz:sfx", { detail }))
+              }
+            }}
+          />
+        )
 
       case "prepared":
         return (
@@ -1073,7 +1092,10 @@ function TadazzShowContent(props: TadazzShowViewProps) {
           return null
         }
 
-        if (s.kind === "interimResults" && scene.activeSceneData?.interimResults) {
+        if (
+          s.kind === "interimResults" &&
+          (scene.activeSceneData?.interimResults?.options?.length ?? 0) > 0
+        ) {
           return null
         }
 

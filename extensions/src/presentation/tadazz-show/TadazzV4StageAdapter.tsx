@@ -153,11 +153,11 @@ export const TadazzV4StageAdapter = forwardRef<
   const [screenMode, setScreenMode] = useState<
     "none" | "custom" | "intro" | "win"
   >(() => (customScreen ? "custom" : "none"))
-  // Lobby/wait/result custom screens may arrive after the persistent stage
-  // mounts. Keep them visible even if the director's first ref-dependent pump
-  // ran before the imperative handle was available.
+  // Cover an initially idle stage if its first content arrived after mount.
+  // Once the director has painted a scene, it alone owns the visible mode.
+  // A refreshed custom JSX value must never cover a native scene on re-render.
   useEffect(() => {
-    if (customScreen) {
+    if (customScreen && modeRef.current === "idle") {
       modeRef.current = "custom"
       setScreenMode("custom")
     }
@@ -671,6 +671,7 @@ export const TadazzV4StageAdapter = forwardRef<
       },
       async showTopPick({ question, counts, topIndex, emptyMessage }) {
         setScreenMode("none")
+        setMode("custom")
         cardsOnStageKeyRef.current = null
         const q = question ?? questionRef.current
         const p = interactivePropsRef.current
@@ -692,6 +693,7 @@ export const TadazzV4StageAdapter = forwardRef<
       },
       async showRoundRecap({ winners, round, subtitle }) {
         setScreenMode("none")
+        setMode("custom")
         cardsOnStageKeyRef.current = null
         const p = interactivePropsRef.current
         await v4Ref.current?.play("round-recap", {
@@ -708,6 +710,7 @@ export const TadazzV4StageAdapter = forwardRef<
       },
       async showInterlude({ title, subtitle }) {
         setScreenMode("none")
+        setMode("custom")
         cardsOnStageKeyRef.current = null
         const p = interactivePropsRef.current
         await v4Ref.current?.play("interlude", {

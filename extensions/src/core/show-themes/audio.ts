@@ -45,6 +45,7 @@ const EFFECT_EVENTS: Readonly<Partial<Record<string, ShowThemeAudioEvent>>> = {
   "countdown-ended": "voteLocked",
   "survey-reveal": "revealResults",
   "top-pick-reveal": "revealResults",
+  "timer-start": "timerWarning",
   "timer-tick": "timerWarning",
   "timer-urgent": "timerWarning",
   "timer-final": "timerWarning",

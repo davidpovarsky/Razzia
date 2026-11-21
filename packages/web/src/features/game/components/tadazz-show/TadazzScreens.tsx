@@ -12,10 +12,8 @@ import type { Interlude } from "@razzia/extensions/core"
 
 import { useEvent } from "@razzia/web/features/game/contexts/socket-context"
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
-import { SFX } from "@razzia/web/features/game/utils/constants"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
-import useSound from "use-sound"
 import { useTadazzShellText } from "./useTadazzLabels"
 import { readPublicLobbyDirectory } from "./lobby-directory"
 
@@ -116,19 +114,20 @@ export function TadazzWaitScreen({
 export function TadazzStartScreen({
   subject,
   time,
+  onTick,
 }: {
   subject: string
   time: number
+  onTick: (seconds: number) => void
 }) {
   const [showTitle, setShowTitle] = useState(true)
   const [cooldown, setCooldown] = useState(time)
-  const [sfxBoump] = useSound(SFX.BOUMP_SOUND, { volume: 0.2 })
   useEvent(EVENTS.GAME.START_COOLDOWN, () => {
-    sfxBoump()
+    onTick(time)
     setShowTitle(false)
   })
   useEvent(EVENTS.GAME.COOLDOWN, (sec) => {
-    sfxBoump()
+    onTick(sec)
     setCooldown(sec)
   })
 

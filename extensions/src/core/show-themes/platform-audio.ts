@@ -12,6 +12,7 @@ export const PLATFORM_SFX_BY_CUE: Readonly<Record<string, string>> = {
   "countdown-ended": PLATFORM_CUE_URLS.revealResults,
   "survey-reveal": PLATFORM_CUE_URLS.revealResults,
   "top-pick-reveal": PLATFORM_CUE_URLS.answerPressed,
+  "timer-start": "/sounds/boump.mp3",
   "timer-tick": "/sounds/tadazz-timer-tick-20261108.mp3",
   "timer-urgent": "/sounds/tadazz-timer-urgent-20261108.mp3",
   "timer-final": "/sounds/tadazz-timer-final-20261108.mp3",
