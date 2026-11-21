@@ -1,0 +1,39 @@
+{
+  "candidateBase": "26eb0e2b8051a795786f62d327d48e25b2c795a9",
+  "base": "b959a5b1faf2616ce6316612146dfdcfd4fb000a",
+  "checks": [
+    {
+      "label": "format",
+      "exit": 0,
+      "seconds": 0.92
+    },
+    {
+      "label": "lobby-regressions",
+      "exit": 0,
+      "seconds": 3.02
+    },
+    {
+      "label": "types",
+      "exit": 0,
+      "seconds": 2.07
+    },
+    {
+      "label": "lint",
+      "exit": 0,
+      "seconds": 4.38
+    },
+    {
+      "label": "baseline-lint",
+      "exit": 0,
+      "seconds": 4.38
+    }
+  ],
+  "problem": null,
+  "network": "none",
+  "productionChanged": false,
+  "evidenceHostDirectory": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-bms-roster-f1b7f591",
+  "sourceHashes": {
+    "extensions/src/server/game/public-directory.ts": "fcfc705f6973048987a5644e5204eb605080c3454630f0d04ca5ee0fc9ac3cd9",
+    "extensions/src/server/game/public-directory.test.ts": "7d0814973023f49c9c22d7fff8454853a60268a57c417eb89d2b1f7b28aa3a24"
+  }
+}

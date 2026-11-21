@@ -1,4 +1,5 @@
 import type { RuntimeSnapshot } from "../../core/packages/protocol"
+import type { PublicFullShowData } from "../../core/studio-timeline-schema"
 import type { ShowScene } from "../tadazz-show/presentation-scene"
 import { storyElapsedSeconds } from "../tadazz-v4/reference-story/story-clock"
 
@@ -15,6 +16,9 @@ export interface PackageSceneProjectionInput {
   questionCount?: number | null
   finalLeaderboard?: boolean
   phaseElapsedMs?: number
+  revealStage?: RuntimeSnapshot["revealStage"]
+  /** Only the already-public lobby directory, never raw roster records. */
+  lobby?: Pick<PublicFullShowData, "dialNumber" | "instructions" | "roster">
 }
 
 export type PackageSceneProjection = Pick<
@@ -28,11 +32,15 @@ export type PackageSceneProjection = Pick<
   | "cardTitle"
   | "finalLeaderboard"
   | "phaseElapsedMs"
+  | "revealStage"
   | "questionImage"
   | "backgroundImage"
   | "answers"
   | "leaders"
   | "personalResult"
+  | "joinPhoneNumber"
+  | "lobbyInstructions"
+  | "roster"
 >
 
 /** Reading time is root-owned and must not appear as a voting countdown. */
@@ -158,7 +166,7 @@ export function projectPackageScene(
         ...(answer.image && images[answer.image]
           ? { image: images[answer.image] }
           : {}),
-        ...(scene.kind === "results"
+        ...(scene.kind === "results" && input.revealStage !== "pending"
           ? {
               percent:
                 scene.reveal.percentages?.[index] ??
@@ -167,7 +175,9 @@ export function projectPackageScene(
                     scene.reveal.counts.reduce((sum, count) => sum + count, 0)
                   : 0),
               votes: scene.reveal.counts[index] ?? 0,
-              ...(scene.reveal.mode === "quiz"
+              ...(scene.reveal.mode === "quiz" &&
+              (input.revealStage === undefined ||
+                input.revealStage === "correct")
                 ? {
                     correct: scene.reveal.solutions?.includes(index) ?? false,
                   }
@@ -206,6 +216,28 @@ export function projectPackageScene(
 
   return {
     phase: packageRuntimePhase(scene, input.voteLocked),
+    ...(scene.kind === "results" && input.revealStage
+      ? { revealStage: input.revealStage }
+      : {}),
+    ...(scene.kind === "lobby" && input.lobby
+      ? {
+          ...(input.lobby.dialNumber
+            ? { joinPhoneNumber: input.lobby.dialNumber }
+            : {}),
+          ...(input.lobby.instructions
+            ? { lobbyInstructions: input.lobby.instructions.slice(0, 8) }
+            : {}),
+          ...(input.lobby.roster
+            ? {
+                roster: input.lobby.roster.slice(0, 2000).map((row) => ({
+                  id: row.id,
+                  label: row.label,
+                  connected: row.connected,
+                })),
+              }
+            : {}),
+        }
+      : {}),
     title,
     cardKind: scene.kind === "scene" ? scene.scene.kind : scene.kind,
     cardTitle: title,

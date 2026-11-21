@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next"
 import {
   ThemeSandboxHost,
   createPackageQuestionAdmission,
+  createPackageSceneContinuity,
   packageQuestionContentSupported,
   packageRuntimePhase,
   packageUsesSandboxForPhase,
@@ -21,25 +22,29 @@ import {
 } from "@razzia/extensions/presentation"
 import type { RuntimeSnapshot } from "@razzia/extensions/core"
 import { ensureSession } from "@razzia/web/lib/session"
+import type { PublicLobbyDirectory } from "./lobby-directory"
 
 /** Public fields are copied explicitly; never post raw status/envelope/extras. */
 export function PackageStage({
-  scene,
+  scene: incomingScene,
   roomId,
-  questionId,
-  epoch,
-  sequence,
+  questionId: incomingQuestionId,
+  epoch: incomingEpoch,
+  sequence: incomingSequence,
   role,
   paused,
-  canAnswer,
+  canAnswer: incomingCanAnswer,
   voteLocked,
-  remainingMs,
-  deadline,
+  remainingMs: incomingRemainingMs,
+  deadline: incomingDeadline,
   serverTime,
   onSubmit,
   onFallback,
-  backgroundUrl,
+  backgroundUrl: incomingBackgroundUrl,
   trustedOverlay,
+  lobbyData,
+  phaseElapsedMs: incomingPhaseElapsedMs,
+  revealStage: incomingRevealStage,
   children,
 }: {
   scene: ShowScene
@@ -59,13 +64,66 @@ export function PackageStage({
   onFallback: () => void
   backgroundUrl?: string
   trustedOverlay?: ReactNode
+  lobbyData?: PublicLobbyDirectory
+  phaseElapsedMs?: number
+  revealStage?: "pending" | "audience" | "correct"
 }) {
   const theme = useShowTheme(role)
   const { t, i18n } = useTranslation()
   const pin = theme.definition.runtime
   const sourceDigest = pin?.sourceDigest
+  const [continuity] = useState(() => createPackageSceneContinuity())
+  const { presentation, holding } = continuity.select(
+    JSON.stringify([
+      roomId,
+      role,
+      theme.definition.id,
+      sourceDigest,
+      pin?.buildDigest,
+    ]),
+    {
+      scene: incomingScene,
+      questionId: incomingQuestionId,
+      epoch: incomingEpoch,
+      sequence: incomingSequence,
+      remainingMs: incomingRemainingMs,
+      deadline: incomingDeadline,
+      backgroundUrl: incomingBackgroundUrl,
+      phaseElapsedMs: incomingPhaseElapsedMs,
+      revealStage: incomingRevealStage,
+    },
+  )
+  const {
+    scene,
+    questionId,
+    epoch,
+    sequence,
+    remainingMs,
+    deadline,
+    backgroundUrl,
+    phaseElapsedMs,
+    revealStage,
+  } = presentation
+  const canAnswer = incomingCanAnswer && !holding
+  const phase = packageRuntimePhase(scene, voteLocked)
+  const questionFamily =
+    scene.kind === "question" ||
+    scene.kind === "voting" ||
+    scene.kind === "results" ||
+    scene.kind === "player-result" ||
+    (scene.kind === "wait" && phase === "voteLocked")
+  // A capability authenticates the initial document load, not every phase.
+  // Renew only at a real scene boundary; replacing src during a question reloads
+  // its whole React tree and repeats its question/answer entrances.
+  const capabilityLifetime = questionFamily
+    ? `question:${questionId}`
+    : scene.key
   const [url, setUrl] = useState("")
-  const capability = useRef<{ key: string; issuedAt: number } | null>(null)
+  const capability = useRef<{
+    key: string
+    issuedAt: number
+    lifetime: string
+  } | null>(null)
   const [capabilityState, setCapabilityState] = useState<{
     key: string
     unavailable: boolean
@@ -108,6 +166,7 @@ export function PackageStage({
       capability.current?.key === capabilityKey &&
       Date.now() - capability.current.issuedAt < 240_000
     ) {
+      capability.current.lifetime = capabilityLifetime
       return
     }
 
@@ -131,7 +190,11 @@ export function PackageStage({
       })
       .then((r) => {
         if (alive) {
-          capability.current = { key: capabilityKey, issuedAt: Date.now() }
+          capability.current = {
+            key: capabilityKey,
+            issuedAt: Date.now(),
+            lifetime: capabilityLifetime,
+          }
           setUrl(r.url)
           setCapabilityState({ key: capabilityKey, unavailable: false })
         }
@@ -147,7 +210,13 @@ export function PackageStage({
     return () => {
       alive = false
     }
-  }, [sourceDigest, theme.definition.id, roomId, scene.key, capabilityKey])
+  }, [
+    sourceDigest,
+    theme.definition.id,
+    roomId,
+    capabilityLifetime,
+    capabilityKey,
+  ])
   useEffect(() => {
     if (!sourceDigest) {
       return
@@ -217,14 +286,17 @@ export function PackageStage({
       controller.abort()
     }
   }, [sourceDigest, imageUrls, assetKey])
-  const phase = packageRuntimePhase(scene, voteLocked)
   const [questionAdmission] = useState(() => createPackageQuestionAdmission())
   const sandboxSupported = Boolean(
     pin &&
     packageUsesSandboxForPhase(theme.definition.sandbox?.slots, phase) &&
     theme.definition.sandbox?.roles.includes(role),
   )
-  const capabilityPending = capabilityState?.key !== capabilityKey
+  const capabilityPending =
+    capabilityState?.key !== capabilityKey ||
+    (capability.current?.key === capabilityKey &&
+      capability.current.lifetime !== capabilityLifetime &&
+      Date.now() - capability.current.issuedAt >= 240_000)
   const capabilityUnavailable =
     capabilityState?.key === capabilityKey && capabilityState.unavailable
   const assetsPending = imageUrls.length > 0 && assetState?.key !== assetKey
@@ -242,12 +314,6 @@ export function PackageStage({
     !assetsUnavailable &&
     url,
   )
-  const questionFamily =
-    scene.kind === "question" ||
-    scene.kind === "voting" ||
-    scene.kind === "results" ||
-    scene.kind === "player-result" ||
-    (scene.kind === "wait" && phase === "voteLocked")
   const content =
     "questionType" in scene
       ? {
@@ -275,7 +341,14 @@ export function PackageStage({
         pending,
       })
     : available
+  const awaitingSandbox = Boolean(
+    questionFamily &&
+    packageQuestionContentSupported(content) === true &&
+    pending &&
+    !usingSandbox,
+  )
   const wasSandbox = useRef(false)
+  const wasAwaitingSandbox = useRef(false)
   const fallbackCallback = useRef(onFallback)
   useLayoutEffect(() => {
     fallbackCallback.current = onFallback
@@ -283,14 +356,18 @@ export function PackageStage({
   useEffect(() => {
     if (
       !usingSandbox &&
-      (wasSandbox.current || runtimeFallbackPending.current)
+      !awaitingSandbox &&
+      (wasSandbox.current ||
+        wasAwaitingSandbox.current ||
+        runtimeFallbackPending.current)
     ) {
       runtimeFallbackPending.current = false
       fallbackCallback.current()
     }
 
     wasSandbox.current = usingSandbox
-  }, [usingSandbox])
+    wasAwaitingSandbox.current = awaitingSandbox
+  }, [usingSandbox, awaitingSandbox])
   const snapshot = useMemo<RuntimeSnapshot>(
     () => ({
       roomId,
@@ -305,6 +382,9 @@ export function PackageStage({
         paused,
         images,
         backgroundUrl,
+        lobby: lobbyData,
+        phaseElapsedMs,
+        revealStage,
       }),
       ...(scene.kind === "lobby"
         ? {
@@ -334,6 +414,9 @@ export function PackageStage({
       phase,
       voteLocked,
       backgroundUrl,
+      lobbyData,
+      phaseElapsedMs,
+      revealStage,
       images,
       i18n.language,
       deadline,
@@ -347,6 +430,18 @@ export function PackageStage({
 
   // Explicit unsupported slots/roles always use the existing compiled stage.
   if (!usingSandbox) {
+    // Do not paint a native question while its chosen renderer is still loading:
+    // replacing that visible fallback with the sandbox repeats the question.
+    if (awaitingSandbox) {
+      return (
+        <div
+          className="h-full w-full"
+          data-testid="package-runtime-loading"
+          aria-busy="true"
+        />
+      )
+    }
+
     if (assetsUnavailable && pin) {
       return (
         <div

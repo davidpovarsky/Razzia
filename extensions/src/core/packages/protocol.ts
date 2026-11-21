@@ -54,6 +54,7 @@ export const runtimeSnapshotSchema = z.strictObject({
   cardTitle: text.optional(),
   finalLeaderboard: z.boolean().optional(),
   phaseElapsedMs: z.number().min(0).max(86_400_000).optional(),
+  revealStage: z.enum(["pending", "audience", "correct"]).optional(),
   questionImage: z
     .string()
     .max(7_000_000)
@@ -72,6 +73,18 @@ export const runtimeSnapshotSchema = z.strictObject({
     .string()
     .max(2048)
     .regex(/^https?:\/\/[^\s?#]+\/game$/u)
+    .optional(),
+  joinPhoneNumber: z.string().max(100).optional(),
+  lobbyInstructions: z.array(z.string().max(500)).max(8).optional(),
+  roster: z
+    .array(
+      z.strictObject({
+        id: z.string().max(100),
+        label: z.string().max(160),
+        connected: z.boolean(),
+      }),
+    )
+    .max(2000)
     .optional(),
   answers: z
     .array(
@@ -118,13 +131,22 @@ export type RuntimeSnapshot = z.infer<typeof runtimeSnapshotSchema>
 /** Old SDK bundles validate snapshots strictly; only send additions after negotiation. */
 export function runtimeSnapshotForCapabilities(
   snapshot: RuntimeSnapshot,
-  snapshotMetadataVersion?: 1,
+  snapshotMetadataVersion?: 1 | 2,
 ): RuntimeSnapshot {
-  if (snapshotMetadataVersion === 1) {
+  if (snapshotMetadataVersion === 2) {
     return snapshot
   }
 
   const legacy = { ...snapshot }
+  delete legacy.joinPhoneNumber
+  delete legacy.lobbyInstructions
+  delete legacy.roster
+  delete legacy.revealStage
+
+  if (snapshotMetadataVersion === 1) {
+    return legacy
+  }
+
   delete legacy.questionNumber
   delete legacy.questionCount
   delete legacy.cardKind
@@ -156,7 +178,7 @@ export const rendererMessageSchema = z.discriminatedUnion("type", [
   z.strictObject({
     ...envelope,
     type: z.literal("RUNTIME_CAPABILITIES"),
-    snapshotMetadataVersion: z.literal(1),
+    snapshotMetadataVersion: z.union([z.literal(1), z.literal(2)]),
   }),
   z.strictObject({
     ...envelope,

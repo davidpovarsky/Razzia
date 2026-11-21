@@ -1,4 +1,5 @@
 import { PlatformButton } from "./platform-controls"
+import { PLATFORM_SFX_BY_CUE } from "../core/show-themes/platform-audio"
 import {
   DEFAULT_CUE_URLS,
   SOUNDTRACK_SLOT_IDS,
@@ -82,30 +83,7 @@ export const TADAZZ_PHASE_SFX: Partial<Record<CueId, string>> = {
   revealResults: REVEAL,
 }
 
-export const TADAZZ_SFX_BY_CUE: Readonly<Record<string, string>> = {
-  "timer-ended": "/sounds/tadazz-timer-end-368edc1d9522.mp3",
-  "countdown-ended": REVEAL,
-  "survey-reveal": REVEAL,
-  "top-pick-reveal": CONFIRM,
-  "timer-tick": "/sounds/tadazz-timer-tick-20261108.mp3",
-  "timer-urgent": "/sounds/tadazz-timer-urgent-20261108.mp3",
-  "timer-final": "/sounds/tadazz-timer-final-20261108.mp3",
-  "story-begin": TRANSITION,
-  "wipe-covered": TRANSITION,
-  "company-ident": TRANSITION,
-  "tadazz-welcome": TRANSITION,
-  "opening-portal": TRANSITION,
-  "opening-logo": TRANSITION,
-  "directory-loaded": CONFIRM,
-  "phone-ready": CONFIRM,
-  "readiness-grid": CONFIRM,
-  "round-launch": TRANSITION,
-  "story-progress-update": CONFIRM,
-  "story-assembled": REVEAL,
-  "story-live-hold": TRANSITION,
-  "finale-impact": "/sounds/first.mp3",
-  "curtains-closed": TRANSITION,
-}
+export const TADAZZ_SFX_BY_CUE = PLATFORM_SFX_BY_CUE
 
 /** Suppress competing playback owners, while retaining distinct player actions. */
 export function shouldSuppressAudioEffect({
@@ -672,7 +650,9 @@ export const AudioCuePlayer = ({
       stageOwnsReveal &&
       (selectedSoundtrackSlot === "results" ||
         selectedSoundtrackSlot === "recap") &&
-      Object.keys(theme.audioSelections.revealResults ?? {}).length > 0 &&
+      (theme.audioSelections.revealResults?.mediaUrl ||
+        (theme.audioSelections.revealResults?.variantId &&
+          !theme.audio.revealResults.inheritPlatform)) &&
       !theme.audio.revealResults.loop
     ) {
       return null

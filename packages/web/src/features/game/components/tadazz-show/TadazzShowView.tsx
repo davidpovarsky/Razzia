@@ -33,6 +33,8 @@ import {
   resolveTadazzAudioPolicy,
   acceptsQuestionMilestone,
   themeTimerTransition,
+  usePackageRevealClock,
+  usePackageRevealAudio,
   type ThemeTimerEndState,
   runSteps,
   NativeCompositionBoundary,
@@ -85,7 +87,7 @@ import {
   useRef,
   useState,
 } from "react"
-import { useTranslation } from "react-i18next"
+import { I18nextProvider, useTranslation } from "react-i18next"
 import { resolveMonotonicCooldownDeadline } from "./cooldown-sync"
 import { useTimerBeeps } from "./use-timer-beeps"
 import { useTadazzRawStatus } from "./raw-status-context"
@@ -113,6 +115,7 @@ import {
   useTadazzV4Labels,
 } from "./useTadazzLabels"
 import { PackageStage } from "./PackageStage"
+import { readPublicLobbyDirectory } from "./lobby-directory"
 
 export interface TadazzShowViewProps {
   nativeContent?: React.ReactNode
@@ -167,6 +170,31 @@ function isCinematicScene(scene: SceneDescriptor): boolean {
  * authoritative state, and keeps every host/player capability.
  */
 export function TadazzShowView(props: TadazzShowViewProps) {
+  const { i18n } = useTranslation()
+  const defaults = props.extensionState?.extras.defaults as
+    { presentationLocale?: unknown } | undefined
+  const requestedLocale = defaults?.presentationLocale
+  const locale =
+    typeof requestedLocale === "string" &&
+    ["en", "fr", "de", "es", "it", "ja", "tr", "vi", "he"].includes(
+      requestedLocale,
+    )
+      ? requestedLocale
+      : undefined
+  const presentationI18n = useMemo(
+    () =>
+      locale ? i18n.cloneInstance({ lng: locale, initAsync: false }) : i18n,
+    [i18n, locale],
+  )
+
+  return (
+    <I18nextProvider i18n={presentationI18n}>
+      <TadazzShowContent {...props} />
+    </I18nextProvider>
+  )
+}
+
+function TadazzShowContent(props: TadazzShowViewProps) {
   const {
     manager,
     role,
@@ -698,6 +726,29 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   const [answerPending, setAnswerPending] = useState(false)
   const selectionSoundSequence = useRef(0)
   const questionKey = "question" in scene ? scene.question.key : null
+  const packageRevealIdentity = `${showGameId}:${questionKey ?? extensionState?.questionId ?? scene.key}:${extensionState?.epoch ?? 0}:results`
+  const packageReveal = usePackageRevealClock({
+    active: Boolean(theme.definition.sandbox) && scene.kind === "results",
+    identity: packageRevealIdentity,
+    startedAt:
+      extensionState?.phase === "responses"
+        ? extensionState.startedAt - serverClockOffset
+        : undefined,
+    paused: isPaused,
+    hasCorrectAnswer:
+      scene.kind === "results" &&
+      scene.reveal.mode === "quiz" &&
+      (scene.reveal.solutions?.length ?? 0) > 0,
+    reducedMotion: reduced,
+  })
+  usePackageRevealAudio({
+    identity: packageRevealIdentity,
+    stage: packageReveal.stage,
+    elapsedMs: packageReveal.elapsedMs,
+    enabled: Boolean(theme.definition.sandbox) && role !== "player",
+    paused: isPaused,
+    reducedMotion: reduced,
+  })
   const revealAttemptRef = useRef(0)
 
   if (scene.kind === "voting") {
@@ -707,7 +758,8 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   const timerEndRef = useRef<ThemeTimerEndState | null>(null)
   useEffect(() => {
     const next = themeTimerTransition(timerEndRef.current, {
-      enabled: useV4 && role !== "player",
+      enabled:
+        (useV4 || Boolean(theme.definition.sandbox)) && role !== "player",
       gameId: showGameId,
       questionId: extensionState?.questionId ?? questionKey,
       epoch: extensionState?.epoch ?? 0,
@@ -734,6 +786,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     }
   }, [
     useV4,
+    theme.definition.sandbox,
     role,
     showGameId,
     extensionState?.questionId,
@@ -747,7 +800,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   ])
   useTimerBeeps({
     enabled:
-      useV4 &&
+      (useV4 || Boolean(theme.definition.sandbox)) &&
       role !== "player" &&
       scene.kind === "voting" &&
       (votingStartsAt === undefined ||
@@ -1473,6 +1526,9 @@ export function TadazzShowView(props: TadazzShowViewProps) {
             >
               <PackageStage
                 scene={scene}
+                lobbyData={readPublicLobbyDirectory(
+                  extensionState?.extras.lobbyFullShow,
+                )}
                 roomId={extensionState?.gameId ?? ""}
                 backgroundUrl={backdrop?.url}
                 trustedOverlay={overlay}
@@ -1496,6 +1552,8 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                       scene.key !== "wait:question-content" &&
                       scene.text === "game:waitingForAnswers"))
                 }
+                phaseElapsedMs={packageReveal.elapsedMs}
+                revealStage={packageReveal.stage}
                 remainingMs={runtimeRemainingMs}
                 serverTime={Date.now() + serverClockOffset}
                 deadline={
@@ -1654,7 +1712,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
             <AudioCuePlayer
               eventOnly={role === "player" || scene.kind === "wait"}
               showTrack={referenceStoryTrack}
-              stageOwnsReveal={useV4 && !theme.definition.sandbox}
+              stageOwnsReveal={useV4 || Boolean(theme.definition.sandbox)}
               cueId={props.audioCueId}
               audioExtras={
                 extensionState.extras.audio as QuizExtrasV1["audio"] | undefined

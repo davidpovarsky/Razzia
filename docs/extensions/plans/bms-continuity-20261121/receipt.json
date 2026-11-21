@@ -1,0 +1,266 @@
+{
+  "run": "tadazz-bms-continuity-a9a56ee3",
+  "head": "7291cea58bf0d20d72405c3819df33864e085688",
+  "checks": [
+    {
+      "name": "format",
+      "exit": 0,
+      "seconds": 0.67
+    },
+    {
+      "name": "units",
+      "exit": 0,
+      "seconds": 0.87
+    },
+    {
+      "name": "before",
+      "exit": 1,
+      "seconds": 8.0
+    },
+    {
+      "name": "after",
+      "exit": 0,
+      "seconds": 7.89
+    }
+  ],
+  "problem": null,
+  "receipts": {
+    "before": {
+      "fixture": "actual PackageStage, ThemeSandboxHost, SDK and BMS source",
+      "checks": [
+        {
+          "name": "loading does not paint then replace a native question",
+          "passed": false,
+          "nativeFrames": 1
+        },
+        {
+          "name": "no correctness before reveal",
+          "passed": true,
+          "correct": 0
+        },
+        {
+          "name": "question and geometry persist when answers arrive",
+          "passed": true,
+          "reading": {
+            "document": "38ec782a-d8e1-43eb-a422-aa9e4285ae8c",
+            "questionAnimations": 1,
+            "sameHeading": true,
+            "samePanel": true,
+            "sameAnswers": true,
+            "question": "Who was the last speaker that we had in sem?",
+            "geometry": [
+              100.2,
+              264.3,
+              412.5,
+              164.3
+            ],
+            "correct": 0
+          },
+          "voting": {
+            "document": "38ec782a-d8e1-43eb-a422-aa9e4285ae8c",
+            "questionAnimations": 1,
+            "sameHeading": true,
+            "samePanel": true,
+            "sameAnswers": true,
+            "question": "Who was the last speaker that we had in sem?",
+            "geometry": [
+              100.2,
+              264.3,
+              412.5,
+              164.3
+            ],
+            "correct": 0
+          }
+        },
+        {
+          "name": "staggered socket messages do not replace iframe or question",
+          "passed": false,
+          "coherent": {
+            "document": "03737f09-d65a-4e72-b53c-081bb5a24e1b",
+            "questionAnimations": 1,
+            "sameHeading": true,
+            "samePanel": true,
+            "sameAnswers": true,
+            "question": "Who was the last speaker that we had in sem?",
+            "geometry": [
+              100.2,
+              264.3,
+              412.5,
+              164.3
+            ],
+            "correct": 0
+          }
+        },
+        {
+          "name": "expired launch ticket is not renewed inside question or reveal",
+          "passed": false,
+          "capabilityRequests": 2,
+          "beforeRevealRequests": 2
+        },
+        {
+          "name": "answers and question persist on correct reveal",
+          "passed": false,
+          "revealed": {
+            "document": "b1926d58-5885-4df9-be76-e9f0060bda87",
+            "questionAnimations": 1,
+            "sameHeading": true,
+            "samePanel": true,
+            "sameAnswers": true,
+            "question": "Who was the last speaker that we had in sem?",
+            "geometry": [
+              100.2,
+              264.3,
+              412.5,
+              164.3
+            ],
+            "correct": 1
+          }
+        },
+        {
+          "name": "pause resume preserves question tree",
+          "passed": true
+        },
+        {
+          "name": "new question can renew expired capability",
+          "passed": true,
+          "capabilityRequests": 2
+        },
+        {
+          "name": "real SDK failure activates native fallback and stays latched",
+          "passed": true
+        },
+        {
+          "name": "no unexpected browser errors",
+          "passed": true,
+          "errors": []
+        }
+      ],
+      "network": "loopback-only",
+      "customerData": false,
+      "passed": false
+    },
+    "after": {
+      "fixture": "actual PackageStage, ThemeSandboxHost, SDK and BMS source",
+      "checks": [
+        {
+          "name": "loading does not paint then replace a native question",
+          "passed": true,
+          "nativeFrames": 0
+        },
+        {
+          "name": "no correctness before reveal",
+          "passed": true,
+          "correct": 0
+        },
+        {
+          "name": "question and geometry persist when answers arrive",
+          "passed": true,
+          "reading": {
+            "document": "e414ddca-a245-46bd-8926-9cc579626c77",
+            "questionAnimations": 1,
+            "sameHeading": true,
+            "samePanel": true,
+            "sameAnswers": true,
+            "question": "Who was the last speaker that we had in sem?",
+            "geometry": [
+              100.2,
+              264.3,
+              412.5,
+              164.3
+            ],
+            "correct": 0
+          },
+          "voting": {
+            "document": "e414ddca-a245-46bd-8926-9cc579626c77",
+            "questionAnimations": 1,
+            "sameHeading": true,
+            "samePanel": true,
+            "sameAnswers": true,
+            "question": "Who was the last speaker that we had in sem?",
+            "geometry": [
+              100.2,
+              264.3,
+              412.5,
+              164.3
+            ],
+            "correct": 0
+          }
+        },
+        {
+          "name": "staggered socket messages do not replace iframe or question",
+          "passed": true,
+          "coherent": {
+            "document": "e414ddca-a245-46bd-8926-9cc579626c77",
+            "questionAnimations": 1,
+            "sameHeading": true,
+            "samePanel": true,
+            "sameAnswers": true,
+            "question": "Who was the last speaker that we had in sem?",
+            "geometry": [
+              100.2,
+              264.3,
+              412.5,
+              164.3
+            ],
+            "correct": 0
+          }
+        },
+        {
+          "name": "expired launch ticket is not renewed inside question or reveal",
+          "passed": true,
+          "capabilityRequests": 1,
+          "beforeRevealRequests": 1
+        },
+        {
+          "name": "answers and question persist on correct reveal",
+          "passed": true,
+          "revealed": {
+            "document": "e414ddca-a245-46bd-8926-9cc579626c77",
+            "questionAnimations": 1,
+            "sameHeading": true,
+            "samePanel": true,
+            "sameAnswers": true,
+            "question": "Who was the last speaker that we had in sem?",
+            "geometry": [
+              100.2,
+              264.3,
+              412.5,
+              164.3
+            ],
+            "correct": 1
+          }
+        },
+        {
+          "name": "pause resume preserves question tree",
+          "passed": true
+        },
+        {
+          "name": "new question can renew expired capability",
+          "passed": true,
+          "capabilityRequests": 2
+        },
+        {
+          "name": "real SDK failure activates native fallback and stays latched",
+          "passed": true
+        },
+        {
+          "name": "no unexpected browser errors",
+          "passed": true,
+          "errors": []
+        }
+      ],
+      "network": "loopback-only",
+      "customerData": false,
+      "passed": true
+    }
+  },
+  "evidence": "/home/ubuntu/tadazz-bms-continuity-a9a56ee3",
+  "unitLog": "\n\u001b[1m\u001b[30m\u001b[46m RUN \u001b[49m\u001b[39m\u001b[22m \u001b[36mv5.0.3 \u001b[39m\u001b[90m/evidence/source\u001b[39m\n\n \u001b[32m\u2713\u001b[39m extensions/src/presentation/package-runtime/scene-continuity.test.ts \u001b[2m(\u001b[22m\u001b[2m6 tests\u001b[22m\u001b[2m)\u001b[22m\u001b[32m 9\u001b[2mms\u001b[22m\u001b[39m\n\n\u001b[2m Test Files \u001b[22m \u001b[1m\u001b[32m1 passed\u001b[39m\u001b[22m\u001b[90m (1)\u001b[39m\n\u001b[2m      Tests \u001b[22m \u001b[1m\u001b[32m6 passed\u001b[39m\u001b[22m\u001b[90m (6)\u001b[39m\n\u001b[2m   Start at \u001b[22m 17:48:11\n\u001b[2m   Duration \u001b[22m 232ms\u001b[2m (transform 59%, import 22%, tests 11%, worker 7%)\u001b[22m\n\n",
+  "unitErrors": "",
+  "candidateSourceHashes": {
+    "packages/web/src/features/game/components/tadazz-show/PackageStage.tsx": "05e911cd20d0c0ce16352ed6b1b16594cec86ed4659dc2953d06e902d4232e35",
+    "extensions/src/presentation/package-runtime/scene-continuity.ts": "5d319c12f23e65f7dbf9d5ce5f1cdeb470fd35706bf3f7566585ff7416f715b5",
+    "extensions/src/presentation/package-runtime/scene-continuity.test.ts": "e462e5d41065ac49b704693bc9249fc54a4812a73a6c21fee1ae525bd5891a19",
+    "extensions/qa/package-stage-continuity.mjs": "80eaf30f3e6bea5277ac966865ea7311e06a562b1097dbb6f7a60d152d9f28ed"
+  }
+}

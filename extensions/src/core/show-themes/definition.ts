@@ -57,6 +57,7 @@ const audioVariant = z.strictObject({
   id,
   labelKey: z.string().min(1).max(160),
   assetId: id.optional(),
+  inheritPlatform: z.boolean().optional(),
   silent: z.boolean(),
   volume: z.number().min(0).max(1),
   loop: z.boolean(),
@@ -429,11 +430,14 @@ export const showThemeDefinitionSchema = z
 
           if (
             "silent" in choice &&
-            choice.silent === (choice.assetId !== undefined)
+            (choice.inheritPlatform
+              ? choice.silent || choice.assetId !== undefined
+              : choice.silent === (choice.assetId !== undefined))
           ) {
             ctx.addIssue({
               code: "custom",
-              message: "Audio must be silent or reference one asset",
+              message:
+                "Audio must inherit the platform, be silent or reference one asset",
               path: [group, key],
             })
           }

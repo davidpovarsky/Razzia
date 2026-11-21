@@ -1,4 +1,5 @@
 import { TADAZZ_PRODUCT_LOGO_URL } from "../product-branding"
+import { platformThemeAudio } from "./platform-audio"
 import type { ShowThemeDefinition } from "./definition"
 import { ShowThemeRegistry, showThemeRegistry } from "./registry"
 import {
@@ -176,18 +177,24 @@ export function resolveShowTheme(input: {
         diagnostics.push({ code: "disallowed-media", slot: event })
       }
 
+      const inherited = variant.inheritPlatform
+        ? platformThemeAudio(event)
+        : undefined
+      const effective = { ...variant, ...inherited }
       const silent =
         choice.muted === true ||
-        !variant.roles.includes(input.role) ||
-        (variant.silent && !permittedMedia)
-      const url = permittedMedia ? choice.mediaUrl : assetUrl(variant.assetId)
+        !effective.roles.includes(input.role) ||
+        (effective.silent && !permittedMedia)
+      const url = permittedMedia
+        ? choice.mediaUrl
+        : (inherited?.url ?? assetUrl(variant.assetId))
 
       return [
         event,
         {
-          ...variant,
+          ...effective,
           silent,
-          volume: choice.volume ?? variant.volume,
+          volume: choice.volume ?? effective.volume,
           url: silent ? undefined : url,
         },
       ]
