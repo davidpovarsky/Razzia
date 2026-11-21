@@ -764,6 +764,8 @@ function TadazzShowContent(props: TadazzShowViewProps) {
       questionId: extensionState?.questionId ?? questionKey,
       epoch: extensionState?.epoch ?? 0,
       voting: scene.kind === "voting",
+      awaitingCompletion:
+        extensionState?.phase === "question" && scene.kind !== "voting",
       results: extensionState?.phase === "responses",
       paused: isPaused,
       deadline: votingEndsAt,
