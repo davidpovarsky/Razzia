@@ -1,5 +1,5 @@
 import type { ResolvedShowTheme } from "./resolve"
-import { isPlatformAudioUrl, platformThemeAudio } from "./platform-audio"
+import { platformThemeAudio } from "./platform-audio"
 import { isSafeThemeAssetUrl, type ShowThemeAudioEvent } from "./selection"
 import type { CueId, SoundtrackSlotId } from "../constants"
 import type { AudioExtras } from "../quiz-extras"
@@ -7,6 +7,7 @@ import {
   isPlatformSoundtrackUrl,
   isInheritedPlatformCueUrl,
   PLATFORM_CUE_URLS,
+  PLATFORM_SOUNDTRACK_DEFAULTS,
   resolvePlatformAudioDefaults,
 } from "../platform-audio-defaults"
 
@@ -75,7 +76,20 @@ export function themeAllowsAudioUrl(
     return false
   }
 
-  if (isPlatformAudioUrl(url)) {
+  // A platform recording inherits only its event's role. Registering a timer
+  // effect must not silently admit that effect as a looping music selection.
+  if (
+    platformThemeAudio(event).url === url ||
+    Object.entries(EFFECT_EVENTS).some(
+      ([name, effectEvent]) =>
+        effectEvent === event && platformThemeAudio(event, name).url === url,
+    ) ||
+    Object.entries(SOUNDTRACK_THEME_EVENTS).some(
+      ([slot, soundtrackEvent]) =>
+        soundtrackEvent === event &&
+        PLATFORM_SOUNDTRACK_DEFAULTS[slot as SoundtrackSlotId]?.url === url,
+    )
+  ) {
     return true
   }
 
@@ -181,18 +195,20 @@ export function applyThemeAudioDefaults(
         (effective.inheritPlatform ||
           isInheritedPlatformCueUrl(cueId as CueId, effective.url))
       const inheritedCue = platformAudio.cues[cueId as CueId]
+      let volume = saved?.volume ?? effective.volume
+
+      if (selection?.volume !== undefined || explicitRecording) {
+        volume = effective.volume
+      } else if (inheritsPlatformCue) {
+        volume = inheritedCue.volume
+      }
 
       return [
         cueId,
         {
           source: "media",
           url: inheritsPlatformCue ? inheritedCue.url : effective.url,
-          volume:
-            selection?.volume !== undefined || explicitRecording
-              ? effective.volume
-              : inheritsPlatformCue
-                ? inheritedCue.volume
-                : (saved?.volume ?? effective.volume),
+          volume,
           enabled:
             !effective.silent &&
             (selection?.muted !== undefined || explicitRecording

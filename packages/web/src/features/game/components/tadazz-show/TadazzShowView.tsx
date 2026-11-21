@@ -26,9 +26,9 @@ import {
   TadazzV4StageAdapter,
   collapseForResume,
   computeShowScene,
-  isFullShowScene,
   isTadazzV4Active,
   planTransition,
+  showSceneTransitionIdentity,
   resolveStageBackdrop,
   resolveTadazzAudioPolicy,
   acceptsQuestionMilestone,
@@ -318,19 +318,7 @@ function TadazzShowContent(props: TadazzShowViewProps) {
     questionReveal,
   ])
   const sceneIdentity = useMemo(
-    () =>
-      scene.kind === "voting" ||
-      (scene.kind === "scene" &&
-        scene.scene.kind === "animation" &&
-        isFullShowScene(
-          (
-            scene.scene as {
-              preset?: string
-            }
-          ).preset ?? "",
-        ))
-        ? scene.key
-        : JSON.stringify(scene),
+    () => showSceneTransitionIdentity(scene),
     [scene],
   )
   const showGameId =

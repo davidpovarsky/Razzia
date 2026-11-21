@@ -1,7 +1,6 @@
 import {
   PLATFORM_AUDIO_URLS,
   PLATFORM_CUE_URLS,
-  PLATFORM_SOUNDTRACK_DEFAULTS,
 } from "../platform-audio-defaults"
 import type { ShowThemeAudioEvent, ShowThemeRole } from "./selection"
 
@@ -80,15 +79,4 @@ export function platformThemeAudio(
     restart: event === "answersMusic" ? ("epoch" as const) : ("event" as const),
     roles,
   }
-}
-
-/** Exact platform assets remain available even when a theme disallows uploads. */
-export function isPlatformAudioUrl(url: string): boolean {
-  return (
-    Object.values(PLATFORM_EVENT_URLS).includes(url) ||
-    Object.values(PLATFORM_SFX_BY_CUE).includes(url) ||
-    Object.values(PLATFORM_SOUNDTRACK_DEFAULTS).some(
-      (track) => track.url === url,
-    )
-  )
 }

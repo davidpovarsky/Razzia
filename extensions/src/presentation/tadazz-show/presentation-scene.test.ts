@@ -438,7 +438,7 @@ describe("planTransition — the ten reference methods are driven by real events
     ).toEqual(["nextQuestion"])
   })
 
-  it("SELECT_ANSWER → presentOptions + openVoting with a server deadline", () => {
+  it("SELECT_ANSWER enters answers and voting together with a server deadline", () => {
     const steps = planTransition(
       { kind: "question", key: "q", question: q("k1", 0) },
       {
@@ -454,8 +454,10 @@ describe("planTransition — the ten reference methods are driven by real events
       { questionKey: "k1", mode: "question" },
       1_000_000,
     )
-    expect(ops(steps)).toEqual(["presentOptions", "openVoting"])
-    expect(steps[1]).toMatchObject({ seconds: 20, deadlineMs: 1_012_000 })
+    expect(ops(steps)).toEqual(["openVoting"])
+    expect(steps[0]).toMatchObject({
+      question: q("k1"), seconds: 20, deadlineMs: 1_012_000,
+    })
   })
 
   it("voting → results always plays lockVoting before revealResults", () => {

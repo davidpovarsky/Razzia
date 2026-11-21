@@ -7,6 +7,7 @@ const source = process.env.TADAZZ_HANDOFF_SOURCE
 const deps = process.env.TADAZZ_HANDOFF_DEPS
 const evidence = process.env.TADAZZ_HANDOFF_EVIDENCE
 const adapterOverride = process.env.TADAZZ_HANDOFF_ADAPTER
+const legacySceneIdentity = process.env.TADAZZ_HANDOFF_LEGACY_SCENE_IDENTITY === "1"
 if (!source || !deps || !evidence)
   throw new Error("Explicit isolated source/deps/evidence required")
 const require = createRequire(path.join(deps, "extensions/package.json"))
@@ -36,19 +37,24 @@ import React,{useRef,useState} from 'react';
 import {createRoot} from 'react-dom/client';
 import {flushSync} from 'react-dom';
 import {TadazzV4StageAdapter} from ${JSON.stringify(adapter)};
-import {planTransition,runSteps} from ${JSON.stringify(director)};
+import {planTransition,runSteps,showSceneTransitionIdentity} from ${JSON.stringify(director)};
 import {AudioCuePlayer} from ${JSON.stringify(audioOwner)};
 import {startCountdownCue} from ${JSON.stringify(timerEvents)};
 const q1={key:'first#1',question:'FIRST QUESTION',number:1,totalQuestions:23,answerCount:3,options:[]};
 const options=[{label:'Alpha'},{label:'Bravo'},{label:'Charlie'}];
+const transitionIdentity=${legacySceneIdentity ? "scene=>JSON.stringify(scene)" : "showSceneTransitionIdentity"};
 function App(){
  const stage=useRef(null);const previous=useRef(null);const [custom,setCustom]=useState(null);
+ const previousIdentity=useRef(null);
  const [guessOff,setGuessOff]=useState(false);const cues=useRef([]);
  const [audio,setAudio]=useState({gameId:'start-audio',epoch:1,seconds:5,role:'manager',paused:false});
  const startTick=()=>{const detail=startCountdownCue(audio);if(detail)window.dispatchEvent(new CustomEvent('tadazz:sfx',{detail}))};
  const drive=async(next)=>{
    // The live director intentionally ignores this split-delivery placeholder.
    if(next.kind==='wait'&&next.key==='wait:question-content')return;
+   const identity=transitionIdentity(next);
+   if(previousIdentity.current===identity)return;
+   previousIdentity.current=identity;
    const handle=stage.current;
    const steps=planTransition(previous.current,next,{questionKey:handle.questionKey,mode:handle.mode});
    previous.current=next;await runSteps(handle,steps,()=>true);
@@ -82,6 +88,10 @@ function App(){
    flushSync(()=>setCustom(<div data-testid="unexpected-native-overlay">STALE CUSTOM TITLE</div>));
    await drive(next);
   },
+  async elapsedSnapshot(){
+   if(previous.current?.kind!=='scene')throw new Error('Expected authored scene');
+   await drive({...previous.current,elapsedMs:(previous.current.elapsedMs??0)+1000});
+  },
   rerenderCustom(){
    flushSync(()=>setCustom(<div data-testid="unexpected-native-overlay">REFRESHED CUSTOM TITLE</div>));
   },
@@ -111,13 +121,6 @@ const plugins = [
   {
     name: "isolated-native-source",
     setup(builder) {
-      builder.onResolve(
-        {
-          filter:
-            /^(?:react(?:-dom)?(?:\/.*)?|zod|clsx|tailwind-merge|lucide-react|framer-motion|motion(?:\/.*)?)$/,
-        },
-        (args) => ({ path: resolveModule.resolve(args.path) }),
-      )
       builder.onResolve({ filter: /^@razzia\// }, async (args) => {
         const [, scope, ...parts] = args.path.split("/")
         const base =
@@ -133,9 +136,24 @@ const plugins = [
         }
         throw new Error("Unresolved candidate workspace import " + args.path)
       })
-      builder.onResolve({ filter: /^[^./]/ }, (args) => ({
-        path: resolveModule.resolve(args.path),
-      }))
+      builder.onResolve({ filter: /^[^./]/ }, (args) => {
+        const relative = path.relative(source, args.resolveDir)
+        if (
+          relative === ".." ||
+          relative.startsWith(".." + path.sep) ||
+          path.isAbsolute(relative)
+        ) return undefined
+        // Candidate code uses the matching installed workspace. Once resolved
+        // into that dependency tree, esbuild follows each real importer itself
+        // (including pnpm's private transitive dependencies).
+        const fromImporter = createRequire(path.join(deps, relative, "package.json"))
+        try {
+          return { path: fromImporter.resolve(args.path) }
+        } catch {
+          // Presentation peers are supplied by the web host.
+          return { path: resolveModule.resolve(args.path) }
+        }
+      })
       if (adapterOverride)
         builder.onLoad(
           { filter: /TadazzV4StageAdapter\.tsx$/ },
@@ -161,7 +179,7 @@ await build({
   external: ["/tadazz-show/*"],
   loader: { ".woff2": "file", ".png": "file", ".jpg": "file", ".svg": "file" },
   define: { "process.env.NODE_ENV": '"production"' },
-  stdin: { contents: entry, loader: "tsx", resolveDir: source },
+  stdin: { contents: entry, loader: "tsx", resolveDir: path.join(source, "packages/web") },
   outfile: path.join(evidence, "fixture.js"),
 })
 const server = http.createServer(async (request, response) => {
@@ -212,6 +230,7 @@ const result = {
     "actual TadazzV4StageAdapter + show-director; no altered animation clock",
   source,
   adapterOverride: adapterOverride ?? null,
+  legacySceneIdentity,
   checks: [],
   customerData: false,
   network: "container loopback only",
@@ -224,6 +243,12 @@ try {
   const errors = []
   page.on("pageerror", (e) => errors.push(e.message))
   await page.addInitScript(() => {
+    window.animationStarts = 0
+    const animate = Element.prototype.animate
+    Element.prototype.animate = function (...args) {
+      window.animationStarts += 1
+      return animate.apply(this, args)
+    }
     window.audioAttempts = []
     window.startAudioElements = []
     const play = HTMLMediaElement.prototype.play
@@ -456,6 +481,19 @@ try {
       painted.mode === testCase.expectedMode && painted.customVisible === false,
       { painted },
     )
+    const beforeClock = await page.evaluate(() => ({
+      animationStarts: window.animationStarts,
+      cues: window.handoff.cues(),
+    }))
+    await page.evaluate(() => window.handoff.elapsedSnapshot())
+    const afterClock = await page.evaluate(() => ({
+      animationStarts: window.animationStarts,
+      cues: window.handoff.cues(),
+    }))
+    check(`native ${testCase.name} ignores an elapsed-only authored snapshot`,
+      afterClock.animationStarts === beforeClock.animationStarts &&
+      JSON.stringify(afterClock.cues) === JSON.stringify(beforeClock.cues),
+      { beforeClock, afterClock })
   }
   for (const guessOff of [false, true]) {
     for (const count of [3, 4, 5]) {
@@ -490,6 +528,7 @@ try {
               rect.right <= innerWidth + 1 &&
               rect.top >= -1 &&
               rect.bottom <= innerHeight + 1,
+            titleFontSize: Number.parseFloat(getComputedStyle(title).fontSize),
           }
         })
       })
@@ -515,7 +554,10 @@ try {
           ),
         { geometry, overlaps },
       )
+      const caseName = `${guessOff ? "guess-off" : "native"}-${count}-answers`
+      await page.screenshot({ path: path.join(evidence, `${caseName}-voting.png`) })
       await page.evaluate(() => window.handoff.choiceResults())
+      await page.screenshot({ path: path.join(evidence, `${caseName}-reveal.png`) })
       const cuesBefore = await page.evaluate(() => window.handoff.cues())
       await page.evaluate(() => window.handoff.rerenderCustom())
       await page.evaluate(

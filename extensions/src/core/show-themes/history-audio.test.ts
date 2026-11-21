@@ -159,3 +159,22 @@ it("local default replaces global custom media and host effects never reach play
     false,
   )
 })
+
+it("keeps start-countdown recordings within their event and host roles", () => {
+  const selection = createDefaultShowTheme()
+  for (const role of ["manager", "spectator"] as const) {
+    const theme = resolveShowTheme({ selection, role })
+    expect(resolveThemeEffect(theme, "timer-start")?.url).toBe("/sounds/boump.mp3")
+    expect(themeAllowsAudioUrl(theme, "timerWarning", "/sounds/boump.mp3")).toBe(true)
+    expect(themeAllowsAudioUrl(theme, "opening", "/sounds/boump.mp3")).toBe(true)
+    expect(themeAllowsAudioUrl(theme, "answersMusic", "/sounds/boump.mp3")).toBe(false)
+    expect(themeAllowsAudioUrl(theme, "revealResults", "/sounds/boump.mp3")).toBe(false)
+  }
+  const player = resolveShowTheme({ selection, role: "player" })
+  expect(resolveThemeEffect(player, "timer-start")?.url).toBeUndefined()
+  const muted = resolveShowTheme({
+    selection: { ...selection, overrides: { audio: { timerWarning: { muted: true } } } },
+    role: "manager",
+  })
+  expect(resolveThemeEffect(muted, "timer-start")?.url).toBeUndefined()
+})

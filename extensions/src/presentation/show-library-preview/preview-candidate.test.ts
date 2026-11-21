@@ -258,13 +258,13 @@ describe("silent preview candidate", () => {
     expect(
       await owner.run([{ op: "openVoting", seconds: 20, deadlineMs: 16000 }]),
     ).toBe(true)
-    expect(openVoting).toHaveBeenLastCalledWith(20, 76000)
+    expect(openVoting).toHaveBeenLastCalledWith(20, 76000, undefined)
     // Re-anchoring an already-visible countdown uses the same latest clock path.
     wallNow += 10000
     expect(
       await owner.run([{ op: "openVoting", seconds: 20, deadlineMs: 16000 }]),
     ).toBe(true)
-    expect(openVoting).toHaveBeenLastCalledWith(20, 86000)
+    expect(openVoting).toHaveBeenLastCalledWith(20, 86000, undefined)
   })
 
   it("drains a native lock before admitting only the latest question", async () => {

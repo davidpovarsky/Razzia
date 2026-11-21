@@ -116,6 +116,32 @@ export interface StageSnapshot {
   mode: StageMode
 }
 
+/** Timing snapshots patch the current scene; only presentation changes enter it. */
+export function showSceneTransitionIdentity(scene: ShowScene): string {
+  if (
+    scene.kind === "voting" ||
+    (scene.kind === "scene" &&
+      scene.scene.kind === "animation" &&
+      isFullShowScene(scene.scene.preset ?? ""))
+  ) {
+    return scene.key
+  }
+
+  if (scene.kind === "scene") {
+    // Pause/resume changes startedAt and every broadcast refreshes elapsedMs.
+    // Neither may interrupt and restart the already-painted authored scene.
+    return JSON.stringify({
+      kind: scene.kind,
+      key: scene.key,
+      scene: scene.scene,
+      activeSceneData: scene.activeSceneData,
+      stepIndex: scene.stepIndex,
+    })
+  }
+
+  return JSON.stringify(scene)
+}
+
 /** Hold between the old and the new leaderboard (legacy Razzia timing). */
 export const LEADERBOARD_UPDATE_DELAY_MS = 1600
 
@@ -135,7 +161,7 @@ const sameEntries = (a: StageLeaderEntry[], b: StageLeaderEntry[]) =>
 /**
  * Maps an authoritative scene change to the reference animation methods:
  *  question     → showQuestion() | nextQuestion() (ZZ wipe when leaving a previous question)
- *  voting       → presentOptions() + openVoting(server seconds)
+ *  voting       → openVoting(server seconds, question with answers)
  *  results      → lockVoting() (always played) + revealResults(server snapshot)
  *  leaderboard  → showLeaderboard(old) + updateLeaderboard(new)
  *  prepared     → playZZWipe() covering into the branded "Question N" card

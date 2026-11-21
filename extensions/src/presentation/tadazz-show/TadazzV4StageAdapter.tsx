@@ -141,6 +141,7 @@ export const TadazzV4StageAdapter = forwardRef<
   if (customScreen) {
     heldCustomScreenRef.current = customScreen
   }
+
   const modeRef = useRef<StageMode>(customScreen ? "custom" : "idle")
   const questionRef = useRef<StageQuestion | null>(null)
   const cardsOnStageKeyRef = useRef<string | null>(null)

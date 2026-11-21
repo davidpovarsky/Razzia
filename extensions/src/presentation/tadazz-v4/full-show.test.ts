@@ -448,7 +448,7 @@ describe("TadazzV4Motion: WAAPI Cue Emission & Reduced Motion Lifecycle", () => 
     }
   })
 
-  it("keeps an existing question readable when photo artwork and options enter", async () => {
+  it("retains photo artwork while answers enter, and replays it only for a cold question", async () => {
     const animate = () =>
       vi.fn((_frames: Keyframe[]) => ({
         finished: Promise.resolve(),
@@ -458,6 +458,7 @@ describe("TadazzV4Motion: WAAPI Cue Emission & Reduced Motion Lifecycle", () => 
     const panel = { animate: animate() }
     const artwork = { animate: animate() }
     const option = { animate: animate() }
+    let optionsVisible = false
     const stage = {
       querySelector: (selector: string) =>
         (
@@ -467,19 +468,24 @@ describe("TadazzV4Motion: WAAPI Cue Emission & Reduced Motion Lifecycle", () => 
           }) as Record<string, unknown>
         )[selector] ?? null,
       querySelectorAll: (selector: string) =>
-        selector === ".photo-option" ? [option] : [],
+        selector === ".photo-option" && optionsVisible ? [option] : [],
     } as unknown as HTMLElement
     const motion = new TadazzV4Motion(stage, { reducedMotion: true })
+    await motion.play("question-image")
+    expect(panel.animate).toHaveBeenCalledTimes(1)
+    expect(artwork.animate).toHaveBeenCalledTimes(1)
+    expect(option.animate).not.toHaveBeenCalled()
+    optionsVisible = true
     await motion.play("question-image", { questionAlreadyOnStage: true })
-    expect(panel.animate).not.toHaveBeenCalled()
+    expect(panel.animate).toHaveBeenCalledTimes(1)
     expect(artwork.animate).toHaveBeenCalledTimes(1)
     expect(option.animate).toHaveBeenCalledTimes(1)
     await motion.play("question-image", { cardsAlreadyOnStage: true })
-    expect(panel.animate).not.toHaveBeenCalled()
+    expect(panel.animate).toHaveBeenCalledTimes(1)
     expect(artwork.animate).toHaveBeenCalledTimes(1)
     expect(option.animate).toHaveBeenCalledTimes(1)
     await motion.play("question-image")
-    expect(panel.animate).toHaveBeenCalledTimes(1)
+    expect(panel.animate).toHaveBeenCalledTimes(2)
     expect(artwork.animate).toHaveBeenCalledTimes(2)
     expect(option.animate).toHaveBeenCalledTimes(2)
   })
