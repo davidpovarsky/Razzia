@@ -844,214 +844,289 @@ describe("managed-client HTTP/native boundaries", () => {
   })
 })
 
-it("authenticates real scoped host/display sockets, denies foreign rooms, and retires active controls on unassign/rotation", async () => {
-  const server = createAdaptorServer({ fetch: app.fetch })
-  const io = createSocketServer(server)
-  await new Promise<void>((resolve) => {
-    server.listen(0, "127.0.0.1", resolve)
-  })
-  const url = `http://127.0.0.1:${(server.address() as AddressInfo).port}`
+it("keeps cookie-bearing HTTP writes origin-bound despite same-origin polling metadata", async () => {
   const created = await createClient()
   const { cookie } = await exchange(created.code)
-  const room = (await (
-    await launch(cookie)
-  ).json()) as ManagedClientLaunchResponse
-  const foreign = await request("/games", {
-    method: "POST",
-    bearer: strangerToken,
-    body: { quizzId: strangerQuizId },
-  })
-  expect(foreign.status).toBe(201)
-  const foreignRoom = (await foreign.json()) as {
-    gameId: string
-    inviteCode: string
-  }
-  expect(
-    (
-      await request(`/games/${foreignRoom.gameId}/display-media`, {
-        managed: true,
-        cookie,
-      })
-    ).status,
-  ).toBe(404)
-  expect(
-    (
-      await request("/games/check", {
-        method: "POST",
-        managed: true,
-        cookie,
-        body: { inviteCode: foreignRoom.inviteCode },
-      })
-    ).status,
-  ).toBe(404)
-  expect(
-    (await request(`/games/${foreignRoom.gameId}/display-media`)).status,
-  ).toBe(200)
-  expect(
-    (
-      await request("/games/check", {
-        method: "POST",
-        body: { inviteCode: foreignRoom.inviteCode },
-      })
-    ).status,
-  ).toBe(200)
-  const traces = new WeakMap<ClientSocket, string[]>()
-  const makeSocket = (
-    origin: string,
-    mode: "managed" | "bearer" | "invalid" = "managed",
-  ) => {
-    const authentication = {
-      managed: { managedClient: true, token },
-      bearer: { token: cookie.slice("tdz_client_auth=".length) },
-      invalid: { managedClient: "invalid", token },
+  const response = await app.request(
+    `http://localhost/api/client-access/games/${quizId}/launch`,
+    {
+      method: "POST",
+      headers: {
+        Host: "localhost",
+        Cookie: cookie,
+        "Content-Type": "application/json",
+        "X-Tadazz-Session": "managed-client",
+        "Sec-Fetch-Site": "same-origin",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+      },
+      body: JSON.stringify({ requestId: randomUUID() }),
+    },
+  )
+  expect(response.status).toBe(401)
+  expect(Registry.getInstance().getAllGames()).toHaveLength(0)
+})
+
+it.each(["websocket", "polling"] as const)(
+  "authenticates real scoped host/display sockets over %s, denies foreign rooms, and retires active controls on unassign/rotation",
+  async (transport) => {
+    const server = createAdaptorServer({ fetch: app.fetch })
+    const io = createSocketServer(server)
+    await new Promise<void>((resolve) => {
+      server.listen(0, "127.0.0.1", resolve)
+    })
+    const url = `http://127.0.0.1:${(server.address() as AddressInfo).port}`
+    const created = await createClient()
+    const { cookie } = await exchange(created.code)
+    const room = (await (
+      await launch(cookie)
+    ).json()) as ManagedClientLaunchResponse
+    const foreign = await request("/games", {
+      method: "POST",
+      bearer: strangerToken,
+      body: { quizzId: strangerQuizId },
+    })
+    expect(foreign.status).toBe(201)
+    const foreignRoom = (await foreign.json()) as {
+      gameId: string
+      inviteCode: string
     }
-    const auth = authentication[mode]
-    const socket = connect(url, {
-      path: "/ws",
-      transports: ["websocket"],
-      forceNew: true,
-      reconnection: false,
-      auth,
-      extraHeaders: { Cookie: cookie, Origin: origin },
-    })
-    const trace: string[] = []
-    traces.set(socket, trace)
-    socket.onAny((name: string, value: unknown) => {
-      if (trace.length < 30) {
-        trace.push(
-          name === EVENTS.GAME.ERROR_MESSAGE &&
-            typeof value === "string" &&
-            value.startsWith("errors:")
-            ? `${name}:${value}`
-            : name,
-        )
-      }
-    })
-    socket.on("connect", () => {
-      trace.push("connect")
-    })
-    socket.on("connect_error", () => {
-      trace.push("connect_error")
-    })
-    socket.on("disconnect", () => {
-      trace.push("disconnect")
-    })
-    sockets.push(socket)
-
-    return socket
-  }
-  const event = <T = unknown>(socket: ClientSocket, name: string): Promise<T> =>
-    new Promise<T>((resolve, reject) => {
-      const timer = setTimeout(() => {
-        reject(
-          new Error(
-            `Missing ${name}; observed ${JSON.stringify(traces.get(socket))}`,
-          ),
-        )
-      }, 5000)
-      socket.once(name, (value: T) => {
-        clearTimeout(timer)
-        resolve(value)
-      })
-    })
-
-  try {
-    for (const [origin, mode] of [
-      ["https://unrelated.invalid", "managed"],
-      [url, "bearer"],
-      [url, "invalid"],
-    ] as const) {
-      const invalid = makeSocket(origin, mode)
-      const error = await event<Error & { data?: { code: string } }>(
-        invalid,
-        "connect_error",
-      )
-      expect(error.data?.code).toBe("TOKEN_INVALID")
-    }
-
-    const client = makeSocket(url)
-    await event(client, "connect")
-    const reconnect = event(client, EVENTS.MANAGER.SUCCESS_RECONNECT)
-    client.emit(EVENTS.MANAGER.RECONNECT, { gameId: room.gameId })
-    expect(await reconnect).toMatchObject({ gameId: room.gameId })
-    expect(await client.timeout(5000).emitWithAck("extensions:clock")).toEqual(
-      expect.any(Number),
-    )
-    const unknownDenied = event(client, EVENTS.GAME.ERROR_MESSAGE)
-    client.emit("unregistered:managed-event", { gameId: room.gameId })
-    expect(await unknownDenied).toBe("errors:auth.unauthorized")
-    const display = makeSocket(url)
-    await event(display, "connect")
-    const joined = event(display, EVENTS.SPECTATOR.SUCCESS_JOIN)
-    display.emit(EVENTS.SPECTATOR.JOIN, { gameId: room.gameId })
-    expect(await joined).toMatchObject({ gameId: room.gameId })
-    for (const gameId of [randomUUID(), foreignRoom.gameId]) {
-      for (const name of [EVENTS.SPECTATOR.JOIN, EVENTS.SPECTATOR.LEAVE]) {
-        const deniedDisplay = event(display, EVENTS.GAME.ERROR_MESSAGE)
-        display.emit(name, { gameId })
-        expect(await deniedDisplay).toBe("errors:auth.unauthorized")
-      }
-    }
-
-    expect(
-      Registry.getInstance()
-        .getGameById(foreignRoom.gameId)
-        ?.getSpectatorCount(),
-    ).toBe(0)
-    const disconnected = Promise.all([
-      event(client, "disconnect"),
-      event(display, "disconnect"),
-    ])
-    new ManagedClientStore().assign(owner, created.client.id, [])
-    expect(await disconnected).toEqual([
-      "io server disconnect",
-      "io server disconnect",
-    ])
     expect(
       (
-        await request(`/games/${room.gameId}/roster`, {
+        await request(`/games/${foreignRoom.gameId}/display-media`, {
           managed: true,
           cookie,
-          bearer: token,
         })
       ).status,
     ).toBe(404)
-
-    new ManagedClientStore().assign(owner, created.client.id, [quizId])
-    const restoredHost = makeSocket(url)
-    await event(restoredHost, "connect")
-    const restored = event(restoredHost, EVENTS.MANAGER.SUCCESS_RECONNECT)
-    restoredHost.emit(EVENTS.MANAGER.RECONNECT, { gameId: room.gameId })
-    expect(await restored).toMatchObject({ gameId: room.gameId })
-    const restoredDisplay = makeSocket(url)
-    await event(restoredDisplay, "connect")
-    const restoredJoin = event(restoredDisplay, EVENTS.SPECTATOR.SUCCESS_JOIN)
-    restoredDisplay.emit(EVENTS.SPECTATOR.JOIN, { gameId: room.gameId })
-    expect(await restoredJoin).toMatchObject({ gameId: room.gameId })
-    const rotated = Promise.all([
-      event(restoredHost, "disconnect"),
-      event(restoredDisplay, "disconnect"),
-    ])
-    new ManagedClientStore().rotate(owner, created.client.id)
-    expect(await rotated).toEqual([
-      "io server disconnect",
-      "io server disconnect",
-    ])
-    const retired = makeSocket(url)
-    const retiredError = await event<Error & { data?: { code: string } }>(
-      retired,
-      "connect_error",
-    )
-    expect(retiredError.data?.code).toBe("TOKEN_INVALID")
-  } finally {
-    for (const socket of sockets.splice(0)) {
-      socket.disconnect()
+    expect(
+      (
+        await request("/games/check", {
+          method: "POST",
+          managed: true,
+          cookie,
+          body: { inviteCode: foreignRoom.inviteCode },
+        })
+      ).status,
+    ).toBe(404)
+    expect(
+      (await request(`/games/${foreignRoom.gameId}/display-media`)).status,
+    ).toBe(200)
+    expect(
+      (
+        await request("/games/check", {
+          method: "POST",
+          body: { inviteCode: foreignRoom.inviteCode },
+        })
+      ).status,
+    ).toBe(200)
+    const traces = new WeakMap<ClientSocket, string[]>()
+    const pollingMetadata = {
+      "Sec-Fetch-Site": "same-origin",
+      "Sec-Fetch-Mode": "cors",
+      "Sec-Fetch-Dest": "empty",
     }
+    const makeSocket = (
+      origin: string | undefined,
+      mode: "managed" | "bearer" | "invalid" = "managed",
+      metadata: Record<string, string> = {},
+    ) => {
+      const authentication = {
+        managed: { managedClient: true, token },
+        bearer: { token: cookie.slice("tdz_client_auth=".length) },
+        invalid: { managedClient: "invalid", token },
+      }
+      const auth = authentication[mode]
+      const socket = connect(url, {
+        path: "/ws",
+        transports: [transport],
+        forceNew: true,
+        reconnection: false,
+        auth,
+        extraHeaders: {
+          Cookie: cookie,
+          ...(origin === undefined ? {} : { Origin: origin }),
+          ...metadata,
+        },
+      })
+      const trace: string[] = []
+      traces.set(socket, trace)
+      socket.onAny((name: string, value: unknown) => {
+        if (trace.length < 30) {
+          trace.push(
+            name === EVENTS.GAME.ERROR_MESSAGE &&
+              typeof value === "string" &&
+              value.startsWith("errors:")
+              ? `${name}:${value}`
+              : name,
+          )
+        }
+      })
+      socket.on("connect", () => {
+        trace.push("connect")
+      })
+      socket.on("connect_error", () => {
+        trace.push("connect_error")
+      })
+      socket.on("disconnect", () => {
+        trace.push("disconnect")
+      })
+      sockets.push(socket)
 
-    await io.close()
-    setIo(fake.io)
-  }
-})
+      return socket
+    }
+    const makeAllowedSocket = () =>
+      transport === "polling"
+        ? makeSocket(undefined, "managed", pollingMetadata)
+        : makeSocket(url)
+    const event = <T = unknown>(
+      socket: ClientSocket,
+      name: string,
+    ): Promise<T> =>
+      new Promise<T>((resolve, reject) => {
+        const timer = setTimeout(() => {
+          reject(
+            new Error(
+              `Missing ${name}; observed ${JSON.stringify(traces.get(socket))}`,
+            ),
+          )
+        }, 5000)
+        socket.once(name, (value: T) => {
+          clearTimeout(timer)
+          resolve(value)
+        })
+      })
+
+    try {
+      for (const [origin, mode] of [
+        ["https://unrelated.invalid", "managed"],
+        [url, "bearer"],
+        [url, "invalid"],
+      ] as const) {
+        const invalid = makeSocket(origin, mode)
+        const error = await event<Error & { data?: { code: string } }>(
+          invalid,
+          "connect_error",
+        )
+        expect(error.data?.code).toBe("TOKEN_INVALID")
+      }
+
+      for (const [origin, metadata] of [
+        [undefined, {}],
+        [undefined, { ...pollingMetadata, "Sec-Fetch-Site": "cross-site" }],
+        [undefined, { ...pollingMetadata, "Sec-Fetch-Site": "same-site" }],
+        [undefined, { ...pollingMetadata, "Sec-Fetch-Site": "none" }],
+        [undefined, { ...pollingMetadata, "Sec-Fetch-Mode": "navigate" }],
+        [undefined, { ...pollingMetadata, "Sec-Fetch-Dest": "document" }],
+        ["https://unrelated.invalid", pollingMetadata],
+        ["null", pollingMetadata],
+        ["", pollingMetadata],
+      ] as const) {
+        const invalid = makeSocket(origin, "managed", metadata)
+        const error = await event<Error & { data?: { code: string } }>(
+          invalid,
+          "connect_error",
+        )
+        expect(error.data?.code).toBe("TOKEN_INVALID")
+        invalid.disconnect()
+      }
+
+      const client = makeAllowedSocket()
+      await event(client, "connect")
+      const handshake = io.sockets.sockets.get(client.id!)?.request
+      expect(handshake?.method).toBe("GET")
+      expect(handshake?.headers.host).toBe(new URL(url).host)
+      expect(handshake?.headers.origin).toBe(
+        transport === "polling" ? undefined : url,
+      )
+
+      if (transport === "polling") {
+        expect(handshake?.headers["sec-fetch-site"]).toBe("same-origin")
+        expect(handshake?.url).toContain("transport=polling")
+      }
+
+      const reconnect = event(client, EVENTS.MANAGER.SUCCESS_RECONNECT)
+      client.emit(EVENTS.MANAGER.RECONNECT, { gameId: room.gameId })
+      expect(await reconnect).toMatchObject({ gameId: room.gameId })
+      expect(
+        await client.timeout(5000).emitWithAck("extensions:clock"),
+      ).toEqual(expect.any(Number))
+      const unknownDenied = event(client, EVENTS.GAME.ERROR_MESSAGE)
+      client.emit("unregistered:managed-event", { gameId: room.gameId })
+      expect(await unknownDenied).toBe("errors:auth.unauthorized")
+      const display = makeAllowedSocket()
+      await event(display, "connect")
+      const joined = event(display, EVENTS.SPECTATOR.SUCCESS_JOIN)
+      display.emit(EVENTS.SPECTATOR.JOIN, { gameId: room.gameId })
+      expect(await joined).toMatchObject({ gameId: room.gameId })
+      for (const gameId of [randomUUID(), foreignRoom.gameId]) {
+        for (const name of [EVENTS.SPECTATOR.JOIN, EVENTS.SPECTATOR.LEAVE]) {
+          const deniedDisplay = event(display, EVENTS.GAME.ERROR_MESSAGE)
+          display.emit(name, { gameId })
+          expect(await deniedDisplay).toBe("errors:auth.unauthorized")
+        }
+      }
+
+      expect(
+        Registry.getInstance()
+          .getGameById(foreignRoom.gameId)
+          ?.getSpectatorCount(),
+      ).toBe(0)
+      const disconnected = Promise.all([
+        event(client, "disconnect"),
+        event(display, "disconnect"),
+      ])
+      new ManagedClientStore().assign(owner, created.client.id, [])
+      expect(await disconnected).toEqual([
+        "io server disconnect",
+        "io server disconnect",
+      ])
+      expect(
+        (
+          await request(`/games/${room.gameId}/roster`, {
+            managed: true,
+            cookie,
+            bearer: token,
+          })
+        ).status,
+      ).toBe(404)
+
+      new ManagedClientStore().assign(owner, created.client.id, [quizId])
+      const restoredHost = makeAllowedSocket()
+      await event(restoredHost, "connect")
+      const restored = event(restoredHost, EVENTS.MANAGER.SUCCESS_RECONNECT)
+      restoredHost.emit(EVENTS.MANAGER.RECONNECT, { gameId: room.gameId })
+      expect(await restored).toMatchObject({ gameId: room.gameId })
+      const restoredDisplay = makeAllowedSocket()
+      await event(restoredDisplay, "connect")
+      const restoredJoin = event(restoredDisplay, EVENTS.SPECTATOR.SUCCESS_JOIN)
+      restoredDisplay.emit(EVENTS.SPECTATOR.JOIN, { gameId: room.gameId })
+      expect(await restoredJoin).toMatchObject({ gameId: room.gameId })
+      const rotated = Promise.all([
+        event(restoredHost, "disconnect"),
+        event(restoredDisplay, "disconnect"),
+      ])
+      new ManagedClientStore().rotate(owner, created.client.id)
+      expect(await rotated).toEqual([
+        "io server disconnect",
+        "io server disconnect",
+      ])
+      const retired = makeAllowedSocket()
+      const retiredError = await event<Error & { data?: { code: string } }>(
+        retired,
+        "connect_error",
+      )
+      expect(retiredError.data?.code).toBe("TOKEN_INVALID")
+    } finally {
+      for (const socket of sockets.splice(0)) {
+        socket.disconnect()
+      }
+
+      await io.close()
+      setIo(fake.io)
+    }
+  },
+)
 
 it("revalidates an ordinary owner's retained authority after display conversion and explicit logout", async () => {
   const server = createAdaptorServer({ fetch: app.fetch })
