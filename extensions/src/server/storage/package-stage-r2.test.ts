@@ -55,7 +55,11 @@ describe("R2 production package-stage opaque adapter contract", () => {
       expect(storedExtras.baseDigest).toBe(result.baseDigest)
       expect(storedExtras.authoring).toStrictEqual(extras.authoring)
       expect(storedExtras.scenes).toStrictEqual(extras.scenes)
-      expect(storedExtras.audio).toStrictEqual(extras.audio)
+      // JSON omits optional undefined URLs; every defined audio setting must
+      // survive the package's persisted representation exactly.
+      expect(storedExtras.audio).toStrictEqual(
+        JSON.parse(JSON.stringify(extras.audio)),
+      )
       expect(storedExtras.mediaCatalog).toStrictEqual(extras.mediaCatalog)
       for (const key of ["defaults", "teams", "roster"])
         expect(storedExtras[key]).toStrictEqual(

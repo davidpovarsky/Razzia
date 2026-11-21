@@ -4,6 +4,7 @@ import {
   createDefaultRosterExtras,
   createDotLottieArchive,
   computeCanonicalBaseDigest,
+  DEFAULT_CUE_URLS,
 } from "../core/index"
 import {
   type MediaCatalogResponse,
@@ -262,8 +263,15 @@ describe("Gate C: Persistent Media Catalog & Reference-Safe Deletion", () => {
     const body = (await res.json()) as MediaCatalogResponse
     expect(body.media[0].usedInCurrentShow).toBe(true)
     expect(
-      body.builtInSounds.some((s) => s.url === "/sounds/answersMusic.mp3"),
-    ).toBe(true)
+      body.builtInSounds.find((sound) => sound.cueId === "answersMusic"),
+    ).toMatchObject({
+      url: DEFAULT_CUE_URLS.answersMusic,
+      builtIn: true,
+      defaultLoop: true,
+    })
+    expect(new Set(body.builtInSounds.map((sound) => sound.cueId)).size).toBe(
+      body.builtInSounds.length,
+    )
   })
   it("fail-closed: blocks deletion when any show file in quizz/ is malformed or unreadable", () => {
     // Write a valid show

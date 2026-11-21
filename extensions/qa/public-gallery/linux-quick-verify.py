@@ -27,7 +27,8 @@ REMOTE_ROOT = "/home/ubuntu/tadazz-phase2-20261116/evidence/" + RUN
 EVIDENCE = ROOT / "docs/extensions/plans/public-gallery-20261119" / RUN
 EVIDENCE.mkdir(parents=True, exist_ok=False)
 PATHS = ["extensions", "packages", "package.json", "tsconfig.json", "vitest.config.ts", "pnpm-workspace.yaml",
-         "pnpm-lock.yaml", "oxlint.config.ts", ".prettierrc.json", ".gitignore", ".prettierignore"]
+         "pnpm-lock.yaml", "oxlint.config.ts", ".prettierrc.json", ".gitignore", ".prettierignore",
+         "docs/extensions/references/TADAZZ_Motion_Showcase_One_Click_20261105.html"]
 names = subprocess.check_output(["git", "ls-files", "--cached", "--others", "--exclude-standard", "-z", "--", *PATHS], cwd=ROOT).decode().split("\0")
 files = sorted({name for name in names if name and '.bak.' not in name and (ROOT / name).is_file()})
 changed = subprocess.check_output(["git", "diff", "--name-only", "-z", BASE, "--", *PATHS], cwd=ROOT).decode().split("\0")

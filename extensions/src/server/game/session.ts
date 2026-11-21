@@ -370,7 +370,7 @@ export class ExtensionGameSession {
       this.extras?.quizId === "6369bf77-c3d4-40ee-8a67-0476434b562f" &&
       isQuizExtrasV2(this.extras) &&
       this.extras.defaults.showTheme?.id === "tadazz-classic" &&
-      this.extras.defaults.showTheme?.version === "1.0.0" &&
+      this.extras.defaults.showTheme.version === "1.0.0" &&
       !this.extras.defaults.showComposition
     ) {
       extrasPayload.stageLook = "guess-off"

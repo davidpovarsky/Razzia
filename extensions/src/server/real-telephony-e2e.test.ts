@@ -13,6 +13,7 @@ import Registry from "@razzia/socket/services/registry"
 import { sign } from "hono/jwt"
 import { io as connect, type Socket } from "socket.io-client"
 import { afterAll, beforeAll, describe, expect, it } from "vitest"
+import { extensionStateEnvelopeSchema, readPlatformOpening } from "../core/index"
 import {
   KeypadSimulatorCore,
   MockProvider,
@@ -133,6 +134,41 @@ describe("GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real S
       fs.rmSync(tempConfigDir, { recursive: true, force: true })
     }
   }, 15000)
+
+  // Use the same three host actions as the UI: intro, lobby, then the round.
+  // Waiting for server state prevents a second action racing the first one.
+  const startRealGame = async (manager: Socket, gameId: string): Promise<void> => {
+    for (const stage of ["opening", "lobby"] as const) {
+      await new Promise<void>((resolve, reject) => {
+        const listener = (state: unknown) => {
+          const parsed = extensionStateEnvelopeSchema.safeParse(state)
+
+          if (!parsed.success) {
+            return
+          }
+
+          const launch = readPlatformOpening(parsed.data.extras.presentationLaunch)
+
+          if (launch?.stage !== stage) {
+            return
+          }
+
+          clearTimeout(timeout)
+          manager.off(EVENTS.EXTENSIONS.STATE, listener)
+          resolve()
+        }
+        const timeout = setTimeout(() => {
+          manager.off(EVENTS.EXTENSIONS.STATE, listener)
+          reject(new Error(`Timeout waiting for platform ${stage}`))
+        }, 5000)
+
+        manager.on(EVENTS.EXTENSIONS.STATE, listener)
+        manager.emit(EVENTS.MANAGER.START_GAME, { gameId })
+      })
+    }
+
+    manager.emit(EVENTS.MANAGER.START_GAME, { gameId })
+  }
 
   // Helper to authenticate manager via real HTTP endpoint
   const waitForCondition = async (
@@ -339,7 +375,7 @@ describe("GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real S
     expect(bridge.getActiveSessionsCount()).toBe(1)
 
     // 4. Manager Starts Game over real WebSocket
-    managerSocket.emit(EVENTS.MANAGER.START_GAME, { gameId })
+    await startRealGame(managerSocket, gameId)
 
     // Wait until question 1 accepts answers (SELECT_ANSWER status)
     await waitForCondition(
@@ -613,7 +649,7 @@ describe("GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real S
     expect(phoneClientId).toBeTruthy()
 
     // Manager starts game
-    managerSocket.emit(EVENTS.MANAGER.START_GAME, { gameId })
+    await startRealGame(managerSocket, gameId)
 
     // Wait until Question 1 is accepting answers
     await waitForCondition(
@@ -848,7 +884,7 @@ describe("GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real S
     expect(game?.players.length).toBe(PARTICIPANTS)
 
     // Phase 2: Start question on Real Server
-    managerSocket.emit(EVENTS.MANAGER.START_GAME, { gameId })
+    await startRealGame(managerSocket, gameId)
 
     const isClientAccepting = (idx: number) => {
       const c = bridge.getClient(

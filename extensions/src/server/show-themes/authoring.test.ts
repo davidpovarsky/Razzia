@@ -29,7 +29,7 @@ it("validates actual Classic assets including bounded embedded Lottie rasters", 
     publicRoot,
     { trustedRepository: true },
   )
-  expect(result.assetCount).toBe(31)
+  expect(result.assetCount).toBe(showThemeRegistry.classic().assets.length)
   expect(result.manifestSha256).toMatch(/^[a-f0-9]{64}$/u)
   await expect(
     validateThemePackage(showThemeRegistry.classic(), publicRoot),

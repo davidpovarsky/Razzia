@@ -7,22 +7,41 @@ import {
 } from "./native-media-library"
 
 describe("independent native asset/audio metadata without new playback authority", () => {
-  it("deduplicates67 declarations to39 exact refs while preserving36 IDs and35 hashes", () => {
+  it("deduplicates every exact manifest reference while preserving IDs, hashes and declarations", () => {
+    const assets = getNativeShowLibrary().families.flatMap(
+      (family) => family.definition.assets,
+    )
+    const exactRefs = new Set(assets.map((asset) => `${asset.id}:${asset.sha256}`))
     const library = getNativeAssetLibrary()
-    expect(library.entries).toHaveLength(39)
-    expect(
-      new Set(library.entries.map((entry) => entry.ref.assetId)).size,
-    ).toBe(36)
+    const actualRefs = library.entries.map(
+      (entry) => `${entry.ref.assetId}:${entry.ref.sha256}`,
+    )
+
+    expect(new Set(actualRefs)).toEqual(exactRefs)
+    expect(actualRefs).toHaveLength(exactRefs.size)
+    expect(new Set(library.entries.map((entry) => entry.ref.assetId))).toEqual(
+      new Set(assets.map((asset) => asset.id)),
+    )
     expect(
       library.entries.reduce(
         (sum, entry) => sum + entry.declarations.length,
         0,
       ),
-    ).toBe(67)
-    expect(new Set(library.entries.map((entry) => entry.ref.sha256)).size).toBe(
-      35,
+    ).toBe(assets.length)
+    expect(new Set(library.entries.map((entry) => entry.ref.sha256))).toEqual(
+      new Set(assets.map((asset) => asset.sha256)),
     )
-    expect(library.contentAliases).toHaveLength(3)
+    const aliases = [...new Set(assets.map((asset) => asset.sha256))]
+      .map((sha256) => ({
+        sha256,
+        assetIds: [...new Set(assets.filter((asset) => asset.sha256 === sha256).map((asset) => asset.id))].sort(),
+      }))
+      .filter((alias) => alias.assetIds.length > 1)
+      .sort((left, right) => left.sha256.localeCompare(right.sha256))
+
+    expect(
+      [...library.contentAliases].sort((left, right) => left.sha256.localeCompare(right.sha256)),
+    ).toEqual(aliases)
     for (const alias of library.contentAliases) {
       expect(alias.assetIds.length).toBeGreaterThan(1)
       expect(new Set(alias.assetIds).size).toBe(alias.assetIds.length)

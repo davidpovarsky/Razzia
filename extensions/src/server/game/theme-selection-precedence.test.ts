@@ -8,15 +8,16 @@ const BMS_QUIZ_ID = "6369bf77-c3d4-40ee-8a67-0476434b562f"
 function snapshot(
   role: "manager" | "player",
   theme: { id: string; version: string } | undefined,
-  composition = false,
-  quizId = BMS_QUIZ_ID,
+  options: { composition?: boolean; quizId?: string } = {},
 ) {
+  const { composition = false, quizId = BMS_QUIZ_ID } = options
   const extras = createDefaultQuizExtrasV2(
     quizId,
     [randomUUID()],
     "0".repeat(64),
   )
-  extras.defaults.showTheme = theme
+  extras.defaults.showTheme = theme ? { ...theme, overrides: {} } : undefined
+
   if (composition) {
     extras.defaults.showComposition = {
       workspaceId: "00000000-0000-4000-8000-000000000099",
@@ -26,6 +27,7 @@ function snapshot(
       rendererBuildSha256: "2".repeat(64),
     }
   }
+
   return new ExtensionGameSession("theme-precedence", extras).getStateSnapshot(
     role,
     [],
@@ -57,7 +59,7 @@ describe.each(["manager", "player"] as const)(
       const result = snapshot(
         role,
         { id: "tadazz-classic", version: "1.0.0" },
-        true,
+        { composition: true },
       )
       expect(result).not.toHaveProperty("stageLook")
       expect(result).toHaveProperty("applicationCompositionUnavailable", true)
@@ -68,8 +70,7 @@ describe.each(["manager", "player"] as const)(
         snapshot(
           role,
           { id: "tadazz-classic", version: "1.0.0" },
-          false,
-          "another-game",
+          { quizId: "another-game" },
         ),
       ).not.toHaveProperty("stageLook")
     })
