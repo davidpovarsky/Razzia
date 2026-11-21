@@ -199,7 +199,7 @@ describe("package preview native audio clock", () => {
     expect(final.volume).toBe(0.42)
   })
 
-  it("plays timer end once after expiry, or vote lock on an early finish", () => {
+  it("plays timer end once after expiry or a host early finish", () => {
     const voting = packageTimerAudioTransition(null, {
       ...input,
       remainingMs: 500,
@@ -228,7 +228,7 @@ describe("package preview native audio clock", () => {
           remainingMs: 0,
         },
       ).cue,
-    ).toBe("vote-locked")
+    ).toBe("timer-ended")
     expect(
       packageTimerAudioTransition(null, {
         ...input,
@@ -238,6 +238,35 @@ describe("package preview native audio clock", () => {
     ).toBeUndefined()
   })
 
+  it("does not replay a manual finish at the later result or after a paused completion", () => {
+    const voting = packageTimerAudioTransition(null, {
+      ...input,
+      remainingMs: 15_000,
+    }).state
+    const finish = {
+      ...input,
+      phase: "voteLocked",
+      remainingMs: 0,
+    }
+    const locked = packageTimerAudioTransition(voting, finish)
+    expect(locked.cue).toBe("timer-ended")
+    expect(
+      packageTimerAudioTransition(locked.state, {
+        ...finish,
+        phase: "results",
+        epoch: 4,
+      }).cue,
+    ).toBeUndefined()
+    const paused = packageTimerAudioTransition(voting, {
+      ...finish,
+      paused: true,
+    })
+    expect(paused.cue).toBeUndefined()
+    expect(
+      packageTimerAudioTransition(paused.state, finish).cue,
+    ).toBeUndefined()
+    expect(packageTimerAudioTransition(null, finish).cue).toBeUndefined()
+  })
   it("keeps silent, paused and player previews silent", () => {
     for (const control of [
       { enabled: false, paused: false },
