@@ -220,6 +220,21 @@ export async function loadFirstPartyBindings(configRoot: string) {
         accounts.isAccountSessionValid(accountId, sid)
       )
     },
+    delegatedConnectionActive(accountId: string, sid: string) {
+      configured()
+
+      if (
+        !liveDb ||
+        !z.uuid().safeParse(accountId).success ||
+        !z.uuid().safeParse(sid).success
+      ) {
+        throw unavailable()
+      }
+
+      checkDatabase(liveDb)
+
+      return accounts.isAccountConnectionValid(accountId, sid)
+    },
   })
   trustedBindings.add(bindings)
   return bindings
