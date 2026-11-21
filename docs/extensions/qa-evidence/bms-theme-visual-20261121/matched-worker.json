@@ -1,0 +1,31 @@
+{
+  "run": "tadazz-bms-package-2cd82406",
+  "workerImage": "sha256:623c6edc603a8dde3188f4726a62d52eb99feabfda9c491f64d80c459f924e2b",
+  "workerSource": "/home/ubuntu/tadazz-package-worker-a48040529dfe-67c22a7f/source",
+  "scope": "New synthetic store only; no production uploads or installs",
+  "sourceDigest": "833c817242d9a1d505ad05641c17cbb889740ae811dad30daa153c300e4a545c",
+  "sourceBytes": 143795,
+  "job": "/home/ubuntu/tadazz-bms-package-2cd82406/store/d78d59d76dd8e57e1d270b8fdf9d4214a9c0d99814347010a3518de69e43f0b6/jobs/9c6a6125-9cf9-4556-8448-68c9e13a4525",
+  "brokerExit": 0,
+  "result": {
+    "sourceDigest": "833c817242d9a1d505ad05641c17cbb889740ae811dad30daa153c300e4a545c",
+    "outputDigest": "5c2a8968381281ce28bee11818aea56b7053a6e3c818e2146b7546c7d4eec4ea",
+    "mediaValidated": true,
+    "toolchain": "esbuild@0.28.2;react@19.3.0;ffmpeg@5.1.9"
+  },
+  "themes": {
+    "bms-memory-files": {
+      "jsBytes": 867964,
+      "cssBytes": 80467,
+      "assets": [
+        "shared/art/bms-wordmark.png",
+        "shared/art/stage-backdrop.webp",
+        "shared/art/stage-poster.webp",
+        "shared/fonts/barlow-condensed-latin-700-normal.woff2",
+        "shared/fonts/barlow-latin-500-normal.woff2"
+      ]
+    }
+  },
+  "stdout": "",
+  "stderr": ""
+}

@@ -1,0 +1,687 @@
+{
+  "baseGameMode": "quiz",
+  "cards": [
+    {
+      "key": "bms-title",
+      "kind": "transition",
+      "title": "The Most Quizzical Quiz EVER!",
+      "durationMs": 8000,
+      "advance": "auto"
+    },
+    {
+      "answers": [
+        {
+          "display": "text",
+          "text": "Rabbi Tatz"
+        },
+        {
+          "display": "text",
+          "text": "Rabbi Zonenstien"
+        },
+        {
+          "display": "text",
+          "text": "Mrs Schlesinger"
+        }
+      ],
+      "cooldownSeconds": 3,
+      "correctAnswers": [
+        1
+      ],
+      "key": "bms-q01",
+      "kind": "quiz",
+      "maxPoints": 1000,
+      "penalty": 0,
+      "question": "Who was the last speaker that we had in sem?",
+      "questionType": "single",
+      "timeSeconds": 25
+    },
+    {
+      "answers": [
+        {
+          "display": "text",
+          "text": "Rebbetzin Schlesinger"
+        },
+        {
+          "display": "text",
+          "text": "Mrs C Gross"
+        },
+        {
+          "display": "text",
+          "text": "The Security Guard"
+        }
+      ],
+      "cooldownSeconds": 3,
+      "correctAnswers": [
+        2
+      ],
+      "key": "bms-q02",
+      "kind": "quiz",
+      "maxPoints": 1000,
+      "penalty": 0,
+      "question": "Who told us to keep our door open when we leave sem?",
+      "questionType": "single",
+      "timeSeconds": 25
+    },
+    {
+      "answers": [
+        {
+          "display": "text",
+          "text": "Rabbi Chissick"
+        },
+        {
+          "display": "text",
+          "text": "Rabbi Hecksher"
+        },
+        {
+          "display": "text",
+          "text": "Rabbi Kirsch"
+        }
+      ],
+      "cooldownSeconds": 3,
+      "correctAnswers": [
+        3
+      ],
+      "key": "bms-q03",
+      "kind": "quiz",
+      "maxPoints": 1000,
+      "penalty": 0,
+      "question": "Who is speaking in Lechu Venelchu this Tuesday?",
+      "questionType": "single",
+      "timeSeconds": 25
+    },
+    {
+      "answers": [
+        {
+          "display": "text",
+          "text": "To give gifts that the other person will like, not what you like."
+        },
+        {
+          "display": "text",
+          "text": "To feel with other people in their simcha and pain."
+        },
+        {
+          "display": "text",
+          "text": "You can polish your apples but you can’t paint them red."
+        }
+      ],
+      "cooldownSeconds": 3,
+      "correctAnswers": [
+        2
+      ],
+      "key": "bms-q04",
+      "kind": "quiz",
+      "maxPoints": 1000,
+      "penalty": 0,
+      "question": "What was the last thing that Mrs Ginsburg taught us?",
+      "questionType": "single",
+      "timeSeconds": 30
+    },
+    {
+      "answers": [
+        {
+          "display": "text",
+          "text": "Before Pesach in Shiur Aleph about behaviour"
+        },
+        {
+          "display": "text",
+          "text": "Before retreat about sleeping"
+        },
+        {
+          "display": "text",
+          "text": "The last week of sem about phones"
+        }
+      ],
+      "cooldownSeconds": 3,
+      "correctAnswers": [
+        1
+      ],
+      "key": "bms-q05",
+      "kind": "quiz",
+      "maxPoints": 1000,
+      "penalty": 0,
+      "question": "When was the first time we had to make a plan for Mrs Hager?",
+      "questionType": "single",
+      "timeSeconds": 25
+    },
+    {
+      "answers": [
+        {
+          "display": "text",
+          "text": "Mrs Rotbhard"
+        },
+        {
+          "display": "text",
+          "text": "The Smart Board"
+        },
+        {
+          "display": "text",
+          "text": "Mrs Dunner"
+        }
+      ],
+      "cooldownSeconds": 3,
+      "correctAnswers": [
+        3
+      ],
+      "key": "bms-q06",
+      "kind": "quiz",
+      "maxPoints": 1000,
+      "penalty": 0,
+      "question": "Who is Mrs Kutiner’s friend?",
+      "questionType": "single",
+      "timeSeconds": 25
+    },
+    {
+      "answers": [
+        {
+          "display": "text",
+          "text": "To look into a Chumash when we feel stressed"
+        },
+        {
+          "display": "text",
+          "text": "To wear helmets when we do horse riding"
+        },
+        {
+          "display": "text",
+          "text": "To teach our children to cross roads safely when on scooters or bikes"
+        }
+      ],
+      "cooldownSeconds": 3,
+      "correctAnswers": [
+        3
+      ],
+      "key": "bms-q07",
+      "kind": "quiz",
+      "maxPoints": 1000,
+      "penalty": 0,
+      "question": "What was Mrs Gluck’s final message?",
+      "questionType": "single",
+      "timeSeconds": 30
+    },
+    {
+      "answers": [
+        {
+          "display": "text",
+          "text": "3"
+        },
+        {
+          "display": "text",
+          "text": "10+"
+        },
+        {
+          "display": "text",
+          "text": "None"
+        }
+      ],
+      "cooldownSeconds": 3,
+      "correctAnswers": [
+        1
+      ],
+      "key": "bms-q08",
+      "kind": "quiz",
+      "maxPoints": 1000,
+      "penalty": 0,
+      "question": "How many official class gatherings have we had since leaving sem, including this smashing Shabbos?",
+      "questionType": "single",
+      "timeSeconds": 25
+    },
+    {
+      "key": "bms-honour-roll-8",
+      "kind": "leaderboard",
+      "title": "SCORES",
+      "durationMs": 24000,
+      "advance": "auto"
+    },
+    {
+      "answers": [
+        {
+          "display": "text",
+          "text": "The heads of YHS"
+        },
+        {
+          "display": "text",
+          "text": "Mrs Davis"
+        },
+        {
+          "display": "text",
+          "text": "Rav Padwa"
+        }
+      ],
+      "cooldownSeconds": 3,
+      "correctAnswers": [
+        2
+      ],
+      "key": "bms-q09",
+      "kind": "quiz",
+      "maxPoints": 1000,
+      "penalty": 0,
+      "question": "Who is a friend of Beer Miriam?",
+      "questionType": "single",
+      "timeSeconds": 25
+    },
+    {
+      "answers": [
+        {
+          "display": "text",
+          "text": "The grass is greener on the other side."
+        },
+        {
+          "display": "text",
+          "text": "Without darkness we would never see the stars."
+        },
+        {
+          "display": "text",
+          "text": "Empty vessels make the most noise."
+        }
+      ],
+      "cooldownSeconds": 3,
+      "correctAnswers": [
+        3
+      ],
+      "key": "bms-q10",
+      "kind": "quiz",
+      "maxPoints": 1000,
+      "penalty": 0,
+      "question": "Which proverb describes someone who makes a lot of noise but has little to say?",
+      "questionType": "single",
+      "timeSeconds": 25
+    },
+    {
+      "answers": [
+        {
+          "display": "text",
+          "text": "During speeches"
+        },
+        {
+          "display": "text",
+          "text": "Every day (you are never allowed to go on your own!)"
+        },
+        {
+          "display": "text",
+          "text": "In Krakow Hotel"
+        }
+      ],
+      "cooldownSeconds": 3,
+      "correctAnswers": [
+        3
+      ],
+      "key": "bms-q11",
+      "kind": "quiz",
+      "maxPoints": 1000,
+      "penalty": 0,
+      "question": "When in sem did we need guards to go to the bathroom?",
+      "questionType": "single",
+      "timeSeconds": 25
+    },
+    {
+      "answers": [
+        {
+          "display": "text",
+          "text": "Gateshead"
+        },
+        {
+          "display": "text",
+          "text": "Argentina"
+        },
+        {
+          "display": "text",
+          "text": "Poland"
+        }
+      ],
+      "cooldownSeconds": 3,
+      "correctAnswers": [
+        1
+      ],
+      "key": "bms-q12",
+      "kind": "quiz",
+      "maxPoints": 1000,
+      "penalty": 0,
+      "question": "At one point we were all going to move to…",
+      "questionType": "single",
+      "timeSeconds": 25
+    },
+    {
+      "answers": [
+        {
+          "display": "text",
+          "text": "Red cheeks (for some reason)"
+        },
+        {
+          "display": "text",
+          "text": "A rekidah"
+        },
+        {
+          "display": "text",
+          "text": "Foooooooooddd!!"
+        }
+      ],
+      "cooldownSeconds": 3,
+      "correctAnswers": [
+        2
+      ],
+      "key": "bms-q13",
+      "kind": "quiz",
+      "maxPoints": 1000,
+      "penalty": 0,
+      "question": "What will every BMS feedback always end with?",
+      "questionType": "single",
+      "timeSeconds": 25
+    },
+    {
+      "answers": [
+        {
+          "display": "text",
+          "text": "To see how many times one point can be said in different versions"
+        },
+        {
+          "display": "text",
+          "text": "To rate your creativity"
+        },
+        {
+          "display": "text",
+          "text": "Velochein"
+        }
+      ],
+      "cooldownSeconds": 3,
+      "correctAnswers": [
+        3
+      ],
+      "key": "bms-q14",
+      "kind": "quiz",
+      "maxPoints": 1000,
+      "penalty": 0,
+      "question": "What is the purpose of feedback in sem?",
+      "questionType": "single",
+      "timeSeconds": 25
+    },
+    {
+      "answers": [
+        {
+          "display": "text",
+          "text": "Happens to be in every Chumash"
+        },
+        {
+          "display": "text",
+          "text": "Was never mentioned in any of our lessons"
+        },
+        {
+          "display": "text",
+          "text": "Name happens to be Rappaport"
+        }
+      ],
+      "cooldownSeconds": 3,
+      "correctAnswers": [
+        3
+      ],
+      "key": "bms-q15",
+      "kind": "quiz",
+      "maxPoints": 1000,
+      "penalty": 0,
+      "question": "The Mincha Belulah which…",
+      "questionType": "single",
+      "timeSeconds": 25
+    },
+    {
+      "answers": [
+        {
+          "display": "text",
+          "text": "Kidnappers"
+        },
+        {
+          "display": "text",
+          "text": "The spare phone"
+        },
+        {
+          "display": "text",
+          "text": "Unidentified crawling objects"
+        }
+      ],
+      "cooldownSeconds": 3,
+      "correctAnswers": [
+        2
+      ],
+      "key": "bms-q16",
+      "kind": "quiz",
+      "maxPoints": 1000,
+      "penalty": 0,
+      "question": "Finish this sentence: Spare your family from the threat of…?",
+      "questionType": "single",
+      "timeSeconds": 25
+    },
+    {
+      "key": "bms-honour-roll-16",
+      "kind": "leaderboard",
+      "title": "SCORES",
+      "durationMs": 24000,
+      "advance": "auto"
+    },
+    {
+      "answers": [
+        {
+          "display": "text",
+          "text": "Erev Pesach"
+        },
+        {
+          "display": "text",
+          "text": "Second last week of sem"
+        },
+        {
+          "display": "text",
+          "text": "It wasn’t ever"
+        }
+      ],
+      "cooldownSeconds": 3,
+      "correctAnswers": [
+        3
+      ],
+      "key": "bms-q17",
+      "kind": "quiz",
+      "maxPoints": 1000,
+      "penalty": 0,
+      "question": "When was the deadline of EPQ?",
+      "questionType": "single",
+      "timeSeconds": 25
+    },
+    {
+      "answers": [
+        {
+          "display": "text",
+          "text": "Rocking"
+        },
+        {
+          "display": "text",
+          "text": "In the box (BMS box)"
+        },
+        {
+          "display": "text",
+          "text": "Cute"
+        }
+      ],
+      "cooldownSeconds": 3,
+      "correctAnswers": [
+        2
+      ],
+      "key": "bms-q18",
+      "kind": "quiz",
+      "maxPoints": 1000,
+      "penalty": 0,
+      "question": "Which of these least describes our class?",
+      "questionType": "single",
+      "timeSeconds": 25
+    },
+    {
+      "answers": [
+        {
+          "display": "text",
+          "text": "£10.47"
+        },
+        {
+          "display": "text",
+          "text": "£11.27"
+        },
+        {
+          "display": "text",
+          "text": "£10.85"
+        }
+      ],
+      "cooldownSeconds": 3,
+      "correctAnswers": [
+        3
+      ],
+      "key": "bms-q19",
+      "kind": "quiz",
+      "maxPoints": 1000,
+      "penalty": 0,
+      "question": "What is the minimum wage for someone our age?",
+      "questionType": "single",
+      "timeSeconds": 25
+    },
+    {
+      "answers": [
+        {
+          "display": "text",
+          "text": "Having a mobile"
+        },
+        {
+          "display": "text",
+          "text": "Making friends"
+        },
+        {
+          "display": "text",
+          "text": "Listening to lessons"
+        }
+      ],
+      "cooldownSeconds": 3,
+      "correctAnswers": [
+        1
+      ],
+      "key": "bms-q20",
+      "kind": "quiz",
+      "maxPoints": 1000,
+      "penalty": 0,
+      "question": "What was considered the biggest crime in BMS?",
+      "questionType": "single",
+      "timeSeconds": 25
+    },
+    {
+      "answers": [
+        {
+          "display": "text",
+          "text": "As it will spill"
+        },
+        {
+          "display": "text",
+          "text": "Because we won’t know where to make an after blessing"
+        },
+        {
+          "display": "text",
+          "text": "Much more comfortable to eat it at home"
+        }
+      ],
+      "cooldownSeconds": 3,
+      "correctAnswers": [
+        1
+      ],
+      "key": "bms-q21",
+      "kind": "quiz",
+      "maxPoints": 1000,
+      "penalty": 0,
+      "question": "Why should one be careful not to walk out of their house with a hot coffee? (Rabbi Hecksher)",
+      "questionType": "single",
+      "timeSeconds": 30
+    },
+    {
+      "answers": [
+        {
+          "display": "text",
+          "text": "To add gym to the course list"
+        },
+        {
+          "display": "text",
+          "text": "Mrs Hager’s wardrobe"
+        },
+        {
+          "display": "text",
+          "text": "The colour of the common room walls"
+        }
+      ],
+      "cooldownSeconds": 3,
+      "correctAnswers": [
+        3
+      ],
+      "key": "bms-q22",
+      "kind": "quiz",
+      "maxPoints": 1000,
+      "penalty": 0,
+      "question": "What did our amazing class manage to change in BMS?",
+      "questionType": "single",
+      "timeSeconds": 25
+    },
+    {
+      "answers": [
+        {
+          "display": "text",
+          "text": "Prague"
+        },
+        {
+          "display": "text",
+          "text": "EPQ"
+        },
+        {
+          "display": "text",
+          "text": "Retakes"
+        }
+      ],
+      "cooldownSeconds": 3,
+      "correctAnswers": [
+        3
+      ],
+      "key": "bms-q23",
+      "kind": "quiz",
+      "maxPoints": 1000,
+      "penalty": 0,
+      "question": "What didn’t cause a big eruption in our class?",
+      "questionType": "single",
+      "timeSeconds": 25
+    },
+    {
+      "key": "bms-honour-roll-23",
+      "kind": "leaderboard",
+      "title": "FINAL SCORES",
+      "durationMs": 24000,
+      "advance": "auto"
+    },
+    {
+      "key": "bms-curtain",
+      "kind": "closing",
+      "title": "THANK YOU",
+      "durationMs": 6000,
+      "advance": "auto"
+    }
+  ],
+  "format": "tada-show",
+  "settings": [],
+  "title": "The Most Quizzical Quiz EVER!",
+  "version": 1,
+  "defaults": {
+    "showTheme": {
+      "id": "bms-memory-files",
+      "version": "1.1.0",
+      "legacyPolicy": "theme-defaults"
+    },
+    "newQuestionMode": "quiz",
+    "leaderboardPolicy": "cardOnly",
+    "advanceMode": "auto",
+    "presentationLocale": "en",
+    "lobby": {
+      "joinMode": "phone-only",
+      "dialNumber": "+44 330 613 1984",
+      "showRoster": true,
+      "instructions": [
+        "Call this number and stay on the line.",
+        "Read the question. When voting opens, press 1, 2 or 3.",
+        "Answer before the timer ends. See the audience choice, then the correct answer.",
+        "Scores appear after questions 8, 16 and 23."
+      ]
+    }
+  }
+}
