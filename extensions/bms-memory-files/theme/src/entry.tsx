@@ -2,6 +2,7 @@ import React, { memo, useEffect, useRef, useState } from "react"
 import type { ThemeSDK } from "@tadazz/theme-sdk"
 import LightRays from "./vendor/LightRays"
 import { annotate } from "./vendor/rough-notation.js"
+import "./vendor/rough-notation.css"
 import { copy } from "./messages"
 import "./style.css"
 

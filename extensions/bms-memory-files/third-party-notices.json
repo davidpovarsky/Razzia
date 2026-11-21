@@ -14,7 +14,8 @@
     "source": "https://github.com/rough-stuff/rough-notation",
     "license": "MIT License\n\nCopyright (c) 2020 Preet Shihn\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n",
     "distribution": "rough-notation@0.5.1",
-    "upstreamSourceSha256": "af346fb8433c55a08400d4c8d3edd2083b5e5d1f78980f20cc7151cdc8379687"
+    "upstreamSourceSha256": "af346fb8433c55a08400d4c8d3edd2083b5e5d1f78980f20cc7151cdc8379687",
+    "modifications": "Replaced only runtime style injection with a statically imported stylesheet containing the same upstream keyframe, to comply with the platform's hash-locked style CSP. Drawing, annotation and animation behavior are unchanged. MIT notice retained."
   },
   "barlow": {
     "name": "Barlow / Barlow Condensed",

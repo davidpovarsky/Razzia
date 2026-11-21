@@ -543,11 +543,22 @@
       "provenance": "Screenshot of the incorporated BMS game stage: React Bits LightRays (ed33ebe4acfe29e60fb759bcccc70a138ce2dcef) and Barlow fonts. Full third-party notices retained in third-party-notices.json. Application artwork, not a standalone component.",
       "rights": "licensed",
       "preload": "slot"
+    },
+    {
+      "id": "bms-wordmark",
+      "url": "../shared/art/bms-wordmark.png",
+      "kind": "image",
+      "sha256": "b12aac4ad988ee3a1ceb68cdffb3828c0474e5901de816f7f1f61b700f9635c8",
+      "bytes": 10776,
+      "provenance": "Transparent screenshot of the existing BMS header text mark using Barlow Condensed (SIL OFL 1.1). This is game typography, not an institutional logo.",
+      "rights": "licensed",
+      "preload": "critical"
     }
   ],
   "adapterAssets": {
     "showBackdrop": "bms-stage-backdrop",
-    "questionBackdrop": "bms-stage-backdrop"
+    "questionBackdrop": "bms-stage-backdrop",
+    "brandLogo": "bms-wordmark"
   },
   "sandbox": {
     "runtimeApi": 1,

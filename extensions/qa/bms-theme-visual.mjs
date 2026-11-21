@@ -3,6 +3,7 @@ import path from "node:path"
 import http from "node:http"
 import assert from "node:assert/strict"
 import { createRequire } from "node:module"
+import { createHash } from "node:crypto"
 
 const source = "/source/extensions/bms-memory-files"
 const evidence = "/evidence/visual"
@@ -17,7 +18,7 @@ await fs.mkdir(evidence, { recursive: true })
 const fixtures = JSON.parse(
   await fs.readFile("/evidence/fixtures.json", "utf8"),
 )
-const entry = `import React from 'react';import {createRoot} from 'react-dom/client';import {flushSync} from 'react-dom';import Theme from ${JSON.stringify(`${source}/theme/src/entry.tsx`)};const root=createRoot(document.getElementById('root'));window.__submissions=[];window.__render=(s)=>flushSync(()=>root.render(<Theme snapshot={s} asset={()=>''} submitAnswer={(a)=>window.__submissions.push(a)} requestAudioCue={()=>{}}/>));`
+const entry = `import React from 'react';import {createRoot} from 'react-dom/client';import {flushSync} from 'react-dom';import Theme from ${JSON.stringify(`${source}/theme/src/entry.tsx`)};window.__cspViolations=[];window.addEventListener('securitypolicyviolation',event=>window.__cspViolations.push({directive:event.effectiveDirective,blocked:event.blockedURI}));const root=createRoot(document.getElementById('root'));window.__submissions=[];window.__render=(s)=>flushSync(()=>root.render(<Theme snapshot={s} asset={()=>''} submitAnswer={(a)=>window.__submissions.push(a)} requestAudioCue={()=>{}}/>));`
 await build({
   stdin: { contents: entry, loader: "tsx", resolveDir: "/source" },
   bundle: true,
@@ -39,6 +40,11 @@ await build({
     },
   ],
 })
+const compiledScript = await fs.readFile(`${evidence}/preview.js`, "utf8")
+const compiledStyle = await fs.readFile(`${evidence}/preview.css`, "utf8")
+const cspHash = (value) =>
+  `sha256-${createHash("sha256").update(value).digest("base64")}`
+const policy = `default-src 'none'; script-src '${cspHash(compiledScript)}'; style-src '${cspHash(compiledStyle)}'; style-src-attr 'unsafe-inline'; img-src data:; font-src data:; media-src 'none'; connect-src 'none'; worker-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'`
 const server = http.createServer(async (request, response) => {
   if (request.url === "/preview.js" || request.url === "/preview.css") {
     response.writeHead(200, {
@@ -48,9 +54,12 @@ const server = http.createServer(async (request, response) => {
     })
     response.end(await fs.readFile(`${evidence}${request.url}`))
   } else {
-    response.writeHead(200, { "Content-Type": "text/html" })
+    response.writeHead(200, {
+      "Content-Type": "text/html",
+      "Content-Security-Policy": policy,
+    })
     response.end(
-      '<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/preview.css"><div id="root"></div><script src="/preview.js"></script>',
+      `<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,"><style>${compiledStyle}</style><div id="root"></div><script>${compiledScript}</script>`,
     )
   }
 })
@@ -214,6 +223,20 @@ try {
     (await page
       .locator('li[data-connected="true"] .rough-annotation')
       .count()) === 10,
+  )
+  check(
+    "Rough Notation marker animation finishes visibly under the platform style CSP",
+    await page
+      .locator('li[data-connected="true"] .rough-annotation path')
+      .evaluateAll(
+        (paths) =>
+          paths.length > 0 &&
+          paths.every(
+            (path) =>
+              Math.abs(parseFloat(getComputedStyle(path).strokeDashoffset)) <
+              0.01,
+          ),
+      ),
   )
   const lobbyOverflow = await fits()
   check("desktop lobby text fits", !lobbyOverflow.length, {
@@ -450,6 +473,10 @@ try {
   )
   await page.screenshot({ path: `${evidence}/stage-backdrop.png` })
   check("no unexpected browser errors", !errors.length)
+  const violations = await page.evaluate(() => window.__cspViolations)
+  check("no sandbox content-security-policy violations", !violations.length, {
+    violations,
+  })
 } catch (error) {
   record.error = String(error)
 } finally {
