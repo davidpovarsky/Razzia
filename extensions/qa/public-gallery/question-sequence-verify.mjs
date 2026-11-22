@@ -12,6 +12,40 @@ export async function watchQuestionSequence(root, options = {}) {
     const votingPhase = options.votingPhase ?? "voting"
     const records = []
     let current = null
+    // Keep original RAF-based assertions intact; separately record passive timing evidence.
+    const installedAt = performance.now()
+    const recentPhases = []
+    const recentFrames = []
+    let previousFrameAt = null
+    const phaseObserver = new MutationObserver((changes) => {
+      const at = performance.now()
+      const phases = changes.filter(
+        (change) => change.attributeName === phaseAttribute,
+      )
+      for (let index = 0; index < phases.length; index++) {
+        const event = {
+          at,
+          oldPhase: phases[index].oldValue,
+          phase:
+            phases[index + 1]?.oldValue ?? element.getAttribute(phaseAttribute),
+          batchIndex: index,
+          batchSize: phases.length,
+        }
+        recentPhases.push(event)
+        if (recentPhases.length > 8) recentPhases.shift()
+        // The question mutation precedes the next RAF's new round record.
+        if (current && event.phase !== "question") {
+          if (current.diagnostic.phaseTransitions.length < 16)
+            current.diagnostic.phaseTransitions.push(event)
+          else current.diagnostic.phaseOverflow = true
+        }
+      }
+    })
+    phaseObserver.observe(element, {
+      attributes: true,
+      attributeFilter: [phaseAttribute],
+      attributeOldValue: true,
+    })
     let previousPhase = ""
     let frame
     let stopped = false
@@ -103,6 +137,31 @@ export async function watchQuestionSequence(root, options = {}) {
       explicitReplay: record.explicitReplay,
       identityLockedAt: record.identityLockedAt,
       initialReplayRemounts: record.initialReplayRemounts,
+      diagnostic: {
+        clock: "performance.now",
+        installedAt,
+        phaseTransitions: record.diagnostic.phaseTransitions,
+        phaseOverflow: record.diagnostic.phaseOverflow,
+        leadingFrames: record.diagnostic.leadingFrames,
+        frames: [
+          ...record.diagnostic.firstFrames,
+          ...record.diagnostic.lastFrames,
+        ],
+        firstFrameByPhase: record.diagnostic.firstFrameByPhase,
+        observedFrameCount: record.diagnostic.observedFrameCount,
+        omittedFrameCount: Math.max(
+          0,
+          record.diagnostic.observedFrameCount - 240,
+        ),
+        largestRafGapMs: record.diagnostic.largestRafGapMs,
+        limits: {
+          phaseTransitions: 16,
+          leadingFrames: 8,
+          firstFrames: 192,
+          lastFrames: 48,
+          resultsFrames: 4,
+        },
+      },
     })
     const startAction = (event) => {
       if (
@@ -121,10 +180,21 @@ export async function watchQuestionSequence(root, options = {}) {
     }
     if (options.startAction)
       element.addEventListener("click", startAction, true)
-    const tick = () => {
+    const tick = (frameTimestamp) => {
       if (stopped || !element.isConnected) return
       const phase = element.getAttribute(phaseAttribute)
       const now = performance.now()
+      const diagnosticFrame = {
+        at: now,
+        frameTimestamp,
+        phase,
+        gap: previousFrameAt === null ? null : now - previousFrameAt,
+        headingVisible: null,
+        answers: null,
+        timer: null,
+        endAt: null,
+      }
+      previousFrameAt = now
       if (
         armed &&
         phase === "question" &&
@@ -162,6 +232,16 @@ export async function watchQuestionSequence(root, options = {}) {
           explicitReplay: pendingExplicitReplay,
           identityLockedAt: null,
           initialReplayRemounts: [],
+          diagnostic: {
+            phaseTransitions: recentPhases.slice(-2),
+            phaseOverflow: false,
+            leadingFrames: [...recentFrames],
+            firstFrames: [],
+            lastFrames: [],
+            firstFrameByPhase: {},
+            observedFrameCount: 0,
+            largestRafGapMs: 0,
+          },
         }
         pendingExplicitReplay = false
         records.push(current)
@@ -175,6 +255,7 @@ export async function watchQuestionSequence(root, options = {}) {
         const heading = panel?.querySelector(".q-text, .photo-question-head")
         if (panels.length > 1) current.duplicateHeadings = true
         if (heading && visible(heading)) {
+          diagnosticFrame.headingVisible = true
           if (!current.heading) {
             current.panel = panel
             current.heading = heading
@@ -278,8 +359,12 @@ export async function watchQuestionSequence(root, options = {}) {
         } else if (current.heading && phase !== "question") {
           current.retainedHeading = false
         }
+        if (diagnosticFrame.headingVisible === null)
+          diagnosticFrame.headingVisible = false
         const answers = all("[data-v4-choice]").some(visible)
         const timer = all(".countdown-floater").some(visible)
+        diagnosticFrame.answers = answers
+        diagnosticFrame.timer = timer
         if (phase === "question") {
           current.earlyAnswers ||= answers
           current.earlyTimer ||= timer
@@ -306,6 +391,28 @@ export async function watchQuestionSequence(root, options = {}) {
           })
         }
       }
+      diagnosticFrame.endAt = performance.now()
+      if (
+        current &&
+        ["question", votingPhase, "results"].includes(phase) &&
+        (phase !== "results" || current.resultsFrames <= 4)
+      ) {
+        const evidence = current.diagnostic
+        evidence.observedFrameCount++
+        evidence.largestRafGapMs = Math.max(
+          evidence.largestRafGapMs,
+          diagnosticFrame.gap ?? 0,
+        )
+        evidence.firstFrameByPhase[phase] ??= diagnosticFrame
+        if (evidence.firstFrames.length < 192)
+          evidence.firstFrames.push(diagnosticFrame)
+        else {
+          evidence.lastFrames.push(diagnosticFrame)
+          if (evidence.lastFrames.length > 48) evidence.lastFrames.shift()
+        }
+      }
+      recentFrames.push(diagnosticFrame)
+      if (recentFrames.length > 8) recentFrames.shift()
       previousPhase = phase
       frame = requestAnimationFrame(tick)
     }
@@ -314,6 +421,7 @@ export async function watchQuestionSequence(root, options = {}) {
       stop: () => {
         stopped = true
         cancelAnimationFrame(frame)
+        phaseObserver.disconnect()
         element.removeEventListener("click", startAction, true)
       },
     }

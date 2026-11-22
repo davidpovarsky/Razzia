@@ -65,8 +65,13 @@ const previewFrameSchema = path.join(
   "extensions/src/core/show-library/application-preview-schema.ts",
 )
 await fs.mkdir(evidence, { recursive: true })
+const sceneResolver = path.join(
+  source,
+  "extensions/src/presentation/tadazz-show/presentation-scene.ts",
+)
+const sceneSchema = path.join(source, "extensions/src/core/quiz-extras.ts")
 const entry = `
-import React,{useRef,useState} from 'react';
+import React,{useRef,useState,useLayoutEffect} from 'react';
 import {createRoot} from 'react-dom/client';
 import {flushSync} from 'react-dom';
 import {TadazzV4StageAdapter} from ${JSON.stringify(adapter)};
@@ -75,7 +80,9 @@ import {AudioCuePlayer} from ${JSON.stringify(audioOwner)};
 import {startCountdownCue} from ${JSON.stringify(timerEvents)};
 import {ShowThemeScope} from ${JSON.stringify(themeContext)};
 import {resolveShowTheme} from ${JSON.stringify(themeResolver)};
-import {resolveThemeEffect} from ${JSON.stringify(themeEffects)};
+import {resolveThemeEffect,applyThemeAudioDefaults} from ${JSON.stringify(themeEffects)};
+import {createDefaultAudioExtras} from ${JSON.stringify(sceneSchema)};
+import * as Scenes from ${JSON.stringify(sceneResolver)};
 import {createPlatformAudioExtras} from ${JSON.stringify(audioDefaults)};
 import {resolveNativePhaseAudioCue,resolveTadazzAudioPolicy} from ${JSON.stringify(audioPolicy)};
 import {PlatformClosingBoundary} from ${JSON.stringify(closingBoundary)};
@@ -165,19 +172,50 @@ function App(){
  };
  return <ShowThemeScope theme={theme}><div style={{width:'100%',height:'100%'}} data-guess-off-stage={guessOff?'true':undefined} data-guess-off-media={guessOff&&!answerImages?'text':undefined}><TadazzV4StageAdapter ref={stage} customScreen={custom} guessOffLook={guessOff} onCue={cue=>cues.current.push(cue)}/><div style={{position:'fixed',top:0,left:0,zIndex:1000,background:'white',color:'black'}}><PlatformClosingBoundary elapsedMs={audio.closingElapsed}><AudioCuePlayer gameId={audio.gameId} epoch={audio.epoch} phase={statusName} cueId={cueId} soundtrackSlot={policy.slot} continuityKey={policy.continuityKey} audioExtras={audioExtras} stageOwnsReveal eventOnly={audio.role==='player'} paused={audio.paused} autoPlay showControls/></PlatformClosingBoundary><button data-testid="start-audio-tick" onClick={startTick}>Server start tick</button></div></div></ShowThemeScope>;
 }
-function PreviewApp(){
+function PreviewApp({audioMode='custom'}){
  const [frame,setFrame]=useState(()=>applicationPreviewFrameSchema.parse({
-  show:{format:'tada-show',version:1,title:'Authored scene audio fixture',baseGameMode:'quiz',settings:[],cards:[{key:'authored-recap',kind:'animation',preset:'round-recap',durationMs:20000,advance:'manual',audio:{mode:'custom',url:'/media/fixture-recap.mp3#authored-recap-marker',volume:1,loop:false}},{key:'following-question',kind:'quiz',question:'Synthetic following question',timeSeconds:20,answers:[{text:'Alpha'},{text:'Bravo'},{text:'Charlie'}],correctAnswers:[1]}]},
+  show:{format:'tada-show',version:1,title:'Authored scene audio fixture',baseGameMode:'quiz',settings:[],cards:[{key:'authored-recap',kind:'animation',preset:'round-recap',durationMs:20000,advance:'manual',...(audioMode==='absent'?{}:{audio:{mode:audioMode,url:'/media/fixture-recap.mp3#authored-recap-marker',volume:1,loop:false}})},{key:'following-question',kind:'quiz',question:'Synthetic following question',timeSeconds:20,answers:[{text:'Alpha'},{text:'Bravo'},{text:'Charlie'}],correctAnswers:[1]}]},
   chapterIndex:0,clock:{epoch:1,sequence:1,elapsedMs:0,deadlineMs:20000,paused:false},role:'spectator',locale:'en',reducedMotion:false,soundEnabled:true,mediaRevealed:false,appearanceRevision:0,
  }));
  window.previewScene={
+  info:()=>({audio:frame.show.cards[0].audio,expectedRecap:applyThemeAudioDefaults(resolveShowTheme({role:frame.role}),createDefaultAudioExtras()).soundtrack.recap.url}),
   update:next=>flushSync(()=>setFrame(current=>applicationPreviewFrameSchema.parse({...current,...next}))),
   clock:next=>flushSync(()=>setFrame(current=>applicationPreviewFrameSchema.parse({...current,clock:{...current.clock,...next,sequence:current.clock.sequence+1}}))),
  };
  return <ApplicationPreviewStage frame={frame} onCommitted={()=>{window.previewCommitted=true}} onUnavailable={()=>{window.previewUnavailable=true}}/>;
 }
+function TerminalHandoffApp({role}){
+ const theme=React.useMemo(()=>resolveShowTheme({role,selection:{id:'tadazz-classic',version:'1.0.0',overrides:{}}}),[role]);
+ const extras=React.useMemo(()=>createPlatformAudioExtras(),[]);
+ window.terminalHandoff={expectedFinale:applyThemeAudioDefaults(theme,extras).soundtrack.finale.url};
+ const stage=useRef(null),previous=useRef(null),identity=useRef(null),cues=useRef([]);
+ const [snapshot,setSnapshot]=useState({gameId:'finale-diagnostic',epoch:2,phase:'scene',startedAt:Date.now()-7600,status:{name:'SHOW_RESPONSES',data:{question:'Previous question',answers:['Alpha','Bravo','Charlie'],responses:{0:1},solutions:[0]}},extras:{presentationLaunch:{stage:'running',startedAt:null},currentScene:{id:'authored-finale',kind:'animation',preset:'grand-finale',durationMs:9200,advance:'auto'},activeTimelineStep:{kind:'animation',sceneId:'authored-finale',stepIndex:1}},closingElapsed:7600,paused:false});
+ const scene=Scenes.computeShowScene({role,isConnected:true,status:snapshot.status,envelope:snapshot,questionStates:{current:1,total:1}});
+ const pending=Scenes.isShowSceneContentPending(scene);
+ const waitingForFinale=scene.kind==='wait'&&scene.key==='wait:finale-content';
+ const descriptor=scene.kind==='scene'?scene.scene:null;
+ const policy=resolveTadazzAudioPolicy({statusName:snapshot.status.name,extensionPhase:snapshot.phase,sceneKind:descriptor?.kind??scene.kind,scenePreset:descriptor?.preset,presentationLaunch:snapshot.extras.presentationLaunch,activeTimelineStep:snapshot.extras.activeTimelineStep});
+ const sceneIdentity=showSceneTransitionIdentity(scene);
+ useLayoutEffect(()=>{
+  if(pending||identity.current===sceneIdentity)return;
+  identity.current=sceneIdentity;
+  const handle=stage.current;
+  const steps=planTransition(previous.current,scene,{questionKey:handle.questionKey,mode:handle.mode});
+  previous.current=scene;
+  void runSteps(handle,steps,()=>true);
+ },[sceneIdentity,pending]);
+ window.terminalHandoff.snapshot={scene,policy,gameId:snapshot.gameId,epoch:snapshot.epoch};
+ window.terminalHandoff.stage=()=>({mode:stage.current?.mode,questionKey:stage.current?.questionKey,cues:cues.current.map(cue=>cue.name)});
+ window.terminalHandoff.gap=stageName=>flushSync(()=>setSnapshot(current=>({...current,phase:'responses',epoch:3,extras:{presentationLaunch:{stage:stageName,startedAt:current.startedAt}},closingElapsed:stageName==='closed'?8680:8000})));
+ window.terminalHandoff.pause=value=>flushSync(()=>setSnapshot(current=>({...current,paused:value})));
+ window.terminalHandoff.finished=()=>flushSync(()=>setSnapshot(current=>({...current,phase:'finished',status:{name:'FINISHED',data:{top:[{username:'Winner',points:10}]}},extras:{presentationLaunch:{stage:'closed',startedAt:current.startedAt}},closingElapsed:8680})));
+ window.terminalHandoff.staleLaunch=()=>flushSync(()=>setSnapshot(current=>({...current,extras:{...current.extras,presentationLaunch:{stage:'closed',startedAt:1},activeTimelineStep:{kind:'question',questionId:'replay-current'}}})));
+ window.terminalHandoff.replay=gameId=>flushSync(()=>setSnapshot(current=>({...current,gameId,epoch:4,phase:'question',status:{name:'SHOW_QUESTION',data:{question:'Replay question',totalAnswers:3}},extras:{presentationLaunch:{stage:'running',startedAt:null}},closingElapsed:null})));
+ return <ShowThemeScope theme={theme}><PlatformClosingBoundary elapsedMs={snapshot.closingElapsed}><TadazzV4StageAdapter ref={stage} onCue={cue=>cues.current.push(cue)}/><AudioCuePlayer eventOnly={role==='player'||(scene.kind==='wait'&&!waitingForFinale)} audioExtras={extras} gameId={snapshot.gameId} activeCardKey={descriptor?.id} phase={snapshot.phase} epoch={snapshot.epoch} soundtrackSlot={policy.slot} continuityKey={policy.continuityKey} paused={snapshot.paused} autoPlay showControls stageOwnsReveal/></PlatformClosingBoundary></ShowThemeScope>;
+}
 const root=createRoot(document.getElementById('root'));
-window.mountAuthoredPreview=()=>flushSync(()=>root.render(<PreviewApp/>));
+window.mountAuthoredPreview=(audioMode='custom')=>flushSync(()=>root.render(<PreviewApp key={audioMode} audioMode={audioMode}/>));
+window.mountTerminalHandoff=role=>flushSync(()=>root.render(<TerminalHandoffApp key={role} role={role}/>));
 root.render(<App/>);
 `
 const plugins = [
@@ -1304,6 +1342,256 @@ try {
   await page.screenshot({
     path: path.join(evidence, "authored-fragment-preview.png"),
   })
+
+  const readEdgeAudio = () =>
+    page.evaluate(() => {
+      const owners = [
+        ...document.querySelectorAll('[data-testid="audio-cue-player-state"]'),
+      ]
+      const owner = owners[0]
+      return {
+        owners: owners.length,
+        attributes: Object.fromEntries(
+          Array.from(owner?.attributes ?? []).map((a) => [a.name, a.value]),
+        ),
+        audio: window.startAudioElements.map((audio, element) => ({
+          element,
+          url: audio.getAttribute("src"),
+          time: audio.currentTime,
+          paused: audio.paused,
+          ended: audio.ended,
+          loop: audio.loop,
+          volume: audio.volume,
+        })),
+        attempts: window.audioAttempts.map((attempt) => ({ ...attempt })),
+        phaseEvents: [...window.previewPhaseEvents],
+        preview: window.previewScene?.info(),
+        terminal: window.terminalHandoff?.snapshot,
+        stage: window.terminalHandoff?.stage(),
+        curtain: document
+          .querySelector('[data-testid="platform-closing-boundary"]')
+          ?.getAttribute("data-closing-stage"),
+      }
+    })
+  const activeEdgeAudio = (state, url) =>
+    state.audio.filter(
+      (audio) => audio.url === url && !audio.paused && !audio.ended,
+    )
+  const waitForEdgeAudio = async (url) => {
+    await page.waitForFunction((url) => {
+      const owner = document.querySelector(
+        '[data-testid="audio-cue-player-state"]',
+      )
+      return (
+        owner?.getAttribute("data-audio-blocked") === "true" ||
+        window.startAudioElements.some(
+          (audio) =>
+            audio.getAttribute("src") === url &&
+            !audio.paused &&
+            !audio.ended &&
+            audio.currentTime > 0.05,
+        )
+      )
+    }, url)
+    for (const testId of ["preview-unlock-audio", "host-enable-audio"]) {
+      const control = page.getByTestId(testId)
+      if (await control.isVisible()) await control.click()
+    }
+    await page.waitForFunction(
+      (url) =>
+        window.startAudioElements.some(
+          (audio) =>
+            audio.getAttribute("src") === url &&
+            !audio.paused &&
+            !audio.ended &&
+            audio.currentTime > 0.1,
+        ),
+      url,
+    )
+    return readEdgeAudio()
+  }
+  for (const mode of ["absent", "inherit", "mute"]) {
+    const attemptStart = await page.evaluate(() => window.audioAttempts.length)
+    await page.evaluate((mode) => {
+      window.previewPhaseEvents = []
+      window.previewCommitted = false
+      window.previewUnavailable = false
+      window.mountAuthoredPreview(mode)
+    }, mode)
+    await page.waitForFunction(() => window.previewCommitted === true)
+    const expected = await page.evaluate(
+      () => window.previewScene.info().expectedRecap,
+    )
+    if (mode !== "mute") await waitForEdgeAudio(expected)
+    else await page.waitForTimeout(150)
+    const before = await readEdgeAudio()
+    await page.evaluate(() => window.previewScene.clock({ elapsedMs: 700 }))
+    await page.waitForTimeout(250)
+    const after = await readEdgeAudio()
+    check(
+      mode + "-schema-retains-mode-and-authored-url",
+      mode === "absent" ||
+        (before.preview.audio?.mode === mode &&
+          before.preview.audio?.url === previewUrl),
+    )
+    check(
+      mode + "-never-starts-inactive-authored-url",
+      after.attempts
+        .slice(attemptStart)
+        .every((attempt) => !attempt.src.endsWith(previewUrl)),
+    )
+    check(
+      mode + "-no-implicit-opening-effect",
+      !before.phaseEvents.includes("phase-start") &&
+        !after.phaseEvents.includes("phase-start"),
+      { before: before.phaseEvents, after: after.phaseEvents },
+    )
+    if (mode === "mute") {
+      check(
+        "mute-remains-silent",
+        after.owners === 1 &&
+          after.attributes["data-audio-url"] === "" &&
+          after.audio.every((audio) => audio.paused || audio.ended),
+        { after },
+      )
+    } else {
+      const initial = activeEdgeAudio(before, expected),
+        next = activeEdgeAudio(after, expected)
+      check(
+        mode + "-single-recap-bed-advances-without-replay",
+        before.owners === 1 &&
+          after.owners === 1 &&
+          before.attributes["data-soundtrack-slot"] === "recap" &&
+          after.attributes["data-soundtrack-slot"] === "recap" &&
+          before.attributes["data-audio-url"] === expected &&
+          after.attributes["data-audio-url"] === expected &&
+          initial.length === 1 &&
+          next.length === 1 &&
+          initial[0].element === next[0].element &&
+          next[0].time > initial[0].time &&
+          before.attempts.length === after.attempts.length,
+        { expected, before, after },
+      )
+    }
+  }
+  for (const role of ["manager", "spectator"]) {
+    await page.evaluate((role) => {
+      window.previewPhaseEvents = []
+      window.mountTerminalHandoff(role)
+    }, role)
+    const url = await page.evaluate(() => window.terminalHandoff.expectedFinale)
+    const started = await waitForEdgeAudio(url)
+    await page.evaluate(() => window.terminalHandoff.pause(true))
+    await page.waitForTimeout(120)
+    const paused = await readEdgeAudio()
+    await page.evaluate(() => window.terminalHandoff.pause(false))
+    const before = await waitForEdgeAudio(url)
+    check(
+      role + "-finale-pause-resume-keeps-element-and-position",
+      activeEdgeAudio(started, url).length === 1 &&
+        activeEdgeAudio(paused, url).length === 0 &&
+        activeEdgeAudio(before, url).length === 1 &&
+        activeEdgeAudio(started, url)[0].element ===
+          activeEdgeAudio(before, url)[0].element &&
+        activeEdgeAudio(before, url)[0].time >=
+          activeEdgeAudio(started, url)[0].time,
+      { started, paused, before },
+    )
+    await page.evaluate(() => window.terminalHandoff.gap("closing"))
+    await page.waitForTimeout(180)
+    const closing = await readEdgeAudio()
+    await page.evaluate(() => window.terminalHandoff.gap("closed"))
+    await page.waitForTimeout(180)
+    const closed = await readEdgeAudio()
+    await page.evaluate(() => window.terminalHandoff.finished())
+    await page.waitForTimeout(350)
+    const finished = await readEdgeAudio()
+    const observations = [closing, closed, finished],
+      initial = activeEdgeAudio(before, url)[0]
+    check(
+      role + "-authored-finale-split-status-keeps-one-track",
+      observations.every((state) => {
+        const active = activeEdgeAudio(state, url)
+        return (
+          state.owners === 1 &&
+          active.length === 1 &&
+          active[0].element === initial?.element &&
+          active[0].time >= initial?.time &&
+          state.attempts.length === before.attempts.length &&
+          state.attributes["data-audio-identity"] ===
+            before.attributes["data-audio-identity"]
+        )
+      }),
+      { before, closing, closed, finished },
+    )
+    check(
+      role + "-closing-handoff-does-not-replay-question",
+      closing.stage.mode === before.stage.mode &&
+        closed.stage.mode === before.stage.mode &&
+        observations.every(
+          (state) =>
+            !state.stage.cues
+              .slice(before.stage.cues.length)
+              .some((cue) =>
+                [
+                  "scene:picture-answers",
+                  "scene:survey-results",
+                  "scene:question",
+                  "scene:countdown",
+                ].includes(cue),
+              ),
+        ),
+      {
+        before: before.stage,
+        closing: closing.stage,
+        closed: closed.stage,
+        finished: finished.stage,
+      },
+    )
+    check(
+      role + "-same-platform-curtain-remains-closed",
+      closing.curtain === "closing" &&
+        closed.curtain === "closed" &&
+        finished.curtain === "closed",
+    )
+    await page.evaluate(() =>
+      window.terminalHandoff.replay("finale-diagnostic"),
+    )
+    await page.waitForTimeout(900)
+    const replay = await readEdgeAudio()
+    check(
+      role + "-same-game-replay-releases-final-ending",
+      replay.terminal.scene.kind === "question" &&
+        replay.attributes["data-soundtrack-slot"] === "question" &&
+        activeEdgeAudio(replay, url).length === 0,
+      { replay },
+    )
+    await page.evaluate(() =>
+      window.terminalHandoff.replay("new-game-diagnostic"),
+    )
+    await page.waitForTimeout(250)
+    const newGame = await readEdgeAudio()
+    check(
+      role + "-new-game-does-not-inherit-final-ending",
+      newGame.terminal.gameId === "new-game-diagnostic" &&
+        newGame.terminal.scene.kind === "question" &&
+        newGame.attributes["data-soundtrack-slot"] === "question" &&
+        !newGame.attributes["data-audio-identity"].includes(
+          "finale-diagnostic:",
+        ),
+      { newGame },
+    )
+    await page.evaluate(() => window.terminalHandoff.staleLaunch())
+    await page.waitForTimeout(200)
+    const staleLaunch = await readEdgeAudio()
+    check(
+      role + "-active-question-rejects-stale-closing-launch",
+      staleLaunch.terminal.scene.kind === "question" &&
+        staleLaunch.attributes["data-soundtrack-slot"] === "question" &&
+        activeEdgeAudio(staleLaunch, url).length === 0,
+      { staleLaunch },
+    )
+  }
   check("no browser runtime errors", errors.length === 0, { errors })
   await page.screenshot({ path: path.join(evidence, "completed.png") })
   result.passed = result.checks.every((x) => x.passed)

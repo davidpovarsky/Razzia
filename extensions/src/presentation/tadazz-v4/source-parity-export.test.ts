@@ -17,10 +17,12 @@ import {
 } from "./FullShowScenes"
 import { FivePictureAnswersV4 } from "./components"
 import type { TadazzV4Answer } from "./types"
-const EVIDENCE_DIR = join(
-  __dirname,
-  "../../../../docs/extensions/qa-evidence/tadazz-next-source-parity-20261106",
-)
+const EVIDENCE_DIR =
+  process.env.TADAZZ_SOURCE_PARITY_EVIDENCE ??
+  join(
+    __dirname,
+    "../../../../docs/extensions/qa-evidence/tadazz-next-source-parity-20261106",
+  )
 const sampleAnswers: TadazzV4Answer[] = [
   {
     title: "The Brave Adventurer Exploring Ancient Crypts",

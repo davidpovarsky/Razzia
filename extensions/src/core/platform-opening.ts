@@ -47,6 +47,26 @@ export function readPlatformOpening(
   }
 }
 
+/** Closing authority can arrive before the corresponding native final payload. */
+export function isNativeFinaleContentPending({
+  presentationLaunch,
+  activeTimelineStep,
+  statusName,
+}: {
+  presentationLaunch?: unknown
+  activeTimelineStep?: unknown
+  statusName?: string | null
+}): boolean {
+  const launch = readPlatformOpening(presentationLaunch)
+
+  return (
+    !activeTimelineStep &&
+    (launch?.stage === "closing" || launch?.stage === "closed") &&
+    statusName !== "FINISHED" &&
+    statusName !== "SUMMARY"
+  )
+}
+
 /** The same server timestamp drives host, projector and reconnects. */
 export function platformOpeningFrame(
   launch: PlatformOpeningSnapshot,
@@ -78,6 +98,7 @@ export function platformOpeningFrame(
 
 /** Preserve the established Creating Worlds finale hold and curtain movement. */
 export const PLATFORM_CLOSING_HOLD_MS = 6500
+
 export const PLATFORM_CLOSING_DURATION_MS =
   PLATFORM_CLOSING_HOLD_MS + PLATFORM_CURTAIN_DURATION_MS
 

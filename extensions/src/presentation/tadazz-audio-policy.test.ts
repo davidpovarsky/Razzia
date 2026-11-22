@@ -17,6 +17,40 @@ import {
 } from "./tadazz-audio-policy"
 
 describe("P0 Tadazz soundtrack policy", () => {
+  it("retains the finale bed across separately delivered closing and native status snapshots", () => {
+    for (const stage of ["closing", "closed"]) {
+      expect(
+        resolveTadazzAudioPolicy({
+          statusName: "SHOW_RESPONSES",
+          extensionPhase: "responses",
+          sceneKind: "wait",
+          presentationLaunch: { stage, startedAt: 1000 },
+        }),
+      ).toEqual({ slot: "finale", continuityKey: "finale" })
+    }
+    expect(
+      resolveTadazzAudioPolicy({
+        statusName: "SHOW_QUESTION",
+        extensionPhase: "question",
+        sceneKind: "question",
+        presentationLaunch: { stage: "running", startedAt: null },
+      }),
+    ).toEqual({ slot: "question", continuityKey: "question" })
+    expect(
+      resolveTadazzAudioPolicy({
+        sceneKind: "question",
+        activeTimelineStep: { kind: "question", questionId: "current" },
+        presentationLaunch: { stage: "closed", startedAt: 1000 },
+      }).slot,
+    ).toBe("question")
+    expect(
+      resolveTadazzAudioPolicy({
+        sceneKind: "results",
+        presentationLaunch: { stage: "closed", startedAt: "invalid" },
+      }).slot,
+    ).toBe("results")
+  })
+
   it("gives server start ticks sole effect ownership while retaining round-start music", () => {
     expect(resolveNativePhaseAudioCue("start", "start")).toBeUndefined()
     expect(

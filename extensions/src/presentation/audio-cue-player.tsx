@@ -580,7 +580,11 @@ export const AudioCuePlayer = ({
   const effectiveCueId: CueId | undefined =
     selectedSoundtrackSlot === "voting"
       ? "answersMusic"
-      : (cueId ?? sceneAudio?.cueId ?? (sceneAudio?.url ? "start" : undefined))
+      : (cueId ??
+        sceneAudio?.cueId ??
+        (sceneAudio?.url && sceneAudio.mode !== "inherit"
+          ? "start"
+          : undefined))
   const resolvedCue = effectiveCueId
     ? resolveEffectiveAudioCue({
         cueId: effectiveCueId,

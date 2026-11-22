@@ -26,6 +26,7 @@ import {
   TadazzV4StageAdapter,
   collapseForResume,
   computeShowScene,
+  isShowSceneContentPending,
   isTadazzV4Active,
   planTransition,
   showSceneTransitionIdentity,
@@ -322,6 +323,8 @@ function TadazzShowContent(props: TadazzShowViewProps) {
     () => showSceneTransitionIdentity(scene),
     [scene],
   )
+  const waitingForFinale =
+    scene.kind === "wait" && scene.key === "wait:finale-content"
   const showGameId =
     managerState.gameId ?? extensionState?.gameId ?? playerGameId ?? "show"
   const composition = useNativeCompositionResolution(
@@ -632,7 +635,7 @@ function TadazzShowContent(props: TadazzShowViewProps) {
   useEffect(() => {
     // Keep the painted scene and director history until status content and its
     // separately delivered counter/extension envelope describe one question.
-    if (scene.kind === "wait" && scene.key === "wait:question-content") {
+    if (isShowSceneContentPending(scene)) {
       return
     }
 
@@ -953,7 +956,11 @@ function TadazzShowContent(props: TadazzShowViewProps) {
         )
 
       case "wait":
-        if (submitted || Boolean(stageRef.current?.questionKey)) {
+        if (
+          waitingForFinale ||
+          submitted ||
+          Boolean(stageRef.current?.questionKey)
+        ) {
           return null
         }
 
@@ -1216,6 +1223,8 @@ function TadazzShowContent(props: TadazzShowViewProps) {
 
     return resolveTadazzAudioPolicy({
       statusName: props.statusName,
+      presentationLaunch: extensionState?.extras.presentationLaunch,
+      activeTimelineStep: extensionState?.extras.activeTimelineStep,
       extensionPhase: extensionState?.phase,
       sceneKind: descriptor?.kind ?? scene.kind,
       scenePreset:
@@ -1226,7 +1235,13 @@ function TadazzShowContent(props: TadazzShowViewProps) {
           : null,
       openingActive: false,
     })
-  }, [extensionState?.phase, props.statusName, scene])
+  }, [
+    extensionState?.phase,
+    extensionState?.extras.presentationLaunch,
+    extensionState?.extras.activeTimelineStep,
+    props.statusName,
+    scene,
+  ])
   let overlay: React.ReactNode = null
 
   if (scene.kind === "scene" && isCinematicScene(scene.scene)) {
@@ -1737,10 +1752,17 @@ function TadazzShowContent(props: TadazzShowViewProps) {
 
           {extensionState && (
             <AudioCuePlayer
-              eventOnly={role === "player" || scene.kind === "wait"}
+              eventOnly={
+                role === "player" ||
+                (scene.kind === "wait" && !waitingForFinale)
+              }
               showTrack={referenceStoryTrack}
               stageOwnsReveal={useV4 || Boolean(theme.definition.sandbox)}
-              cueId={resolveNativePhaseAudioCue(scene.kind, props.audioCueId)}
+              cueId={
+                waitingForFinale
+                  ? undefined
+                  : resolveNativePhaseAudioCue(scene.kind, props.audioCueId)
+              }
               audioExtras={
                 extensionState.extras.audio as QuizExtrasV1["audio"] | undefined
               }
@@ -1749,7 +1771,9 @@ function TadazzShowContent(props: TadazzShowViewProps) {
                   CardAudioOverrides | undefined
               }
               sceneAudio={
-                (isStoryReading ? undefined : props.sceneAudio) as never
+                (isStoryReading || waitingForFinale
+                  ? undefined
+                  : props.sceneAudio) as never
               }
               gameId={extensionState.gameId}
               activeCardKey={extensionState.questionId ?? props.activeCardKey}

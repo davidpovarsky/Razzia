@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 import {
   buildReveal,
   computeShowScene,
+  isShowSceneContentPending,
   isTadazzShowActive,
   isTadazzV4Active,
   leaderboardEntries,
@@ -59,6 +60,95 @@ const answers = [
 ]
 
 describe("computeShowScene — every Razzia status maps to a TADAZZ screen", () => {
+  it("holds an authored finale while the closing envelope precedes final status", () => {
+    const closing = envelope(
+      {
+        currentScene: { id: "last", kind: "animation", preset: "grand-finale" },
+        activeTimelineStep: {
+          kind: "animation",
+          sceneId: "last",
+          stepIndex: 1,
+        },
+        presentationLaunch: { stage: "running", startedAt: null },
+      },
+      { phase: "scene" },
+    )
+    const previous = computeShowScene(base({ envelope: closing }))
+    expect(previous.kind).toBe("scene")
+    for (const stage of ["closing", "closed"]) {
+      for (const role of ["manager", "spectator", "player"] as const) {
+        const next = computeShowScene(
+          base({
+            role,
+            envelope: envelope(
+              { presentationLaunch: { stage, startedAt: 1000 } },
+              { phase: "responses", epoch: 4 },
+            ),
+            status: {
+              name: "SHOW_RESPONSES",
+              data: { question: "Previous question", answers, responses: {} },
+            },
+          }),
+        )
+        expect(isShowSceneContentPending(next)).toBe(true)
+        expect(
+          planTransition(previous, next, { mode: "finale", questionKey: null }),
+        ).toEqual([])
+      }
+    }
+    const finished = computeShowScene(
+      base({
+        envelope: envelope({
+          presentationLaunch: { stage: "closed", startedAt: 1000 },
+        }),
+        status: {
+          name: "FINISHED",
+          data: { top: [{ username: "Winner", points: 10 }] },
+        },
+      }),
+    )
+    expect(finished).toMatchObject({
+      kind: "finale",
+      winner: { name: "Winner", score: 10 },
+    })
+  })
+
+  it("ignores an old closing launch when an active question is authoritative", () => {
+    const scene = computeShowScene(
+      base({
+        envelope: envelope({
+          activeTimelineStep: { kind: "question", questionId: QID },
+          presentationLaunch: { stage: "closed", startedAt: 1000 },
+        }),
+        status: {
+          name: "SHOW_QUESTION",
+          data: { question: "Current question", totalAnswers: 3 },
+        },
+      }),
+    )
+    expect(scene.kind).toBe("question")
+    expect(isShowSceneContentPending(scene)).toBe(false)
+  })
+
+  it("does not retain a finished scene after replay or a new game resumes", () => {
+    for (const gameId of ["g1", "new-game"]) {
+      const resumed = computeShowScene(
+        base({
+          envelope: envelope(
+            { presentationLaunch: { stage: "running", startedAt: null } },
+            { gameId },
+          ),
+          status: {
+            name: "SHOW_QUESTION",
+            data: { question: "Replay", totalAnswers: 3 },
+          },
+        }),
+      )
+      expect(resumed.kind).toBe("question")
+      expect(isShowSceneContentPending(resumed)).toBe(false)
+    }
+  })
+
   it("maps SELECT_ANSWER with real answers + answerVisuals by answerIndex and server time", () => {
     const scene = computeShowScene(
       base({

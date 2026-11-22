@@ -5,7 +5,11 @@ import {
   type FullShowInput,
   type FullShowScene,
 } from "../tadazz-v4/FullShowScenes"
-import type { ShowScene, SceneDescriptor } from "./presentation-scene"
+import {
+  isShowSceneContentPending,
+  type ShowScene,
+  type SceneDescriptor,
+} from "./presentation-scene"
 import type {
   StageLeaderEntry,
   StageMode,
@@ -175,6 +179,10 @@ function planTransition(
   stage: StageSnapshot,
   now = Date.now(),
 ): StageStep[] {
+  if (isShowSceneContentPending(next)) {
+    return []
+  }
+
   const leavingQuestion =
     prev !== null &&
     (QUESTION_EXIT_KINDS.has(prev.kind) ||
