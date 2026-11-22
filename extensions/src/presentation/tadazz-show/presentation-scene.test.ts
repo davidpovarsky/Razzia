@@ -826,6 +826,97 @@ describe("planTransition — the ten reference methods are driven by real events
     ).toBe(false)
   })
 
+  it("planTransition preserves authored recap title and subtitle for answer and preset scenes", () => {
+    const authored = {
+      title: "Cumulative Show Answer Recap",
+      subtitle: "Survey and quiz highlights",
+    }
+    const answerSteps = planTransition(
+      null,
+      {
+        kind: "scene",
+        key: "authored-answer-recap",
+        scene: {
+          kind: "answerRecap",
+          ...authored,
+          recapItems: [{ label: "Choice A", image: "/imgA.png" }],
+        },
+      },
+      { questionKey: null, mode: "idle" },
+    )
+    expect(answerSteps).toEqual([
+      {
+        op: "showRoundRecap",
+        ...authored,
+        winners: [{ label: "Choice A", image: "/imgA.png", alt: "Choice A" }],
+      },
+    ])
+
+    const previewSteps = planTransition(
+      null,
+      {
+        kind: "scene",
+        key: "editor-answer-recap",
+        scene: { kind: "answerRecap", title: authored.title },
+        activeSceneData: {
+          answerRecap: {
+            ...authored,
+            totalQuestionsInRange: 1,
+            completedQuestionsCount: 0,
+            mode: "correctAnswer",
+            maxItemsPerPage: 4,
+            showCounts: false,
+            showPercentages: false,
+            items: [
+              {
+                questionId: QID,
+                questionNumber: 1,
+                questionText: "An authored quiz question",
+                playMode: "quiz",
+                totalResponders: 0,
+                winningOptions: [
+                  {
+                    answerIndex: 0,
+                    label: "Choice A",
+                    count: 0,
+                    percentage: 0,
+                    imageUrl: "/imgA.png",
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      },
+      { questionKey: null, mode: "idle" },
+    )
+    expect(previewSteps).toEqual(answerSteps)
+    expect(
+      planTransition(
+        null,
+        {
+          kind: "scene",
+          key: "incomplete-editor-recap",
+          scene: { kind: "answerRecap", title: authored.title },
+        },
+        { questionKey: null, mode: "idle" },
+      ),
+    ).toEqual([{ op: "custom" }])
+
+    const presetSteps = planTransition(
+      null,
+      {
+        kind: "scene",
+        key: "authored-preset-recap",
+        scene: { kind: "animation", preset: "round-recap", ...authored },
+      },
+      { questionKey: null, mode: "idle" },
+    )
+    expect(presetSteps).toEqual([
+      { op: "showRoundRecap", ...authored, round: undefined, winners: [] },
+    ])
+  })
+
   it("planTransition maps v4 timeline scenes: answerRecap, interlude, top-pick", () => {
     const recapStep = planTransition(
       null,

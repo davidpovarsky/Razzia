@@ -14,7 +14,7 @@ type ReferenceWindow = Window & {
 import fs from "node:fs"
 import { randomUUID } from "node:crypto"
 import assert from "node:assert/strict"
-import { EVENTS } from "@razzia/common/constants"
+import { EVENTS, QUIZZ_MODES } from "@razzia/common/constants"
 import { STATUS } from "@razzia/common/types/game/status"
 import { quizzValidator } from "@razzia/common/validators/quizz"
 import {
@@ -184,10 +184,38 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
     )
     await installZeroLegacyFlickerProbe(managerPage)
     const imported = readStoredTzila()
+    expect(imported.quizz.gameMode).toBe(QUIZZ_MODES.SURVEY)
     const hostWire = observeLiveFlow(managerPage)
+    const createAudiencePage = async (viewport: {
+      width: number
+      height: number
+    }) => {
+      const context = await browser.newContext({ viewport })
 
-    // 1. Host creates game with Tzila 5-option picture show
-    const pin = await createGame(managerPage, TZILA_TITLE)
+      return { context, page: await context.newPage() }
+    }
+
+    // Independent empty audience contexts can initialize while the host creates
+    // the real room. Every navigation and vote still waits for that room.
+    const [pin, audience] = await Promise.all([
+      createGame(managerPage, TZILA_TITLE),
+      Promise.all([
+        createAudiencePage(
+          browserName === "webkit"
+            ? { width: 1024, height: 768 }
+            : { width: 1920, height: 1080 },
+        ),
+        createAudiencePage({ width: 1024, height: 768 }),
+        createAudiencePage({ width: 800, height: 600 }),
+        createAudiencePage({ width: 390, height: 844 }),
+      ]),
+    ])
+    const [
+      { context: spectatorCtx, page: spectator },
+      { context: p1Ctx, page: alice },
+      { context: p2Ctx, page: bob },
+      { context: p3Ctx, page: dana },
+    ] = audience
     expect(pin).toMatch(/^\d{6}$/u)
     await setManualProgression(managerPage)
     const gameIdMatch = /\/party\/manager\/([^/?#]+)/u.exec(managerPage.url())
@@ -200,56 +228,44 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
 
     // 2. The shared product opening has completed; a fresh display joins the lobby.
     // platform-opening.spec owns MP4/Lottie and host/audience opening timing.
-    const spectatorCtx = await browser.newContext({
-      viewport:
-        browserName === "webkit"
-          ? {
-              width: 1024,
-              height: 768,
-            }
-          : {
-              width: 1920,
-              height: 1080,
-            },
-    })
-    const spectator = await spectatorCtx.newPage()
     const spectatorWire = observeLiveFlow(spectator)
-    await installZeroLegacyFlickerProbe(spectator)
-    await spectator.goto(`http://127.0.0.1:3010/display/${gameId}`)
-    await expect(spectator.getByTestId("tadazz-show")).toBeVisible()
-    await expect(spectator.locator("iframe")).toHaveCount(0)
-    await expect(spectator.locator('img[alt="background"]')).toHaveCount(0)
-    await expect(spectator.getByTestId("tadazz-lobby-pin")).toHaveText(pin, {
-      timeout: 5_000,
-    })
-    await expect(spectator.getByTestId("platform-game-opening")).toHaveCount(0)
-    await expect(spectator.getByTestId("tadazz-opening")).toHaveCount(0)
-    await expect(spectator.getByTestId("platform-opening-start")).toHaveCount(0)
-    await spectator.reload()
-    await expect(spectator.getByTestId("tadazz-lobby-pin")).toHaveText(pin, {
-      timeout: 5_000,
-    })
-    await expect(spectator.getByTestId("platform-game-opening")).toHaveCount(0)
-    await expect(spectator.getByTestId("tadazz-opening")).toHaveCount(0)
-    await saveShot(spectator, "01_existing_lobby_display.png")
+    const aliceWire = observeLiveFlow(alice)
+    await Promise.all([
+      installZeroLegacyFlickerProbe(spectator),
+      installZeroLegacyFlickerProbe(alice),
+    ])
+    const verifyExistingDisplayLobby = async () => {
+      await spectator.goto(`http://127.0.0.1:3010/display/${gameId}`)
+      await expect(spectator.getByTestId("tadazz-show")).toBeVisible()
+      await expect(spectator.locator("iframe")).toHaveCount(0)
+      await expect(spectator.locator('img[alt="background"]')).toHaveCount(0)
+      await expect(spectator.getByTestId("tadazz-lobby-pin")).toHaveText(pin, {
+        timeout: 5_000,
+      })
+      await expect(spectator.getByTestId("platform-game-opening")).toHaveCount(
+        0,
+      )
+      await expect(spectator.getByTestId("tadazz-opening")).toHaveCount(0)
+      await expect(spectator.getByTestId("platform-opening-start")).toHaveCount(
+        0,
+      )
+      await spectator.reload()
+      await expect(spectator.getByTestId("tadazz-lobby-pin")).toHaveText(pin, {
+        timeout: 5_000,
+      })
+      await expect(spectator.getByTestId("platform-game-opening")).toHaveCount(
+        0,
+      )
+      await expect(spectator.getByTestId("tadazz-opening")).toHaveCount(0)
+      await saveShot(spectator, "01_existing_lobby_display.png")
+    }
 
     // 3. A03: Branded Lobby with real PIN, URL, QR, and 3 players joining across Gate A14 resolutions
     await expect(managerPage.getByTestId("tadazz-screen-lobby")).toBeVisible()
     await expect(managerPage.getByTestId("tadazz-lobby-pin")).toHaveText(pin)
     await expect(managerPage.getByTestId("tadazz-lobby-qr")).toBeVisible()
-    const [p1Ctx, p2Ctx, p3Ctx] = await Promise.all([
-      browser.newContext({ viewport: { width: 1024, height: 768 } }),
-      browser.newContext({ viewport: { width: 800, height: 600 } }),
-      browser.newContext({ viewport: { width: 390, height: 844 } }),
-    ])
-    const [alice, bob, dana] = await Promise.all([
-      p1Ctx.newPage(),
-      p2Ctx.newPage(),
-      p3Ctx.newPage(),
-    ])
-    const aliceWire = observeLiveFlow(alice)
-    await installZeroLegacyFlickerProbe(alice)
     await Promise.all([
+      verifyExistingDisplayLobby(),
       joinGame(alice, pin, "Alice"),
       joinGame(bob, pin, "Bob"),
       joinGame(dana, pin, "Dana"),
@@ -334,13 +350,13 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
         questionIndex: 0,
         surface: "player",
       }),
+      expect(alice.getByTestId("game-question-title")).toContainText(q1Text),
       assertTzilaChoices({
         page: spectator,
         questionIndex: 0,
         surface: "native",
       }),
     ])
-    await expect(alice.getByTestId("game-question-title")).toContainText(q1Text)
     await expect
       .poll(() => activeStep(hostWire))
       .toMatchObject({
@@ -644,15 +660,23 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
       }
     }
     await managerPage.getByTestId("host-next-screen-btn").click()
-    // Pure surveys finish with SUMMARY; scored shows keep the FINISHED podium.
+    // This all-survey show completes with SUMMARY; FINISHED belongs to scored
+    // quizzes. Require the real finished phase and exact participant/question totals.
     await Promise.all(
       [hostWire, spectatorWire, aliceWire].map(async (rows) => {
         await expect
           .poll(() => ({
-            summary: rows.some((row) => row.name === STATUS.SUMMARY),
             phase: latestState(rows)?.phase,
+            summary: rows.findLast((row) => row.name === STATUS.SUMMARY)?.data,
           }))
-          .toEqual({ summary: true, phase: "finished" })
+          .toEqual({
+            phase: "finished",
+            summary: {
+              subject: TZILA_TITLE,
+              totalPlayers: 4,
+              totalQuestions: 10,
+            },
+          })
         expect(recordedStepIds(rows)).toEqual(
           imported.extras.timeline.map((item) => item.id),
         )

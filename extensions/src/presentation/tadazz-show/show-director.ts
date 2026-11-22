@@ -576,7 +576,7 @@ function planScene(
           op: "showRoundRecap",
           winners,
           title: scene.title,
-          subtitle: scene.subtitle,
+          subtitle: scene.subtitle ?? recap?.subtitle,
         },
       ]
     }
