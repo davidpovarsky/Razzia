@@ -23,6 +23,7 @@
 **`changes`** — Do **not** merge `8e13d00a7c36dd1b130018ca59499acf6fc1fa83` yet.
 
 The composition boundary cleanly reuses existing first-party OAuth, SDK Streamable HTTP, tenant SQLite, and C1 Native Save authorities without touching `packages/**` or adding schemas, and stays fail-closed default-off. However, five concrete behavioral/security/QA defects prevent acceptance until repaired and re-verified on Linux:
+
 1. **Critical:** `createPrincipalRateLimiter` LRU eviction resets active/exhausted rate-limit buckets within the same window and keys per `grantId` (`service.ts:230-261`, affirmed by `service.nodecheck.ts:1036-1039`).
 2. **Important:** `outerBudget` (`32`-slot admission) and `active` tracking release early when `remote.fetch` returns `400`/`504` on abort/timeout while `remote`'s background `retire()` still holds live dependency work (`service.ts:634-641` vs `server/http.ts:447-470`).
 3. **Important:** `createBoundedNodeBodyStream` lacks backpressure, destroys the TCP socket via `req.destroy(rejection)` before emitting `413` on chunked bodies `> 65_536` bytes (turning `413` into `400` internally and empty EOF on the wire), and leaks `"error"`/`"aborted"` listeners in `cancel()` while early rejections never cancel `webRequest.body` (`service.ts:767-835, 945-987`).
@@ -46,6 +47,7 @@ The composition boundary cleanly reuses existing first-party OAuth, SDK Streamab
 ### Critical (Must Fix)
 
 #### 1. `createPrincipalRateLimiter` LRU eviction resets exhausted rate-limit buckets and allows per-grant amplification
+
 - **Location:** `extensions/src/mcp-app/first-party/service.ts:196-260` (specifically lines `225-258`) and `extensions/qa/phase3-mcp-service/service.nodecheck.ts:1014-1039`.
 - **What is wrong:**
   1. `bucketKey` is `${principal.accountId}:${principal.grantId}:${isMutation ? "w" : "r"}` (`service.ts:225`). A single account may approve up to `1000` active OAuth grants in `grants.sqlite` (`oauth-grants.ts:326`), giving one account up to `1000x` the intended read/mutation budget and `2000` distinct map keys.
@@ -65,6 +67,7 @@ The composition boundary cleanly reuses existing first-party OAuth, SDK Streamab
 ### Important (Should Fix)
 
 #### 2. `outerBudget` (32-slot budget) and `active` tracking release early on aborted or timed-out `remote.fetch` calls
+
 - **Location:** `extensions/src/mcp-app/first-party/service.ts:528-529, 606-646` vs `extensions/src/mcp-app/server/http.ts:447-470`.
 - **What is wrong:**
   - `createRemoteMcpApp` (`server/http.ts:447-470`) returns `400` on abort or `504` on `responseTimeoutMs` immediately via `Promise.race([serving, interrupted])`, while spawning `retire()` in `finally` to hold `remote`'s 32-slot `IngressBudget` and `remote`'s `active` entry until `serving` and `work.drain()` (e.g., `verifyAccessToken`, `rateLimit`, `previewCandidateV2.render`, `storage`) actually finish.
@@ -79,6 +82,7 @@ The composition boundary cleanly reuses existing first-party OAuth, SDK Streamab
   - Either expose a per-request settlement / admission hook from `createRemoteMcpApp` (Wait: `server/**` is protected/read-only unless approved! Wait — check downstream alternative first: `service.ts` can pass a wrapped `dependencies` / `rateLimit` / `preview` / `previewCandidateV2` tracker or track `remote.drain()` / per-call dependency promises inside `service.ts`! Specifically, `createProtectedMcpService` ALREADY constructs `dependencies` (`service.ts:506-518`) — wrapping async dependency methods passed into `oauth.remote(...)` with a per-request/service pending counter or awaiting completion before calling `release()` and `deferred.resolve()` requires **zero `packages/**` or `server/**` edits**! Note: `verifyAccessToken` is bound inside `oauth.remote()` (`oauth.ts:194`), so `rateLimit`, `catalog`, `preview`, `previewCandidateV2`, `storage`, `exports` are wrappable in `service.ts`, whereas tracking an aborted `verifyAccessToken` or `serving` directly inside `remote` would only need `server/http.ts` if `verifyAccessToken` can stall; document that exact boundary!).
 
 #### 3. `createBoundedNodeBodyStream` lacks backpressure, turns chunked `> 64 KiB` `413` rejections into `400`/empty EOF, and leaks listeners / unread streams
+
 - **Location:** `extensions/src/mcp-app/first-party/service.ts:767-835, 934-988`.
 - **What is wrong:**
   1. **Eager flowing mode / no backpressure:** `start(controller)` attaches `req.on("data", onData)` (`service.ts:824`) immediately rather than pausing `req` and driving reads via `pull()` + `req.resume()`/`req.pause()` against `controller.desiredSize`.
@@ -86,7 +90,7 @@ The composition boundary cleanly reuses existing first-party OAuth, SDK Streamab
      - `req.once("aborted", abortRequest)` (`service.ts:930`) -> `controller.abort()`;
      - `req.on("aborted", onAborted)` (`service.ts:822, 827`) -> `fail(new HttpRejection(400))`, setting `settled = true` **before** line 803 (`fail(rejection)`) runs, overwriting `413` with `400`;
      - socket destruction (`req.socket.destroyed === true`), so no HTTP `413` (or `400`) response reaches the client.
-     - Even worse, on `POST /mcp` (`server/http.ts:317`), `await verified()` runs async WebCrypto/SQLite checks *before* `bodyText(request)` reads the stream; because `start()` puts `req` into flowing mode immediately, a chunked > 64 KiB body triggers `req.destroy(rejection)` mid-auth, causing `res.close` (`writableFinished=false`) and `!canWriteNodeResponse(res)` (`service.ts:953`) to drop the response completely.
+     - Even worse, on `POST /mcp` (`server/http.ts:317`), `await verified()` runs async WebCrypto/SQLite checks _before_ `bodyText(request)` reads the stream; because `start()` puts `req` into flowing mode immediately, a chunked > 64 KiB body triggers `req.destroy(rejection)` mid-auth, causing `res.close` (`writableFinished=false`) and `!canWriteNodeResponse(res)` (`service.ts:953`) to drop the response completely.
   3. **Incomplete `cancel()` and unread-body leak:** `cancel()` (`service.ts:829-833`) removes only `"data"` and `"end"` listeners, leaving `"error"` and `"aborted"` listeners attached and never calling `req.pause()` or `req.destroy()`. Moreover, when `service.fetch()` returns an early error (`401`/`403`/`404`/`415`/`429`) without reading `webRequest.body`, `createProtectedMcpNodeListener` never cancels `webRequest.body`.
 - **Minimal reproducible case (empirically verified on Node `v22.17.0`):**
   - Send `POST /oauth/token HTTP/1.1` (or `POST /mcp` with async `verifyToken`) with `Host: example.invalid`, `Transfer-Encoding: chunked`, and a single 70,000-byte chunk (`> 65_536`).
@@ -99,6 +103,7 @@ The composition boundary cleanly reuses existing first-party OAuth, SDK Streamab
   - In `cancel()`, call `cleanup()` (all 4 listeners), pause `req`, and destroy `req` only after response handling or if not already ended; in `createProtectedMcpNodeListener`'s `finally` (or right after `service.fetch` returns when `!webRequest.bodyUsed`), cancel unread `webRequest.body` cleanly and destroy incomplete `req` after `res` flushes.
 
 #### 4. TCP response buffering/writes escape admission, `drain()`, and timeouts; pre-header/idle sockets lack connection limits
+
 - **Location:** `extensions/src/mcp-app/first-party/service.ts:636-646, 951-975, 1006-1020, 1058-1074`.
 - **What is wrong:**
   1. `createProtectedMcpNodeListener` runs `const bodyBytes = Buffer.from(await webResponse.arrayBuffer())` (`service.ts:957`) and fire-and-forget `res.end(bodyBytes)` (`service.ts:975`) **after** `service.fetch()` (`service.ts:951`) has already exited `finally` (`service.ts:636-641`), releasing `outerBudget` and resolving `active`. Thus:
@@ -112,6 +117,7 @@ The composition boundary cleanly reuses existing first-party OAuth, SDK Streamab
   - Bound `server.maxConnections` explicitly (e.g., capped alongside `outerBudget` + small keep-alive headroom) and consider an explicit `responseTimeoutMs` deadline on `oauth.fetch` paths as well as `remote.fetch`.
 
 #### 5. QA portability defect fails `service.nodecheck.ts` on Linux (`8 PASS / 1 FAIL`) and leaves real C1 persistence untested via `createProtectedMcpService`
+
 - **Location:** `extensions/qa/phase3-mcp-service/service.nodecheck.ts:671-733` (specifically lines `727-729`), `service.nodecheck.ts:392-395`, and `extensions/qa/phase3-mcp-service/evidence/verification-receipt.json`.
 - **What is wrong:**
   1. Test `"real C1 createNativeCreationPort on Windows fails closed after native-save approval without fake commit"` (`service.nodecheck.ts:671-733`) runs unconditionally on all platforms and asserts `outcome.ok === false` (`line 727`), `outcome.error.code === "DEPENDENCY_UNAVAILABLE"` (`line 728`), and `existsSync(join(f.root, "quizz")) === false` (`line 729`). On Linux, `createFirstPartyNativeSaveOperations` uses real C1 and succeeds (`outcome.ok === true`), causing a **reproduced `8 PASS / 1 FAIL` failure** in the Manager's Linux QA container (`inbox/17edc638/20261117-manager-linux-qa.md`).
@@ -142,6 +148,7 @@ The composition boundary cleanly reuses existing first-party OAuth, SDK Streamab
 ## Executable Negative & Distinguishing Tests
 
 ### Verified Locally in Read-Only Node `v22.17.0` (Zero Repo Writes)
+
 1. **Rate-limit LRU reset bypass (`createPrincipalRateLimiter` exact logic):**
    - `readsPerMinute: 1, maxEntries: 2, windowMs: 60_000`; 9 alternating calls across `g1, g2, g3` for one `accountId` -> `[true, true, true, true, true, true, true, true, true]` (never hits `false`).
 2. **`outerBudget` early-release vs `remote` `retire()`:**
@@ -157,7 +164,9 @@ The composition boundary cleanly reuses existing first-party OAuth, SDK Streamab
    - `Content-Length: 5` + `Transfer-Encoding: chunked` rejected by `llhttp` before handler (`reachedHandler: false`, `HTTP/1.1 400 Bad Request`).
 
 ### Proposed Commands for Manager's Existing RAM-Only Linux QA Container (Not Executed by Reviewer)
+
 After Unit A fixes the 5 issues above, the Manager can validate on `/tmp/phase3-999ed90c/source` (`network-none`, `Node v24.22.2`) using:
+
 ```bash
 # 1. Re-run repaired Phase 3 service + TCP listener suites (expect 9+/9 PASS including real Linux C1 persistence)
 node /cleanup/extensions/node_modules/tsx/dist/cli.mjs --tsconfig extensions/qa/phase3-mcp-service/tsconfig.json --test --test-concurrency=1 extensions/qa/phase3-mcp-service/service.nodecheck.ts extensions/qa/phase3-mcp-service/http-listener.nodecheck.ts
@@ -171,6 +180,7 @@ node /cleanup/extensions/src/mcp-app/node_modules/typescript/bin/tsc --noEmit -p
 node /cleanup/extensions/src/mcp-app/node_modules/typescript/bin/tsc --noEmit -p extensions/qa/phase3-mcp-service/tsconfig.json
 node --experimental-strip-types /cleanup/node_modules/oxlint/bin/oxlint -c oxlint.config.ts extensions/src/mcp-app/first-party/service.ts extensions/src/mcp-app/first-party/index.ts extensions/qa/phase3-mcp-service/*.ts
 ```
+
 (Note: for real ext4 durability acceptance of Linux C1 `save_game`, `native-save-client.nodecheck.ts` / Phase 3 Linux C1 must run on an ext4 path rather than `/tmp` tmpfs.)
 
 ---

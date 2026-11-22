@@ -8,12 +8,12 @@ The assigned site changes cover Sort alignment/accessibility, TDS account/contac
 
 ## Clean receipts
 
-| Receipt | Result | Coverage |
-| --- | --- | --- |
-| [site-receipt.json](site-receipt.json) | 7 groups passed; zero page errors | Sort at 1440/768/390 px, contact fields, forgot/reset UI, history selection, room handoff return, cancellation/late response/duplicate protection, and loading Retry |
-| [prepare-label-receipt.json](prepare-label-receipt.json) | 1 focused group passed; zero page errors | Empty, pending, cancelled-restored and acknowledged-restored action labels |
-| [native-layout-receipt.json](native-layout-receipt.json) | 12 groups passed; zero page errors | Six viewports, both canvas ratios, four top tabs, drawers/focus, editing, media, timeline, theme and Hebrew RTL |
-| [native-persistence-receipt.json](native-persistence-receipt.json) | 7 targeted groups passed; zero page errors | Interaction/focus, theme, actual create/update with fresh reload, and RTL; the six viewport groups were not repeated in this run |
+| Receipt                                                            | Result                                     | Coverage                                                                                                                                                             |
+| ------------------------------------------------------------------ | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [site-receipt.json](site-receipt.json)                             | 7 groups passed; zero page errors          | Sort at 1440/768/390 px, contact fields, forgot/reset UI, history selection, room handoff return, cancellation/late response/duplicate protection, and loading Retry |
+| [prepare-label-receipt.json](prepare-label-receipt.json)           | 1 focused group passed; zero page errors   | Empty, pending, cancelled-restored and acknowledged-restored action labels                                                                                           |
+| [native-layout-receipt.json](native-layout-receipt.json)           | 12 groups passed; zero page errors         | Six viewports, both canvas ratios, four top tabs, drawers/focus, editing, media, timeline, theme and Hebrew RTL                                                      |
+| [native-persistence-receipt.json](native-persistence-receipt.json) | 7 targeted groups passed; zero page errors | Interaction/focus, theme, actual create/update with fresh reload, and RTL; the six viewport groups were not repeated in this run                                     |
 
 Native viewport coverage: 320×640, 390×844, 768×768, 1024×768, 1440×900 and 844×390. Both 16:9 and 4:3 stages fit their available canvas. Document and body dimensions stayed within the viewport. Participants, Settings and Launch also remained bounded. All five phase/aspect controls were fully visible at 320 and 390 px. Nested Media library Escape restored focus to its opener inside the drawer; the following Escape closed the drawer.
 

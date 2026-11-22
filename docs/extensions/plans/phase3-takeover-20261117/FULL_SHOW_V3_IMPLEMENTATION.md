@@ -6,7 +6,6 @@ V3 uses a separate preview_show tool and ui://tadazz/full-show/v3.html resource.
 
 The UI reuses existing native Classic Stage/Razzia primitives and ScenePresenter. Exact resource bytes and physical renderer-source build ID are deployment prerequisites; native asset metadata alone grants no rights. Asset delivery callback is mandatory and must verify actual deployment assets, provenance and live issuer authority. Private/customer media is unavailable until qualified separately. No full-show acceptance claim is made before source/SDK/browser tests and final production verification.
 
-
 ## Qualified Windows milestone ? 2026-11-18
 
 The working tree (uncommitted on initial e1482c4) now passes 18/18 actual OAuth issuer/repository and MCP SDK selection/projection/title-CAS tests and 16/16 real Chromium/Edge + WebKit AppBridge/browser cases. Both native theme families rendered all 28 authored chapters through existing native components; screenshots cover opening, question, voting lock/reveal, transition and closing. Title changes preserve cards, summary refresh uses the actual repository, and cancellation/context teardown and digest tamper fail closed. The opaque sandbox retains only allow-scripts; explicit SDK action buttons replaced blocked form submission.

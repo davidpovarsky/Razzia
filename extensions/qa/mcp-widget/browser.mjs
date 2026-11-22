@@ -13,9 +13,7 @@ const rawEvidence = process.env.TADAZZ_WIDGET_EVIDENCE
 const evidence = rawEvidence
   ? rawEvidence.startsWith("file://")
     ? new URL(rawEvidence.endsWith("/") ? rawEvidence : `${rawEvidence}/`)
-    : new URL(
-        pathToFileURL(resolve(rawEvidence)).href.replace(/\/?$/u, "/"),
-      )
+    : new URL(pathToFileURL(resolve(rawEvidence)).href.replace(/\/?$/u, "/"))
   : new URL(
       "../../../docs/extensions/qa-evidence/mcp-widget-20261115/",
       import.meta.url,
@@ -615,7 +613,8 @@ try {
           () =>
             new Promise((resolve) =>
               setTimeout(
-                () => requestAnimationFrame(() => requestAnimationFrame(resolve)),
+                () =>
+                  requestAnimationFrame(() => requestAnimationFrame(resolve)),
                 50,
               ),
             ),
@@ -629,9 +628,7 @@ try {
         /Preview unavailable|Development candidate/u,
       )
       assert.equal(
-        await frame
-          .getByTestId("sdk-candidate-stage")
-          .isVisible(),
+        await frame.getByTestId("sdk-candidate-stage").isVisible(),
         false,
       )
       assert.equal(
@@ -669,7 +666,8 @@ try {
           () =>
             new Promise((resolve) =>
               setTimeout(
-                () => requestAnimationFrame(() => requestAnimationFrame(resolve)),
+                () =>
+                  requestAnimationFrame(() => requestAnimationFrame(resolve)),
                 50,
               ),
             ),
@@ -740,7 +738,8 @@ try {
           () =>
             new Promise((resolve) =>
               setTimeout(
-                () => requestAnimationFrame(() => requestAnimationFrame(resolve)),
+                () =>
+                  requestAnimationFrame(() => requestAnimationFrame(resolve)),
                 50,
               ),
             ),

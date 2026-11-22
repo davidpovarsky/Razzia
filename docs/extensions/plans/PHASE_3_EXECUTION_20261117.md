@@ -27,14 +27,14 @@ Avoid known-hanging handoff log/resume commands.
 
 ## Classification / dependency graph
 
-| Unit | Classification | Existing foundation | Gap / next acceptance |
-|---|---|---|---|
-| A | IMPLEMENT_GAP | first-party OAuth, remote SDK fetch, C1 consent/save | Protected downstream composition/listener and browser route integration absent in module documentation; prove exact current seam before coding |
-| B | PROBE_UNKNOWN | Widget AppBridge, V2 current-card renderer, ACK fix | Determine compatible reuse of Phase 2 native full-show preview without widening frozen contracts; bounded read-only assessment first |
-| C | VERIFY_REGRESSION / PROBE_UNKNOWN | REGISTER-only call and operation chain | Current fixture coverage for late callbacks/redial/live score; fix reproduced gaps only |
-| D | VERIFY_REGRESSION / PROBE_UNKNOWN | scalar/C1/Sidecar journal | Disposable restart/backup/rollback qualification, not customer DB or all-writer/power-loss claim |
-| E | VERIFY_REGRESSION | accepted eight-locale site/metadata/public sample | Source-pinned checks and actual output where runtime available; no fabricated assets |
-| F | VERIFY_REGRESSION | integrated security boundaries | Fresh read-only review after stable integration |
+| Unit | Classification                    | Existing foundation                                  | Gap / next acceptance                                                                                                                          |
+| ---- | --------------------------------- | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| A    | IMPLEMENT_GAP                     | first-party OAuth, remote SDK fetch, C1 consent/save | Protected downstream composition/listener and browser route integration absent in module documentation; prove exact current seam before coding |
+| B    | PROBE_UNKNOWN                     | Widget AppBridge, V2 current-card renderer, ACK fix  | Determine compatible reuse of Phase 2 native full-show preview without widening frozen contracts; bounded read-only assessment first           |
+| C    | VERIFY_REGRESSION / PROBE_UNKNOWN | REGISTER-only call and operation chain               | Current fixture coverage for late callbacks/redial/live score; fix reproduced gaps only                                                        |
+| D    | VERIFY_REGRESSION / PROBE_UNKNOWN | scalar/C1/Sidecar journal                            | Disposable restart/backup/rollback qualification, not customer DB or all-writer/power-loss claim                                               |
+| E    | VERIFY_REGRESSION                 | accepted eight-locale site/metadata/public sample    | Source-pinned checks and actual output where runtime available; no fabricated assets                                                           |
+| F    | VERIFY_REGRESSION                 | integrated security boundaries                       | Fresh read-only review after stable integration                                                                                                |
 
 A and B cannot concurrently change shared DTO/server contracts. B starts read-only.
 C and D have disjoint ownership and can run together after A/B settle.

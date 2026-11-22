@@ -12,15 +12,15 @@ The existing enabled timer invoked the reviewed broker with immutable image sha2
 
 The broker itself matched the reviewed source: /opt/tadazz-package-runtime/package-build-worker.py, SHA-256 7b591a69dd4aca951cf0f8224670c797696979085ae23c01d596ab99159d60d6. Its bytes, package store argument and isolation contract were retained. Only the immutable image argument in the existing service unit changed.
 
-| Identity | Accepted value |
-| --- | --- |
-| Worker image | sha256:4ef04ef752c23e5360399880f1bcf4c79c0f48900c9597bcaa68da8aa01d1411 |
-| Immutable base | sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647 |
-| Service unit before | 64c191c2e03a28f134219b17295389e041d3e5ef71093a5912cd397f9ec69053 |
-| Service unit after | 7bfd2b44f2409588f162e278e2b3eb5a8671f61d81f1609ad29292608231559c |
-| Package store | /var/lib/tadazz-release-5312660/config/extensions/packages |
-| Final receipt | e9303029460cf83e7667d7bb0fcbe9748d061c64d0ab6b58c34e1a68af934e2f |
-| Final execution | 020726f594525c70149889188f136da5eb87636cec836c9a1912c4967becb6ad |
+| Identity            | Accepted value                                                          |
+| ------------------- | ----------------------------------------------------------------------- |
+| Worker image        | sha256:4ef04ef752c23e5360399880f1bcf4c79c0f48900c9597bcaa68da8aa01d1411 |
+| Immutable base      | sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647 |
+| Service unit before | 64c191c2e03a28f134219b17295389e041d3e5ef71093a5912cd397f9ec69053        |
+| Service unit after  | 7bfd2b44f2409588f162e278e2b3eb5a8671f61d81f1609ad29292608231559c        |
+| Package store       | /var/lib/tadazz-release-5312660/config/extensions/packages              |
+| Final receipt       | e9303029460cf83e7667d7bb0fcbe9748d061c64d0ab6b58c34e1a68af934e2f        |
+| Final execution     | 020726f594525c70149889188f136da5eb87636cec836c9a1912c4967becb6ad        |
 
 The accepted app explicitly uses /app/config, bound to /var/lib/tadazz-release-5312660/config. The helper inspected all mount ancestors of the actual package store to exclude a deeper overriding mount. The resulting path exactly matched the broker service argument.
 
@@ -34,11 +34,11 @@ A fresh container without a cache bind verified the 82 code hashes, 36 package c
 
 Independent review found a cleanup variable-shadowing bug during preparation. It was corrected before execution; the [archived cleanup guard](reviewed-tools/replacement/cleanup-target-check.json) records that the launch and final cleanup retain the same owned container name.
 
-| Synthetic artifact | SHA-256 | Bytes |
-| --- | --- | ---: |
-| Complete archive | 2d64baabbafa9dd12f07be4a97422167437f2d815b6363a62ec34e9de7eace4d | 520,223 |
-| Actual bundle | a789c772a2ba73788ce9548568a72b017a37236a5d4efd3c5d24b088e4acade6 | 752,963 |
-| Result | 9f4d6ec7dd8a1fd166f57c1d7bcb2598ab876840ae2a825cd4c576b94d7455c8 | 242 |
+| Synthetic artifact | SHA-256                                                          |   Bytes |
+| ------------------ | ---------------------------------------------------------------- | ------: |
+| Complete archive   | 2d64baabbafa9dd12f07be4a97422167437f2d815b6363a62ec34e9de7eace4d | 520,223 |
+| Actual bundle      | a789c772a2ba73788ce9548568a72b017a37236a5d4efd3c5d24b088e4acade6 | 752,963 |
+| Result             | 9f4d6ec7dd8a1fd166f57c1d7bcb2598ab876840ae2a825cd4c576b94d7455c8 |     242 |
 
 The bundle contains fixture-arcade; actual media validation passed. The production timer later produced the same output digest.
 
@@ -54,9 +54,9 @@ R2 required the exact recorded rollback state and the four retained synthetic fi
 
 After the fresh result appeared, the helper stopped future timer triggers and waited boundedly for the existing broker to finish without killing it. It required an inactive successful broker, matching source/output digests, actual media validation and strict trigger advancement:
 
-| Timer measurement | Microseconds |
-| --- | ---: |
-| Before R2 | 1,343,961,755,332 |
+| Timer measurement       |      Microseconds |
+| ----------------------- | ----------------: |
+| Before R2               | 1,343,961,755,332 |
 | After the new timer run | 1,345,319,387,745 |
 
 Only then did it remove the new fixture and the exact retained first-attempt fixture with type/hash checks, without recursive store cleanup. The final timer was restarted and verified active/waiting/enabled; the service remained successful on the replacement image. Effective service properties and runtime flags were unchanged.

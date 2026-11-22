@@ -25,14 +25,14 @@ Five leaf components now import answer styling directly from `game/utils/answer-
 ## Saved synthetic fixture
 
 {
-  "label": "actual-composite-save-reload",
-  "quizId": "ETe9VIGm1ezZfIJO_2RHJ",
-  "createStatus": 201,
-  "updateStatus": 200,
-  "questions": 2,
-  "scenes": 1,
-  "theme": "razzia-original",
-  "background": "url(\"http://127.0.0.1:4371/assets/background-CMjhDDHd.png\")"
+"label": "actual-composite-save-reload",
+"quizId": "ETe9VIGm1ezZfIJO_2RHJ",
+"createStatus": 201,
+"updateStatus": 200,
+"questions": 2,
+"scenes": 1,
+"theme": "razzia-original",
+"background": "url(\"http://127.0.0.1:4371/assets/background-CMjhDDHd.png\")"
 }
 
 ## Evidence

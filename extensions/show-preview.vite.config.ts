@@ -17,7 +17,12 @@ export default defineConfig({
     manifest: true,
     cssCodeSplit: false,
     lib: {
-      entry: fileURLToPath(new URL("./src/presentation/show-library-preview/renderer-entry.tsx", import.meta.url)),
+      entry: fileURLToPath(
+        new URL(
+          "./src/presentation/show-library-preview/renderer-entry.tsx",
+          import.meta.url,
+        ),
+      ),
       formats: ["es"],
       fileName: "renderer",
     },

@@ -50,18 +50,18 @@ No nested agents, account switches, Codex/Claude execution or paid fallback.
 Every child worktree below is **`W\<full Cezar ID>`**, with branch `cez/<id8>`.
 States and hashes are read-only Git/Cezar evidence, not trust in done reports.
 
-| Cezar ID | Lifecycle / Git | Full source SHA | Acceptance |
-|---|---|---|---|
-| `e0c87b17-8d33-415c-811a-1370aa05654a` | DONE / CLEAN | `8e13d00a7c36dd1b130018ca59499acf6fc1fa83` | Initial A rejected, superseded; no direct merge |
-| `c76cfcf7-a3d2-4bf5-98a7-ee98ba0001db` | DONE / CLEAN | `0c1aa5ed0abcf16e16a6e1ed5d4598127438de02` | Probe docs merged with manager corrections |
-| `df544d57-2f58-4005-9b4d-328a7bfbd772` | DONE / CLEAN | `95e892e80a1bb85c1d118d221a5dfcd7d3b74d19` | Widget scoped acceptance; merge `ee846f2ed1ebbdcec07501d429bf31b323e83d52` |
-| `17edc638-3eae-492f-adde-76373a73db3e` | DONE / CLEAN | `6fc790a53056b972b5161ea2e78355c64635c815` | Initial A security review **changes**; docs merge `3e29270f9ee64a1d3a33b0b90704dfaec973200c` |
-| `44fdfcc0-aeb6-46d4-8707-b2f6e8a59d3a` | DONE / CLEAN | `4a1d92b03d734d96717c26873686c68d6c76735c` | Earlier phone full-chain failed; superseded |
-| `e17507c7-ed2a-47d6-9e89-4cd55a5277a3` | FAILED / CLEAN | `02d752c04a5d9bef1d670d3f613ea9e921f0506a` | Linux11/12 twice; not directly merged; stale quota/closeout retries preserved |
-| `482771e7-752c-4083-b823-703b5badc6a8` | FAILED / CLEAN | `dd6fd4392d44932fd63a80837abadece416e5ade` | **Source independently accepted**, merge `30fab7f63a5208e9c2b95e023aa399ece623bb21`; lifecycle remains FAILED |
-| `8de82781-9222-4ea0-8eea-0c61982b564a` | DONE / CLEAN | `62a9cbea2846711a8392d695be02f9f82f635536` | **Source independently accepted**, merge `be93cd8310818387733c88658e46f06d66cb6ad7` |
-| `1e96bb6f-0451-4568-aeab-c14c0fb708cd` | DONE / CLEAN | `f6fc33969bd59ca59cc030cd32d9fda4a801be79` | **UNMERGED / latest Linux case5 NOT_RUN**; predecessor d85 scoped passes below |
-| `fd341b34-dbd2-436d-a3fd-afe9e140fba3` | CANCELLED / **DIRTY** | `a7c7c8f531fee3ad32416e8edf0b33ef01886b63` | **Uncommitted, unreviewed, untested WIP**, not accepted |
+| Cezar ID                               | Lifecycle / Git       | Full source SHA                            | Acceptance                                                                                                    |
+| -------------------------------------- | --------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
+| `e0c87b17-8d33-415c-811a-1370aa05654a` | DONE / CLEAN          | `8e13d00a7c36dd1b130018ca59499acf6fc1fa83` | Initial A rejected, superseded; no direct merge                                                               |
+| `c76cfcf7-a3d2-4bf5-98a7-ee98ba0001db` | DONE / CLEAN          | `0c1aa5ed0abcf16e16a6e1ed5d4598127438de02` | Probe docs merged with manager corrections                                                                    |
+| `df544d57-2f58-4005-9b4d-328a7bfbd772` | DONE / CLEAN          | `95e892e80a1bb85c1d118d221a5dfcd7d3b74d19` | Widget scoped acceptance; merge `ee846f2ed1ebbdcec07501d429bf31b323e83d52`                                    |
+| `17edc638-3eae-492f-adde-76373a73db3e` | DONE / CLEAN          | `6fc790a53056b972b5161ea2e78355c64635c815` | Initial A security review **changes**; docs merge `3e29270f9ee64a1d3a33b0b90704dfaec973200c`                  |
+| `44fdfcc0-aeb6-46d4-8707-b2f6e8a59d3a` | DONE / CLEAN          | `4a1d92b03d734d96717c26873686c68d6c76735c` | Earlier phone full-chain failed; superseded                                                                   |
+| `e17507c7-ed2a-47d6-9e89-4cd55a5277a3` | FAILED / CLEAN        | `02d752c04a5d9bef1d670d3f613ea9e921f0506a` | Linux11/12 twice; not directly merged; stale quota/closeout retries preserved                                 |
+| `482771e7-752c-4083-b823-703b5badc6a8` | FAILED / CLEAN        | `dd6fd4392d44932fd63a80837abadece416e5ade` | **Source independently accepted**, merge `30fab7f63a5208e9c2b95e023aa399ece623bb21`; lifecycle remains FAILED |
+| `8de82781-9222-4ea0-8eea-0c61982b564a` | DONE / CLEAN          | `62a9cbea2846711a8392d695be02f9f82f635536` | **Source independently accepted**, merge `be93cd8310818387733c88658e46f06d66cb6ad7`                           |
+| `1e96bb6f-0451-4568-aeab-c14c0fb708cd` | DONE / CLEAN          | `f6fc33969bd59ca59cc030cd32d9fda4a801be79` | **UNMERGED / latest Linux case5 NOT_RUN**; predecessor d85 scoped passes below                                |
+| `fd341b34-dbd2-436d-a3fd-afe9e140fba3` | CANCELLED / **DIRTY** | `a7c7c8f531fee3ad32416e8edf0b33ef01886b63` | **Uncommitted, unreviewed, untested WIP**, not accepted                                                       |
 
 Native-consent WIP: modified `extensions/src/site/web/studio/Studio.tsx`
 (26 added lines), nine untracked files under
@@ -72,31 +72,31 @@ commit was fabricated. Review/reconcile this worktree before any future merge.
 
 ## 4. Phase 3 units A–F and original MCP tasks
 
-| Unit | Current outcome | Important unfinished boundary |
-|---|---|---|
-| A — MCP/OAuth/save | Protected service library **accepted/merged, scoped** | Actual deployed HTTPS routing, human consent and Studio browser workflow incomplete |
-| B — Widget | SDK roundtrip/edit preservation **accepted/merged, scoped** | Full-show/media/scene/host integration incomplete; synthetic host is not ChatGPT |
-| C — Phone | Real-authority/gateway/native game fixture **accepted/merged, scoped** | Real PSTN, new500-call/50-session load and provider adoption NOT_RUN |
-| D — Recovery | Runtime fixes and QA **unmerged**, latest negative-case fix NOT_RUN on Linux | Final8/8 qualification and combined-source acceptance missing |
-| E — Site/brand/locales | Earlier42/42 scoped metadata/locales **REUSED** | No final combined HTML/assets/CSP/rights/browser release matrix |
-| F — Security | Initial A review completed with changes; repairs verified separately | **Final independent combined-source security review NOT_RUN** |
+| Unit                   | Current outcome                                                              | Important unfinished boundary                                                       |
+| ---------------------- | ---------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| A — MCP/OAuth/save     | Protected service library **accepted/merged, scoped**                        | Actual deployed HTTPS routing, human consent and Studio browser workflow incomplete |
+| B — Widget             | SDK roundtrip/edit preservation **accepted/merged, scoped**                  | Full-show/media/scene/host integration incomplete; synthetic host is not ChatGPT    |
+| C — Phone              | Real-authority/gateway/native game fixture **accepted/merged, scoped**       | Real PSTN, new500-call/50-session load and provider adoption NOT_RUN                |
+| D — Recovery           | Runtime fixes and QA **unmerged**, latest negative-case fix NOT_RUN on Linux | Final8/8 qualification and combined-source acceptance missing                       |
+| E — Site/brand/locales | Earlier42/42 scoped metadata/locales **REUSED**                              | No final combined HTML/assets/CSP/rights/browser release matrix                     |
+| F — Security           | Initial A review completed with changes; repairs verified separately         | **Final independent combined-source security review NOT_RUN**                       |
 
 All original tasks remain OPEN; neither unit scope passes nor worker DONE means
 product completion. Original Asana project: `1219846276680200`.
 
-| Original task | GID | Exact acceptance limit |
-|---|---|---|
-| MCP parent | `1220539632193783` | Phase3 STOPPED / NOT_READY |
-| MCP-02 server | `1220539638955304` | Local protected SDK/listener accepted; remote endpoint not ready |
-| MCP-03 OAuth/permissions | `1220539632251971` | PKCE/grant/account negatives scoped-pass; live issuer/discovery/browser consent not accepted |
-| MCP-04 create/edit/save | `1220539611695147` | Tool/C1 backend scoped-pass; human consent -> model retry -> Studio UI **WIP/NOT_RUN** |
-| MCP-05 Stage | `1220539638962739` | Current-card native candidate only, not full-show acceptance |
-| MCP-06 Widget | `1220539769117845` | Synthetic SDK host/browser scoped-pass; no verified installed host |
-| MCP-07 conversational edits | `1220539638954076` | CAS/ACK/edit tests scoped-pass, not real multi-turn ChatGPT acceptance |
-| MCP-08 media/themes | `1220539632226057` | Existing Phase2 substrate reused; MCP full media/audio/Lottie/rights gates incomplete |
-| MCP-09 host install | `1220539611723851` | **BLOCKED_EXTERNAL**, no real ChatGPT/Claude install verified |
-| MCP-10 QA/security | `1220539638965463` | Scoped evidence only; final security and single-SHA matrix NOT_RUN |
-| MCP-11 release/docs | `1220539769107140` | Handoff delivered; staging/release acceptance **NOT_READY**, no deployment |
+| Original task               | GID                | Exact acceptance limit                                                                       |
+| --------------------------- | ------------------ | -------------------------------------------------------------------------------------------- |
+| MCP parent                  | `1220539632193783` | Phase3 STOPPED / NOT_READY                                                                   |
+| MCP-02 server               | `1220539638955304` | Local protected SDK/listener accepted; remote endpoint not ready                             |
+| MCP-03 OAuth/permissions    | `1220539632251971` | PKCE/grant/account negatives scoped-pass; live issuer/discovery/browser consent not accepted |
+| MCP-04 create/edit/save     | `1220539611695147` | Tool/C1 backend scoped-pass; human consent -> model retry -> Studio UI **WIP/NOT_RUN**       |
+| MCP-05 Stage                | `1220539638962739` | Current-card native candidate only, not full-show acceptance                                 |
+| MCP-06 Widget               | `1220539769117845` | Synthetic SDK host/browser scoped-pass; no verified installed host                           |
+| MCP-07 conversational edits | `1220539638954076` | CAS/ACK/edit tests scoped-pass, not real multi-turn ChatGPT acceptance                       |
+| MCP-08 media/themes         | `1220539632226057` | Existing Phase2 substrate reused; MCP full media/audio/Lottie/rights gates incomplete        |
+| MCP-09 host install         | `1220539611723851` | **BLOCKED_EXTERNAL**, no real ChatGPT/Claude install verified                                |
+| MCP-10 QA/security          | `1220539638965463` | Scoped evidence only; final security and single-SHA matrix NOT_RUN                           |
+| MCP-11 release/docs         | `1220539769107140` | Handoff delivered; staging/release acceptance **NOT_READY**, no deployment                   |
 
 **Live runtime warning (owner-provided current observation, not re-probed after
 STOP): `https://tadazz.com/mcp` and the `/.well-known` OAuth routes currently
@@ -143,7 +143,7 @@ fabricated executable pin or speculative4MiB impossibility claim.
   Initial Node22 import/setup, unsupported lint-stdin, remote formatter setup and
   two malformed initial D receipt hashes are retained, not relabeled green.
 - Earlier recovery44/44 was **mixed filesystem** (C1 ext4/journal tmpfs), not
- 44 ext4 durability cases. Site42/42 is earlier scoped evidence, not fresh release QA.
+  44 ext4 durability cases. Site42/42 is earlier scoped evidence, not fresh release QA.
 
 Evidence filenames in A:
 `server-service-dd6fd43-verification.json`,

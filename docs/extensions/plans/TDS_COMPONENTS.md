@@ -132,6 +132,7 @@ Initial failures and intermediate diagnostics are retained in `phase04-r1`,
 those failure records. Broader role/device/performance matrix remains TDS-12.
 No push, merge, deployment, production writes or new authorization required.
 Next: TDS-05 internal live catalog and governance, using these exact components.
+
 # TDS-08 production host compositions
 
 Current host additions are documented in [TDS_HOST.md](TDS_HOST.md):

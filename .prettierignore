@@ -31,3 +31,22 @@ extensions/src/presentation/tadazz-v4/reference-story/reveal-renderer.ts
 docs/design-reference/handoff-20261110/**
 extensions/site-assets/**
 docs/design-reference/upstream/**
+# Preserve the recorded bytes of these exact historical evidence files.
+/docs/extensions/plans/editor-hebrew-20261118/host-roster/browser.mjs
+/docs/extensions/plans/editor-hebrew-20261118/host-roster/fixture.html
+/docs/extensions/plans/editor-hebrew-20261118/host-roster/fixture.tsx
+/docs/extensions/plans/editor-hebrew-20261118/media-picker-audio/browser-configs.mjs
+/docs/extensions/plans/editor-hebrew-20261118/media-picker-audio/browser.mjs
+/docs/extensions/plans/editor-hebrew-20261118/media-picker-audio/fixture.html
+/docs/extensions/plans/editor-hebrew-20261118/media-picker-audio/fixture.tsx
+/docs/extensions/plans/editor-hebrew-20261118/native-he-scenes.config.ts
+/docs/extensions/plans/editor-hebrew-20261118/native-he-scenes.fixture.test.ts
+/docs/extensions/plans/phase-continuity-20261119/ggo/20261119T172039Z-d4b213df/executed-warmup.mjs
+/docs/extensions/plans/phase3-takeover-20261117/operator-capabilities-fix-20261118-25557ce6/synthetic-clone.cjs
+/docs/extensions/plans/phase3-takeover-20261117/operator-capabilities-fix-20261118-25557ce6/synthetic-stage.cjs
+/docs/extensions/plans/ux-followup-20261119/billing/harness/public-browser-check.mjs
+/docs/extensions/plans/ux-followup-20261119/production-public-smoke-policy-fix/original-production-public-smoke.mjs
+/docs/extensions/plans/ux-followup-20261119/release-tools/production-public-smoke.mjs
+/docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/context/provenance/verify-and-build.mjs
+/docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/prepare-source-pins.mjs
+/extensions/src/mcp-app/tests/first-party/ad895-producer/provenance.json

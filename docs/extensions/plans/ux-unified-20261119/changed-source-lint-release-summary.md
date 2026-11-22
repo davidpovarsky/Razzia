@@ -4,10 +4,10 @@ Status: **FAIL: 19 errors, 0 warnings**. Oxlint 1.90.0, 233 rules, 2 threads, 49
 
 The command used Node 24 with the repository's automatic lint configuration and --type-aware. No --fix, source edits, index changes, commits or checkout occurred. All 49 source hashes matched before and after. QA/e2e directories were excluded; in-source unit tests remained included, consistent with the previous scope.
 
-| File | Errors | Details |
-| --- | ---: | --- |
-| extensions/src/mcp-app/server/results.ts |6|Braces1; existing four-argument failureResult exceeds max-params1; statement spacing4|
-| extensions/src/site/web/marketing/GreatGuessOffDemo.tsx |13|Interface preference2; braces2; destructuring1; nested ternaries3; statement spacing5|
+| File                                                    | Errors | Details                                                                               |
+| ------------------------------------------------------- | -----: | ------------------------------------------------------------------------------------- |
+| extensions/src/mcp-app/server/results.ts                |      6 | Braces1; existing four-argument failureResult exceeds max-params1; statement spacing4 |
+| extensions/src/site/web/marketing/GreatGuessOffDemo.tsx |     13 | Interface preference2; braces2; destructuring1; nested ternaries3; statement spacing5 |
 
 All other 47 files, including the five direct-import cycle repairs and latest MCP viewport/provider changes, had no diagnostics. The earlier lint receipts covered 39/40 files; this complete baseline comparison includes 49 files.
 
@@ -17,7 +17,6 @@ Canonical details: changed-source-lint-release.log, changed-source-lint-release.
 
 - C:\Users\DAVID\Code\Razzia-worktrees\tadazz-ux-unified-20261119\docs\extensions\plans\ux-unified-20261119\site-editor\production-deeplink-fix\saved-reloaded-390x844.png
 - C:\Users\DAVID\Code\Razzia-worktrees\tadazz-ux-unified-20261119\docs\extensions\plans\ux-unified-20261119\site-editor\production-deeplink-fix\rtl-question-320x640.png
-
 
 ## Delta classification against the integration merge
 

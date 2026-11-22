@@ -5,6 +5,7 @@ Authorized editor audit found that validated card background position and overla
 Planned files: core/tadazz-appearance.ts and test; presentation/tadazz-show/presentation-scene.ts and test; tadazz-show/TadazzStage.tsx; tadazz-show/TadazzV4StageAdapter.tsx; tadazz-v4/types.ts and components.tsx; show-library-preview/application-preview-stage.tsx; web TadazzShowView.tsx. Inspect Original Razzia and incomplete-preview fallbacks for the same missing fields and apply only matching background propagation if necessary.
 
 Verification: focused real resolver tests for authored/scene/inherited/unsafe backgrounds and zero/max opacity; native renderer output; actual unsaved editor preview controls with computed styles and screenshots for Classic and Original, preserving the default appearance. No missing catalog, new preset, color/gradient redesign, or source pin/release claim in this change.
+
 ## Verified outcome
 
 53/53 focused tests pass: card-appearance10, tadazz-appearance10, presentation-scene31, actual StageBackdropV4 SSR2. Web TypeScript passes; typed lint over12 affected source/test files has0 warnings/errors; Prettier passes. The initial runner invocation used the wrong working directory and was corrected; one new fixture assetBase omitted its required trailing slash and was corrected without changing runtime behavior. Current final logs: backdrop-tests.log, backdrop-types.log, backdrop-lint.log and backdrop-gates.json.

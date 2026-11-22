@@ -12,9 +12,7 @@ const rawEvidence = process.env.TADAZZ_WIDGET_EVIDENCE
 const evidence = rawEvidence
   ? rawEvidence.startsWith("file://")
     ? new URL(rawEvidence.endsWith("/") ? rawEvidence : `${rawEvidence}/`)
-    : new URL(
-        pathToFileURL(resolve(rawEvidence)).href.replace(/\/?$/u, "/"),
-      )
+    : new URL(pathToFileURL(resolve(rawEvidence)).href.replace(/\/?$/u, "/"))
   : new URL(
       "../../../docs/extensions/qa-evidence/mcp-widget-20261115/inflight-edit-20261116/",
       import.meta.url,

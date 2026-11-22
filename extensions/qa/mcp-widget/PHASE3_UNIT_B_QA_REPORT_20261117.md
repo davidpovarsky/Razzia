@@ -40,6 +40,7 @@ Heavy Vite builds and Playwright Chromium/WebKit suites were **NOT_RUN** locally
 ### Clean Build Prerequisites
 
 Inside `/tmp/phase3-999ed90c/source`, ensure the existing `/cleanup` dependency graphs are linked/available (read-only reuse, no `pnpm install`):
+
 - `/cleanup/node_modules` -> `node_modules`
 - `/cleanup/extensions/node_modules` -> `extensions/node_modules`
 - `/cleanup/extensions/src/mcp-app/node_modules` -> `extensions/src/mcp-app/node_modules`

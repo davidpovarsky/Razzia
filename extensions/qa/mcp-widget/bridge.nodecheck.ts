@@ -3,7 +3,10 @@ import { execFileSync } from "node:child_process"
 import { readFileSync } from "node:fs"
 import { test } from "node:test"
 import { AppBridge } from "../../src/mcp-app/node_modules/@modelcontextprotocol/ext-apps/dist/src/app-bridge.js"
-import type { NativePreviewCandidateMountV2, NativePreviewRendererInputV2 } from "../../src/core/show-library/native-preview-renderer-v2-schema"
+import type {
+  NativePreviewCandidateMountV2,
+  NativePreviewRendererInputV2,
+} from "../../src/core/show-library/native-preview-renderer-v2-schema"
 import { hashJson } from "../../src/mcp-app/contracts/canonical.ts"
 import {
   createWidgetBridgeCore,
@@ -116,9 +119,7 @@ function cloneForRevision(
   return cloned
 }
 
-type ToolResult = Awaited<
-  ReturnType<NonNullable<AppBridge["oncalltool"]>>
->
+type ToolResult = Awaited<ReturnType<NonNullable<AppBridge["oncalltool"]>>>
 type TransportMessage = Parameters<NonNullable<AppTransport["send"]>>[0]
 
 function createTransportPair(): [AppTransport, AppTransport] {
@@ -169,11 +170,13 @@ function deferred<T = unknown>() {
   return { promise, resolve, reject }
 }
 
-async function createConnectedHarness(options: {
-  locale?: string
-  onCallTool?: AppBridge["oncalltool"]
-  onInitialized?: (host: AppBridge) => void | Promise<void>
-} = {}) {
+async function createConnectedHarness(
+  options: {
+    locale?: string
+    onCallTool?: AppBridge["oncalltool"]
+    onInitialized?: (host: AppBridge) => void | Promise<void>
+  } = {},
+) {
   const [appTransport, hostTransport] = createTransportPair()
   const contexts: unknown[] = []
   const mounts: Array<{
@@ -218,15 +221,11 @@ async function createConnectedHarness(options: {
   if (options.onCallTool) {
     host.oncalltool = options.onCallTool
   }
-  const widget = createWidgetBridgeCore(
-    (ctx) => contexts.push(ctx),
-    mount,
-    {
-      transport: appTransport,
-      appOptions: { autoResize: false },
-      isTopWindow: () => false,
-    },
-  )
+  const widget = createWidgetBridgeCore((ctx) => contexts.push(ctx), mount, {
+    transport: appTransport,
+    appOptions: { autoResize: false },
+    isTopWindow: () => false,
+  })
   const statuses: string[] = []
   widget.controller.subscribe(() => {
     statuses.push(widget.controller.snapshot().status)
@@ -253,8 +252,10 @@ async function createConnectedHarness(options: {
 
 test("candidate-first handling on preview() avoids intermediate unavailable status", async () => {
   const draftId = retainedEn.selection.draftId
-  const calls: Array<{ name: string; args: Record<string, unknown> | undefined }> =
-    []
+  const calls: Array<{
+    name: string
+    args: Record<string, unknown> | undefined
+  }> = []
   const h = await createConnectedHarness({
     onCallTool: async ({ name, arguments: args }) => {
       calls.push({ name, args })
@@ -566,7 +567,8 @@ test("preview after edit sends expectedRevision + 1 and disposes prior candidate
 
 test("adversarial tamper, stale candidate, toolcancelled, toolInfo, and plain unavailable fail closed", async () => {
   const draftId = retainedEn.selection.draftId
-  let nextPreview: () => Promise<ToolResult> = async () => makePlainUnavailable()
+  let nextPreview: () => Promise<ToolResult> = async () =>
+    makePlainUnavailable()
   const h = await createConnectedHarness({
     onCallTool: async ({ name }) => {
       if (name === "get_game_draft") {
