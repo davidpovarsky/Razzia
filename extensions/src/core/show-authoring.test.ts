@@ -1392,6 +1392,8 @@ describe("Show Authoring Schema & Converters", () => {
   })
   describe("Gate 6: Cinematic Video & Multi-Layer Lottie Overlays Roundtrip", () => {
     it("roundtrips opening, closing, and cinema media scenes with overlayAnimations and mediaEndFallbackMs across .tada.json <-> native V2 bundle", () => {
+      const recapTitle = "Round highlights"
+      const recapSubtitle = "Answers retained – תשובות"
       const sampleOverlays = [
         {
           id: "emblem-1",
@@ -1497,6 +1499,16 @@ describe("Show Authoring Schema & Converters", () => {
             overlayAnimations: [sampleOverlays[0]],
           },
           {
+            key: "RECAP_1",
+            kind: "answerRecap",
+            title: recapTitle,
+            subtitle: recapSubtitle,
+            startQuestionKey: "Q1",
+            mode: "correctAnswer",
+            durationMs: 6000,
+            advance: "manual",
+          },
+          {
             key: "CLOSE_1",
             kind: "closing",
             title: "Goodnight!",
@@ -1528,12 +1540,18 @@ describe("Show Authoring Schema & Converters", () => {
       expect(mediaScene.overlayAnimations).toEqual([sampleOverlays[0]])
       expect(closeScene.mediaEndFallbackMs).toBe(18000)
       expect(closeScene.overlayAnimations).toEqual([sampleOverlays[1]])
+      expect(
+        scenesList.find((scene) => scene.kind === "answerRecap"),
+      ).toMatchObject({
+        title: recapTitle,
+        subtitle: recapSubtitle,
+      })
 
       // Convert back to authored TadaShowV1
       const restored = nativeBundleToAuthoredShow(bundle)
       const restoredOpen = restored.cards[0] as AuthoredOpeningCard
       const restoredMedia = restored.cards[2] as AuthoredMediaCard
-      const restoredClose = restored.cards[3] as AuthoredClosingCard
+      const restoredClose = restored.cards[4] as AuthoredClosingCard
       expect(restoredOpen.mediaEndFallbackMs).toBe(24000)
       expect(restoredOpen.overlayAnimations).toEqual(sampleOverlays)
       expect(restoredMedia.stageLayout).toBe("cinema")
@@ -1543,6 +1561,22 @@ describe("Show Authoring Schema & Converters", () => {
       expect(restoredMedia.overlayAnimations).toEqual([sampleOverlays[0]])
       expect(restoredClose.mediaEndFallbackMs).toBe(18000)
       expect(restoredClose.overlayAnimations).toEqual([sampleOverlays[1]])
+      expect(restored.cards[3]).toMatchObject({
+        kind: "answerRecap",
+        title: recapTitle,
+        subtitle: recapSubtitle,
+      })
+
+      // Cross the real authored JSON boundary before converting back again.
+      const jsonPayload: unknown = JSON.parse(JSON.stringify(restored))
+      const jsonShow = tadaShowV1Schema.parse(jsonPayload)
+      const reimported = authoredShowToNativeBundleDraft(jsonShow)
+      expect(reimported.ok).toBe(true)
+      expect(
+        Object.values(reimported.bundleDraft?.extras.scenes ?? {}).find(
+          (scene) => scene.kind === "answerRecap",
+        ),
+      ).toMatchObject({ title: recapTitle, subtitle: recapSubtitle })
     })
   })
 })

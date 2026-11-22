@@ -63,6 +63,8 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
     expect(q1.correctAnswers).toEqual([1])
   })
   it("round-trips XLSX -> Native Draft -> Authored -> XLSX with semantic equivalence and Hebrew/Unicode", () => {
+    const recapTitle = "סיכום התשובות"
+    const recapSubtitle = "החידון והסקר נשמרו – highlights"
     const originalShow: TadaShowV1 = {
       format: "tada-show",
       version: 1,
@@ -152,6 +154,16 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
           advance: "auto",
         },
         {
+          key: "CARD_RECAP",
+          kind: "answerRecap",
+          title: recapTitle,
+          subtitle: recapSubtitle,
+          startQuestionKey: "CARD_Q1",
+          mode: "correctAnswer",
+          durationMs: 6000,
+          advance: "manual",
+        },
+        {
           key: "CARD_OUT",
           kind: "closing",
           title: "תודה שהשתתפתם!",
@@ -182,7 +194,13 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
     // Parse XLSX back
     const parsedShow = parseTadaShowWorkbook(xlsxBuffer)
     expect(parsedShow.title).toBe("שעשועון טריוויה חגיגי בעברית")
-    expect(parsedShow.cards.length).toBe(6)
+    expect(parsedShow.cards.length).toBe(7)
+    expect(
+      parsedShow.cards.find((card) => card.kind === "answerRecap"),
+    ).toMatchObject({
+      title: recapTitle,
+      subtitle: recapSubtitle,
+    })
 
     // Convert parsed show to Native Bundle Draft
     const nativeDraftResult = authoredShowToNativeBundleDraft(parsedShow)
@@ -193,7 +211,15 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
     expect(quizz.questions.length).toBe(2)
     expect(quizz.questions[0].solutions).toEqual([0])
     expect(quizz.questions[1].solutions).toBeUndefined()
-    expect(extras.timeline.length).toBe(6)
+    expect(extras.timeline.length).toBe(7)
+    expect(
+      Object.values(extras.scenes).find(
+        (scene) => scene.kind === "answerRecap",
+      ),
+    ).toMatchObject({
+      title: recapTitle,
+      subtitle: recapSubtitle,
+    })
 
     // Convert back from Native to Authored Show
     const reAuthored = nativeBundleToAuthoredShow({
@@ -201,13 +227,25 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
       extras,
     })
     expect(reAuthored.title).toBe("שעשועון טריוויה חגיגי בעברית")
-    expect(reAuthored.cards.length).toBe(6)
+    expect(reAuthored.cards.length).toBe(7)
+    expect(
+      reAuthored.cards.find((card) => card.kind === "answerRecap"),
+    ).toMatchObject({
+      title: recapTitle,
+      subtitle: recapSubtitle,
+    })
 
     // Re-export to XLSX and parse once more
     const secondXlsx = exportTadaShowWorkbook(reAuthored)
     const secondParsed = parseTadaShowWorkbook(secondXlsx)
     expect(secondParsed.title).toBe("שעשועון טריוויה חגיגי בעברית")
-    expect(secondParsed.cards.length).toBe(6)
+    expect(secondParsed.cards.length).toBe(7)
+    expect(
+      secondParsed.cards.find((card) => card.kind === "answerRecap"),
+    ).toMatchObject({
+      title: recapTitle,
+      subtitle: recapSubtitle,
+    })
   })
   describe("Negative XLSX Security & Validation Tests", () => {
     it("strictly rejects spreadsheet formula cells (<f>)", () => {
