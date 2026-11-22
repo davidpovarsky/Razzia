@@ -55,7 +55,9 @@ with tarfile.open(fileobj=sys.stdin.buffer,mode="r|gz") as archive:
 """
 command = "sudo -n docker exec -i " + CONTAINER + " python3 -c " + shlex.quote(extract) + " " + shlex.quote("/evidence/" + RUN)
 with archive_path.open("rb") as stream:
-    transferred = subprocess.run([*SSH, command], stdin=stream, capture_output=True, timeout=150)
+    # The media-rich source archive can exceed two minutes on the SSH uplink.
+    # Bound transport separately; build and qualification timeouts stay unchanged.
+    transferred = subprocess.run([*SSH, command], stdin=stream, capture_output=True, timeout=600)
 if transferred.returncode:
     (EVIDENCE / "transfer-error.log").write_bytes(transferred.stderr)
     raise SystemExit("Native pin source transfer failed")
