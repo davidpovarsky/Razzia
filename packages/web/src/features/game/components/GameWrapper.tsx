@@ -82,6 +82,7 @@ import {
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
 type Props = PropsWithChildren & {
+  gameId?: string
   statusName: Status | undefined
   onNext?: () => void
   onBack?: () => void
@@ -610,10 +611,13 @@ const GameWrapper = (props: Props) => {
   const presentationRootRef = useRef<HTMLDivElement | null>(null)
   const managerGameId = useManagerStore((state) => state.gameId)
   const playerGameId = usePlayerStore((state) => state.gameId)
+  // The route knows the room before reconnect fills the player store. Keep the
+  // scope stable while reconnect status and extension packets arrive together.
   const gameId =
-    props.manager || props.viewRole === "spectator"
+    props.gameId ??
+    (props.manager || props.viewRole === "spectator"
       ? managerGameId
-      : playerGameId
+      : playerGameId)
 
   return (
     <AudioPreferencesScope key={gameId ?? "pending"}>

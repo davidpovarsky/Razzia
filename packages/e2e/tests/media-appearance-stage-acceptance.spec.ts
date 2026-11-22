@@ -689,12 +689,13 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         exact: true,
       })
       .click()
-    await expect(background.locator("img")).not.toHaveAttribute(
+    await expect(background.locator("img")).toHaveCount(0)
+    await openStudioPanel(page, "edit")
+    await expect(edit.getByTestId("answer-image-preview-0")).toBeVisible()
+    await expect(edit.getByTestId("answer-image-preview-0")).toHaveAttribute(
       "src",
       sharedUrl ?? "",
     )
-    await openStudioPanel(page, "edit")
-    await expect(edit.getByTestId("answer-image-preview-0")).toBeVisible()
   })
   test("2. Live Runtime & Zero-Scroll Stage Matrix (STAGE-P0) across 8 Viewports + Card Background + Single Audio + Staged Motion", async ({
     page: managerPage,
@@ -1347,13 +1348,24 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         )
       }
 
-      // 4. Assert no vertical overlap between header/title and HUD/timer, and between HUD and cards
-      await assertNoVerticalOverlap(
-        spectatorPage,
-        '[data-testid="tadazz-question-panel"] .q-text',
-        '[data-testid="tadazz-timer"]',
-        `Q1 Title / Timer Overlap @ ${vp.name}`,
-      )
+      // The native header places its title and timer in separate columns.
+      // Keep the vertical-stack assertions below for the player reveal layout.
+      const [titleBox, timerBox] = await Promise.all([
+        spectatorPage
+          .locator('[data-testid="tadazz-question-panel"] .q-text')
+          .boundingBox(),
+        spectatorPage.getByTestId("tadazz-timer").boundingBox(),
+      ])
+
+      if (!titleBox || !timerBox) {
+        throw new Error(`Native title or timer is missing @ ${vp.name}`)
+      }
+
+      expect(
+        titleBox.x + titleBox.width <= timerBox.x + 2 ||
+          timerBox.x + timerBox.width <= titleBox.x + 2,
+        `Native title and timer overlap horizontally @ ${vp.name}`,
+      ).toBe(true)
 
       if (
         vp.name === "800x600_4_3" ||
@@ -1830,6 +1842,7 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
                 id: "00000000-0000-4000-8000-000000000304",
                 kind: "answerRecap",
                 title: "Cumulative Show Answer Recap",
+                subtitle: "Survey and quiz highlights",
                 startQuestionId: "00000000-0000-4000-8000-000000000101",
                 mode: "correctAnswer",
                 durationMs: 30000,
@@ -2051,20 +2064,28 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
 
     // Advance from Q2 SHOW_RESPONSES to Cumulative Answer Recap Scene!
     await next(managerPage)
-    await expect(
-      spectatorPage.locator('[data-testid="tadazz-screen-recap"]'),
-    ).toBeVisible({
+    const recap = spectatorPage.getByTestId("tadazz-screen-recap")
+    await expect(recap).toBeVisible({
       timeout: 15_000,
     })
-    await expect(
-      spectatorPage.getByTestId("tadazz-screen-recap").locator(".tz-recap-row"),
-    ).toHaveCount(2)
+    await expect(recap.locator(".choice-slot")).toHaveCount(2)
+    for (const [index, answer] of ["Solar Flare", "Mars"].entries()) {
+      const card = recap.getByTestId(`tadazz-card-${index}`)
+      await expect(card).toBeVisible()
+      await expect(card).toBeDisabled()
+      await expect(card.locator(".answer-title")).toHaveText(answer)
+    }
 
     await expect(
-      spectatorPage
-        .getByTestId("tadazz-screen-recap")
-        .getByText("Cumulative Show Answer Recap", { exact: true }),
+      recap.getByRole("heading", {
+        name: "Cumulative Show Answer Recap",
+        exact: true,
+      }),
     ).toBeVisible()
+    await expect(recap.getByTestId("tadazz-recap-subtitle")).toHaveText(
+      "Survey and quiz highlights",
+    )
+    await expect(recap.getByTestId("tadazz-recap-subtitle")).toBeVisible()
     await expect(managerPage.getByTestId("host-next-screen-btn")).toBeEnabled()
     await expect(playerPage.getByTestId("scene-awaiting-host")).toBeVisible()
 
@@ -2127,18 +2148,42 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         spectatorPage,
         `Cumulative Answer Recap @ ${vp.name}`,
       )
-      await assertVisualContainment(
+      await Promise.all([
+        assertVisualContainment(
+          spectatorPage,
+          '[data-testid="tadazz-screen-recap"]',
+          `Answer Recap Container @ ${vp.name}`,
+          { checkTextCompleteness: false },
+        ),
+        assertVisualContainment(
+          spectatorPage,
+          '[data-testid="tadazz-screen-recap"] [data-testid="tadazz-recap-title"]',
+          `Answer Recap Title @ ${vp.name}`,
+        ),
+        assertVisualContainment(
+          spectatorPage,
+          '[data-testid="tadazz-screen-recap"] [data-testid="tadazz-recap-subtitle"]',
+          `Answer Recap Subtitle @ ${vp.name}`,
+        ),
+        ...[0, 1].flatMap((index) => [
+          assertVisualContainment(
+            spectatorPage,
+            `[data-testid="tadazz-screen-recap"] [data-testid="tadazz-card-${index}"]`,
+            `Answer Recap Card ${index + 1} @ ${vp.name}`,
+            { checkTextCompleteness: false },
+          ),
+          assertVisualContainment(
+            spectatorPage,
+            `[data-testid="tadazz-screen-recap"] [data-testid="tadazz-card-${index}"] .answer-title`,
+            `Answer Recap Answer ${index + 1} @ ${vp.name}`,
+          ),
+        ]),
+      ])
+      await assertNoVerticalOverlap(
         spectatorPage,
-        '[data-testid="tadazz-screen-recap"]',
-        `Answer Recap Container @ ${vp.name}`,
-        {
-          checkTextCompleteness: false,
-        },
-      )
-      await assertVisualContainment(
-        spectatorPage,
-        '[data-testid="tadazz-screen-recap"] .tz-x-title',
-        `Answer Recap Title @ ${vp.name}`,
+        '[data-testid="tadazz-screen-recap"] .answers',
+        '[data-testid="tadazz-screen-recap"] .story-finale',
+        `Answer Recap Cards and Authored Text @ ${vp.name}`,
       )
 
       if (

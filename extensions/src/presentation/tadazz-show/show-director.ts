@@ -112,6 +112,7 @@ export type StageStep =
         alt?: string
       }>
       round?: number | null
+      title?: string
       subtitle?: string
     }
   | {
@@ -574,7 +575,8 @@ function planScene(
         {
           op: "showRoundRecap",
           winners,
-          subtitle: scene.subtitle,
+          title: scene.title,
+          subtitle: scene.subtitle ?? recap?.subtitle,
         },
       ]
     }
@@ -732,6 +734,8 @@ function planScene(
         return [
           {
             op: "showRoundRecap",
+            title: scene.title,
+            subtitle: scene.subtitle,
             round: (
               scene as {
                 round?: number

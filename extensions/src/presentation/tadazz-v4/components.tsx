@@ -693,12 +693,27 @@ export function LeaderboardV4({ data }: { data: TadazzV4Data }) {
 
 export function RoundRecapV4({ data }: { data: TadazzV4Data }) {
   const tx = labelsFor(data)
+  const title = data.title || data.subtitle || tx.storyBegin
+  const subtitle = data.title ? data.subtitle : undefined
 
   return (
-    <div data-testid="tadazz-screen-recap">
+    <div className="round-recap" data-testid="tadazz-screen-recap">
       <FivePictureAnswersV4 data={data} recap />
       <div className="story-connection" />
-      <div className="story-finale">{data.subtitle || tx.storyBegin}</div>
+      <div className="story-finale">
+        <h2 className="story-title" data-testid="tadazz-recap-title" dir="auto">
+          {title}
+        </h2>
+        {subtitle && (
+          <p
+            className="story-subtitle"
+            data-testid="tadazz-recap-subtitle"
+            dir="auto"
+          >
+            {subtitle}
+          </p>
+        )}
+      </div>
     </div>
   )
 }

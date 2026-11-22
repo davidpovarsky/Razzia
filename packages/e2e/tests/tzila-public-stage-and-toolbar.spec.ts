@@ -611,12 +611,7 @@ test.describe("P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolba
 
     // In a normal quiz without authored interimResults scenes, standard SHOW_RESPONSES MUST APPEAR!
     // Verify standard responses stage is visible on Host
-    const nextBtn = managerPage.getByRole("button", {
-      name: new RegExp(
-        `${t("game:next")}|${t("extensions:host.nextScreen")}`,
-        "i",
-      ),
-    })
+    const nextBtn = managerPage.getByTestId("host-next-screen-btn")
     await expect(nextBtn).toBeVisible({ timeout: 15_000 })
 
     // Host shows responses (e.g. answer counts / percentages)

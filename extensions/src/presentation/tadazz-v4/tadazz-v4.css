@@ -330,6 +330,7 @@
 .tzv4-stage .q-text {
   font-size: 66px;
   line-height: 1.09;
+  padding-block: 2px;
   text-align: center;
   letter-spacing: -0.038em;
   font-weight: 900;
@@ -1513,6 +1514,10 @@
   color: #efff5e;
   text-shadow: 0 0 22px #edff58ab;
 }
+.tzv4-stage .round-recap {
+  position: absolute;
+  inset: 0;
+}
 .tzv4-stage .answers.recap-answers {
   top: 266px;
   left: 81px;
@@ -1574,6 +1579,22 @@
     0 3px 1px #140027,
     0 7px 22px #010008,
     0 0 24px #ffe6b865;
+}
+.tzv4-stage .story-title {
+  margin: 0;
+  padding: 2px 120px;
+  font: inherit;
+  text-wrap: balance;
+}
+.tzv4-stage .story-subtitle {
+  margin: 12px 120px 0;
+  font-size: 32px;
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+  text-wrap: balance;
+  -webkit-text-stroke: 0;
 }
 .tzv4-stage .story-finale::before {
   content: "";

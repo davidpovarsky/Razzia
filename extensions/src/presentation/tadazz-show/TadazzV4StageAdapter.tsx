@@ -694,7 +694,7 @@ export const TadazzV4StageAdapter = forwardRef<
           labels: v4LabelsRef.current,
         })
       },
-      async showRoundRecap({ winners, round, subtitle }) {
+      async showRoundRecap({ winners, round, title, subtitle }) {
         setScreenMode("none")
         setMode("custom")
         cardsOnStageKeyRef.current = null
@@ -702,6 +702,7 @@ export const TadazzV4StageAdapter = forwardRef<
         await v4Ref.current?.play("round-recap", {
           winners: toV4Answers(winners),
           round: round ?? questionRef.current?.round ?? 1,
+          title,
           subtitle,
           showQuestionNumber: false,
           backgroundUrl: p.backdropUrl,

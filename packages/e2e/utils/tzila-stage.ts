@@ -233,59 +233,61 @@ export const assertTzilaChoices = async (input: {
     : page.getByTestId(/^photo-card-choice-[0-4]$/u)
   await expect(cards).toHaveCount(5)
 
-  for (const [index, option] of options.entries()) {
-    const card = native
-      ? page.getByTestId("tadazz-show").getByTestId(`tadazz-card-${index}`)
-      : page.getByTestId(`photo-card-choice-${index}`)
-    await expect(card).toBeVisible()
-    const label = native
-      ? card.locator(".answer-index")
-      : card.getByTestId(`photo-card-label-${index}`)
-    const caption = native
-      ? card.locator(".answer-title")
-      : card.getByTestId(`photo-card-caption-${index}`)
-    const image = native
-      ? card.locator(".tz-photo-frame img")
-      : card.getByTestId(`photo-card-image-${index}`)
-    await expect(label).toHaveText(
-      native ? String(index + 1).padStart(2, "0") : String(index + 1),
-    )
-    await expect(caption).toHaveText(option.label)
-    await expect(caption).toBeVisible()
-    await expect(image).toHaveAttribute("src", option.url)
-    await expect(image).toHaveAttribute("alt", option.alt)
-    await expect
-      .poll(() =>
-        image.evaluate(
-          (element) =>
-            element instanceof HTMLImageElement &&
-            element.complete &&
-            element.naturalWidth > 0,
-        ),
+  await Promise.all(
+    options.map(async (option, index) => {
+      const card = native
+        ? page.getByTestId("tadazz-show").getByTestId(`tadazz-card-${index}`)
+        : page.getByTestId(`photo-card-choice-${index}`)
+      await expect(card).toBeVisible()
+      const label = native
+        ? card.locator(".answer-index")
+        : card.getByTestId(`photo-card-label-${index}`)
+      const caption = native
+        ? card.locator(".answer-title")
+        : card.getByTestId(`photo-card-caption-${index}`)
+      const image = native
+        ? card.locator(".tz-photo-frame img")
+        : card.getByTestId(`photo-card-image-${index}`)
+      await expect(label).toHaveText(
+        native ? String(index + 1).padStart(2, "0") : String(index + 1),
       )
-      .toBe(true)
+      await expect(caption).toHaveText(option.label)
+      await expect(caption).toBeVisible()
+      await expect(image).toHaveAttribute("src", option.url)
+      await expect(image).toHaveAttribute("alt", option.alt)
+      await expect
+        .poll(() =>
+          image.evaluate(
+            (element) =>
+              element instanceof HTMLImageElement &&
+              element.complete &&
+              element.naturalWidth > 0,
+          ),
+        )
+        .toBe(true)
 
-    if (native) {
-      await expect(card).toBeDisabled()
-    } else {
-      if (input.paused) {
+      if (native) {
         await expect(card).toBeDisabled()
       } else {
-        await expect(card).toBeEnabled()
-      }
+        if (input.paused) {
+          await expect(card).toBeDisabled()
+        } else {
+          await expect(card).toBeEnabled()
+        }
 
-      const background = await card.evaluate(
-        (element) => getComputedStyle(element).backgroundColor,
-      )
-      expect(background).toBe(TZILA_ANSWER_COLORS[index])
-      expect(background).not.toContain("rgba")
-      const frameBackground = await image
-        .locator("..")
-        .evaluate((element) => getComputedStyle(element).backgroundColor)
-      expect(frameBackground).toBe(TZILA_ANSWER_COLORS[index])
-      expect(frameBackground).not.toContain("rgba")
-    }
-  }
+        const background = await card.evaluate(
+          (element) => getComputedStyle(element).backgroundColor,
+        )
+        expect(background).toBe(TZILA_ANSWER_COLORS[index])
+        expect(background).not.toContain("rgba")
+        const frameBackground = await image
+          .locator("..")
+          .evaluate((element) => getComputedStyle(element).backgroundColor)
+        expect(frameBackground).toBe(TZILA_ANSWER_COLORS[index])
+        expect(frameBackground).not.toContain("rgba")
+      }
+    }),
+  )
 }
 
 export const assertNativeTzilaResult = async (input: {
@@ -308,25 +310,28 @@ export const assertNativeTzilaResult = async (input: {
     page.getByTestId("tadazz-question-panel").locator(".eyebrow"),
   ).toHaveText(tzilaResultTitle(questionIndex))
   await expect(nativeTzilaCards(page)).toHaveCount(5)
-  for (const [index, option] of options.entries()) {
-    const card = page
-      .getByTestId("tadazz-show")
-      .getByTestId(`tadazz-card-${index}`)
-    await expect(card.locator(".answer-title")).toHaveText(option.label)
-    const percentage = total > 0 ? Math.round((counts[index] / total) * 100) : 0
-    const result = card.locator(".tz-result-number")
-    await expect(result).toBeVisible()
-    await expect(result).toHaveText(`${percentage}%`)
-    await expect(result).toHaveAttribute(
-      "data-target-percentage",
-      String(percentage),
-    )
-    await expect(card).toHaveClass(
-      winners.includes(index)
-        ? /\bis-favourite\b/u
-        : /^(?!.*\bis-favourite\b)/u,
-    )
-  }
+  await Promise.all(
+    options.map(async (option, index) => {
+      const card = page
+        .getByTestId("tadazz-show")
+        .getByTestId(`tadazz-card-${index}`)
+      await expect(card.locator(".answer-title")).toHaveText(option.label)
+      const percentage =
+        total > 0 ? Math.round((counts[index] / total) * 100) : 0
+      const result = card.locator(".tz-result-number")
+      await expect(result).toBeVisible()
+      await expect(result).toHaveText(`${percentage}%`)
+      await expect(result).toHaveAttribute(
+        "data-target-percentage",
+        String(percentage),
+      )
+      await expect(card).toHaveClass(
+        winners.includes(index)
+          ? /\bis-favourite\b/u
+          : /^(?!.*\bis-favourite\b)/u,
+      )
+    }),
+  )
   await expect(
     nativeTzilaCards(page).and(page.locator(".is-favourite")),
   ).toHaveCount(winners.length)
@@ -361,37 +366,40 @@ export const assertResponsiveTzilaResult = async (input: {
   await expect(rows.and(page.locator('[data-winner="true"]'))).toHaveCount(
     winners.length,
   )
-  for (const [index, option] of options.entries()) {
-    const row = rows.filter({
-      has: page.getByText(option.label, { exact: true }),
-    })
-    await expect(row).toHaveCount(1)
-    await expect(row).toBeVisible()
-    await expect(row).toHaveAttribute(
-      "data-winner",
-      String(winners.includes(index)),
-    )
-    await expect(row.locator("img")).toHaveAttribute("src", option.url)
-    const percentage = total > 0 ? Math.round((counts[index] / total) * 100) : 0
-    const percentText = total === 0 ? "(0%)" : `${percentage}%`
-    const expectedCopies = winners.includes(index) ? 2 : 1
-    const percentages = row.getByText(percentText, { exact: true })
-    await expect(percentages).toHaveText(
-      Array<string>(expectedCopies).fill(percentText),
-    )
-    for (const percentageElement of await percentages.all()) {
-      await expect(percentageElement).toBeVisible()
-    }
-    const votes = t("extensions:reveal.votes", { count: counts[index] })
-    const voteText = winners.includes(index) ? `(${votes})` : votes
-    const voteCounts = row.getByText(voteText, { exact: true })
-    await expect(voteCounts).toHaveText(
-      Array<string>(expectedCopies).fill(voteText),
-    )
-    for (const voteCount of await voteCounts.all()) {
-      await expect(voteCount).toBeVisible()
-    }
-  }
+  await Promise.all(
+    options.map(async (option, index) => {
+      const row = rows.filter({
+        has: page.getByText(option.label, { exact: true }),
+      })
+      await expect(row).toHaveCount(1)
+      await expect(row).toBeVisible()
+      await expect(row).toHaveAttribute(
+        "data-winner",
+        String(winners.includes(index)),
+      )
+      await expect(row.locator("img")).toHaveAttribute("src", option.url)
+      const percentage =
+        total > 0 ? Math.round((counts[index] / total) * 100) : 0
+      const percentText = total === 0 ? "(0%)" : `${percentage}%`
+      const expectedCopies = winners.includes(index) ? 2 : 1
+      const percentages = row.getByText(percentText, { exact: true })
+      await expect(percentages).toHaveText(
+        Array<string>(expectedCopies).fill(percentText),
+      )
+      for (const percentageElement of await percentages.all()) {
+        await expect(percentageElement).toBeVisible()
+      }
+      const votes = t("extensions:reveal.votes", { count: counts[index] })
+      const voteText = winners.includes(index) ? `(${votes})` : votes
+      const voteCounts = row.getByText(voteText, { exact: true })
+      await expect(voteCounts).toHaveText(
+        Array<string>(expectedCopies).fill(voteText),
+      )
+      for (const voteCount of await voteCounts.all()) {
+        await expect(voteCount).toBeVisible()
+      }
+    }),
+  )
 
   if (winners.length > 1) {
     await expect(scene.getByTestId("spotlight-tie")).toBeVisible()

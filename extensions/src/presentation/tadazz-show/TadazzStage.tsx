@@ -160,6 +160,7 @@ export interface TadazzStageHandle {
   showRoundRecap?(data: {
     winners: StageOption[]
     round?: number | null
+    title?: string
     subtitle?: string
   }): Promise<void>
   showInterlude?(data: { title: string; subtitle?: string }): Promise<void>
