@@ -1,0 +1,74 @@
+{
+  "bytes": 4033870,
+  "candidateSha": "31a9d4ce6e5633b48ff00f57ce8a731c741436d1",
+  "excluded": [
+    "config",
+    "authentication state",
+    "temporary runtime",
+    "traces",
+    "videos"
+  ],
+  "files": [
+    {
+      "bytes": 1253724,
+      "path": "diagnostic-receipt.json",
+      "sha256": "7552a9030e1f66e997eeac5457ec3b438b35e9b21068dca79235b58f2e9e2dc8"
+    },
+    {
+      "bytes": 445741,
+      "path": "source-before.json",
+      "sha256": "2d244db485d1212802a0fe2fe9811cf2c7548e27f816faf810022cbcc7ac0b6a"
+    },
+    {
+      "bytes": 445741,
+      "path": "source-after.json",
+      "sha256": "2d244db485d1212802a0fe2fe9811cf2c7548e27f816faf810022cbcc7ac0b6a"
+    },
+    {
+      "bytes": 1741,
+      "path": "container-plan.json",
+      "sha256": "a1140505873e1623e1855f986b7c6c88861ba32f8355660dfc82a6debbb473ac"
+    },
+    {
+      "bytes": 1621,
+      "path": "execution-plan.json",
+      "sha256": "d1ff8063eb2b8a12d9962905398e99c11522685c801289f17ae4b156fe705933"
+    },
+    {
+      "bytes": 1183,
+      "path": "browser.stdout.log",
+      "sha256": "f812863307f4f3c47e9493ed6dd32083ac6ee1d6a5c936d97bfff98d9a5cd034"
+    },
+    {
+      "bytes": 0,
+      "path": "browser.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 25727,
+      "path": "diagnostics/paused-countdown-late-display-diagnostic.mjs",
+      "sha256": "9a62fdce68ff8fad695fcabf9620e521343a3a1ac7ea99f8c13c3d5e934594f8"
+    },
+    {
+      "bytes": 760,
+      "path": "paused-countdown/diagnostic-source.json",
+      "sha256": "3d9021b734c8c51c7fa64047567baa101369e4f540fc0a05a5242d08d08484c2"
+    },
+    {
+      "bytes": 1172963,
+      "path": "paused-countdown/paused-countdown-diagnostic.json",
+      "sha256": "6d0f16b4dd1485cd90074f9e18b6636eb83db39e403696aca9b5cdecd7585989"
+    },
+    {
+      "bytes": 342292,
+      "path": "paused-countdown/paused-countdown-late-display.png",
+      "sha256": "6b804e741171cdef59cdb9109d897fc9ba2268c7f79d8f406bf1d33567791643"
+    },
+    {
+      "bytes": 342377,
+      "path": "paused-countdown/paused-countdown-resumed.png",
+      "sha256": "8bf5a13a069a207c7ebca0fc7eed5ed388e8b6742847d8971167ffe782da31af"
+    }
+  ],
+  "run": "paused-countdown-iteration9"
+}

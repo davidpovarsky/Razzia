@@ -276,6 +276,7 @@ function Question({ data }: { data: TadazzV4Data }) {
       data-v4="question-frame"
       data-testid="tadazz-question-panel"
       data-has-picture={data.questionImage ? "true" : "false"}
+      data-answer-count={data.answerCount ?? data.answers?.length}
     >
       <div className="og-question-rule" aria-hidden="true" />
       <h2
@@ -600,7 +601,7 @@ function OriginalInterlude({ data }: { data: TadazzV4Data }) {
       <span className="og-scene-symbol" aria-hidden="true">
         ✦
       </span>
-      <span className="interlude-mini">{labels.upNext}</span>
+      <span className="interlude-mini">{data.eyebrow ?? labels.upNext}</span>
       <h2 className="interlude-title" dir="auto">
         {data.title ?? ""}
       </h2>

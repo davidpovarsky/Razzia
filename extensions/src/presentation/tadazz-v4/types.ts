@@ -78,6 +78,8 @@ export interface TadazzV4Data {
   round?: number
   totalQuestions?: number | null
   showQuestionNumber?: boolean
+  /** Authoritative option count is available before the options are revealed. */
+  answerCount?: number
   answers?: TadazzV4Answer[]
   /** Authoritative counts; never filled with demo/example values. */
   counts?: number[]

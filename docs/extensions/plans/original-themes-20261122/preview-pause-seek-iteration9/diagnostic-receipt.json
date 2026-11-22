@@ -1,0 +1,919 @@
+{
+  "baseSourceSha": "31a9d4ce6e5633b48ff00f57ce8a731c741436d1",
+  "browserExecutables": {
+    "chromium": "/root/.cache/ms-playwright/chromium-1248/chrome-linux-arm64/chrome",
+    "webkit": "/root/.cache/ms-playwright/webkit-2370/pw_run.sh"
+  },
+  "browserReceipt": {
+    "artifactSha256": "97318606cbf12d7c255be742769759b6cc6da45a1d6624b3ac3b78180dcdbe1f",
+    "calls": [
+      {
+        "inputDigest": "8b999e7a2d49dfae064e1c0c8ec35a44bce784f89e0a018388d69dd910f9d6cf",
+        "inputRevision": 1,
+        "name": "get_game_draft_summary",
+        "result": {
+          "contractVersion": "0.1.0",
+          "correlationId": "07f99a55-7daa-4e45-9f09-26957044e133",
+          "data": {
+            "draftId": "n1gSR46jWeqSGvGiJWn7m3_KzF-CWR8f",
+            "revision": 1,
+            "summary": {
+              "cardCount": 8,
+              "diagnostics": [],
+              "questionCount": 5,
+              "themeId": "tadazz-classic",
+              "themeVersion": "1.0.0",
+              "title": "Full show tadazz-classic chromium"
+            }
+          },
+          "ok": true
+        }
+      },
+      {
+        "inputDigest": "8b999e7a2d49dfae064e1c0c8ec35a44bce784f89e0a018388d69dd910f9d6cf",
+        "inputRevision": 1,
+        "name": "get_game_draft_summary",
+        "result": {
+          "contractVersion": "0.1.0",
+          "correlationId": "536cdc06-1ad5-4e70-a283-0fa8788df997",
+          "data": {
+            "draftId": "n1gSR46jWeqSGvGiJWn7m3_KzF-CWR8f",
+            "revision": 1,
+            "summary": {
+              "cardCount": 8,
+              "diagnostics": [],
+              "questionCount": 5,
+              "themeId": "tadazz-classic",
+              "themeVersion": "1.0.0",
+              "title": "Full show tadazz-classic chromium"
+            }
+          },
+          "ok": true
+        }
+      },
+      {
+        "inputDigest": "1143603e0b05edaf3f65e9fb0b8b7642b503d64bd75e6964bbf8155ba37bb7bf",
+        "inputRevision": 1,
+        "name": "get_game_draft_summary",
+        "result": {
+          "contractVersion": "0.1.0",
+          "correlationId": "7721a684-720f-4f82-8942-1781aa283803",
+          "data": {
+            "draftId": "8RSkFFRqmovKwCXXE-FzmfxE4ya_crc-",
+            "revision": 1,
+            "summary": {
+              "cardCount": 8,
+              "diagnostics": [],
+              "questionCount": 5,
+              "themeId": "tadazz-classic",
+              "themeVersion": "1.0.0",
+              "title": "Full show tadazz-classic webkit"
+            }
+          },
+          "ok": true
+        }
+      },
+      {
+        "inputDigest": "1143603e0b05edaf3f65e9fb0b8b7642b503d64bd75e6964bbf8155ba37bb7bf",
+        "inputRevision": 1,
+        "name": "get_game_draft_summary",
+        "result": {
+          "contractVersion": "0.1.0",
+          "correlationId": "665d853b-5f74-4590-8497-dbb90d4b2391",
+          "data": {
+            "draftId": "8RSkFFRqmovKwCXXE-FzmfxE4ya_crc-",
+            "revision": 1,
+            "summary": {
+              "cardCount": 8,
+              "diagnostics": [],
+              "questionCount": 5,
+              "themeId": "tadazz-classic",
+              "themeVersion": "1.0.0",
+              "title": "Full show tadazz-classic webkit"
+            }
+          },
+          "ok": true
+        }
+      },
+      {
+        "inputDigest": "fc1c5b07610a2e40b1ce0e8bed0f6ad8a6efb978c18b7072ff8071b155842f52",
+        "inputRevision": 1,
+        "name": "preview_show",
+        "result": {
+          "contractVersion": "0.1.0",
+          "correlationId": "87af7f2b-05de-44fc-91c3-8fca8c6da41a",
+          "data": {
+            "chapterCount": 28,
+            "draftId": "8RSkFFRqmovKwCXXE-FzmfxE4ya_crc-",
+            "frameDigest": "696655d41b48988a9fbc567989858adff62d1f797018fe50515fdab76dd52019",
+            "revision": 1,
+            "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:voting",
+            "title": "Full show tadazz-classic webkit"
+          },
+          "ok": true
+        }
+      },
+      {
+        "inputDigest": "006f89d880a19e725efcc17447e8adbe765a5ba0970945227d92e2c11199d583",
+        "inputRevision": 1,
+        "name": "preview_show",
+        "result": {
+          "contractVersion": "0.1.0",
+          "correlationId": "b4d057cc-c14e-4040-b18f-b577ac193939",
+          "data": {
+            "chapterCount": 28,
+            "draftId": "8RSkFFRqmovKwCXXE-FzmfxE4ya_crc-",
+            "frameDigest": "211b865483f8bf8c7e42a3d46c55022fab423f637f049d906d680d39cd291d78",
+            "revision": 1,
+            "selectedChapterId": "preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:results",
+            "title": "Full show tadazz-classic webkit"
+          },
+          "ok": true
+        }
+      }
+    ],
+    "claim": "Isolated fixture validation; not ChatGPT installation or production consent",
+    "customerMountAccessed": false,
+    "diagnosticMode": "phase-continuity",
+    "engines": [
+      {
+        "name": "chromium",
+        "outcomes": [
+          {
+            "budgetMs": 60000,
+            "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- 'preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question'\n",
+            "ms": 1817,
+            "name": "chromium / tadazz-classic phase continuity normal motion",
+            "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- 'preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question'\n\n    at verifyPhaseContinuity (file:///source/extensions/qa/phase3-full-show/phase-continuity.mjs:332:12)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:934:17\n    at async run (file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:626:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:928:11",
+            "status": "FAIL"
+          },
+          {
+            "budgetMs": 60000,
+            "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- 'preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question'\n",
+            "ms": 1316,
+            "name": "chromium / tadazz-classic phase continuity reduced motion",
+            "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- 'preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question'\n\n    at verifyPhaseContinuity (file:///source/extensions/qa/phase3-full-show/phase-continuity.mjs:332:12)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:934:17\n    at async run (file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:626:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:928:11",
+            "status": "FAIL"
+          }
+        ],
+        "version": "156.0.8078.4"
+      },
+      {
+        "name": "webkit",
+        "outcomes": [
+          {
+            "budgetMs": 60000,
+            "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- 'preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question'\n",
+            "ms": 3682,
+            "name": "webkit / tadazz-classic phase continuity normal motion",
+            "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- 'preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question'\n\n    at verifyPhaseContinuity (file:///source/extensions/qa/phase3-full-show/phase-continuity.mjs:332:12)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:934:17\n    at async run (file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:626:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:928:11",
+            "status": "FAIL"
+          },
+          {
+            "budgetMs": 60000,
+            "error": "AssertionError [ERR_ASSERTION]: result reveal: iframe reloaded\n+ actual - expected\n\n+ undefined\n- 1795369887802\n",
+            "ms": 17299,
+            "name": "webkit / tadazz-classic phase continuity reduced motion",
+            "stack": "AssertionError [ERR_ASSERTION]: result reveal: iframe reloaded\n+ actual - expected\n\n+ undefined\n- 1795369887802\n\n    at assertSameQuestion (file:///source/extensions/qa/phase3-full-show/phase-continuity.mjs:185:10)\n    at verifyPhaseContinuity (file:///source/extensions/qa/phase3-full-show/phase-continuity.mjs:380:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:934:17\n    at async run (file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:626:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:928:11",
+            "status": "FAIL"
+          }
+        ],
+        "version": "27.2"
+      }
+    ],
+    "entries": [
+      {
+        "budgetMs": 60000,
+        "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- 'preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question'\n",
+        "ms": 1817,
+        "name": "chromium / tadazz-classic phase continuity normal motion",
+        "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- 'preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question'\n\n    at verifyPhaseContinuity (file:///source/extensions/qa/phase3-full-show/phase-continuity.mjs:332:12)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:934:17\n    at async run (file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:626:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:928:11",
+        "status": "FAIL"
+      },
+      {
+        "budgetMs": 60000,
+        "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- 'preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question'\n",
+        "ms": 1316,
+        "name": "chromium / tadazz-classic phase continuity reduced motion",
+        "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- 'preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question'\n\n    at verifyPhaseContinuity (file:///source/extensions/qa/phase3-full-show/phase-continuity.mjs:332:12)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:934:17\n    at async run (file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:626:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:928:11",
+        "status": "FAIL"
+      },
+      {
+        "budgetMs": 60000,
+        "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- 'preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question'\n",
+        "ms": 3682,
+        "name": "webkit / tadazz-classic phase continuity normal motion",
+        "stack": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ undefined\n- 'preview-card-a0ebd613d79b925ab08a3ce1d37d06ac9d526df4c53d4d5b47c979e5796e4ce1:question'\n\n    at verifyPhaseContinuity (file:///source/extensions/qa/phase3-full-show/phase-continuity.mjs:332:12)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:934:17\n    at async run (file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:626:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:928:11",
+        "status": "FAIL"
+      },
+      {
+        "budgetMs": 60000,
+        "error": "AssertionError [ERR_ASSERTION]: result reveal: iframe reloaded\n+ actual - expected\n\n+ undefined\n- 1795369887802\n",
+        "ms": 17299,
+        "name": "webkit / tadazz-classic phase continuity reduced motion",
+        "stack": "AssertionError [ERR_ASSERTION]: result reveal: iframe reloaded\n+ actual - expected\n\n+ undefined\n- 1795369887802\n\n    at assertSameQuestion (file:///source/extensions/qa/phase3-full-show/phase-continuity.mjs:185:10)\n    at verifyPhaseContinuity (file:///source/extensions/qa/phase3-full-show/phase-continuity.mjs:380:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:934:17\n    at async run (file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:626:5)\n    at async file:///source/extensions/qa/phase3-full-show/browser-verify.mjs:928:11",
+        "status": "FAIL"
+      }
+    ],
+    "errors": [],
+    "failureCount": 4,
+    "kind": "real issuer + official MCP client + AppBridge + sandboxed native Stage",
+    "network": "none",
+    "oauthSession": {
+      "accessTokenLifetimeSeconds": 300,
+      "automaticReauthorization": false,
+      "kind": "actual-issuer-oauth-refresh",
+      "refreshCount": 0,
+      "refreshes": [],
+      "rejected": false,
+      "scheduler": "wall-clock"
+    },
+    "observations": [
+      {
+        "at": "2026-11-22T17:51:17.098Z",
+        "check": "host document lifecycle",
+        "engine": "chromium",
+        "finishedAt": "2026-11-22T17:51:17.098Z",
+        "reason": "normal continuity case",
+        "status": "no-host",
+        "theme": "tadazz-classic",
+        "url": "about:blank"
+      },
+      {
+        "at": "2026-11-22T17:51:19.144Z",
+        "check": "host document lifecycle",
+        "engine": "chromium",
+        "finishedAt": "2026-11-22T17:51:19.185Z",
+        "reason": "reduced continuity case",
+        "receipt": {
+          "cancelledReplies": 0,
+          "documentId": "c89855e8-5504-4469-a2ca-8db03a961710",
+          "elapsedMs": 5.200000047683716,
+          "errors": [],
+          "finishedAt": "2026-11-22T17:51:19.182Z",
+          "initial": {
+            "connecting": false,
+            "handlers": 0,
+            "http": 0,
+            "initialization": 0,
+            "replies": 0
+          },
+          "rejectedNewCalls": 0,
+          "remaining": {
+            "connecting": false,
+            "handlers": 0,
+            "http": 0,
+            "initialization": 0,
+            "replies": 0
+          },
+          "requestEvents": [
+            {
+              "at": "2026-11-22T17:51:18.340Z",
+              "path": "/qa/initial",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-22T17:51:18.557Z",
+              "path": "/qa/initial",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-22T17:51:18.698Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-22T17:51:19.111Z",
+              "path": "/qa/call",
+              "status": "completed"
+            }
+          ],
+          "sentReplies": 1,
+          "startedAt": "2026-11-22T17:51:19.177Z",
+          "status": "drained",
+          "url": "http://127.0.0.1:34857/host?scenario=kjD4wUnNDWFvRt5zN5SWdH5c"
+        },
+        "status": "drained",
+        "theme": "tadazz-classic",
+        "url": "http://127.0.0.1:34857/host?scenario=kjD4wUnNDWFvRt5zN5SWdH5c"
+      },
+      {
+        "at": "2026-11-22T17:51:20.209Z",
+        "check": "host document lifecycle",
+        "engine": "chromium",
+        "finishedAt": "2026-11-22T17:51:20.443Z",
+        "reason": "close continuity context",
+        "receipt": {
+          "cancelledReplies": 0,
+          "documentId": "15539d26-d8dc-44dc-856f-81e0381aed10",
+          "elapsedMs": 227.40000009536743,
+          "errors": [],
+          "finishedAt": "2026-11-22T17:51:20.441Z",
+          "initial": {
+            "connecting": false,
+            "handlers": 1,
+            "http": 1,
+            "initialization": 0,
+            "replies": 1
+          },
+          "rejectedNewCalls": 0,
+          "remaining": {
+            "connecting": false,
+            "handlers": 0,
+            "http": 0,
+            "initialization": 0,
+            "replies": 0
+          },
+          "requestEvents": [
+            {
+              "at": "2026-11-22T17:51:19.768Z",
+              "path": "/qa/initial",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-22T17:51:19.959Z",
+              "path": "/qa/initial",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-22T17:51:20.050Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-22T17:51:20.440Z",
+              "path": "/qa/call",
+              "status": "completed"
+            }
+          ],
+          "sentReplies": 1,
+          "startedAt": "2026-11-22T17:51:20.213Z",
+          "status": "drained",
+          "url": "http://127.0.0.1:34857/host?scenario=kjD4wUnNDWFvRt5zN5SWdH5c"
+        },
+        "status": "drained",
+        "theme": "tadazz-classic",
+        "url": "http://127.0.0.1:34857/host?scenario=kjD4wUnNDWFvRt5zN5SWdH5c"
+      },
+      {
+        "at": "2026-11-22T17:51:23.744Z",
+        "check": "host document lifecycle",
+        "engine": "webkit",
+        "finishedAt": "2026-11-22T17:51:23.744Z",
+        "reason": "normal continuity case",
+        "status": "no-host",
+        "theme": "tadazz-classic",
+        "url": "about:blank"
+      },
+      {
+        "at": "2026-11-22T17:51:27.429Z",
+        "check": "host document lifecycle",
+        "engine": "webkit",
+        "finishedAt": "2026-11-22T17:51:27.435Z",
+        "reason": "reduced continuity case",
+        "receipt": {
+          "cancelledReplies": 0,
+          "documentId": "297c8aa2-b240-4403-844f-a8736552f39c",
+          "elapsedMs": 1,
+          "errors": [],
+          "finishedAt": "2026-11-22T17:51:27.433Z",
+          "initial": {
+            "connecting": false,
+            "handlers": 0,
+            "http": 0,
+            "initialization": 0,
+            "replies": 0
+          },
+          "rejectedNewCalls": 0,
+          "remaining": {
+            "connecting": false,
+            "handlers": 0,
+            "http": 0,
+            "initialization": 0,
+            "replies": 0
+          },
+          "requestEvents": [
+            {
+              "at": "2026-11-22T17:51:25.626Z",
+              "path": "/qa/initial",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-22T17:51:26.024Z",
+              "path": "/qa/initial",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-22T17:51:26.607Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-22T17:51:27.135Z",
+              "path": "/qa/call",
+              "status": "completed"
+            }
+          ],
+          "sentReplies": 1,
+          "startedAt": "2026-11-22T17:51:27.432Z",
+          "status": "drained",
+          "url": "http://127.0.0.1:34857/host?scenario=zEqqNqpiLhKlXOmrmktkymvq"
+        },
+        "status": "drained",
+        "theme": "tadazz-classic",
+        "url": "http://127.0.0.1:34857/host?scenario=zEqqNqpiLhKlXOmrmktkymvq"
+      },
+      {
+        "at": "2026-11-22T17:51:44.702Z",
+        "check": "host document lifecycle",
+        "engine": "webkit",
+        "finishedAt": "2026-11-22T17:51:44.706Z",
+        "reason": "close continuity context",
+        "receipt": {
+          "cancelledReplies": 0,
+          "documentId": "a0967e13-119a-4232-8031-87a283488741",
+          "elapsedMs": 1,
+          "errors": [],
+          "finishedAt": "2026-11-22T17:51:44.704Z",
+          "initial": {
+            "connecting": false,
+            "handlers": 0,
+            "http": 0,
+            "initialization": 0,
+            "replies": 0
+          },
+          "rejectedNewCalls": 0,
+          "remaining": {
+            "connecting": false,
+            "handlers": 0,
+            "http": 0,
+            "initialization": 0,
+            "replies": 0
+          },
+          "requestEvents": [
+            {
+              "at": "2026-11-22T17:51:29.416Z",
+              "path": "/qa/initial",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-22T17:51:29.847Z",
+              "path": "/qa/initial",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-22T17:51:30.370Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-22T17:51:30.911Z",
+              "path": "/qa/call",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-22T17:51:37.023Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-22T17:51:37.245Z",
+              "path": "/qa/call",
+              "status": "completed"
+            },
+            {
+              "at": "2026-11-22T17:51:43.940Z",
+              "path": "/qa/call",
+              "status": "started"
+            },
+            {
+              "at": "2026-11-22T17:51:44.477Z",
+              "path": "/qa/call",
+              "status": "completed"
+            }
+          ],
+          "sentReplies": 3,
+          "startedAt": "2026-11-22T17:51:44.703Z",
+          "status": "drained",
+          "url": "http://127.0.0.1:34857/host?scenario=zEqqNqpiLhKlXOmrmktkymvq"
+        },
+        "status": "drained",
+        "theme": "tadazz-classic",
+        "url": "http://127.0.0.1:34857/host?scenario=zEqqNqpiLhKlXOmrmktkymvq"
+      }
+    ],
+    "outboundDenied": [],
+    "pageErrorEvents": [],
+    "productionChanged": false,
+    "qaRequestEvents": [
+      {
+        "activeCheck": "chromium / tadazz-classic phase continuity normal motion",
+        "activeStep": "chromium / tadazz-classic phase continuity normal motion",
+        "allowOrigin": null,
+        "at": "2026-11-22T17:51:18.360Z",
+        "contentType": "application/json",
+        "documentUrl": "http://127.0.0.1:34857/host?scenario=kjD4wUnNDWFvRt5zN5SWdH5c",
+        "engine": "chromium",
+        "method": "GET",
+        "responseAt": "2026-11-22T17:51:18.555Z",
+        "status": 200,
+        "theme": "tadazz-classic",
+        "url": "http://127.0.0.1:34857/qa/initial?scenario=kjD4wUnNDWFvRt5zN5SWdH5c"
+      },
+      {
+        "activeCheck": "chromium / tadazz-classic phase continuity normal motion",
+        "activeStep": "chromium / tadazz-classic phase continuity normal motion",
+        "allowOrigin": null,
+        "at": "2026-11-22T17:51:18.727Z",
+        "contentType": "application/json",
+        "documentUrl": "http://127.0.0.1:34857/host?scenario=kjD4wUnNDWFvRt5zN5SWdH5c",
+        "engine": "chromium",
+        "method": "POST",
+        "responseAt": "2026-11-22T17:51:19.143Z",
+        "status": 200,
+        "theme": "tadazz-classic",
+        "url": "http://127.0.0.1:34857/qa/call?scenario=kjD4wUnNDWFvRt5zN5SWdH5c"
+      },
+      {
+        "activeCheck": "chromium / tadazz-classic phase continuity reduced motion",
+        "activeStep": "HTTP get_game_draft_summary",
+        "allowOrigin": null,
+        "at": "2026-11-22T17:51:19.786Z",
+        "contentType": "application/json",
+        "documentUrl": "http://127.0.0.1:34857/host?scenario=kjD4wUnNDWFvRt5zN5SWdH5c",
+        "engine": "chromium",
+        "method": "GET",
+        "responseAt": "2026-11-22T17:51:19.957Z",
+        "status": 200,
+        "theme": "tadazz-classic",
+        "url": "http://127.0.0.1:34857/qa/initial?scenario=kjD4wUnNDWFvRt5zN5SWdH5c"
+      },
+      {
+        "activeCheck": "chromium / tadazz-classic phase continuity reduced motion",
+        "activeStep": "HTTP get_game_draft_summary",
+        "allowOrigin": null,
+        "at": "2026-11-22T17:51:20.062Z",
+        "contentType": "application/json",
+        "documentUrl": "http://127.0.0.1:34857/host?scenario=kjD4wUnNDWFvRt5zN5SWdH5c",
+        "engine": "chromium",
+        "method": "POST",
+        "responseAt": "2026-11-22T17:51:20.441Z",
+        "status": 200,
+        "theme": "tadazz-classic",
+        "url": "http://127.0.0.1:34857/qa/call?scenario=kjD4wUnNDWFvRt5zN5SWdH5c"
+      },
+      {
+        "activeCheck": "webkit / tadazz-classic phase continuity normal motion",
+        "activeStep": "webkit / tadazz-classic phase continuity normal motion",
+        "allowOrigin": null,
+        "at": "2026-11-22T17:51:25.628Z",
+        "contentType": "application/json",
+        "documentUrl": "http://127.0.0.1:34857/host?scenario=zEqqNqpiLhKlXOmrmktkymvq",
+        "engine": "webkit",
+        "method": "GET",
+        "responseAt": "2026-11-22T17:51:26.026Z",
+        "status": 200,
+        "theme": "tadazz-classic",
+        "url": "http://127.0.0.1:34857/qa/initial?scenario=zEqqNqpiLhKlXOmrmktkymvq"
+      },
+      {
+        "activeCheck": "webkit / tadazz-classic phase continuity normal motion",
+        "activeStep": "webkit / tadazz-classic phase continuity normal motion",
+        "allowOrigin": null,
+        "at": "2026-11-22T17:51:26.613Z",
+        "contentType": "application/json",
+        "documentUrl": "http://127.0.0.1:34857/host?scenario=zEqqNqpiLhKlXOmrmktkymvq",
+        "engine": "webkit",
+        "method": "POST",
+        "responseAt": "2026-11-22T17:51:27.174Z",
+        "status": 200,
+        "theme": "tadazz-classic",
+        "url": "http://127.0.0.1:34857/qa/call?scenario=zEqqNqpiLhKlXOmrmktkymvq"
+      },
+      {
+        "activeCheck": "webkit / tadazz-classic phase continuity reduced motion",
+        "activeStep": "webkit / tadazz-classic phase continuity reduced motion",
+        "allowOrigin": null,
+        "at": "2026-11-22T17:51:29.417Z",
+        "contentType": "application/json",
+        "documentUrl": "http://127.0.0.1:34857/host?scenario=zEqqNqpiLhKlXOmrmktkymvq",
+        "engine": "webkit",
+        "method": "GET",
+        "responseAt": "2026-11-22T17:51:29.937Z",
+        "status": 200,
+        "theme": "tadazz-classic",
+        "url": "http://127.0.0.1:34857/qa/initial?scenario=zEqqNqpiLhKlXOmrmktkymvq"
+      },
+      {
+        "activeCheck": "webkit / tadazz-classic phase continuity reduced motion",
+        "activeStep": "webkit / tadazz-classic phase continuity reduced motion",
+        "allowOrigin": null,
+        "at": "2026-11-22T17:51:30.414Z",
+        "contentType": "application/json",
+        "documentUrl": "http://127.0.0.1:34857/host?scenario=zEqqNqpiLhKlXOmrmktkymvq",
+        "engine": "webkit",
+        "method": "POST",
+        "responseAt": "2026-11-22T17:51:30.971Z",
+        "status": 200,
+        "theme": "tadazz-classic",
+        "url": "http://127.0.0.1:34857/qa/call?scenario=zEqqNqpiLhKlXOmrmktkymvq"
+      },
+      {
+        "activeCheck": "webkit / tadazz-classic phase continuity reduced motion",
+        "activeStep": "HTTP get_game_draft_summary",
+        "allowOrigin": null,
+        "at": "2026-11-22T17:51:37.025Z",
+        "contentType": "application/json",
+        "documentUrl": "http://127.0.0.1:34857/host?scenario=zEqqNqpiLhKlXOmrmktkymvq",
+        "engine": "webkit",
+        "method": "POST",
+        "responseAt": "2026-11-22T17:51:37.246Z",
+        "status": 200,
+        "theme": "tadazz-classic",
+        "url": "http://127.0.0.1:34857/qa/call?scenario=zEqqNqpiLhKlXOmrmktkymvq"
+      },
+      {
+        "activeCheck": "webkit / tadazz-classic phase continuity reduced motion",
+        "activeStep": "HTTP preview_show",
+        "allowOrigin": null,
+        "at": "2026-11-22T17:51:43.943Z",
+        "contentType": "application/json",
+        "documentUrl": "http://127.0.0.1:34857/host?scenario=zEqqNqpiLhKlXOmrmktkymvq",
+        "engine": "webkit",
+        "method": "POST",
+        "responseAt": "2026-11-22T17:51:44.475Z",
+        "status": 200,
+        "theme": "tadazz-classic",
+        "url": "http://127.0.0.1:34857/qa/call?scenario=zEqqNqpiLhKlXOmrmktkymvq"
+      }
+    ],
+    "rendererBuildId": "8010ed25cb22533588080bd29dc3763525800a5f058675e0e4ed8b5e987bc6fa",
+    "rendererFixtures": [],
+    "requestFailures": [],
+    "requests": [
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+      },
+      {
+        "engine": "chromium",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/sounds/tadazz-reveal-bright-20261108.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/sounds/tadazz-timer-end-368edc1d9522.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/sounds/tadazz-confirm-20261108.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/music/platform/tadazz-determination-20261106.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/tadazz-brand-logo.png"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/show-stage.webp"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/v4/question-bg.webp"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/sounds/tadazz-reveal-bright-20261108.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/sounds/tadazz-timer-end-368edc1d9522.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/sounds/tadazz-confirm-20261108.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/music/platform/tadazz-determination-20261106.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/music/platform/tzila-determined-pursuit-20261105.mp3"
+      },
+      {
+        "engine": "webkit",
+        "theme": "tadazz-classic",
+        "url": "https://tadazz.com/tadazz-show/music/cutie-patootie.mp3"
+      }
+    ],
+    "requiredChecks": [
+      "chromium / tadazz-classic native opening, five phases, transitions and closing",
+      "chromium / tadazz-classic title edit CAS and summary refresh through AppBridge",
+      "chromium / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "chromium / tadazz-classic nine localized interfaces and non-reduced native motion",
+      "chromium / tadazz-classic native audio gesture, acknowledged music and volume, persistent playback",
+      "chromium / tadazz-classic native pause, resume, replay and adjacent skip",
+      "chromium / tadazz-classic responsive 16:9 and 4:3 keyboard controls",
+      "chromium / tadazz-classic zero-vote, tie and picture result parity with preserved media and motion",
+      "chromium / tadazz-classic tamper, cancellation and tool-context teardown",
+      "chromium / tadazz-classic CSP, native media resources and browser errors",
+      "chromium / razzia-original native opening, five phases, transitions and closing",
+      "chromium / razzia-original title edit CAS and summary refresh through AppBridge",
+      "chromium / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "chromium / razzia-original nine localized interfaces and non-reduced native motion",
+      "chromium / razzia-original native audio gesture, acknowledged music and volume, persistent playback",
+      "chromium / razzia-original native pause, resume, replay and adjacent skip",
+      "chromium / razzia-original responsive 16:9 and 4:3 keyboard controls",
+      "chromium / razzia-original zero-vote, tie and picture result parity with preserved media and motion",
+      "chromium / razzia-original tamper, cancellation and tool-context teardown",
+      "chromium / razzia-original CSP, native media resources and browser errors",
+      "webkit / tadazz-classic native opening, five phases, transitions and closing",
+      "webkit / tadazz-classic title edit CAS and summary refresh through AppBridge",
+      "webkit / tadazz-classic semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "webkit / tadazz-classic nine localized interfaces and non-reduced native motion",
+      "webkit / tadazz-classic native audio gesture, acknowledged music and volume, persistent playback",
+      "webkit / tadazz-classic native pause, resume, replay and adjacent skip",
+      "webkit / tadazz-classic responsive 16:9 and 4:3 keyboard controls",
+      "webkit / tadazz-classic zero-vote, tie and picture result parity with preserved media and motion",
+      "webkit / tadazz-classic tamper, cancellation and tool-context teardown",
+      "webkit / tadazz-classic CSP, native media resources and browser errors",
+      "webkit / razzia-original native opening, five phases, transitions and closing",
+      "webkit / razzia-original title edit CAS and summary refresh through AppBridge",
+      "webkit / razzia-original semantic question, lost ACK retry, reconnect undo, purple background, five pictures and theme preservation",
+      "webkit / razzia-original nine localized interfaces and non-reduced native motion",
+      "webkit / razzia-original native audio gesture, acknowledged music and volume, persistent playback",
+      "webkit / razzia-original native pause, resume, replay and adjacent skip",
+      "webkit / razzia-original responsive 16:9 and 4:3 keyboard controls",
+      "webkit / razzia-original zero-vote, tie and picture result parity with preserved media and motion",
+      "webkit / razzia-original tamper, cancellation and tool-context teardown",
+      "webkit / razzia-original CSP, native media resources and browser errors"
+    ],
+    "resources": [
+      {
+        "admitted": true,
+        "engine": "chromium",
+        "path": "/tadazz-show/v4/show-stage.webp",
+        "theme": "tadazz-classic"
+      },
+      {
+        "admitted": true,
+        "engine": "chromium",
+        "path": "/tadazz-show/v4/question-bg.webp",
+        "theme": "tadazz-classic"
+      },
+      {
+        "admitted": true,
+        "engine": "chromium",
+        "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+        "theme": "tadazz-classic"
+      },
+      {
+        "admitted": true,
+        "engine": "chromium",
+        "path": "/tadazz-show/v4/show-stage.webp",
+        "theme": "tadazz-classic"
+      },
+      {
+        "admitted": true,
+        "engine": "chromium",
+        "path": "/tadazz-show/v4/question-bg.webp",
+        "theme": "tadazz-classic"
+      },
+      {
+        "admitted": true,
+        "engine": "chromium",
+        "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+        "theme": "tadazz-classic"
+      },
+      {
+        "admitted": true,
+        "engine": "webkit",
+        "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+        "theme": "tadazz-classic"
+      },
+      {
+        "admitted": true,
+        "engine": "webkit",
+        "path": "/tadazz-show/v4/show-stage.webp",
+        "theme": "tadazz-classic"
+      },
+      {
+        "admitted": true,
+        "engine": "webkit",
+        "path": "/tadazz-show/v4/question-bg.webp",
+        "theme": "tadazz-classic"
+      },
+      {
+        "admitted": true,
+        "engine": "webkit",
+        "path": "/tadazz-show/v4/tadazz-brand-logo.png",
+        "theme": "tadazz-classic"
+      },
+      {
+        "admitted": true,
+        "engine": "webkit",
+        "path": "/tadazz-show/v4/show-stage.webp",
+        "theme": "tadazz-classic"
+      },
+      {
+        "admitted": true,
+        "engine": "webkit",
+        "path": "/tadazz-show/v4/question-bg.webp",
+        "theme": "tadazz-classic"
+      }
+    ],
+    "sha": "31a9d4ce6e5633b48ff00f57ce8a731c741436d1",
+    "sourceHashesUnchanged": true,
+    "transport": "Loopback HTTP plus exact hash-verified public-asset interception; no outbound network",
+    "widgetHtmlSha256": "97318606cbf12d7c255be742769759b6cc6da45a1d6624b3ac3b78180dcdbe1f",
+    "widgetManifestSha256": "f9866bfb0defad8d7d5d2fad94f9dd935c47e0dffcef38165685c4d3840c034c"
+  },
+  "containerBeforeStop": {
+    "exitCode": 0,
+    "oomKilled": false,
+    "status": "running"
+  },
+  "containerName": "tadazz-preview-pause-seek-iteration9-20261122",
+  "containerStopped": true,
+  "customerMountUsed": false,
+  "diagnostic": "preview-pause-seek",
+  "exit": 1,
+  "expectedChecks": [
+    "chromium / tadazz-classic phase continuity normal motion",
+    "chromium / tadazz-classic phase continuity reduced motion",
+    "webkit / tadazz-classic phase continuity normal motion",
+    "webkit / tadazz-classic phase continuity reduced motion"
+  ],
+  "iteration": "9",
+  "network": "none",
+  "passed": false,
+  "preparationOnly": true,
+  "productionChanged": false,
+  "readOnlyMountsVerified": true,
+  "releaseQualified": false,
+  "runRoot": "/home/ubuntu/tadazz-original-themes-preflight-20261122/preview-pause-seek-iteration9",
+  "sdkCacheHashesVerifiedBeforeAfter": true,
+  "seconds": 38.79,
+  "sourceAfterSha256": "da61e0328d821809a982b000170aaec470cef12599152453e48551eb973aff72",
+  "sourceBeforeSha256": "da61e0328d821809a982b000170aaec470cef12599152453e48551eb973aff72",
+  "sourceFileCount": 2678,
+  "sourceHashesVerifiedBeforeAfter": true,
+  "sourceReadOnly": true,
+  "sourceRoot": "/home/ubuntu/tadazz-original-themes-preflight-20261122/source"
+}

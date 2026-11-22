@@ -276,6 +276,7 @@ export async function verifyPhaseContinuity({
     await waitChapter(question.id)
     child = page.frames().find((frame) => frame.url().endsWith("/widget"))
     assert(child)
+    let snapshotSequence = 0
     const snapshot = async (
       step,
       {
@@ -292,30 +293,63 @@ export async function verifyPhaseContinuity({
         expectedModes = ["voting-open", "countdown", "voting"]
       }
 
+      snapshotSequence += 1
+      const requestToken = `${name}:${snapshotSequence}`
       const ready = await child.waitForFunction(
-        async (expected) => {
+        (expected) => {
           const probe = window.__phaseContinuity
-          const matches = (state) =>
+
+          if (!probe) {
+            return false
+          }
+
+          if (probe.snapshotWait?.token !== expected.requestToken) {
+            probe.snapshotWait = {
+              token: expected.requestToken,
+              identity: null,
+              frames: 0,
+            }
+          }
+
+          const state = probe.capture()
+          const matches =
             state?.question &&
             state.text === expected.expectedQuestion &&
             expected.expectedModes.includes(state.nativeMode) &&
             (!expected.cards || state.cards.length === 5) &&
             (!expected.settled || probe.settled())
 
-          if (!matches(probe?.capture())) {
+          if (!matches) {
+            probe.snapshotWait.identity = null
+            probe.snapshotWait.frames = 0
+
             return false
           }
 
-          // Deliver CSS animationstart events, then capture and validate the
-          // same frame before a later protocol round trip can change chapters.
-          await new Promise(requestAnimationFrame)
-          await new Promise(requestAnimationFrame)
-          const state = probe.capture()
+          const identity = JSON.stringify([
+            state.documentId,
+            state.chapter,
+            state.epoch,
+            state.nativeMode,
+            state.question,
+            state.textNode,
+            state.text,
+            state.cards.map((card) => [card.testId, card.id]),
+          ])
 
-          return matches(state) ? state : false
+          if (probe.snapshotWait.identity !== identity) {
+            probe.snapshotWait.identity = identity
+            probe.snapshotWait.frames = 0
+          }
+
+          // One ready observation plus two subsequent RAF polls delivers CSS
+          // animationstart events without a later, unrelated DOM capture.
+          probe.snapshotWait.frames += 1
+
+          return probe.snapshotWait.frames >= 3 ? state : false
         },
-        { cards, expectedQuestion, settled, expectedModes },
-        { timeout: 10000 },
+        { cards, expectedQuestion, settled, expectedModes, requestToken },
+        { timeout: 10000, polling: "raf" },
       )
 
       try {

@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 [chromium] › tests/wave1-show-import-acceptance.spec.ts:337:3 › TADA Studio Show Import/Export Acceptance (JSON + Excel) › IMPORT05: Import valid show with Hebrew note and per-question interlude, save in editor, reload, export .tada.json and .xlsx, verify byte content (7.8s)
+
+  1 passed (13.3s)

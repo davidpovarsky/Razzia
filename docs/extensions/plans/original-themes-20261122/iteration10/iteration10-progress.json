@@ -1,0 +1,73 @@
+[
+  {
+    "label": "format",
+    "exit": 0,
+    "seconds": 12.2
+  },
+  {
+    "label": "theme-engine-units",
+    "exit": 0,
+    "seconds": 44.67
+  },
+  {
+    "label": "web-types",
+    "exit": 0,
+    "seconds": 14.33
+  },
+  {
+    "label": "widget-types",
+    "exit": 0,
+    "seconds": 5.62
+  },
+  {
+    "label": "native-types",
+    "exit": 0,
+    "seconds": 7.42
+  },
+  {
+    "label": "extensions-types",
+    "exit": 0,
+    "seconds": 20.48
+  },
+  {
+    "label": "e2e-types",
+    "exit": 0,
+    "seconds": 5.21
+  },
+  {
+    "label": "source-lint",
+    "exit": 1,
+    "seconds": 15.09
+  },
+  {
+    "label": "baseline-lint",
+    "exit": 1,
+    "seconds": 15.98
+  },
+  {
+    "label": "source-lint-new-diagnostics",
+    "exit": 1,
+    "inherited": 258,
+    "new": 125
+  },
+  {
+    "label": "builtin-and-signed-catalog-policy",
+    "exit": 0,
+    "seconds": 5.37
+  },
+  {
+    "label": "native-preview-build",
+    "exit": 0,
+    "seconds": 4.24
+  },
+  {
+    "label": "widget-build",
+    "exit": 0,
+    "seconds": 9.17
+  },
+  {
+    "label": "site-build",
+    "exit": 0,
+    "seconds": 7.09
+  }
+]

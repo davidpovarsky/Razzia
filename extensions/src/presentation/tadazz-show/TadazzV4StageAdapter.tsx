@@ -249,6 +249,7 @@ export const TadazzV4StageAdapter = forwardRef<
             ? Math.floor((q.number - 1) / 5) + 1
             : 1),
         totalQuestions: q.totalQuestions,
+        answerCount: q.answerCount ?? q.options.length,
         answers: toV4Answers(q.options),
         questionImage: q.questionImage,
         photoLayout: isPhotoQuestion(q),
@@ -715,7 +716,7 @@ export const TadazzV4StageAdapter = forwardRef<
           labels: v4LabelsRef.current,
         })
       },
-      async showInterlude({ title, subtitle }) {
+      async showInterlude({ title, subtitle, eyebrow }) {
         setScreenMode("none")
         setMode("custom")
         cardsOnStageKeyRef.current = null
@@ -723,6 +724,7 @@ export const TadazzV4StageAdapter = forwardRef<
         await v4Ref.current?.play("interlude", {
           title,
           subtitle,
+          eyebrow,
           backgroundUrl: p.backdropUrl,
           backgroundFit: p.backdropFit,
           backgroundPosition: p.backdropPosition,

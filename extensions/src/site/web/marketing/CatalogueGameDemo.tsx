@@ -484,6 +484,7 @@ function CataloguePlayer({
       await stage.current?.showFinale({ name: t("You"), score })
     } else {
       await stage.current?.showInterlude?.({
+        ...(originalDemo ? { eyebrow: t("Thanks for playing together!") } : {}),
         title:
           originalDemo && closingCard
             ? t(closingCard.title)

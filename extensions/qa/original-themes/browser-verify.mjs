@@ -386,6 +386,18 @@ async function verifyMobileStoryRecap({ phone, root, questions, evidence }) {
   await expect(recap).toBeVisible()
   await expect(recap).toHaveAttribute("data-phase", "finish")
   await expect(recapLabels).toHaveText(chosenLabels)
+  const finale = root.getByTestId("tadazz-screen-interlude")
+  await expect(finale.locator(".interlude-mini")).toHaveText(
+    "תודה ששיחקתם יחד!",
+  )
+  await expect(finale.locator(".interlude-title")).toHaveText(
+    "כל קול הוסיף קצת קסם",
+  )
+  await expect(finale.locator(".interlude-sub")).toHaveText(
+    "שמרו את ההרפתקה. דמיינו את הבאה.",
+  )
+  await expect(root.getByTestId("tadazz-finale-screen")).not.toBeVisible()
+  await expect(root.locator(".tz-win-score")).toHaveText("")
   assert.equal(finalEntries, 6)
 
   return finalEntries
@@ -664,6 +676,26 @@ async function verifyPublic({ browser, options, inspect, record }) {
       }
       await expect(root).toHaveAttribute("data-game-phase", "finish")
       await expect(next).toBeEnabled({ timeout: 30000 })
+
+      if (id === "magic-storybook") {
+        const closing = options.previews
+          .get(id)
+          .show.cards.find((card) => card.kind === "closing")
+        assert(closing, "Storybook retains its authored closing card")
+        const finale = root.getByTestId("tadazz-screen-interlude")
+        await expect(finale.locator(".interlude-mini")).toHaveText(
+          "Thanks for playing together!",
+        )
+        await expect(finale.locator(".interlude-title")).toHaveText(
+          closing.title,
+        )
+        await expect(finale.locator(".interlude-sub")).toHaveText(
+          closing.subtitle,
+        )
+        await expect(root.getByTestId("tadazz-finale-screen")).not.toBeVisible()
+        await expect(root.locator(".tz-win-score")).toHaveText("")
+      }
+
       await decodedImages(root)
       await page.screenshot({
         path: join(options.evidence, `public-${id}-finale.png`),
