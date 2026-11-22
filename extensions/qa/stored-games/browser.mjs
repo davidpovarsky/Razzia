@@ -2,13 +2,45 @@
 import assert from "node:assert/strict"
 import { createHash } from "node:crypto"
 import { createRequire } from "node:module"
-import { isFullShowScene } from "../../src/presentation/tadazz-v4/FullShowScenes.tsx"
+import { readFileSync } from "node:fs"
+import { CREATING_WORLDS_PRESETS } from "../../src/core/creating-worlds-show.ts"
 import { qualifyOwnerImageRepair } from "./external-media-repair.mjs"
 import {
   readQuestionSequence,
   stopQuestionSequence,
   watchQuestionSequence,
 } from "../public-gallery/question-sequence-verify.mjs"
+
+// Node observes browser output; importing the React renderer would also import CSS.
+// Read its literal contract as data and retain exactly the same scene assertion set.
+const secondaryScenePresets = new Set([
+  "top-pick",
+  "round-recap",
+  "interlude",
+  "z-wipe",
+])
+const fullShowScenePresets = CREATING_WORLDS_PRESETS.filter(
+  (preset) => !secondaryScenePresets.has(preset),
+)
+const fullShowSource = readFileSync(
+  new URL("../../src/presentation/tadazz-v4/FullShowScenes.tsx", import.meta.url),
+  "utf8",
+)
+const fullShowLiteral = fullShowSource.match(
+  /export const FULL_SHOW_SCENES = (\[[\s\S]*?\]) as const/u,
+)
+assert(fullShowLiteral, "The immutable renderer must declare its scene contract")
+const rendererScenePresets = JSON.parse(
+  fullShowLiteral[1].replace(/,\s*\]$/u, "]"),
+)
+assert.equal(new Set(fullShowScenePresets).size, 12)
+assert.equal(CREATING_WORLDS_PRESETS.length - fullShowScenePresets.length, 4)
+assert.deepEqual(fullShowScenePresets, rendererScenePresets)
+assert.match(
+  fullShowSource,
+  /export const isFullShowScene = \(value: string\): value is FullShowScene =>\s*\(FULL_SHOW_SCENES as readonly string\[\]\)\.includes\(value\)\s*\n\s*export interface/u,
+)
+const isFullShowScene = (value) => fullShowScenePresets.includes(value)
 
 const require = createRequire("/cleanup/extensions/package.json")
 const { expect } = require("@playwright/test")
