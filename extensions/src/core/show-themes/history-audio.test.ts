@@ -191,8 +191,15 @@ it("keeps start-countdown recordings within their event and host roles", () => {
   })
   expect(resolveThemeEffect(muted, "timer-start")?.url).toBeUndefined()
   const custom = resolveShowTheme({
-    selection: { ...selection, overrides: { audio: { opening: { mediaUrl: "/media/custom-start.mp3" } } } },
+    selection: {
+      ...selection,
+      overrides: {
+        audio: { opening: { mediaUrl: "/media/custom-start.mp3" } },
+      },
+    },
     role: "manager",
   })
-  expect(resolveThemeEffect(custom, "timer-start")?.url).toBe("/media/custom-start.mp3")
+  expect(resolveThemeEffect(custom, "timer-start")?.url).toBe(
+    "/media/custom-start.mp3",
+  )
 })

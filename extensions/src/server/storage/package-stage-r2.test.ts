@@ -23,14 +23,21 @@ describe("R2 production package-stage opaque adapter contract", () => {
     previousAccounts = process.env.TADAZZ_ACCOUNTS_ENABLED
   })
   afterEach(() => {
-    if (previousConfig === undefined) delete process.env.CONFIG_PATH
-    else process.env.CONFIG_PATH = previousConfig
-    if (previousAccounts === undefined)
+    if (previousConfig === undefined) {
+      delete process.env.CONFIG_PATH
+    } else {
+      process.env.CONFIG_PATH = previousConfig
+    }
+
+    if (previousAccounts === undefined) {
       delete process.env.TADAZZ_ACCOUNTS_ENABLED
-    else process.env.TADAZZ_ACCOUNTS_ENABLED = previousAccounts
+    } else {
+      process.env.TADAZZ_ACCOUNTS_ENABLED = previousAccounts
+    }
   })
   it("stages a real enhanced game with the supported Map-only base adapter", () => {
     const { root, descriptor } = makeNativeFixture("media")
+
     try {
       const stagingRoot = path.join(root, "package-stage-r2")
       const quizz = nativeInput("R2 actual production stager")
@@ -64,10 +71,13 @@ describe("R2 production package-stage opaque adapter contract", () => {
       expect(storedExtras.scenes).toStrictEqual(extras.scenes)
       // JSON omits optional undefined URLs; every defined audio setting must
       // survive the package's persisted representation exactly.
-      expect(JSON.stringify(storedExtras.audio)).toBe(JSON.stringify(extras.audio))
+      expect(JSON.stringify(storedExtras.audio)).toBe(
+        JSON.stringify(extras.audio),
+      )
       expect(storedExtras.mediaCatalog).toStrictEqual(extras.mediaCatalog)
-      for (const key of ["defaults", "teams", "roster"] as const)
+      for (const key of ["defaults", "teams", "roster"] as const) {
         expect(storedExtras[key]).toStrictEqual(extras[key])
+      }
       expect(Object.values(storedExtras.perQuestion)).toStrictEqual(
         Object.values(extras.perQuestion),
       )

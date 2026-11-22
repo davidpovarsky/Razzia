@@ -573,15 +573,17 @@ it.runIf(process.platform === "linux")(
     const open = fs.openSync.bind(fs)
     const deniedOpen =
       process.getuid?.() === 0
-        ? vi.spyOn(fs, "openSync").mockImplementation((file, flags, fileMode) => {
-            if (String(file) === store) {
-              throw Object.assign(new Error("EACCES: permission denied"), {
-                code: "EACCES",
-              })
-            }
+        ? vi
+            .spyOn(fs, "openSync")
+            .mockImplementation((file, flags, fileMode) => {
+              if (String(file) === store) {
+                throw Object.assign(new Error("EACCES: permission denied"), {
+                  code: "EACCES",
+                })
+              }
 
-            return open(file, flags, fileMode)
-          })
+              return open(file, flags, fileMode)
+            })
         : undefined
 
     try {
@@ -592,6 +594,7 @@ it.runIf(process.platform === "linux")(
       deniedOpen?.mockRestore()
       fs.chmodSync(store, mode)
     }
+
     expect(fs.readFileSync(store)).toEqual(sourceBytes)
   },
 )

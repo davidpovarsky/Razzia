@@ -3,6 +3,7 @@ import assert from "node:assert/strict"
 import { createHash } from "node:crypto"
 import { createRequire } from "node:module"
 import { isFullShowScene } from "../../src/presentation/tadazz-v4/FullShowScenes.tsx"
+import { qualifyOwnerImageRepair } from "./external-media-repair.mjs"
 import {
   readQuestionSequence,
   stopQuestionSequence,
@@ -30,16 +31,21 @@ async function installPlaybackAudit(page) {
     let ownerViolations = 0
     let blockedFrames = 0
     const sample = () => {
-      if (!armed || !document.querySelector('[data-testid="tadazz-show"]')) return
-      const owners = [...document.querySelectorAll('[data-testid="audio-cue-player-state"]')]
+      if (!armed || !document.querySelector('[data-testid="tadazz-show"]'))
+        return
+      const owners = [
+        ...document.querySelectorAll('[data-testid="audio-cue-player-state"]'),
+      ]
       samples++
       minOwners = Math.min(minOwners, owners.length)
       maxOwners = Math.max(maxOwners, owners.length)
       if (owners.length !== 1) ownerViolations++
       for (const owner of owners) {
-        if (owner.dataset.shouldPlay === "true") desiredTracks.add(owner.dataset.audioUrl ?? "")
+        if (owner.dataset.shouldPlay === "true")
+          desiredTracks.add(owner.dataset.audioUrl ?? "")
         if (owner.dataset.audioBlocked === "true") blockedFrames++
-        if (owner.dataset.audioError === "true") failedTracks.add(owner.dataset.audioUrl ?? "unknown")
+        if (owner.dataset.audioError === "true")
+          failedTracks.add(owner.dataset.audioUrl ?? "unknown")
       }
     }
     const tick = () => {
@@ -49,7 +55,10 @@ async function installPlaybackAudit(page) {
     const mutations = new MutationObserver((records) => {
       if (armed) {
         for (const record of records) {
-          if (record.attributeName === "data-audio-error" && record.oldValue === "true") {
+          if (
+            record.attributeName === "data-audio-error" &&
+            record.oldValue === "true"
+          ) {
             failedTracks.add(record.target.dataset.audioUrl ?? "unknown")
           }
         }
@@ -57,27 +66,46 @@ async function installPlaybackAudit(page) {
       }
     })
     mutations.observe(document, {
-      attributes: true, attributeOldValue: true, subtree: true,
-      attributeFilter: ["data-audio-error", "data-audio-url", "data-should-play"],
+      attributes: true,
+      attributeOldValue: true,
+      subtree: true,
+      attributeFilter: [
+        "data-audio-error",
+        "data-audio-url",
+        "data-should-play",
+      ],
     })
     const onMediaError = (event) => {
       const target = event.target
-      if (target instanceof HTMLMediaElement || target instanceof HTMLImageElement) {
-        mediaErrors.add(JSON.stringify({
-          kind: target.tagName,
-          url: target.currentSrc || target.src,
-          code: target instanceof HTMLMediaElement ? target.error?.code : null,
-        }))
+      if (
+        target instanceof HTMLMediaElement ||
+        target instanceof HTMLImageElement
+      ) {
+        mediaErrors.add(
+          JSON.stringify({
+            kind: target.tagName,
+            url: target.currentSrc || target.src,
+            code:
+              target instanceof HTMLMediaElement ? target.error?.code : null,
+          }),
+        )
       }
     }
     document.addEventListener("error", onMediaError, true)
     window.__tadazzStoredAudit = {
-      arm: () => { armed = true; sample() },
+      arm: () => {
+        armed = true
+        sample()
+      },
       read: () => ({
-        samples, minOwners: Number.isFinite(minOwners) ? minOwners : null,
-        maxOwners, ownerViolations, blockedFrames,
+        samples,
+        minOwners: Number.isFinite(minOwners) ? minOwners : null,
+        maxOwners,
+        ownerViolations,
+        blockedFrames,
         desiredTracks: desiredTracks.size,
-        failedTracks: [...failedTracks], mediaErrors: [...mediaErrors],
+        failedTracks: [...failedTracks],
+        mediaErrors: [...mediaErrors],
       }),
       stop: () => {
         cancelAnimationFrame(frame)
@@ -92,9 +120,13 @@ async function installPlaybackAudit(page) {
 const sceneTimeout = (snapshot) =>
   Math.max(30_000, Math.min(300_000, snapshot.durationMs ?? 0) + 30_000)
 
-const paintedFrames = (stage) => stage.evaluate(() => new Promise((resolve) => {
-  requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
-}))
+const paintedFrames = (stage) =>
+  stage.evaluate(
+    () =>
+      new Promise((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+      }),
+  )
 
 /** Compare actual coordinator transitions, permitting only its real conditional tie policy. */
 function orderedTimelineReceipt(trace, timeline, scenes, terminal) {
@@ -102,34 +134,63 @@ function orderedTimelineReceipt(trace, timeline, scenes, terminal) {
   for (const entry of trace) {
     if (!entry.id) continue
     const previous = observed.at(-1)
-    if (!previous || previous.id !== entry.id || previous.epoch !== entry.epoch) observed.push(entry)
+    if (!previous || previous.id !== entry.id || previous.epoch !== entry.epoch)
+      observed.push(entry)
   }
   const skipped = []
   let expectedIndex = 0
   const allowConditionalSkip = (index, observation) => {
     const item = timeline[index]
     const scene = item?.kind === "animation" ? scenes[item.sceneId] : null
-    assert(scene?.preset === "tie-break" && observation.unresolvedStoryTie === false,
-      "Only a tie-break without an unresolved native story tie may be skipped")
-    skipped.push({ index, stepDigest: digest(item.id), reason: "no-unresolved-story-tie" })
+    assert(
+      scene?.preset === "tie-break" && observation.unresolvedStoryTie === false,
+      "Only a tie-break without an unresolved native story tie may be skipped",
+    )
+    skipped.push({
+      index,
+      stepDigest: digest(item.id),
+      reason: "no-unresolved-story-tie",
+    })
   }
   for (const entry of observed) {
-    assert(Number.isInteger(entry.stepIndex) && entry.stepIndex >= expectedIndex,
-      "Authored steps never repeat or run backwards")
-    while (expectedIndex < entry.stepIndex) allowConditionalSkip(expectedIndex++, entry)
+    assert(
+      Number.isInteger(entry.stepIndex) && entry.stepIndex >= expectedIndex,
+      "Authored steps never repeat or run backwards",
+    )
+    while (expectedIndex < entry.stepIndex)
+      allowConditionalSkip(expectedIndex++, entry)
     const expected = timeline[expectedIndex]
     assert(expected, "No unexpected timeline step")
-    assert.equal(digest({ id: entry.id, kind: entry.kind, questionId: entry.questionId, sceneId: entry.sceneId }),
-      digest({ id: expected.id, kind: expected.kind, questionId: expected.questionId ?? null, sceneId: expected.sceneId ?? null }),
-      "Each active step exactly matches the next authored card")
+    assert.equal(
+      digest({
+        id: entry.id,
+        kind: entry.kind,
+        questionId: entry.questionId,
+        sceneId: entry.sceneId,
+      }),
+      digest({
+        id: expected.id,
+        kind: expected.kind,
+        questionId: expected.questionId ?? null,
+        sceneId: expected.sceneId ?? null,
+      }),
+      "Each active step exactly matches the next authored card",
+    )
     expectedIndex++
   }
-  while (expectedIndex < timeline.length) allowConditionalSkip(expectedIndex++, terminal)
+  while (expectedIndex < timeline.length)
+    allowConditionalSkip(expectedIndex++, terminal)
   return {
-    authored: timeline.length, observed: observed.length, skipped,
-    scenes: observed.filter((entry) => entry.sceneId).map((entry) => ({
-      id: entry.sceneId, kind: entry.kind, afterQuestion: entry.questionOrdinal,
-    })),
+    authored: timeline.length,
+    observed: observed.length,
+    skipped,
+    scenes: observed
+      .filter((entry) => entry.sceneId)
+      .map((entry) => ({
+        id: entry.sceneId,
+        kind: entry.kind,
+        afterQuestion: entry.questionOrdinal,
+      })),
   }
 }
 
@@ -144,6 +205,10 @@ export async function verifyStoredGameBrowser(options) {
   let player
   let audio
   let timelineReceipt
+  let externalMediaRepair
+  let mirrorsAtLaunch = 0
+  const repairedImageUrls = new Set()
+  const repairedImageQuestions = []
   let mediaErrors = []
   let room
   let traceTimer
@@ -160,21 +225,33 @@ export async function verifyStoredGameBrowser(options) {
   const previewStatuses = []
   const mirrorChecks = []
   const mirrorRoutes = []
-  const knownAssets = new Set((fixture.sourceSummary?.media ?? []).map((asset) => {
-    const url = new URL(asset.url, origin)
-    return url.origin + url.pathname
-  }))
+  const knownAssets = new Set(
+    (fixture.sourceSummary?.media ?? []).map((asset) => {
+      const url = new URL(asset.url, origin)
+      return url.origin + url.pathname
+    }),
+  )
   const isAsset = (request) => {
     const url = new URL(request.url())
-    return ["image", "media", "font", "script", "stylesheet"].includes(request.resourceType()) ||
+    return (
+      ["image", "media", "font", "script", "stylesheet"].includes(
+        request.resourceType(),
+      ) ||
       knownAssets.has(url.origin + url.pathname) ||
-      /\.(?:json|wasm|lottie|png|jpe?g|webp|gif|svg|mp[34]|m4a|ogg|wav|webm|woff2?)$/iu.test(url.pathname)
+      /\.(?:json|wasm|lottie|png|jpe?g|webp|gif|svg|mp[34]|m4a|ogg|wav|webm|woff2?)$/iu.test(
+        url.pathname,
+      )
+    )
   }
   const collectPlaybackAudit = async () => {
-    const read = (page) => page?.evaluate(() => window.__tadazzStoredAudit?.read()).catch(() => null)
+    const read = (page) =>
+      page?.evaluate(() => window.__tadazzStoredAudit?.read()).catch(() => null)
     const hostAudit = await read(host)
     const playerAudit = await read(player)
-    mediaErrors = [...(hostAudit?.mediaErrors ?? []), ...(playerAudit?.mediaErrors ?? [])].map(digest)
+    mediaErrors = [
+      ...(hostAudit?.mediaErrors ?? []),
+      ...(playerAudit?.mediaErrors ?? []),
+    ].map(digest)
     if (hostAudit) {
       const { failedTracks, mediaErrors: _media, ...summary } = hostAudit
       audio = { ...summary, failedTracks: failedTracks.map(digest) }
@@ -184,19 +261,40 @@ export async function verifyStoredGameBrowser(options) {
     for (const item of options.externalAssets ?? []) {
       if (!item.mirror) continue
       const mirror = item.mirror
-      assert.match(mirror.nativeUrl, /^\/media\/qa-external-[a-f0-9]{64}\.png$/u)
+      assert.match(
+        mirror.nativeUrl,
+        /^\/media\/qa-external-[a-f0-9]{64}\.png$/u,
+      )
       assert.equal(mirror.sourceHttpStatus, 200)
-      const response = await context.request.get(origin + mirror.nativeUrl, { headers })
-      assert.equal(response.status(), 200, "Offline mirror uses the actual owned media HTTP route")
-      assert.match(response.headers()["content-type"] ?? "", /^image\/png(?:;|$)/u)
+      const response = await context.request.get(origin + mirror.nativeUrl, {
+        headers,
+      })
+      assert.equal(
+        response.status(),
+        200,
+        "Offline mirror uses the actual owned media HTTP route",
+      )
+      assert.match(
+        response.headers()["content-type"] ?? "",
+        /^image\/png(?:;|$)/u,
+      )
       const body = await response.body()
       assert.equal(body.length, mirror.bytes)
-      assert.equal(createHash("sha256").update(body).digest("hex"), mirror.sha256)
+      assert.equal(
+        createHash("sha256").update(body).digest("hex"),
+        mirror.sha256,
+      )
       const check = {
-        referenceDigest: item.referenceDigest, role, sha256: mirror.sha256, bytes: body.length,
-        nativeHttpStatus: 200, sourceHttpStatus: mirror.sourceHttpStatus,
-        verifiedAt: mirror.verifiedAt, manifestSha256: mirror.manifestSha256,
-        requests: 0, originalUrlPlayedOverInternet: false,
+        referenceDigest: item.referenceDigest,
+        role,
+        sha256: mirror.sha256,
+        bytes: body.length,
+        nativeHttpStatus: 200,
+        sourceHttpStatus: mirror.sourceHttpStatus,
+        verifiedAt: mirror.verifiedAt,
+        manifestSha256: mirror.manifestSha256,
+        requests: 0,
+        originalUrlPlayedOverInternet: false,
       }
       mirrorChecks.push(check)
       const exact = (url) => url.href === mirror.sourceUrl
@@ -227,20 +325,14 @@ export async function verifyStoredGameBrowser(options) {
     page.on("pageerror", (error) => faults.push(digest(error.message)))
     page.on("requestfailed", (request) => {
       const reason = request.failure()?.errorText ?? "unknown"
-      if (
-        reason !== "net::ERR_ABORTED" &&
-        isAsset(request)
-      ) {
+      if (reason !== "net::ERR_ABORTED" && isAsset(request)) {
         assetFailures.add(
           digest({ path: new URL(request.url()).pathname, reason }),
         )
       }
     })
     page.on("response", (response) => {
-      if (
-        response.status() >= 400 &&
-        isAsset(response.request())
-      ) {
+      if (response.status() >= 400 && isAsset(response.request())) {
         assetFailures.add(
           digest({
             path: new URL(response.url()).pathname,
@@ -280,9 +372,15 @@ export async function verifyStoredGameBrowser(options) {
   try {
     await installPlaybackAudit(host)
     await addExactMirrors(context, "manager")
-    const preview = await context.request.get(origin + "/api/extensions/preview/quizzes/" + quizId, { headers })
+    const preview = await context.request.get(
+      origin + "/api/extensions/preview/quizzes/" + quizId,
+      { headers },
+    )
     previewStatuses.push(preview.status())
-    record("original-native-account-preview", { status: preview.status(), passed: preview.status() === 200 })
+    record("original-native-account-preview", {
+      status: preview.status(),
+      passed: preview.status() === 200,
+    })
     const beforeBase = await read("/api/quizz/" + quizId)
     const beforeExtras = (await read("/api/extensions/quizzes/" + quizId))
       .extras
@@ -311,11 +409,17 @@ export async function verifyStoredGameBrowser(options) {
       "Stored game saves through native editor",
     )
     await host.waitForURL(/\/(studio\/games|manager\/config)$/)
-    const savedBase = await read("/api/quizz/" + quizId)
-    const savedExtras = (await read("/api/extensions/quizzes/" + quizId)).extras
-    const savedPreview = await context.request.get(origin + "/api/extensions/preview/quizzes/" + quizId, { headers })
+    let savedBase = await read("/api/quizz/" + quizId)
+    let savedExtras = (await read("/api/extensions/quizzes/" + quizId)).extras
+    const savedPreview = await context.request.get(
+      origin + "/api/extensions/preview/quizzes/" + quizId,
+      { headers },
+    )
     previewStatuses.push(savedPreview.status())
-    record("saved-native-account-preview", { status: savedPreview.status(), passed: savedPreview.status() === 200 })
+    record("saved-native-account-preview", {
+      status: savedPreview.status(),
+      passed: savedPreview.status() === 200,
+    })
     assert.equal(
       digest(savedBase.questions),
       digest(beforeBase.questions),
@@ -342,7 +446,56 @@ export async function verifyStoredGameBrowser(options) {
       questions: savedBase.questions.length,
       cards: savedExtras?.timeline?.length ?? savedBase.questions.length,
     })
+    if (options.externalAssets?.length) {
+      checkpoint = "external-image-owner-repair"
+      assert.deepEqual(
+        previewStatuses,
+        [422, 422],
+        "Record the original external-image preview failure before repair",
+      )
+      const originalFixtureDigest = digest(fixture)
+      const repaired = await qualifyOwnerImageRepair({
+        request: context.request,
+        origin,
+        token,
+        quizId,
+        fixtureId: fixture.fixtureId,
+        externalAssets: options.externalAssets,
+        evidenceDirectory: options.evidenceDirectory,
+      })
+      assert.equal(
+        digest(fixture),
+        originalFixtureDigest,
+        "Repair never edits the immutable source fixture",
+      )
+      externalMediaRepair = repaired.receipt
+      externalMediaRepair.originalSidecarAbsent = beforeExtras === null
+      savedBase = repaired.base
+      savedExtras = repaired.extras
+      for (const url of repaired.uploadedUrls) repairedImageUrls.add(url)
+      previewStatuses.push(repaired.receipt.repairedPreviewStatus)
+      const sourceUrls = new Set(
+        options.externalAssets.map((item) => item.mirror.sourceUrl),
+      )
+      const references = beforeBase.questions.filter(
+        (question) =>
+          question.media?.type === "image" &&
+          sourceUrls.has(question.media.url),
+      ).length
+      assert.equal(externalMediaRepair.semanticDelta.paths.length, references)
+      record("native-owner-upload-and-revisioned-image-repair", {
+        references,
+        originalPreviewStatus: 422,
+        repairedPreviewStatus: 200,
+        sourceFixtureUnchanged: true,
+        staleRevisionStatus: externalMediaRepair.staleRevisionStatus,
+      })
+    }
     await openEditor()
+    mirrorsAtLaunch = mirrorChecks.reduce(
+      (total, check) => total + check.requests,
+      0,
+    )
     checkpoint = "saved-game-launch"
     await host.getByTestId("studio-tab-launch").click()
     await expect(host.getByTestId("studio-launch-btn")).toBeEnabled()
@@ -383,7 +536,8 @@ export async function verifyStoredGameBrowser(options) {
         questionOrdinal: step?.questionOrdinal ?? null,
         durationMs: step?.durationMs ?? null,
         epoch: step?.epoch ?? null,
-        unresolvedStoryTie: game.extensionSession?.hasUnresolvedStoryTie() ?? false,
+        unresolvedStoryTie:
+          game.extensionSession?.hasUnresolvedStoryTie() ?? false,
         questionIndex: game.round.currentQuestionIndex,
         status: game.managerStatus?.name ?? null,
       }
@@ -503,16 +657,33 @@ export async function verifyStoredGameBrowser(options) {
         }
       }
       if (active.phase === "scene") {
-        await expect(stage).toHaveAttribute("data-show-scene", "scene", { timeout: sceneTimeout(active) })
+        await expect(stage).toHaveAttribute("data-show-scene", "scene", {
+          timeout: sceneTimeout(active),
+        })
         const authoredScene = savedExtras.scenes[active.sceneId]
-        if (authoredScene?.kind === "animation" && isFullShowScene(authoredScene.preset)) {
-          await expect(stage.locator("[data-full-show-scene]")).toHaveAttribute("data-full-show-scene", authoredScene.preset)
+        if (
+          authoredScene?.kind === "animation" &&
+          isFullShowScene(authoredScene.preset)
+        ) {
+          await expect(stage.locator("[data-full-show-scene]")).toHaveAttribute(
+            "data-full-show-scene",
+            authoredScene.preset,
+          )
           await expect(stage.locator("[data-full-show-scene]")).toBeVisible()
-        } else if (["opening", "closing", "media"].includes(authoredScene?.kind) &&
-          (authoredScene.mediaUrl || authoredScene.lottieUrl || authoredScene.overlayAnimations?.length)) {
-          await expect(stage.locator("[data-scene-id]")).toHaveAttribute("data-scene-id", active.sceneId)
+        } else if (
+          ["opening", "closing", "media"].includes(authoredScene?.kind) &&
+          (authoredScene.mediaUrl ||
+            authoredScene.lottieUrl ||
+            authoredScene.overlayAnimations?.length)
+        ) {
+          await expect(stage.locator("[data-scene-id]")).toHaveAttribute(
+            "data-scene-id",
+            active.sceneId,
+          )
         } else if (active.kind === "leaderboard") {
-          await expect(stage.getByTestId("tadazz-leaderboard-screen")).toBeVisible()
+          await expect(
+            stage.getByTestId("tadazz-leaderboard-screen"),
+          ).toBeVisible()
         }
         await paintedFrames(stage)
         await next(active)
@@ -569,17 +740,34 @@ export async function verifyStoredGameBrowser(options) {
         } else {
           await paintedFrames(stage)
         }
+        if (repairedImageUrls.has(question.media?.url)) {
+          await expect
+            .poll(() =>
+              stage.evaluate(
+                (element, url) =>
+                  [...element.querySelectorAll("img")].some(
+                    (image) =>
+                      new URL(image.currentSrc || image.src, location.href)
+                        .pathname === url &&
+                      image.complete &&
+                      image.naturalWidth > 0 &&
+                      image.getBoundingClientRect().width > 0,
+                  ),
+                question.media.url,
+              ),
+            )
+            .toBe(true)
+          repairedImageQuestions.push(index)
+        }
         const answer = async (answerIndex) => {
           const pad = player.getByTestId("tadazz-pad-option-" + answerIndex)
           if (await pad.isVisible()) {
             await expect(pad).toBeEnabled()
             await pad.click()
           } else {
-            const native = player
-              .locator("button")
-              .filter({
-                has: player.getByTestId("answer-badge-" + answerIndex),
-              })
+            const native = player.locator("button").filter({
+              has: player.getByTestId("answer-badge-" + answerIndex),
+            })
             await expect(native).toHaveCount(1)
             await expect(native).toBeEnabled()
             await native.click()
@@ -640,8 +828,13 @@ export async function verifyStoredGameBrowser(options) {
             timeout: 30_000,
           })
           .toBe(true)
-        const authoredResults = nativeTimeline[active.stepIndex + 1]?.kind === "interimResults"
-        await expect(stage).toHaveAttribute("data-show-scene", authoredResults ? "scene" : "results", { timeout: 30_000 })
+        const authoredResults =
+          nativeTimeline[active.stepIndex + 1]?.kind === "interimResults"
+        await expect(stage).toHaveAttribute(
+          "data-show-scene",
+          authoredResults ? "scene" : "results",
+          { timeout: 30_000 },
+        )
         await paintedFrames(stage)
         if (question.type !== "estimation") {
           const throughResults = !authoredResults
@@ -690,7 +883,12 @@ export async function verifyStoredGameBrowser(options) {
     await expect(stage).toHaveAttribute("data-show-scene", "finale", {
       timeout: 30_000,
     })
-    timelineReceipt = orderedTimelineReceipt(trace, nativeTimeline, savedExtras.scenes ?? {}, snapshot())
+    timelineReceipt = orderedTimelineReceipt(
+      trace,
+      nativeTimeline,
+      savedExtras.scenes ?? {},
+      snapshot(),
+    )
     sceneVisits.splice(0, sceneVisits.length, ...timelineReceipt.scenes)
     // Scene IDs stay private; the receipt records ordered hashes and counts.
     delete timelineReceipt.scenes
@@ -717,15 +915,65 @@ export async function verifyStoredGameBrowser(options) {
       )
     }
     await collectPlaybackAudit()
-    assert(audio?.samples > 0, "Observed shared audio ownership throughout playback")
-    assert.equal(audio.minOwners, 1, "Shared audio owner is never missing during playback")
-    assert.equal(audio.maxOwners, 1, "No duplicate audio owner at any observed playback frame")
-    assert.equal(audio.ownerViolations, 0, "One shared audio owner throughout playback")
-    assert.equal(audio.failedTracks.length, 0, "No earlier or final soundtrack failure")
-    assert.equal(mediaErrors.length, 0, "No native image/audio/video decode errors")
+    assert(
+      audio?.samples > 0,
+      "Observed shared audio ownership throughout playback",
+    )
+    assert.equal(
+      audio.minOwners,
+      1,
+      "Shared audio owner is never missing during playback",
+    )
+    assert.equal(
+      audio.maxOwners,
+      1,
+      "No duplicate audio owner at any observed playback frame",
+    )
+    assert.equal(
+      audio.ownerViolations,
+      0,
+      "One shared audio owner throughout playback",
+    )
+    assert.equal(
+      audio.failedTracks.length,
+      0,
+      "No earlier or final soundtrack failure",
+    )
+    assert.equal(
+      mediaErrors.length,
+      0,
+      "No native image/audio/video decode errors",
+    )
     assert.equal(faults.length, 0, "No browser JavaScript failures")
     assert.equal(assetFailures.size, 0, "No asset HTTP failures")
-    assert(previewStatuses.every((status) => status === 200), "Original and saved native account previews must both succeed; admission failures remain unqualified")
+    if (externalMediaRepair) {
+      assert(
+        externalMediaRepair.passed,
+        "The original rejection requires a fully qualified owner repair",
+      )
+      assert.deepEqual(previewStatuses, [422, 422, 200])
+      assert.equal(
+        repairedImageQuestions.length,
+        externalMediaRepair.semanticDelta.paths.length,
+        "Every repaired question actually displays the owner-uploaded image",
+      )
+      assert.equal(
+        mirrorChecks.reduce((total, check) => total + check.requests, 0),
+        mirrorsAtLaunch,
+        "Repaired playback uses owner media, never the offline external-URL mirror",
+      )
+      externalMediaRepair.playback = {
+        passed: true,
+        renderedQuestions: repairedImageQuestions.length,
+        externalMirrorRequests: 0,
+        fullNativeFlowCompleted: true,
+      }
+    } else {
+      assert(
+        previewStatuses.every((status) => status === 200),
+        "Original and saved native account previews must both succeed; admission failures remain unqualified",
+      )
+    }
     record("saved-game-full-native-playback", {
       questions: starts.length,
       accepted: accepted.length,
@@ -747,6 +995,8 @@ export async function verifyStoredGameBrowser(options) {
       mediaErrors,
       timelineReceipt,
       previewStatuses,
+      originalPreviewQualified: previewStatuses[0] === 200,
+      externalMediaRepair,
       mirrorChecks,
       assetFailures: [...assetFailures],
       faults,
@@ -755,6 +1005,7 @@ export async function verifyStoredGameBrowser(options) {
     // Detailed Playwright errors can contain authored text. The controller keeps
     // stderr private on Linux and retrieves only this opaque diagnostic receipt.
     console.error("Stored game failed", fixture.fixtureId, checkpoint, error)
+    externalMediaRepair ??= error?.repairReceipt
     await collectPlaybackAudit()
     return {
       fixtureId: fixture.fixtureId,
@@ -769,6 +1020,8 @@ export async function verifyStoredGameBrowser(options) {
       mediaErrors,
       timelineReceipt,
       previewStatuses,
+      originalPreviewQualified: previewStatuses[0] === 200,
+      externalMediaRepair,
       mirrorChecks,
       assetFailures: [...assetFailures],
       faults,
@@ -778,8 +1031,12 @@ export async function verifyStoredGameBrowser(options) {
   } finally {
     clearInterval(traceTimer)
     if (stage) await stopQuestionSequence(stage).catch(() => {})
-    await host.evaluate(() => window.__tadazzStoredAudit?.stop()).catch(() => {})
-    await player?.evaluate(() => window.__tadazzStoredAudit?.stop()).catch(() => {})
+    await host
+      .evaluate(() => window.__tadazzStoredAudit?.stop())
+      .catch(() => {})
+    await player
+      ?.evaluate(() => window.__tadazzStoredAudit?.stop())
+      .catch(() => {})
     for (const { browserContext, exact, handler } of mirrorRoutes) {
       await browserContext.unroute(exact, handler)
     }

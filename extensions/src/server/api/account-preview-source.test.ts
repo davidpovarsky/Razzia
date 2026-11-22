@@ -177,7 +177,10 @@ describe("account-owned preview source is a read-only projection", () => {
       const before = [digest(baseFile), digest(sideFile)]
       const first = readAccountPreviewSource(f, "owned-game")
 
-      expect(first.show.cards.map((card) => card.kind)).toEqual(["quiz", "quiz"])
+      expect(first.show.cards.map((card) => card.kind)).toEqual([
+        "quiz",
+        "quiz",
+      ])
       expect(readAccountPreviewSource(f, "owned-game")).toEqual(first)
       expect([digest(baseFile), digest(sideFile)]).toEqual(before)
 
@@ -186,15 +189,18 @@ describe("account-owned preview source is a read-only projection", () => {
       writeFileSync(baseFile, JSON.stringify(changed))
       const changedBytes = readFileSync(baseFile)
 
-      expect(() => readAccountPreviewSource(f, "owned-game")).toThrowError(
+      expect(() => readAccountPreviewSource(f, "owned-game")).toThrow(
         expect.objectContaining({ status: 409 }),
       )
       expect(readFileSync(baseFile)).toEqual(changedBytes)
       expect(digest(sideFile)).toBe(before[1])
 
       writeFileSync(baseFile, JSON.stringify(storedRecord))
-      writeFileSync(sideFile, JSON.stringify({ ...extras, quizId: "foreign-game" }))
-      expect(() => readAccountPreviewSource(f, "owned-game")).toThrowError(
+      writeFileSync(
+        sideFile,
+        JSON.stringify({ ...extras, quizId: "foreign-game" }),
+      )
+      expect(() => readAccountPreviewSource(f, "owned-game")).toThrow(
         PreviewSourceError,
       )
     },

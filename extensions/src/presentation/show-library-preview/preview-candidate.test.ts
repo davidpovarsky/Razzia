@@ -108,15 +108,18 @@ describe("silent preview candidate", () => {
   })
 
   it("does not forward a stale wipe-covered callback", async () => {
-    let covered: (() => void | Promise<void>) | undefined
-    let finish: (() => void) | undefined
+    const callbacks: {
+      covered?: () => void | Promise<void>
+      finish?: () => void
+    } = {}
     const showQuestion = vi.fn(async () => {})
     const stage = {
       showQuestion,
-      playZZWipe: (callback: typeof covered) => {
-        covered = callback
+      playZZWipe: (callback: () => void | Promise<void>) => {
+        callbacks.covered = callback
+
         return new Promise<void>((resolve) => {
-          finish = resolve
+          callbacks.finish = resolve
         })
       },
     } as unknown as TadazzStageHandle
@@ -134,8 +137,9 @@ describe("silent preview candidate", () => {
       },
     ])
     owner.invalidate()
-    await covered?.()
-    finish?.()
+    expect(callbacks.covered).toBeTypeOf("function")
+    await callbacks.covered?.()
+    callbacks.finish?.()
     expect(await pending).toBe(false)
     expect(showQuestion).not.toHaveBeenCalled()
   })
@@ -166,6 +170,7 @@ describe("silent preview candidate", () => {
     const showQuestion = vi.fn(async () => {})
     const wipe = vi.fn((covered?: () => void | Promise<void>) => {
       void Promise.resolve(covered?.()).catch(() => undefined)
+
       return Promise.resolve()
     })
     const stage = {
@@ -190,6 +195,7 @@ describe("silent preview candidate", () => {
       showQuestion: () => entrance,
       playZZWipe: (covered?: () => void | Promise<void>) => {
         void Promise.resolve(covered?.()).catch(() => undefined)
+
         return Promise.resolve()
       },
     } as unknown as TadazzStageHandle
@@ -313,8 +319,10 @@ describe("silent preview candidate", () => {
       )
       expect(result.steps.some((step) => step.op === "openVoting")).toBe(false)
       expect(result.steps[0].op).toBe("showQuestion")
-      if (phase === "voteLocked")
+
+      if (phase === "voteLocked") {
         expect(result.steps.at(-1)?.op).toBe("lockVoting")
+      }
     }
   })
 
@@ -335,8 +343,12 @@ describe("silent preview candidate", () => {
 
   it("projects genuine paused results using the bound controller clock", () => {
     const { draft, plan } = prepareDemoFixture("spectator", "en", false)
-    const card = draft.show.cards[0]
-    if (card.kind !== "quiz") throw new Error("unexpected fixture")
+    const [card] = draft.show.cards
+
+    if (card.kind !== "quiz") {
+      throw new Error("unexpected fixture")
+    }
+
     const questionId = draft.input.identityMap.questions.find(
       (q) => q.authoredKey === card.key,
     )!.previewId

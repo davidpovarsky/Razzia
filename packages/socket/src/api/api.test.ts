@@ -1,4 +1,8 @@
-import { QUIZZ_MODES, SESSION_ROLES } from "@razzia/common/constants"
+import {
+  EXAMPLE_QUIZZ_IMAGE,
+  QUIZZ_MODES,
+  SESSION_ROLES,
+} from "@razzia/common/constants"
 import type { SessionResponse } from "@razzia/common/types/auth"
 import { app } from "@razzia/socket/app"
 import { mintToken, verifyJoinTicket } from "@razzia/socket/services/auth"
@@ -391,7 +395,19 @@ describe("media", () => {
     const { name } = await json<{ name: string }>(uploaded)
     const list = await request("/media", { token: managerToken })
 
-    expect(await json(list)).toMatchObject({ media: [{ name, type: "image" }] })
+    const listed = await json<{ media: Array<{ name: string; type: string }> }>(
+      list,
+    )
+    expect(listed.media).toHaveLength(2)
+    expect(listed.media).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ name, type: "image" }),
+        expect.objectContaining({
+          name: EXAMPLE_QUIZZ_IMAGE.name,
+          type: "image",
+        }),
+      ]),
+    )
 
     const deleted = await request(`/media/${name}`, {
       method: "DELETE",

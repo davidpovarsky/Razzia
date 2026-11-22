@@ -32,11 +32,30 @@ const timerEvents = path.join(
   source,
   "extensions/src/presentation/show-themes/timer-events.ts",
 )
-const themeContext = path.join(source, "extensions/src/presentation/show-themes/context.tsx")
-const themeResolver = path.join(source, "extensions/src/core/show-themes/resolve.ts")
-const audioDefaults = path.join(source, "extensions/src/core/platform-audio-defaults.ts")
-const audioPolicy = path.join(source, "extensions/src/presentation/tadazz-audio-policy.ts")
-const closingBoundary = path.join(source, "extensions/src/presentation/platform-closing.tsx")
+const themeContext = path.join(
+  source,
+  "extensions/src/presentation/show-themes/context.tsx",
+)
+const themeResolver = path.join(
+  source,
+  "extensions/src/core/show-themes/resolve.ts",
+)
+const themeEffects = path.join(
+  source,
+  "extensions/src/core/show-themes/audio.ts",
+)
+const audioDefaults = path.join(
+  source,
+  "extensions/src/core/platform-audio-defaults.ts",
+)
+const audioPolicy = path.join(
+  source,
+  "extensions/src/presentation/tadazz-audio-policy.ts",
+)
+const closingBoundary = path.join(
+  source,
+  "extensions/src/presentation/platform-closing.tsx",
+)
 await fs.mkdir(evidence, { recursive: true })
 const entry = `
 import React,{useRef,useState} from 'react';
@@ -48,19 +67,24 @@ import {AudioCuePlayer} from ${JSON.stringify(audioOwner)};
 import {startCountdownCue} from ${JSON.stringify(timerEvents)};
 import {ShowThemeScope} from ${JSON.stringify(themeContext)};
 import {resolveShowTheme} from ${JSON.stringify(themeResolver)};
+import {resolveThemeEffect} from ${JSON.stringify(themeEffects)};
 import {createPlatformAudioExtras} from ${JSON.stringify(audioDefaults)};
 import {resolveNativePhaseAudioCue,resolveTadazzAudioPolicy} from ${JSON.stringify(audioPolicy)};
 import {PlatformClosingBoundary} from ${JSON.stringify(closingBoundary)};
 const q1={key:'first#1',question:'FIRST QUESTION',number:1,totalQuestions:23,answerCount:3,options:[]};
 const options=[{label:'Alpha'},{label:'Bravo'},{label:'Charlie'}];
 const transitionIdentity=${legacySceneIdentity ? "scene=>JSON.stringify(scene)" : "showSceneTransitionIdentity"};
-const audioExtras=createPlatformAudioExtras();
 function App(){
  const stage=useRef(null);const previous=useRef(null);const [custom,setCustom]=useState(null);
  const previousIdentity=useRef(null);
- const [guessOff,setGuessOff]=useState(false);const cues=useRef([]);
+ const [guessOff,setGuessOff]=useState(false);const [answerImages,setAnswerImages]=useState(false);const cues=useRef([]);
  const [audio,setAudio]=useState({gameId:'start-audio',epoch:1,seconds:5,role:'manager',paused:false,sceneKind:'start',closingElapsed:null});
- const theme=React.useMemo(()=>resolveShowTheme({role:audio.role}),[audio.role]);
+ const [audioExtras,setAudioExtras]=useState(()=>createPlatformAudioExtras());
+ const [openingOverride,setOpeningOverride]=useState(null);
+ const theme=React.useMemo(()=>{
+  const base=resolveShowTheme({role:audio.role});
+  return openingOverride ? resolveShowTheme({role:audio.role,selection:{...base.requested,overrides:{...base.requested.overrides,audio:{...base.requested.overrides.audio,opening:openingOverride}}}}) : base;
+ },[audio.role,openingOverride]);
  const statusName=audio.sceneKind==='start'?'SHOW_START':'FINISHED';
  const policy=resolveTadazzAudioPolicy({sceneKind:audio.sceneKind,statusName});
  const cueId=resolveNativePhaseAudioCue(audio.sceneKind,audio.sceneKind==='start'?'start':'podium1');
@@ -111,22 +135,25 @@ function App(){
   rerenderCustom(){
    flushSync(()=>setCustom(<div data-testid="unexpected-native-overlay">REFRESHED CUSTOM TITLE</div>));
   },
-  async choices(count,look){
-   flushSync(()=>{setCustom(null);setGuessOff(look)});
-   const question={...q1,key:'choices-'+count+'-'+look,question:'Which option do you choose?',number:count,answerCount:count,options:Array.from({length:count},(_,i)=>({label:['A walk by the river','An evening with friends','A homemade celebration','Exploring somewhere new','A quiet afternoon'][i]}))};
+  async choices(count,look,images=false){
+   flushSync(()=>{setCustom(null);setGuessOff(look);setAnswerImages(images)});
+   const question={...q1,key:'choices-'+count+'-'+look+'-'+images,question:'Which option do you choose?',number:count,answerCount:count,options:Array.from({length:count},(_,i)=>({label:['A walk by the river','An evening with friends','A homemade celebration','Exploring somewhere new','A quiet afternoon'][i],...(images?{image:'/tadazz-show/great-guessoff/banana.webp',display:'both'}:{})}))};
    await drive({kind:'question',key:'question:'+question.key,question:{...question,options:[]}});
    await drive({kind:'voting',key:'voting:'+question.key,question,seconds:null});
    cues.current=[];
   },
-  async choiceResults(){
+  async choiceResults(mode='quiz'){
    const question=previous.current.question;
-   await drive({kind:'results',key:'results:'+question.key,question,reveal:{mode:'quiz',counts:question.options.map((_,i)=>i+1),solutions:[1]}});
+   await drive({kind:'results',key:'results:'+question.key,question,reveal:{mode,counts:question.options.map((_,i)=>i+1),...(mode==='quiz'?{solutions:[1]}:{})}});
   },
   cues:()=>cues.current.map(cue=>cue.name),
   audioState:(next)=>flushSync(()=>setAudio(current=>({...current,...next}))),
+  audioMix:(next)=>flushSync(()=>setAudioExtras(current=>({...current,cues:{...current.cues,start:{...current.cues.start,...next}}}))),
+  openingOverride:(next)=>flushSync(()=>setOpeningOverride(next)),
+  audioDebug:()=>({audio,theme:{id:theme.definition.id,role:theme.role,legacyPolicy:theme.requested.legacyPolicy,start:resolveThemeEffect(theme,'timer-start'),selection:theme.audioSelections.opening},savedStart:audioExtras.cues.start}),
   mode:()=>stage.current?.mode,
  };
- return <ShowThemeScope theme={theme}><div style={{width:'100%',height:'100%'}} data-guess-off-stage={guessOff?'true':undefined} data-guess-off-media={guessOff?'text':undefined}><TadazzV4StageAdapter ref={stage} customScreen={custom} guessOffLook={guessOff} onCue={cue=>cues.current.push(cue)}/><div style={{position:'fixed',top:0,left:0,zIndex:1000,background:'white',color:'black'}}><PlatformClosingBoundary elapsedMs={audio.closingElapsed}><AudioCuePlayer gameId={audio.gameId} epoch={audio.epoch} phase={statusName} cueId={cueId} soundtrackSlot={policy.slot} continuityKey={policy.continuityKey} audioExtras={audioExtras} stageOwnsReveal eventOnly={audio.role==='player'} paused={audio.paused} autoPlay showControls/></PlatformClosingBoundary><button data-testid="start-audio-tick" onClick={startTick}>Server start tick</button></div></div></ShowThemeScope>;
+ return <ShowThemeScope theme={theme}><div style={{width:'100%',height:'100%'}} data-guess-off-stage={guessOff?'true':undefined} data-guess-off-media={guessOff&&!answerImages?'text':undefined}><TadazzV4StageAdapter ref={stage} customScreen={custom} guessOffLook={guessOff} onCue={cue=>cues.current.push(cue)}/><div style={{position:'fixed',top:0,left:0,zIndex:1000,background:'white',color:'black'}}><PlatformClosingBoundary elapsedMs={audio.closingElapsed}><AudioCuePlayer gameId={audio.gameId} epoch={audio.epoch} phase={statusName} cueId={cueId} soundtrackSlot={policy.slot} continuityKey={policy.continuityKey} audioExtras={audioExtras} stageOwnsReveal eventOnly={audio.role==='player'} paused={audio.paused} autoPlay showControls/></PlatformClosingBoundary><button data-testid="start-audio-tick" onClick={startTick}>Server start tick</button></div></div></ShowThemeScope>;
 }
 createRoot(document.getElementById('root')).render(<App/>);
 `
@@ -161,13 +188,15 @@ const plugins = [
         // into that dependency tree, esbuild follows each real importer itself
         // (including pnpm's private transitive dependencies).
         const resolved = await builder.resolve(args.path, {
-          resolveDir: path.join(deps, relative), kind: args.kind,
+          resolveDir: path.join(deps, relative),
+          kind: args.kind,
         })
         if (!resolved.errors.length) return resolved
         // Presentation peers are supplied by the web host. Use esbuild here,
         // too, so conditional package exports retain their browser branch.
         return builder.resolve(args.path, {
-          resolveDir: path.join(deps, "packages/web"), kind: args.kind,
+          resolveDir: path.join(deps, "packages/web"),
+          kind: args.kind,
         })
       })
       if (adapterOverride)
@@ -202,12 +231,15 @@ await build({
   },
   outfile: path.join(evidence, "fixture.js"),
 })
+const serverFailures = []
 const server = http.createServer(async (request, response) => {
   try {
     const url = new URL(request.url, "http://localhost")
     let file
     if (url.pathname === "/fixture.js" || url.pathname === "/fixture.css")
       file = path.join(evidence, url.pathname.slice(1))
+    else if (url.pathname === "/media/fixture-start.mp3")
+      file = path.join(source, "packages/web/public/sounds/boump.mp3")
     else if (
       url.pathname.startsWith("/tadazz-show/") ||
       url.pathname.startsWith("/sounds/")
@@ -233,9 +265,14 @@ const server = http.createServer(async (request, response) => {
               : file.endsWith(".woff2")
                 ? "font/woff2"
                 : "image/jpeg"
-    response.writeHead(200, { "Content-Type": mime })
-    response.end(await fs.readFile(file))
-  } catch {
+    const bytes = await fs.readFile(file)
+    response.writeHead(200, {
+      "Content-Type": mime,
+      "Content-Length": bytes.length,
+    })
+    response.end(bytes)
+  } catch (error) {
+    serverFailures.push({ url: request.url, error: String(error) })
     response.writeHead(404)
     response.end()
   }
@@ -258,10 +295,63 @@ const result = {
 function check(name, passed, details = {}) {
   result.checks.push({ name, passed: Boolean(passed), ...details })
 }
+const errors = []
+const failedRequests = []
+const failedResponses = []
+const consoleErrors = []
+const page = await browser.newPage({ viewport: { width: 1366, height: 768 } })
+page.on("pageerror", (error) => errors.push(error.message))
+page.on("requestfailed", (request) =>
+  failedRequests.push({ url: request.url(), failure: request.failure() }),
+)
+page.on("response", (response) => {
+  if (response.status() >= 400)
+    failedResponses.push({ url: response.url(), status: response.status() })
+})
+page.on("console", (message) => {
+  if (message.type() === "error") consoleErrors.push(message.text())
+})
+async function captureAudio(label) {
+  const state = await page.evaluate(() => ({
+    debug: window.handoff?.audioDebug(),
+    state: Object.fromEntries(
+      Array.from(
+        document.querySelector('[data-testid="audio-cue-player-state"]')
+          ?.attributes ?? [],
+      ).map((attribute) => [attribute.name, attribute.value]),
+    ),
+    attempts: window.audioAttempts,
+    events: window.audioEvents,
+    media: (window.startAudioElements ?? []).map((audio) => ({
+      src: audio.src,
+      currentSrc: audio.currentSrc,
+      time: audio.currentTime,
+      duration: audio.duration,
+      paused: audio.paused,
+      ended: audio.ended,
+      readyState: audio.readyState,
+      networkState: audio.networkState,
+      volume: audio.volume,
+      muted: audio.muted,
+      loop: audio.loop,
+      error: audio.error && {
+        code: audio.error.code,
+        message: audio.error.message,
+      },
+    })),
+  }))
+  result.observations ??= []
+  result.observations.push({
+    label,
+    ...state,
+    failedRequests: [...failedRequests],
+    failedResponses: [...failedResponses],
+    serverFailures: [...serverFailures],
+    errors: [...errors],
+    consoleErrors: [...consoleErrors],
+  })
+}
 try {
-  const page = await browser.newPage({ viewport: { width: 1366, height: 768 } })
-  const errors = []
-  page.on("pageerror", (e) => errors.push(e.message))
   await page.addInitScript(() => {
     window.animationStarts = 0
     const animate = Element.prototype.animate
@@ -270,15 +360,60 @@ try {
       return animate.apply(this, args)
     }
     window.audioAttempts = []
+    window.audioEvents = []
     window.startAudioElements = []
     const play = HTMLMediaElement.prototype.play
     HTMLMediaElement.prototype.play = function (...args) {
+      let attempt
       if (this instanceof HTMLAudioElement) {
-        window.audioAttempts.push({ src: this.src, volume: this.volume })
-        if (!window.startAudioElements.includes(this))
+        attempt = {
+          src: this.src,
+          volume: this.volume,
+          time: this.currentTime,
+          readyState: this.readyState,
+          status: "pending",
+        }
+        window.audioAttempts.push(attempt)
+        if (!window.startAudioElements.includes(this)) {
           window.startAudioElements.push(this)
+          for (const name of [
+            "error",
+            "stalled",
+            "waiting",
+            "canplay",
+            "playing",
+            "pause",
+            "ended",
+          ]) {
+            this.addEventListener(name, () => {
+              if (window.audioEvents.length < 200)
+                window.audioEvents.push({
+                  name,
+                  src: this.src,
+                  time: this.currentTime,
+                  readyState: this.readyState,
+                  networkState: this.networkState,
+                  error: this.error && {
+                    code: this.error.code,
+                    message: this.error.message,
+                  },
+                })
+            })
+          }
+        }
       }
-      return play.apply(this, args)
+      const promise = play.apply(this, args)
+      if (attempt)
+        promise.then(
+          () => {
+            attempt.status = "fulfilled"
+          },
+          (error) => {
+            attempt.status = "rejected"
+            attempt.error = { name: error.name, message: error.message }
+          },
+        )
+      return promise
     }
   })
   await page.goto("http://127.0.0.1:" + server.address().port)
@@ -291,10 +426,52 @@ try {
         ).length,
     )
   const unlock = page.getByTestId("host-enable-audio")
+  // Autoplay rejection is asynchronous. Observe either actual playback or the
+  // real gate before interacting, so an early visibility check cannot miss it.
+  await page.waitForFunction(() => {
+    const state = document.querySelector(
+      '[data-testid="audio-cue-player-state"]',
+    )
+    const url = state?.getAttribute("data-audio-url")
+    return (
+      state?.getAttribute("data-audio-blocked") === "true" ||
+      window.startAudioElements.some(
+        (audio) =>
+          audio.src.endsWith(url || "missing") &&
+          !audio.paused &&
+          audio.currentTime > 0.05,
+      )
+    )
+  })
   if (await unlock.isVisible()) await unlock.click()
-  check("SHOW_START phase does not duplicate the countdown's first effect", (await startAttemptCount()) === 0)
-  check("SHOW_START keeps its round-start music bed", await page.getByTestId("audio-cue-player-state").getAttribute("data-soundtrack-slot") === "roundStart")
+  await page.waitForFunction(() => {
+    const state = document.querySelector(
+      '[data-testid="audio-cue-player-state"]',
+    )
+    const url = state?.getAttribute("data-audio-url")
+    return (
+      state?.getAttribute("data-audio-blocked") === "false" &&
+      window.startAudioElements.some(
+        (audio) =>
+          audio.src.endsWith(url || "missing") &&
+          !audio.paused &&
+          audio.currentTime > 0.05,
+      )
+    )
+  })
+  await captureAudio("before-first-countdown-tick")
+  check(
+    "SHOW_START phase does not duplicate the countdown's first effect",
+    (await startAttemptCount()) === 0,
+  )
+  check(
+    "SHOW_START keeps its round-start music bed",
+    (await page
+      .getByTestId("audio-cue-player-state")
+      .getAttribute("data-soundtrack-slot")) === "roundStart",
+  )
   await page.getByTestId("start-audio-tick").click()
+  await captureAudio("after-first-countdown-tick")
   await page.waitForFunction(() =>
     window.startAudioElements.some(
       (audio) =>
@@ -340,6 +517,97 @@ try {
     "resumed host plays the next current tick once",
     (await startAttemptCount()) === 2,
   )
+  await page.evaluate(() => {
+    window.handoff.audioMix({ enabled: false, volume: 0.27 })
+    window.handoff.audioState({ seconds: 3 })
+  })
+  await page.getByTestId("start-audio-tick").click()
+  check(
+    "saved legacy start-cue disable is respected by the single owner",
+    (await startAttemptCount()) === 2,
+  )
+  await page.evaluate(() =>
+    window.handoff.audioMix({ enabled: true, volume: 0 }),
+  )
+  await page.getByTestId("start-audio-tick").click()
+  check(
+    "saved zero start volume silences the countdown",
+    (await startAttemptCount()) === 2,
+  )
+  await page.evaluate(() => window.handoff.audioMix({ volume: 0.27 }))
+  await page.getByTestId("start-audio-tick").click()
+  const legacyVolume = await page.evaluate(
+    () =>
+      window.audioAttempts
+        .filter((item) => item.src.endsWith("/sounds/boump.mp3"))
+        .at(-1)?.volume,
+  )
+  check(
+    "saved nonzero start volume survives countdown delegation",
+    (await startAttemptCount()) === 3 && Math.abs(legacyVolume - 0.27) < 0.001,
+    { volume: legacyVolume },
+  )
+  await page.evaluate(() => {
+    window.handoff.audioMix({
+      source: "media",
+      url: "/media/fixture-start.mp3",
+      volume: 0.31,
+    })
+    window.handoff.audioState({ seconds: 2 })
+  })
+  await page.getByTestId("start-audio-tick").click()
+  await page.waitForFunction(() =>
+    window.startAudioElements.some(
+      (audio) =>
+        audio.src.endsWith("/media/fixture-start.mp3") && audio.currentTime > 0,
+    ),
+  )
+  const customStart = await page.evaluate(() =>
+    window.audioAttempts.filter((item) =>
+      item.src.endsWith("/media/fixture-start.mp3"),
+    ),
+  )
+  check(
+    "saved owner-media start cue retains its URL and volume",
+    customStart.length === 1 && Math.abs(customStart[0].volume - 0.31) < 0.001,
+    { attempts: customStart },
+  )
+  await page.evaluate(() => {
+    window.handoff.openingOverride({ volume: 0.61 })
+    window.handoff.audioState({ seconds: 1 })
+  })
+  await page.getByTestId("start-audio-tick").click()
+  const explicitVolume = await page.evaluate(
+    () =>
+      window.audioAttempts
+        .filter((item) => item.src.endsWith("/sounds/boump.mp3"))
+        .at(-1)?.volume,
+  )
+  check(
+    "explicit theme opening volume retains precedence over legacy settings",
+    (await startAttemptCount()) === 4 &&
+      Math.abs(explicitVolume - 0.61) < 0.001,
+    { volume: explicitVolume },
+  )
+  await page.evaluate(() => {
+    window.handoff.openingOverride({ muted: true })
+    window.handoff.audioState({ epoch: 2, seconds: 5 })
+  })
+  await page.getByTestId("start-audio-tick").click()
+  check(
+    "theme opening mute silences the delegated countdown",
+    (await startAttemptCount()) === 4,
+  )
+  await page.evaluate(() => {
+    window.handoff.openingOverride(null)
+    window.handoff.audioMix({
+      source: "default",
+      url: undefined,
+      enabled: true,
+      volume: 0.8,
+    })
+  })
+  await captureAudio("countdown-policy-complete")
   await page.evaluate(() => window.handoff.results())
   await page
     .locator('[data-testid="tadazz-question-panel"] .q-text')
@@ -522,11 +790,25 @@ try {
     )
   }
   for (const guessOff of [false, true]) {
-    for (const count of [3, 4, 5]) {
+    const cases = [3, 4, 5].map((count) => ({ count, images: false }))
+    if (guessOff) cases.push({ count: 5, images: true })
+    for (const { count, images } of cases) {
       await page.evaluate(
-        ({ count, guessOff }) => window.handoff.choices(count, guessOff),
-        { count, guessOff },
+        ({ count, guessOff, images }) =>
+          window.handoff.choices(count, guessOff, images),
+        { count, guessOff, images },
       )
+      if (images) {
+        await page.waitForFunction((count) => {
+          const images = [
+            ...document.querySelectorAll(".choice-slot .tz-photo-frame img"),
+          ]
+          return (
+            images.length === count &&
+            images.every((image) => image.complete && image.naturalWidth > 0)
+          )
+        }, count)
+      }
       const geometry = await page.evaluate(() => {
         const cards = [
           ...document.querySelectorAll('[data-testid^="tadazz-card-"]'),
@@ -568,7 +850,7 @@ try {
           ),
       )
       check(
-        `${guessOff ? "Guess-off" : "native"} ${count} answer cards fit without overlap or clipped text`,
+        `${guessOff ? "Guess-off" : "native"} ${count}${images ? " image" : ""} answer cards fit without overlap or clipped text`,
         geometry.length === count &&
           !overlaps &&
           geometry.every(
@@ -580,11 +862,167 @@ try {
           ),
         { geometry, overlaps },
       )
-      const caseName = `${guessOff ? "guess-off" : "native"}-${count}-answers`
+      const votingLayout = await page.evaluate(() => {
+        const bounds = (node) => {
+          if (!node) return null
+          const rect = node.getBoundingClientRect()
+          let visible = rect.width > 0 && rect.height > 0
+          for (
+            let ancestor = node;
+            ancestor instanceof Element;
+            ancestor = ancestor.parentElement
+          ) {
+            const style = getComputedStyle(ancestor)
+            if (
+              style.display === "none" ||
+              style.visibility === "hidden" ||
+              Number(style.opacity) <= 0.01
+            )
+              visible = false
+          }
+          return {
+            left: rect.left,
+            right: rect.right,
+            top: rect.top,
+            bottom: rect.bottom,
+            width: rect.width,
+            height: rect.height,
+            visible,
+            withinViewport:
+              rect.left >= -1 &&
+              rect.right <= innerWidth + 1 &&
+              rect.top >= -1 &&
+              rect.bottom <= innerHeight + 1,
+          }
+        }
+        const question = document.querySelector(".q-text")
+        window.choiceQuestionNode = question
+        window.choiceQuestionBaseline = {
+          bounds: bounds(question),
+          text: question.textContent,
+          fontSize: getComputedStyle(question).fontSize,
+          fontWeight: getComputedStyle(question).fontWeight,
+        }
+        const stage = document
+          .querySelector(".tzv4-stage")
+          .getBoundingClientRect()
+        const banner = bounds(document.querySelector('[data-v4="vote-status"]'))
+        const badges = [
+          ...document.querySelectorAll(".choice-slot .answer-index"),
+        ].map(bounds)
+        return {
+          banner,
+          badges,
+          bannerStageTop:
+            banner && (banner.top - stage.top) / (stage.width / 1920),
+        }
+      })
+      const badgeOverlaps = votingLayout.badges.some((badge) => {
+        const banner = votingLayout.banner
+        return (
+          !badge ||
+          !banner ||
+          (Math.min(badge.right, banner.right) -
+            Math.max(badge.left, banner.left) >
+            1 &&
+            Math.min(badge.bottom, banner.bottom) -
+              Math.max(badge.top, banner.top) >
+              1)
+        )
+      })
+      check(
+        `${guessOff ? "Guess-off" : "native"} ${count}${images ? " image" : ""} visible answer badges and voting banner fit without overlap`,
+        votingLayout.banner?.visible &&
+          votingLayout.banner.withinViewport &&
+          votingLayout.badges.length === count &&
+          votingLayout.badges.every(
+            (badge) => badge?.visible && badge.withinViewport,
+          ) &&
+          !badgeOverlaps &&
+          Math.abs(
+            votingLayout.bannerStageTop - (guessOff && !images ? 855 : 930),
+          ) <= 1,
+        { votingLayout, badgeOverlaps },
+      )
+      const caseName = `${guessOff ? "guess-off" : "native"}-${count}${images ? "-image" : ""}-answers`
       await page.screenshot({
         path: path.join(evidence, `${caseName}-voting.png`),
       })
-      await page.evaluate(() => window.handoff.choiceResults())
+      const resultMode = count === 3 ? "survey" : "quiz"
+      await page.evaluate(
+        (mode) => window.handoff.choiceResults(mode),
+        resultMode,
+      )
+      const resultLabels = await page.evaluate(() => {
+        const question = document.querySelector(".q-text")
+        const rect = question.getBoundingClientRect()
+        const before = window.choiceQuestionBaseline
+        const visible = (node) => {
+          if (!node) return false
+          const bounds = node.getBoundingClientRect()
+          if (!bounds.width || !bounds.height) return false
+          for (
+            let ancestor = node;
+            ancestor instanceof Element;
+            ancestor = ancestor.parentElement
+          ) {
+            const style = getComputedStyle(ancestor)
+            if (
+              style.display === "none" ||
+              style.visibility === "hidden" ||
+              Number(style.opacity) <= 0.01
+            )
+              return false
+          }
+          return true
+        }
+        return {
+          heading: document
+            .querySelector(".q-frame .eyebrow")
+            ?.textContent?.trim(),
+          status: document
+            .querySelector('.tzv4-sr-status[data-testid="tadazz-status"]')
+            ?.textContent?.trim(),
+          tags: [...document.querySelectorAll(".choice-slot .winner-tag")]
+            .filter(visible)
+            .map((node) => ({
+              text: node.textContent.trim(),
+              correct: node
+                .closest(".choice-slot")
+                .classList.contains("is-correct"),
+              favourite: node
+                .closest(".choice-slot")
+                .classList.contains("is-favourite"),
+            })),
+          retainedQuestion:
+            question === window.choiceQuestionNode &&
+            question.textContent === before.text,
+          stableGeometry: ["left", "right", "top", "bottom"].every(
+            (key) => Math.abs(rect[key] - before.bounds[key]) <= 1,
+          ),
+          stableTypography:
+            getComputedStyle(question).fontSize === before.fontSize &&
+            getComputedStyle(question).fontWeight === before.fontWeight,
+        }
+      })
+      const expectedHeading =
+        resultMode === "quiz" ? "CORRECT ANSWER" : "AUDIENCE RESULTS"
+      const expectedTag =
+        resultMode === "quiz" ? "CORRECT ANSWER" : "AUDIENCE FAVOURITE"
+      check(
+        `${guessOff ? "Guess-off" : "native"} ${count}${images ? " image" : ""} ${resultMode} results keep the question stable and use the correct labels`,
+        resultLabels.heading === expectedHeading &&
+          resultLabels.status === expectedHeading &&
+          resultLabels.tags.length === 1 &&
+          resultLabels.tags[0].text === expectedTag &&
+          (resultMode === "quiz"
+            ? resultLabels.tags[0].correct
+            : resultLabels.tags[0].favourite) &&
+          resultLabels.retainedQuestion &&
+          resultLabels.stableGeometry &&
+          resultLabels.stableTypography,
+        { resultMode, resultLabels },
+      )
       await page.screenshot({
         path: path.join(evidence, `${caseName}-reveal.png`),
       })
@@ -604,7 +1042,7 @@ try {
           ?.classList.contains("is-visible"),
       }))
       check(
-        `${guessOff ? "Guess-off" : "native"} ${count} choices retain one reveal after re-render`,
+        `${guessOff ? "Guess-off" : "native"} ${count}${images ? " image" : ""} choices retain one reveal after re-render`,
         afterRefresh.mode === "results" &&
           afterRefresh.visibleCustom === false &&
           cuesBefore.filter((name) => name === "survey-reveal").length === 1 &&
@@ -613,36 +1051,79 @@ try {
       )
     }
   }
-  await page.evaluate(() => window.handoff.audioState({ sceneKind: "finale", closingElapsed: 0 }))
+  await page.evaluate(() =>
+    window.handoff.audioState({ sceneKind: "finale", closingElapsed: 0 }),
+  )
   await page.waitForFunction(() => {
-    const state = document.querySelector('[data-testid="audio-cue-player-state"]')
-    const url = state?.getAttribute('data-audio-url')
-    const audio = window.startAudioElements.findLast(item => item.src.endsWith(url || 'missing'))
+    const state = document.querySelector(
+      '[data-testid="audio-cue-player-state"]',
+    )
+    const url = state?.getAttribute("data-audio-url")
+    const audio = window.startAudioElements.findLast((item) =>
+      item.src.endsWith(url || "missing"),
+    )
     if (!audio || audio.currentTime <= 0.05 || audio.paused) return false
     window.finaleAudio = audio
-    window.finaleBeforeClose = { url, time: audio.currentTime, plays: window.audioAttempts.filter(item => item.src === audio.src).length,
-      identity: state.getAttribute('data-audio-identity') }
+    window.finaleBeforeClose = {
+      url,
+      time: audio.currentTime,
+      plays: window.audioAttempts.filter((item) => item.src === audio.src)
+        .length,
+      identity: state.getAttribute("data-audio-identity"),
+    }
     return true
   })
-  await page.evaluate(() => window.handoff.audioState({ closingElapsed: 100000 }))
+  await page.evaluate(() =>
+    window.handoff.audioState({ closingElapsed: 100000 }),
+  )
   await page.waitForTimeout(500)
   const finale = await page.evaluate(() => {
-    const state = document.querySelector('[data-testid="audio-cue-player-state"]')
-    const before = window.finaleBeforeClose, audio = window.finaleAudio
-    return { before, time: audio.currentTime, paused: audio.paused, loop: audio.loop,
-      desiredLoop: state.getAttribute('data-audio-loop'), identity: state.getAttribute('data-audio-identity'),
-      plays: window.audioAttempts.filter(item => item.src === audio.src).length,
-      closed: document.querySelector('[data-testid="platform-closing-boundary"]')?.getAttribute('data-closing-stage') }
+    const state = document.querySelector(
+      '[data-testid="audio-cue-player-state"]',
+    )
+    const before = window.finaleBeforeClose,
+      audio = window.finaleAudio
+    return {
+      before,
+      time: audio.currentTime,
+      paused: audio.paused,
+      loop: audio.loop,
+      desiredLoop: state.getAttribute("data-audio-loop"),
+      identity: state.getAttribute("data-audio-identity"),
+      plays: window.audioAttempts.filter((item) => item.src === audio.src)
+        .length,
+      closed: document
+        .querySelector('[data-testid="platform-closing-boundary"]')
+        ?.getAttribute("data-closing-stage"),
+    }
   })
-  check("finale music continues as one loop after the platform curtains close", finale.closed === "closed" &&
-    finale.loop && finale.desiredLoop === "true" && !finale.paused && finale.time >= finale.before.time &&
-    finale.identity === finale.before.identity && finale.plays === finale.before.plays, { finale })
+  check(
+    "finale music continues as one loop after the platform curtains close",
+    finale.closed === "closed" &&
+      finale.loop &&
+      finale.desiredLoop === "true" &&
+      !finale.paused &&
+      finale.time >= finale.before.time &&
+      finale.identity === finale.before.identity &&
+      finale.plays === finale.before.plays,
+    { finale },
+  )
   check("no browser runtime errors", errors.length === 0, { errors })
   await page.screenshot({ path: path.join(evidence, "completed.png") })
   result.passed = result.checks.every((x) => x.passed)
 } catch (error) {
   result.error = String(error)
   result.passed = false
+  try {
+    await captureAudio("failure")
+  } catch (captureError) {
+    result.diagnosticError = String(captureError)
+  }
+  try {
+    await page.screenshot({ path: path.join(evidence, "failure.png") })
+  } catch (captureError) {
+    result.screenshotError = String(captureError)
+  }
 } finally {
   await browser.close()
   await new Promise((resolve) => server.close(resolve))

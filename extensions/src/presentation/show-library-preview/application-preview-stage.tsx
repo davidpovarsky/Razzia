@@ -61,7 +61,7 @@ import { observeQuestionPresentation } from "../question-lead-in"
 // First-party native stage only. The host admits exact built bytes and account assets
 // before mounting. This component has no room/socket/score/telephone transport.
 //
-type ApplicationPreviewStageProps = {
+interface ApplicationPreviewStageProps {
   frame: ApplicationPreviewFrame
   questionPosition?: { number: number; total: number }
   activeSceneData?: ScenePresenterProps["activeSceneData"]
@@ -149,11 +149,18 @@ function NativeApplicationPreviewStage({
     rootComponent === "native.original-stage" ||
     (rootComponent !== "native.cinematic-stage" &&
       theme.definition.rendererId === "razzia-native-stage")
-  const guessOffLook = !original && resolveStageLook(frame.show.defaults) === "guess-off"
-  const guessOffTextAnswers = guessOffLook &&
+  const guessOffLook =
+    !original && resolveStageLook(frame.show.defaults) === "guess-off"
+  const guessOffTextAnswers =
+    guessOffLook &&
     (card?.kind === "quiz" || card?.kind === "survey") &&
-    !(card.media?.type === "image" && (!card.reveal || card.reveal.effect === "none")) &&
-    card.answers.every(answer => answer.display === "text" || !answer.imageUrl)
+    !(
+      card.media?.type === "image" &&
+      (!card.reveal || card.reveal.effect === "none")
+    ) &&
+    card.answers.every(
+      (answer) => answer.display === "text" || !answer.imageUrl,
+    )
   const slot: ShowThemeSlotId =
     !frame.stagePhase && card && card.kind !== "quiz" && card.kind !== "survey"
       ? themeSlotForSceneKind(card.kind)
@@ -668,7 +675,11 @@ function NativeApplicationPreviewStage({
                   key={stageIdentity}
                   ref={stage}
                   labels={labels.labels}
-                  v4Labels={guessOffLook ? { ...labels.v4Labels, teamLeaderboard: "LEADERBOARD" } : labels.v4Labels}
+                  v4Labels={
+                    guessOffLook
+                      ? { ...labels.v4Labels, teamLeaderboard: "LEADERBOARD" }
+                      : labels.v4Labels
+                  }
                   guessOffLook={guessOffLook}
                   reducedMotion={frame.reducedMotion || frame.clock.paused}
                   interactive={false}

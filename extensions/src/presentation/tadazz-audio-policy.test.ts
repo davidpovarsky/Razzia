@@ -19,10 +19,18 @@ import {
 describe("P0 Tadazz soundtrack policy", () => {
   it("gives server start ticks sole effect ownership while retaining round-start music", () => {
     expect(resolveNativePhaseAudioCue("start", "start")).toBeUndefined()
-    expect(resolveTadazzAudioPolicy({ sceneKind: "start", statusName: "SHOW_START" })).toEqual({
-      slot: "roundStart", continuityKey: "round-launch",
+    expect(
+      resolveTadazzAudioPolicy({
+        sceneKind: "start",
+        statusName: "SHOW_START",
+      }),
+    ).toEqual({
+      slot: "roundStart",
+      continuityKey: "round-launch",
     })
-    expect(resolveNativePhaseAudioCue("question", "showQuestion")).toBe("showQuestion")
+    expect(resolveNativePhaseAudioCue("question", "showQuestion")).toBe(
+      "showQuestion",
+    )
     expect(resolveNativePhaseAudioCue("finale", "podium1")).toBe("podium1")
   })
   it("starts the active voting music despite a delayed previous-scene cue and music payload", () => {

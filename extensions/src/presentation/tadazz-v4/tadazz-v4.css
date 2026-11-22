@@ -456,7 +456,8 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: 855px;
+  /* Native answer cards and their external number badges end at 901px. */
+  top: 930px;
   width: 610px;
   min-height: 88px;
   display: flex;

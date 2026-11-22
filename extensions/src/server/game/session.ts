@@ -130,7 +130,10 @@ export class ExtensionGameSession {
     this.compositionMediaNames = new Set(
       appearance ? publicApplicationCompositionMediaNames(appearance) : [],
     )
-    this.extras = extras && isQuizExtrasV2(extras) ? normalizeLegacyStageLook(extras) : extras
+    this.extras =
+      extras && isQuizExtrasV2(extras)
+        ? normalizeLegacyStageLook(extras)
+        : extras
     this.themeDefinition = themeDefinition
       ? (createShowThemeRegistry([themeDefinition]).get(
           themeDefinition.id,

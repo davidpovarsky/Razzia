@@ -29,7 +29,10 @@ import {
 import { listMedia } from "@razzia/socket/services/media"
 import { Hono } from "hono"
 import { billingRoutes } from "@razzia/socket/api/extensions/billing-routes"
-import { isSavedThemeMediaReferenced } from "@razzia/socket/services/theme-installation"
+import {
+  isSavedThemeMediaReferenced,
+  readInstalledThemeMedia,
+} from "@razzia/socket/services/theme-installation"
 
 const extensionRoutes = createExtensionRoutes(
   {
@@ -39,6 +42,11 @@ const extensionRoutes = createExtensionRoutes(
     saveQuizz,
     deleteQuizz,
     listMedia,
+    readInstalledMedia: (name) => {
+      const owner = activeAccount()
+
+      return owner ? readInstalledThemeMedia(owner, name) : null
+    },
     isThemeMediaReferenced: (name) => {
       const owner = activeAccount()
 

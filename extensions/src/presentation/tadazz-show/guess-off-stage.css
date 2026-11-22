@@ -1,3 +1,10 @@
+/* Public and native text Guess-off layouts already clear the original status row. */
+:is(.ggo-native, [data-guess-off-stage][data-guess-off-media="text"])
+  .tzv4-stage
+  .vote-status {
+  top: 855px;
+}
+
 /* Q1 / Q3 / Q4: 2 × 2 wide, text-first cards. No giant image placeholders
    and no orphan answer-number-only tiles. Styling is scoped to Guess-off. */
 :is(

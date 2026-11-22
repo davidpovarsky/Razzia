@@ -27,12 +27,16 @@ function setup() {
     idempotencyKey: key,
   }
   const transfer = store.begin(owner, input)
+
   return { root, store, bytes, owner, input, transfer }
 }
 afterEach(() => {
-  for (const store of stores.splice(0)) store.close()
-  for (const root of roots.splice(0))
+  for (const store of stores.splice(0)) {
+    store.close()
+  }
+  for (const root of roots.splice(0)) {
     fs.rmSync(root, { recursive: true, force: true })
+  }
 })
 
 describe("MCP package staging", () => {
@@ -59,7 +63,7 @@ describe("MCP package staging", () => {
     expect(() => f.store.receiveTicket(ticket, Buffer.from("wrong"))).toThrow(
       "DIGEST_CHANGED",
     )
-    expect(() => f.store.ticketUploadSize(ticket + "extra")).toThrow(
+    expect(() => f.store.ticketUploadSize(`${ticket}extra`)).toThrow(
       "NOT_FOUND",
     )
     expect(f.store.receiveTicket(ticket, f.bytes)).toEqual({
@@ -114,11 +118,13 @@ describe("MCP package staging", () => {
     let calls = 0
     const upload = (bytes: Buffer) => {
       expect(bytes).toEqual(f.bytes)
-      calls++
+      calls += 1
+
       return { uploadId }
     }
     const read = (id: string) => {
       expect(id).toBe(uploadId)
+
       return { uploadId }
     }
     expect(() =>
@@ -179,9 +185,15 @@ describe("MCP package staging", () => {
     let calls = 0,
       ready = false
     const guard = () => {
-      if (!ready) throw new Error("not ready")
+      if (!ready) {
+        throw new Error("not ready")
+      }
     }
-    const action = () => ({ count: ++calls })
+    const action = () => {
+      calls += 1
+
+      return { count: calls }
+    }
     expect(() =>
       f.store.operation(f.owner, "build", key, input, action, guard),
     ).toThrow("not ready")
@@ -219,7 +231,8 @@ describe("MCP package staging", () => {
     ).toThrow("IDEMPOTENCY_CONFLICT")
     let calls = 0
     const action = () => {
-      calls++
+      calls += 1
+
       return {
         uploadId: selection.uploadId,
         revision: 2,
@@ -245,9 +258,10 @@ describe("MCP package staging", () => {
     }
     let calls = 0
     const action = (selection: PackageInstallIntent) => {
-      calls++
+      calls += 1
       expect(selection.sourceDigest).toBe(input.sourceDigest)
       expect(selection.buildDigest).toBe(input.buildDigest)
+
       return {
         uploadId: selection.uploadId,
         revision: selection.revision,
@@ -268,10 +282,11 @@ describe("MCP package staging", () => {
       { sourceDigest: "b".repeat(64) },
       { buildDigest: "c".repeat(64) },
       { selectedContentIds: ["game"] },
-    ])
+    ]) {
       expect(() =>
         f.store.installAuthorized(f.owner, { ...input, ...changed }, action),
       ).toThrow("IDEMPOTENCY_CONFLICT")
+    }
     expect(calls).toBe(1)
   })
   it("resumes an interrupted direct installation using the same immutable intent", () => {
@@ -291,8 +306,12 @@ describe("MCP package staging", () => {
     }
     let attempts = 0
     const native = () => {
-      attempts++
-      if (attempts === 1) throw new Error("interrupted after native commit")
+      attempts += 1
+
+      if (attempts === 1) {
+        throw new Error("interrupted after native commit")
+      }
+
       return result
     }
     expect(() => f.store.installAuthorized(f.owner, input, native)).toThrow(
@@ -304,7 +323,7 @@ describe("MCP package staging", () => {
     let foreignCalls = 0
     expect(() =>
       f.store.installAuthorized(randomUUID(), input, () => {
-        foreignCalls++
+        foreignCalls += 1
         throw new Error("native ownership rejected")
       }),
     ).toThrow("ownership")

@@ -135,12 +135,17 @@ export function audioEffectFailureDisposition(
 }
 
 /** Resume a timed recording at the same media position, including authored offsets. */
-export function resolveTimedAudioOffset(
-  elapsedMs: number,
+export function resolveTimedAudioOffset({
+  elapsedMs,
   startOffsetSeconds = 0,
   loop = false,
   durationSeconds = Infinity,
-): number {
+}: {
+  elapsedMs: number
+  startOffsetSeconds?: number
+  loop?: boolean
+  durationSeconds?: number
+}): number {
   const position = Math.max(0, startOffsetSeconds + elapsedMs / 1000)
 
   return loop && Number.isFinite(durationSeconds) && durationSeconds > 0
@@ -507,12 +512,12 @@ export const AudioCuePlayer = ({
 
       // Compute from the live clock on each user action. Reusing the initial
       // offset here would rewind the soundtrack whenever volume/mute changes.
-      const position = resolveTimedAudioOffset(
-        elapsed,
-        showTrack.startOffsetSeconds,
-        showTrack.loop,
-        active.duration,
-      )
+      const position = resolveTimedAudioOffset({
+        elapsedMs: elapsed,
+        startOffsetSeconds: showTrack.startOffsetSeconds,
+        loop: showTrack.loop,
+        durationSeconds: active.duration,
+      })
 
       if (Math.abs(active.currentTime - position) > 0.4) {
         active.currentTime = position
@@ -635,10 +640,10 @@ export const AudioCuePlayer = ({
         volume: showTrack.volume,
         loop: showTrack.loop ?? false,
         fadeMs: 0,
-        startOffsetSeconds: resolveTimedAudioOffset(
-          elapsed,
-          showTrack.startOffsetSeconds,
-        ),
+        startOffsetSeconds: resolveTimedAudioOffset({
+          elapsedMs: elapsed,
+          startOffsetSeconds: showTrack.startOffsetSeconds,
+        }),
         maxDurationMs: showTrack.durationMs - elapsed,
       }
     }
@@ -689,7 +694,7 @@ export const AudioCuePlayer = ({
     if (selectedSoundtrackSlot === "voting") {
       const cardMode = cardAudioCues?.answersMusic?.mode
       const cardOwnsVoting = cardMode !== undefined && cardMode !== "inherit"
-      const configuredVoting = audioExtras?.soundtrack?.voting
+      const configuredVoting = audioExtras.soundtrack?.voting
 
       if (cardOwnsVoting && !resolvedCue?.shouldPlay) {
         return null
@@ -730,22 +735,24 @@ export const AudioCuePlayer = ({
         fadeMs: 0,
         startOffsetSeconds: 0,
         fallbackUrl:
-          audioExtras?.cues.answersMusic.url !== resolvedCue.url
-            ? audioExtras?.cues.answersMusic.url
+          audioExtras.cues.answersMusic.url !== resolvedCue.url
+            ? audioExtras.cues.answersMusic.url
             : undefined,
       }
     }
 
     if (
-      audioExtras?.soundtrack?.[selectedSoundtrackSlot ?? "lobby"]?.mode ===
+      audioExtras.soundtrack?.[selectedSoundtrackSlot ?? "lobby"]?.mode ===
       "mute"
     ) {
       return null
     }
 
     if (soundtrack?.url) {
-      const loop = selectedSoundtrackSlot === "finale" ||
-        (!theme && selectedSoundtrackSlot !== "openingIntro") || soundtrack.loop
+      const loop =
+        selectedSoundtrackSlot === "finale" ||
+        (!theme && selectedSoundtrackSlot !== "openingIntro") ||
+        soundtrack.loop
 
       return {
         identity: `${gameId ?? "g"}:soundtrack:${continuityKey ?? selectedSoundtrackSlot}:${soundtrack.url}`,
@@ -1233,7 +1240,7 @@ export const AudioCuePlayer = ({
       return
     }
 
-    const upcoming = audioExtras?.soundtrack?.results
+    const upcoming = audioExtras.soundtrack?.results
     const elements = backgroundsRef.current
 
     if (
@@ -1261,7 +1268,7 @@ export const AudioCuePlayer = ({
   useEffect(() => {
     if (
       !autoPlay ||
-      audioExtras?.soundtrack?.results?.url !==
+      audioExtras.soundtrack?.results?.url !==
         "/tadazz-show/music/cutie-patootie.mp3"
     ) {
       return
@@ -1414,6 +1421,7 @@ export const AudioCuePlayer = ({
         ? themeCue?.url
         : (detail.url ??
           (detail.name ? TADAZZ_SFX_BY_CUE[detail.name] : undefined))
+      let savedStartVolume: number | undefined = undefined
 
       if (
         theme &&
@@ -1430,6 +1438,10 @@ export const AudioCuePlayer = ({
 
         if (saved?.enabled === false || saved?.volume === 0) {
           return
+        }
+
+        if (detail.name === "timer-start") {
+          savedStartVolume = saved?.volume
         }
 
         const card =
@@ -1578,7 +1590,11 @@ export const AudioCuePlayer = ({
           0,
           Math.min(
             1,
-            explicitVolume ?? detail.volume ?? themeCue?.volume ?? 0.7,
+            explicitVolume ??
+              savedStartVolume ??
+              detail.volume ??
+              themeCue?.volume ??
+              0.7,
           ),
         ) *
         (isReveal && timerEndRef.current && !timerEndRef.current.paused
@@ -1866,7 +1882,7 @@ export const AudioCuePlayer = ({
         </PlatformButton>
       )}
       {selectedSoundtrackSlot === "finale" &&
-        audioExtras?.soundtrack?.results?.url ===
+        audioExtras.soundtrack?.results?.url ===
           "/tadazz-show/music/cutie-patootie.mp3" && (
           <a
             className="absolute bottom-2 left-2 z-40 rounded px-2 py-1 text-xs text-white/70 hover:text-white"

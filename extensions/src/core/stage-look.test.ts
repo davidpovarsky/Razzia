@@ -1,16 +1,22 @@
 import { describe, expect, it } from "vitest"
 import { normalizeLegacyStageLook, resolveStageLook } from "./stage-look"
-import { authoredShowToNativeBundleDraft, nativeBundleToAuthoredShow } from "./show-authoring-convert"
+import {
+  authoredShowToNativeBundleDraft,
+  nativeBundleToAuthoredShow,
+} from "./show-authoring-convert"
 import { authoredFixture } from "./show-library/preview-fixtures"
 import { studioDefaultsSchema } from "./studio-timeline-schema"
 
 const legacyId = "6369bf77-c3d4-40ee-8a67-0476434b562f"
 const composition = {
   workspaceId: "00000000-0000-4000-8000-000000000099",
-  documentId: "appearance-test", version: "1.0.0",
-  digest: "1".repeat(64), rendererBuildSha256: "2".repeat(64),
+  documentId: "appearance-test",
+  version: "1.0.0",
+  digest: "1".repeat(64),
+  rendererBuildSha256: "2".repeat(64),
 }
-const bundle = () => authoredShowToNativeBundleDraft(authoredFixture(3, 2), legacyId).bundleDraft!
+const bundle = () =>
+  authoredShowToNativeBundleDraft(authoredFixture(3, 2), legacyId).bundleDraft!
 
 describe("persisted native stage appearance", () => {
   it("normalizes the legacy show without changing any authored data or mutating its source", () => {
@@ -32,7 +38,10 @@ describe("persisted native stage appearance", () => {
     const before = JSON.stringify(source)
     const authored = nativeBundleToAuthoredShow(source)
     expect(authored.defaults?.stageLook).toBe("guess-off")
-    const restored = authoredShowToNativeBundleDraft(authored, "new-clone").bundleDraft!
+    const restored = authoredShowToNativeBundleDraft(
+      authored,
+      "new-clone",
+    ).bundleDraft!
     expect(restored.extras.quizId).toBe("new-clone")
     expect(resolveStageLook(restored.extras.defaults)).toBe("guess-off")
     expect(nativeBundleToAuthoredShow(restored).cards).toEqual(authored.cards)
@@ -41,6 +50,7 @@ describe("persisted native stage appearance", () => {
 
   it("keeps explicit theme, version, composition and opt-out choices authoritative", () => {
     const source = normalizeLegacyStageLook(bundle().extras)
+
     for (const showTheme of [
       { id: "razzia-original", version: "1.0.0", overrides: {} },
       { id: "installed-theme", version: "1.0.0", overrides: {} },
@@ -48,10 +58,20 @@ describe("persisted native stage appearance", () => {
     ]) {
       expect(resolveStageLook({ ...source.defaults, showTheme })).toBe("theme")
     }
-    expect(resolveStageLook({ ...source.defaults, showComposition: composition })).toBe("theme")
-    const optOut = { ...source, defaults: { ...source.defaults, stageLook: "theme" as const } }
+    expect(
+      resolveStageLook({ ...source.defaults, showComposition: composition }),
+    ).toBe("theme")
+    const optOut = {
+      ...source,
+      defaults: { ...source.defaults, stageLook: "theme" as const },
+    }
     expect(normalizeLegacyStageLook(optOut)).toBe(optOut)
     expect(resolveStageLook(optOut.defaults)).toBe("theme")
-    expect(studioDefaultsSchema.safeParse({ ...source.defaults, stageLook: "unknown" }).success).toBe(false)
+    expect(
+      studioDefaultsSchema.safeParse({
+        ...source.defaults,
+        stageLook: "unknown",
+      }).success,
+    ).toBe(false)
   })
 })

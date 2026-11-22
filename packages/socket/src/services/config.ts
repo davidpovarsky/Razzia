@@ -1,4 +1,8 @@
-import { EXAMPLE_QUIZZ, QUIZZ_MODES } from "@razzia/common/constants"
+import {
+  EXAMPLE_QUIZZ,
+  EXAMPLE_QUIZZ_IMAGE,
+  QUIZZ_MODES,
+} from "@razzia/common/constants"
 import type {
   GameResult,
   GameResultMeta,
@@ -13,9 +17,10 @@ import { invalidInput, notFound } from "@razzia/socket/services/errors"
 import { normalizeFilename } from "@razzia/socket/utils/file"
 import { resolveConfigFile } from "@razzia/socket/services/config-scope"
 import { accountsEnabled, activeAccount } from "./account-scope"
+import { createHash } from "node:crypto"
 import fs from "fs"
 import { nanoid } from "nanoid"
-import { join } from "path"
+import { isAbsolute, join } from "path"
 
 export const getPath = resolveConfigFile
 
@@ -74,6 +79,78 @@ const requireFileById = (subDir: string, id: string, key: string): string => {
   return file
 }
 
+/** Only the explicit first-run seed copies this existing bundled illustration. */
+const materializeExampleImage = () => {
+  // The configured built site is authoritative for relocated native QA bundles.
+  // Production uses /app/web, including the isolated /candidate launch gate.
+  // Source/tsx and the standalone socket build retain their fixed repo layouts.
+  const siteDist = process.env.TADAZZ_SITE_DIST_DIR
+
+  if (siteDist && !isAbsolute(siteDist)) {
+    throw new Error("Example image site dist must be absolute")
+  }
+
+  const source = (
+    siteDist
+      ? [join(siteDist, EXAMPLE_QUIZZ_IMAGE.publicPath)]
+      : [
+          join("/app/web", EXAMPLE_QUIZZ_IMAGE.publicPath),
+          new URL(
+            `../../../web/public/${EXAMPLE_QUIZZ_IMAGE.publicPath}`,
+            import.meta.url,
+          ),
+          new URL(
+            `../../web/public/${EXAMPLE_QUIZZ_IMAGE.publicPath}`,
+            import.meta.url,
+          ),
+        ]
+  ).find((candidate) => fs.existsSync(candidate))
+
+  if (!source) {
+    throw new Error("Bundled example image unavailable")
+  }
+
+  const sourceStat = fs.lstatSync(source)
+
+  if (!sourceStat.isFile() || sourceStat.size !== EXAMPLE_QUIZZ_IMAGE.bytes) {
+    throw new Error("Bundled example image invalid")
+  }
+
+  const bytes = fs.readFileSync(source)
+
+  if (
+    createHash("sha256").update(bytes).digest("hex") !==
+    EXAMPLE_QUIZZ_IMAGE.sha256
+  ) {
+    throw new Error("Bundled example image changed")
+  }
+
+  const mediaDirectory = getPath("media")
+  fs.mkdirSync(mediaDirectory, { recursive: true })
+
+  if (!fs.lstatSync(mediaDirectory).isDirectory()) {
+    throw new Error("Example media directory invalid")
+  }
+
+  const destination = getPath(`media/${EXAMPLE_QUIZZ_IMAGE.name}`)
+
+  if (fs.existsSync(destination)) {
+    const stat = fs.lstatSync(destination)
+
+    if (
+      !stat.isFile() ||
+      stat.size !== bytes.length ||
+      !fs.readFileSync(destination).equals(bytes)
+    ) {
+      throw new Error(
+        "Existing example image differs; no media was overwritten",
+      )
+    }
+  } else {
+    fs.writeFileSync(destination, bytes, { flag: "wx" })
+  }
+}
+
 export const initConfig = () => {
   const isConfigFolderExists = fs.existsSync(getPath())
 
@@ -84,6 +161,8 @@ export const initConfig = () => {
   const isQuizzExists = fs.existsSync(getPath("quizz"))
 
   if (!isQuizzExists) {
+    // Materialize first: an unavailable asset must not leave a broken seed quiz.
+    materializeExampleImage()
     fs.mkdirSync(getPath("quizz"))
 
     fs.writeFileSync(
@@ -267,17 +346,27 @@ export const deleteResult = (id: string): void => {
 /** C1 allocation only. The scoped creation port owns all physical publication. */
 export const prepareNativeQuizCreation = (data: unknown) => {
   const owner = activeAccount()
+
   if (
     accountsEnabled() &&
     (!owner || !/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/iu.test(owner))
-  )
+  ) {
     throw invalidInput("Missing or invalid native creation account scope")
+  }
+
   const result = quizzValidator.safeParse(data)
-  if (!result.success) throw invalidInput(result.error.issues[0].message)
+
+  if (!result.success) {
+    throw invalidInput(result.error.issues[0].message)
+  }
+
   const id = nanoid()
   const baseFileName = `${normalizeFilename(result.data.subject, { fallback: "quizz" })}.json`
-  if (findFileById("quizz", id))
+
+  if (findFileById("quizz", id)) {
     throw invalidInput("Native creation ID collision")
+  }
+
   return { id, baseFileName, normalizedBase: result.data }
 }
 

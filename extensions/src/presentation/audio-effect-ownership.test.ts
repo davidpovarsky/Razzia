@@ -105,11 +105,35 @@ describe("default audio playback ownership", () => {
   })
 
   it("keeps timed opening music on its authored offset across pause, reconnect and loops", () => {
-    expect(resolveTimedAudioOffset(3500, 2)).toBe(5.5)
-    expect(resolveTimedAudioOffset(3500, 2)).toBe(5.5)
-    expect(resolveTimedAudioOffset(11500, 2, true, 6)).toBe(1.5)
-    expect(resolveTimedAudioOffset(11500, 2, false, 6)).toBe(13.5)
-    expect(resolveTimedAudioOffset(1000, 2, true)).toBe(3)
+    expect(
+      resolveTimedAudioOffset({ elapsedMs: 3500, startOffsetSeconds: 2 }),
+    ).toBe(5.5)
+    expect(
+      resolveTimedAudioOffset({ elapsedMs: 3500, startOffsetSeconds: 2 }),
+    ).toBe(5.5)
+    expect(
+      resolveTimedAudioOffset({
+        elapsedMs: 11500,
+        startOffsetSeconds: 2,
+        loop: true,
+        durationSeconds: 6,
+      }),
+    ).toBe(1.5)
+    expect(
+      resolveTimedAudioOffset({
+        elapsedMs: 11500,
+        startOffsetSeconds: 2,
+        loop: false,
+        durationSeconds: 6,
+      }),
+    ).toBe(13.5)
+    expect(
+      resolveTimedAudioOffset({
+        elapsedMs: 1000,
+        startOffsetSeconds: 2,
+        loop: true,
+      }),
+    ).toBe(3)
   })
 
   it("keeps distinct player clicks and distinct result milestones", () => {

@@ -39,9 +39,14 @@ const fixtureBytes = readFileSync(fixturePath)
 const fixtureSha256 = createHash("sha256").update(fixtureBytes).digest("hex")
 assert.equal(fixtureSha256, process.env.TADAZZ_PRIVATE_GAME_FIXTURES_SHA256)
 const externalMediaPath = join(dirname(fixturePath), "external-assets.json")
-const externalMediaSha256 = createHash("sha256").update(readFileSync(externalMediaPath)).digest("hex")
-assert.equal(externalMediaSha256, process.env.TADAZZ_PRIVATE_EXTERNAL_MEDIA_SHA256,
-  "Externally verified public media manifest must be pinned")
+const externalMediaSha256 = createHash("sha256")
+  .update(readFileSync(externalMediaPath))
+  .digest("hex")
+assert.equal(
+  externalMediaSha256,
+  process.env.TADAZZ_PRIVATE_EXTERNAL_MEDIA_SHA256,
+  "Externally verified public media manifest must be pinned",
+)
 const fixtures = JSON.parse(fixtureBytes.toString("utf8"))
 assert.equal(fixtures.schemaVersion, 1)
 assert(Array.isArray(fixtures.games) && fixtures.games.length > 0)
@@ -92,6 +97,12 @@ const writeReceipt = () => {
     fixtures: fixtures.games.length,
     completed: receipts.length,
     passedGames: receipts.filter((receipt) => receipt.passed).length,
+    originalPreviewFailures: receipts.filter(
+      (receipt) => receipt.originalPreviewQualified === false,
+    ).length,
+    repairedCopiesQualified: receipts.filter(
+      (receipt) => receipt.passed && receipt.externalMediaRepair?.passed,
+    ).length,
     isolatedNativeHost: true,
     originalIdsRetained: true,
     productionChanged: false,
@@ -202,6 +213,7 @@ try {
         context,
         registry,
         externalAssets: media.externalAssets,
+        evidenceDirectory: evidence,
       })
       receipt.media = media
     } catch (error) {
@@ -231,8 +243,11 @@ try {
     fixtureSha256,
     "Private fixtures remain unchanged",
   )
-  assert.equal(createHash("sha256").update(readFileSync(externalMediaPath)).digest("hex"), externalMediaSha256,
-    "External media manifest remains unchanged")
+  assert.equal(
+    createHash("sha256").update(readFileSync(externalMediaPath)).digest("hex"),
+    externalMediaSha256,
+    "External media manifest remains unchanged",
+  )
 } catch (error) {
   console.error("Stored game runner failed", error)
   fatalError = {

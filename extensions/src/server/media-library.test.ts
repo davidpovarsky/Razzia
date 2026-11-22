@@ -611,6 +611,7 @@ describe("Gate C: Persistent Media Catalog & Reference-Safe Deletion", () => {
         .map((relative) => {
           const file = path.join(tempDir, relative)
           const stat = fs.lstatSync(file)
+
           return {
             relative,
             kind: stat.isDirectory() ? "directory" : "file",
@@ -875,6 +876,7 @@ describe("Gate C: Persistent Media Catalog & Reference-Safe Deletion", () => {
         .map((relative) => {
           const file = path.join(tempDir, relative)
           const stat = fs.lstatSync(file)
+
           return {
             relative,
             kind: stat.isDirectory() ? "directory" : "file",

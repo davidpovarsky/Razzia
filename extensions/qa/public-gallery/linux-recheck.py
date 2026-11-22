@@ -90,6 +90,12 @@ elif c['mode']=='--repair-regressions':
 else:
  run('focused-tests',['node','/cleanup/node_modules/vitest/vitest.mjs','run','--config','vitest.config.ts','--configLoader','runner','--no-cache',*[p.removeprefix('extensions/') for p in tests]],300,'/evidence/source/extensions')
  run('socket-demo-catalog',['node','/cleanup/node_modules/vitest/vitest.mjs','run','--config','vitest.config.ts','--configLoader','runner','--no-cache','--project','socket','packages/socket/src/api/extensions/demo-catalog.test.ts','packages/socket/src/services/game/question-sequencing.test.ts','packages/socket/src/services/game/creating-worlds-repair.test.ts','packages/socket/src/handlers/end-answer-timer.test.ts'],180)
+if 'extensions/qa/stored-games/external-media-repair.test.mjs' in c['manifest']:
+ run('external-media-repair-planner',['node','--import','/cleanup/extensions/node_modules/tsx/dist/loader.mjs','--test','extensions/qa/stored-games/external-media-repair.test.mjs'],60)
+if 'extensions/qa/stored-games/maintenance-external-media.test.py' in c['manifest']:
+ run('maintenance-media-guards',['python3','extensions/qa/stored-games/maintenance-external-media.test.py'],45)
+if 'extensions/qa/managed-clients/test_native_owner_verifier.py' in c['manifest']:
+ run('native-owner-projection-guards',['python3','-m','unittest','discover','-s','extensions/qa/managed-clients','-p','test_native_owner_verifier.py','-v'],45)
 if lint:run('gallery-lint',['node','/cleanup/node_modules/oxlint/bin/oxlint','--format','json',*lint],120)
 run('account-native-http',['node','/cleanup/extensions/node_modules/tsx/dist/cli.mjs','--tsconfig','tsconfig.json','extensions/qa/public-gallery/account-verify.mjs'],150)
 run('phone-question-sequencing',['node','/cleanup/node_modules/vitest/vitest.mjs','run','--config','qa/phase3-phone/vitest.config.ts','--configLoader','runner','--no-cache','qa/phase3-phone/phone-v2-authority-startup.test.ts'],180,'/evidence/source/extensions')
