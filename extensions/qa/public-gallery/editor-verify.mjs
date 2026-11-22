@@ -1,5 +1,9 @@
 /** Native editor acceptance using only an account owned by the disposable host. */
 import assert from "node:assert/strict"
+import {
+  PUBLIC_GALLERY_IDS,
+  GLOBAL_THEME_COUNT,
+} from "./catalogue-inventory.mjs"
 import { createRequire } from "node:module"
 import { join } from "node:path"
 import { writeFileSync } from "node:fs"
@@ -84,7 +88,7 @@ export async function verifyGalleryEditor(options) {
       options.evidence,
     )
     let panel = await openThemes()
-    assert.equal(options.themeDefinitions.length, 11)
+    assert.equal(options.themeDefinitions.length, GLOBAL_THEME_COUNT)
     await expect
       .poll(
         () =>
@@ -105,11 +109,11 @@ export async function verifyGalleryEditor(options) {
       .toBe(true)
     await page.evaluate(() => window.scrollTo(0, 0))
     await page.screenshot({
-      path: join(options.evidence, "native-editor-eleven-global-themes.png"),
+      path: join(options.evidence, "native-editor-all-global-themes.png"),
       fullPage: true,
     })
     report.push({
-      name: "native-editor-all-eleven-global-theme-choices",
+      name: "native-editor-all-global-theme-choices",
       passed: true,
     })
 
@@ -203,7 +207,9 @@ export async function verifyGalleryEditor(options) {
     await page.getByTestId("editor-panel-close-themes").click()
 
     await page.goto(options.origin + "/studio/explore")
-    await expect(page.locator("[data-catalogue-card]")).toHaveCount(10)
+    await expect(page.locator("[data-catalogue-card]")).toHaveCount(
+      PUBLIC_GALLERY_IDS.length,
+    )
     await verifyCatalogueCovers(page, "studio", options.evidence)
     await page.evaluate(() => window.scrollTo(0, 0))
     await page.screenshot({

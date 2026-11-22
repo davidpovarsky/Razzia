@@ -8,6 +8,7 @@ import {
 } from "../contracts/full-show-frame.ts"
 import { resolveShowTheme } from "../../core/show-themes/resolve.ts"
 import { showThemeRegistry } from "../../core/show-themes/registry.ts"
+import { isOriginalThemeId } from "../../core/show-themes/original-theme-families.ts"
 import { sceneConfigSchema } from "../../core/studio-timeline-schema.ts"
 import {
   ShowThemeScope,
@@ -125,11 +126,14 @@ function NativeScene({
       ),
     [scene],
   )
-  const classic = theme.definition.rendererId === "tadazz-classic-stage"
+  const cinematic =
+    theme.definition.rendererId === "tadazz-classic-stage" ||
+    (theme.definition.rendererId === "tadazz-original-stage" &&
+      isOriginalThemeId(theme.definition.id))
   useLayoutEffect(() => {
     const handle = stage.current
 
-    if (!classic || !handle) {
+    if (!cinematic || !handle) {
       return
     }
 
@@ -154,7 +158,7 @@ function NativeScene({
       current = false
       handle.finishAnimations()
     }
-  }, [classic, plan, onUnavailable])
+  }, [cinematic, plan, onUnavailable])
   useLayoutEffect(() => {
     if (playback.clock.paused) {
       stage.current?.pauseAnimations?.()
@@ -165,7 +169,7 @@ function NativeScene({
   const surface = (
     <ScenePresenter
       scene={scene}
-      tadazzEnabled={classic}
+      tadazzEnabled={cinematic}
       isManager={input.inventory.context.role === "manager"}
       labels={labels.sceneLabels}
       epoch={`${input.inventory.selectedChapterId}:${playback.clock.epoch}`}
@@ -176,7 +180,7 @@ function NativeScene({
 
   return (
     <I18nextProvider i18n={labels.i18n}>
-      {classic ? (
+      {cinematic ? (
         <TadazzV4StageAdapter
           ref={stage}
           labels={labels.labels}

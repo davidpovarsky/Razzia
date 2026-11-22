@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" role="img" aria-label="Retro TV original cover">
+  <title>Retro TV</title><desc>Original source-controlled geometric stage art authored for Tadazz. No external imagery, fonts, scripts or remote resources.</desc>
+  <defs><radialGradient id="bg" cx="50%" cy="45%" r="75%"><stop stop-color="#483125"/><stop offset="1" stop-color="#29241f"/></radialGradient><linearGradient id="light" x2="0" y2="1"><stop stop-color="#ffd78a"/><stop offset="1" stop-color="#ffd78a" stop-opacity="0"/></linearGradient><linearGradient id="glass" x2="1" y2="1"><stop stop-color="#ffd78a" stop-opacity=".22"/><stop offset=".5" stop-color="#91c4b0" stop-opacity=".04"/><stop offset="1" stop-color="#ffd78a" stop-opacity=".12"/></linearGradient></defs>
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+    <path d="M0 0H1920V1080H0Z" fill="#613e2b" opacity=".22"/>
+    <circle cx="100" cy="180" r="180" fill="none" stroke="#ffd78a" stroke-width="28" opacity=".14"/><circle cx="100" cy="180" r="255" fill="none" stroke="#91c4b0" stroke-width="28" opacity=".14"/><circle cx="100" cy="180" r="330" fill="none" stroke="#ffd78a" stroke-width="28" opacity=".14"/><circle cx="100" cy="180" r="405" fill="none" stroke="#91c4b0" stroke-width="28" opacity=".14"/>
+    <rect x="1440" y="480" width="600" height="700" rx="150" fill="none" stroke="#ffd78a" stroke-width="20" opacity=".16"/><rect x="1494" y="534" width="492" height="592" rx="125" fill="none" stroke="#91c4b0" stroke-width="20" opacity=".16"/><rect x="1548" y="588" width="384" height="484" rx="100" fill="none" stroke="#ffd78a" stroke-width="20" opacity=".16"/>
+    <path d="M0 985H1920V1080H0Z" fill="#1e1c18" opacity=".5"/>
+    <rect x="120" y="45" width="90" height="14" rx="7" fill="#ffd78a" opacity=".5"/><rect x="400" y="45" width="90" height="14" rx="7" fill="#91c4b0" opacity=".5"/><rect x="680" y="45" width="90" height="14" rx="7" fill="#ffd78a" opacity=".5"/><rect x="960" y="45" width="90" height="14" rx="7" fill="#91c4b0" opacity=".5"/><rect x="1240" y="45" width="90" height="14" rx="7" fill="#ffd78a" opacity=".5"/><rect x="1520" y="45" width="90" height="14" rx="7" fill="#91c4b0" opacity=".5"/><rect x="1800" y="45" width="90" height="14" rx="7" fill="#ffd78a" opacity=".5"/>
+    <path d="M1450 0L1810 480M1490 0L1850 480" stroke="#fff4c8" stroke-width="2" opacity=".1"/><g>
+    <rect x="330" y="272" width="1260" height="430" rx="96" fill="#29241f" fill-opacity=".88" stroke="#ffd78a" stroke-opacity=".7" stroke-width="2"/>
+    <path d="M800 320H1120" stroke="#ffd78a" stroke-width="3"/>
+    <text x="960" y="405" text-anchor="middle" font-family="sans-serif" font-size="23" letter-spacing="8" fill="#ffd78a">TADAZZ ORIGINALS</text>
+    <text x="960" y="550" text-anchor="middle" font-family="Georgia,serif" font-weight="500" font-size="118" letter-spacing="-3" fill="#fff3d8">Retro TV</text>
+    <g transform="translate(570 620)"><rect x="0" width="165" height="14" rx="7" fill="#ffd78a" opacity="0.5"/><rect x="205" width="165" height="14" rx="7" fill="#91c4b0" opacity="0.6"/><rect x="410" width="165" height="14" rx="7" fill="#ffd78a" opacity="0.7"/><rect x="615" width="165" height="14" rx="7" fill="#91c4b0" opacity="0.8"/></g>
+    <text x="960" y="820" text-anchor="middle" font-family="sans-serif" font-size="24" letter-spacing="3" fill="#fff3d8" opacity=".75">RETRO TV</text>
+  </g></svg>

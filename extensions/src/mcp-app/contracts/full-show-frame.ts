@@ -11,6 +11,10 @@ import {
 } from "../../core/show-themes/selection.ts"
 import { nativePreviewVisualSettingsV2Schema } from "../../core/show-library/native-preview-renderer-v2-schema.ts"
 import { digest } from "./schemas.ts"
+import {
+  ORIGINAL_THEME_IDS,
+  isOriginalThemeId,
+} from "../../core/show-themes/original-theme-families.ts"
 
 export const FULL_SHOW_RESOURCE_V3 = "ui://tadazz/full-show/v3.html"
 
@@ -102,25 +106,50 @@ export const fullShowPresentationV3Schema = z.strictObject({
     .default([]),
 })
 
-export const fullShowThemeV3Schema = z.strictObject({
-  id: z.enum(["tadazz-classic", "razzia-original"]),
-  version: z.literal("1.0.0"),
-  definitionSha256: digest,
-  audio: z
-    .partialRecord(z.enum(SHOW_THEME_AUDIO_EVENTS), audioSelection)
-    .default({}),
-  rendererId: z.enum(["tadazz-classic-stage", "razzia-native-stage"]),
-  slots: z.record(
-    z.enum(SHOW_THEME_SLOTS),
-    z.strictObject({
-      variantId: z
-        .string()
-        .min(1)
-        .max(160)
-        .regex(/^[a-zA-Z0-9._-]+$/u),
-    }),
-  ),
-})
+export const fullShowThemeV3Schema = z
+  .strictObject({
+    id: z.enum(["tadazz-classic", "razzia-original", ...ORIGINAL_THEME_IDS]),
+    version: z.literal("1.0.0"),
+    definitionSha256: digest,
+    audio: z
+      .partialRecord(z.enum(SHOW_THEME_AUDIO_EVENTS), audioSelection)
+      .default({}),
+    rendererId: z.enum([
+      "tadazz-classic-stage",
+      "razzia-native-stage",
+      "tadazz-original-stage",
+    ]),
+    slots: z.record(
+      z.enum(SHOW_THEME_SLOTS),
+      z.strictObject({
+        variantId: z
+          .string()
+          .min(1)
+          .max(160)
+          .regex(/^[a-zA-Z0-9._-]+$/u),
+      }),
+    ),
+  })
+  .superRefine((theme, ctx) => {
+    const legacyRenderer = theme.id === "tadazz-classic"
+      ? "tadazz-classic-stage"
+      : "razzia-native-stage"
+    const renderer = isOriginalThemeId(theme.id)
+      ? "tadazz-original-stage"
+      : legacyRenderer
+
+    if (
+      theme.rendererId !== renderer ||
+      Object.values(theme.slots).some(
+        (slot) => !slot.variantId.startsWith(`${theme.id}.`),
+      )
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        message: "full-show:theme-family-mismatch",
+      })
+    }
+  })
 
 const content = z.discriminatedUnion("kind", [
   z.strictObject({

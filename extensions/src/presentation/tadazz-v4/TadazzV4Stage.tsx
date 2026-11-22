@@ -16,11 +16,17 @@ import {
   ZWipeV4,
 } from "./components"
 import { showThemeStyle, useOptionalShowTheme } from "../show-themes/context"
+import { isOriginalThemeId } from "../../core/show-themes/original-theme-families"
+import {
+  OriginalThemeAtmosphere,
+  OriginalThemeScene,
+} from "../original-themes/OriginalThemeScene"
 import "./full-show.css"
 import { TadazzV4Motion } from "./motion"
 import { observeQuestionPresentation } from "../question-lead-in"
 import "./source-layout.css"
 import "./tadazz-v4.css"
+import originalThemeCss from "../original-themes/original-themes.css?inline"
 import {
   continuesQuestionStage,
   normalizeData,
@@ -66,6 +72,11 @@ export const TadazzV4Stage = forwardRef<
   ref,
 ) {
   const theme = useOptionalShowTheme()
+  const originalFamily =
+    theme?.definition.rendererId === "tadazz-original-stage" &&
+    isOriginalThemeId(theme.definition.id)
+      ? theme.definition.id
+      : undefined
   const paletteTheme =
     theme?.definition.kind === "declarative" &&
     theme.definition.rendererId === "tadazz-classic-stage"
@@ -222,6 +233,7 @@ export const TadazzV4Stage = forwardRef<
     const engine = new TadazzV4Motion(layer, {
       motionScale: motionScaleRef.current,
       reducedMotion: reducedMotionRef.current,
+      originalFamily,
       onCue: (cue) => {
         if (cue.name === "wipe-covered") {
           fireCovered()
@@ -258,7 +270,7 @@ export const TadazzV4Stage = forwardRef<
         wipeEngineRef.current = null
       }
     }
-  }, [wipeRev])
+  }, [wipeRev, originalFamily])
   const showPercentagesRef = useRef(showPercentages)
   showPercentagesRef.current = overridePercentages ?? showPercentages
   /* oxlint-disable require-await, typescript/require-await -- Retain promise-returning API and rejection semantics for synchronous implementations. */
@@ -348,6 +360,7 @@ export const TadazzV4Stage = forwardRef<
     const engine = new TadazzV4Motion(el, {
       motionScale: motionScaleRef.current,
       reducedMotion: reducedMotionRef.current,
+      originalFamily,
       onCue: cueHandler,
     })
     engineRef.current?.dispose()
@@ -389,7 +402,7 @@ export const TadazzV4Stage = forwardRef<
         engineRef.current = null
       }
     }
-  }, [view?.revision, view?.scene])
+  }, [view?.revision, view?.scene, originalFamily])
   useLayoutEffect(() => {
     const element = stageRef.current
 
@@ -432,6 +445,23 @@ export const TadazzV4Stage = forwardRef<
     width: 1920,
     height: 1080,
   }
+  let sceneContent: ReactNode = null
+
+  if (view) {
+    const sceneData = {
+      ...data,
+      showPercentages: data.showPercentages ?? showPercentagesRef.current,
+    }
+    sceneContent = originalFamily ? (
+      <OriginalThemeScene
+        family={originalFamily}
+        scene={view.scene}
+        data={sceneData}
+      />
+    ) : (
+      <StageSceneV4 scene={view.scene} data={sceneData} assetBase={assetBase} />
+    )
+  }
 
   return (
     <div
@@ -445,6 +475,8 @@ export const TadazzV4Stage = forwardRef<
           .filter(Boolean)
           .join(" ")}
         data-theme-palette={paletteTheme?.definition.id}
+        data-original-family={originalFamily}
+        data-original-theme={originalFamily}
         data-v4-scene={view?.scene ?? "idle"}
         data-stage-mode={view?.scene ?? (customScreen ? "custom" : "idle")}
         data-question-key={data.questionKey ?? ""}
@@ -452,10 +484,17 @@ export const TadazzV4Stage = forwardRef<
         style={stageStyle}
         data-testid="tadazz-stage"
       >
+        {originalFamily ? (
+          <style data-original-theme-styles>{originalThemeCss}</style>
+        ) : null}
         <StageBackdropV4 scene={scene} data={data} assetBase={assetBase} />
         <div className="veil" />
         {underlay as ReactNode}
-        <StageAmbientV4 />
+        {originalFamily ? (
+          <OriginalThemeAtmosphere family={originalFamily} />
+        ) : (
+          <StageAmbientV4 />
+        )}
         {view &&
           data.eventArtworkUrl &&
           ![
@@ -472,17 +511,7 @@ export const TadazzV4Stage = forwardRef<
             />
           )}
         <div className="tzv4-scene-root" key={view?.contentRevision}>
-          {view ? (
-            <StageSceneV4
-              scene={view.scene}
-              data={{
-                ...data,
-                showPercentages:
-                  data.showPercentages ?? showPercentagesRef.current,
-              }}
-              assetBase={assetBase}
-            />
-          ) : null}
+          {sceneContent}
         </div>
         {customScreen ? (
           <div className="tzv4-custom-root">{customScreen as ReactNode}</div>

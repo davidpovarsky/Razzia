@@ -17,6 +17,7 @@ import {
 } from "../cinematic-overlays"
 import { getNativeShowLibrary } from "./native-library"
 import { assertBoundedJson, freeze } from "./primitives"
+import { createNativeLibraryPager } from "./native-library-page"
 
 const library = freeze({
   format: "tadazz-native-motion-library" as const,
@@ -53,6 +54,23 @@ const library = freeze({
   runtimeOwner: "existing-native-stage-and-cinematic-owners" as const,
 })
 
+const readPage = createNativeLibraryPager(
+  {
+    format: library.format,
+    schemaVersion: library.schemaVersion,
+    version: library.version,
+    cinematicOverlay: library.cinematicOverlay,
+    seek: library.seek,
+    lifecycleAcceptance: library.lifecycleAcceptance,
+    runtimeOwner: library.runtimeOwner,
+  },
+  [
+    ...library.stageEntrances.map((value) => ({ collection: "stageEntrances" as const, value })),
+    ...library.questionDecorations.map((value) => ({ collection: "questionDecorations" as const, value })),
+    ...library.nativeChoreography.map((value) => ({ collection: "nativeChoreography" as const, value })),
+  ],
+)
+
 const settingSchema = z.discriminatedUnion("kind", [
   z.strictObject({
     schemaVersion: z.literal(1),
@@ -82,7 +100,12 @@ export function parseNativeMotionSetting(
   return freeze(settingSchema.parse(input))
 }
 
-/** Configuration discovery is distinct from proven generic replay/seek capability. */
+/** Complete in-process configuration discovery; no generic replay/seek grant. */
 export function getNativeMotionLibrary(): typeof library {
   return library
+}
+
+/** Every motion configuration collection, with the same bounded JSON contract. */
+export function getNativeMotionLibraryPage(input: unknown = {}) {
+  return readPage(input)
 }

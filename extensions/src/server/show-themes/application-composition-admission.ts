@@ -68,9 +68,11 @@ export function admitApplicationComposition(
 
     if (
       theme.diagnostics.length ||
-      !["tadazz-classic-stage", "razzia-native-stage"].includes(
-        theme.definition.rendererId,
-      )
+      ![
+        "tadazz-classic-stage",
+        "razzia-native-stage",
+        "tadazz-original-stage",
+      ].includes(theme.definition.rendererId)
     ) {
       throw new Error("theme-builder:unsupported-family")
     }

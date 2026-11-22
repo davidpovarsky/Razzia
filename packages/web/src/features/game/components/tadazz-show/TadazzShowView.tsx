@@ -9,6 +9,7 @@ import {
   EXTENSION_EVENTS,
   resolveThemeEffect,
   isCreatingWorldsPreset,
+  isOriginalThemeId,
   type CardAudioOverrides,
   type CueId,
   type ExtensionStateEnvelope,
@@ -361,12 +362,18 @@ function TadazzShowContent(props: TadazzShowViewProps) {
     }
   }
 
-  // TADAZZ v4 design kit is the default stage; goldy-20261105 / legacy stay available as rollback.
+  const originalFamily =
+    theme.definition.rendererId === "tadazz-original-stage" &&
+    isOriginalThemeId(theme.definition.id)
+  // Compiled first-party families own their visual layout. Existing motion-kit
+  // rollback settings still apply to the other native themes.
   const useV4 =
+    originalFamily ||
     compositionRoot?.component.id === "native.cinematic-stage" ||
     isTadazzV4Active(extensionState)
   const v4Labels = useTadazzV4Labels()
-  const guessOffLook = useV4 && extensionState?.extras.stageLook === "guess-off"
+  const guessOffLook =
+    useV4 && !originalFamily && extensionState?.extras.stageLook === "guess-off"
   const guessOffTextAnswers =
     guessOffLook &&
     (scene.kind === "question" ||

@@ -21,6 +21,7 @@ import {
   EXTENSION_EVENTS,
   RAZZIA_THEME_ID,
   readPlatformOpening,
+  isOriginalThemeId,
 } from "@razzia/extensions/core"
 import { PlatformGameOpening } from "./PlatformGameOpening"
 import { PlatformGameClosing } from "./PlatformGameClosing"
@@ -135,7 +136,12 @@ const GameWrapperView = ({
     "native.original-stage": "razzia-native-stage",
     "native.cinematic-stage": "tadazz-classic-stage",
   }
-  const forcedRenderer = renderers[rootComponent ?? ""]
+  const originalFamily =
+    theme.definition.rendererId === "tadazz-original-stage" &&
+    isOriginalThemeId(theme.definition.id)
+  const forcedRenderer = originalFamily
+    ? "tadazz-original-stage"
+    : renderers[rootComponent ?? ""]
   const isEnhancedQuiz = Boolean(extensionState?.gameId)
   const {
     isPresenting: isHostPresentingConfirmed,
@@ -375,11 +381,13 @@ const GameWrapperView = ({
   const cinematicSurface =
     effectiveRole !== "player" ||
     Boolean(theme.definition.runtime) ||
-    forcedRenderer === "tadazz-classic-stage"
+    forcedRenderer === "tadazz-classic-stage" ||
+    (originalFamily && rootComponent === "native.cinematic-stage")
 
   if (
     cinematicSurface &&
-    (forcedRenderer === "tadazz-classic-stage" ||
+    (originalFamily ||
+      forcedRenderer === "tadazz-classic-stage" ||
       (forcedRenderer !== "razzia-native-stage" &&
         isTadazzShowActive(extensionState)))
   ) {

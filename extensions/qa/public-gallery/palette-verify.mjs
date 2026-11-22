@@ -1,5 +1,6 @@
 /** Computed browser evidence for native palettes and reusable catalogue covers. */
 import assert from "node:assert/strict"
+import { PUBLIC_GALLERY_IDS } from "./catalogue-inventory.mjs"
 import { existsSync, readFileSync, writeFileSync } from "node:fs"
 import { createRequire } from "node:module"
 import { join } from "node:path"
@@ -185,7 +186,7 @@ export async function verifyCatalogueCovers(page, context, evidence) {
   }))
   const rows = []
   const cards = page.locator("[data-catalogue-card]")
-  await expect(cards).toHaveCount(10)
+  await expect(cards).toHaveCount(PUBLIC_GALLERY_IDS.length)
   for (const card of await cards.all()) {
     const cover = card.locator("[data-catalogue-cover]")
     await cover.scrollIntoViewIfNeeded()

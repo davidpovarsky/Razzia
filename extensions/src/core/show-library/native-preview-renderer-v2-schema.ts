@@ -6,6 +6,10 @@ import {
 } from "../card-appearance"
 import { SHOW_THEME_SLOTS } from "../show-themes/selection"
 import {
+  ORIGINAL_THEME_IDS,
+  isOriginalThemeId,
+} from "../show-themes/original-theme-families"
+import {
   nativePreviewFrameV1Schema,
   nativePreviewRendererInputV1Schema,
 } from "./native-preview-frame-schema"
@@ -45,10 +49,14 @@ export const nativePreviewThemeBindingV2Schema = z
     role: z.enum(["manager", "spectator"]),
     draftRevision: z.number().int().positive().max(Number.MAX_SAFE_INTEGER),
     theme: z.strictObject({
-      id: z.enum(["tadazz-classic", "razzia-original"]),
+      id: z.enum(["tadazz-classic", "razzia-original", ...ORIGINAL_THEME_IDS]),
       version: z.literal("1.0.0"),
     }),
-    rendererId: z.enum(["tadazz-classic-stage", "razzia-native-stage"]),
+    rendererId: z.enum([
+      "tadazz-classic-stage",
+      "razzia-native-stage",
+      "tadazz-original-stage",
+    ]),
     definitionSha256: digest,
     compositionDocumentSha256: digest,
     slots: z.record(
@@ -58,11 +66,15 @@ export const nativePreviewThemeBindingV2Schema = z
     settings: nativePreviewVisualSettingsV2Schema,
   })
   .superRefine((binding, ctx) => {
+    const legacyRenderer = binding.theme.id === "tadazz-classic"
+      ? "tadazz-classic-stage"
+      : "razzia-native-stage"
+    const renderer = isOriginalThemeId(binding.theme.id)
+      ? "tadazz-original-stage"
+      : legacyRenderer
+
     if (
-      binding.rendererId !==
-        (binding.theme.id === "tadazz-classic"
-          ? "tadazz-classic-stage"
-          : "razzia-native-stage") ||
+      binding.rendererId !== renderer ||
       Object.values(binding.slots).some(
         (slot) => !slot.variantId.startsWith(`${binding.theme.id}.`),
       )

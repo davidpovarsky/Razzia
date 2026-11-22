@@ -57,6 +57,7 @@ import { createPreviewStageContinuity } from "./preview-stage-continuity"
 import { createShowThemeRegistry } from "../../core/show-themes/registry"
 import { PackageApplicationPreviewStage } from "./package-application-stage"
 import { observeQuestionPresentation } from "../question-lead-in"
+import { isOriginalThemeId } from "../../core/show-themes/original-theme-families"
 
 // First-party native stage only. The host admits exact built bytes and account assets
 // before mounting. This component has no room/socket/score/telephone transport.
@@ -145,12 +146,29 @@ function NativeApplicationPreviewStage({
     () => previewNativeLabels(frame.locale),
     [frame.locale],
   )
+  const originalFamily =
+    theme.definition.rendererId === "tadazz-original-stage" &&
+    isOriginalThemeId(theme.definition.id)
   const original =
-    rootComponent === "native.original-stage" ||
-    (rootComponent !== "native.cinematic-stage" &&
-      theme.definition.rendererId === "razzia-native-stage")
+    !originalFamily &&
+    (rootComponent === "native.original-stage" ||
+      (rootComponent !== "native.cinematic-stage" &&
+        theme.definition.rendererId === "razzia-native-stage"))
+  let continuityRenderer = "cinematic"
+  let previewEngine = "tadazz-classic-stage"
+
+  if (originalFamily) {
+    continuityRenderer = `original:${theme.definition.id}`
+    previewEngine = "tadazz-original-stage"
+  } else if (original) {
+    continuityRenderer = "razzia"
+    previewEngine = "razzia-native-stage"
+  }
+
   const guessOffLook =
-    !original && resolveStageLook(frame.show.defaults) === "guess-off"
+    !original &&
+    !originalFamily &&
+    resolveStageLook(frame.show.defaults) === "guess-off"
   const guessOffTextAnswers =
     guessOffLook &&
     (card?.kind === "quiz" || card?.kind === "survey") &&
@@ -209,7 +227,7 @@ function NativeApplicationPreviewStage({
     phase,
     clockEpoch: frame.clock.epoch,
     appearanceRevision: frame.appearanceRevision,
-    renderer: original ? "razzia" : "cinematic",
+    renderer: continuityRenderer,
     role: frame.role,
   })
   const [committed, setCommitted] = useState("")
@@ -327,9 +345,10 @@ function NativeApplicationPreviewStage({
       !card ||
       !bundle.ok ||
       theme.diagnostics.length ||
-      !["tadazz-classic-stage", "razzia-native-stage"].includes(
-        theme.definition.rendererId,
-      )
+      (!originalFamily &&
+        !["tadazz-classic-stage", "razzia-native-stage"].includes(
+          theme.definition.rendererId,
+        ))
     ) {
       callbacks.current.onUnavailable()
 
@@ -501,6 +520,7 @@ function NativeApplicationPreviewStage({
     frame.locale,
     theme,
     original,
+    originalFamily,
     questionPosition,
   ])
   useLayoutEffect(() => {
@@ -605,9 +625,7 @@ function NativeApplicationPreviewStage({
           data-preview-theme-slot={slot}
           data-preview-question-number={questionPosition?.number}
           data-preview-question-total={questionPosition?.total}
-          data-preview-engine={
-            original ? "razzia-native-stage" : "tadazz-classic-stage"
-          }
+          data-preview-engine={previewEngine}
           data-preview-reduced-motion={String(frame.reducedMotion)}
           data-preview-audio-event={audition?.event}
           data-preview-audio-silent={

@@ -1,5 +1,6 @@
 /** Shared viewer acceptance against the real Linux-hosted site; no mocked app clock. */
 import assert from "node:assert/strict"
+import { PUBLIC_GALLERY_IDS } from "./catalogue-inventory.mjs"
 import { createRequire } from "node:module"
 import { mkdirSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
@@ -766,7 +767,9 @@ export async function verifyStudioViewer(options) {
         )
         assert.equal(response?.status(), 200)
         const cards = page.locator("[data-catalogue-card]")
-        await expect(cards).toHaveCount(10, { timeout: 30_000 })
+        await expect(cards).toHaveCount(PUBLIC_GALLERY_IDS.length, {
+          timeout: 30_000,
+        })
         assert.equal(
           await cards.locator(".catalogue-studio-details[open]").count(),
           0,

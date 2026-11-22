@@ -238,7 +238,7 @@ function body(result: Awaited<ReturnType<typeof call>>) {
   }
 }
 
-test("real issuer/SDK catalog returns only exact D metadata and signed two-page continuation without private writes", async () => {
+test("real issuer/SDK catalog returns all ten exact families through signed continuation without private writes", async () => {
   language = "en"
   const c = await connect(await linked())
 
@@ -249,13 +249,30 @@ test("real issuer/SDK catalog returns only exact D metadata and signed two-page 
     assert.equal(first.data.items.length, 1)
     assert.ok(first.data.nextCursor)
     assert.ok(first.data.nextCursor.length <= 128)
-    const second = body(
-      await call(c, { limit: 1, cursor: first.data.nextCursor }),
-    )
-    assert.equal(second.ok, true)
-    assert.equal(second.data.nextCursor, undefined)
-    const all = [...first.data.items, ...second.data.items],
-      source = getNativeShowLibrary().families
+    const source = getNativeShowLibrary().families
+    assert.equal(source.length, 10)
+    const all = [...first.data.items]
+    const cursors = new Set<string>()
+
+    async function appendFollowingPage(cursor: string | undefined): Promise<void> {
+      if (!cursor) {
+        return
+      }
+
+      assert.equal(cursors.has(cursor), false)
+      assert.ok(cursors.size < source.length)
+      assert.ok(cursor.length <= 128)
+      cursors.add(cursor)
+      const next = body(await call(c, { limit: 1, cursor }))
+      assert.equal(next.ok, true)
+      assert.equal(next.data.items.length, 1)
+      all.push(...next.data.items)
+      await appendFollowingPage(next.data.nextCursor)
+    }
+
+    await appendFollowingPage(first.data.nextCursor)
+    assert.equal(all.length, 10)
+    assert.equal(cursors.size, 9)
     assert.deepEqual(
       all.map((i) => [i.themeId, i.version]),
       source.map((i) => [i.ref.id, i.ref.version]),

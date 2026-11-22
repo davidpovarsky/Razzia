@@ -5,6 +5,7 @@ import { GameViewer } from "../../components/game-viewer/GameViewer"
 import { getPublicDemo } from "../../../core/show-library/public-demo-catalogue"
 import { tadaShowV1Schema } from "../../../core/show-authoring-schema"
 import { resolveShowTheme } from "../../../core/show-themes"
+import { isOriginalThemeId } from "../../../core/show-themes/original-theme-families"
 import {
   ShowThemeScope,
   showThemeStyle,
@@ -44,6 +45,8 @@ type Phase =
   | "question"
   | "voting"
   | "results"
+  | "checkpoint"
+  | "interlude"
   | "finish"
 
 const soundtrackByPhase: Record<Phase, SoundtrackSlotId> = {
@@ -53,6 +56,8 @@ const soundtrackByPhase: Record<Phase, SoundtrackSlotId> = {
   question: "question",
   voting: "voting",
   results: "results",
+  checkpoint: "leaderboard",
+  interlude: "roundStart",
   finish: "finale",
 }
 
@@ -86,12 +91,14 @@ function CataloguePlayer({
       resolveShowTheme({ selection: show.defaults?.showTheme, role: "player" }),
     [show],
   )
+  const originalDemo = isOriginalThemeId(demo.metadata.themeId)
   const stage = useRef<TadazzStageHandle>(null)
   const [leadIn] = useState(() => createQuestionLeadIn())
   const phaseRef = useRef<Phase>("intro")
   const [phase, setPhase] = useState<Phase>("intro")
   const [index, setIndex] = useState(0)
-  const [votes, setVotes] = useState<Record<number, number>>({})
+  const [sceneOffset, setSceneOffset] = useState(-1)
+  const [votes, setVotes] = useState<Partial<Record<number, number>>>({})
   const [seconds, setSeconds] = useState(0)
   const deadline = useRef(0)
   const busyRef = useRef(false)
@@ -104,9 +111,36 @@ function CataloguePlayer({
     Promise.resolve(),
   )
   const question = questions[index]
+  const followupScenes = useMemo(() => {
+    if (!originalDemo) {
+      return []
+    }
+
+    const position = show.cards.findIndex((card) => card.key === question.key)
+    const following = show.cards.slice(position + 1)
+    const nextQuestion = following.findIndex(
+      (card) => card.kind === "quiz" || card.kind === "survey",
+    )
+
+    return (
+      nextQuestion < 0 ? following : following.slice(0, nextQuestion)
+    ).filter(
+      (card) =>
+        card.kind === "leaderboard" ||
+        card.kind === "answerRecap" ||
+        card.kind === "transition" ||
+        card.kind === "closing",
+    )
+  }, [originalDemo, question.key, show])
+  const currentAuthoredScene =
+    sceneOffset >= 0 ? followupScenes.at(sceneOffset) : undefined
+  const closingCard = show.cards.find((card) => card.kind === "closing")
   const { playEffect, musicUrl } = useCatalogueAudio({
     enabled: sound,
-    slot: soundtrackByPhase[phase],
+    slot:
+      phase === "checkpoint" && currentAuthoredScene?.kind === "answerRecap"
+        ? "recap"
+        : soundtrackByPhase[phase],
     screenKey: [demo.metadata.id, index, phase].join(":"),
     selection: show.defaults?.showTheme,
     cardAudioCues: question.audioCues,
@@ -199,7 +233,7 @@ function CataloguePlayer({
       question: card.question,
       number: position + 1,
       totalQuestions: questions.length,
-      round: Math.floor(position / 4) + 1,
+      round: Math.floor(position / (originalDemo ? 2 : 4)) + 1,
       note: card.note,
       ...(card.media?.type === "image"
         ? { questionImage: card.media.url }
@@ -225,9 +259,12 @@ function CataloguePlayer({
 
     transition("preparing")
     setIndex(position)
+    setSceneOffset(-1)
     setVotes((previous) =>
       Object.fromEntries(
-        Object.entries(previous).filter(([key]) => Number(key) !== position),
+        Object.entries(previous).filter(([key]) =>
+          originalDemo ? Number(key) < position : Number(key) !== position,
+        ),
       ),
     )
     const stageCard = stageQuestion(position)
@@ -317,6 +354,7 @@ function CataloguePlayer({
     leadIn.cancel()
     setVotes({})
     setIndex(0)
+    setSceneOffset(-1)
     transition("intro")
     await stage.current?.showIntro()
   }
@@ -333,6 +371,79 @@ function CataloguePlayer({
       return restart()
     }
 
+    if (originalDemo) {
+      const scene = followupScenes.at(sceneOffset + 1)
+
+      if (scene) {
+        setSceneOffset((previous) => previous + 1)
+
+        if (scene.kind === "leaderboard") {
+          transition("checkpoint")
+          await stage.current?.showLeaderboard(
+            [{ id: "solo-player", name: t("You"), score }],
+            t(scene.title ?? "Your score"),
+          )
+
+          return
+        }
+
+        if (scene.kind === "answerRecap") {
+          transition("checkpoint")
+          const startsAt = Math.max(
+            0,
+            questions.findIndex((card) => card.key === scene.startQuestionKey),
+          )
+          const winners = questions
+            .slice(startsAt, index + 1)
+            .flatMap((card, offset) => {
+              const choice = votes[startsAt + offset]
+              const answer =
+                choice === undefined ? undefined : card.answers.at(choice)
+
+              return answer
+                ? [
+                    {
+                      label: answer.text,
+                      ...(answer.imageUrl
+                        ? {
+                            image: answer.imageUrl,
+                            alt: answer.alt ?? answer.text,
+                          }
+                        : {}),
+                    },
+                  ]
+                : []
+            })
+
+          if (winners.length) {
+            await stage.current?.showRoundRecap?.({
+              winners,
+              round: Math.floor(index / 2) + 1,
+              subtitle: t(scene.title ?? "Your story choices"),
+            })
+          } else {
+            await stage.current?.showInterlude?.({
+              title: t(scene.title ?? "Your story choices"),
+              subtitle: t("No choices yet"),
+            })
+          }
+
+          return
+        }
+
+        if (scene.kind === "transition") {
+          transition("interlude")
+          await stage.current?.showInterlude?.({
+            title: t(scene.title ?? "The adventure continues"),
+            subtitle: scene.description ? t(scene.description) : undefined,
+          })
+
+          return
+        }
+        // The final authored closing uses the same native finale owner below.
+      }
+    }
+
     if (index < questions.length - 1) {
       return startQuestion(index + 1)
     }
@@ -343,15 +454,25 @@ function CataloguePlayer({
       await stage.current?.showFinale({ name: t("You"), score })
     } else {
       await stage.current?.showInterlude?.({
-        title: t("Thanks for playing together!"),
-        subtitle: t("You shared {{count}} choices", {
-          count: Object.keys(votes).length,
-        }),
+        title:
+          originalDemo && closingCard
+            ? t(closingCard.title)
+            : t("Thanks for playing together!"),
+        subtitle:
+          originalDemo && closingCard?.subtitle
+            ? t(closingCard.subtitle)
+            : t("You shared {{count}} choices", {
+                count: Object.keys(votes).length,
+              }),
       })
     }
   }
   const back = async () => {
-    if (phaseRef.current === "finish") {
+    if (
+      phaseRef.current === "finish" ||
+      phaseRef.current === "checkpoint" ||
+      phaseRef.current === "interlude"
+    ) {
       return startQuestion(index)
     }
 
@@ -368,6 +489,11 @@ function CataloguePlayer({
 
   if (phase === "intro") {
     status = t("{{count}} rounds", { count: questions.length })
+  } else if (
+    (phase === "checkpoint" || phase === "interlude") &&
+    currentAuthoredScene
+  ) {
+    status = t(currentAuthoredScene.title ?? "Your score")
   } else if (phase === "finish") {
     status = quizCount
       ? t("Your score: {{score}}", { score })
@@ -389,6 +515,7 @@ function CataloguePlayer({
         data-testid="catalogue-game-demo"
         data-catalogue-id={demo.metadata.id}
         data-game-phase={phase}
+        data-authored-scene={currentAuthoredScene?.key}
         data-audio-url={musicUrl}
         data-question-index={index}
         data-question-count={questions.length}
@@ -492,8 +619,15 @@ function CataloguePlayer({
             <TadazzV4StageAdapter
               ref={stage}
               labels={{
-                introCaption: demo.metadata.title,
-                footer: demo.metadata.title,
+                introCaption: originalDemo
+                  ? t(demo.metadata.title)
+                  : demo.metadata.title,
+                footer: originalDemo
+                  ? t(demo.metadata.title)
+                  : demo.metadata.title,
+                ...(originalDemo && closingCard
+                  ? { champion: t(closingCard.title) }
+                  : {}),
                 correctAnswer: t("Correct answer"),
                 audienceFavourite: t("Your choice"),
                 audienceResults: t("Your choice"),

@@ -1,5 +1,11 @@
 /** Real browser acceptance against a Linux-hosted candidate or the deployed site. */
 import assert from "node:assert/strict"
+import {
+  LEGACY_GALLERY_IDS,
+  ORIGINAL_GALLERY_IDS,
+  PUBLIC_GALLERY_IDS,
+  PUBLIC_QUESTION_COUNT,
+} from "./catalogue-inventory.mjs"
 import { createRequire } from "node:module"
 import { mkdirSync, writeFileSync } from "node:fs"
 import { join, resolve } from "node:path"
@@ -39,18 +45,8 @@ mkdirSync(evidence, { recursive: true })
 const sourceSha = process.env.TADAZZ_GALLERY_SOURCE_SHA ?? "uncommitted"
 const require = createRequire("/cleanup/extensions/package.json")
 const { chromium, expect } = require("@playwright/test")
-const ids = [
-  "great-guessoff",
-  "crowd",
-  "quiz",
-  "story",
-  "picture",
-  "truth",
-  "finale",
-  "family",
-  "classroom",
-  "team",
-]
+const ids = LEGACY_GALLERY_IDS
+
 const observations = {
   pageErrors: [],
   failedAssets: [],
@@ -493,11 +489,17 @@ try {
   )
   assert.equal(response.status(), 200)
   const { games } = await response.json()
-  assert.deepEqual(games.map((game) => game.id).sort(), [...ids].sort())
-  assert.equal(new Set(games.map((game) => game.themeId)).size, 10)
+  assert.deepEqual(
+    games.map((game) => game.id).sort(),
+    [...PUBLIC_GALLERY_IDS].sort(),
+  )
+  assert.equal(
+    new Set(games.map((game) => game.themeId)).size,
+    PUBLIC_GALLERY_IDS.length,
+  )
   assert.equal(
     games.reduce((count, game) => count + game.questionCount, 0),
-    77,
+    PUBLIC_QUESTION_COUNT,
   )
   const previews = new Map()
   for (const game of games) {
@@ -532,19 +534,32 @@ try {
     404,
   )
   record("all-public-catalogue-and-preview-bindings", {
-    games: 10,
-    questions: 77,
-    themes: 10,
+    games: PUBLIC_GALLERY_IDS.length,
+    questions: PUBLIC_QUESTION_COUNT,
+    themes: PUBLIC_GALLERY_IDS.length,
   })
 
   await goto(page, "/?view=store")
-  await expect(page.locator("[data-catalogue-card]")).toHaveCount(10)
+  await expect(page.locator("[data-catalogue-card]")).toHaveCount(
+    PUBLIC_GALLERY_IDS.length,
+  )
   await imageDecode(page, true)
   await verifyCatalogueCovers(page, "public-desktop", evidence)
   await screenshot(page, "gallery-desktop")
-  record("desktop-gallery-all-ten-cards")
+  record("desktop-gallery-complete-public-catalogue", {
+    cards: PUBLIC_GALLERY_IDS.length,
+  })
 
-  for (const game of games) {
+  // Preserve the established 77-round regression. The eight originals have
+  // their own authored-scene/structural acceptance; this receipt does not claim it.
+  const legacyGames = games.filter((game) =>
+    LEGACY_GALLERY_IDS.includes(game.id),
+  )
+  assert.equal(
+    legacyGames.reduce((sum, game) => sum + game.questionCount, 0),
+    77,
+  )
+  for (const game of legacyGames) {
     const animatedPreview = ["great-guessoff", "family", "picture"].includes(
       game.id,
     )
@@ -805,7 +820,9 @@ try {
       try {
         const languageQuery = mode === "hebrew" ? "&lng=he" : ""
         await goto(page, "/?view=store" + languageQuery)
-        await expect(page.locator("[data-catalogue-card]")).toHaveCount(10)
+        await expect(page.locator("[data-catalogue-card]")).toHaveCount(
+          PUBLIC_GALLERY_IDS.length,
+        )
         if (mode === "hebrew")
           await expect(page.locator("html")).toHaveAttribute("dir", "rtl")
         const overflow = await page.evaluate(
@@ -923,6 +940,11 @@ try {
         complete: true,
         passed: true,
         sourceSha,
+        deepPlayScope: {
+          gameIds: LEGACY_GALLERY_IDS,
+          rounds: 77,
+          originalsRequireSeparateAcceptance: ORIGINAL_GALLERY_IDS,
+        },
         origin,
         platform: process.platform,
         browser: "chromium",
@@ -944,6 +966,11 @@ try {
         complete: true,
         passed: false,
         sourceSha,
+        deepPlayScope: {
+          gameIds: LEGACY_GALLERY_IDS,
+          rounds: 77,
+          originalsRequireSeparateAcceptance: ORIGINAL_GALLERY_IDS,
+        },
         origin,
         platform: process.platform,
         results,

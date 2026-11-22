@@ -9,6 +9,7 @@ import type { TadazzStageHandle } from "../../presentation/tadazz-show/TadazzSta
 import { NativePreviewStage } from "../../presentation/show-library-preview/NativePreviewStage.tsx"
 import { NativeRazziaPreviewV2 } from "../../presentation/show-library-preview/NativeRazziaPreviewV2.tsx"
 import { NativeStageViewportV3 } from "./native-stage-viewport.tsx"
+import { isOriginalThemeId } from "../../core/show-themes/original-theme-families.ts"
 
 export interface FullShowDemoLabels {
   choose: string
@@ -124,7 +125,9 @@ export function FullShowDemoQuestionV3({
 
   return (
     <>
-      {theme.definition.rendererId === "tadazz-classic-stage" ? (
+      {theme.definition.rendererId === "tadazz-classic-stage" ||
+      (theme.definition.rendererId === "tadazz-original-stage" &&
+        isOriginalThemeId(theme.definition.id)) ? (
         <NativePreviewStage
           frame={nativeFrame}
           locale={input.inventory.context.locale}

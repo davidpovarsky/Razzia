@@ -97,11 +97,19 @@ class MemoryStorage implements CompositionStorage {
 }
 
 describe("real bundled native library discovery", () => {
-  it("preserves exact two family IDs and all15 slots/16 audio events and sources", () => {
+  it("preserves both existing families and eight original IDs with all15 slots/16 audio events and sources", () => {
     const library = getNativeShowLibrary()
     expect(library.families.map((family) => family.ref.id)).toEqual([
       "tadazz-classic",
       "razzia-original",
+      "royal-quiz",
+      "neon-arcade",
+      "retro-tv",
+      "magic-storybook",
+      "crystal-future",
+      "carnival-pop",
+      "sports-arena",
+      "mystery-noir",
     ])
     for (const family of library.families) {
       expect(family.visualSlots).toHaveLength(15)

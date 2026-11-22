@@ -1,5 +1,6 @@
 /** Real account HTTP integration in a new disposable Linux-native host. */
 import assert from "node:assert/strict"
+import { PUBLIC_GALLERY_IDS } from "./catalogue-inventory.mjs"
 import { spawn } from "node:child_process"
 import { fileURLToPath } from "node:url"
 import { randomBytes } from "node:crypto"
@@ -100,7 +101,10 @@ try {
     return response.json()
   }
   const catalog = (await json("/api/extensions/catalogue")).games
-  assert.equal(catalog.length, 10)
+  assert.deepEqual(
+    catalog.map((game) => game.id).sort(),
+    [...PUBLIC_GALLERY_IDS].sort(),
+  )
   const beforePublic = new Map()
   for (const game of catalog)
     beforePublic.set(
@@ -174,9 +178,14 @@ try {
     )
     installed.set(game.id, result)
   }
-  assert.equal((await json("/api/quizz", alice.token)).quizz.length, 10)
+  assert.equal(
+    (await json("/api/quizz", alice.token)).quizz.length,
+    PUBLIC_GALLERY_IDS.length,
+  )
   assert.equal((await json("/api/quizz", bob.token)).quizz.length, 0)
-  record("all-ten-real-native-installs-reopen-and-tenant-denial", { games: 10 })
+  record("all-public-native-installs-reopen-and-tenant-denial", {
+    games: PUBLIC_GALLERY_IDS.length,
+  })
 
   const family = installed.get("family")
   const nativeQuiz = await json("/api/quizz/" + family.quizzId, alice.token)
@@ -229,7 +238,10 @@ try {
       .extras.defaults.showTheme.id,
     "tadazz-midnight-club",
   )
-  assert.equal((await json("/api/quizz", alice.token)).quizz.length, 10)
+  assert.equal(
+    (await json("/api/quizz", alice.token)).quizz.length,
+    PUBLIC_GALLERY_IDS.length,
+  )
   record("theme-change-save-reload-and-install-idempotency-preserve-edits")
 
   const other = await request(
@@ -285,11 +297,11 @@ try {
             : reject(new Error("Candidate public browser exited " + code)),
         )
       })
-      record("candidate-all-ten-previews-full-play-mobile-and-hebrew")
+      record("candidate-public-catalogue-and-legacy-ten-full-play")
     } catch (error) {
       publicBrowserError = error
       results.push({
-        name: "candidate-all-ten-previews-full-play-mobile-and-hebrew",
+        name: "candidate-public-catalogue-and-legacy-ten-full-play",
         passed: false,
         error: String(error?.stack ?? error),
       })
@@ -312,7 +324,7 @@ try {
       JSON.stringify(editorReceipt, null, 2) + "\n",
     )
     record(
-      "native-editor-eleven-themes-switch-save-reload-and-catalogue-links",
+      "native-editor-global-themes-switch-save-reload-and-catalogue-links",
       { checks: editorReceipt.results.length },
     )
     if (publicBrowserError) throw publicBrowserError
