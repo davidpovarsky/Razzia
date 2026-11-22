@@ -355,6 +355,7 @@ export const authoredAnswerRecapCardSchema = z
     key: z.string().min(1),
     kind: z.literal("answerRecap"),
     title: z.string().max(120).optional(),
+    subtitle: z.string().max(300).optional(),
     startQuestionKey: z.string().min(1).optional(),
     mode: z.enum(ANSWER_RECAP_MODES).default("mostSelected"),
     maxItemsPerPage: z.number().int().min(1).max(8).default(4).optional(),
