@@ -268,7 +268,12 @@
         },
         {
           "file": "presenter-audio.spec.ts",
-          "title": "real presenter media: rejected autoplay unlocks, intro survives video end, pause retains position, one engine survives fullscreen"
+          "title": "real presenter media: rejected autoplay unlocks, opening hands off once, pause retains position, one engine survives fullscreen",
+          "originalTitle": "real presenter media: rejected autoplay unlocks, intro survives video end, pause retains position, one engine survives fullscreen",
+          "reviewedTitleChange": {
+            "sourceCommit": "195c2895590f6f17a350b0d0795c7e643de027d3",
+            "reason": "The reviewed presenter case now proves the single-owner opening-to-lobby handoff; its old title incorrectly described continued intro playback. The test body and all behavioral assertions remain unchanged by this metadata correction."
+          }
         },
         {
           "file": "quizz-types.spec.ts",

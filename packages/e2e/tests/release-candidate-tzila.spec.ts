@@ -68,6 +68,68 @@ test("staged Tzila release has exact media, QR, roster, soundtrack and same-wind
   })
   expect(auth.ok(), await auth.text()).toBe(true)
   const { token } = (await auth.json()) as { token: string }
+  const sidecar = await request.get(
+    "/api/extensions/quizzes/0KTcUgc0uvF_vGWYHrpTJ",
+    { headers: { Authorization: `Bearer ${token}` } },
+  )
+  expect(sidecar.ok(), await sidecar.text()).toBe(true)
+  const saved = (await sidecar.json()) as {
+    extras: import("../../../extensions/src/core").QuizExtrasV2
+  }
+  const directoryScenes = Object.values(saved.extras.scenes).filter(
+    (scene) =>
+      scene.kind === "animation" && scene.preset === "representative-directory",
+  )
+  expect(directoryScenes).toHaveLength(1)
+  const directory = directoryScenes.at(0)
+
+  if (directory?.kind !== "animation") {
+    throw new Error("The staged fixture must retain its saved directory scene")
+  }
+
+  expect(directory.seatingPlan).toBeUndefined()
+  expect(directory.representatives).toBeUndefined()
+  expect(saved.extras.defaults.lobby).toBeUndefined()
+  expect(saved.extras.questionIds).toHaveLength(10)
+  // This saved revision has no authored artwork or opening card. The shared
+  // platform ident is the sole opening owner; unused directory data serves its lobby.
+  expect(
+    Object.values(saved.extras.scenes).filter(
+      (scene) => scene.kind === "animation" && scene.eventArtworkUrl,
+    ),
+  ).toEqual([])
+  const firstCard = saved.extras.timeline.at(0)
+
+  if (firstCard?.kind !== "animation") {
+    throw new Error(
+      "The staged timeline must begin with its authored round-one card",
+    )
+  }
+
+  expect(saved.extras.scenes[firstCard.sceneId]).toMatchObject({
+    kind: "animation",
+    preset: "round-one",
+  })
+  const namesByTable = new Map<number, string[]>()
+
+  for (const participant of saved.extras.roster.participants) {
+    const { tableNumber, displayName } = participant
+    expect(Number.isInteger(tableNumber)).toBe(true)
+
+    if (tableNumber === undefined) {
+      throw new Error(
+        "Every staged representative must retain an explicit table",
+      )
+    }
+
+    expect(tableNumber).toBeGreaterThanOrEqual(1)
+    expect(tableNumber).toBeLessThanOrEqual(31)
+    const names = namesByTable.get(tableNumber) ?? []
+    names.push(displayName)
+    namesByTable.set(tableNumber, names)
+  }
+
+  expect(namesByTable.size).toBe(31)
 
   for (const [name, expected] of media) {
     const response = await request.get(`/media/${name}`, {
@@ -86,10 +148,23 @@ test("staged Tzila release has exact media, QR, roster, soundtrack and same-wind
   await page.getByRole("button", { name: title, exact: true }).click()
   await page.getByRole("button", { name: "Start game", exact: true }).click()
 
-  const opening = page.getByTestId("tadazz-opening")
-  await expect(opening).toHaveAttribute("data-opening-phase", "event-artwork")
-  await expect(page.getByTestId("tadazz-opening-event-artwork")).toBeVisible()
+  const platformOpening = page.getByTestId("platform-game-opening")
+  const audio = page.getByTestId("audio-cue-player-state")
+  await expect(platformOpening).toHaveCount(1)
+  await expect(platformOpening).toHaveAttribute(
+    "data-platform-opening-stage",
+    "standby",
+  )
+  await expect(page.getByTestId("tadazz-opening")).toHaveCount(0)
+  await expect(audio).toHaveCount(1)
   await expect(page.getByTestId("tadazz-opening-video")).toHaveCount(0)
+  await page.getByTestId("platform-opening-start").click()
+  await expect(platformOpening).toHaveAttribute(
+    "data-platform-opening-stage",
+    "opening",
+  )
+  const opening = page.getByTestId("tadazz-opening")
+  await expect(opening).toHaveCount(1)
   await expect(opening).toHaveAttribute("data-opening-phase", "brand")
   await expect(page.getByTestId("tadazz-opening-event-artwork")).toHaveCount(0)
   const video = page.getByTestId("tadazz-opening-video")
@@ -99,40 +174,72 @@ test("staged Tzila release has exact media, QR, roster, soundtrack and same-wind
       (element: HTMLVideoElement) => element.muted && element.volume === 0,
     ),
   ).toBe(true)
-  await expect(page.getByTestId("audio-cue-player-state")).toHaveAttribute(
+  await expect(audio).toHaveCount(1)
+  await expect(audio).toHaveAttribute(
     "data-audio-url",
     "/media/tadazz-production-intro-20261106.wav",
   )
-  await page.getByTestId("tadazz-opening-skip").click()
+  await expect(audio).toHaveAttribute("data-should-play", "true")
+  await page.getByTestId("platform-opening-skip").click()
+  await expect(platformOpening).toHaveCount(0)
+  await expect(opening).toHaveCount(0)
   await expect(page.getByTestId("tadazz-lobby-pin")).toHaveText(/^\d{6}$/u)
   await expect(page.getByTestId("tadazz-lobby-qr")).toBeVisible()
-  await expect(page.getByTestId("tadazz-lobby-representative")).toHaveCount(31)
+  const lobbyDirectory = page.getByTestId("tadazz-full-directory")
+  const seats = lobbyDirectory.locator(".table-unit")
+  await expect(seats).toHaveCount(31)
+
+  for (const [table, names] of namesByTable) {
+    const seat = lobbyDirectory.locator(`.table-unit[data-table="${table}"]`)
+    await expect(seat).toHaveCount(1)
+    await expect(seat).toBeVisible()
+    const label = await seat.getAttribute("aria-label")
+
+    for (const name of names) {
+      expect(label).toContain(name)
+    }
+  }
   await expect(
     page.getByText("+44 330 613 1984", { exact: true }),
   ).toBeVisible()
-  await expect(page.locator(".tz-lobby-show-rep.connected")).toHaveCount(0)
-  await expect(page.getByTestId("audio-cue-player-state")).toHaveAttribute(
+  await expect(lobbyDirectory.locator(".table-unit.connected")).toHaveCount(0)
+  await expect(audio).toHaveCount(1)
+  await expect(audio).toHaveAttribute(
     "data-audio-url",
     "/media/tadazz-exploration-20261106.mp3",
   )
-  const code = (await page.getByTestId("tadazz-lobby-pin").textContent())!
+  await expect(audio).toHaveAttribute("data-should-play", "true")
+  const code = await page.getByTestId("tadazz-lobby-pin").textContent()
+  const representative = saved.extras.roster.participants.at(0)
+
+  if (!code || !representative?.tableNumber) {
+    throw new Error(
+      "The staged fixture must expose a PIN and a saved representative table",
+    )
+  }
+
+  expect(
+    saved.extras.roster.participants.filter(
+      (person) =>
+        person.displayName.trim().toLocaleLowerCase() ===
+        representative.displayName.trim().toLocaleLowerCase(),
+    ),
+  ).toHaveLength(1)
   const playerContext = await browser.newContext({
     viewport: { width: 390, height: 844 },
   })
   const player = await playerContext.newPage()
-  const sidecar = await request.get(
-    "/api/extensions/quizzes/0KTcUgc0uvF_vGWYHrpTJ",
-    { headers: { Authorization: `Bearer ${token}` } },
-  )
-  const saved = (await sidecar.json()) as {
-    extras: import("../../../extensions/src/core").QuizExtrasV2
-  }
-  await joinGame(player, code, saved.extras.roster.participants[0].displayName)
-  await page.waitForTimeout(1500)
+  await joinGame(player, code, representative.displayName)
+  await expect(
+    lobbyDirectory.locator(
+      `.table-unit[data-table="${representative.tableNumber}"]`,
+    ),
+  ).toHaveAttribute("data-connected", "true")
+  await expect(lobbyDirectory.locator(".table-unit.connected")).toHaveCount(1)
 
   await page.getByRole("button", { name: "Start", exact: true }).click()
   await expect(page.locator('[data-v4-scene="round-one"]')).toBeVisible()
-  // The artwork and 40-person roster belong BEFORE Start, never on the timeline.
+  // The platform ident and saved table directory precede the authored timeline.
   await expect(page.locator('[data-v4-scene="company-opening"]')).toHaveCount(0)
   await expect(
     page.locator('[data-v4-scene="representative-directory"]'),
@@ -151,5 +258,12 @@ test("staged Tzila release has exact media, QR, roster, soundtrack and same-wind
   expect(page.url()).toBe(originalUrl)
   await page.keyboard.press("Escape")
   await expect(page.getByTestId("manager-control-toolbar")).toBeVisible()
+  const after = await request.get(
+    "/api/extensions/quizzes/0KTcUgc0uvF_vGWYHrpTJ",
+    { headers: { Authorization: `Bearer ${token}` } },
+  )
+  expect(after.ok(), await after.text()).toBe(true)
+  const unchanged = (await after.json()) as typeof saved
+  expect(unchanged.extras).toEqual(saved.extras)
   await playerContext.close()
 })
