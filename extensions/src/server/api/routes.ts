@@ -29,6 +29,7 @@ import {
   readAccountPreviewAssets,
   listAccountPreviewSources,
   PreviewSourceError,
+  type AccountPreviewInjections,
 } from "./account-preview-source"
 import { readApplicationPreviewRuntime } from "./application-preview-runtime"
 import {
@@ -115,7 +116,7 @@ const uploadLottieBodySchema = z
   })
 
 export const createExtensionRoutes = (
-  injections: StorageInjections,
+  injections: StorageInjections & AccountPreviewInjections,
   requireManagerMiddleware?: MiddlewareHandler,
 ) => {
   const service = new CompositeStorageService(injections)

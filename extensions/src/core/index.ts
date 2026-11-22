@@ -1,5 +1,7 @@
 export * from "./audio-catalog"
+
 export * from "./platform-audio-assets"
+
 export * from "./platform-audio-defaults"
 
 export * from "./show-themes/index"
@@ -31,6 +33,8 @@ export * from "./questions"
 export * from "./quiz-extras"
 
 export * from "./studio-timeline-schema"
+
+export * from "./stage-look"
 
 export * from "./studio-migrate"
 

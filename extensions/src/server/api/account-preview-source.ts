@@ -40,6 +40,11 @@ export class PreviewSourceError extends Error {
   }
 }
 
+export type AccountPreviewInjections = Pick<StorageInjections, "getPath"> & {
+  /** Same authenticated owner and installed-media boundary as native /media. */
+  readInstalledMedia?: (name: string) => { bytes: Uint8Array } | null
+}
+
 function readFile(file: string, maxBytes: number): Buffer {
   const stat = fs.lstatSync(file)
 
@@ -164,7 +169,17 @@ export function projectAccountPreviewContent(
         baseDigest,
       )
 
-  if (extras.quizId !== id || extras.baseDigest !== baseDigest) {
+  // Stored sidecars historically hashed either the logical payload or the full
+  // record including its storage ID. Match the storage reader's compatibility
+  // contract without normalizing or rewriting any persisted bytes. Keep the
+  // normalized form already admitted by preview for legacy default fields.
+  const { id: _storageId, ...storedPayload } = input
+  const matchesBaseDigest =
+    extras.baseDigest === baseDigest ||
+    extras.baseDigest === computeCanonicalBaseDigest(storedPayload) ||
+    extras.baseDigest === computeCanonicalBaseDigest(input)
+
+  if (extras.quizId !== id || !matchesBaseDigest) {
     throw new PreviewSourceError(409)
   }
 
@@ -197,7 +212,7 @@ export function projectAccountPreviewContent(
 // Content projection alone never admits a renderer or grants media access.
 //
 export function readAccountPreviewSource(
-  injections: Pick<StorageInjections, "getPath">,
+  injections: AccountPreviewInjections,
   id: string,
   builtinAuthority?: AccountPreviewBuiltinAuthority,
 ) {
@@ -245,9 +260,9 @@ export function readAccountPreviewSource(
   return { ...result, assets }
 }
 
-/** The existing tenant directory is the ownership boundary; no URL or path fetch. */
+/** Existing tenant files and installed-media authorization only; no URL fetch. */
 export function readAccountPreviewAssets(
-  injections: Pick<StorageInjections, "getPath">,
+  injections: AccountPreviewInjections,
   urls: readonly string[],
 ) {
   if (urls.length > 256 || new Set(urls).size !== urls.length) {
@@ -265,10 +280,19 @@ export function readAccountPreviewAssets(
       throw new PreviewSourceError(422)
     }
 
-    const bytes = readFile(
-      injections.getPath(`media/${url.slice(7)}`),
-      100_000_000,
-    )
+    const name = url.slice(7)
+    // Reserved virtual names must never fall back to a same-named upload. The
+    // native reader checks tenant, installed/published state and content digest.
+    const installed =
+      /^(?:pkg_[a-f0-9]{24}|theme_[a-f0-9]{32})_[a-f0-9]{64}\./u.test(name)
+    const bytes = installed
+      ? injections.readInstalledMedia?.(name)?.bytes
+      : readFile(injections.getPath(`media/${name}`), 100_000_000)
+
+    if (!bytes || bytes.byteLength === 0 || bytes.byteLength > 100_000_000) {
+      throw new PreviewSourceError(422)
+    }
+
     total += bytes.byteLength
 
     if (total > 200_000_000 || assets.length >= 256) {

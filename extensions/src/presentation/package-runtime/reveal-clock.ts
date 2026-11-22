@@ -147,7 +147,8 @@ export function packageTimerAudioTransition(
   ) {
     return {
       state,
-      cue: previous.seconds <= 1 ? "timer-ended" : "vote-locked",
+      // The host may finish the native preview clock before its deadline.
+      cue: "timer-ended",
       volume: 0.8,
     }
   }

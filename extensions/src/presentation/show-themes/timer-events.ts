@@ -1,3 +1,27 @@
+/** Route a server start tick through the shared audio owner; this owns no timer. */
+export function startCountdownCue(input: {
+  gameId: string
+  epoch: number
+  seconds: number
+  role: "manager" | "spectator" | "player"
+  paused: boolean
+}): { name: "timer-start"; identity: string; volume: number } | null {
+  if (
+    input.role === "player" ||
+    input.paused ||
+    !Number.isFinite(input.seconds) ||
+    input.seconds <= 0
+  ) {
+    return null
+  }
+
+  return {
+    name: "timer-start",
+    identity: `${input.gameId}:${input.epoch}:start-countdown:${input.seconds}`,
+    volume: 0.2,
+  }
+}
+
 export interface ThemeTimerEndState {
   gameId: string
   questionId: string
@@ -15,6 +39,7 @@ export function themeTimerTransition(
     questionId: string | null
     epoch: number
     voting: boolean
+    awaitingCompletion?: boolean
     results: boolean
     paused: boolean
     deadline?: number
@@ -35,6 +60,11 @@ export function themeTimerTransition(
     previous.questionId === input.questionId &&
     previous.epoch === input.epoch
 
+  // Native status can close voting before the matching extension result arrives.
+  if (same && input.awaitingCompletion && !input.results) {
+    return { state: previous }
+  }
+
   if (input.results) {
     if (!same || previous.emitted) {
       return { state: previous }
@@ -46,7 +76,10 @@ export function themeTimerTransition(
       return { state }
     }
 
-    const event = input.reason === "elapsed" ? "timer-ended" : "vote-locked"
+    const event =
+      input.reason === "elapsed" || input.reason === "manual"
+        ? "timer-ended"
+        : "vote-locked"
 
     return {
       state,

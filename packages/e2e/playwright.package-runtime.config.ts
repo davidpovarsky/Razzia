@@ -77,7 +77,11 @@ const common = {
 
 export default defineConfig({
   testDir: "tests",
-  testMatch: ["package-runtime.spec.ts", "package-runtime-load.spec.ts"],
+  testMatch: [
+    "package-runtime.spec.ts",
+    "package-runtime-load.spec.ts",
+    "managed-clients.spec.ts",
+  ],
   outputDir: "test-results/package-runtime",
   timeout: 240_000,
   expect: { timeout: 20_000 },

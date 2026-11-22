@@ -8,6 +8,7 @@ import {
   EVENTS,
   NO_TIME_LIMIT,
   QUESTION_TYPES,
+  QUESTION_LEAD_IN_MS,
   QUIZZ_MODES,
   SCORING_MODES,
 } from "@razzia/common/constants"
@@ -218,7 +219,7 @@ describe("quiz flow", () => {
     expect(status(game.gameId)?.name).toBe(STATUS.SHOW_QUESTION)
 
     game.selectAnswer(alice, [0])
-    await vi.advanceTimersByTimeAsync(3000)
+    await vi.advanceTimersByTimeAsync(QUESTION_LEAD_IN_MS)
 
     expect(status(game.gameId)?.name).toBe(STATUS.SELECT_ANSWER)
 

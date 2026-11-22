@@ -76,6 +76,51 @@ function resolved(role: ShowThemeRole = "manager", overrides = {}) {
 }
 
 describe("imported theme platform audio inheritance", () => {
+  it("keeps Classic's start effect separate from the timed platform intro and round-start music", () => {
+    const theme = resolveShowTheme({
+      role: "manager",
+      selection: createDefaultShowTheme(),
+    })
+    const audio = applyThemeAudioDefaults(theme, createPlatformAudioExtras())
+    expect(audio.cues.start).toMatchObject({
+      url: PLATFORM_CUE_URLS.start,
+      enabled: true,
+      volume: 0.8,
+      loop: false,
+    })
+    expect(audio.soundtrack?.openingIntro).toEqual(
+      PLATFORM_SOUNDTRACK_DEFAULTS.openingIntro,
+    )
+    expect(audio.soundtrack?.openingIntro).toMatchObject({
+      loop: false,
+      maxDurationMs: 12000,
+    })
+    expect(audio.soundtrack?.roundStart).toEqual(
+      PLATFORM_SOUNDTRACK_DEFAULTS.roundStart,
+    )
+
+    for (const [slot, url] of [
+      ["openingIntro", PLATFORM_AUDIO_URLS.openingIntro],
+      ["roundStart", PLATFORM_AUDIO_URLS.roundStart],
+    ] as const) {
+      const output = renderToString(
+        createElement(ShowThemeScope, {
+          theme,
+          children: createElement(AudioCuePlayer, {
+            audioExtras: audio,
+            soundtrackSlot: slot,
+            cueId: "start",
+            autoPlay: false,
+          }),
+        }),
+      )
+      expect(output).toContain(`data-audio-url="${url}"`)
+      expect(output).not.toContain(
+        `data-audio-url="${PLATFORM_CUE_URLS.start}"`,
+      )
+    }
+  })
+
   it("uses the existing full mix without copying recordings into a theme or accepting arbitrary URLs", () => {
     const theme = resolved()
     expect(theme.diagnostics).toEqual([])
@@ -124,6 +169,7 @@ describe("imported theme platform audio inheritance", () => {
     (role) => {
       const theme = resolved(role)
       for (const name of [
+        "timer-start",
         "timer-tick",
         "timer-urgent",
         "timer-final",
@@ -157,6 +203,7 @@ describe("imported theme platform audio inheritance", () => {
       PLATFORM_CUE_URLS.answerPressed,
     )
     expect(resolveThemeEffect(theme, "answer-selected")?.url).toBeUndefined()
+    expect(resolveThemeEffect(theme, "timer-start")?.url).toBeUndefined()
     expect(resolveThemeEffect(theme, "timer-ended")?.url).toBeUndefined()
     expect(resolveThemeEffect(theme, "survey-reveal")?.url).toBeUndefined()
   })
@@ -260,12 +307,16 @@ describe("imported theme platform audio inheritance", () => {
     const silent = structuredClone(definition)
     delete silent.audioEvents.timerExpired.variants[0].inheritPlatform
     silent.audioEvents.timerExpired.variants[0].silent = true
+    delete silent.audioEvents.opening.variants[0].inheritPlatform
+    silent.audioEvents.opening.variants[0].silent = true
     const theme = resolveShowTheme({
       role: "manager",
       registry: createShowThemeRegistry([silent]),
       selection: { ...createDefaultShowTheme(), id: definition.id },
     })
     expect(resolveThemeEffect(theme, "timer-ended")?.url).toBeUndefined()
+    expect(resolveThemeEffect(theme, "timer-start")?.url).toBeUndefined()
+    expect(defaultThemeAudioUrl(theme, "opening")).toBeUndefined()
     expect(defaultThemeAudioUrl(theme, "timerExpired")).toBeUndefined()
     const missing = structuredClone(definition)
     delete missing.audioEvents.timerExpired.variants[0].inheritPlatform

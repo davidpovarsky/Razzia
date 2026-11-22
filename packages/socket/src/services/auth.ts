@@ -18,6 +18,10 @@ import {
 } from "@razzia/socket/services/account-auth"
 import { sign, verify } from "hono/jwt"
 import { v7 as uuid } from "uuid"
+import {
+  ManagedClientStore,
+  type ManagedClientPrincipal,
+} from "./managed-clients"
 
 const ALGORITHM = "HS256"
 const PLAYER_TTL = 60 * 60 * 24 * 30
@@ -67,6 +71,17 @@ export const mintToken = async (
 export const verifyToken = async (token: string): Promise<SessionClaims> => {
   const claims = parseClaims(await verify(token, jwtSecret, ALGORITHM))
 
+  if (claims.managedClientId) {
+    if (
+      !accountsEnabled() ||
+      !new ManagedClientStore().session(claims.sub, claims.sid)
+    ) {
+      throw new Error("Managed client session revoked or invalid")
+    }
+
+    return claims
+  }
+
   if (
     accountsEnabled() &&
     claims.role === SESSION_ROLES.MANAGER &&
@@ -76,6 +91,33 @@ export const verifyToken = async (token: string): Promise<SessionClaims> => {
   }
 
   return claims
+}
+
+/** Issued only after the six-digit exchange has created its revocable DB row. */
+export const mintManagedClientToken = async (
+  principal: ManagedClientPrincipal,
+): Promise<string> => {
+  const current = new ManagedClientStore().session(
+    principal.id,
+    principal.sessionId,
+  )
+
+  if (!current || current.ownerId !== principal.ownerId) {
+    throw new Error("Managed client session revoked or invalid")
+  }
+
+  return await sign(
+    {
+      sub: current.id,
+      role: SESSION_ROLES.MANAGER,
+      managedClientId: current.id,
+      sid: current.sessionId,
+      iat: Math.floor(Date.now() / 1000),
+      exp: current.expiresAt,
+    },
+    jwtSecret,
+    ALGORITHM,
+  )
 }
 
 export const verifyIgnoringExpiry = async (

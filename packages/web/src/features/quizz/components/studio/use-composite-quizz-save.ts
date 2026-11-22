@@ -39,7 +39,6 @@ export function useCompositeQuizzSave() {
   const {
     handleSubmit,
     control,
-    getValues,
     reset,
     formState: { isSubmitting, isDirty },
   } = useFormContext<QuizzFormValues, unknown, QuizzValidated>()
@@ -72,13 +71,13 @@ export function useCompositeQuizzSave() {
     handleExit()
   }
 
-  const { mutate: create, isPending: isCreating } = useMutation({
+  const { mutateAsync: create, isPending: isCreating } = useMutation({
     mutationFn: createQuizz,
     onSuccess: () => onSaved("quizz:quizzSaved"),
     onError,
   })
 
-  const { mutate: update, isPending: isUpdating } = useMutation({
+  const { mutateAsync: update, isPending: isUpdating } = useMutation({
     mutationFn: updateQuizz,
     onSuccess: () => onSaved("quizz:quizzUpdated"),
     onError,
@@ -177,13 +176,15 @@ export function useCompositeQuizzSave() {
           }
         }
 
-        if (quizzId) {
-          update({ id: quizzId, json: values })
-
-          return
+        try {
+          if (quizzId) {
+            await update({ id: quizzId, json: values })
+          } else {
+            await create(values)
+          }
+        } catch {
+          // The mutation's onError handler reports the failure. Keep the form editable.
         }
-
-        create(values)
       },
       (invalid) => {
         if (!Array.isArray(invalid.questions)) {
@@ -249,42 +250,42 @@ export function useCompositeQuizzSave() {
     }
   }
 
-  const handleForceOverwriteConflict = async () => {
-    if (!quizzId || !extras) {
-      return
-    }
+  const handleForceOverwriteConflict = () =>
+    handleSubmit(async (currentValues) => {
+      if (!quizzId || !extras) {
+        return
+      }
 
-    try {
-      const currentValues = getValues()
-      const baseDigest = computeCanonicalBaseDigest(currentValues)
-      const client = new CompositeApiClient({
-        getAuthToken: () => localStorage.getItem("token"),
-      })
-      // Force overwrite with expectedRevision: null and fresh baseDigest matching current form values
-      const res = await client.saveQuizComposite(quizzId, {
-        expectedRevision: null,
-        quizz: currentValues,
-        extras: {
-          ...extras,
-          baseDigest,
-          questionIds,
-        },
-      })
-      setExtras((prev) =>
-        prev
-          ? {
-              ...prev,
-              revision: res.revision,
-              baseDigest: res.baseDigest,
-            }
-          : null,
-      )
-      setConflict(null)
-      onSaved("quizz:quizzUpdated")
-    } catch (err: unknown) {
-      onError(err as Error)
-    }
-  }
+      try {
+        const baseDigest = computeCanonicalBaseDigest(currentValues)
+        const client = new CompositeApiClient({
+          getAuthToken: () => localStorage.getItem("token"),
+        })
+        // Force overwrite with expectedRevision: null and fresh baseDigest matching current form values
+        const res = await client.saveQuizComposite(quizzId, {
+          expectedRevision: null,
+          quizz: currentValues,
+          extras: {
+            ...extras,
+            baseDigest,
+            questionIds,
+          },
+        })
+        setExtras((prev) =>
+          prev
+            ? {
+                ...prev,
+                revision: res.revision,
+                baseDigest: res.baseDigest,
+              }
+            : null,
+        )
+        setConflict(null)
+        onSaved("quizz:quizzUpdated")
+      } catch (err: unknown) {
+        onError(err as Error)
+      }
+    })()
 
   return {
     control,

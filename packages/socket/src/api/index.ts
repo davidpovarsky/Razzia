@@ -7,6 +7,10 @@ import { resolveConfigRoot } from "../services/config-scope"
 import { auth } from "@razzia/socket/api/routes/auth"
 import { contact } from "@razzia/socket/api/routes/contact"
 import { accounts } from "@razzia/socket/api/routes/accounts"
+import {
+  clientAccess,
+  managedClients,
+} from "@razzia/socket/api/routes/managed-clients"
 import { games } from "@razzia/socket/api/routes/games"
 import { media } from "@razzia/socket/api/routes/media"
 import { quizz } from "@razzia/socket/api/routes/quizz"
@@ -25,7 +29,10 @@ import {
 import { listMedia } from "@razzia/socket/services/media"
 import { Hono } from "hono"
 import { billingRoutes } from "@razzia/socket/api/extensions/billing-routes"
-import { isSavedThemeMediaReferenced } from "@razzia/socket/services/theme-installation"
+import {
+  isSavedThemeMediaReferenced,
+  readInstalledThemeMedia,
+} from "@razzia/socket/services/theme-installation"
 
 const extensionRoutes = createExtensionRoutes(
   {
@@ -35,6 +42,11 @@ const extensionRoutes = createExtensionRoutes(
     saveQuizz,
     deleteQuizz,
     listMedia,
+    readInstalledMedia: (name) => {
+      const owner = activeAccount()
+
+      return owner ? readInstalledThemeMedia(owner, name) : null
+    },
     isThemeMediaReferenced: (name) => {
       const owner = activeAccount()
 
@@ -59,6 +71,8 @@ const routes = new Hono()
   .get("/health", (c) => c.json({ status: "ok" }))
   .route("/auth", auth)
   .route("/accounts", accounts)
+  .route("/managed-clients", managedClients)
+  .route("/client-access", clientAccess)
   .route("/contact", contact)
   .route("/billing", billingRoutes)
   .route("/quizz", quizz)

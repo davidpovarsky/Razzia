@@ -1,0 +1,549 @@
+{
+  "run": "tadazz-native-final-e2eabcee",
+  "container": "a682c7664c8edf62482c0aad8dc2587aad83f2a50d4c3b49b2f36c0f81b0e5f7",
+  "containerStopped": true,
+  "fixtureSha256": "82e2871fd084c81f0042f9f862698eb67231e6fbc63c9272052b3e4b53916096",
+  "directorSha256": "197a0f03b65a671336ba407ff86c44aef344587f2d1a4ad650bd002765546acf",
+  "runs": [
+    {
+      "phase": "before",
+      "exit": 1,
+      "receipt": {
+        "source": "/src",
+        "quizId": "6369bf77-c3d4-40ee-8a67-0476434b562f",
+        "baseSha256": "62790117934a78f6c5bd8ba11285f4b89172d6c10e8c8e6775fe4ed8351df103",
+        "extrasSha256": "71c30555fea7ec2616770990815c0c75c4e245e81fb0f9c3707f5161f9af1754",
+        "sourceFiles": {
+          "server/game/studio-show-coordinator.ts": "e6be7f09a2b46e06ac956d3158543ff765fd9850d0e6914734a28d50b1dcc46e",
+          "gameplay/timeline-runner.ts": "4bbb3473c6eef880c898bc4c54292301f6e282f5edd3cfe8cea29a03d107911c",
+          "server/game/round-policy.ts": "e2b4246e38aace3eaf53294abe6d02002eff748c6cd89ce11bec937f41c56046",
+          "presentation/tadazz-show/presentation-scene.ts": "a3e8a5ebeb452c9e19c371c625fdbc44cfd4e989ce5d0fdaab6f678f596430fa",
+          "presentation/tadazz-show/show-director.ts": "2d9b182d9ac70b7cd2d677a5f0a088277292f537f6a2498387029f304b8c8a1e"
+        },
+        "questions": 23,
+        "steps": 28,
+        "questionStarts": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23
+        ],
+        "boardAfter": [
+          8,
+          16,
+          23
+        ],
+        "automaticBoards": [],
+        "finishCallbacks": 1,
+        "nativeFinaleCalls": 2,
+        "trace": [
+          {
+            "step": 0,
+            "kind": "scene",
+            "afterQuestion": 0,
+            "operations": [
+              "playZZWipe"
+            ]
+          },
+          {
+            "step": 1,
+            "kind": "question",
+            "question": 1
+          },
+          {
+            "step": 2,
+            "kind": "question",
+            "question": 2
+          },
+          {
+            "step": 3,
+            "kind": "question",
+            "question": 3
+          },
+          {
+            "step": 4,
+            "kind": "question",
+            "question": 4
+          },
+          {
+            "step": 5,
+            "kind": "question",
+            "question": 5
+          },
+          {
+            "step": 6,
+            "kind": "question",
+            "question": 6
+          },
+          {
+            "step": 7,
+            "kind": "question",
+            "question": 7
+          },
+          {
+            "step": 8,
+            "kind": "question",
+            "question": 8
+          },
+          {
+            "step": 9,
+            "kind": "scene",
+            "afterQuestion": 8,
+            "operations": [
+              "showLeaderboard"
+            ]
+          },
+          {
+            "step": 10,
+            "kind": "question",
+            "question": 9
+          },
+          {
+            "step": 11,
+            "kind": "question",
+            "question": 10
+          },
+          {
+            "step": 12,
+            "kind": "question",
+            "question": 11
+          },
+          {
+            "step": 13,
+            "kind": "question",
+            "question": 12
+          },
+          {
+            "step": 14,
+            "kind": "question",
+            "question": 13
+          },
+          {
+            "step": 15,
+            "kind": "question",
+            "question": 14
+          },
+          {
+            "step": 16,
+            "kind": "question",
+            "question": 15
+          },
+          {
+            "step": 17,
+            "kind": "question",
+            "question": 16
+          },
+          {
+            "step": 18,
+            "kind": "scene",
+            "afterQuestion": 16,
+            "operations": [
+              "showLeaderboard"
+            ]
+          },
+          {
+            "step": 19,
+            "kind": "question",
+            "question": 17
+          },
+          {
+            "step": 20,
+            "kind": "question",
+            "question": 18
+          },
+          {
+            "step": 21,
+            "kind": "question",
+            "question": 19
+          },
+          {
+            "step": 22,
+            "kind": "question",
+            "question": 20
+          },
+          {
+            "step": 23,
+            "kind": "question",
+            "question": 21
+          },
+          {
+            "step": 24,
+            "kind": "question",
+            "question": 22
+          },
+          {
+            "step": 25,
+            "kind": "question",
+            "question": 23
+          },
+          {
+            "step": 26,
+            "kind": "scene",
+            "afterQuestion": 23,
+            "operations": [
+              "showLeaderboard"
+            ]
+          },
+          {
+            "step": 27,
+            "kind": "scene",
+            "afterQuestion": 23,
+            "operations": [
+              "showFinale"
+            ]
+          },
+          {
+            "kind": "finale",
+            "operations": [
+              "showFinale"
+            ]
+          }
+        ],
+        "checks": [
+          {
+            "name": "actual original game and native default",
+            "passed": true
+          },
+          {
+            "name": "all 23 questions start exactly once in order",
+            "passed": true
+          },
+          {
+            "name": "all 28 authored steps execute",
+            "passed": true
+          },
+          {
+            "name": "actual native leaderboard operations occur after 8,16,23",
+            "passed": true
+          },
+          {
+            "name": "cardOnly suppresses every automatic duplicate board",
+            "passed": true
+          },
+          {
+            "name": "coordinator finishes exactly once despite duplicate completion signals",
+            "passed": true
+          },
+          {
+            "name": "native finale is requested once across authored closing and FINISHED",
+            "passed": false
+          },
+          {
+            "name": "populated matching winner preserves authored finale",
+            "passed": false
+          },
+          {
+            "name": "first final entrance is retained",
+            "passed": true
+          },
+          {
+            "name": "changed winner name is retained",
+            "passed": true
+          },
+          {
+            "name": "same winner with changed score is retained",
+            "passed": true
+          },
+          {
+            "name": "unpainted authored closing still presents finale",
+            "passed": true
+          },
+          {
+            "name": "cinematic authored closing does not swallow final screen",
+            "passed": true
+          }
+        ],
+        "passed": false
+      },
+      "stderr": ""
+    },
+    {
+      "phase": "after",
+      "exit": 0,
+      "receipt": {
+        "source": "/src",
+        "quizId": "6369bf77-c3d4-40ee-8a67-0476434b562f",
+        "baseSha256": "62790117934a78f6c5bd8ba11285f4b89172d6c10e8c8e6775fe4ed8351df103",
+        "extrasSha256": "71c30555fea7ec2616770990815c0c75c4e245e81fb0f9c3707f5161f9af1754",
+        "sourceFiles": {
+          "server/game/studio-show-coordinator.ts": "e6be7f09a2b46e06ac956d3158543ff765fd9850d0e6914734a28d50b1dcc46e",
+          "gameplay/timeline-runner.ts": "4bbb3473c6eef880c898bc4c54292301f6e282f5edd3cfe8cea29a03d107911c",
+          "server/game/round-policy.ts": "e2b4246e38aace3eaf53294abe6d02002eff748c6cd89ce11bec937f41c56046",
+          "presentation/tadazz-show/presentation-scene.ts": "a3e8a5ebeb452c9e19c371c625fdbc44cfd4e989ce5d0fdaab6f678f596430fa",
+          "presentation/tadazz-show/show-director.ts": "197a0f03b65a671336ba407ff86c44aef344587f2d1a4ad650bd002765546acf"
+        },
+        "questions": 23,
+        "steps": 28,
+        "questionStarts": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21,
+          22,
+          23
+        ],
+        "boardAfter": [
+          8,
+          16,
+          23
+        ],
+        "automaticBoards": [],
+        "finishCallbacks": 1,
+        "nativeFinaleCalls": 1,
+        "trace": [
+          {
+            "step": 0,
+            "kind": "scene",
+            "afterQuestion": 0,
+            "operations": [
+              "playZZWipe"
+            ]
+          },
+          {
+            "step": 1,
+            "kind": "question",
+            "question": 1
+          },
+          {
+            "step": 2,
+            "kind": "question",
+            "question": 2
+          },
+          {
+            "step": 3,
+            "kind": "question",
+            "question": 3
+          },
+          {
+            "step": 4,
+            "kind": "question",
+            "question": 4
+          },
+          {
+            "step": 5,
+            "kind": "question",
+            "question": 5
+          },
+          {
+            "step": 6,
+            "kind": "question",
+            "question": 6
+          },
+          {
+            "step": 7,
+            "kind": "question",
+            "question": 7
+          },
+          {
+            "step": 8,
+            "kind": "question",
+            "question": 8
+          },
+          {
+            "step": 9,
+            "kind": "scene",
+            "afterQuestion": 8,
+            "operations": [
+              "showLeaderboard"
+            ]
+          },
+          {
+            "step": 10,
+            "kind": "question",
+            "question": 9
+          },
+          {
+            "step": 11,
+            "kind": "question",
+            "question": 10
+          },
+          {
+            "step": 12,
+            "kind": "question",
+            "question": 11
+          },
+          {
+            "step": 13,
+            "kind": "question",
+            "question": 12
+          },
+          {
+            "step": 14,
+            "kind": "question",
+            "question": 13
+          },
+          {
+            "step": 15,
+            "kind": "question",
+            "question": 14
+          },
+          {
+            "step": 16,
+            "kind": "question",
+            "question": 15
+          },
+          {
+            "step": 17,
+            "kind": "question",
+            "question": 16
+          },
+          {
+            "step": 18,
+            "kind": "scene",
+            "afterQuestion": 16,
+            "operations": [
+              "showLeaderboard"
+            ]
+          },
+          {
+            "step": 19,
+            "kind": "question",
+            "question": 17
+          },
+          {
+            "step": 20,
+            "kind": "question",
+            "question": 18
+          },
+          {
+            "step": 21,
+            "kind": "question",
+            "question": 19
+          },
+          {
+            "step": 22,
+            "kind": "question",
+            "question": 20
+          },
+          {
+            "step": 23,
+            "kind": "question",
+            "question": 21
+          },
+          {
+            "step": 24,
+            "kind": "question",
+            "question": 22
+          },
+          {
+            "step": 25,
+            "kind": "question",
+            "question": 23
+          },
+          {
+            "step": 26,
+            "kind": "scene",
+            "afterQuestion": 23,
+            "operations": [
+              "showLeaderboard"
+            ]
+          },
+          {
+            "step": 27,
+            "kind": "scene",
+            "afterQuestion": 23,
+            "operations": [
+              "showFinale"
+            ]
+          },
+          {
+            "kind": "finale",
+            "operations": []
+          }
+        ],
+        "checks": [
+          {
+            "name": "actual original game and native default",
+            "passed": true
+          },
+          {
+            "name": "all 23 questions start exactly once in order",
+            "passed": true
+          },
+          {
+            "name": "all 28 authored steps execute",
+            "passed": true
+          },
+          {
+            "name": "actual native leaderboard operations occur after 8,16,23",
+            "passed": true
+          },
+          {
+            "name": "cardOnly suppresses every automatic duplicate board",
+            "passed": true
+          },
+          {
+            "name": "coordinator finishes exactly once despite duplicate completion signals",
+            "passed": true
+          },
+          {
+            "name": "native finale is requested once across authored closing and FINISHED",
+            "passed": true
+          },
+          {
+            "name": "populated matching winner preserves authored finale",
+            "passed": true
+          },
+          {
+            "name": "first final entrance is retained",
+            "passed": true
+          },
+          {
+            "name": "changed winner name is retained",
+            "passed": true
+          },
+          {
+            "name": "same winner with changed score is retained",
+            "passed": true
+          },
+          {
+            "name": "unpainted authored closing still presents finale",
+            "passed": true
+          },
+          {
+            "name": "cinematic authored closing does not swallow final screen",
+            "passed": true
+          }
+        ],
+        "passed": true
+      },
+      "stderr": ""
+    }
+  ]
+}

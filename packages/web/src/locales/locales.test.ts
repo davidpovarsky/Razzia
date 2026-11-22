@@ -7,7 +7,8 @@ import { describe, expect, it } from "vitest"
 const LOCALES_DIR = import.meta.dirname
 const PACKAGES_DIR = join(import.meta.dirname, "../../..")
 const REFERENCE = "en"
-const KEY_PATTERN = /["'`]((?:common|errors|game|manager|quizz):[\w.-]+)["'`]/gu
+const KEY_PATTERN =
+  /["'`]((?:common|errors|game|manager|quizz):[\w-]+(?:\.[\w-]+)*)["'`]/gu
 
 const PLURAL_SUFFIX = /_(?:ordinal_)?(?:zero|one|two|few|many|other)$/u
 
@@ -54,13 +55,13 @@ const listSources = (dir: string): string[] =>
     return isSource && !entry.name.includes(".test.") ? [path] : []
   })
 
+const keysInSource = (source: string) =>
+  Array.from(source.matchAll(KEY_PATTERN), ([, key]) => key)
+
 const usedKeys = (packageName: string) =>
   new Set(
     listSources(join(PACKAGES_DIR, packageName, "src")).flatMap((file) =>
-      Array.from(
-        fs.readFileSync(file, "utf-8").matchAll(KEY_PATTERN),
-        ([, key]) => key,
-      ),
+      keysInSource(fs.readFileSync(file, "utf-8")),
     ),
   )
 
@@ -97,6 +98,22 @@ const languages = fs
   .map((entry) => entry.name)
 
 describe("translations", () => {
+  it("finds complete translation keys without treating dotted prefixes as keys", () => {
+    const source = [
+      't("common:retry")',
+      't("errors:extensions.invalidImportHeaders")',
+      't("quizz:answer-key_one")',
+      'key.startsWith("errors:extensions.")',
+      'key.replace("errors:extensions.", "extensions:roster.errors.")',
+    ].join("\n")
+
+    expect(keysInSource(source)).toEqual([
+      "common:retry",
+      "errors:extensions.invalidImportHeaders",
+      "quizz:answer-key_one",
+    ])
+  })
+
   it.each(languages)("%s has every english key", (lang) => {
     const keys = baseKeys(lang)
 

@@ -31,6 +31,10 @@ import {
 import { useFormContext, useWatch } from "react-hook-form"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
+import {
+  insertQuestionForScene,
+  withQuestionPlayMode,
+} from "./studio-question-mutations"
 
 export type StudioTab = "questions" | "participants" | "settings" | "launch"
 
@@ -588,16 +592,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
 
         if (qIndex >= 0 && qIndex < currentQuestions.length) {
           const currentQ = currentQuestions[qIndex]
-          const updatedQ: Question = {
-            ...currentQ,
-            playMode: toKind,
-            ...(toKind === "quiz" &&
-            (!currentQ.solutions || currentQ.solutions.length === 0)
-              ? {
-                  solutions: [0],
-                }
-              : {}),
-          }
+          const updatedQ = withQuestionPlayMode(currentQ, toKind)
           const nextQuestions = currentQuestions.map((q, idx) =>
             idx === qIndex ? updatedQ : q,
           )
@@ -700,8 +695,18 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           cooldown: QUESTION_LEAD_IN_SECONDS,
           time: 20,
         }
-        const nextQuestions = [...currentQuestions, newQuestion]
-        const nextQIds = [...currentQIds, newQId]
+        const {
+          nextQuestions,
+          nextQuestionIds: nextQIds,
+          nextCurrentIndex,
+        } = insertQuestionForScene({
+          questions: currentQuestions,
+          questionIds: currentQIds,
+          timeline: currentTimeline,
+          sceneIndex: itemIdx,
+          question: newQuestion,
+          questionId: newQId,
+        })
         const nextTimeline = currentTimeline.map((entry) =>
           entry.id === item.id
             ? {
@@ -727,7 +732,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           nextTimeline,
           nextScenes,
           nextSelectedId: item.id,
-          nextCurrentIndex: nextQuestions.length - 1,
+          nextCurrentIndex,
         })
 
         return
@@ -1295,10 +1300,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
   const bulkApplyQuestionMode = useCallback(
     (mode: "quiz" | "survey") => {
       const currentQuestions = getValues("questions")
-      const updated = currentQuestions.map((q) => ({
-        ...q,
-        playMode: mode,
-      }))
+      const updated = currentQuestions.map((q) => withQuestionPlayMode(q, mode))
       setValue("questions", updated, {
         shouldDirty: true,
       })

@@ -491,6 +491,8 @@ export const studioDefaultsSchema = z.strictObject({
     })
     .optional(),
   showTheme: showThemeSelectionSchema.optional(),
+  /** Native stage styling persists with the show when it is copied or exported. */
+  stageLook: z.enum(["theme", "guess-off"]).optional(),
   showComposition: applicationCompositionPinSchema.optional(),
   /** Native UUIDs in storage; authored card keys during friendly show export. */
   showCompositionScopeAliases: z

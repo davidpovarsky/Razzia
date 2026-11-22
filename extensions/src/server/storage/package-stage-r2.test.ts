@@ -1,8 +1,13 @@
 import fs from "node:fs"
 import path from "node:path"
+import { quizzValidator } from "@razzia/common/validators/quizz"
+import { z } from "zod"
 import { afterEach, beforeEach, describe, expect, it } from "vitest"
 import { stagePackageGame } from "../packages/game-stage"
-import { computeCanonicalBaseDigest } from "../../core/index"
+import {
+  computeCanonicalBaseDigest,
+  quizExtrasV2Schema,
+} from "../../core/index"
 import {
   makeNativeFixture,
   nativeInput,
@@ -11,21 +16,28 @@ import {
 } from "./native-binding-fixture"
 
 describe("R2 production package-stage opaque adapter contract", () => {
-  let previousConfig: string | undefined
-  let previousAccounts: string | undefined
+  let previousConfig: string | undefined = undefined
+  let previousAccounts: string | undefined = undefined
   beforeEach(() => {
     previousConfig = process.env.CONFIG_PATH
     previousAccounts = process.env.TADAZZ_ACCOUNTS_ENABLED
   })
   afterEach(() => {
-    if (previousConfig === undefined) delete process.env.CONFIG_PATH
-    else process.env.CONFIG_PATH = previousConfig
-    if (previousAccounts === undefined)
+    if (previousConfig === undefined) {
+      delete process.env.CONFIG_PATH
+    } else {
+      process.env.CONFIG_PATH = previousConfig
+    }
+
+    if (previousAccounts === undefined) {
       delete process.env.TADAZZ_ACCOUNTS_ENABLED
-    else process.env.TADAZZ_ACCOUNTS_ENABLED = previousAccounts
+    } else {
+      process.env.TADAZZ_ACCOUNTS_ENABLED = previousAccounts
+    }
   })
   it("stages a real enhanced game with the supported Map-only base adapter", () => {
     const { root, descriptor } = makeNativeFixture("media")
+
     try {
       const stagingRoot = path.join(root, "package-stage-r2")
       const quizz = nativeInput("R2 actual production stager")
@@ -42,10 +54,12 @@ describe("R2 production package-stage opaque adapter contract", () => {
       const extrasFile = result.files.find(
         (file) => file.relative === `extensions/quizzes/${result.quizId}.json`,
       )!
-      const { id, ...storedPayload } = JSON.parse(
-        baseFile.bytes.toString("utf8"),
+      const { id, ...storedPayload } = quizzValidator
+        .safeExtend({ id: z.string() })
+        .parse(JSON.parse(baseFile.bytes.toString("utf8")))
+      const storedExtras = quizExtrasV2Schema.parse(
+        JSON.parse(extrasFile.bytes.toString("utf8")),
       )
-      const storedExtras = JSON.parse(extrasFile.bytes.toString("utf8"))
       expect(id).toBe(result.quizId)
       expect(storedPayload).toStrictEqual(quizz)
       expect(storedExtras.quizId).toBe(result.quizId)
@@ -55,12 +69,15 @@ describe("R2 production package-stage opaque adapter contract", () => {
       expect(storedExtras.baseDigest).toBe(result.baseDigest)
       expect(storedExtras.authoring).toStrictEqual(extras.authoring)
       expect(storedExtras.scenes).toStrictEqual(extras.scenes)
-      expect(storedExtras.audio).toStrictEqual(extras.audio)
+      // JSON omits optional undefined URLs; every defined audio setting must
+      // survive the package's persisted representation exactly.
+      expect(JSON.stringify(storedExtras.audio)).toBe(
+        JSON.stringify(extras.audio),
+      )
       expect(storedExtras.mediaCatalog).toStrictEqual(extras.mediaCatalog)
-      for (const key of ["defaults", "teams", "roster"])
-        expect(storedExtras[key]).toStrictEqual(
-          extras[key as keyof typeof extras],
-        )
+      for (const key of ["defaults", "teams", "roster"] as const) {
+        expect(storedExtras[key]).toStrictEqual(extras[key])
+      }
       expect(Object.values(storedExtras.perQuestion)).toStrictEqual(
         Object.values(extras.perQuestion),
       )

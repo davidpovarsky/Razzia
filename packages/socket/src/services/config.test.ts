@@ -1,5 +1,8 @@
-import { QUIZZ_MODES } from "@razzia/common/constants"
+import { EXAMPLE_QUIZZ_IMAGE, QUIZZ_MODES } from "@razzia/common/constants"
 import type { GameResult } from "@razzia/common/types/game"
+import { CompositeStorageService } from "@razzia/extensions/server"
+import { readAccountPreviewSource } from "../../../../extensions/src/server/api/account-preview-source"
+import { createHash } from "node:crypto"
 import {
   deleteQuizz,
   deleteResult,
@@ -17,8 +20,8 @@ import {
 import { DomainError } from "@razzia/socket/services/errors"
 import { createQuestion, createQuizz } from "@razzia/socket/test/fixtures"
 import fs from "fs"
-import { join } from "path"
-import { beforeEach, describe, expect, it } from "vitest"
+import { dirname, join } from "path"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 const quizzDir = () => getPath("quizz")
 const resultsDir = () => getPath("results")
@@ -46,9 +49,141 @@ beforeEach(() => {
   initConfig()
 })
 
+afterEach(() => {
+  vi.unstubAllEnvs()
+})
+
 describe("initConfig", () => {
   it("creates the example quizz on first launch", () => {
     expect(getQuizz().map((q) => q.subject)).toEqual(["Example Quizz"])
+  })
+
+  it("seeds real local image bytes admitted by the strict read-only preview", () => {
+    const [example] = getQuizz()
+    const source = getPath("quizz/example.json")
+    const before = fs.readFileSync(source)
+    const url = `/media/${EXAMPLE_QUIZZ_IMAGE.name}`
+    const image = fs.readFileSync(getPath(`media/${EXAMPLE_QUIZZ_IMAGE.name}`))
+
+    expect(image.length).toBe(EXAMPLE_QUIZZ_IMAGE.bytes)
+    expect(image.readUInt32BE(16)).toBe(512)
+    expect(image.readUInt32BE(20)).toBe(512)
+    expect(createHash("sha256").update(image).digest("hex")).toBe(
+      EXAMPLE_QUIZZ_IMAGE.sha256,
+    )
+    expect(
+      example.questions.flatMap((question) =>
+        question.media ? [question.media.url] : [],
+      ),
+    ).toEqual([url, url])
+    const preview = readAccountPreviewSource({ getPath }, example.id)
+    expect(preview.assets.filter((asset) => asset.url === url)).toEqual([
+      {
+        url,
+        sha256: EXAMPLE_QUIZZ_IMAGE.sha256,
+        bytes: EXAMPLE_QUIZZ_IMAGE.bytes,
+      },
+    ])
+    expect(fs.readFileSync(source)).toEqual(before)
+    expect(fs.existsSync(getPath("extensions/quizzes"))).toBe(false)
+  })
+
+  it("retains local image admission after same-owner export and import", () => {
+    const [example] = getQuizz()
+    const before = fs.readFileSync(getPath("quizz/example.json"))
+    const service = new CompositeStorageService({
+      getPath,
+      getQuizzById,
+      saveQuizz,
+      updateQuizz,
+      deleteQuizz,
+    })
+    const imported = service.importEnhancedBundle(
+      service.exportEnhancedBundle(example.id),
+    )
+    expect(imported.quizId).not.toBe(example.id)
+    expect(getQuizzById(imported.quizId).questions).toEqual(example.questions)
+    const preview = readAccountPreviewSource({ getPath }, imported.quizId)
+    expect(preview.assets).toContainEqual({
+      url: `/media/${EXAMPLE_QUIZZ_IMAGE.name}`,
+      sha256: EXAMPLE_QUIZZ_IMAGE.sha256,
+      bytes: EXAMPLE_QUIZZ_IMAGE.bytes,
+    })
+    expect(fs.readFileSync(getPath("quizz/example.json"))).toEqual(before)
+  })
+
+  it("seeds a relocated native bundle from the configured built site", () => {
+    const bytes = fs.readFileSync(getPath(`media/${EXAMPLE_QUIZZ_IMAGE.name}`))
+    const dist = getPath("isolated-built-site")
+    const artifact = join(dist, EXAMPLE_QUIZZ_IMAGE.publicPath)
+    fs.mkdirSync(dirname(artifact), { recursive: true })
+    fs.writeFileSync(artifact, bytes)
+    fs.rmSync(quizzDir(), { recursive: true })
+    fs.rmSync(getPath("media"), { recursive: true })
+    vi.stubEnv("TADAZZ_SITE_DIST_DIR", dist)
+
+    initConfig()
+
+    const [example] = getQuizz()
+    expect(
+      fs.readFileSync(getPath(`media/${EXAMPLE_QUIZZ_IMAGE.name}`)),
+    ).toEqual(bytes)
+    expect(
+      readAccountPreviewSource({ getPath }, example.id).assets,
+    ).toContainEqual({
+      url: `/media/${EXAMPLE_QUIZZ_IMAGE.name}`,
+      sha256: EXAMPLE_QUIZZ_IMAGE.sha256,
+      bytes: EXAMPLE_QUIZZ_IMAGE.bytes,
+    })
+  })
+
+  it("never masks a missing configured build asset with a source-tree fallback", () => {
+    const dist = getPath("incomplete-built-site")
+    fs.mkdirSync(dist)
+    fs.rmSync(quizzDir(), { recursive: true })
+    fs.rmSync(getPath("media"), { recursive: true })
+    vi.stubEnv("TADAZZ_SITE_DIST_DIR", dist)
+
+    expect(initConfig).toThrow("Bundled example image unavailable")
+    expect(fs.existsSync(quizzDir())).toBe(false)
+    expect(fs.existsSync(getPath("media"))).toBe(false)
+  })
+
+  it("rejects a relative built site path instead of resolving it against cwd", () => {
+    fs.rmSync(quizzDir(), { recursive: true })
+    vi.stubEnv("TADAZZ_SITE_DIST_DIR", "relative-built-site")
+
+    expect(initConfig).toThrow("Example image site dist must be absolute")
+    expect(fs.existsSync(quizzDir())).toBe(false)
+  })
+
+  it("does not rewrite existing games or recreate their missing media on restart or read", () => {
+    const file = getPath("quizz/example.json")
+    const existing = fs
+      .readFileSync(file, "utf8")
+      .replaceAll(
+        `/media/${EXAMPLE_QUIZZ_IMAGE.name}`,
+        "https://placehold.co/600x400.png",
+      )
+    fs.writeFileSync(file, existing)
+    const image = getPath(`media/${EXAMPLE_QUIZZ_IMAGE.name}`)
+    fs.rmSync(image)
+
+    initConfig()
+    getQuizz()
+
+    expect(fs.readFileSync(file, "utf8")).toBe(existing)
+    expect(fs.existsSync(image)).toBe(false)
+  })
+
+  it("does not overwrite colliding user media or create a seed with wrong bytes", () => {
+    fs.rmSync(quizzDir(), { recursive: true })
+    const image = getPath(`media/${EXAMPLE_QUIZZ_IMAGE.name}`)
+    fs.writeFileSync(image, "existing owner media")
+
+    expect(initConfig).toThrow("Existing example image differs")
+    expect(fs.readFileSync(image, "utf8")).toBe("existing owner media")
+    expect(fs.existsSync(quizzDir())).toBe(false)
   })
 })
 

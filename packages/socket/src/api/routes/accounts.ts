@@ -1,6 +1,7 @@
 import { zValidator } from "@hono/zod-validator"
 import { SESSION_ROLES } from "@razzia/common/constants"
 import { mintToken } from "@razzia/socket/services/auth"
+import { retireManagedClientCookie } from "@razzia/socket/services/managed-client-session"
 import { accountsEnabled } from "@razzia/socket/services/account-scope"
 import { checkAccountConfiguration } from "@razzia/socket/services/account-db"
 import {
@@ -110,6 +111,7 @@ export const accounts = new Hono()
     }
 
     const session = await mintToken(user.id, SESSION_ROLES.MANAGER)
+    await retireManagedClientCookie(c)
     setCookie(c, "tdz_media_auth", session.token, {
       ...commonCookie,
       maxAge: 12 * 60 * 60,

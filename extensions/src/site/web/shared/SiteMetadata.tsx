@@ -2,6 +2,7 @@ import { useRouterState } from "@tanstack/react-router"
 import { useTranslation } from "react-i18next"
 import { useEffect } from "react"
 import { siteText as t } from "../../locales"
+import { useManagedClientText } from "../../locales/clients"
 import { catalogue } from "../marketing/Catalogue"
 import { resolveSiteMetadata } from "./site-metadata-policy"
 
@@ -9,6 +10,7 @@ import { resolveSiteMetadata } from "./site-metadata-policy"
 export function SiteMetadata({ tenantName }: { tenantName?: string }) {
   const location = useRouterState({ select: (state) => state.location })
   useTranslation("tadazzSite")
+  const clientText = useManagedClientText()
   const metadata = resolveSiteMetadata({
     pathname: location.pathname,
     search: location.searchStr,
@@ -18,10 +20,14 @@ export function SiteMetadata({ tenantName }: { tenantName?: string }) {
   })
   const title = metadata.isHome
     ? metadata.brand
-    : `${t(metadata.titleKey)} | ${metadata.brand}`
-  const description = t(
-    "Explore the collection. Preview anything. Make a show your own.",
-  )
+    : `${metadata.clientTitleKey ? clientText(metadata.clientTitleKey) : t(metadata.titleKey)} | ${metadata.brand}`
+  const description = metadata.clientTitleKey
+    ? clientText(
+        metadata.clientTitleKey === "entryTitle"
+          ? "entryDescription"
+          : "ownerDescription",
+      )
+    : t("Explore the collection. Preview anything. Make a show your own.")
 
   useEffect(() => {
     const oldTitle = document.title

@@ -1,16 +1,31 @@
-import { QUIZZ_MODES, SESSION_ROLES } from "@razzia/common/constants"
+import {
+  QUESTION_LEAD_IN_MS,
+  QUIZZ_MODES,
+  SESSION_ROLES,
+} from "@razzia/common/constants"
+import type { Question } from "@razzia/common/types/game"
+import {
+  EXTENSION_EVENTS,
+  readPlatformOpening,
+  type ExtensionStateEnvelope,
+} from "@razzia/extensions/core"
 import { STATUS } from "@razzia/common/types/game/status"
 import { app } from "@razzia/socket/app"
 import { mintToken } from "@razzia/socket/services/auth"
 import { getPath, initConfig, saveQuizz } from "@razzia/socket/services/config"
 import { setIo } from "@razzia/socket/services/io"
 import Registry from "@razzia/socket/services/registry"
+import type Game from "@razzia/socket/services/game"
 import { createFakeIo } from "@razzia/socket/test/fake-io"
 import {
   createEstimationQuestion,
   createQuestion,
   createQuizz,
 } from "@razzia/socket/test/fixtures"
+import {
+  FIRST_QUESTION_DELAY_MS,
+  NEXT_QUESTION_DELAY_MS,
+} from "@razzia/socket/test/game-setup"
 import fs from "fs"
 import { StatusCodes } from "http-status-codes"
 import {
@@ -23,8 +38,7 @@ import {
   vi,
 } from "vitest"
 const TEST_PILOT_SECRET = "isolated-pilot-phone-test-secret"
-const FIRST_QUESTION_DELAY_MS = 8000
-const NEXT_QUESTION_DELAY_MS = 2000
+const runtimeIo = createFakeIo()
 let managerToken = ""
 const request = (
   path: string,
@@ -61,7 +75,7 @@ const request = (
 const json = async <T = Record<string, unknown>>(response: Response) =>
   (await response.json()) as T
 beforeAll(async () => {
-  setIo(createFakeIo().io)
+  setIo(runtimeIo.io)
   managerToken = (await mintToken("manager", SESSION_ROLES.MANAGER)).token
 })
 beforeEach(() => {
@@ -82,6 +96,36 @@ afterEach(() => {
       Registry.getInstance().removeGame(game.gameId)
     })
 })
+async function startPersistedGame(game: Game, question: Question) {
+  const manager = runtimeIo.createSocket("manager")
+  game.reconnect(manager)
+  const launchStage = () => {
+    const state = runtimeIo.lastEvent(manager.id, EXTENSION_EVENTS.STATE)
+      ?.data as ExtensionStateEnvelope | undefined
+
+    return readPlatformOpening(state?.extras.presentationLaunch)?.stage
+  }
+
+  expect(launchStage()).toBe("standby")
+  await game.start(manager)
+  expect(launchStage()).toBe("opening")
+  expect(game.started).toBe(false)
+  // The host's second start skips the opening to the lobby, not the questions.
+  await game.start(manager)
+  expect(launchStage()).toBe("lobby")
+  expect(game.started).toBe(false)
+  const started = game.start(manager)
+  await vi.advanceTimersByTimeAsync(
+    FIRST_QUESTION_DELAY_MS + QUESTION_LEAD_IN_MS,
+  )
+  await started
+  expect(game.started).toBe(true)
+  expect(game.roundManager.isCurrentlyAcceptingAnswers).toBe(true)
+  expect(runtimeIo.lastStatus(game.gameId)).toMatchObject({
+    name: STATUS.SELECT_ANSWER,
+    data: { time: question.time, votingStartsAt: Date.now() },
+  })
+}
 describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
   it("A01: accepts answerIndex 4 for 5-answer survey and tallies 5th vote correctly", async () => {
     const q1 = createQuestion({
@@ -151,10 +195,7 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
     }
 
     // 2. Start game and reach answering
-    void game.start(createFakeIo().createSocket("manager"))
-    await vi.advanceTimersByTimeAsync(
-      FIRST_QUESTION_DELAY_MS + q1.cooldown * 1000,
-    )
+    await startPersistedGame(game, q1)
 
     // 3. Poll question state
     const pollRes = await request("/games/pilot-phone", {
@@ -276,10 +317,7 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
     }>(joinRes)
 
     // Start Question 1 (5 options)
-    void game.start(createFakeIo().createSocket("manager"))
-    await vi.advanceTimersByTimeAsync(
-      FIRST_QUESTION_DELAY_MS + q5.cooldown * 1000,
-    )
+    await startPersistedGame(game, q5)
 
     // Test out-of-bounds: index 5 (would be key 6) on 5-option question
     const outOfBounds = await request("/games/pilot-phone", {
@@ -376,12 +414,12 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
       }
     ).round.endTimer()
     await vi.advanceTimersByTimeAsync(1000)
-    // Advance past responses/leaderboard to Q4
+    // A survey has no score leaderboard between its reveal and the next question.
+    expect(game.roundManager.currentStepName).toBe("reveal")
     game.advance()
-    await vi.advanceTimersByTimeAsync(1000)
-    game.advance()
+    expect(game.roundManager.currentQuestionIndex).toBe(1)
     await vi.advanceTimersByTimeAsync(
-      NEXT_QUESTION_DELAY_MS + q4.cooldown * 1000,
+      NEXT_QUESTION_DELAY_MS + QUESTION_LEAD_IN_MS,
     )
 
     // In 4-option question: verify maxAnswerIndex is 3
@@ -442,7 +480,7 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
     }>(acceptKey4On4Options)
     expect(acceptData.accepted).toBe(true)
 
-    // Advance Q4 to reveal, advance past leaderboard, then advance to Question 3 (Estimation)
+    // Persisted legacy quizzes use the runtime card-only leaderboard policy.
     ;(
       game as unknown as {
         round: {
@@ -451,13 +489,18 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
       }
     ).round.endTimer()
     await vi.advanceTimersByTimeAsync(1000)
-    // Reveal -> leaderboard
+    const state = runtimeIo.lastEvent("manager", EXTENSION_EVENTS.STATE)
+      ?.data as ExtensionStateEnvelope | undefined
+    expect(state?.extras).toMatchObject({
+      defaults: { leaderboardPolicy: "cardOnly" },
+    })
+    expect(game.roundManager.currentStepName).toBe("reveal")
+    // No authored leaderboard card: one host advance starts the estimation.
     game.advance()
-    await vi.advanceTimersByTimeAsync(1000)
-    // Leaderboard -> next question
-    game.advance()
+    expect(game.roundManager.currentQuestionIndex).toBe(2)
+    expect(game.roundManager.currentStepName).toBeNull()
     await vi.advanceTimersByTimeAsync(
-      NEXT_QUESTION_DELAY_MS + qEst.cooldown * 1000,
+      NEXT_QUESTION_DELAY_MS + QUESTION_LEAD_IN_MS,
     )
 
     // Estimation is not single-choice PSTN supported
@@ -596,11 +639,7 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
     }>(joinRes)
 
     // Start game
-    const manager = createFakeIo().createSocket("manager")
-    game.reconnect(manager)
-    void game.start(manager)
-    await vi.advanceTimersByTimeAsync(FIRST_QUESTION_DELAY_MS + 3000)
-    expect(game.roundManager.isCurrentlyAcceptingAnswers).toBe(true)
+    await startPersistedGame(game, q1)
     const initialEpoch = game.getCurrentQuestionPstnSupport().epoch
 
     // 1. Initial vote: DTMF 2 (answerIndex 1 - wrong)
@@ -634,8 +673,10 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
     const reopened = game.roundManager.previousScreen()
     expect(reopened).toBe(true)
 
-    // Wait cooldown for reopened question (NEXT_QUESTION_DELAY_MS + cooldown)
-    await vi.advanceTimersByTimeAsync(NEXT_QUESTION_DELAY_MS + 3000)
+    // A reopened question uses the same platform-owned reading interval.
+    await vi.advanceTimersByTimeAsync(
+      NEXT_QUESTION_DELAY_MS + QUESTION_LEAD_IN_MS,
+    )
     expect(game.roundManager.isCurrentlyAcceptingAnswers).toBe(true)
     expect(game.roundManager.getAnswerCount()).toBe(0)
     const newEpoch = game.getCurrentQuestionPstnSupport().epoch

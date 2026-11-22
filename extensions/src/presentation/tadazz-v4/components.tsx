@@ -26,6 +26,12 @@ export function labelsFor(data: TadazzV4Data): TadazzV4Labels {
   }
 }
 
+function resultLabelFor(data: TadazzV4Data): string {
+  const labels = labelsFor(data)
+
+  return data.mode === "quiz" ? labels.correctAnswer : labels.audienceResults
+}
+
 export function StageIdentityV4({
   data,
   scene,
@@ -98,10 +104,11 @@ export function QuestionFrameV4({
       data-testid="tadazz-question-panel"
     >
       <div className="eyebrow">
-        {data.eyebrow || (results ? tx.audienceResults : tx.nextQuestion)}
+        {data.eyebrow || (results ? resultLabelFor(data) : tx.nextQuestion)}
       </div>
       <div
         className="q-text"
+        dir="auto"
         style={
           size
             ? {
@@ -113,7 +120,7 @@ export function QuestionFrameV4({
         {question}
       </div>
       {note && results && (
-        <div className="q-note" data-testid="tadazz-question-note">
+        <div className="q-note" data-testid="tadazz-question-note" dir="auto">
           {note}
         </div>
       )}
@@ -803,7 +810,7 @@ export function StageSceneV4({
       )}
       {scene === "survey-results" && (
         <div className="tzv4-sr-status" data-testid="tadazz-status">
-          {tx.audienceResults}
+          {resultLabelFor(data)}
         </div>
       )}
       {scene === "question-image" && (

@@ -254,6 +254,7 @@ export function createPackageFixture(
     for (const event of Object.values(theme.audioEvents)) {
       for (const variant of event.variants) {
         delete variant.assetId
+        delete variant.inheritPlatform
         variant.silent = true
       }
     }

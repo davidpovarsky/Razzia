@@ -1,5 +1,8 @@
+import fs from "node:fs"
+import os from "node:os"
+import path from "node:path"
 import type { MiddlewareHandler } from "hono"
-import { describe, expect, it } from "vitest"
+import { afterEach, beforeEach, describe, expect, it } from "vitest"
 import {
   computeCanonicalBaseDigest,
   createDefaultQuizExtras,
@@ -33,10 +36,10 @@ describe("Hono Composite REST Routes (/api/extensions) (SEC01, CORE01, CORE04)",
   }
 
   const baseQuizzes = new Map<string, Record<string, unknown>>()
-  const sidecars = new Map<string, string>()
+  let tempDir = ""
 
   const injections: StorageInjections = {
-    getPath: (subPath = "") => `/fake/${subPath}`,
+    getPath: (subPath = "") => path.join(tempDir, subPath),
     getQuizzById: (id: string) => {
       const found = baseQuizzes.get(id)
 
@@ -67,14 +70,25 @@ describe("Hono Composite REST Routes (/api/extensions) (SEC01, CORE01, CORE04)",
     },
     deleteQuizz: (id: string) => {
       baseQuizzes.delete(id)
-      sidecars.delete(id)
     },
   }
+  let app = createExtensionRoutes(injections)
 
-  // Create app without auth for testing business routes
-  const app = createExtensionRoutes(injections)
+  beforeEach(() => {
+    // The callback-backed base adapter still persists real sidecars and journals.
+    // Keep those files in a fresh writable fixture, independent of other tests.
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "razzia-routes-"))
+    baseQuizzes.clear()
+    app = createExtensionRoutes(injections)
+  })
+  afterEach(() => {
+    if (tempDir) {
+      fs.rmSync(tempDir, { recursive: true, force: true })
+      tempDir = ""
+    }
+  })
 
-  it("POST /quizzes creates composite quiz and returns 201", async () => {
+  async function createQuiz() {
     const qIds = generateQuestionIds(1)
     const baseDigest = computeCanonicalBaseDigest(sampleQuiz)
     const extras = createDefaultQuizExtras("temp-id", qIds, baseDigest)
@@ -88,8 +102,14 @@ describe("Hono Composite REST Routes (/api/extensions) (SEC01, CORE01, CORE04)",
       }),
     })
 
-    expect(res.status).toBe(201)
     const data = (await res.json()) as QuizResponse
+    expect(res.status, data.error).toBe(201)
+
+    return { data, baseDigest }
+  }
+
+  it("POST /quizzes creates composite quiz and returns 201", async () => {
+    const { data, baseDigest } = await createQuiz()
 
     expect(data.quizId).toBeDefined()
     expect(data.revision).toBe(1)
@@ -102,8 +122,8 @@ describe("Hono Composite REST Routes (/api/extensions) (SEC01, CORE01, CORE04)",
 
     expect(res404.status).toBe(404)
 
-    // Existing quiz created earlier
-    const [existingId] = Array.from(baseQuizzes.keys())
+    const { data: created } = await createQuiz()
+    const existingId = created.quizId
     const res200 = await app.request(`/quizzes/${existingId}`)
 
     expect(res200.status).toBe(200)
@@ -114,7 +134,8 @@ describe("Hono Composite REST Routes (/api/extensions) (SEC01, CORE01, CORE04)",
   })
 
   it("PUT /quizzes/:id returns 409 on revision conflict", async () => {
-    const [existingId] = Array.from(baseQuizzes.keys())
+    const { data: created } = await createQuiz()
+    const existingId = created.quizId
     const qIds = generateQuestionIds(1)
     const baseDigest = computeCanonicalBaseDigest(sampleQuiz)
     const extras = createDefaultQuizExtras(existingId, qIds, baseDigest)
@@ -150,7 +171,8 @@ describe("Hono Composite REST Routes (/api/extensions) (SEC01, CORE01, CORE04)",
   })
 
   it("GET /export/:id and POST /import remaps quiz bundle", async () => {
-    const [existingId] = Array.from(baseQuizzes.keys())
+    const { data: created } = await createQuiz()
+    const existingId = created.quizId
 
     // Export
     const exportRes = await app.request(`/export/${existingId}`)
@@ -191,8 +213,8 @@ describe("Hono Composite REST Routes (/api/extensions) (SEC01, CORE01, CORE04)",
     expect(unauthRes.status).toBe(401)
 
     // Request with valid auth
-    const [firstId] = Array.from(baseQuizzes.keys())
-    const authRes = await secureApp.request(`/quizzes/${firstId}`, {
+    const { data: created } = await createQuiz()
+    const authRes = await secureApp.request(`/quizzes/${created.quizId}`, {
       headers: { Authorization: "Bearer manager-token" },
     })
 

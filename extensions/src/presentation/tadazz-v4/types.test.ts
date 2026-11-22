@@ -73,6 +73,19 @@ describe("question stage continuity", () => {
     ).toBe(true)
     expect(
       continuesQuestionStage(
+        { ...question, data: { questionKey: "q1", photoLayout: true } },
+        {
+          scene: "question-image",
+          data: {
+            questionKey: "q1",
+            photoLayout: true,
+            questionAlreadyOnStage: true,
+          },
+        },
+      ),
+    ).toBe(true)
+    expect(
+      continuesQuestionStage(
         { ...question, scene: "countdown" },
         {
           scene: "survey-results",
@@ -108,7 +121,6 @@ describe("question stage continuity", () => {
 
   it("does not reuse a different composition as a question stage", () => {
     for (const scene of [
-      "question-image",
       "company-opening",
       "top-pick",
       "round-recap",

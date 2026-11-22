@@ -279,7 +279,8 @@
         {
           "id": "tadazz-classic.audio.opening.default",
           "labelKey": "extensions:themes.default",
-          "silent": true,
+          "inheritPlatform": true,
+          "silent": false,
           "volume": 0.7,
           "loop": false,
           "priority": 60,

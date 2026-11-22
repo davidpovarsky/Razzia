@@ -20,13 +20,15 @@ SSH = ["ssh", "-i", str(pathlib.Path.home() / ".ssh/tadazz_oracle_2026"),
        "-o", "ConnectTimeout=10", "ubuntu@132.145.25.168"]
 HEAD = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT).decode().strip()
 BASE = sys.argv[1] if len(sys.argv) > 1 else HEAD
+ALL_UNIT_TESTS = "--all-unit-tests" in sys.argv[2:]
 subprocess.run(["git", "merge-base", "--is-ancestor", BASE, HEAD], cwd=ROOT, check=True)
 RUN = "tadazz-gallery-wip-" + HEAD[:12] + "-" + uuid.uuid4().hex[:8]
 REMOTE_ROOT = "/home/ubuntu/tadazz-phase2-20261116/evidence/" + RUN
 EVIDENCE = ROOT / "docs/extensions/plans/public-gallery-20261119" / RUN
 EVIDENCE.mkdir(parents=True, exist_ok=False)
 PATHS = ["extensions", "packages", "package.json", "tsconfig.json", "vitest.config.ts", "pnpm-workspace.yaml",
-         "pnpm-lock.yaml", "oxlint.config.ts", ".prettierrc.json", ".gitignore", ".prettierignore"]
+         "pnpm-lock.yaml", "oxlint.config.ts", ".prettierrc.json", ".gitignore", ".prettierignore",
+         "scripts/tadazz/extract-motion-assets.mjs", "docs/extensions/references/TADAZZ_Motion_Showcase_One_Click_20261105.html"]
 names = subprocess.check_output(["git", "ls-files", "--cached", "--others", "--exclude-standard", "-z", "--", *PATHS], cwd=ROOT).decode().split("\0")
 files = sorted({name for name in names if name and '.bak.' not in name and (ROOT / name).is_file()})
 changed = subprocess.check_output(["git", "diff", "--name-only", "-z", BASE, "--", *PATHS], cwd=ROOT).decode().split("\0")
@@ -48,7 +50,7 @@ with tarfile.open(archive, "w:gz") as output:
         info.mode = 0o644
         output.addfile(info, io.BytesIO(data))
 config = {"head": HEAD, "formatBase": BASE, "run": RUN, "remote": REMOTE_ROOT, "manifest": manifest,
-          "formatFiles": format_files, "sourceBytes": total}
+          "formatFiles": format_files, "sourceBytes": total, "allUnitTests": ALL_UNIT_TESTS}
 (EVIDENCE / "input-manifest.json").write_text(json.dumps(config, indent=2) + "\n", encoding="utf8")
 extract = r'''
 import pathlib,tarfile,sys,json
@@ -113,8 +115,12 @@ formatted={p:hashlib.sha256((source/p).read_bytes()).hexdigest() for p in c['man
 tests=[]
 for suffix in ['public-demo-catalogue.test.ts', 'show-themes.test.ts', 'public-catalogue-install.test.ts', 'account-preview-source.test.ts', 'application-preview-input.test.ts', 'site/tests/locales.test.ts', 'site/tests/client.test.ts', 'full-show-preview-timeline.test.ts', 'question-lead-in.test.ts', 'preview-stage-continuity.test.ts', 'tadazz-show/question-sequencing.test.ts', 'platform-controls.test.ts', 'end-answer-timer.test.ts', 'application-package-preview.test.ts', 'package-preview-scene.test.ts', 'package-runtime/projection.test.ts', 'package-runtime/question-family.test.ts', 'server/packages/transfers.test.ts', 'package-leaderboard-metadata.test.ts']:
  found=[p for p in c['manifest'] if p.startswith('extensions/') and p.endswith(suffix)];assert found,'Focused test missing: '+suffix;tests+=found
-run('focused-tests',['node','/cleanup/node_modules/vitest/vitest.mjs','run','--config','vitest.config.ts','--configLoader','runner','--no-cache',*[p.removeprefix('extensions/') for p in tests]],300,'/evidence/source/extensions')
-run('socket-demo-catalog',['node','/cleanup/node_modules/vitest/vitest.mjs','run','--config','vitest.config.ts','--configLoader','runner','--no-cache','--project','socket','packages/socket/src/api/extensions/demo-catalog.test.ts','packages/socket/src/services/game/question-sequencing.test.ts','packages/socket/src/services/game/creating-worlds-repair.test.ts','packages/socket/src/handlers/end-answer-timer.test.ts'],180)
+if c['allUnitTests']:
+ run('extensions-unit-tests',['node','/cleanup/node_modules/vitest/vitest.mjs','run','--config','vitest.config.ts','--configLoader','runner','--no-cache','--maxWorkers','1','--no-file-parallelism'],600,'/evidence/source/extensions')
+ run('core-unit-tests',['node','/cleanup/node_modules/vitest/vitest.mjs','run','--config','vitest.config.ts','--configLoader','runner','--no-cache','--maxWorkers','1','--no-file-parallelism'],600)
+else:
+ run('focused-tests',['node','/cleanup/node_modules/vitest/vitest.mjs','run','--config','vitest.config.ts','--configLoader','runner','--no-cache',*[p.removeprefix('extensions/') for p in tests]],300,'/evidence/source/extensions')
+ run('socket-demo-catalog',['node','/cleanup/node_modules/vitest/vitest.mjs','run','--config','vitest.config.ts','--configLoader','runner','--no-cache','--project','socket','packages/socket/src/api/extensions/demo-catalog.test.ts','packages/socket/src/services/game/question-sequencing.test.ts','packages/socket/src/services/game/creating-worlds-repair.test.ts','packages/socket/src/handlers/end-answer-timer.test.ts'],180)
 run('phone-question-sequencing',['node','/cleanup/node_modules/vitest/vitest.mjs','run','--config','qa/phase3-phone/vitest.config.ts','--configLoader','runner','--no-cache','qa/phase3-phone/phone-v2-authority-startup.test.ts'],180,'/evidence/source/extensions')
 run('extensions-types',['node','/cleanup/node_modules/typescript/bin/tsc','--noEmit','-p','extensions/tsconfig.json'],180)
 run('socket-types',['node','/cleanup/node_modules/typescript/bin/tsc','--noEmit','-p','packages/socket/tsconfig.json'],180)
@@ -129,7 +135,7 @@ report={'run':c['run'],'head':c['head'],'immutableCommit':False,'snapshotFiles':
 (owned/'receipt.json').write_text(json.dumps(report,indent=2)+'\n')
 print(json.dumps({'final':report}),flush=True)
 '''.replace("c=CONFIG", "c=" + repr(config))
-result = subprocess.run([*SSH, "sudo -n python3 -"], input=remote.encode(), capture_output=True, timeout=1600)
+result = subprocess.run([*SSH, "sudo -n python3 -"], input=remote.encode(), capture_output=True, timeout=2400 if ALL_UNIT_TESTS else 1600)
 (EVIDENCE / "controller.stdout.log").write_bytes(result.stdout)
 (EVIDENCE / "controller.stderr.log").write_bytes(result.stderr)
 print(result.stdout.decode(errors="replace"), flush=True)

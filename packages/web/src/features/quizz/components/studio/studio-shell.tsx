@@ -2,6 +2,7 @@ import Button from "@razzia/web/components/Button"
 import Loader from "@razzia/web/components/Loader"
 import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 import { useTranslation } from "react-i18next"
+import { useFormContext } from "react-hook-form"
 import QuestionEditor from "@razzia/web/features/quizz/components/QuestionEditor"
 import QuizzEditorHeader from "@razzia/web/features/quizz/components/QuizzEditorHeader"
 import QuizzEditorSidebar from "@razzia/web/features/quizz/components/QuizzEditorSidebar"
@@ -88,21 +89,35 @@ const StudioContent = () => {
   )
 }
 
-export const StudioShell = () => (
-  <InstalledThemeCatalogProvider>
-    <StudioEditorProvider>
-      <EditorEditingModeProvider>
-        <div className="native-editor-shell bg-muted relative flex max-w-full flex-col">
-          <EditorGameBackdrop />
-          <QuizzEditorHeader />
-          <div
-            id="studio-content"
-            className="flex min-h-0 min-w-0 flex-1 flex-col"
-          >
-            <StudioContent />
+export const StudioShell = () => {
+  const { t } = useTranslation()
+  const {
+    formState: { isSubmitting },
+  } = useFormContext()
+
+  return (
+    <InstalledThemeCatalogProvider>
+      <StudioEditorProvider>
+        <EditorEditingModeProvider>
+          <div className="native-editor-shell bg-muted relative flex max-w-full flex-col">
+            <EditorGameBackdrop />
+            <QuizzEditorHeader />
+            {isSubmitting && (
+              <p role="status" className="sr-only">
+                {t("common:loading")}
+              </p>
+            )}
+            <div
+              id="studio-content"
+              inert={isSubmitting}
+              aria-busy={isSubmitting}
+              className="flex min-h-0 min-w-0 flex-1 flex-col"
+            >
+              <StudioContent />
+            </div>
           </div>
-        </div>
-      </EditorEditingModeProvider>
-    </StudioEditorProvider>
-  </InstalledThemeCatalogProvider>
-)
+        </EditorEditingModeProvider>
+      </StudioEditorProvider>
+    </InstalledThemeCatalogProvider>
+  )
+}

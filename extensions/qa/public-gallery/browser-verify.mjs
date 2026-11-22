@@ -16,6 +16,11 @@ import {
   verifyNativePalette,
   verifyCatalogueCovers,
 } from "./palette-verify.mjs"
+import {
+  watchGuessOffContract,
+  verifyGuessOffResult,
+  readGuessOffContract,
+} from "./guess-off-contract-verify.mjs"
 
 assert.equal(
   process.platform,
@@ -594,10 +599,17 @@ try {
           phaseAttribute: "data-preview-phase",
         })
         await page.getByTestId("game-preview-play-pause").click()
-        await expect(nativeStage).toHaveAttribute("data-preview-phase", "question", {
-          timeout: 30_000,
-        })
-        await expect(nativeStage).toHaveAttribute("data-preview-chapter-index", "1")
+        await expect(nativeStage).toHaveAttribute(
+          "data-preview-phase",
+          "question",
+          {
+            timeout: 30_000,
+          },
+        )
+        await expect(nativeStage).toHaveAttribute(
+          "data-preview-chapter-index",
+          "1",
+        )
         nativeQuestionSequence = await readQuestionSequence(nativeStage, 0, {
           throughResults: false,
           photo:
@@ -645,6 +657,7 @@ try {
         await watchQuestionSequence(gameRoot, {
           phaseAttribute: "data-ggo-phase",
         })
+        await watchGuessOffContract(gameRoot)
         const questionSequences = []
         let votingRounds = 0
         for (let step = 0; step < 20; step++) {
@@ -666,8 +679,18 @@ try {
                 evidence,
                 false,
               )
-            await chooseNative(page, 0)
-            await expect(gameRoot).toHaveAttribute("data-ggo-phase", "results")
+            const unanswered = votingRounds < 2
+            if (!unanswered) await chooseNative(page, 0)
+            // The first survey and quiz reach results through the real 20-second
+            // deadline. No answer, next action, clock patch, or fast-forward.
+            await expect(gameRoot).toHaveAttribute(
+              "data-ggo-phase",
+              "results",
+              {
+                timeout: unanswered ? 30_000 : 10_000,
+              },
+            )
+            await verifyGuessOffResult(gameRoot, expect, unanswered)
             questionSequences.push(
               await readQuestionSequence(gameRoot, votingRounds),
             )
@@ -679,6 +702,11 @@ try {
         await expect(gameRoot).toHaveAttribute("data-ggo-phase", "closing")
         assert.equal(votingRounds, 5)
         await stopQuestionSequence(gameRoot)
+        const nativeContract = await readGuessOffContract(gameRoot)
+        writeFileSync(
+          join(evidence, "guess-off-native-contract.json"),
+          JSON.stringify(nativeContract, null, 2) + "\n",
+        )
         writeFileSync(
           join(evidence, "question-sequence-" + game.id + ".json"),
           JSON.stringify(questionSequences, null, 2) + "\n",
@@ -690,6 +718,8 @@ try {
           rounds: votingRounds,
           replay: true,
           questionSequences: questionSequences.length,
+          naturalExpiries: 2,
+          sceneFrames: nativeContract.frames,
         })
       } else {
         const gameRoot = page.getByTestId("catalogue-game-demo")

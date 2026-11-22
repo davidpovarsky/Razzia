@@ -125,6 +125,14 @@ export const ACCEPTED_MEDIA_TYPES = {
   "video/webm": { ext: ".webm", type: MEDIA_TYPES.VIDEO },
 } as const
 
+/** Bundled 512px illustration materialized into owner media only on first seed. */
+export const EXAMPLE_QUIZZ_IMAGE = {
+  name: "tadazz-example-cloud-796dfd8f3dcc.png",
+  publicPath: "tadazz-show/gallery/picture-cloud.png",
+  sha256: "796dfd8f3dcc5dff7a1f596c01d2eaf62a7c41b5b118f3286fcce9aad0a1e65f",
+  bytes: 20139,
+} as const
+
 export const EXAMPLE_QUIZZ = {
   gameMode: QUIZZ_MODES.QUIZ,
   subject: "Example Quizz",
@@ -141,7 +149,7 @@ export const EXAMPLE_QUIZZ = {
       answers: ["No", "No", "No", "Good answer"],
       media: {
         type: MEDIA_TYPES.IMAGE,
-        url: "https://placehold.co/600x400.png",
+        url: `${MEDIA_URL_PREFIX}${EXAMPLE_QUIZZ_IMAGE.name}`,
       },
       solutions: [3],
       cooldown: QUESTION_LEAD_IN_SECONDS,
@@ -152,7 +160,7 @@ export const EXAMPLE_QUIZZ = {
       answers: ["Good answer", "No"],
       media: {
         type: MEDIA_TYPES.IMAGE,
-        url: "https://placehold.co/600x400.png",
+        url: `${MEDIA_URL_PREFIX}${EXAMPLE_QUIZZ_IMAGE.name}`,
       },
       solutions: [0],
       cooldown: QUESTION_LEAD_IN_SECONDS,

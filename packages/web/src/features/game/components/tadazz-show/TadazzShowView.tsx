@@ -26,13 +26,15 @@ import {
   TadazzV4StageAdapter,
   collapseForResume,
   computeShowScene,
-  isFullShowScene,
   isTadazzV4Active,
   planTransition,
+  showSceneTransitionIdentity,
   resolveStageBackdrop,
   resolveTadazzAudioPolicy,
+  resolveNativePhaseAudioCue,
   acceptsQuestionMilestone,
   themeTimerTransition,
+  startCountdownCue,
   usePackageRevealClock,
   usePackageRevealAudio,
   type ThemeTimerEndState,
@@ -87,7 +89,8 @@ import {
   useRef,
   useState,
 } from "react"
-import { I18nextProvider, useTranslation } from "react-i18next"
+import { useTranslation } from "react-i18next"
+import { PresentationLocale } from "./presentation-locale"
 import { resolveMonotonicCooldownDeadline } from "./cooldown-sync"
 import { useTimerBeeps } from "./use-timer-beeps"
 import { useTadazzRawStatus } from "./raw-status-context"
@@ -170,27 +173,13 @@ function isCinematicScene(scene: SceneDescriptor): boolean {
  * authoritative state, and keeps every host/player capability.
  */
 export function TadazzShowView(props: TadazzShowViewProps) {
-  const { i18n } = useTranslation()
   const defaults = props.extensionState?.extras.defaults as
     { presentationLocale?: unknown } | undefined
-  const requestedLocale = defaults?.presentationLocale
-  const locale =
-    typeof requestedLocale === "string" &&
-    ["en", "fr", "de", "es", "it", "ja", "tr", "vi", "he"].includes(
-      requestedLocale,
-    )
-      ? requestedLocale
-      : undefined
-  const presentationI18n = useMemo(
-    () =>
-      locale ? i18n.cloneInstance({ lng: locale, initAsync: false }) : i18n,
-    [i18n, locale],
-  )
 
   return (
-    <I18nextProvider i18n={presentationI18n}>
+    <PresentationLocale locale={defaults?.presentationLocale}>
       <TadazzShowContent {...props} />
-    </I18nextProvider>
+    </PresentationLocale>
   )
 }
 
@@ -330,19 +319,7 @@ function TadazzShowContent(props: TadazzShowViewProps) {
     questionReveal,
   ])
   const sceneIdentity = useMemo(
-    () =>
-      scene.kind === "voting" ||
-      (scene.kind === "scene" &&
-        scene.scene.kind === "animation" &&
-        isFullShowScene(
-          (
-            scene.scene as {
-              preset?: string
-            }
-          ).preset ?? "",
-        ))
-        ? scene.key
-        : JSON.stringify(scene),
+    () => showSceneTransitionIdentity(scene),
     [scene],
   )
   const showGameId =
@@ -385,6 +362,15 @@ function TadazzShowContent(props: TadazzShowViewProps) {
     compositionRoot?.component.id === "native.cinematic-stage" ||
     isTadazzV4Active(extensionState)
   const v4Labels = useTadazzV4Labels()
+  const guessOffLook = useV4 && extensionState?.extras.stageLook === "guess-off"
+  const guessOffTextAnswers =
+    guessOffLook &&
+    (scene.kind === "question" ||
+      scene.kind === "voting" ||
+      scene.kind === "results") &&
+    !scene.question.questionImage &&
+    !scene.question.hasAnswerImages &&
+    scene.question.options.every((option) => !option.image)
 
   if (typeof document !== "undefined") {
     document.documentElement.style.background =
@@ -764,6 +750,8 @@ function TadazzShowContent(props: TadazzShowViewProps) {
       questionId: extensionState?.questionId ?? questionKey,
       epoch: extensionState?.epoch ?? 0,
       voting: scene.kind === "voting",
+      awaitingCompletion:
+        extensionState?.phase === "question" && scene.kind !== "voting",
       results: extensionState?.phase === "responses",
       paused: isPaused,
       deadline: votingEndsAt,
@@ -977,7 +965,25 @@ function TadazzShowContent(props: TadazzShowViewProps) {
         )
 
       case "start":
-        return <TadazzStartScreen subject={scene.subject} time={scene.time} />
+        return (
+          <TadazzStartScreen
+            subject={scene.subject}
+            time={scene.time}
+            onTick={(seconds) => {
+              const detail = startCountdownCue({
+                gameId: showGameId,
+                epoch: extensionState?.epoch ?? 0,
+                seconds,
+                role,
+                paused: isPaused,
+              })
+
+              if (detail) {
+                window.dispatchEvent(new CustomEvent("tadazz:sfx", { detail }))
+              }
+            }}
+          />
+        )
 
       case "prepared":
         return (
@@ -1066,6 +1072,20 @@ function TadazzShowContent(props: TadazzShowViewProps) {
               recap={scene.activeSceneData.answerRecap}
             />
           )
+        }
+
+        if (
+          s.kind === "leaderboard" &&
+          (scene.activeSceneData?.leaderboard?.entries?.length ?? 0) > 0
+        ) {
+          return null
+        }
+
+        if (
+          s.kind === "interimResults" &&
+          (scene.activeSceneData?.interimResults?.options?.length ?? 0) > 0
+        ) {
+          return null
         }
 
         if (s.kind === "interimResults" || s.kind === "leaderboard") {
@@ -1441,6 +1461,8 @@ function TadazzShowContent(props: TadazzShowViewProps) {
               : "false"
           }
           data-show-scene={scene.kind}
+          data-guess-off-stage={guessOffLook || undefined}
+          data-guess-off-media={guessOffTextAnswers ? "text" : undefined}
           data-role={role}
           data-host-presenting={isHostPresenting ? "true" : "false"}
           data-game-paused={isPaused ? "true" : "false"}
@@ -1573,7 +1595,12 @@ function TadazzShowContent(props: TadazzShowViewProps) {
                   <TadazzV4StageAdapter
                     ref={stageRef}
                     labels={labels}
-                    v4Labels={v4Labels}
+                    v4Labels={
+                      guessOffLook
+                        ? { ...v4Labels, teamLeaderboard: "LEADERBOARD" }
+                        : v4Labels
+                    }
+                    guessOffLook={guessOffLook}
                     onCue={handleStageCue}
                     onResolveStoryTie={
                       role === "manager" ? resolveStoryTie : undefined
@@ -1713,7 +1740,7 @@ function TadazzShowContent(props: TadazzShowViewProps) {
               eventOnly={role === "player" || scene.kind === "wait"}
               showTrack={referenceStoryTrack}
               stageOwnsReveal={useV4 || Boolean(theme.definition.sandbox)}
-              cueId={props.audioCueId}
+              cueId={resolveNativePhaseAudioCue(scene.kind, props.audioCueId)}
               audioExtras={
                 extensionState.extras.audio as QuizExtrasV1["audio"] | undefined
               }

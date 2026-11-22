@@ -1,5 +1,36 @@
 import { describe, expect, it } from "vitest"
-import { themeTimerTransition } from "./timer-events"
+import { startCountdownCue, themeTimerTransition } from "./timer-events"
+
+describe("shared start countdown audio", () => {
+  const start = {
+    gameId: "game",
+    epoch: 3,
+    seconds: 5,
+    role: "manager" as const,
+    paused: false,
+  }
+
+  it("uses one identity for duplicate server ticks and re-renders", () => {
+    const initial = startCountdownCue(start)
+    expect(initial?.name).toBe("timer-start")
+    expect(startCountdownCue({ ...start })?.identity).toBe(initial?.identity)
+    expect(startCountdownCue({ ...start, seconds: 4 })?.identity).not.toBe(
+      initial?.identity,
+    )
+    expect(startCountdownCue({ ...start, epoch: 4 })?.identity).not.toBe(
+      initial?.identity,
+    )
+  })
+
+  it("keeps player views, paused shows and expired ticks silent", () => {
+    expect(startCountdownCue({ ...start, role: "player" })).toBeNull()
+    expect(startCountdownCue({ ...start, paused: true })).toBeNull()
+    for (const seconds of [0, -1, Number.NaN, Number.POSITIVE_INFINITY]) {
+      expect(startCountdownCue({ ...start, seconds })).toBeNull()
+    }
+    expect(startCountdownCue({ ...start, role: "spectator" })).not.toBeNull()
+  })
+})
 
 const input = {
   enabled: true,
@@ -30,10 +61,15 @@ describe("theme timer event ownership", () => {
       }).cue,
     ).toBeUndefined()
   })
-  it("uses lock completion for manual end/all answered, never expiry", () => {
+  it("keeps automatic all-answered completion distinct from a timer end", () => {
     const armed = themeTimerTransition(null, input).state
     expect(
-      themeTimerTransition(armed, { ...input, results: true, now: 1000 }).event,
+      themeTimerTransition(armed, {
+        ...input,
+        results: true,
+        now: 1000,
+        reason: "allAnswered",
+      }).event,
     ).toBe("vote-locked")
     expect(
       themeTimerTransition(armed, {
@@ -41,6 +77,53 @@ describe("theme timer event ownership", () => {
         voting: false,
         results: false,
         now: 1000,
+      }).state,
+    ).toBeNull()
+  })
+
+  it("plays the timer-end cue once when the host ends voting early", () => {
+    const armed = themeTimerTransition(null, input).state
+    const result = themeTimerTransition(armed, {
+      ...input,
+      results: true,
+      now: 1000,
+      reason: "manual",
+    })
+    expect(result.event).toBe("timer-ended")
+    expect(result.cue).toBe("game:q:1:timer-ended")
+    expect(
+      themeTimerTransition(result.state, {
+        ...input,
+        results: true,
+        now: 10_000,
+        reason: "elapsed",
+      }).cue,
+    ).toBeUndefined()
+  })
+  it("retains the observed timer through a split status and result snapshot", () => {
+    const armed = themeTimerTransition(null, input).state
+    const waiting = themeTimerTransition(armed, {
+      ...input,
+      voting: false,
+      awaitingCompletion: true,
+    })
+    expect(waiting.state).toEqual(armed)
+    expect(waiting.cue).toBeUndefined()
+    expect(
+      themeTimerTransition(waiting.state, {
+        ...input,
+        voting: false,
+        results: true,
+        reason: "manual",
+        now: 1000,
+      }).event,
+    ).toBe("timer-ended")
+    expect(
+      themeTimerTransition(armed, {
+        ...input,
+        voting: false,
+        awaitingCompletion: true,
+        questionId: "other",
       }).state,
     ).toBeNull()
   })
@@ -56,6 +139,7 @@ describe("theme timer event ownership", () => {
       ...input,
       paused: true,
       results: true,
+      reason: "manual",
       now: 20_000,
     })
     expect(paused.cue).toBeUndefined()

@@ -3,6 +3,8 @@ import { buildLobbyDirectory } from "./public-directory"
 import {
   extensionCommandSchema,
   isQuizExtrasV2,
+  normalizeLegacyStageLook,
+  resolveStageLook,
   type ActiveSceneData,
   type AnyQuizExtras,
   type ExtensionCommand,
@@ -128,7 +130,10 @@ export class ExtensionGameSession {
     this.compositionMediaNames = new Set(
       appearance ? publicApplicationCompositionMediaNames(appearance) : [],
     )
-    this.extras = extras
+    this.extras =
+      extras && isQuizExtrasV2(extras)
+        ? normalizeLegacyStageLook(extras)
+        : extras
     this.themeDefinition = themeDefinition
       ? (createShowThemeRegistry([themeDefinition]).get(
           themeDefinition.id,
@@ -365,6 +370,14 @@ export class ExtensionGameSession {
         : undefined
 
     const extrasPayload: Record<string, unknown> = {}
+
+    if (
+      this.extras &&
+      isQuizExtrasV2(this.extras) &&
+      resolveStageLook(this.extras.defaults) === "guess-off"
+    ) {
+      extrasPayload.stageLook = "guess-off"
+    }
 
     if (this.themeDefinitionJson) {
       extrasPayload.themeDefinitionJson = this.themeDefinitionJson

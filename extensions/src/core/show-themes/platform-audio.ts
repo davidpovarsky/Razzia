@@ -1,7 +1,6 @@
 import {
   PLATFORM_AUDIO_URLS,
   PLATFORM_CUE_URLS,
-  PLATFORM_SOUNDTRACK_DEFAULTS,
 } from "../platform-audio-defaults"
 import type { ShowThemeAudioEvent, ShowThemeRole } from "./selection"
 
@@ -12,6 +11,7 @@ export const PLATFORM_SFX_BY_CUE: Readonly<Record<string, string>> = {
   "countdown-ended": PLATFORM_CUE_URLS.revealResults,
   "survey-reveal": PLATFORM_CUE_URLS.revealResults,
   "top-pick-reveal": PLATFORM_CUE_URLS.answerPressed,
+  "timer-start": "/sounds/boump.mp3",
   "timer-tick": "/sounds/tadazz-timer-tick-20261108.mp3",
   "timer-urgent": "/sounds/tadazz-timer-urgent-20261108.mp3",
   "timer-final": "/sounds/tadazz-timer-final-20261108.mp3",
@@ -79,15 +79,4 @@ export function platformThemeAudio(
     restart: event === "answersMusic" ? ("epoch" as const) : ("event" as const),
     roles,
   }
-}
-
-/** Exact platform assets remain available even when a theme disallows uploads. */
-export function isPlatformAudioUrl(url: string): boolean {
-  return (
-    Object.values(PLATFORM_EVENT_URLS).includes(url) ||
-    Object.values(PLATFORM_SFX_BY_CUE).includes(url) ||
-    Object.values(PLATFORM_SOUNDTRACK_DEFAULTS).some(
-      (track) => track.url === url,
-    )
-  )
 }

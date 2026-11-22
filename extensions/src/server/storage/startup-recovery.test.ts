@@ -564,15 +564,38 @@ it.runIf(process.platform === "linux")(
       bytes = fs.readFileSync(journal)
     const store = path.join(fixture.root, "tadazz-accounts.sqlite"),
       mode = fs.statSync(store).mode & 0o777
+    const sourceBytes = fs.readFileSync(store)
     fs.chmodSync(store, 0)
 
+    // Root can bypass mode 000 via CAP_DAC_OVERRIDE. Inject the same OS denial
+    // at the canonical open boundary so root QA still verifies fail-closed I/O.
+    // Non-root Linux runs exercise the real filesystem permission denial.
+    const open = fs.openSync.bind(fs)
+    const deniedOpen =
+      process.getuid?.() === 0
+        ? vi
+            .spyOn(fs, "openSync")
+            .mockImplementation((file, flags, fileMode) => {
+              if (String(file) === store) {
+                throw Object.assign(new Error("EACCES: permission denied"), {
+                  code: "EACCES",
+                })
+              }
+
+              return open(file, flags, fileMode)
+            })
+        : undefined
+
     try {
-      expect(() => readStartupOwnerSnapshot()).toThrow()
+      expect(() => readStartupOwnerSnapshot()).toThrow(/EACCES/)
       expect(fs.statSync(store).mode & 0o777).toBe(0)
       expect(fs.readFileSync(journal)).toEqual(bytes)
     } finally {
+      deniedOpen?.mockRestore()
       fs.chmodSync(store, mode)
     }
+
+    expect(fs.readFileSync(store)).toEqual(sourceBytes)
   },
 )
 it("rejects a linked canonical DB without following or rewriting its target", () => {

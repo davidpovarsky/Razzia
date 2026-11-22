@@ -25,6 +25,7 @@ import { votingPresentation } from "./voting-presentation"
 import { FINALE, INTRO, confettiBit } from "./motion-spec"
 import "./tadazz-motion-kit.css"
 import "./tadazz-show-adaptations.css"
+import "./guess-off-stage.css"
 import {
   TADAZZ_LOGO_URL,
   type StageLeaderEntry,
@@ -40,10 +41,22 @@ import {
 
 export interface TadazzV4StageAdapterProps extends TadazzStageProps {
   v4Labels?: Partial<TadazzV4Labels>
+  guessOffLook?: boolean
   fitRevision?: number
   onCue?: (cue: TadazzV4Cue) => void
   onQuestionPresented?: (questionKey: string) => void
   onResolveStoryTie?: (contestantIndex: number) => void
+}
+
+export function GuessOffWinnerDecoration() {
+  return (
+    <div className="ggo-winner-decoration" aria-hidden="true">
+      <div className="ggo-winner-light ggo-winner-light-left" />
+      <div className="ggo-winner-light ggo-winner-light-right" />
+      <span className="ggo-winner-z ggo-winner-z-left">Z</span>
+      <span className="ggo-winner-z ggo-winner-z-right">Z</span>
+    </div>
+  )
 }
 
 function toV4Answers(options: StageOption[]): TadazzV4Answer[] {
@@ -78,6 +91,7 @@ export const TadazzV4StageAdapter = forwardRef<
   {
     labels: stageLabelOverrides,
     v4Labels: v4LabelOverrides,
+    guessOffLook = false,
     backdropUrl,
     backdropFit = "cover",
     backdropPosition = "center",
@@ -120,6 +134,14 @@ export const TadazzV4StageAdapter = forwardRef<
   const v4LabelsRef = useRef(v4Labels)
   v4LabelsRef.current = v4Labels
   const v4Ref = useRef<TadazzV4StageHandle>(null)
+  // The director owns the painted mode. Split socket updates can temporarily
+  // remove custom content while it deliberately holds the current scene.
+  const heldCustomScreenRef = useRef(customScreen)
+
+  if (customScreen) {
+    heldCustomScreenRef.current = customScreen
+  }
+
   const modeRef = useRef<StageMode>(customScreen ? "custom" : "idle")
   const questionRef = useRef<StageQuestion | null>(null)
   const cardsOnStageKeyRef = useRef<string | null>(null)
@@ -132,11 +154,11 @@ export const TadazzV4StageAdapter = forwardRef<
   const [screenMode, setScreenMode] = useState<
     "none" | "custom" | "intro" | "win"
   >(() => (customScreen ? "custom" : "none"))
-  // Lobby/wait/result custom screens may arrive after the persistent stage
-  // mounts. Keep them visible even if the director's first ref-dependent pump
-  // ran before the imperative handle was available.
+  // Cover an initially idle stage if its first content arrived after mount.
+  // Once the director has painted a scene, it alone owns the visible mode.
+  // A refreshed custom JSX value must never cover a native scene on re-render.
   useEffect(() => {
-    if (customScreen) {
+    if (customScreen && modeRef.current === "idle") {
       modeRef.current = "custom"
       setScreenMode("custom")
     }
@@ -650,6 +672,7 @@ export const TadazzV4StageAdapter = forwardRef<
       },
       async showTopPick({ question, counts, topIndex, emptyMessage }) {
         setScreenMode("none")
+        setMode("custom")
         cardsOnStageKeyRef.current = null
         const q = question ?? questionRef.current
         const p = interactivePropsRef.current
@@ -671,6 +694,7 @@ export const TadazzV4StageAdapter = forwardRef<
       },
       async showRoundRecap({ winners, round, subtitle }) {
         setScreenMode("none")
+        setMode("custom")
         cardsOnStageKeyRef.current = null
         const p = interactivePropsRef.current
         await v4Ref.current?.play("round-recap", {
@@ -687,6 +711,7 @@ export const TadazzV4StageAdapter = forwardRef<
       },
       async showInterlude({ title, subtitle }) {
         setScreenMode("none")
+        setMode("custom")
         cardsOnStageKeyRef.current = null
         const p = interactivePropsRef.current
         await v4Ref.current?.play("interlude", {
@@ -767,6 +792,7 @@ export const TadazzV4StageAdapter = forwardRef<
         data-testid="tadazz-finale-screen"
       >
         <div className="tz-screen-inner">
+          {guessOffLook && <GuessOffWinnerDecoration />}
           <div className="tz-confetti">
             {confettiKey > 0 &&
               Array.from(
@@ -827,7 +853,7 @@ export const TadazzV4StageAdapter = forwardRef<
         data-testid="tadazz-custom-screen"
       >
         <div className="tz-screen-inner">
-          {screenMode === "custom" ? customScreen : null}
+          {screenMode === "custom" ? heldCustomScreenRef.current : null}
         </div>
       </div>
     </>
