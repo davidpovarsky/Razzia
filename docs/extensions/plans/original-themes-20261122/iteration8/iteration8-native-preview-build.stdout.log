@@ -1,0 +1,84 @@
+{
+  "format": "tadazz-application-preview-build",
+  "available": true,
+  "files": [
+    {
+      "name": "renderer.mjs",
+      "bytes": 2817364,
+      "sha256": "e41b1c97b70bceb1a0798b1adee0c1c4e169371a819f0877aacf03e46e865102"
+    },
+    {
+      "name": "renderer.css",
+      "bytes": 467274,
+      "sha256": "bf2133b45aa779b8583691f25a381f30a46d1dc9aba217fa243612ac7577b057"
+    }
+  ],
+  "pins": [
+    {
+      "portVersion": 3,
+      "identityRuleVersion": 2,
+      "registry": {
+        "id": "tadazz-native-application",
+        "version": "1.0.0"
+      },
+      "registrySha256": "f2df518ddff01b3c3aa75382c2632bd1898a510e1d2fde8bcad9a2a6e4cba2b4",
+      "renderer": {
+        "id": "tadazz-classic-stage",
+        "version": "1.0.0"
+      },
+      "rendererBuildSha256": "006bd6165d9cff7a7dd90e346b7d2b2151cd0553d2b40166e34c8c9a0cdc569a"
+    },
+    {
+      "portVersion": 3,
+      "identityRuleVersion": 2,
+      "registry": {
+        "id": "tadazz-native-application",
+        "version": "1.0.0"
+      },
+      "registrySha256": "f2df518ddff01b3c3aa75382c2632bd1898a510e1d2fde8bcad9a2a6e4cba2b4",
+      "renderer": {
+        "id": "razzia-native-stage",
+        "version": "1.0.0"
+      },
+      "rendererBuildSha256": "006bd6165d9cff7a7dd90e346b7d2b2151cd0553d2b40166e34c8c9a0cdc569a"
+    },
+    {
+      "portVersion": 3,
+      "identityRuleVersion": 2,
+      "registry": {
+        "id": "tadazz-native-application",
+        "version": "1.0.0"
+      },
+      "registrySha256": "f2df518ddff01b3c3aa75382c2632bd1898a510e1d2fde8bcad9a2a6e4cba2b4",
+      "renderer": {
+        "id": "tadazz-original-stage",
+        "version": "1.0.0"
+      },
+      "rendererBuildSha256": "006bd6165d9cff7a7dd90e346b7d2b2151cd0553d2b40166e34c8c9a0cdc569a"
+    }
+  ],
+  "verification": {
+    "format": "tadazz-application-preview-verification",
+    "mode": "generate-manifest",
+    "verifiedManifest": false,
+    "manifestSha256": "5fba3520c56627fab947c301ddc406f17550ebf09dc7c08081695f8dec5f5e02",
+    "artifactSha256": "59faeda5252d88dc054d19af9aeecd334807ab46ae094bba5aeff12b2cb1ed66",
+    "registrySha256": "424a1c3ff42aad612af9593dd8d5b15eca4eb0177a17162b87f1f61d74c9f1f8",
+    "files": [
+      {
+        "name": "renderer.mjs",
+        "bytes": 2817364,
+        "sha256": "e41b1c97b70bceb1a0798b1adee0c1c4e169371a819f0877aacf03e46e865102"
+      },
+      {
+        "name": "renderer.css",
+        "bytes": 467274,
+        "sha256": "bf2133b45aa779b8583691f25a381f30a46d1dc9aba217fa243612ac7577b057"
+      }
+    ],
+    "inputFiles": 3753,
+    "generatedSourceChanged": true,
+    "liveAuthorityInputs": [],
+    "productionChanged": false
+  }
+}

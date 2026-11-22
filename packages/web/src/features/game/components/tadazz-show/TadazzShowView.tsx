@@ -383,20 +383,6 @@ function TadazzShowContent(props: TadazzShowViewProps) {
     !scene.question.hasAnswerImages &&
     scene.question.options.every((option) => !option.image)
 
-  if (typeof document !== "undefined") {
-    document.documentElement.style.background =
-      theme.definition.tokens.background
-    document.body.style.background = theme.definition.tokens.background
-  }
-
-  useEffect(
-    () => () => {
-      document.documentElement.style.background = ""
-      document.body.style.background = ""
-    },
-    [],
-  )
-
   const stageRef = useRef<TadazzStageHandle>(null)
   const showRootRef = useRef<HTMLElement | null>(null)
   const isPaused = Boolean(extensionState?.pause?.paused)
@@ -533,7 +519,9 @@ function TadazzShowContent(props: TadazzShowViewProps) {
     const media = showRootRef.current?.querySelectorAll("video, audio") ?? []
 
     if (isPaused) {
-      stage?.pauseAnimations?.(pausedCountdownRemainingMs)
+      if (!useV4) {
+        stage?.pauseAnimations?.(pausedCountdownRemainingMs)
+      }
       media.forEach((element) => {
         ;(element as HTMLMediaElement).pause()
       })
@@ -541,7 +529,9 @@ function TadazzShowContent(props: TadazzShowViewProps) {
       return
     }
 
-    stage?.resumeAnimations?.()
+    if (!useV4) {
+      stage?.resumeAnimations?.()
+    }
     media.forEach((element) => {
       const mediaElement = element as HTMLMediaElement
 
@@ -549,7 +539,7 @@ function TadazzShowContent(props: TadazzShowViewProps) {
         void mediaElement.play().catch(() => undefined)
       }
     })
-  }, [isPaused, pausedCountdownRemainingMs])
+  }, [isPaused, pausedCountdownRemainingMs, useV4])
   // ── Director: authoritative scene → reference animation methods ────────
   const prevSceneRef = useRef<ShowScene | null>(null)
   const pendingRef = useRef<ShowScene | null>(null)
@@ -1671,6 +1661,10 @@ function TadazzShowContent(props: TadazzShowViewProps) {
                     underlay={underlay}
                     overlay={overlay}
                     reducedMotion={reduced}
+                    livePlayback={{
+                      paused: isPaused,
+                      countdownRemainingMs: pausedCountdownRemainingMs,
+                    }}
                     fitRevision={isHostPresenting ? 1 : 0}
                   />
                 ) : (

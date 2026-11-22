@@ -247,6 +247,12 @@ export interface TadazzV4StageHandle {
   setPercentagesVisible(visible: boolean): void
 }
 
+/** Authoritative live state; absent for imperative preview pause/seek callers. */
+export interface TadazzV4LivePlayback {
+  paused: boolean
+  countdownRemainingMs?: number
+}
+
 export interface TadazzV4StageProps {
   initialScene?: TadazzV4Scene
   initialData?: TadazzV4Data
@@ -254,6 +260,7 @@ export interface TadazzV4StageProps {
   motionScale?: number
   showPercentages?: boolean
   reducedMotion?: boolean
+  livePlayback?: TadazzV4LivePlayback
   /** Recompute the 1920×1080 fit after host chrome/fullscreen changes. */
   fitRevision?: number
   className?: string

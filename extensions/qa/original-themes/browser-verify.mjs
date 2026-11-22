@@ -177,6 +177,11 @@ async function captureStageFailure({
           host?.getAttribute("data-show-scene") ??
           host?.getAttribute("data-game-phase"),
         scene: stage?.getAttribute("data-v4-scene"),
+        hostToolbar: describe(
+          document.querySelector('[data-testid="manager-control-toolbar"]'),
+        ),
+        hostActionRow: describe(document.querySelector(".tds-host-action-row")),
+        stageViewport: describe(stage?.closest(".tzv4-viewport")),
         stage: bounds(stage),
         question: describe(stage?.querySelector(".og-question")),
         answers: describe(stage?.querySelector(".og-answers")),
@@ -635,7 +640,10 @@ async function verifyPublic({ browser, options, inspect, record }) {
             if (index === 1 || (id === "magic-storybook" && index === 5)) {
               await decodedImages(root)
               await page.screenshot({
-                path: join(options.evidence, `public-${id}-checkpoint-${index + 1}.png`),
+                path: join(
+                  options.evidence,
+                  `public-${id}-checkpoint-${index + 1}.png`,
+                ),
               })
             }
           } else {
@@ -879,9 +887,13 @@ async function verifyNative({ browser, options, inspect, record }) {
         const before = Number(await answered.getAttribute("data-count"))
         assert(Number.isInteger(before) && before >= 0 && before < 2)
         await button.click()
-        await expect(answered).toHaveAttribute("data-count", String(before + 1), {
-          timeout: 15000,
-        })
+        await expect(answered).toHaveAttribute(
+          "data-count",
+          String(before + 1),
+          {
+            timeout: 15000,
+          },
+        )
         await expect(button).toBeHidden({ timeout: 15000 })
       }
       for (let index = 0; index < fixture.quizz.questions.length; index += 1) {

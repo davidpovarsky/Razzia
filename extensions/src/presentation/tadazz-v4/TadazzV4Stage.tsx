@@ -23,6 +23,10 @@ import {
 } from "../original-themes/OriginalThemeScene"
 import "./full-show.css"
 import { TadazzV4Motion } from "./motion"
+import {
+  pausedCountdownRemainingMsFor,
+  scenePlaybackFor,
+} from "./live-playback"
 import { observeQuestionPresentation } from "../question-lead-in"
 import "./source-layout.css"
 import "./tadazz-v4.css"
@@ -60,6 +64,7 @@ export const TadazzV4Stage = forwardRef<
     motionScale = 1,
     showPercentages = true,
     reducedMotion = false,
+    livePlayback,
     fitRevision = 0,
     className,
     underlay,
@@ -86,6 +91,8 @@ export const TadazzV4Stage = forwardRef<
   const stageRef = useRef<HTMLDivElement>(null)
   const engineRef = useRef<TadazzV4Motion | null>(null)
   const pausedCountdownRemainingMsRef = useRef<number | undefined>(undefined)
+  const livePlaybackRef = useRef(livePlayback)
+  livePlaybackRef.current = livePlayback
   const [view, setView] = useState<CurrentScene | null>(
     initialScene
       ? {
@@ -159,7 +166,10 @@ export const TadazzV4Stage = forwardRef<
         }
       }
       engineRef.current?.stop()
-      const remainingMs = pausedCountdownRemainingMsRef.current
+      const remainingMs = pausedCountdownRemainingMsFor(
+        livePlaybackRef.current,
+        pausedCountdownRemainingMsRef.current,
+      )
       const nextData =
         scene === "countdown" && remainingMs !== undefined
           ? { ...data, remainingSeconds: remainingMs / 1000 }
@@ -201,6 +211,23 @@ export const TadazzV4Stage = forwardRef<
     onCovered?: () => void | Promise<void>
     resolve: (ok: boolean) => void
   } | null>(null)
+  const livePaused = livePlayback?.paused
+  const liveCountdownRemainingMs = livePlayback?.countdownRemainingMs
+  useLayoutEffect(() => {
+    if (livePaused === undefined) {
+      return
+    }
+
+    // Freeze an existing live scene in place. New scene engines separately
+    // reconstruct the paused snapshot below, before the browser paints it.
+    if (livePaused) {
+      engineRef.current?.pause(liveCountdownRemainingMs)
+      wipeEngineRef.current?.pause()
+    } else {
+      engineRef.current?.resume()
+      wipeEngineRef.current?.resume()
+    }
+  }, [livePaused, liveCountdownRemainingMs])
   const wipe = useCallback(
     (onCovered?: () => void | Promise<void>): Promise<boolean> => {
       wipeEngineRef.current?.stop()
@@ -238,7 +265,8 @@ export const TadazzV4Stage = forwardRef<
     }
     const engine = new TadazzV4Motion(layer, {
       motionScale: motionScaleRef.current,
-      reducedMotion: reducedMotionRef.current,
+      reducedMotion:
+        reducedMotionRef.current || livePlaybackRef.current?.paused === true,
       originalFamily,
       onCue: (cue) => {
         if (cue.name === "wipe-covered") {
@@ -250,7 +278,13 @@ export const TadazzV4Stage = forwardRef<
     })
     wipeEngineRef.current = engine
     let alive = true
-    void engine.play("z-wipe", {}).then((ok) => {
+    const playing = engine.play("z-wipe", {})
+
+    if (livePlaybackRef.current?.paused) {
+      engine.finishAll()
+    }
+
+    void playing.then((ok) => {
       if (!alive) {
         return
       }
@@ -287,7 +321,10 @@ export const TadazzV4Stage = forwardRef<
       clear,
       wipe,
       patchData: (patch) => {
-        const remainingMs = pausedCountdownRemainingMsRef.current
+        const remainingMs = pausedCountdownRemainingMsFor(
+          livePlaybackRef.current,
+          pausedCountdownRemainingMsRef.current,
+        )
         const nextPatch =
           remainingMs === undefined
             ? patch
@@ -370,9 +407,14 @@ export const TadazzV4Stage = forwardRef<
       )
       callbackRef.current.onCue?.(taggedCue)
     }
+    const playback = scenePlaybackFor(view.scene, {
+      reducedMotion: reducedMotionRef.current,
+      livePlayback: livePlaybackRef.current,
+      imperativeRemainingMs: pausedCountdownRemainingMsRef.current,
+    })
     const engine = new TadazzV4Motion(el, {
       motionScale: motionScaleRef.current,
-      reducedMotion: reducedMotionRef.current,
+      reducedMotion: playback.reducedMotion,
       originalFamily,
       onCue: cueHandler,
     })
@@ -383,12 +425,12 @@ export const TadazzV4Stage = forwardRef<
       ...view.data,
       showPercentages: view.data.showPercentages ?? showPercentagesRef.current,
     })
-    const remainingMs = pausedCountdownRemainingMsRef.current
-
-    // A delayed scene commit must inherit the authoritative pause. Preview
-    // pause() without a remainder keeps its existing explicit seek lifecycle.
-    if (remainingMs !== undefined) {
-      engine.pause(remainingMs)
+    // A paused live snapshot must paint its final authoritative results now,
+    // while a real countdown keeps its frozen remainder instead of finishing.
+    if (playback.settleScene) {
+      engine.finishAll()
+    } else if (playback.pauseAfterCommit) {
+      engine.pause(playback.countdownRemainingMs)
     }
 
     void playing.then((completed) => {

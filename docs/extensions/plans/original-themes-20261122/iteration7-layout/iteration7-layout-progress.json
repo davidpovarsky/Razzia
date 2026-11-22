@@ -1,0 +1,27 @@
+[
+  {
+    "label": "web-types",
+    "exit": 0,
+    "seconds": 12.86
+  },
+  {
+    "label": "extensions-types",
+    "exit": 0,
+    "seconds": 20.14
+  },
+  {
+    "label": "native-preview-build",
+    "exit": 0,
+    "seconds": 3.99
+  },
+  {
+    "label": "widget-build",
+    "exit": 0,
+    "seconds": 8.98
+  },
+  {
+    "label": "site-build",
+    "exit": 0,
+    "seconds": 6.96
+  }
+]

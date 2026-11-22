@@ -1718,120 +1718,144 @@
 }
 /* Shared interactions keep their geometry and clock. Their decorative surfaces
    belong to the selected family; company/grand opening remain platform-owned. */
-.tzv4-stage[data-original-family] .og-full-show :is(
-  .full-directory-col,
-  .full-directory-dial,
-  .full-phone-device,
-  .full-phone-key,
-  .full-step,
-  .full-readiness-tray,
-  .full-table-led,
-  .full-progress-piece,
-  .full-progress-piece.is-filled,
-  .full-progress-index,
-  .full-tie-card
-) {
+.tzv4-stage[data-original-family]
+  .og-full-show
+  :is(
+    .full-directory-col,
+    .full-directory-dial,
+    .full-phone-device,
+    .full-phone-key,
+    .full-step,
+    .full-readiness-tray,
+    .full-table-led,
+    .full-progress-piece,
+    .full-progress-piece.is-filled,
+    .full-progress-index,
+    .full-tie-card
+  ) {
   background: var(--og-surface);
   border-color: var(--og-border);
   color: var(--og-ink);
-  box-shadow: 0 12px 28px #0004, inset 0 1px 0 #ffffff16;
+  box-shadow:
+    0 12px 28px #0004,
+    inset 0 1px 0 #ffffff16;
 }
-.tzv4-stage[data-original-family] .og-full-show :is(
-  .full-rep-row,
-  .full-phone-speaker,
-  .full-phone-display,
-  .full-connection-track,
-  .full-progress-frame
-) {
+.tzv4-stage[data-original-family]
+  .og-full-show
+  :is(
+    .full-rep-row,
+    .full-phone-speaker,
+    .full-phone-display,
+    .full-connection-track,
+    .full-progress-frame
+  ) {
   background: var(--og-bg);
   border-color: var(--og-border);
   box-shadow: inset 0 2px 10px #0004;
 }
-.tzv4-stage[data-original-family] .og-full-show :is(
-  .full-head .full-title,
-  .full-step-head,
-  .full-rep-name,
-  .full-rep-row.connected .full-rep-name,
-  .full-progress-name,
-  .full-connected-count,
-  .full-round-number
-) {
+.tzv4-stage[data-original-family]
+  .og-full-show
+  :is(
+    .full-head .full-title,
+    .full-step-head,
+    .full-rep-name,
+    .full-rep-row.connected .full-rep-name,
+    .full-progress-name,
+    .full-connected-count,
+    .full-round-number
+  ) {
   color: var(--og-ink);
   text-shadow: 0 4px 16px #0005;
 }
-.tzv4-stage[data-original-family] .og-full-show :is(
-  .full-head .full-subtitle,
-  .full-step-text,
-  .full-directory-footer,
-  .full-directory-dial-label,
-  .full-phone-display-small,
-  .full-led-label,
-  .full-table-led.connected .full-led-label,
-  .full-connection-legend,
-  .full-progress-piece:not(.is-filled) .full-progress-name,
-  .full-progress-bottom span:last-child,
-  .full-tie-instruction
-) {
+.tzv4-stage[data-original-family]
+  .og-full-show
+  :is(
+    .full-head .full-subtitle,
+    .full-step-text,
+    .full-directory-footer,
+    .full-directory-dial-label,
+    .full-phone-display-small,
+    .full-led-label,
+    .full-table-led.connected .full-led-label,
+    .full-connection-legend,
+    .full-progress-piece:not(.is-filled) .full-progress-name,
+    .full-progress-bottom span:last-child,
+    .full-tie-instruction
+  ) {
   color: var(--og-muted);
   text-shadow: none;
 }
-.tzv4-stage[data-original-family] .og-full-show :is(
-  .full-head .full-eyebrow,
-  .full-col-title,
-  .full-directory-dial-number,
-  .full-phone-display-number,
-  .full-step-num,
-  .full-progress-cap,
-  .full-progress-bottom,
-  .full-tie-index,
-  .full-tie-card b,
-  .full-equals,
-  .full-round-mini
-) {
+.tzv4-stage[data-original-family]
+  .og-full-show
+  :is(
+    .full-head .full-eyebrow,
+    .full-col-title,
+    .full-directory-dial-number,
+    .full-phone-display-number,
+    .full-step-num,
+    .full-progress-cap,
+    .full-progress-bottom,
+    .full-tie-index,
+    .full-tie-card b,
+    .full-equals,
+    .full-round-mini
+  ) {
   color: var(--og-accent);
   text-shadow: none;
 }
-.tzv4-stage[data-original-family] .og-full-show :is(
-  .full-led-number,
-  .full-progress-placeholder
-) {
+.tzv4-stage[data-original-family]
+  .og-full-show
+  :is(.full-led-number, .full-progress-placeholder) {
   color: var(--og-muted);
   text-shadow: none;
 }
-.tzv4-stage[data-original-family] .og-full-show :is(
-  .full-table-number,
-  .full-rep-row.connected .full-table-number,
-  .full-connection-fill,
-  .full-phone-chin,
-  .full-progress-bridge,
-  .full-launch-rule
-) {
+.tzv4-stage[data-original-family]
+  .og-full-show
+  :is(
+    .full-table-number,
+    .full-rep-row.connected .full-table-number,
+    .full-connection-fill,
+    .full-phone-chin,
+    .full-progress-bridge,
+    .full-launch-rule
+  ) {
   background: var(--og-accent);
   color: var(--og-bg);
   box-shadow: none;
 }
-.tzv4-stage[data-original-family] .og-full-show :is(
-  .full-rep-row.connected,
-  .full-table-led.connected,
-  .full-tie-card.chosen
-) {
+.tzv4-stage[data-original-family]
+  .og-full-show
+  :is(
+    .full-rep-row.connected,
+    .full-table-led.connected,
+    .full-tie-card.chosen
+  ) {
   background: var(--og-surface);
   border-color: var(--og-accent);
-  box-shadow: inset 0 0 0 2px var(--og-accent), 0 8px 20px #0003;
+  box-shadow:
+    inset 0 0 0 2px var(--og-accent),
+    0 8px 20px #0003;
 }
-.tzv4-stage[data-original-family] .og-full-show .full-table-led.connected .full-led-number {
+.tzv4-stage[data-original-family]
+  .og-full-show
+  .full-table-led.connected
+  .full-led-number {
   color: var(--og-accent);
   text-shadow: none;
 }
-.tzv4-stage[data-original-family] .og-full-show :is(.full-rep-joined, .full-led-pip) {
+.tzv4-stage[data-original-family]
+  .og-full-show
+  :is(.full-rep-joined, .full-led-pip) {
   background: var(--og-border);
   border-color: var(--og-border);
   box-shadow: none;
 }
-.tzv4-stage[data-original-family] .og-full-show :is(
-  .full-rep-row.connected .full-rep-joined,
-  .full-table-led.connected .full-led-pip
-) {
+.tzv4-stage[data-original-family]
+  .og-full-show
+  :is(
+    .full-rep-row.connected .full-rep-joined,
+    .full-table-led.connected .full-led-pip
+  ) {
   background: var(--og-accent);
   border-color: var(--og-accent);
   box-shadow: 0 0 12px var(--og-accent);
@@ -1839,12 +1863,18 @@
 .tzv4-stage[data-original-family] .og-full-show .full-round-plaque {
   font-family: var(--og-display);
 }
-.tzv4-stage[data-original-family] .og-full-show :is(.full-launch-glow, .full-final-bloom) {
+.tzv4-stage[data-original-family]
+  .og-full-show
+  :is(.full-launch-glow, .full-final-bloom) {
   background: radial-gradient(ellipse, var(--og-accent), transparent 70%);
 }
-.tzv4-stage[data-original-family] .og-full-show :is(.full-final-rings, .full-final-sparks) {
+.tzv4-stage[data-original-family]
+  .og-full-show
+  :is(.full-final-rings, .full-final-sparks) {
   border-color: var(--og-accent);
-  box-shadow: 0 0 36px var(--og-accent), inset 0 0 20px var(--og-border);
+  box-shadow:
+    0 0 36px var(--og-accent),
+    inset 0 0 20px var(--og-border);
 }
 .tzv4-stage[data-original-family] .og-full-show .full-final-arc {
   border-top-color: var(--og-ink);
@@ -1867,7 +1897,9 @@
 }
 /* The reference story choreography still owns its cards, canvas and timing.
    Its baked-in Classic stage and masking mattes must not cover family artwork. */
-.tzv4-stage[data-original-family] .og-full-show :is(.tadazz-reference-mixer, .tadazz-reference-reveal) {
+.tzv4-stage[data-original-family]
+  .og-full-show
+  :is(.tadazz-reference-mixer, .tadazz-reference-reveal) {
   --violet: var(--og-bg);
   --royal: var(--og-surface);
   --electric: var(--og-accent);
@@ -1879,35 +1911,78 @@
   background: none;
   color: var(--og-ink);
 }
-.tzv4-stage[data-original-family] .og-full-show :is(.tadazz-reference-mixer, .tadazz-reference-reveal) :is(.theater, .back-wall, .floor-mask, .old-caption-cover) {
+.tzv4-stage[data-original-family]
+  .og-full-show
+  :is(.tadazz-reference-mixer, .tadazz-reference-reveal)
+  :is(.theater, .back-wall, .floor-mask, .old-caption-cover) {
   background: none;
 }
-.tzv4-stage[data-original-family] .og-full-show :is(.tadazz-reference-mixer, .tadazz-reference-reveal) .stage-art,
-.tzv4-stage[data-original-family] .og-full-show :is(.tadazz-reference-mixer, .tadazz-reference-reveal) :is(.back-wall, .floor-mask)::before,
-.tzv4-stage[data-original-family] .og-full-show :is(.tadazz-reference-mixer, .tadazz-reference-reveal) :is(.back-wall, .floor-mask)::after {
+.tzv4-stage[data-original-family]
+  .og-full-show
+  :is(.tadazz-reference-mixer, .tadazz-reference-reveal)
+  .stage-art,
+.tzv4-stage[data-original-family]
+  .og-full-show
+  :is(.tadazz-reference-mixer, .tadazz-reference-reveal)
+  :is(.back-wall, .floor-mask)::before,
+.tzv4-stage[data-original-family]
+  .og-full-show
+  :is(.tadazz-reference-mixer, .tadazz-reference-reveal)
+  :is(.back-wall, .floor-mask)::after {
   display: none;
 }
-.tzv4-stage[data-original-family] .og-full-show :is(.tadazz-reference-mixer, .tadazz-reference-reveal) :is(.card-shell, .card-body, .card-num, .card-badge, .bottom-marquee, .reference-round, .closed-book-face) {
+.tzv4-stage[data-original-family]
+  .og-full-show
+  :is(.tadazz-reference-mixer, .tadazz-reference-reveal)
+  :is(
+    .card-shell,
+    .card-body,
+    .card-num,
+    .card-badge,
+    .bottom-marquee,
+    .reference-round,
+    .closed-book-face
+  ) {
   background: var(--og-surface);
   border-color: var(--og-border);
   color: var(--og-ink);
-  box-shadow: 0 12px 25px #0005, inset 0 0 0 1px var(--og-border);
+  box-shadow:
+    0 12px 25px #0005,
+    inset 0 0 0 1px var(--og-border);
 }
-.tzv4-stage[data-original-family] .og-full-show :is(.tadazz-reference-mixer, .tadazz-reference-reveal) :is(.card-photo-wrap, .card-image-wrap) {
+.tzv4-stage[data-original-family]
+  .og-full-show
+  :is(.tadazz-reference-mixer, .tadazz-reference-reveal)
+  :is(.card-photo-wrap, .card-image-wrap) {
   background: var(--og-bg);
   border-color: var(--og-border);
 }
-.tzv4-stage[data-original-family] .og-full-show :is(.tadazz-reference-mixer, .tadazz-reference-reveal) :is(.card-caption, .card-title, .hero-title, .headline-big, .finish-message) {
+.tzv4-stage[data-original-family]
+  .og-full-show
+  :is(.tadazz-reference-mixer, .tadazz-reference-reveal)
+  :is(.card-caption, .card-title, .hero-title, .headline-big, .finish-message) {
   color: var(--og-ink);
   text-shadow: 0 4px 16px #0005;
 }
-.tzv4-stage[data-original-family] .og-full-show :is(.tadazz-reference-mixer, .tadazz-reference-reveal) :is(.hero-punct, .headline-small, .lime-exclamation, .timer-digits) {
+.tzv4-stage[data-original-family]
+  .og-full-show
+  :is(.tadazz-reference-mixer, .tadazz-reference-reveal)
+  :is(.hero-punct, .headline-small, .lime-exclamation, .timer-digits) {
   color: var(--og-accent);
   text-shadow: none;
 }
-.tzv4-stage[data-original-family] .og-full-show :is(.tadazz-reference-mixer, .tadazz-reference-reveal) :is(.headline-rule, .timer-track-fill, .timer-knob),
-.tzv4-stage[data-original-family] .og-full-show :is(.tadazz-reference-mixer, .tadazz-reference-reveal) :is(.bottom-marquee, .card-shell)::before,
-.tzv4-stage[data-original-family] .og-full-show :is(.tadazz-reference-mixer, .tadazz-reference-reveal) :is(.bottom-marquee, .card-col, .story-card)::after {
+.tzv4-stage[data-original-family]
+  .og-full-show
+  :is(.tadazz-reference-mixer, .tadazz-reference-reveal)
+  :is(.headline-rule, .timer-track-fill, .timer-knob),
+.tzv4-stage[data-original-family]
+  .og-full-show
+  :is(.tadazz-reference-mixer, .tadazz-reference-reveal)
+  :is(.bottom-marquee, .card-shell)::before,
+.tzv4-stage[data-original-family]
+  .og-full-show
+  :is(.tadazz-reference-mixer, .tadazz-reference-reveal)
+  :is(.bottom-marquee, .card-col, .story-card)::after {
   background: var(--og-accent);
   box-shadow: none;
 }
@@ -1921,26 +1996,58 @@
 .tzv4-stage[data-original-family] .tz-custom-screen .tz-screen-inner {
   color: var(--og-ink);
 }
-.tzv4-stage[data-original-family] .tz-custom-screen :is(.tz-x-title, .tz-x-headline) {
+.tzv4-stage[data-original-family]
+  .tz-custom-screen
+  :is(.tz-x-title, .tz-x-headline) {
   color: var(--og-ink);
   font-family: var(--og-display);
   text-shadow: 0 4px 20px #0005;
 }
-.tzv4-stage[data-original-family] .tz-custom-screen :is(.tz-x-title span, .tz-x-big, .tz-lobby-pin, .tz-lobby-lock, .tz-lobby-show-pin, .tz-lobby-show-phone) {
+.tzv4-stage[data-original-family]
+  .tz-custom-screen
+  :is(
+    .tz-x-title span,
+    .tz-x-big,
+    .tz-lobby-pin,
+    .tz-lobby-lock,
+    .tz-lobby-show-pin,
+    .tz-lobby-show-phone
+  ) {
   color: var(--og-accent);
   text-shadow: none;
 }
-.tzv4-stage[data-original-family] .tz-custom-screen :is(.tz-x-eyebrow, .tz-x-sub, .tz-lobby-label, .tz-lobby-count, .tz-lobby-show-small, .tz-lobby-show-brand span, .tz-lobby-show-col-label) {
+.tzv4-stage[data-original-family]
+  .tz-custom-screen
+  :is(
+    .tz-x-eyebrow,
+    .tz-x-sub,
+    .tz-lobby-label,
+    .tz-lobby-count,
+    .tz-lobby-show-small,
+    .tz-lobby-show-brand span,
+    .tz-lobby-show-col-label
+  ) {
   color: var(--og-muted);
   text-shadow: none;
 }
-.tzv4-stage[data-original-family] .tz-custom-screen :is(.tz-x-panel, .tz-lobby-show-roster, .tz-lobby-show-connected, .tz-lobby-show-rep) {
+.tzv4-stage[data-original-family]
+  .tz-custom-screen
+  :is(
+    .tz-x-panel,
+    .tz-lobby-show-roster,
+    .tz-lobby-show-connected,
+    .tz-lobby-show-rep
+  ) {
   background: var(--og-surface);
   border-color: var(--og-border);
   color: var(--og-ink);
-  box-shadow: 0 12px 28px #0004, inset 0 1px 0 #ffffff16;
+  box-shadow:
+    0 12px 28px #0004,
+    inset 0 1px 0 #ffffff16;
 }
-.tzv4-stage[data-original-family] .tz-custom-screen :is(.tz-x-underline, .tz-lobby-divider) {
+.tzv4-stage[data-original-family]
+  .tz-custom-screen
+  :is(.tz-x-underline, .tz-lobby-divider) {
   background: var(--og-accent);
   box-shadow: none;
 }
@@ -1958,14 +2065,22 @@
   background: var(--og-border);
   border-color: var(--og-border);
 }
-.tzv4-stage[data-original-family] .tz-custom-screen .tz-lobby-show-rep.connected {
+.tzv4-stage[data-original-family]
+  .tz-custom-screen
+  .tz-lobby-show-rep.connected {
   border-color: var(--og-accent);
   box-shadow: inset 0 0 0 1px var(--og-accent);
 }
-.tzv4-stage[data-original-family] .tz-custom-screen .tz-lobby-show-rep.connected strong {
+.tzv4-stage[data-original-family]
+  .tz-custom-screen
+  .tz-lobby-show-rep.connected
+  strong {
   color: var(--og-accent);
 }
-.tzv4-stage[data-original-family] .tz-custom-screen .tz-lobby-show-rep.connected i {
+.tzv4-stage[data-original-family]
+  .tz-custom-screen
+  .tz-lobby-show-rep.connected
+  i {
   background: var(--og-accent);
   border-color: var(--og-accent);
   box-shadow: 0 0 10px var(--og-accent);
@@ -1980,7 +2095,12 @@
   color: var(--og-ink);
   border-color: var(--og-border);
 }
-.tzv4-stage[data-original-family] :is(.tz-custom-screen .tz-x-logo, .tz-custom-screen .tz-lobby-show-brand img, .tz-win-logo) {
+.tzv4-stage[data-original-family]
+  :is(
+    .tz-custom-screen .tz-x-logo,
+    .tz-custom-screen .tz-lobby-show-brand img,
+    .tz-win-logo
+  ) {
   filter: drop-shadow(0 8px 24px #0005);
 }
 .tzv4-stage[data-original-family] .tz-custom-screen .tz-card {

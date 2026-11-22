@@ -22,6 +22,7 @@ import {
 import { DEFAULT_TADAZZ_STAGE_LABELS, type TadazzStageLabels } from "./labels"
 import { MotionEngine } from "./motion-engine"
 import { votingPresentation } from "./voting-presentation"
+import type { TadazzV4LivePlayback } from "../tadazz-v4/types"
 import { FINALE, INTRO, confettiBit } from "./motion-spec"
 import "./tadazz-motion-kit.css"
 import "./tadazz-show-adaptations.css"
@@ -40,6 +41,7 @@ import {
 } from "./TadazzStage"
 
 export interface TadazzV4StageAdapterProps extends TadazzStageProps {
+  livePlayback?: TadazzV4LivePlayback
   v4Labels?: Partial<TadazzV4Labels>
   guessOffLook?: boolean
   fitRevision?: number
@@ -104,6 +106,7 @@ export const TadazzV4StageAdapter = forwardRef<
     underlay,
     overlay,
     reducedMotion = false,
+    livePlayback,
     fitRevision = 0,
     className,
     onModeChange,
@@ -873,6 +876,7 @@ export const TadazzV4StageAdapter = forwardRef<
         labels: v4Labels,
       }}
       reducedMotion={reducedMotion}
+      livePlayback={livePlayback}
       fitRevision={fitRevision}
       className={className}
       underlay={underlay}
