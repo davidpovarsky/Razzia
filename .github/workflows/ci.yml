@@ -48,43 +48,198 @@ jobs:
       - name: Run tests
         run: pnpm test
 
-  e2e:
-    name: E2E Tests
+  e2e_inventory:
+    name: E2E identity ledger (153 original cases)
     runs-on: ubuntu-latest
     if: github.actor != 'dependabot[bot]' || contains(github.event.pull_request.labels.*.name, 'javascript')
     steps:
-      - name: Checkout code
+      - name: Checkout candidate head
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Setup
         uses: ./.github/actions/setup
+
+      - name: Verify unchanged generic discovery
+        shell: bash
+        run: |
+          mkdir -p work/ci-e2e/inventory
+          git rev-parse HEAD > work/ci-e2e/inventory/revision.txt
+          pnpm test:e2e --list | tee work/ci-e2e/inventory/generic-list.txt
+          python3 scripts/qa/ci-e2e-routing.py verify-list generic-discovery work/ci-e2e/inventory/generic-list.txt > work/ci-e2e/inventory/verified.json
+
+      - name: Upload identity ledger evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: e2e-inventory-${{ github.event.pull_request.head.sha || github.sha }}
+          path: work/ci-e2e/inventory
+          retention-days: 7
+
+  e2e:
+    name: E2E / ${{ matrix.lane }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    needs: e2e_inventory
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - lane: ordinary
+            config: playwright.config.ts
+            browsers: chromium
+            buildOrdinarySite: false
+            remoteQa: "0"
+          - lane: billing
+            config: playwright.billing.config.ts
+            browsers: chromium webkit
+            buildOrdinarySite: true
+            remoteQa: "0"
+          - lane: p0-media-tzila
+            config: playwright.p0-acceptance.config.ts
+            browsers: chromium
+            buildOrdinarySite: true
+            remoteQa: "1"
+          - lane: cleanup
+            config: playwright.cleanup-theme.config.ts
+            browsers: chromium webkit
+            buildOrdinarySite: true
+            remoteQa: "1"
+          - lane: tadazz-show
+            config: playwright.tadazz-show.config.ts
+            browsers: chromium webkit
+            buildOrdinarySite: true
+            remoteQa: "1"
+          - lane: ui-fidelity
+            config: playwright.ui-fidelity.config.ts
+            browsers: chromium webkit
+            buildOrdinarySite: true
+            remoteQa: "1"
+          - lane: branch-sync
+            config: playwright.branch-sync.config.ts
+            browsers: chromium webkit
+            buildOrdinarySite: true
+            remoteQa: "1"
+          - lane: next-native
+            config: playwright.next.config.ts
+            browsers: chromium
+            buildOrdinarySite: true
+            remoteQa: "1"
+          - lane: answers-only-normal
+            config: playwright.answers-only-acceptance.config.ts
+            browsers: chromium
+            buildOrdinarySite: false
+            remoteQa: "0"
+    env:
+      TADAZZ_REMOTE_QA: ${{ matrix.remoteQa }}
+      PLAYWRIGHT_JSON_OUTPUT_FILE: ${{ github.workspace }}/work/ci-e2e/${{ matrix.lane }}/playwright-report.json
+    steps:
+      - name: Checkout candidate head
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Verify exact dedicated discovery
+        shell: bash
+        run: |
+          evidence="work/ci-e2e/${{ matrix.lane }}"
+          mkdir -p "$evidence"
+          git rev-parse HEAD > "$evidence/revision.txt"
+          python3 scripts/qa/ci-e2e-routing.py selectors "${{ matrix.lane }}" > "$evidence/selectors.txt"
+          mapfile -t files < "$evidence/selectors.txt"
+          pnpm test:e2e --config="${{ matrix.config }}" "${files[@]}" --list | tee "$evidence/list.txt"
+          python3 scripts/qa/ci-e2e-routing.py verify-list "${{ matrix.lane }}" "$evidence/list.txt" > "$evidence/discovery.json"
+
+      - name: Build ordinary frontend for preview servers
+        if: matrix.buildOrdinarySite
+        env:
+          TADAZZ_SITE_ENABLED: "false"
+        run: pnpm --filter @razzia/web exec vite build --config ../../extensions/site.vite.config.ts --configLoader runner
 
       - name: Get Playwright version
         id: playwright
         run: echo "version=$(pnpm --filter @razzia/e2e exec playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
 
-      - name: Cache Playwright browser
+      - name: Cache Playwright browsers
         id: playwright-cache
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}-${{ matrix.browsers }}
 
-      - name: Install Playwright browser
+      - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: pnpm --filter @razzia/e2e exec playwright install --with-deps chromium
+        run: pnpm --filter @razzia/e2e exec playwright install --with-deps ${{ matrix.browsers }}
 
       - name: Install Playwright system dependencies
         if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: pnpm --filter @razzia/e2e exec playwright install-deps chromium
+        run: pnpm --filter @razzia/e2e exec playwright install-deps ${{ matrix.browsers }}
 
-      - name: Run e2e tests
-        run: pnpm test:e2e
+      - name: Run exact dedicated cases
+        id: run
+        shell: bash
+        run: |
+          evidence="work/ci-e2e/${{ matrix.lane }}"
+          mapfile -t files < "$evidence/selectors.txt"
+          pnpm test:e2e --config="${{ matrix.config }}" "${files[@]}" --reporter=list,json,github
 
-      - name: Upload Playwright traces
-        if: failure()
+      - name: Verify exact actual results
+        if: always() && steps.run.outcome != 'skipped'
+        run: python3 scripts/qa/ci-e2e-routing.py verify-result "${{ matrix.lane }}" "$PLAYWRIGHT_JSON_OUTPUT_FILE" > "work/ci-e2e/${{ matrix.lane }}/result-verification.json"
+
+      - name: Upload Playwright evidence
+        if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: playwright-traces
-          path: packages/e2e/test-results
+          name: e2e-${{ matrix.lane }}-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            work/ci-e2e/${{ matrix.lane }}
+            packages/e2e/test-results
+            work/next-acceptance-results
+            work/ui-fidelity-results
+            work/tadazz-show-results
+          retention-days: 7
+
+  operator_e2e:
+    name: Operator E2E / 8 required original cases
+    runs-on: ubuntu-latest
+    needs: e2e_inventory
+    permissions:
+      contents: read
+      statuses: read
+    env:
+      CANDIDATE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+      EVENT_SHA: ${{ github.sha }}
+    steps:
+      - name: Checkout candidate head
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Record exact pending operator contract
+        shell: bash
+        run: |
+          mkdir -p work/ci-e2e/operator
+          test "$(git rev-parse HEAD)" = "$CANDIDATE_SHA"
+          printf '%s\n' "$EVENT_SHA" > work/ci-e2e/operator/event-sha.txt
+          python3 scripts/qa/ci-e2e-routing.py operator-contract > work/ci-e2e/operator/required.json
+
+      - name: Require trusted same-head operator result
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          gh api --paginate --slurp "repos/$GITHUB_REPOSITORY/commits/$CANDIDATE_SHA/status?per_page=100" > work/ci-e2e/operator/github-status.json
+          python3 scripts/qa/ci-e2e-routing.py verify-operator-status "$CANDIDATE_SHA" work/ci-e2e/operator/github-status.json > work/ci-e2e/operator/admission.json
+
+      - name: Upload pending contract and observed status
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: e2e-operator-${{ github.event.pull_request.head.sha || github.sha }}
+          path: work/ci-e2e/operator
           retention-days: 7

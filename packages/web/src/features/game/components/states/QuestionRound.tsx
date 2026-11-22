@@ -1,6 +1,7 @@
 import type { StatusDataMap } from "@razzia/common/types/game/status"
 import { useState } from "react"
 import clsx from "clsx"
+import { useViewRole } from "@razzia/web/features/game/contexts/view-role-context"
 import { NativeQuestionHeading } from "./QuestionPresentation"
 import { useQuestionPresentation } from "../tadazz-show/use-question-presentation"
 import Question from "./Question"
@@ -18,6 +19,7 @@ type QuestionRoundData =
  * during an automatic transition. Re-entering the lead-in deliberately replays it.
  */
 export default function QuestionRound({ data }: { data: QuestionRoundData }) {
+  const viewRole = useViewRole()
   const phase = (() => {
     if ("responses" in data) {
       return "results" as const
@@ -88,6 +90,11 @@ export default function QuestionRound({ data }: { data: QuestionRoundData }) {
   }
 
   const questionOnly = phase === "question"
+  const hidePlayerQuestion =
+    viewRole === "player" &&
+    phase === "voting" &&
+    "answersOnly" in data &&
+    data.answersOnly
 
   return (
     <section
@@ -97,8 +104,10 @@ export default function QuestionRound({ data }: { data: QuestionRoundData }) {
       className="relative flex h-full min-h-0 w-full flex-1 flex-col overflow-hidden"
     >
       <div
+        aria-hidden={hidePlayerQuestion || undefined}
         className={clsx(
-          "mx-auto flex min-h-0 w-full max-w-7xl flex-col items-center px-2 pt-1 sm:pt-2",
+          "mx-auto min-h-0 w-full max-w-7xl flex-col items-center px-2 pt-1 sm:pt-2",
+          hidePlayerQuestion ? "hidden" : "flex",
           questionOnly
             ? "flex-1 justify-center gap-2 sm:gap-4"
             : "shrink-0 justify-start pb-1",

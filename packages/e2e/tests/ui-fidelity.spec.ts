@@ -12,6 +12,13 @@ import {
   createDefaultOverlayAnimation,
 } from "../../../extensions/src/core"
 import { join } from "node:path"
+import { skipPlatformOpening } from "@razzia/e2e/utils/manager"
+import { t } from "@razzia/e2e/utils/i18n"
+import {
+  endRecordedVote,
+  observeLiveFlow,
+  setManualProgression,
+} from "@razzia/e2e/utils/extension-manager"
 const families = [
   "tadazz-classic",
   "tadazz-demo-cosmic",
@@ -194,20 +201,34 @@ async function room(
     (value) => localStorage.setItem("token", value),
     token,
   )
+  const hostWire = observeLiveFlow(page)
   await page.goto(`/party/manager/${game.gameId}`)
-  await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
-    "data-native-layout",
-    "true",
-  )
+  await skipPlatformOpening(page)
+  const stage = page.getByTestId("tadazz-show")
+  await expect(stage).toHaveCount(1)
+  await expect(stage).toHaveAttribute("data-show-theme", id)
+  await expect(stage).toHaveAttribute("data-theme-fallback", "false")
+
+  if (id === "razzia-original") {
+    await expect(stage).toHaveAttribute("data-native-layout", "true")
+  } else {
+    await expect(page.locator(".tzv4-stage")).toHaveCount(1)
+    await expect(page.getByTestId("native-game-surface")).toHaveCount(0)
+  }
+
+  await setManualProgression(page)
 
   return {
     ...game,
     quizId,
+    questionId,
     token,
+    hostWire,
+    origin: new URL(page.url()).origin,
   }
 }
 /* oxlint-enable max-params */
-async function noOverflow(page: Page) {
+async function noOverflow(page: Page, cinematic = false) {
   await expect(page.locator('[data-control-source="standalone"]')).toHaveCount(
     0,
   )
@@ -216,16 +237,30 @@ async function noOverflow(page: Page) {
       () => document.documentElement.scrollWidth <= innerWidth + 1,
     ),
   ).toBe(true)
-  const box = await page.getByTestId("native-game-surface").boundingBox()
+  await expect(page.getByTestId("tadazz-show")).toHaveCount(1)
+  const surface = cinematic
+    ? page.getByTestId("tadazz-show")
+    : page.getByTestId("native-game-surface")
+  const box = await surface.boundingBox()
   expect(box).not.toBeNull()
   expect(box!.width).toBeGreaterThan(
     (await page.evaluate(() => innerWidth)) * 0.95,
   )
-  await expect(page.locator(".tzv4-stage")).toHaveCount(0)
-  await expect(page.getByTestId("product-logo").first()).toHaveAttribute(
-    "src",
-    TADAZZ_PRODUCT_LOGO_URL,
-  )
+
+  if (cinematic) {
+    await expect(page.locator(".tzv4-stage")).toHaveCount(1)
+    await expect(page.getByTestId("native-game-surface")).toHaveCount(0)
+    await expect(page.locator(".stage-brand-logo")).toHaveAttribute(
+      "src",
+      TADAZZ_PRODUCT_LOGO_URL,
+    )
+  } else {
+    await expect(page.locator(".tzv4-stage")).toHaveCount(0)
+    await expect(page.getByTestId("product-logo").first()).toHaveAttribute(
+      "src",
+      TADAZZ_PRODUCT_LOGO_URL,
+    )
+  }
 }
 for (const family of families) {
   test(`${family}: native operator, responsive iPad, fixed brand and projector`, async ({
@@ -247,7 +282,7 @@ for (const family of families) {
     const displayBrowser = await browser.browserType().launch()
 
     try {
-      await player.goto(`http://127.0.0.1:3190/game?pin=${game.inviteCode}`)
+      await player.goto(`${game.origin}/game?pin=${game.inviteCode}`)
       await player.getByPlaceholder("Username here").fill("Responsive iPad")
       await player
         .getByRole("button", {
@@ -274,7 +309,7 @@ for (const family of families) {
           name: /One/,
         }),
       ).toBeVisible()
-      await noOverflow(page)
+      await noOverflow(page, family !== "razzia-original")
       await noOverflow(player)
       expect(
         await page
@@ -334,7 +369,7 @@ for (const family of families) {
         },
         locale: "en-US",
       })
-      await display.goto(`http://127.0.0.1:3190/display/${game.gameId}`)
+      await display.goto(`${game.origin}/display/${game.gameId}`)
       await expect(display.getByTestId("tadazz-show")).toHaveAttribute(
         "data-show-theme",
         family,
@@ -356,7 +391,10 @@ for (const family of families) {
       }
 
       await page.bringToFront()
-      await page.getByTestId("host-end-timer-btn").click()
+      await endRecordedVote(page, game.hostWire, {
+        questionId: game.questionId,
+        count: 1,
+      })
       await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
         "data-show-scene",
         "results",
@@ -397,7 +435,7 @@ for (const type of ["multi", "estimation"]) {
 
     try {
       const player = await ctx.newPage()
-      await player.goto(`http://127.0.0.1:3190/game?pin=${game.inviteCode}`)
+      await player.goto(`${game.origin}/game?pin=${game.inviteCode}`)
       await player.getByPlaceholder("Username here").fill("Native Types")
       await player
         .getByRole("button", {
@@ -446,7 +484,10 @@ for (const type of ["multi", "estimation"]) {
         })
         .click()
       await page.bringToFront()
-      await page.getByTestId("host-end-timer-btn").click()
+      await endRecordedVote(page, game.hostWire, {
+        questionId: game.questionId,
+        count: 1,
+      })
       await expect(
         player.getByText("Nice!", {
           exact: true,
@@ -465,7 +506,7 @@ test("native game keeps timeline scenes and original editor remains outside game
   const game = await room(request, page, "razzia-original", "single", true)
   const context = await browser.newContext()
   const participant = await context.newPage()
-  await participant.goto(`http://127.0.0.1:3190/game?pin=${game.inviteCode}`)
+  await participant.goto(`${game.origin}/game?pin=${game.inviteCode}`)
   await participant.getByPlaceholder("Username here").fill("Scene QA")
   await participant
     .getByRole("button", {
@@ -493,7 +534,12 @@ test("native game keeps timeline scenes and original editor remains outside game
   await page.getByTestId("host-next-screen-btn").click()
   await expect(page.getByTestId("game-question-title")).toBeVisible()
   await page.goto(`/manager/quizz/${game.quizId}`)
-  await page.getByTestId("studio-tab-settings").click()
+  await page
+    .getByRole("button", {
+      name: t("extensions:studio.tabs.settings"),
+      exact: true,
+    })
+    .click()
   for (const id of families) {
     await expect(page.getByTestId(`show-theme-${id}`)).toBeVisible()
   }
@@ -511,6 +557,9 @@ test("operator projection preserves native audio preferences and can return to r
   browserName,
 }) => {
   await room(request, page, "tadazz-demo-cosmic")
+  const stage = page.getByTestId("tadazz-show")
+  const originalStage = await stage.elementHandle()
+
   await page.getByTestId("host-toggle-audio-mute").click()
   await expect(page.getByTestId("host-toggle-audio-mute")).toHaveAttribute(
     "aria-pressed",
@@ -534,6 +583,17 @@ test("operator projection preserves native audio preferences and can return to r
       "aria-pressed",
       "true",
     )
+
+    await expect(page.getByTestId("host-audio-volume")).toHaveValue("0.37")
+    await expect(page.getByTestId("host-toggle-audio-pause")).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    )
+    expect(await originalStage.evaluate((element) => element.isConnected)).toBe(
+      true,
+    )
+    await expect(stage).toHaveCount(1)
+    await expect(page.locator(".tzv4-stage")).toHaveCount(1)
 
     return
   }
@@ -559,10 +619,13 @@ test("operator projection preserves native audio preferences and can return to r
     "data-host-presenting",
     "false",
   )
-  await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
-    "data-native-layout",
-    "true",
+  expect(await originalStage.evaluate((element) => element.isConnected)).toBe(
+    true,
   )
+  await expect(stage).toHaveCount(1)
+  await expect(stage).toHaveAttribute("data-show-theme", "tadazz-demo-cosmic")
+  await expect(page.locator(".tzv4-stage")).toHaveCount(1)
+  await expect(page.getByTestId("native-game-surface")).toHaveCount(0)
   await expect(page.getByTestId("host-toggle-audio-mute")).toHaveAttribute(
     "aria-pressed",
     "true",
@@ -573,14 +636,21 @@ test("operator projection preserves native audio preferences and can return to r
     "true",
   )
   await page.getByTestId("host-present-from-host-btn").click()
+  await expect(stage).toHaveAttribute("data-host-presenting", "true")
+  expect(await originalStage.evaluate((element) => element.isConnected)).toBe(
+    true,
+  )
   await page.keyboard.press("Escape")
   await expect
     .poll(() => page.evaluate(() => document.fullscreenElement === null))
     .toBe(true)
-  await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
-    "data-native-layout",
-    "true",
+  expect(await originalStage.evaluate((element) => element.isConnected)).toBe(
+    true,
   )
+  await expect(stage).toHaveCount(1)
+  await expect(stage).toHaveAttribute("data-show-theme", "tadazz-demo-cosmic")
+  await expect(page.locator(".tzv4-stage")).toHaveCount(1)
+  await expect(page.getByTestId("native-game-surface")).toHaveCount(0)
 })
 test("native iPad keeps the upstream five choices reachable and scores the last choice", async ({
   page,
@@ -607,7 +677,7 @@ test("native iPad keeps the upstream five choices reachable and scores the last 
 
   try {
     const player = await context.newPage()
-    await player.goto(`http://127.0.0.1:3190/game?pin=${game.inviteCode}`)
+    await player.goto(`${game.origin}/game?pin=${game.inviteCode}`)
     await player.getByPlaceholder("Username here").fill("Long list QA")
     await player
       .getByRole("button", {
@@ -637,7 +707,10 @@ test("native iPad keeps the upstream five choices reachable and scores the last 
       })
       .click()
     await page.bringToFront()
-    await page.getByTestId("host-end-timer-btn").click()
+    await endRecordedVote(page, game.hostWire, {
+      questionId: game.questionId,
+      count: 1,
+    })
     await expect(
       player.getByText("Nice!", {
         exact: true,
@@ -659,7 +732,7 @@ test("native public lobby reuses the Razzia invitation and QR without management
 
   try {
     const display = await context.newPage()
-    await display.goto(`http://127.0.0.1:3190/display/${game.gameId}`)
+    await display.goto(`${game.origin}/display/${game.gameId}`)
     await expect(
       display.getByText(game.inviteCode, {
         exact: true,
@@ -686,25 +759,70 @@ test("native overlay and timeline buttons preserve keyboard positioning, pointer
   request,
 }, info) => {
   const game = await room(request, page, "razzia-original", "single", "overlay")
+  const closeDrawer = async () => {
+    const drawer = page.locator("[data-editor-drawer-close]:visible")
+    const count = await drawer.count()
+    expect(count).toBeLessThanOrEqual(1)
+
+    if (count === 1) {
+      await drawer.click()
+    }
+  }
+  const openPanel = async (id: "timeline" | "edit" | "preview") => {
+    await closeDrawer()
+    const panel = page.getByTestId(`editor-panel-${id}`)
+
+    if (!(await panel.isVisible())) {
+      await page.getByTestId(`editor-panel-toggle-${id}`).click()
+    }
+
+    await expect(panel).toBeVisible()
+  }
   await page.goto(`/manager/quizz/${game.quizId}`)
+  await openPanel("timeline")
+  const openingCard = page
+    .getByTestId("editor-timeline")
+    .getByTestId("editor-scene-card")
+    .filter({
+      has: page.getByRole("button", {
+        name: "Native overlay controls",
+        exact: true,
+      }),
+    })
+  await expect(openingCard).toHaveCount(1)
+  await expect(openingCard).toHaveAttribute("data-scene-kind", "opening")
+  await openingCard.getByTestId("editor-scene-select").click()
+  await openPanel("edit")
+  await expect(page.getByTestId("scene-title-input")).toHaveValue(
+    "Native overlay controls",
+  )
+  await openPanel("preview")
+  await page.getByTestId("scene-preview-mode-layers").click()
   const track = page.getByTestId("studio-preview-track-native-edit-overlay")
   await expect(track).toHaveJSProperty("tagName", "BUTTON")
   await track.click()
   const scrub = page.getByTestId("studio-preview-scrub-slider")
   await scrub.fill("1000")
+  // Preview is a modal drawer; close it before interacting with the real canvas.
+  await closeDrawer()
   const overlay = page.getByTestId("cinematic-overlay-native-edit-overlay")
   await expect(overlay).toBeVisible()
   await expect(overlay).toHaveJSProperty("tagName", "BUTTON")
   await expect(overlay).toHaveAttribute("data-control-source", "razzia")
   await overlay.focus()
   await overlay.press("ArrowRight")
+  await openPanel("edit")
   await expect(
     page.getByTestId("studio-overlay-x-native-edit-overlay"),
   ).toHaveValue("51")
+  await closeDrawer()
+  await overlay.focus()
   await overlay.press("Shift+ArrowDown")
+  await openPanel("edit")
   await expect(
     page.getByTestId("studio-overlay-y-native-edit-overlay"),
   ).toHaveValue("55")
+  await closeDrawer()
   const plane = await page
     .getByTestId("cinematic-layer-stack-opening")
     .boundingBox()
@@ -721,6 +839,7 @@ test("native overlay and timeline buttons preserve keyboard positioning, pointer
     },
   )
   await page.mouse.up()
+  await openPanel("edit")
   await expect
     .poll(async () =>
       Number(
@@ -745,6 +864,7 @@ test("native overlay and timeline buttons preserve keyboard positioning, pointer
   await expect(page.locator('[data-control-source="standalone"]')).toHaveCount(
     0,
   )
+  await closeDrawer()
   await page.screenshot({
     path: info.outputPath("native-overlay-controls.png"),
   })

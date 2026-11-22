@@ -85,6 +85,8 @@ export interface StageWinner {
 }
 
 export interface StageRevealInput {
+  /** Public title of the authored results card; absent uses the canonical label. */
+  title?: string
   /** Raw vote counts per option index (server authoritative). */
   counts: number[]
   /** Server percentages per option index; derived from counts if absent. */
@@ -136,8 +138,14 @@ export interface TadazzStageHandle {
   ): Promise<void>
   lockVoting(): Promise<void>
   revealResults(input: StageRevealInput): Promise<StageRevealResult | null>
-  showLeaderboard(entries: StageLeaderEntry[]): Promise<StageLeaderEntry[]>
-  updateLeaderboard(entries: StageLeaderEntry[]): Promise<StageLeaderEntry[]>
+  showLeaderboard(
+    entries: StageLeaderEntry[],
+    title?: string,
+  ): Promise<StageLeaderEntry[]>
+  updateLeaderboard(
+    entries: StageLeaderEntry[],
+    title?: string,
+  ): Promise<StageLeaderEntry[]>
   nextQuestion(data: StageQuestion): Promise<void>
   playZZWipe(onCovered?: () => void | Promise<void>): Promise<void>
   showFinale(winner: StageWinner | null): Promise<void>
@@ -185,6 +193,7 @@ interface StageModel {
   winnerTag: string
   screen: "none" | "leader" | "win" | "intro" | "custom"
   rows: StageLeaderEntry[]
+  leaderboardTitle?: string
   winner: StageWinner | null
   confettiKey: number
   wipeVisible: boolean
@@ -549,7 +558,7 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
 
     // ── leaderboard rows (_renderRows) ─────────────────────────────────────
     const renderRows = useCallback(
-      async (entries: StageLeaderEntry[]) => {
+      async (entries: StageLeaderEntry[], title?: string) => {
         const next = entries
           .map((x) => ({
             ...x,
@@ -558,6 +567,7 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
           .slice(0, 6)
         await commit({
           rows: next,
+          leaderboardTitle: title,
           screen: "leader",
         })
         for (const entry of next) {
@@ -834,7 +844,7 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
                 : m.question,
             stageState: "",
             timerDisplay: "none",
-            statusText: labelsRef.current.audienceResults,
+            statusText: input.title || labelsRef.current.audienceResults,
             statusMode: "results",
             winnerTag: (() => {
               if (isQuiz) {
@@ -933,7 +943,7 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
             total,
           }
         },
-        async showLeaderboard(entries) {
+        async showLeaderboard(entries, title) {
           stopTimer()
           engine.reset()
           setMode("leaderboard")
@@ -941,7 +951,7 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
             stageState: "",
             rows: [],
           })
-          const data = await renderRows(entries)
+          const data = await renderRows(entries, title)
           const tasks: Array<Promise<void>> = []
           data.forEach((entry, i) => {
             const row = rowRefs.current.get(entry.id)
@@ -969,13 +979,13 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
 
           return data
         },
-        async updateLeaderboard(entries) {
+        async updateLeaderboard(entries, title) {
           if (!entries.length) {
             return []
           }
 
           if (modeRef.current !== "leaderboard") {
-            return this.showLeaderboard(entries)
+            return this.showLeaderboard(entries, title)
           }
 
           engine.reset()
@@ -984,7 +994,7 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
             before.set(id, node.getBoundingClientRect())
           })
           const prevScores = new Map(teamScores.current)
-          const next = await renderRows(entries)
+          const next = await renderRows(entries, title)
           const s = scale()
           const tasks: Array<Promise<void>> = []
           next.forEach((entry, i) => {
@@ -1341,8 +1351,12 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
                 {labels.leaderboardEyebrow}
               </div>
               <div className="tz-leader-title">
-                {labels.leaderboardTitlePrefix}
-                <span>{labels.leaderboardTitleAccent}</span>
+                {model.leaderboardTitle || (
+                  <>
+                    {labels.leaderboardTitlePrefix}
+                    <span>{labels.leaderboardTitleAccent}</span>
+                  </>
+                )}
               </div>
               <div className="tz-leader-underline" />
               <div className="tz-leader-rows">

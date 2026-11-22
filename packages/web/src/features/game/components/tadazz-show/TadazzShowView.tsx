@@ -1035,6 +1035,8 @@ function TadazzShowContent(props: TadazzShowViewProps) {
           <TadazzEstimationResultScreen
             question={scene.question.question}
             estimation={scene.estimation}
+            note={scene.note}
+            isManager={role === "manager"}
           />
         ) : null
 

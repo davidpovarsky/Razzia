@@ -1,5 +1,9 @@
 import {
   isLegacyShowRollback,
+  isQuizExtrasV2,
+  projectLegacyCompat,
+  type QuizExtrasV1,
+  type StudioDefaults,
   QUESTION_DECORATION_PRESETS,
   QUESTION_ENTRANCE_PRESETS,
   resolveCardStageAnimations,
@@ -13,6 +17,9 @@ import {
   type StageAnimationTiming,
 } from "@razzia/extensions/core"
 import { ShowThemeSettings } from "./show-theme-settings"
+import { withLeaderboardPolicy } from "./studio-leaderboard-settings"
+import { AudioCuesSection } from "@razzia/extensions/editor"
+import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 import AlertDialog from "@razzia/web/components/AlertDialog"
 import Button from "@razzia/web/components/Button"
 import ToggleGroup from "@razzia/web/components/ToggleGroup"
@@ -31,13 +38,34 @@ import {
   Trophy,
 } from "lucide-react"
 import { useTranslation } from "react-i18next"
-import { useState } from "react"
+import { useId, useState } from "react"
 import { useStudioEditor } from "./studio-editor-context"
 import { StudioSelect } from "./studio-select"
 
 export const StudioSettingsPage = () => {
   const { t } = useTranslation()
   const { defaults, updateDefaults, bulkApplyQuestionMode } = useStudioEditor()
+  const { extras, setExtras } = useQuizzEditor()
+  const leaderboardIntervalId = useId()
+  const legacyExtras =
+    extras && isQuizExtrasV2(extras) ? projectLegacyCompat(extras) : extras
+  const tr = (key: string, fallback: string) =>
+    t(`extensions:${key}`, { defaultValue: fallback })
+  const changeLeaderboardPolicy = (
+    policy: StudioDefaults["leaderboardPolicy"],
+    everyN?: number,
+  ) => {
+    setExtras((previous) =>
+      previous && isQuizExtrasV2(previous)
+        ? withLeaderboardPolicy(previous, policy, everyN)
+        : previous,
+    )
+  }
+  const changeLegacyAudio = (updated: QuizExtrasV1) => {
+    setExtras((previous) =>
+      previous ? { ...previous, audio: updated.audio } : previous,
+    )
+  }
   const [tadazzMediaPickerOpen, setTadazzMediaPickerOpen] = useState(false)
   const tadazzBackground =
     defaults.tadazzBackground ?? tadazzShowBackgroundSchema.parse({})
@@ -303,31 +331,67 @@ export const StudioSettingsPage = () => {
           <hr className="border-accent" />
 
           {/* Leaderboard Policy */}
-          <ConfigField>
-            <ConfigField.Label
-              icon={<Trophy className="text-primary size-4" />}
-              label={t(
-                "extensions:studio.settings.leaderboardPolicy",
-                "Leaderboard Policy",
+          <section data-testid="studio-leaderboard-settings">
+            <ConfigField>
+              <ConfigField.Label
+                icon={<Trophy className="text-primary size-4" />}
+                label={t(
+                  "extensions:studio.settings.leaderboardPolicy",
+                  "Leaderboard Policy",
+                )}
+              />
+              <ConfigField.Description>
+                {t(
+                  "extensions:studio.settings.leaderboardPolicyDesc",
+                  "Control when ranking leaderboards are displayed during live gameplay.",
+                )}
+              </ConfigField.Description>
+              <StudioSelect
+                ariaLabel={t("extensions:studio.settings.leaderboardPolicy")}
+                dataTestId="studio-leaderboard-policy"
+                value={defaults.leaderboardPolicy}
+                onChange={(val: string) =>
+                  changeLeaderboardPolicy(
+                    val as StudioDefaults["leaderboardPolicy"],
+                  )
+                }
+                items={leaderboardPolicyItems}
+              />
+              {defaults.leaderboardPolicy === "everyN" && (
+                <div
+                  className="flex flex-wrap items-center gap-3"
+                  data-testid="studio-leaderboard-interval"
+                >
+                  <label
+                    htmlFor={leaderboardIntervalId}
+                    className="text-foreground text-sm font-semibold"
+                  >
+                    {t("extensions:leaderboard.everyNLabel")}
+                  </label>
+                  <input
+                    id={leaderboardIntervalId}
+                    type="number"
+                    min={1}
+                    max={100}
+                    step={1}
+                    value={extras?.leaderboard?.everyN ?? 1}
+                    onChange={(event) => {
+                      const interval = event.currentTarget.valueAsNumber
+
+                      if (Number.isFinite(interval)) {
+                        changeLeaderboardPolicy("everyN", interval)
+                      }
+                    }}
+                    className="focus:ring-primary border-accent bg-background text-foreground w-20 rounded-lg border p-2 text-center text-sm font-bold focus:ring-2 focus:outline-none"
+                    data-testid="every-n-input"
+                  />
+                  <span className="text-muted-foreground text-sm">
+                    {t("extensions:leaderboard.questionsSuffix")}
+                  </span>
+                </div>
               )}
-            />
-            <ConfigField.Description>
-              {t(
-                "extensions:studio.settings.leaderboardPolicyDesc",
-                "Control when ranking leaderboards are displayed during live gameplay.",
-              )}
-            </ConfigField.Description>
-            <StudioSelect
-              value={defaults.leaderboardPolicy}
-              onChange={(val: string) =>
-                updateDefaults({
-                  leaderboardPolicy: val as
-                    "upstream" | "everyN" | "cardOnly" | "disabled",
-                })
-              }
-              items={leaderboardPolicyItems}
-            />
-          </ConfigField>
+            </ConfigField>
+          </section>
 
           <hr className="border-accent" />
 
@@ -362,6 +426,16 @@ export const StudioSettingsPage = () => {
           {isLegacyShowRollback(defaults) && (
             <>
               {/* Archived compatibility controls. */}
+              {legacyExtras && (
+                <>
+                  <AudioCuesSection
+                    extras={legacyExtras}
+                    onChange={changeLegacyAudio}
+                    tr={tr}
+                  />
+                  <hr className="border-accent" />
+                </>
+              )}
               <ConfigField>
                 <ConfigField.Label
                   icon={<Sparkles className="text-primary size-4" />}

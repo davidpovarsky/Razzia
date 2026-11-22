@@ -9,6 +9,7 @@
     "jsx": "react-jsx",
     "skipLibCheck": true,
     "noEmit": true,
+    "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true
   }
 }

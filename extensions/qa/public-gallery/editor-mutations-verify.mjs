@@ -19,6 +19,7 @@ export async function verifyEditorMutations(options) {
   const evidence = join(options.evidence, "editor-mutations")
   mkdirSync(evidence, { recursive: true })
   const page = await options.context.newPage()
+  const editPanel = page.getByTestId("editor-panel-edit")
   await page.setViewportSize({ width: 1440, height: 1000 })
   const errors = []
   page.on("pageerror", (error) => errors.push(error.message))
@@ -114,7 +115,8 @@ export async function verifyEditorMutations(options) {
     const released = new Promise((resolve) => {
       release = resolve
     })
-    const field = page.locator('input[name$=".question"]').first()
+    const field = editPanel.locator('input[name$=".question"]')
+    await expect(field).toHaveCount(1)
     const previousQuestion = await field.inputValue()
     const previousTitle = await page
       .locator('input[name="subject"]')
@@ -187,12 +189,12 @@ export async function verifyEditorMutations(options) {
       .getByTestId("editor-scene-select")
       .click()
     await openPanel("edit")
-    await page.locator('[data-testid="toggle-kind-quiz"]:visible').click()
+    await editPanel.getByTestId("toggle-kind-quiz").click()
     await expect(
-      page.locator('input[name="questions.1.question"]:visible'),
+      editPanel.locator('input[name="questions.1.question"]'),
     ).toHaveValue("Middle converted question")
-    await page.getByTestId("answer-text-0").fill("Middle first answer")
-    await page.getByTestId("answer-text-1").fill("Middle second answer")
+    await editPanel.getByTestId("answer-text-0").fill("Middle first answer")
+    await editPanel.getByTestId("answer-text-1").fill("Middle second answer")
     await saveWithPendingCheck()
 
     let stored = await read("/api/quizz/" + quizId)
@@ -210,6 +212,16 @@ export async function verifyEditorMutations(options) {
       storedExtras.questionIds,
       "Native question order must match the authored timeline",
     )
+    assert.equal(
+      stored.questions[1].options,
+      undefined,
+      "Converted choice must not inherit estimation-only registered options",
+    )
+    assert.deepEqual(
+      stored.questions[2],
+      quizz.questions[1],
+      "Following estimation question must retain its complete authored values",
+    )
     assert.deepEqual(Object.keys(storedExtras.scenes), [])
     assert.equal(storedExtras.questionIds[0], questionIds[0])
     assert.equal(storedExtras.questionIds[2], questionIds[1])
@@ -220,7 +232,7 @@ export async function verifyEditorMutations(options) {
     await page.getByTestId("editor-question-card-1").click()
     await openPanel("edit")
     await expect(
-      page.locator('input[name="questions.1.question"]:visible'),
+      editPanel.locator('input[name="questions.1.question"]'),
     ).toHaveValue("Middle converted question")
     await page.getByTestId("studio-tab-settings").click()
     await page.getByRole("button", { name: "Convert All", exact: true }).click()
@@ -275,7 +287,7 @@ export async function verifyEditorMutations(options) {
         "",
       )
       await expect(
-        page.locator('input[name$=".question"]').first(),
+        editPanel.locator('input[name="questions.0.question"]'),
       ).toHaveValue("First authored question")
     } finally {
       await page.unroute(failedSaveUrl, failSave)

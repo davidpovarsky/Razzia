@@ -16,6 +16,7 @@ interface StudioSelectProps {
   onChange: (_val: string) => void
   items: StudioSelectItem[]
   ariaLabel?: string
+  dataTestId?: string
   className?: string
 }
 
@@ -24,10 +25,15 @@ export const StudioSelect = ({
   onChange,
   items,
   ariaLabel,
+  dataTestId,
   className,
 }: StudioSelectProps) => (
   <Select value={value} onValueChange={onChange}>
-    <SelectTrigger aria-label={ariaLabel} className={className}>
+    <SelectTrigger
+      aria-label={ariaLabel}
+      data-testid={dataTestId}
+      className={className}
+    >
       <SelectValue />
     </SelectTrigger>
     <SelectContent>

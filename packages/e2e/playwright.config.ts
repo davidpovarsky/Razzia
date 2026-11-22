@@ -1,5 +1,9 @@
 import { defineConfig, devices } from "@playwright/test"
-import { CONFIG_PATH, MANAGER_PASSWORD } from "@razzia/e2e/utils/constants"
+import {
+  CONFIG_PATH,
+  MANAGER_PASSWORD,
+  TZILA_PILOT_SECRET,
+} from "@razzia/e2e/utils/constants"
 import fs from "fs"
 import { join } from "path"
 
@@ -42,6 +46,7 @@ export default defineConfig({
       env: {
         CONFIG_PATH,
         MANAGER_PASSWORD,
+        TADA_PILOT_SECRET: TZILA_PILOT_SECRET,
         JWT_SECRET: "e2e-secret-that-is-at-least-32-characters",
         GAME_SPEED: "10",
       },

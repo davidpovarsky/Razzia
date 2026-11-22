@@ -9,8 +9,11 @@ import { join } from "node:path"
 import {
   computeCanonicalBaseDigest,
   createDefaultQuizExtrasV2,
+  PLATFORM_AUDIO_URLS,
+  PLATFORM_SOUNDTRACK_DEFAULTS,
 } from "../../../extensions/src/core"
-import { skipPlatformOpening } from "../utils/manager"
+import { createGame, skipPlatformOpening, startGame } from "../utils/manager"
+import { joinGame } from "../utils/player"
 
 const evidence = join(
   import.meta.dirname,
@@ -158,6 +161,7 @@ function audioState(page: Page, path: string) {
 
     return {
       total: tracks.length,
+      element: active ? tracks.indexOf(active) : -1,
       playing: matches.filter((audio) => !audio.paused).length,
       time: active?.currentTime ?? 0,
       volume: active?.volume ?? 0,
@@ -449,40 +453,284 @@ test("ordinary show keeps private roster out of the public lobby in every displa
 
 test("manual music expires between authored screens in the same automatic audio group", async ({
   page,
+  request,
+  browser,
 }) => {
-  await page.goto("/")
-  const fixtureModule = `/@fs/${join(import.meta.dirname, "../../../extensions/src/presentation/host-audio-scope.test-fixture.tsx").replaceAll("\\", "/")}`
-  await page.evaluate(async (url) => {
-    const fixture = (await import(url)) as {
-      mountAudioScopeFixture: () => void
+  const questionId = crypto.randomUUID()
+  const firstSceneId = crypto.randomUUID()
+  const secondSceneId = crypto.randomUUID()
+  const quizz = {
+    subject: `Authored music scope ${Date.now()}`,
+    gameMode: "quiz" as const,
+    questions: [
+      {
+        type: "single" as const,
+        question: "Music scope question",
+        answers: ["Ready", "Later"],
+        solutions: [0],
+        cooldown: 2,
+        time: 120,
+      },
+    ],
+  }
+  const extras = createDefaultQuizExtrasV2(
+    "draft",
+    [questionId],
+    computeCanonicalBaseDigest(quizz),
+  )
+  extras.defaults.showTheme = {
+    id: "tadazz-classic",
+    version: "1.0.0",
+    overrides: {},
+  }
+  extras.defaults.advanceMode = "manual"
+  const automaticUrl = PLATFORM_AUDIO_URLS.recap
+  const manualUrl = PLATFORM_SOUNDTRACK_DEFAULTS.results?.url ?? ""
+  expect(manualUrl).not.toBe("")
+  expect(manualUrl).not.toBe(automaticUrl)
+  extras.audio.soundtrack = {
+    ...extras.audio.soundtrack,
+    recap: {
+      mode: "media",
+      url: automaticUrl,
+      volume: 0.3,
+      loop: true,
+      fadeMs: 120,
+      startOffsetSeconds: 0,
+    },
+    results: {
+      mode: "media",
+      url: manualUrl,
+      volume: 0.3,
+      loop: true,
+      fadeMs: 120,
+      startOffsetSeconds: 0,
+    },
+  }
+  for (const [index, id] of [firstSceneId, secondSceneId].entries()) {
+    extras.scenes[id] = {
+      id,
+      kind: "answerRecap",
+      title: `Authored recap ${index + 1}`,
+      startQuestionId: questionId,
+      mode: "correctAnswer",
+      durationMs: 8000,
+      advance: "manual",
     }
-    fixture.mountAudioScopeFixture()
-  }, fixtureModule)
-  const scope = page.getByTestId("manual-scope-fixture")
-  const music = scope.getByTestId("scope-music")
-  const state = scope.getByTestId("audio-cue-player-state")
-  await expect(music).toHaveValue("")
-  await expect(state).toHaveAttribute("data-soundtrack-slot", "recap")
-  const automaticIdentity = await state.getAttribute("data-audio-identity")
-  expect(automaticIdentity).toBeTruthy()
-  await music.selectOption("results")
-  await expect(music).toHaveValue("results")
-  await expect(state).toHaveAttribute("data-soundtrack-slot", "results")
-  await scope.getByRole("button", { name: "Same screen" }).click()
-  await expect(music).toHaveValue("results")
-  await scope.getByRole("button", { name: "Second scene" }).click()
-  await expect(scope).toHaveAttribute("data-screen-key", "authored-scene-b")
-  await expect(music).toHaveValue("")
-  await expect(state).toHaveAttribute("data-soundtrack-slot", "recap")
-  await expect(state).toHaveAttribute(
-    "data-audio-identity",
-    automaticIdentity ?? "",
-  )
-  await scope.getByRole("button", { name: "First scene" }).click()
-  await expect(scope).toHaveAttribute("data-screen-key", "authored-scene-a")
-  await expect(music).toHaveValue("")
-  await expect(state).toHaveAttribute(
-    "data-audio-identity",
-    automaticIdentity ?? "",
-  )
+    extras.timeline.push({
+      id: crypto.randomUUID(),
+      kind: "answerRecap",
+      sceneId: id,
+    })
+  }
+  const login = await request.post("/api/auth/manager", {
+    data: { password: "e2e-password" },
+  })
+  expect(login.ok()).toBe(true)
+  const { token } = (await login.json()) as { token: string }
+  const saved = await request.post("/api/extensions/quizzes", {
+    headers: { Authorization: `Bearer ${token}` },
+    data: { quizz, extras },
+  })
+  expect(saved.status(), await saved.text()).toBe(201)
+  for (const url of [automaticUrl, manualUrl]) {
+    const response = await request.get(url)
+    expect(response.status(), url).toBe(200)
+  }
+
+  const errors: string[] = []
+  const scenes: Array<{ sceneId: string; epoch: number }> = []
+  page.on("pageerror", (error) => errors.push(error.message))
+  page.on("websocket", (socket) => {
+    socket.on("framereceived", ({ payload }) => {
+      const raw = payload.toString()
+
+      if (!raw.startsWith("42")) {
+        return
+      }
+
+      let packet: unknown = null
+
+      try {
+        packet = JSON.parse(raw.slice(raw.indexOf("[")))
+      } catch {
+        return
+      }
+
+      if (!Array.isArray(packet)) {
+        return
+      }
+
+      const event: unknown = packet[0]
+      const eventPayload: unknown = packet[1]
+
+      if (event !== "extensions:state") {
+        return
+      }
+
+      const record = (value: unknown): Record<string, unknown> =>
+        value !== null && typeof value === "object" && !Array.isArray(value)
+          ? (value as Record<string, unknown>)
+          : {}
+      const state = record(eventPayload)
+      const step = record(record(state.extras).activeTimelineStep)
+
+      if (
+        state.phase === "scene" &&
+        typeof step.sceneId === "string" &&
+        typeof state.epoch === "number"
+      ) {
+        scenes.push({ sceneId: step.sceneId, epoch: state.epoch })
+      }
+    })
+  })
+  await page.addInitScript(() => {
+    const target = window as unknown as { qaAudio: HTMLAudioElement[] }
+    target.qaAudio = []
+    const descriptor = Object.getOwnPropertyDescriptor(
+      HTMLMediaElement.prototype,
+      "play",
+    )
+
+    if (typeof descriptor?.value !== "function") {
+      throw new Error("Native media playback unavailable")
+    }
+
+    const original = descriptor.value as (
+      this: HTMLMediaElement,
+    ) => Promise<void>
+    HTMLMediaElement.prototype.play = function observeScopedMusicPlayback() {
+      if (this instanceof HTMLAudioElement && !target.qaAudio.includes(this)) {
+        target.qaAudio.push(this)
+      }
+
+      return original.call(this)
+    }
+  })
+  const pin = await createGame(page, quizz.subject)
+  const player = await browser.newPage()
+
+  try {
+    await joinGame(player, pin, "Music scope player")
+    await expect(page.getByTestId("host-connected-counter")).toHaveText(
+      /^1(?:\s*\/\s*1)?$/u,
+    )
+    await startGame(page)
+    const shell = page.getByTestId("tadazz-show")
+    await expect(shell).toHaveAttribute("data-show-scene", "voting")
+    await page.getByTestId("host-end-timer-btn").click()
+    await expect(shell).toHaveAttribute("data-show-scene", "results")
+    await page.getByTestId("host-next-screen-btn").click()
+    await expect.poll(() => scenes.at(-1)?.sceneId).toBe(firstSceneId)
+    await expect(shell).toHaveAttribute("data-show-scene", "scene")
+    const music = page.getByTestId("host-audio-track-select")
+    const state = page.getByTestId("audio-cue-player-state")
+    await expect(state).toHaveCount(1)
+    await expect(music).toHaveValue("")
+    await expect(state).toHaveAttribute("data-soundtrack-slot", "recap")
+    await expect(state).toHaveAttribute("data-audio-url", automaticUrl)
+    const automaticIdentity = await state.getAttribute("data-audio-identity")
+    expect(automaticIdentity).toBeTruthy()
+    await expect
+      .poll(async () => (await audioState(page, automaticUrl)).playing)
+      .toBe(1)
+    await expect
+      .poll(async () => (await audioState(page, automaticUrl)).time)
+      .toBeGreaterThan(0.15)
+
+    await music.selectOption("results")
+    await expect(music).toHaveValue("results")
+    await expect(state).toHaveAttribute("data-soundtrack-slot", "results")
+    await expect(state).toHaveAttribute("data-audio-url", manualUrl)
+    await expect
+      .poll(async () => (await audioState(page, manualUrl)).playing)
+      .toBe(1)
+    await expect
+      .poll(async () => (await audioState(page, manualUrl)).time)
+      .toBeGreaterThan(0.15)
+    const manualIdentity = await state.getAttribute("data-audio-identity")
+    const firstScene = scenes.at(-1)
+    await page.getByTestId("host-toggle-audio-pause").click()
+    await expect(state).toHaveAttribute("data-audio-paused", "true")
+    await expect(music).toHaveValue("results")
+    await expect
+      .poll(async () => (await audioState(page, manualUrl)).playing)
+      .toBe(0)
+    const paused = await audioState(page, manualUrl)
+    await page.getByTestId("host-toggle-audio-pause").click()
+    await expect(state).toHaveAttribute("data-audio-paused", "false")
+    await expect(music).toHaveValue("results")
+    await expect(state).toHaveAttribute(
+      "data-audio-identity",
+      manualIdentity ?? "",
+    )
+    await expect
+      .poll(async () => (await audioState(page, manualUrl)).playing)
+      .toBe(1)
+    await expect
+      .poll(async () => (await audioState(page, manualUrl)).time)
+      .toBeGreaterThan(paused.time)
+    expect((await audioState(page, manualUrl)).element).toBe(paused.element)
+    expect(scenes.at(-1)).toEqual(firstScene)
+
+    await page.getByTestId("host-next-screen-btn").click()
+    await expect.poll(() => scenes.at(-1)?.sceneId).toBe(secondSceneId)
+    await expect(music).toHaveValue("")
+    await expect(state).toHaveAttribute("data-soundtrack-slot", "recap")
+    await expect(state).toHaveAttribute("data-audio-url", automaticUrl)
+    await expect(state).toHaveAttribute(
+      "data-audio-identity",
+      automaticIdentity ?? "",
+    )
+    await expect
+      .poll(async () => (await audioState(page, manualUrl)).playing)
+      .toBe(0)
+    await expect
+      .poll(async () => (await audioState(page, automaticUrl)).playing)
+      .toBe(1)
+    const secondSceneAudio = await audioState(page, automaticUrl)
+    await page.getByTestId("host-previous-screen-btn").click()
+    await expect.poll(() => scenes.at(-1)?.sceneId).toBe(firstSceneId)
+    await expect(music).toHaveValue("")
+    await expect(state).toHaveAttribute("data-soundtrack-slot", "recap")
+    await expect(state).toHaveAttribute(
+      "data-audio-identity",
+      automaticIdentity ?? "",
+    )
+    await expect
+      .poll(async () => (await audioState(page, automaticUrl)).playing)
+      .toBe(1)
+    await expect
+      .poll(async () => (await audioState(page, automaticUrl)).time)
+      .toBeGreaterThan(secondSceneAudio.time)
+    expect((await audioState(page, automaticUrl)).element).toBe(
+      secondSceneAudio.element,
+    )
+    expect(errors).toEqual([])
+    fs.writeFileSync(
+      join(evidence, "manual-scope-browser-proof.json"),
+      JSON.stringify(
+        {
+          actualAuthoredSceneIds: [firstSceneId, secondSceneId],
+          scenes,
+          automaticIdentity,
+          manualIdentity,
+          automaticUrl,
+          manualUrl,
+          paused,
+          secondSceneAudio,
+          finalAudio: await audioState(page, automaticUrl),
+          realNativeControls: true,
+          sameScreenSelectionRetained: true,
+          nextAndPreviousRestoreAutomatic: true,
+          realMediaTimeAdvanced: true,
+          browserErrors: errors,
+        },
+        null,
+        2,
+      ),
+    )
+  } finally {
+    await player.close()
+  }
 })

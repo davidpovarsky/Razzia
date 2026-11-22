@@ -149,7 +149,11 @@ export const QuizzEditorProvider = ({
       : defaultQuestion()
 
   const replaceQuestions = (newQuestions: Question[], newIds: string[]) => {
-    replace(newQuestions)
+    const snapshot = structuredClone(newQuestions)
+
+    // Unmount indexed controllers before their question paths shift.
+    flushSync(() => setRemovingFrom(questions))
+    replace(snapshot)
     setQuestionIds(newIds)
   }
 

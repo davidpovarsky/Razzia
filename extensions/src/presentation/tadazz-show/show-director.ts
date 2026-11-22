@@ -63,10 +63,12 @@ export type StageStep =
   | {
       op: "showLeaderboard"
       entries: StageLeaderEntry[]
+      title?: string
     }
   | {
       op: "updateLeaderboard"
       entries: StageLeaderEntry[]
+      title?: string
     }
   | {
       op: "playZZWipe"
@@ -428,10 +430,12 @@ function planScene(
           ? {
               op: "updateLeaderboard",
               entries,
+              title: scene.title,
             }
           : {
               op: "showLeaderboard",
               entries,
+              title: scene.title,
             },
       ]
     }
@@ -498,6 +502,7 @@ function planScene(
       steps.push({
         op: "revealResults",
         reveal: {
+          title: scene.title,
           counts: r.options.map((o) => o.count),
           percentages: r.options.map((o) => o.percentage),
           mode: "survey",
@@ -1012,12 +1017,12 @@ export async function runSteps(
         break
 
       case "showLeaderboard":
-        await handle.showLeaderboard(step.entries)
+        await handle.showLeaderboard(step.entries, step.title)
 
         break
 
       case "updateLeaderboard":
-        await handle.updateLeaderboard(step.entries)
+        await handle.updateLeaderboard(step.entries, step.title)
 
         break
 

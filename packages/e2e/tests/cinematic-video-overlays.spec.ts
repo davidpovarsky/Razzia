@@ -10,7 +10,12 @@ import {
   next,
   startGame,
 } from "@razzia/e2e/utils/manager"
-import { endTimer } from "@razzia/e2e/utils/extension-manager"
+import {
+  endRecordedVote,
+  observeLiveFlow,
+  setManualProgression,
+  waitForRecordedVoting,
+} from "@razzia/e2e/utils/extension-manager"
 import { joinGame } from "@razzia/e2e/utils/player"
 import type { Page } from "@playwright/test"
 const SCREENSHOT_DIR = join(
@@ -25,6 +30,34 @@ const saveScreenshot = async (page: Page, filename: string) => {
     path: join(SCREENSHOT_DIR, filename),
     fullPage: false,
   })
+}
+
+async function openStudioPanel(page: Page, id: "edit" | "preview") {
+  const openDrawer = page.locator("[data-editor-drawer-close]:visible")
+  const drawerCount = await openDrawer.count()
+  expect(drawerCount).toBeLessThanOrEqual(1)
+
+  if (drawerCount === 1) {
+    await openDrawer.click()
+  }
+
+  const panel = page.getByTestId(`editor-panel-${id}`)
+
+  if (!(await panel.isVisible())) {
+    await page.getByTestId(`editor-panel-toggle-${id}`).click()
+  }
+
+  await expect(panel).toBeVisible()
+
+  return panel
+}
+
+async function advanceAuthoredScene(manager: Page) {
+  await expect(manager.getByTestId("host-end-timer-btn")).toHaveCount(0)
+  const advance = manager.getByTestId("host-next-screen-btn")
+  await expect(advance).toHaveCount(1)
+  await expect(advance).toBeEnabled()
+  await advance.click()
 }
 
 // --- CRC32 & PNG / ZIP Helpers for Deterministic Engineering Fixtures ---
@@ -1036,12 +1069,26 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
     })
     await page.goto(`/manager/quizz/${createdShow.quizId}`)
     await expect(
-      page.locator('[data-testid="studio-card-type-bar"]'),
+      page.locator(
+        '[data-testid="studio-card-type-bar"][data-embedded="false"]',
+      ),
     ).toBeVisible({
       timeout: 15_000,
     })
 
-    // Opening card is selected first; verify Overlay Animations section is visible
+    // Select the authored opening, then edit its existing layers in the Edit panel.
+    const openingCard = page
+      .getByTestId("editor-timeline")
+      .getByTestId("editor-scene-card")
+      .filter({
+        has: page.getByRole("button", {
+          name: "Grand Opening Act",
+          exact: true,
+        }),
+      })
+    await expect(openingCard).toHaveCount(1)
+    await openingCard.getByTestId("editor-scene-select").click()
+    await openStudioPanel(page, "edit")
     const overlaySection = page.locator(
       '[data-testid="studio-overlay-animations-section"]',
     )
@@ -1082,7 +1129,9 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
       .locator(`[data-testid="studio-overlay-duration-${thirdRowId}"]`)
       .fill("2")
 
-    // Test 16:9 and 4:3 preview switch inside existing preview
+    // Use the controlled layer preview before changing aspect ratio or scrubbing.
+    const previewPanel = await openStudioPanel(page, "preview")
+    await previewPanel.getByTestId("scene-preview-mode-layers").click()
     await page.locator('[data-testid="studio-preview-aspect-4-3"]').click()
     await expect(
       page.locator('[data-testid="studio-scene-preview-stage"]'),
@@ -1132,6 +1181,8 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
       page.locator(`[data-testid="cinematic-overlay-${thirdRowId}"]`),
     ).toHaveAttribute("data-overlay-phase", "playing")
 
+    // Return to the editable inspector; the preview drawer makes the canvas inert.
+    await openStudioPanel(page, "edit")
     // Test Duplicate & Remove layer (Remove detaches from scene without deleting file from library)
     await page
       .locator(`[data-testid="studio-overlay-duplicate-${thirdRowId}"]`)
@@ -1226,6 +1277,7 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
     browser,
   }) => {
     const SOCKET_ORIGIN = "http://127.0.0.1:3011"
+    const observations = observeLiveFlow(managerPage)
     await loginManager(managerPage)
     const token = await managerPage.evaluate(() =>
       localStorage.getItem("token"),
@@ -1693,6 +1745,7 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
       "Cinema Multi-Lottie Live Acceptance Show",
     )
     expect(pin).toMatch(/^\d{6}$/u)
+    await setManualProgression(managerPage)
     const gameIdMatch = /\/party\/manager\/([^/?#]+)/u.exec(managerPage.url())
     expect(gameIdMatch).not.toBeNull()
     const { 1: gameId } = gameIdMatch!
@@ -1718,12 +1771,10 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
     const playerPage = await playerContext.newPage()
     await joinGame(playerPage, pin, "CinemaPlayerOne")
     await expect(
-      managerPage.getByRole("button", {
-        name: /1 \/ 1 Players/i,
-      }),
-    ).toBeVisible({
-      timeout: 10_000,
-    })
+      managerPage
+        .getByTestId("host-bottom-players-btn")
+        .getByTestId("host-connected-counter"),
+    ).toHaveText(/^1(?:\s*\/\s*1)?$/u)
 
     // Start the show -> Opening Cinema Scene starts immediately without legacy 6s countdown!
     await startGame(managerPage)
@@ -1865,24 +1916,29 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
 
     // Checkpoint 5 (t ~ 9.5s): Foreground MP4 genuinely finishes -> advances ONCE automatically to Survey Q1!
     await expect(
-      spectatorPage.getByRole("button", {
-        name: /Crimson Pulse/i,
-      }),
+      spectatorPage.getByTestId("tadazz-card-0").locator(".answer-title"),
     ).toBeVisible({
       timeout: 14_000,
     })
+    await expect(
+      spectatorPage.getByTestId("tadazz-card-0").locator(".answer-title"),
+    ).toHaveText("Crimson Pulse")
     await saveScreenshot(
       spectatorPage,
       "07_auto_advanced_to_survey_q1_after_8s_video.png",
     )
 
-    // Complete Survey Q1 (5 image answers)
+    // Complete Survey Q1 only after the real server opens voting for this question.
+    await waitForRecordedVoting(observations, q1Id)
     await playerPage
       .getByRole("button", {
         name: /Emerald Aurora/i,
       })
       .click()
-    await endTimer(managerPage)
+    await endRecordedVote(managerPage, observations, {
+      questionId: q1Id,
+      count: 1,
+    })
 
     // Advance to Media Audio Scene
     await next(managerPage)
@@ -1893,11 +1949,7 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
     })
 
     // Advance to Standalone Animation Scene
-    await managerPage
-      .getByRole("button", {
-        name: /Advance Scene/i,
-      })
-      .click()
+    await advanceAuthoredScene(managerPage)
     await expect(
       spectatorPage.locator('[data-testid="scene-animation-preset-spotlight"]'),
     ).toBeVisible({
@@ -1905,24 +1957,25 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
     })
 
     // Advance to Quiz Q2
-    await managerPage
-      .getByRole("button", {
-        name: /Advance Scene/i,
-      })
-      .click()
+    await advanceAuthoredScene(managerPage)
     await expect(
-      spectatorPage.getByRole("button", {
-        name: /Three/i,
-      }),
+      spectatorPage.getByTestId("tadazz-card-1").locator(".answer-title"),
     ).toBeVisible({
       timeout: 12_000,
     })
+    await expect(
+      spectatorPage.getByTestId("tadazz-card-1").locator(".answer-title"),
+    ).toHaveText("Three")
+    await waitForRecordedVoting(observations, q2Id)
     await playerPage
       .getByRole("button", {
         name: /Three/i,
       })
       .click()
-    await endTimer(managerPage)
+    await endRecordedVote(managerPage, observations, {
+      questionId: q2Id,
+      count: 1,
+    })
 
     // Advance to Cumulative Answer Recap Scene
     await next(managerPage)
@@ -1940,11 +1993,7 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
     expect(recapText).not.toContain("CinemaPlayerOne")
 
     // Advance to Closing Cinema Scene (MP4 + 3 simultaneous overlays, manual advance)
-    await managerPage
-      .getByRole("button", {
-        name: /Advance Scene/i,
-      })
-      .click()
+    await advanceAuthoredScene(managerPage)
     const closingStack = spectatorPage.locator(
       '[data-testid="cinematic-layer-stack-closing"]',
     )

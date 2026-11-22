@@ -430,6 +430,8 @@ test.describe("TADA Studio Show Import/Export Acceptance (JSON + Excel)", () => 
     // 3. Navigate to editor
     await expect(page).toHaveURL(/\/manager\/quizz\/[a-zA-Z0-9_-]+$/u)
     await expect(page.getByTestId("editor-save-btn")).toBeVisible()
+    const importedQuizId = new URL(page.url()).pathname.split("/").at(-1)
+    expect(importedQuizId).toBeTruthy()
     await saveScreenshot(page, "08_import05_show_editor_1280.png")
 
     // 4. Save harmless change in editor
@@ -440,9 +442,10 @@ test.describe("TADA Studio Show Import/Export Acceptance (JSON + Excel)", () => 
       .click()
 
     // 5. Export as .tada.json and verify byte content
-    const exportTadaJsonBtn = page
-      .locator("[data-testid^='export-tada-json-']")
-      .first()
+    const exportTadaJsonBtn = page.getByTestId(
+      `export-tada-json-${importedQuizId}`,
+    )
+    await expect(exportTadaJsonBtn).toHaveCount(1)
     await expect(exportTadaJsonBtn).toBeVisible()
 
     const jsonDownloadPromise = page.waitForEvent("download")
@@ -475,7 +478,8 @@ test.describe("TADA Studio Show Import/Export Acceptance (JSON + Excel)", () => 
     expect(downloadedSurvey.interlude).toEqual(surveyInterlude)
 
     // 6. Export as .xlsx and verify byte content
-    const exportXlsxBtn = page.locator("[data-testid^='export-xlsx-']").first()
+    const exportXlsxBtn = page.getByTestId(`export-xlsx-${importedQuizId}`)
+    await expect(exportXlsxBtn).toHaveCount(1)
     await expect(exportXlsxBtn).toBeVisible()
 
     const xlsxDownloadPromise = page.waitForEvent("download")

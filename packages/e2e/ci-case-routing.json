@@ -1,0 +1,871 @@
+{
+  "schemaVersion": 1,
+  "originalInventorySha256": "e2e7a81462607e129ede7e7167a601ccfd05da2060b40c3f5b2441b08d4993bd",
+  "originalSourceCases": 153,
+  "originalFiles": 46,
+  "portableOriginalSourceCases": 145,
+  "operatorOriginalSourceCases": 8,
+  "additionalNormalSpeedSourceCases": 7,
+  "lanes": [
+    {
+      "name": "ordinary",
+      "config": "playwright.config.ts",
+      "projects": ["chromium"],
+      "browsers": "chromium",
+      "buildOrdinarySite": false,
+      "remoteQa": "0",
+      "gameSpeed": 10,
+      "files": [
+        "branding.spec.ts",
+        "browser-acceptance.spec.ts",
+        "creating-worlds-full-game.spec.ts",
+        "editor.spec.ts",
+        "extras.spec.ts",
+        "flow.spec.ts",
+        "game.spec.ts",
+        "host-followup.spec.ts",
+        "host-guest-join.spec.ts",
+        "host-presentation.spec.ts",
+        "live-production-smoke.spec.ts",
+        "live-production-tzila.spec.ts",
+        "manager.spec.ts",
+        "media-library.spec.ts",
+        "platform-opening.spec.ts",
+        "presenter-audio.spec.ts",
+        "quizz-types.spec.ts",
+        "results.spec.ts",
+        "reveal.spec.ts",
+        "settings.spec.ts",
+        "studio-native-parity.spec.ts",
+        "tadazz-manager-branding.spec.ts",
+        "theme-installation-flow.spec.ts",
+        "theme-installation-preview.spec.ts",
+        "wave1-card-editor-regression.spec.ts",
+        "wave1-completion.spec.ts",
+        "wave1-final-qa.spec.ts",
+        "wave1-show-import-acceptance.spec.ts"
+      ],
+      "cases": [
+        {
+          "file": "branding.spec.ts",
+          "title": "applies the instance branding"
+        },
+        {
+          "file": "branding.spec.ts",
+          "title": "keeps the default look without branding"
+        },
+        {
+          "file": "browser-acceptance.spec.ts",
+          "title": "GATE 3: Browser Acceptance & Real-World UI Verification › Scenario 1: QuizzEditorProvider Lifecycle, Enhancements, First-Save Disk Persistence & Stable Asset Association"
+        },
+        {
+          "file": "browser-acceptance.spec.ts",
+          "title": "GATE 3: Browser Acceptance & Real-World UI Verification › Scenario 2: Asynchronous Sidecar-Loading Race Condition Handling"
+        },
+        {
+          "file": "browser-acceptance.spec.ts",
+          "title": "GATE 3: Browser Acceptance & Real-World UI Verification › Scenario 3: HTTP 409 Conflict Handling with Two Real Editing Sessions (Cancel, Reload, and Confirmed Force Overwrite)"
+        },
+        {
+          "file": "browser-acceptance.spec.ts",
+          "title": "GATE 3: Browser Acceptance & Real-World UI Verification › Scenario 4: Live Gameplay - Manager + 2 Web Players + Simulated Phone, Teams, Reveal & Reconnect"
+        },
+        {
+          "file": "browser-acceptance.spec.ts",
+          "title": "GATE 3: Browser Acceptance & Real-World UI Verification › Scenario 5: Backwards Compatibility & 8 Locales Verification"
+        },
+        {
+          "file": "browser-acceptance.spec.ts",
+          "title": "GATE 3: Browser Acceptance & Real-World UI Verification › Scenario 6: Wave 2 Phase A Full Flow - Real Browser Acceptance (Host Controls, Multi-Choice Bar Distribution, Previous/History, Replay Checkpoint, Interlude & Keyboard Navigation)"
+        },
+        {
+          "file": "browser-acceptance.spec.ts",
+          "title": "GATE 3: Browser Acceptance & Real-World UI Verification › Scenario 7 (P0): Phone Roster, XLSX/CSV Import Preview, Full Unmasked Host Phone Numbers, Live Players Modal, and Truthful Bottom Counter"
+        },
+        {
+          "file": "editor.spec.ts",
+          "title": "saves every question type and setting"
+        },
+        {
+          "file": "editor.spec.ts",
+          "title": "hides the scoring settings in survey mode"
+        },
+        {
+          "file": "editor.spec.ts",
+          "title": "shows validation errors and jumps to the invalid question"
+        },
+        {
+          "file": "editor.spec.ts",
+          "title": "edits then deletes a quizz"
+        },
+        {
+          "file": "editor.spec.ts",
+          "title": "exports and imports a quizz as JSON"
+        },
+        {
+          "file": "editor.spec.ts",
+          "title": "attaches an uploaded image to a question"
+        },
+        {
+          "file": "editor.spec.ts",
+          "title": "keeps the other questions intact when deleting one in the middle"
+        },
+        {
+          "file": "editor.spec.ts",
+          "title": "restores the quiz settings when switching back from survey"
+        },
+        {
+          "file": "editor.spec.ts",
+          "title": "refuses to save a quizz without a title"
+        },
+        {
+          "file": "editor.spec.ts",
+          "title": "keeps the number settings within their limits"
+        },
+        {
+          "file": "editor.spec.ts",
+          "title": "uses original Studio controls for every card kind, keyboard navigation and media"
+        },
+        {
+          "file": "extras.spec.ts",
+          "title": "plays video and audio questions"
+        },
+        {
+          "file": "extras.spec.ts",
+          "title": "shows a streak badge after two right answers in a row"
+        },
+        {
+          "file": "extras.spec.ts",
+          "title": "expands the QR code in the waiting room"
+        },
+        {
+          "file": "flow.spec.ts",
+          "title": "restores the manager screen after a reload"
+        },
+        {
+          "file": "flow.spec.ts",
+          "title": "marks a player who did not answer in time as wrong"
+        },
+        {
+          "file": "flow.spec.ts",
+          "title": "reveals the answers without waiting for a player who left"
+        },
+        {
+          "file": "flow.spec.ts",
+          "title": "scores an estimation answered with the slider"
+        },
+        {
+          "file": "flow.spec.ts",
+          "title": "lets the manager skip the auto-advance countdown"
+        },
+        {
+          "file": "flow.spec.ts",
+          "title": "keeps the waiting room when the manager reloads the page"
+        },
+        {
+          "file": "game.spec.ts",
+          "title": "plays a full quiz from the lobby to the podium"
+        },
+        {
+          "file": "game.spec.ts",
+          "title": "refuses players once the room is locked"
+        },
+        {
+          "file": "game.spec.ts",
+          "title": "submits the PIN with the Enter key"
+        },
+        {
+          "file": "game.spec.ts",
+          "title": "lets the manager kick a player"
+        },
+        {
+          "file": "game.spec.ts",
+          "title": "brings a player back into the game after a reload"
+        },
+        {
+          "file": "game.spec.ts",
+          "title": "sends players home when the manager exits the waiting room"
+        },
+        {
+          "file": "game.spec.ts",
+          "title": "refuses to start a game without players"
+        },
+        {
+          "file": "game.spec.ts",
+          "title": "lets a player rejoin from the home page after closing the tab"
+        },
+        {
+          "file": "host-followup.spec.ts",
+          "title": "one Creating Worlds stage, real soundtrack choices, and a compact live roster in LTR/RTL"
+        },
+        {
+          "file": "host-followup.spec.ts",
+          "title": "ordinary show keeps private roster out of the public lobby in every display mode"
+        },
+        {
+          "file": "host-followup.spec.ts",
+          "title": "manual music expires between authored screens in the same automatic audio group"
+        },
+        {
+          "file": "host-guest-join.spec.ts",
+          "title": "host guest switch enforces live admission in razzia-original / en"
+        },
+        {
+          "file": "host-guest-join.spec.ts",
+          "title": "host guest switch enforces live admission in tadazz-classic / he"
+        },
+        {
+          "file": "host-presentation.spec.ts",
+          "title": "same-window host presentation hides manager UI and controls authoritative pause"
+        },
+        {
+          "file": "manager.spec.ts",
+          "title": "refuses a wrong manager password"
+        },
+        {
+          "file": "manager.spec.ts",
+          "title": "keeps the manager logged in after a reload"
+        },
+        {
+          "file": "manager.spec.ts",
+          "title": "logs the manager out"
+        },
+        {
+          "file": "manager.spec.ts",
+          "title": "switches the language and keeps it after a reload"
+        },
+        {
+          "file": "media-library.spec.ts",
+          "title": "uploads, searches, filters and picks a media"
+        },
+        {
+          "file": "media-library.spec.ts",
+          "title": "deletes a media and detaches it from the question"
+        },
+        {
+          "file": "media-library.spec.ts",
+          "title": "attaches a media from a URL"
+        },
+        {
+          "file": "platform-opening.spec.ts",
+          "title": "shared product curtain, video, pause and reconnect return to the selected theme"
+        },
+        {
+          "file": "platform-opening.spec.ts",
+          "title": "original theme receives the same product opening and a failed video never traps its lobby"
+        },
+        {
+          "file": "platform-opening.spec.ts",
+          "title": "legacy imports get an in-memory original-theme launch and reduced motion keeps a static ident"
+        },
+        {
+          "file": "platform-opening.spec.ts",
+          "title": "one product curtain closes razzia-original, including pause and audience reconnect"
+        },
+        {
+          "file": "platform-opening.spec.ts",
+          "title": "one product curtain closes tadazz-classic, including pause and audience reconnect"
+        },
+        {
+          "file": "presenter-audio.spec.ts",
+          "title": "real presenter media: rejected autoplay unlocks, intro survives video end, pause retains position, one engine survives fullscreen"
+        },
+        {
+          "file": "quizz-types.spec.ts",
+          "title": "scores every question type with its scoring settings"
+        },
+        {
+          "file": "quizz-types.spec.ts",
+          "title": "collects answers without scoring in survey mode"
+        },
+        {
+          "file": "results.spec.ts",
+          "title": "shows the stats, answers and points of each question"
+        },
+        {
+          "file": "results.spec.ts",
+          "title": "falls back to computed values for older results"
+        },
+        {
+          "file": "results.spec.ts",
+          "title": "hides correctness in the result of a survey"
+        },
+        {
+          "file": "reveal.spec.ts",
+          "title": "shows the answer explanation when revealing the answer"
+        },
+        {
+          "file": "reveal.spec.ts",
+          "title": "keeps the answers reachable on phones when the question has an image"
+        },
+        {
+          "file": "reveal.spec.ts",
+          "title": "shows the question image inline on desktop"
+        },
+        {
+          "file": "settings.spec.ts",
+          "title": "applies the game settings"
+        },
+        {
+          "file": "settings.spec.ts",
+          "title": "refuses an auto-advance delay out of range"
+        },
+        {
+          "file": "studio-native-parity.spec.ts",
+          "title": "Studio preserves native question settings, category inheritance and saving"
+        },
+        {
+          "file": "tadazz-manager-branding.spec.ts",
+          "title": "brands the manager login as TADAZZ at laptop size"
+        },
+        {
+          "file": "tadazz-manager-branding.spec.ts",
+          "title": "brands the manager login as TADAZZ at desktop size"
+        },
+        {
+          "file": "tadazz-manager-branding.spec.ts",
+          "title": "brands the manager login as TADAZZ at widescreen size"
+        },
+        {
+          "file": "wave1-card-editor-regression.spec.ts",
+          "title": "Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15) › C01: New quiz route /manager/quizz renders StudioShell with swapped rows, valid default question, and no old enhancements"
+        },
+        {
+          "file": "wave1-card-editor-regression.spec.ts",
+          "title": "Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15) › C02: Edit quiz route /manager/quizz/:id renders StudioShell with both rows and full question editing"
+        },
+        {
+          "file": "wave1-card-editor-regression.spec.ts",
+          "title": "Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15) › C03: Header viewports 1024, 1280, 1440, 1920 keep top row & Save/Exit visible and lower row reachable"
+        },
+        {
+          "file": "wave1-card-editor-regression.spec.ts",
+          "title": "Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15) › C04: Create Quiz and Survey cards directly via sidebar footer without overwriting existing questions"
+        },
+        {
+          "file": "wave1-card-editor-regression.spec.ts",
+          "title": "Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15) › C05: Create each non-question kind via sidebar footer and mount corresponding scene editor cleanly"
+        },
+        {
+          "file": "wave1-card-editor-regression.spec.ts",
+          "title": "Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15) › C06: Question -> Scene conversion shows confirmation dialog, cancels safely, converts without crash, and blocks last question"
+        },
+        {
+          "file": "wave1-card-editor-regression.spec.ts",
+          "title": "Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15) › C07: Scene -> Question conversion creates a valid question with answers and immediately usable question editor"
+        },
+        {
+          "file": "wave1-card-editor-regression.spec.ts",
+          "title": "Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15) › C08: Quiz <-> Survey toggle modifies only the selected card without affecting other cards"
+        },
+        {
+          "file": "wave1-card-editor-regression.spec.ts",
+          "title": "Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15) › C09: Duplicate and remove cards preserves stable state without stale selections or undefined dereferencing"
+        },
+        {
+          "file": "wave1-card-editor-regression.spec.ts",
+          "title": "Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15) › C10: Drag-and-drop reorders mixed timeline and updates question ordinals accurately"
+        },
+        {
+          "file": "wave1-card-editor-regression.spec.ts",
+          "title": "Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15) › C11: Save / exit / reopen persists exact mixed order, card kinds, scene configs and questions"
+        },
+        {
+          "file": "wave1-card-editor-regression.spec.ts",
+          "title": "Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15) › C12: Rapid interactions and estimation question type never trigger undefined.answers or unhandled errors"
+        },
+        {
+          "file": "wave1-card-editor-regression.spec.ts",
+          "title": "Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15) › C13: Legacy pre-V2 quiz without sidecar loads seamlessly, preserves data, and saves cleanly"
+        },
+        {
+          "file": "wave1-card-editor-regression.spec.ts",
+          "title": "Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15) › C14: Launch preflight blockers prevent launch on missing media and permit valid launches"
+        },
+        {
+          "file": "wave1-card-editor-regression.spec.ts",
+          "title": "Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15) › C15: Participants, Settings, and Launch navigation collapses Row 2 and leaves card state intact"
+        },
+        {
+          "file": "wave1-completion.spec.ts",
+          "title": "Wave 1 Acceptance: Studio Navigation, Launch Protection & Live Game Scenes › Scenario 1: Studio Timeline Navigation, Questions, Scene Editor, Participants, Settings and Launch Preflight"
+        },
+        {
+          "file": "wave1-completion.spec.ts",
+          "title": "Wave 1 Acceptance: Studio Navigation, Launch Protection & Live Game Scenes › Scenario 2: Live Game Scene Presentation, Input Suppression during Scenes, Advance to Question & Finished Podium"
+        },
+        {
+          "file": "wave1-final-qa.spec.ts",
+          "title": "Wave 1 Final Acceptance: UI Reachability, Settings Width, UI Workflow & Live Scenes › QA-01: Header reachability and Save/Exit visibility across 1024, 1280, 1440, 1920 viewports + Settings full width"
+        },
+        {
+          "file": "wave1-final-qa.spec.ts",
+          "title": "Wave 1 Final Acceptance: UI Reachability, Settings Width, UI Workflow & Live Scenes › QA-02: Editor UI workflow — Card kind toggle, Save button click, and reload persistence"
+        },
+        {
+          "file": "wave1-final-qa.spec.ts",
+          "title": "Wave 1 Final Acceptance: UI Reachability, Settings Width, UI Workflow & Live Scenes › QA-03: Preflight launch protection — dirty draft & missing media warnings"
+        },
+        {
+          "file": "wave1-final-qa.spec.ts",
+          "title": "Wave 1 Final Acceptance: UI Reachability, Settings Width, UI Workflow & Live Scenes › QA-04: Authoritative Live Game Scenes — Real Leaderboard Scores and Interim Results with 2 Players"
+        },
+        {
+          "file": "wave1-show-import-acceptance.spec.ts",
+          "title": "TADA Studio Show Import/Export Acceptance (JSON + Excel) › IMPORT01: Manager import area renders original design tokens, template download, and export affordances at 1024 & 1280 viewports"
+        },
+        {
+          "file": "wave1-show-import-acceptance.spec.ts",
+          "title": "TADA Studio Show Import/Export Acceptance (JSON + Excel) › IMPORT02: Import friendly .tada.json with preflight preview, warnings, and editor opening with ordered cards & media"
+        },
+        {
+          "file": "wave1-show-import-acceptance.spec.ts",
+          "title": "TADA Studio Show Import/Export Acceptance (JSON + Excel) › IMPORT03: Import multi-sheet Excel (.xlsx), export as Tada Excel (.xlsx), and verify zero writes on cancel"
+        },
+        {
+          "file": "wave1-show-import-acceptance.spec.ts",
+          "title": "TADA Studio Show Import/Export Acceptance (JSON + Excel) › IMPORT04: Export as Friendly Tada JSON (.tada.json) and verify unsafe URL error blocking"
+        },
+        {
+          "file": "wave1-show-import-acceptance.spec.ts",
+          "title": "TADA Studio Show Import/Export Acceptance (JSON + Excel) › IMPORT05: Import valid show with Hebrew note and per-question interlude, save in editor, reload, export .tada.json and .xlsx, verify byte content"
+        },
+        {
+          "file": "wave1-show-import-acceptance.spec.ts",
+          "title": "TADA Studio Show Import/Export Acceptance (JSON + Excel) › IMPORT06: Reject invalid targetKey in JSON/XLSX and malformed interludeJson with zero server writes"
+        },
+        {
+          "file": "creating-worlds-full-game.spec.ts",
+          "title": "runs the complete Creating Worlds show with real assets, results, tie and finale"
+        },
+        {
+          "file": "creating-worlds-full-game.spec.ts",
+          "title": "fits the 16:9 stage across projector and laptop viewports"
+        },
+        {
+          "file": "creating-worlds-full-game.spec.ts",
+          "title": "survives skip, restart, pause, timer end, rapid input, and refresh"
+        },
+        {
+          "file": "live-production-smoke.spec.ts",
+          "title": "final live Tzila smoke: real room, host presentation, pause, vote, results audio"
+        },
+        {
+          "file": "live-production-tzila.spec.ts",
+          "title": "live production: original Tzila show, forty representatives, ten votes, tie, host presentation and audio"
+        },
+        {
+          "file": "theme-installation-flow.spec.ts",
+          "title": "package to private review, approved publication, Studio persistence and all real game roles"
+        },
+        {
+          "file": "theme-installation-preview.spec.ts",
+          "title": "reviews all fifteen native slots, sixteen explicit audio events and eight locale maps"
+        }
+      ],
+      "existingGuardedCases": [
+        {
+          "file": "creating-worlds-full-game.spec.ts",
+          "title": "runs the complete Creating Worlds show with real assets, results, tie and finale"
+        },
+        {
+          "file": "creating-worlds-full-game.spec.ts",
+          "title": "fits the 16:9 stage across projector and laptop viewports"
+        },
+        {
+          "file": "creating-worlds-full-game.spec.ts",
+          "title": "survives skip, restart, pause, timer end, rapid input, and refresh"
+        },
+        {
+          "file": "live-production-smoke.spec.ts",
+          "title": "final live Tzila smoke: real room, host presentation, pause, vote, results audio"
+        },
+        {
+          "file": "live-production-tzila.spec.ts",
+          "title": "live production: original Tzila show, forty representatives, ten votes, tie, host presentation and audio"
+        },
+        {
+          "file": "theme-installation-flow.spec.ts",
+          "title": "package to private review, approved publication, Studio persistence and all real game roles"
+        },
+        {
+          "file": "theme-installation-preview.spec.ts",
+          "title": "reviews all fifteen native slots, sixteen explicit audio events and eight locale maps"
+        }
+      ]
+    },
+    {
+      "name": "billing",
+      "config": "playwright.billing.config.ts",
+      "projects": ["chromium", "webkit"],
+      "browsers": "chromium webkit",
+      "buildOrdinarySite": true,
+      "remoteQa": "0",
+      "gameSpeed": 1,
+      "files": ["billing.spec.ts"],
+      "cases": [
+        {
+          "file": "billing.spec.ts",
+          "title": "original manager UI, all locales, narrow and desktop layouts"
+        },
+        {
+          "file": "billing.spec.ts",
+          "title": "four currencies and access granted only after signed server notification"
+        },
+        {
+          "file": "billing.spec.ts",
+          "title": "a second authenticated account sees no other account's allowance"
+        }
+      ],
+      "existingGuardedCases": []
+    },
+    {
+      "name": "p0-media-tzila",
+      "config": "playwright.p0-acceptance.config.ts",
+      "projects": ["chromium"],
+      "browsers": "chromium",
+      "buildOrdinarySite": true,
+      "remoteQa": "1",
+      "gameSpeed": 1,
+      "files": [
+        "cinematic-video-overlays.spec.ts",
+        "media-appearance-stage-acceptance.spec.ts",
+        "p0-tzila-acceptance.spec.ts",
+        "tzila-exact-player-screen.spec.ts",
+        "tzila-public-stage-and-toolbar.spec.ts"
+      ],
+      "cases": [
+        {
+          "file": "cinematic-video-overlays.spec.ts",
+          "title": "Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7) › 1. Security, Self-Hosted WASM, Shared Lottie Catalog, Reference-Safe Delete, Native Editor UX & Format Roundtrips (.tada.json, .xlsx, .bundle.json)"
+        },
+        {
+          "file": "cinematic-video-overlays.spec.ts",
+          "title": "Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7) › 2. Live Show E2E: Real 8s MP4 + 3 Timed Transparent Overlays in SAME Opening Scene, No Premature Cut at 5s, Timeline Checkpoints, Late-Join Sync & 8 Viewports × 8 Locales"
+        },
+        {
+          "file": "media-appearance-stage-acceptance.spec.ts",
+          "title": "Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audio, Staged Motion & Zero-Scroll Stage › 1. Studio Editor: Responsive Zero-Overflow (1280..320), Smart Convert Question->Scene, Per-Answer Visuals, Shared Media Library & Reference-Safe Delete"
+        },
+        {
+          "file": "media-appearance-stage-acceptance.spec.ts",
+          "title": "Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audio, Staged Motion & Zero-Scroll Stage › 2. Live Runtime & Zero-Scroll Stage Matrix (STAGE-P0) across 8 Viewports + Card Background + Single Audio + Staged Motion"
+        },
+        {
+          "file": "media-appearance-stage-acceptance.spec.ts",
+          "title": "Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audio, Staged Motion & Zero-Scroll Stage › 3. Wave 2 Complete: Cinema Opening, Media Audio, Standalone Animation + Lottie Fixture, Question Decoration, and Cumulative Answer Recap across 8 Viewports"
+        },
+        {
+          "file": "p0-tzila-acceptance.spec.ts",
+          "title": "P0: Tzila Five-Option Picture Polls & Projector Acceptance › Full Tzila Show Lifecycle: 5-option cards, PSTN DTMF 1-5, spectator display, tie, zero votes"
+        },
+        {
+          "file": "p0-tzila-acceptance.spec.ts",
+          "title": "P0: Tzila Five-Option Picture Polls & Projector Acceptance › P0 Previous Screen True Revote: reopens completed question, resets timer and votes, allows revoting via DTMF, and preserves subsequent results"
+        },
+        {
+          "file": "tzila-exact-player-screen.spec.ts",
+          "title": "TADA P0: Exact Player Screen Reuse for Audience Display › A1: Static Architecture Guard — No duplicate UI trees in /display"
+        },
+        {
+          "file": "tzila-exact-player-screen.spec.ts",
+          "title": "TADA P0: Exact Player Screen Reuse for Audience Display › A2-A9: Live Game — Exact Player Parity, Footer Omission, Synced Countdown, Mid-Voting Join & Rejection"
+        },
+        {
+          "file": "tzila-exact-player-screen.spec.ts",
+          "title": "TADA P0: Exact Player Screen Reuse for Audience Display › A7 & A10: Backward Compatibility — Standard Quiz without authored scene"
+        },
+        {
+          "file": "tzila-public-stage-and-toolbar.spec.ts",
+          "title": "P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolbar › Gate A & Gate B: Audience Live Display, Synced Countdown, Mid-Voting Join, Single Reveal, Ties, Revote"
+        },
+        {
+          "file": "tzila-public-stage-and-toolbar.spec.ts",
+          "title": "P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolbar › Gate C: Responsive Host Toolbar across Viewports & Localization"
+        },
+        {
+          "file": "tzila-public-stage-and-toolbar.spec.ts",
+          "title": "P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolbar › Gate B Fallback: Normal Quiz Results Unaffected (Backward Compatibility)"
+        }
+      ],
+      "existingGuardedCases": []
+    },
+    {
+      "name": "cleanup",
+      "config": "playwright.cleanup-theme.config.ts",
+      "projects": ["chromium", "webkit-ipad"],
+      "browsers": "chromium webkit",
+      "buildOrdinarySite": true,
+      "remoteQa": "1",
+      "gameSpeed": 20,
+      "files": ["cleanup-legacy-flow.spec.ts", "cleanup-theme.spec.ts"],
+      "cases": [
+        {
+          "file": "cleanup-legacy-flow.spec.ts",
+          "title": "legacy adapters retain picture voting, multi percentages and zero votes"
+        },
+        {
+          "file": "cleanup-theme.spec.ts",
+          "title": "Classic host, player and display keep the current lobby and authoritative pause/roster"
+        },
+        {
+          "file": "cleanup-theme.spec.ts",
+          "title": "explicit rollback uses extracted scene presenter and original Studio controls"
+        },
+        {
+          "file": "cleanup-theme.spec.ts",
+          "title": "unknown versions preserve stored identity and warn only the manager"
+        },
+        {
+          "file": "cleanup-theme.spec.ts",
+          "title": "blocked audio waits for a user gesture without retrying on ticks"
+        },
+        {
+          "file": "cleanup-theme.spec.ts",
+          "title": "Studio shows only registered built-in choices, previews locally, and persists explicit mute"
+        },
+        {
+          "file": "cleanup-theme.spec.ts",
+          "title": "live theme shares all roles, fits five viewports, and restarts voting music only for a new question"
+        }
+      ],
+      "existingGuardedCases": []
+    },
+    {
+      "name": "tadazz-show",
+      "config": "playwright.tadazz-show.config.ts",
+      "projects": ["chromium", "webkit-ipad"],
+      "browsers": "chromium webkit",
+      "buildOrdinarySite": true,
+      "remoteQa": "1",
+      "gameSpeed": 1,
+      "files": ["tadazz-full-show-parity.spec.ts"],
+      "cases": [
+        {
+          "file": "tadazz-full-show-parity.spec.ts",
+          "title": "TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â€“A21 › A01, A02, A03, A04, A05, A06, A07, A08, A11, A12, A15: Live 5-Image Show (Shared Lobby -> 3 Players + Phone Vote -> Question -> Vote -> Lock -> Reveal -> Tie -> Zero Votes -> Next Question -> Finale & Projector Parity)"
+        },
+        {
+          "file": "tadazz-full-show-parity.spec.ts",
+          "title": "TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â€“A21 › A09, A10, A12, A14, A17: Scored Quiz â€” Correct/Incorrect Badges, Leaderboard + Rank Change (updateLeaderboard), 2â€“4 Options Monogram Fallback, Finale with Real Winner & Confetti"
+        },
+        {
+          "file": "tadazz-full-show-parity.spec.ts",
+          "title": "TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â€“A21 › A20 & A21: Studio Editor Untouched + Side-by-Side Frame Sampling (0s, 0.25s, 0.5s, 1.0s, 3.0s) vs Canonical HTML"
+        }
+      ],
+      "existingGuardedCases": []
+    },
+    {
+      "name": "ui-fidelity",
+      "config": "playwright.ui-fidelity.config.ts",
+      "projects": ["chromium", "webkit-ipad"],
+      "browsers": "chromium webkit",
+      "buildOrdinarySite": true,
+      "remoteQa": "1",
+      "gameSpeed": 1,
+      "files": ["ui-fidelity.spec.ts"],
+      "cases": [
+        {
+          "file": "ui-fidelity.spec.ts",
+          "title": "tadazz-classic: native operator, responsive iPad, fixed brand and projector"
+        },
+        {
+          "file": "ui-fidelity.spec.ts",
+          "title": "tadazz-demo-cosmic: native operator, responsive iPad, fixed brand and projector"
+        },
+        {
+          "file": "ui-fidelity.spec.ts",
+          "title": "tadazz-demo-jade: native operator, responsive iPad, fixed brand and projector"
+        },
+        {
+          "file": "ui-fidelity.spec.ts",
+          "title": "razzia-original: native operator, responsive iPad, fixed brand and projector"
+        },
+        {
+          "file": "ui-fidelity.spec.ts",
+          "title": "native multi retains scoring, picture cards and confirmation"
+        },
+        {
+          "file": "ui-fidelity.spec.ts",
+          "title": "native estimation retains scoring, picture cards and confirmation"
+        },
+        {
+          "file": "ui-fidelity.spec.ts",
+          "title": "native game keeps timeline scenes and original editor remains outside game styles"
+        },
+        {
+          "file": "ui-fidelity.spec.ts",
+          "title": "operator projection preserves native audio preferences and can return to responsive controls"
+        },
+        {
+          "file": "ui-fidelity.spec.ts",
+          "title": "native iPad keeps the upstream five choices reachable and scores the last choice"
+        },
+        {
+          "file": "ui-fidelity.spec.ts",
+          "title": "native public lobby reuses the Razzia invitation and QR without management controls"
+        },
+        {
+          "file": "ui-fidelity.spec.ts",
+          "title": "native overlay and timeline buttons preserve keyboard positioning, pointer drag and saving"
+        }
+      ],
+      "existingGuardedCases": []
+    },
+    {
+      "name": "branch-sync",
+      "config": "playwright.branch-sync.config.ts",
+      "projects": ["chromium", "webkit-ipad"],
+      "browsers": "chromium webkit",
+      "buildOrdinarySite": true,
+      "remoteQa": "1",
+      "gameSpeed": 20,
+      "files": ["branch-sync.spec.ts"],
+      "cases": [
+        {
+          "file": "branch-sync.spec.ts",
+          "title": "synchronized seating metadata uses native live table presence"
+        },
+        {
+          "file": "branch-sync.spec.ts",
+          "title": "synchronized seating metadata keeps ordinary lobbies unchanged"
+        }
+      ],
+      "existingGuardedCases": []
+    },
+    {
+      "name": "next-native",
+      "config": "playwright.next.config.ts",
+      "projects": ["chromium"],
+      "browsers": "chromium",
+      "buildOrdinarySite": true,
+      "remoteQa": "1",
+      "gameSpeed": 3,
+      "files": ["tadazz-native-directory.spec.ts", "tadazz-next-live.spec.ts"],
+      "cases": [
+        {
+          "file": "tadazz-native-directory.spec.ts",
+          "title": "native source cards: 40 saved representatives, focus pages, live join, readiness and story progress"
+        },
+        {
+          "file": "tadazz-next-live.spec.ts",
+          "title": "server timeline: host/display round banners, ten photo votes, results, stories, refresh and curtains"
+        }
+      ],
+      "existingGuardedCases": []
+    }
+  ],
+  "operatorLanes": [
+    {
+      "name": "package-runtime",
+      "config": "playwright.package-runtime.config.ts",
+      "projects": ["chromium", "webkit"],
+      "files": [
+        "managed-clients.spec.ts",
+        "package-runtime-load.spec.ts",
+        "package-runtime.spec.ts"
+      ],
+      "cases": [
+        {
+          "file": "managed-clients.spec.ts",
+          "title": "managed client code opens only assigned canonical games with the native custom host and display"
+        },
+        {
+          "file": "package-runtime-load.spec.ts",
+          "title": "concurrent package displays keep authoritative pause, results and reconnect"
+        },
+        {
+          "file": "package-runtime-load.spec.ts",
+          "title": "bounded heavy TSX stays responsive and missing renderer heartbeat falls back without losing the room"
+        },
+        {
+          "file": "package-runtime.spec.ts",
+          "title": "declarative package previews decoded private assets before installation"
+        },
+        {
+          "file": "package-runtime.spec.ts",
+          "title": "one-file complete React installation without review, independent layouts, live core and sandbox boundary"
+        },
+        {
+          "file": "package-runtime.spec.ts",
+          "title": "networkless builder rejects unapproved dependencies and executable import tricks"
+        }
+      ],
+      "existingGuardedCases": [],
+      "requiredEnvironment": "same-head managed account host, TLS runtime, qualified package worker and broker",
+      "requiredStatusContext": "Tadazz / operator E2E"
+    },
+    {
+      "name": "package-sequence",
+      "config": "playwright.package-sequence.config.ts",
+      "projects": ["chromium"],
+      "files": ["package-question-sequence.spec.ts"],
+      "cases": [
+        {
+          "file": "package-question-sequence.spec.ts",
+          "title": "package question sequence, persistent iframe and real SDK failure recovery"
+        }
+      ],
+      "existingGuardedCases": [],
+      "requiredEnvironment": "same-head native account host, compiled runtime, qualified package worker and broker",
+      "requiredStatusContext": "Tadazz / operator E2E"
+    },
+    {
+      "name": "staged-release",
+      "config": "playwright.release-candidate.config.ts",
+      "projects": ["chromium"],
+      "files": ["release-candidate-tzila.spec.ts"],
+      "cases": [
+        {
+          "file": "release-candidate-tzila.spec.ts",
+          "title": "staged Tzila release has exact media, QR, roster, soundtrack and same-window presentation"
+        }
+      ],
+      "existingGuardedCases": [],
+      "requiredEnvironment": "same-head isolated staged frontend/backend and exact private 31-seat Tzila fixture",
+      "requiredStatusContext": "Tadazz / operator E2E"
+    }
+  ],
+  "normalSpeedAcceptance": {
+    "name": "answers-only-normal",
+    "config": "playwright.answers-only-acceptance.config.ts",
+    "projects": ["chromium"],
+    "browsers": "chromium",
+    "buildOrdinarySite": false,
+    "remoteQa": "0",
+    "gameSpeed": 1,
+    "files": ["answers-only-and-explanations.acceptance.ts"],
+    "cases": [
+      {
+        "file": "answers-only-and-explanations.acceptance.ts",
+        "title": "ordinary player answers-only disabled control"
+      },
+      {
+        "file": "answers-only-and-explanations.acceptance.ts",
+        "title": "ordinary player answers-only enabled regression"
+      },
+      {
+        "file": "answers-only-and-explanations.acceptance.ts",
+        "title": "ordinary manager receives the supported explanation at reveal"
+      },
+      {
+        "file": "answers-only-and-explanations.acceptance.ts",
+        "title": "Razzia estimation manager receives the explanation in the existing reveal"
+      },
+      {
+        "file": "answers-only-and-explanations.acceptance.ts",
+        "title": "Classic choice preserves its existing single manager explanation"
+      },
+      {
+        "file": "answers-only-and-explanations.acceptance.ts",
+        "title": "Classic estimation manager receives the explanation in the existing reveal"
+      },
+      {
+        "file": "answers-only-and-explanations.acceptance.ts",
+        "title": "Classic long question and explanation remain readable through real scrolling"
+      }
+    ],
+    "existingGuardedCases": []
+  }
+}

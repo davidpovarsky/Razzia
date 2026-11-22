@@ -1,4 +1,6 @@
 import type { Locator } from "@playwright/test"
+import { BASIC_QUIZZ } from "@razzia/e2e/utils/constants"
+import { readQuizz, seedQuizz } from "@razzia/e2e/utils/editor"
 import { expect, test } from "@razzia/e2e/utils/fixtures"
 import { t } from "@razzia/e2e/utils/i18n"
 import { createGame, startGame } from "@razzia/e2e/utils/manager"
@@ -9,7 +11,14 @@ const toggleSetting = async (dialog: Locator, label: string) => {
 }
 
 test("applies the game settings", async ({ page: manager, newPage }) => {
-  const pin = await createGame(manager)
+  const subject = `Settings board ${crypto.randomUUID()}`
+  const basic = readQuizz(BASIC_QUIZZ)
+  expect(basic).toBeDefined()
+  seedQuizz(subject, {
+    questions: basic!.questions.map((item) => ({ ...item, time: 120 })),
+    leaderboard: "upstream",
+  })
+  const pin = await createGame(manager, subject)
 
   await manager.getByRole("button", { name: t("game:settings.title") }).click()
 
@@ -18,12 +27,14 @@ test("applies the game settings", async ({ page: manager, newPage }) => {
   await toggleSetting(dialog, t("game:settings.generatedUsernames.label"))
   await toggleSetting(dialog, t("game:settings.answersOnly.label"))
   await toggleSetting(dialog, t("game:settings.autoAdvance.label"))
+  // Preserve three real seconds for the result and board animations at GAME_SPEED=10.
+  // The game still advances automatically; the browser and application clocks stay real.
   await dialog
     .getByLabel(t("game:settings.autoAdvance.responsesDelay"))
-    .fill("3")
+    .fill("30")
   await dialog
     .getByLabel(t("game:settings.autoAdvance.leaderboardDelay"))
-    .fill("3")
+    .fill("30")
   await dialog.getByRole("button", { name: t("common:save") }).click()
   await expect(dialog).toBeHidden()
 
@@ -52,7 +63,9 @@ test("applies the game settings", async ({ page: manager, newPage }) => {
   await answer(player, "Paris")
   await expect(player.getByText(t("game:correct"))).toBeVisible()
 
-  await expect(manager.getByText(t("game:leaderboard"))).toBeVisible()
+  await expect(
+    manager.getByRole("heading", { name: t("game:leaderboard"), exact: true }),
+  ).toBeVisible()
   await answer(player, "4")
   await expect(player.getByText(t("game:correct"))).toBeVisible()
   await expect(

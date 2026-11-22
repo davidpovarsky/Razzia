@@ -594,6 +594,99 @@ describe("planTransition — the ten reference methods are driven by real events
     expect(ops(steps)).toEqual(["showLeaderboard", "hold", "updateLeaderboard"])
   })
 
+  it.each(["idle", "leaderboard"] as const)(
+    "keeps the authored leaderboard title when the stage is %s",
+    (mode) => {
+      const steps = planTransition(
+        null,
+        {
+          kind: "scene",
+          key: "authored-leaderboard",
+          scene: { kind: "leaderboard", title: "Mid-Game Leaderboard" },
+          activeSceneData: {
+            leaderboard: {
+              entries: [{ rank: 1, displayName: "Alice", points: 850 }],
+            },
+          },
+        },
+        { questionKey: null, mode },
+      )
+      expect(steps).toEqual([
+        {
+          op: mode === "leaderboard" ? "updateLeaderboard" : "showLeaderboard",
+          entries: [{ id: "rank:Alice", name: "Alice", score: 850 }],
+          title: "Mid-Game Leaderboard",
+        },
+      ])
+    },
+  )
+
+  it("reveals the authored interim title on the existing question", () => {
+    const steps = planTransition(
+      null,
+      {
+        kind: "scene",
+        key: "authored-interim",
+        scene: { kind: "interimResults", title: "Audience Poll Overview" },
+        activeSceneData: {
+          interimResults: {
+            sourceQuestionId: "poll",
+            questionText: "Which color?",
+            totalResponders: 2,
+            options: [
+              { answerIndex: 0, label: "Red", count: 1, percentage: 50 },
+              { answerIndex: 1, label: "Blue", count: 1, percentage: 50 },
+            ],
+            winners: [0, 1],
+            isTie: true,
+          },
+        },
+      },
+      { questionKey: "Which color?#poll", mode: "voting" },
+    )
+    expect(ops(steps)).toEqual([
+      "presentOptions",
+      "lockVoting",
+      "revealResults",
+    ])
+    expect(steps[0]).toMatchObject({
+      question: { key: "Which color?#poll", question: "Which color?" },
+    })
+    expect(steps[2]).toEqual({
+      op: "revealResults",
+      reveal: {
+        title: "Audience Poll Overview",
+        counts: [1, 1],
+        percentages: [50, 50],
+        mode: "survey",
+      },
+    })
+  })
+
+  it("keeps an untitled authored leaderboard eligible for the canonical heading", () => {
+    const steps = planTransition(
+      null,
+      {
+        kind: "scene",
+        key: "untitled-leaderboard",
+        scene: { kind: "leaderboard" },
+        activeSceneData: {
+          leaderboard: {
+            entries: [{ rank: 1, displayName: "Alice", points: 850 }],
+          },
+        },
+      },
+      { questionKey: null, mode: "leaderboard" },
+    )
+    expect(steps).toEqual([
+      {
+        op: "updateLeaderboard",
+        entries: [{ id: "rank:Alice", name: "Alice", score: 850 }],
+        title: undefined,
+      },
+    ])
+  })
+
   it("prepared after a question uses playZZWipe; finale uses showFinale; authored opening without media uses showIntro", () => {
     const results = {
       kind: "results" as const,

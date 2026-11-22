@@ -1,12 +1,13 @@
+import type { Page } from "@playwright/test"
 // Original all-question-types regression with the already existing Studio Add card selector.
 import {
   addAnswer,
+  addQuestionCard,
   answerInput,
   numberSetting,
   openQuizzTab,
   readQuizz,
   saveQuizz,
-  selectOption,
   switchSetting,
 } from "@razzia/e2e/utils/editor"
 import { expect, test } from "@razzia/e2e/utils/fixtures"
@@ -24,6 +25,19 @@ const toggleSolution = async (
 }
 const uniqueSubject = (name: string) => `${name} ${Date.now()}`
 
+const openQuestionSettings = async (page: Page) => {
+  await page.getByTestId("editor-panel-toggle-settings").click()
+  const panel = page.getByTestId("editor-panel-settings")
+  await expect(panel).toBeVisible()
+
+  return panel
+}
+
+const closeQuestionSettings = async (page: Page) => {
+  await page.getByTestId("editor-panel-close-settings").click()
+  await expect(page.getByTestId("editor-panel-settings")).toBeHidden()
+}
+
 test.beforeEach(async ({ page }) => {
   await openQuizzTab(page)
 })
@@ -35,6 +49,7 @@ test("Studio preserves native question settings, category inheritance and saving
 
   await page.getByRole("button", { name: t("manager:quizz.create") }).click()
   await page.getByPlaceholder(t("quizz:titleQuizzPlaceholder")).fill(subject)
+  await page.getByTestId("editor-mode-advanced").click()
 
   await page
     .getByPlaceholder(t("quizz:question.placeholder"))
@@ -46,7 +61,8 @@ test("Studio preserves native question settings, category inheritance and saving
   await answerInput(page, 1).fill("Right")
   await toggleSolution(page, 1)
   await toggleSolution(page, 0)
-  await page
+  const settings = await openQuestionSettings(page)
+  await settings
     .getByRole("combobox", {
       name: t("quizz:question.config.categoryPlaceholder"),
     })
@@ -54,40 +70,44 @@ test("Studio preserves native question settings, category inheritance and saving
   await numberSetting(page, t("quizz:question.config.maxPoints")).fill("500")
   await switchSetting(page, t("quizz:question.config.penalty")).click()
   await numberSetting(page, t("quizz:question.config.penalty")).fill("250")
-  await numberSetting(page, t("quizz:question.config.questionDisplay")).fill(
-    "4",
-  )
+  await expect(settings.getByTestId("system-question-lead-in")).toHaveText("2")
+  await expect(
+    settings.getByRole("spinbutton", {
+      name: t("quizz:question.config.questionDisplay"),
+      exact: true,
+    }),
+  ).toHaveCount(0)
   await switchSetting(page, t("quizz:question.config.answerTime")).click()
+  await closeQuestionSettings(page)
 
-  await page.getByTestId("studio-add-card-btn").click()
+  await addQuestionCard(page)
   await page
     .getByPlaceholder(t("quizz:question.placeholder"))
     .fill("Multi question")
-  await selectOption(
-    page,
-    t("quizz:question.config.answerMode"),
-    t("quizz:questionType.multi"),
-  )
+  await openQuestionSettings(page)
+  await settings.getByTestId("answer-type-multi").click()
+  await closeQuestionSettings(page)
   await addAnswer(page)
   await answerInput(page, 0).fill("A")
   await answerInput(page, 1).fill("B")
   await answerInput(page, 2).fill("C")
   await toggleSolution(page, 2)
-  await selectOption(
-    page,
-    t("quizz:question.config.scoringMode"),
-    t("quizz:question.config.scoringMode.strict"),
-  )
+  await openQuestionSettings(page)
+  await settings
+    .getByRole("radio", {
+      name: t("quizz:question.config.scoringMode.strict"),
+      exact: true,
+    })
+    .click()
+  await closeQuestionSettings(page)
 
-  await page.getByTestId("studio-add-card-btn").click()
+  await addQuestionCard(page)
   await page
     .getByPlaceholder(t("quizz:question.placeholder"))
     .fill("Estimation question")
-  await selectOption(
-    page,
-    t("quizz:question.config.answerMode"),
-    t("quizz:questionType.estimation"),
-  )
+  await openQuestionSettings(page)
+  await settings.getByTestId("answer-type-estimation").click()
+  await closeQuestionSettings(page)
   await page
     .getByRole("spinbutton", {
       name: t("quizz:question.config.estimation.max"),
@@ -103,11 +123,13 @@ test("Studio preserves native question settings, category inheritance and saving
       name: t("quizz:question.estimation.correctAnswer"),
     })
     .fill("120")
-  await selectOption(
-    page,
-    t("quizz:question.config.estimation.inputMode"),
-    t("quizz:question.config.estimation.inputModes.input"),
-  )
+  await openQuestionSettings(page)
+  await settings
+    .getByRole("radio", {
+      name: t("quizz:question.config.estimation.inputModes.input"),
+      exact: true,
+    })
+    .click()
   await numberSetting(page, t("quizz:question.config.estimation.step")).fill(
     "5",
   )
@@ -115,6 +137,7 @@ test("Studio preserves native question settings, category inheritance and saving
     "20",
   )
 
+  await closeQuestionSettings(page)
   await saveQuizz(page)
 
   expect(readQuizz(subject)).toMatchObject({
@@ -129,7 +152,7 @@ test("Studio preserves native question settings, category inheritance and saving
         category: "Round 1",
         maxPoints: 500,
         penalty: 250,
-        cooldown: 4,
+        cooldown: 2,
         time: -1,
       },
       {

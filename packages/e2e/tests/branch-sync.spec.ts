@@ -4,6 +4,7 @@ import {
   createDefaultQuizExtrasV2,
 } from "@razzia/extensions/core"
 import { join } from "node:path"
+import { skipPlatformOpening } from "@razzia/e2e/utils/manager"
 
 for (const explicitSeating of [true, false]) {
   test(`synchronized seating metadata ${explicitSeating ? "uses native live table presence" : "keeps ordinary lobbies unchanged"}`, async ({
@@ -85,23 +86,27 @@ for (const explicitSeating of [true, false]) {
       token,
     )
     await page.goto(`/party/manager/${game.gameId}`)
-    const skip = page.getByTestId("tadazz-opening-skip")
-
-    if (await skip.isVisible()) {
-      await skip.click()
-    }
-
-    await expect(page.getByTestId("tadazz-show")).toBeVisible()
+    await skipPlatformOpening(page)
+    await expect(page.getByTestId("tadazz-show")).toHaveCount(1)
+    const { origin } = new URL(page.url())
 
     if (!explicitSeating) {
-      // The authenticated host already sees its roster in the current native map.
-      // An ordinary unflagged show's directory must remain absent from the public display.
-      await expect(page.locator(".table-unit")).toHaveCount(31)
+      // The host and public stage share the ordinary lobby. Private roster access
+      // remains in the host's existing participants dialog, without an extra map.
+      await expect(page.locator(".table-unit")).toHaveCount(0)
+      await page.getByTestId("host-bottom-players-btn").click()
+      const roster = page.getByTestId("host-modal-players-table")
+      await expect(roster).toBeVisible()
+      await expect(roster).toContainText("QA Representative One")
+      await expect(roster).toContainText("QA Representative Two")
+      await expect(roster).toContainText("QA Other Table")
+      await page.getByTestId("host-players-close-btn").click()
+      await expect(page.getByTestId("host-players-modal")).toBeHidden()
       const audienceBrowser = await browser.browserType().launch()
 
       try {
         const display = await audienceBrowser.newPage()
-        await display.goto(`http://127.0.0.1:3170/display/${game.gameId}`)
+        await display.goto(`${origin}/display/${game.gameId}`)
         await expect(display.getByTestId("tadazz-lobby-pin")).toHaveText(
           game.inviteCode,
         )
@@ -134,7 +139,7 @@ for (const explicitSeating of [true, false]) {
 
     try {
       const guest = await guestContext.newPage()
-      await guest.goto(`http://127.0.0.1:3170/game?pin=${game.inviteCode}`)
+      await guest.goto(`${origin}/game?pin=${game.inviteCode}`)
       await guest
         .getByPlaceholder("Username here")
         .fill("QA Representative One")

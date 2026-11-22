@@ -842,12 +842,31 @@ try {
         .querySelector("[data-v4-scene]")
         ?.getAttribute("data-v4-scene"),
     }))
+    let titleSelector = null
+    if (testCase.scene.kind === "leaderboard") {
+      titleSelector =
+        '[data-testid="tadazz-leaderboard-screen"] .leader-head h2'
+    } else if (testCase.scene.kind === "interimResults") {
+      titleSelector = '[data-testid="tadazz-question-panel"] .eyebrow'
+    }
+    const title = titleSelector
+      ? {
+          count: await page.locator(titleSelector).count(),
+          text: await page.locator(titleSelector).textContent(),
+          visible: await page.locator(titleSelector).isVisible(),
+        }
+      : null
     check(
       "native " +
         testCase.name +
         " retains sole ownership after a parent re-render",
-      painted.mode === testCase.expectedMode && painted.customVisible === false,
-      { painted },
+      painted.mode === testCase.expectedMode &&
+        painted.customVisible === false &&
+        (!title ||
+          (title.count === 1 &&
+            title.text === testCase.scene.title &&
+            title.visible)),
+      { painted, authoredTitle: title },
     )
     const beforeClock = await page.evaluate(() => ({
       animationStarts: window.animationStarts,

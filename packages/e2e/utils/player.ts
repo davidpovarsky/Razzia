@@ -2,7 +2,7 @@ import { expect, type Page } from "@playwright/test"
 import { t } from "@razzia/e2e/utils/i18n"
 
 export const typePin = async (page: Page, pin: string) => {
-  await page.goto("/")
+  await page.goto("/game")
   await page
     .getByRole("textbox", { name: t("game:pinDigit", { position: 1 }) })
     .click()

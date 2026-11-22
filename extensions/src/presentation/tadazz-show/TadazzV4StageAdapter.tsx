@@ -519,6 +519,7 @@ export const TadazzV4StageAdapter = forwardRef<
           mode: input.mode,
           solutions: input.solutions,
           note: input.note ?? q.note,
+          eyebrow: input.title,
           showPercentages: input.showPercentages ?? showPercentagesRef.current,
           cardsAlreadyOnStage: alreadyOnStage,
         })
@@ -532,13 +533,14 @@ export const TadazzV4StageAdapter = forwardRef<
           total,
         }
       },
-      async showLeaderboard(entries: StageLeaderEntry[]) {
+      async showLeaderboard(entries: StageLeaderEntry[], title?: string) {
         setScreenMode("none")
         setMode("leaderboard")
         cardsOnStageKeyRef.current = null
         const sorted = [...entries].sort((a, b) => b.score - a.score)
         const p = interactivePropsRef.current
         await v4Ref.current?.play("leaderboard", {
+          title,
           teams: sorted.map((e) => ({
             id: e.id,
             name: e.name,
@@ -560,8 +562,9 @@ export const TadazzV4StageAdapter = forwardRef<
       },
       /* oxlint-disable require-await, typescript/require-await -- Retain promise-returning API and rejection semantics for synchronous implementations. */ async updateLeaderboard(
         entries: StageLeaderEntry[],
+        title?: string,
       ) {
-        return this.showLeaderboard(entries)
+        return this.showLeaderboard(entries, title)
       } /* oxlint-enable require-await, typescript/require-await */,
       async nextQuestion(data: StageQuestion) {
         const box: {

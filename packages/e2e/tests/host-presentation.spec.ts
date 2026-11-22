@@ -3,7 +3,8 @@ import fs from "node:fs"
 import { join } from "node:path"
 import {
   computeCanonicalBaseDigest,
-  createDefaultQuizExtras,
+  createDefaultQuizExtrasV2,
+  PLATFORM_CUE_URLS,
 } from "../../../extensions/src/core"
 import { createGame } from "../utils/manager"
 import { joinGame } from "../utils/player"
@@ -93,15 +94,23 @@ test("same-window host presentation hides manager UI and controls authoritative 
         answers: ["One", "Two", "Three", "Four"],
         solutions: [0],
         cooldown: 3,
-        time: 30,
+        // Keep a real finite vote open while keyboard and authoritative-pause
+        // assertions run under the generic GAME_SPEED=10 fixture.
+        time: 120,
       },
     ],
   }
-  const extras = createDefaultQuizExtras(
+  const extras = createDefaultQuizExtrasV2(
     "draft",
     [questionId],
     computeCanonicalBaseDigest(quizz),
   )
+  extras.defaults.showTheme = {
+    id: "tadazz-classic",
+    version: "1.0.0",
+    overrides: {},
+  }
+  extras.defaults.advanceMode = "manual"
   const login = await request.post("/api/auth/manager", {
     data: { password: "e2e-password" },
   })
@@ -114,6 +123,7 @@ test("same-window host presentation hides manager UI and controls authoritative 
 
   for (const path of [
     "/sounds/answersMusic.mp3",
+    PLATFORM_CUE_URLS.answersMusic,
     "/sounds/answersSound.mp3",
     "/sounds/boump.mp3",
     "/sounds/show.mp3",
@@ -129,6 +139,51 @@ test("same-window host presentation hides manager UI and controls authoritative 
     expect(response.status(), `${path} must be served`).toBe(200)
   }
 
+  await host.addInitScript(() => {
+    const target = window as unknown as { qaHostAudio: HTMLAudioElement[] }
+    target.qaHostAudio = []
+    const descriptor = Object.getOwnPropertyDescriptor(
+      HTMLMediaElement.prototype,
+      "play",
+    )
+
+    if (typeof descriptor?.value !== "function") {
+      throw new Error("Native media playback unavailable")
+    }
+
+    const original = descriptor.value as (
+      this: HTMLMediaElement,
+    ) => Promise<void>
+    HTMLMediaElement.prototype.play = function observeHostAudioPlayback() {
+      if (
+        this instanceof HTMLAudioElement &&
+        !target.qaHostAudio.includes(this)
+      ) {
+        target.qaHostAudio.push(this)
+      }
+
+      return original.call(this)
+    }
+  })
+  const readVotingAudio = () =>
+    host.evaluate((url) => {
+      const tracks = (window as unknown as { qaHostAudio: HTMLAudioElement[] })
+        .qaHostAudio
+      const matches = tracks.filter(
+        (audio) => new URL(audio.src || "/", location.href).pathname === url,
+      )
+      const active =
+        matches.find((audio) => !audio.paused) ??
+        matches
+          .toSorted((left, right) => right.currentTime - left.currentTime)
+          .at(0)
+
+      return {
+        playing: matches.filter((audio) => !audio.paused).length,
+        element: active ? tracks.indexOf(active) : -1,
+        time: active?.currentTime ?? 0,
+      }
+    }, PLATFORM_CUE_URLS.answersMusic)
   await createGame(host, title)
   const presentationCommandStart = commands.length
 
@@ -281,27 +336,36 @@ test("same-window host presentation hides manager UI and controls authoritative 
     timeout: 20_000,
   })
   await expect(shell).toHaveAttribute("data-host-presenting", "true")
+  await expect(host.getByTestId("audio-cue-player-state")).toHaveCount(1)
   await expect(host.getByTestId("audio-cue-player-state")).toHaveAttribute(
     "data-audio-url",
-    "/sounds/answersMusic.mp3",
+    PLATFORM_CUE_URLS.answersMusic,
   )
   await expect(host.getByTestId("audio-cue-player-state")).toHaveAttribute(
     "data-audio-loop",
     "true",
   )
 
+  await expect.poll(async () => (await readVotingAudio()).playing).toBe(1)
+  await expect
+    .poll(async () => (await readVotingAudio()).time)
+    .toBeGreaterThan(0.15)
+  const votingAudioBeforePause = await readVotingAudio()
+
   // Different skip aliases are not accepted as the required same-chord confirmation.
   await host.keyboard.press("Shift+ArrowRight")
   await host.keyboard.press("Shift+S")
   await expect(shell).toHaveAttribute("data-show-scene", "voting")
 
-  const visibleTimer = host
-    .locator('[data-testid="tadazz-timer"]:visible')
-    .last()
+  const visibleTimer = host.locator('[data-testid="tadazz-timer"]:visible')
+  await expect(visibleTimer).toHaveCount(1)
   await expect(visibleTimer).toBeVisible()
   await doublePress("Space")
   await expect(shell).toHaveAttribute("data-game-paused", "true")
   const pausedTimer = await visibleTimer.textContent()
+  await expect.poll(async () => (await readVotingAudio()).playing).toBe(0)
+  const pausedVotingAudio = await readVotingAudio()
+  expect(pausedVotingAudio.element).toBe(votingAudioBeforePause.element)
   const authoritativePause = pauseStates.at(-1)
   expect(authoritativePause?.paused).toBe(true)
   expect(authoritativePause?.remainingMs).toBeGreaterThan(0)
@@ -311,11 +375,20 @@ test("same-window host presentation hides manager UI and controls authoritative 
   await host.screenshot({ path: join(evidenceDir, "voting-paused-host.png") })
   await host.waitForTimeout(1200)
   await expect(visibleTimer).toHaveText(pausedTimer ?? "")
+  expect(
+    Math.abs((await readVotingAudio()).time - pausedVotingAudio.time),
+  ).toBeLessThan(0.12)
   await doublePress("Space")
   await expect(shell).toHaveAttribute("data-game-paused", "false")
   await expect(
     player.getByRole("button", { name: "1 One", exact: true }),
   ).toBeEnabled()
+
+  await expect.poll(async () => (await readVotingAudio()).playing).toBe(1)
+  await expect
+    .poll(async () => (await readVotingAudio()).time)
+    .toBeGreaterThan(pausedVotingAudio.time)
+  expect((await readVotingAudio()).element).toBe(votingAudioBeforePause.element)
 
   await player.screenshot({ path: join(evidenceDir, "voting-player-390.png") })
   await player.getByRole("button", { name: "1 One", exact: true }).click()
@@ -328,10 +401,11 @@ test("same-window host presentation hides manager UI and controls authoritative 
   )
   await player.screenshot({ path: join(evidenceDir, "results-player-390.png") })
   await expect(
-    host.getByTestId("tadazz-question-panel").getByText("AUDIENCE RESULTS", {
-      exact: true,
-    }),
+    host.getByTestId("tadazz-question-panel").locator(".eyebrow"),
   ).toBeVisible()
+  await expect(
+    host.getByTestId("tadazz-question-panel").locator(".eyebrow"),
+  ).toHaveText("CORRECT ANSWER")
   await host.screenshot({ path: join(evidenceDir, "results-host-present.png") })
 
   await host.keyboard.press("Escape")
@@ -383,6 +457,9 @@ test("same-window host presentation hides manager UI and controls authoritative 
         displayReloadStayedInLobby: true,
         authoritativePause,
         pausedTimer,
+        votingAudioBeforePause,
+        pausedVotingAudio,
+        votingAudioUrl: PLATFORM_CUE_URLS.answersMusic,
         viewports,
         playerViewport: player.viewportSize(),
         actualFullscreen: true,

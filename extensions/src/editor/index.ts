@@ -8,6 +8,12 @@ export * from "./editor-enhancement-panel"
 
 export { RosterSection } from "./components/RosterSection"
 
+export { TeamsSection } from "./components/TeamsSection"
+
+export { AudioCuesSection } from "./components/AudioCuesSection"
+
+export { RevealSection } from "./components/RevealSection"
+
 export { CANONICAL_ANSWER_COLORS } from "./components/utils"
 
 export * from "./media-reconciliation"

@@ -70,3 +70,18 @@ describe("public lobby directory boundary", () => {
     })
   })
 })
+
+it("keeps explicit seating opt-in and all public representatives without inferring a floorplan", () => {
+  const representatives = Array.from({ length: 40 }, (_, index) => ({
+    table: index + 1,
+    name: `Representative ${index + 1}`,
+  }))
+  expect(
+    readPublicLobbyDirectory({ representatives, seatingPlan: true }),
+  ).toEqual({ representatives, seatingPlan: true })
+  for (const seatingPlan of [undefined, false, "true", 1, null, {}, []]) {
+    expect(readPublicLobbyDirectory({ representatives, seatingPlan })).toEqual({
+      representatives,
+    })
+  }
+})

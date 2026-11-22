@@ -158,6 +158,16 @@ export const ManagerControlToolbar = ({
   const isInterlude = extensionState?.phase === "interlude"
   const epoch = extensionState?.epoch
   const phase = extensionState?.phase
+  const isScene =
+    phase === "scene" ||
+    Boolean(
+      extensionState?.extras?.activeTimelineStep &&
+      (extensionState.extras.activeTimelineStep as { kind?: string }).kind !==
+        "question",
+    )
+  // An authored results scene may replace voting without a second legacy status.
+  const isQuestionStage = !isScene && !isInterlude
+  const canEndTimer = isQuestionStage && statusName === STATUS.SELECT_ANSWER
   const isPaused = Boolean(extensionState?.pause?.paused)
 
   const sendCommand = useCallback(
@@ -243,9 +253,11 @@ export const ManagerControlToolbar = ({
   const [reopenConfirmOpen, setReopenConfirmOpen] = useState(false)
 
   const willReopenQuestion =
-    Boolean(extensionState?.extras?.willReopenQuestion) ||
-    statusName === STATUS.SELECT_ANSWER ||
-    statusName === STATUS.SHOW_RESPONSES
+    typeof extensionState?.extras?.willReopenQuestion === "boolean"
+      ? extensionState.extras.willReopenQuestion
+      : isQuestionStage &&
+        (statusName === STATUS.SELECT_ANSWER ||
+          statusName === STATUS.SHOW_RESPONSES)
 
   const canPreviousAuthoritative =
     typeof extensionState?.extras?.canPrevious === "boolean"
@@ -255,7 +267,7 @@ export const ManagerControlToolbar = ({
         statusName !== STATUS.FINISHED &&
         statusName !== STATUS.SUMMARY
 
-  const isLobby = statusName === STATUS.SHOW_ROOM
+  const isLobby = statusName === STATUS.SHOW_ROOM && !isScene && !isInterlude
   const launch = readPlatformOpening(extensionState?.extras.presentationLaunch)
   const isPreLobby = launch?.stage === "standby" || launch?.stage === "opening"
   const isFinished =
@@ -381,15 +393,6 @@ export const ManagerControlToolbar = ({
     setSelectedHistoryIndex(null)
   }
 
-  // Primary action shortcut handler (Space / Enter) with robust focus & modal protection
-  const isScene =
-    extensionState?.phase === "scene" ||
-    Boolean(
-      extensionState?.extras?.activeTimelineStep &&
-      (extensionState.extras.activeTimelineStep as { kind?: string }).kind !==
-        "question",
-    )
-
   // Active viewing history snapshot normalized from backend QuestionResult or HistorySummaryItem
   const viewingHistoryEnvelope = extensionState?.extras.viewingHistory as
     | {
@@ -410,11 +413,12 @@ export const ManagerControlToolbar = ({
   )
 
   const canSkipQuestion =
-    statusName === STATUS.SHOW_PREPARED ||
-    statusName === STATUS.SHOW_QUESTION ||
-    statusName === STATUS.SELECT_ANSWER
-  const canEndTimer = statusName === STATUS.SELECT_ANSWER
+    isQuestionStage &&
+    (statusName === STATUS.SHOW_PREPARED ||
+      statusName === STATUS.SHOW_QUESTION ||
+      statusName === STATUS.SELECT_ANSWER)
   const canRestartQuestion =
+    isQuestionStage &&
     !isLobby &&
     !isFinished &&
     (questionStates?.current ?? 0) > 0 &&
@@ -549,7 +553,7 @@ export const ManagerControlToolbar = ({
               open={reopenConfirmOpen}
               onOpenChange={setReopenConfirmOpen}
               title={
-                statusName === STATUS.SELECT_ANSWER
+                canEndTimer
                   ? t(
                       "extensions:host.cancelActiveVoteConfirmTitle",
                       "Cancel Active Vote",
@@ -557,7 +561,7 @@ export const ManagerControlToolbar = ({
                   : t("extensions:host.reopenConfirmTitle", "Reopen Question")
               }
               description={
-                statusName === STATUS.SELECT_ANSWER
+                canEndTimer
                   ? t(
                       "extensions:host.cancelActiveVoteConfirmDesc",
                       "Navigating back will cancel the current voting round and discard submitted answers. Continue?",

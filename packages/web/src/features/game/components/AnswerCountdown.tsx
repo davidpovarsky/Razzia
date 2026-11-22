@@ -44,7 +44,13 @@ export const AnswerCountdown = ({
       )}
     >
       <span className="text-sm font-semibold">{t("game:hud.time")}</span>
-      <span>{safeSeconds}</span>
+      <span
+        className={
+          variant === "player" ? "text-[28px] leading-none" : undefined
+        }
+      >
+        {safeSeconds}
+      </span>
       {totalSeconds && totalSeconds > 0 ? (
         <span
           aria-hidden="true"

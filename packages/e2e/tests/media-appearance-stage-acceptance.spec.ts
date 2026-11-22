@@ -9,7 +9,14 @@ import {
   next,
   startGame,
 } from "@razzia/e2e/utils/manager"
-import { endTimer } from "@razzia/e2e/utils/extension-manager"
+import { EVENTS } from "@razzia/common/constants"
+import {
+  endRecordedVote,
+  latestState,
+  observeLiveFlow,
+  setManualProgression,
+  waitForRecordedVoting,
+} from "@razzia/e2e/utils/extension-manager"
 import { joinGame } from "@razzia/e2e/utils/player"
 import type { Page } from "@playwright/test"
 const SCREENSHOT_DIR = join(
@@ -24,6 +31,141 @@ const saveScreenshot = async (page: Page, filename: string) => {
     path: join(SCREENSHOT_DIR, filename),
     fullPage: false,
   })
+}
+
+async function openStudioPanel(page: Page, id: "edit" | "settings") {
+  const drawer = page.locator("[data-editor-drawer-close]:visible")
+  const count = await drawer.count()
+  expect(count).toBeLessThanOrEqual(1)
+
+  if (count === 1) {
+    await drawer.click()
+  }
+
+  const panel = page.getByTestId(`editor-panel-${id}`)
+
+  if (!(await panel.isVisible())) {
+    await page.getByTestId(`editor-panel-toggle-${id}`).click()
+  }
+
+  await expect(panel).toBeVisible()
+
+  return panel
+}
+
+async function advanceAuthoredScene(manager: Page) {
+  await expect(manager.getByTestId("host-end-timer-btn")).toHaveCount(0)
+  const advance = manager.getByTestId("host-next-screen-btn")
+  await expect(advance).toHaveCount(1)
+  await expect(advance).toBeEnabled()
+  await advance.click()
+}
+
+interface NativeMotionObservation {
+  questionKey: string
+  scene: string
+  question: boolean
+  card: number | null
+  duration: number
+  delay: number
+  hasOpacity: boolean
+  hasTransform: boolean
+  finished: boolean
+}
+
+async function observeNativeMotion(page: Page) {
+  await page.addInitScript(() => {
+    const target = window as unknown as {
+      qaNativeMotion: NativeMotionObservation[]
+    }
+    target.qaNativeMotion = []
+    const descriptor = Object.getOwnPropertyDescriptor(
+      Element.prototype,
+      "animate",
+    )
+
+    if (!descriptor || typeof descriptor.value !== "function") {
+      throw new Error("The native stage requires the real Web Animations API")
+    }
+
+    const original = descriptor.value as Element["animate"]
+    Element.prototype.animate = function observeStageAnimation(
+      ...args: Parameters<Element["animate"]>
+    ) {
+      const animation = original.apply(this, args)
+      const stage = this.closest('[data-testid="tadazz-stage"]')
+      const isQuestion = this.matches(".q-frame, .q-text")
+      const card = this.matches(".choice-slot")
+        ? Number(this.getAttribute("data-v4-choice"))
+        : null
+
+      if (stage && (isQuestion || card !== null)) {
+        const { effect } = animation
+        const frames =
+          effect instanceof KeyframeEffect ? effect.getKeyframes() : []
+        const timing = effect?.getTiming()
+        const row: NativeMotionObservation = {
+          questionKey: stage.getAttribute("data-question-key") ?? "",
+          scene: stage.getAttribute("data-v4-scene") ?? "",
+          question: isQuestion,
+          card,
+          duration: typeof timing?.duration === "number" ? timing.duration : 0,
+          delay: timing?.delay ?? 0,
+          hasOpacity: frames.some((frame) => frame.opacity !== undefined),
+          hasTransform: frames.some((frame) => frame.transform !== undefined),
+          finished: false,
+        }
+        target.qaNativeMotion.push(row)
+        void animation.finished
+          .then(() => {
+            row.finished = true
+          })
+          .catch(() => {
+            row.finished = false
+          })
+      }
+
+      return animation
+    }
+  })
+}
+
+async function assertNativeQuestionMotion(page: Page, cardCount: number) {
+  const stage = page.getByTestId("tadazz-stage")
+  const questionKey = await stage.getAttribute("data-question-key")
+  expect(questionKey).toBeTruthy()
+  await expect
+    .poll(() =>
+      page.evaluate(
+        ({ key, count }) => {
+          const rows = (
+            window as unknown as { qaNativeMotion: NativeMotionObservation[] }
+          ).qaNativeMotion.filter(
+            (row) =>
+              row.questionKey === key &&
+              row.duration > 0 &&
+              row.hasOpacity &&
+              row.hasTransform,
+          )
+          const cards = Array.from({ length: count }, (_, index) =>
+            rows.find((row) => row.card === index && row.finished),
+          )
+
+          return {
+            question: rows.some((row) => row.question && row.finished),
+            cards: cards.every(Boolean),
+            staggered: cards.every(
+              (row, index) =>
+                index === 0 ||
+                (row !== undefined &&
+                  row.delay > (cards[index - 1]?.delay ?? Infinity)),
+            ),
+          }
+        },
+        { key: questionKey, count: cardCount },
+      ),
+    )
+    .toEqual({ question: true, cards: true, staggered: true })
 }
 
 // 1x1 transparent PNG buffer for real upload testing
@@ -117,6 +259,7 @@ const assertZeroStageScroll = async (page: Page, label: string) => {
     const doc = document.documentElement
     const { body } = document
     const stage =
+      document.querySelector('[data-testid="tadazz-show"]') ??
       document.querySelector('[data-testid="audience-display"] section') ??
       document.querySelector("section") ??
       doc
@@ -372,181 +515,172 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     page,
   }) => {
     await loginManager(page)
-
-    // Create a new show in Studio
     await page.goto("/manager/quizz")
-    await expect(
-      page.locator('[data-testid="studio-card-type-bar"]'),
-    ).toBeVisible({
-      timeout: 15_000,
-    })
+    const headerKinds = page.locator(
+      '[data-testid="studio-card-type-bar"][data-embedded="false"]',
+    )
+    await expect(headerKinds).toBeVisible({ timeout: 15_000 })
 
-    // 1A. Verify responsive zero-horizontal-overflow across 1280, 1024, 844, 768, 390, 320
     const editorWidths = [1280, 1024, 844, 768, 390, 320]
-    for (const w of editorWidths) {
-      await page.setViewportSize({
-        width: w,
-        height: 800,
-      })
+    for (const width of editorWidths) {
+      await page.setViewportSize({ width, height: 800 })
       const overflow = await page.evaluate(() => ({
         scrollWidth: document.documentElement.scrollWidth,
         clientWidth: document.documentElement.clientWidth,
       }))
       expect(
         overflow.scrollWidth,
-        `Editor horizontal overflow at width ${w}px`,
+        `Editor horizontal overflow at width ${width}px`,
       ).toBeLessThanOrEqual(overflow.clientWidth + 1)
-      await expect(
-        page.locator('[data-testid="studio-card-type-bar"]'),
-      ).toBeVisible()
+      await expect(headerKinds).toBeVisible()
     }
     await saveScreenshot(page, "01_editor_narrow_320px.png")
-    await page.setViewportSize({
-      width: 1280,
-      height: 900,
+    await page.setViewportSize({ width: 1280, height: 900 })
+
+    // Transition and Answer Recap belong to the explicit Advanced card chooser.
+    await page.getByTestId("editor-mode-advanced").click()
+    await page.getByTestId("studio-add-card-btn").click()
+    const transitionToggle = headerKinds.getByRole("radio", {
+      name: /Transition/i,
     })
-
-    // 1B. Smart Conversion Confirmation:
-    // Add a second question card so we have > 1 question
-    const addBtn = page.locator('[data-testid="studio-add-card-btn"]')
-    await addBtn.click()
-
-    // New question is blank -> converting to "Transition" scene should happen IMMEDIATELY without confirmation dialog!
-    const transitionToggle = page
-      .locator('[data-testid="studio-card-type-bar"]')
-      .getByRole("radio", {
-        name: /Transition/i,
-      })
     await transitionToggle.click()
-    await expect(page.getByPlaceholder("Card title...")).toBeVisible({
+    await openStudioPanel(page, "edit")
+    await expect(page.getByTestId("scene-title-input")).toBeVisible({
       timeout: 5_000,
     })
-
-    // Convert scene back to Quiz question and populate question title -> then converting to Scene MUST prompt confirmation
-    const quizToggle = page
-      .locator('[data-testid="studio-card-type-bar"]')
-      .getByRole("radio", {
-        name: /Quiz/i,
-      })
-    await quizToggle.click()
-    const titleInput = page.getByPlaceholder(t("quizz:question.placeholder"))
-    await expect(titleInput).toBeVisible()
+    await headerKinds.getByRole("radio", { name: /Quiz/i }).click()
+    const edit = await openStudioPanel(page, "edit")
+    const titleInput = edit.getByPlaceholder(t("quizz:question.placeholder"))
+    await expect(titleInput).toHaveCount(1)
     await titleInput.fill("Populated Question Title")
     await transitionToggle.click()
-    // Confirmation dialog should appear, and its text must NOT falsely claim automatic Undo
     const dialogDesc = page.getByText(/replace its question content/i)
     await expect(dialogDesc).toBeVisible()
-    const descText = (await dialogDesc.textContent()) ?? ""
-    expect(descText.toLowerCase()).not.toContain("undo")
-
-    // Cancel keeps the populated question intact
+    expect(
+      ((await dialogDesc.textContent()) ?? "").toLowerCase(),
+    ).not.toContain("undo")
     await page
-      .getByRole("button", {
-        name: t("common:cancel"),
-      })
+      .getByRole("button", { name: t("common:cancel"), exact: true })
       .click()
     await expect(titleInput).toHaveValue("Populated Question Title")
 
-    // 1C. Upload image once in Answer 0 picker and reuse across Card Background & Scene without re-uploading
-    const pickAns0Btn = page.locator('[data-testid="answer-pick-image-0"]')
-    await expect(pickAns0Btn).toBeVisible()
-    await pickAns0Btn.click()
-    const dialog = page.getByRole("dialog")
+    await edit.getByTestId("answer-pick-image-0").click()
+    const dialog = page.getByRole("dialog", {
+      name: t("quizz:media.library"),
+      exact: true,
+    })
     await expect(dialog).toBeVisible()
-
-    // Verify file input accept attribute is strictly filtered to image
     const fileInput = dialog.locator('input[type="file"]')
     await expect(fileInput).toHaveAttribute("accept", /image/i)
-
-    // Upload a real PNG image
     await fileInput.setInputFiles({
       name: "shared-stage-asset.png",
       mimeType: "image/png",
       buffer: TINY_PNG_BUFFER,
     })
-
-    // Select the uploaded image from the library grid
     const uploadedThumb = dialog.locator('img[alt^="shared-stage-asset"]')
-    await expect(uploadedThumb).toBeVisible({
-      timeout: 10_000,
-    })
+    await expect(uploadedThumb).toHaveCount(1)
+    await expect(uploadedThumb).toBeVisible({ timeout: 10_000 })
+    const sharedUrl = await uploadedThumb.getAttribute("src")
+    expect(sharedUrl).toBeTruthy()
     await uploadedThumb.click()
+    await expect(edit.getByTestId("answer-image-preview-0")).toBeVisible()
 
-    // Verify Answer 0 now displays the thumbnail preview and "Both" mode is active
-    await expect(
-      page.locator('[data-testid="answer-image-preview-0"]'),
-    ).toBeVisible()
+    // Native theme sections own background/audio/motion; legacy controls are rollback-only.
+    const settings = await openStudioPanel(page, "settings")
+    const advanced = settings.getByTestId("question-advanced-settings-toggle")
 
-    // Reuse the SAME uploaded image in Card Background without re-uploading (from "In This Show" tab!)
-    const chooseBgBtn = page.locator('[data-testid="card-bg-choose-btn"]')
-    await chooseBgBtn.click()
+    if ((await advanced.getAttribute("aria-expanded")) === "false") {
+      await advanced.click()
+    }
+
+    const background = settings
+      .getByRole("heading", {
+        name: t("extensions:themes.sections.background"),
+        exact: true,
+      })
+      .locator("..")
+    await background
+      .getByRole("button", {
+        name: t("extensions:themes.customMedia"),
+        exact: true,
+      })
+      .click()
     await expect(dialog).toBeVisible()
-    await dialog.locator('[data-testid="media-scope-show"]').click()
-    await expect(dialog.locator('img[alt^="shared-stage-asset"]')).toBeVisible()
-    await dialog.locator('img[alt^="shared-stage-asset"]').click()
-    await expect(page.locator('[data-testid="card-bg-preview"]')).toBeVisible()
-
-    // 1D. Configure Per-Card Audio Cue (Built-in sound selection) & Staged Animations
-    const customAudioBtn = page.locator(
-      '[data-testid="card-audio-mode-showQuestion-custom"]',
+    await dialog.getByTestId("media-scope-show").click()
+    const reused = dialog.locator('img[alt^="shared-stage-asset"]')
+    await expect(reused).toHaveCount(1)
+    await expect(reused).toHaveAttribute("src", sharedUrl ?? "")
+    await reused.click()
+    await expect(background.locator("img")).toHaveAttribute(
+      "src",
+      sharedUrl ?? "",
     )
-    await customAudioBtn.click()
+
+    const showQuestionAudio = settings.getByTestId("theme-audio-showQuestion")
+    await showQuestionAudio
+      .getByRole("button", {
+        name: t("extensions:themes.customMedia"),
+        exact: true,
+      })
+      .click()
     await expect(dialog).toBeVisible()
-    await dialog.locator('[data-testid="media-scope-builtin"]').click()
-    const builtinPreviewBtn = dialog
-      .locator('[data-testid^="builtin-sound-preview-"]')
-      .first()
-    await expect(builtinPreviewBtn).toBeVisible()
-    await builtinPreviewBtn.click()
-    const builtinSoundBtn = dialog
-      .locator('[data-testid^="builtin-sound-select-"]')
-      .first()
-    await expect(builtinSoundBtn).toBeVisible()
-    await builtinSoundBtn.click()
+    await dialog.getByTestId("media-scope-builtin").click()
+    const preview = dialog.getByTestId(
+      "builtin-sound-preview-classic-transition",
+    )
+    await expect(preview).toBeVisible()
+    await preview.click()
+    const select = dialog.getByTestId("builtin-sound-select-classic-transition")
+    await expect(select).toBeVisible()
+    await select.click()
+    await expect(showQuestionAudio.getByRole("combobox")).toHaveAttribute(
+      "data-state",
+      "closed",
+    )
+    await expect(showQuestionAudio.getByRole("combobox")).toHaveText(
+      t("extensions:themes.default"),
+    )
 
-    // Configure Staged Animation slots & Question Underline Decoration
+    const motion = settings
+      .getByRole("heading", {
+        name: t("extensions:themes.sections.motion"),
+        exact: true,
+      })
+      .locator("..")
     await expect(
-      page.locator('[data-testid="staged-animation-section"]'),
+      motion.getByText(t("extensions:themes.motionOwned"), { exact: true }),
     ).toBeVisible()
+    await expect(settings.getByTestId("staged-animation-section")).toHaveCount(
+      0,
+    )
     await expect(
-      page.locator('[data-testid="stage-anim-slot-answerEntrance"]'),
-    ).toBeVisible()
+      settings.getByTestId("question-decoration-preset"),
+    ).toHaveCount(0)
     await expect(
-      page.locator('[data-testid="stage-anim-slot-answerBadgeEntrance"]'),
-    ).toBeVisible()
-    await expect(
-      page.locator('[data-testid="stage-anim-slot-resultsRevealEntrance"]'),
-    ).toBeVisible()
-    await expect(
-      page.locator('[data-testid="question-decoration-preset"]'),
-    ).toBeVisible()
-
-    // Verify grouped card chooser exposes Answer Recap
-    await expect(
-      page.locator('[data-testid="studio-card-type-bar"]').getByRole("radio", {
-        name: /Answer Recap/i,
-      }),
+      headerKinds.getByRole("radio", { name: /Answer Recap/i }),
     ).toBeVisible()
     await saveScreenshot(page, "02_editor_card_appearance_configured.png")
 
-    // 1E. Verify "Remove from Card" only detaches from card, while Library Delete on a referenced asset returns 409 Conflict warning
-    const removeBgFromCardBtn = page.locator(
-      '[data-testid="card-bg-remove-btn"]',
+    // Reset only the local background; the same library asset remains an answer visual.
+    await background
+      .getByRole("button", {
+        name: t("extensions:themes.sectionReset"),
+        exact: true,
+      })
+      .click()
+    await expect(background.locator("img")).not.toHaveAttribute(
+      "src",
+      sharedUrl ?? "",
     )
-    await removeBgFromCardBtn.click()
-    await expect(
-      page.locator('[data-testid="card-bg-preview"]'),
-    ).not.toBeVisible()
-    // Answer 0 image preview is still intact!
-    await expect(
-      page.locator('[data-testid="answer-image-preview-0"]'),
-    ).toBeVisible()
+    await openStudioPanel(page, "edit")
+    await expect(edit.getByTestId("answer-image-preview-0")).toBeVisible()
   })
   test("2. Live Runtime & Zero-Scroll Stage Matrix (STAGE-P0) across 8 Viewports + Card Background + Single Audio + Staged Motion", async ({
     page: managerPage,
     browser,
   }) => {
     const SOCKET_ORIGIN = "http://127.0.0.1:3011"
+    const observations = observeLiveFlow(managerPage)
     await loginManager(managerPage)
 
     // Upload real diverse aspect-ratio image fixtures via API (1600x900 landscape, 1200x1600 portrait, 1024x1024 square)
@@ -880,6 +1014,49 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       },
     )
     expect(createRes.status()).toBe(201)
+    const { quizId } = (await createRes.json()) as { quizId: string }
+    const savedResponse = await managerPage.request.get(
+      `${SOCKET_ORIGIN}/api/extensions/quizzes/${quizId}`,
+      {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      },
+    )
+    expect(savedResponse.ok()).toBe(true)
+    const saved = (await savedResponse.json()) as {
+      extras: {
+        scenes: Record<string, { title?: string; subtitle?: string }>
+        perQuestion: Record<string, { stageAnimations?: unknown }>
+      }
+    }
+    expect(
+      saved.extras.scenes["00000000-0000-4000-8000-000000000021"].title,
+    ).toBe("Welcome to Studio Stage")
+    expect(
+      saved.extras.scenes["00000000-0000-4000-8000-000000000021"].subtitle,
+    ).toBe("Zero-Scroll Public Display Verification")
+    expect(
+      saved.extras.perQuestion["00000000-0000-4000-8000-000000000001"]
+        .stageAnimations,
+    ).toMatchObject({
+      answerEntrance: {
+        preset: "fade",
+        durationMs: 650,
+        timing: "sequential",
+        staggerMs: 80,
+      },
+      answerBadgeEntrance: {
+        preset: "zoom-soft",
+        durationMs: 500,
+        timing: "sequential",
+        staggerMs: 80,
+      },
+      resultsRevealEntrance: {
+        preset: "spotlight",
+        durationMs: 700,
+        timing: "sequential",
+        staggerMs: 90,
+      },
+    })
 
     // Verify Reference-Safe Deletion: attempting to delete `custom-card-bg.png` without detach MUST return 409 Conflict!
     const deleteBlockedRes = await managerPage.request.delete(
@@ -908,6 +1085,7 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       "Zero Scroll & Appearance E2E Show",
     )
     expect(pin).toMatch(/^\d{6}$/u)
+    await setManualProgression(managerPage)
     const gameIdMatch = /\/party\/manager\/([^/?#]+)/u.exec(managerPage.url())
     expect(gameIdMatch).not.toBeNull()
     const { 1: gameId } = gameIdMatch!
@@ -920,6 +1098,7 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       },
     })
     const spectatorPage = await spectatorContext.newPage()
+    await observeNativeMotion(spectatorPage)
     await spectatorPage.goto(`/display/${gameId}`)
     await expect(
       spectatorPage.locator('[data-testid="audience-display"]'),
@@ -937,27 +1116,38 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
 
     // Assert host sees 1 player connected before starting
     await expect(
-      managerPage.getByRole("button", {
-        name: /1 \/ 1 Players/i,
-      }),
-    ).toBeVisible({
-      timeout: 10_000,
-    })
+      managerPage
+        .getByTestId("host-bottom-players-btn")
+        .getByTestId("host-connected-counter"),
+    ).toHaveText(/^1(?:\s*\/\s*1)?$/u)
     await startGame(managerPage)
 
     // 2A. Opening Scene: verify custom card background, custom audio state, and zero-scroll across viewports
+    // Plain Classic bookends expose a Card name; the native preset owns its title.
+    await expect(spectatorPage.getByTestId("tadazz-intro-screen")).toHaveClass(
+      /is-visible/u,
+      { timeout: 15_000 },
+    )
     await expect(
-      spectatorPage.getByRole("heading", {
+      spectatorPage
+        .getByTestId("tadazz-intro-screen")
+        .locator(".tz-intro-logo"),
+    ).toBeVisible()
+    await expect(
+      playerPage.getByRole("heading", {
         name: "Welcome to Studio Stage",
+        exact: true,
       }),
-    ).toBeVisible({
-      timeout: 15_000,
-    })
+    ).toBeVisible()
+    await expect(spectatorPage.getByTestId("tadazz-backdrop")).toHaveCSS(
+      "background-image",
+      new RegExp(uploadedBg.url.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&")),
+    )
     await expect(
-      spectatorPage.locator('[data-testid="stage-card-background"]'),
-    ).toHaveAttribute("data-bg-url", uploadedBg.url)
+      spectatorPage.getByTestId("audio-cue-player-state"),
+    ).toHaveCount(1)
     await expect(
-      spectatorPage.locator('[data-testid="audio-cue-player-state"]'),
+      spectatorPage.getByTestId("audio-cue-player-state"),
     ).toHaveAttribute("data-audio-url", "/sounds/boump.mp3")
     const stageViewports = [
       {
@@ -1015,11 +1205,7 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     await saveScreenshot(spectatorPage, "03_opening_scene_custom_bg_1080p.png")
 
     // Advance to Question 1
-    await managerPage
-      .getByRole("button", {
-        name: /Advance Scene/i,
-      })
-      .click()
+    await advanceAuthoredScene(managerPage)
 
     // Wait for Question 1 voting phase (SELECT_ANSWER)
     await expect(
@@ -1029,23 +1215,27 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     ).toBeVisible({
       timeout: 15_000,
     })
-    await expect(
-      spectatorPage.locator('[data-testid="photo-card-grid"]'),
-    ).toBeVisible({
-      timeout: 15_000,
-    })
+    await waitForRecordedVoting(
+      observations,
+      "00000000-0000-4000-8000-000000000001",
+    )
+    await expect(spectatorPage.getByTestId(/^tadazz-card-[0-4]$/u)).toHaveCount(
+      5,
+    )
+    await assertNativeQuestionMotion(spectatorPage, 5)
 
     // Verify custom background is active on Question 1
-    await expect(
-      spectatorPage.locator('[data-testid="stage-card-background"]'),
-    ).toHaveAttribute("data-bg-url", uploadedBg.url)
+    await expect(spectatorPage.getByTestId("tadazz-backdrop")).toHaveCSS(
+      "background-image",
+      new RegExp(uploadedBg.url.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&")),
+    )
 
     // Verify Staged Animation attributes on Question 1 cards & badges
     await expect(
-      spectatorPage.locator('[data-testid="photo-card-choice-0"]'),
+      playerPage.locator('[data-testid="photo-card-choice-0"]'),
     ).toHaveAttribute("data-tada-entrance", "fade")
     await expect(
-      spectatorPage.locator('[data-testid="photo-card-label-0"]'),
+      playerPage.locator('[data-testid="photo-card-label-0"]'),
     ).toHaveAttribute("data-tada-entrance", "zoom-soft")
 
     // Verify Zero-Scroll and Full Visual Containment across all 8 required viewports during 5-option image+text voting!
@@ -1063,19 +1253,19 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       // 1. Question Title is visible, bounded, not clipped
       await assertVisualContainment(
         spectatorPage,
-        '[data-testid="game-question-title"]',
+        '[data-testid="tadazz-question-panel"] .q-text',
         `Q1 Title @ ${vp.name}`,
       )
 
       // 2. Countdown Timer & HUD answers counter are visible, bounded, not clipped
       await assertVisualContainment(
         spectatorPage,
-        '[data-testid="answer-cooldown"]',
+        '[data-testid="tadazz-timer"]',
         `Q1 Timer @ ${vp.name}`,
       )
       await assertVisualContainment(
         spectatorPage,
-        '[data-testid="stage-hud-answer-counter"]',
+        '[data-testid="tadazz-live-answered"]',
         `Q1 HUD Answer Counter @ ${vp.name}`,
       )
 
@@ -1083,17 +1273,17 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       for (let i = 0; i < 5; i += 1) {
         await assertVisualContainment(
           spectatorPage,
-          `[data-testid="photo-card-choice-${i}"]`,
+          `[data-testid="tadazz-card-${i}"]`,
           `Q1 Card ${i} @ ${vp.name}`,
         )
         await assertVisualContainment(
           spectatorPage,
-          `[data-testid="photo-card-label-${i}"]`,
+          `[data-testid="tadazz-card-${i}"] .answer-index`,
           `Q1 Card Label ${i} @ ${vp.name}`,
         )
         await assertVisualContainment(
           spectatorPage,
-          `[data-testid="photo-card-image-${i}"]`,
+          `[data-testid="tadazz-card-${i}"] .tz-photo-frame img`,
           `Q1 Image ${i} @ ${vp.name}`,
           {
             checkImageLoaded: true,
@@ -1101,7 +1291,7 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         )
         await assertVisualContainment(
           spectatorPage,
-          `[data-testid="photo-card-caption-${i}"]`,
+          `[data-testid="tadazz-card-${i}"] .answer-title`,
           `Q1 Caption ${i} @ ${vp.name}`,
         )
       }
@@ -1109,8 +1299,8 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       // 4. Assert no vertical overlap between header/title and HUD/timer, and between HUD and cards
       await assertNoVerticalOverlap(
         spectatorPage,
-        '[data-testid="game-question-title"]',
-        '[data-testid="answer-cooldown"]',
+        '[data-testid="tadazz-question-panel"] .q-text',
+        '[data-testid="tadazz-timer"]',
         `Q1 Title / Timer Overlap @ ${vp.name}`,
       )
 
@@ -1166,17 +1356,46 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     // Player casts a vote on Option 0
     await playerPage.locator('[data-testid="photo-card-choice-0"]').click()
 
-    // Host ends timer -> SHOW_RESPONSES reveal
-    await endTimer(managerPage)
+    // The authored interim-results card owns this reveal, so wait for its actual state.
+    const voting = await waitForRecordedVoting(
+      observations,
+      "00000000-0000-4000-8000-000000000001",
+    )
+    await expect
+      .poll(() =>
+        observations
+          .slice(observations.indexOf(voting) + 1)
+          .some(
+            (row) =>
+              row.name === EVENTS.GAME.PLAYER_ANSWER && row.data.count === 1,
+          ),
+      )
+      .toBe(true)
+    await managerPage.getByTestId("host-end-timer-btn").click()
+    await expect.poll(() => latestState(observations)?.phase).toBe("scene")
+    await expect(managerPage.getByTestId("host-end-timer-btn")).toHaveCount(0)
+    await expect(managerPage.getByTestId("host-next-screen-btn")).toBeEnabled()
     await expect(
-      spectatorPage.locator('[data-testid="results-hero-section"]'),
-    ).toBeVisible({
+      spectatorPage.getByTestId("tadazz-question-panel").locator(".eyebrow"),
+    ).toHaveText("Round 1 Breakdown")
+    for (let index = 0; index < 5; index += 1) {
+      const card = spectatorPage.getByTestId(`tadazz-card-${index}`)
+      await expect(card.locator(".tz-result-number")).toHaveText(
+        index === 0 ? "100%" : "0%",
+      )
+
+      if (index === 0) {
+        await expect(card).toHaveClass(/is-favourite/u)
+      } else {
+        await expect(card).not.toHaveClass(/is-favourite/u)
+      }
+    }
+    // The responsive player retains the authored hero/runner presentation and reveal entrance.
+    await expect(playerPage.getByTestId("results-hero-section")).toBeVisible({
       timeout: 15_000,
     })
-
-    // Verify resultsRevealEntrance animation on interim results winner
     await expect(
-      spectatorPage.locator(
+      playerPage.locator(
         '[data-testid="interim-option-row"][data-winner="true"]',
       ),
     ).toHaveAttribute("data-tada-entrance", "slide-up")
@@ -1186,6 +1405,33 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         width: vp.width,
         height: vp.height,
       })
+      await playerPage.setViewportSize({ width: vp.width, height: vp.height })
+      await assertVisualContainment(
+        spectatorPage,
+        '[data-testid="tadazz-question-panel"] .q-text',
+        `Native Reveal Question @ ${vp.name}`,
+      )
+      await assertVisualContainment(
+        spectatorPage,
+        '[data-testid="tadazz-question-panel"] .eyebrow',
+        `Authored Reveal Title @ ${vp.name}`,
+      )
+      for (let index = 0; index < 5; index += 1) {
+        await assertVisualContainment(
+          spectatorPage,
+          `[data-testid="tadazz-card-${index}"]`,
+          `Native Reveal Card ${index} @ ${vp.name}`,
+        )
+        await assertVisualContainment(
+          spectatorPage,
+          `[data-testid="tadazz-card-${index}"] .tz-result-number`,
+          `Native Reveal Percentage ${index} @ ${vp.name}`,
+        )
+      }
+      await assertZeroStageScroll(
+        playerPage,
+        `Player Interim Reveal @ ${vp.name}`,
+      )
       await assertZeroStageScroll(
         spectatorPage,
         `Q1 Interim Reveal @ ${vp.name}`,
@@ -1194,7 +1440,7 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       // P0-4: Assert true visual containment & text completeness on reveal stage elements:
       // 1. Question text: fully visible, unclamped, not ellipsized
       await assertVisualContainment(
-        spectatorPage,
+        playerPage,
         '[data-testid="scene-question-text"]',
         `Reveal Question Text @ ${vp.name}`,
         {
@@ -1202,7 +1448,7 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         },
       )
       const qText =
-        (await spectatorPage
+        (await playerPage
           .locator('[data-testid="scene-question-text"]')
           .textContent()) ?? ""
       expect(qText).toContain("Question 1 with Custom Background")
@@ -1210,7 +1456,7 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
 
       // 2. Bottom awaiting host line: fully visible, not cut off by screen bottom edge
       await assertVisualContainment(
-        spectatorPage,
+        playerPage,
         '[data-testid="scene-awaiting-host"]',
         `Reveal Awaiting Host Line @ ${vp.name}`,
         {
@@ -1218,37 +1464,37 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         },
       )
       const hostText =
-        (await spectatorPage
+        (await playerPage
           .locator('[data-testid="scene-awaiting-host"]')
           .textContent()) ?? ""
       expect(hostText.toLowerCase()).toContain("awaiting host")
 
       // 3. Dominant hero winner and runners up
       await assertVisualContainment(
-        spectatorPage,
+        playerPage,
         '[data-testid="results-hero-section"]',
         `Reveal Hero Section @ ${vp.name}`,
       )
       await assertVisualContainment(
-        spectatorPage,
+        playerPage,
         '[data-testid="interim-option-row"][data-winner="true"]',
         `Reveal Winner Row @ ${vp.name}`,
       )
       await assertVisualContainment(
-        spectatorPage,
+        playerPage,
         '[data-testid="results-runners-up-section"]',
         `Reveal Runners Up @ ${vp.name}`,
       )
 
       // 4. No vertical overlap between question text and hero section, or between hero section and awaiting host footer
       await assertNoVerticalOverlap(
-        spectatorPage,
+        playerPage,
         '[data-testid="scene-question-text"]',
         '[data-testid="results-hero-section"]',
         `Reveal Question / Hero Overlap @ ${vp.name}`,
       )
       await assertNoVerticalOverlap(
-        spectatorPage,
+        playerPage,
         '[data-testid="results-hero-section"]',
         '[data-testid="scene-awaiting-host"]',
         `Reveal Hero / Awaiting Host Overlap @ ${vp.name}`,
@@ -1268,11 +1514,7 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     })
 
     // Advance to Question 2 (which has NO custom card background and has showQuestion audio MUTED)
-    await managerPage
-      .getByRole("button", {
-        name: /Advance Scene/i,
-      })
-      .click()
+    await advanceAuthoredScene(managerPage)
     await expect(
       spectatorPage.getByText(
         "Question 2 with Default Game Background & Muted Cue",
@@ -1281,10 +1523,15 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       timeout: 15_000,
     })
 
-    // Verify fallback to default GameBackground (no stage-card-background overlay)
-    await expect(
-      spectatorPage.locator('[data-testid="stage-card-background"]'),
-    ).toHaveCount(0)
+    // The same native backdrop owner now resolves the default rather than Q1's uploaded image.
+    await waitForRecordedVoting(
+      observations,
+      "00000000-0000-4000-8000-000000000002",
+    )
+    await expect(spectatorPage.getByTestId("tadazz-backdrop")).not.toHaveCSS(
+      "background-image",
+      new RegExp(uploadedBg.url.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&")),
+    )
     for (const vp of stageViewports) {
       await spectatorPage.setViewportSize({
         width: vp.width,
@@ -1300,6 +1547,7 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     browser,
   }) => {
     const SOCKET_ORIGIN = "http://127.0.0.1:3011"
+    const observations = observeLiveFlow(managerPage)
     await loginManager(managerPage)
     const token = await managerPage.evaluate(() =>
       localStorage.getItem("token"),
@@ -1593,6 +1841,7 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       "Wave 2 Cinema, Audio, Motion & Answer Recap Show",
     )
     expect(pin).toMatch(/^\d{6}$/u)
+    await setManualProgression(managerPage)
     const gameIdMatch = /\/party\/manager\/([^/?#]+)/u.exec(managerPage.url())
     expect(gameIdMatch).not.toBeNull()
     const { 1: gameId } = gameIdMatch!
@@ -1603,6 +1852,7 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       },
     })
     const spectatorPage = await spectatorContext.newPage()
+    await observeNativeMotion(spectatorPage)
     await spectatorPage.goto(`/display/${gameId}`)
     await expect(
       spectatorPage.locator('[data-testid="audience-display"]'),
@@ -1618,12 +1868,10 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     const playerPage = await playerContext.newPage()
     await joinGame(playerPage, pin, "RecapTester")
     await expect(
-      managerPage.getByRole("button", {
-        name: /1 \/ 1 Players/i,
-      }),
-    ).toBeVisible({
-      timeout: 10_000,
-    })
+      managerPage
+        .getByTestId("host-bottom-players-btn")
+        .getByTestId("host-connected-counter"),
+    ).toHaveText(/^1(?:\s*\/\s*1)?$/u)
     await startGame(managerPage)
 
     // 1. Cinema Opening Scene renders immediately without legacy 6s countdown
@@ -1641,26 +1889,28 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     await assertZeroStageScroll(spectatorPage, "Cinema Opening @ 1920x1080")
     await saveScreenshot(spectatorPage, "06_wave2_cinema_opening_1080p.png")
 
-    // 2. Advance to Q1: verify decorative underline (`glow-sweep`) and inherited global stage motion (`pop-bounce` / `cascade`)
-    await managerPage
-      .getByRole("button", {
-        name: /Advance Scene/i,
-      })
-      .click()
+    // 2. The responsive player retains the authored underline; the native stage owns its choreography.
+    await advanceAuthoredScene(managerPage)
     await expect(
-      spectatorPage.locator('[data-testid="question-decoration-underline"]'),
+      playerPage.locator('[data-testid="question-decoration-underline"]'),
     ).toHaveAttribute("data-tada-underline", "glow-sweep", {
       timeout: 10_000,
     })
 
     // Wait for SELECT_ANSWER on Q1 and let 700ms entrance animation settle
     await expect(
-      spectatorPage.getByRole("button", {
-        name: /Solar Flare/i,
-      }),
+      spectatorPage.getByTestId("tadazz-card-0").locator(".answer-title"),
     ).toBeVisible({
       timeout: 15_000,
     })
+    await expect(
+      spectatorPage.getByTestId("tadazz-card-0").locator(".answer-title"),
+    ).toHaveText("Solar Flare")
+    await waitForRecordedVoting(
+      observations,
+      "00000000-0000-4000-8000-000000000101",
+    )
+    await assertNativeQuestionMotion(spectatorPage, 3)
     await spectatorPage.waitForTimeout(850)
     await saveScreenshot(spectatorPage, "07_wave2_q1_decoration_and_motion.png")
 
@@ -1670,7 +1920,10 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         name: /Solar Flare/i,
       })
       .click()
-    await endTimer(managerPage)
+    await endRecordedVote(managerPage, observations, {
+      questionId: "00000000-0000-4000-8000-000000000101",
+      count: 1,
+    })
 
     // Advance from Q1 SHOW_RESPONSES to Media Audio Scene
     await next(managerPage)
@@ -1686,11 +1939,7 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     await saveScreenshot(spectatorPage, "08_wave2_media_audio_scene.png")
 
     // Advance from Media Audio Scene to Standalone Animation + Lottie Fixture Scene
-    await managerPage
-      .getByRole("button", {
-        name: /Advance Scene/i,
-      })
-      .click()
+    await advanceAuthoredScene(managerPage)
     await expect(
       spectatorPage.locator('[data-testid="scene-animation-preset-confetti"]'),
     ).toBeVisible({
@@ -1706,26 +1955,30 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     await saveScreenshot(spectatorPage, "09_wave2_animation_lottie_scene.png")
 
     // Advance to Quiz Q2
-    await managerPage
-      .getByRole("button", {
-        name: /Advance Scene/i,
-      })
-      .click()
+    await advanceAuthoredScene(managerPage)
     await expect(
-      spectatorPage.getByRole("button", {
-        name: /Mars/i,
-      }),
+      spectatorPage.getByTestId("tadazz-card-1").locator(".answer-title"),
     ).toBeVisible({
       timeout: 15_000,
     })
 
+    await expect(
+      spectatorPage.getByTestId("tadazz-card-1").locator(".answer-title"),
+    ).toHaveText("Mars")
+    await waitForRecordedVoting(
+      observations,
+      "00000000-0000-4000-8000-000000000102",
+    )
     // Player votes for Option 1 ("Mars", the correct answer)
     await playerPage
       .getByRole("button", {
         name: /Mars/i,
       })
       .click()
-    await endTimer(managerPage)
+    await endRecordedVote(managerPage, observations, {
+      questionId: "00000000-0000-4000-8000-000000000102",
+      count: 1,
+    })
 
     // Advance from Q2 SHOW_RESPONSES to Cumulative Answer Recap Scene!
     await next(managerPage)

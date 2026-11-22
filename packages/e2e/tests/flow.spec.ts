@@ -1,6 +1,9 @@
+import { EVENTS } from "@razzia/common/constants"
 import type { Question } from "@razzia/common/types/game"
+import { STATUS } from "@razzia/common/types/game/status"
+import { observeLiveFlow } from "@razzia/e2e/utils/extension-manager"
 import { BASIC_QUIZZ } from "@razzia/e2e/utils/constants"
-import { seedQuizz } from "@razzia/e2e/utils/editor"
+import { readQuizz, seedQuizz } from "@razzia/e2e/utils/editor"
 import { expect, test } from "@razzia/e2e/utils/fixtures"
 import { t } from "@razzia/e2e/utils/i18n"
 import { createGame, next, startGame } from "@razzia/e2e/utils/manager"
@@ -44,32 +47,52 @@ test("restores the manager screen after a reload", async ({
   page: manager,
   newPage,
 }) => {
-  const pin = await createAutomaticGame(manager)
+  const subject = uniqueSubject("Manager reload quiz")
+  const basic = readQuizz(BASIC_QUIZZ)
+  expect(basic).toBeDefined()
+  seedQuizz(subject, {
+    questions: basic!.questions.map((item) => ({ ...item, time: 120 })),
+  })
+  const hostWire = observeLiveFlow(manager)
+  const pin = await createAutomaticGame(manager, subject)
   const player = await newPage()
 
   await joinGame(player, pin, "Alice")
   await expect(manager.getByText("Alice")).toBeVisible()
   await startGame(manager)
-  await expect(
-    manager.getByRole("button", { name: t("common:skip"), exact: true }).or(
-      manager.getByRole("button", {
-        name: t("extensions:host.skipQuestion"),
-        exact: true,
-      }),
-    ),
-  ).toBeVisible()
+  await expect(manager.getByTestId("host-end-timer-btn")).toBeVisible()
+  await expect
+    .poll(
+      () =>
+        hostWire.findLast((row) => row.name === STATUS.SELECT_ANSWER)?.data
+          .questionId,
+    )
+    .toEqual(expect.any(String))
+  const initialVoting = hostWire.findLast(
+    (row) => row.name === STATUS.SELECT_ANSWER,
+  )
+  expect(initialVoting).toBeDefined()
+  const replayStart = hostWire.length
 
   await manager.reload()
 
   await expect(manager.getByText("1 / 2")).toBeVisible()
-  await expect(
-    manager.getByRole("button", { name: t("common:skip"), exact: true }).or(
-      manager.getByRole("button", {
-        name: t("extensions:host.skipQuestion"),
-        exact: true,
-      }),
-    ),
-  ).toBeVisible()
+  await expect(manager.getByTestId("host-end-timer-btn")).toBeVisible()
+  await expect
+    .poll(
+      () =>
+        hostWire
+          .slice(replayStart)
+          .findLast((row) => row.name === EVENTS.MANAGER.SUCCESS_RECONNECT)
+          ?.data,
+    )
+    .toMatchObject({
+      currentQuestion: { current: 1, total: 2 },
+      status: {
+        name: STATUS.SELECT_ANSWER,
+        data: { questionId: initialVoting!.data.questionId },
+      },
+    })
 
   await answer(player, "Paris")
   await expect(
@@ -88,7 +111,9 @@ test("marks a player who did not answer in time as wrong", async ({
 }) => {
   const subject = uniqueSubject("Timeout quizz")
 
-  seedQuizz(subject, { questions: [question({ time: 5 })] })
+  // Six real voting seconds at this suite's GAME_SPEED=10 leave a visible
+  // answer window while still requiring natural expiry with no host command.
+  seedQuizz(subject, { questions: [question({ time: 60 })] })
 
   const pin = await createAutomaticGame(manager, subject)
   const player = await newPage()
@@ -170,7 +195,15 @@ test("lets the manager skip the auto-advance countdown", async ({
   page: manager,
   newPage,
 }) => {
-  const pin = await createAutomaticGame(manager)
+  const subject = `Auto advance board ${crypto.randomUUID()}`
+  const basic = readQuizz(BASIC_QUIZZ)
+  expect(basic).toBeDefined()
+  seedQuizz(subject, {
+    questions: basic!.questions.map((item) => ({ ...item, time: 120 })),
+    leaderboard: "upstream",
+  })
+  const hostWire = observeLiveFlow(manager)
+  const pin = await createAutomaticGame(manager, subject)
 
   await manager.getByRole("button", { name: t("game:settings.title") }).click()
 
@@ -185,6 +218,11 @@ test("lets the manager skip the auto-advance countdown", async ({
   await dialog
     .getByLabel(t("game:settings.autoAdvance.responsesDelay"))
     .fill("600")
+  // Both countdowns must remain active while the real Next button is exercised.
+  // GAME_SPEED=10 makes the default leaderboard delay only half a real second.
+  await dialog
+    .getByLabel(t("game:settings.autoAdvance.leaderboardDelay"))
+    .fill("600")
   await dialog.getByRole("button", { name: t("common:save") }).click()
   await expect(dialog).toBeHidden()
 
@@ -196,11 +234,31 @@ test("lets the manager skip the auto-advance countdown", async ({
   await answer(player, "Paris")
   await expect(player.getByText(t("game:correct"))).toBeVisible()
 
+  const expectActiveCountdown = async (since = 0) => {
+    await expect
+      .poll(
+        () =>
+          hostWire
+            .slice(since)
+            .findLast((row) => row.name === EVENTS.MANAGER.AUTO_ADVANCE)?.data,
+      )
+      .toMatchObject({ total: 600, seconds: expect.any(Number) })
+    const seconds = hostWire
+      .slice(since)
+      .findLast((row) => row.name === EVENTS.MANAGER.AUTO_ADVANCE)?.data.seconds
+    expect(seconds).toBeGreaterThan(0)
+  }
+  await expectActiveCountdown()
+  const beforeLeaderboard = hostWire.length
   await next(manager)
 
-  await expect(manager.getByText(t("game:leaderboard"))).toBeVisible()
+  await expect(
+    manager.getByRole("heading", { name: t("game:leaderboard"), exact: true }),
+  ).toBeVisible()
+  await expectActiveCountdown(beforeLeaderboard)
 
   await next(manager)
+  await expect(manager.getByText("2 / 2", { exact: true })).toBeVisible()
   await answer(player, "4")
   await expect(player.getByText(t("game:correct"))).toBeVisible()
   await next(manager)
