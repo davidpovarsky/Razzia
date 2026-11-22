@@ -1041,7 +1041,12 @@ export const ScenePresenter = ({
           )}
 
           {kind === "interimResults" && (
-            <div className="flex flex-col items-center gap-1">
+            <div
+              className={clsx(
+                "flex items-center justify-center gap-1",
+                isUltraCompact ? "flex-wrap" : "flex-col",
+              )}
+            >
               <div className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-0.5 text-xs font-bold text-white shadow-xs backdrop-blur-md sm:px-4 sm:py-1 sm:text-sm">
                 <BarChart3 className="text-primary size-3.5 sm:size-4" />
                 <span>{getKindLabel("interimResults", "Interim Results")}</span>
@@ -1143,7 +1148,14 @@ export const ScenePresenter = ({
         (activeScene &&
           "mediaType" in activeScene &&
           activeScene.mediaType === "audio")) && (
-        <div className="relative z-10 my-2 flex min-h-0 w-full flex-1 flex-col items-center justify-center overflow-hidden sm:my-3">
+        <div
+          className={clsx(
+            "relative z-10 flex min-h-0 w-full flex-1 flex-col items-center justify-center overflow-hidden",
+            kind === "interimResults" && isUltraCompact
+              ? "my-0"
+              : "my-2 sm:my-3",
+          )}
+        >
           {labels?.sampleDataNotice && (
             <span className="border-primary/40 bg-primary/20 text-primary mb-1.5 shrink-0 rounded-full border px-3 py-0.5 text-xs font-semibold">
               {labels.sampleDataNotice}
@@ -1444,7 +1456,10 @@ export const ScenePresenter = ({
                           <div
                             data-testid="results-hero-section"
                             className={clsx(
-                              "flex w-full max-w-4xl flex-wrap items-center justify-center",
+                              "grid min-h-0 w-full max-w-4xl auto-rows-fr items-stretch justify-items-center",
+                              winners.length === 1
+                                ? "grid-cols-1"
+                                : "grid-cols-2",
                               isUltraCompact || availableHeight <= 600
                                 ? "mb-1 gap-1.5"
                                 : "mb-2 gap-2 sm:gap-4",
@@ -1472,15 +1487,15 @@ export const ScenePresenter = ({
                                     },
                                   )}
                                   className={clsx(
-                                    "relative flex flex-col items-center justify-between overflow-hidden rounded-xl border-2 border-amber-300 text-center shadow-2xl ring-2 shadow-amber-500/30 ring-amber-400 transition-all duration-500 sm:rounded-2xl",
+                                    "relative flex min-h-0 w-full flex-col items-center justify-between overflow-hidden rounded-xl border-2 border-amber-300 text-center shadow-2xl ring-2 shadow-amber-500/30 ring-amber-400 transition-all duration-500 sm:rounded-2xl",
                                     isUltraCompact || availableHeight <= 600
                                       ? "p-1 sm:p-1.5"
                                       : "p-2 sm:p-3 sm:ring-4",
                                     resultsSlot.preset !== "none" &&
                                       `tada-entrance-${resultsSlot.preset}`,
                                     winners.length === 1
-                                      ? "w-full max-w-xs sm:max-w-sm md:max-w-md"
-                                      : "w-[calc(50%-0.5rem)] max-w-xs sm:max-w-sm",
+                                      ? "max-w-xs sm:max-w-sm md:max-w-md"
+                                      : "max-w-xs sm:max-w-sm",
                                   )}
                                 >
                                   <div className="z-10 mb-0.5 flex w-full items-center justify-between gap-1">
@@ -1526,7 +1541,7 @@ export const ScenePresenter = ({
                                   </div>
 
                                   <div
-                                    className="relative flex w-full items-center justify-center overflow-hidden rounded-lg border border-black/20 shadow-inner sm:rounded-xl"
+                                    className="relative flex min-h-6 w-full items-center justify-center overflow-hidden rounded-lg border border-black/20 shadow-inner sm:min-h-8 sm:rounded-xl md:min-h-9"
                                     style={{
                                       backgroundColor: cardBg,
                                       height: (() => {
@@ -1615,7 +1630,7 @@ export const ScenePresenter = ({
                             <div
                               data-testid="results-runners-up-section"
                               className={clsx(
-                                "grid w-full max-w-4xl grid-cols-2 sm:grid-cols-4",
+                                "grid min-h-0 w-full max-w-4xl auto-rows-fr grid-cols-2 sm:grid-cols-4",
                                 isUltraCompact || availableHeight <= 600
                                   ? "gap-1"
                                   : "gap-1.5 sm:gap-2.5",
@@ -1644,7 +1659,7 @@ export const ScenePresenter = ({
                                       },
                                     )}
                                     className={clsx(
-                                      "relative flex flex-col items-center justify-between overflow-hidden rounded-lg border border-black/20 text-center opacity-95 shadow-lg transition-all duration-300 sm:rounded-xl",
+                                      "relative flex min-h-0 flex-col items-center justify-between overflow-hidden rounded-lg border border-black/20 text-center opacity-95 shadow-lg transition-all duration-300 sm:rounded-xl",
                                       isUltraCompact || availableHeight <= 600
                                         ? "p-1"
                                         : "p-1.5 sm:p-2",
@@ -1676,7 +1691,7 @@ export const ScenePresenter = ({
                                     </div>
 
                                     <div
-                                      className="relative flex w-full items-center justify-center overflow-hidden rounded-md border border-black/15 shadow-inner sm:rounded-lg"
+                                      className="relative flex min-h-5 w-full items-center justify-center overflow-hidden rounded-md border border-black/15 shadow-inner sm:rounded-lg"
                                       style={{
                                         backgroundColor: cardBg,
                                         height: (() => {

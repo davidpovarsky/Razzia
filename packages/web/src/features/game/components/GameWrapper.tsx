@@ -145,16 +145,16 @@ const GameWrapperView = ({
     effectiveRole !== "player" ||
     Boolean(theme.definition.runtime) ||
     forcedRenderer === "tadazz-classic-stage"
-  const usesCinematicStage =
-    cinematicSurface &&
-    (forcedRenderer === "tadazz-classic-stage" ||
-      (forcedRenderer !== "razzia-native-stage" &&
-        isTadazzShowActive(extensionState)))
+  const usesTadazzCanvas =
+    forcedRenderer === "tadazz-classic-stage" ||
+    (forcedRenderer !== "razzia-native-stage" &&
+      isTadazzShowActive(extensionState))
+  const usesCinematicStage = cinematicSurface && usesTadazzCanvas
 
   // The game route owns its canvas across the separate product opening and
   // theme stage. A child renderer leaving must not clear the active canvas.
   useLayoutEffect(() => {
-    if (!usesCinematicStage) {
+    if (!usesTadazzCanvas) {
       return
     }
 
@@ -169,7 +169,7 @@ const GameWrapperView = ({
       root.style.background = previousRootBackground
       body.style.background = previousBodyBackground
     }
-  }, [usesCinematicStage, theme.definition.tokens.background])
+  }, [usesTadazzCanvas, theme.definition.tokens.background])
   const isEnhancedQuiz = Boolean(extensionState?.gameId)
   const {
     isPresenting: isHostPresentingConfirmed,
