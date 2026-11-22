@@ -25,6 +25,7 @@ import {
   useCatalogueMobileControls,
 } from "./CatalogueMobileQuestion"
 import { siteText as t } from "../../locales"
+import mobileQuestionCss from "./catalogue-mobile-question.css?inline"
 import v4Css from "../../../presentation/tadazz-v4/tadazz-v4.css?inline"
 import v4LayoutCss from "../../../presentation/tadazz-v4/source-layout.css?inline"
 import v4FullShowCss from "../../../presentation/tadazz-v4/full-show.css?inline"
@@ -149,6 +150,35 @@ function CataloguePlayer({
   const showMobileQuestion =
     compactControls &&
     (phase === "question" || phase === "voting" || phase === "results")
+  // The companion reads the same recorded votes and authored range as the stage.
+  const mobileRecapScene =
+    phase === "checkpoint" && currentAuthoredScene?.kind === "answerRecap"
+      ? currentAuthoredScene
+      : undefined
+  const showMobileRecap =
+    compactControls &&
+    demo.metadata.themeId === "magic-storybook" &&
+    (mobileRecapScene !== undefined || phase === "finish")
+  const mobileRecapStart = mobileRecapScene
+    ? Math.max(
+        0,
+        questions.findIndex(
+          (card) => card.key === mobileRecapScene.startQuestionKey,
+        ),
+      )
+    : 0
+  const mobileRecapChoices = showMobileRecap
+    ? questions.slice(mobileRecapStart, index + 1).flatMap((card, offset) => {
+        const position = mobileRecapStart + offset
+        const choice = votes[position]
+        const answer =
+          choice === undefined ? undefined : card.answers.at(choice)
+
+        return answer
+          ? [{ key: card.key, number: position + 1, label: answer.text }]
+          : []
+      })
+    : []
   const quizCount = questions.filter((card) => card.kind === "quiz").length
   const score = questions.reduce(
     (sum, card, position) =>
@@ -419,7 +449,7 @@ function CataloguePlayer({
             await stage.current?.showRoundRecap?.({
               winners,
               round: Math.floor(index / 2) + 1,
-              subtitle: t(scene.title ?? "Your story choices"),
+              title: t(scene.title ?? "Your story choices"),
             })
           } else {
             await stage.current?.showInterlude?.({
@@ -550,6 +580,44 @@ function CataloguePlayer({
                   onChoose={choose}
                 />
               )}
+              {showMobileRecap && (
+                <section
+                  className="catalogue-mobile-question catalogue-mobile-recap"
+                  data-testid="catalogue-mobile-recap"
+                  data-phase={phase}
+                  aria-label={t("Your story choices")}
+                  dir="auto"
+                >
+                  <style>{mobileQuestionCss}</style>
+                  <h2 data-testid="catalogue-mobile-recap-heading" dir="auto">
+                    {t(mobileRecapScene?.title ?? "Your story choices")}
+                  </h2>
+                  {mobileRecapChoices.length ? (
+                    <ol className="catalogue-mobile-recap-list">
+                      {mobileRecapChoices.map((choice) => (
+                        <li
+                          key={choice.key}
+                          value={choice.number}
+                          data-question-key={choice.key}
+                          data-selected="true"
+                        >
+                          <span
+                            className="catalogue-mobile-recap-label"
+                            data-testid="catalogue-mobile-recap-label"
+                            dir="auto"
+                          >
+                            {choice.label}
+                          </span>
+                        </li>
+                      ))}
+                    </ol>
+                  ) : (
+                    <p data-testid="catalogue-mobile-recap-empty">
+                      {t("No choices yet")}
+                    </p>
+                  )}
+                </section>
+              )}
               <PresentationControls
                 previous={{
                   disabled:
@@ -614,7 +682,7 @@ function CataloguePlayer({
             className="catalogue-player-frame"
             data-testid="catalogue-native-stage"
             dir="ltr"
-            aria-hidden={showMobileQuestion || undefined}
+            aria-hidden={showMobileQuestion || showMobileRecap || undefined}
           >
             <TadazzV4StageAdapter
               ref={stage}
@@ -640,7 +708,7 @@ function CataloguePlayer({
                 mostChosenAnswer: t("Your choice"),
               }}
               backdropUrl={themeAdapterAsset(theme, "questionBackdrop")}
-              interactive={!showMobileQuestion}
+              interactive={!showMobileQuestion && !showMobileRecap}
               onSelectOption={choose}
               onCue={onCue}
               onQuestionPresented={onQuestionPresented}

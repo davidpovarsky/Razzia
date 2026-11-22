@@ -115,6 +115,111 @@ async function verifyChoiceLayout(world, count, label) {
     .toEqual([])
 }
 
+async function captureStageFailure({
+  page,
+  id,
+  evidence,
+  error,
+  scope = "native",
+}) {
+  const detail = {
+    family: id,
+    url: page.url(),
+    error: String(error?.stack ?? error).slice(0, 12000),
+  }
+
+  try {
+    detail.layout = await page.evaluate(() => {
+      const bounds = (node) => {
+        if (!node) {
+          return null
+        }
+
+        const { x, y, width, height } = node.getBoundingClientRect()
+
+        return { x, y, width, height }
+      }
+      const describe = (node) => {
+        if (!node) {
+          return null
+        }
+
+        const style = getComputedStyle(node)
+
+        return {
+          text: node.textContent?.trim().slice(0, 320),
+          bounds: bounds(node),
+          clientWidth: node.clientWidth,
+          clientHeight: node.clientHeight,
+          scrollWidth: node.scrollWidth,
+          scrollHeight: node.scrollHeight,
+          display: style.display,
+          visibility: style.visibility,
+          flexDirection: style.flexDirection,
+          alignItems: style.alignItems,
+          gridTemplateRows: style.gridTemplateRows,
+          minWidth: style.minWidth,
+          minHeight: style.minHeight,
+          padding: style.padding,
+          fontSize: style.fontSize,
+          lineHeight: style.lineHeight,
+          overflow: style.overflow,
+        }
+      }
+      const host =
+        document.querySelector('[data-testid="tadazz-show"]') ??
+        document.querySelector('[data-testid="catalogue-game-demo"]')
+      const stage = host?.querySelector(".tzv4-stage")
+
+      return {
+        viewport: { width: innerWidth, height: innerHeight },
+        phase:
+          host?.getAttribute("data-show-scene") ??
+          host?.getAttribute("data-game-phase"),
+        scene: stage?.getAttribute("data-v4-scene"),
+        stage: bounds(stage),
+        question: describe(stage?.querySelector(".og-question")),
+        answers: describe(stage?.querySelector(".og-answers")),
+        cards: [...(stage?.querySelectorAll("[data-v4-choice]") ?? [])]
+          .slice(0, 6)
+          .map((card) => ({
+            index: card.getAttribute("data-v4-choice"),
+            card: describe(card),
+            body: describe(card.querySelector(".og-choice-body")),
+            title: describe(card.querySelector(".answer-title")),
+            image: describe(card.querySelector(".answer-image")),
+            percentage: describe(card.querySelector(".result-percentage")),
+            winner: describe(card.querySelector(".winner-tag")),
+          })),
+        visibleText: document.body.innerText.slice(0, 2500),
+      }
+    })
+  } catch (diagnosticError) {
+    detail.diagnosticError = String(diagnosticError).slice(0, 2000)
+  }
+
+  try {
+    await page.screenshot({
+      path: join(evidence, `${scope}-${id}-failure.png`),
+      fullPage: true,
+      timeout: 10000,
+    })
+  } catch (screenshotError) {
+    detail.screenshotError = String(screenshotError).slice(0, 2000)
+  }
+
+  try {
+    write(evidence, `${scope}-${id}-failure`, detail)
+  } catch (writeError) {
+    console.error(
+      JSON.stringify({
+        originalThemeFailureEvidenceError: String(writeError).slice(0, 2000),
+        family: id,
+      }),
+    )
+  }
+}
+
 async function verifySoloCheckpoint(root, score) {
   await expect(root.locator(".team-row")).toHaveCount(1)
   const row = root.locator('.team-row[data-id="solo-player"]')
@@ -185,6 +290,98 @@ async function verifyRoyalHistory(page, root, questions) {
   })
   await page.getByTestId("catalogue-replay").click()
   await expect(root).toHaveAttribute("data-game-phase", "intro")
+}
+
+async function verifyMobileStoryRecap({ phone, root, questions, evidence }) {
+  assert.equal(questions.length, 6)
+  await expect(phone.locator("html")).toHaveAttribute("dir", "rtl")
+  const next = phone.getByTestId("catalogue-next")
+  const companion = phone.getByTestId("catalogue-mobile-question")
+  const recap = phone.getByTestId("catalogue-mobile-recap")
+  const recapLabels = recap.getByTestId("catalogue-mobile-recap-label")
+  const chosenLabels = [questions[0].answers[0].text]
+  let finalEntries = 0
+
+  // Continue the genuine first mobile vote through the remaining five rounds.
+  for (let index = 0; index < questions.length; index += 1) {
+    if (index > 0) {
+      await expect(root).toHaveAttribute("data-game-phase", "voting", {
+        timeout: 30000,
+      })
+      await expect(root).toHaveAttribute("data-question-index", String(index))
+      const choice = index % questions[index].answers.length
+      chosenLabels.push(questions[index].answers[choice].text)
+      await companion.getByTestId(`tadazz-pad-option-${choice}`).click()
+      await expect(root).toHaveAttribute("data-game-phase", "results")
+      await expect(
+        companion.getByTestId("catalogue-mobile-selected-answer"),
+      ).toContainText(chosenLabels[index])
+    }
+
+    await expect(next).toBeEnabled({ timeout: 30000 })
+    await next.click()
+    for (let guard = 0; guard < 3; guard += 1) {
+      await expect(next).toBeEnabled({ timeout: 30000 })
+      const phase = await root.getAttribute("data-game-phase")
+
+      if (phase !== "checkpoint" && phase !== "interlude") {
+        break
+      }
+
+      if (phase === "checkpoint") {
+        const expectedLabels =
+          index === 5 ? chosenLabels : chosenLabels.slice(index - 1, index + 1)
+        await expect(recap).toBeVisible()
+        await expect(recap).toHaveCSS("direction", "rtl")
+        await expect(recapLabels).toHaveText(expectedLabels)
+        await expect(recap.locator('li[data-selected="true"]')).toHaveCount(
+          expectedLabels.length,
+        )
+        const stageRecap = root.getByTestId("tadazz-screen-recap")
+        await expect(stageRecap.locator(".story-finale")).toHaveText(
+          index === 5 ? "ההרפתקה השלמה שלנו" : "הסיפור שלנו עד עכשיו",
+        )
+        await expect(stageRecap.locator(".og-recap-subtitle")).toHaveCount(0)
+        await expect(stageRecap.locator(".answer-title")).toHaveText(
+          expectedLabels,
+        )
+        assert(
+          await recapLabels.evaluateAll((nodes) =>
+            nodes.every(
+              (node) =>
+                Number.parseFloat(getComputedStyle(node).fontSize) >= 16 &&
+                node.scrollWidth <= node.clientWidth + 1 &&
+                node.scrollHeight <= node.clientHeight + 1,
+            ),
+          ),
+          "Mobile recap labels retain readable native size without clipping",
+        )
+
+        if (index === 5) {
+          await expect(root).toHaveAttribute(
+            "data-authored-scene",
+            "chapter-3-choices",
+          )
+          finalEntries = await recapLabels.count()
+          assert.equal(finalEntries, 6)
+          await phone.screenshot({
+            path: join(evidence, "mobile-he-magic-storybook-final-recap.png"),
+            fullPage: true,
+          })
+        }
+      }
+
+      await next.click()
+    }
+  }
+
+  await expect(root).toHaveAttribute("data-game-phase", "finish")
+  await expect(recap).toBeVisible()
+  await expect(recap).toHaveAttribute("data-phase", "finish")
+  await expect(recapLabels).toHaveText(chosenLabels)
+  assert.equal(finalEntries, 6)
+
+  return finalEntries
 }
 
 async function originalWorld(root, id) {
@@ -302,9 +499,11 @@ async function verifyPublic({ browser, options, inspect, record }) {
   const page = await context.newPage()
   inspect(page)
   let baselineControls = undefined
+  let activeFamily = "unknown"
 
   try {
     for (const id of ids) {
+      activeFamily = id
       await page.goto(`${options.origin}/?view=demo&game=${id}&lng=en`)
       const root = page.getByTestId("catalogue-game-demo")
       await expect(root).toHaveAttribute("data-game-phase", "intro", {
@@ -415,11 +614,17 @@ async function verifyPublic({ browser, options, inspect, record }) {
             )
 
             if (id === "magic-storybook") {
-              await expect(
-                root
-                  .getByTestId("tadazz-screen-recap")
-                  .locator(".answer-title"),
-              ).toHaveText(
+              const authoredRecap = options.previews
+                .get(id)
+                .show.cards.find((card) => card.key === authored)
+              assert.equal(authoredRecap?.kind, "answerRecap")
+              const recap = root.getByTestId("tadazz-screen-recap")
+              await expect(recap.locator(".story-finale")).toHaveText(
+                authoredRecap.title,
+              )
+              // Authored answerRecap cards contain a title, with no subtitle field.
+              await expect(recap.locator(".og-recap-subtitle")).toHaveCount(0)
+              await expect(recap.locator(".answer-title")).toHaveText(
                 index === 5
                   ? chosenLabels
                   : chosenLabels.slice(index - 1, index + 1),
@@ -427,14 +632,30 @@ async function verifyPublic({ browser, options, inspect, record }) {
             } else {
               await verifySoloCheckpoint(root, expectedScore)
             }
+            if (index === 1 || (id === "magic-storybook" && index === 5)) {
+              await decodedImages(root)
+              await page.screenshot({
+                path: join(options.evidence, `public-${id}-checkpoint-${index + 1}.png`),
+              })
+            }
           } else {
             interludes.push(authored)
+            if (index === 1) {
+              await page.screenshot({
+                path: join(options.evidence, `public-${id}-interlude.png`),
+              })
+            }
           }
 
           await next.click()
         }
       }
       await expect(root).toHaveAttribute("data-game-phase", "finish")
+      await expect(next).toBeEnabled({ timeout: 30000 })
+      await decodedImages(root)
+      await page.screenshot({
+        path: join(options.evidence, `public-${id}-finale.png`),
+      })
       assert.equal(checkpoints.length, 3)
       assert.equal(interludes.length, 2)
       await stopQuestionSequence(root)
@@ -464,6 +685,15 @@ async function verifyPublic({ browser, options, inspect, record }) {
         replay: true,
       })
     }
+  } catch (error) {
+    await captureStageFailure({
+      page,
+      id: activeFamily,
+      evidence: options.evidence,
+      error,
+      scope: "public",
+    })
+    throw error
   } finally {
     await context.close()
   }
@@ -476,6 +706,7 @@ async function verifyPublic({ browser, options, inspect, record }) {
   })
   const phone = await mobile.newPage()
   inspect(phone)
+  let storybookFinalRecapEntries = 0
 
   try {
     for (const locale of locales) {
@@ -530,10 +761,21 @@ async function verifyPublic({ browser, options, inspect, record }) {
         path: join(options.evidence, `mobile-he-${id}.png`),
         fullPage: true,
       })
+
+      if (id === "magic-storybook") {
+        storybookFinalRecapEntries = await verifyMobileStoryRecap({
+          phone,
+          root,
+          questions: questionsOf(options.previews.get(id)),
+          evidence: options.evidence,
+        })
+      }
     }
+    assert.equal(storybookFinalRecapEntries, 6)
     record("nine-locales-and-eight-reduced-motion-hebrew-mobile-votes", {
       locales: 9,
       mobileRounds: 8,
+      storybookFinalRecapEntries,
     })
   } finally {
     await mobile.close()
@@ -628,17 +870,19 @@ async function verifyNative({ browser, options, inspect, record }) {
       ).toBeVisible({ timeout: 30000 })
       const sequences = []
       const select = async (player, index) => {
-        const button = player
-          .locator("button")
-          .filter({ has: player.getByTestId(`answer-badge-${index}`) })
+        // Every native fixture authors answer visuals, so the real player
+        // renders PhotoCardGrid rather than the text-only answer badges.
+        const button = player.getByTestId(`photo-card-choice-${index}`)
+        await expect(button).toBeVisible({ timeout: 15000 })
         await expect(button).toBeEnabled({ timeout: 15000 })
+        const answered = page.getByTestId("tadazz-live-answered")
+        const before = Number(await answered.getAttribute("data-count"))
+        assert(Number.isInteger(before) && before >= 0 && before < 2)
         await button.click()
-        await expect(
-          player.getByRole("heading", {
-            name: "Thanks, that's noted",
-            exact: true,
-          }),
-        ).toBeVisible({ timeout: 15000 })
+        await expect(answered).toHaveAttribute("data-count", String(before + 1), {
+          timeout: 15000,
+        })
+        await expect(button).toBeHidden({ timeout: 15000 })
       }
       for (let index = 0; index < fixture.quizz.questions.length; index += 1) {
         await watchQuestionSequence(stage, {
@@ -833,6 +1077,24 @@ async function verifyNative({ browser, options, inspect, record }) {
           resultsLayoutChecks: 4,
         },
       )
+    } catch (error) {
+      // Capture the actual host before finally closes it and both player pages.
+      await captureStageFailure({
+        page,
+        id,
+        evidence: options.evidence,
+        error,
+      })
+      for (const [playerIndex, player] of players.entries()) {
+        await captureStageFailure({
+          page: player.page,
+          id,
+          evidence: options.evidence,
+          error,
+          scope: `native-player-${playerIndex + 1}`,
+        })
+      }
+      throw error
     } finally {
       for (const player of players) {
         await player.context.close()

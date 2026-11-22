@@ -650,6 +650,42 @@ function OriginalTopPick({ data }: { data: TadazzV4Data }) {
   )
 }
 
+function OriginalRecap({ data }: { data: TadazzV4Data }) {
+  const title = data.title || labelsFor(data).roundRecap
+  let titleSize = data.subtitle ? 48 : 66
+
+  if (title.length > 50) {
+    titleSize = 36
+  }
+
+  const subtitleSize = (data.subtitle?.length ?? 0) > 100 ? 22 : 28
+
+  return (
+    <section className="og-recap" data-testid="tadazz-screen-recap">
+      <header
+        className="og-recap-heading"
+        style={
+          {
+            "--og-recap-title-size": `${titleSize}px`,
+            "--og-recap-subtitle-size": `${subtitleSize}px`,
+          } as CSSProperties
+        }
+      >
+        <h2 className="story-finale" dir="auto">
+          {title}
+        </h2>
+        {data.subtitle ? (
+          <p className="og-recap-subtitle" dir="auto">
+            {data.subtitle}
+          </p>
+        ) : null}
+      </header>
+      <Answers data={data} scene="round-recap" recap />
+      <div className="story-connection" />
+    </section>
+  )
+}
+
 export function OriginalThemeAtmosphere({
   family,
 }: {
@@ -714,15 +750,7 @@ export function OriginalThemeScene({
       {scene === "leaderboard" ? <OriginalLeaderboard data={data} /> : null}
       {scene === "top-pick" ? <OriginalTopPick data={data} /> : null}
       {scene === "interlude" ? <OriginalInterlude data={data} /> : null}
-      {scene === "round-recap" ? (
-        <section className="og-recap" data-testid="tadazz-screen-recap">
-          <h2 className="story-finale">
-            {data.subtitle || labelsFor(data).roundRecap}
-          </h2>
-          <Answers data={data} scene={scene} recap />
-          <div className="story-connection" />
-        </section>
-      ) : null}
+      {scene === "round-recap" ? <OriginalRecap data={data} /> : null}
       {scene === "z-wipe" ? (
         <>
           <div className="wipe" />

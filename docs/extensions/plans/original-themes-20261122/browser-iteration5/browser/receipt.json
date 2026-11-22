@@ -1,0 +1,25 @@
+{
+  "passed": false,
+  "sourceSha": "diagnostic-iteration5-uncommitted",
+  "isolatedNativeHost": true,
+  "customerMountUsed": false,
+  "realEmailSent": false,
+  "manualListeningPerformed": false,
+  "results": [
+    {
+      "name": "eight-native-installs-and-isolated-two-to-five-choice-fixtures",
+      "passed": true,
+      "originals": 8,
+      "rounds": 32,
+      "anonymousInstallDenied": true,
+      "crossAccountReadDenied": true
+    },
+    {
+      "name": "native-editor-eight-theme-round-trip-save-reload-and-history",
+      "passed": true,
+      "switches": 8,
+      "preservedQuestionCount": 6
+    }
+  ],
+  "error": "AssertionError [ERR_ASSERTION]: Question geometry remains stable: {\"phase\":\"results\",\"at\":7438.700000047684,\"questionAt\":3992,\"changed\":[\"x\",\"y\"],\"baseline\":{\"phase\":\"question\",\"at\":5880.600000143051,\"heading\":{\"x\":391.4466247558594,\"y\":256.02386474609375,\"width\":657.075439453125,\"height\":54.110748291015625,\"fontSize\":\"72px\",\"lineHeight\":\"82.08px\",\"fontWeight\":\"500\",\"transform\":\"identity\",\"opacity\":\"1\"},\"panel\":{\"x\":258.50286865234375,\"y\":191.44732666015625,\"width\":922.9629516601562,\"height\":183.27407836914062,\"fontSize\":\"15px\",\"lineHeight\":\"normal\",\"fontWeight\":\"400\",\"transform\":\"identity\",\"opacity\":\"1\"},\"stage\":{\"x\":87.095458984375,\"y\":69.484375,\"width\":1265.77783203125,\"height\":712,\"fontSize\":\"15px\",\"lineHeight\":\"normal\",\"fontWeight\":\"400\",\"transform\":\"matrix(0.659259, 0, 0, 0.659259, -960, -540)\",\"opacity\":\"1\"},\"root\":{\"x\":12,\"y\":69,\"width\":1416,\"height\":0,\"fontSize\":\"15px\",\"lineHeight\":\"22.5px\",\"fontWeight\":\"400\",\"transform\":\"identity\",\"opacity\":\"1\"},\"scroll\":{\"x\":0,\"y\":0,\"dialogLeft\":0,\"dialogTop\":0},\"viewport\":{\"width\":1440,\"height\":900}},\"actual\":{\"heading\":{\"x\":372.3280944824219,\"y\":252.7275390625,\"width\":657.075439453125,\"height\":54.11077880859375,\"fontSize\":\"72px\",\"lineHeight\":\"82.08px\",\"fontWeight\":\"500\",\"transform\":\"identity\",\"opacity\":\"1\"},\"panel\":{\"x\":239.3843536376953,\"y\":188.15103149414062,\"width\":922.9629516601562,\"height\":183.27407836914062,\"fontSize\":\"15px\",\"lineHeight\":\"normal\",\"fontWeight\":\"400\",\"transform\":\"identity\",\"opacity\":\"1\"},\"stage\":{\"x\":87.095458984375,\"y\":69.484375,\"width\":1265.77783203125,\"height\":712,\"fontSize\":\"15px\",\"lineHeight\":\"normal\",\"fontWeight\":\"400\",\"transform\":\"matrix(0.659259, 0, 0, 0.659259, -960, -540)\",\"opacity\":\"1\"},\"root\":{\"x\":12,\"y\":69,\"width\":1416,\"height\":0,\"fontSize\":\"15px\",\"lineHeight\":\"22.5px\",\"fontWeight\":\"400\",\"transform\":\"identity\",\"opacity\":\"1\"},\"scroll\":{\"x\":0,\"y\":0,\"dialogLeft\":0,\"dialogTop\":0},\"viewport\":{\"width\":1440,\"height\":900}}}\n\nfalse !== true\n\n    at readQuestionSequence (file:///source/extensions/qa/public-gallery/question-sequence-verify.mjs:526:10)\n    at runNextTicks (node:internal/process/task_queues:65:5)\n    at process.processImmediate (node:internal/timers:541:9)\n    at async verifyPublic (file:///source/extensions/qa/original-themes/browser-verify.mjs:567:24)\n    at async verifyOriginalThemeBrowser (file:///source/extensions/qa/original-themes/browser-verify.mjs:1110:5)\n    at async <anonymous> (/source/extensions/qa/original-themes/account-verify.mjs:249:3)"
+}

@@ -689,12 +689,13 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         exact: true,
       })
       .click()
-    await expect(background.locator("img")).not.toHaveAttribute(
+    await expect(background.locator("img")).toHaveCount(0)
+    await openStudioPanel(page, "edit")
+    await expect(edit.getByTestId("answer-image-preview-0")).toBeVisible()
+    await expect(edit.getByTestId("answer-image-preview-0")).toHaveAttribute(
       "src",
       sharedUrl ?? "",
     )
-    await openStudioPanel(page, "edit")
-    await expect(edit.getByTestId("answer-image-preview-0")).toBeVisible()
   })
   test("2. Live Runtime & Zero-Scroll Stage Matrix (STAGE-P0) across 8 Viewports + Card Background + Single Audio + Staged Motion", async ({
     page: managerPage,
@@ -1347,13 +1348,39 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         )
       }
 
-      // 4. Assert no vertical overlap between header/title and HUD/timer, and between HUD and cards
-      await assertNoVerticalOverlap(
-        spectatorPage,
-        '[data-testid="tadazz-question-panel"] .q-text',
-        '[data-testid="tadazz-timer"]',
-        `Q1 Title / Timer Overlap @ ${vp.name}`,
-      )
+      // 4. Native title and timer sit side by side; their visible boxes must not intersect.
+      const questionTitle = spectatorPage
+        .getByTestId("tadazz-question-panel")
+        .locator(".q-text")
+      const questionTimer = spectatorPage.getByTestId("tadazz-timer")
+      await expect(questionTitle).toBeVisible()
+      await expect(questionTimer).toBeVisible()
+      const [titleBox, timerBox] = await Promise.all([
+        questionTitle.boundingBox(),
+        questionTimer.boundingBox(),
+      ])
+
+      if (!titleBox || !timerBox) {
+        throw new Error(`Q1 Title / Timer bounds missing @ ${vp.name}`)
+      }
+
+      for (const bounds of [titleBox, timerBox]) {
+        expect(bounds.width, `Q1 positive width @ ${vp.name}`).toBeGreaterThan(
+          0,
+        )
+        expect(
+          bounds.height,
+          `Q1 positive height @ ${vp.name}`,
+        ).toBeGreaterThan(0)
+      }
+
+      expect(
+        titleBox.x + titleBox.width <= timerBox.x ||
+          timerBox.x + timerBox.width <= titleBox.x ||
+          titleBox.y + titleBox.height <= timerBox.y ||
+          timerBox.y + timerBox.height <= titleBox.y,
+        `Q1 Title / Timer overlap @ ${vp.name}: ${JSON.stringify({ titleBox, timerBox })}`,
+      ).toBe(true)
 
       if (
         vp.name === "800x600_4_3" ||
@@ -1886,7 +1913,54 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       },
     )
     expect(createRes.status()).toBe(201)
-    await managerPage.reload()
+    const { quizId } = (await createRes.json()) as { quizId: string }
+    await managerPage.goto(`/manager/quizz/${quizId}`)
+    await managerPage.getByTestId("editor-mode-advanced").click()
+    const recapCard = managerPage
+      .getByTestId("editor-timeline")
+      .getByTestId("editor-scene-card")
+      .filter({
+        has: managerPage.getByRole("button", {
+          name: "Cumulative Show Answer Recap",
+          exact: true,
+        }),
+      })
+    await expect(recapCard).toHaveCount(1)
+    await recapCard.getByTestId("editor-scene-select").click()
+    const editorStage = managerPage.getByTestId("studio-scene-preview-stage")
+    const editorRecap = editorStage.getByTestId("tadazz-screen-recap")
+    await expect(editorRecap).toBeVisible()
+    await expect(
+      editorRecap.getByText("Cumulative Show Answer Recap", { exact: true }),
+    ).toBeVisible()
+    // Editor samples carry no responses: a survey retains its question text,
+    // while a quiz can show its authored correct answer without invented votes.
+    await expect(editorRecap.locator(".answer-title")).toHaveText([
+      "Wave 2 Survey Q1: Which visual theme do you prefer?",
+      "Mars",
+    ])
+    await expect(
+      editorStage.locator("[data-editor-preview-fallback]"),
+    ).toHaveCount(0)
+    const stableRecap = await editorRecap.elementHandle()
+    // Layout changes allocate equivalent scene data without replaying the scene.
+    for (const aspect of ["4-3", "16-9"]) {
+      const control = managerPage.getByTestId(`studio-preview-aspect-${aspect}`)
+      await control.click()
+      await expect(control).toHaveAttribute("aria-pressed", "true")
+      await managerPage.evaluate(
+        () =>
+          new Promise<void>((resolve) => {
+            requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+          }),
+      )
+      expect(await stableRecap.evaluate((element) => element.isConnected)).toBe(
+        true,
+      )
+    }
+    await stableRecap.dispose()
+    await saveScreenshot(managerPage, "wave2_editor_native_recap.png")
+    await managerPage.goto("/manager/config")
     const pin = await createGame(
       managerPage,
       "Wave 2 Cinema, Audio, Motion & Answer Recap Show",
@@ -2057,7 +2131,9 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       timeout: 15_000,
     })
     await expect(
-      spectatorPage.getByTestId("tadazz-screen-recap").locator(".tz-recap-row"),
+      spectatorPage
+        .getByTestId("tadazz-screen-recap")
+        .locator("[data-v4-choice]"),
     ).toHaveCount(2)
 
     await expect(
@@ -2137,7 +2213,7 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       )
       await assertVisualContainment(
         spectatorPage,
-        '[data-testid="tadazz-screen-recap"] .tz-x-title',
+        '[data-testid="tadazz-screen-recap"] .leader-head h2',
         `Answer Recap Title @ ${vp.name}`,
       )
 

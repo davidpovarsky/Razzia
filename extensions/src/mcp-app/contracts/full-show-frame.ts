@@ -131,9 +131,10 @@ export const fullShowThemeV3Schema = z
     ),
   })
   .superRefine((theme, ctx) => {
-    const legacyRenderer = theme.id === "tadazz-classic"
-      ? "tadazz-classic-stage"
-      : "razzia-native-stage"
+    const legacyRenderer =
+      theme.id === "tadazz-classic"
+        ? "tadazz-classic-stage"
+        : "razzia-native-stage"
     const renderer = isOriginalThemeId(theme.id)
       ? "tadazz-original-stage"
       : legacyRenderer

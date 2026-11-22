@@ -695,7 +695,12 @@ export function RoundRecapV4({ data }: { data: TadazzV4Data }) {
   const tx = labelsFor(data)
 
   return (
-    <div data-testid="tadazz-screen-recap">
+    <div className="round-recap" data-testid="tadazz-screen-recap">
+      {data.title ? (
+        <header className="leader-head">
+          <h2>{data.title}</h2>
+        </header>
+      ) : null}
       <FivePictureAnswersV4 data={data} recap />
       <div className="story-connection" />
       <div className="story-finale">{data.subtitle || tx.storyBegin}</div>

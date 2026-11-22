@@ -4,6 +4,7 @@ Usage: python extensions/qa/original-themes/linux-browser-verify.py SOURCE_RUN
 This controller executes no app or browser on the calling workstation.
 """
 import argparse
+import hashlib
 import io
 import json
 import pathlib
@@ -25,16 +26,19 @@ build = json.loads((previous / "receipt.json").read_text(encoding="utf8"))
 assert source["sha"] == sha and build["sha"] == sha and build["allHashesVerifiedBeforeAfter"]
 assert all(check["exit"] == 0 for check in build["checks"])
 assert {"native-site-build", "native-application-preview-build"}.issubset({check["label"] for check in build["checks"]})
-for relative in ["extensions/qa/original-themes/account-verify.mjs", "extensions/qa/original-themes/browser-verify.mjs", "extensions/qa/original-themes/audio-observer.mjs", "extensions/qa/original-themes/contract.mjs"]:
+qa_files = ["extensions/qa/original-themes/" + name for name in
+            ("account-verify.mjs", "browser-verify.mjs", "audio-observer.mjs", "contract.mjs", "linux-browser-verify.py")]
+for relative in qa_files:
     assert relative in source["files"], "The committed candidate must contain the exact QA implementation"
+    assert hashlib.sha256((ROOT / relative).read_bytes()).hexdigest() == source["files"][relative], "QA controller and modules must match the immutable candidate"
 run = "tadazz-originals-" + sha[:12] + "-" + uuid.uuid4().hex[:8]
 evidence = ROOT / "docs/extensions/plans/original-themes-20261122" / run
 evidence.mkdir(parents=True, exist_ok=False)
-config = {"sha": sha, "sourceRun": args.source_run, "manifest": source["files"], "run": run}
+config = {"sha": sha, "sourceRun": args.source_run, "manifest": source["files"], "run": run, "qaFiles": qa_files}
 (evidence / "input-manifest.json").write_text(json.dumps(config, indent=2) + "\n", encoding="utf8")
 SSH = ["ssh", "-i", str(pathlib.Path.home() / ".ssh/tadazz_oracle_2026"), "-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=yes", "-o", "ConnectTimeout=10", "ubuntu@132.145.25.168"]
 remote = r'''
-import pathlib,json,hashlib,subprocess,time,atexit
+import pathlib,json,hashlib,subprocess,time,atexit,stat
 c=CONFIG
 base=pathlib.Path('/home/ubuntu/tadazz-phase2-20261116/evidence')
 source=base/c['sourceRun']/'source'
@@ -42,6 +46,25 @@ owned=base/c['run'];owned.mkdir(mode=0o700,exist_ok=False)
 assert not source.is_symlink() and source.is_dir()
 def source_hashes():return {p:hashlib.sha256((source/p).read_bytes()).hexdigest() for p in c['manifest']}
 assert source_hashes()==c['manifest'],'Source differs from successful immutable native build'
+def canonical_digest(value):return hashlib.sha256(json.dumps(value,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+def artifact_tree(root):
+ assert root.is_dir() and not root.is_symlink(),'Artifact root must be a plain directory'
+ result={};total=0
+ for path in sorted(root.rglob('*')):
+  before=path.lstat()
+  assert not stat.S_ISLNK(before.st_mode),'Artifact symlinks are not accepted'
+  if stat.S_ISDIR(before.st_mode):continue
+  assert stat.S_ISREG(before.st_mode) and before.st_nlink==1 and before.st_size<=64*1024**2,'Artifact file is not bounded and plain'
+  payload=path.read_bytes();after=path.stat()
+  assert (before.st_dev,before.st_ino,before.st_size,before.st_mtime_ns,before.st_ctime_ns)==(after.st_dev,after.st_ino,after.st_size,after.st_mtime_ns,after.st_ctime_ns) and len(payload)==before.st_size,'Artifact changed while hashing'
+  total+=len(payload)
+  assert total<=512*1024**2 and len(result)<10000,'Artifact tree exceeds staging bounds'
+  result[path.relative_to(root).as_posix()]={'sha256':hashlib.sha256(payload).hexdigest(),'bytes':len(payload)}
+ assert result,'Built artifact tree is empty'
+ return result
+artifact_roots={'web':source/'packages/web/dist','widget':source/'extensions/src/mcp-app/widget/dist','application':source/'extensions/dist/application-preview','backend':base/c['sourceRun']/'fixtures/native-host-build'}
+def artifact_hashes():return {name:artifact_tree(root) for name,root in artifact_roots.items()}
+artifacts_before=artifact_hashes()
 facts=json.loads(subprocess.check_output(['docker','inspect','tadazz-phase2-20261116']))[0]
 rootfs=pathlib.Path('/var/lib/docker/rootfs/overlayfs')/facts['Id']
 assert (rootfs/'cleanup').is_dir() and (rootfs/'root/.cache/ms-playwright').is_dir()
@@ -56,6 +79,10 @@ for origin,target,readonly in mounts:argv+=['--mount','type=bind,source='+str(or
 argv+=['--entrypoint','/bin/sleep',facts['Image'],'infinity']
 subprocess.run(argv,check=True,stdout=subprocess.DEVNULL)
 atexit.register(lambda:subprocess.run(['docker','stop','--time','10',name],stdout=subprocess.DEVNULL,timeout=25))
+created=json.loads(subprocess.check_output(['docker','inspect',name]))[0]
+for origin,target,readonly in mounts:
+ matching=[item for item in created['Mounts'] if item['Destination']==target]
+ assert len(matching)==1 and matching[0]['Source']==str(origin) and matching[0]['Type']=='bind' and matching[0]['RW'] is not readonly,'QA mount differs from the bounded read-only plan'
 env={'TMPDIR':'/tmp','TSX_DISABLE_CACHE':'1','NODE_OPTIONS':'--max-old-space-size=1400','TADAZZ_ORIGINALS_SOURCE_SHA':c['sha'],'TADAZZ_ORIGINALS_EVIDENCE':'/evidence/browser','TADAZZ_SITE_DIST_DIR':'/source/packages/web/dist','TADAZZ_INLINE_GAME_PREVIEW_ENABLED':'true','TADAZZ_PUBLIC_GAME_PREVIEW_ENABLED':'true','TADAZZ_SITE_ENABLED':'true','TADAZZ_REMOTE_QA':'1'}
 prefix=['docker','exec','-w','/source']
 for key,value in env.items():prefix+=['-e',key+'='+value]
@@ -66,10 +93,13 @@ with (owned/'browser.stdout.log').open('wb') as out,(owned/'browser.stderr.log')
  result=subprocess.run(prefix+command,stdout=out,stderr=err,timeout=1820)
 assert source_hashes()==c['manifest'],'Browser changed immutable candidate source'
 assert sdk_hashes()==entries,'Browser changed shared SDK cache'
+artifacts_after=artifact_hashes()
+assert artifacts_before==artifacts_after,'Browser changed built candidate artifacts'
 receipt_path=owned/'browser/receipt.json'
 inner=json.loads(receipt_path.read_text()) if receipt_path.exists() else None
 state=json.loads(subprocess.check_output(['docker','inspect',name]))[0]['State']
 report={'sha':c['sha'],'sourceRun':c['sourceRun'],'run':c['run'],'exit':result.returncode,'seconds':round(time.time()-start,2),'passed':result.returncode==0 and inner is not None and inner.get('passed') is True,'allSourceHashesVerified':True,'candidateSourceHashesVerifiedBeforeAfter':True,'sdkCacheHashesVerifiedBeforeAfter':True,'applicationSourcesEqualCandidate':True,'runtimeQaSourceEqualsCandidate':True,'sourceReadOnly':True,'customerMountUsed':False,'productionChanged':False,'manualListeningPerformed':False,'network':'none','oomKilled':state.get('OOMKilled',False),'browserReceipt':inner}
+report.update(format='tadazz-original-themes-acceptance',version=1,sourceManifestSha256=canonical_digest(c['manifest']),qaSourceSha256={relative:c['manifest'][relative] for relative in c['qaFiles']},builtArtifactHashesVerifiedBeforeAfter=True,builtArtifactsBefore=artifacts_before,builtArtifactsAfter=artifacts_after,readOnlyMountsVerified=True)
 (owned/'receipt.json').write_text(json.dumps(report,indent=2)+'\n')
 print(json.dumps(report),flush=True)
 '''.replace("c=CONFIG", "c=" + repr(config))

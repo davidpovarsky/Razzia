@@ -10,11 +10,13 @@ import {
 export interface PlayerGameViewProps {
   status: { name: Status; data: Record<string, unknown> } | null
   viewRole?: ViewRole
+  roomId?: string
 }
 
 export const PlayerGameView = ({
   status,
   viewRole = "player",
+  roomId,
 }: PlayerGameViewProps) => {
   const currentStatus = status ?? {
     name: STATUS.WAIT,
@@ -35,7 +37,11 @@ export const PlayerGameView = ({
 
   return (
     <TadazzRawStatusContext.Provider value={status}>
-      <GameWrapper statusName={effectiveStatusName} viewRole={viewRole}>
+      <GameWrapper
+        statusName={effectiveStatusName}
+        viewRole={viewRole}
+        roomId={roomId}
+      >
         {CurrentComponent && <CurrentComponent data={statusData as never} />}
       </GameWrapper>
     </TadazzRawStatusContext.Provider>

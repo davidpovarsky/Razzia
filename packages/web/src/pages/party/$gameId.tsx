@@ -102,7 +102,9 @@ const PlayerGamePage = () => {
     return null
   }
 
-  return <PlayerGameView status={status} viewRole="player" />
+  return (
+    <PlayerGameView status={status} viewRole="player" roomId={gameIdParam} />
+  )
 }
 
 export const Route = createFileRoute("/party/$gameId")({

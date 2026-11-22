@@ -7,7 +7,10 @@ import { fileURLToPath, pathToFileURL } from "node:url"
 import path from "node:path"
 const cliArguments = process.argv.slice(2)
 
-if (cliArguments.length > 1 || (cliArguments.length === 1 && cliArguments[0] !== "--verify-manifest")) {
+if (
+  cliArguments.length > 1 ||
+  (cliArguments.length === 1 && cliArguments[0] !== "--verify-manifest")
+) {
   throw new Error(
     "Use no arguments to generate pins or --verify-manifest to reproduce committed pins",
   )

@@ -19,7 +19,7 @@ function reconstructCatalog(
   let page = first
   let consumed = 0
 
-  while (true) {
+  for (;;) {
     const text = library.canonicalJson(page)
 
     expect(new TextEncoder().encode(text).length).toBeLessThanOrEqual(262144)
@@ -92,7 +92,11 @@ describe("cumulative public library consumer contract", () => {
       {
         catalog: library.getNativeMotionLibrary(),
         read: library.getNativeMotionLibraryPage,
-        collections: ["stageEntrances", "questionDecorations", "nativeChoreography"],
+        collections: [
+          "stageEntrances",
+          "questionDecorations",
+          "nativeChoreography",
+        ],
       },
     ]) {
       expect(Object.isFrozen(catalog)).toBe(true)
@@ -106,7 +110,9 @@ describe("cumulative public library consumer contract", () => {
     expect(Object.isFrozen(OVERLAY_TIME_BASES)).toBe(false)
   })
   it("rejects tampered, foreign and stale cursors and validates bounded page requests", () => {
-    const cursor = requiredCursor(library.getNativeShowLibraryPage({ limit: 1 }))
+    const cursor = requiredCursor(
+      library.getNativeShowLibraryPage({ limit: 1 }),
+    )
     const moved = cursor.replace(/^nlp1\.[0-9]+/u, "nlp1.2")
 
     expect(() => library.getNativeShowLibraryPage({ cursor: moved })).toThrow()
@@ -169,7 +175,10 @@ describe("cumulative public library consumer contract", () => {
         collection: "entries",
         value: { index, value },
       }))
-      const read = createNativeLibraryPager({ format: "budget-fixture" }, records)
+      const read = createNativeLibraryPager(
+        { format: "budget-fixture" },
+        records,
+      )
       const first = read({ limit: 128 })
       const next = read({ limit: 128, cursor: requiredCursor(first) })
 
@@ -184,15 +193,14 @@ describe("cumulative public library consumer contract", () => {
     }
   })
   it("fails closed for an oversized single entry and keeps authoring limits unchanged", () => {
-    const read = createNativeLibraryPager(
-      { format: "oversized-fixture" },
-      [{ collection: "entries", value: "x".repeat(262144) }],
-    )
+    const read = createNativeLibraryPager({ format: "oversized-fixture" }, [
+      { collection: "entries", value: "x".repeat(262144) },
+    ])
 
     expect(() => read()).toThrow("show-library:native-catalog-entry-budget")
-    expect(() => library.canonicalJson(Array.from({ length: 10000 }, () => null))).toThrow(
-      "show-library:json-budget",
-    )
+    expect(() =>
+      library.canonicalJson(Array.from({ length: 10000 }, () => null)),
+    ).toThrow("show-library:json-budget")
     expect(() => library.canonicalJson("x".repeat(262145))).toThrow(
       "show-library:string-budget",
     )

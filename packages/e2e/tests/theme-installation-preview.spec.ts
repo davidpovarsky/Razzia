@@ -219,7 +219,9 @@ test("reviews all fifteen native slots, sixteen explicit audio events and eight 
       page
         .getByTestId("theme-installation-preview")
         .getByRole("heading", { level: 1 }),
-    ).toContainText(localizations[locale][definition.nameKey])
+    ).toContainText(
+      (localizations[locale] ?? localizations.en)[definition.nameKey],
+    )
   }
   await page.emulateMedia({ reducedMotion: "reduce" })
   await page.reload()

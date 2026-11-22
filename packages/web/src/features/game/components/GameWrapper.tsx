@@ -88,6 +88,8 @@ type Props = PropsWithChildren & {
   onBack?: () => void
   manager?: boolean
   viewRole?: ViewRole
+  /** Route identity stays available while the player/manager stores hydrate. */
+  roomId?: string
 }
 const GameWrapperView = ({
   children,
@@ -619,9 +621,10 @@ const GameWrapper = (props: Props) => {
   const managerGameId = useManagerStore((state) => state.gameId)
   const playerGameId = usePlayerStore((state) => state.gameId)
   const gameId =
-    props.manager || props.viewRole === "spectator"
+    props.roomId ??
+    (props.manager || props.viewRole === "spectator"
       ? managerGameId
-      : playerGameId
+      : playerGameId)
 
   return (
     <AudioPreferencesScope key={gameId ?? "pending"}>

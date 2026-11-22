@@ -56,7 +56,17 @@ ENV_OVERRIDES = {
     "TADAZZ_MCP_SERVICE_ENABLED": "true",
     "TADAZZ_INLINE_GAME_PREVIEW_ENABLED": "true",
 }
-PUBLIC_CATALOGUE_IDS = ("great-guessoff", "crowd", "quiz", "story", "picture", "truth", "finale", "family", "classroom", "team")
+PUBLIC_CATALOGUE_IDS = (
+    "great-guessoff", "crowd", "quiz", "story", "picture", "truth", "finale", "family", "classroom", "team",
+    "royal-quiz", "neon-arcade", "retro-tv", "magic-storybook",
+    "crystal-future", "carnival-pop", "sports-arena", "mystery-noir",
+)
+ORIGINAL_THEME_IDS = (
+    "royal-quiz", "neon-arcade", "retro-tv", "magic-storybook",
+    "crystal-future", "carnival-pop", "sports-arena", "mystery-noir",
+)
+ORIGINAL_QA_FILES = {"extensions/qa/original-themes/" + name for name in
+                     ("account-verify.mjs", "browser-verify.mjs", "audio-observer.mjs", "contract.mjs", "linux-browser-verify.py")}
 MAX_TREE_BYTES = 16 * 1024**3
 MAX_FILES = 200000
 MAX_LOG_BYTES = 16 * 1024**2
@@ -91,6 +101,10 @@ def sha256(path):
 
 def canonical(value):
     return json.dumps(value, sort_keys=True, separators=(",", ":")).encode()
+
+
+def canonical_digest(value):
+    return hashlib.sha256(canonical(value)).hexdigest()
 
 
 def plain_path(path, directory=True, root_owned=False):
@@ -1187,6 +1201,105 @@ def validate_stage_identity(args, manifest):
             manifest.get("imageId") == args.image_sha256, "STAGE_CANDIDATE_IMAGE_MISMATCH")
 
 
+def original_theme_checks():
+    checks = {
+        "eight-native-installs-and-isolated-two-to-five-choice-fixtures": {
+            "originals": 8, "rounds": 32, "anonymousInstallDenied": True, "crossAccountReadDenied": True},
+        "native-editor-eight-theme-round-trip-save-reload-and-history": {
+            "switches": 8, "preservedQuestionCount": 6},
+        "public-back-clears-current-and-future-votes": {
+            "retainedScore": 1000, "clearedQuestions": [2, 3], "replay": True},
+        "nine-locales-and-eight-reduced-motion-hebrew-mobile-votes": {
+            "locales": 9, "mobileRounds": 8, "storybookFinalRecapEntries": 6},
+        "native-pause-replay-previous-and-confirmed-skip": {
+            "retainedPausedTimer": True, "replayDiscardsOldVotes": True},
+        "original-browser-console-and-resource-integrity": {},
+        "immutable-public-masters-after-editor-and-live-games": {},
+    }
+    for theme in ORIGINAL_THEME_IDS:
+        checks["normal-motion-complete-public-show-" + theme] = {
+            "rounds": 6, "checkpoints": 3, "interludes": 2, "replay": True}
+        checks["reduced-motion-native-two-to-five-choices-votes-images-and-audio-" + theme] = {
+            "questions": 4, "realPlayers": 2, "tie": True, "zeroVotes": True,
+            "answerImages": 14, "questionImages": 1, "votingLayoutChecks": 4, "resultsLayoutChecks": 4}
+    return {name: {"name": name, "passed": True, **detail} for name, detail in checks.items()}
+
+
+def validate_originals_evidence(manifest, receipt_bytes):
+    pins = manifest.get("receiptSha256")
+    require(isinstance(pins, dict) and isinstance(pins.get("originals"), str) and
+            HEX_RE.fullmatch(pins["originals"]) and
+            hashlib.sha256(receipt_bytes).hexdigest() == pins["originals"], "STAGE_ORIGINALS_RECEIPT_PIN_MISMATCH")
+    receipt = json.loads(receipt_bytes)
+    revision, source_run = manifest.get("sourceSha"), manifest.get("sourceRun")
+    require(isinstance(revision, str) and SHA_RE.fullmatch(revision) and isinstance(source_run, str) and
+            re.fullmatch(r"tadazz-codex-" + revision[:12] + r"-[a-f0-9]{8}", source_run),
+            "STAGE_ORIGINALS_IDENTITY_MISMATCH")
+    require(isinstance(receipt, dict) and receipt.get("format") == "tadazz-original-themes-acceptance" and
+            type(receipt.get("version")) is int and receipt["version"] == 1 and
+            receipt.get("sha") == revision and receipt.get("sourceRun") == source_run and
+            isinstance(receipt.get("run"), str) and
+            re.fullmatch(r"tadazz-originals-" + revision[:12] + r"-[a-f0-9]{8}", receipt["run"]),
+            "STAGE_ORIGINALS_IDENTITY_MISMATCH")
+    require(type(receipt.get("exit")) is int and receipt["exit"] == 0 and receipt.get("passed") is True and
+            receipt.get("oomKilled") is False and receipt.get("network") == "none" and
+            all(receipt.get(field) is False for field in ("customerMountUsed", "productionChanged", "manualListeningPerformed")) and
+            all(receipt.get(field) is True for field in (
+                "allSourceHashesVerified", "candidateSourceHashesVerifiedBeforeAfter", "sdkCacheHashesVerifiedBeforeAfter",
+                "applicationSourcesEqualCandidate", "runtimeQaSourceEqualsCandidate", "sourceReadOnly",
+                "readOnlyMountsVerified", "builtArtifactHashesVerifiedBeforeAfter")), "STAGE_ORIGINALS_NOT_QUALIFIED")
+    qa_pins = receipt.get("qaSourceSha256")
+    require(isinstance(qa_pins, dict) and set(qa_pins) == ORIGINAL_QA_FILES and
+            all(isinstance(pin, str) and HEX_RE.fullmatch(pin) for pin in qa_pins.values()) and
+            isinstance(receipt.get("sourceManifestSha256"), str) and HEX_RE.fullmatch(receipt["sourceManifestSha256"]),
+            "STAGE_ORIGINALS_SOURCE_PIN_MISMATCH")
+    inner = receipt.get("browserReceipt")
+    require(isinstance(inner, dict) and inner.get("passed") is True and inner.get("platform") == "linux" and
+            inner.get("sourceSha") == revision and inner.get("isolatedNativeHost") is True and
+            all(inner.get(field) is False for field in ("customerMountUsed", "realEmailSent", "manualListeningPerformed")) and
+            not inner.get("error"), "STAGE_ORIGINALS_BROWSER_NOT_QUALIFIED")
+    expected = original_theme_checks()
+    results = inner.get("results")
+    require(isinstance(results, list) and len(results) == len(expected) and
+            all(isinstance(item, dict) and isinstance(item.get("name"), str) for item in results),
+            "STAGE_ORIGINALS_SCENARIOS_INCOMPLETE")
+    actual = {item["name"]: item for item in results}
+    require(len(actual) == len(results) and canonical(actual) == canonical(expected), "STAGE_ORIGINALS_SCENARIOS_INCOMPLETE")
+    artifacts = receipt.get("builtArtifactsBefore")
+    require(isinstance(artifacts, dict) and set(artifacts) == {"web", "widget", "application", "backend"} and
+            all(isinstance(files, dict) and files for files in artifacts.values()) and
+            artifacts == receipt.get("builtArtifactsAfter"), "STAGE_ORIGINALS_BUILT_ARTIFACT_MISMATCH")
+    web = {name.removeprefix("web/"): {"sha256": pin, "bytes": manifest.get("artifactBytes", {}).get(name)}
+           for name, pin in manifest.get("artifacts", {}).items() if name.startswith("web/")}
+    require(web and artifacts["web"] == web, "STAGE_ORIGINALS_BUILT_ARTIFACT_MISMATCH")
+    for group, name, pin, size in (
+            ("backend", "index.cjs", manifest.get("backendSha256"), manifest.get("artifactBytes", {}).get("socket/index.cjs")),
+            ("widget", "full-show.html", manifest.get("widgetHtmlSha256"), manifest.get("artifactBytes", {}).get("mcp/full-show.html")),
+            ("widget", "full-show-artifact.json", manifest.get("widgetManifestSha256"), manifest.get("artifactBytes", {}).get("mcp/full-show-artifact.json"))):
+        require(artifacts[group].get(name) == {"sha256": pin, "bytes": size} and
+                isinstance(pin, str) and HEX_RE.fullmatch(pin) and type(size) is int and size > 0,
+                "STAGE_ORIGINALS_BUILT_ARTIFACT_MISMATCH")
+    native = manifest.get("nativeApplicationPreview", {})
+    require(isinstance(native, dict), "STAGE_ORIGINALS_BUILT_ARTIFACT_MISMATCH")
+    native_files = native.get("files")
+    require(isinstance(native_files, list) and len(native_files) == 2 and
+            all(isinstance(item, dict) for item in native_files) and
+            {item.get("name") for item in native_files} == {"renderer.mjs", "renderer.css"},
+            "STAGE_ORIGINALS_BUILT_ARTIFACT_MISMATCH")
+    for item in native_files:
+        require(artifacts["application"].get(item["name"]) == {"sha256": item["sha256"], "bytes": item["bytes"]},
+                "STAGE_ORIGINALS_BUILT_ARTIFACT_MISMATCH")
+    for name, pin in (("artifact.json", native.get("artifactSha256")), ("registry.json", native.get("registrySha256"))):
+        require(isinstance(pin, str) and HEX_RE.fullmatch(pin) and
+                artifacts["application"].get(name, {}).get("sha256") == pin, "STAGE_ORIGINALS_BUILT_ARTIFACT_MISMATCH")
+    expected_proof = {"format": "tadazz-original-themes-release-proof", "version": 1, "passed": True,
+                      "sourceSha": revision, "sourceRun": source_run, "run": receipt["run"],
+                      "familyIds": list(ORIGINAL_THEME_IDS), "requiredChecks": sorted(expected),
+                      "sourceManifestSha256": receipt["sourceManifestSha256"], "qaSourceSha256": qa_pins,
+                      "builtArtifactsSha256": canonical_digest(artifacts)}
+    require(canonical(manifest.get("originalThemes")) == canonical(expected_proof), "STAGE_ORIGINALS_PROOF_MISMATCH")
+
+
 def validate_stage(args):
     stage = plain_path(args.release_dir, root_owned=True)
     require(re.fullmatch(r"/home/ubuntu/tadazz-mcp-(?:candidate|release)-[a-zA-Z0-9-]+", str(stage)), "RELEASE_PATH_REJECTED")
@@ -1210,6 +1323,10 @@ def validate_stage(args):
     require(smoke.get("ok") is True and smoke.get("sourceSha") == args.revision and smoke.get("productionTouched") is False and smoke.get("customerMountUsed") is False and smoke.get("network") == "none", "SYNTHETIC_SMOKE_NOT_QUALIFIED")
     require(smoke.get("nativeApplicationPreview") == native_preview_proof(native_preview_files(stage), True),
             "STAGE_NATIVE_PREVIEW_NOT_QUALIFIED")
+    originals = plain_path(stage / "evidence/originals-receipt.json", directory=False, root_owned=True)
+    require(stat.S_IMODE(originals.stat().st_mode) == 0o600 and originals.stat().st_size <= 32 * 1024**2,
+            "STAGE_ORIGINALS_RECEIPT_MODE_SIZE")
+    validate_originals_evidence(manifest, originals.read_bytes())
     return stage
 
 
@@ -1913,8 +2030,12 @@ def public_preview_self_tests():
                    response(body, content_type="text/javascript"), "PROBE_STATUS_200_EXPECTED_401")
             checks.append("public-preview-rejects-unpinned-digest-name-and-private-runtime-access")
 
-            for catalogue in ({"games": []}, {"games": [{"id": value} for value in PUBLIC_CATALOGUE_IDS[:-1]]},
+            for catalogue in ({"games": []}, {"games": [{"id": value} for value in PUBLIC_CATALOGUE_IDS[:10]]},
+                              {"games": [{"id": value} for value in PUBLIC_CATALOGUE_IDS[:-1]]},
+                              {"games": [{"id": value} for value in reversed(PUBLIC_CATALOGUE_IDS)]},
+                              {"games": [{"id": value} for value in (*PUBLIC_CATALOGUE_IDS[:-1], PUBLIC_CATALOGUE_IDS[0])]},
                               {"games": [{"id": value} for value in (*PUBLIC_CATALOGUE_IDS[:-1], "synthetic-private")]},
+                              {"games": [{"id": value} for value in (*PUBLIC_CATALOGUE_IDS, "synthetic-private")]},
                               {"games": [{"id": value} for value in PUBLIC_CATALOGUE_IDS],
                                "private": "synthetic-private"}):
                 reject("/api/extensions/catalogue", response(catalogue),
@@ -1929,10 +2050,107 @@ def public_preview_self_tests():
     return checks
 
 
+def originals_evidence_self_tests():
+    """Keep the additive proof mandatory through candidate deployment."""
+    revision = "b" * 40
+    source_run = "tadazz-codex-" + revision[:12] + "-12345678"
+    def spec(value):
+        return {"sha256": hashlib.sha256(value.encode()).hexdigest(), "bytes": len(value.encode())}
+    application = {name: spec(name) for name in ("renderer.mjs", "renderer.css", "artifact.json", "registry.json", "verification.json")}
+    web = {"index.html": spec("index.html"), **{"tadazz-application-runtime/" + name: application[name]
+                                               for name in ("renderer.mjs", "renderer.css")}}
+    widget = {name: spec(name) for name in ("full-show.html", "full-show-artifact.json", "full-show.js")}
+    backend = {name: spec(name) for name in ("index.cjs", "artifact.json")}
+    artifacts = {"web": web, "widget": widget, "application": application, "backend": backend}
+    payload = {**{"web/" + name: item for name, item in web.items()}, "socket/index.cjs": backend["index.cjs"],
+               "mcp/full-show.html": widget["full-show.html"], "mcp/full-show-artifact.json": widget["full-show-artifact.json"]}
+    qa_pins = {name: "a" * 64 for name in ORIGINAL_QA_FILES}
+    results = list(original_theme_checks().values())
+    receipt = {"format": "tadazz-original-themes-acceptance", "version": 1,
+               "sha": revision, "sourceRun": source_run, "run": "tadazz-originals-" + revision[:12] + "-12345678",
+               "passed": True, "exit": 0, "oomKilled": False, "network": "none",
+               "sourceReadOnly": True, "customerMountUsed": False, "productionChanged": False,
+               "manualListeningPerformed": False, "allSourceHashesVerified": True,
+               "candidateSourceHashesVerifiedBeforeAfter": True, "sdkCacheHashesVerifiedBeforeAfter": True,
+               "applicationSourcesEqualCandidate": True, "runtimeQaSourceEqualsCandidate": True,
+               "readOnlyMountsVerified": True, "builtArtifactHashesVerifiedBeforeAfter": True,
+               "sourceManifestSha256": canonical_digest(qa_pins), "qaSourceSha256": qa_pins,
+               "builtArtifactsBefore": artifacts, "builtArtifactsAfter": artifacts,
+               "browserReceipt": {"passed": True, "platform": "linux", "sourceSha": revision,
+                                  "isolatedNativeHost": True, "customerMountUsed": False,
+                                  "realEmailSent": False, "manualListeningPerformed": False, "results": results}}
+    proof = {"format": "tadazz-original-themes-release-proof", "version": 1, "passed": True,
+             "sourceSha": revision, "sourceRun": source_run, "run": receipt["run"],
+             "familyIds": list(ORIGINAL_THEME_IDS), "requiredChecks": sorted(original_theme_checks()),
+             "sourceManifestSha256": receipt["sourceManifestSha256"], "qaSourceSha256": qa_pins,
+             "builtArtifactsSha256": canonical_digest(artifacts)}
+    raw = canonical(receipt)
+    manifest = {"sourceSha": revision, "sourceRun": source_run, "receiptSha256": {"originals": hashlib.sha256(raw).hexdigest()},
+                "originalThemes": proof, "artifacts": {name: item["sha256"] for name, item in payload.items()},
+                "artifactBytes": {name: item["bytes"] for name, item in payload.items()},
+                "backendSha256": backend["index.cjs"]["sha256"], "widgetHtmlSha256": widget["full-show.html"]["sha256"],
+                "widgetManifestSha256": widget["full-show-artifact.json"]["sha256"],
+                "nativeApplicationPreview": {"files": [{"name": name, **application[name]} for name in ("renderer.mjs", "renderer.css")],
+                                             "artifactSha256": application["artifact.json"]["sha256"],
+                                             "registrySha256": application["registry.json"]["sha256"]}}
+    validate_originals_evidence(manifest, raw)
+    checks = ["originals-stage-proof-exact-source-artifacts-and-23-scenarios"]
+    def reject(name, changed_manifest, changed_raw, expected):
+        try:
+            validate_originals_evidence(changed_manifest, changed_raw)
+        except GateError as error:
+            require(str(error) == expected, "SELFTEST_ORIGINALS_STAGE_WRONG_FAILURE")
+            checks.append("originals-stage-rejects-" + name)
+        else:
+            raise GateError("SELFTEST_ORIGINALS_STAGE_ACCEPTED_INVALID_PROOF")
+    reject("changed-receipt-bytes", manifest, raw + b"\n", "STAGE_ORIGINALS_RECEIPT_PIN_MISMATCH")
+    for field, expected in (("receiptSha256", "STAGE_ORIGINALS_RECEIPT_PIN_MISMATCH"),
+                            ("originalThemes", "STAGE_ORIGINALS_PROOF_MISMATCH")):
+        changed_manifest = copy.deepcopy(manifest)
+        del changed_manifest[field]
+        reject("missing-" + field, changed_manifest, raw, expected)
+    mobile_index = next(index for index, item in enumerate(results) if item["name"] ==
+                        "nine-locales-and-eight-reduced-motion-hebrew-mobile-votes")
+    failures = (
+        ("revision", ("sha",), "c" * 40, "STAGE_ORIGINALS_IDENTITY_MISMATCH"),
+        ("source-run", ("sourceRun",), source_run[:-8] + "00000000", "STAGE_ORIGINALS_IDENTITY_MISMATCH"),
+        ("oom", ("oomKilled",), True, "STAGE_ORIGINALS_NOT_QUALIFIED"),
+        ("qa-overlay", ("runtimeQaSourceEqualsCandidate",), False, "STAGE_ORIGINALS_NOT_QUALIFIED"),
+        ("live-data", ("customerMountUsed",), True, "STAGE_ORIGINALS_NOT_QUALIFIED"),
+        ("non-linux", ("browserReceipt", "platform"), "win32", "STAGE_ORIGINALS_BROWSER_NOT_QUALIFIED"),
+        ("missing-family", ("browserReceipt", "results"), results[:-1], "STAGE_ORIGINALS_SCENARIOS_INCOMPLETE"),
+        ("duplicate-case", ("browserReceipt", "results"), [*results[:-1], results[0]], "STAGE_ORIGINALS_SCENARIOS_INCOMPLETE"),
+        ("truncated-storybook", ("browserReceipt", "results", mobile_index, "storybookFinalRecapEntries"), 2, "STAGE_ORIGINALS_SCENARIOS_INCOMPLETE"),
+        ("changed-after", ("builtArtifactsAfter", "web", "index.html", "sha256"), "d" * 64, "STAGE_ORIGINALS_BUILT_ARTIFACT_MISMATCH"),
+        ("controller-pin", ("qaSourceSha256", "extensions/qa/original-themes/linux-browser-verify.py"), "d" * 64, "STAGE_ORIGINALS_PROOF_MISMATCH"),
+    )
+    for name, path, value, expected in failures:
+        changed = json.loads(json.dumps(receipt))
+        target = changed
+        for key in path[:-1]:
+            target = target[key]
+        target[path[-1]] = copy.deepcopy(value)
+        changed_raw = canonical(changed)
+        changed_manifest = copy.deepcopy(manifest)
+        changed_manifest["receiptSha256"]["originals"] = hashlib.sha256(changed_raw).hexdigest()
+        reject(name, changed_manifest, changed_raw, expected)
+    # Even an internally matching before/after receipt cannot substitute other
+    # web bytes for the staged payload that deploy independently hashes.
+    changed = json.loads(json.dumps(receipt))
+    changed["builtArtifactsBefore"]["web"]["index.html"]["sha256"] = "d" * 64
+    changed["builtArtifactsAfter"] = copy.deepcopy(changed["builtArtifactsBefore"])
+    changed_raw = canonical(changed)
+    changed_manifest = copy.deepcopy(manifest)
+    changed_manifest["receiptSha256"]["originals"] = hashlib.sha256(changed_raw).hexdigest()
+    changed_manifest["originalThemes"]["builtArtifactsSha256"] = canonical_digest(changed["builtArtifactsBefore"])
+    reject("different-staged-web", changed_manifest, changed_raw, "STAGE_ORIGINALS_BUILT_ARTIFACT_MISMATCH")
+    return checks
+
+
 def self_test():
     """Synthetic, no Docker/network/customer access; retained only in temp dir."""
     checks = (game_count_self_tests() + deployment_identity_self_tests() +
-              host_config_self_tests() + billing_probe_self_tests() + public_preview_self_tests())
+              host_config_self_tests() + billing_probe_self_tests() + public_preview_self_tests() + originals_evidence_self_tests())
     original = {"Config": {"Env": ["SECRET=private-value", "SOCKET_PORT=9999", "PATH=/bin"], "Labels": {"existing": "yes"}}, "HostConfig": {"NetworkMode": "bridge"}}
     payload = replacement_payload(original, {"Id": "sha256:" + "a" * 64}, "b" * 40, "test")
     require(env_map(payload["Env"]) == {"SECRET": "private-value", "PATH": "/bin", **ENV_OVERRIDES}, "SELFTEST_ENV_PRESERVATION")

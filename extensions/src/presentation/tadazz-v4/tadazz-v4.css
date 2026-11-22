@@ -1165,6 +1165,10 @@
 .tzv4-stage .q-text {
   font-size: 62px;
 }
+.tzv4-stage:not([data-original-family]) .q-text {
+  /* Keep glyph ink inside the measured line box without changing typography. */
+  padding-block: 2px;
+}
 .tzv4-stage .answers {
   left: 77px;
   right: 77px;
@@ -1512,6 +1516,13 @@
 .tzv4-stage .countdown-value.timer-low {
   color: #efff5e;
   text-shadow: 0 0 22px #edff58ab;
+}
+.tzv4-stage .round-recap {
+  position: absolute;
+  inset: 0;
+}
+.tzv4-stage .round-recap .leader-head h2 {
+  padding-block: 2px;
 }
 .tzv4-stage .answers.recap-answers {
   top: 266px;

@@ -237,32 +237,23 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
     await expect(managerPage.getByTestId("tadazz-screen-lobby")).toBeVisible()
     await expect(managerPage.getByTestId("tadazz-lobby-pin")).toHaveText(pin)
     await expect(managerPage.getByTestId("tadazz-lobby-qr")).toBeVisible()
-    const p1Ctx = await browser.newContext({
-      viewport: {
-        width: 1024,
-        height: 768,
-      },
-    })
-    const p2Ctx = await browser.newContext({
-      viewport: {
-        width: 800,
-        height: 600,
-      },
-    })
-    const p3Ctx = await browser.newContext({
-      viewport: {
-        width: 390,
-        height: 844,
-      },
-    })
-    const alice = await p1Ctx.newPage()
-    const bob = await p2Ctx.newPage()
-    const dana = await p3Ctx.newPage()
+    const [p1Ctx, p2Ctx, p3Ctx] = await Promise.all([
+      browser.newContext({ viewport: { width: 1024, height: 768 } }),
+      browser.newContext({ viewport: { width: 800, height: 600 } }),
+      browser.newContext({ viewport: { width: 390, height: 844 } }),
+    ])
+    const [alice, bob, dana] = await Promise.all([
+      p1Ctx.newPage(),
+      p2Ctx.newPage(),
+      p3Ctx.newPage(),
+    ])
     const aliceWire = observeLiveFlow(alice)
     await installZeroLegacyFlickerProbe(alice)
-    await joinGame(alice, pin, "Alice")
-    await joinGame(bob, pin, "Bob")
-    await joinGame(dana, pin, "Dana")
+    await Promise.all([
+      joinGame(alice, pin, "Alice"),
+      joinGame(bob, pin, "Bob"),
+      joinGame(dana, pin, "Dana"),
+    ])
     await expect(managerPage.getByTestId("host-connected-counter")).toHaveText(
       /^3(?:\s*\/\s*3)?$/u,
     )
@@ -337,17 +328,19 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
       )
       .toBe(true)
 
-    await assertTzilaChoices({
-      page: alice,
-      questionIndex: 0,
-      surface: "player",
-    })
+    await Promise.all([
+      assertTzilaChoices({
+        page: alice,
+        questionIndex: 0,
+        surface: "player",
+      }),
+      assertTzilaChoices({
+        page: spectator,
+        questionIndex: 0,
+        surface: "native",
+      }),
+    ])
     await expect(alice.getByTestId("game-question-title")).toContainText(q1Text)
-    await assertTzilaChoices({
-      page: spectator,
-      questionIndex: 0,
-      surface: "native",
-    })
     await expect
       .poll(() => activeStep(hostWire))
       .toMatchObject({
@@ -462,23 +455,27 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
     await expect(
       managerPage.getByTestId("tadazz-card-0").locator(".tz-result-number"),
     ).toHaveText("25%")
-    await assertNativeTzilaResult({
-      page: managerPage,
-      questionIndex: 0,
-      counts: [1, 0, 0, 3, 0],
-    })
-    await assertNativeTzilaResult({
-      page: spectator,
-      questionIndex: 0,
-      counts: [1, 0, 0, 3, 0],
-    })
-    await assertResponsiveTzilaResult({
-      page: alice,
-      questionIndex: 0,
-      counts: [1, 0, 0, 3, 0],
-    })
-    await saveShot(managerPage, "05_reveal_results_winner_favourite.png")
-    await saveShot(spectator, "05b_reveal_results_spectator.png")
+    await Promise.all([
+      assertNativeTzilaResult({
+        page: managerPage,
+        questionIndex: 0,
+        counts: [1, 0, 0, 3, 0],
+      }),
+      assertNativeTzilaResult({
+        page: spectator,
+        questionIndex: 0,
+        counts: [1, 0, 0, 3, 0],
+      }),
+      assertResponsiveTzilaResult({
+        page: alice,
+        questionIndex: 0,
+        counts: [1, 0, 0, 3, 0],
+      }),
+    ])
+    await Promise.all([
+      saveShot(managerPage, "05_reveal_results_winner_favourite.png"),
+      saveShot(spectator, "05b_reveal_results_spectator.png"),
+    ])
 
     // Single Next Screen click advances from Q1 interimResults to Q2 (test TIE case)
     await next(managerPage)
@@ -515,16 +512,18 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
     await expect(
       managerPage.getByTestId("tadazz-card-0").locator(".tz-winner-tag"),
     ).toHaveText("JOINT AUDIENCE FAVOURITE")
-    await assertNativeTzilaResult({
-      page: managerPage,
-      questionIndex: 1,
-      counts: [1, 1, 0, 0, 0],
-    })
-    await assertResponsiveTzilaResult({
-      page: alice,
-      questionIndex: 1,
-      counts: [1, 1, 0, 0, 0],
-    })
+    await Promise.all([
+      assertNativeTzilaResult({
+        page: managerPage,
+        questionIndex: 1,
+        counts: [1, 1, 0, 0, 0],
+      }),
+      assertResponsiveTzilaResult({
+        page: alice,
+        questionIndex: 1,
+        counts: [1, 1, 0, 0, 0],
+      }),
+    ])
     await saveShot(managerPage, "06_reveal_results_joint_tie.png")
 
     // Single Next Screen click advances from Q2 interimResults to Q3 (test ZERO VOTES case)
@@ -552,16 +551,18 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
     )
     // Zero votes -> zero favourite cards!
     await expect(managerPage.locator(".tz-card.is-favourite")).toHaveCount(0)
-    await assertNativeTzilaResult({
-      page: managerPage,
-      questionIndex: 2,
-      counts: [0, 0, 0, 0, 0],
-    })
-    await assertResponsiveTzilaResult({
-      page: alice,
-      questionIndex: 2,
-      counts: [0, 0, 0, 0, 0],
-    })
+    await Promise.all([
+      assertNativeTzilaResult({
+        page: managerPage,
+        questionIndex: 2,
+        counts: [0, 0, 0, 0, 0],
+      }),
+      assertResponsiveTzilaResult({
+        page: alice,
+        questionIndex: 2,
+        counts: [0, 0, 0, 0, 0],
+      }),
+    ])
     await saveShot(managerPage, "07_reveal_results_zero_votes.png")
 
     // Complete the remaining authored cards in their exact saved order. Each
@@ -643,14 +644,20 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
       }
     }
     await managerPage.getByTestId("host-next-screen-btn").click()
-    for (const rows of [hostWire, spectatorWire, aliceWire]) {
-      await expect
-        .poll(() => rows.some((row) => row.name === STATUS.FINISHED))
-        .toBe(true)
-      expect(recordedStepIds(rows)).toEqual(
-        imported.extras.timeline.map((item) => item.id),
-      )
-    }
+    // Pure surveys finish with SUMMARY; scored shows keep the FINISHED podium.
+    await Promise.all(
+      [hostWire, spectatorWire, aliceWire].map(async (rows) => {
+        await expect
+          .poll(() => ({
+            summary: rows.some((row) => row.name === STATUS.SUMMARY),
+            phase: latestState(rows)?.phase,
+          }))
+          .toEqual({ summary: true, phase: "finished" })
+        expect(recordedStepIds(rows)).toEqual(
+          imported.extras.timeline.map((item) => item.id),
+        )
+      }),
+    )
     await expect(managerPage.getByTestId("tadazz-finale-screen")).toHaveClass(
       /is-visible/u,
     )

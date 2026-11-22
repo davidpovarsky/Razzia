@@ -3,6 +3,7 @@ import { canonicalJson, sha256 } from "./digest"
 import { assertBoundedJson, freeze } from "./primitives"
 
 export const NATIVE_LIBRARY_PAGE_MAX_ITEMS = 128
+
 export const NATIVE_LIBRARY_PAGE_MAX_BYTES = 262144
 
 const cursorPattern = /^nlp1\.([1-9][0-9]{0,9})\.([a-f0-9]{64})$/u
@@ -37,9 +38,14 @@ function fitsPageBudget(value: unknown): boolean {
     // representation is paged; callers cannot choose a larger validation budget.
     const text = canonicalJson(value)
 
-    return new TextEncoder().encode(text).length <= NATIVE_LIBRARY_PAGE_MAX_BYTES
+    return (
+      new TextEncoder().encode(text).length <= NATIVE_LIBRARY_PAGE_MAX_BYTES
+    )
   } catch (error) {
-    if (error instanceof Error && error.message === "show-library:json-budget") {
+    if (
+      error instanceof Error &&
+      error.message === "show-library:json-budget"
+    ) {
       return false
     }
 
@@ -70,7 +76,10 @@ export function createNativeLibraryPager<
   // authorization proof. Existing authenticated MCP cursors retain their owner binding.
   const cursorFor = (offset: number) =>
     `nlp1.${offset}.${sha256(`tadazz-native-library-cursor@1\n${snapshotSha256}\n${offset}`)}`
-  const makePage = (items: Entry[], offset: number): NativeLibraryPage<Catalog, Entry> => {
+  const makePage = (
+    items: Entry[],
+    offset: number,
+  ): NativeLibraryPage<Catalog, Entry> => {
     const next = offset + items.length
 
     return {
@@ -85,7 +94,9 @@ export function createNativeLibraryPager<
     }
   }
 
-  return function readPage(input: unknown = {}): NativeLibraryPage<Catalog, Entry> {
+  return function readPage(
+    input: unknown = {},
+  ): NativeLibraryPage<Catalog, Entry> {
     assertBoundedJson(input)
     const request = pageRequestSchema.parse(input)
     let offset = 0

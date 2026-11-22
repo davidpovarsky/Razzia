@@ -1,4 +1,7 @@
-import type { ShowThemeDefinition } from "../../../extensions/src/core"
+import {
+  showThemeDefinitionSchema,
+  type ShowThemeDefinition,
+} from "../../../extensions/src/core/show-themes/definition"
 /** Remote-only original Canvas artwork. No existing artwork is transformed. */
 import { chromium } from "@playwright/test"
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs"
@@ -333,7 +336,8 @@ try {
           }, source) as string
       }
     }
-    theme.localizations = localizations
+    theme.localizations =
+      showThemeDefinitionSchema.shape.localizations.parse(localizations)
     ;({ 0: theme.tokens.background } = colors)
     theme.tokens.foreground = "#ffffff"
     ;({ 2: theme.tokens.accent } = colors)

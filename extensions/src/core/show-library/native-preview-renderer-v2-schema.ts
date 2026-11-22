@@ -66,9 +66,10 @@ export const nativePreviewThemeBindingV2Schema = z
     settings: nativePreviewVisualSettingsV2Schema,
   })
   .superRefine((binding, ctx) => {
-    const legacyRenderer = binding.theme.id === "tadazz-classic"
-      ? "tadazz-classic-stage"
-      : "razzia-native-stage"
+    const legacyRenderer =
+      binding.theme.id === "tadazz-classic"
+        ? "tadazz-classic-stage"
+        : "razzia-native-stage"
     const renderer = isOriginalThemeId(binding.theme.id)
       ? "tadazz-original-stage"
       : legacyRenderer

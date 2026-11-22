@@ -184,12 +184,10 @@ try {
         type: "single",
         playMode: index === 1 || index === 2 ? "survey" : "quiz",
         question: `${id}: ${count} choices, ${questionScenarios[index]}`,
-        answers: Array.from(
-          { length: count },
-          (_, answer) =>
-            count === 5 && answer === 0
-              ? "The explorer follows the lantern-lit path through the ancient forest to the observatory."
-              : `Choice ${answer + 1}`,
+        answers: Array.from({ length: count }, (_, answer) =>
+          count === 5 && answer === 0
+            ? "The explorer follows the lantern-lit path through the ancient forest to the observatory."
+            : `Choice ${answer + 1}`,
         ),
         solutions: index === 1 || index === 2 ? [] : [count - 1],
         cooldown: 2,

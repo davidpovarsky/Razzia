@@ -1,0 +1,12 @@
+{
+  "baselineSha": "53c2d04fea97096622204858affe94a614637fca",
+  "candidateBaseSha": "2e9ee96541baf8f0ea16bd4b6b7bd9d89f2eba04",
+  "method": "same unchanged rules/dependencies; every labelled span maps to exact unchanged source lines",
+  "baselineCount": 88,
+  "candidateCount": 85,
+  "inheritedCount": 85,
+  "newCount": 0,
+  "passed": true,
+  "wholeChangedSourceLintPass": false,
+  "unmatchedDiagnostics": []
+}

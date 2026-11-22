@@ -152,8 +152,14 @@ const readAssetPage = createNativeLibraryPager(
     referenceMeaning: assetLibrary.referenceMeaning,
   },
   [
-    ...assetLibrary.entries.map((value) => ({ collection: "entries" as const, value })),
-    ...assetLibrary.contentAliases.map((value) => ({ collection: "contentAliases" as const, value })),
+    ...assetLibrary.entries.map((value) => ({
+      collection: "entries" as const,
+      value,
+    })),
+    ...assetLibrary.contentAliases.map((value) => ({
+      collection: "contentAliases" as const,
+      value,
+    })),
   ],
 )
 
@@ -164,7 +170,10 @@ const readAudioPage = createNativeLibraryPager(
     version: audioLibrary.version,
     playbackOwner: audioLibrary.playbackOwner,
   },
-  audioLibrary.events.map((value) => ({ collection: "events" as const, value })),
+  audioLibrary.events.map((value) => ({
+    collection: "events" as const,
+    value,
+  })),
 )
 
 /** Complete in-process metadata; no network/media resolver, rights or delete grant. */

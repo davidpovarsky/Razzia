@@ -835,6 +835,7 @@ describe("planTransition — the ten reference methods are driven by real events
         scene: {
           kind: "answerRecap",
           roundNumber: 2,
+          title: "Authored Recap Title",
           subtitle: "Recap Subtitle",
           recapItems: [{ label: "Choice A", image: "/imgA.png" }],
         },
@@ -842,6 +843,14 @@ describe("planTransition — the ten reference methods are driven by real events
       { questionKey: null, mode: "idle" },
     )
     expect(ops(recapStep)).toEqual(["showRoundRecap"])
+    expect(recapStep).toEqual([
+      {
+        op: "showRoundRecap",
+        title: "Authored Recap Title",
+        subtitle: "Recap Subtitle",
+        winners: [{ label: "Choice A", image: "/imgA.png", alt: "Choice A" }],
+      },
+    ])
 
     const interludeStep = planTransition(
       null,

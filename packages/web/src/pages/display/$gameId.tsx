@@ -146,7 +146,7 @@ const AudienceDisplayPage = () => {
       data-testid="audience-display"
       data-role="spectator"
     >
-      <PlayerGameView status={status} viewRole="spectator" />
+      <PlayerGameView status={status} viewRole="spectator" roomId={gameId} />
     </main>
   )
 }

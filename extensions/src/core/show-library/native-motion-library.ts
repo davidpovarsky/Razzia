@@ -65,9 +65,18 @@ const readPage = createNativeLibraryPager(
     runtimeOwner: library.runtimeOwner,
   },
   [
-    ...library.stageEntrances.map((value) => ({ collection: "stageEntrances" as const, value })),
-    ...library.questionDecorations.map((value) => ({ collection: "questionDecorations" as const, value })),
-    ...library.nativeChoreography.map((value) => ({ collection: "nativeChoreography" as const, value })),
+    ...library.stageEntrances.map((value) => ({
+      collection: "stageEntrances" as const,
+      value,
+    })),
+    ...library.questionDecorations.map((value) => ({
+      collection: "questionDecorations" as const,
+      value,
+    })),
+    ...library.nativeChoreography.map((value) => ({
+      collection: "nativeChoreography" as const,
+      value,
+    })),
   ],
 )
 
