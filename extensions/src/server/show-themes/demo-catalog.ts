@@ -1,8 +1,8 @@
-import cosmicV1 from "./demo-themes/cosmic.v1.manifest.json"
-import jadeV1 from "./demo-themes/jade.v1.manifest.json"
+import cosmicV1 from "./demo-themes/cosmic.v1.manifest.json" with { type: "json" }
+import jadeV1 from "./demo-themes/jade.v1.manifest.json" with { type: "json" }
 /** Reviewed repository demos only. Not an upload or publication bypass. */
-import cosmic from "./demo-themes/cosmic.manifest.json"
-import jade from "./demo-themes/jade.manifest.json"
+import cosmic from "./demo-themes/cosmic.manifest.json" with { type: "json" }
+import jade from "./demo-themes/jade.manifest.json" with { type: "json" }
 import { createShowThemeRegistry } from "../../core/show-themes/registry"
 
 // The registry validates references, deep freezes definitions, and stays local.

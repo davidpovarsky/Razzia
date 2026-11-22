@@ -17,6 +17,8 @@ if (!process.env.TEST_WORKER_INDEX) {
 
 export default defineConfig({
   testDir: "tests",
+  // The remote theme lab requires its explicit seed receipt and dedicated config.
+  testIgnore: "**/theme-lab.spec.ts",
   outputDir: "test-results",
   timeout: 90_000,
   expect: { timeout: 20_000 },
