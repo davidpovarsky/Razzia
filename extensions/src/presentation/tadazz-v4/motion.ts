@@ -74,6 +74,7 @@ export class TadazzV4Motion {
   private scene: TadazzV4Scene = "question"
   private countdownSweep: Animation | null = null
   private countdownTotal = 0
+  private pausedCountdownRemainingMs: number | undefined = undefined
   private stage: HTMLElement
   private config: MotionConfig
   constructor(stage: HTMLElement, config: MotionConfig = {}) {
@@ -93,6 +94,7 @@ export class TadazzV4Motion {
     }
     this.active = []
     this.countdownSweep = null
+    this.pausedCountdownRemainingMs = undefined
     this.finalizers = []
     for (const id of this.tickerFrames) {
       cancelAnimationFrame(id)
@@ -110,7 +112,7 @@ export class TadazzV4Motion {
       flash.style.opacity = "0"
     }
   }
-  pause() {
+  pause(countdownRemainingMs?: number) {
     for (const a of this.root().getAnimations?.({
       subtree: true,
     }) ?? []) {
@@ -120,13 +122,32 @@ export class TadazzV4Motion {
     }
     this.active.forEach((a) => {
       try {
+        const { currentTime } = a
         a.pause()
+
+        // Setting currentTime settles the native pending-pause task now,
+        // instead of letting a later compositor frame choose the hold time.
+        if (typeof currentTime === "number") {
+          a.currentTime = currentTime
+        }
       } catch {
         /* Stale */
       }
     })
+    this.pausedCountdownRemainingMs = undefined
+    const sweep = this.countdownSweep
+
+    if (sweep && countdownRemainingMs !== undefined) {
+      const duration = this.countdownTotal * 1000
+      const remaining = Math.min(duration, Math.max(0, countdownRemainingMs))
+      this.pausedCountdownRemainingMs = remaining
+      sweep.effect?.updateTiming({ duration, delay: 0, fill: "both" })
+      sweep.currentTime = duration - remaining
+      this.paintCountdown()
+    }
   }
   resume() {
+    this.pausedCountdownRemainingMs = undefined
     this.active.forEach((a) => {
       try {
         if (a.playState === "paused") {
@@ -144,7 +165,12 @@ export class TadazzV4Motion {
   syncCountdown(data: TadazzV4Data) {
     const sweep = this.countdownSweep
 
-    if (!sweep || data.deadlineMs === undefined || !this.countdownTotal) {
+    if (
+      !sweep ||
+      data.deadlineMs === undefined ||
+      !this.countdownTotal ||
+      this.pausedCountdownRemainingMs !== undefined
+    ) {
       return
     }
 
@@ -156,6 +182,23 @@ export class TadazzV4Motion {
       fill: "both",
     })
     sweep.currentTime = Math.max(0, now - opensAt)
+  }
+  private paintCountdown() {
+    const value = query(this.root(), ".countdown-value")
+    const sweep = this.countdownSweep
+
+    if (!value || !sweep) {
+      return
+    }
+
+    const progress = sweep.effect?.getComputedTiming().progress ?? 0
+    const seconds =
+      this.pausedCountdownRemainingMs === undefined
+        ? this.countdownTotal * (1 - progress)
+        : this.pausedCountdownRemainingMs / 1000
+    const left = Math.max(0, Math.ceil(seconds))
+    value.textContent = String(left).padStart(2, "0")
+    value.classList.toggle("timer-low", left <= 3)
   }
   finishAll() {
     for (const id of this.tickerFrames) {
@@ -681,10 +724,7 @@ export class TadazzV4Motion {
       }
 
       // Use WAAPI as one pause-safe time source; no divergent setInterval stopwatch.
-      const progress = sweep.effect?.getComputedTiming().progress ?? 0
-      const left = Math.max(0, Math.ceil(totalSeconds * (1 - progress)))
-      value.textContent = String(left).padStart(2, "0")
-      value.classList.toggle("timer-low", left <= 3)
+      this.paintCountdown()
 
       if (sweep.playState !== "finished") {
         this.tick(tick)

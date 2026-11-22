@@ -517,12 +517,16 @@ function TadazzShowContent(props: TadazzShowViewProps) {
 
     return () => clearTimeout(timer)
   }, [scene.kind, votingStartsAt, isPaused])
+  const pausedCountdownRemainingMs =
+    isPaused && scene.kind === "voting"
+      ? (extensionState?.pause?.remainingMs ?? undefined)
+      : undefined
   useEffect(() => {
     const stage = stageRef.current
     const media = showRootRef.current?.querySelectorAll("video, audio") ?? []
 
     if (isPaused) {
-      stage?.pauseAnimations?.()
+      stage?.pauseAnimations?.(pausedCountdownRemainingMs)
       media.forEach((element) => {
         ;(element as HTMLMediaElement).pause()
       })
@@ -538,7 +542,7 @@ function TadazzShowContent(props: TadazzShowViewProps) {
         void mediaElement.play().catch(() => undefined)
       }
     })
-  }, [isPaused])
+  }, [isPaused, pausedCountdownRemainingMs])
   // ── Director: authoritative scene → reference animation methods ────────
   const prevSceneRef = useRef<ShowScene | null>(null)
   const pendingRef = useRef<ShowScene | null>(null)
@@ -1270,6 +1274,9 @@ function TadazzShowContent(props: TadazzShowViewProps) {
         <CinematicLayerStack
           sceneId={s.id ?? s.kind}
           sceneKind={kind}
+          titleSlot={customScreen}
+          titleSlotLayout="stage"
+          titleSlotVisible={s.textOverlay !== false}
           epoch={extensionState?.epoch}
           serverStartedAt={scene.startedAt}
           mediaUrl={s.mediaUrl}
@@ -1312,6 +1319,8 @@ function TadazzShowContent(props: TadazzShowViewProps) {
         <CinematicLayerStack
           sceneId={`interlude-${extensionState?.epoch ?? 0}`}
           sceneKind="media"
+          titleSlot={customScreen}
+          titleSlotLayout="stage"
           epoch={extensionState?.epoch}
           serverStartedAt={scene.startedAt}
           mediaUrl={scene.interlude.url}
@@ -1323,6 +1332,10 @@ function TadazzShowContent(props: TadazzShowViewProps) {
       </div>
     )
   }
+
+  // The cinematic title layer owns this content. A truthy empty screen also
+  // clears the adapter's retained custom screen without mounting it twice.
+  const stageCustomScreen = overlay ? <></> : customScreen
 
   // ── Layout ──────────────────────────────────────────────────────────────
   const [viewportSize, setViewportSize] = useState(() => ({
@@ -1647,7 +1660,7 @@ function TadazzShowContent(props: TadazzShowViewProps) {
                       scene.kind === "voting" && scene.questionType === "multi"
                     }
                     onSelectOption={onSelectOption}
-                    customScreen={customScreen}
+                    customScreen={stageCustomScreen}
                     underlay={underlay}
                     overlay={overlay}
                     reducedMotion={reduced}
@@ -1673,7 +1686,7 @@ function TadazzShowContent(props: TadazzShowViewProps) {
                       scene.kind === "voting" && scene.questionType === "multi"
                     }
                     onSelectOption={onSelectOption}
-                    customScreen={customScreen}
+                    customScreen={stageCustomScreen}
                     underlay={underlay}
                     overlay={overlay}
                     reducedMotion={reduced}

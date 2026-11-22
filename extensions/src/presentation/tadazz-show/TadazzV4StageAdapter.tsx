@@ -414,7 +414,6 @@ export const TadazzV4StageAdapter = forwardRef<
               seconds,
               remainingSeconds: remaining,
               deadlineMs,
-              cardsAlreadyOnStage: true,
             }),
           )
 
@@ -736,8 +735,8 @@ export const TadazzV4StageAdapter = forwardRef<
 
         return Promise.resolve()
       },
-      pauseAnimations() {
-        v4Ref.current?.pause()
+      pauseAnimations(countdownRemainingMs) {
+        v4Ref.current?.pause(countdownRemainingMs)
       },
       resumeAnimations() {
         v4Ref.current?.resume()

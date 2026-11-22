@@ -549,6 +549,9 @@ test.describe("TADA P0: Exact Player Screen Reuse for Audience Display", () => {
     })
     const playerPage = await playerContext.newPage()
     await joinGame(playerPage, pin, "Dan")
+    await expect(managerPage.getByTestId("host-connected-counter")).toHaveText(
+      /^1(?:\s*\/\s*1)?$/u,
+    )
     await startGame(managerPage)
 
     // Question 1: "What is the capital of France?"

@@ -226,16 +226,26 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     )
     expect(fontSize).toBeGreaterThanOrEqual(28)
 
+    const answerCount = playerPage
+      .getByTestId("stage-hud-answer-counter")
+      .locator("..")
+    await expect(answerCount).toBeVisible()
     const qBox = await showQuestion.boundingBox()
     const tBox = await playerTimer.boundingBox()
+    const answerCountBox = await answerCount.boundingBox()
     const firstCardBox = await playerPage
       .getByTestId("photo-card-choice-0")
       .boundingBox()
     expect(qBox).not.toBeNull()
     expect(tBox).not.toBeNull()
+    expect(answerCountBox).not.toBeNull()
     expect(firstCardBox).not.toBeNull()
     expect(tBox!.y).toBeGreaterThanOrEqual(qBox!.y + qBox!.height - 5)
     expect(firstCardBox!.y).toBeGreaterThanOrEqual(tBox!.y + tBox!.height - 5)
+    expect(answerCountBox!.y).toBeGreaterThanOrEqual(qBox!.y + qBox!.height)
+    expect(firstCardBox!.y).toBeGreaterThanOrEqual(
+      answerCountBox!.y + answerCountBox!.height - 5,
+    )
 
     // Capture (4) Player answersOnly Question & Big Timer (375x667)
     await saveScreenshot(

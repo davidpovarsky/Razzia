@@ -240,7 +240,7 @@ export interface TadazzV4StageHandle {
   /** Update interactive/data properties without restarting WAAPI animations. */
   patchData(patch: Partial<TadazzV4Data>): void
   replay(): Promise<boolean>
-  pause(): void
+  pause(countdownRemainingMs?: number): void
   resume(): void
   skipToEnd(): void
   stop(): void
