@@ -84,6 +84,13 @@ let server
 let browser
 let context
 let fatalError
+const mediaIngress = {
+  route: "/media/:name -> /api/media/raw/:name",
+  nativeAuthorizationPreserved: true,
+  browserCookieFromNativeLogin: false,
+  rewrittenRequests: 0,
+  anonymousDeniedRequests: 0,
+}
 const writeReceipt = () => {
   const report = {
     passed:
@@ -107,6 +114,7 @@ const writeReceipt = () => {
     originalIdsRetained: true,
     productionChanged: false,
     privateFixtureContentInReceipt: false,
+    mediaIngress,
     structural,
     games: receipts,
     ...(fatalError ? { error: fatalError } : {}),
@@ -132,12 +140,36 @@ try {
     process.env.TADAZZ_SITE_DIST_DIR,
     "Actual built candidate web bundle required",
   )
+  const mcp = buildMcpOptions({ origin, keys: createEphemeralOAuthKeys() })
+  assert.match(
+    readFileSync(
+      new URL("../../deployment/nginx-server.conf", import.meta.url),
+      "utf8",
+    ),
+    /location \/media\/ \{[^}]*proxy_pass http:\/\/127\.0\.0\.1:3001\/api\/media\/raw\/;[^}]*proxy_set_header Cookie \$http_cookie;/u,
+    "The QA media bridge must match the candidate's deployed route and cookie forwarding",
+  )
+  const serveSite = native.createSiteDistHandler(
+    process.env.TADAZZ_SITE_DIST_DIR,
+    { isMachinePath: native.createMachineRouteMatcher(mcp.config) },
+  )
   host = await native.createNativeConsentHost({
     enabled: true,
     configRoot,
     initializeNativeRuntime: true,
-    siteDistDir: process.env.TADAZZ_SITE_DIST_DIR,
-    mcp: buildMcpOptions({ origin, keys: createEphemeralOAuthKeys() }),
+    // The deployed reverse proxy rewrites public media URLs to this native
+    // route. Keep its real cookie/room authorization and byte response here.
+    webFallback: async (request) => {
+      const url = new URL(request.url)
+      const media = /^\/media\/([^/]+)$/u.exec(url.pathname)
+      if (!media) return serveSite(request)
+      assert(["GET", "HEAD"].includes(request.method))
+      url.pathname = "/api/media/raw/" + media[1]
+      const { app } = await import("@razzia/socket/app")
+      mediaIngress.rewrittenRequests++
+      return app.fetch(new Request(url, request))
+    },
+    mcp,
   })
   server = await native.listenNativeConsentHost(host, {
     host: "127.0.0.1",
@@ -145,11 +177,14 @@ try {
     tls,
     attachSocketServer: true,
   })
-  const owner = await registerAndLoginAccount({
-    origin,
-    fetchImpl,
+  const credentials = {
     email: "stored-games-qa@example.invalid",
     password: randomBytes(24).toString("base64url") + "Aa1!",
+  }
+  const registeredOwner = await registerAndLoginAccount({
+    origin,
+    fetchImpl,
+    ...credentials,
     codes: trap.codes,
   })
   const { default: Registry } = await import("@razzia/socket/services/registry")
@@ -163,6 +198,27 @@ try {
     locale: "en-GB",
     ignoreHTTPSErrors: true,
   })
+  // A real login in this browser context also installs the native HttpOnly
+  // media cookie; copying only the bearer token into localStorage loses it.
+  const browserLogin = await context.request.post(
+    origin + "/api/accounts/login",
+    { data: credentials },
+  )
+  assert.equal(browserLogin.status(), 200)
+  const browserSession = await browserLogin.json()
+  assert.equal(typeof browserSession.token, "string")
+  const browserOwner = await context.request.get(origin + "/api/accounts/me", {
+    headers: { Authorization: "Bearer " + browserSession.token },
+  })
+  assert.equal(browserOwner.status(), 200)
+  assert.equal((await browserOwner.json()).id, registeredOwner.accountId)
+  const owner = { ...registeredOwner, token: browserSession.token }
+  const mediaCookie = (await context.cookies(origin + "/media/qa.png")).find(
+    (cookie) => cookie.name === "tdz_media_auth",
+  )
+  assert(mediaCookie?.httpOnly && mediaCookie.path === "/media")
+  assert.equal(mediaCookie.value, owner.token)
+  mediaIngress.browserCookieFromNativeLogin = true
   await context.addInitScript((token) => {
     localStorage.setItem("token", token)
     localStorage.setItem("i18nextLng", "en")
@@ -191,6 +247,17 @@ try {
         configRoot,
         accountId: owner.accountId,
       })
+      for (const item of media.externalAssets) {
+        if (!item.mirror) continue
+        const anonymous = await fetchImpl(origin + item.mirror.nativeUrl)
+        assert.equal(
+          anonymous.status,
+          401,
+          "The media rewrite must retain native anonymous denial",
+        )
+        await anonymous.arrayBuffer()
+        mediaIngress.anonymousDeniedRequests++
+      }
       writeFileSync(
         join(tenantRoot, "quizz", fixture.quizz.id + ".json"),
         JSON.stringify(fixture.quizz),

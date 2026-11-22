@@ -3,6 +3,7 @@ import assert from "node:assert/strict"
 import { createHash } from "node:crypto"
 import { createRequire } from "node:module"
 import { readFileSync } from "node:fs"
+import { usernameValidator } from "@razzia/common/validators/auth"
 import { CREATING_WORLDS_PRESETS } from "../../src/core/creating-worlds-show.ts"
 import { qualifyOwnerImageRepair } from "./external-media-repair.mjs"
 import {
@@ -23,13 +24,19 @@ const fullShowScenePresets = CREATING_WORLDS_PRESETS.filter(
   (preset) => !secondaryScenePresets.has(preset),
 )
 const fullShowSource = readFileSync(
-  new URL("../../src/presentation/tadazz-v4/FullShowScenes.tsx", import.meta.url),
+  new URL(
+    "../../src/presentation/tadazz-v4/FullShowScenes.tsx",
+    import.meta.url,
+  ),
   "utf8",
 )
 const fullShowLiteral = fullShowSource.match(
   /export const FULL_SHOW_SCENES = (\[[\s\S]*?\]) as const/u,
 )
-assert(fullShowLiteral, "The immutable renderer must declare its scene contract")
+assert(
+  fullShowLiteral,
+  "The immutable renderer must declare its scene contract",
+)
 const rendererScenePresets = JSON.parse(
   fullShowLiteral[1].replace(/,\s*\]$/u, "]"),
 )
@@ -230,6 +237,7 @@ export async function verifyStoredGameBrowser(options) {
   assert.equal(process.platform, "linux")
   assert.equal(new URL(options.origin).hostname, "127.0.0.1")
   const { fixture, context, browser, origin, token, registry } = options
+  const qaUsername = usernameValidator.parse("Stored QA")
   const quizId = fixture.quizz.id
   const headers = { Authorization: "Bearer " + token }
   const host = await context.newPage()
@@ -381,7 +389,9 @@ export async function verifyStoredGameBrowser(options) {
     return response.json()
   }
   const openEditor = async () => {
-    await host.goto(origin + "/manager/quizz/" + quizId + "?lng=en")
+    await host.goto(origin + "/manager/quizz/" + quizId + "?lng=en", {
+      waitUntil: "domcontentloaded",
+    })
     await expect(host.getByTestId("editor-save-btn")).toBeEnabled({
       timeout: 30_000,
     })
@@ -523,6 +533,7 @@ export async function verifyStoredGameBrowser(options) {
         staleRevisionStatus: externalMediaRepair.staleRevisionStatus,
       })
     }
+    checkpoint = "editor-reopen"
     await openEditor()
     mirrorsAtLaunch = mirrorChecks.reduce(
       (total, check) => total + check.requests,
@@ -628,11 +639,38 @@ export async function verifyStoredGameBrowser(options) {
     await player.goto(
       origin + "/game?pin=" + encodeURIComponent(room.inviteCode),
     )
-    await player
-      .getByPlaceholder("Username here")
-      .fill("Stored game QA participant")
-    await player.getByRole("button", { name: "Submit", exact: true }).click()
+    await player.getByPlaceholder("Username here").fill(qaUsername)
+    const [joinResponse] = await Promise.all([
+      player.waitForResponse(
+        (response) =>
+          new URL(response.url()).pathname === "/api/games/join" &&
+          response.request().method() === "POST",
+      ),
+      player.getByRole("button", { name: "Submit", exact: true }).click(),
+    ])
+    assert.equal(
+      joinResponse.status(),
+      200,
+      "The real participant join succeeds",
+    )
+    const joined = await joinResponse.json()
+    assert.equal(joined.gameId, room.gameId)
+    assert.equal(joined.username, qaUsername)
+    assert.equal(typeof joined.ticket, "string")
+    assert(
+      joined.ticket.length > 0,
+      "A fresh participant receives a join ticket",
+    )
     await expect(player).toHaveURL(origin + "/party/" + room.gameId)
+    await expect
+      .poll(
+        () =>
+          game.players.filter(
+            (participant) =>
+              participant.connected && participant.username === qaUsername,
+          ).length,
+      )
+      .toBe(1)
     await host.bringToFront()
     const toolbar = host.getByTestId("manager-control-toolbar")
     await toolbar.getByRole("button", { name: "Start", exact: true }).click()

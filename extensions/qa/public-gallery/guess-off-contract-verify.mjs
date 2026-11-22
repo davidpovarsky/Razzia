@@ -71,17 +71,46 @@ export async function watchGuessOffContract(root) {
           startedAt: performance.now(),
           selected: false,
           timerValues: [],
+          timerSamples: [],
         }
         trace.rounds.push(currentRound)
       }
       if (currentRound && phase === "voting") {
         currentRound.selected ||=
           element.querySelector(".choice-slot.is-selected") !== null
-        const timer = element
-          .querySelector('[data-testid="tadazz-timer"]')
-          ?.textContent?.match(/\d{2}:\d{2}/u)?.[0]
-        if (timer && currentRound.timerValues.at(-1) !== timer)
-          currentRound.timerValues.push(timer)
+        const timers = [
+          ...element.querySelectorAll('[data-testid="tadazz-timer"]'),
+        ].filter(visible)
+        if (
+          timers.length > 1 &&
+          !trace.violations.some(
+            (item) =>
+              item.kind === "duplicate-visible-timer" &&
+              item.round === currentRound.index,
+          )
+        ) {
+          trace.violations.push({
+            kind: "duplicate-visible-timer",
+            round: currentRound.index,
+            count: timers.length,
+          })
+        }
+        if (timers.length === 1) {
+          // CountdownFloaterV4 and its real WAAPI clock render 20, 19, ... 01.
+          // Keep the painted text as evidence; never infer time from captions.
+          const text = timers[0].textContent.trim()
+          const seconds = /^\d{2}$/u.test(text) ? Number(text) : null
+          if (currentRound.timerSamples.at(-1)?.text !== text) {
+            currentRound.timerSamples.push({
+              text,
+              seconds,
+              scene,
+              elapsedMs: performance.now() - currentRound.startedAt,
+            })
+          }
+          if (seconds !== null && currentRound.timerValues.at(-1) !== seconds)
+            currentRound.timerValues.push(seconds)
+        }
       }
       if (
         currentRound &&
@@ -159,9 +188,11 @@ export async function verifyGuessOffResult(root, expect, unanswered) {
 }
 
 export async function readGuessOffContract(root) {
-  const trace = await root.evaluate((element) =>
-    element.__guessOffContract.stop(),
-  )
+  return root.evaluate((element) => element.__guessOffContract.stop())
+}
+
+/** Validate only after the complete observed trace has been persisted. */
+export function assertGuessOffContract(trace) {
   assert(
     trace.frames > 0,
     "The complete Guess-off walk must be observed in real frames",
@@ -192,11 +223,17 @@ export async function readGuessOffContract(root) {
       "Unanswered results must wait for the genuine 20-second timer",
     )
     assert(
-      round.timerValues.some((value) => value === "00:20" || value === "00:19"),
+      round.timerSamples.every(
+        (sample) => sample.scene === "countdown" && sample.seconds !== null,
+      ),
+      "Read numeric seconds from the visible native countdown",
+    )
+    assert(
+      round.timerValues.some((value) => value === 20 || value === 19),
       "Observe the real initial countdown",
     )
     assert(
-      round.timerValues.some((value) => value === "00:01"),
+      round.timerValues.some((value) => value === 1),
       "Observe the last second before natural expiry",
     )
   }

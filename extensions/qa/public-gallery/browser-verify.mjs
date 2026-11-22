@@ -20,6 +20,7 @@ import {
   watchGuessOffContract,
   verifyGuessOffResult,
   readGuessOffContract,
+  assertGuessOffContract,
 } from "./guess-off-contract-verify.mjs"
 
 assert.equal(
@@ -707,6 +708,7 @@ try {
           join(evidence, "guess-off-native-contract.json"),
           JSON.stringify(nativeContract, null, 2) + "\n",
         )
+        assertGuessOffContract(nativeContract)
         writeFileSync(
           join(evidence, "question-sequence-" + game.id + ".json"),
           JSON.stringify(questionSequences, null, 2) + "\n",

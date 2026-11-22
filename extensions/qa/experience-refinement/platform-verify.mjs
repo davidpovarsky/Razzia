@@ -16,6 +16,7 @@ const VOTING =
   "/tadazz-show/music/platform/tzila-determined-pursuit-20261105.mp3"
 const LOBBY = "/tadazz-show/music/platform/tadazz-exploration-20261106.mp3"
 const RESULTS = "/tadazz-show/music/cutie-patootie.mp3"
+const FINALE = "/tadazz-show/music/platform/tadazz-epic-endgame-20261106.mp3"
 const CONFIRM = "/sounds/tadazz-confirm-20261108.mp3"
 const TRANSITION = "/sounds/tadazz-silky-transition-20261108.mp3"
 const REVEAL = "/sounds/tadazz-reveal-bright-20261108.mp3"
@@ -377,6 +378,57 @@ export async function verifyPlatformDefaults(options) {
       .poll(() => activeUrls(host), { timeout: 10_000 })
       .toEqual([url])
   }
+  const readFinalePlayback = async (page) => {
+    const owner = page.getByTestId("audio-cue-player-state")
+    await expect(owner).toHaveCount(1)
+    for (const [name, value] of Object.entries({
+      "data-soundtrack-slot": "finale",
+      "data-audio-url": FINALE,
+      "data-should-play": "true",
+      "data-audio-loop": "true",
+      "data-audio-blocked": "false",
+      "data-audio-error": "false",
+      "data-audio-paused": "false",
+    })) {
+      await expect(owner).toHaveAttribute(name, value)
+    }
+    await expect.poll(() => activeUrls(page)).toEqual([FINALE])
+    const state = await mediaState(page)
+    assert.equal(state.active.length, 1, "Exactly one active finale element")
+    const audio = state.active[0]
+    assert.equal(audio.url, FINALE)
+    assert.equal(audio.loop, true)
+    assert.equal(audio.muted, false)
+    assert.equal(audio.error, null)
+    const identity = await owner.getAttribute("data-audio-identity")
+    assert(identity, "Finale has an authoritative playback identity")
+    return {
+      identity,
+      element: audio.element,
+      url: audio.url,
+      time: audio.time,
+      loop: audio.loop,
+      plays: state.plays.filter(
+        (item) => item.url === FINALE || item.requestedUrl === FINALE,
+      ).length,
+    }
+  }
+  const assertFinaleContinues = (before, after) => {
+    assert.equal(after.identity, before.identity, "Finale identity is retained")
+    assert.equal(
+      after.element,
+      before.element,
+      "The same audio element continues",
+    )
+    assert.equal(after.url, before.url)
+    assert.equal(
+      after.plays,
+      before.plays,
+      "Closing must not replay the finale",
+    )
+    assert(after.time > before.time + 0.1, "Real finale playback time advances")
+    assert.equal(after.loop, true)
+  }
 
   try {
     for (const [theme, legacy, finale] of [
@@ -601,16 +653,49 @@ export async function verifyPlatformDefaults(options) {
         path: join(evidence, theme + "-paused-curtain.png"),
       })
       await host.getByTestId("host-pause-resume-btn").click()
+      const finaleSurfaces = [
+        ["host", host],
+        ["display", display],
+      ]
+      const finaleContinuity = {}
+      for (const [role, surface] of finaleSurfaces) {
+        await expect(
+          surface.getByTestId("platform-closing-boundary"),
+        ).toHaveAttribute("data-closing-stage", "closing")
+        finaleContinuity[role] = { before: await readFinalePlayback(surface) }
+      }
       await expect(
         host.getByTestId("platform-closing-boundary"),
       ).toHaveAttribute("data-closing-stage", "closed", { timeout: 15_000 })
+      for (const [role, surface] of finaleSurfaces) {
+        await expect(
+          surface.getByTestId("platform-closing-boundary"),
+        ).toHaveAttribute("data-closing-stage", "closed")
+        finaleContinuity[role].closed = await readFinalePlayback(surface)
+      }
       // Let an authored finale's 9.2-second timeline finish as well: its onFinish
       // must retain the existing closed curtain rather than start a second one.
       await host.waitForTimeout(900)
       await expect(
         host.getByTestId("platform-closing-boundary"),
       ).toHaveAttribute("data-closing-stage", "closed")
-      await expect.poll(() => activeUrls(host)).toEqual([])
+      for (const [role, surface] of finaleSurfaces) {
+        await expect(
+          surface.getByTestId("platform-closing-boundary"),
+        ).toHaveAttribute("data-closing-stage", "closed")
+        await expect(surface.getByTestId("platform-game-closing")).toHaveCount(
+          1,
+        )
+        finaleContinuity[role].after = await readFinalePlayback(surface)
+      }
+      writeFileSync(
+        join(evidence, theme + "-finale-continuity.json"),
+        JSON.stringify(finaleContinuity, null, 2) + "\n",
+      )
+      for (const state of Object.values(finaleContinuity)) {
+        assertFinaleContinues(state.before, state.closed)
+        assertFinaleContinues(state.closed, state.after)
+      }
       await host.reload()
       await expect(
         host.getByTestId("platform-closing-boundary"),
@@ -624,7 +709,9 @@ export async function verifyPlatformDefaults(options) {
         join(evidence, theme + "-accepted-audio.json"),
         JSON.stringify(accepted, null, 2) + "\n",
       )
-      record(theme + "-one-final-curtain-pause-reconnect-and-no-second-close")
+      record(theme + "-one-final-curtain-pause-reconnect-and-no-second-close", {
+        finaleContinuity,
+      })
       await host.close()
       await display.close()
       await player.close()
