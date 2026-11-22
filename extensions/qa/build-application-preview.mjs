@@ -190,6 +190,10 @@ await writeFile(
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex")
 async function collectStyleSources(sourceDirectory) {
   for (const entry of await readdir(sourceDirectory, { withFileTypes: true })) {
+    if (["node_modules", "dist", ".git"].includes(entry.name)) {
+      continue
+    }
+
     const filename = path.join(sourceDirectory, entry.name)
 
     if (entry.isDirectory() && !entry.name.startsWith(".")) {

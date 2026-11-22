@@ -1,0 +1,101 @@
+{
+  "sha": "fe25457aa5c79e7ac24c36ef55ff2235d97dd9d4",
+  "sourceRun": "tadazz-codex-fe25457aa5c7-53880a3e",
+  "exit": 1,
+  "retryEvidence": [
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-original-themes-20261122\\docs\\extensions\\plans\\phase3-takeover-20261117\\tadazz-codex-fe25457aa5c7-53880a3e-retry-22e28948"
+  ],
+  "launchEvidence": [],
+  "checks": [
+    {
+      "label": "native-application-preview-build",
+      "exit": 1,
+      "seconds": 3.947
+    },
+    {
+      "label": "native-http",
+      "exit": 0,
+      "seconds": 79.641
+    },
+    {
+      "label": "native-types",
+      "exit": 0,
+      "seconds": 7.786
+    },
+    {
+      "label": "native-lint",
+      "exit": 0,
+      "seconds": 6.738
+    },
+    {
+      "label": "native-format",
+      "exit": 0,
+      "seconds": 3.918
+    },
+    {
+      "label": "package-runtime-deploy-self-test",
+      "exit": 0,
+      "seconds": 0.221
+    },
+    {
+      "label": "package-runtime-operator-tests",
+      "exit": 0,
+      "seconds": 0.223
+    },
+    {
+      "label": "semantic-types",
+      "exit": 1,
+      "seconds": 7.27
+    },
+    {
+      "label": "full-show-widget-types",
+      "exit": 0,
+      "seconds": 5.776
+    },
+    {
+      "label": "full-show-widget-lint",
+      "exit": 0,
+      "seconds": 5.298
+    },
+    {
+      "label": "full-show-widget-format",
+      "exit": 0,
+      "seconds": 2.028
+    },
+    {
+      "label": "semantic-lint",
+      "exit": 1,
+      "seconds": 6.328
+    },
+    {
+      "label": "semantic-format",
+      "exit": 0,
+      "seconds": 2.073
+    },
+    {
+      "label": "semantic-integration-lint-baseline",
+      "exit": 0,
+      "seconds": 6.577
+    }
+  ],
+  "sourceHashesUnchanged": true,
+  "failedChecks": [
+    {
+      "label": "native-application-preview-build",
+      "stdout": "",
+      "stderr": "file:///evidence/tadazz-codex-fe25457aa5c7-53880a3e/source/extensions/qa/build-application-preview.mjs:381\n    throw new Error(\n          ^\n\nError: Native preview build does not reproduce the committed manifest\n    at file:///evidence/tadazz-codex-fe25457aa5c7-53880a3e/source/extensions/qa/build-application-preview.mjs:381:11\n\nNode.js v24.22.2\n"
+    },
+    {
+      "label": "semantic-types",
+      "stdout": "extensions/qa/phase3-full-show/native-parity-fixtures.ts(92,36): error TS7053: Element implicitly has an 'any' type because expression of type '\"carnival-pop\" | \"crystal-future\" | \"magic-storybook\" | \"mystery-noir\" | \"neon-arcade\" | \"razzia-original\" | \"retro-tv\" | \"royal-quiz\" | \"sports-arena\" | \"tadazz-classic\"' can't be used to index type '{ readonly \"tadazz-classic\": readonly [\"extensions/src/presentation/show-library-preview/NativePreviewStage.tsx\", \"extensions/src/presentation/tadazz-show/TadazzV4StageAdapter.tsx\"]; readonly \"razzia-original\": readonly [\"extensions/src/presentation/show-library-preview/NativeRazziaPreviewV2.tsx\", \"packages/web/src/features/game/components/PhotoCardGrid.tsx\", \"packages/web/src/features/game/utils/answer-style.ts\", \"extensions/src/presentation/stage-fit.tsx\", \"extensions/src/mcp-app/widget/native-photo-card-port.ts\"]; }'.\n  Property 'carnival-pop' does not exist on type '{ readonly \"tadazz-classic\": readonly [\"extensions/src/presentation/show-library-preview/NativePreviewStage.tsx\", \"extensions/src/presentation/tadazz-show/TadazzV4StageAdapter.tsx\"]; readonly \"razzia-original\": readonly [\"extensions/src/presentation/show-library-preview/NativeRazziaPreviewV2.tsx\", \"packages/web/src/features/game/components/PhotoCardGrid.tsx\", \"packages/web/src/features/game/utils/answer-style.ts\", \"extensions/src/presentation/stage-fit.tsx\", \"extensions/src/mcp-app/widget/native-photo-card-port.ts\"]; }'.\n",
+      "stderr": ""
+    },
+    {
+      "label": "semantic-lint",
+      "stdout": "\n  x typescript(TS7053): Element implicitly has an 'any' type because expression of type '\"carnival-pop\" | \"crystal-future\" | \"magic-storybook\" | \"mystery-noir\" | \"neon-arcade\" | \"razzia-original\" | \"retro-tv\" | \"royal-quiz\" | \"sports-arena\" | \"tadazz-classic\"' can't be used to index type '{ readonly \"tadazz-classic\": readonly [\"extensions/src/presentation/show-library-preview/\n  | NativePreviewStage.tsx\", \"extensions/src/presentation/tadazz-show/TadazzV4StageAdapter.tsx\"]; readonly \"razzia-original\": readonly [\"extensions/src/presentation/show-library-preview/NativeRazziaPreviewV2.tsx\", \"packages/web/src/features/game/components/PhotoCardGrid.tsx\", \"packages/web/src/features/game/utils/answer-style.ts\", \"extensions/src/presentation/stage-fit.tsx\", \"extensions/src/mcp-\n  | app/widget/native-photo-card-port.ts\"]; }'.\n    ,-[extensions/qa/phase3-full-show/native-parity-fixtures.ts:92:36]\n 91 |     definitionSha256: frame.theme.definitionSha256,\n 92 |     sourceModules: [...sources, ...familySources[source.theme.id]],\n    :                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n 93 |     frame,\n    `----\n\n  x typescript(no-unsafe-assignment): Unsafe spread of an error typed value in an array.\n    ,-[extensions/qa/phase3-full-show/native-parity-fixtures.ts:92:33]\n 91 |     definitionSha256: frame.theme.definitionSha256,\n 92 |     sourceModules: [...sources, ...familySources[source.theme.id]],\n    :                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n 93 |     frame,\n    `----\n  help: The spread value has type `error`. Use a safely typed array or narrow the value before spreading it.\n\nFound 0 warnings and 2 errors.\nFinished in 6.2s on 12 files with 233 rules using 1 threads.\n",
+      "stderr": ""
+    }
+  ],
+  "stdoutTail": "{\n  \"sha\": \"fe25457aa5c79e7ac24c36ef55ff2235d97dd9d4\",\n  \"evidence\": \"C:\\\\Users\\\\DAVID\\\\Code\\\\Razzia-worktrees\\\\tadazz-original-themes-20261122\\\\docs\\\\extensions\\\\plans\\\\phase3-takeover-20261117\\\\tadazz-codex-fe25457aa5c7-53880a3e-retry-22e28948\",\n  \"sourceFilesVerified\": 2266,\n  \"checks\": [\n    {\n      \"label\": \"native-application-preview-build\",\n      \"exit\": 1,\n      \"seconds\": 3.947\n    },\n    {\n      \"label\": \"native-http\",\n      \"exit\": 0,\n      \"seconds\": 79.641\n    },\n    {\n      \"label\": \"native-types\",\n      \"exit\": 0,\n      \"seconds\": 7.786\n    },\n    {\n      \"label\": \"native-lint\",\n      \"exit\": 0,\n      \"seconds\": 6.738\n    },\n    {\n      \"label\": \"native-format\",\n      \"exit\": 0,\n      \"seconds\": 3.918\n    },\n    {\n      \"label\": \"package-runtime-deploy-self-test\",\n      \"exit\": 0,\n      \"seconds\": 0.221\n    },\n    {\n      \"label\": \"package-runtime-operator-tests\",\n      \"exit\": 0,\n      \"seconds\": 0.223\n    },\n    {\n      \"label\": \"semantic-types\",\n      \"exit\": 1,\n      \"seconds\": 7.27\n    },\n    {\n      \"label\": \"full-show-widget-types\",\n      \"exit\": 0,\n      \"seconds\": 5.776\n    },\n    {\n      \"label\": \"full-show-widget-lint\",\n      \"exit\": 0,\n      \"seconds\": 5.298\n    },\n    {\n      \"label\": \"full-show-widget-format\",\n      \"exit\": 0,\n      \"seconds\": 2.028\n    },\n    {\n      \"label\": \"semantic-lint\",\n      \"exit\": 1,\n      \"seconds\": 6.328\n    },\n    {\n      \"label\": \"semantic-format\",\n      \"exit\": 0,\n      \"seconds\": 2.073\n    },\n    {\n      \"label\": \"semantic-integration-lint-baseline\",\n      \"exit\": 0,\n      \"seconds\": 6.577\n    }\n  ]\n}\n",
+  "stderrTail": ""
+}
