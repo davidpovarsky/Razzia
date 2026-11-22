@@ -8,11 +8,11 @@ Only these three editor production files changed. The live AudioCuePlayer, Theme
 
 ## Executed before/after proof
 
-| Surface | Actual before-fix failure | Final result |
-| --- | --- | --- |
-| Shared MediaLibrary | After switching cues, queued old ended/error/rejected-play callbacks cleared the newer active icon; two prerequisite checks passed before the failure. | 11 lifecycle checks pass. |
-| Legacy CardAudioConfig | Old callbacks cleared the newer slot; moving to the other actual editor question left the old Stop indicator visible after audio cleanup. | Five owner/error/stop/unmount checks plus two card/source-change checks pass. |
-| ThemeAudioOptions | After changing the actual controlled media source and starting the new preview, a queued prior-source onended removed the new Stop button. | Seven source/owner/completion/rejection/unmount checks pass. |
+| Surface                | Actual before-fix failure                                                                                                                              | Final result                                                                  |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
+| Shared MediaLibrary    | After switching cues, queued old ended/error/rejected-play callbacks cleared the newer active icon; two prerequisite checks passed before the failure. | 11 lifecycle checks pass.                                                     |
+| Legacy CardAudioConfig | Old callbacks cleared the newer slot; moving to the other actual editor question left the old Stop indicator visible after audio cleanup.              | Five owner/error/stop/unmount checks plus two card/source-change checks pass. |
+| ThemeAudioOptions      | After changing the actual controlled media source and starting the new preview, a queued prior-source onended removed the new Stop button.             | Seven source/owner/completion/rejection/unmount checks pass.                  |
 
 The final 25 checks have zero page errors. Real React, QuizzEditorProvider, StudioEditorProvider, TanStack Query, i18n, actual native controls and application styles are mounted through the isolated Vite app. The Audio implementation is controlled to schedule otherwise timing-sensitive stale callbacks deterministically; the empty media HTTP response is intercepted. These receipts establish lifecycle/UI behavior, not audible playback, media decoding, a live multiplayer game or physical-device acceptance.
 

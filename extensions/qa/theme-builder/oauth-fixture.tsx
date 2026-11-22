@@ -26,16 +26,16 @@ document.documentElement.lang = locale
 })
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-  <I18nextProvider i18n={instance}>
-    <OAuthConsentPage
-      account={{
-        id: "author-a",
-        email: "synthetic-author@example.invalid",
-        verified: true,
-      }}
-      issuerBasePath="/api/qa/oauth"
-      search={location.search}
-    />
-  </I18nextProvider>
+    <I18nextProvider i18n={instance}>
+      <OAuthConsentPage
+        account={{
+          id: "author-a",
+          email: "synthetic-author@example.invalid",
+          verified: true,
+        }}
+        issuerBasePath="/api/qa/oauth"
+        search={location.search}
+      />
+    </I18nextProvider>
   </StrictMode>,
 )

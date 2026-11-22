@@ -29,10 +29,10 @@ remaining independently testable work only after the capacity gate.
 
 ## Source receipts and independent Linux verification
 
-| Candidate | Source status | Manager result | Acceptance |
-|---|---|---|---|
-| A repair `02d752c04a5d9bef1d670d3f613ea9e921f0506a` | Seven owned files, clean child tree; no protected source edits | Actual service suite **11/12** on tmpfs and **11/12** on ext4; focused QA types PASS | **NOT MERGED / changes required** |
-| C phone `4a1d92b03d734d96717c26873686c68d6c76735c` | Six owned files; one narrowly scoped runtime change | Live-game Vitest **4/4**; POSIX full-chain fixture **0/2** | **NOT MERGED / acceptance incomplete** |
+| Candidate                                           | Source status                                                  | Manager result                                                                       | Acceptance                             |
+| --------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------------------------------ | -------------------------------------- |
+| A repair `02d752c04a5d9bef1d670d3f613ea9e921f0506a` | Seven owned files, clean child tree; no protected source edits | Actual service suite **11/12** on tmpfs and **11/12** on ext4; focused QA types PASS | **NOT MERGED / changes required**      |
+| C phone `4a1d92b03d734d96717c26873686c68d6c76735c`  | Six owned files; one narrowly scoped runtime change            | Live-game Vitest **4/4**; POSIX full-chain fixture **0/2**                           | **NOT MERGED / acceptance incomplete** |
 
 Manager uploaded exact Git archives to the existing isolated QA scratch,
 verified every changed file SHA256 before and after execution, and ran tests
@@ -307,11 +307,11 @@ input avoids the bug but does not qualify this internal service boundary.
 
 ### Manager-owned pre-edit ledger — this task's authorized D correction
 
-| Exact file / symbol | Minimal authorized change | Required proof |
-|---|---|---|
-| `extensions/src/server/storage/service.ts` / `CompositeStorageService.saveCompositeQuiz` updated-extras construction | Persist the already successfully validated canonical `extrasValidation.data`, consistent with create path; preserve revision/CAS/digest/account/journal APIs | Failing valid-raw-V2/defaulted-scene regression before fix; persisted canonical sidecar, original crash/replay witness, invalid payload/CAS rejection unchanged |
-| `extensions/src/core/card-media-references.ts` / `detachMediaFromShowData` | Preserve correct base/sidecar binding when actual native question media is removed; do not manufacture a digest on partial legacy extras or launder an already mismatched original binding | Manager actual-helper RED above; V1/V2 digest-after-detach GREEN, unrelated/sidecar-only refs unchanged, original input immutable, stale-original binding fails closed |
-| `extensions/qa/phase3-recovery/**` | Exact regressions, remaining invalid QA assertions/root guards, restore post-detach `digestMatches === true`, programmatic receipts | Full new ext4 suite and focused media/storage regressions, raw RED/GREEN, real source hashes |
+| Exact file / symbol                                                                                                  | Minimal authorized change                                                                                                                                                                  | Required proof                                                                                                                                                         |
+| -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `extensions/src/server/storage/service.ts` / `CompositeStorageService.saveCompositeQuiz` updated-extras construction | Persist the already successfully validated canonical `extrasValidation.data`, consistent with create path; preserve revision/CAS/digest/account/journal APIs                               | Failing valid-raw-V2/defaulted-scene regression before fix; persisted canonical sidecar, original crash/replay witness, invalid payload/CAS rejection unchanged        |
+| `extensions/src/core/card-media-references.ts` / `detachMediaFromShowData`                                           | Preserve correct base/sidecar binding when actual native question media is removed; do not manufacture a digest on partial legacy extras or launder an already mismatched original binding | Manager actual-helper RED above; V1/V2 digest-after-detach GREEN, unrelated/sidecar-only refs unchanged, original input immutable, stale-original binding fails closed |
+| `extensions/qa/phase3-recovery/**`                                                                                   | Exact regressions, remaining invalid QA assertions/root guards, restore post-detach `digestMatches === true`, programmatic receipts                                                        | Full new ext4 suite and focused media/storage regressions, raw RED/GREEN, real source hashes                                                                           |
 
 This is an explicit narrow downstream scope revision within the owner's Phase3
 Recovery/Media mandate, not permission for `packages/**`, original editor,

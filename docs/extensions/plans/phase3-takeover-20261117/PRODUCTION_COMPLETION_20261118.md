@@ -56,6 +56,7 @@ packaging interface. Never claim installation/authentication from upload alone.
 The owner explicitly authorized implementation, deployment and private host connection. Work continues from e1482c4219da52bd722e1823190355fa45abf78a on the existing worktree/branch.
 
 Verified on this code checkpoint:
+
 - Actual issuer/SQLite/MCP V3 selection and projection: 18 passing checks.
 - Native full-show AppBridge browser QA: 16/16 passing across Chromium/Edge and WebKit, both built-in families, all 28 chapter selections, title CAS acknowledgement, summary refresh, cancellation, context teardown and strict CSP.
 - Windows production catalog/export/artifact adapters: 11 passes, no failures; the one symlink case is Linux-specific and remains a Linux release gate.
@@ -68,6 +69,7 @@ Verified on this code checkpoint:
 - The private plugin archive contains the real Tadazz brand icon, MCP endpoint and provided public OAuth client; upload/installation/authentication remain later gates.
 
 Production preparation:
+
 - Persistent Ed25519/ticket keys were created only in the root-owned 0600 server runtime configuration. Secrets are excluded from Git, this document, and public receipts.
 - Client ID: tadazz-chatgpt-private-20261118. Exact callback: https://chatgpt.com/connector_platform_oauth_redirect. Actual host connection validation remains required.
 - Live read-only probe at 2026-11-18T05:08:52Z (07:08 Israel): /api/health=200 JSON; /mcp and OAuth metadata/JWKS still=200 HTML on old image. The old production container remains running.

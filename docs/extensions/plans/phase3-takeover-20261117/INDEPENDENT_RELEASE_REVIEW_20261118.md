@@ -19,21 +19,21 @@ The independent security review was source inspection and review communication. 
 
 The audit started from the base commit above and continued over the uncommitted implementation changes listed below. These hashes bind this decision to the bytes observed at this checkpoint; later edits need review of their material differences, not an assumption that the same decision covers them.
 
-| Reviewed path | Bytes | SHA-256 |
-| --- | ---: | --- |
-| `extensions/deployment/deploy-mcp-site.py` | 53011 | `a9a447b2007a00cae54b245c69545a4e9ee649e8c00a9a8c04e79873258f9ac5` |
-| `extensions/src/mcp-app/native-host/production-capabilities.ts` | 4646 | `f3c05dae4907dea049b7461e6ec31be6210aa433f433cd28e3eb6926b60476c6` |
-| `extensions/src/mcp-app/native-host/production-entry.ts` | 2536 | `bcce048fc7cc13661ec95b7c245861c1b62528a1a3d3f3f93f2e1af827b10cee` |
-| `extensions/src/mcp-app/contracts/full-show-frame.ts` | 3816 | `20167d12b9efe029abcf83cef0fe5c5eb0d1eb45e78549190a1467d1357927ab` |
-| `extensions/src/mcp-app/server/full-show-frame.ts` | 7056 | `3e8e5e35c905bcbb6b7bef82e92bd86d40caa08e40be9cdd24acd9208594f6e8` |
-| `extensions/src/mcp-app/client/full-show-frame.ts` | 2213 | `841fd65303e8ebca3af9c7902b24d7719ef488330fd299539bb0f6c372586a81` |
-| `extensions/src/mcp-app/server/dispatch.ts` | 9922 | `35979e3ee9b7f6e7058d72b83e19fb67f1e36421dbf1c9cef2d84bbf47334834` |
-| `extensions/src/mcp-app/server/http.ts` | 18515 | `9f2007524b80c57570ec1e35bbbb8c778a52b28382ae035634324667a68e004f` |
-| `extensions/src/mcp-app/server/factory.ts` | 7000 | `8b961d2142f2250bf98ca2a8a1ceff3f36807358eb774f8db93edfa8c72372be` |
-| `extensions/src/mcp-app/contracts/tools.ts` | 6326 | `d1c52ce4cedaed8bdc8557453f9b82348dbfa55d27dc14fec61d1ef309260b7d` |
-| `extensions/src/mcp-app/widget/full-show-entry.tsx` | 9895 | `6518ba3116b4fcd0c04c69c790f0fcd77af1a4654dd207845a592d19783cdb3d` |
-| `extensions/src/mcp-app/widget/full-show-stage.tsx` | 6720 | `5ef12b695657637121f0939a16c09131f54485f01d2ec1face031097f7390766` |
-| `extensions/src/mcp-app/widget/build-full-show.mjs` | 3823 | `44e9a4ff5ef798d9a735bf393b3013f042b28feeb7243fcced71cdd3bb043660` |
+| Reviewed path                                                   | Bytes | SHA-256                                                            |
+| --------------------------------------------------------------- | ----: | ------------------------------------------------------------------ |
+| `extensions/deployment/deploy-mcp-site.py`                      | 53011 | `a9a447b2007a00cae54b245c69545a4e9ee649e8c00a9a8c04e79873258f9ac5` |
+| `extensions/src/mcp-app/native-host/production-capabilities.ts` |  4646 | `f3c05dae4907dea049b7461e6ec31be6210aa433f433cd28e3eb6926b60476c6` |
+| `extensions/src/mcp-app/native-host/production-entry.ts`        |  2536 | `bcce048fc7cc13661ec95b7c245861c1b62528a1a3d3f3f93f2e1af827b10cee` |
+| `extensions/src/mcp-app/contracts/full-show-frame.ts`           |  3816 | `20167d12b9efe029abcf83cef0fe5c5eb0d1eb45e78549190a1467d1357927ab` |
+| `extensions/src/mcp-app/server/full-show-frame.ts`              |  7056 | `3e8e5e35c905bcbb6b7bef82e92bd86d40caa08e40be9cdd24acd9208594f6e8` |
+| `extensions/src/mcp-app/client/full-show-frame.ts`              |  2213 | `841fd65303e8ebca3af9c7902b24d7719ef488330fd299539bb0f6c372586a81` |
+| `extensions/src/mcp-app/server/dispatch.ts`                     |  9922 | `35979e3ee9b7f6e7058d72b83e19fb67f1e36421dbf1c9cef2d84bbf47334834` |
+| `extensions/src/mcp-app/server/http.ts`                         | 18515 | `9f2007524b80c57570ec1e35bbbb8c778a52b28382ae035634324667a68e004f` |
+| `extensions/src/mcp-app/server/factory.ts`                      |  7000 | `8b961d2142f2250bf98ca2a8a1ceff3f36807358eb774f8db93edfa8c72372be` |
+| `extensions/src/mcp-app/contracts/tools.ts`                     |  6326 | `d1c52ce4cedaed8bdc8557453f9b82348dbfa55d27dc14fec61d1ef309260b7d` |
+| `extensions/src/mcp-app/widget/full-show-entry.tsx`             |  9895 | `6518ba3116b4fcd0c04c69c790f0fcd77af1a4654dd207845a592d19783cdb3d` |
+| `extensions/src/mcp-app/widget/full-show-stage.tsx`             |  6720 | `5ef12b695657637121f0939a16c09131f54485f01d2ec1face031097f7390766` |
+| `extensions/src/mcp-app/widget/build-full-show.mjs`             |  3823 | `44e9a4ff5ef798d9a735bf393b3013f042b28feeb7243fcced71cdd3bb043660` |
 
 Additional inspected baseline areas include native-host configuration/entry/HTTP bridge/consent routes, first-party OAuth protocol/grants/bindings/service/catalog, access-token verification, server authorization/HTTP/resource dispatch, tenant drafts, native save, export authorization, full-show selection and bounded media access.
 
@@ -180,19 +180,18 @@ The author reported seven focused synthetic checks passing: precise environment 
 
 Known finite limits remain: grants are bounded by the native session and maximum grant duration; access tokens are short lived; repository record quotas are finite; cross-database logout is not a fully linearizable transaction; and prolonged loaded operation has not been established by this review. These do not create a newly identified P0/P1 bypass, but they bound what can truthfully be claimed about the private release.
 
-
 ## Follow-up: final production artifact boundary and mechanical cleanup
 
 This follow-up completes the previously pending source review of production V3 artifact wiring. Actual Linux candidate and live/ChatGPT qualification remain separate gates.
 
-| Follow-up source | Bytes | SHA-256 |
-| --- | ---: | --- |
-| `extensions/src/mcp-app/native-host/production-capabilities.ts` | 5175 | `4e348c14ba47e3e1ebbef5b72322d42b6720ec7f601efaf71509e5c6ea15e059` |
-| `extensions/qa/phase3-native-consent/production-capabilities.nodecheck.ts` | 4313 | `3fc65648f5241a36baedc52cf2c6c10f5273bea0f7d3bf125a45b02172b7369e` |
-| `extensions/src/mcp-app/native-host/production-artifacts.ts` | 7505 | `a2e73db0e12af97acab901305071f4a9b0bfd9ab1694b170c6de3698152cf06d` |
-| `extensions/src/mcp-app/native-host/production-entry.ts` | 3269 | `bb832e51358929f050006236214df85eae6ae533e900c4cd018678723171da94` |
-| `extensions/deployment/build-native-host.mjs` | 5281 | `5621d316ab57648c16f974803e9dca89365f1645e3958bc47b2aff2cde97fdae` |
-| `extensions/src/mcp-app/widget/build-full-show.mjs` | 4097 | `461d447f04e83e1c2c1e0fc35366a73489d44e5520fecc01f73159530f3b69d1` |
+| Follow-up source                                                           | Bytes | SHA-256                                                            |
+| -------------------------------------------------------------------------- | ----: | ------------------------------------------------------------------ |
+| `extensions/src/mcp-app/native-host/production-capabilities.ts`            |  5175 | `4e348c14ba47e3e1ebbef5b72322d42b6720ec7f601efaf71509e5c6ea15e059` |
+| `extensions/qa/phase3-native-consent/production-capabilities.nodecheck.ts` |  4313 | `3fc65648f5241a36baedc52cf2c6c10f5273bea0f7d3bf125a45b02172b7369e` |
+| `extensions/src/mcp-app/native-host/production-artifacts.ts`               |  7505 | `a2e73db0e12af97acab901305071f4a9b0bfd9ab1694b170c6de3698152cf06d` |
+| `extensions/src/mcp-app/native-host/production-entry.ts`                   |  3269 | `bb832e51358929f050006236214df85eae6ae533e900c4cd018678723171da94` |
+| `extensions/deployment/build-native-host.mjs`                              |  5281 | `5621d316ab57648c16f974803e9dca89365f1645e3958bc47b2aff2cde97fdae` |
+| `extensions/src/mcp-app/widget/build-full-show.mjs`                        |  4097 | `461d447f04e83e1c2c1e0fc35366a73489d44e5520fecc01f73159530f3b69d1` |
 
 ### Compiled manifest pin — accepted
 
@@ -228,14 +227,13 @@ Validation run directly by this reviewer with the existing pinned Node 24 runtim
 
 The initial independent policy judgment remains unchanged. These mechanical edits are disclosed so this report is not represented as an entirely independent review of code authored by someone else.
 
-
 ## Final staging/deployment script review checkpoint
 
 The later packaging review covered the version-2 release stager and the exact-Host clone probe update. These script pins supersede the earlier deployment-script pin in this report:
 
-| Script | Accepted SHA-256 |
-| --- | --- |
-| `extensions/deployment/stage-mcp-site.py` | `0feb2e920e88ce3e08ead3469c41b4b5eae907d62aeebd548549f2e31cb0ffae` |
+| Script                                     | Accepted SHA-256                                                   |
+| ------------------------------------------ | ------------------------------------------------------------------ |
+| `extensions/deployment/stage-mcp-site.py`  | `0feb2e920e88ce3e08ead3469c41b4b5eae907d62aeebd548549f2e31cb0ffae` |
 | `extensions/deployment/deploy-mcp-site.py` | `b99ce12f1ccebe40c947b1e6fcf7faebc073fe0bd5a5a60359a48b15081ed09a` |
 
 The stager binds five qualification receipts to the exact source revision, source trees, backend/widget/web bytes, Linux launch result and Chromium/WebKit scenarios. It creates only a fresh private release directory/image and a synthetic configuration for a network-isolated smoke container. Private evidence, generated test keys and build logs are excluded from the Docker build context; the synthetic keys are created after the build. Existing runtime configuration is neither mounted nor overwritten by staging.
@@ -538,10 +536,10 @@ the changed gate coverage, fixture attribution or aspect-ratio UI delta. This
 is readiness to run the immutable qualification, not a passing qualification
 or deployment claim.
 
-| Reviewed file | SHA-256 |
-| --- | --- |
-| `extensions/deployment/stage-mcp-site.py` | `e3cf36665328ad7ca636e336aa96bd6b5b93a5fd59511145d3805910ce943e84` |
-| `extensions/qa/phase3-recovery/linux-verify.py` | `4b2dfb35953c2cc046a2f6c254eb6c85f8ae86e05a3e7cb2eabeb56d44f0e1d6` |
+| Reviewed file                                              | SHA-256                                                            |
+| ---------------------------------------------------------- | ------------------------------------------------------------------ |
+| `extensions/deployment/stage-mcp-site.py`                  | `e3cf36665328ad7ca636e336aa96bd6b5b93a5fd59511145d3805910ce943e84` |
+| `extensions/qa/phase3-recovery/linux-verify.py`            | `4b2dfb35953c2cc046a2f6c254eb6c85f8ae86e05a3e7cb2eabeb56d44f0e1d6` |
 | `extensions/qa/phase3-full-show/native-parity-fixtures.ts` | `3821b6a6923ee51b0657749f7a99854060a9538ab73115feba160e8807632d2a` |
 
 The controller and stager require the complete agreed protocol, HTTP,
@@ -578,7 +576,6 @@ browser proof.
 Final Linux/native-save, browser and live/installed-host receipts remain
 pending and must be recorded by the release owner before completion claims.
 
-
 ## Final proxy privacy review and bounded correction (2026-11-18)
 
 The exact running application container and image were rechecked before reading only effective configuration. Nginx inherited `access_log /var/log/nginx/access.log main` with `$request` and Referer, and an error log at warning level. The new protected location covered `/oauth/downloads/*`. The export download endpoint accepts a short-lived encrypted URL capability without a separate bearer header and then rechecks the live account, session, grant and export rights. Recording the entire request target would therefore persist a reusable capability during its validity window. Authorization-request tickets and native-save request IDs are more constrained and are not themselves an authentication bypass. No production download URL, token or raw production log was read; no evidence of an actual customer disclosure is asserted.
@@ -599,7 +596,6 @@ The updated proxy controller/stager binding was inspected: final staging require
 
 The latest renderer-fixture metadata adjustment is also bounded: the shared source set is augmented with the actual Classic native-stage sources or the Razzia native PhotoCardGrid/stage-fit sources, and the stager checks the family-specific set. The 40 ordinary browser scenarios and 44 explicitly renderer-only fixture witnesses remain separate requirements; metadata is not an issuer or real-host acceptance claim. Exact final source/hash qualification still belongs to the frozen release run.
 
-
 ### Actual Nginx development witness
 
 The new production-image TLS Nginx test passed on the preserved `9c8b1081f07c608e03946deec14351d27d6cca57` source plus the exact current config/test overlay. Result: 1/1 test, zero failures, skips, cancellations or todo; all nine bounded privacy-proof fields true. Ordinary access and upstream-error controls were present, while synthetic protected path/query/Referer values were absent during successful consent-page responses, invalid-download denial and actual unavailable-upstream 502 responses. All 1,706 preserved source files, both overlaid inputs and the SDK cache stayed identical. The runner was the exact production image `sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346` with network disabled and no customer mount.
@@ -610,11 +606,11 @@ Evidence: `docs/extensions/plans/phase3-takeover-20261117/tadazz-codex-proxy-9c8
 
 Only the following three JSON receipts were copied byte-for-byte into `docs/extensions/plans/phase3-takeover-20261117/caddy-privacy-evidence-20261118-73642f/` and verified against their remote SHA256 values:
 
-| Receipt | Bytes | SHA256 |
-| --- | ---: | --- |
-| `caddy-isolated-receipt.json` | 1,295 | `41620153d9e7d998a6a6059b566e53b727a07c61c3cffa023260bd4c0ea17bcb` |
+| Receipt                         | Bytes | SHA256                                                             |
+| ------------------------------- | ----: | ------------------------------------------------------------------ |
+| `caddy-isolated-receipt.json`   | 1,295 | `41620153d9e7d998a6a6059b566e53b727a07c61c3cffa023260bd4c0ea17bcb` |
 | `caddy-candidate-metadata.json` | 1,359 | `261d35135395b825b3ef5a688bbc751f84fcbfd5f7dde01fdd6e0c9c5d921668` |
-| `caddy-applied-receipt.json` | 1,212 | `0b268409e776bcdb337e61fce996e67cd1d76499c1fa61317c0961fae7dfbf00` |
+| `caddy-applied-receipt.json`    | 1,212 | `0b268409e776bcdb337e61fce996e67cd1d76499c1fa61317c0961fae7dfbf00` |
 
 The field review found only hashes, minimal public logging-filter metadata, timestamps and result flags, binary/service paths, ownership/mode metadata, and references to private backup locations. The Caddyfile, private backup contents, full active configuration, raw logs, request headers, credentials and customer data were not copied. The applied receipt independently preserves root's successful live logging-only change as distinct from the isolated synthetic witness and candidate validation. No service was changed by this evidence-copy operation.
 
@@ -660,12 +656,12 @@ Root independently reviewed the new helper/authority/source/parser boundary and 
 
 Final focused source SHA256 values:
 
-| File | SHA256 |
-| --- | --- |
-| core/show-library/reviewed-preview-assets.ts | df7803ce2053dec7a34893c24a55470f16c5a3393024ee51d875fd10533efcf3 |
-| server/api/account-preview-builtins.ts | 1ab318b0d82f6e63fedc67ee720a8fad1c4fe0fd4da250c09da5c8acb7a25cb1 |
-| server/api/account-preview-source.ts | 2e2b8f07f309bfeecf6014fb923c27928058efb9683195bfc271ab3593abfc95 |
-| core/show-library/application-preview-input.ts | 7c09a28417eb658cc06f69acdc18af0cc16e5ea88679fe3b1c4b59c61ec8d96b |
+| File                                                           | SHA256                                                           |
+| -------------------------------------------------------------- | ---------------------------------------------------------------- |
+| core/show-library/reviewed-preview-assets.ts                   | df7803ce2053dec7a34893c24a55470f16c5a3393024ee51d875fd10533efcf3 |
+| server/api/account-preview-builtins.ts                         | 1ab318b0d82f6e63fedc67ee720a8fad1c4fe0fd4da250c09da5c8acb7a25cb1 |
+| server/api/account-preview-source.ts                           | 2e2b8f07f309bfeecf6014fb923c27928058efb9683195bfc271ab3593abfc95 |
+| core/show-library/application-preview-input.ts                 | 7c09a28417eb658cc06f69acdc18af0cc16e5ea88679fe3b1c4b59c61ec8d96b |
 | qa/phase3-native-consent/account-preview-builtins.nodecheck.ts | 471b96a98ad96a12a0142e97e9f4caf482cfe3c1a842baa068dd08f56ab8d7dd |
 
 The source paths in the table are relative to extensions/src, except the qa path, which is relative to extensions. A separate read-only review accepted engineering's Studio background hookup: the shared native resolver now receives the saved show default, preserves per-card priority, preserves explicit scoped theme overrides, and retains the legacy fallback when no show setting exists. Actual saved-game Studio rendering remains part of the final Linux browser gate, not established by these unit/source checks.

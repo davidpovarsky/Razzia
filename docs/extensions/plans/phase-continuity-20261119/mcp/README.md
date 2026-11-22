@@ -18,10 +18,10 @@ Direct browser tool chapters are question, voting and results. The actual native
 
 ## Evidence
 
-| Run | Cases | Result | Source integrity |
-| --- | ---: | --- | --- |
-| chromium-final | 4 | PASS | unchanged |
-| webkit-final | 4 | PASS | unchanged |
+| Run            | Cases | Result | Source integrity |
+| -------------- | ----: | ------ | ---------------- |
+| chromium-final |     4 | PASS   | unchanged        |
+| webkit-final   |     4 | PASS   | unchanged        |
 
 - `chromium-final/receipt.json` and `webkit-final/receipt.json`: actual SDK/AppBridge receipts, browser versions, CSP/network events and host lifecycle drains.
 - `*-phase-continuity.json`: 13 per-case snapshots with actual DOM IDs, phase epochs and entrance counters.
@@ -42,13 +42,13 @@ Direct browser tool chapters are question, voting and results. The actual native
 
 ## Owned source/QA hashes
 
-| File | SHA-256 |
-| --- | --- |
+| File                                                        | SHA-256                                                            |
+| ----------------------------------------------------------- | ------------------------------------------------------------------ |
 | `extensions/src/mcp-app/widget/full-show-demo-question.tsx` | `03b0c4794bf9c2f12581177fdbb91d5355a76655068535264717aa9b9cf933d9` |
-| `extensions/src/mcp-app/server/full-show-frame.ts` | `4328c6e82c21d515107acd6131134387114bd19ee6260c66290ed00f53915b49` |
-| `extensions/qa/phase3-full-show/phase-continuity.mjs` | `de4511fbea48cf02cd43052889634d00a8f47d2a20192504b8a20ca7041400d2` |
-| `extensions/qa/phase3-full-show/browser-verify.mjs` | `4dcb60dde9db58dd19db2e039875f77f75e886fa7475142a581739b4f791f090` |
-| `extensions/qa/phase3-full-show/selection.nodecheck.ts` | `6746137fa0a6653967767c541f1204d1605661e5fc510892bf114325937ebcee` |
+| `extensions/src/mcp-app/server/full-show-frame.ts`          | `4328c6e82c21d515107acd6131134387114bd19ee6260c66290ed00f53915b49` |
+| `extensions/qa/phase3-full-show/phase-continuity.mjs`       | `de4511fbea48cf02cd43052889634d00a8f47d2a20192504b8a20ca7041400d2` |
+| `extensions/qa/phase3-full-show/browser-verify.mjs`         | `4dcb60dde9db58dd19db2e039875f77f75e886fa7475142a581739b4f791f090` |
+| `extensions/qa/phase3-full-show/selection.nodecheck.ts`     | `6746137fa0a6653967767c541f1204d1605661e5fc510892bf114325937ebcee` |
 
 Both browser runners exited successfully after awaited browser/context closure, host lifecycle drain and loopback HTTP shutdown. No customer data, live votes, production service, or deployment was changed by this worker.
 

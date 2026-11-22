@@ -16,13 +16,13 @@ No globalDecoration change or additional appearance scope is recommended. The re
 
 ## Reviewed source hashes
 
-| File | SHA256 |
-|---|---|
-| extensions/src/mcp-app/server/full-show-frame.ts | 4328c6e82c21d515107acd6131134387114bd19ee6260c66290ed00f53915b49 |
-| extensions/qa/phase3-full-show/selection.nodecheck.ts | 6746137fa0a6653967767c541f1204d1605661e5fc510892bf114325937ebcee |
+| File                                                           | SHA256                                                           |
+| -------------------------------------------------------------- | ---------------------------------------------------------------- |
+| extensions/src/mcp-app/server/full-show-frame.ts               | 4328c6e82c21d515107acd6131134387114bd19ee6260c66290ed00f53915b49 |
+| extensions/qa/phase3-full-show/selection.nodecheck.ts          | 6746137fa0a6653967767c541f1204d1605661e5fc510892bf114325937ebcee |
 | extensions/src/core/show-library/native-preview-renderer-v2.ts | fa8d94d11faff8ab5868d60b409dfe69b5edaf0f6b4c8a4609fd5e0ff783d3b6 |
-| extensions/src/core/card-appearance.ts | 1e84151840bb664826c449ec2c993a9fa46f8a12441c31baf8d940ba28b4c744 |
-| extensions/src/mcp-app/server/full-show-selection.ts | cd0f3f27ca2c8a4ef16a2d15c699c196581c52d14297c6a3d5fb0326a745008d |
+| extensions/src/core/card-appearance.ts                         | 1e84151840bb664826c449ec2c993a9fa46f8a12441c31baf8d940ba28b4c744 |
+| extensions/src/mcp-app/server/full-show-selection.ts           | cd0f3f27ca2c8a4ef16a2d15c699c196581c52d14297c6a3d5fb0326a745008d |
 
 ## Reviewed cache recovery
 

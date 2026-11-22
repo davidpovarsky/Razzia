@@ -61,8 +61,7 @@ owner's answer to the explicit narrow cleanup question.
 The next Linux packet on a9a3fe2 completed in9.455s (12 PASS,1 FAIL), with
 types/lint/format PASS and no shutdown timeout. The remaining failure was the
 Node-only browser-client fixture not supplying the Origin a real browser adds.
-It now supplies that exact origin; the separate missing-Origin negative remains
-403. The B-account negative now sends the actual consentRequestId DTO, uses B's
+It now supplies that exact origin; the separate missing-Origin negative remains 403. The B-account negative now sends the actual consentRequestId DTO, uses B's
 real OAuth ledger, and asserts the accepted ledger's exact uniform503 /
 DEPENDENCY_UNAVAILABLE refusal plus no leaked snapshot. A's valid inspection
 and approval must succeed afterward, so generic service failure cannot pass.
@@ -80,8 +79,7 @@ pre-body refusal, concurrency and disconnect/timeout behavior before acceptance.
 
 Fresh no-network browser QA on c4125d58a746 verified all1669 source hashes and
 ran Chromium/WebKit successfully, but all six scenarios failed: the top-level
-downstream site router omitted /studio/native-save-consent/$requestId and showed
-404. Before editing: add that one feature-gated route in site/bootstrap.tsx,
+downstream site router omitted /studio/native-save-consent/$requestId and showed 404. Before editing: add that one feature-gated route in site/bootstrap.tsx,
 and allow only the exact 54-character query/hash-free local consent destination
 after login in site/adapters/client.ts, with focused security regression cases.
 No generated/native editor route, provider, typography or package changes.

@@ -7,5 +7,10 @@ export function PreviewStageHost({ unavailable }: { unavailable: string }) {
     const node = host.current
     if (node && !node.shadowRoot) node.attachShadow({ mode: "open" })
   }, [])
-  return <div><div ref={host} aria-hidden="true" /><p role="status">{unavailable}</p></div>
+  return (
+    <div>
+      <div ref={host} aria-hidden="true" />
+      <p role="status">{unavailable}</p>
+    </div>
+  )
 }

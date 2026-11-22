@@ -95,17 +95,17 @@ branch `codex/tadazz-design-system-20261110`. No push, merge, deployment or rele
 All nine owner-approved paths now have bounded presentation changes; **593**
 other protected hashes remain identical. Cumulative changed-line counts vs BASE:
 
-| Seam | Lines / maximum |
-| --- | --- |
-| ManagerControlToolbar | 72 / 140 |
-| GameWrapper | 26 / 35 |
-| HostPlayersModal (portal/close only; content remains TDS-09) | 9 / 110 |
-| GameSettingsModal/index | 11 / 18 |
-| HistoryDialog | 11 / 18 |
-| HostShortcutsDialog | 6 / 18 |
-| Room | 33 / 35 |
-| TadazzScreens lobby | 34 / 35 |
-| NativeGameLayout (unchanged this phase) | 20 / 40 |
+| Seam                                                         | Lines / maximum |
+| ------------------------------------------------------------ | --------------- |
+| ManagerControlToolbar                                        | 72 / 140        |
+| GameWrapper                                                  | 26 / 35         |
+| HostPlayersModal (portal/close only; content remains TDS-09) | 9 / 110         |
+| GameSettingsModal/index                                      | 11 / 18         |
+| HistoryDialog                                                | 11 / 18         |
+| HostShortcutsDialog                                          | 6 / 18          |
+| Room                                                         | 33 / 35         |
+| TadazzScreens lobby                                          | 34 / 35         |
+| NativeGameLayout (unchanged this phase)                      | 20 / 40         |
 
 Production additions: canonical `platform-ui/host-controls.tsx` (display group,
 footer scope and original-audio scope adapter), shared canonical button/switch
