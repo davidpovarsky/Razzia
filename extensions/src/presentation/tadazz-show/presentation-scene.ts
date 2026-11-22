@@ -76,6 +76,7 @@ export interface SceneDescriptor {
   endBehavior?: "holdFrame" | "advanceNext" | "fadeToTitle"
   background?: Partial<CardBackgroundOverride> & { mode?: string }
   stageLayout?: "card" | "cinema"
+  textOverlay?: boolean
 }
 
 export type ShowScene =

@@ -279,7 +279,7 @@ const Answers = ({
               media={media}
               showQuestion
               label={t("game:question.show")}
-              className="hover:bg-accent absolute top-4 right-4 flex size-11 items-center justify-center rounded-md bg-white text-black shadow-lg"
+              className="hover:bg-accent mr-2 ml-auto flex size-11 items-center justify-center rounded-md bg-white text-black shadow-lg"
             >
               <CircleQuestionMark className="size-6" />
             </QuestionDialog>

@@ -362,13 +362,17 @@ test("same-window host presentation hides manager UI and controls authoritative 
   await expect(visibleTimer).toBeVisible()
   await doublePress("Space")
   await expect(shell).toHaveAttribute("data-game-paused", "true")
+  const authoritativePause = pauseStates.at(-1)
+  expect(authoritativePause?.paused).toBe(true)
+  expect(authoritativePause?.remainingMs).toBeGreaterThan(0)
+  const expectedTimer = String(
+    Math.ceil((authoritativePause?.remainingMs ?? 0) / 1000),
+  ).padStart(2, "0")
+  await expect(visibleTimer).toHaveText(expectedTimer)
   const pausedTimer = await visibleTimer.textContent()
   await expect.poll(async () => (await readVotingAudio()).playing).toBe(0)
   const pausedVotingAudio = await readVotingAudio()
   expect(pausedVotingAudio.element).toBe(votingAudioBeforePause.element)
-  const authoritativePause = pauseStates.at(-1)
-  expect(authoritativePause?.paused).toBe(true)
-  expect(authoritativePause?.remainingMs).toBeGreaterThan(0)
   await expect(
     player.getByRole("button", { name: "1 One", exact: true }),
   ).toBeDisabled()

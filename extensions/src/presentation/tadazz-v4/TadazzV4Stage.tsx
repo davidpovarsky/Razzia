@@ -85,6 +85,7 @@ export const TadazzV4Stage = forwardRef<
   const viewportRef = useRef<HTMLDivElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
   const engineRef = useRef<TadazzV4Motion | null>(null)
+  const pausedCountdownRemainingMsRef = useRef<number | undefined>(undefined)
   const [view, setView] = useState<CurrentScene | null>(
     initialScene
       ? {
@@ -158,9 +159,14 @@ export const TadazzV4Stage = forwardRef<
         }
       }
       engineRef.current?.stop()
+      const remainingMs = pausedCountdownRemainingMsRef.current
+      const nextData =
+        scene === "countdown" && remainingMs !== undefined
+          ? { ...data, remainingSeconds: remainingMs / 1000 }
+          : data
       setView((previous) => ({
         scene,
-        data: normalizeData(data),
+        data: normalizeData(nextData),
         revision,
         contentRevision:
           previous && continuesQuestionStage(previous, { scene, data })
@@ -281,14 +287,19 @@ export const TadazzV4Stage = forwardRef<
       clear,
       wipe,
       patchData: (patch) => {
-        engineRef.current?.syncCountdown(patch)
+        const remainingMs = pausedCountdownRemainingMsRef.current
+        const nextPatch =
+          remainingMs === undefined
+            ? patch
+            : { ...patch, remainingSeconds: remainingMs / 1000 }
+        engineRef.current?.syncCountdown(nextPatch)
         setView((prev) =>
           prev
             ? {
                 ...prev,
                 data: normalizeData({
                   ...prev.data,
-                  ...patch,
+                  ...nextPatch,
                 }),
               }
             : prev,
@@ -305,11 +316,13 @@ export const TadazzV4Stage = forwardRef<
             })
           : false
       },
-      pause: () => {
-        engineRef.current?.pause()
+      pause: (countdownRemainingMs) => {
+        pausedCountdownRemainingMsRef.current = countdownRemainingMs
+        engineRef.current?.pause(countdownRemainingMs)
         wipeEngineRef.current?.pause()
       },
       resume: () => {
+        pausedCountdownRemainingMsRef.current = undefined
         engineRef.current?.resume()
         wipeEngineRef.current?.resume()
       },
@@ -366,31 +379,37 @@ export const TadazzV4Stage = forwardRef<
     engineRef.current?.dispose()
     engineRef.current = engine
     let alive = true
-    void engine
-      .play(view.scene, {
-        ...view.data,
-        showPercentages:
-          view.data.showPercentages ?? showPercentagesRef.current,
-      })
-      .then((completed) => {
-        if (!alive) {
-          return
-        }
+    const playing = engine.play(view.scene, {
+      ...view.data,
+      showPercentages: view.data.showPercentages ?? showPercentagesRef.current,
+    })
+    const remainingMs = pausedCountdownRemainingMsRef.current
 
-        resolutions.current.get(view.revision)?.(completed)
-        resolutions.current.delete(view.revision)
+    // A delayed scene commit must inherit the authoritative pause. Preview
+    // pause() without a remainder keeps its existing explicit seek lifecycle.
+    if (remainingMs !== undefined) {
+      engine.pause(remainingMs)
+    }
 
-        if (completed) {
-          el.dispatchEvent(
-            new CustomEvent("tadazz:animation-complete", {
-              detail: {
-                scene: view.scene,
-              },
-            }),
-          )
-          callbackRef.current.onComplete?.(view.scene)
-        }
-      })
+    void playing.then((completed) => {
+      if (!alive) {
+        return
+      }
+
+      resolutions.current.get(view.revision)?.(completed)
+      resolutions.current.delete(view.revision)
+
+      if (completed) {
+        el.dispatchEvent(
+          new CustomEvent("tadazz:animation-complete", {
+            detail: {
+              scene: view.scene,
+            },
+          }),
+        )
+        callbackRef.current.onComplete?.(view.scene)
+      }
+    })
 
     return () => {
       alive = false
@@ -408,15 +427,14 @@ export const TadazzV4Stage = forwardRef<
 
     if (
       !element ||
-      !view ||
-      view.scene !== "question" ||
+      view?.scene !== "question" ||
       !view.data.questionKey ||
       !callbackRef.current.onQuestionPresented
     ) {
       return
     }
 
-    const questionKey = view.data.questionKey
+    const { questionKey } = view.data
 
     return observeQuestionPresentation(element, () => {
       if (sequence.current === view.revision) {

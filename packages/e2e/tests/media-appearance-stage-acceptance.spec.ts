@@ -581,6 +581,10 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       .click()
     await expect(titleInput).toHaveValue("Populated Question Title")
 
+    const answerVisualMode = edit.getByTestId("answer-mode-0-both")
+    await answerVisualMode.click()
+    await expect(answerVisualMode).toHaveAttribute("aria-checked", "true")
+    await expect(edit.getByTestId("answer-pick-image-0")).toBeVisible()
     await edit.getByTestId("answer-pick-image-0").click()
     const dialog = page.getByRole("dialog", {
       name: t("quizz:media.library"),

@@ -39,6 +39,9 @@ export interface CinematicLayerStackProps {
 
   /** Native Layer 3 content (brand logo, title, subtitle, audio card) */
   titleSlot?: React.ReactNode
+  /** Native stage content keeps its canonical full-stage coordinate system. */
+  titleSlotLayout?: "content" | "stage"
+  titleSlotVisible?: boolean
   /** Interactive Layer 5 content (host advance/skip controls, badges) */
   interactiveSlot?: React.ReactNode
 
@@ -88,6 +91,8 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
   overlayAnimations,
   inlineLottieMap,
   titleSlot,
+  titleSlotLayout = "content",
+  titleSlotVisible = true,
   interactiveSlot,
   onForegroundMediaEnded,
   onOverlayCompleted,
@@ -669,14 +674,20 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
       </div>
 
       {/* Layer 3: Native Razzia title, subtitle, brand logo, or audio card */}
-      {titleSlot && (
-        <div
-          data-testid="cinematic-layer-native-title"
-          className="pointer-events-none relative z-30 flex w-full max-w-5xl flex-col items-center justify-center px-4 text-center"
-        >
-          {titleSlot}
-        </div>
-      )}
+      {titleSlot &&
+        (titleSlotVisible ||
+          (endBehavior === "fadeToTitle" && mediaEndedVisual)) && (
+          <div
+            data-testid="cinematic-layer-native-title"
+            className={
+              titleSlotLayout === "stage"
+                ? "pointer-events-none absolute inset-0 z-30"
+                : "pointer-events-none relative z-30 flex w-full max-w-5xl flex-col items-center justify-center px-4 text-center"
+            }
+          >
+            {titleSlot}
+          </div>
+        )}
 
       {/* Layer 4: Ordered Lottie overlays above native title */}
       <div

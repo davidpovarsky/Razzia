@@ -1797,11 +1797,15 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
       ),
     ).toHaveAttribute("data-overlay-phase", "beforeStart")
     await saveScreenshot(spectatorPage, "03_live_opening_t0_1s.png")
+    const openingTitle = openingStack
+      .getByTestId("cinematic-layer-native-title")
+      .getByTestId("tadazz-screen-message")
+      .locator(".tz-x-headline")
+    await expect(openingTitle).toHaveText("Cinematic Opening Premiere")
+    await expect(openingTitle).toBeVisible()
     await expect(
-      spectatorPage.getByRole("heading", {
-        name: "Cinematic Opening Premiere",
-      }),
-    ).toBeVisible()
+      spectatorPage.getByTestId("tadazz-screen-message"),
+    ).toHaveCount(1)
 
     // Verify full-bleed cinema stage (no max-w-6xl card box) and transparent pointer-events-none overlays
     const stageArchitecture = await spectatorPage.evaluate(() => {
@@ -1980,13 +1984,13 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
     // Advance to Cumulative Answer Recap Scene
     await next(managerPage)
     await expect(
-      spectatorPage.locator('[data-testid="scene-answer-recap"]'),
+      spectatorPage.locator('[data-testid="tadazz-screen-recap"]'),
     ).toBeVisible({
       timeout: 10_000,
     })
     const recapText =
       (await spectatorPage
-        .locator('[data-testid="scene-answer-recap"]')
+        .locator('[data-testid="tadazz-screen-recap"]')
         .textContent()) ?? ""
     expect(recapText).toContain("Emerald Aurora")
     expect(recapText).toContain("Three")
@@ -2108,11 +2112,15 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
         spectatorPage,
         `Closing Cinema + 3 Overlays @ ${vp.name}`,
       )
+      const closingTitle = closingStack
+        .getByTestId("cinematic-layer-native-title")
+        .getByTestId("tadazz-screen-message")
+        .locator(".tz-x-headline")
+      await expect(closingTitle).toHaveText("Grand Cinema Finale")
+      await expect(closingTitle).toBeVisible()
       await expect(
-        spectatorPage.getByRole("heading", {
-          name: "Grand Cinema Finale",
-        }),
-      ).toBeVisible()
+        spectatorPage.getByTestId("tadazz-screen-message"),
+      ).toHaveCount(1)
 
       if (
         vp.name === "1920x1080" ||

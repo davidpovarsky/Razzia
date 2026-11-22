@@ -490,6 +490,162 @@ describe("TadazzV4Motion: WAAPI Cue Emission & Reduced Motion Lifecycle", () => 
     expect(option.animate).toHaveBeenCalledTimes(2)
   })
 
+  const countdownHarness = () => {
+    let now = 1000
+    let duration = 12000
+    let currentTime = 0
+    let state: AnimationPlayState = "running"
+    let pendingPause = false
+    let frame: FrameRequestCallback | undefined = undefined
+    let finish: () => void = () => undefined
+    const finished = new Promise<void>((resolve) => {
+      finish = resolve
+    })
+    const animation = {
+      finished,
+      effect: {
+        getTiming: () => ({ iterations: 1 }),
+        getComputedTiming: () => ({ progress: currentTime / duration }),
+        updateTiming: (timing: OptionalEffectTiming) => {
+          const { duration: nextDuration } = timing
+
+          if (typeof nextDuration === "number") {
+            duration = nextDuration
+          }
+        },
+      },
+      get currentTime() {
+        return currentTime
+      },
+      set currentTime(value: number) {
+        currentTime = value
+
+        // Native currentTime assignment synchronously completes pending pause.
+        if (pendingPause) {
+          pendingPause = false
+          state = "paused"
+        }
+      },
+      get playState() {
+        return pendingPause ? "paused" : state
+      },
+      get pending() {
+        return pendingPause
+      },
+      pause: () => {
+        pendingPause = true
+      },
+      play: () => {
+        state = "running"
+      },
+      cancel: () => {
+        state = "idle"
+        finish()
+      },
+    }
+    const value = {
+      textContent: "",
+      classList: { add: vi.fn(), toggle: vi.fn() },
+    }
+    const ring = { style: {}, animate: vi.fn(() => animation) }
+    const stage = {
+      querySelector: (selector: string) => {
+        if (selector === ".countdown-ring .timer-progress") {
+          return ring
+        }
+
+        return selector === ".countdown-value" ? value : null
+      },
+      querySelectorAll: () => [],
+      getAnimations: () => [animation],
+    } as unknown as HTMLElement
+    const clock = vi.spyOn(Date, "now").mockImplementation(() => now)
+    vi.stubGlobal("requestAnimationFrame", (callback: FrameRequestCallback) => {
+      frame = callback
+
+      return 1
+    })
+    vi.stubGlobal("cancelAnimationFrame", vi.fn())
+    const motion = new TadazzV4Motion(stage, { reducedMotion: true })
+    void motion.play("countdown", {
+      seconds: 12,
+      deadlineMs: 12307,
+      cardsAlreadyOnStage: true,
+    })
+
+    return {
+      motion,
+      animation,
+      value,
+      ring,
+      advance: (milliseconds: number) => {
+        now += milliseconds
+
+        if (state === "running") {
+          currentTime += milliseconds
+        }
+
+        frame?.(now)
+      },
+      deadlineAfter: (milliseconds: number) => now + milliseconds,
+      dispose: () => {
+        motion.dispose()
+        clock.mockRestore()
+        vi.unstubAllGlobals()
+      },
+    }
+  }
+  it("holds the authoritative countdown through delayed paint and stale deadline patches", () => {
+    const clock = countdownHarness()
+
+    try {
+      expect(clock.value.textContent).toBe("12")
+      clock.advance(1100)
+      expect(clock.value.textContent).toBe("11")
+      clock.motion.pause(11307)
+      expect(clock.animation.pending).toBe(false)
+      expect(clock.animation.playState).toBe("paused")
+      expect(clock.animation.currentTime).toBe(693)
+      expect(clock.value.textContent).toBe("12")
+      clock.advance(1200)
+      clock.motion.syncCountdown({ deadlineMs: 12307 })
+      clock.advance(1200)
+      expect(clock.animation.currentTime).toBe(693)
+      expect(clock.value.textContent).toBe("12")
+      expect(clock.ring.animate).toHaveBeenCalledTimes(1)
+
+      clock.motion.resume()
+      clock.motion.syncCountdown({ deadlineMs: clock.deadlineAfter(11307) })
+      expect(clock.animation.currentTime).toBe(693)
+      clock.advance(1200)
+      expect(clock.animation.playState).toBe("running")
+      expect(clock.value.textContent).toBe("11")
+      expect(clock.ring.animate).toHaveBeenCalledTimes(1)
+    } finally {
+      clock.dispose()
+    }
+  })
+  it("freezes native pending pause synchronously while retaining explicit preview seeking", () => {
+    const clock = countdownHarness()
+
+    try {
+      clock.motion.pause()
+      expect(clock.animation.pending).toBe(false)
+      clock.advance(1200)
+      expect(clock.animation.currentTime).toBe(693)
+      expect(clock.value.textContent).toBe("12")
+
+      // A preview has its own clock and deliberately seeks while still paused.
+      clock.motion.syncCountdown({ deadlineMs: clock.deadlineAfter(5000) })
+      clock.advance(1200)
+      expect(clock.animation.playState).toBe("paused")
+      expect(clock.animation.currentTime).toBe(7000)
+      expect(clock.value.textContent).toBe("05")
+      expect(clock.ring.animate).toHaveBeenCalledTimes(1)
+    } finally {
+      clock.dispose()
+    }
+  })
   it("stop() cancels active state and clears pending timers", () => {
     const stage = fakeElement()
     const motion = new TadazzV4Motion(stage)

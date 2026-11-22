@@ -91,7 +91,7 @@ export function NativeClassicScene({
 
   return (
     <>
-      {content}
+      {!cinematic && content}
       {cinematic && (
         <div
           className="tz-scene-media"
@@ -106,6 +106,9 @@ export function NativeClassicScene({
                 : "media"
             }
             epoch={epoch}
+            titleSlot={content}
+            titleSlotLayout="stage"
+            titleSlotVisible={scene.textOverlay !== false}
             mediaUrl={descriptor.mediaUrl}
             mediaType={descriptor.mediaType}
             mediaFit={descriptor.mediaFit}

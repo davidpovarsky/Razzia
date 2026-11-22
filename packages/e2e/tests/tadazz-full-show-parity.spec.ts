@@ -342,6 +342,7 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
       questionIndex: 0,
       surface: "player",
     })
+    await expect(alice.getByTestId("game-question-title")).toContainText(q1Text)
     await assertTzilaChoices({
       page: spectator,
       questionIndex: 0,
@@ -378,12 +379,33 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
         }
       ).accepted,
     ).toBe(true)
+    const aliceAnswerStart = aliceWire.length
     await clickCard(alice, 3)
     await clickCard(bob, 3)
+    await waitForVoteCount({
+      rows: hostWire,
+      questionId: imported.extras.questionIds[0],
+      count: 3,
+    })
+    await expect
+      .poll(
+        () =>
+          aliceWire
+            .slice(aliceAnswerStart)
+            .findLast((row) => row.name === STATUS.WAIT)?.data,
+      )
+      .toEqual({ text: "game:waitingForAnswers" })
+    await expect(
+      alice.getByRole("heading", {
+        name: t("game:waitingForAnswers"),
+        exact: true,
+      }),
+    ).toBeVisible()
+    await expect(alice.getByTestId("photo-card-grid")).toHaveCount(0)
     await expect(spectator.getByTestId("tadazz-question-panel")).toContainText(
       q1Text,
     )
-    await expect(alice.getByTestId("game-question-title")).toContainText(q1Text)
+    await expect(dana.getByTestId("game-question-title")).toContainText(q1Text)
     await setTzilaPaused(managerPage, true)
     /* oxlint-disable require-await, typescript/require-await -- Retain promise-returning API and rejection semantics for synchronous implementations. */
     await expect
@@ -1010,6 +1032,14 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
       typeof winner.username === "string" && typeof winner.points === "number",
     )
     expect(winner.points).toBe(Math.max(aliceScore, bobScore))
+    const winnerNames = actualTop
+      .map((entry) => liveRecord(entry))
+      .filter((entry) => entry.points === winner.points)
+      .map((entry) => {
+        assert(typeof entry.username === "string")
+
+        return entry.username
+      })
     for (const [name, rows] of [
       ["Alice", aliceWire],
       ["Bob", bobWire],
@@ -1023,7 +1053,7 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
     const finaleScreen = managerPage.getByTestId("tadazz-finale-screen")
     await expect(finaleScreen).toHaveClass(/is-visible/u)
     await expect(managerPage.getByTestId("tadazz-winner-name")).toHaveText(
-      winner.username,
+      winnerNames.join(" & "),
     )
     await expect
       .poll(async () =>

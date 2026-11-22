@@ -16,6 +16,7 @@ import { join } from "node:path"
 import { skipPlatformOpening } from "@razzia/e2e/utils/manager"
 import {
   endRecordedVote,
+  latestState,
   observeLiveFlow,
   setManualProgression,
 } from "@razzia/e2e/utils/extension-manager"
@@ -756,13 +757,20 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
     "data-show-scene",
     "results",
   )
+  await expect
+    .poll(() => latestState(game.hostWire))
+    .toMatchObject({
+      phase: "responses",
+      questionId: game.extras.questionIds[0],
+      extras: { voteCompletionReason: "manual" },
+    })
   expect(
-    (await probe(page)).cues.filter((cue) => cue.name === "timer-ended"),
+    (await probe(page)).cues.filter((cue) => cue.name === "vote-locked"),
   ).toHaveLength(0)
   await expect
     .poll(
       async () =>
-        (await probe(page)).cues.filter((cue) => cue.name === "vote-locked")
+        (await probe(page)).cues.filter((cue) => cue.name === "timer-ended")
           .length,
     )
     .toBe(1)
@@ -770,7 +778,7 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
     (await probe(page)).plays.filter((item) =>
       item.url.includes("tadazz-timer-end-"),
     ),
-  ).toHaveLength(0)
+  ).toHaveLength(1)
   await page.getByTestId("host-next-screen-btn").click()
   await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
     "data-voting-open",
@@ -803,17 +811,24 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
     { timeout: 30_000 },
   )
   await expect
+    .poll(() => latestState(game.hostWire))
+    .toMatchObject({
+      phase: "responses",
+      questionId: game.extras.questionIds[1],
+      extras: { voteCompletionReason: "elapsed" },
+    })
+  await expect
     .poll(
       async () =>
         (await probe(page)).cues.filter((cue) => cue.name === "timer-ended")
           .length,
     )
-    .toBe(1)
+    .toBe(2)
   expect(
     (await probe(page)).plays.filter((item) =>
       item.url.includes("tadazz-timer-end-"),
     ),
-  ).toHaveLength(1)
+  ).toHaveLength(2)
   for (const surface of [page, player, display]) {
     const evidence = await probe(surface)
     expect(evidence.frames).toBeGreaterThan(0)
@@ -919,7 +934,7 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
         (await probe(page)).cues.filter((cue) => cue.name === "timer-ended")
           .length,
     )
-    .toBe(1)
+    .toBe(2)
   await page.getByTestId("host-pause-resume-btn").click()
   await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
     "data-game-paused",
@@ -931,15 +946,27 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
     "results",
   )
   await expect
+    .poll(() => latestState(game.hostWire))
+    .toMatchObject({
+      phase: "responses",
+      questionId: game.extras.questionIds[3],
+      extras: { voteCompletionReason: "manual" },
+    })
+  await expect
     .poll(
       async () =>
-        (await probe(page)).cues.filter((cue) => cue.name === "vote-locked")
+        (await probe(page)).cues.filter((cue) => cue.name === "timer-ended")
           .length,
     )
-    .toBe(2)
+    .toBe(3)
   expect(
-    (await probe(page)).cues.filter((cue) => cue.name === "timer-ended"),
-  ).toHaveLength(1)
+    (await probe(page)).cues.filter((cue) => cue.name === "vote-locked"),
+  ).toHaveLength(0)
+  expect(
+    (await probe(page)).plays.filter((item) =>
+      item.url.includes("tadazz-timer-end-"),
+    ),
+  ).toHaveLength(3)
   await testInfo.attach("complete-audio-trace.json", {
     body: JSON.stringify(
       {

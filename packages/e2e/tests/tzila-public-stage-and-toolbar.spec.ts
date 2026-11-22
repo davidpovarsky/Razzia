@@ -586,6 +586,9 @@ test.describe("P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolba
     })
     const playerPage = await playerContext.newPage()
     await joinGame(playerPage, pin, "Bob")
+    await expect(managerPage.getByTestId("host-connected-counter")).toHaveText(
+      /^1(?:\s*\/\s*1)?$/u,
+    )
 
     // 3. Start Game
     await startGame(managerPage)

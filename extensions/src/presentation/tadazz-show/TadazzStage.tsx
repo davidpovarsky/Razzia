@@ -164,7 +164,8 @@ export interface TadazzStageHandle {
   }): Promise<void>
   showInterlude?(data: { title: string; subtitle?: string }): Promise<void>
   showChosen?(selectedIndices: number[]): Promise<void>
-  pauseAnimations?(): void
+  /** Freeze a voting clock at the server's remaining milliseconds when supplied. */
+  pauseAnimations?(countdownRemainingMs?: number): void
   resumeAnimations?(): void
   setPercentagesVisible?(visible: boolean): void
   finishAnimations(): void
