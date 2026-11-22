@@ -59,10 +59,20 @@ export const readStoredTzila = () => {
   assert.equal(matches.length, 1)
   const [filename] = matches
   assert(filename)
-  const quizId = path.basename(filename, ".json")
-  const storedQuiz = quizzValidator.parse(
-    JSON.parse(fs.readFileSync(path.join(quizDirectory, filename), "utf8")),
+  const storedValue: unknown = JSON.parse(
+    fs.readFileSync(path.join(quizDirectory, filename), "utf8"),
   )
+  assert(
+    storedValue !== null &&
+      typeof storedValue === "object" &&
+      !Array.isArray(storedValue) &&
+      "id" in storedValue &&
+      typeof storedValue.id === "string" &&
+      /^[A-Za-z0-9_-]+$/u.test(storedValue.id),
+    "The imported quiz must retain its allocated ID",
+  )
+  const { id: quizId } = storedValue
+  const storedQuiz = quizzValidator.parse(storedValue)
   const storedExtras = quizExtrasV2Schema.parse(
     JSON.parse(
       fs.readFileSync(

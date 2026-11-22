@@ -76,7 +76,7 @@ test("restores the manager screen after a reload", async ({
 
   await manager.reload()
 
-  await expect(manager.getByText("1 / 2")).toBeVisible()
+  await expect(manager.getByText("1 / 2", { exact: true })).toBeVisible()
   await expect(manager.getByTestId("host-end-timer-btn")).toBeVisible()
   await expect
     .poll(

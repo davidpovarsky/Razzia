@@ -179,6 +179,16 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit == 'true'
         run: pnpm --filter @razzia/e2e exec playwright install-deps ${{ matrix.browsers }}
 
+      - name: Install real video fixture encoder
+        if: matrix.lane == 'p0-media-tzila'
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y ffmpeg
+          command -v ffmpeg
+          ffmpeg -version | tee "work/ci-e2e/${{ matrix.lane }}/ffmpeg-version.txt"
+          dpkg-query -W ffmpeg > "work/ci-e2e/${{ matrix.lane }}/ffmpeg-package.txt"
+
       - name: Run exact dedicated cases
         id: run
         shell: bash

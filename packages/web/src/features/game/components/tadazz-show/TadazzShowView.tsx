@@ -29,6 +29,7 @@ import {
   isShowSceneContentPending,
   isTadazzV4Active,
   planTransition,
+  usesSharedScenePresenter,
   showSceneTransitionIdentity,
   resolveStageBackdrop,
   resolveTadazzAudioPolicy,
@@ -1051,6 +1052,10 @@ function TadazzShowContent(props: TadazzShowViewProps) {
       case "scene": {
         const s = scene.scene
 
+        if (usesSharedScenePresenter(s)) {
+          return props.nativeContent
+        }
+
         if (
           s.kind === "animation" &&
           isCreatingWorldsPreset(
@@ -1246,7 +1251,11 @@ function TadazzShowContent(props: TadazzShowViewProps) {
   ])
   let overlay: React.ReactNode = null
 
-  if (scene.kind === "scene" && isCinematicScene(scene.scene)) {
+  if (
+    scene.kind === "scene" &&
+    !usesSharedScenePresenter(scene.scene) &&
+    isCinematicScene(scene.scene)
+  ) {
     const s = scene.scene
     const kind: CinematicLayerStackProps["sceneKind"] =
       s.kind === "opening" || s.kind === "closing" ? s.kind : "media"

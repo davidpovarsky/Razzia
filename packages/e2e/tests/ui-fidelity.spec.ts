@@ -311,6 +311,10 @@ for (const family of families) {
       ).toBeVisible()
       await noOverflow(page, family !== "razzia-original")
       await noOverflow(player)
+      await expect(page.getByTestId("host-audio-controls")).toHaveAttribute(
+        "data-platform-scope",
+        "platform.host",
+      )
       expect(
         await page
           .getByTestId("host-toggle-audio-mute")
@@ -320,7 +324,7 @@ for (const family of families) {
         await page
           .getByTestId("host-toggle-audio-mute")
           .evaluate((element) => getComputedStyle(element).borderRadius),
-      ).toBe("8px")
+      ).toBe("12px")
       await page.getByTestId("host-pause-resume-btn").click()
       await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
         "data-game-paused",

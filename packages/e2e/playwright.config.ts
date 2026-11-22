@@ -58,6 +58,7 @@ export default defineConfig({
       url: "http://localhost:3000",
       reuseExistingServer: false,
       env: {
+        CONFIG_PATH,
         NODE_OPTIONS: "--experimental-strip-types",
       },
     },

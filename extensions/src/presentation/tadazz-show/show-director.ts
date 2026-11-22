@@ -30,6 +30,16 @@ export function hasAuthoredCinematicContent(
   )
 }
 
+/** Foreground audio and authored Lottie keep their existing shared media owner. */
+export function usesSharedScenePresenter(scene: SceneDescriptor): boolean {
+  return (
+    (scene.kind === "media" && scene.mediaType === "audio") ||
+    (scene.kind === "animation" &&
+      Boolean(scene.lottieUrl) &&
+      !isFullShowScene(scene.preset ?? ""))
+  )
+}
+
 /** One call on the stage handle. The director never invents data. */
 export type StageStep =
   | {
@@ -602,7 +612,7 @@ function planScene(
 
       // The existing ScenePresenter owns an explicitly authored Lottie. Keep
       // Creating Worlds' full-show choreography on its original native path.
-      if (scene.lottieUrl && !(preset && isFullShowScene(preset))) {
+      if (usesSharedScenePresenter(scene)) {
         return [{ op: "custom" }]
       }
 

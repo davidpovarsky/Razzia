@@ -524,6 +524,21 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     const editorWidths = [1280, 1024, 844, 768, 390, 320]
     for (const width of editorWidths) {
       await page.setViewportSize({ width, height: 800 })
+      let kinds = headerKinds
+
+      if (width < 1100) {
+        await expect(headerKinds).toBeHidden()
+        const editPanel = await openStudioPanel(page, "edit")
+        kinds = editPanel.locator(
+          '[data-testid="studio-card-type-bar"][data-embedded="true"]',
+        )
+      }
+
+      await expect(kinds).toHaveCount(1)
+      await expect(kinds).toBeVisible()
+      await expect(kinds.getByRole("radio")).toHaveCount(2)
+      await expect(kinds.getByRole("radio", { name: /Quiz/i })).toBeVisible()
+      await expect(kinds.getByRole("radio", { name: /Survey/i })).toBeVisible()
       const overflow = await page.evaluate(() => ({
         scrollWidth: document.documentElement.scrollWidth,
         clientWidth: document.documentElement.clientWidth,
@@ -532,9 +547,11 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         overflow.scrollWidth,
         `Editor horizontal overflow at width ${width}px`,
       ).toBeLessThanOrEqual(overflow.clientWidth + 1)
-      await expect(headerKinds).toBeVisible()
     }
     await saveScreenshot(page, "01_editor_narrow_320px.png")
+    const drawerClose = page.locator("[data-editor-drawer-close]:visible")
+    await expect(drawerClose).toHaveCount(1)
+    await drawerClose.click()
     await page.setViewportSize({ width: 1280, height: 900 })
 
     // Transition and Answer Recap belong to the explicit Advanced card chooser.
@@ -757,6 +774,36 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       type: string
     }
 
+    // Register the same real sound bytes as authored media. The theme's built-in
+    // start-effect URL is not an admitted custom lobby soundtrack.
+    const openingSoundResponse = await managerPage.request.get(
+      new URL("/sounds/boump.mp3", managerPage.url()).href,
+    )
+    expect(openingSoundResponse.ok()).toBe(true)
+    expect(openingSoundResponse.headers()["content-type"]).toMatch(/audio\//u)
+    const openingSoundBytes = await openingSoundResponse.body()
+    expect(openingSoundBytes.length).toBeGreaterThan(0)
+    const uploadOpeningSound = await managerPage.request.post(
+      `${SOCKET_ORIGIN}/api/media`,
+      {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        multipart: {
+          file: {
+            name: "authored-opening-sound.mp3",
+            mimeType: "audio/mpeg",
+            buffer: openingSoundBytes,
+          },
+        },
+      },
+    )
+    expect(uploadOpeningSound.status()).toBe(201)
+    const uploadedOpeningSound = (await uploadOpeningSound.json()) as {
+      url: string
+      type: string
+    }
+    expect(uploadedOpeningSound.url).toMatch(/^\/media\//u)
+    expect(uploadedOpeningSound.type).toBe("audio")
+
     // Create a composite show with:
     // - Opening scene WITH custom background override
     // - Question 1 (5 image+text options, custom background override, custom audio cue, and 4-slot staged animations)
@@ -865,7 +912,7 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
                 },
                 audio: {
                   mode: "custom",
-                  url: "/sounds/boump.mp3",
+                  url: uploadedOpeningSound.url,
                   volume: 0.6,
                   loop: false,
                 },
@@ -1148,7 +1195,7 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     ).toHaveCount(1)
     await expect(
       spectatorPage.getByTestId("audio-cue-player-state"),
-    ).toHaveAttribute("data-audio-url", "/sounds/boump.mp3")
+    ).toHaveAttribute("data-audio-url", uploadedOpeningSound.url)
     const stageViewports = [
       {
         width: 1920,
@@ -1881,9 +1928,16 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       timeout: 8_000,
     })
     await expect(
-      spectatorPage.getByRole("heading", {
-        name: "Cinema Premiere Opening",
-      }),
+      spectatorPage
+        .getByTestId("tadazz-screen-message")
+        .getByText("Cinema Premiere Opening", { exact: true }),
+    ).toBeVisible()
+    await expect(
+      spectatorPage
+        .getByTestId("tadazz-screen-message")
+        .getByText("Full-Stage Coverage Without Legacy Countdown", {
+          exact: true,
+        }),
     ).toBeVisible()
     await spectatorPage.waitForTimeout(800)
     await assertZeroStageScroll(spectatorPage, "Cinema Opening @ 1920x1080")
@@ -1932,9 +1986,15 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     ).toBeVisible({
       timeout: 15_000,
     })
+    const nativeAudio = spectatorPage.getByTestId("scene-audio")
+    await expect(nativeAudio).toHaveCount(1)
+    await expect(nativeAudio).toBeVisible()
+    await expect(nativeAudio).toHaveAttribute("src", "/sounds/answersMusic.mp3")
+    await expect(nativeAudio).toHaveJSProperty("volume", 0.7)
+    await expect(nativeAudio).toHaveJSProperty("loop", false)
     await expect(
-      spectatorPage.locator('[data-testid="scene-audio"]'),
-    ).toBeVisible()
+      spectatorPage.getByTestId("tadazz-cinematic-scene"),
+    ).toHaveCount(0)
     await assertZeroStageScroll(spectatorPage, "Media Audio Scene @ 1920x1080")
     await saveScreenshot(spectatorPage, "08_wave2_media_audio_scene.png")
 
@@ -1945,9 +2005,14 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     ).toBeVisible({
       timeout: 15_000,
     })
+    await expect(nativeAudio).toHaveCount(0)
+    await expect(spectatorPage.getByTestId("scene-lottie-player")).toHaveCount(
+      1,
+    )
+    await expect(spectatorPage.getByTestId("scene-lottie-player")).toBeVisible()
     await expect(
-      spectatorPage.locator('[data-testid="scene-lottie-player"]'),
-    ).toBeVisible()
+      spectatorPage.getByTestId("tadazz-cinematic-scene"),
+    ).toHaveCount(0)
     await assertZeroStageScroll(
       spectatorPage,
       "Animation + Lottie Fixture Scene @ 1920x1080",
@@ -1983,18 +2048,26 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     // Advance from Q2 SHOW_RESPONSES to Cumulative Answer Recap Scene!
     await next(managerPage)
     await expect(
-      spectatorPage.locator('[data-testid="scene-answer-recap"]'),
+      spectatorPage.locator('[data-testid="tadazz-screen-recap"]'),
     ).toBeVisible({
       timeout: 15_000,
     })
     await expect(
-      spectatorPage.locator('[data-testid="recap-question-card"]'),
+      spectatorPage.getByTestId("tadazz-screen-recap").locator(".tz-recap-row"),
     ).toHaveCount(2)
+
+    await expect(
+      spectatorPage
+        .getByTestId("tadazz-screen-recap")
+        .getByText("Cumulative Show Answer Recap", { exact: true }),
+    ).toBeVisible()
+    await expect(managerPage.getByTestId("host-next-screen-btn")).toBeEnabled()
+    await expect(playerPage.getByTestId("scene-awaiting-host")).toBeVisible()
 
     // Verify Q1 (survey) and Q2 (quiz) answers appear in the cumulative recap without exposing player names/phones
     const recapText =
       (await spectatorPage
-        .locator('[data-testid="scene-answer-recap"]')
+        .locator('[data-testid="tadazz-screen-recap"]')
         .textContent()) ?? ""
     expect(recapText).toContain("Solar Flare")
     expect(recapText).toContain("Mars")
@@ -2052,7 +2125,7 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       )
       await assertVisualContainment(
         spectatorPage,
-        '[data-testid="scene-answer-recap"]',
+        '[data-testid="tadazz-screen-recap"]',
         `Answer Recap Container @ ${vp.name}`,
         {
           checkTextCompleteness: false,
@@ -2060,8 +2133,8 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       )
       await assertVisualContainment(
         spectatorPage,
-        '[data-testid="scene-awaiting-host"]',
-        `Answer Recap Awaiting Host @ ${vp.name}`,
+        '[data-testid="tadazz-screen-recap"] .tz-x-title',
+        `Answer Recap Title @ ${vp.name}`,
       )
 
       if (

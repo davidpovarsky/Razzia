@@ -279,10 +279,10 @@ export const ScenePresenter = ({
     return () => clearInterval(interval)
   }, [effectiveServerStartedAt, durationMs, controlledTimeMs])
 
-  // A readonly preview supplies its existing sole clock. Legacy foreground
-  // media follows it just as the cinematic layer already does.
+  // Preview media follows its existing sole clock. Live media receives only
+  // the authoritative pause state and retains its current playback position.
   useEffect(() => {
-    if (controlledTimeMs === undefined) {
+    if (controlledTimeMs === undefined && controlledPaused === undefined) {
       return
     }
 
@@ -292,21 +292,23 @@ export const ScenePresenter = ({
           continue
         }
 
-        const elapsed = Math.max(0, controlledTimeMs / 1000)
-        let target = elapsed
+        if (controlledTimeMs !== undefined) {
+          const elapsed = Math.max(0, controlledTimeMs / 1000)
+          let target = elapsed
 
-        if (Number.isFinite(media.duration) && media.duration > 0) {
-          target = media.loop
-            ? elapsed % media.duration
-            : Math.min(elapsed, media.duration)
-        }
+          if (Number.isFinite(media.duration) && media.duration > 0) {
+            target = media.loop
+              ? elapsed % media.duration
+              : Math.min(elapsed, media.duration)
+          }
 
-        if (
-          Number.isFinite(media.duration) &&
-          media.duration > 0 &&
-          Math.abs(media.currentTime - target) > 0.25
-        ) {
-          media.currentTime = target
+          if (
+            Number.isFinite(media.duration) &&
+            media.duration > 0 &&
+            Math.abs(media.currentTime - target) > 0.25
+          ) {
+            media.currentTime = target
+          }
         }
 
         if (controlledPaused ?? true) {

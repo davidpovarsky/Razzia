@@ -14,6 +14,7 @@ import {
 import {
   collapseForResume,
   planTransition,
+  usesSharedScenePresenter,
   type StageStep,
 } from "./show-director"
 
@@ -468,6 +469,72 @@ describe("activation and backdrop priority", () => {
 })
 
 describe("planTransition — the ten reference methods are driven by real events", () => {
+  it.each([
+    {
+      kind: "media",
+      mediaType: "audio" as const,
+      mediaUrl: "/media/owned.mp3",
+    },
+    { kind: "animation", preset: "confetti", lottieUrl: "/media/owned.json" },
+  ])(
+    "keeps authored $kind content on the shared presenter through live scene resolution",
+    (authored) => {
+      for (const role of ["manager", "spectator"] as const) {
+        const scene = computeShowScene(
+          base({
+            role,
+            envelope: envelope(
+              {
+                currentScene: {
+                  id: "authored",
+                  title: "Authored media",
+                  ...authored,
+                },
+                activeTimelineStep: {
+                  kind: authored.kind,
+                  sceneId: "authored",
+                  stepIndex: 1,
+                },
+              },
+              { phase: "scene" },
+            ),
+          }),
+        )
+        expect(scene.kind).toBe("scene")
+
+        if (scene.kind !== "scene") {
+          throw new Error("The authored scene was not resolved")
+        }
+
+        expect(scene.scene).toMatchObject(authored)
+        expect(usesSharedScenePresenter(scene.scene)).toBe(true)
+        expect(
+          planTransition(null, scene, { mode: "idle", questionKey: null }),
+        ).toEqual([{ op: "custom" }])
+      }
+    },
+  )
+
+  it.each([
+    {
+      kind: "media",
+      mediaType: "image" as const,
+      mediaUrl: "/media/photo.png",
+    },
+    {
+      kind: "media",
+      mediaType: "video" as const,
+      mediaUrl: "/media/movie.mp4",
+    },
+    { kind: "animation", preset: "confetti" },
+    { kind: "animation", preset: "round-one", lottieUrl: "/media/owned.json" },
+  ])(
+    "retains the native image, video and preset owner for $kind/$preset/$mediaType",
+    (scene) => {
+      expect(usesSharedScenePresenter(scene)).toBe(false)
+    },
+  )
+
   it("shows an authored Lottie instead of the generic spotlight without replacing Creating Worlds", () => {
     const stage = { mode: "idle" as const, questionKey: null }
     const scene = {

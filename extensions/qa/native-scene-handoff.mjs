@@ -13,6 +13,13 @@ if (!source || !deps || !evidence)
   throw new Error("Explicit isolated source/deps/evidence required")
 const require = createRequire(path.join(deps, "extensions/package.json"))
 const { build } = require("esbuild")
+const dotLottieEntry = createRequire(
+  require.resolve("@lottiefiles/dotlottie-react"),
+).resolve("@lottiefiles/dotlottie-web")
+const dotLottieWasm = path.join(
+  path.dirname(dotLottieEntry),
+  "dotlottie-player.wasm",
+)
 const { chromium } = createRequire(
   path.join(deps, "packages/e2e/package.json"),
 )("@playwright/test")
@@ -64,6 +71,10 @@ const previewFrameSchema = path.join(
   source,
   "extensions/src/core/show-library/application-preview-schema.ts",
 )
+const extensionStageContent = path.join(
+  source,
+  "extensions/src/presentation/extension-stage-content.tsx",
+)
 await fs.mkdir(evidence, { recursive: true })
 const sceneResolver = path.join(
   source,
@@ -88,6 +99,7 @@ import {resolveNativePhaseAudioCue,resolveTadazzAudioPolicy} from ${JSON.stringi
 import {PlatformClosingBoundary} from ${JSON.stringify(closingBoundary)};
 import {ApplicationPreviewStage} from ${JSON.stringify(applicationPreview)};
 import {applicationPreviewFrameSchema} from ${JSON.stringify(previewFrameSchema)};
+import {ExtensionStageContent} from ${JSON.stringify(extensionStageContent)};
 const q1={key:'first#1',question:'FIRST QUESTION',number:1,totalQuestions:23,answerCount:3,options:[]};
 const options=[{label:'Alpha'},{label:'Bravo'},{label:'Charlie'}];
 const transitionIdentity=${legacySceneIdentity ? "scene=>JSON.stringify(scene)" : "showSceneTransitionIdentity"};
@@ -184,6 +196,27 @@ function PreviewApp({audioMode='custom'}){
  };
  return <ApplicationPreviewStage frame={frame} onCommitted={()=>{window.previewCommitted=true}} onUnavailable={()=>{window.previewUnavailable=true}}/>;
 }
+function ForegroundPreviewApp({kind}){
+ const [frame,setFrame]=useState(()=>applicationPreviewFrameSchema.parse({
+  show:{format:'tada-show',version:1,title:'Native foreground owner fixture',baseGameMode:'quiz',settings:[],cards:[
+   kind==='audio'
+    ? {key:'foreground-media',kind:'media',title:'Owned foreground audio',mediaType:'audio',mediaUrl:'/media/fixture-recap.mp3#foreground-owner',volume:0.65,loop:true,showControls:true,durationMs:20000,advance:'manual'}
+    : {key:'foreground-lottie',kind:'animation',title:'Owned foreground Lottie',preset:'confetti',lottieUrl:'/media/fixture-animation.json',lottieLoop:true,durationMs:20000,advance:'manual'},
+   {key:'following-question',kind:'quiz',question:'Following real question',timeSeconds:20,answers:[{text:'Alpha'},{text:'Bravo'}],correctAnswers:[1]}
+  ]},
+  chapterIndex:0,clock:{epoch:1,sequence:1,elapsedMs:0,deadlineMs:20000,paused:true},role:'spectator',locale:'en',reducedMotion:false,soundEnabled:true,mediaRevealed:false,appearanceRevision:0,
+ }));
+ const clock=next=>flushSync(()=>setFrame(current=>applicationPreviewFrameSchema.parse({...current,clock:{...current.clock,...next,sequence:current.clock.sequence+1}})));
+ window.foregroundPreview={clock,sound:soundEnabled=>flushSync(()=>setFrame(current=>applicationPreviewFrameSchema.parse({...current,soundEnabled})))};
+ return <><ApplicationPreviewStage frame={frame} onCommitted={()=>{window.foregroundPreviewReady=true}} onUnavailable={()=>{window.foregroundPreviewUnavailable=true}}/><button data-testid="foreground-preview-resume" style={{position:'fixed',top:0,left:0,zIndex:2000}} onClick={()=>clock({paused:false})}>Resume existing preview clock</button></>;
+}
+function LiveForegroundApp(){
+ const commands=useRef([]);
+ const [envelope,setEnvelope]=useState(()=>({v:1,gameId:'live-foreground-owner',phase:'scene',epoch:3,startedAt:Date.now(),pause:{paused:true},extras:{currentScene:{id:'live-foreground-audio',kind:'media',title:'Live foreground audio',mediaType:'audio',mediaUrl:'/media/fixture-recap.mp3#live-foreground-owner',durationMs:20000,advance:'manual',volume:0.65,loop:true,showControls:false},activeTimelineStep:{kind:'media',sceneId:'live-foreground-audio',stepIndex:0}}}));
+ const pause=paused=>flushSync(()=>setEnvelope(current=>({...current,pause:{paused}})));
+ window.liveForeground={pause,commands:()=>commands.current};
+ return <><ExtensionStageContent extensionState={envelope} openingPlaceholder={false} tadazzEnabled isManager scenePresenterLabels={undefined} interludeLabels={{}} onCommand={command=>commands.current.push(command)}/><button data-testid="live-foreground-resume" style={{position:'fixed',top:0,left:0,zIndex:2000}} onClick={()=>pause(false)}>Resume authoritative scene</button></>;
+}
 function TerminalHandoffApp({role}){
  const theme=React.useMemo(()=>resolveShowTheme({role,selection:{id:'tadazz-classic',version:'1.0.0',overrides:{}}}),[role]);
  const extras=React.useMemo(()=>createPlatformAudioExtras(),[]);
@@ -216,6 +249,8 @@ function TerminalHandoffApp({role}){
 const root=createRoot(document.getElementById('root'));
 window.mountAuthoredPreview=(audioMode='custom')=>flushSync(()=>root.render(<PreviewApp key={audioMode} audioMode={audioMode}/>));
 window.mountTerminalHandoff=role=>flushSync(()=>root.render(<TerminalHandoffApp key={role} role={role}/>));
+window.mountForegroundPreview=kind=>{window.foregroundPreviewReady=false;window.foregroundPreviewUnavailable=false;flushSync(()=>root.render(<ForegroundPreviewApp key={kind} kind={kind}/>));};
+window.mountLiveForeground=()=>flushSync(()=>root.render(<LiveForegroundApp/>));
 root.render(<App/>);
 `
 const plugins = [
@@ -292,6 +327,45 @@ await build({
   },
   outfile: path.join(evidence, "fixture.js"),
 })
+const foregroundLottie = {
+  v: "5.7.4",
+  fr: 30,
+  ip: 0,
+  op: 120,
+  w: 240,
+  h: 240,
+  nm: "native-foreground-fixture",
+  ddd: 0,
+  assets: [],
+  layers: [
+    {
+      ddd: 0,
+      ind: 1,
+      ty: 1,
+      nm: "owned-square",
+      sr: 1,
+      ks: {
+        o: { a: 0, k: 100 },
+        r: { a: 0, k: 0 },
+        p: { a: 0, k: [120, 120, 0] },
+        a: { a: 0, k: [60, 60, 0] },
+        s: { a: 0, k: [100, 100, 100] },
+      },
+      ao: 0,
+      sw: 120,
+      sh: 120,
+      sc: "#7c3aed",
+      ip: 0,
+      op: 120,
+      st: 0,
+      bm: 0,
+    },
+  ],
+}
+await fs.writeFile(
+  path.join(evidence, "fixture-animation.json"),
+  JSON.stringify(foregroundLottie),
+)
 const serverFailures = []
 const server = http.createServer(async (request, response) => {
   try {
@@ -299,6 +373,10 @@ const server = http.createServer(async (request, response) => {
     let file
     if (url.pathname === "/fixture.js" || url.pathname === "/fixture.css")
       file = path.join(evidence, url.pathname.slice(1))
+    else if (url.pathname === "/api/extensions/lottie-wasm")
+      file = dotLottieWasm
+    else if (url.pathname === "/media/fixture-animation.json")
+      file = path.join(evidence, "fixture-animation.json")
     else if (url.pathname === "/media/fixture-start.mp3")
       file = path.join(source, "packages/web/public/sounds/boump.mp3")
     else if (url.pathname === "/assets/tadazz-question-background.png")
@@ -323,19 +401,23 @@ const server = http.createServer(async (request, response) => {
       )
       return
     }
-    const mime = file.endsWith(".js")
-      ? "text/javascript"
-      : file.endsWith(".css")
-        ? "text/css"
-        : file.endsWith(".mp3")
-          ? "audio/mpeg"
-          : file.endsWith(".png")
-            ? "image/png"
-            : file.endsWith(".svg")
-              ? "image/svg+xml"
-              : file.endsWith(".woff2")
-                ? "font/woff2"
-                : "image/jpeg"
+    const mime = file.endsWith(".wasm")
+      ? "application/wasm"
+      : file.endsWith(".json")
+        ? "application/json"
+        : file.endsWith(".js")
+          ? "text/javascript"
+          : file.endsWith(".css")
+            ? "text/css"
+            : file.endsWith(".mp3")
+              ? "audio/mpeg"
+              : file.endsWith(".png")
+                ? "image/png"
+                : file.endsWith(".svg")
+                  ? "image/svg+xml"
+                  : file.endsWith(".woff2")
+                    ? "font/woff2"
+                    : "image/jpeg"
     const bytes = await fs.readFile(file)
     response.writeHead(200, {
       "Content-Type": mime,
@@ -1611,6 +1693,214 @@ try {
       { staleLaunch },
     )
   }
+  await page.evaluate(() => window.mountForegroundPreview("audio"))
+  await page.waitForFunction(() => window.foregroundPreviewReady === true)
+  const foregroundAudio = page.getByTestId("scene-audio")
+  await foregroundAudio.waitFor({ state: "attached" })
+  await page.waitForFunction(() => {
+    const audio = document.querySelector('[data-testid="scene-audio"]')
+    return audio instanceof HTMLAudioElement && audio.readyState >= 2
+  })
+  await page.evaluate(() => {
+    window.foregroundElement = document.querySelector(
+      '[data-testid="scene-audio"]',
+    )
+  })
+  const readForeground = () =>
+    page.evaluate(() => {
+      const audio = document.querySelector('[data-testid="scene-audio"]')
+      return {
+        count: document.querySelectorAll('[data-testid="scene-audio"]').length,
+        same: audio === window.foregroundElement,
+        source: audio?.getAttribute("src"),
+        paused: audio?.paused,
+        time: audio?.currentTime,
+        volume: audio?.volume,
+        muted: audio?.muted,
+        loop: audio?.loop,
+        unavailable: window.foregroundPreviewUnavailable,
+        extraStack: document.querySelectorAll(
+          '[data-testid="tadazz-cinematic-scene"]',
+        ).length,
+        playingOwners: Array.from(
+          document.querySelectorAll("audio,video"),
+        ).filter((media) => !media.paused && !media.muted && media.volume > 0)
+          .length,
+      }
+    })
+  const foregroundBefore = await readForeground()
+  await page.evaluate(() => window.foregroundPreview.sound(false))
+  const foregroundMuted = await readForeground()
+  await page.evaluate(() => window.foregroundPreview.sound(true))
+  const foregroundUnmuted = await readForeground()
+  check(
+    "actual Classic preview mounts exactly one owned foreground audio element",
+    foregroundBefore.count === 1 &&
+      foregroundBefore.same &&
+      foregroundBefore.source === "/media/fixture-recap.mp3#foreground-owner" &&
+      foregroundBefore.paused &&
+      !foregroundBefore.muted &&
+      foregroundBefore.loop &&
+      Math.abs(foregroundBefore.volume - 0.65) < 0.001 &&
+      foregroundBefore.extraStack === 0 &&
+      !foregroundBefore.unavailable &&
+      foregroundMuted.same &&
+      foregroundMuted.muted &&
+      foregroundMuted.volume === 0 &&
+      foregroundMuted.playingOwners === 0 &&
+      foregroundUnmuted.same &&
+      !foregroundUnmuted.muted &&
+      Math.abs(foregroundUnmuted.volume - 0.65) < 0.001,
+    { foregroundBefore, foregroundMuted, foregroundUnmuted },
+  )
+  await page.getByTestId("foreground-preview-resume").click()
+  await page.waitForFunction(() => {
+    const audio = document.querySelector('[data-testid="scene-audio"]')
+    return (
+      audio instanceof HTMLAudioElement &&
+      !audio.paused &&
+      audio.currentTime > 0.1
+    )
+  })
+  const foregroundPlaying = await readForeground()
+  check(
+    "foreground preview audio advances after the existing clock resumes",
+    foregroundPlaying.same &&
+      foregroundPlaying.count === 1 &&
+      !foregroundPlaying.paused &&
+      foregroundPlaying.time > foregroundBefore.time &&
+      foregroundPlaying.playingOwners === 1,
+    { foregroundPlaying },
+  )
+  await page.evaluate(() =>
+    window.foregroundPreview.clock({ elapsedMs: 3000, paused: true }),
+  )
+  await page.waitForFunction(() => {
+    const audio = document.querySelector('[data-testid="scene-audio"]')
+    return (
+      audio instanceof HTMLAudioElement &&
+      audio.paused &&
+      Math.abs(audio.currentTime - 3) < 0.15
+    )
+  })
+  const foregroundPaused = await readForeground()
+  await page.waitForTimeout(180)
+  const foregroundHeld = await readForeground()
+  check(
+    "foreground preview seek and pause retain the same element and controlled time",
+    foregroundPaused.same &&
+      foregroundPaused.count === 1 &&
+      foregroundPaused.paused &&
+      Math.abs(foregroundPaused.time - 3) < 0.15 &&
+      Math.abs(foregroundHeld.time - foregroundPaused.time) < 0.05,
+    { foregroundPaused, foregroundHeld },
+  )
+  await page.getByTestId("foreground-preview-resume").click()
+  await page.waitForFunction(() => {
+    const audio = document.querySelector('[data-testid="scene-audio"]')
+    return (
+      audio instanceof HTMLAudioElement &&
+      !audio.paused &&
+      audio.currentTime > 3.1
+    )
+  })
+  const foregroundResumed = await readForeground()
+  await page.evaluate(() => window.mountForegroundPreview("lottie"))
+  await page.waitForFunction(
+    () =>
+      window.foregroundPreviewReady === true && window.foregroundElement.paused,
+  )
+  check(
+    "foreground preview resume preserves its owner and scene replacement releases it",
+    foregroundResumed.same &&
+      foregroundResumed.count === 1 &&
+      !foregroundResumed.paused &&
+      foregroundResumed.time >= foregroundPaused.time &&
+      (await foregroundAudio.count()) === 0,
+    { foregroundResumed },
+  )
+  const lottie = page.getByTestId("scene-lottie-player")
+  await page.waitForFunction(() => {
+    const player = document.querySelector('[data-testid="scene-lottie-player"]')
+    return player?.getAttribute("data-lottie-ready") === "true"
+  })
+  await page.evaluate(() => window.foregroundPreview.clock({ elapsedMs: 1000 }))
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('[data-testid="scene-lottie-player"]')
+        ?.getAttribute("data-lottie-frame") === "30",
+  )
+  const firstLottieFrame = Number(
+    await lottie.getAttribute("data-lottie-frame"),
+  )
+  await page.evaluate(() => window.foregroundPreview.clock({ elapsedMs: 1500 }))
+  await page.waitForFunction(
+    () =>
+      document
+        .querySelector('[data-testid="scene-lottie-player"]')
+        ?.getAttribute("data-lottie-frame") === "45",
+  )
+  check(
+    "authored Lottie preview has one shared presenter and follows its existing clock",
+    (await lottie.count()) === 1 &&
+      (await lottie.locator("canvas").count()) === 1 &&
+      (await lottie.getAttribute("data-lottie-ready")) === "true" &&
+      firstLottieFrame === 30 &&
+      Number(await lottie.getAttribute("data-lottie-frame")) === 45 &&
+      (await page.getByTestId("tadazz-cinematic-scene").count()) === 0 &&
+      (await page.getByTestId("scene-lottie-player-error").count()) === 0,
+  )
+  await page.evaluate(() => window.mountLiveForeground())
+  await page.getByTestId("scene-audio").waitFor({ state: "attached" })
+  await page.evaluate(() => {
+    window.foregroundElement = document.querySelector(
+      '[data-testid="scene-audio"]',
+    )
+  })
+  await page.getByTestId("live-foreground-resume").click()
+  await page.waitForFunction(() => {
+    const audio = document.querySelector('[data-testid="scene-audio"]')
+    return (
+      audio instanceof HTMLAudioElement &&
+      !audio.paused &&
+      audio.currentTime > 0.2
+    )
+  })
+  const livePlaying = await readForeground()
+  await page.evaluate(() => window.liveForeground.pause(true))
+  const livePaused = await readForeground()
+  await page.waitForTimeout(180)
+  const liveHeld = await readForeground()
+  await page.getByTestId("live-foreground-resume").click()
+  await page.waitForFunction((heldTime) => {
+    const audio = document.querySelector('[data-testid="scene-audio"]')
+    return (
+      audio instanceof HTMLAudioElement &&
+      !audio.paused &&
+      audio.currentTime > heldTime + 0.1
+    )
+  }, liveHeld.time)
+  const liveResumed = await readForeground()
+  check(
+    "live shared foreground audio honors authoritative pause and resume without rewinding",
+    livePlaying.same &&
+      livePlaying.count === 1 &&
+      livePlaying.playingOwners === 1 &&
+      livePlaying.source === "/media/fixture-recap.mp3#live-foreground-owner" &&
+      livePaused.same &&
+      livePaused.paused &&
+      livePaused.time >= livePlaying.time &&
+      Math.abs(liveHeld.time - livePaused.time) < 0.05 &&
+      liveHeld.playingOwners === 0 &&
+      liveResumed.same &&
+      !liveResumed.paused &&
+      liveResumed.time > liveHeld.time &&
+      liveResumed.playingOwners === 1 &&
+      (await page.evaluate(() => window.liveForeground.commands())).length ===
+        0,
+    { livePlaying, livePaused, liveHeld, liveResumed },
+  )
   check("no browser runtime errors", errors.length === 0, { errors })
   await page.screenshot({ path: path.join(evidence, "completed.png") })
   result.passed = result.checks.every((x) => x.passed)

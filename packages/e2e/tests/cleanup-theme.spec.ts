@@ -211,7 +211,9 @@ test("Classic host, player and display keep the current lobby and authoritative 
     await page.bringToFront()
     await page.getByRole("button", { name: "Start", exact: true }).click()
     await expect(
-      page.getByRole("heading", { name: "Isolated scene" }),
+      hostStage
+        .getByTestId("tadazz-screen-interlude")
+        .getByText("Isolated scene", { exact: true }),
     ).toBeVisible()
     await page.getByTestId("host-next-screen-btn").click()
     await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
@@ -271,12 +273,36 @@ test("explicit rollback uses extracted scene presenter and original Studio contr
     path: join(testInfo.outputDir, "rollback-scene.png"),
   })
   await page.goto(`/manager/quizz/${game.quizId}`)
-  await expect(
-    page.locator('[data-testid="studio-card-type-bar"][data-embedded="false"]'),
-  ).toBeVisible()
-  await expect(
-    page.getByText("Isolated scene", { exact: true }).first(),
-  ).toBeVisible()
+  let kinds = page.locator(
+    '[data-testid="studio-card-type-bar"][data-embedded="false"]',
+  )
+
+  if (!(await kinds.isVisible())) {
+    const editPanel = page.getByTestId("editor-panel-edit")
+
+    if (!(await editPanel.isVisible())) {
+      await page.getByTestId("editor-panel-toggle-edit").click()
+    }
+
+    await expect(editPanel).toBeVisible()
+    kinds = editPanel.locator(
+      '[data-testid="studio-card-type-bar"][data-embedded="true"]',
+    )
+  }
+
+  await expect(kinds).toHaveCount(1)
+  await expect(kinds).toBeVisible()
+  await expect(kinds.getByRole("radio", { name: /Transition/u })).toBeChecked()
+  const editPanel = page.getByTestId("editor-panel-edit")
+
+  if (!(await editPanel.isVisible())) {
+    await page.getByTestId("editor-panel-toggle-edit").click()
+  }
+
+  await expect(editPanel.getByTestId("scene-title-input")).toBeVisible()
+  await expect(editPanel.getByTestId("scene-title-input")).toHaveValue(
+    "Isolated scene",
+  )
   await page.getByTestId("editor-save-btn").click()
   await expect(page).toHaveURL(/\/manager\/config$/u)
   await participantContext.close()
@@ -638,11 +664,21 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
     (item) =>
       item.url.endsWith(PLATFORM_CUE_URLS.answersMusic) && item.time < 0.2,
   ).length
-  await expect(
-    page
+  const hostCards = page
+    .getByTestId("tadazz-show")
+    .locator('.choice-slot[data-testid^="tadazz-card-"]')
+  await expect(hostCards).toHaveCount(2)
+
+  for (const index of [0, 1]) {
+    const card = page
       .getByTestId("tadazz-show")
-      .getByRole("button", { name: /Choice [0-9]/u }),
-  ).toHaveCount(2)
+      .getByTestId(`tadazz-card-${index}`)
+    await expect(card).toBeVisible()
+    await expect(card).toBeDisabled()
+    await expect(
+      card.getByRole("img", { name: `Choice ${index + 1}`, exact: true }),
+    ).toBeVisible()
+  }
   await page.getByTestId("host-pause-resume-btn").click()
   await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
     "data-game-paused",

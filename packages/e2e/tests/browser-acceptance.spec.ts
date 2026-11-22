@@ -1307,6 +1307,13 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     })
     await expect(replayBtn).toBeVisible()
     await expect(replayBtn).toBeEnabled()
+    const replayCommands = () =>
+      hostWire.filter(
+        (row) =>
+          row.name === `sent:${EXTENSION_EVENTS.COMMAND}` &&
+          row.data.action === "REPLAY_FROM_CHECKPOINT",
+      )
+    const beforeReplayCount = replayCommands().length
     const previousEpoch = latestState(hostWire)?.epoch
     await replayBtn.click()
 
@@ -1324,6 +1331,14 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     })
     await expect(confirmReplay).toBeEnabled()
     await confirmReplay.click()
+    await expect.poll(() => replayCommands().length).toBe(beforeReplayCount + 1)
+    expect(replayCommands().at(-1)?.data).toMatchObject({
+      payload: {
+        questionIndex: 0,
+        confirmed: true,
+        epoch: previousEpoch,
+      },
+    })
     await expect
       .poll(() => latestState(hostWire)?.epoch)
       .toBeGreaterThan(Number(previousEpoch))
@@ -1359,6 +1374,7 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     await expect(manager.getByRole("button", { name: /Paris/u })).toContainText(
       "100%",
     )
+    expect(replayCommands()).toHaveLength(beforeReplayCount + 1)
     await saveScreenshots(manager, "gate3-phase-a-flow-replay.png")
   })
 

@@ -177,11 +177,17 @@ export const ManagerControlToolbar = ({
         requestId?: string
       },
     ) => {
-      if (!gameId || isPending) {
+      // Reading or closing history must not consume the live action cooldown.
+      const mutatesGame = command.action !== "VIEW_HISTORY"
+
+      if (!gameId || (mutatesGame && isPending)) {
         return
       }
 
-      setIsPending(true)
+      if (mutatesGame) {
+        setIsPending(true)
+      }
+
       socket.emit(EXTENSION_EVENTS.COMMAND, {
         v: 1,
         gameId,
@@ -189,9 +195,12 @@ export const ManagerControlToolbar = ({
         payload: command.payload,
         requestId: generateRequestId(command.action),
       })
-      setTimeout(() => {
-        setIsPending(false)
-      }, 800)
+
+      if (mutatesGame) {
+        setTimeout(() => {
+          setIsPending(false)
+        }, 800)
+      }
     },
     [gameId, isPending, socket],
   )
