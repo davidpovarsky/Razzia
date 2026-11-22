@@ -1440,11 +1440,15 @@ export const ScenePresenter = ({
                               : "my-1.5",
                           )}
                         >
-                          {/* Dominant Centered Hero Winner(s) */}
+                          {/* Size both result groups inside the remaining card region.
+                              Text keeps its size; photo frames absorb any height reduction. */}
                           <div
                             data-testid="results-hero-section"
                             className={clsx(
-                              "flex w-full max-w-4xl flex-wrap items-center justify-center",
+                              "grid min-h-0 w-full max-w-4xl auto-rows-fr items-stretch justify-items-center",
+                              winners.length === 1
+                                ? "grid-cols-1"
+                                : "grid-cols-4",
                               isUltraCompact || availableHeight <= 600
                                 ? "mb-1 gap-1.5"
                                 : "mb-2 gap-2 sm:gap-4",
@@ -1472,18 +1476,22 @@ export const ScenePresenter = ({
                                     },
                                   )}
                                   className={clsx(
-                                    "relative flex flex-col items-center justify-between overflow-hidden rounded-xl border-2 border-amber-300 text-center shadow-2xl ring-2 shadow-amber-500/30 ring-amber-400 transition-all duration-500 sm:rounded-2xl",
+                                    "relative flex min-h-0 w-full flex-col items-center justify-between overflow-hidden rounded-xl border-2 border-amber-300 text-center shadow-2xl ring-2 shadow-amber-500/30 ring-amber-400 transition-all duration-500 sm:rounded-2xl",
                                     isUltraCompact || availableHeight <= 600
                                       ? "p-1 sm:p-1.5"
                                       : "p-2 sm:p-3 sm:ring-4",
                                     resultsSlot.preset !== "none" &&
                                       `tada-entrance-${resultsSlot.preset}`,
                                     winners.length === 1
-                                      ? "w-full max-w-xs sm:max-w-sm md:max-w-md"
-                                      : "w-[calc(50%-0.5rem)] max-w-xs sm:max-w-sm",
+                                      ? "max-w-xs sm:max-w-sm md:max-w-md"
+                                      : "col-span-2 max-w-xs sm:max-w-sm",
+                                    winners.length > 1 &&
+                                      winners.length % 2 === 1 &&
+                                      wIdx === winners.length - 1 &&
+                                      "col-start-2",
                                   )}
                                 >
-                                  <div className="z-10 mb-0.5 flex w-full items-center justify-between gap-1">
+                                  <div className="z-10 mb-0.5 flex w-full shrink-0 items-center justify-between gap-1">
                                     <span
                                       className={clsx(
                                         "flex shrink-0 items-center justify-center rounded-lg border border-white/25 bg-black/35 font-black text-white shadow-md",
@@ -1526,7 +1534,7 @@ export const ScenePresenter = ({
                                   </div>
 
                                   <div
-                                    className="relative flex w-full items-center justify-center overflow-hidden rounded-lg border border-black/20 shadow-inner sm:rounded-xl"
+                                    className="relative flex min-h-0 w-full shrink items-center justify-center overflow-hidden rounded-lg border border-black/20 shadow-inner sm:rounded-xl"
                                     style={{
                                       backgroundColor: cardBg,
                                       height: (() => {
@@ -1588,7 +1596,7 @@ export const ScenePresenter = ({
                                   <span
                                     data-testid="winner-caption"
                                     className={clsx(
-                                      "mt-0.5 w-full text-center leading-tight font-black break-words text-white drop-shadow-md",
+                                      "mt-0.5 w-full shrink-0 text-center leading-tight font-black break-words text-white drop-shadow-md",
                                       isUltraCompact || availableHeight <= 600
                                         ? "text-[10px] sm:text-xs"
                                         : "text-xs sm:text-sm md:text-base",
@@ -1597,7 +1605,7 @@ export const ScenePresenter = ({
                                     {winner.label}
                                   </span>
 
-                                  <div className="mt-0.5 h-1 w-full overflow-hidden rounded-full bg-white/25 sm:h-1.5">
+                                  <div className="mt-0.5 h-1 w-full shrink-0 overflow-hidden rounded-full bg-white/25 sm:h-1.5">
                                     <div
                                       className="h-full rounded-full bg-amber-400 transition-all duration-700 ease-out"
                                       style={{
@@ -1615,7 +1623,7 @@ export const ScenePresenter = ({
                             <div
                               data-testid="results-runners-up-section"
                               className={clsx(
-                                "grid w-full max-w-4xl grid-cols-2 sm:grid-cols-4",
+                                "grid min-h-0 w-full max-w-4xl auto-rows-fr grid-cols-2 sm:grid-cols-4",
                                 isUltraCompact || availableHeight <= 600
                                   ? "gap-1"
                                   : "gap-1.5 sm:gap-2.5",
@@ -1644,7 +1652,7 @@ export const ScenePresenter = ({
                                       },
                                     )}
                                     className={clsx(
-                                      "relative flex flex-col items-center justify-between overflow-hidden rounded-lg border border-black/20 text-center opacity-95 shadow-lg transition-all duration-300 sm:rounded-xl",
+                                      "relative flex min-h-0 flex-col items-center justify-between overflow-hidden rounded-lg border border-black/20 text-center opacity-95 shadow-lg transition-all duration-300 sm:rounded-xl",
                                       isUltraCompact || availableHeight <= 600
                                         ? "p-1"
                                         : "p-1.5 sm:p-2",
@@ -1652,7 +1660,7 @@ export const ScenePresenter = ({
                                         `tada-entrance-${resultsSlot.preset}`,
                                     )}
                                   >
-                                    <div className="z-10 mb-0.5 flex w-full items-center justify-between gap-1">
+                                    <div className="z-10 mb-0.5 flex w-full shrink-0 items-center justify-between gap-1">
                                       <span
                                         className={clsx(
                                           "flex shrink-0 items-center justify-center rounded-md border border-white/20 bg-black/35 font-black text-white shadow-md",
@@ -1676,7 +1684,7 @@ export const ScenePresenter = ({
                                     </div>
 
                                     <div
-                                      className="relative flex w-full items-center justify-center overflow-hidden rounded-md border border-black/15 shadow-inner sm:rounded-lg"
+                                      className="relative flex min-h-0 w-full shrink items-center justify-center overflow-hidden rounded-md border border-black/15 shadow-inner sm:rounded-lg"
                                       style={{
                                         backgroundColor: cardBg,
                                         height: (() => {
@@ -1724,11 +1732,11 @@ export const ScenePresenter = ({
                                       </div>
                                     </div>
 
-                                    <span className="mt-0.5 w-full text-center text-[10px] leading-tight font-bold break-words text-white drop-shadow-md sm:text-[11px]">
+                                    <span className="mt-0.5 w-full shrink-0 text-center text-[10px] leading-tight font-bold break-words text-white drop-shadow-md sm:text-[11px]">
                                       {runner.label}
                                     </span>
 
-                                    <div className="mt-0.5 h-1 w-full overflow-hidden rounded-full bg-white/20">
+                                    <div className="mt-0.5 h-1 w-full shrink-0 overflow-hidden rounded-full bg-white/20">
                                       <div
                                         className="h-full rounded-full bg-white transition-all duration-700 ease-out"
                                         style={{

@@ -1,0 +1,25 @@
+{
+  "passed": false,
+  "sourceSha": "7c6057aeee58459787dc771fe1abbffd80819579",
+  "diagnosticOnly": true,
+  "releaseQualified": false,
+  "runtimeQaSourceEqualsCandidate": false,
+  "isolatedNativeHost": true,
+  "customerMountUsed": false,
+  "realEmailSent": false,
+  "manualListeningPerformed": false,
+  "results": [
+    {
+      "name": "eight-native-installs-and-isolated-two-to-five-choice-fixtures",
+      "passed": true,
+      "originals": 8,
+      "rounds": 32,
+      "anonymousInstallDenied": true,
+      "crossAccountReadDenied": true,
+      "diagnosticOnly": true,
+      "releaseQualified": false,
+      "runtimeQaSourceEqualsCandidate": false
+    }
+  ],
+  "error": "Error: expect(locator).toHaveCount(expected) failed\n\nLocator:  getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img')\nExpected: 1\nReceived: 0\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img') with timeout 5000ms\n  - waiting for getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img')\n    14 × locator resolved to 0 elements\n       - unexpected value \"0\"\n\n    at captureRawStack (/cleanup/node_modules/.pnpm/playwright-core@1.64.0/node_modules/playwright-core/lib/coreBundle.js:9282:17)\n    at callMatcherAsStep (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13316:57)\n    at Object.toHaveCount (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13308:23)\n    at verifyNative (/overlay/extensions/qa/original-themes/browser-verify.mjs:1124:62)\n    at async verifyOriginalThemeBrowser (/overlay/extensions/qa/original-themes/browser-verify.mjs:1362:5)\n    at async <anonymous> (/overlay/extensions/qa/original-themes/account-verify.mjs:249:3)"
+}

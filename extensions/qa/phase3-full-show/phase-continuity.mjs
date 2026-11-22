@@ -292,33 +292,40 @@ export async function verifyPhaseContinuity({
         expectedModes = ["voting-open", "countdown", "voting"]
       }
 
-      await child.waitForFunction(
-        (expected) => {
+      const ready = await child.waitForFunction(
+        async (expected) => {
           const probe = window.__phaseContinuity
-          const state = probe?.capture()
-
-          return (
+          const matches = (state) =>
             state?.question &&
             state.text === expected.expectedQuestion &&
             expected.expectedModes.includes(state.nativeMode) &&
             (!expected.cards || state.cards.length === 5) &&
             (!expected.settled || probe.settled())
-          )
+
+          if (!matches(probe?.capture())) {
+            return false
+          }
+
+          // Deliver CSS animationstart events, then capture and validate the
+          // same frame before a later protocol round trip can change chapters.
+          await new Promise(requestAnimationFrame)
+          await new Promise(requestAnimationFrame)
+          const state = probe.capture()
+
+          return matches(state) ? state : false
         },
         { cards, expectedQuestion, settled, expectedModes },
         { timeout: 10000 },
       )
-      // Allow browser-delivered CSS animationstart events to reach the observer.
-      await child.evaluate(async () => {
-        await new Promise(requestAnimationFrame)
-        await new Promise(requestAnimationFrame)
-      })
-      const state = await child.evaluate(() =>
-        window.__phaseContinuity.capture(),
-      )
-      witness.snapshots.push({ step, ...state })
 
-      return state
+      try {
+        const state = await ready.jsonValue()
+        witness.snapshots.push({ step, ...state })
+
+        return state
+      } finally {
+        await ready.dispose()
+      }
     }
 
     const initial = await snapshot("question")

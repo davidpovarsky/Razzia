@@ -1,0 +1,62 @@
+{
+  "browser.stderr.log": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "browser.stdout.log": {
+    "bytes": 942,
+    "sha256": "80f2c728c8983a96d33563dd9791d1e94f884d9d343abf5363a8a84908624dc1"
+  },
+  "container-plan.json": {
+    "bytes": 1751,
+    "sha256": "6cd16522db53501bae50118eb5b97924e490080e8df1ffcbdf4c02cae707ec26"
+  },
+  "diagnostic-receipt.json": {
+    "bytes": 1852425,
+    "sha256": "19d48730aed85206d0db6de5dd23d2730ed5c1966cd26fcd678129bc3983baed"
+  },
+  "execution-plan.json": {
+    "bytes": 1775,
+    "sha256": "5073c3cd1ffedd8f2fa05f78254174d9dacd78d2ed2359012e211c32220e0801"
+  },
+  "output/browser/noir-scroll-diagnostic.json": {
+    "bytes": 1722970,
+    "sha256": "270f75347dd1a2f5583527c24cd8ccb34d9e44341fdfac701922d28a84c576e7"
+  },
+  "output/browser/public-mystery-noir-checkpoint-2.png": {
+    "bytes": 395681,
+    "sha256": "dcb2bb862fa9c3e25f6188dc119012879448ae40342cdfe4c4e446cb65aad8eb"
+  },
+  "output/browser/public-mystery-noir-finale.png": {
+    "bytes": 455168,
+    "sha256": "d15c259e0664e25deaa6579b98cebe9d28837b613777a6281313a5e70e605aba"
+  },
+  "output/browser/public-mystery-noir-interlude.png": {
+    "bytes": 409712,
+    "sha256": "54681d588d54c6077e1b4436d407cd4f2a9dc79280f00324689e579846a02609"
+  },
+  "output/browser/public-mystery-noir.json": {
+    "bytes": 211264,
+    "sha256": "9e7530ad8912543000b2d43b2abd445ee5befc7a255f121fa45bf8fd1c46fc7a"
+  },
+  "output/browser/public-mystery-noir.png": {
+    "bytes": 391916,
+    "sha256": "b7dc2d6cd97751de32e8b5861e81a43f77b55dbc4c693163b57e2e6dadacbccf"
+  },
+  "output/browser/receipt.json": {
+    "bytes": 1405,
+    "sha256": "e37bec8edcef9f44fe4106b757baf5409d481f68dedf62c228e5facc663242da"
+  },
+  "overlay-plan.json": {
+    "bytes": 2055,
+    "sha256": "59fa25afe2a6968eef5aa1b080660bbdb4ab04cb84e0353574e7d49fc8fbaddc"
+  },
+  "source-after.json": {
+    "bytes": 445739,
+    "sha256": "cfc7c7652643591adc6cada94d46ea44c7af5ef7ed553d570ff2697deabbf789"
+  },
+  "source-before.json": {
+    "bytes": 445739,
+    "sha256": "cfc7c7652643591adc6cada94d46ea44c7af5ef7ed553d570ff2697deabbf789"
+  }
+}

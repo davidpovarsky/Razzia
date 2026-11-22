@@ -1,0 +1,149 @@
+{
+  "candidateSha": "7c6057aeee58459787dc771fe1abbffd80819579",
+  "copiedBytes": 6187287,
+  "copiedFiles": 32,
+  "diagnosticOnly": true,
+  "files": {
+    "browser.stderr.log": {
+      "bytes": 2365,
+      "sha256": "ba1f9f0c58832f487a7faef3b23604c3f54c1ba7d466273a130dc0efffd885cb"
+    },
+    "browser.stdout.log": {
+      "bytes": 1197,
+      "sha256": "696bf11800b32b3d13ba93e401ec386367508cf2beda3de35aff4b8a0e0818fe"
+    },
+    "container-plan.json": {
+      "bytes": 1755,
+      "sha256": "ab4721bc8cdee47a5ec13d5eb57efa59f98819e3de5de57208ab98a9c39b5b0e"
+    },
+    "diagnostic-receipt.json": {
+      "bytes": 12182,
+      "sha256": "d8db5f60a176bd83c291c6be8290137b960fed8035d9855bb454847fdb42f2c2"
+    },
+    "execution-plan.json": {
+      "bytes": 1777,
+      "sha256": "2975269a970444928598bef6bba487817ef496e5692cb70097ed49f0af8c4dab"
+    },
+    "output/browser/browser-failure-screenshot.json": {
+      "bytes": 276,
+      "sha256": "e0e50e22d03ab32bec4c16434827ab6c04f64ee4dc026aa7570b21df5470d673"
+    },
+    "output/browser/browser-failure.json": {
+      "bytes": 1268,
+      "sha256": "5daf43f630a58e72576ecb9bd64cc5172faf82e68d098cbc3c0d4c7cebb7c6a6"
+    },
+    "output/browser/choice-layout-royal-quiz-2-results.json": {
+      "bytes": 339017,
+      "sha256": "bde14531e7128b5dbca7df60e763faf8e82a6f503f4b068085aca754d1915b07"
+    },
+    "output/browser/choice-layout-royal-quiz-2-voting.json": {
+      "bytes": 306900,
+      "sha256": "e7a40076e266237c6a33d1b22bffe448e323a2de8d8498327fe215ce78964b45"
+    },
+    "output/browser/choice-layout-royal-quiz-3-results.json": {
+      "bytes": 321429,
+      "sha256": "ad0f8319b5cbc7a82d7ebb5553622ed28cffe584c32ccc8625b2bd670c070ff1"
+    },
+    "output/browser/choice-layout-royal-quiz-3-voting.json": {
+      "bytes": 312519,
+      "sha256": "9276ed67411286782d65ada26cca1ee2998e6259350a352b59150ef925a86ab2"
+    },
+    "output/browser/choice-layout-royal-quiz-4-results.json": {
+      "bytes": 327094,
+      "sha256": "661c365d76fe757b5314e8182e77115ee6fb1c2d48244c61b4cd9a85d3f87558"
+    },
+    "output/browser/choice-layout-royal-quiz-4-voting.json": {
+      "bytes": 321997,
+      "sha256": "c1f0d5d99e2616f9d9cc89357c9abc62ea05266adac40698d4295713c95036cc"
+    },
+    "output/browser/choice-layout-royal-quiz-5-voting.json": {
+      "bytes": 326381,
+      "sha256": "66f5123541b8e36e9d3085c674e551a910413f27eafc1c0e8a4b5710023be48a"
+    },
+    "output/browser/native-layout-diagnostic.json": {
+      "bytes": 6925,
+      "sha256": "892b6abec9612ab6a6130f3ee68cada95fe952d6b4efaf98f9fa1e9760994cdf"
+    },
+    "output/browser/native-player-1-royal-quiz-failure.json": {
+      "bytes": 1899,
+      "sha256": "27b2b42f40cf3f51169463b716a25daefab84426beae4f6035b3aedf1ea9b9ae"
+    },
+    "output/browser/native-player-1-royal-quiz-failure.png": {
+      "bytes": 88022,
+      "sha256": "b507ccb9df40f1a51878aee3c06f6ef79b6f5b05977963566f498560165532bc"
+    },
+    "output/browser/native-player-2-royal-quiz-failure.json": {
+      "bytes": 1899,
+      "sha256": "5dba9a85f96450242a61c7aa95f9ed1ea9b09766b4a8a1daf3ada8a49f5da7dc"
+    },
+    "output/browser/native-player-2-royal-quiz-failure.png": {
+      "bytes": 87908,
+      "sha256": "e9025b279e6814aefc5004c9b7fd48ec20abc09f4a815a655a8d40b083a1e5ef"
+    },
+    "output/browser/native-royal-quiz-2-choices.png": {
+      "bytes": 402835,
+      "sha256": "35fce1d91df7bbd565a72703375916a5294b76ea6a2eb2eb4714d8bfd6552034"
+    },
+    "output/browser/native-royal-quiz-3-choices.png": {
+      "bytes": 422200,
+      "sha256": "d461e86c420a2df3b2c5ceada2c349bd09174f0318a48f77ece1825d9f651356"
+    },
+    "output/browser/native-royal-quiz-4-choices.png": {
+      "bytes": 427135,
+      "sha256": "f060d6c01fca5dc31bae06eca77bd648d86fbe92061ca9f3f0f6121f6295c96a"
+    },
+    "output/browser/native-royal-quiz-failure.json": {
+      "bytes": 27228,
+      "sha256": "fee623c477161520141309bde2d9a5455d53d44e7dfb0bc526a01580c8b6db39"
+    },
+    "output/browser/native-royal-quiz-failure.png": {
+      "bytes": 394152,
+      "sha256": "b22fd7eef4ad8abc8e8b961bc80df595c131c1d35ac954c125736487551e0d2a"
+    },
+    "output/browser/question-sequence-royal-quiz-2-results.json": {
+      "bytes": 410965,
+      "sha256": "3eae595425cc1a7278eabb95d1daeb2e15af15d36a0371d4804cc2e465ddb513"
+    },
+    "output/browser/question-sequence-royal-quiz-3-results.json": {
+      "bytes": 367865,
+      "sha256": "b2e66f6b27f0aa9adb7c832fceb2b780f0fbf99d26b2471d8b4f83a24e3ba267"
+    },
+    "output/browser/question-sequence-royal-quiz-4-results.json": {
+      "bytes": 371592,
+      "sha256": "e08fd0ba864961c2407c449ad4b51b9c69d20a35adf7581b1b0c8885267db511"
+    },
+    "output/browser/receipt.json": {
+      "bytes": 1890,
+      "sha256": "99656f39b3e26dc120bdc9108075c2b5102d78748d6dff3dca6b922ab3230c42"
+    },
+    "overlay-plan.json": {
+      "bytes": 2180,
+      "sha256": "52d869e0a1f94235826e7e16cff08f3ae20a7b32b507befbde51634140f50633"
+    },
+    "source-after.json": {
+      "bytes": 445739,
+      "sha256": "cfc7c7652643591adc6cada94d46ea44c7af5ef7ed553d570ff2697deabbf789"
+    },
+    "source-before.json": {
+      "bytes": 445739,
+      "sha256": "cfc7c7652643591adc6cada94d46ea44c7af5ef7ed553d570ff2697deabbf789"
+    },
+    "transfer-manifest.json": {
+      "bytes": 4957,
+      "sha256": "f43a206a02fc3f39a6c9f1d65a979b5b7a9cb28e3a50741b0500cfa8bf16e9bd"
+    }
+  },
+  "format": "tadazz-originals-diagnostic-repository-manifest",
+  "jobId": "job_9e3fb77bbca3",
+  "manifestExcludesItself": true,
+  "noAuthConfigOrStateCopied": true,
+  "releaseQualified": false,
+  "run": "native-layout-iteration8-792342fb",
+  "runtimeQaSourceEqualsCandidate": false,
+  "sourceArchive": {
+    "filename": "native-layout-evidence.tgz",
+    "sha256": "7aae230c3ba483a04ab93c3295d013e9bb562feb535b7858c81a613c2b82651c"
+  },
+  "sourceTransferManifestSha256": "f43a206a02fc3f39a6c9f1d65a979b5b7a9cb28e3a50741b0500cfa8bf16e9bd",
+  "version": 1
+}

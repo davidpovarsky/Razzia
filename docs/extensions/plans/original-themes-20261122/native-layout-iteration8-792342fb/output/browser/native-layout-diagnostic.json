@@ -1,0 +1,178 @@
+{
+  "format": "tadazz-native-layout-diagnostic",
+  "version": 1,
+  "diagnosticOnly": true,
+  "releaseQualified": false,
+  "runtimeQaSourceEqualsCandidate": false,
+  "expectedFamilies": [
+    "royal-quiz",
+    "neon-arcade",
+    "retro-tv",
+    "magic-storybook",
+    "crystal-future",
+    "carnival-pop",
+    "sports-arena",
+    "mystery-noir"
+  ],
+  "expectedChoiceCounts": [
+    2,
+    3,
+    4,
+    5
+  ],
+  "checks": [
+    {
+      "family": "royal-quiz",
+      "choiceCount": 2,
+      "round": 1,
+      "phase": "voting",
+      "kind": "choice-layout",
+      "key": "choice-layout-royal-quiz-2-voting",
+      "passed": true,
+      "evidence": "choice-layout-royal-quiz-2-voting.json",
+      "screenshot": null
+    },
+    {
+      "family": "royal-quiz",
+      "choiceCount": 2,
+      "round": 1,
+      "phase": "results",
+      "kind": "choice-layout",
+      "key": "choice-layout-royal-quiz-2-results",
+      "passed": true,
+      "evidence": "choice-layout-royal-quiz-2-results.json",
+      "screenshot": null
+    },
+    {
+      "family": "royal-quiz",
+      "choiceCount": 2,
+      "round": 1,
+      "phase": "results",
+      "kind": "question-sequence",
+      "key": "question-sequence-royal-quiz-2-results",
+      "passed": true,
+      "evidence": "question-sequence-royal-quiz-2-results.json",
+      "screenshot": null
+    },
+    {
+      "family": "royal-quiz",
+      "choiceCount": 3,
+      "round": 2,
+      "phase": "voting",
+      "kind": "choice-layout",
+      "key": "choice-layout-royal-quiz-3-voting",
+      "passed": true,
+      "evidence": "choice-layout-royal-quiz-3-voting.json",
+      "screenshot": null
+    },
+    {
+      "family": "royal-quiz",
+      "choiceCount": 3,
+      "round": 2,
+      "phase": "results",
+      "kind": "choice-layout",
+      "key": "choice-layout-royal-quiz-3-results",
+      "passed": true,
+      "evidence": "choice-layout-royal-quiz-3-results.json",
+      "screenshot": null
+    },
+    {
+      "family": "royal-quiz",
+      "choiceCount": 3,
+      "round": 2,
+      "phase": "results",
+      "kind": "question-sequence",
+      "key": "question-sequence-royal-quiz-3-results",
+      "passed": true,
+      "evidence": "question-sequence-royal-quiz-3-results.json",
+      "screenshot": null
+    },
+    {
+      "family": "royal-quiz",
+      "choiceCount": 4,
+      "round": 3,
+      "phase": "voting",
+      "kind": "choice-layout",
+      "key": "choice-layout-royal-quiz-4-voting",
+      "passed": true,
+      "evidence": "choice-layout-royal-quiz-4-voting.json",
+      "screenshot": null
+    },
+    {
+      "family": "royal-quiz",
+      "choiceCount": 4,
+      "round": 3,
+      "phase": "results",
+      "kind": "choice-layout",
+      "key": "choice-layout-royal-quiz-4-results",
+      "passed": true,
+      "evidence": "choice-layout-royal-quiz-4-results.json",
+      "screenshot": null
+    },
+    {
+      "family": "royal-quiz",
+      "choiceCount": 4,
+      "round": 3,
+      "phase": "results",
+      "kind": "question-sequence",
+      "key": "question-sequence-royal-quiz-4-results",
+      "passed": true,
+      "evidence": "question-sequence-royal-quiz-4-results.json",
+      "screenshot": null
+    },
+    {
+      "family": "royal-quiz",
+      "choiceCount": 5,
+      "round": 4,
+      "phase": "voting",
+      "kind": "choice-layout",
+      "key": "choice-layout-royal-quiz-5-voting",
+      "passed": true,
+      "evidence": "choice-layout-royal-quiz-5-voting.json",
+      "screenshot": null
+    }
+  ],
+  "failures": [],
+  "completedFamilies": [],
+  "active": {
+    "family": "royal-quiz",
+    "choiceCount": 5,
+    "round": 4,
+    "phase": "voting",
+    "kind": "choice-layout",
+    "key": "choice-layout-royal-quiz-5-voting"
+  },
+  "fatalFailure": {
+    "active": {
+      "family": "royal-quiz",
+      "choiceCount": 5,
+      "round": 4,
+      "phase": "voting",
+      "kind": "choice-layout",
+      "key": "choice-layout-royal-quiz-5-voting"
+    },
+    "error": {
+      "name": "Error",
+      "message": "expect(locator).toHaveCount(expected) failed\n\nLocator:  getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img')\nExpected: 1\nReceived: 0\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img') with timeout 5000ms\n  - waiting for getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img')\n    14 × locator resolved to 0 elements\n       - unexpected value \"0\"\n",
+      "stack": "Error: expect(locator).toHaveCount(expected) failed\n\nLocator:  getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img')\nExpected: 1\nReceived: 0\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img') with timeout 5000ms\n  - waiting for getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img')\n    14 × locator resolved to 0 elements\n       - unexpected value \"0\"\n\n    at captureRawStack (/cleanup/node_modules/.pnpm/playwright-core@1.64.0/node_modules/playwright-core/lib/coreBundle.js:9282:17)\n    at callMatcherAsStep (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13316:57)\n    at Object.toHaveCount (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13308:23)\n    at verifyNative (/overlay/extensions/qa/original-themes/browser-verify.mjs:1124:62)\n    at async verifyOriginalThemeBrowser (/overlay/extensions/qa/original-themes/browser-verify.mjs:1362:5)\n    at async <anonymous> (/overlay/extensions/qa/original-themes/account-verify.mjs:249:3)",
+      "code": null,
+      "operator": null,
+      "matcherResult": {
+        "actual": 0,
+        "expected": 1,
+        "message": "expect(locator).toHaveCount(expected) failed\n\nLocator:  getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img')\nExpected: 1\nReceived: 0\nTimeout:  5000ms\n\nCall log:\n  - Expect \"toHaveCount\" getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img') with timeout 5000ms\n  - waiting for getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img')\n    14 × locator resolved to 0 elements\n       - unexpected value \"0\"\n",
+        "name": "toHaveCount",
+        "pass": false,
+        "log": [
+          "  - Expect \"toHaveCount\" getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img') with timeout 5000ms",
+          "  - waiting for getByTestId('tadazz-show').locator('.tzv4-stage').first().locator('.photo-question-img')",
+          "    14 × locator resolved to 0 elements",
+          "       - unexpected value \"0\""
+        ],
+        "timeout": 5000
+      }
+    }
+  },
+  "allFamiliesCompleted": false,
+  "passed": false
+}

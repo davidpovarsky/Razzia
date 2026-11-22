@@ -1,0 +1,18 @@
+Game cleanup task started
+New game created: 916304 subject: Diagnostic Royal paused countdown
+Game 01a20447-9cc1-71f8-9513-3504b56b7d0a added. Total games: 1
+Game 01a20447-9cc1-71f8-9513-3504b56b7d0a marked as empty. Total empty games: 1
+A user connected: socketId: LoVzZldk-QBAwrILAAAA, clientId: a2849bcf-d0a9-4320-af5d-4c1038e863b7
+Game 01a20447-9cc1-71f8-9513-3504b56b7d0a reactivated. Remaining empty games: 0
+Manager reconnected to game 916304
+A user connected: socketId: unj6STFqa7R_IXS0AAAB, clientId: 01a20447-a90c-778a-a5ac-d45a7e1f3bd9
+A user connected: socketId: dw1yU7uIoEQXTeskAAAC, clientId: 01a20447-b285-7336-9e7d-5bfb2239ebbb
+A user connected: socketId: 6N2X7dD5VJnRmgkDAAAD, clientId: 01a20447-ebe4-7674-9337-4f72c2dc9a40
+{"diagnostic":"paused-countdown-late-display","passed":false,"releaseQualified":false,"evidence":"/evidence/paused-countdown"}
+A user disconnected : 6N2X7dD5VJnRmgkDAAAD
+A user disconnected : dw1yU7uIoEQXTeskAAAC
+A user disconnected : unj6STFqa7R_IXS0AAAB
+A user disconnected : LoVzZldk-QBAwrILAAAA
+Manager disconnected from game 916304
+Game 01a20447-9cc1-71f8-9513-3504b56b7d0a marked as empty. Total empty games: 1
+Game cleanup task stopped

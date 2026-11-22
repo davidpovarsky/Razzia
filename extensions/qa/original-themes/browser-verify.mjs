@@ -180,7 +180,9 @@ async function captureStageFailure({
         hostToolbar: describe(
           document.querySelector('[data-testid="manager-control-toolbar"]'),
         ),
-        hostActionRow: describe(document.querySelector(".tds-host-action-row")),
+        hostActionRow: describe(
+          document.querySelector('[data-testid="host-action-band"]'),
+        ),
         stageViewport: describe(stage?.closest(".tzv4-viewport")),
         stage: bounds(stage),
         question: describe(stage?.querySelector(".og-question")),
@@ -627,7 +629,7 @@ async function verifyPublic({ browser, options, inspect, record }) {
               await expect(recap.locator(".story-finale")).toHaveText(
                 authoredRecap.title,
               )
-              // Authored answerRecap cards contain a title, with no subtitle field.
+              // These authored example recaps omit subtitles.
               await expect(recap.locator(".og-recap-subtitle")).toHaveCount(0)
               await expect(recap.locator(".answer-title")).toHaveText(
                 index === 5
@@ -637,6 +639,7 @@ async function verifyPublic({ browser, options, inspect, record }) {
             } else {
               await verifySoloCheckpoint(root, expectedScore)
             }
+
             if (index === 1 || (id === "magic-storybook" && index === 5)) {
               await decodedImages(root)
               await page.screenshot({
@@ -648,6 +651,7 @@ async function verifyPublic({ browser, options, inspect, record }) {
             }
           } else {
             interludes.push(authored)
+
             if (index === 1) {
               await page.screenshot({
                 path: join(options.evidence, `public-${id}-interlude.png`),

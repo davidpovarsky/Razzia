@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest"
+import { ORIGINAL_THEME_IDS } from "../../core/show-themes/original-theme-families"
 import {
   buildReveal,
   computeShowScene,
@@ -61,6 +62,124 @@ const answers = [
 ]
 
 describe("computeShowScene — every Razzia status maps to a TADAZZ screen", () => {
+  it.each(ORIGINAL_THEME_IDS)(
+    "%s retains question media alongside two to five answer images in every phase",
+    (id) => {
+      const media = { type: "image", url: "/media/authored-question.webp" }
+
+      for (const count of [2, 3, 4, 5]) {
+        for (const [name, kind] of [
+          ["SHOW_QUESTION", "question"],
+          ["SELECT_ANSWER", "voting"],
+          ["SHOW_RESPONSES", "results"],
+        ] as const) {
+          const scene = computeShowScene(
+            base({
+              envelope: envelope({
+                defaults: { showTheme: { id, version: "1.0.0" } },
+                answerVisuals: visuals.slice(0, count),
+              }),
+              status: {
+                name,
+                data: {
+                  question: "Question with its own image",
+                  totalAnswers: count,
+                  answers: answers.slice(0, count),
+                  time: 30,
+                  media,
+                },
+              },
+            }),
+          )
+          expect(scene).toMatchObject({
+            kind,
+            question: {
+              questionImage: media.url,
+              answerCount: count,
+              hasAnswerImages: true,
+            },
+          })
+
+          if (scene.kind === "voting" || scene.kind === "results") {
+            expect(
+              scene.question.options.map((option) => option.image),
+            ).toEqual(visuals.slice(0, count).map((visual) => visual.url))
+          }
+        }
+      }
+    },
+  )
+
+  it("keeps the legacy four-text-answer photo eligibility and answers-only privacy", () => {
+    const media = { type: "image", url: "/media/authored-question.webp" }
+
+    for (const selection of [
+      { id: "tadazz-classic", version: "1.0.0" },
+      { id: "royal-quiz", version: "unregistered" },
+    ]) {
+      const scene = computeShowScene(
+        base({
+          envelope: envelope({
+            defaults: { showTheme: selection },
+            answerVisuals: visuals,
+          }),
+          status: {
+            name: "SELECT_ANSWER",
+            data: { question: "Question", answers, time: 30, media },
+          },
+        }),
+      )
+      expect(scene).toMatchObject({ kind: "voting" })
+
+      if (scene.kind === "voting") {
+        expect(scene.question.questionImage).toBeUndefined()
+      }
+    }
+
+    const classic = computeShowScene(
+      base({
+        status: {
+          name: "SELECT_ANSWER",
+          data: {
+            question: "Question",
+            answers: answers.slice(0, 4),
+            time: 30,
+            media,
+          },
+        },
+      }),
+    )
+    expect(classic).toMatchObject({
+      kind: "voting",
+      question: { questionImage: media.url },
+    })
+
+    const player = computeShowScene(
+      base({
+        role: "player",
+        envelope: envelope({
+          defaults: { showTheme: { id: "royal-quiz", version: "1.0.0" } },
+          answerVisuals: visuals,
+        }),
+        status: {
+          name: "SELECT_ANSWER",
+          data: {
+            question: "Private question",
+            answers,
+            time: 30,
+            media,
+            answersOnly: true,
+          },
+        },
+      }),
+    )
+    expect(player).toMatchObject({ kind: "voting", question: { question: "" } })
+
+    if (player.kind === "voting") {
+      expect(player.question.questionImage).toBeUndefined()
+    }
+  })
+
   it("holds an authored finale while the closing envelope precedes final status", () => {
     const closing = envelope(
       {

@@ -1,0 +1,350 @@
+{
+  "passed": false,
+  "exit": 1,
+  "seconds": 83.44,
+  "sourceFileCount": 2678,
+  "sourceBeforeSha256": "fa80ca868e921eac4ce5678c0b263505f67398a308431881b5e4d38b4cf88823",
+  "sourceAfterSha256": "fa80ca868e921eac4ce5678c0b263505f67398a308431881b5e4d38b4cf88823",
+  "sourceHashesVerifiedBeforeAfter": true,
+  "sdkCacheHashesVerifiedBeforeAfter": true,
+  "probeHashesVerifiedBeforeAfter": true,
+  "readOnlyMountsVerified": true,
+  "containerStopped": true,
+  "checks": [
+    {
+      "name": "normal-motion-display-preference",
+      "passed": true
+    },
+    {
+      "name": "paused-countdown-observed-after-two-frames",
+      "passed": true
+    },
+    {
+      "name": "visible-authoritative-countdown-and-cards-stable",
+      "passed": false
+    }
+  ],
+  "error": "Error: expect(received).toBe(expected) // Object.is equality\n\nExpected: true\nReceived: false\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n    at captureRawStack (/cleanup/node_modules/.pnpm/playwright-core@1.64.0/node_modules/playwright-core/lib/coreBundle.js:9282:17)\n    at callMatcherAsStep (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13316:57)\n    at Object.toBe (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13308:23)\n    at probePausedCountdownLateDisplay (/diagnostics/paused-countdown-late-display-diagnostic.mjs:204:156)\n    at async main (/diagnostics/paused-countdown-late-display-diagnostic.mjs:377:20)\n    at async <anonymous> (/diagnostics/paused-countdown-late-display-diagnostic.mjs:406:3)",
+  "authoritativePause": {
+    "deadline": null,
+    "epoch": 1,
+    "paused": true,
+    "phase": "question",
+    "remainingMs": 44153
+  },
+  "observedFrames": 74,
+  "observedWindowMs": 1245.8999998569489,
+  "violations": [
+    {
+      "kind": "incomplete-paused-countdown",
+      "problem": "visible answer 0"
+    },
+    {
+      "kind": "incomplete-paused-countdown",
+      "problem": "visible answer 1"
+    }
+  ],
+  "firstSample": {
+    "at": 3755.600000143051,
+    "content": {
+      "cards": [
+        {
+          "imageDecoded": false,
+          "imagePresent": false,
+          "imageVisible": false,
+          "index": "0",
+          "title": "Choice 1",
+          "titleVisible": true
+        },
+        {
+          "imageDecoded": false,
+          "imagePresent": false,
+          "imageVisible": false,
+          "index": "1",
+          "title": "Choice 2",
+          "titleVisible": true
+        }
+      ],
+      "heading": "Royal diagnostic question 1",
+      "headingVisible": true,
+      "timer": "45",
+      "timerVisible": true
+    },
+    "finite": [
+      {
+        "clock": false,
+        "currentTime": 0.9999999999998899,
+        "duration": 1,
+        "id": 1,
+        "pending": false,
+        "playState": "paused",
+        "remainingMs": 1.1013412404281553e-13,
+        "target": "tadazz-question-panel"
+      },
+      {
+        "clock": false,
+        "currentTime": 0.9999999999998899,
+        "duration": 1,
+        "id": 2,
+        "pending": false,
+        "playState": "paused",
+        "remainingMs": 1.1013412404281553e-13,
+        "target": "og-question-text q-text"
+      },
+      {
+        "clock": false,
+        "currentTime": 0.9999999999998899,
+        "duration": 1,
+        "id": 3,
+        "pending": false,
+        "playState": "paused",
+        "remainingMs": 1.1013412404281553e-13,
+        "target": "tadazz-card-0"
+      },
+      {
+        "clock": false,
+        "currentTime": 0.9999999999998899,
+        "duration": 1,
+        "id": 4,
+        "pending": false,
+        "playState": "paused",
+        "remainingMs": 1.1013412404281553e-13,
+        "target": "tadazz-card-1"
+      },
+      {
+        "clock": false,
+        "currentTime": 0.9999999999998899,
+        "duration": 1,
+        "id": 5,
+        "pending": false,
+        "playState": "paused",
+        "remainingMs": 1.1013412404281553e-13,
+        "target": "og-clock countdown-floater"
+      },
+      {
+        "clock": false,
+        "currentTime": 0.9999999999998899,
+        "duration": 1,
+        "id": 6,
+        "pending": false,
+        "playState": "paused",
+        "remainingMs": 1.1013412404281553e-13,
+        "target": "countdown-label"
+      },
+      {
+        "clock": true,
+        "currentTime": 847,
+        "duration": 45000,
+        "id": 7,
+        "pending": false,
+        "playState": "paused",
+        "remainingMs": 44153,
+        "target": "timer-progress"
+      }
+    ],
+    "paused": true
+  },
+  "lastSample": {
+    "at": 5001.5,
+    "content": {
+      "cards": [
+        {
+          "imageDecoded": false,
+          "imagePresent": false,
+          "imageVisible": false,
+          "index": "0",
+          "title": "Choice 1",
+          "titleVisible": true
+        },
+        {
+          "imageDecoded": false,
+          "imagePresent": false,
+          "imageVisible": false,
+          "index": "1",
+          "title": "Choice 2",
+          "titleVisible": true
+        }
+      ],
+      "heading": "Royal diagnostic question 1",
+      "headingVisible": true,
+      "timer": "45",
+      "timerVisible": true
+    },
+    "finite": [
+      {
+        "clock": false,
+        "currentTime": 0.9999999999998899,
+        "duration": 1,
+        "id": 1,
+        "pending": false,
+        "playState": "paused",
+        "remainingMs": 1.1013412404281553e-13,
+        "target": "tadazz-question-panel"
+      },
+      {
+        "clock": false,
+        "currentTime": 0.9999999999998899,
+        "duration": 1,
+        "id": 2,
+        "pending": false,
+        "playState": "paused",
+        "remainingMs": 1.1013412404281553e-13,
+        "target": "og-question-text q-text"
+      },
+      {
+        "clock": false,
+        "currentTime": 0.9999999999998899,
+        "duration": 1,
+        "id": 3,
+        "pending": false,
+        "playState": "paused",
+        "remainingMs": 1.1013412404281553e-13,
+        "target": "tadazz-card-0"
+      },
+      {
+        "clock": false,
+        "currentTime": 0.9999999999998899,
+        "duration": 1,
+        "id": 4,
+        "pending": false,
+        "playState": "paused",
+        "remainingMs": 1.1013412404281553e-13,
+        "target": "tadazz-card-1"
+      },
+      {
+        "clock": false,
+        "currentTime": 0.9999999999998899,
+        "duration": 1,
+        "id": 5,
+        "pending": false,
+        "playState": "paused",
+        "remainingMs": 1.1013412404281553e-13,
+        "target": "og-clock countdown-floater"
+      },
+      {
+        "clock": false,
+        "currentTime": 0.9999999999998899,
+        "duration": 1,
+        "id": 6,
+        "pending": false,
+        "playState": "paused",
+        "remainingMs": 1.1013412404281553e-13,
+        "target": "countdown-label"
+      },
+      {
+        "clock": true,
+        "currentTime": 847,
+        "duration": 45000,
+        "id": 7,
+        "pending": false,
+        "playState": "paused",
+        "remainingMs": 44153,
+        "target": "timer-progress"
+      }
+    ],
+    "paused": true
+  },
+  "lastPartialObservation": {
+    "at": 10246.600000143051,
+    "content": {
+      "cards": [
+        {
+          "imageDecoded": false,
+          "imagePresent": false,
+          "imageVisible": false,
+          "index": "0",
+          "title": "Choice 1",
+          "titleVisible": true
+        },
+        {
+          "imageDecoded": false,
+          "imagePresent": false,
+          "imageVisible": false,
+          "index": "1",
+          "title": "Choice 2",
+          "titleVisible": true
+        }
+      ],
+      "heading": "Royal diagnostic question 1",
+      "headingVisible": true,
+      "timer": "45",
+      "timerVisible": true
+    },
+    "finite": [
+      {
+        "clock": false,
+        "currentTime": 0.9999999999998899,
+        "duration": 1,
+        "id": 1,
+        "pending": false,
+        "playState": "paused",
+        "remainingMs": 1.1013412404281553e-13,
+        "target": "tadazz-question-panel"
+      },
+      {
+        "clock": false,
+        "currentTime": 0.9999999999998899,
+        "duration": 1,
+        "id": 2,
+        "pending": false,
+        "playState": "paused",
+        "remainingMs": 1.1013412404281553e-13,
+        "target": "og-question-text q-text"
+      },
+      {
+        "clock": false,
+        "currentTime": 0.9999999999998899,
+        "duration": 1,
+        "id": 3,
+        "pending": false,
+        "playState": "paused",
+        "remainingMs": 1.1013412404281553e-13,
+        "target": "tadazz-card-0"
+      },
+      {
+        "clock": false,
+        "currentTime": 0.9999999999998899,
+        "duration": 1,
+        "id": 4,
+        "pending": false,
+        "playState": "paused",
+        "remainingMs": 1.1013412404281553e-13,
+        "target": "tadazz-card-1"
+      },
+      {
+        "clock": false,
+        "currentTime": 0.9999999999998899,
+        "duration": 1,
+        "id": 5,
+        "pending": false,
+        "playState": "paused",
+        "remainingMs": 1.1013412404281553e-13,
+        "target": "og-clock countdown-floater"
+      },
+      {
+        "clock": false,
+        "currentTime": 0.9999999999998899,
+        "duration": 1,
+        "id": 6,
+        "pending": false,
+        "playState": "paused",
+        "remainingMs": 1.1013412404281553e-13,
+        "target": "countdown-label"
+      },
+      {
+        "clock": true,
+        "currentTime": 847,
+        "duration": 45000,
+        "id": 7,
+        "pending": false,
+        "playState": "paused",
+        "remainingMs": 44153,
+        "target": "timer-progress"
+      }
+    ],
+    "paused": true
+  },
+  "browserErrors": [],
+  "archiveBytes": 639763,
+  "archiveSha256": "1f924bc73985081317c2554179870a4bd1792ab7889ef4084fc05222ca088cb7"
+}

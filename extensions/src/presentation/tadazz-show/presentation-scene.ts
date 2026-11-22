@@ -7,6 +7,7 @@ import { RAZZIA_THEME_ID } from "../../core/product-branding"
 import { isNativeFinaleContentPending } from "../../core/platform-opening"
 import type { Status } from "@razzia/common/types/game/status"
 import { isLegacyShowRollback } from "../../core/show-themes/selection"
+import { isOriginalThemeId } from "../../core/show-themes/original-theme-families"
 import type {
   ActiveSceneData,
   PublicRankEntry,
@@ -376,6 +377,12 @@ function sceneKey(envelope: ShowEnvelope | null, suffix: string): string {
 export function computeShowScene(input: ShowInput): ShowScene {
   const { envelope, status, role, questionStates: counter } = input
   const extras = envelope?.extras ?? {}
+  const selection = asRecord(asRecord(extras.defaults).showTheme)
+  const originalQuestionImages =
+    isTadazzV4Active(envelope) &&
+    typeof selection.id === "string" &&
+    isOriginalThemeId(selection.id) &&
+    selection.version === "1.0.0"
 
   if (envelope?.phase === "scene") {
     const scene = extras.currentScene as SceneDescriptor | undefined
@@ -524,8 +531,7 @@ export function computeShowScene(input: ShowInput): ShowScene {
         visuals,
         questionImage:
           media.type === "image" &&
-          answerCount === 4 &&
-          !hasAnswerImages &&
+          (originalQuestionImages || (answerCount === 4 && !hasAnswerImages)) &&
           typeof media.url === "string"
             ? media.url
             : undefined,
@@ -567,10 +573,11 @@ export function computeShowScene(input: ShowInput): ShowScene {
           (v) => v.url && (v.display === "image" || v.display === "both"),
         ),
       )
-      const isPhotoQuestion =
+      const hasStageQuestionImage =
         mediaRef?.type.toLowerCase() === "image" &&
-        !hasAnswerImages &&
-        answers.length === 4
+        (originalQuestionImages
+          ? !(role === "player" && answersOnly)
+          : !hasAnswerImages && answers.length === 4)
       const question = buildStageQuestion({
         text: role === "player" && answersOnly ? "" : fullQuestion,
         keyText: fullQuestion,
@@ -578,7 +585,7 @@ export function computeShowScene(input: ShowInput): ShowScene {
         visuals,
         questionId: envelope?.questionId,
         questionStates,
-        questionImage: isPhotoQuestion ? mediaRef?.url : undefined,
+        questionImage: hasStageQuestionImage ? mediaRef?.url : undefined,
         photoAlt: fullQuestion,
       })
       const time = Number(data.time)
@@ -645,6 +652,12 @@ export function computeShowScene(input: ShowInput): ShowScene {
         questionId: envelope?.questionId,
         questionStates,
         note,
+        questionImage:
+          originalQuestionImages &&
+          media.type === "image" &&
+          typeof media.url === "string"
+            ? media.url
+            : undefined,
       })
       const rawSnapshot = extras.revealDistribution as
         RevealDistributionSnapshot | undefined

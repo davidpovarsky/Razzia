@@ -1,0 +1,147 @@
+{
+  "actualInventory": {
+    "cases": [
+      {
+        "expectedStatus": "passed",
+        "file": "media-appearance-stage-acceptance.spec.ts",
+        "project": "chromium",
+        "results": [
+          {
+            "duration": 44450,
+            "retry": 0,
+            "status": "failed"
+          }
+        ],
+        "status": "unexpected",
+        "title": "2. Live Runtime & Zero-Scroll Stage Matrix (STAGE-P0) across 8 Viewports + Card Background + Single Audio + Staged Motion"
+      },
+      {
+        "expectedStatus": "passed",
+        "file": "p0-tzila-acceptance.spec.ts",
+        "project": "chromium",
+        "results": [
+          {
+            "duration": 62048,
+            "retry": 0,
+            "status": "passed"
+          }
+        ],
+        "status": "expected",
+        "title": "Full Tzila Show Lifecycle: 5-option cards, PSTN DTMF 1-5, spectator display, tie, zero votes"
+      },
+      {
+        "expectedStatus": "passed",
+        "file": "tzila-public-stage-and-toolbar.spec.ts",
+        "project": "chromium",
+        "results": [
+          {
+            "duration": 19869,
+            "retry": 0,
+            "status": "passed"
+          }
+        ],
+        "status": "expected",
+        "title": "Gate C: Responsive Host Toolbar across Viewports & Localization"
+      }
+    ],
+    "errors": [],
+    "stats": {
+      "duration": 141122.365,
+      "expected": 2,
+      "flaky": 0,
+      "skipped": 0,
+      "startTime": "2026-11-22T17:25:24.504Z",
+      "unexpected": 1
+    }
+  },
+  "applicationEntry": "ordinary",
+  "buildBaseSha": "916c332c210ab5956f9eb134e3df4ad2982eba37",
+  "buildContainer": {
+    "before": {
+      "exitCode": 0,
+      "oomKilled": false,
+      "status": "running"
+    },
+    "noOom": true,
+    "stopped": true
+  },
+  "buildReadOnlySourceMountsVerified": true,
+  "buildReceipt": "/home/ubuntu/tadazz-original-themes-preflight-20261122/iteration8-receipt.json",
+  "buildReceiptSha256": "82dc3d76a5d3a5f600b1c234385976d2812623d6fdc5890efa41ed1447e8176e",
+  "candidateSha": "7c6057aeee58459787dc771fe1abbffd80819579",
+  "ciBuildFlag": "TADAZZ_SITE_ENABLED=false",
+  "containerBeforeStop": {
+    "exitCode": 0,
+    "oomKilled": false,
+    "status": "running"
+  },
+  "containerStopped": true,
+  "customerMountUsed": false,
+  "exactTestCopyVerifiedBeforeAfter": true,
+  "exit": 1,
+  "expected": {
+    "media-appearance-stage-acceptance.spec.ts": "2. Live Runtime & Zero-Scroll Stage Matrix (STAGE-P0) across 8 Viewports + Card Background + Single Audio + Staged Motion",
+    "p0-tzila-acceptance.spec.ts": "Full Tzila Show Lifecycle: 5-option cards, PSTN DTMF 1-5, spectator display, tie, zero votes",
+    "tzila-public-stage-and-toolbar.spec.ts": "Gate C: Responsive Host Toolbar across Viewports & Localization"
+  },
+  "listedInventory": {
+    "cases": [
+      {
+        "expectedStatus": "passed",
+        "file": "media-appearance-stage-acceptance.spec.ts",
+        "project": "chromium",
+        "results": [],
+        "status": "skipped",
+        "title": "2. Live Runtime & Zero-Scroll Stage Matrix (STAGE-P0) across 8 Viewports + Card Background + Single Audio + Staged Motion"
+      },
+      {
+        "expectedStatus": "passed",
+        "file": "p0-tzila-acceptance.spec.ts",
+        "project": "chromium",
+        "results": [],
+        "status": "skipped",
+        "title": "Full Tzila Show Lifecycle: 5-option cards, PSTN DTMF 1-5, spectator display, tie, zero votes"
+      },
+      {
+        "expectedStatus": "passed",
+        "file": "tzila-public-stage-and-toolbar.spec.ts",
+        "project": "chromium",
+        "results": [],
+        "status": "skipped",
+        "title": "Gate C: Responsive Host Toolbar across Viewports & Localization"
+      }
+    ],
+    "errors": [],
+    "stats": {
+      "duration": 3094.353,
+      "expected": 0,
+      "flaky": 0,
+      "skipped": 3,
+      "startTime": "2026-11-22T17:25:20.577Z",
+      "unexpected": 0
+    }
+  },
+  "network": "none",
+  "noOom": true,
+  "ordinaryArtifact": "/home/ubuntu/tadazz-original-themes-preflight-20261122/p0-iteration8b-024444f1-ordinary-dist",
+  "ordinaryArtifactAfterSha256": "cb4d4533022ec3723c17f18f347ce262c80c8fbc1db2b0e70f429c7ed3c08764",
+  "ordinaryArtifactBeforeSha256": "cb4d4533022ec3723c17f18f347ce262c80c8fbc1db2b0e70f429c7ed3c08764",
+  "ordinaryArtifactFileCount": 249,
+  "ordinaryArtifactHashesVerifiedBeforeAfter": true,
+  "ordinaryBuildExit": 0,
+  "passed": false,
+  "preparationOnly": true,
+  "productionChanged": false,
+  "readOnlyMountsVerified": true,
+  "releaseQualified": false,
+  "replacesNativeSiteAcceptance": false,
+  "run": "p0-iteration8b-024444f1",
+  "sdkCacheHashesVerifiedBeforeAfter": true,
+  "seconds": 155.62,
+  "sourceAfterSha256": "fa80ca868e921eac4ce5678c0b263505f67398a308431881b5e4d38b4cf88823",
+  "sourceAndBuiltHashesVerifiedBeforeAfter": true,
+  "sourceAndNativeBuildHashesAfterOrdinaryBuild": true,
+  "sourceBeforeSha256": "fa80ca868e921eac4ce5678c0b263505f67398a308431881b5e4d38b4cf88823",
+  "sourceFileCount": 2678,
+  "sourceReadOnly": true
+}

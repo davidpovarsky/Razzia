@@ -1335,6 +1335,10 @@
 }
 
 /* Mystery Noir: a case folder and evidence ledger under venetian light. */
+.tzv4-stage[data-original-family="mystery-noir"] .og-noir {
+  /* Rotated light stays inside this world without creating stage scroll range. */
+  overflow: clip;
+}
 .tzv4-stage[data-original-family] .og-noir-blinds {
   position: absolute;
   inset: -250px;

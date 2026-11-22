@@ -425,6 +425,7 @@ export const TadazzV4Stage = forwardRef<
       ...view.data,
       showPercentages: view.data.showPercentages ?? showPercentagesRef.current,
     })
+
     // A paused live snapshot must paint its final authoritative results now,
     // while a real countdown keeps its frozen remainder instead of finishing.
     if (playback.settleScene) {
