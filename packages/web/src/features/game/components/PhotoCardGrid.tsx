@@ -538,7 +538,7 @@ export const PhotoCardGrid = ({
       )}
       <div
         className={clsx(
-          "mx-auto grid w-full max-w-6xl grid-cols-6 content-center items-stretch gap-1.5 px-1.5 py-0.5 sm:gap-2.5 sm:px-2 md:gap-3.5",
+          "mx-auto grid max-h-full min-h-0 w-full max-w-6xl auto-rows-fr grid-cols-6 content-center items-stretch gap-1.5 px-1.5 py-0.5 sm:gap-2.5 sm:px-2 md:gap-3.5",
           className,
         )}
         data-testid="photo-card-grid"

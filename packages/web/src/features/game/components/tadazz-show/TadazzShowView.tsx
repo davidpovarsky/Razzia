@@ -376,20 +376,6 @@ function TadazzShowContent(props: TadazzShowViewProps) {
     !scene.question.hasAnswerImages &&
     scene.question.options.every((option) => !option.image)
 
-  if (typeof document !== "undefined") {
-    document.documentElement.style.background =
-      theme.definition.tokens.background
-    document.body.style.background = theme.definition.tokens.background
-  }
-
-  useEffect(
-    () => () => {
-      document.documentElement.style.background = ""
-      document.body.style.background = ""
-    },
-    [],
-  )
-
   const stageRef = useRef<TadazzStageHandle>(null)
   const showRootRef = useRef<HTMLElement | null>(null)
   const isPaused = Boolean(extensionState?.pause?.paused)

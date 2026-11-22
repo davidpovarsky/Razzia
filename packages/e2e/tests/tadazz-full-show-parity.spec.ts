@@ -76,12 +76,14 @@ const saveShot = async (page: Page, name: string, allowWebkit = false) => {
   })
 }
 const clickCard = async (page: Page, index: number) => {
+  await page.bringToFront()
   const card = page.getByTestId(`photo-card-choice-${index}`)
   await expect(card).toBeVisible()
   await expect(card).toBeEnabled()
   await card.click()
 }
 const endVotingNow = async (managerPage: Page) => {
+  await managerPage.bringToFront()
   const button = managerPage.getByTestId("host-end-timer-btn")
   await expect(button).toBeVisible()
   await expect(button).toBeEnabled()
@@ -186,30 +188,33 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
     const imported = readStoredTzila()
     expect(imported.quizz.gameMode).toBe(QUIZZ_MODES.SURVEY)
     const hostWire = observeLiveFlow(managerPage)
-    const createAudiencePage = async (viewport: {
+    const createAudienceContext = (viewport: {
       width: number
       height: number
-    }) => {
-      const context = await browser.newContext({ viewport })
+    }) => browser.newContext({ viewport })
 
-      return { context, page: await context.newPage() }
-    }
-
-    // Independent empty audience contexts can initialize while the host creates
-    // the real room. Every navigation and vote still waits for that room.
-    const [pin, audience] = await Promise.all([
+    // Empty contexts can initialize with the host room. Create their pages only
+    // after host setup so another device does not take focus during its actions.
+    await managerPage.bringToFront()
+    const [pin, audienceContexts] = await Promise.all([
       createGame(managerPage, TZILA_TITLE),
       Promise.all([
-        createAudiencePage(
+        createAudienceContext(
           browserName === "webkit"
             ? { width: 1024, height: 768 }
             : { width: 1920, height: 1080 },
         ),
-        createAudiencePage({ width: 1024, height: 768 }),
-        createAudiencePage({ width: 800, height: 600 }),
-        createAudiencePage({ width: 390, height: 844 }),
+        createAudienceContext({ width: 1024, height: 768 }),
+        createAudienceContext({ width: 800, height: 600 }),
+        createAudienceContext({ width: 390, height: 844 }),
       ]),
     ])
+    const audience = await Promise.all(
+      audienceContexts.map(async (context) => ({
+        context,
+        page: await context.newPage(),
+      })),
+    )
     const [
       { context: spectatorCtx, page: spectator },
       { context: p1Ctx, page: alice },
@@ -217,6 +222,7 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
       { context: p3Ctx, page: dana },
     ] = audience
     expect(pin).toMatch(/^\d{6}$/u)
+    await managerPage.bringToFront()
     await setManualProgression(managerPage)
     const gameIdMatch = /\/party\/manager\/([^/?#]+)/u.exec(managerPage.url())
     expect(gameIdMatch).not.toBeNull()
@@ -235,6 +241,7 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
       installZeroLegacyFlickerProbe(alice),
     ])
     const verifyExistingDisplayLobby = async () => {
+      await spectator.bringToFront()
       await spectator.goto(`http://127.0.0.1:3010/display/${gameId}`)
       await expect(spectator.getByTestId("tadazz-show")).toBeVisible()
       await expect(spectator.locator("iframe")).toHaveCount(0)
@@ -264,12 +271,18 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
     await expect(managerPage.getByTestId("tadazz-screen-lobby")).toBeVisible()
     await expect(managerPage.getByTestId("tadazz-lobby-pin")).toHaveText(pin)
     await expect(managerPage.getByTestId("tadazz-lobby-qr")).toBeVisible()
-    await Promise.all([
-      verifyExistingDisplayLobby(),
-      joinGame(alice, pin, "Alice"),
-      joinGame(bob, pin, "Bob"),
-      joinGame(dana, pin, "Dana"),
-    ])
+    await verifyExistingDisplayLobby()
+    // These pages represent separate foreground devices. Focus each user's
+    // real controls in sequence; no parallel task changes the active page.
+    for (const [player, name] of [
+      [alice, "Alice"],
+      [bob, "Bob"],
+      [dana, "Dana"],
+    ] as const) {
+      await player.bringToFront()
+      await joinGame(player, pin, name)
+    }
+    await managerPage.bringToFront()
     await expect(managerPage.getByTestId("host-connected-counter")).toHaveText(
       /^3(?:\s*\/\s*3)?$/u,
     )
@@ -289,6 +302,7 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
     await expect(spectator.getByText("Alice", { exact: true })).toHaveCount(0)
 
     // 4. Start Game -> Opening timeline scene (showIntro) -> Question 1
+    await managerPage.bringToFront()
     await startGame(managerPage)
     await assertTzilaOpening({ manager: managerPage, player: alice, spectator })
     await expect(managerPage.getByTestId("tadazz-intro-screen")).toHaveClass(
@@ -306,6 +320,7 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
     /* oxlint-enable require-await, typescript/require-await */
     await saveShot(managerPage, "03_timeline_opening_scene.png")
     const advanceBtn = managerPage.getByTestId("host-next-screen-btn")
+    await managerPage.bringToFront()
     await advanceBtn.click()
 
     // 5. A04 & A05: Question 1 with 5 square photo cards
@@ -415,6 +430,7 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
       q1Text,
     )
     await expect(dana.getByTestId("game-question-title")).toContainText(q1Text)
+    await managerPage.bringToFront()
     await setTzilaPaused(managerPage, true)
     /* oxlint-disable require-await, typescript/require-await -- Retain promise-returning API and rejection semantics for synchronous implementations. */
     await expect
@@ -441,6 +457,7 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
     }
 
     // Option 0 (index 0, Mechaneches) gets Dana = 1 vote (25%)
+    await managerPage.bringToFront()
     await setTzilaPaused(managerPage, false)
     await clickCard(dana, 0)
     await waitForVoteCount({
@@ -492,6 +509,7 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
     await saveShot(spectator, "05b_reveal_results_spectator.png")
 
     // Single Next Screen click advances from Q1 interimResults to Q2 (test TIE case)
+    await managerPage.bringToFront()
     await next(managerPage)
     await expect(
       managerPage.getByTestId("tadazz-question-panel"),
@@ -541,6 +559,7 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
     await saveShot(managerPage, "06_reveal_results_joint_tie.png")
 
     // Single Next Screen click advances from Q2 interimResults to Q3 (test ZERO VOTES case)
+    await managerPage.bringToFront()
     await next(managerPage)
     await expect(
       managerPage.getByTestId("tadazz-question-panel"),
@@ -591,6 +610,7 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
       }
 
       if (item.kind !== "interimResults") {
+        await managerPage.bringToFront()
         await managerPage.getByTestId("host-next-screen-btn").click()
       }
 
@@ -657,6 +677,7 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
         assert.equal(item.kind, "interimResults")
       }
     }
+    await managerPage.bringToFront()
     await managerPage.getByTestId("host-next-screen-btn").click()
     // This all-survey show completes with SUMMARY; FINISHED belongs to scored
     // quizzes. Require the real finished phase and exact participant/question totals.
@@ -680,9 +701,27 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
         )
       }),
     )
-    await expect(managerPage.getByTestId("tadazz-finale-screen")).toHaveClass(
-      /is-visible/u,
+    // Final Next completes this all-survey show with the native SUMMARY.
+    // The authored closing/finale was verified above before that real action.
+    await expect(managerPage.getByTestId("tadazz-show")).toHaveAttribute(
+      "data-show-scene",
+      "summary",
     )
+    const summary = managerPage.getByTestId("tadazz-screen-summary")
+    await expect(summary).toHaveCount(1)
+    await expect(summary).toBeVisible()
+    await expect(summary.locator(".tz-x-sub")).toHaveText(
+      t("game:summary.title"),
+    )
+    await expect(summary.locator(".tz-x-headline")).toHaveText(TZILA_TITLE)
+    await expect(
+      summary.getByText(`4 · ${t("game:summary.participants")}`, {
+        exact: true,
+      }),
+    ).toBeVisible()
+    await expect(
+      summary.getByText(`10 · ${t("game:summary.questions")}`, { exact: true }),
+    ).toBeVisible()
     await saveShot(managerPage, "07b_complete_authored_timeline_finale.png")
     await testInfo.attach("tzila-full-authored-timeline.json", {
       body: JSON.stringify(

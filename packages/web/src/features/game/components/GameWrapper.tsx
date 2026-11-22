@@ -74,6 +74,7 @@ import clsx from "clsx"
 import { Maximize, Minimize } from "lucide-react"
 import {
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type PropsWithChildren,
@@ -137,6 +138,38 @@ const GameWrapperView = ({
     "native.cinematic-stage": "tadazz-classic-stage",
   }
   const forcedRenderer = renderers[rootComponent ?? ""]
+  // The host and audience share one theme stage. Fullscreen only hides chrome;
+  // it must never switch renderer, lobby content or the active audio owner.
+  // Player input stays on its dedicated responsive surface.
+  const cinematicSurface =
+    effectiveRole !== "player" ||
+    Boolean(theme.definition.runtime) ||
+    forcedRenderer === "tadazz-classic-stage"
+  const usesCinematicStage =
+    cinematicSurface &&
+    (forcedRenderer === "tadazz-classic-stage" ||
+      (forcedRenderer !== "razzia-native-stage" &&
+        isTadazzShowActive(extensionState)))
+
+  // The game route owns its canvas across the separate product opening and
+  // theme stage. A child renderer leaving must not clear the active canvas.
+  useLayoutEffect(() => {
+    if (!usesCinematicStage) {
+      return
+    }
+
+    const root = document.documentElement
+    const { body } = document
+    const previousRootBackground = root.style.background
+    const previousBodyBackground = body.style.background
+    root.style.background = theme.definition.tokens.background
+    body.style.background = theme.definition.tokens.background
+
+    return () => {
+      root.style.background = previousRootBackground
+      body.style.background = previousBodyBackground
+    }
+  }, [usesCinematicStage, theme.definition.tokens.background])
   const isEnhancedQuiz = Boolean(extensionState?.gameId)
   const {
     isPresenting: isHostPresentingConfirmed,
@@ -370,20 +403,7 @@ const GameWrapperView = ({
     )
   }
 
-  // The host and audience share one theme stage. Fullscreen only hides chrome;
-  // it must never switch renderer, lobby content or the active audio owner.
-  // Player input stays on its dedicated responsive surface.
-  const cinematicSurface =
-    effectiveRole !== "player" ||
-    Boolean(theme.definition.runtime) ||
-    forcedRenderer === "tadazz-classic-stage"
-
-  if (
-    cinematicSurface &&
-    (forcedRenderer === "tadazz-classic-stage" ||
-      (forcedRenderer !== "razzia-native-stage" &&
-        isTadazzShowActive(extensionState)))
-  ) {
+  if (usesCinematicStage) {
     return (
       <PlatformGameClosing extensionState={extensionState} role={effectiveRole}>
         <ShowThemeRenderer
