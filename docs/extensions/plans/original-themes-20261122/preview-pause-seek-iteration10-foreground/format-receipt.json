@@ -1,0 +1,16 @@
+{
+  "container": "tadazz-preview-foreground-format-20261122",
+  "containerStopped": true,
+  "diagnostic": true,
+  "exit": 0,
+  "formatOnly": true,
+  "helperAfterSha256": "81ed57f7368c301b61f8e4b06e603f2290a6f97b90e9beb275d873a537a43114",
+  "helperBeforeSha256": "81ed57f7368c301b61f8e4b06e603f2290a6f97b90e9beb275d873a537a43114",
+  "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+  "noOom": true,
+  "observerAfterSha256": "9420f3d09d12fa158b4193e2f6b1a971aaf0adea6a9364c953656cf8ea8e03ee",
+  "observerBeforeSha256": "59ca339dd09c39f94ba9e8c3a4d01a1f99866b310335e4cc4b92b78e5cd0a98d",
+  "passed": true,
+  "productionChanged": false,
+  "sourceMounted": false
+}

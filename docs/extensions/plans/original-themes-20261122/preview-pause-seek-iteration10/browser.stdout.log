@@ -1,0 +1,5 @@
+START chromium / tadazz-classic phase continuity normal motion
+START chromium / tadazz-classic phase continuity reduced motion
+START webkit / tadazz-classic phase continuity normal motion
+START webkit / tadazz-classic phase continuity reduced motion
+{"evidence":"/evidence/preview-pause-seek","results":[{"name":"chromium / tadazz-classic phase continuity normal motion","status":"PASS"},{"name":"chromium / tadazz-classic phase continuity reduced motion","status":"PASS"},{"name":"webkit / tadazz-classic phase continuity normal motion","status":"FAIL","error":"TimeoutError: frame.waitForFunction: Timeout 10000ms exceeded."},{"name":"webkit / tadazz-classic phase continuity reduced motion","status":"FAIL","error":"TimeoutError: frame.waitForFunction: Timeout 10000ms exceeded."}],"errors":[]}

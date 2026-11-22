@@ -264,6 +264,7 @@ export async function verifyPhaseContinuity({
     await page.emulateMedia({
       reducedMotion: reducedMotion ? "reduce" : "no-preference",
     })
+    await page.bringToFront()
     await prepareHostNavigation(page, `${mode} continuity case`)
     await page.goto(`${base}/host?scenario=${scenario.id}`)
     await page.locator("html[data-host-ready=true]").waitFor()
@@ -407,6 +408,7 @@ export async function verifyPhaseContinuity({
       "Selecting an answer must not call any server tool",
     )
 
+    await page.bringToFront()
     await iframe.getByTestId("full-show-demo-reveal").click()
     await waitChapter(results.id)
     await iframe.getByTestId("full-show-demo-result").waitFor()
@@ -439,6 +441,7 @@ export async function verifyPhaseContinuity({
       .getAttribute("data-demo-result")
     await page.screenshot({ path: path.join(evidence, `${name}-results.png`) })
 
+    await page.bringToFront()
     await iframe.getByTestId("full-show-replay").click()
     await waitChapter(question.id)
     await iframe.locator('[data-demo-selected-index=""]').waitFor()
@@ -465,6 +468,7 @@ export async function verifyPhaseContinuity({
       )
     }
 
+    await page.bringToFront()
     await iframe.getByTestId("full-show-next").click()
     await waitChapter(nextQuestion.id)
     const next = await snapshot("next-question", {
@@ -482,6 +486,7 @@ export async function verifyPhaseContinuity({
       )
     }
 
+    await page.bringToFront()
     await iframe.getByTestId("full-show-previous").click()
     await waitChapter(question.id)
     const previous = await snapshot("previous-question")
@@ -501,6 +506,7 @@ export async function verifyPhaseContinuity({
     await waitChapter(voting.id, question.duration.milliseconds + 10000)
     const again = await snapshot("second-answers", { cards: true })
     assertSameQuestion(previous, again, "previous question → answers/voting")
+    await page.bringToFront()
     await iframe.getByTestId("full-show-pause").click()
     await iframe.locator('[data-playback-paused="true"]').waitFor()
     const pausedAnswers = await snapshot("paused-answers", {
@@ -525,6 +531,7 @@ export async function verifyPhaseContinuity({
       await page.evaluate(() => window.__host.calls()),
       callsBeforePausedChoice,
     )
+    await page.bringToFront()
     await iframe.getByTestId("full-show-demo-reveal").click()
     await waitChapter(results.id)
     await iframe.getByTestId("full-show-demo-result").waitFor()
@@ -542,6 +549,7 @@ export async function verifyPhaseContinuity({
       ),
       ["preview_show"],
     )
+    await page.bringToFront()
     await iframe.getByTestId("full-show-next").click()
     await waitChapter(nextQuestion.id)
     const pausedNext = await snapshot("paused-next-question", {
@@ -551,6 +559,7 @@ export async function verifyPhaseContinuity({
     assert.equal(pausedNext.paused, "true")
     assert.notEqual(pausedNext.question, pausedResults.question)
     await iframe.locator('[data-demo-selected-index=""]').waitFor()
+    await page.bringToFront()
     await iframe.getByTestId("full-show-pause").click()
     await iframe.locator('[data-playback-paused="false"]').waitFor()
     const resumedNext = await snapshot("resumed-next-question", {
