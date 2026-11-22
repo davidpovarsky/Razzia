@@ -17,6 +17,7 @@ import { nativePreviewScopeIds } from "../../core/show-library/native-preview-sc
 import { nativeBundleToAuthoredShow } from "../../core/show-authoring-convert"
 import { sanitizeAuthoredShowForPreview } from "../../core/show-library/sanitized-authored-preview"
 import { compileFullShowPreviewTimeline } from "../../core/show-library/full-show-preview-timeline"
+import { ownedMediaPath } from "../../core/owned-media-reference"
 import type { StorageInjections } from "../storage/sidecar"
 import {
   readAccountPreviewBuiltinAssets,
@@ -272,15 +273,13 @@ export function readAccountPreviewAssets(
   const assets: Array<{ url: string; sha256: string; bytes: number }> = []
   let total = 0
   for (const url of urls) {
-    if (
-      !/^\/media\/[A-Za-z0-9_-]+\.(?:png|jpg|jpeg|webp|gif|mp4|webm|mp3|ogg|wav|m4a|json|lottie)$/u.test(
-        url,
-      )
-    ) {
+    const pathname = ownedMediaPath(url)
+
+    if (!pathname) {
       throw new PreviewSourceError(422)
     }
 
-    const name = url.slice(7)
+    const name = pathname.slice(7)
     // Reserved virtual names must never fall back to a same-named upload. The
     // native reader checks tenant, installed/published state and content digest.
     const installed =

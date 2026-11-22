@@ -266,6 +266,8 @@ export interface AudioCuePlayerProps {
 }
 
 interface DesiredTrack {
+  /** The chosen authored recording owns music without an inferred phase effect. */
+  sceneOwned?: true
   identity: string
   url: string
   volume: number
@@ -680,6 +682,7 @@ export const AudioCuePlayer = ({
       sceneAudio.mode !== "inherit"
     ) {
       return {
+        sceneOwned: true,
         identity: `${gameId ?? "g"}:scene-music:${activeCardKey ?? continuityKey}:${sceneAudio.url}`,
         url: sceneAudio.url,
         volume: sceneAudio.volume ?? 0.8,
@@ -1675,6 +1678,7 @@ export const AudioCuePlayer = ({
   ])
   useEffect(() => {
     if (
+      desired?.sceneOwned ||
       !soundtrack ||
       !effectiveCueId ||
       !resolvedCue?.shouldPlay ||
@@ -1698,6 +1702,7 @@ export const AudioCuePlayer = ({
       }),
     )
   }, [
+    desired?.sceneOwned,
     effectiveCueId,
     epoch,
     gameId,

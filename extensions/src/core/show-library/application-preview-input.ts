@@ -5,6 +5,7 @@ import { applicationPackagePreviewSchema } from "./application-package-preview"
 import { deriveAuthoredShowPreviewIdentityMap } from "./identity"
 import { assertBoundedJson, freeze } from "./primitives"
 import { canonicalJson } from "./digest"
+import { ownedMediaPath } from "../owned-media-reference"
 import {
   assertReviewedPreviewBindings,
   isReviewedPreviewAssetUrl,
@@ -33,7 +34,7 @@ const sourceSchema = z.strictObject({
           .max(2048)
           .refine(
             (value) =>
-              /^\/media\/[A-Za-z0-9_-]+\.[a-z0-9]+$/u.test(value) ||
+              ownedMediaPath(value) !== null ||
               isReviewedPreviewAssetUrl(value),
           ),
         bytes: z.number().int().positive().max(100_000_000),

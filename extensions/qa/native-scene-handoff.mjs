@@ -56,6 +56,14 @@ const closingBoundary = path.join(
   source,
   "extensions/src/presentation/platform-closing.tsx",
 )
+const applicationPreview = path.join(
+  source,
+  "extensions/src/presentation/show-library-preview/application-preview-stage.tsx",
+)
+const previewFrameSchema = path.join(
+  source,
+  "extensions/src/core/show-library/application-preview-schema.ts",
+)
 await fs.mkdir(evidence, { recursive: true })
 const entry = `
 import React,{useRef,useState} from 'react';
@@ -71,6 +79,8 @@ import {resolveThemeEffect} from ${JSON.stringify(themeEffects)};
 import {createPlatformAudioExtras} from ${JSON.stringify(audioDefaults)};
 import {resolveNativePhaseAudioCue,resolveTadazzAudioPolicy} from ${JSON.stringify(audioPolicy)};
 import {PlatformClosingBoundary} from ${JSON.stringify(closingBoundary)};
+import {ApplicationPreviewStage} from ${JSON.stringify(applicationPreview)};
+import {applicationPreviewFrameSchema} from ${JSON.stringify(previewFrameSchema)};
 const q1={key:'first#1',question:'FIRST QUESTION',number:1,totalQuestions:23,answerCount:3,options:[]};
 const options=[{label:'Alpha'},{label:'Bravo'},{label:'Charlie'}];
 const transitionIdentity=${legacySceneIdentity ? "scene=>JSON.stringify(scene)" : "showSceneTransitionIdentity"};
@@ -155,7 +165,20 @@ function App(){
  };
  return <ShowThemeScope theme={theme}><div style={{width:'100%',height:'100%'}} data-guess-off-stage={guessOff?'true':undefined} data-guess-off-media={guessOff&&!answerImages?'text':undefined}><TadazzV4StageAdapter ref={stage} customScreen={custom} guessOffLook={guessOff} onCue={cue=>cues.current.push(cue)}/><div style={{position:'fixed',top:0,left:0,zIndex:1000,background:'white',color:'black'}}><PlatformClosingBoundary elapsedMs={audio.closingElapsed}><AudioCuePlayer gameId={audio.gameId} epoch={audio.epoch} phase={statusName} cueId={cueId} soundtrackSlot={policy.slot} continuityKey={policy.continuityKey} audioExtras={audioExtras} stageOwnsReveal eventOnly={audio.role==='player'} paused={audio.paused} autoPlay showControls/></PlatformClosingBoundary><button data-testid="start-audio-tick" onClick={startTick}>Server start tick</button></div></div></ShowThemeScope>;
 }
-createRoot(document.getElementById('root')).render(<App/>);
+function PreviewApp(){
+ const [frame,setFrame]=useState(()=>applicationPreviewFrameSchema.parse({
+  show:{format:'tada-show',version:1,title:'Authored scene audio fixture',baseGameMode:'quiz',settings:[],cards:[{key:'authored-recap',kind:'animation',preset:'round-recap',durationMs:20000,advance:'manual',audio:{mode:'custom',url:'/media/fixture-recap.mp3#authored-recap-marker',volume:1,loop:false}},{key:'following-question',kind:'quiz',question:'Synthetic following question',timeSeconds:20,answers:[{text:'Alpha'},{text:'Bravo'},{text:'Charlie'}],correctAnswers:[1]}]},
+  chapterIndex:0,clock:{epoch:1,sequence:1,elapsedMs:0,deadlineMs:20000,paused:false},role:'spectator',locale:'en',reducedMotion:false,soundEnabled:true,mediaRevealed:false,appearanceRevision:0,
+ }));
+ window.previewScene={
+  update:next=>flushSync(()=>setFrame(current=>applicationPreviewFrameSchema.parse({...current,...next}))),
+  clock:next=>flushSync(()=>setFrame(current=>applicationPreviewFrameSchema.parse({...current,clock:{...current.clock,...next,sequence:current.clock.sequence+1}}))),
+ };
+ return <ApplicationPreviewStage frame={frame} onCommitted={()=>{window.previewCommitted=true}} onUnavailable={()=>{window.previewUnavailable=true}}/>;
+}
+const root=createRoot(document.getElementById('root'));
+window.mountAuthoredPreview=()=>flushSync(()=>root.render(<PreviewApp/>));
+root.render(<App/>);
 `
 const plugins = [
   {
@@ -216,7 +239,7 @@ const plugins = [
 ]
 await build({
   bundle: true,
-  format: "iife",
+  format: "esm",
   platform: "browser",
   jsx: "automatic",
   plugins,
@@ -240,6 +263,16 @@ const server = http.createServer(async (request, response) => {
       file = path.join(evidence, url.pathname.slice(1))
     else if (url.pathname === "/media/fixture-start.mp3")
       file = path.join(source, "packages/web/public/sounds/boump.mp3")
+    else if (url.pathname === "/assets/tadazz-question-background.png")
+      file = path.join(
+        source,
+        "extensions/assets/tadazz-question-background.png",
+      )
+    else if (url.pathname === "/media/fixture-recap.mp3")
+      file = path.join(
+        source,
+        "packages/web/public/tadazz-show/music/cutie-patootie.mp3",
+      )
     else if (
       url.pathname.startsWith("/tadazz-show/") ||
       url.pathname.startsWith("/sounds/")
@@ -248,7 +281,7 @@ const server = http.createServer(async (request, response) => {
     else {
       response.writeHead(200, { "Content-Type": "text/html" })
       response.end(
-        '<!doctype html><meta charset="utf-8"><link rel="stylesheet" href="/fixture.css"><style>html,body,#root{width:100%;height:100%;margin:0;overflow:hidden;background:#101a31}</style><div id="root"></div><script src="/fixture.js"></script>',
+        '<!doctype html><meta charset="utf-8"><link rel="stylesheet" href="/fixture.css"><style>html,body,#root{width:100%;height:100%;margin:0;overflow:hidden;background:#101a31}</style><div id="root"></div><script type="module" src="/fixture.js"></script>',
       )
       return
     }
@@ -296,11 +329,15 @@ function check(name, passed, details = {}) {
   result.checks.push({ name, passed: Boolean(passed), ...details })
 }
 const errors = []
+const errorDetails = []
 const failedRequests = []
 const failedResponses = []
 const consoleErrors = []
 const page = await browser.newPage({ viewport: { width: 1366, height: 768 } })
-page.on("pageerror", (error) => errors.push(error.message))
+page.on("pageerror", (error) => {
+  errors.push(error.message)
+  errorDetails.push({ message: error.message, stack: error.stack })
+})
 page.on("requestfailed", (request) =>
   failedRequests.push({ url: request.url(), failure: request.failure() }),
 )
@@ -348,6 +385,7 @@ async function captureAudio(label) {
     failedResponses: [...failedResponses],
     serverFailures: [...serverFailures],
     errors: [...errors],
+    errorDetails: [...errorDetails],
     consoleErrors: [...consoleErrors],
   })
 }
@@ -1108,6 +1146,164 @@ try {
       finale.plays === finale.before.plays,
     { finale },
   )
+  await page.evaluate(() => {
+    window.previewPhaseEvents = []
+    window.addEventListener("tadazz:sfx", (event) => {
+      if (event.detail?.name?.startsWith("phase-"))
+        window.previewPhaseEvents.push(event.detail.name)
+    })
+    window.mountAuthoredPreview()
+  })
+  await page.waitForFunction(() => window.previewCommitted === true)
+  const previewUrl = "/media/fixture-recap.mp3#authored-recap-marker"
+  const readPreviewAudio = () =>
+    page.evaluate((url) => {
+      const owners = [
+        ...document.querySelectorAll('[data-testid="audio-cue-player-state"]'),
+      ]
+      const owner = owners[0]
+      const active = window.startAudioElements.filter(
+        (audio) =>
+          !audio.paused && !audio.ended && !audio.muted && audio.volume > 0,
+      )
+      const matching = active.filter((audio) => audio.src.endsWith(url))
+      const audio = matching[0]
+      return {
+        owners: owners.length,
+        url: owner?.getAttribute("data-audio-url"),
+        identity: owner?.getAttribute("data-audio-identity"),
+        blocked: owner?.getAttribute("data-audio-blocked"),
+        error: owner?.getAttribute("data-audio-error"),
+        active: active.length,
+        matching: matching.length,
+        element: audio ? window.startAudioElements.indexOf(audio) : null,
+        time: audio?.currentTime ?? 0,
+        volume: audio?.volume,
+        loop: audio?.loop,
+        plays: window.audioAttempts.filter(
+          (item) => item.src.endsWith(url) && item.status === "fulfilled",
+        ).length,
+        attemptCount: window.audioAttempts.filter((item) =>
+          item.src.endsWith(url),
+        ).length,
+        rejected: window.audioAttempts.filter(
+          (item) => item.src.endsWith(url) && item.status === "rejected",
+        ).length,
+        phaseEvents: window.previewPhaseEvents,
+        unavailable: window.previewUnavailable === true,
+      }
+    }, previewUrl)
+  await page.waitForFunction((url) => {
+    const owner = document.querySelector(
+      '[data-testid="audio-cue-player-state"]',
+    )
+    return (
+      owner?.getAttribute("data-audio-blocked") === "true" ||
+      window.startAudioElements.some(
+        (audio) =>
+          audio.src.endsWith(url) && !audio.paused && audio.currentTime > 0.25,
+      )
+    )
+  }, previewUrl)
+  const previewUnlock = page.getByTestId("preview-unlock-audio")
+  if (await previewUnlock.isVisible()) await previewUnlock.click()
+  await page.waitForFunction(
+    (url) =>
+      window.startAudioElements.some(
+        (audio) =>
+          audio.src.endsWith(url) && !audio.paused && audio.currentTime > 0.4,
+      ),
+    previewUrl,
+  )
+  const previewBefore = await readPreviewAudio()
+  check(
+    "actual application preview plays an authored fragment through exactly one central owner",
+    previewBefore.owners === 1 &&
+      previewBefore.active === 1 &&
+      previewBefore.matching === 1 &&
+      previewBefore.url === previewUrl &&
+      previewBefore.blocked === "false" &&
+      previewBefore.error === "false" &&
+      previewBefore.volume === 1 &&
+      previewBefore.loop === false &&
+      previewBefore.plays === 1 &&
+      !previewBefore.unavailable,
+    { previewBefore },
+  )
+  check(
+    "an authored recap does not introduce an opening phase sound",
+    !previewBefore.phaseEvents.includes("phase-start"),
+    { phaseEvents: previewBefore.phaseEvents },
+  )
+  await page.evaluate(() => window.previewScene.clock({ elapsedMs: 1000 }))
+  await page.waitForFunction(
+    ({ url, time }) =>
+      window.startAudioElements.some(
+        (audio) =>
+          audio.src.endsWith(url) &&
+          !audio.paused &&
+          audio.currentTime > time + 0.15,
+      ),
+    { url: previewUrl, time: previewBefore.time },
+  )
+  const previewAfter = await readPreviewAudio()
+  check(
+    "authored preview clock updates retain the same playing element without duplicate replay",
+    previewAfter.owners === 1 &&
+      previewAfter.active === 1 &&
+      previewAfter.matching === 1 &&
+      previewAfter.identity === previewBefore.identity &&
+      previewAfter.element === previewBefore.element &&
+      previewAfter.plays === previewBefore.plays &&
+      previewAfter.attemptCount === previewBefore.attemptCount &&
+      previewAfter.phaseEvents.length === 0 &&
+      previewAfter.time > previewBefore.time,
+    { previewAfter },
+  )
+  await page.evaluate(() => window.previewScene.clock({ paused: true }))
+  await page.waitForFunction(() =>
+    window.startAudioElements.every(
+      (audio) =>
+        audio.paused || audio.ended || audio.muted || audio.volume === 0,
+    ),
+  )
+  check(
+    "authored preview pause stops actual scene playback",
+    (await readPreviewAudio()).active === 0,
+  )
+  await page.evaluate(() => window.previewScene.clock({ paused: false }))
+  await page.waitForFunction(
+    (url) =>
+      window.startAudioElements.some(
+        (audio) => audio.src.endsWith(url) && !audio.paused,
+      ),
+    previewUrl,
+  )
+  const previewResumed = await readPreviewAudio()
+  check(
+    "authored preview resume retains one scene audio owner",
+    previewResumed.active === 1 &&
+      previewResumed.matching === 1 &&
+      previewResumed.identity === previewBefore.identity &&
+      previewResumed.phaseEvents.length === 0 &&
+      previewResumed.time >= previewAfter.time &&
+      previewResumed.element === previewBefore.element,
+    { previewResumed },
+  )
+  await page.evaluate(() => window.previewScene.update({ soundEnabled: false }))
+  await page.waitForFunction(() =>
+    window.startAudioElements.every(
+      (audio) =>
+        audio.paused || audio.ended || audio.muted || audio.volume === 0,
+    ),
+  )
+  check(
+    "authored preview sound disable suppresses scene audio",
+    (await readPreviewAudio()).active === 0,
+  )
+  await page.screenshot({
+    path: path.join(evidence, "authored-fragment-preview.png"),
+  })
   check("no browser runtime errors", errors.length === 0, { errors })
   await page.screenshot({ path: path.join(evidence, "completed.png") })
   result.passed = result.checks.every((x) => x.passed)

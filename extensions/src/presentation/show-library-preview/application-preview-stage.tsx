@@ -716,6 +716,7 @@ function NativeApplicationPreviewStage({
                 ? card.audioCues
                 : undefined
             }
+            sceneAudio={audition ? undefined : config?.audio}
             showTrack={audition ? auditionTrack : undefined}
             gameId="read-only-preview"
             activeCardKey={card.key}

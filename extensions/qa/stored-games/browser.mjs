@@ -62,6 +62,52 @@ async function installPlaybackAudit(page) {
     const failedTracks = new Set()
     const mediaErrors = new Set()
     const desiredTracks = new Set()
+    const audioElements = []
+    const audioPlays = []
+    let observedIdentity
+    let identitySequence = 0
+    const readIdentity = () => {
+      const identity =
+        document
+          .querySelector('[data-testid="audio-cue-player-state"]')
+          ?.getAttribute("data-audio-identity") ?? ""
+      if (identity !== observedIdentity) {
+        observedIdentity = identity
+        identitySequence++
+      }
+      return { identity, sequence: identitySequence }
+    }
+    const originalPlay = HTMLMediaElement.prototype.play
+    const observedPlay = function (...args) {
+      let attempt
+      if (this instanceof HTMLAudioElement) {
+        if (!audioElements.includes(this)) audioElements.push(this)
+        attempt = {
+          url: this.getAttribute("src") ?? "",
+          ...readIdentity(),
+          status: "pending",
+        }
+        audioPlays.push(attempt)
+      }
+      try {
+        const result = Reflect.apply(originalPlay, this, args)
+        if (attempt) {
+          void Promise.resolve(result).then(
+            () => {
+              attempt.status = "fulfilled"
+            },
+            () => {
+              attempt.status = "rejected"
+            },
+          )
+        }
+        return result
+      } catch (error) {
+        if (attempt) attempt.status = "rejected"
+        throw error
+      }
+    }
+    HTMLMediaElement.prototype.play = observedPlay
     let armed = false
     let frame
     let samples = 0
@@ -75,6 +121,7 @@ async function installPlaybackAudit(page) {
       const owners = [
         ...document.querySelectorAll('[data-testid="audio-cue-player-state"]'),
       ]
+      readIdentity()
       samples++
       minOwners = Math.min(minOwners, owners.length)
       maxOwners = Math.max(maxOwners, owners.length)
@@ -146,10 +193,57 @@ async function installPlaybackAudit(page) {
         failedTracks: [...failedTracks],
         mediaErrors: [...mediaErrors],
       }),
+      readCustomAudio: (url) => {
+        const owners = [
+          ...document.querySelectorAll(
+            '[data-testid="audio-cue-player-state"]',
+          ),
+        ]
+        const currentIdentity = readIdentity()
+        const attempts = audioPlays.filter(
+          (attempt) =>
+            attempt.url === url &&
+            attempt.identity === currentIdentity.identity &&
+            attempt.sequence === currentIdentity.sequence,
+        )
+        const playing = audioElements.filter(
+          (element) =>
+            element.getAttribute("src") === url &&
+            !element.paused &&
+            !element.ended &&
+            !element.muted &&
+            element.volume > 0 &&
+            element.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA &&
+            element.error === null,
+        )
+        return {
+          at: performance.now(),
+          owners: owners.length,
+          owner: owners[0] ? { ...owners[0].dataset } : null,
+          identitySequence: currentIdentity.sequence,
+          playCalls: attempts.length,
+          fulfilledPlaybacks: attempts.filter(
+            (attempt) => attempt.status === "fulfilled",
+          ).length,
+          rejectedPlaybacks: attempts.filter(
+            (attempt) => attempt.status === "rejected",
+          ).length,
+          pendingPlaybacks: attempts.filter(
+            (attempt) => attempt.status === "pending",
+          ).length,
+          playing: playing.map((element) => ({
+            element: audioElements.indexOf(element),
+            time: element.currentTime,
+            loop: element.loop,
+          })),
+        }
+      },
       stop: () => {
         cancelAnimationFrame(frame)
         mutations.disconnect()
         document.removeEventListener("error", onMediaError, true)
+        if (HTMLMediaElement.prototype.play === observedPlay)
+          HTMLMediaElement.prototype.play = originalPlay
       },
     }
     frame = requestAnimationFrame(tick)
@@ -262,6 +356,12 @@ export async function verifyStoredGameBrowser(options) {
   const accepted = []
   const sceneVisits = []
   const sequences = []
+  const fragmentAudio = {
+    authored: 0,
+    expectedActive: null,
+    observed: 0,
+    scenes: [],
+  }
   const previewStatuses = []
   const mirrorChecks = []
   const mirrorRoutes = []
@@ -675,6 +775,121 @@ export async function verifyStoredGameBrowser(options) {
     const toolbar = host.getByTestId("manager-control-toolbar")
     await toolbar.getByRole("button", { name: "Start", exact: true }).click()
     const nativeTimeline = savedExtras?.timeline ?? []
+    const fragmentAudioTargets = new Map(
+      nativeTimeline.flatMap((item) => {
+        const audio = item.sceneId
+          ? savedExtras.scenes[item.sceneId]?.audio
+          : null
+        return audio?.mode === "custom" &&
+          typeof audio.url === "string" &&
+          audio.url.includes("#")
+          ? [[item.id, { sceneId: item.sceneId, audio }]]
+          : []
+      }),
+    )
+    fragmentAudio.authored = fragmentAudioTargets.size
+    const qualifiedFragmentSteps = new Set()
+    const qualifyFragmentAudio = async (active, authoredAudio) => {
+      checkpoint = "authored-fragment-audio-" + active.stepIndex
+      const url = authoredAudio.url
+      const identity = `${room.gameId}:scene-music:${active.sceneId}:${url}`
+      const readAudio = () =>
+        host.evaluate(
+          (expectedUrl) =>
+            window.__tadazzStoredAudit.readCustomAudio(expectedUrl),
+          url,
+        )
+      const isActive = () => {
+        const current = snapshot()
+        return (
+          current.id === active.id &&
+          current.epoch === active.epoch &&
+          current.phase === "scene"
+        )
+      }
+      const matches = (sample) =>
+        isActive() &&
+        sample.owners === 1 &&
+        sample.owner?.audioUrl === url &&
+        sample.owner?.audioIdentity === identity &&
+        sample.owner?.shouldPlay === "true" &&
+        sample.owner?.audioBlocked === "false" &&
+        sample.owner?.audioError === "false" &&
+        sample.owner?.audioPaused === "false" &&
+        sample.owner?.audioLoop === String(authoredAudio.loop ?? true) &&
+        sample.playCalls > 0 &&
+        sample.fulfilledPlaybacks === 1 &&
+        sample.pendingPlaybacks === 0 &&
+        sample.playing.length === 1 &&
+        sample.playing[0].loop === (authoredAudio.loop ?? true)
+      let before
+      await expect
+        .poll(
+          async () => {
+            const sample = await readAudio()
+            if (!matches(sample)) return false
+            before = sample
+            return true
+          },
+          {
+            timeout: sceneTimeout(active),
+            message:
+              "The authored fragment track must really play during its own scene",
+          },
+        )
+        .toBe(true)
+      let after
+      await expect
+        .poll(
+          async () => {
+            const sample = await readAudio()
+            if (!matches(sample)) return false
+            after = sample
+            return sample.playing[0].time > before.playing[0].time + 0.1
+          },
+          {
+            timeout: sceneTimeout(active),
+            message:
+              "Actual authored media time must advance before the host advances",
+          },
+        )
+        .toBe(true)
+      assert(isActive(), "Audio proof remains within the exact authored scene")
+      assert.equal(
+        after.identitySequence,
+        before.identitySequence,
+        "Audio identity stays on this authored scene",
+      )
+      assert.equal(
+        after.playing[0].element,
+        before.playing[0].element,
+        "The same real audio element advances",
+      )
+      assert.equal(
+        after.playCalls,
+        before.playCalls,
+        "The authored scene does not restart or duplicate its track",
+      )
+      fragmentAudio.scenes.push({
+        stepDigest: digest(active.id),
+        sceneDigest: digest(active.sceneId),
+        urlDigest: digest(url),
+        identityDigest: digest(identity),
+        sceneDurationMs: active.durationMs,
+        owners: after.owners,
+        playingMatches: after.playing.length,
+        playCallsBefore: before.playCalls,
+        playCallsAfter: after.playCalls,
+        fulfilledPlaybacks: after.fulfilledPlaybacks,
+        rejectedPlaybacks: after.rejectedPlaybacks,
+        pendingPlaybacks: after.pendingPlaybacks,
+        elapsedMs: after.at - before.at,
+        mediaTimeBeforeSeconds: before.playing[0].time,
+        mediaTimeAfterSeconds: after.playing[0].time,
+      })
+      qualifiedFragmentSteps.add(active.id)
+      fragmentAudio.observed = qualifiedFragmentSteps.size
+    }
     const allowedSceneIds = new Set(
       nativeTimeline
         .filter((item) => item.kind !== "question")
@@ -756,6 +971,15 @@ export async function verifyStoredGameBrowser(options) {
           ).toBeVisible()
         }
         await paintedFrames(stage)
+        if (
+          fragmentAudioTargets.has(active.id) &&
+          !qualifiedFragmentSteps.has(active.id)
+        ) {
+          await qualifyFragmentAudio(
+            active,
+            fragmentAudioTargets.get(active.id).audio,
+          )
+        }
         await next(active)
         await expect
           .poll(
@@ -962,6 +1186,23 @@ export async function verifyStoredGameBrowser(options) {
     sceneVisits.splice(0, sceneVisits.length, ...timelineReceipt.scenes)
     // Scene IDs stay private; the receipt records ordered hashes and counts.
     delete timelineReceipt.scenes
+    const skippedFragmentSteps = new Set(
+      timelineReceipt.skipped.map((item) => item.stepDigest),
+    )
+    const expectedFragmentSteps = [...fragmentAudioTargets.keys()].filter(
+      (id) => !skippedFragmentSteps.has(digest(id)),
+    )
+    fragmentAudio.expectedActive = expectedFragmentSteps.length
+    assert.deepEqual(
+      [...qualifiedFragmentSteps].map(digest).sort(),
+      expectedFragmentSteps.map(digest).sort(),
+      "Every active authored fragment-audio scene has actual playback proof",
+    )
+    assert.equal(
+      fragmentAudio.scenes.length,
+      expectedFragmentSteps.length,
+      "One audio proof per active authored card",
+    )
     const unused = new Set(fixture.expected.unusedSceneIds ?? [])
     assert(
       sceneVisits.every((visit) => !unused.has(visit.id)),
@@ -1054,6 +1295,7 @@ export async function verifyStoredGameBrowser(options) {
       authoredCards: timelineReceipt.authored,
       observedCards: timelineReceipt.observed,
       conditionalTieSkips: timelineReceipt.skipped.length,
+      authoredFragmentAudio: fragmentAudio.observed,
     })
     return {
       fixtureId: fixture.fixtureId,
@@ -1062,6 +1304,7 @@ export async function verifyStoredGameBrowser(options) {
       trace: safeTrace(),
       sequences,
       audio,
+      fragmentAudio,
       mediaErrors,
       timelineReceipt,
       previewStatuses,
@@ -1087,6 +1330,7 @@ export async function verifyStoredGameBrowser(options) {
       sceneVisits: safeSceneVisits(),
       sequences,
       audio,
+      fragmentAudio,
       mediaErrors,
       timelineReceipt,
       previewStatuses,

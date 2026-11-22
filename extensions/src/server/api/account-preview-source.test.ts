@@ -16,6 +16,7 @@ import { publicDemoCatalogue } from "../../core/show-library/public-demo-catalog
 import { authoredShowToNativeBundleDraft } from "../../core/show-authoring-convert"
 import { authoredFixture } from "../../core/show-library/preview-fixtures"
 import { computeCanonicalBaseDigest } from "../../core/digest"
+import { normalizeApplicationPreviewDraft } from "../../core/show-library/application-preview-input"
 import {
   readAccountPreviewSource,
   readAccountPreviewAssets,
@@ -98,6 +99,92 @@ const digest = (file: string) =>
   createHash("sha256").update(readFileSync(file)).digest("hex")
 
 describe("account-owned preview source is a read-only projection", () => {
+  it("binds authored scene fragments to current owner bytes and preserves them through the native adapter", () => {
+    const owner = fixture(true)
+    const foreign = fixture(false)
+    const url = "/media/owned-recap.mp3#authored-recap-marker"
+    const sceneId = crypto.randomUUID()
+    const audio = { mode: "custom" as const, url, volume: 1, loop: false }
+    owner.bundle.extras.timeline.unshift({
+      id: crypto.randomUUID(),
+      kind: "animation",
+      sceneId,
+    })
+    owner.bundle.extras.scenes[sceneId] = {
+      id: sceneId,
+      kind: "animation",
+      preset: "round-recap",
+      durationMs: 3000,
+      advance: "manual",
+      audio,
+    }
+    const sideFile = owner.getPath("extensions/quizzes/owned-game.json")
+    writeFileSync(sideFile, JSON.stringify(owner.bundle.extras))
+    mkdirSync(owner.getPath("media"))
+    const mediaFile = owner.getPath("media/owned-recap.mp3")
+    writeFileSync(mediaFile, "owner-scoped audio bytes")
+    const before = [
+      digest(owner.getPath("quizz/source.json")),
+      digest(sideFile),
+      digest(mediaFile),
+    ]
+    const result = readAccountPreviewSource(owner, "owned-game")
+
+    expect(result.assets).toEqual([
+      { url, bytes: 24, sha256: digest(mediaFile) },
+    ])
+    const draft = normalizeApplicationPreviewDraft(
+      { source: result.source, show: result.show, assets: result.assets },
+      {
+        locale: "en",
+        reducedMotion: false,
+        role: "spectator",
+      },
+    )
+    expect(draft.show.cards[0]).toMatchObject({ kind: "animation", audio })
+    const converted = authoredShowToNativeBundleDraft(
+      draft.show,
+      "owned-preview",
+    ).bundleDraft!
+    const [first] = converted.extras.timeline
+    expect(first.kind).toBe("animation")
+
+    if (first.kind === "question") {
+      throw new Error("Expected an authored scene")
+    }
+
+    expect(converted.extras.scenes[first.sceneId].audio).toEqual(audio)
+    expect(() => readAccountPreviewAssets(foreign, [url])).toThrow()
+    expect([
+      digest(owner.getPath("quizz/source.json")),
+      digest(sideFile),
+      digest(mediaFile),
+    ]).toEqual(before)
+    expect(readdirSync(owner.getPath("media"))).toEqual(["owned-recap.mp3"])
+  })
+  it("authorizes installed media by pathname while binding the exact fragment reference", () => {
+    const owner = fixture(false)
+    const name = `pkg_${"a".repeat(24)}_${"b".repeat(64)}.mp3`
+    const url = `/media/${name}#t=1,3`
+    const bytes = Buffer.from("installed owner bytes")
+    const readInstalledMedia = vi.fn(() => ({ bytes }))
+    const result = readAccountPreviewAssets({ ...owner, readInstalledMedia }, [
+      url,
+    ])
+
+    expect(readInstalledMedia).toHaveBeenCalledTimes(1)
+    expect(readInstalledMedia).toHaveBeenCalledWith(name)
+    expect(result).toEqual([
+      {
+        url,
+        bytes: bytes.byteLength,
+        sha256: createHash("sha256").update(bytes).digest("hex"),
+      },
+    ])
+    expect(() => readAccountPreviewAssets(owner, [url])).toThrow(
+      PreviewSourceError,
+    )
+  })
   it("binds appearance media to current tenant bytes and refuses foreign URLs or traversal", () => {
     const owner = fixture(false),
       foreign = fixture(false)

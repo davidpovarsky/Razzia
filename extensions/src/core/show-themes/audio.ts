@@ -3,6 +3,7 @@ import { platformThemeAudio } from "./platform-audio"
 import { isSafeThemeAssetUrl, type ShowThemeAudioEvent } from "./selection"
 import type { CueId, SoundtrackSlotId } from "../constants"
 import type { AudioExtras } from "../quiz-extras"
+import { ownedMediaPath } from "../owned-media-reference"
 import {
   isPlatformSoundtrackUrl,
   isInheritedPlatformCueUrl,
@@ -72,6 +73,14 @@ export function themeAllowsAudioUrl(
   event: ShowThemeAudioEvent,
   url: string,
 ): boolean {
+  const spec = theme.definition.audioEvents[event]
+
+  // Authored owner media may carry a client-side fragment. This does not widen
+  // package asset URLs or an event that forbids custom recordings.
+  if (spec.customMedia && ownedMediaPath(url) !== null) {
+    return true
+  }
+
   if (!isSafeThemeAssetUrl(url)) {
     return false
   }
@@ -92,8 +101,6 @@ export function themeAllowsAudioUrl(
   ) {
     return true
   }
-
-  const spec = theme.definition.audioEvents[event]
 
   if (
     spec.variants.some((variant) =>
