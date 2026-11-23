@@ -1634,6 +1634,7 @@ function TadazzShowContent(props: TadazzShowViewProps) {
                 revealStage={packageReveal.stage}
                 remainingMs={runtimeRemainingMs}
                 serverTime={Date.now() + serverClockOffset}
+                serverClockOffset={serverClockOffset}
                 deadline={
                   isPaused || runtimeDeadline === null
                     ? null

@@ -1,4 +1,7 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["qa/**/*.ts", "../scripts/qa/**/*.ts"]
+  "include": ["qa/**/*.ts", "qa/**/*.tsx", "../scripts/qa/**/*.ts"],
+  "compilerOptions": {
+    "types": ["node", "vite/client"]
+  }
 }

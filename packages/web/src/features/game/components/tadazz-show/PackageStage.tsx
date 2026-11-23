@@ -27,7 +27,6 @@ import type { PublicLobbyDirectory } from "./lobby-directory"
 interface CapabilityIdentity {
   key: string
   lifetime: string
-  boundaryAt: number
 }
 
 type CapabilityState = CapabilityIdentity &
@@ -50,6 +49,7 @@ export function PackageStage({
   remainingMs: incomingRemainingMs,
   deadline: incomingDeadline,
   serverTime,
+  serverClockOffset = 0,
   onSubmit,
   onFallback,
   backgroundUrl: incomingBackgroundUrl,
@@ -71,6 +71,7 @@ export function PackageStage({
   remainingMs: number
   deadline: number | null
   serverTime: number
+  serverClockOffset?: number
   onSubmit: (keys: number[]) => void
   children: ReactNode
   onFallback: () => void
@@ -134,7 +135,6 @@ export function PackageStage({
   const [capabilityState, setCapability] = useState<CapabilityState>(() => ({
     key: capabilityKey,
     lifetime: capabilityLifetime,
-    boundaryAt: serverTime,
     status: "pending",
   }))
   let capability = capabilityState
@@ -146,14 +146,13 @@ export function PackageStage({
     const nextIdentity = {
       key: capabilityKey,
       lifetime: capabilityLifetime,
-      boundaryAt: serverTime,
     }
     // A boundary is observed before committing a new document. Clock changes
     // inside that lifetime never expire or replace its already-loaded iframe.
     const reusable =
       capability.key === capabilityKey &&
       capability.status === "ready" &&
-      serverTime - capability.issuedAt < 240_000
+      serverTime - serverClockOffset - capability.issuedAt < 240_000
     capability = reusable
       ? { ...capability, ...nextIdentity }
       : { ...nextIdentity, status: "pending" }
@@ -195,7 +194,6 @@ export function PackageStage({
     }
 
     const controller = new AbortController()
-    const requestedAt = Date.now()
     void requestAuthHeaders()
       .then(async (headers) => {
         controller.signal.throwIfAborted()
@@ -217,8 +215,9 @@ export function PackageStage({
       })
       .then((result) => {
         if (!controller.signal.aborted) {
-          // Keep ticket age on the same server-adjusted clock as the boundary.
-          const issuedAt = capability.boundaryAt + Date.now() - requestedAt
+          // Ticket age uses the local clock at both ends. Server-clock calibration
+          // changes snapshots, but must not age or rejuvenate a launch capability.
+          const issuedAt = Date.now()
           setCapability((current) =>
             current === capability
               ? { ...capability, status: "ready", url: result.url, issuedAt }

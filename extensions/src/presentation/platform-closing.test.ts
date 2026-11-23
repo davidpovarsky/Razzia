@@ -2,7 +2,7 @@ import { createElement } from "react"
 import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
 import { PlatformClosingBoundary } from "./platform-closing"
-import { Finale, type FullShowInput } from "./tadazz-v4/FullShowScenes"
+import { Finale } from "./tadazz-v4/FullShowScenes"
 import { PLATFORM_CLOSING_DURATION_MS } from "../core/platform-opening"
 
 describe("shared product curtain ownership", () => {

@@ -61,6 +61,25 @@ function inspectionStartState(allowed: boolean, authorized: boolean): State {
   return authorized ? "loading" : "expired"
 }
 
+function invalidatedConsent(
+  current: ConsentState,
+  identity: string,
+  attempt: number,
+): ConsentState {
+  if (current.identity !== identity || current.attempt !== attempt) {
+    return current
+  }
+
+  const uncertain = current.state === "saving" || current.state === "uncertain"
+
+  return {
+    ...current,
+    state: uncertain ? "uncertain" : "expired",
+    inspection: null,
+    read: false,
+  }
+}
+
 const opaque = /^[A-Za-z0-9_-]{22,64}$/u
 const digest = /^[a-f0-9]{64}$/u
 const contentId = /^[a-z][a-z0-9-]{1,79}$/u
@@ -268,28 +287,19 @@ export function PackageSaveConsent({ requestId }: { requestId: string }) {
       current.identity === identity && current.attempt === attempt
     const invalidate = () => {
       controller.abort()
-      approval.current?.controller.abort()
+      const operation = approval.current
+
+      if (operation?.identity === identity && operation.attempt === attempt) {
+        operation.controller.abort()
+      }
+
       session.current = null
       snapshot.current = null
-      setConsent((current) => {
-        if (!matches(current)) {
-          return current
-        }
-
-        const uncertain =
-          current.state === "saving" || current.state === "uncertain"
-
-        return {
-          ...current,
-          state: uncertain ? "uncertain" : "expired",
-          inspection: null,
-          read: false,
-        }
-      })
+      setConsent((current) => invalidatedConsent(current, identity, attempt))
     }
 
-    // A session can change between render and effect setup. The same monitor
-    // that protects an in-flight read handles that race without starting one.
+    // A session can change between render and effect setup. The independent
+    // monitor handles that race without issuing a read for the previous session.
     if (sameSession(bound, requestId)) {
       void packageJson<unknown>(`/save-consents/${requestId}`, {
         signal: controller.signal,
@@ -334,8 +344,35 @@ export function PackageSaveConsent({ requestId }: { requestId: string }) {
         })
     }
 
+    // A read ending does not end the identity or its uncertain approval.
+    return () => controller.abort()
+  }, [requestId, identity, token, owner, attempt, read, allowed, authorized])
+
+  useEffect(() => {
+    if (!allowed || !authorized || !token) {
+      return
+    }
+
+    const bound = { token, owner, requestId }
+    let active = true
+    const invalidate = () => {
+      if (!active) {
+        return
+      }
+
+      active = false
+      const operation = approval.current
+
+      if (operation?.identity === identity && operation.attempt === attempt) {
+        operation.controller.abort()
+      }
+
+      session.current = null
+      snapshot.current = null
+      setConsent((current) => invalidatedConsent(current, identity, attempt))
+    }
     const check = () => {
-      if (controller.signal.aborted) {
+      if (!active) {
         return
       }
 
@@ -362,7 +399,7 @@ export function PackageSaveConsent({ requestId }: { requestId: string }) {
     window.addEventListener("storage", onStorage)
 
     return () => {
-      controller.abort()
+      active = false
       const operation = approval.current
 
       if (operation?.identity === identity && operation.attempt === attempt) {
@@ -376,7 +413,7 @@ export function PackageSaveConsent({ requestId }: { requestId: string }) {
       window.removeEventListener("focus", check)
       window.removeEventListener("storage", onStorage)
     }
-  }, [requestId, identity, token, owner, attempt, read, allowed, authorized])
+  }, [requestId, identity, token, owner, attempt, allowed, authorized])
 
   const save = async () => {
     const current = inspection
