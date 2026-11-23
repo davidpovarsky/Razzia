@@ -4,6 +4,16 @@ import { PackageManager } from "@razzia/web/features/manager/components/packages
 import { PackageSaveConsent } from "@razzia/web/features/manager/components/packages/PackageSaveConsent"
 import { SiteLink } from "../shared/SiteLink"
 
+function readRouteString(params: unknown, key: string): string | undefined {
+  if (typeof params !== "object" || params === null || Array.isArray(params)) {
+    return undefined
+  }
+
+  const value: unknown = Reflect.get(params, key)
+
+  return typeof value === "string" ? value : undefined
+}
+
 function PackagePage({ children }: { children: import("react").ReactNode }) {
   const { t } = useTranslation()
 
@@ -25,11 +35,10 @@ function PackagePage({ children }: { children: import("react").ReactNode }) {
 
 export function StudioPackagePreview() {
   const { t } = useTranslation()
-  const {
-    uploadId,
-    revision: revisionText,
-    gameId,
-  } = useParams({ strict: false }) as Record<string, string | undefined>
+  const params: unknown = useParams({ strict: false })
+  const uploadId = readRouteString(params, "uploadId")
+  const revisionText = readRouteString(params, "revision")
+  const gameId = readRouteString(params, "gameId")
   const revision = Number(revisionText)
   const valid =
     uploadId &&
@@ -59,10 +68,8 @@ export function StudioPackagePreview() {
 }
 
 export function StudioPackageSaveConsent() {
-  const { requestId } = useParams({ strict: false }) as Record<
-    string,
-    string | undefined
-  >
+  const params: unknown = useParams({ strict: false })
+  const requestId = readRouteString(params, "requestId")
   const { t } = useTranslation()
 
   return (
