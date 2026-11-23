@@ -465,7 +465,7 @@ async function verifyEditor({ page, options, record }) {
     )
     await page.getByTestId("editor-save-btn").click()
     assert.equal((await saved).status(), 200)
-    await page.waitForURL(/\/(studio\/games|manager\/config)$/)
+    await page.waitForURL(`${options.origin}/studio/games`, { timeout: 30000 })
     const actual = await options.read(`/api/quizz/${copy.quizzId}`)
     const { extras } = await options.read(
       `/api/extensions/quizzes/${copy.quizzId}`,

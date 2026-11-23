@@ -657,6 +657,10 @@
 }
 
 /* Neon Arcade: separate console and vertically stacked command deck. */
+.tzv4-stage[data-original-family="neon-arcade"] .og-neon {
+  /* Contain projected grid artwork without creating stage scroll range. */
+  overflow: clip;
+}
 .tzv4-stage[data-original-family] .og-neon-grid {
   position: absolute;
   left: -300px;
