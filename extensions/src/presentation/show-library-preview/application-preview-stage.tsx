@@ -248,6 +248,8 @@ function NativeApplicationPreviewStage({
       config
         ? {
             ...config,
+            // Preview lifetime follows the authored card, not regenerated storage IDs.
+            id: card?.key ?? config.id,
             ...(config.kind === "media" ||
             config.kind === "opening" ||
             config.kind === "closing"
@@ -260,7 +262,7 @@ function NativeApplicationPreviewStage({
             audio: { mode: "mute" as const, volume: 0, loop: false },
           }
         : undefined,
-    [config, frame.soundEnabled],
+    [config, card?.key, frame.soundEnabled],
   )
   const previewScene: ShowScene | undefined =
     card && card.kind !== "quiz" && card.kind !== "survey"

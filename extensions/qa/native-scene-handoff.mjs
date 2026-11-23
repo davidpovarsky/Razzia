@@ -383,6 +383,51 @@ await fs.writeFile(
   path.join(evidence, "fixture-animation.json"),
   JSON.stringify(foregroundLottie),
 )
+/** One byte range is enough for browser media seeking; ignore multipart requests. */
+function singleByteRange(value, size) {
+  if (!value) {
+    return null
+  }
+
+  const unit = /^bytes=(.*)$/iu.exec(value.trim())
+
+  if (!unit || unit[1].includes(",")) {
+    return null
+  }
+
+  const range = /^(\d*)-(\d*)$/u.exec(unit[1].trim())
+
+  if (!range || (!range[1] && !range[2]) || size === 0) {
+    return "unsatisfiable"
+  }
+
+  // Decimal offsets can exceed Number.MAX_SAFE_INTEGER. Compare before narrowing.
+  const length = BigInt(size)
+
+  if (!range[1]) {
+    const suffix = BigInt(range[2])
+
+    return suffix === 0n
+      ? "unsatisfiable"
+      : {
+          start: Number(suffix >= length ? 0n : length - suffix),
+          end: size - 1,
+        }
+  }
+
+  const start = BigInt(range[1])
+  const end = range[2] ? BigInt(range[2]) : length - 1n
+
+  if (start >= length || end < start) {
+    return "unsatisfiable"
+  }
+
+  return {
+    start: Number(start),
+    end: Number(end >= length ? length - 1n : end),
+  }
+}
+
 const serverFailures = []
 const server = http.createServer(async (request, response) => {
   try {
@@ -459,11 +504,39 @@ const server = http.createServer(async (request, response) => {
 
     const mime = getAssetContentType()
     const bytes = await fs.readFile(file)
-    response.writeHead(200, {
+    const size = bytes.length
+    const headers = {
       "Content-Type": mime,
-      "Content-Length": bytes.length,
-    })
-    response.end(bytes)
+      "Content-Length": size,
+      "Accept-Ranges": "bytes",
+    }
+    // Range applies only to GET. HEAD describes the complete representation.
+    // Without a validator, If-Range cannot authorize a partial copy.
+    const range =
+      request.method === "GET" && request.headers["if-range"] === undefined
+        ? singleByteRange(request.headers.range, size)
+        : null
+
+    if (range === "unsatisfiable") {
+      headers["Content-Range"] = `bytes */${size}`
+      headers["Content-Length"] = 0
+      response.writeHead(416, headers)
+      response.end()
+
+      return
+    }
+
+    if (range) {
+      headers["Content-Range"] = `bytes ${range.start}-${range.end}/${size}`
+      headers["Content-Length"] = range.end - range.start + 1
+      response.writeHead(206, headers)
+      response.end(bytes.subarray(range.start, range.end + 1))
+
+      return
+    }
+
+    response.writeHead(200, headers)
+    response.end(request.method === "HEAD" ? undefined : bytes)
   } catch (error) {
     serverFailures.push({ url: request.url, error: String(error) })
     response.writeHead(404)
