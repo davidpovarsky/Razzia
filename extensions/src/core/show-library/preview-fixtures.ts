@@ -14,18 +14,21 @@ export interface SharedPreviewFixture {
   readonly input: PreviewDraftInput
   readonly manifest: CompiledPreviewManifest
   readonly identityRuleVersion: 2
-  readonly checkpoints: readonly Readonly<{
-    phase: PreviewPhase
-    clock: DemoClockSnapshot
-    intents: readonly DemoIntent[]
-    expectedResolution: "exact" | "fallback" | "unavailable"
-    expectedVisibleBindingIds: readonly string[]
-    forbiddenBindingIds: readonly string[]
-    expectedAnswerIds: readonly string[]
-    expectedDiagnosticCodes: readonly string[]
-    expectedCueIds: readonly string[]
-  }>[]
+  readonly checkpoints: ReadonlyArray<
+    Readonly<{
+      phase: PreviewPhase
+      clock: DemoClockSnapshot
+      intents: readonly DemoIntent[]
+      expectedResolution: "exact" | "fallback" | "unavailable"
+      expectedVisibleBindingIds: readonly string[]
+      forbiddenBindingIds: readonly string[]
+      expectedAnswerIds: readonly string[]
+      expectedDiagnosticCodes: readonly string[]
+      expectedCueIds: readonly string[]
+    }>
+  >
 }
+
 export function authoredFixture(answerCount = 5, questionCount = 5) {
   return {
     format: "tada-show",
@@ -38,17 +41,19 @@ export function authoredFixture(answerCount = 5, questionCount = 5) {
       kind: "quiz",
       question: `Synthetic question ${i + 1}`,
       timeSeconds: 20,
-      answers: Array.from({ length: answerCount }, (_, j) => ({
+      answers: Array.from({ length: answerCount }, (_choice, j) => ({
         text: `Choice ${j + 1}`,
       })),
       correctAnswers: [1],
     })),
   }
 }
+
 export function previewInputFixture(
   show: unknown = authoredFixture(),
 ): PreviewDraftInput {
   const authoredShowJson = JSON.stringify(show)
+
   return {
     portVersion: 3,
     identityRuleVersion: 2,
@@ -65,6 +70,7 @@ export function previewInputFixture(
     },
   }
 }
+
 export const sharedPreviewFixtures: readonly SharedPreviewFixture[] = [
   {
     fixtureId: "demo-5q-20s-foundation-unavailable",

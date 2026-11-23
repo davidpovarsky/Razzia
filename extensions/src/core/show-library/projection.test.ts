@@ -1,10 +1,14 @@
 import { normalizePreviewDraft, getPreviewIdentityId } from "./identity"
 import { resolvePreviewPlan } from "./preview-resolve"
-import { authoredFixture } from "./preview-fixtures"
+import {
+  authoredFixture,
+  previewInputFixture,
+  snapshotFixture,
+} from "./preview-fixtures"
 import { describe, expect, it } from "vitest"
 import { RUNTIME_PHASES } from "../packages/protocol"
 import { previewContextSchema, demoIntentSchema } from "./preview-schemas"
-import { previewInputFixture, snapshotFixture } from "./preview-fixtures"
+
 import { projectShowBindings } from "./projection"
 import { showProjectionSchema } from "./projection-schema"
 
@@ -151,17 +155,24 @@ describe("phase/role projection before visual props", () => {
 describe("readiness requires genuine bound evidence", () => {
   function boundFixture(estimation = false) {
     const show = authoredFixture(2, 1)
-    if (estimation)
+
+    if (estimation) {
       Object.assign(show.cards[0], {
         questionType: "estimation",
         options: { inputMode: "input", min: 0, max: 100, step: 1, margin: 0 },
       })
+    }
+
     const input = previewInputFixture(show)
     input.context.role = "player"
     const draft = normalizePreviewDraft(input),
       plan = resolvePreviewPlan(draft)
-    const card = draft.show.cards[0]
-    if (card.kind !== "quiz") throw new Error("fixture")
+    const [card] = draft.show.cards
+
+    if (card.kind !== "quiz") {
+      throw new Error("fixture")
+    }
+
     const id = getPreviewIdentityId(
       draft.input.identityMap,
       "questions",
@@ -196,6 +207,7 @@ describe("readiness requires genuine bound evidence", () => {
       phase: "voting" as const,
       clock: snapshot.clock,
     }
+
     return { snapshot, binding, context: input.context }
   }
   it("denies the review witness: player voting without a question", () => {
@@ -248,13 +260,14 @@ describe("readiness requires genuine bound evidence", () => {
           supportedRoles: ["player"],
         },
       },
-    ])
+    ]) {
       expect(() =>
         projectShowBindings(snapshot, context, {
           ...binding,
           plan,
         } as typeof binding),
       ).toThrow("unbound-preview-plan")
+    }
   })
   it("rejects mismatched identity, type, count, choice IDs, role, phase and clock", () => {
     const { snapshot, context, binding } = boundFixture()
@@ -269,10 +282,11 @@ describe("readiness requires genuine bound evidence", () => {
           id: "foreign",
         })),
       },
-    ])
+    ]) {
       expect(() =>
         projectShowBindings({ ...snapshot, question }, context, binding),
       ).toThrow()
+    }
     expect(() =>
       projectShowBindings(snapshot, { ...context, role: "spectator" }, binding),
     ).toThrow("context-mismatch")
@@ -296,12 +310,13 @@ describe("readiness requires genuine bound evidence", () => {
     for (const clock of [
       { ...snapshot.clock, paused: true },
       { ...snapshot.clock, elapsedMs: 20000 },
-    ])
+    ]) {
       expect(
         projectShowBindings({ ...snapshot, clock }, context, {
           ...binding,
           clock,
         }),
       ).toMatchObject({ canAnswer: false, answerReadiness: "inactive" })
+    }
   })
 })

@@ -14,10 +14,14 @@ const checks = [],
   network = []
 page.setDefaultTimeout(12000)
 page.on("response", (r) => {
-  if (r.status() >= 400) network.push({ url: r.url(), status: r.status() })
+  if (r.status() >= 400) {
+    network.push({ url: r.url(), status: r.status() })
+  }
 })
 page.on("console", (m) => {
-  if (m.type() === "error") network.push({ console: m.text() })
+  if (m.type() === "error") {
+    network.push({ console: m.text() })
+  }
 })
 page.on("requestfailed", (q) =>
   network.push({ url: q.url(), error: q.failure()?.errorText }),
@@ -31,15 +35,15 @@ const sourceSha256 = createHash("sha256")
   .update(fs.readFileSync(source))
   .digest("hex")
 const fixture = "/src/test/editor-audio-preview-lifecycle-fixture.mjs"
+
 try {
   await page.route("**/__audio_preview_lifecycle__", (route) =>
     route.fulfill({
       status: 200,
       contentType: "text/html",
-      body:
-        '<!doctype html><html lang="en"><body><div id="root"></div><script type="module">import RefreshRuntime from "/@react-refresh"; RefreshRuntime.injectIntoGlobalHook(window); window.$RefreshReg$=()=>{}; window.$RefreshSig$=()=>(type)=>type; window.__vite_plugin_react_preamble_installed__=true; await import("' +
-        fixture +
-        '");</script></body></html>',
+      body: `<!doctype html><html lang="en"><body><div id="root"></div><script type="module">import RefreshRuntime from "/@react-refresh"; RefreshRuntime.injectIntoGlobalHook(window); window.$RefreshReg$=()=>{}; window.$RefreshSig$=()=>(type)=>type; window.__vite_plugin_react_preamble_installed__=true; await import("${
+        fixture
+      }");</script></body></html>`,
     }),
   )
   await page.goto("http://127.0.0.1:3180/__audio_preview_lifecycle__")
@@ -51,14 +55,15 @@ try {
   await start.click()
   await expect(start).toContainText("Stop")
   await page.evaluate(() => {
-    const a = window.__audioHarness.audios[0]
+    const [a] = window.__audioHarness.audios
     window.__audioHarness.staleEnded = a.onended
     window.__audioHarness.staleError = a.onerror
   })
   await show.click()
   await expect(show).toContainText("Stop")
   const first = await page.evaluate(() => {
-    const a = window.__audioHarness.audios[0]
+    const [a] = window.__audioHarness.audios
+
     return {
       paused: a.paused,
       time: a.currentTime,
@@ -87,7 +92,8 @@ try {
   await show.click()
   await expect(show).toContainText("Play")
   const second = await page.evaluate(() => {
-    const a = window.__audioHarness.audios[1]
+    const [, a] = window.__audioHarness.audios
+
     return {
       paused: a.paused,
       time: a.currentTime,
@@ -120,6 +126,7 @@ try {
     const a = window.__audioHarness.audios.at(-1)
     a.rejectPlay(new Error("late unmounted playback"))
     await Promise.resolve()
+
     return {
       paused: a.paused,
       time: a.currentTime,
@@ -146,12 +153,14 @@ try {
     network,
   }
   await page
-    .screenshot({ path: path.join(out, run + ".png"), fullPage: true })
-    .catch(() => {})
+    .screenshot({ path: path.join(out, `${run}.png`), fullPage: true })
+    .catch(() => {
+      /* Keep the recorded audit outcome if its diagnostic screenshot is unavailable. */
+    })
   process.exitCode = 1
 } finally {
   fs.writeFileSync(
-    path.join(out, run + ".json"),
+    path.join(out, `${run}.json`),
     JSON.stringify(result, null, 2),
   )
   console.log(JSON.stringify(result))

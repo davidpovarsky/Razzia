@@ -34,6 +34,7 @@ page.on("response", (r) => {
   }
 })
 page.on("pageerror", (e) => errors.push(e.message))
+
 try {
   await page.addInitScript(() => localStorage.setItem("i18nextLng", "he"))
   await page.goto("http://127.0.0.1:3180/manager?lng=he")
@@ -58,9 +59,10 @@ try {
     )
     const style = getComputedStyle(target)
     const loaded = await document.fonts.load(style.font, "שאלות")
-    await new Promise((r) =>
-      requestAnimationFrame(() => requestAnimationFrame(r)),
-    )
+    await new Promise((r) => {
+      requestAnimationFrame(() => requestAnimationFrame(r))
+    })
+
     return {
       lang: document.documentElement.lang,
       dir: document.documentElement.dir,
@@ -180,7 +182,9 @@ try {
   await page.setViewportSize({ width: 320, height: 1000 })
   await page.evaluate(
     () =>
-      new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))),
+      new Promise((r) => {
+        requestAnimationFrame(() => requestAnimationFrame(r))
+      }),
   )
   const headerTabs = await page
     .locator('[data-testid^="studio-tab-"]')

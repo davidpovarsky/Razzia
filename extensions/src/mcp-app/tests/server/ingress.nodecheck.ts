@@ -2,6 +2,7 @@ import assert from "node:assert/strict"
 import test from "node:test"
 import { CallToolResultSchema } from "@modelcontextprotocol/core"
 import { harness, principal, newKey, code } from "./fixtures.ts"
+import { synchronousPromise } from "../../../core/synchronous-promise.ts"
 
 test("real SDK malformed tool calls are authenticated, limited once and sanitized before strict validation", async () => {
   const p = principal()
@@ -10,22 +11,26 @@ test("real SDK malformed tool calls are authenticated, limited once and sanitize
     budget = 0
   const h = await harness(
     {
-      authorize: async () => {
-        auth++
-        return p
+      authorize: () => {
+        auth += 1
+
+        return Promise.resolve(p)
       },
-      prevalidationLimit: async () => {
-        ingress++
-        return true
+      prevalidationLimit: () => {
+        ingress += 1
+
+        return Promise.resolve(true)
       },
-      rateLimit: async () => {
-        budget++
-        return true
+      rateLimit: () => {
+        budget += 1
+
+        return Promise.resolve(true)
       },
     },
     p,
   )
   const marker = "arbitrary-reflected-input-must-never-appear"
+
   try {
     for (const params of [
       {
@@ -99,19 +104,23 @@ test("unauthenticated malformed call consumes ingress budget and cannot reflect 
     ingress = 0,
     budget = 0
   const h = await harness({
-    authorize: async () => {
-      auth++
-      throw new Error("secret-authorizer-detail")
+    authorize: () => {
+      auth += 1
+
+      return Promise.reject(new Error("secret-authorizer-detail"))
     },
-    prevalidationLimit: async () => {
-      ingress++
-      return true
+    prevalidationLimit: () => {
+      ingress += 1
+
+      return Promise.resolve(true)
     },
-    rateLimit: async () => {
-      budget++
-      return true
+    rateLimit: () => {
+      budget += 1
+
+      return Promise.resolve(true)
     },
   })
+
   try {
     const result = await h.call("get_game_draft", {
       arbitrarySecretKey: "secret-body",
@@ -129,15 +138,18 @@ test("unauthenticated malformed call consumes ingress budget and cannot reflect 
 })
 
 test("denied or missing ingress guard fails closed before token verification and schema work", async () => {
-  for (const prevalidationLimit of [undefined, async () => false]) {
+  for (const prevalidationLimit of [undefined, () => Promise.resolve(false)]) {
     let auth = 0
     const h = await harness({
       prevalidationLimit,
-      authorize: async () => {
-        auth++
-        return principal()
-      },
+      authorize: () =>
+        synchronousPromise(() => {
+          auth += 1
+
+          return principal()
+        }),
     })
+
     try {
       const result = await h.call("get_game_draft", { untrusted: true })
       assert.equal(

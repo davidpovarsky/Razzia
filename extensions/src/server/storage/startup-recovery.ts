@@ -2,6 +2,7 @@ import fs from "node:fs"
 import path from "node:path"
 import { recoverStartupJournals } from "../media-library"
 import type { StartupOwnerSnapshot } from "./startup-owner-snapshot"
+
 export type { StartupOwnerSnapshot } from "./startup-owner-snapshot"
 
 // Internal startup composition. Snapshot comes only from the native owner

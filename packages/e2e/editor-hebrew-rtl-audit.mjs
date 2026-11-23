@@ -3,8 +3,9 @@ import fs from "node:fs"
 import path from "node:path"
 
 const out = path.resolve(
-  "../../docs/extensions/plans/editor-hebrew-20261118/" +
-    (process.env.HEBREW_AUDIT_INCOMPLETE ? "visual-he-draft" : "visual-he"),
+  `../../docs/extensions/plans/editor-hebrew-20261118/${
+    process.env.HEBREW_AUDIT_INCOMPLETE ? "visual-he-draft" : "visual-he"
+  }`,
 )
 fs.mkdirSync(out, { recursive: true })
 const browser = await chromium.launch({ channel: "msedge", headless: true })
@@ -19,10 +20,14 @@ const errors = [],
   checks = []
 page.on("pageerror", (e) => errors.push(e.message))
 page.on("console", (m) => {
-  if (m.type() === "error") consoleErrors.push(m.text())
+  if (m.type() === "error") {
+    consoleErrors.push(m.text())
+  }
 })
 page.on("response", (r) => {
-  if (r.status() >= 400) failures.push({ status: r.status(), url: r.url() })
+  if (r.status() >= 400) {
+    failures.push({ status: r.status(), url: r.url() })
+  }
 })
 const result = () => ({
   date: new Date().toISOString(),
@@ -39,15 +44,18 @@ const persist = () =>
     JSON.stringify(result(), null, 2),
   )
 async function snapshot(name, focus) {
-  if (focus) await focus.scrollIntoViewIfNeeded()
+  if (focus) {
+    await focus.scrollIntoViewIfNeeded()
+  }
+
   await page.evaluate(async () => {
     await document.fonts.ready
-    await new Promise((r) =>
-      requestAnimationFrame(() => requestAnimationFrame(r)),
-    )
+    await new Promise((r) => {
+      requestAnimationFrame(() => requestAnimationFrame(r))
+    })
   })
   await page.screenshot({
-    path: path.join(out, name + ".png"),
+    path: path.join(out, `${name}.png`),
     fullPage: true,
     animations: "disabled",
   })
@@ -90,27 +98,30 @@ async function snapshot(name, focus) {
   }))
   snapshots.push({ name, ...state })
   persist()
-  expect(state.lang, name + " html language").toBe("he")
-  expect(state.dir, name + " html direction").toBe("rtl")
+  expect(state.lang, `${name} html language`).toBe("he")
+  expect(state.dir, `${name} html direction`).toBe("rtl")
   expect(
     state.scrollWidth,
-    name + " document horizontal overflow",
+    `${name} document horizontal overflow`,
   ).toBeLessThanOrEqual(state.width + 1)
-  for (const portal of state.portals)
-    expect(portal.dir, name + " portal direction").toBe("rtl")
-  expect(state.text, name + " raw translation keys").not.toMatch(
+  for (const portal of state.portals) {
+    expect(portal.dir, `${name} portal direction`).toBe("rtl")
+  }
+  expect(state.text, `${name} raw translation keys`).not.toMatch(
     /\b(?:extensions|quizz|common|manager):[a-z]/u,
   )
+
   return state
 }
 async function widthShots(name, target, widths = [1440, 390, 320]) {
   for (const width of widths) {
     await page.setViewportSize({ width, height: 1000 })
-    await snapshot(name + "-" + width, target)
+    await snapshot(`${name}-${width}`, target)
   }
 }
 async function confirmType() {
   const dialog = page.getByRole("alertdialog")
+
   if (await dialog.count()) {
     await expect(dialog).toBeVisible()
     expect(await dialog.evaluate((x) => getComputedStyle(x).direction)).toBe(
@@ -130,16 +141,21 @@ async function addScene(kind, label) {
   await page.getByTestId("studio-add-card-btn").click()
   await expect(page.getByTestId("studio-scene-preview-stage")).toBeVisible()
   await snapshot(
-    "scene-" + kind + "-default",
+    `scene-${kind}-default`,
     page.getByTestId("studio-scene-preview-stage"),
   )
   const input = page.getByPlaceholder("כותרת הכרטיס…")
-  if (await input.count()) await input.fill("בדיקת " + label + " QA 2026")
-  await expect(page.getByTestId("toggle-kind-" + kind)).toHaveAttribute(
+
+  if (await input.count()) {
+    await input.fill(`בדיקת ${label} QA 2026`)
+  }
+
+  await expect(page.getByTestId(`toggle-kind-${kind}`)).toHaveAttribute(
     "data-state",
     "on",
   )
 }
+
 try {
   await page.addInitScript(() => localStorage.setItem("i18nextLng", "he"))
   await page.goto("http://127.0.0.1:3180/manager?lng=he")
@@ -153,10 +169,13 @@ try {
   await page
     .getByPlaceholder("כותרת החידון…")
     .fill("בדיקת עברית QA — 18.11.2026")
-  if (!process.env.HEBREW_AUDIT_INCOMPLETE)
+
+  if (!process.env.HEBREW_AUDIT_INCOMPLETE) {
     await page
       .getByPlaceholder("הקלידו את השאלה…")
       .fill("מה התשובה הנכונה לשאלה QA מספר 12?")
+  }
+
   await page.getByTestId("answer-text-0").fill("עברית English 123")
   await page.getByTestId("answer-text-1").fill("English עברית 456")
   expect(
@@ -217,9 +236,9 @@ try {
     "Image pickers only appear in image/both modes at desktop390320; text-only hides them",
   )
   for (const phase of ["question", "answers", "results"]) {
-    await page.getByTestId("question-preview-phase-" + phase).click()
+    await page.getByTestId(`question-preview-phase-${phase}`).click()
     await snapshot(
-      "preview-phase-" + phase + "-320",
+      `preview-phase-${phase}-320`,
       page.getByTestId("question-live-preview"),
     )
   }
@@ -270,9 +289,9 @@ try {
   )
   await page.getByTestId("toggle-kind-quiz").click()
   for (const tab of ["participants", "settings", "launch"]) {
-    await page.getByTestId("studio-tab-" + tab).click()
+    await page.getByTestId(`studio-tab-${tab}`).click()
     await expect(page.getByTestId("studio-card-type-bar")).toHaveCount(0)
-    await widthShots("tab-" + tab)
+    await widthShots(`tab-${tab}`)
   }
   await page.getByTestId("studio-tab-questions").click()
   await page.setViewportSize({ width: 1440, height: 1000 })
@@ -280,7 +299,7 @@ try {
     await page.setViewportSize({ width, height: 1000 })
     await page.getByTestId("studio-card-kind-select").click()
     await expect(page.getByRole("listbox")).toBeVisible()
-    await snapshot("card-type-menu-" + width, page.getByRole("listbox"))
+    await snapshot(`card-type-menu-${width}`, page.getByRole("listbox"))
     await page.keyboard.press("Escape")
   }
   await page.setViewportSize({ width: 1440, height: 1000 })
@@ -297,17 +316,18 @@ try {
   ]) {
     await addScene(kind, label)
     await widthShots(
-      "scene-" + kind,
+      `scene-${kind}`,
       page.getByTestId("studio-scene-preview-stage"),
       ["media", "opening", "countdown", "answerRecap"].includes(kind)
         ? [1440, 390, 320]
         : [1440],
     )
     await page.setViewportSize({ width: 1440, height: 1000 })
+
     if (await page.getByTestId("scene-preview-mode-layers").count()) {
       await page.getByTestId("scene-preview-mode-layers").click()
       await snapshot(
-        "scene-" + kind + "-layers",
+        `scene-${kind}-layers`,
         page.getByTestId("studio-scene-preview-stage"),
       )
       await page.getByTestId("scene-preview-mode-stage").click()
@@ -360,7 +380,9 @@ try {
     ),
   )
 } catch (error) {
-  await snapshot("failure").catch(() => {})
+  await snapshot("failure").catch(() => {
+    /* Keep the recorded audit outcome if its diagnostic screenshot is unavailable. */
+  })
   console.log(
     JSON.stringify(
       {

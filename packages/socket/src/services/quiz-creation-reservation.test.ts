@@ -22,13 +22,93 @@ import {
   retainCreationReceipt,
 } from "../../../../extensions/src/server/storage/creation-process"
 
+function isQuizCreationObservationRecord(
+  value: unknown,
+): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value)
+}
+
+function requireQuizCreationObservationRecord(
+  value: unknown,
+): Record<string, unknown> {
+  if (!isQuizCreationObservationRecord(value)) {
+    throw new Error("Invalid quiz-creation evidence record")
+  }
+
+  return value
+}
+
+function requireQuizCreationObservationString(value: unknown): string {
+  if (typeof value !== "string") {
+    throw new Error("Missing quiz-creation evidence text")
+  }
+
+  return value
+}
+
+function isQuizCreationObservationArray(value: unknown): value is unknown[] {
+  return Array.isArray(value)
+}
+
+function isQuizCreationObservationRuns(
+  value: unknown,
+): value is Array<Record<string, unknown>> {
+  if (!isQuizCreationObservationArray(value)) {
+    return false
+  }
+
+  for (const entry of value) {
+    if (!isQuizCreationObservationRecord(entry)) {
+      return false
+    }
+  }
+
+  return true
+}
+
+function requireQuizCreationObservationRuns(
+  value: unknown,
+): Array<Record<string, unknown>> {
+  if (!isQuizCreationObservationRuns(value)) {
+    throw new Error("Invalid quiz-creation replay evidence array")
+  }
+
+  return value
+}
+
+function isQuizCreationObservationResult(
+  value: unknown,
+): value is Record<string, unknown> & { quizId: string } {
+  return (
+    isQuizCreationObservationRecord(value) && typeof value.quizId === "string"
+  )
+}
+
+function requireQuizCreationObservationResult(
+  value: unknown,
+): Record<string, unknown> & { quizId: string } {
+  if (!isQuizCreationObservationResult(value)) {
+    throw new Error("Invalid quiz-creation API result")
+  }
+
+  return value
+}
+
 describe.runIf(process.platform === "linux")(
   "C1 actual native creation composition",
   () => {
-    let fixture: ReturnType<typeof createCreationFixture>
-    let config: string | undefined,
-      accounts: string | undefined,
-      prototype: string | undefined
+    type InitializedFixtureValue = ReturnType<typeof createCreationFixture>
+    let fixture: InitializedFixtureValue | undefined = undefined
+    function requireInitializedFixture(): InitializedFixtureValue {
+      if (fixture === undefined) {
+        throw new Error("Fixture state fixture was read before initialization")
+      }
+
+      return fixture
+    }
+    let config: string | undefined = undefined,
+      accounts: string | undefined = undefined,
+      prototype: string | undefined = undefined
     beforeEach(() => {
       config = process.env.CONFIG_PATH
       accounts = process.env.TADAZZ_ACCOUNTS_ENABLED
@@ -39,14 +119,28 @@ describe.runIf(process.platform === "linux")(
     afterEach(() => {
       vi.restoreAllMocks()
       closeAccountDb()
-      removeCreationFixture(fixture.root, fixture.token)
-      if (config === undefined) delete process.env.CONFIG_PATH
-      else process.env.CONFIG_PATH = config
-      if (accounts === undefined) delete process.env.TADAZZ_ACCOUNTS_ENABLED
-      else process.env.TADAZZ_ACCOUNTS_ENABLED = accounts
-      if (prototype === undefined)
+      removeCreationFixture(
+        requireInitializedFixture().root,
+        requireInitializedFixture().token,
+      )
+
+      if (config === undefined) {
+        delete process.env.CONFIG_PATH
+      } else {
+        process.env.CONFIG_PATH = config
+      }
+
+      if (accounts === undefined) {
+        delete process.env.TADAZZ_ACCOUNTS_ENABLED
+      } else {
+        process.env.TADAZZ_ACCOUNTS_ENABLED = accounts
+      }
+
+      if (prototype === undefined) {
         delete process.env.TADAZZ_C1_CREATION_PROTOTYPE
-      else process.env.TADAZZ_C1_CREATION_PROTOTYPE = prototype
+      } else {
+        process.env.TADAZZ_C1_CREATION_PROTOTYPE = prototype
+      }
     })
     it("uses the actual validator, one preparer and independent random8 native basename without opaque save", () => {
       const input = {
@@ -54,7 +148,7 @@ describe.runIf(process.platform === "linux")(
         ignoredByNative: "stripped before frozen digest",
       }
       const before = JSON.stringify(input)
-      const result = fixture.service.createCompositeQuiz({
+      const result = requireInitializedFixture().service.createCompositeQuiz({
         quizz: input,
         extras: creationExtras(),
       })
@@ -63,8 +157,10 @@ describe.runIf(process.platform === "linux")(
       expect(files).toHaveLength(1)
       expect(files[0]).toMatch(/-[A-Za-z0-9_-]{8}\.json$/u)
       expect(files[0]).not.toBe(`${result.quizId}.json`)
-      const stored = JSON.parse(
-        fs.readFileSync(native.getPath(`quizz/${files[0]}`), "utf8"),
+      const stored = requireQuizCreationObservationRecord(
+        JSON.parse(
+          fs.readFileSync(native.getPath(`quizz/${files[0]}`), "utf8"),
+        ),
       )
       const { id, ...logical } = stored
       expect(id).toBe(result.quizId)
@@ -73,7 +169,9 @@ describe.runIf(process.platform === "linux")(
         computeCanonicalBaseDigest(quizzValidator.parse(input)),
       )
       expect(JSON.stringify(input)).toBe(before)
-      const composite = fixture.service.getCompositeQuiz(result.quizId)
+      const composite = requireInitializedFixture().service.getCompositeQuiz(
+        result.quizId,
+      )
       expect(composite.digestMatches).toBe(true)
       expect(composite.extras?.schemaVersion).toBe(2)
       native.updateQuizz(result.quizId, {
@@ -95,18 +193,20 @@ describe.runIf(process.platform === "linux")(
       native.prepareNativeQuizCreation(creationInput())
       expect(fs.readFileSync(file, "utf8")).toBe(bytes)
       expect(fs.statSync(file, { bigint: true }).ino).toBe(inode)
-      const before = creationTree(fixture.root)
+      const before = creationTree(requireInitializedFixture().root)
       process.env.TADAZZ_ACCOUNTS_ENABLED = "true"
       expect(() => native.prepareNativeQuizCreation(creationInput())).toThrow(
         /scope/,
       )
       expect(() =>
-        fixture.service.createCompositeQuiz({
+        requireInitializedFixture().service.createCompositeQuiz({
           quizz: creationInput(),
           extras: creationExtras(),
         }),
       ).toThrow(/owner/)
-      expect(creationTree(fixture.root)).toStrictEqual(before)
+      expect(creationTree(requireInitializedFixture().root)).toStrictEqual(
+        before,
+      )
     })
     it("uses real manager JWT/session middleware in two tenants and discovers the dedicated roots after a flag change", async () => {
       process.env.TADAZZ_ACCOUNTS_ENABLED = "true"
@@ -116,7 +216,7 @@ describe.runIf(process.platform === "linux")(
         "00000000-0000-4000-8000-0000000000B2",
       ]
       const db = getAccountDb()
-      for (const owner of owners)
+      for (const owner of owners) {
         db.prepare(
           "INSERT INTO accounts(id,email,salt,hash,verified_at,created_at) VALUES(?,?,?,?,?,?)",
         ).run(
@@ -127,6 +227,7 @@ describe.runIf(process.platform === "linux")(
           Date.now(),
           Date.now(),
         )
+      }
       const { api: app } = await import("../api/index")
       const results: Array<{ quizId: string }> = []
       for (const owner of owners) {
@@ -143,32 +244,48 @@ describe.runIf(process.platform === "linux")(
           }),
         })
         expect(response.status).toBe(201)
-        const result = (await response.json()) as { quizId: string }
+        const result = requireQuizCreationObservationResult(
+          await response.json(),
+        )
         results.push(result)
         await withAccount(owner, () =>
           expect(native.getQuizzById(result.quizId).id).toBe(result.quizId),
         )
       }
       expect(results[0].quizId).not.toBe(results[1].quizId)
-      expect(fs.existsSync(path.join(fixture.root, "quizz"))).toBe(false)
-      const baseline = creationTree(fixture.root)
-      const interrupted = await creationChild(
-        "before-id-return",
-        fixture.root,
-        fixture.token,
-        "",
-        owners[0],
-      )
+      expect(
+        fs.existsSync(path.join(requireInitializedFixture().root, "quizz")),
+      ).toBe(false)
+      const baseline = creationTree(requireInitializedFixture().root)
+      const interrupted = await creationChild({
+        mode: "before-id-return",
+        root: requireInitializedFixture().root,
+        token: requireInitializedFixture().token,
+        sequence: "",
+        owner: owners[0],
+      })
       expect(interrupted.signal, interrupted.stderr).toBe("SIGKILL")
       expect(interrupted.timedOut).toBe(false)
       process.env.TADAZZ_ACCOUNTS_ENABLED = "false"
-      const runs = await creationReplayTwice(fixture.root, fixture.token)
+      const runs = requireQuizCreationObservationRuns(
+        await creationReplayTwice(
+          requireInitializedFixture().root,
+          requireInitializedFixture().token,
+        ),
+      )
       expect(
         new Set([interrupted.pid, ...runs.map((run) => run.pid)]).size,
       ).toBe(3)
       for (const run of runs) {
-        expect(run.process.code, run.process.stderr).toBe(0)
-        expect(run.process.timedOut).toBe(false)
+        expect(
+          requireQuizCreationObservationRecord(run.process).code,
+          requireQuizCreationObservationString(
+            requireQuizCreationObservationRecord(run.process).stderr,
+          ),
+        ).toBe(0)
+        expect(requireQuizCreationObservationRecord(run.process).timedOut).toBe(
+          false,
+        )
         expect(run.state).toStrictEqual(baseline)
       }
       retainCreationReceipt("actual-api-tenant-flag-replay", {
@@ -178,10 +295,18 @@ describe.runIf(process.platform === "linux")(
         baseline,
         runs,
       })
-      for (const owner of owners)
+      for (const owner of owners) {
         expect(
-          fs.readdirSync(path.join(fixture.root, "tenants", owner, "quizz")),
+          fs.readdirSync(
+            path.join(
+              requireInitializedFixture().root,
+              "tenants",
+              owner,
+              "quizz",
+            ),
+          ),
         ).toHaveLength(1)
+      }
     }, 85000)
     it("keeps actual HTTP create/import failures private before durable intent", async () => {
       process.env.TADAZZ_C1_CREATION_PROTOTYPE = "true"
@@ -192,10 +317,16 @@ describe.runIf(process.platform === "linux")(
       )
     })
     it("retains explicit accounts-off legacy import with no sidecar publication", () => {
-      const result = fixture.service.importEnhancedBundle(creationInput())
+      const result =
+        requireInitializedFixture().service.importEnhancedBundle(
+          creationInput(),
+        )
       expect(result.quizId).toMatch(/^[A-Za-z0-9_-]{21}$/u)
       expect(fs.readdirSync(native.getPath("extensions/quizzes"))).toEqual([])
-      expect(fixture.service.getCompositeQuiz(result.quizId).extras).toBeNull()
+      expect(
+        requireInitializedFixture().service.getCompositeQuiz(result.quizId)
+          .extras,
+      ).toBeNull()
     })
     it.each([
       "before-public",
@@ -208,6 +339,7 @@ describe.runIf(process.platform === "linux")(
       "survives actual native %s SIGKILL and two fresh startup replays",
       async (boundary) => {
         const receipt: Record<string, unknown> = { boundary, state: "STARTED" }
+
         try {
           fs.mkdirSync(native.getPath("quizz"))
           native.saveQuizz({
@@ -222,19 +354,32 @@ describe.runIf(process.platform === "linux")(
                   key.startsWith("extensions/quizzes/"),
               ),
             )
-          const baseline = publicFiles(creationTree(fixture.root))
-          const interrupted = await creationChild(
-            boundary,
-            fixture.root,
-            fixture.token,
+          const baseline = publicFiles(
+            creationTree(requireInitializedFixture().root),
           )
-          const checkpoint = JSON.parse(
-            fs.readFileSync(
-              path.join(fixture.root, ".c1-interrupted.json"),
-              "utf8",
+          const interrupted = await creationChild({
+            mode: boundary,
+            root: requireInitializedFixture().root,
+            token: requireInitializedFixture().token,
+          })
+          const checkpoint = requireQuizCreationObservationRecord(
+            JSON.parse(
+              fs.readFileSync(
+                path.join(
+                  requireInitializedFixture().root,
+                  ".c1-interrupted.json",
+                ),
+                "utf8",
+              ),
             ),
           )
-          const runs = await creationReplayTwice(fixture.root, fixture.token)
+
+          const runs = requireQuizCreationObservationRuns(
+            await creationReplayTwice(
+              requireInitializedFixture().root,
+              requireInitializedFixture().token,
+            ),
+          )
           Object.assign(receipt, { interrupted, checkpoint, baseline, runs })
           expect(interrupted.timedOut).toBe(false)
           expect(interrupted.signal, interrupted.stderr).toBe("SIGKILL")
@@ -242,20 +387,35 @@ describe.runIf(process.platform === "linux")(
             new Set([interrupted.pid, ...runs.map((run) => run.pid)]).size,
           ).toBe(3)
           for (const run of runs) {
-            expect(run.pid).toBe(run.process.pid)
-            expect(run.process.timedOut).toBe(false)
-            expect(run.process.code, run.process.stderr).toBe(0)
-            expect(publicFiles(run.state)).toStrictEqual(
+            expect(run.pid).toBe(
+              requireQuizCreationObservationRecord(run.process).pid,
+            )
+            expect(
+              requireQuizCreationObservationRecord(run.process).timedOut,
+            ).toBe(false)
+            expect(
+              requireQuizCreationObservationRecord(run.process).code,
+              requireQuizCreationObservationString(
+                requireQuizCreationObservationRecord(run.process).stderr,
+              ),
+            ).toBe(0)
+            expect(
+              publicFiles(requireQuizCreationObservationRecord(run.state)),
+            ).toStrictEqual(
               [
                 "committed-visible",
                 "private-cleanup",
                 "before-slot-removal",
               ].includes(boundary)
-                ? publicFiles(checkpoint.state)
+                ? publicFiles(
+                    requireQuizCreationObservationRecord(checkpoint.state),
+                  )
                 : baseline,
             )
           }
-          expect(runs[1].report.recovered).toBe(0)
+          expect(
+            requireQuizCreationObservationRecord(runs[1].report).recovered,
+          ).toBe(0)
           receipt.state = "PASS"
         } catch (error) {
           receipt.state = "FAIL"

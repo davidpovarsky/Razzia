@@ -92,6 +92,18 @@ export function getSceneCardPresentation(
       ? scene.mediaType
       : (role?.icon ?? "transition")
 
+  const getAdvanceLabel = () => {
+    if (scene.advance === "manual") {
+      return "extensions:timeline.waitForHost"
+    }
+
+    if (scene.advance === "onMediaEnd") {
+      return "extensions:timeline.afterMedia"
+    }
+
+    return undefined
+  }
+
   return {
     semanticKind: presetRole ? preset : kind,
     icon,
@@ -104,11 +116,6 @@ export function getSceneCardPresentation(
     authoredTitle: scene.title?.trim() || undefined,
     authoredDescription:
       scene.subtitle?.trim() || scene.description?.trim() || undefined,
-    advanceLabelKey:
-      scene.advance === "manual"
-        ? "extensions:timeline.waitForHost"
-        : scene.advance === "onMediaEnd"
-          ? "extensions:timeline.afterMedia"
-          : undefined,
+    advanceLabelKey: getAdvanceLabel(),
   }
 }

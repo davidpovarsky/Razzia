@@ -6,6 +6,7 @@ import {
   type ActiveOAuthGrant,
 } from "../../server/access-token.ts"
 import { config } from "./fixtures.ts"
+import { synchronousPromise } from "../../../core/synchronous-promise.ts"
 
 function fixture() {
   const { publicKey, privateKey } = generateKeyPairSync("ed25519")
@@ -31,19 +32,29 @@ function fixture() {
       {
         kid: "synthetic-test-key",
         algorithm: "EdDSA",
-        pem: publicKey.export({ type: "spki", format: "pem" }).toString(),
+        pem: publicKey.export({ type: "spki", format: "pem" }),
       },
     ],
-    activeGrant: async (id) => {
-      grantReads++
-      if (grantFailure) throw new Error("private-sql-path-secret")
-      return id === grant.grantId ? active : undefined
-    },
-    activeAccount: async (id) => {
-      accountReads++
-      if (revokeDuringAccountCheck) active = undefined
-      return id === grant.accountId && accountEnabled
-    },
+    activeGrant: (id) =>
+      synchronousPromise(() => {
+        grantReads += 1
+
+        if (grantFailure) {
+          throw new Error("private-sql-path-secret")
+        }
+
+        return id === grant.grantId ? active : undefined
+      }),
+    activeAccount: (id) =>
+      synchronousPromise(() => {
+        accountReads += 1
+
+        if (revokeDuringAccountCheck) {
+          active = undefined
+        }
+
+        return id === grant.accountId && accountEnabled
+      }),
   })
   const claims = {
     iss: config.issuer,
@@ -67,12 +78,10 @@ function fixture() {
     ]
       .map((part) => Buffer.from(JSON.stringify(part)).toString("base64url"))
       .join(".")
-    return (
-      encoded +
-      "." +
-      sign(null, Buffer.from(encoded), privateKey).toString("base64url")
-    )
+
+    return `${encoded}.${sign(null, Buffer.from(encoded), privateKey).toString("base64url")}`
   }
+
   return {
     grant,
     verify,
@@ -134,12 +143,13 @@ test("algorithm, kid, token key references and forged signature never reach gran
     { jku: "https://attacker.invalid/jwks" },
     { jwk: {} },
     { crit: ["unexpected"] },
-  ])
+  ]) {
     await assert.rejects(f.verify(f.token({}, header)))
+  }
   const parts = f.token().split(".")
   parts[2] = Buffer.alloc(64).toString("base64url")
   await assert.rejects(f.verify(parts.join(".")))
-  await assert.rejects(f.verify(f.token() + "="))
+  await assert.rejects(f.verify(`${f.token()}=`))
   assert.equal(f.counts().grantReads, 0)
   const g = fixture()
   g.failGrant()

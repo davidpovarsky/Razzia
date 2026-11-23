@@ -220,7 +220,10 @@ export function createApplicationPreviewSession(options: {
       Date.now() - lastPackageValidation > 240_000
     ) {
       await revalidate(abort.signal)
-      if (disposed || ticket !== generation || clock.snapshot().paused) return
+
+      if (disposed || ticket !== generation || clock.snapshot().paused) {
+        return
+      }
     }
 
     const chapter = chapters[chapterIndex]
@@ -463,6 +466,7 @@ export function createApplicationPreviewSession(options: {
       }
 
       ended = false
+
       if (stagePhase === "lobby" && options.getPackageContext) {
         clock.replay()
       } else {
@@ -728,7 +732,11 @@ export function createApplicationPreviewSession(options: {
       }
 
       stagePhase = "lobby"
-      if (options.getPackageContext) clock.replay()
+
+      if (options.getPackageContext) {
+        clock.replay()
+      }
+
       audioAudition = undefined
       mediaRevealed = false
       appearanceRevision += 1

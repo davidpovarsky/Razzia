@@ -5,5 +5,12 @@
     "checkJs": false,
     "types": ["node", "vite/client"]
   },
-  "include": ["tds*.ts", "tds*.tsx", "tds*.mjs", "../src/**/*.d.ts"]
+  "include": [
+    "tds*.ts",
+    "tds*.tsx",
+    "tds*.mjs",
+    "theme-builder/*.ts",
+    "theme-builder/*.tsx",
+    "../src/**/*.d.ts"
+  ]
 }

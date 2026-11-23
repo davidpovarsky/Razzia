@@ -5,6 +5,7 @@ import { assertCurrentToolDiscovery } from "./discovery-fixture.ts"
 
 test("real SDK discovery keeps UI absent without an actual reviewed artifact", async () => {
   const h = await harness()
+
   try {
     const listing = await h.client.listTools()
     assertCurrentToolDiscovery(listing.tools)

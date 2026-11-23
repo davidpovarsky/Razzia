@@ -19,7 +19,7 @@ import {
   shouldSuppressAudioEffect,
 } from "../../../presentation/audio-cue-player"
 
-type DemoTrack = {
+interface DemoTrack {
   url: string
   volume: number
   loop: boolean
@@ -68,11 +68,18 @@ export function useCatalogueAudio({
     const cardOwnsVoting =
       slot === "voting" && cardMode !== undefined && cardMode !== "inherit"
 
-    if (!cardOwnsVoting && stage?.mode === "mute") return null
+    if (!cardOwnsVoting && stage?.mode === "mute") {
+      return null
+    }
+
     if (!cardOwnsVoting && stage?.mode === "media" && stage.url) {
       return { ...stage, url: stage.url }
     }
-    if (slot !== "voting") return null
+
+    if (slot !== "voting") {
+      return null
+    }
+
     const cue = resolveEffectiveAudioCue({
       cueId: "answersMusic",
       globalAudio: resolved,
@@ -81,6 +88,7 @@ export function useCatalogueAudio({
       defaultVolume: 0.38,
       defaultLoop: true,
     })
+
     return cue.shouldPlay && cue.url
       ? {
           url: cue.url,
@@ -101,12 +109,15 @@ export function useCatalogueAudio({
     if (!enabled || !track || closed) {
       music.current?.pause()
       music.current?.removeAttribute("src")
+
       if (!enabled) {
         effect.current?.pause()
         effect.current?.removeAttribute("src")
       }
+
       return
     }
+
     const element = music.current ?? new Audio()
     music.current = element
     element.pause()
@@ -117,6 +128,7 @@ export function useCatalogueAudio({
     void element.play().catch(() => {
       // A later direct action or the sound switch can unlock browser playback.
     })
+
     return () => element.pause()
   }, [enabled, track, screenKey, closed])
 
@@ -136,22 +148,30 @@ export function useCatalogueAudio({
         music.current?.pause()
         setClosedScreenKey(screenKey)
       }
+
       if (
         !enabledRef.current ||
         (identity && playedActions.current.has(identity))
-      )
+      ) {
         return
+      }
+
       const role =
         name === "answer-selected" || name === "answer-submitted"
           ? player
           : manager
       const cue = resolveThemeEffect(role, name)
-      if (!cue?.url || cue.volume <= 0) return
+
+      if (!cue?.url || cue.volume <= 0) {
+        return
+      }
+
       const currentMusic = music.current
       const playingUrls =
         currentMusic && !currentMusic.paused && !currentMusic.ended
           ? [currentMusic.getAttribute("src") ?? ""]
           : []
+
       if (
         shouldSuppressAudioEffect({
           name,
@@ -160,9 +180,14 @@ export function useCatalogueAudio({
           lastEffect: lastEffect.current,
           now: Date.now(),
         })
-      )
+      ) {
         return
-      if (identity) playedActions.current.add(identity)
+      }
+
+      if (identity) {
+        playedActions.current.add(identity)
+      }
+
       lastEffect.current = { url: cue.url, at: Date.now() }
       const element = effect.current ?? new Audio()
       effect.current = element
@@ -170,7 +195,9 @@ export function useCatalogueAudio({
       element.src = cue.url
       element.volume = cue.volume
       element.currentTime = 0
-      void element.play().catch(() => {})
+      void element.play().catch(() => {
+        /* A rejected playback request leaves the current demo state unchanged. */
+      })
     },
     [manager, player, screenKey],
   )

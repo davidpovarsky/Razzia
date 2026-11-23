@@ -66,10 +66,12 @@ export async function verifyGalleryEditor(options) {
     const panel = page.getByTestId("editor-panel-themes")
     await expect(panel).toBeVisible()
     for (const theme of options.themeDefinitions) {
-      await expect(panel.getByTestId("show-theme-" + theme.id)).toHaveCount(1)
+      await expect(panel.getByTestId(`show-theme-${theme.id}`)).toHaveCount(1)
     }
+
     return panel
   }
+
   try {
     await openEditor()
     await expect(page.getByTestId("editor-game-backdrop")).toHaveAttribute(
@@ -77,12 +79,12 @@ export async function verifyGalleryEditor(options) {
       "tadazz-midnight-club",
     )
     await page.getByTestId("editor-question-card-0").click()
-    const initialGeometry = await verifyNativePalette(
+    const initialGeometry = await verifyNativePalette({
       page,
-      "tadazz-midnight-club",
-      "editor",
-      options.evidence,
-    )
+      themeId: "tadazz-midnight-club",
+      context: "editor",
+      evidence: options.evidence,
+    })
     let panel = await openThemes()
     assert.equal(options.themeDefinitions.length, 11)
     await expect
@@ -92,6 +94,7 @@ export async function verifyGalleryEditor(options) {
             images
               .filter((image) => {
                 const bounds = image.getBoundingClientRect()
+
                 return (
                   bounds.top < window.innerHeight &&
                   bounds.bottom > 0 &&
@@ -119,7 +122,7 @@ export async function verifyGalleryEditor(options) {
         (asset) => asset.id === theme.adapterAssets.showBackdrop,
       ).url
       await panel
-        .getByTestId("show-theme-" + themeId)
+        .getByTestId(`show-theme-${themeId}`)
         .getByRole("button", { name: "Use this theme", exact: true })
         .click()
       const confirm = page.getByRole("alertdialog")
@@ -128,7 +131,7 @@ export async function verifyGalleryEditor(options) {
         .getByRole("button", { name: "Use this theme", exact: true })
         .click()
       await expect(
-        panel.getByTestId("show-theme-" + themeId).getByRole("button"),
+        panel.getByTestId(`show-theme-${themeId}`).getByRole("button"),
       ).toBeDisabled()
       await expect(page.getByTestId("editor-game-backdrop")).toHaveAttribute(
         "data-editor-theme",
@@ -144,7 +147,7 @@ export async function verifyGalleryEditor(options) {
       )
       await page.getByTestId("editor-save-btn").click()
       assert.equal((await saved).status(), 200, "Native editor composite save")
-      await page.waitForURL(options.origin + "/studio/games")
+      await page.waitForURL(`${options.origin}/studio/games`)
       await openEditor()
       await expect(page.getByTestId("editor-save-btn")).toBeVisible()
       await expect(page.locator('input[name="subject"]')).toHaveValue(
@@ -174,12 +177,12 @@ export async function verifyGalleryEditor(options) {
       await expect(
         page.locator('input[name="questions.0.question"]'),
       ).toHaveValue(options.expectedQuestions[0].question)
-      const geometry = await verifyNativePalette(
+      const geometry = await verifyNativePalette({
         page,
         themeId,
-        "editor",
-        options.evidence,
-      )
+        context: "editor",
+        evidence: options.evidence,
+      })
       assert.deepEqual(
         geometry,
         initialGeometry,
@@ -187,22 +190,22 @@ export async function verifyGalleryEditor(options) {
       )
       await page.evaluate(() => window.scrollTo(0, 0))
       await page.screenshot({
-        path: join(options.evidence, "native-editor-saved-" + themeId + ".png"),
+        path: join(options.evidence, `native-editor-saved-${themeId}.png`),
         fullPage: true,
       })
       panel = await openThemes()
       await expect(
-        panel.getByTestId("show-theme-" + themeId).getByRole("button"),
+        panel.getByTestId(`show-theme-${themeId}`).getByRole("button"),
       ).toBeDisabled()
       report.push({
-        name: "native-editor-save-reload-" + themeId,
+        name: `native-editor-save-reload-${themeId}`,
         passed: true,
         questionCount: actualQuiz.questions.length,
       })
     }
     await page.getByTestId("editor-panel-close-themes").click()
 
-    await page.goto(options.origin + "/studio/explore")
+    await page.goto(`${options.origin}/studio/explore`)
     await expect(page.locator("[data-catalogue-card]")).toHaveCount(10)
     await verifyCatalogueCovers(page, "studio", options.evidence)
     await page.evaluate(() => window.scrollTo(0, 0))
@@ -228,19 +231,22 @@ export async function verifyGalleryEditor(options) {
       passed: true,
     })
 
-    await page.goto(options.origin + "/?view=product&game=family")
+    await page.goto(`${options.origin}/?view=product&game=family`)
     await page.getByTestId("catalogue-customise").click()
     await expect(page).toHaveURL(options.origin + editor)
     await expect(page.locator('input[name="subject"]')).toHaveValue(
       options.expectedTitle,
     )
-    await page.goto(options.origin + "/?view=product&game=family")
-    let capturedRoom
-    await page.route(options.origin + "/api/games", async (route) => {
+    await page.goto(`${options.origin}/?view=product&game=family`)
+    let capturedRoom = undefined
+
+    await page.route(`${options.origin}/api/games`, async (route) => {
       if (route.request().method() !== "POST") {
         await route.continue()
+
         return
       }
+
       const response = await route.fetch()
       capturedRoom = {
         status: response.status(),
@@ -255,7 +261,7 @@ export async function verifyGalleryEditor(options) {
     assert.equal(capturedRoom.quizId, options.quizId)
     const room = capturedRoom.body
     await expect(page).toHaveURL(
-      options.origin + "/party/manager/" + room.gameId,
+      `${options.origin}/party/manager/${room.gameId}`,
     )
     await expect(page.getByTestId("platform-opening-start")).toBeEnabled({
       timeout: 30_000,
@@ -296,12 +302,12 @@ export async function verifyGalleryEditor(options) {
     )
     const player = await playerContext.newPage()
     player.on("pageerror", (error) =>
-      pageErrors.push("player: " + error.message),
+      pageErrors.push(`player: ${error.message}`),
     )
-    await player.goto(options.origin + "/game?pin=" + encodeURIComponent(pin))
+    await player.goto(`${options.origin}/game?pin=${encodeURIComponent(pin)}`)
     await player.getByPlaceholder("Username here").fill("Gallery QA player")
     await player.getByRole("button", { name: "Submit", exact: true }).click()
-    await expect(player).toHaveURL(options.origin + "/party/" + room.gameId)
+    await expect(player).toHaveURL(`${options.origin}/party/${room.gameId}`)
     await expect(
       page
         .getByRole("status")
@@ -341,6 +347,7 @@ export async function verifyGalleryEditor(options) {
       buttons: [...document.querySelectorAll("button")].map((button) => {
         const bounds = button.getBoundingClientRect()
         const style = getComputedStyle(button)
+
         return {
           text: button.innerText?.trim(),
           firstAnswerBadge: Boolean(
@@ -370,7 +377,7 @@ export async function verifyGalleryEditor(options) {
     }))
     writeFileSync(
       join(options.evidence, "native-player-voting-controls.json"),
-      JSON.stringify(playerDiagnostic, null, 2) + "\n",
+      `${JSON.stringify(playerDiagnostic, null, 2)}\n`,
     )
     const observedChoice = playerDiagnostic.buttons.filter(
       (button) => button.firstAnswerBadge && button.visible && !button.disabled,
@@ -402,10 +409,11 @@ export async function verifyGalleryEditor(options) {
     await expect(
       page.getByTestId("tadazz-card-0").locator(".result-percentage"),
     ).toHaveText("100%")
-    for (const index of [1, 2, 3])
+    for (const index of [1, 2, 3]) {
       await expect(
-        page.getByTestId("tadazz-card-" + index).locator(".result-percentage"),
+        page.getByTestId(`tadazz-card-${index}`).locator(".result-percentage"),
       ).toHaveAttribute("data-target-percentage", "0")
+    }
     await player.screenshot({
       path: join(options.evidence, "native-player-gallery-answer-sent.png"),
       fullPage: true,
@@ -415,12 +423,12 @@ export async function verifyGalleryEditor(options) {
       passed: true,
       acceptedVotes: 1,
     })
-    await verifyNativePalette(
+    await verifyNativePalette({
       page,
-      "tadazz-discovery-lab",
-      "host",
-      options.evidence,
-    )
+      themeId: "tadazz-discovery-lab",
+      context: "host",
+      evidence: options.evidence,
+    })
     await page.evaluate(() => window.scrollTo(0, 0))
     await page.screenshot({
       path: join(options.evidence, "native-host-gallery-theme-started.png"),
@@ -481,11 +489,12 @@ export async function verifyGalleryEditor(options) {
 
     assert.deepEqual(pageErrors, [], "No editor browser JavaScript errors")
     assert.deepEqual(failedAssets, [], "No editor asset failures")
+
     return { passed: true, results: report, pageErrors, failedAssets }
   } catch (error) {
     writeFileSync(
       join(options.evidence, "native-editor-partial-receipt.json"),
-      JSON.stringify(
+      `${JSON.stringify(
         {
           passed: false,
           results: report,
@@ -495,14 +504,16 @@ export async function verifyGalleryEditor(options) {
         },
         null,
         2,
-      ) + "\n",
+      )}\n`,
     )
     await page
       .screenshot({
         path: join(options.evidence, "native-editor-failure.png"),
         fullPage: true,
       })
-      .catch(() => {})
+      .catch(() => {
+        /* Keep the recorded audit outcome if its diagnostic screenshot is unavailable. */
+      })
     throw error
   } finally {
     await browser.close()

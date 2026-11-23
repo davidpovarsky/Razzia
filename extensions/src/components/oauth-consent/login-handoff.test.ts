@@ -6,6 +6,18 @@ import {
   createConsentLoginHandoff,
 } from "./login-handoff"
 
+function isObservedRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+}
+
+function requireObservedRecord(value: unknown): Record<string, unknown> {
+  if (!isObservedRecord(value)) {
+    throw new Error("Expected an object in the observed JSON value")
+  }
+
+  return value
+}
+
 const first = "a".repeat(64),
   second = "b".repeat(64)
 const location = (ticket = first) => ({
@@ -47,10 +59,9 @@ describe("same-tab consent login handoff", () => {
     const recreated = createConsentLoginHandoff(f.storage, f.now)
     expect(recreated.resume(destination)).toEqual({ oauth_request: first })
     expect(recreated.resume(destination)).toEqual({ oauth_request: first })
-    expect(Object.keys(JSON.parse(record!)).sort()).toEqual([
-      "expiresAt",
-      "ticket",
-    ])
+    expect(
+      Object.keys(requireObservedRecord(JSON.parse(record!))).sort(),
+    ).toEqual(["expiresAt", "ticket"])
     recreated.acknowledge(first)
     expect(recreated.resume(destination)).toBeNull()
     expect(f.records.size).toBe(0)
@@ -76,7 +87,9 @@ describe("same-tab consent login handoff", () => {
     f.handoff.capture(location(second))
     f.handoff.acknowledge(first)
     expect(f.handoff.resume(destination)).toEqual({ oauth_request: second })
-    f.handoff.clear() // Explicit cancel, logout or unexpected session replacement
+    // Explicit cancel, logout or unexpected session replacement
+
+    f.handoff.clear()
     expect(f.handoff.resume(destination)).toBeNull()
   })
   it("rejects malformed/duplicate/unbounded tickets and extra authority fields", () => {

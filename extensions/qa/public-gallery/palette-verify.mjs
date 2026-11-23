@@ -6,7 +6,7 @@ import { join } from "node:path"
 
 const require = createRequire("/cleanup/extensions/package.json")
 const { expect } = require("@playwright/test")
-const rgb = (values) => "rgb(" + values.join(", ") + ")"
+const rgb = (values) => `rgb(${values.join(", ")})`
 const expected = {
   "tadazz-midnight-club": {
     mid: [20, 58, 88],
@@ -31,22 +31,26 @@ const append = (evidence, filename, row) => {
   const path = join(evidence, filename)
   const rows = existsSync(path) ? JSON.parse(readFileSync(path, "utf8")) : []
   rows.push(row)
-  writeFileSync(path, JSON.stringify(rows, null, 2) + "\n")
+  writeFileSync(path, `${JSON.stringify(rows, null, 2)}\n`)
 }
 
-export async function verifyNativePalette(
+export async function verifyNativePalette({
   page,
   themeId,
   context,
   evidence,
   captureScreenshot = true,
-) {
-  if (themeId !== "tadazz-classic" && !expected[themeId]) return null
+}) {
+  if (themeId !== "tadazz-classic" && !expected[themeId]) {
+    return null
+  }
+
   const stage = page
     .locator(".tzv4-stage:visible")
     .filter({ has: page.locator(".q-frame") })
     .first()
   await expect(stage.locator(".q-frame")).toBeVisible({ timeout: 30_000 })
+
   if (context === "editor") {
     // The static Question tab intentionally contains no answers. Palette
     // comparisons inspect the explicit Answers tab, without starting playback.
@@ -56,22 +60,31 @@ export async function verifyNativePalette(
     await preview.getByTestId("question-preview-phase-answers").click()
     await expect(preview).toHaveAttribute("data-preview-phase", "answers")
   }
+
   await expect(stage.locator(".answer-card").first()).toBeVisible({
     timeout: 30_000,
   })
-  if (expected[themeId])
+
+  if (expected[themeId]) {
     await expect(stage).toHaveAttribute("data-theme-palette", themeId)
-  else
+  } else {
     assert.equal(
       await stage.getAttribute("data-theme-palette"),
       null,
       "Classic retains its source artwork",
     )
+  }
+
   const sample = await stage.evaluate((root) => {
     const select = (selector) => {
       const element = root.querySelector(selector)
-      if (!element) return null
+
+      if (!element) {
+        return null
+      }
+
       const style = getComputedStyle(element)
+
       return {
         backgroundImage: style.backgroundImage,
         backgroundColor: style.backgroundColor,
@@ -89,6 +102,7 @@ export async function verifyNativePalette(
       }
     }
     const answer = root.querySelector(".answer-card")
+
     return {
       marker: root.getAttribute("data-theme-palette"),
       question: select(".q-frame"),
@@ -103,48 +117,46 @@ export async function verifyNativePalette(
     themeId,
     ...sample,
   })
+
   if (expected[themeId]) {
     const colors = expected[themeId]
     assert.equal(
       sample.question.backgroundImage,
-      "linear-gradient(150deg, " +
-        rgb(colors.mid) +
-        ", " +
-        rgb(colors.night) +
-        ")",
-      context + " question palette",
+
+      `linear-gradient(150deg, ${rgb(colors.mid)}, ${rgb(colors.night)})`,
+      `${context} question palette`,
     )
     assert.equal(
       sample.question.borderColor,
       rgb(colors.secondary),
-      context + " question border",
+      `${context} question border`,
     )
     assert.equal(
       sample.answer.backgroundImage,
-      "linear-gradient(165deg, " +
-        rgb(colors.mid) +
-        ", " +
-        rgb(colors.night) +
-        " 49%, " +
-        rgb(colors.mid) +
-        ")",
-      context + " answer palette",
+
+      `linear-gradient(165deg, ${rgb(colors.mid)}, ${rgb(
+        colors.night,
+      )} 49%, ${rgb(colors.mid)})`,
+      `${context} answer palette`,
     )
     assert.equal(
       sample.answer.borderColor,
       rgb(sample.selected ? colors.accent : colors.secondary),
-      context + " answer border",
+      `${context} answer border`,
     )
-    if (sample.monogram)
+
+    if (sample.monogram) {
       assert.equal(
         sample.monogram.color,
         rgb(colors.accent),
-        context + " monogram accent",
+        `${context} monogram accent`,
       )
+    }
+
     assert.equal(
       sample.title.color,
       "rgb(255, 249, 239)",
-      context + " answer text",
+      `${context} answer text`,
     )
   } else {
     assert(
@@ -160,21 +172,25 @@ export async function verifyNativePalette(
       "rgba(184, 91, 255, 0.88)",
       "Classic answer border remains unchanged",
     )
-    if (sample.monogram)
+
+    if (sample.monogram) {
       assert.equal(
         sample.monogram.color,
         "rgb(239, 255, 66)",
         "Classic monogram remains unchanged",
       )
+    }
   }
+
   if (
     captureScreenshot &&
     ["editor", "preview", "solo", "host"].includes(context)
   ) {
     await stage.screenshot({
-      path: join(evidence, "palette-" + context + "-" + themeId + ".png"),
+      path: join(evidence, `palette-${context}-${themeId}.png`),
     })
   }
+
   return { question: sample.question.geometry, answer: sample.answer.geometry }
 }
 
@@ -190,15 +206,19 @@ export async function verifyCatalogueCovers(page, context, evidence) {
     const cover = card.locator("[data-catalogue-cover]")
     await cover.scrollIntoViewIfNeeded()
     const row = await card.evaluate((root) => {
-      const cover = root.querySelector("[data-catalogue-cover]")
-      const title = cover?.querySelector(".cover-title")
+      const coverElement = root.querySelector("[data-catalogue-cover]")
+      const title = coverElement?.querySelector(".cover-title")
       const trigger = root.querySelector(".game-preview-trigger")
       const bodyTitle = root.querySelector(
         ".game-card-body h3 .catalogue-title-link",
       )
       const rect = (element) => {
-        if (!element) return null
+        if (!element) {
+          return null
+        }
+
         const r = element.getBoundingClientRect()
+
         return {
           left: r.left,
           top: r.top,
@@ -208,10 +228,11 @@ export async function verifyCatalogueCovers(page, context, evidence) {
           height: r.height,
         }
       }
+
       return {
         id: root.getAttribute("data-catalogue-card"),
         card: rect(root),
-        cover: rect(cover),
+        cover: rect(coverElement),
         bodyTitle: rect(bodyTitle),
         controls: [
           ...root.querySelectorAll(
@@ -239,45 +260,53 @@ export async function verifyCatalogueCovers(page, context, evidence) {
   for (const row of rows) {
     assert(
       row.cover?.width && row.cover?.height,
-      context + ": rendered artwork " + row.id,
+      `${context}: rendered artwork ${row.id}`,
     )
+
     if (row.title?.width && row.title?.height) {
       assert(
         inside(row.title, row.cover),
-        context + ": overlay title inside cover " + row.id,
+        `${context}: overlay title inside cover ${row.id}`,
       )
-      if (row.trigger?.width && row.trigger?.height)
+
+      if (row.trigger?.width && row.trigger?.height) {
         assert(
           !overlaps(row.title, row.trigger),
-          context + ": title clear of Preview " + row.id,
+          `${context}: title clear of Preview ${row.id}`,
         )
+      }
     } else {
       assert(
         context.startsWith("public-"),
-        context + ": expected visible Studio cover title " + row.id,
+        `${context}: expected visible Studio cover title ${row.id}`,
       )
       assert(
         row.bodyTitle?.width && row.bodyTitle?.height,
-        context + ": visible body title " + row.id,
+        `${context}: visible body title ${row.id}`,
       )
       assert(
         inside(row.bodyTitle, row.card) &&
           row.bodyTitle.top >= row.cover.bottom - 1,
-        context + ": title inside card below artwork " + row.id,
+        `${context}: title inside card below artwork ${row.id}`,
       )
     }
-    if (row.trigger?.width && row.trigger?.height)
+
+    if (row.trigger?.width && row.trigger?.height) {
       assert(
         inside(row.trigger, row.cover),
-        context + ": Preview inside artwork " + row.id,
+        `${context}: Preview inside artwork ${row.id}`,
       )
-    for (let a = 0; a < row.controls.length; a++) {
-      for (let b = a + 1; b < row.controls.length; b++)
+    }
+
+    for (let a = 0; a < row.controls.length; a += 1) {
+      for (let b = a + 1; b < row.controls.length; b += 1) {
         assert(
           !overlaps(row.controls[a], row.controls[b]),
-          context + ": explicit card actions do not overlap " + row.id,
+          `${context}: explicit card actions do not overlap ${row.id}`,
         )
+      }
     }
   }
+
   return rows
 }

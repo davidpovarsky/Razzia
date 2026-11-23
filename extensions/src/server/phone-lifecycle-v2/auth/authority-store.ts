@@ -1,3 +1,4 @@
+/* oxlint-disable max-classes-per-file -- The read-only lease reader and authority writer share private validation and storage ownership in this module. */
 import { randomBytes } from "node:crypto"
 import type { DatabaseSync } from "node:sqlite"
 import { identifier, type Action } from "../contracts"
@@ -45,15 +46,24 @@ const scope = (address: ServiceAddress) => [
 ]
 type SqlRow = Record<string, unknown>
 
-function decode(row: SqlRow | undefined): ServiceLeaseRecord | undefined {
-  if (!row) return undefined
+function decode(leaseRow: SqlRow | undefined): ServiceLeaseRecord | undefined {
+  if (!leaseRow) {
+    return undefined
+  }
+
   const text = (key: string) => {
-    if (typeof row[key] !== "string") authorityDenied()
-    return row[key] as string
+    if (typeof leaseRow[key] !== "string") {
+      authorityDenied()
+    }
+
+    return leaseRow[key]
   }
   const integer = (key: string) => {
-    if (!Number.isSafeInteger(row[key])) authorityDenied()
-    return row[key] as number
+    if (!Number.isSafeInteger(leaseRow[key])) {
+      authorityDenied()
+    }
+
+    return leaseRow[key] as number
   }
   const initial = canonicalActions(
     JSON.parse(text("initial_actions")) as Action[],
@@ -74,8 +84,9 @@ function decode(row: SqlRow | undefined): ServiceLeaseRecord | undefined {
   identifier(issuerSid)
   identifier(executorId)
   const state = text("state"),
-    revoked = row.revoked_at,
+    revoked = leaseRow.revoked_at,
     hash = text("capability_hash")
+
   if (
     !initial.includes("register") ||
     current.some((action) => !initial.includes(action)) ||
@@ -87,8 +98,10 @@ function decode(row: SqlRow | undefined): ServiceLeaseRecord | undefined {
     (state === "REVOKED"
       ? revoked === null || current.length !== 0
       : revoked !== null)
-  )
+  ) {
     authorityDenied()
+  }
+
   return Object.freeze({
     ...address,
     issuerSid,
@@ -108,8 +121,13 @@ function row(db: DatabaseSync, address: ServiceAddress) {
 }
 function request(input: ControlRequest) {
   identifier(input.requestId)
-  if (!Number.isSafeInteger(input.expectedVersion) || input.expectedVersion < 0)
+
+  if (
+    !Number.isSafeInteger(input.expectedVersion) ||
+    input.expectedVersion < 0
+  ) {
     serviceDenied()
+  }
 }
 function immutable(binding: ServiceCredentialBinding) {
   return [
@@ -126,12 +144,17 @@ function immutable(binding: ServiceCredentialBinding) {
 function sameBinding(a: ServiceCredentialBinding, b: ServiceCredentialBinding) {
   return JSON.stringify(immutable(a)) === JSON.stringify(immutable(b))
 }
-function metadata(
-  ok: boolean,
-  status: string,
-  address: ServiceAddress,
-  lease?: ServiceLeaseRecord,
-): ControlReceipt {
+function metadata({
+  ok,
+  status,
+  address,
+  lease,
+}: {
+  ok: boolean
+  status: string
+  address: ServiceAddress
+  lease?: ServiceLeaseRecord
+}): ControlReceipt {
   return Object.freeze({
     ok,
     status,
@@ -141,8 +164,17 @@ function metadata(
   })
 }
 function parseReceipt(raw: unknown): ControlReceipt {
-  if (typeof raw !== "string") authorityDenied()
-  const data = JSON.parse(raw) as Record<string, unknown>
+  if (typeof raw !== "string") {
+    authorityDenied()
+  }
+
+  const parsed: unknown = JSON.parse(raw)
+
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+    authorityDenied()
+  }
+
+  const data = parsed as Record<string, unknown>
   const statuses = [
     "request_conflict",
     "authority_exists",
@@ -152,6 +184,7 @@ function parseReceipt(raw: unknown): ControlReceipt {
     "active",
     "revoked",
   ]
+
   if (
     Object.keys(data).some(
       (key) =>
@@ -165,47 +198,77 @@ function parseReceipt(raw: unknown): ControlReceipt {
     !Number.isSafeInteger(data.version) ||
     (data.version as number) < 1 ||
     !statuses.includes(data.status)
-  )
+  ) {
     authorityDenied()
+  }
+
   identifier(data.service)
+
   if (
     data.state !== undefined &&
-    !["PENDING_DELIVERY", "ACTIVE", "REVOKED"].includes(String(data.state))
-  )
+    (typeof data.state !== "string" ||
+      !["PENDING_DELIVERY", "ACTIVE", "REVOKED"].includes(data.state))
+  ) {
     authorityDenied()
+  }
+
   if (
     data.expiresAt !== undefined &&
     (!Number.isSafeInteger(data.expiresAt) || (data.expiresAt as number) <= 0)
-  )
+  ) {
     authorityDenied()
+  }
+
   return Object.freeze(data) as unknown as ControlReceipt
 }
-function prior(
-  db: DatabaseSync,
-  address: ServiceAddress,
-  input: ControlRequest,
-  fp: string,
-): ControlReceipt | undefined {
+function prior({
+  db,
+  address,
+  input,
+  fp,
+}: {
+  db: DatabaseSync
+  address: ServiceAddress
+  input: ControlRequest
+  fp: string
+}): ControlReceipt | undefined {
   const found = db
     .prepare(
       `SELECT fingerprint,metadata FROM control_receipts WHERE ${WHERE} AND request_id=?`,
     )
     .get(...scope(address), input.requestId)
-  if (!found) return undefined
-  if (found.fingerprint !== fp)
-    return metadata(false, "request_conflict", address)
+
+  if (!found) {
+    return undefined
+  }
+
+  if (found.fingerprint !== fp) {
+    return metadata({ ok: false, status: "request_conflict", address })
+  }
+
   const receipt = parseReceipt(found.metadata)
-  if (receipt.service !== address.service) authorityDenied()
+
+  if (receipt.service !== address.service) {
+    authorityDenied()
+  }
+
   return receipt
 }
-function finish(
-  db: DatabaseSync,
-  address: ServiceAddress,
-  input: ControlRequest,
-  action: string,
-  fp: string,
-  receipt: ControlReceipt,
-): SecretAttempt {
+function finish({
+  db,
+  address,
+  input,
+  action,
+  fp,
+  receipt,
+}: {
+  db: DatabaseSync
+  address: ServiceAddress
+  input: ControlRequest
+  action: string
+  fp: string
+  receipt: ControlReceipt
+}): SecretAttempt {
   // Explicit whitelist construction: never serialize a SecretAttempt/lease/credential.
   const safe = {
     ok: receipt.ok,
@@ -227,6 +290,7 @@ function finish(
     JSON.stringify(safe),
     Date.now(),
   )
+
   return { receipt: Object.freeze(safe) }
 }
 
@@ -234,6 +298,7 @@ export class ReadonlyServiceLeaseReader implements SynchronousServiceLeaseReader
   constructor(private readonly files: PrivateAuthorityFiles) {}
   readCurrent(input: ServiceAddress): ServiceLeaseRecord | undefined {
     const address = copyAddress(input)
+
     return this.files.read((db) => row(db, address))
   }
 }
@@ -244,18 +309,24 @@ export class ServiceAuthorityWriter {
     this.files.initialize(check, SCHEMA)
   }
 
-  issue(
-    binding: ServiceCredentialBinding,
-    input: ControlRequest,
-    actorSid: string,
-    check: SynchronousReauthorize,
-  ): SecretAttempt {
+  issue({
+    binding,
+    input,
+    actorSid,
+    check,
+  }: {
+    binding: ServiceCredentialBinding
+    input: ControlRequest
+    actorSid: string
+    check: SynchronousReauthorize
+  }): SecretAttempt {
     const address = copyAddress(binding),
       initial = canonicalActions(binding.initialActions)
     request(input)
     identifier(actorSid)
     identifier(binding.issuerSid)
     identifier(binding.executorId)
+
     if (
       address.version !== 1 ||
       input.expectedVersion !== 0 ||
@@ -263,8 +334,10 @@ export class ServiceAuthorityWriter {
       !Number.isSafeInteger(binding.expiresAt) ||
       binding.expiresAt <= Date.now() ||
       actorSid !== binding.issuerSid
-    )
+    ) {
       serviceDenied()
+    }
+
     const fp = fingerprint([
       "issue-v1",
       input.requestId,
@@ -272,21 +345,40 @@ export class ServiceAuthorityWriter {
       actorSid,
       immutable(binding),
     ])
+
     return this.files.mutate(check, (db) => {
-      if (binding.expiresAt <= Date.now()) serviceDenied()
+      if (binding.expiresAt <= Date.now()) {
+        serviceDenied()
+      }
+
       const current = row(db, address)
-      if (current && !sameBinding(current, binding)) serviceDenied()
-      const cached = prior(db, address, input, fp)
-      if (cached) return { receipt: cached }
-      if (current)
-        return finish(
+
+      if (current && !sameBinding(current, binding)) {
+        serviceDenied()
+      }
+
+      const cached = prior({ db, address, input, fp })
+
+      if (cached) {
+        return { receipt: cached }
+      }
+
+      if (current) {
+        return finish({
           db,
           address,
           input,
-          "issue",
+          action: "issue",
           fp,
-          metadata(false, "authority_exists", address, current),
-        )
+          receipt: metadata({
+            ok: false,
+            status: "authority_exists",
+            address,
+            lease: current,
+          }),
+        })
+      }
+
       const credential = randomBytes(32).toString("hex")
       const hash = serviceCapabilityHash(binding, credential)
       const inserted = db
@@ -303,34 +395,57 @@ export class ServiceAuthorityWriter {
           JSON.stringify(initial),
           hash,
         )
-      if (Number(inserted.changes) !== 1)
-        return finish(
+
+      if (Number(inserted.changes) !== 1) {
+        return finish({
           db,
           address,
           input,
-          "issue",
+          action: "issue",
           fp,
-          metadata(false, "game_authority_conflict", address),
-        )
-      const completed = row(db, address)!
-      const result = finish(
+          receipt: metadata({
+            ok: false,
+            status: "game_authority_conflict",
+            address,
+          }),
+        })
+      }
+
+      const completed = row(db, address)
+
+      if (!completed) {
+        authorityDenied()
+      }
+
+      const result = finish({
         db,
         address,
         input,
-        "issue",
+        action: "issue",
         fp,
-        metadata(true, "pending_delivery", address, completed),
-      )
+        receipt: metadata({
+          ok: true,
+          status: "pending_delivery",
+          address,
+          lease: completed,
+        }),
+      })
+
       return { ...result, credential }
     })
   }
 
-  rotate(
-    binding: ServiceCredentialBinding,
-    input: ControlRequest,
-    actorSid: string,
-    check: SynchronousReauthorize,
-  ): SecretAttempt {
+  rotate({
+    binding,
+    input,
+    actorSid,
+    check,
+  }: {
+    binding: ServiceCredentialBinding
+    input: ControlRequest
+    actorSid: string
+    check: SynchronousReauthorize
+  }): SecretAttempt {
     const address = copyAddress(binding)
     request(input)
     identifier(actorSid)
@@ -341,30 +456,45 @@ export class ServiceAuthorityWriter {
       actorSid,
       immutable(binding),
     ])
+
     return this.files.mutate(check, (db) => {
       const current = row(db, address)
+
       if (
         !current ||
         !sameBinding(current, binding) ||
         current.issuerSid !== actorSid ||
         current.expiresAt <= Date.now()
-      )
+      ) {
         serviceDenied()
-      const cached = prior(db, address, input, fp)
-      if (cached) return { receipt: cached }
+      }
+
+      const cached = prior({ db, address, input, fp })
+
+      if (cached) {
+        return { receipt: cached }
+      }
+
       if (
         current.state === "REVOKED" ||
         current.version !== input.expectedVersion ||
         current.version >= Number.MAX_SAFE_INTEGER
-      )
-        return finish(
+      ) {
+        return finish({
           db,
           address,
           input,
-          "rotate",
+          action: "rotate",
           fp,
-          metadata(false, "version_conflict", address, current),
-        )
+          receipt: metadata({
+            ok: false,
+            status: "version_conflict",
+            address,
+            lease: current,
+          }),
+        })
+      }
+
       const next = { ...current, version: current.version + 1 }
       const credential = randomBytes(32).toString("hex"),
         hash = serviceCapabilityHash(next, credential)
@@ -373,30 +503,50 @@ export class ServiceAuthorityWriter {
           `UPDATE leases SET version=?,state='PENDING_DELIVERY',capability_hash=? WHERE ${WHERE} AND version=? AND state!='REVOKED'`,
         )
         .run(next.version, hash, ...scope(address), input.expectedVersion)
-      if (Number(changed.changes) !== 1) authorityDenied()
-      const result = finish(
+
+      if (Number(changed.changes) !== 1) {
+        authorityDenied()
+      }
+
+      const result = finish({
         db,
         address,
         input,
-        "rotate",
+        action: "rotate",
         fp,
-        metadata(true, "pending_delivery", address, row(db, address)),
-      )
+        receipt: metadata({
+          ok: true,
+          status: "pending_delivery",
+          address,
+          lease: row(db, address),
+        }),
+      })
+
       return { ...result, credential }
     })
   }
 
-  activate(
-    inputAddress: ServiceAddress,
-    capability: string,
-    input: ControlRequest,
-    check: SynchronousReauthorize,
-  ): SecretAttempt {
+  activate({
+    inputAddress,
+    capability,
+    input,
+    check,
+  }: {
+    inputAddress: ServiceAddress
+    capability: string
+    input: ControlRequest
+    check: SynchronousReauthorize
+  }): SecretAttempt {
     const address = copyAddress(inputAddress)
     request(input)
-    if (input.expectedVersion !== address.version) serviceDenied()
+
+    if (input.expectedVersion !== address.version) {
+      serviceDenied()
+    }
+
     return this.files.mutate(check, (db) => {
       const current = row(db, address)
+
       // Service proof must be current BEFORE any cached receipt is disclosed.
       if (
         !current ||
@@ -408,8 +558,10 @@ export class ServiceAuthorityWriter {
           serviceCapabilityHash(current, capability),
           current.capabilityHash,
         )
-      )
+      ) {
         serviceDenied()
+      }
+
       const fp = fingerprint([
         "activate-v1",
         input.requestId,
@@ -417,31 +569,49 @@ export class ServiceAuthorityWriter {
         immutable(current),
         current.capabilityHash,
       ])
-      const cached = prior(db, address, input, fp)
-      if (cached) return { receipt: cached }
+      const cached = prior({ db, address, input, fp })
+
+      if (cached) {
+        return { receipt: cached }
+      }
+
       const changed = db
         .prepare(
           `UPDATE leases SET state='ACTIVE' WHERE ${WHERE} AND version=? AND state IN ('PENDING_DELIVERY','ACTIVE')`,
         )
         .run(...scope(address), input.expectedVersion)
-      if (Number(changed.changes) !== 1) authorityDenied()
-      return finish(
+
+      if (Number(changed.changes) !== 1) {
+        authorityDenied()
+      }
+
+      return finish({
         db,
         address,
         input,
-        "activate",
+        action: "activate",
         fp,
-        metadata(true, "active", address, row(db, address)),
-      )
+        receipt: metadata({
+          ok: true,
+          status: "active",
+          address,
+          lease: row(db, address),
+        }),
+      })
     })
   }
 
-  revoke(
-    binding: ServiceCredentialBinding,
-    input: ControlRequest,
-    actorSid: string,
-    check: SynchronousReauthorize,
-  ): SecretAttempt {
+  revoke({
+    binding,
+    input,
+    actorSid,
+    check,
+  }: {
+    binding: ServiceCredentialBinding
+    input: ControlRequest
+    actorSid: string
+    check: SynchronousReauthorize
+  }): SecretAttempt {
     const address = copyAddress(binding)
     request(input)
     identifier(actorSid)
@@ -452,39 +622,64 @@ export class ServiceAuthorityWriter {
       actorSid,
       immutable(binding),
     ])
+
     return this.files.mutate(check, (db) => {
       const current = row(db, address)
-      if (!current || !sameBinding(current, binding)) serviceDenied()
-      const cached = prior(db, address, input, fp)
-      if (cached) return { receipt: cached }
+
+      if (!current || !sameBinding(current, binding)) {
+        serviceDenied()
+      }
+
+      const cached = prior({ db, address, input, fp })
+
+      if (cached) {
+        return { receipt: cached }
+      }
+
       if (
         current.version !== input.expectedVersion ||
         current.version >= Number.MAX_SAFE_INTEGER
-      )
-        return finish(
+      ) {
+        return finish({
           db,
           address,
           input,
-          "revoke",
+          action: "revoke",
           fp,
-          metadata(false, "version_conflict", address, current),
-        )
+          receipt: metadata({
+            ok: false,
+            status: "version_conflict",
+            address,
+            lease: current,
+          }),
+        })
+      }
+
       if (current.state !== "REVOKED") {
         const changed = db
           .prepare(
             `UPDATE leases SET version=version+1,state='REVOKED',revoked_at=?,current_actions='[]' WHERE ${WHERE} AND version=?`,
           )
           .run(Date.now(), ...scope(address), input.expectedVersion)
-        if (Number(changed.changes) !== 1) authorityDenied()
+
+        if (Number(changed.changes) !== 1) {
+          authorityDenied()
+        }
       }
-      return finish(
+
+      return finish({
         db,
         address,
         input,
-        "revoke",
+        action: "revoke",
         fp,
-        metadata(true, "revoked", address, row(db, address)),
-      )
+        receipt: metadata({
+          ok: true,
+          status: "revoked",
+          address,
+          lease: row(db, address),
+        }),
+      })
     })
   }
 }

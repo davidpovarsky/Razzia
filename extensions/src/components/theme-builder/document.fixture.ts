@@ -51,6 +51,7 @@ export function builderDocumentFixture() {
     motions: [],
     children: {},
   })
+
   return parseBuilderDocument({
     format: "tadazz-theme-builder-draft",
     formatVersion: 1,

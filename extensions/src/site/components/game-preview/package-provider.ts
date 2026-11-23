@@ -29,16 +29,21 @@ export function createPackagePreviewProvider(options: {
     if (getClientId() !== options.accountId) {
       throw new SiteApiError(403, "preview-account-changed")
     }
+
     const value = await options.read(signal)
     assertBoundedJson(value)
+
     if (!value || typeof value !== "object" || Array.isArray(value)) {
       throw new SiteApiError(409, "preview-package-invalid")
     }
+
     const { show: authored, ...receipt } = value as Record<string, unknown>
     const context = applicationPackagePreviewSchema.parse(receipt)
+
     if (getClientId() !== options.accountId) {
       throw new SiteApiError(403, "preview-account-changed")
     }
+
     if (
       context.uploadId !== options.uploadId ||
       context.revision !== options.revision ||
@@ -53,8 +58,10 @@ export function createPackagePreviewProvider(options: {
     ) {
       throw new SiteApiError(409, "preview-package-changed")
     }
+
     const show = sanitizeAuthoredShowForPreview(authored)
     const { runtimeUrls: _ephemeral, ...immutableContext } = context
+
     return {
       show,
       context: freeze(context),
@@ -77,15 +84,18 @@ export function createPackagePreviewProvider(options: {
       ) {
         return { status: "unavailable", reason: "source-unavailable" }
       }
+
       try {
         const initial = await read(signal)
         let currentContext = initial.context
         let runtimeReceiptAt = Date.now()
         const revalidate = async (nextSignal: AbortSignal) => {
           const current = await read(nextSignal)
+
           if (current.fingerprint !== initial.fingerprint) {
             throw new SiteApiError(409, "preview-package-changed")
           }
+
           // Do not remount the frame on every question phase. Renew an expiring
           // runtime ticket only; its immutable source/build/media binding stays exact.
           if (Date.now() - runtimeReceiptAt > 240_000) {
@@ -108,11 +118,14 @@ export function createPackagePreviewProvider(options: {
           { role: "spectator", ...preferences },
         )
         const plan = resolveApplicationPreviewPlan(draft)
+
         if (plan.resolution.kind === "unavailable") {
           return { status: "unavailable", reason: "renderer-unavailable" }
         }
+
         const runtime = await loadApplicationPreviewRuntime(signal)
         signal.throwIfAborted()
+
         return {
           status: "ready",
           session: createApplicationPreviewSession({
@@ -123,37 +136,55 @@ export function createPackagePreviewProvider(options: {
             runtime,
             revalidate,
             getPackageContext: () => {
-              if (getClientId() !== options.accountId)
+              if (getClientId() !== options.accountId) {
                 throw new SiteApiError(403, "preview-account-changed")
+              }
+
               return currentContext
             },
             authorizeMedia: async (urls, nextSignal) => {
               await revalidate(nextSignal)
+
               return urls.map((url) => {
                 const asset = initial.context.assets.find(
                   (entry) => entry.url === url,
                 )
-                if (!asset)
+
+                if (!asset) {
                   throw new SiteApiError(403, "preview-package-media-denied")
+                }
+
                 return asset
               })
             },
           }),
         }
       } catch (error) {
-        if (signal.aborted) throw error
+        if (signal.aborted) {
+          throw error
+        }
+
         const status =
           error && typeof error === "object" && "status" in error
             ? error.status
             : undefined
+
+        const getUnavailableReason = ():
+          "access-denied" | "stale-revision" | "source-unavailable" => {
+          if (status === 401 || status === 403) {
+            return "access-denied"
+          }
+
+          if (status === 409) {
+            return "stale-revision"
+          }
+
+          return "source-unavailable"
+        }
+
         return {
           status: "unavailable",
-          reason:
-            status === 401 || status === 403
-              ? "access-denied"
-              : status === 409
-                ? "stale-revision"
-                : "source-unavailable",
+          reason: getUnavailableReason(),
         }
       }
     },

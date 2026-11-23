@@ -11,6 +11,18 @@ import {
   CONSENT_PATH,
 } from "../../../components/oauth-consent/login-handoff"
 
+function isObservedRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+}
+
+function requireObservedRecord(value: unknown): Record<string, unknown> {
+  if (!isObservedRecord(value)) {
+    throw new Error("Expected an object in the observed JSON value")
+  }
+
+  return value
+}
+
 const password = "Local-only-consent-route-passphrase-2026"
 const address = `consent-route-${Date.now()}@example.invalid`
 const mail = fileURLToPath(
@@ -68,18 +80,18 @@ test("logged-out consent survives actual login and repeated guards without exten
     if (req.url().endsWith("/approve")) {
       approvals.push(req.url())
     }
+
     if (new URL(req.url()).pathname === "/api/auth/mode") {
-      modeRequests++
+      modeRequests += 1
     }
   })
   await openLogin(page)
   await expect.poll(() => modeRequests).toBeGreaterThanOrEqual(2)
   const captured = await pending(page)
   expect(JSON.parse(captured!)).toMatchObject({ ticket })
-  expect(Object.keys(JSON.parse(captured!)).sort()).toEqual([
-    "expiresAt",
-    "ticket",
-  ])
+  expect(
+    Object.keys(requireObservedRecord(JSON.parse(captured!))).sort(),
+  ).toEqual(["expiresAt", "ticket"])
   await page.reload()
   expect(await pending(page)).toBe(captured)
   await login(page)
@@ -99,7 +111,12 @@ test("expired pending ticket is not restored by a successful native login", asyn
 }) => {
   await openLogin(page)
   await page.evaluate((key) => {
-    const value = JSON.parse(sessionStorage.getItem(key)!)
+    const value: unknown = JSON.parse(sessionStorage.getItem(key)!)
+
+    if (typeof value !== "object" || value === null || Array.isArray(value)) {
+      throw new Error("Expected the pending consent handoff to be an object")
+    }
+
     sessionStorage.setItem(
       key,
       JSON.stringify({ ...value, expiresAt: Date.now() - 1 }),

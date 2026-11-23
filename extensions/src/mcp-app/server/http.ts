@@ -5,16 +5,17 @@ import type {
 } from "./dependencies.ts"
 import { authorize, validateConfig } from "./authorization.ts"
 import { createTadazzMcpHttpHandler } from "./factory.ts"
-import { inputs, toolNames } from "../contracts/tools.ts"
+import { inputs, toolNames, scopes } from "../contracts/tools.ts"
 import { FULL_SHOW_RESOURCE_V3 } from "../contracts/full-show-frame.ts"
 import { LIMITS, PREVIEW_RESOURCE } from "../contracts/schemas.ts"
 import { PREVIEW_UI_RESPONSE_LIMIT } from "./preview-resource.ts"
-import { scopes } from "../contracts/tools.ts"
+
 import {
   IngressBudget,
   HttpRejection,
   bodyText,
 } from "../first-party/ingress.ts"
+import { synchronousPromise } from "../../core/synchronous-promise.ts"
 
 export interface RemoteMcpOptions {
   config: ServerConfig
@@ -24,6 +25,8 @@ export interface RemoteMcpOptions {
   responseTimeoutMs?: number
   /** Signature, issuer, exact audience, expiry, live grant and account verifier. */
   verifyAccessToken(
+    // oxlint-disable-next-line typescript/no-invalid-void-type -- TypeScript this: void declares a receiver-free callback; it is erased and is not a runtime argument.
+    this: void,
     token: string,
     signal: AbortSignal,
   ): Promise<VerifiedPrincipal>
@@ -66,8 +69,13 @@ async function completeLegacyResponse(
   const chunks: Uint8Array[] = []
   let size = 0
   let complete = false
-  let reading: ReturnType<typeof reader.read> | undefined
-  let interrupt!: (error: Error) => void
+  let reading: ReturnType<typeof reader.read> | undefined = undefined
+  let interrupt: (error: Error) => void = () => {
+    throw new Error(
+      "Promise resolver interrupt was used before executor initialization",
+    )
+  }
+
   const interrupted = new Promise<never>((_, reject) => {
     interrupt = reject
   })
@@ -79,8 +87,9 @@ async function completeLegacyResponse(
       abort()
     }
 
-    while (true) {
+    for (;;) {
       reading = reader.read()
+      // oxlint-disable-next-line no-await-in-loop -- Consume one stream read/abort race at a time to preserve byte limits and cancellation ownership.
       const part = await Promise.race([reading, interrupted])
       reading = undefined
 
@@ -108,7 +117,12 @@ async function completeLegacyResponse(
     signal.removeEventListener("abort", abort)
 
     if (!complete) {
-      await Promise.allSettled([reading, reader.cancel().catch(() => {})])
+      await Promise.allSettled([
+        reading,
+        reader.cancel().catch(() => {
+          /* Cancellation rejection still settles before the owned reader is released. */
+        }),
+      ])
     }
 
     reader.releaseLock()
@@ -155,6 +169,7 @@ class RequestWork {
   }
   async drain() {
     while (this.pending.size) {
+      // oxlint-disable-next-line no-await-in-loop -- Recheck pending work after each settled snapshot because more work may have joined the set.
       await Promise.allSettled([...this.pending])
     }
   }
@@ -206,14 +221,21 @@ export function createRemoteMcpApp(options: RemoteMcpOptions) {
     async fetch(input: Request): Promise<Response> {
       let request = input
       const lifetime = new AbortController()
-      let release: (() => void) | undefined
-      let server: ReturnType<typeof createTadazzMcpHttpHandler> | undefined
+      let release: (() => void) | undefined = undefined
+
+      let server: ReturnType<typeof createTadazzMcpHttpHandler> | undefined =
+        undefined
       const work = new RequestWork(lifetime.signal)
-      let removeAbort = () => {}
-      let finish = () => {}
+      let removeAbort = () => {
+        /* No abort listener has been installed at request initialization. */
+      }
+      let finish = () => {
+        /* No completion promise has been registered at request initialization. */
+      }
       let timedOut = false
-      let timer: ReturnType<typeof setTimeout> | undefined
-      let serving: Promise<Response> | undefined
+      let timer: ReturnType<typeof setTimeout> | undefined = undefined
+
+      let serving: Promise<Response> | undefined = undefined
       let suppliedOrigin: string | null = null
       const rejected = (status: number, suppliedChallenge?: string) => {
         const response = rejectResponse(status, suppliedChallenge)
@@ -277,22 +299,24 @@ export function createRemoteMcpApp(options: RemoteMcpOptions) {
           const url = new URL(request.url)
           let headerBytes = 0
           let headerCount = 0
-          let invalidHeaders = false
+          const headerState = { invalid: false }
           request.headers.forEach((value, name) => {
             headerBytes += Buffer.byteLength(name + value)
 
+            headerCount += 1
+
             if (
-              ++headerCount > 32 ||
+              headerCount > 32 ||
               headerBytes > 16_384 ||
               value.length > 8192 ||
               name === "forwarded" ||
               name.startsWith("x-forwarded-")
             ) {
-              invalidHeaders = true
+              headerState.invalid = true
             }
           })
 
-          if (invalidHeaders) {
+          if (headerState.invalid) {
             return rejected(400)
           }
 
@@ -387,20 +411,20 @@ export function createRemoteMcpApp(options: RemoteMcpOptions) {
             verify: () => verifyToken(token, request.signal),
           })
           const verified = async () =>
-            authorize(
-              undefined,
-              undefined,
-              {
+            authorize({
+              name: undefined,
+              extra: undefined,
+              deps: {
                 authorize: authority.verify,
                 ...(deps.principalAccepted
                   ? { principalAccepted: deps.principalAccepted }
                   : {}),
-                prevalidationLimit: async () => true,
-                rateLimit: async () => true,
+                prevalidationLimit: () => Promise.resolve(true),
+                rateLimit: () => Promise.resolve(true),
               },
               config,
-            )
-          let initial: VerifiedPrincipal
+            })
+          let initial: VerifiedPrincipal | undefined = undefined
 
           try {
             initial = await verified()
@@ -439,7 +463,7 @@ export function createRemoteMcpApp(options: RemoteMcpOptions) {
             return rejected(413)
           }
 
-          let parsedBody: unknown
+          let parsedBody: unknown = undefined
 
           try {
             parsedBody = JSON.parse(await bodyText(request))
@@ -517,7 +541,8 @@ export function createRemoteMcpApp(options: RemoteMcpOptions) {
 
               return p
             },
-            prevalidationLimit: async () => !request.signal.aborted,
+            prevalidationLimit: () =>
+              synchronousPromise(() => !request.signal.aborted),
             ...(deps.drafts ? { drafts: work.wrap(deps.drafts) } : {}),
             ...(deps.semanticDrafts
               ? { semanticDrafts: work.wrap(deps.semanticDrafts) }
@@ -578,9 +603,19 @@ export function createRemoteMcpApp(options: RemoteMcpOptions) {
 
         return await Promise.race([serving, interrupted])
       } catch (error) {
-        return rejected(
-          timedOut ? 504 : error instanceof HttpRejection ? error.status : 500,
-        )
+        const getRejectionStatus = () => {
+          if (timedOut) {
+            return 504
+          }
+
+          if (error instanceof HttpRejection) {
+            return error.status
+          }
+
+          return 500
+        }
+
+        return rejected(getRejectionStatus())
       } finally {
         if (timer) {
           clearTimeout(timer)
@@ -590,6 +625,7 @@ export function createRemoteMcpApp(options: RemoteMcpOptions) {
         removeAbort()
 
         if (release) {
+          const releaseSlot = release
           const retire = async () => {
             await Promise.allSettled([
               Promise.resolve().then(() => server?.close()),
@@ -604,13 +640,15 @@ export function createRemoteMcpApp(options: RemoteMcpOptions) {
             }
 
             await work.drain()
-            release!()
+            releaseSlot()
             active.delete(lifetime)
             finish()
           }
           // Tracked by active/completion until real settlement. An unexpected
           // retirement failure retains its bounded slot rather than admitting more.
-          void retire().catch(() => {})
+          void retire().catch(() => {
+            /* Retirement failure retains the active admission slot and completion witness. */
+          })
         }
       }
     },

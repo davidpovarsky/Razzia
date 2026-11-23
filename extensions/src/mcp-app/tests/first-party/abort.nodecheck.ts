@@ -2,39 +2,58 @@ import { after, before, test } from "node:test"
 import assert from "node:assert/strict"
 import { existsSync } from "node:fs"
 import { DatabaseSync } from "node:sqlite"
-import { fixture, createInput, origin, snapshot } from "./fixtures.ts"
-import type { Session } from "./fixtures.ts"
+import {
+  fixture,
+  createInput,
+  origin,
+  snapshot,
+  requireObservedRecord,
+  type Session,
+} from "./fixtures.ts"
 import { preserveWitness } from "./review-evidence.fixture.ts"
 
-let f: Awaited<ReturnType<typeof fixture>>
+type InitializedFValue = Awaited<ReturnType<typeof fixture>>
+let f: InitializedFValue | undefined = undefined
+function requireInitializedF(): InitializedFValue {
+  if (f === undefined) {
+    throw new Error("Fixture state f was read before initialization")
+  }
+
+  return f
+}
 before(async () => {
   f = await fixture()
 })
 after(() => f?.close())
 
 function request(session: Session, controller: AbortController) {
-  return new Request(origin + "/drafts", {
+  return new Request(`${origin}/drafts`, {
     method: "POST",
     signal: controller.signal,
     headers: {
       host: new URL(origin).host,
       origin,
       "content-type": "application/json",
-      authorization: "Bearer " + session.token,
+      authorization: `Bearer ${session.token}`,
     },
     body: JSON.stringify(createInput()),
   })
 }
 
 test("post-body abort retains pending real authentication work and creates no private store", async () => {
-  const session = f.sessions[0]
+  const [session] = requireInitializedF().sessions
   const controller = new AbortController()
-  const subtle = globalThis.crypto.subtle
+  const { subtle } = globalThis.crypto
+  // oxlint-disable-next-line typescript/unbound-method -- Keep the raw verify intrinsic for fault injection; Reflect.apply below supplies its captured SubtleCrypto receiver.
   const original = subtle.verify
   const descriptor = Object.getOwnPropertyDescriptor(subtle, "verify")
   let calls = 0
-  let reached: () => void = () => {}
-  let release: () => void = () => {}
+  let reached: () => void = () => {
+    /* The following Promise executor installs this callback synchronously. */
+  }
+  let release: () => void = () => {
+    /* The following Promise executor installs this callback synchronously. */
+  }
   const finalAuthEntered = new Promise<void>((resolve) => {
     reached = resolve
   })
@@ -45,17 +64,20 @@ test("post-body abort retains pending real authentication work and creates no pr
     configurable: true,
     writable: true,
     value: async (...args: Parameters<typeof original>) => {
-      if (++calls === 2) {
+      calls += 1
+
+      if (calls === 2) {
         reached()
         await gate
       }
+
       // Actual WebCrypto verification, not a fabricated valid-token result.
-      return Reflect.apply(original, subtle, args) as Promise<boolean>
+      return Reflect.apply(original, subtle, args)
     },
   })
-  const beforeState = snapshot(f.root)
+  const beforeState = snapshot(requireInitializedF().root)
   let settled = false
-  const response = f.app.fetch(request(session, controller))
+  const response = requireInitializedF().app.fetch(request(session, controller))
   void response.then(
     () => {
       settled = true
@@ -67,6 +89,7 @@ test("post-body abort retains pending real authentication work and creates no pr
   const timeout = setTimeout(() => {
     release()
   }, 10_000)
+
   try {
     await Promise.race([
       finalAuthEntered,
@@ -75,17 +98,19 @@ test("post-body abort retains pending real authentication work and creates no pr
       }),
     ])
     controller.abort()
-    await new Promise<void>((resolve) => setImmediate(resolve))
+    await new Promise<void>((resolve) => {
+      setImmediate(resolve)
+    })
     assert.equal(controller.signal.aborted, true)
     assert.equal(settled, false)
-    assert.equal(existsSync(f.file(session.owner)), false)
+    assert.equal(existsSync(requireInitializedF().file(session.owner)), false)
     release()
     const result = await response
     assert.equal(result.status, 400)
-    assert.equal((await result.json()).data, undefined)
+    assert.equal(requireObservedRecord(await result.json()).data, undefined)
     assert.equal(calls, 2)
-    assert.equal(existsSync(f.file(session.owner)), false)
-    assert.deepEqual(snapshot(f.root), beforeState)
+    assert.equal(existsSync(requireInitializedF().file(session.owner)), false)
+    assert.deepEqual(snapshot(requireInitializedF().root), beforeState)
     preserveWitness("abort-post-body", {
       status: result.status,
       realVerifyCalls: calls,
@@ -97,13 +122,17 @@ test("post-body abort retains pending real authentication work and creates no pr
     clearTimeout(timeout)
     release()
     await Promise.allSettled([response])
-    if (descriptor) Reflect.defineProperty(subtle, "verify", descriptor)
-    else Reflect.deleteProperty(subtle, "verify")
+
+    if (descriptor) {
+      Reflect.defineProperty(subtle, "verify", descriptor)
+    } else {
+      Reflect.deleteProperty(subtle, "verify")
+    }
   }
 })
 
 test("abort at the verified-principal promise handoff prevents private work", async () => {
-  const session = f.sessions[1]
+  const [, session] = requireInitializedF().sessions
   const controller = new AbortController()
   const original = Object.freeze
   const descriptor = Object.getOwnPropertyDescriptor(Object, "freeze")
@@ -113,6 +142,7 @@ test("abort at the verified-principal promise handoff prevents private work", as
     ...descriptor,
     value: (value: unknown) => {
       const frozen = original(value)
+
       if (
         value &&
         typeof value === "object" &&
@@ -122,22 +152,28 @@ test("abort at the verified-principal promise handoff prevents private work", as
         value.sid === session.sid
       ) {
         scheduled = true
-        // principal finishes its synchronous live-authority checks before this
+
+        // The principal finishes its synchronous live-authority checks before this
+
         // microtask; abort runs before dispatch's await continuation resumes.
         queueMicrotask(() => controller.abort())
       }
+
       return frozen
     },
   })
-  const beforeState = snapshot(f.root)
+  const beforeState = snapshot(requireInitializedF().root)
+
   try {
-    const result = await f.app.fetch(request(session, controller))
+    const result = await requireInitializedF().app.fetch(
+      request(session, controller),
+    )
     assert.equal(scheduled, true)
     assert.equal(controller.signal.aborted, true)
     assert.equal(result.status, 400)
-    assert.equal((await result.json()).data, undefined)
-    assert.equal(existsSync(f.file(session.owner)), false)
-    assert.deepEqual(snapshot(f.root), beforeState)
+    assert.equal(requireObservedRecord(await result.json()).data, undefined)
+    assert.equal(existsSync(requireInitializedF().file(session.owner)), false)
+    assert.deepEqual(snapshot(requireInitializedF().root), beforeState)
     preserveWitness("abort-post-auth", {
       status: result.status,
       verifiedPrincipalObserved: scheduled,
@@ -150,30 +186,43 @@ test("abort at the verified-principal promise handoff prevents private work", as
 })
 
 test("postcommit abort withholds disclosure without claiming rollback", async () => {
-  const session = f.sessions[0]
+  const [session] = requireInitializedF().sessions
   const controller = new AbortController()
+  // oxlint-disable-next-line typescript/unbound-method -- Scoped SQLite fault injection calls the raw method with its live receiver and restores this exact function in finally.
   const original = DatabaseSync.prototype.exec
   let committed = false
-  DatabaseSync.prototype.exec = function (this: DatabaseSync, sql: string) {
+  DatabaseSync.prototype.exec = function observeCommitAbort(
+    this: DatabaseSync,
+    sql: string,
+  ) {
     const result = original.call(this, sql)
+
     if (sql === "COMMIT") {
       committed = true
       controller.abort()
     }
+
     return result
   }
+
   try {
-    const result = await f.app.fetch(request(session, controller))
+    const result = await requireInitializedF().app.fetch(
+      request(session, controller),
+    )
     assert.equal(committed, true)
     assert.equal(result.status, 400)
-    assert.equal((await result.json()).data, undefined)
+    assert.equal(requireObservedRecord(await result.json()).data, undefined)
   } finally {
     DatabaseSync.prototype.exec = original
   }
-  const db = new DatabaseSync(f.file(session.owner), { readOnly: true })
+
+  const db = new DatabaseSync(requireInitializedF().file(session.owner), {
+    readOnly: true,
+  })
+
   try {
     const counts = ["drafts", "operations", "audit"].map(
-      (name) => db.prepare("SELECT count(*) AS n FROM " + name).get()?.n,
+      (name) => db.prepare(`SELECT count(*) AS n FROM ${name}`).get()?.n,
     )
     assert.deepEqual(counts, [1, 1, 1])
     preserveWitness("abort-postcommit", {

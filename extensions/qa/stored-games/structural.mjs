@@ -28,14 +28,16 @@ export function verifyStoredStructure(games) {
     }
     const check = (name, passed) =>
       row.checks.push({ name, passed: Boolean(passed) })
-    let coordinator
+    let coordinator = undefined
+
     try {
-      const extras = fixture.extras
+      const { extras } = fixture
       const base = fixture.quizz
       check(
         "stored game has questions",
         Array.isArray(base?.questions) && base.questions.length > 0,
       )
+
       if (extras) {
         check("sidecar belongs to the original game", extras.quizId === base.id)
         const { id: _storageId, ...logicalBase } = base
@@ -53,6 +55,7 @@ export function verifyStoredStructure(games) {
           new Set(extras.questionIds ?? []).size ===
             (extras.questionIds?.length ?? 0),
         )
+
         if (fixture.expected?.questionIds) {
           check(
             "fixture question identities are retained",
@@ -68,6 +71,7 @@ export function verifyStoredStructure(games) {
           "covered by isolated native-host/browser verification"
         row.passed = row.checks.every((item) => item.passed)
         rows.push(row)
+
         continue
       }
 
@@ -76,9 +80,12 @@ export function verifyStoredStructure(games) {
         "stored authored sidecar satisfies the current schema",
         validation.success,
       )
-      if (!validation.success)
+
+      if (!validation.success) {
         row.schemaIssueCount = validation.error.issues.length
-      const timeline = extras.timeline
+      }
+
+      const { timeline } = extras
       const questionItems = timeline.filter((item) => item.kind === "question")
       const questionOrder = questionItems.map((item) => item.questionId)
       const referencedScenes = new Set(
@@ -104,7 +111,8 @@ export function verifyStoredStructure(games) {
           new Set(questionOrder).size === questionOrder.length &&
           extras.questionIds.every((id) => questionOrder.includes(id)),
       )
-      if (fixture.expected?.timelineIds)
+
+      if (fixture.expected?.timelineIds) {
         check(
           "fixture timeline identities are retained",
           same(
@@ -112,7 +120,9 @@ export function verifyStoredStructure(games) {
             fixture.expected.timelineIds,
           ),
         )
-      if (fixture.expected?.timelineKinds)
+      }
+
+      if (fixture.expected?.timelineKinds) {
         check(
           "fixture timeline kinds are retained",
           same(
@@ -120,7 +130,9 @@ export function verifyStoredStructure(games) {
             fixture.expected.timelineKinds,
           ),
         )
-      if (fixture.expected?.unusedSceneIds)
+      }
+
+      if (fixture.expected?.unusedSceneIds) {
         check(
           "unused scene definitions remain outside the timeline",
           same(
@@ -128,6 +140,7 @@ export function verifyStoredStructure(games) {
             [...fixture.expected.unusedSceneIds].sort(),
           ),
         )
+      }
 
       const questionStarts = [],
         visitedSteps = [],
@@ -151,7 +164,9 @@ export function verifyStoredStructure(games) {
           onFinish() {
             finishCount += 1
           },
-          onBroadcastState() {},
+          onBroadcastState() {
+            /* This structural fixture checks scene transitions without broadcasting state. */
+          },
         },
       })
       const hooks = createShowRoundHooks({
@@ -164,10 +179,18 @@ export function verifyStoredStructure(games) {
         gameMode: base.gameMode,
         round: { currentQuestionIndex: 0 },
         roster: {},
-        setLastDistribution() {},
-        syncRosterScoresFromPlayers() {},
-        broadcastHostPresence() {},
-        broadcastExtensionState() {},
+        setLastDistribution() {
+          /* This structural fixture does not store a vote distribution. */
+        },
+        syncRosterScoresFromPlayers() {
+          /* This structural fixture has no player scores to synchronize. */
+        },
+        broadcastHostPresence() {
+          /* This structural fixture has no connected host to notify. */
+        },
+        broadcastExtensionState() {
+          /* This structural fixture observes the session directly instead of broadcasting it. */
+        },
       })
       row.nativeStartCountdownSkipped =
         hooks.skipShowStartCountdown?.() ?? false
@@ -180,13 +203,19 @@ export function verifyStoredStructure(games) {
         guard += 1
       ) {
         const step = coordinator.getAuthoritativeStepEnvelope("manager")
-        if (!step) throw new Error("missing active step")
+
+        if (!step) {
+          throw new Error("missing active step")
+        }
+
         visitedSteps.push(step.id)
+
         if (step.kind === "question") {
           const index = extras.questionIds.indexOf(step.questionId)
           completedQuestions += 1
           acceptedOnlyQuestions &&= coordinator.canAcceptAnswers()
           ordinalsCorrect &&= step.questionOrdinal === completedQuestions
+
           if (
             hooks.shouldShowLeaderboard?.({
               currentQuestionIndex: index,
@@ -194,16 +223,21 @@ export function verifyStoredStructure(games) {
               currentCategory: base.questions[index]?.category,
               nextCategory: base.questions[index + 1]?.category,
             })
-          )
+          ) {
             automaticBoards.push(completedQuestions)
+          }
+
           hooks.onQuestionCompleted(index, () => {
             throw new Error("unexpected fallback advance")
           })
         } else {
           visitedScenes.push(step.sceneId)
           acceptedOnlyQuestions &&= !coordinator.canAcceptAnswers()
-          if (step.kind === "leaderboard")
+
+          if (step.kind === "leaderboard") {
             authoredBoards.push(completedQuestions)
+          }
+
           const before = coordinator.currentIndex
           staleSceneCommandsRejected &&= !coordinator.advanceScene(
             step.sceneId,
@@ -211,10 +245,12 @@ export function verifyStoredStructure(games) {
             step.stepIndex,
           )
           staleSceneCommandsRejected &&= coordinator.currentIndex === before
+
           if (
             !coordinator.advanceScene(step.sceneId, step.epoch, step.stepIndex)
-          )
+          ) {
             throw new Error("canonical advance rejected")
+          }
         }
       }
 
@@ -251,12 +287,14 @@ export function verifyStoredStructure(games) {
           (id) => referencedScenes.has(id) && !unusedScenes.has(id),
         ),
       )
+
       if (fixture.expected?.leaderboardAfterQuestions) {
         check(
           "authored leaderboards occur at their stored question boundaries",
           same(authoredBoards, fixture.expected.leaderboardAfterQuestions),
         )
       }
+
       if (
         ["cardOnly", "disabled"].includes(extras.defaults.leaderboardPolicy)
       ) {
@@ -265,6 +303,7 @@ export function verifyStoredStructure(games) {
           automaticBoards.length === 0,
         )
       }
+
       check(
         "authored timeline reaches finished once",
         coordinator.currentPhase === "finished" && finishCount === 1,
@@ -284,8 +323,10 @@ export function verifyStoredStructure(games) {
     } finally {
       coordinator?.dispose()
     }
+
     rows.push(row)
   }
+
   return {
     schemaVersion: 1,
     layer: "structural-only",

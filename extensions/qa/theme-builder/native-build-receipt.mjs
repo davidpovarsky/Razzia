@@ -14,14 +14,19 @@ const mounts = JSON.parse(
 ).sort((a, b) => b.destination.length - a.destination.length)
 const sha = (bytes) => createHash("sha256").update(bytes).digest("hex")
 const inputs = graph.modules.map(({ id }) => {
-  const path = id.split("?")[0]
-  if (!path.startsWith("/work/")) return { id, observation: "virtual-module" }
+  const [path] = id.split("?")
+
+  if (!path.startsWith("/work/")) {
+    return { id, observation: "virtual-module" }
+  }
+
   try {
     const real = realpathSync(path),
       bytes = readFileSync(real),
       mount = mounts.find(
-        (m) => real === m.destination || real.startsWith(m.destination + "/"),
+        (m) => real === m.destination || real.startsWith(`${m.destination}/`),
       )
+
     return {
       id,
       observedRealpath: real,
@@ -39,6 +44,7 @@ const outputs = readdirSync(`${prefix}-candidate`)
   .filter((name) => statSync(`${prefix}-candidate/${name}`).isFile())
   .map((name) => {
     const bytes = readFileSync(`${prefix}-candidate/${name}`)
+
     return { path: name, bytes: bytes.length, sha256: sha(bytes) }
   })
 const forbidden = graph.modules.filter(
@@ -62,8 +68,10 @@ writeFileSync(
     2,
   ),
 )
+
 if (
   forbidden.length ||
   inputs.some((entry) => entry.observation === "not-a-readable-file")
-)
+) {
   process.exitCode = 1
+}

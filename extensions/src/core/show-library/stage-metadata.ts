@@ -7,9 +7,11 @@ import {
 } from "./stage-metadata-schema"
 
 declare const validatedStageMetadata: unique symbol
+
 export type ValidatedPreviewStageMetadata = PreviewStageMetadata & {
   readonly [validatedStageMetadata]: true
 }
+
 const bindings = new WeakMap<
   object,
   {
@@ -34,7 +36,11 @@ export function derivePreviewStageMetadata(
       getPreviewIdentityId(draft.input.identityMap, "questions", card.key) ===
       currentQuestionId,
   )
-  if (index < 0) throw new Error("show-library:unknown-stage-question")
+
+  if (index < 0) {
+    throw new Error("show-library:unknown-stage-question")
+  }
+
   const metadata = previewStageMetadataSchema.parse({
     portVersion: 3,
     identityRuleVersion: 2,
@@ -46,23 +52,31 @@ export function derivePreviewStageMetadata(
     metadata,
     Object.freeze({ draft, plan, questionId: currentQuestionId }),
   )
+
   return metadata
 }
 
 /** Call at the trusted host boundary before handing only public fields to the renderer. */
-export function assertBoundPreviewStageMetadata(
-  draft: ValidatedPreviewDraft,
-  plan: Readonly<PreviewPlan>,
-  currentQuestionId: string,
-  metadata: ValidatedPreviewStageMetadata,
-): void {
+export function assertBoundPreviewStageMetadata({
+  draft,
+  plan,
+  currentQuestionId,
+  metadata,
+}: {
+  draft: ValidatedPreviewDraft
+  plan: Readonly<PreviewPlan>
+  currentQuestionId: string
+  metadata: ValidatedPreviewStageMetadata
+}): void {
   assertBoundPreviewPlan(draft, plan)
   const binding = bindings.get(metadata)
+
   if (
     !binding ||
     binding.draft !== draft ||
     binding.plan !== plan ||
     binding.questionId !== currentQuestionId
-  )
+  ) {
     throw new Error("show-library:unbound-stage-metadata")
+  }
 }

@@ -9,11 +9,13 @@ registerHooks({
       const target = new URL(specifier, context.parentURL)
       for (const suffix of [".ts", "/index.ts"]) {
         const candidate = new URL(target.href + suffix)
+
         if (existsSync(fileURLToPath(candidate))) {
           return nextResolve(candidate.href, context)
         }
       }
     }
+
     return nextResolve(specifier, context)
   },
 })

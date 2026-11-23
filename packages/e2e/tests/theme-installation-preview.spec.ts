@@ -214,12 +214,18 @@ test("reviews all fifteen native slots, sixteen explicit audio events and eight 
     }
   }
   for (const locale of SHOW_THEME_LOCALES) {
+    const labels = localizations[locale]
+
+    if (!labels) {
+      throw new Error(`Preview must contain the ${locale} locale map`)
+    }
+
     await page.goto(`${path}?lng=${locale}`)
     await expect(
       page
         .getByTestId("theme-installation-preview")
         .getByRole("heading", { level: 1 }),
-    ).toContainText(localizations[locale][definition.nameKey])
+    ).toContainText(labels[definition.nameKey])
   }
   await page.emulateMedia({ reducedMotion: "reduce" })
   await page.reload()

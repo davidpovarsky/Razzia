@@ -1,9 +1,11 @@
 import assert from "node:assert/strict"
 import test from "node:test"
 import { harness, show, newKey, data } from "./fixtures.ts"
+import { synchronousPromise } from "../../../core/synchronous-promise.ts"
 
 test("invalid authored/schema/settings/media rejected without mutation", async () => {
   const h = await harness()
+
   try {
     for (const raw of [
       "{}",
@@ -50,21 +52,25 @@ test("scoped ordinary export delegates without adding a new consent stage", asyn
   let exports = 0
   const h = await harness({
     exports: {
-      async createAuthorizedDownload(_p, selection, format) {
-        exports++
-        return {
-          exportId: newKey(),
-          draftId: selection.draftId,
-          revision: selection.expectedRevision,
-          format,
-          downloadUrl: "https://studio.example.invalid/download/" + newKey(),
-          expiresAt: new Date(Date.now() + 60_000).toISOString(),
-          sha256: "a".repeat(64),
-          bytes: 10,
-        }
+      createAuthorizedDownload(_p, selection, format) {
+        return synchronousPromise(() => {
+          exports += 1
+
+          return {
+            exportId: newKey(),
+            draftId: selection.draftId,
+            revision: selection.expectedRevision,
+            format,
+            downloadUrl: `https://studio.example.invalid/download/${newKey()}`,
+            expiresAt: new Date(Date.now() + 60_000).toISOString(),
+            sha256: "a".repeat(64),
+            bytes: 10,
+          }
+        })
       },
     },
   })
+
   try {
     const draft = data(
       await h.call("create_game_draft", {

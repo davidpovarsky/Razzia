@@ -32,9 +32,12 @@ export function diagnoseStoreMembershipReceipt(
       file.originalIndexRow.integrity.slice(7),
       "base64",
     ).toString("hex")
-    if (sriHex !== file.originalIndexRow.sha512)
+
+    if (sriHex !== file.originalIndexRow.sha512) {
       issues.push(`index-sha512-mismatch:${file.packagePath}`)
+    }
   }
+
   return freeze(issues.sort())
 }
 
@@ -55,8 +58,10 @@ export function diagnoseHostReceiptAuthority(
   for (const resource of resources.resources) {
     if (resource.rights.status === "unknown") {
       issues.push(`rights-unknown:${resource.artifactPath}`)
+
       continue
     }
+
     const reference = resource.rights.reviewReceipt
     const trusted = ROOT_REVIEWED_RIGHTS_RECEIPTS.some(
       (receipt) =>
@@ -78,8 +83,10 @@ export function diagnoseHostReceiptAuthority(
             entry.obligations.length > 0,
         ),
     )
-    if (!trusted)
+
+    if (!trusted) {
       issues.push(`rights-receipt-untrusted:${resource.artifactPath}`)
+    }
   }
   const packageSources = [
     ...artifact.source.files,
@@ -101,11 +108,14 @@ export function diagnoseHostReceiptAuthority(
             file.observed.sha256 === source.sha256,
         ),
     )
-    if (!trusted)
+
+    if (!trusted) {
       issues.push(
         `package-membership-untrusted:${source.packageName}/${source.packagePath}`,
       )
+    }
   }
+
   return freeze({
     status: "unavailable" as const,
     executableAcceptance: false as const,

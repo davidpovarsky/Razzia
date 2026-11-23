@@ -48,6 +48,7 @@ function packageReceipt() {
       sha256: "c".repeat(64),
     })),
   }
+
   return {
     uploadId: "private-upload",
     revision: 4,
@@ -88,10 +89,12 @@ describe("private package application preview receipt", () => {
       { role: "spectator", locale: "en", reducedMotion: false },
     )
     const plan = resolveApplicationPreviewPlan(draft)
+
     if (getApplicationPreviewManifest().pins.length) {
       expect(plan.resolution.kind).toBe("exact")
       expect(plan.resolution.pin?.rendererBuildSha256).toBe(context.buildDigest)
     }
+
     expect(draft.show.cards).toHaveLength(23)
     expect(
       showThemeRegistry.get("private-package-theme", "1.0.0"),

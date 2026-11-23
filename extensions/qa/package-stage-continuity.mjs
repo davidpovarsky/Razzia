@@ -7,11 +7,13 @@ const source = process.env.TADAZZ_CONTINUITY_SOURCE
 const dependencies = process.env.TADAZZ_CONTINUITY_DEPS
 const themeSource = process.env.TADAZZ_CONTINUITY_THEME
 const evidence = process.env.TADAZZ_CONTINUITY_EVIDENCE
+
 if (!source || !dependencies || !themeSource || !evidence) {
   throw new Error(
     "Explicit isolated source, dependency, fixture and evidence paths required",
   )
 }
+
 const require = createRequire(
   path.join(dependencies, "extensions/package.json"),
 )
@@ -119,28 +121,36 @@ const bundle = await fs.readFile(path.join(evidence, "host.js"))
 const theme = await fs.readFile(path.join(evidence, "theme.js"))
 const themeCss = await fs.readFile(path.join(evidence, "theme.css"))
 let capabilityRequests = 0
-let childPort
+let childPort = undefined
+
 const child = http.createServer((request, response) => {
   if (request.url.startsWith("/theme.js")) {
     response.writeHead(200, { "Content-Type": "text/javascript" })
     response.end(theme)
+
     return
   }
+
   if (request.url.startsWith("/theme.css")) {
     response.writeHead(200, { "Content-Type": "text/css" })
     response.end(themeCss)
+
     return
   }
+
   response.writeHead(200, { "Content-Type": "text/html" })
   response.end(
     '<!doctype html><link rel="stylesheet" href="/theme.css"><div id="root"></div><script src="/theme.js"></script>',
   )
 })
-await new Promise((resolve) => child.listen(0, "127.0.0.1", resolve))
+await new Promise((resolve) => {
+  child.listen(0, "127.0.0.1", resolve)
+})
 childPort = child.address().port
 const parent = http.createServer((request, response) => {
   if (request.url.startsWith("/api/packages/runtime/")) {
-    capabilityRequests++
+    capabilityRequests += 1
+
     setTimeout(() => {
       response.writeHead(200, { "Content-Type": "application/json" })
       response.end(
@@ -149,19 +159,25 @@ const parent = http.createServer((request, response) => {
         }),
       )
     }, 250)
+
     return
   }
+
   if (request.url === "/host.js") {
     response.writeHead(200, { "Content-Type": "text/javascript" })
     response.end(bundle)
+
     return
   }
+
   response.writeHead(200, { "Content-Type": "text/html" })
   response.end(
     '<!doctype html><style>html,body{margin:0}#root{width:1200px;height:675px}.h-full{height:100%}.w-full{width:100%}.relative{position:relative}iframe{display:block;border:0}</style><div id="root"></div><script src="/host.js"></script>',
   )
 })
-await new Promise((resolve) => parent.listen(0, "127.0.0.1", resolve))
+await new Promise((resolve) => {
+  parent.listen(0, "127.0.0.1", resolve)
+})
 const browser = await chromium.launch({
   headless: true,
   args: ["--no-sandbox"],
@@ -170,8 +186,9 @@ const page = await browser.newPage({ viewport: { width: 1200, height: 675 } })
 await page.clock.install()
 const errors = []
 page.on("pageerror", (error) => {
-  if (!error.message.includes("intentional-fixture-failure"))
+  if (!error.message.includes("intentional-fixture-failure")) {
     errors.push(error.message)
+  }
 })
 async function frame() {
   const iframe = page.locator('[data-testid="package-runtime-frame"]')
@@ -179,10 +196,12 @@ async function frame() {
   const handle = await iframe.elementHandle()
   const current = await handle.contentFrame()
   await current.locator(".bms-question-title").waitFor({ state: "visible" })
+
   return current
 }
 async function capture() {
   const current = await frame()
+
   return current.evaluate(() => {
     const heading = document.querySelector(".bms-question-title")
     const panel = document.querySelector(".bms-question-paper")
@@ -192,11 +211,15 @@ async function capture() {
     window.__originalAnswers ??= [
       ...document.querySelectorAll(".bms-answer-card"),
     ]
-    if (!window.__originalAnswers.length)
+
+    if (!window.__originalAnswers.length) {
       window.__originalAnswers = [
         ...document.querySelectorAll(".bms-answer-card"),
       ]
+    }
+
     window.__documentIdentity ??= crypto.randomUUID()
+
     return {
       document: window.__documentIdentity,
       questionAnimations: window.__questionAnimations,
@@ -216,6 +239,7 @@ async function capture() {
 function check(name, pass, details) {
   result.checks.push({ name, passed: Boolean(pass), ...details })
 }
+
 try {
   await page.goto(`http://127.0.0.1:${parent.address().port}`)
   await frame()
@@ -256,7 +280,7 @@ try {
   )
   // Advance both parent and real SDK clocks together, flushing each heartbeat.
   // An instant wall-clock jump would intentionally trip runtime health checks.
-  for (let second = 0; second < 241; second++) {
+  for (let second = 0; second < 241; second += 1) {
     await page.clock.runFor(1000)
     await page.evaluate(() => Promise.resolve())
   }
@@ -330,12 +354,20 @@ try {
   result.passed = false
 } finally {
   await browser.close()
-  await new Promise((resolve) => parent.close(resolve))
-  await new Promise((resolve) => child.close(resolve))
+  await new Promise((resolve) => {
+    parent.close(resolve)
+  })
+  await new Promise((resolve) => {
+    child.close(resolve)
+  })
 }
+
 await fs.writeFile(
   path.join(evidence, "receipt.json"),
   JSON.stringify(result, null, 2),
 )
 console.log(JSON.stringify(result))
-if (!result.passed) process.exitCode = 1
+
+if (!result.passed) {
+  process.exitCode = 1
+}

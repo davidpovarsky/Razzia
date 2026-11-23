@@ -104,6 +104,7 @@ describe("P0 Telephony, Roster, Redial & Host Presence E2E (Real Hono + Real Soc
     if (tempConfigDir && fs.existsSync(tempConfigDir)) {
       fs.rmSync(tempConfigDir, { recursive: true, force: true })
     }
+
     vi.unstubAllEnvs()
   }, 15000)
 
@@ -113,9 +114,11 @@ describe("P0 Telephony, Roster, Redial & Host Presence E2E (Real Hono + Real Soc
     }
 
     const headers = new Headers(init?.headers)
+
     if (new URL(url).pathname === "/api/games/pilot-phone") {
       headers.set("x-tada-pilot-secret", TEST_PILOT_SECRET)
     }
+
     return realTransport.http.fetch(url, { ...init, headers })
   }
 

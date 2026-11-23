@@ -3,6 +3,7 @@ import { readFileSync, writeFileSync } from "node:fs"
 import { createHash } from "node:crypto"
 import { defineConfig } from "vite"
 const baseline = process.env.TADAZZ_BOUNDARY_BASELINE === "1"
+
 export default defineConfig({
   root: fileURLToPath(new URL(".", import.meta.url)),
   publicDir: false,
@@ -19,8 +20,9 @@ export default defineConfig({
         if (
           baseline &&
           id.endsWith("/components/theme-builder/StudioThemeBuilder.tsx")
-        )
+        ) {
           return readFileSync("/input-originalStudio.tsx", "utf8")
+        }
       },
       generateBundle() {
         const modules = [...this.getModuleIds()].sort()
@@ -49,7 +51,10 @@ export default defineConfig({
             2,
           ),
         )
-        if (forbidden.length) throw new Error("qa:unexpected-browser-authority")
+
+        if (forbidden.length) {
+          throw new Error("qa:unexpected-browser-authority")
+        }
       },
     },
   ],

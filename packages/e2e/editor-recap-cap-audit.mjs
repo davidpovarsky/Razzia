@@ -14,27 +14,34 @@ let result = {}
 page.on("pageerror", (e) => errors.push(e.message))
 async function theme(id) {
   await page.getByTestId("studio-tab-settings").click()
-  const button = page.getByTestId("show-theme-" + id).getByRole("button")
-  if (await button.isEnabled()) await button.click()
-  if (await page.getByRole("alertdialog").isVisible())
+  const button = page.getByTestId(`show-theme-${id}`).getByRole("button")
+
+  if (await button.isEnabled()) {
+    await button.click()
+  }
+
+  if (await page.getByRole("alertdialog").isVisible()) {
     await page
       .getByRole("alertdialog")
       .getByRole("button", { name: "Use this theme", exact: true })
       .click()
+  }
+
   await page.getByTestId("studio-tab-questions").click()
 }
-async function cap(id, max, value, name) {
+async function cap({ id, max, value, name }) {
   await theme(id)
   const input = page.getByTestId("recap-max-items-input")
   await expect(input).toHaveAttribute("max", String(max))
   await expect(input).toHaveValue(String(value))
   await expect(
-    page.getByText("Questions Per Stage Page (1–" + max + ")", { exact: true }),
+    page.getByText(`Questions Per Stage Page (1–${max})`, { exact: true }),
   ).toBeVisible()
   checks.push({ name, theme: id, max, value })
   await input.scrollIntoViewIfNeeded()
-  await page.screenshot({ path: path.join(out, name + ".png"), fullPage: true })
+  await page.screenshot({ path: path.join(out, `${name}.png`), fullPage: true })
 }
+
 try {
   await page.addInitScript(() => localStorage.setItem("i18nextLng", "en"))
   await page.goto("http://127.0.0.1:3180/manager?lng=en")
@@ -50,20 +57,37 @@ try {
   await page.getByRole("option", { name: "Answer Recap", exact: true }).click()
   await page.getByTestId("studio-add-card-btn").click()
   await page.getByTestId("recap-max-items-input").fill("8")
-  await cap("razzia-original", 8, 8, "original-eight")
-  await cap("tadazz-classic", 6, 6, "classic-six-effective")
-  await cap("razzia-original", 8, 8, "original-eight-preserved")
-  await cap("tadazz-classic", 6, 6, "classic-limit")
+  await cap({ id: "razzia-original", max: 8, value: 8, name: "original-eight" })
+  await cap({
+    id: "tadazz-classic",
+    max: 6,
+    value: 6,
+    name: "classic-six-effective",
+  })
+  await cap({
+    id: "razzia-original",
+    max: 8,
+    value: 8,
+    name: "original-eight-preserved",
+  })
+  await cap({ id: "tadazz-classic", max: 6, value: 6, name: "classic-limit" })
   await page.getByTestId("recap-max-items-input").fill("8")
   await expect(page.getByTestId("recap-max-items-input")).toHaveValue("6")
-  await cap("razzia-original", 8, 6, "explicit-edit-persists-six")
+  await cap({
+    id: "razzia-original",
+    max: 8,
+    value: 6,
+    name: "explicit-edit-persists-six",
+  })
   expect(errors).toEqual([])
   result = { ok: true, checks, errors }
 } catch (e) {
   result = { ok: false, error: String(e), checks, errors }
   await page
     .screenshot({ path: path.join(out, "failure.png"), fullPage: true })
-    .catch(() => {})
+    .catch(() => {
+      /* Keep the recorded audit outcome if its diagnostic screenshot is unavailable. */
+    })
   process.exitCode = 1
 } finally {
   fs.writeFileSync(

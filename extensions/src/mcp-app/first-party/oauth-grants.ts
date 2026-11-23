@@ -59,6 +59,7 @@ import {
   createNativeCatalog,
   type FirstPartyCatalogOptions,
 } from "./oauth-catalog.ts"
+import { synchronousPromise } from "../../core/synchronous-promise.ts"
 
 const TABLES = {
   metadata:
@@ -97,11 +98,13 @@ const invalid = () => new OAuthError("invalid_grant")
 const missing = (error: unknown) =>
   error instanceof Error && "code" in error && error.code === "ENOENT"
 
-/** Tenant-owned grant/code/rotating-refresh authority. Tokens/codes are stored
+/**
+ * Tenant-owned grant/code/rotating-refresh authority. Tokens/codes are stored
  * as SHA256 digests, with one encrypted short retry capsule per connection.
  * This owns no draft/native database or ambient account.
  * Existing first-party account/session authority is checked at every decision.
  */
+
 export class FirstPartyOAuthGrants {
   constructor(
     private readonly auth: FirstPartyBindings,
@@ -109,54 +112,95 @@ export class FirstPartyOAuthGrants {
   ) {
     assertFirstPartyBindings(auth)
   }
-  private ancestry(path: string, createFrom?: string) {
+  private static ancestry(path: string, createFrom?: string) {
     let current = parse(path).root
     for (const part of path.slice(current.length).split(sep).filter(Boolean)) {
       current = join(current, part)
+
       try {
         const stat = lstatSync(current)
-        if (!stat.isDirectory() || stat.isSymbolicLink()) throw unavailable()
-      } catch (error) {
-        if (!missing(error)) throw unavailable()
-        if (!createFrom) return false
-        if (current !== createFrom && !current.startsWith(createFrom + sep))
+
+        if (!stat.isDirectory() || stat.isSymbolicLink()) {
           throw unavailable()
+        }
+      } catch (error) {
+        if (!missing(error)) {
+          throw unavailable()
+        }
+
+        if (!createFrom) {
+          return false
+        }
+
+        if (current !== createFrom && !current.startsWith(createFrom + sep)) {
+          throw unavailable()
+        }
+
         mkdirSync(current, { mode: 0o700 })
         const stat = lstatSync(current)
-        if (!stat.isDirectory() || stat.isSymbolicLink()) throw unavailable()
+
+        if (!stat.isDirectory() || stat.isSymbolicLink()) {
+          throw unavailable()
+        }
       }
     }
+
     return true
   }
   private open(accountId: string, mutation: boolean, create = false) {
     this.auth.configured()
-    if (!z.uuid().safeParse(accountId).success) throw invalid()
+
+    if (!z.uuid().safeParse(accountId).success) {
+      throw invalid()
+    }
+
     const root = resolve(this.auth.root)
-    if (root === parse(root).root || !this.ancestry(root)) throw unavailable()
+
+    if (root === parse(root).root || !FirstPartyOAuthGrants.ancestry(root)) {
+      throw unavailable()
+    }
+
     const dir = join(root, "tenants", accountId, "extensions", "mcp-oauth")
-    if (!this.ancestry(dir, create ? join(root, "tenants") : undefined))
+
+    if (
+      !FirstPartyOAuthGrants.ancestry(
+        dir,
+        create ? join(root, "tenants") : undefined,
+      )
+    ) {
       return undefined
+    }
+
     const file = join(dir, "grants.sqlite")
     for (const suffix of ["-journal", "-wal", "-shm"]) {
       try {
         lstatSync(file + suffix)
         throw unavailable()
       } catch (error) {
-        if (!missing(error)) throw error
+        if (!missing(error)) {
+          throw error
+        }
       }
     }
     let created = false
+
     try {
       const stat = lstatSync(file)
-      if (!stat.isFile() || stat.isSymbolicLink() || stat.nlink !== 1)
+
+      if (!stat.isFile() || stat.isSymbolicLink() || stat.nlink !== 1) {
         throw unavailable()
+      }
+
       const fd = openSync(
         file,
+        // oxlint-disable-next-line typescript/no-unnecessary-condition -- Keep the existing cross-platform fallback because this optional native flag is absent on some supported hosts.
         constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0),
       )
+
       try {
         const opened = fstatSync(fd)
         const header = Buffer.alloc(100)
+
         if (
           opened.dev !== stat.dev ||
           opened.ino !== stat.ino ||
@@ -164,39 +208,54 @@ export class FirstPartyOAuthGrants {
           header.subarray(0, 16).toString("binary") !== "SQLite format 3\0" ||
           header[18] !== 1 ||
           header[19] !== 1
-        )
+        ) {
           throw unavailable()
+        }
       } finally {
         closeSync(fd)
       }
     } catch (error) {
-      if (!missing(error)) throw error
-      if (!create) return undefined
+      if (!missing(error)) {
+        throw error
+      }
+
+      if (!create) {
+        return undefined
+      }
+
       const fd = openSync(
         file,
         constants.O_CREAT |
           constants.O_EXCL |
           constants.O_WRONLY |
+          // oxlint-disable-next-line typescript/no-unnecessary-condition -- Keep the existing cross-platform fallback because this optional native flag is absent on some supported hosts.
           (constants.O_NOFOLLOW ?? 0),
         0o600,
       )
       closeSync(fd)
       created = true
     }
+
     const db = new DatabaseSync(file, { readOnly: !mutation, timeout: 1000 })
+
     try {
       db.exec("PRAGMA trusted_schema=OFF")
+
       if (created) {
         db.exec(
           "PRAGMA journal_mode=DELETE; PRAGMA synchronous=FULL; BEGIN IMMEDIATE",
         )
-        db.exec(Object.values(TABLES).join(";\n") + ";")
+        db.exec(`${Object.values(TABLES).join(";\n")};`)
         db.prepare("INSERT INTO metadata(owner,version) VALUES(?,1)").run(
           accountId,
         )
         db.exec("PRAGMA user_version=1; COMMIT")
       }
-      if (!mutation) db.exec("PRAGMA query_only=ON")
+
+      if (!mutation) {
+        db.exec("PRAGMA query_only=ON")
+      }
+
       const actual = db
         .prepare(
           "SELECT type,name,tbl_name,sql FROM sqlite_schema ORDER BY name COLLATE BINARY LIMIT 20",
@@ -208,30 +267,40 @@ export class FirstPartyOAuthGrants {
       )
       for (const table of Object.keys(TABLES).filter(
         (name) => name !== "audit",
-      ))
-        expected.push([
-          "index",
-          "sqlite_autoindex_" + table + "_1",
-          table,
-          null,
-        ])
-      expected.sort((a, b) =>
-        String(a[1]) < String(b[1]) ? -1 : String(a[1]) > String(b[1]) ? 1 : 0,
-      )
+      )) {
+        expected.push(["index", `sqlite_autoindex_${table}_1`, table, null])
+      }
+      expected.sort((a, b) => {
+        if (String(a[1]) < String(b[1])) {
+          return -1
+        }
+
+        if (String(a[1]) > String(b[1])) {
+          return 1
+        }
+
+        return 0
+      })
+
       if (
         JSON.stringify(actual) !== JSON.stringify(expected) ||
         db.prepare("PRAGMA user_version").get()?.user_version !== 1 ||
         db.prepare("PRAGMA journal_mode").get()?.journal_mode !== "delete" ||
         db.prepare("PRAGMA quick_check(1)").get()?.quick_check !== "ok"
-      )
+      ) {
         throw unavailable()
+      }
+
       const metadata = db.prepare("SELECT owner,version FROM metadata").all()
+
       if (
         metadata.length !== 1 ||
         metadata[0]?.owner !== accountId ||
         metadata[0]?.version !== 1
-      )
+      ) {
         throw unavailable()
+      }
+
       return db
     } catch (error) {
       db.close()
@@ -260,18 +329,22 @@ export class FirstPartyOAuthGrants {
     const raw = db
       .prepare("SELECT * FROM grants WHERE owner=? AND id=?")
       .get(accountId, grantId)
-    if (!raw || raw.state !== "active" || typeof raw.scope !== "string")
+
+    if (raw?.state !== "active" || typeof raw.scope !== "string") {
       throw invalid()
+    }
+
     const result = grantSchema.safeParse({
       grantId: raw.id,
       accountId: raw.owner,
       subject: raw.subject,
       clientId: raw.client_id,
       sid: raw.sid,
-      scopes: JSON.parse(raw.scope),
+      scopes: JSON.parse(raw.scope) as unknown,
       expiresAt: raw.expires_ms,
       active: true,
     })
+
     if (
       !result.success ||
       result.data.subject !== accountId ||
@@ -280,19 +353,29 @@ export class FirstPartyOAuthGrants {
       allowLegacyRenewal
         ? this.auth.delegatedConnectionActive(accountId, result.data.sid)
         : this.auth.delegatedSessionActive(accountId, result.data.sid))
-    )
+    ) {
       throw invalid()
+    }
+
     const allowed = this.protocol.client(result.data.clientId).scopes
-    if (result.data.scopes.some((scope) => !allowed.includes(scope)))
+
+    if (result.data.scopes.some((scope) => !allowed.includes(scope))) {
       throw invalid()
+    }
+
     return result.data
   }
-  private audit(
-    db: DatabaseSync,
-    grantId: string,
-    kind: string,
-    mutation?: MutationIdentity,
-  ) {
+  private static audit({
+    db,
+    grantId,
+    kind,
+    mutation,
+  }: {
+    db: DatabaseSync
+    grantId: string
+    kind: string
+    mutation?: MutationIdentity
+  }) {
     db.prepare(
       "INSERT INTO audit(grant_id,kind,request_key,correlation_id,input_digest,created_ms) VALUES(?,?,?,?,?,?)",
     ).run(
@@ -309,24 +392,32 @@ export class FirstPartyOAuthGrants {
     create: boolean,
     run: (db: DatabaseSync) => T,
   ) {
-    let db: DatabaseSync | undefined
+    let db: DatabaseSync | undefined = undefined
     let active = false
+
     try {
       db = this.open(accountId, true, create)
-      if (!db) throw invalid()
+
+      if (!db) {
+        throw invalid()
+      }
+
       db.exec("PRAGMA synchronous=FULL; BEGIN IMMEDIATE")
       active = true
       const result = run(db)
       db.exec("COMMIT")
       active = false
+
       return result
     } catch (error) {
-      if (active)
+      if (active) {
         try {
           db?.exec("ROLLBACK")
         } catch {
           /* Preserve the original uncertain failure. */
         }
+      }
+
       throw error instanceof OAuthError || error instanceof ToolError
         ? error
         : unavailable()
@@ -334,26 +425,39 @@ export class FirstPartyOAuthGrants {
       try {
         db?.close()
       } catch {
+        // oxlint-disable-next-line eslint/no-unsafe-finally -- An owned database close failure intentionally invalidates the result and reports only temporarily_unavailable.
         throw unavailable()
       }
     }
   }
-  /** Call only from the real same-origin, CSRF-checked first-party consent POST.
+
+  /**
+   * Call only from the real same-origin, CSRF-checked first-party consent POST.
    * The principal capability must have been issued by the real manager binding.
    * Token scopes consent is distinct from exact-revision native-save consent.
    */
+
   approve(p: FirstPartySessionPrincipal, encodedTicket: string) {
     this.auth.assertActive(p)
     const ticket = this.protocol.readTicket(encodedTicket)
     const result = this.transaction(p.accountId, true, (db) => {
       this.auth.assertActive(p)
       const count = db.prepare("SELECT count(*) AS n FROM grants").get()?.n
-      if (typeof count !== "number" || count >= 1000) throw unavailable()
-      const digest = tokenDigest(encodedTicket)
+
+      if (typeof count !== "number" || count >= 1000) {
+        throw unavailable()
+      }
+
+      const ticketDigest = tokenDigest(encodedTicket)
+
       if (
-        db.prepare("SELECT grant_id FROM consents WHERE digest=?").get(digest)
-      )
+        db
+          .prepare("SELECT grant_id FROM consents WHERE digest=?")
+          .get(ticketDigest)
+      ) {
         throw invalid()
+      }
+
       const grantId = randomOpaque()
       const expiresAt = PERSISTENT_GRANT_EXPIRES_AT
       db.prepare(
@@ -388,17 +492,19 @@ export class FirstPartyOAuthGrants {
         Math.min(expiresAt, Date.now() + 120_000),
       )
       db.prepare("INSERT INTO consents(digest,grant_id) VALUES(?,?)").run(
-        digest,
+        ticketDigest,
         grantId,
       )
-      this.audit(db, grantId, "grant-approved")
+      FirstPartyOAuthGrants.audit({ db, grantId, kind: "grant-approved" })
       this.auth.assertActive(p)
+
       return {
         redirectUrl: this.protocol.authorizationResponse(ticket, code),
         grantId,
       }
     })
     this.auth.assertActive(p)
+
     return result
   }
   private tokens(db: DatabaseSync, grant: StoredGrant) {
@@ -550,22 +656,30 @@ export class FirstPartyOAuthGrants {
     resource: string
   }) {
     const code = this.protocol.readCode(input.code)
+
     if (
       code.clientId !== input.client_id ||
       input.resource !== this.protocol.config.resource ||
       !this.protocol
         .client(input.client_id)
         .redirectUris.includes(input.redirect_uri)
-    )
+    ) {
       throw invalid()
+    }
+
     const challenge = pkceChallenge(input.code_verifier)
     const inputDigest = hashJson({ grantType: "authorization_code", ...input })
     const outcome = this.transaction(code.accountId, false, (db) => {
       const grant = this.row(db, code.accountId, code.grantId)
-      if (grant.clientId !== code.clientId) throw invalid()
+
+      if (grant.clientId !== code.clientId) {
+        throw invalid()
+      }
+
       const row = db
         .prepare("SELECT * FROM codes WHERE digest=? AND grant_id=?")
         .get(tokenDigest(input.code), grant.grantId)
+
       if (
         !row ||
         typeof row.expires_ms !== "number" ||
@@ -573,8 +687,10 @@ export class FirstPartyOAuthGrants {
         row.challenge !== challenge ||
         row.redirect !== input.redirect_uri ||
         row.resource !== input.resource
-      )
+      ) {
         throw invalid()
+      }
+
       if (row.used !== 0) {
         const retry = this.tokenRetry(db, grant, inputDigest)
 
@@ -587,9 +703,15 @@ export class FirstPartyOAuthGrants {
         db.prepare(
           "UPDATE grants SET state='revoked' WHERE owner=? AND id=?",
         ).run(code.accountId, code.grantId)
-        this.audit(db, grant.grantId, "code-replay-revoked")
+        FirstPartyOAuthGrants.audit({
+          db,
+          grantId: grant.grantId,
+          kind: "code-replay-revoked",
+        })
+
         return { denied: true as const }
       }
+
       db.prepare("UPDATE codes SET used=1 WHERE digest=? AND used=0").run(
         tokenDigest(input.code),
       )
@@ -599,11 +721,20 @@ export class FirstPartyOAuthGrants {
         tokens: result,
         refreshed: false,
       })
-      this.audit(db, grant.grantId, "code-exchanged")
+      FirstPartyOAuthGrants.audit({
+        db,
+        grantId: grant.grantId,
+        kind: "code-exchanged",
+      })
       this.row(db, code.accountId, code.grantId)
+
       return { denied: false as const, tokens: result }
     })
-    if (outcome.denied) throw invalid()
+
+    if (outcome.denied) {
+      throw invalid()
+    }
+
     return outcome.tokens
   }
   rotate(input: {
@@ -614,11 +745,13 @@ export class FirstPartyOAuthGrants {
     // Legacy expiry is inspected only after proving possession of the exact
     // stored unused credential and its still-active native revocation anchor.
     const token = this.protocol.readRefresh(input.refresh_token, false)
+
     if (
       token.clientId !== input.client_id ||
       input.resource !== this.protocol.config.resource
-    )
+    ) {
       throw invalid()
+    }
 
     const inputDigest = hashJson({ grantType: "refresh_token", ...input })
     const result = this.transaction(token.accountId, false, (db) => {
@@ -627,7 +760,11 @@ export class FirstPartyOAuthGrants {
         grantId: token.grantId,
         allowLegacyRenewal: true,
       })
-      if (grant.clientId !== token.clientId) throw invalid()
+
+      if (grant.clientId !== token.clientId) {
+        throw invalid()
+      }
+
       const row = db
         .prepare("SELECT * FROM refresh WHERE digest=? AND grant_id=?")
         .get(tokenDigest(input.refresh_token), grant.grantId)
@@ -638,6 +775,7 @@ export class FirstPartyOAuthGrants {
 
         return { denied: false as const, tokens: retry }
       }
+
       if (
         (row && row.used !== 0) ||
         (!row && grant.expiresAt === PERSISTENT_GRANT_EXPIRES_AT)
@@ -645,7 +783,12 @@ export class FirstPartyOAuthGrants {
         db.prepare(
           "UPDATE grants SET state='revoked' WHERE owner=? AND id=?",
         ).run(token.accountId, token.grantId)
-        this.audit(db, grant.grantId, "refresh-replay-revoked")
+        FirstPartyOAuthGrants.audit({
+          db,
+          grantId: grant.grantId,
+          kind: "refresh-replay-revoked",
+        })
+
         return { denied: true as const }
       }
 
@@ -670,61 +813,92 @@ export class FirstPartyOAuthGrants {
       // Preserve historical/security audit rows and record a legacy upgrade once.
 
       if (!("version" in token)) {
-        this.audit(db, grant.grantId, "connection-upgraded")
+        FirstPartyOAuthGrants.audit({
+          db,
+          grantId: grant.grantId,
+          kind: "connection-upgraded",
+        })
       }
 
       this.row(db, token.accountId, token.grantId)
+
       return { denied: false as const, tokens }
     })
-    if (result.denied) throw invalid()
+
+    if (result.denied) {
+      throw invalid()
+    }
+
     return result.tokens
   }
   activeGrant(
     accountId: string,
     grantId: string,
   ): ActiveOAuthGrant | undefined {
-    let db: DatabaseSync | undefined
+    let db: DatabaseSync | undefined = undefined
+
     try {
       db = this.open(accountId, false)
-      if (!db) return undefined
+
+      if (!db) {
+        return undefined
+      }
+
       const grant = this.row(db, accountId, grantId)
       const { sid: _sid, ...publicGrant } = grant
+
       return Object.freeze({
         ...publicGrant,
         scopes: Object.freeze([...grant.scopes]),
       })
     } catch (error) {
-      if (error instanceof OAuthError && error.code === "invalid_grant")
+      if (error instanceof OAuthError && error.code === "invalid_grant") {
         return undefined
+      }
+
       throw unavailable()
     } finally {
       try {
         db?.close()
       } catch {
+        // oxlint-disable-next-line eslint/no-unsafe-finally -- An owned database close failure intentionally invalidates the result and reports only temporarily_unavailable.
         throw unavailable()
       }
     }
   }
   revokeToken(clientId: string, encoded: string) {
     this.protocol.client(clientId)
-    let token: ReturnType<OAuthProtocol["readRefresh"]>
+    let token: ReturnType<OAuthProtocol["readRefresh"]> | undefined = undefined
+
     try {
       token = this.protocol.readRefresh(encoded, false)
     } catch {
       return
     }
-    if (token.clientId !== clientId) return
+
+    if (token.clientId !== clientId) {
+      return
+    }
+
     this.transaction(token.accountId, false, (db) => {
       // Any issuer-authentic refresh credential for this exact connection can
       // revoke it, including an old rotated token. No token plaintext is stored.
       const row = db
         .prepare("SELECT id FROM grants WHERE owner=? AND id=? AND client_id=?")
         .get(token.accountId, token.grantId, clientId)
-      if (!row) return
+
+      if (!row) {
+        return
+      }
+
       db.prepare(
         "UPDATE grants SET state='revoked' WHERE owner=? AND id=? AND client_id=?",
       ).run(token.accountId, token.grantId, clientId)
-      this.audit(db, token.grantId, "client-token-revoked")
+      FirstPartyOAuthGrants.audit({
+        db,
+        grantId: token.grantId,
+        kind: "client-token-revoked",
+      })
     })
   }
   revoke(p: FirstPartySessionPrincipal, grantId: string) {
@@ -734,7 +908,7 @@ export class FirstPartyOAuthGrants {
       db.prepare(
         "UPDATE grants SET state='revoked' WHERE owner=? AND id=?",
       ).run(p.accountId, grantId)
-      this.audit(db, grantId, "first-party-revoked")
+      FirstPartyOAuthGrants.audit({ db, grantId, kind: "first-party-revoked" })
       this.auth.assertActive(p)
     })
     this.auth.assertActive(p)
@@ -890,24 +1064,32 @@ export class FirstPartyOAuthGrants {
         },
         // eslint-disable-next-line max-params -- Preserve the existing ledger audit port's transaction and mutation binding.
         audit: (db, grantId, kind, mutation) =>
-          this.audit(db, grantId, kind, mutation),
+          FirstPartyOAuthGrants.audit({ db, grantId, kind, mutation }),
       },
       options,
     )
   }
-  private checkedExport(
-    raw: unknown,
-    accountId: string,
-    grantId: string,
-    requestKey: string,
-    policy: FirstPartyExportPolicy,
-  ) {
+  private checkedExport({
+    raw,
+    accountId,
+    grantId,
+    requestKey,
+    policy,
+  }: {
+    raw: unknown
+    accountId: string
+    grantId: string
+    requestKey: string
+    policy: FirstPartyExportPolicy
+  }) {
     const receipt = exportReceiptSchema.parse(raw)
     const draft = checkedDraft(receipt.draft, { authoring: policy.authoring })
-    const data = receipt.data
+    const { data } = receipt
     const issuer = new URL(this.protocol.config.issuer)
-    const prefix = issuer.pathname.replace(/\/$/u, "") + "/downloads/"
+    const prefix = `${issuer.pathname.replace(/\/$/u, "")}/downloads/`
+
     const url = new URL(data.downloadUrl)
+
     if (
       url.origin !== issuer.origin ||
       url.username ||
@@ -915,12 +1097,15 @@ export class FirstPartyOAuthGrants {
       url.search ||
       url.hash ||
       !url.pathname.startsWith(prefix)
-    )
+    ) {
       throw unavailable()
+    }
+
     const ticket = this.protocol.readDownloadTicket(
       url.pathname.slice(prefix.length),
       false,
     )
+
     if (
       ticket.accountId !== accountId ||
       ticket.grantId !== grantId ||
@@ -937,28 +1122,38 @@ export class FirstPartyOAuthGrants {
       data.bytes !== utf8Bytes(receipt.body) ||
       data.expiresAt !== new Date(ticket.expiresAt).toISOString() ||
       (data.format === "tada-json" && receipt.body !== draft.authoredShowJson)
-    )
+    ) {
       throw unavailable()
+    }
+
     return { ...receipt, draft, ticket }
   }
 
-  private exportRights(
-    grant: StoredGrant,
-    draft: DraftRecord,
-    format: ExportFormat,
-    policy: FirstPartyExportPolicy,
-  ) {
+  private static exportRights({
+    grant,
+    draft,
+    format,
+    policy,
+  }: {
+    grant: StoredGrant
+    draft: DraftRecord
+    format: ExportFormat
+    policy: FirstPartyExportPolicy
+  }) {
     const context = Object.freeze({
       accountId: grant.accountId,
       grantId: grant.grantId,
       clientId: grant.clientId,
     })
+
     if (
       !grant.scopes.includes("tadazz.drafts.read") ||
       !grant.scopes.includes("tadazz.exports.read") ||
+      // oxlint-disable-next-line typescript/no-unnecessary-boolean-literal-compare -- Runtime export policy must explicitly authorize with true; truthy values are not approval.
       policy.canExport(context, draft, format) !== true
-    )
+    ) {
       throw new ToolError("EXPORT_UNAVAILABLE")
+    }
   }
 
   /** Same tenant operations ledger; no schema/migration, native allocation or new consent. */
@@ -967,204 +1162,279 @@ export class FirstPartyOAuthGrants {
     assertIssued: (p: VerifiedPrincipal) => void,
   ): NonNullable<Dependencies["exports"]> {
     return {
-      createAuthorizedDownload: async (p, selected, format, mutation) => {
-        try {
-          assertIssued(p)
-          const parsed = inputs.export_game.safeParse({
-            contractVersion: CONTRACT_VERSION,
-            ...selected,
-            format,
-            idempotencyKey: mutation.idempotencyKey,
-          })
-          if (
-            !parsed.success ||
-            !digest.safeParse(mutation.inputDigest).success ||
-            hashJson(parsed.data) !== mutation.inputDigest ||
-            !z.string().min(1).max(128).safeParse(mutation.correlationId)
-              .success
-          )
-            throw new ToolError("VALIDATION_FAILED")
-          return this.transaction(p.accountId, false, (db) => {
-            const authority = () => {
-              assertIssued(p)
-              const grant = this.row(db, p.accountId, p.grantId)
-              if (
-                p.issuer !== this.protocol.config.issuer ||
-                p.audience !== this.protocol.config.resource ||
-                p.subject !== grant.subject ||
-                p.clientId !== grant.clientId ||
-                p.expiresAt <= Date.now() ||
-                !["tadazz.drafts.read", "tadazz.exports.read"].every(
-                  (scope) =>
-                    p.scopes.includes(scope) && grant.scopes.includes(scope),
-                )
-              )
-                throw new ToolError("SCOPE_REQUIRED")
-              return grant
+      // eslint-disable-next-line max-params -- Implements the existing positional Dependencies["exports"].createAuthorizedDownload port.
+      createAuthorizedDownload: (p, selected, format, mutation) =>
+        synchronousPromise(() => {
+          try {
+            assertIssued(p)
+            const parsed = inputs.export_game.safeParse({
+              contractVersion: CONTRACT_VERSION,
+              ...selected,
+              format,
+              idempotencyKey: mutation.idempotencyKey,
+            })
+
+            if (
+              !parsed.success ||
+              !digest.safeParse(mutation.inputDigest).success ||
+              hashJson(parsed.data) !== mutation.inputDigest ||
+              !z.string().min(1).max(128).safeParse(mutation.correlationId)
+                .success
+            ) {
+              throw new ToolError("VALIDATION_FAILED")
             }
-            let grant = authority()
-            const prior = db
-              .prepare(
-                "SELECT digest,outcome FROM operations WHERE grant_id=? AND kind='export' AND request_key=?",
+
+            return this.transaction(p.accountId, false, (db) => {
+              const authority = () => {
+                assertIssued(p)
+                const grant = this.row(db, p.accountId, p.grantId)
+
+                if (
+                  p.issuer !== this.protocol.config.issuer ||
+                  p.audience !== this.protocol.config.resource ||
+                  p.subject !== grant.subject ||
+                  p.clientId !== grant.clientId ||
+                  p.expiresAt <= Date.now() ||
+                  !["tadazz.drafts.read", "tadazz.exports.read"].every(
+                    (scope) =>
+                      p.scopes.includes(scope) && grant.scopes.includes(scope),
+                  )
+                ) {
+                  throw new ToolError("SCOPE_REQUIRED")
+                }
+
+                return grant
+              }
+              let grant = authority()
+              const prior = db
+                .prepare(
+                  "SELECT digest,outcome FROM operations WHERE grant_id=? AND kind='export' AND request_key=?",
+                )
+                .get(p.grantId, mutation.idempotencyKey)
+
+              if (prior) {
+                if (prior.digest !== mutation.inputDigest) {
+                  throw new ToolError("REQUEST_KEY_REUSED")
+                }
+
+                if (typeof prior.outcome !== "string") {
+                  throw unavailable()
+                }
+
+                const receipt = this.checkedExport({
+                  raw: JSON.parse(prior.outcome),
+                  accountId: p.accountId,
+                  grantId: p.grantId,
+                  requestKey: mutation.idempotencyKey,
+                  policy,
+                })
+
+                if (
+                  receipt.data.draftId !== selected.draftId ||
+                  receipt.data.revision !== selected.expectedRevision ||
+                  receipt.data.format !== format
+                ) {
+                  throw unavailable()
+                }
+
+                FirstPartyOAuthGrants.exportRights({
+                  grant,
+                  draft: receipt.draft,
+                  format,
+                  policy,
+                })
+                authority()
+
+                return receipt.data
+              }
+
+              const count = db
+                .prepare("SELECT count(*) AS n FROM operations")
+                .get()?.n
+
+              if (typeof count !== "number" || count >= 5000) {
+                throw new ToolError("QUOTA_EXCEEDED")
+              }
+
+              const row = db
+                .prepare(
+                  "SELECT id,revision,authored,summary,locale FROM drafts WHERE owner=? AND id=?",
+                )
+                .get(p.accountId, selected.draftId)
+
+              if (!row || typeof row.summary !== "string") {
+                throw new ToolError("NOT_FOUND")
+              }
+
+              const draft = checkedDraft(
+                {
+                  draftId: row.id,
+                  revision: row.revision,
+                  authoredShowJson: row.authored,
+                  summary: JSON.parse(row.summary) as unknown,
+                  ...(row.locale === null ? {} : { locale: row.locale }),
+                },
+                { authoring: policy.authoring },
               )
-              .get(p.grantId, mutation.idempotencyKey)
-            if (prior) {
-              if (prior.digest !== mutation.inputDigest)
-                throw new ToolError("REQUEST_KEY_REUSED")
-              if (typeof prior.outcome !== "string") throw unavailable()
-              const receipt = this.checkedExport(
-                JSON.parse(prior.outcome),
-                p.accountId,
+
+              if (draft.revision !== selected.expectedRevision) {
+                throw new ToolError("REVISION_CONFLICT", {
+                  currentRevision: draft.revision,
+                })
+              }
+
+              FirstPartyOAuthGrants.exportRights({
+                grant,
+                draft,
+                format,
+                policy,
+              })
+              const body = createExportBody(draft, format)
+              const exportId = randomOpaque()
+              const expiresAt = Math.min(
+                Date.now() + 60_000,
+                p.expiresAt,
+                grant.expiresAt,
+              )
+
+              if (expiresAt <= Date.now()) {
+                throw new ToolError("SCOPE_REQUIRED")
+              }
+
+              const sha256 = tokenDigest(body)
+              const ticket = this.protocol.downloadTicket({
+                accountId: p.accountId,
+                grantId: p.grantId,
+                requestKey: mutation.idempotencyKey,
+                exportId,
+                draftId: draft.draftId,
+                revision: draft.revision,
+                format,
+                authoredSha256: tokenDigest(draft.authoredShowJson),
+                sha256,
+                expiresAt,
+              })
+              const issuer = new URL(this.protocol.config.issuer)
+              const data = {
+                exportId,
+                draftId: draft.draftId,
+                revision: draft.revision,
+                format,
+                downloadUrl: new URL(
+                  `${issuer.pathname.replace(/\/$/u, "")}/downloads/${ticket}`,
+                  issuer.origin,
+                ).href,
+                expiresAt: new Date(expiresAt).toISOString(),
+                sha256,
+                bytes: utf8Bytes(body),
+              }
+              const receipt = this.checkedExport({
+                raw: { version: 1, data, draft, body },
+                accountId: p.accountId,
+                grantId: p.grantId,
+                requestKey: mutation.idempotencyKey,
+                policy,
+              })
+              grant = authority()
+              FirstPartyOAuthGrants.exportRights({
+                grant,
+                draft,
+                format,
+                policy,
+              })
+              db.prepare(
+                "INSERT INTO operations(grant_id,kind,request_key,digest,outcome) VALUES(?,'export',?,?,?)",
+              ).run(
                 p.grantId,
                 mutation.idempotencyKey,
-                policy,
+                mutation.inputDigest,
+                canonicalJson({ version: 1, data: receipt.data, draft, body }),
               )
-              if (
-                receipt.data.draftId !== selected.draftId ||
-                receipt.data.revision !== selected.expectedRevision ||
-                receipt.data.format !== format
-              )
-                throw unavailable()
-              this.exportRights(grant, receipt.draft, format, policy)
-              authority()
-              return receipt.data
-            }
-            const count = db
-              .prepare("SELECT count(*) AS n FROM operations")
-              .get()?.n
-            if (typeof count !== "number" || count >= 5000)
-              throw new ToolError("QUOTA_EXCEEDED")
-            const row = db
-              .prepare(
-                "SELECT id,revision,authored,summary,locale FROM drafts WHERE owner=? AND id=?",
-              )
-              .get(p.accountId, selected.draftId)
-            if (!row || typeof row.summary !== "string")
-              throw new ToolError("NOT_FOUND")
-            const draft = checkedDraft(
-              {
-                draftId: row.id,
-                revision: row.revision,
-                authoredShowJson: row.authored,
-                summary: JSON.parse(row.summary),
-                ...(row.locale === null ? {} : { locale: row.locale }),
-              },
-              { authoring: policy.authoring },
-            )
-            if (draft.revision !== selected.expectedRevision)
-              throw new ToolError("REVISION_CONFLICT", {
-                currentRevision: draft.revision,
+              FirstPartyOAuthGrants.audit({
+                db,
+                grantId: p.grantId,
+                kind: "export-created",
+                mutation,
               })
-            this.exportRights(grant, draft, format, policy)
-            const body = createExportBody(draft, format)
-            const exportId = randomOpaque()
-            const expiresAt = Math.min(
-              Date.now() + 60_000,
-              p.expiresAt,
-              grant.expiresAt,
-            )
-            if (expiresAt <= Date.now()) throw new ToolError("SCOPE_REQUIRED")
-            const sha256 = tokenDigest(body)
-            const ticket = this.protocol.downloadTicket({
-              accountId: p.accountId,
-              grantId: p.grantId,
-              requestKey: mutation.idempotencyKey,
-              exportId,
-              draftId: draft.draftId,
-              revision: draft.revision,
-              format,
-              authoredSha256: tokenDigest(draft.authoredShowJson),
-              sha256,
-              expiresAt,
+              authority()
+
+              return receipt.data
             })
-            const issuer = new URL(this.protocol.config.issuer)
-            const data = {
-              exportId,
-              draftId: draft.draftId,
-              revision: draft.revision,
-              format,
-              downloadUrl: new URL(
-                issuer.pathname.replace(/\/$/u, "") + "/downloads/" + ticket,
-                issuer.origin,
-              ).href,
-              expiresAt: new Date(expiresAt).toISOString(),
-              sha256,
-              bytes: utf8Bytes(body),
+          } catch (error) {
+            if (error instanceof ToolError) {
+              throw error
             }
-            const receipt = this.checkedExport(
-              { version: 1, data, draft, body },
-              p.accountId,
-              p.grantId,
-              mutation.idempotencyKey,
-              policy,
+
+            throw new ToolError(
+              error instanceof OAuthError && error.code === "invalid_grant"
+                ? "SCOPE_REQUIRED"
+                : "EXPORT_UNAVAILABLE",
             )
-            grant = authority()
-            this.exportRights(grant, draft, format, policy)
-            db.prepare(
-              "INSERT INTO operations(grant_id,kind,request_key,digest,outcome) VALUES(?,'export',?,?,?)",
-            ).run(
-              p.grantId,
-              mutation.idempotencyKey,
-              mutation.inputDigest,
-              canonicalJson({ version: 1, data: receipt.data, draft, body }),
-            )
-            this.audit(db, p.grantId, "export-created", mutation)
-            authority()
-            return receipt.data
-          })
-        } catch (error) {
-          if (error instanceof ToolError) throw error
-          throw new ToolError(
-            error instanceof OAuthError && error.code === "invalid_grant"
-              ? "SCOPE_REQUIRED"
-              : "EXPORT_UNAVAILABLE",
-          )
-        }
-      },
+          }
+        }),
     }
   }
 
-  /** A short-lived encrypted capability identifies one immutable export outcome.
+  /**
+   * A short-lived encrypted capability identifies one immutable export outcome.
    * Every delivery still checks actual account/session/grant and current rights.
    */
+
   download(encoded: string, policy: FirstPartyExportPolicy) {
     const ticket = this.protocol.readDownloadTicket(encoded)
-    let db: DatabaseSync | undefined
+    let db: DatabaseSync | undefined = undefined
+
     try {
       db = this.open(ticket.accountId, false)
-      if (!db) throw invalid()
+
+      if (!db) {
+        throw invalid()
+      }
+
       const grant = this.row(db, ticket.accountId, ticket.grantId)
       const row = db
         .prepare(
           "SELECT outcome FROM operations WHERE grant_id=? AND kind='export' AND request_key=?",
         )
         .get(ticket.grantId, ticket.requestKey)
-      if (!row || typeof row.outcome !== "string") throw invalid()
-      const receipt = this.checkedExport(
-        JSON.parse(row.outcome),
-        ticket.accountId,
-        ticket.grantId,
-        ticket.requestKey,
+
+      if (!row || typeof row.outcome !== "string") {
+        throw invalid()
+      }
+
+      const receipt = this.checkedExport({
+        raw: JSON.parse(row.outcome),
+        accountId: ticket.accountId,
+        grantId: ticket.grantId,
+        requestKey: ticket.requestKey,
         policy,
-      )
+      })
+
       if (
         receipt.data.downloadUrl !==
         new URL(
-          new URL(this.protocol.config.issuer).pathname.replace(/\/$/u, "") +
-            "/downloads/" +
-            encoded,
+          `${new URL(this.protocol.config.issuer).pathname.replace(/\/$/u, "")}/downloads/${encoded}`,
           new URL(this.protocol.config.issuer).origin,
         ).href
-      )
+      ) {
         throw invalid()
-      this.exportRights(grant, receipt.draft, receipt.data.format, policy)
+      }
+
+      FirstPartyOAuthGrants.exportRights({
+        grant,
+        draft: receipt.draft,
+        format: receipt.data.format,
+        policy,
+      })
       this.row(db, ticket.accountId, ticket.grantId)
       this.protocol.readDownloadTicket(encoded)
+
       return { body: receipt.body, data: receipt.data }
     } finally {
       try {
         db?.close()
       } catch {
+        // oxlint-disable-next-line eslint/no-unsafe-finally -- An owned database close failure intentionally invalidates the result and reports only temporarily_unavailable.
         throw unavailable()
       }
     }
@@ -1183,6 +1453,7 @@ export class FirstPartyOAuthGrants {
     ) => {
       assertIssued(p)
       const grant = this.row(db, p.accountId, p.grantId)
+
       if (
         p.issuer !== this.protocol.config.issuer ||
         p.audience !== this.protocol.config.resource ||
@@ -1192,8 +1463,9 @@ export class FirstPartyOAuthGrants {
         !required.every(
           (scope) => p.scopes.includes(scope) && grant.scopes.includes(scope),
         )
-      )
+      ) {
         throw new ToolError("SCOPE_REQUIRED")
+      }
     }
     const read = (db: DatabaseSync, p: VerifiedPrincipal, id: string) => {
       opaqueId.parse(id)
@@ -1202,13 +1474,16 @@ export class FirstPartyOAuthGrants {
           "SELECT id,revision,authored,summary,locale FROM drafts WHERE owner=? AND id=?",
         )
         .get(p.accountId, id)
-      if (!row || typeof row.summary !== "string")
+
+      if (!row || typeof row.summary !== "string") {
         throw new ToolError("NOT_FOUND")
+      }
+
       return checked({
         draftId: row.id,
         revision: row.revision,
         authoredShowJson: row.authored,
-        summary: JSON.parse(row.summary),
+        summary: JSON.parse(row.summary) as unknown,
         ...(row.locale === null ? {} : { locale: row.locale }),
       })
     }
@@ -1242,32 +1517,52 @@ export class FirstPartyOAuthGrants {
 
       return result
     }
-    const mutate = (
-      p: VerifiedPrincipal,
-      kind: "create" | "replace",
-      draft: NormalizedDraft,
-      mutation: MutationIdentity,
-      selected?: { id: string; revision: number },
-    ): DraftRecord => {
+    const mutate = ({
+      p,
+      kind,
+      draft,
+      mutation,
+      selected,
+    }: {
+      p: VerifiedPrincipal
+      kind: "create" | "replace"
+      draft: NormalizedDraft
+      mutation: MutationIdentity
+      selected?: { id: string; revision: number }
+    }): DraftRecord => {
       assertIssued(p)
       const normalized = normalizeDraft(draft.authoredShowJson, policy)
-      if (canonicalJson(normalized.summary) !== canonicalJson(draft.summary))
+
+      if (canonicalJson(normalized.summary) !== canonicalJson(draft.summary)) {
         throw new ToolError("VALIDATION_FAILED")
+      }
+
       opaqueId.parse(mutation.idempotencyKey)
       opaqueId.parse(mutation.correlationId)
       digest.parse(mutation.inputDigest)
+      const getDraftIdentityFields = () => {
+        if (selected) {
+          return { draftId: selected.id, expectedRevision: selected.revision }
+        }
+
+        if (draft.locale) {
+          return { locale: draft.locale }
+        }
+
+        return {}
+      }
+
       const expectedDigest = hashJson({
         contractVersion: CONTRACT_VERSION,
         authoredShowJson: normalized.authoredShowJson,
         idempotencyKey: mutation.idempotencyKey,
-        ...(selected
-          ? { draftId: selected.id, expectedRevision: selected.revision }
-          : draft.locale
-            ? { locale: draft.locale }
-            : {}),
+        ...getDraftIdentityFields(),
       })
-      if (mutation.inputDigest !== expectedDigest)
+
+      if (mutation.inputDigest !== expectedDigest) {
         throw new ToolError("VALIDATION_FAILED")
+      }
+
       return this.transaction(p.accountId, false, (db) => {
         const required =
           kind === "create"
@@ -1279,26 +1574,40 @@ export class FirstPartyOAuthGrants {
             "SELECT digest,outcome FROM operations WHERE grant_id=? AND kind=? AND request_key=?",
           )
           .get(p.grantId, kind, mutation.idempotencyKey)
+
         if (prior) {
-          if (prior.digest !== mutation.inputDigest)
+          if (prior.digest !== mutation.inputDigest) {
             throw new ToolError("REQUEST_KEY_REUSED")
-          if (typeof prior.outcome !== "string") throw unavailable()
+          }
+
+          if (typeof prior.outcome !== "string") {
+            throw unavailable()
+          }
+
           const replay = checked(JSON.parse(prior.outcome))
           authority(db, p, required)
+
           return replay
         }
+
         const count = db
           .prepare("SELECT count(*) AS n FROM operations")
           .get()?.n
-        if (typeof count !== "number" || count >= 5000)
+
+        if (typeof count !== "number" || count >= 5000) {
           throw new ToolError("QUOTA_EXCEEDED")
-        let result: DraftRecord
+        }
+
+        let result: DraftRecord | undefined = undefined
+
         if (selected) {
           const current = read(db, p, selected.id)
-          if (current.revision !== selected.revision)
+
+          if (current.revision !== selected.revision) {
             throw new ToolError("REVISION_CONFLICT", {
               currentRevision: current.revision,
             })
+          }
 
           const preserved = normalizeStoredDraft(
             preserveSemanticState(
@@ -1310,9 +1619,14 @@ export class FirstPartyOAuthGrants {
           )
           result = write(db, p, { current, next: preserved })
         } else {
-          const count = db.prepare("SELECT count(*) AS n FROM drafts").get()?.n
-          if (typeof count !== "number" || count >= 100)
+          const draftCount = db
+            .prepare("SELECT count(*) AS n FROM drafts")
+            .get()?.n
+
+          if (typeof draftCount !== "number" || draftCount >= 100) {
             throw new ToolError("QUOTA_EXCEEDED")
+          }
+
           result = checked({
             ...normalized,
             draftId: randomOpaque(),
@@ -1330,6 +1644,7 @@ export class FirstPartyOAuthGrants {
             result.locale ?? null,
           )
         }
+
         db.prepare(
           "INSERT INTO operations(grant_id,kind,request_key,digest,outcome) VALUES(?,?,?,?,?)",
         ).run(
@@ -1339,8 +1654,14 @@ export class FirstPartyOAuthGrants {
           mutation.inputDigest,
           canonicalJson(result),
         )
-        this.audit(db, p.grantId, "draft-" + kind, mutation)
+        FirstPartyOAuthGrants.audit({
+          db,
+          grantId: p.grantId,
+          kind: `draft-${kind}`,
+          mutation,
+        })
         authority(db, p, required)
+
         return result
       })
     }
@@ -1348,7 +1669,10 @@ export class FirstPartyOAuthGrants {
       try {
         return run()
       } catch (error) {
-        if (error instanceof ToolError) throw error
+        if (error instanceof ToolError) {
+          throw error
+        }
+
         throw new ToolError(
           error instanceof OAuthError && error.code === "invalid_grant"
             ? "SCOPE_REQUIRED"
@@ -1373,33 +1697,61 @@ export class FirstPartyOAuthGrants {
       read,
       write,
       audit: (db, p, entry) =>
-        this.audit(db, p.grantId, entry.kind, entry.mutation),
+        FirstPartyOAuthGrants.audit({
+          db,
+          grantId: p.grantId,
+          kind: entry.kind,
+          mutation: entry.mutation,
+        }),
     })
+
     return {
       semantic,
-      create: async (p, draft, mutation) =>
-        safe(() => mutate(p, "create", draft, mutation)),
-      replace: async (p, id, revision, draft, mutation) =>
-        safe(() => mutate(p, "replace", draft, mutation, { id, revision })),
-      get: async (p, id) =>
-        safe(() => {
-          assertIssued(p)
-          let db: DatabaseSync | undefined
-          try {
-            db = this.open(p.accountId, false)
-            if (!db) throw new ToolError("NOT_FOUND")
-            authority(db, p, ["tadazz.drafts.read"])
-            const result = read(db, p, id)
-            authority(db, p, ["tadazz.drafts.read"])
-            return result
-          } finally {
+      create: (p, draft, mutation) =>
+        synchronousPromise(() =>
+          safe(() => mutate({ p, kind: "create", draft, mutation })),
+        ),
+      // eslint-disable-next-line max-params -- Implements the existing positional DraftRepository.replace port.
+      replace: (p, id, revision, draft, mutation) =>
+        synchronousPromise(() =>
+          safe(() =>
+            mutate({
+              p,
+              kind: "replace",
+              draft,
+              mutation,
+              selected: { id, revision },
+            }),
+          ),
+        ),
+      get: (p, id) =>
+        synchronousPromise(() =>
+          safe(() => {
+            assertIssued(p)
+            let db: DatabaseSync | undefined = undefined
+
             try {
-              db?.close()
-            } catch {
-              throw unavailable()
+              db = this.open(p.accountId, false)
+
+              if (!db) {
+                throw new ToolError("NOT_FOUND")
+              }
+
+              authority(db, p, ["tadazz.drafts.read"])
+              const result = read(db, p, id)
+              authority(db, p, ["tadazz.drafts.read"])
+
+              return result
+            } finally {
+              try {
+                db?.close()
+              } catch {
+                // oxlint-disable-next-line eslint/no-unsafe-finally -- An owned database close failure intentionally invalidates the result and reports only temporarily_unavailable.
+                throw unavailable()
+              }
             }
-          }
-        }),
+          }),
+        ),
     }
   }
 }

@@ -10,46 +10,77 @@ import {
 import { dirname } from "node:path"
 import { fixture, createInput, snapshot } from "./fixtures.ts"
 
-let f: Awaited<ReturnType<typeof fixture>>
-let firstId: string
+type InitializedFValue = Awaited<ReturnType<typeof fixture>>
+let f: InitializedFValue | undefined = undefined
+function requireInitializedF(): InitializedFValue {
+  if (f === undefined) {
+    throw new Error("Fixture state f was read before initialization")
+  }
+
+  return f
+}
+type InitializedFirstIdValue = string
+let firstId: InitializedFirstIdValue | undefined = undefined
+function requireInitializedFirstId(): InitializedFirstIdValue {
+  if (firstId === undefined) {
+    throw new Error("Fixture state firstId was read before initialization")
+  }
+
+  return firstId
+}
 before(async () => {
   f = await fixture()
   firstId = (
-    await f.as(f.sessions[0], (p) => f.store().create(p, createInput()))
+    await requireInitializedF().as(requireInitializedF().sessions[0], (p) =>
+      requireInitializedF().store().create(p, createInput()),
+    )
   ).draftId
-  await f.as(f.sessions[1], (p) => f.store().create(p, createInput()))
+  await requireInitializedF().as(requireInitializedF().sessions[1], (p) =>
+    requireInitializedF().store().create(p, createInput()),
+  )
 })
 after(() => f?.close())
 test("symlink, hardlink and cross-owner DB substitutions cannot read borrowed private data", async () => {
-  const own = f.file(f.sessions[1].owner)
-  const other = f.file(f.sessions[0].owner)
-  const backup = own + ".held"
+  const own = requireInitializedF().file(
+    requireInitializedF().sessions[1].owner,
+  )
+  const other = requireInitializedF().file(
+    requireInitializedF().sessions[0].owner,
+  )
+  const backup = `${own}.held`
   renameSync(own, backup)
+
   try {
     for (const make of [
       () => symlinkSync(other, own),
       () => linkSync(other, own),
     ]) {
       make()
+
       try {
-        const before = snapshot(f.root)
+        const priorSnapshot = snapshot(requireInitializedF().root)
         await assert.rejects(
-          f.as(f.sessions[1], (p) => f.store().get(p, firstId)),
+          requireInitializedF().as(requireInitializedF().sessions[1], (p) =>
+            requireInitializedF().store().get(p, requireInitializedFirstId()),
+          ),
           /DEPENDENCY_UNAVAILABLE/,
         )
-        assert.deepEqual(snapshot(f.root), before)
+        assert.deepEqual(snapshot(requireInitializedF().root), priorSnapshot)
       } finally {
         unlinkSync(own)
       }
     }
     copyFileSync(other, own)
+
     try {
-      const before = snapshot(f.root)
+      const priorSnapshot2 = snapshot(requireInitializedF().root)
       await assert.rejects(
-        f.as(f.sessions[1], (p) => f.store().get(p, firstId)),
+        requireInitializedF().as(requireInitializedF().sessions[1], (p) =>
+          requireInitializedF().store().get(p, requireInitializedFirstId()),
+        ),
         /DEPENDENCY_UNAVAILABLE/,
       )
-      assert.deepEqual(snapshot(f.root), before)
+      assert.deepEqual(snapshot(requireInitializedF().root), priorSnapshot2)
     } finally {
       unlinkSync(own)
     }
@@ -58,19 +89,28 @@ test("symlink, hardlink and cross-owner DB substitutions cannot read borrowed pr
   }
 })
 test("an unsafe existing ancestor is denied without creating or repairing directories", async () => {
-  const own = dirname(f.file(f.sessions[1].owner))
-  const other = dirname(f.file(f.sessions[0].owner))
-  const backup = own + ".held"
+  const own = dirname(
+    requireInitializedF().file(requireInitializedF().sessions[1].owner),
+  )
+  const other = dirname(
+    requireInitializedF().file(requireInitializedF().sessions[0].owner),
+  )
+  const backup = `${own}.held`
+
   renameSync(own, backup)
+
   try {
     symlinkSync(other, own, "dir")
+
     try {
-      const before = snapshot(f.root)
+      const priorSnapshot3 = snapshot(requireInitializedF().root)
       await assert.rejects(
-        f.as(f.sessions[1], (p) => f.store().get(p, firstId)),
+        requireInitializedF().as(requireInitializedF().sessions[1], (p) =>
+          requireInitializedF().store().get(p, requireInitializedFirstId()),
+        ),
         /DEPENDENCY_UNAVAILABLE/,
       )
-      assert.deepEqual(snapshot(f.root), before)
+      assert.deepEqual(snapshot(requireInitializedF().root), priorSnapshot3)
     } finally {
       unlinkSync(own)
     }

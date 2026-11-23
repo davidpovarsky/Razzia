@@ -347,9 +347,12 @@ test("one Creating Worlds stage, real soundtrack choices, and a compact live ros
     ]) {
       await host.setViewportSize({ width, height })
       const bounds = await modal.evaluate((element) => {
-        const list = element.querySelector(
-          '[data-testid="host-roster-list"]',
-        ) as HTMLElement
+        const list = element.querySelector('[data-testid="host-roster-list"]')
+
+        if (list === null) {
+          throw new Error("Missing host roster list")
+        }
+
         const rect = element.getBoundingClientRect()
 
         return {

@@ -10,8 +10,11 @@ import {
 } from "./creation-fixture"
 import { retainCreationReceipt } from "./creation-process"
 
-/** Caller supplies the actual production API and native token minter. No mock
- * Hono app, customer account, credentials, network listener or external auth. */
+/**
+ * Caller supplies the actual production API and native token minter. No mock
+ * Hono app, customer account, credentials, network listener or external auth.
+ */
+
 export async function assertCreationPrivateHttpErrors(
   request: (url: string, init: RequestInit) => Promise<Response>,
   mintManager: () => Promise<{ token: string }>,
@@ -19,13 +22,16 @@ export async function assertCreationPrivateHttpErrors(
   const priorConfig = process.env.CONFIG_PATH,
     priorAccounts = process.env.TADAZZ_ACCOUNTS_ENABLED
   const receipts: unknown[] = []
+
   try {
     for (const fault of ["slot-mkdir", "intent-file-fence"]) {
       for (const route of ["/extensions/quizzes", "/extensions/import"]) {
         const fixture = createCreationFixture()
         let allocated = "",
           activations = 0
+
         try {
+          // oxlint-disable-next-line no-await-in-loop -- Mint this case's manager before installing shared filesystem fault spies.
           const session = await mintManager()
           const mkdir = fs.mkdirSync.bind(fs),
             sync = fs.fsyncSync.bind(fs)
@@ -35,20 +41,26 @@ export async function assertCreationPrivateHttpErrors(
           ) => {
             if (path.basename(path.dirname(String(directory))) === "active") {
               allocated = path.basename(String(directory))
+
               if (fault === "slot-mkdir") {
-                activations++
-                throw new Error(`EIO private path ${directory}`)
+                activations += 1
+
+                throw new Error(`EIO private path ${String(directory)}`)
               }
             }
+
             return mkdir(directory, options)
           }) as typeof fs.mkdirSync)
           vi.spyOn(fs, "fsyncSync").mockImplementation((fd) => {
             if (fault === "intent-file-fence" && fs.fstatSync(fd).isFile()) {
-              activations++
+              activations += 1
+
               throw new Error(`EIO private allocated identity ${allocated}`)
             }
+
             sync(fd)
           })
+          // oxlint-disable-next-line no-await-in-loop -- Run one fault-injection request at a time; each case owns the shared spies and CONFIG_PATH.
           const response = await request(route, {
             method: "POST",
             headers: {
@@ -61,7 +73,8 @@ export async function assertCreationPrivateHttpErrors(
                 : { quizz: creationInput(), extras: creationExtras() },
             ),
           })
-          const body = await response.json()
+          // oxlint-disable-next-line no-await-in-loop -- Read this response before assertions and restoration of this case's shared fault spies.
+          const body: unknown = await response.json()
           const state = creationTree(fixture.root)
           receipts.push({
             fault,
@@ -85,7 +98,10 @@ export async function assertCreationPrivateHttpErrors(
                 name.startsWith("extensions/quizzes/"),
             ),
           ).toEqual([])
-          if (fault === "slot-mkdir") expect(Object.keys(state)).toEqual([])
+
+          if (fault === "slot-mkdir") {
+            expect(Object.keys(state)).toEqual([])
+          }
         } finally {
           vi.restoreAllMocks()
           removeCreationFixture(fixture.root, fixture.token)
@@ -104,9 +120,16 @@ export async function assertCreationPrivateHttpErrors(
     })
     throw error
   } finally {
-    if (priorConfig === undefined) delete process.env.CONFIG_PATH
-    else process.env.CONFIG_PATH = priorConfig
-    if (priorAccounts === undefined) delete process.env.TADAZZ_ACCOUNTS_ENABLED
-    else process.env.TADAZZ_ACCOUNTS_ENABLED = priorAccounts
+    if (priorConfig === undefined) {
+      delete process.env.CONFIG_PATH
+    } else {
+      process.env.CONFIG_PATH = priorConfig
+    }
+
+    if (priorAccounts === undefined) {
+      delete process.env.TADAZZ_ACCOUNTS_ENABLED
+    } else {
+      process.env.TADAZZ_ACCOUNTS_ENABLED = priorAccounts
+    }
   }
 }

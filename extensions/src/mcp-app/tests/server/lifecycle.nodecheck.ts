@@ -7,6 +7,7 @@ import {
   lifecycleHarness,
 } from "./lifecycle-fixture.ts"
 import { code, principal, harness, newKey } from "./fixtures.ts"
+import { synchronousPromise } from "../../../core/synchronous-promise.ts"
 
 test(
   "SDK cancellation during pending authorization restores capacity only after real work settles",
@@ -17,20 +18,30 @@ test(
     let auth = 0,
       reads = 0
     const h = await lifecycleHarness({
-      authorize: async () => (++auth === 1 ? gate.promise : p),
+      authorize: async () => {
+        auth += 1
+
+        return auth === 1 ? gate.promise : p
+      },
       drafts: {
-        async get() {
-          reads++
-          return undefined
+        get() {
+          reads += 1
+
+          return Promise.resolve(undefined)
         },
-        async create() {
-          throw 0
+        create() {
+          return Promise.reject(
+            new Error("Read-only lifecycle fixture must not create drafts"),
+          )
         },
-        async replace() {
-          throw 0
+        replace() {
+          return Promise.reject(
+            new Error("Read-only lifecycle fixture must not replace drafts"),
+          )
         },
       },
     })
+
     try {
       const abort = new AbortController()
       const cancelled = h.read(abort.signal)
@@ -65,15 +76,21 @@ test(
     let auth = 0
     const h = await lifecycleHarness({
       authorize: async () => {
-        auth++
+        auth += 1
+
         return gate.promise
       },
     })
     const other = await harness()
+
     try {
-      for (let i = 0; i < 32; i++) await h.injectRead("held-" + i)
+      for (let i = 0; i < 32; i += 1) {
+        await h.injectRead(`held-${i}`)
+      }
       await until(() => auth === 32)
-      for (let i = 0; i < 32; i++) await h.cancel("held-" + i)
+      for (let i = 0; i < 32; i += 1) {
+        await h.cancel(`held-${i}`)
+      }
       await drain()
       await h.injectRead("cannot-admit-33")
       await until(() => h.flags.closed)
@@ -82,7 +99,7 @@ test(
         code(await other.call("get_game_draft", { draftId: newKey() })),
         "NOT_FOUND",
       )
-      const sends = h.flags.sends
+      const { sends } = h.flags
       gate.resolve(p)
       await drain()
       assert.equal(h.flags.sends, sends)
@@ -103,18 +120,27 @@ test(
     const h = await lifecycleHarness({
       drafts: {
         async get() {
-          entered++
-          if (slow) await gate.promise
+          entered += 1
+
+          if (slow) {
+            await gate.promise
+          }
+
           return undefined
         },
-        async create() {
-          throw 0
+        create() {
+          return Promise.reject(
+            new Error("Read-only lifecycle fixture must not create drafts"),
+          )
         },
-        async replace() {
-          throw 0
+        replace() {
+          return Promise.reject(
+            new Error("Read-only lifecycle fixture must not replace drafts"),
+          )
         },
       },
     })
+
     try {
       const controllers = Array.from(
         { length: 32 },
@@ -123,14 +149,18 @@ test(
       const pending = controllers.map((c) => h.read(c.signal))
       const rejections = pending.map((p) => assert.rejects(p))
       await until(() => entered === 32)
-      controllers.forEach((c) => c.abort())
+      controllers.forEach((c) => {
+        c.abort()
+      })
       await Promise.all(rejections)
       await drain()
       const before = h.flags.sends
       slow = false
       gate.resolve()
       await drain()
-      assert.equal(h.flags.sends, before) // SDK abort suppresses the original responses.
+      // SDK abort suppresses the original responses.
+
+      assert.equal(h.flags.sends, before)
       const results = await Promise.all(
         Array.from({ length: 32 }, () => h.read()),
       )
@@ -153,11 +183,13 @@ test(
     let auth = 0
     const h = await lifecycleHarness({
       authorize: async () => {
-        auth++
+        auth += 1
+
         return gate.promise
       },
     })
     const other = await harness()
+
     try {
       await h.injectRead("duplicate")
       await until(() => auth === 1)
@@ -185,27 +217,34 @@ test(
       reads = 0
     const h = await lifecycleHarness({
       authorize: async () => {
-        auth++
+        auth += 1
+
         return gate.promise
       },
       drafts: {
-        async get() {
-          reads++
-          return undefined
+        get() {
+          reads += 1
+
+          return Promise.resolve(undefined)
         },
-        async create() {
-          throw 0
+        create() {
+          return Promise.reject(
+            new Error("Read-only lifecycle fixture must not create drafts"),
+          )
         },
-        async replace() {
-          throw 0
+        replace() {
+          return Promise.reject(
+            new Error("Read-only lifecycle fixture must not replace drafts"),
+          )
         },
       },
     })
+
     try {
       await h.injectRead("closing")
       await until(() => auth === 1)
       await h.server.close()
-      const sends = h.flags.sends
+      const { sends } = h.flags
       gate.reject(new Error("synthetic-secret-late-auth"))
       await drain()
       await h.injectRead("after-close")
@@ -234,20 +273,32 @@ test(
     let auth = 0
     const readers: string[] = []
     const h = await lifecycleHarness({
-      authorize: async () => (++auth === 1 ? first.promise : b),
+      authorize: async () => {
+        auth += 1
+
+        return auth === 1 ? first.promise : b
+      },
       drafts: {
-        async get(p) {
-          readers.push(p.accountId)
-          return undefined
+        get(p) {
+          return synchronousPromise(() => {
+            readers.push(p.accountId)
+
+            return undefined
+          })
         },
-        async create() {
-          throw 0
+        create() {
+          return Promise.reject(
+            new Error("Read-only lifecycle fixture must not create drafts"),
+          )
         },
-        async replace() {
-          throw 0
+        replace() {
+          return Promise.reject(
+            new Error("Read-only lifecycle fixture must not replace drafts"),
+          )
         },
       },
     })
+
     try {
       await h.injectRead("reused")
       await until(() => auth === 1)
@@ -280,7 +331,8 @@ test(
       aborted = false,
       completed = 0
     const h = await lifecycleHarness({}, async (context) => {
-      started++
+      started += 1
+
       context.mcpReq.signal.addEventListener(
         "abort",
         () => {
@@ -289,9 +341,13 @@ test(
         { once: true },
       )
       await gate.promise
-      completed++ // Read-only completion marker, not a real durable mutation.
+      // Read-only completion marker, not a real durable mutation.
+
+      completed += 1
+
       return { content: [{ type: "text", text: "synthetic" }] }
     })
+
     try {
       const controller = new AbortController()
       const rejected = assert.rejects(h.read(controller.signal))
@@ -299,7 +355,7 @@ test(
       controller.abort()
       await rejected
       await until(() => aborted)
-      const sends = h.flags.sends
+      const { sends } = h.flags
       gate.resolve()
       await drain()
       assert.equal(completed, 1)
@@ -316,10 +372,12 @@ test(
   { timeout: 15_000 },
   async () => {
     let runs = 0
-    const h = await lifecycleHarness({}, async () => {
-      runs++
-      return { content: [{ type: "text", text: "synthetic" }] }
+    const h = await lifecycleHarness({}, () => {
+      runs += 1
+
+      return Promise.resolve({ content: [{ type: "text", text: "synthetic" }] })
     })
+
     try {
       h.flags.failSend = true
       h.flags.failClose = true
@@ -328,7 +386,7 @@ test(
         h.errors.some((e) => e.includes("Transport close failed")),
       )
       await assert.rejects(h.server.close(), /^Error: Transport close failed$/)
-      const sends = h.flags.sends
+      const { sends } = h.flags
       await h.injectRead("terminal")
       await drain()
       assert.equal(runs, 1)

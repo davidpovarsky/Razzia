@@ -7,9 +7,17 @@ const configuration = z.config()
 const previous = configuration.jitless
 z.config({ jitless: true })
 let restored = false
+
 export function restoreNativeCspConfiguration() {
-  if (restored) return
+  if (restored) {
+    return
+  }
+
   restored = true
-  if (previous === undefined) delete configuration.jitless
-  else configuration.jitless = previous
+
+  if (previous === undefined) {
+    delete configuration.jitless
+  } else {
+    configuration.jitless = previous
+  }
 }

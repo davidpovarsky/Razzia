@@ -1,10 +1,13 @@
 import { spawn } from "node:child_process"
 import { createReadStream } from "node:fs"
 import { pipeline } from "node:stream/promises"
-const name = process.argv[2]
+const [, , name] = process.argv
 const custody = process.argv[4] ?? "retained11"
-if (!/^tadazz-show-ui-E-[a-zA-Z0-9-]+$/u.test(name ?? ""))
+
+if (!/^tadazz-show-ui-E-[a-zA-Z0-9-]+$/u.test(name ?? "")) {
   throw new Error("Invalid owned container")
+}
+
 if (
   ![
     "retained11",
@@ -13,8 +16,10 @@ if (
     "retained16",
     "retained17",
   ].includes(custody)
-)
+) {
   throw new Error("Invalid retained evidence namespace")
+}
+
 const child = spawn(
   "ssh",
   [

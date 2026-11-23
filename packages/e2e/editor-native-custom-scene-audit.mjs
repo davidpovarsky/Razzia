@@ -12,6 +12,7 @@ const errors = [],
   checks = []
 page.on("pageerror", (e) => errors.push(e.message))
 let result = {}
+
 try {
   await page.addInitScript(() => localStorage.setItem("i18nextLng", "en"))
   await page.goto("http://127.0.0.1:3180/manager?lng=en")
@@ -26,9 +27,15 @@ try {
   const choose = page
     .getByTestId("show-theme-tadazz-classic")
     .getByRole("button")
-  if (await choose.isEnabled()) await choose.click()
-  if (await page.getByRole("alertdialog").isVisible())
+
+  if (await choose.isEnabled()) {
+    await choose.click()
+  }
+
+  if (await page.getByRole("alertdialog").isVisible()) {
     await page.getByRole("alertdialog").getByRole("button").last().click()
+  }
+
   await page.getByTestId("studio-tab-questions").click()
   const lng = await page.locator("html").getAttribute("lang")
   const he = lng?.startsWith("he")
@@ -57,32 +64,37 @@ try {
     ).toBeVisible()
     const inner = preview.getByTestId(test)
     await expect(inner).toBeVisible()
+
     if (kind === "countdown") {
       await page.getByTestId("studio-preview-scrub-slider").fill("7000")
       await expect(inner.locator(".tz-x-big")).toHaveText("3")
     }
+
     if (kind === "answerRecap") {
       for (const title of [
         "Which colour is the sky?",
         "Choose the primary colours",
         "Estimate the number",
-      ])
+      ]) {
         await expect(inner).toContainText(title)
+      }
     }
+
     for (const width of [1440, 390, 320]) {
       await page.setViewportSize({ width, height: 1000 })
       await page.evaluate(async () => {
         await document.fonts.ready
-        await new Promise((r) =>
-          requestAnimationFrame(() => requestAnimationFrame(r)),
-        )
+        await new Promise((r) => {
+          requestAnimationFrame(() => requestAnimationFrame(r))
+        })
       })
       const b = await inner.boundingBox(),
         s = await preview.locator(".tzv4-stage").boundingBox()
-      for (const k of ["x", "y", "width", "height"])
+      for (const k of ["x", "y", "width", "height"]) {
         expect(Math.abs(b[k] - s[k])).toBeLessThan(2)
+      }
       await preview.screenshot({
-        path: path.join(out, kind + "-" + width + ".png"),
+        path: path.join(out, `${kind}-${width}.png`),
       })
       checks.push({
         kind,
@@ -103,7 +115,9 @@ try {
   result = { ok: false, error: String(e), checks, errors }
   await page
     .screenshot({ path: path.join(out, "failure.png"), fullPage: true })
-    .catch(() => {})
+    .catch(() => {
+      /* Keep the recorded audit outcome if its diagnostic screenshot is unavailable. */
+    })
   process.exitCode = 1
 } finally {
   fs.writeFileSync(

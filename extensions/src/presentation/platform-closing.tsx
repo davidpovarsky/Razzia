@@ -28,7 +28,8 @@ export function PlatformClosingBoundary({
   elapsedMs,
   reducedMotion = false,
 }: PropsWithChildren<{
-  /** null means an ordinary scene; a number means the product owns the curtain. */
+  /** A null value means an ordinary scene; a number means the product owns the curtain. */
+
   elapsedMs: number | null
   reducedMotion?: boolean
 }>) {
@@ -36,11 +37,19 @@ export function PlatformClosingBoundary({
   const ownsCurtain = elapsedMs !== null
   const closed = frame?.closed ?? false
   const state = useMemo(() => ({ ownsCurtain, closed }), [ownsCurtain, closed])
-  const progress = frame
-    ? reducedMotion
-      ? Number(frame.closed)
-      : frame.curtainProgress
-    : 0
+  const getCurtainProgress = () => {
+    if (frame) {
+      if (reducedMotion) {
+        return Number(frame.closed)
+      }
+
+      return frame.curtainProgress
+    }
+
+    return 0
+  }
+
+  const progress = getCurtainProgress()
   const curtainStyle: CSSProperties = {
     position: "absolute",
     top: "-1.388889%",
@@ -50,14 +59,24 @@ export function PlatformClosingBoundary({
     objectFit: "cover",
   }
 
+  const getClosingStage = () => {
+    if (frame) {
+      if (frame.closed) {
+        return "closed"
+      }
+
+      return "closing"
+    }
+
+    return "inactive"
+  }
+
   return (
     <PlatformClosingContext.Provider value={state}>
       <div
         className="relative h-full w-full overflow-hidden"
         data-testid="platform-closing-boundary"
-        data-closing-stage={
-          frame ? (frame.closed ? "closed" : "closing") : "inactive"
-        }
+        data-closing-stage={getClosingStage()}
       >
         {children}
         {frame && (

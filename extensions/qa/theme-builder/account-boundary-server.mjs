@@ -2,11 +2,18 @@ import { readFileSync, readdirSync } from "node:fs"
 import { resolve, extname } from "node:path"
 import { createServer } from "node:http"
 import { sign } from "hono/jwt"
-if (process.env.TADAZZ_REMOTE_QA !== "1") throw new Error("qa:isolated-only")
+
+if (process.env.TADAZZ_REMOTE_QA !== "1") {
+  throw new Error("qa:isolated-only")
+}
+
 const root = resolve(process.argv[2]),
   resources = new Map()
 for (const file of readdirSync(root, { recursive: true })) {
-  if (![".html", ".js", ".css", ".woff2"].includes(extname(file))) continue
+  if (![".html", ".js", ".css", ".woff2"].includes(extname(file))) {
+    continue
+  }
+
   resources.set(`/${file}`, readFileSync(resolve(root, file)))
 }
 const token = await sign(
@@ -27,6 +34,7 @@ const types = {
 }
 const server = createServer((request, response) => {
   const path = request.url === "/" ? "/account-boundary.html" : request.url
+
   if (
     request.method !== "GET" ||
     !path ||
@@ -35,8 +43,10 @@ const server = createServer((request, response) => {
   ) {
     response.writeHead(400)
     response.end()
+
     return
   }
+
   const body =
     path === "/qa/session"
       ? Buffer.from(JSON.stringify({ token }))

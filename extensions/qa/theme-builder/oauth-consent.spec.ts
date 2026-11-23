@@ -1,11 +1,29 @@
 import playwright from "../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
-import type * as Playwright from "../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
-const { test, expect } = playwright as unknown as typeof Playwright
+
+const { test, expect } =
+  playwright as unknown as typeof import("../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js")
+
+function isOAuthStatsRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+}
+
+function requireOAuthStatsRecord(value: unknown): Record<string, unknown> {
+  if (!isOAuthStatsRecord(value)) {
+    throw new Error("qa:invalid-oauth-stats")
+  }
+
+  return value
+}
+
 const callback =
   "https://consent-callback.example.invalid/callback?code=synthetic-code&state=original"
 const newTicket = (prefix = "test-") =>
   prefix + "synthetic-ticket-".repeat(4) + Math.random().toString(36).slice(2)
-const open = async (page: Playwright.Page, ticket: string, locale = "en") => {
+const open = async (
+  page: import("../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js").Page,
+  ticket: string,
+  locale = "en",
+) => {
   await page.goto(
     `/studio/oauth-consent?${new URLSearchParams({ oauth_request: ticket, locale })}`,
   )
@@ -13,7 +31,10 @@ const open = async (page: Playwright.Page, ticket: string, locale = "en") => {
     "synthetic-registered-client",
   )
 }
-const stats = async (request: Playwright.APIRequestContext, ticket: string) =>
+const stats = async (
+  request: import("../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js").APIRequestContext,
+  ticket: string,
+): Promise<unknown> =>
   (
     await request.get(`/qa/oauth-stats?${new URLSearchParams({ ticket })}`)
   ).json()
@@ -38,9 +59,9 @@ test("cancel during inspection ignores its late response", async ({
       exact: true,
     }),
   ).toBeDisabled()
-  expect((await stats(request, ticket)).approve).toBe(0)
+  expect(requireOAuthStatsRecord(await stats(request, ticket)).approve).toBe(0)
 })
-for (const locale of ["en", "fr", "de", "es", "it", "ja", "tr", "vi"])
+for (const locale of ["en", "fr", "de", "es", "it", "ja", "tr", "vi"]) {
   test(`actual consent component locale ${locale}, no automatic approval`, async ({
     page,
     request,
@@ -54,9 +75,12 @@ for (const locale of ["en", "fr", "de", "es", "it", "ja", "tr", "vi"])
     await expect(page.getByRole("list")).toContainText("tadazz.drafts.read")
     expect(await stats(request, ticket)).toEqual({ inspect: 1, approve: 0 })
     await expect(page.getByRole("button").first()).toBeEnabled()
-    if (locale === "ja")
+
+    if (locale === "ja") {
       await page.screenshot({ path: info.outputPath("native-consent-ja.png") })
+    }
   })
+}
 test("trusted native click approves once and navigates only to exact issuer response", async ({
   page,
   request,
@@ -99,7 +123,7 @@ test("native session change invalidates inspected proof before approval", async 
 }) => {
   const ticket = newTicket()
   await open(page, ticket)
-  await page.evaluate(() => (window as any).__qaOAuth.changeSession())
+  await page.evaluate(() => window.__qaOAuth.changeSession())
   await expect(
     page.getByRole("button", { name: "Allow access", exact: true }),
   ).toBeDisabled()

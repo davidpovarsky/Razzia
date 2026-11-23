@@ -78,6 +78,7 @@ describe("Gate 1: Canonical Built-In Sound Catalog & Asset Verification", () => 
       const approved = PLATFORM_AUDIO_ASSETS.find(
         (asset) => asset.url === sound.url,
       )
+
       if (approved) {
         expect(stat.size).toBe(approved.bytes)
         expect(

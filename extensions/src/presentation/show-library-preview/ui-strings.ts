@@ -158,8 +158,12 @@ const resources = {
 } satisfies Record<PreviewLocale, Record<string, string>>
 
 export type PreviewTextKey = keyof typeof resources.en
+
 export function previewText(locale: PreviewLocale) {
-  if (!resources[locale]) throw new Error("show-preview:unsupported-locale")
+  if (!Object.hasOwn(resources, locale)) {
+    throw new Error("show-preview:unsupported-locale")
+  }
+
   const instance = createInstance()
   void instance.init({
     lng: locale,
@@ -167,5 +171,6 @@ export function previewText(locale: PreviewLocale) {
     initAsync: false,
     resources: { [locale]: { translation: resources[locale] } },
   })
-  return (key: PreviewTextKey) => String(instance.t(key))
+
+  return (key: PreviewTextKey) => instance.t(key)
 }

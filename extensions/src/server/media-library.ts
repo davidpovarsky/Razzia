@@ -48,7 +48,7 @@ const sameBinary = (
   expected: BinarySnapshot | undefined,
   objectIdentity = true,
 ) =>
-  !!expected &&
+  expected !== undefined &&
   actual.sha256 === expected.sha256 &&
   actual.length === expected.length &&
   (!objectIdentity ||
@@ -380,14 +380,16 @@ export function executeMediaDeleteTransaction(
   const affectedShows = shows.filter((show) =>
     references.some((r) => r.quizId === show.id),
   )
+
   try {
     for (const show of affectedShows) {
       if (
         show.physicalKind === "sidecar-only" ||
         resolvePhysicalBase(getPath, show.id) !==
           path.relative(getPath(), show.filePath).split(path.sep).join("/")
-      )
+      ) {
         throw new Error("Referenced show lacks an unambiguous physical base")
+      }
     }
   } catch (error) {
     return {
@@ -397,6 +399,7 @@ export function executeMediaDeleteTransaction(
       error: `Unsafe detach preflight: ${(error as Error).message}`,
     }
   }
+
   const journalId = uuidv7()
   const originalBinary = mediaExists
     ? binaryFingerprint(getPath, `media/${cleanMediaName}`)
@@ -405,7 +408,7 @@ export function executeMediaDeleteTransaction(
   const quarantinePath = mediaExists
     ? path.join(quarantineDir, `${journalId}-${cleanMediaName}`)
     : null
-  let quarantineBinary: BinarySnapshot | undefined
+  let quarantineBinary: BinarySnapshot | undefined = undefined
 
   // 1. Quarantine media binary if it exists
   if (mediaExists && quarantinePath) {
@@ -415,11 +418,18 @@ export function executeMediaDeleteTransaction(
         getPath,
         path.relative(getPath(), quarantinePath).split(path.sep).join("/"),
       )
+
+      if (!originalBinary) {
+        throw new Error("Missing original media fingerprint")
+      }
+
       if (
-        copied.sha256 !== originalBinary!.sha256 ||
-        copied.length !== originalBinary!.length
-      )
+        copied.sha256 !== originalBinary.sha256 ||
+        copied.length !== originalBinary.length
+      ) {
         throw new Error("Quarantine does not match original binary")
+      }
+
       quarantineBinary = copied
     } catch (qErr) {
       return {
@@ -446,20 +456,23 @@ export function executeMediaDeleteTransaction(
       show.extras,
     )
     const bindings = {
-      base: preparePhysicalBinding(
+      base: preparePhysicalBinding({
         getPath,
-        show.id,
-        "base",
-        path.relative(getPath(), show.filePath).split(path.sep).join("/"),
-        detached.quizz,
-      ),
-      sidecar: preparePhysicalBinding(
+        quizId: show.id,
+        kind: "base",
+        relativePath: path
+          .relative(getPath(), show.filePath)
+          .split(path.sep)
+          .join("/"),
+        target: detached.quizz,
+      }),
+      sidecar: preparePhysicalBinding({
         getPath,
-        show.id,
-        "sidecar",
-        `extensions/quizzes/${show.id}.json`,
-        detached.extras,
-      ),
+        quizId: show.id,
+        kind: "sidecar",
+        relativePath: `extensions/quizzes/${show.id}.json`,
+        target: detached.extras,
+      }),
     }
 
     return {
@@ -499,6 +512,7 @@ export function executeMediaDeleteTransaction(
   ])
   const rollback = (): boolean => {
     let allSucceeded = true
+
     try {
       assertPhysicalRestoreGroup(getPath, physicalBindings)
     } catch (error) {
@@ -506,8 +520,10 @@ export function executeMediaDeleteTransaction(
         "[MediaRollback] Ownership changed; preserving both siblings and journal",
         error,
       )
+
       return false
     }
+
     if (mediaExists) {
       try {
         if (!quarantinePath || !fs.existsSync(quarantinePath)) {
@@ -515,16 +531,21 @@ export function executeMediaDeleteTransaction(
             "Quarantine copy missing during rollback verification",
           )
         }
+
         const savedCopy = binaryFingerprint(
           getPath,
           path.relative(getPath(), quarantinePath).split(path.sep).join("/"),
         )
-        if (!sameBinary(savedCopy, journalEntry.quarantineBinary))
+
+        if (!sameBinary(savedCopy, journalEntry.quarantineBinary)) {
           throw new Error("Quarantine identity or bytes changed")
+        }
+
         const current = binaryFingerprintOrMissing(
           getPath,
           `media/${cleanMediaName}`,
         )
+
         if (!current) {
           fs.copyFileSync(
             quarantinePath,
@@ -532,8 +553,11 @@ export function executeMediaDeleteTransaction(
             fs.constants.COPYFILE_EXCL,
           )
           const restored = binaryFingerprint(getPath, `media/${cleanMediaName}`)
-          if (!sameBinary(restored, journalEntry.binary, false))
+
+          if (!sameBinary(restored, journalEntry.binary, false)) {
             throw new Error("Restored binary bytes mismatch")
+          }
+
           journalEntry.restoredBinary = restored
           persistMediaJournal(journalFilePath, journalEntry)
         } else if (
@@ -546,12 +570,15 @@ export function executeMediaDeleteTransaction(
         // Check the restored binary in bounded chunks before releasing its
         // recovery copy. A nonthrowing copy/write is not proof of correct bytes.
         const mediaFd = fs.openSync(mediaFilePath, "r")
+
         try {
           const quarantineFd = fs.openSync(quarantinePath, "r")
+
           try {
             const mediaChunk = Buffer.alloc(64 * 1024)
             const quarantineChunk = Buffer.alloc(64 * 1024)
             let position = 0
+
             while (true) {
               const mediaBytes = fs.readSync(
                 mediaFd,
@@ -567,6 +594,7 @@ export function executeMediaDeleteTransaction(
                 quarantineChunk.length,
                 position,
               )
+
               if (
                 mediaBytes !== quarantineBytes ||
                 !mediaChunk
@@ -575,7 +603,11 @@ export function executeMediaDeleteTransaction(
               ) {
                 throw new Error("Rollback binary content mismatch")
               }
-              if (mediaBytes === 0) break
+
+              if (mediaBytes === 0) {
+                break
+              }
+
               position += mediaBytes
             }
           } finally {
@@ -593,24 +625,34 @@ export function executeMediaDeleteTransaction(
       }
     }
 
-    if (!allSucceeded) return false
+    if (!allSucceeded) {
+      return false
+    }
+
     if (journalEntry.binary) {
       try {
         const restored = binaryFingerprint(getPath, `media/${cleanMediaName}`)
+
         if (
           restored.sha256 !== journalEntry.binary.sha256 ||
           restored.length !== journalEntry.binary.length
-        )
+        ) {
           throw new Error("Restored binary differs from recorded original")
+        }
       } catch (error) {
         console.error(
           "[MediaRollback] Binary verification failed before reference restoration",
           error,
         )
+
         return false
       }
     }
-    if (options?.faultInjection?.failDuringRollback) return false
+
+    if (options?.faultInjection?.failDuringRollback) {
+      return false
+    }
+
     for (const b of journalShows) {
       try {
         assertPhysicalRestoreGroup(getPath, physicalBindings)
@@ -619,6 +661,7 @@ export function executeMediaDeleteTransaction(
       } catch (error) {
         allSucceeded = false
         console.error(`[MediaRollback] Failed restoring ${b.quizId}`, error)
+
         break
       }
     }
@@ -641,6 +684,7 @@ export function executeMediaDeleteTransaction(
         )
       }
     }
+
     if (!allSucceeded) {
       console.warn(
         `[MediaRollback] Rollback failed or was partial; PRESERVING journal ${journalFilePath} for crash recovery`,
@@ -676,19 +720,33 @@ export function executeMediaDeleteTransaction(
       )
 
       if (fs.existsSync(show.filePath)) {
-        publishPhysicalTarget(
-          getPath,
-          journalShows.find((record) => record.quizId === show.id)!.bindings
-            .base,
+        const showJournal = journalShows.find(
+          (record) => record.quizId === show.id,
         )
+
+        if (!showJournal) {
+          throw new Error("Missing staged media journal for show")
+        }
+
+        publishPhysicalTarget(getPath, showJournal.bindings.base)
       }
 
       if (detached.extras) {
         assertPhysicalGroup(getPath, physicalBindings)
-        const binding = journalShows.find(
+        const showJournal = journalShows.find(
           (record) => record.quizId === show.id,
-        )!.bindings.sidecar
-        if (!binding.original) publishPhysicalTarget(getPath, binding)
+        )
+
+        if (!showJournal) {
+          throw new Error("Missing staged media journal for show")
+        }
+
+        const binding = showJournal.bindings.sidecar
+
+        if (!binding.original) {
+          publishPhysicalTarget(getPath, binding)
+        }
+
         writeSidecar(getPath, show.id, detached.extras as AnyQuizExtras)
       }
 
@@ -727,9 +785,12 @@ export function executeMediaDeleteTransaction(
     if (options?.deleteMediaFn) {
       if (originalBinary) {
         const current = binaryFingerprint(getPath, `media/${cleanMediaName}`)
-        if (!sameBinary(current, originalBinary))
+
+        if (!sameBinary(current, originalBinary)) {
           throw new Error("Binary changed before delete")
+        }
       }
+
       if (options?.faultInjection?.failBeforeDeleteMedia) {
         throw new Error("Simulated failure before deleting media binary")
       }
@@ -743,6 +804,7 @@ export function executeMediaDeleteTransaction(
 
     // POINT OF NO RETURN:
     assertPhysicalGroup(getPath, physicalBindings)
+
     // Update journal status to "committed" BEFORE releasing quarantine!
     if (options?.faultInjection?.failBeforeCommittedWrite) {
       throw new Error("Simulated failure before committed marker write")
@@ -771,8 +833,11 @@ export function executeMediaDeleteTransaction(
         getPath,
         path.relative(getPath(), quarantinePath).split(path.sep).join("/"),
       )
-      if (!sameBinary(savedCopy, journalEntry.quarantineBinary))
+
+      if (!sameBinary(savedCopy, journalEntry.quarantineBinary)) {
         throw new Error("Committed quarantine ownership changed")
+      }
+
       fs.unlinkSync(quarantinePath)
     }
 
@@ -1008,6 +1073,7 @@ export function recoverMediaDeleteJournals(
           }
 
           const cleanQuizId = path.basename(s.quizId).replace(/\.json$/i, "")
+
           if (
             !s.bindings ||
             s.bindings.base.quizId !== cleanQuizId ||
@@ -1016,12 +1082,17 @@ export function recoverMediaDeleteJournals(
             s.bindings.sidecar.kind !== "sidecar" ||
             s.originalBaseRaw !== s.bindings.base.original?.raw ||
             s.originalSidecarRaw !== (s.bindings.sidecar.original?.raw ?? null)
-          )
+          ) {
             throw new Error("Missing or inconsistent physical media bindings")
+          }
+
           const filePath = getPath(s.bindings.base.relativePath)
           const sidecarPath = getPath(s.bindings.sidecar.relativePath)
-          if (s.filePath !== filePath || s.sidecarPath !== sidecarPath)
+
+          if (s.filePath !== filePath || s.sidecarPath !== sidecarPath) {
             throw new Error("Conflicting physical journal paths")
+          }
+
           validatedShows.push({
             quizId: cleanQuizId,
             filePath,
@@ -1086,13 +1157,17 @@ export function recoverMediaDeleteJournals(
               .split(path.sep)
               .join("/"),
           )
-          if (!sameBinary(current, entry.quarantineBinary))
+
+          if (!sameBinary(current, entry.quarantineBinary)) {
             throw new Error("Committed quarantine ownership changed")
+          }
+
           fs.unlinkSync(targetQuarantinePath)
         }
 
         // Unlink journal
         cleanupPhysicalBindings(getPath, bindings)
+
         if (fs.existsSync(journalPath)) {
           fs.unlinkSync(journalPath)
         }
@@ -1111,16 +1186,20 @@ export function recoverMediaDeleteJournals(
           getPath,
           `media/${cleanMediaName}`,
         )
+
         if (
           currentBinary &&
           !sameBinary(currentBinary, entry.binary) &&
           !sameBinary(currentBinary, entry.restoredBinary)
-        )
+        ) {
           throw new Error("Public binary ownership changed")
+        }
+
         const mediaExists = currentBinary !== null
         const quarantineExists = targetQuarantinePath
           ? fs.existsSync(targetQuarantinePath)
           : false
+
         if (quarantineExists && targetQuarantinePath) {
           const savedCopy = binaryFingerprint(
             getPath,
@@ -1129,8 +1208,10 @@ export function recoverMediaDeleteJournals(
               .split(path.sep)
               .join("/"),
           )
-          if (!sameBinary(savedCopy, entry.quarantineBinary))
+
+          if (!sameBinary(savedCopy, entry.quarantineBinary)) {
             throw new Error("Quarantine ownership changed")
+          }
         }
 
         if (hadBinaryQuarantined && !mediaExists && !quarantineExists) {
@@ -1158,8 +1239,11 @@ export function recoverMediaDeleteJournals(
               getPath,
               `media/${cleanMediaName}`,
             )
-            if (!sameBinary(restored, entry.binary, false))
+
+            if (!sameBinary(restored, entry.binary, false)) {
               throw new Error("Restored binary differs from original bytes")
+            }
+
             entry.restoredBinary = restored
             persistMediaJournal(journalPath, entry as MediaDeleteJournalEntry)
 
@@ -1188,12 +1272,15 @@ export function recoverMediaDeleteJournals(
           // Media may be a large video. Compare in bounded chunks so recovery
           // does not allocate two entire binaries under memory pressure.
           const mediaFd = fs.openSync(targetMediaFilePath, "r")
+
           try {
             const quarantineFd = fs.openSync(targetQuarantinePath, "r")
+
             try {
               const mediaChunk = Buffer.alloc(64 * 1024)
               const quarantineChunk = Buffer.alloc(64 * 1024)
               let position = 0
+
               while (true) {
                 const mediaBytes = fs.readSync(
                   mediaFd,
@@ -1209,6 +1296,7 @@ export function recoverMediaDeleteJournals(
                   quarantineChunk.length,
                   position,
                 )
+
                 if (
                   mediaBytes !== quarantineBytes ||
                   !mediaChunk
@@ -1219,7 +1307,11 @@ export function recoverMediaDeleteJournals(
                     `Restored binary differs from quarantine in ${file}`,
                   )
                 }
-                if (mediaBytes === 0) break
+
+                if (mediaBytes === 0) {
+                  break
+                }
+
                 position += mediaBytes
               }
             } finally {
@@ -1232,11 +1324,15 @@ export function recoverMediaDeleteJournals(
 
         if (!allRestored) {
           unresolvedJournals.push(file)
+
           continue
         }
+
         if (hadBinaryQuarantined) {
-          if (!entry.binary)
+          if (!entry.binary) {
             throw new Error("Missing original binary fingerprint")
+          }
+
           for (const relative of [
             `media/${cleanMediaName}`,
             ...(targetQuarantinePath && fs.existsSync(targetQuarantinePath)
@@ -1249,13 +1345,15 @@ export function recoverMediaDeleteJournals(
               : []),
           ]) {
             const fingerprint = binaryFingerprint(getPath, relative)
+
             if (
               fingerprint.sha256 !== entry.binary.sha256 ||
               fingerprint.length !== entry.binary.length
-            )
+            ) {
               throw new Error(
                 "Binary fingerprint mismatch before restoring references",
               )
+            }
           }
         }
 
@@ -1270,6 +1368,7 @@ export function recoverMediaDeleteJournals(
             if (s.originalBaseRaw !== null) {
               const restoredBase = fs.readFileSync(s.filePath, "utf-8")
               JSON.parse(restoredBase)
+
               if (restoredBase !== s.originalBaseRaw) {
                 throw new Error(
                   `Restored base content mismatch for ${s.quizId}`,
@@ -1313,6 +1412,7 @@ export function recoverMediaDeleteJournals(
         }
 
         cleanupPhysicalBindings(getPath, bindings)
+
         // 3. Unlink quarantine and journal ONLY after verified rollback
         if (targetQuarantinePath && fs.existsSync(targetQuarantinePath)) {
           fs.unlinkSync(targetQuarantinePath)

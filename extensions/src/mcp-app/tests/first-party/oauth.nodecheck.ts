@@ -11,26 +11,98 @@ import {
 } from "node:fs"
 import { join } from "node:path"
 import { DatabaseSync } from "node:sqlite"
-import { createFirstPartyOAuth } from "../../first-party/oauth.ts"
+import {
+  createFirstPartyOAuth,
+  type FirstPartyOAuthOptions,
+} from "../../first-party/oauth.ts"
 import { normalizeDraft } from "../../server/authoring.ts"
 import { hashJson } from "../../contracts/canonical.ts"
 import {
   createOAuthProtocol,
   tokenDigest,
 } from "../../first-party/oauth-protocol.ts"
-import type { FirstPartyOAuthOptions } from "../../first-party/oauth.ts"
-import { fixture, createInput, key, origin, policy } from "./fixtures.ts"
-import type { Session } from "./fixtures.ts"
+import {
+  fixture,
+  createInput,
+  key,
+  origin,
+  policy,
+  type Session,
+} from "./fixtures.ts"
 
-let f: Awaited<ReturnType<typeof fixture>>
-let issuer: Awaited<ReturnType<typeof createFirstPartyOAuth>>
-let options: FirstPartyOAuthOptions
+function isOAuthObservationRecord(
+  value: unknown,
+): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value)
+}
+
+function requireOAuthObservationRecord(
+  value: unknown,
+): Record<string, unknown> {
+  if (!isOAuthObservationRecord(value)) {
+    throw new Error("Invalid synthetic OAuth evidence record")
+  }
+
+  return value
+}
+
+function requireOAuthObservationString(value: unknown): string {
+  if (typeof value !== "string") {
+    throw new Error("Missing synthetic OAuth evidence text")
+  }
+
+  return value
+}
+
+function requireOAuthObservationPresent<T>(value: T): NonNullable<T> {
+  if (value === null || value === undefined) {
+    throw new Error("Missing synthetic OAuth evidence value")
+  }
+
+  return value
+}
+
+function requireOAuthObservationArray(value: unknown): unknown[] {
+  if (!Array.isArray(value)) {
+    throw new Error("Invalid synthetic OAuth evidence array")
+  }
+
+  return value
+}
+
+type InitializedFValue = Awaited<ReturnType<typeof fixture>>
+let f: InitializedFValue | undefined = undefined
+function requireInitializedF(): InitializedFValue {
+  if (f === undefined) {
+    throw new Error("Fixture state f was read before initialization")
+  }
+
+  return f
+}
+type InitializedIssuerValue = Awaited<ReturnType<typeof createFirstPartyOAuth>>
+let issuer: InitializedIssuerValue | undefined = undefined
+function requireInitializedIssuer(): InitializedIssuerValue {
+  if (issuer === undefined) {
+    throw new Error("Fixture state issuer was read before initialization")
+  }
+
+  return issuer
+}
+type InitializedOptionsValue = FirstPartyOAuthOptions
+let options: InitializedOptionsValue | undefined = undefined
+function requireInitializedOptions(): InitializedOptionsValue {
+  if (options === undefined) {
+    throw new Error("Fixture state options was read before initialization")
+  }
+
+  return options
+}
 const clientId = "private-synthetic-chat-client"
 const redirectUri = "https://host.example.invalid/oauth/callback"
 const config = {
-  issuer: origin + "/oauth",
-  resource: origin + "/mcp",
-  resourceMetadataUrl: origin + "/.well-known/oauth-protected-resource/mcp",
+  issuer: `${origin}/oauth`,
+  resource: `${origin}/mcp`,
+  resourceMetadataUrl: `${origin}/.well-known/oauth-protected-resource/mcp`,
 }
 const scope = "tadazz.catalog.read tadazz.drafts.read tadazz.drafts.write"
 before(async () => {
@@ -38,42 +110,56 @@ before(async () => {
   const pair = generateKeyPairSync("ed25519")
   options = {
     config,
-    configRoot: f.root,
-    consentPageUrl: origin + "/studio/oauth-consent",
+    configRoot: requireInitializedF().root,
+    consentPageUrl: `${origin}/studio/oauth-consent`,
     keyId: "synthetic-oauth-issuer",
-    signingPrivateKeyPem: pair.privateKey
-      .export({ type: "pkcs8", format: "pem" })
-      .toString(),
+    signingPrivateKeyPem: pair.privateKey.export({
+      type: "pkcs8",
+      format: "pem",
+    }),
     ticketEncryptionKey: randomBytes(32),
     clients: [
       { clientId, redirectUris: [redirectUri], scopes: scope.split(" ") },
     ],
   }
-  issuer = await createFirstPartyOAuth(options)
+  issuer = await createFirstPartyOAuth(requireInitializedOptions())
 })
 after(() => f?.close())
 beforeEach(async () => {
   // Each clock-controlled case gets a real fresh ingress budget, while the
   // actual tenant/account stores and deployment-owned synthetic keys persist.
-  issuer = await createFirstPartyOAuth(options)
+  issuer = await createFirstPartyOAuth(requireInitializedOptions())
 })
 const file = (owner: string) =>
-  join(f.root, "tenants", owner, "extensions/mcp-oauth/grants.sqlite")
-function request(
-  path: string,
+  join(
+    requireInitializedF().root,
+    "tenants",
+    owner,
+    "extensions/mcp-oauth/grants.sqlite",
+  )
+function request({
+  path,
   method = "GET",
-  body?: Record<string, string>,
-  session?: Session,
-  extra: Record<string, string> = {},
-  instance = issuer,
-) {
+  body,
+  session,
+  extra = {},
+  instance = requireInitializedIssuer(),
+}: {
+  path: string
+  method?: string
+  body?: Record<string, string>
+  session?: Session
+  extra?: Record<string, string>
+  instance?: ReturnType<typeof requireInitializedIssuer>
+}) {
   const firstParty = path === "/oauth/inspect" || path === "/oauth/approve"
+
   return instance.fetch(
     new Request(origin + path, {
       method,
       headers: {
         host: new URL(origin).host,
-        ...(session ? { authorization: "Bearer " + session.token } : {}),
+        ...(session ? { authorization: `Bearer ${session.token}` } : {}),
         ...(method === "GET"
           ? {}
           : {
@@ -108,9 +194,10 @@ async function begin(changes: Record<string, string> = {}) {
     code_challenge_method: "S256",
     ...changes,
   }
-  const response = await request(
-    "/oauth/authorize?" + new URLSearchParams(params),
-  )
+  const response = await request({
+    path: `/oauth/authorize?${new URLSearchParams(params).toString()}`,
+  })
+
   return {
     response,
     verifier,
@@ -122,49 +209,57 @@ async function begin(changes: Record<string, string> = {}) {
       ) ?? "",
   }
 }
-async function approve(session = f.sessions[0], instance = issuer) {
+async function approve(
+  session = requireInitializedF().sessions[0],
+  instance = requireInitializedIssuer(),
+) {
   const begun = await begin()
   assert.equal(begun.response.status, 302)
-  const inspected = await request(
-    "/oauth/inspect",
-    "POST",
-    { ticket: begun.ticket },
+  const inspected = await request({
+    path: "/oauth/inspect",
+    method: "POST",
+    body: { ticket: begun.ticket },
     session,
-    {},
+    extra: {},
     instance,
-  )
+  })
   assert.equal(inspected.status, 200)
-  const review = await inspected.json()
+  const review = requireOAuthObservationRecord(await inspected.json())
   assert.deepEqual(review.scopes, scope.split(" "))
-  const allowed = await request(
-    "/oauth/approve",
-    "POST",
-    { ticket: begun.ticket, proof: review.proof, decision: "allow" },
+  const allowed = await request({
+    path: "/oauth/approve",
+    method: "POST",
+    body: {
+      ticket: begun.ticket,
+      proof: requireOAuthObservationString(review.proof),
+      decision: "allow",
+    },
     session,
-    {},
+    extra: {},
     instance,
-  )
+  })
   assert.equal(allowed.status, 200, await allowed.clone().text())
-  const result = await allowed.json()
-  const redirect = new URL(result.redirectUrl)
+  const result = requireOAuthObservationRecord(await allowed.json())
+  const redirect = new URL(requireOAuthObservationString(result.redirectUrl))
   assert.equal(redirect.origin + redirect.pathname, redirectUri)
   assert.equal(redirect.searchParams.get("state"), begun.state)
   assert.equal(redirect.searchParams.get("iss"), config.issuer)
+
   return {
     ...begun,
-    grantId: result.grantId as string,
-    code: redirect.searchParams.get("code")!,
+    grantId: requireOAuthObservationString(result.grantId),
+    code: requireOAuthObservationPresent(redirect.searchParams.get("code")),
   }
 }
 async function exchange(
   grant: Awaited<ReturnType<typeof approve>>,
   changes: Record<string, string> = {},
-  instance = issuer,
+  instance = requireInitializedIssuer(),
 ) {
-  return request(
-    "/oauth/token",
-    "POST",
-    {
+  return request({
+    path: "/oauth/token",
+    method: "POST",
+    body: {
       grant_type: "authorization_code",
       client_id: clientId,
       code: grant.code,
@@ -173,10 +268,10 @@ async function exchange(
       resource: config.resource,
       ...changes,
     },
-    undefined,
-    {},
+    session: undefined,
+    extra: {},
     instance,
-  )
+  })
 }
 const tokenResponseSchema = z.strictObject({
   access_token: z.string().min(1),
@@ -190,7 +285,7 @@ async function readTokens(response: Response) {
   return tokenResponseSchema.parse((await response.json()) as unknown)
 }
 
-async function linked(session = f.sessions[0]) {
+async function linked(session = requireInitializedF().sessions[0]) {
   const grant = await approve(session)
   const response = await exchange(grant)
   assert.equal(response.status, 200, await response.clone().text())
@@ -198,39 +293,46 @@ async function linked(session = f.sessions[0]) {
   return { ...grant, tokens: await readTokens(response) }
 }
 async function freshSession(): Promise<Session> {
-  const minted = await f.tokens.mintToken(f.sessions[0].owner, "manager")
-  const claims = await f.tokens.verifyToken(minted.token)
+  const minted = await requireInitializedF().tokens.mintToken(
+    requireInitializedF().sessions[0].owner,
+    "manager",
+  )
+  const claims = await requireInitializedF().tokens.verifyToken(minted.token)
   assert.ok(claims.sid)
 
-  return { owner: f.sessions[0].owner, sid: claims.sid, token: minted.token }
+  return {
+    owner: requireInitializedF().sessions[0].owner,
+    sid: claims.sid,
+    token: minted.token,
+  }
 }
 function rotateCredential(
   credential: string,
   changes: Record<string, string> = {},
-  instance = issuer,
+  instance = requireInitializedIssuer(),
 ) {
-  return request(
-    "/oauth/token",
-    "POST",
-    {
+  return request({
+    path: "/oauth/token",
+    method: "POST",
+    body: {
       grant_type: "refresh_token",
       client_id: clientId,
       resource: config.resource,
       refresh_token: credential,
       ...changes,
     },
-    undefined,
-    {},
+    session: undefined,
+    extra: {},
     instance,
-  )
+  })
 }
 async function legacyConnection(session: Session) {
   // Reconstruct only the historical token/store representation after a real
   // native-account consent + PKCE exchange. No principal or approval is forged.
   const grant = await linked(session)
-  const claims = await f.tokens.verifyToken(session.token)
+  const claims = await requireInitializedF().tokens.verifyToken(session.token)
   const expiresAt = claims.exp * 1000
-  const credential = createOAuthProtocol(options).refresh({
+  const credential = createOAuthProtocol(requireInitializedOptions()).refresh({
     accountId: session.owner,
     grantId: grant.grantId,
     clientId,
@@ -258,33 +360,49 @@ async function legacyConnection(session: Session) {
   return { ...grant, credential, expiresAt }
 }
 test("discovery and JWKS expose public configuration without creating a tenant grant store", async () => {
-  const response = await request(
-    "/.well-known/oauth-authorization-server/oauth",
-  )
+  const response = await request({
+    path: "/.well-known/oauth-authorization-server/oauth",
+  })
   assert.equal(response.status, 200)
-  const metadata = await response.json()
+  const metadata = requireOAuthObservationRecord(await response.json())
   assert.equal(metadata.issuer, config.issuer)
   assert.deepEqual(metadata.code_challenge_methods_supported, ["S256"])
   assert.deepEqual(metadata.token_endpoint_auth_methods_supported, ["none"])
-  const jwks = await (await request("/oauth/jwks.json")).json()
-  assert.equal(jwks.keys[0].kty, "OKP")
-  assert.equal(jwks.keys[0].d, undefined)
-  assert.equal(existsSync(file(f.sessions[0].owner)), false)
-  assert.equal(existsSync(join(f.root, "grants.sqlite")), false)
+  const jwks = requireOAuthObservationRecord(
+    await (await request({ path: "/oauth/jwks.json" })).json(),
+  )
+
+  assert.equal(
+    requireOAuthObservationRecord(requireOAuthObservationArray(jwks.keys)[0])
+      .kty,
+    "OKP",
+  )
+  assert.equal(
+    requireOAuthObservationRecord(requireOAuthObservationArray(jwks.keys)[0]).d,
+    undefined,
+  )
+  assert.equal(existsSync(file(requireInitializedF().sessions[0].owner)), false)
+  assert.equal(
+    existsSync(join(requireInitializedF().root, "grants.sqlite")),
+    false,
+  )
 })
 test("exact client/redirect/resource/PKCE/scope admission rejects unsafe authorization requests", async () => {
   for (const changes of [
     { client_id: "unknown" },
     { redirect_uri: "https://attacker.invalid/callback" },
-    { redirect_uri: redirectUri + "/" },
+    { redirect_uri: `${redirectUri}/` },
     { resource: config.issuer },
     { code_challenge_method: "plain" },
     { scope: "tadazz.library.write" },
-    { scope: scope + " tadazz.drafts.read" },
+    { scope: `${scope} tadazz.drafts.read` },
     { state: "short" },
-  ] as Array<Record<string, string>>)
+  ] as Array<Record<string, string>>) {
     assert.equal((await begin(changes)).response.status, 400)
-  const response = await request("/oauth/authorize?client_id=a&client_id=b")
+  }
+  const response = await request({
+    path: "/oauth/authorize?client_id=a&client_id=b",
+  })
   assert.equal(response.status, 400)
   assert.equal(response.headers.get("location"), null)
 })
@@ -298,12 +416,12 @@ test("ChatGPT authorization hints are ignored without altering exact client, PKC
   }
   const begun = await begin(extras)
   assert.equal(begun.response.status, 302)
-  const inspect = await request(
-    "/oauth/inspect",
-    "POST",
-    { ticket: begun.ticket },
-    f.sessions[0],
-  )
+  const inspect = await request({
+    path: "/oauth/inspect",
+    method: "POST",
+    body: { ticket: begun.ticket },
+    session: requireInitializedF().sessions[0],
+  })
   assert.equal(inspect.status, 200)
   const responseText = await inspect.text()
   assert.equal(responseText.includes(hint), false)
@@ -313,12 +431,12 @@ test("ChatGPT authorization hints are ignored without altering exact client, PKC
     .object({ scopes: z.array(z.string()), proof: z.string() })
     .parse(JSON.parse(responseText) as unknown)
   assert.deepEqual(review.scopes, scope.split(" "))
-  const allowed = await request(
-    "/oauth/approve",
-    "POST",
-    { ticket: begun.ticket, proof: review.proof, decision: "allow" },
-    f.sessions[0],
-  )
+  const allowed = await request({
+    path: "/oauth/approve",
+    method: "POST",
+    body: { ticket: begun.ticket, proof: review.proof, decision: "allow" },
+    session: requireInitializedF().sessions[0],
+  })
   assert.equal(allowed.status, 200)
   const approved = z
     .object({ redirectUrl: z.string() })
@@ -329,21 +447,27 @@ test("ChatGPT authorization hints are ignored without altering exact client, PKC
   assert.equal(redirect.searchParams.get("iss"), config.issuer)
   const authorizationCode = redirect.searchParams.get("code")
   assert.ok(authorizationCode)
-  const tokenResponse = await request("/oauth/token", "POST", {
-    grant_type: "authorization_code",
-    client_id: clientId,
-    code: authorizationCode,
-    code_verifier: begun.verifier,
-    redirect_uri: redirectUri,
-    resource: config.resource,
+  const tokenResponse = await request({
+    path: "/oauth/token",
+    method: "POST",
+    body: {
+      grant_type: "authorization_code",
+      client_id: clientId,
+      code: authorizationCode,
+      code_verifier: begun.verifier,
+      redirect_uri: redirectUri,
+      resource: config.resource,
+    },
   })
   assert.equal(tokenResponse.status, 200)
   const tokens = z
     .object({ access_token: z.string() })
     .parse((await tokenResponse.json()) as unknown)
-  const principal = await issuer.verifyAccessToken(tokens.access_token)
+  const principal = await requireInitializedIssuer().verifyAccessToken(
+    tokens.access_token,
+  )
   assert.equal(principal.clientId, clientId)
-  assert.equal(principal.accountId, f.sessions[0].owner)
+  assert.equal(principal.accountId, requireInitializedF().sessions[0].owner)
   assert.equal(
     (
       await begin({
@@ -361,57 +485,76 @@ test("ChatGPT authorization hints are ignored without altering exact client, PKC
 test("consent requires real manager identity, same origin and the exact account/session/ticket proof", async () => {
   const begun = await begin()
   assert.equal(
-    (await request("/oauth/inspect", "POST", { ticket: begun.ticket })).status,
+    (
+      await request({
+        path: "/oauth/inspect",
+        method: "POST",
+        body: { ticket: begun.ticket },
+      })
+    ).status,
     401,
   )
   assert.equal(
     (
-      await request(
-        "/oauth/inspect",
-        "POST",
-        { ticket: begun.ticket },
-        f.sessions[0],
-        { origin: "https://attacker.invalid" },
-      )
+      await request({
+        path: "/oauth/inspect",
+        method: "POST",
+        body: { ticket: begun.ticket },
+        session: requireInitializedF().sessions[0],
+        extra: { origin: "https://attacker.invalid" },
+      })
     ).status,
     403,
   )
-  const review = await (
-    await request(
-      "/oauth/inspect",
-      "POST",
-      { ticket: begun.ticket },
-      f.sessions[0],
-    )
-  ).json()
+  const review = requireOAuthObservationRecord(
+    await (
+      await request({
+        path: "/oauth/inspect",
+        method: "POST",
+        body: { ticket: begun.ticket },
+        session: requireInitializedF().sessions[0],
+      })
+    ).json(),
+  )
+
   assert.equal(
     (
-      await request(
-        "/oauth/approve",
-        "POST",
-        { ticket: begun.ticket, proof: review.proof, decision: "allow" },
-        f.sessions[1],
-      )
+      await request({
+        path: "/oauth/approve",
+        method: "POST",
+        body: {
+          ticket: begun.ticket,
+          proof: requireOAuthObservationString(review.proof),
+          decision: "allow",
+        },
+        session: requireInitializedF().sessions[1],
+      })
     ).status,
     403,
   )
   assert.equal(
     (
-      await request(
-        "/oauth/approve",
-        "POST",
-        { ticket: begun.ticket, proof: "0".repeat(64), decision: "allow" },
-        f.sessions[0],
-      )
+      await request({
+        path: "/oauth/approve",
+        method: "POST",
+        body: {
+          ticket: begun.ticket,
+          proof: "0".repeat(64),
+          decision: "allow",
+        },
+        session: requireInitializedF().sessions[0],
+      })
     ).status,
     403,
   )
-  assert.equal(existsSync(file(f.sessions[1].owner)), false)
+  assert.equal(existsSync(file(requireInitializedF().sessions[1].owner)), false)
 })
 test("real account PKCE flow stores only token digests and survives a fresh issuer instance", async () => {
   const grant = await linked()
-  const p = await issuer.verifyAccessToken(grant.tokens.access_token)
-  assert.equal(p.accountId, f.sessions[0].owner)
+  const p = await requireInitializedIssuer().verifyAccessToken(
+    grant.tokens.access_token,
+  )
+  assert.equal(p.accountId, requireInitializedF().sessions[0].owner)
   assert.equal(p.grantId, grant.grantId)
   assert.equal(p.clientId, clientId)
   const bytes = readFileSync(file(p.accountId))
@@ -420,19 +563,20 @@ test("real account PKCE flow stores only token digests and survives a fresh issu
     grant.tokens.refresh_token,
     grant.code,
     grant.ticket,
-    f.sessions[0].token,
-  ])
+    requireInitializedF().sessions[0].token,
+  ]) {
     assert.equal(bytes.includes(Buffer.from(secret)), false)
+  }
   assert.equal(statSync(file(p.accountId)).mode & 0o777, 0o600)
-  const reopened = await createFirstPartyOAuth(options)
+  const reopened = await createFirstPartyOAuth(requireInitializedOptions())
   assert.equal(
     (await reopened.verifyAccessToken(grant.tokens.access_token)).grantId,
     grant.grantId,
   )
-  const before = readFileSync(file(p.accountId))
+  const priorBytes = readFileSync(file(p.accountId))
   const mtime = statSync(file(p.accountId)).mtimeMs
   await reopened.verifyAccessToken(grant.tokens.access_token)
-  assert.deepEqual(readFileSync(file(p.accountId)), before)
+  assert.deepEqual(readFileSync(file(p.accountId)), priorBytes)
   assert.equal(statSync(file(p.accountId)).mtimeMs, mtime)
 })
 test("wrong PKCE/client/resource/redirect cannot consume a valid code; code replay after the retry window revokes its grant", async (t) => {
@@ -442,20 +586,27 @@ test("wrong PKCE/client/resource/redirect cannot consume a valid code; code repl
     { client_id: "unknown" },
     { resource: config.issuer },
     { redirect_uri: "https://attacker.invalid/callback" },
-  ] as Array<Record<string, string>>)
+  ] as Array<Record<string, string>>) {
     assert.equal((await exchange(grant, changes)).status, 400)
+  }
   const response = await exchange(grant)
   assert.equal(response.status, 200)
-  const tokens = await response.json()
+  const tokens = requireOAuthObservationRecord(await response.json())
   assert.equal(
-    (await issuer.verifyAccessToken(tokens.access_token)).grantId,
+    (
+      await requireInitializedIssuer().verifyAccessToken(
+        requireOAuthObservationString(tokens.access_token),
+      )
+    ).grantId,
     grant.grantId,
   )
   const now = Date.now()
   t.mock.method(Date, "now", () => now + 31_000)
   assert.equal((await exchange(grant)).status, 400)
   await assert.rejects(
-    issuer.verifyAccessToken(tokens.access_token),
+    requireInitializedIssuer().verifyAccessToken(
+      requireOAuthObservationString(tokens.access_token),
+    ),
     /SCOPE_REQUIRED/u,
   )
 })
@@ -467,18 +618,42 @@ test("refresh rotates once, and replay after the retry window durably revokes ol
     refresh_token: grant.tokens.refresh_token,
     resource: config.resource,
   }
-  const response = await request("/oauth/token", "POST", refresh)
+  const response = await request({
+    path: "/oauth/token",
+    method: "POST",
+    body: refresh,
+  })
   assert.equal(response.status, 200)
-  const rotated = await response.json()
-  assert.notEqual(rotated.refresh_token, refresh.refresh_token)
-  await issuer.verifyAccessToken(rotated.access_token)
+  const rotated = requireOAuthObservationRecord(await response.json())
+
+  assert.notEqual(
+    requireOAuthObservationString(rotated.refresh_token),
+    refresh.refresh_token,
+  )
+  await requireInitializedIssuer().verifyAccessToken(
+    requireOAuthObservationString(rotated.access_token),
+  )
   const now = Date.now()
   t.mock.method(Date, "now", () => now + 31_000)
-  assert.equal((await request("/oauth/token", "POST", refresh)).status, 400)
-  await assert.rejects(issuer.verifyAccessToken(grant.tokens.access_token))
-  await assert.rejects(issuer.verifyAccessToken(rotated.access_token))
-  const reopened = await createFirstPartyOAuth(options)
-  await assert.rejects(reopened.verifyAccessToken(rotated.access_token))
+  assert.equal(
+    (await request({ path: "/oauth/token", method: "POST", body: refresh }))
+      .status,
+    400,
+  )
+  await assert.rejects(
+    requireInitializedIssuer().verifyAccessToken(grant.tokens.access_token),
+  )
+  await assert.rejects(
+    requireInitializedIssuer().verifyAccessToken(
+      requireOAuthObservationString(rotated.access_token),
+    ),
+  )
+  const reopened = await createFirstPartyOAuth(requireInitializedOptions())
+  await assert.rejects(
+    reopened.verifyAccessToken(
+      requireOAuthObservationString(rotated.access_token),
+    ),
+  )
 })
 test("parallel code exchange and refresh retries recover the same response without a second rotation", async (t) => {
   const grant = await approve()
@@ -505,7 +680,7 @@ test("parallel code exchange and refresh retries recover the same response witho
   assert.equal(c.access_token, a.access_token)
   const now = Date.now()
   t.mock.method(Date, "now", () => now + 15_000)
-  const reopened = await createFirstPartyOAuth(options)
+  const reopened = await createFirstPartyOAuth(requireInitializedOptions())
   const recovered = await rotateCredential(first.refresh_token, {}, reopened)
   assert.equal(recovered.status, 200)
   const recovery = await readTokens(recovered)
@@ -513,7 +688,7 @@ test("parallel code exchange and refresh retries recover the same response witho
   assert.equal(recovery.access_token, a.access_token)
   assert.ok(recovery.expires_in <= 285 && recovery.expires_in >= 283)
   await reopened.verifyAccessToken(recovery.access_token)
-  const bytes = readFileSync(file(f.sessions[0].owner))
+  const bytes = readFileSync(file(requireInitializedF().sessions[0].owner))
   for (const credential of [
     first.refresh_token,
     a.refresh_token,
@@ -543,7 +718,9 @@ test("a retry cannot recover a replaced refresh head or cross client/resource bi
   assert.equal(second.status, 200)
   const b = await readTokens(second)
   assert.equal((await rotateCredential(grant.tokens.refresh_token)).status, 400)
-  await assert.rejects(issuer.verifyAccessToken(b.access_token))
+  await assert.rejects(
+    requireInitializedIssuer().verifyAccessToken(b.access_token),
+  )
 })
 test("persistent connection refresh survives years and native expiry without extending native or access tokens", async (t) => {
   const session = await freshSession()
@@ -552,11 +729,16 @@ test("persistent connection refresh survives years and native expiry without ext
   let current = now + 400 * 24 * 60 * 60 * 1000
   t.mock.method(Date, "now", () => current)
   assert.equal(
-    f.accounts.isAccountSessionValid(session.owner, session.sid),
+    requireInitializedF().accounts.isAccountSessionValid(
+      session.owner,
+      session.sid,
+    ),
     false,
   )
-  await assert.rejects(f.tokens.verifyToken(session.token))
-  await assert.rejects(issuer.verifyAccessToken(grant.tokens.access_token))
+  await assert.rejects(requireInitializedF().tokens.verifyToken(session.token))
+  await assert.rejects(
+    requireInitializedIssuer().verifyAccessToken(grant.tokens.access_token),
+  )
   const { auth } = await import("@razzia/socket/api/routes/auth")
   const nativeRenewal = await auth.request("/session", {
     method: "POST",
@@ -570,11 +752,11 @@ test("persistent connection refresh survives years and native expiry without ext
   assert.equal(nativeSession.role, "player")
   assert.notEqual(nativeSession.clientId, session.owner)
   assert.ok(
-    f.db
-      .prepare("SELECT id FROM sessions WHERE id=? AND user_id=?")
+    requireInitializedF()
+      .db.prepare("SELECT id FROM sessions WHERE id=? AND user_id=?")
       .get(session.sid, session.owner),
   )
-  const reopened = await createFirstPartyOAuth(options)
+  const reopened = await createFirstPartyOAuth(requireInitializedOptions())
   const response = await rotateCredential(
     grant.tokens.refresh_token,
     {},
@@ -606,7 +788,7 @@ test("persistent connection refresh survives years and native expiry without ext
   assert.equal(later.status, 200)
   const renewed = await readTokens(later)
   await reopened.verifyAccessToken(renewed.access_token)
-  f.accounts.revokeAccountSession(session.sid)
+  requireInitializedF().accounts.revokeAccountSession(session.sid)
   await assert.rejects(reopened.verifyAccessToken(renewed.access_token))
   assert.equal(
     (await rotateCredential(renewed.refresh_token, {}, reopened)).status,
@@ -615,9 +797,12 @@ test("persistent connection refresh survives years and native expiry without ext
 })
 test("many ordinary rotations retain one digest and one encrypted retry entry per connection", async (t) => {
   const grant = await linked()
-  const initial = new DatabaseSync(file(f.sessions[0].owner), {
-    readOnly: true,
-  })
+  const initial = new DatabaseSync(
+    file(requireInitializedF().sessions[0].owner),
+    {
+      readOnly: true,
+    },
+  )
   let auditCount = 0
 
   try {
@@ -630,8 +815,10 @@ test("many ordinary rotations retain one digest and one encrypted retry entry pe
     initial.close()
   }
 
-  const beforeBytes = statSync(file(f.sessions[0].owner)).size
-  const steadyIssuer = await createFirstPartyOAuth(options)
+  const beforeBytes = statSync(
+    file(requireInitializedF().sessions[0].owner),
+  ).size
+  const steadyIssuer = await createFirstPartyOAuth(requireInitializedOptions())
   let now = Date.now()
   t.mock.method(Date, "now", () => now)
   // Chain real exchanges in order: each needs the previous response's head.
@@ -647,7 +834,9 @@ test("many ordinary rotations retain one digest and one encrypted retry entry pe
     },
     Promise.resolve(grant.tokens.refresh_token),
   )
-  const db = new DatabaseSync(file(f.sessions[0].owner), { readOnly: true })
+  const db = new DatabaseSync(file(requireInitializedF().sessions[0].owner), {
+    readOnly: true,
+  })
 
   try {
     assert.equal(
@@ -669,10 +858,14 @@ test("many ordinary rotations retain one digest and one encrypted retry entry pe
       .get(grant.grantId)?.outcome
     assert.ok(typeof summary === "string")
     assert.equal(
-      createOAuthProtocol(options).readTokenRetry(summary).refreshCount,
+      createOAuthProtocol(requireInitializedOptions()).readTokenRetry(summary)
+        .refreshCount,
       120,
     )
-    assert.ok(statSync(file(f.sessions[0].owner)).size <= beforeBytes + 16_384)
+    assert.ok(
+      statSync(file(requireInitializedF().sessions[0].owner)).size <=
+        beforeBytes + 16_384,
+    )
     assert.equal(
       db
         .prepare(
@@ -700,11 +893,16 @@ test("an expired legacy connection upgrades only with its exact unused refresh c
   const response = await rotateCredential(legacy.credential)
   assert.equal(response.status, 200)
   const tokens = await readTokens(response)
-  const principal = await issuer.verifyAccessToken(tokens.access_token)
+  const principal = await requireInitializedIssuer().verifyAccessToken(
+    tokens.access_token,
+  )
   assert.equal(principal.accountId, session.owner)
   assert.equal(principal.grantId, legacy.grantId)
   assert.equal(
-    f.accounts.isAccountSessionValid(session.owner, session.sid),
+    requireInitializedF().accounts.isAccountSessionValid(
+      session.owner,
+      session.sid,
+    ),
     false,
   )
   const db = new DatabaseSync(file(session.owner), { readOnly: true })
@@ -732,15 +930,19 @@ test("legacy renewal cannot resurrect explicit grant/session revocation or a dis
       if (reason === "grant") {
         assert.equal(
           (
-            await request("/oauth/revoke", "POST", {
-              client_id: clientId,
-              token: grant.credential,
+            await request({
+              path: "/oauth/revoke",
+              method: "POST",
+              body: {
+                client_id: clientId,
+                token: grant.credential,
+              },
             })
           ).status,
           200,
         )
       } else if (reason === "session") {
-        f.accounts.revokeAccountSession(session.sid)
+        requireInitializedF().accounts.revokeAccountSession(session.sid)
       } else if (reason === "used") {
         const db = new DatabaseSync(file(session.owner))
 
@@ -772,43 +974,54 @@ test("legacy renewal cannot resurrect explicit grant/session revocation or a dis
     )
     const disabled = cases.find((item) => item.reason === "disabled")
     assert.ok(disabled)
-    f.db
-      .prepare("UPDATE accounts SET disabled=1 WHERE id=?")
-      .run(f.sessions[0].owner)
+    requireInitializedF()
+      .db.prepare("UPDATE accounts SET disabled=1 WHERE id=?")
+      .run(requireInitializedF().sessions[0].owner)
     assert.equal(
       (await rotateCredential(disabled.grant.credential)).status,
       400,
     )
   } finally {
-    f.db
-      .prepare("UPDATE accounts SET disabled=0 WHERE id=?")
-      .run(f.sessions[0].owner)
+    requireInitializedF()
+      .db.prepare("UPDATE accounts SET disabled=0 WHERE id=?")
+      .run(requireInitializedF().sessions[0].owner)
   }
 })
 test("client revocation and actual native-session logout revoke OAuth access", async () => {
   const grant = await linked()
   assert.equal(
     (
-      await request("/oauth/revoke", "POST", {
-        client_id: clientId,
-        token: grant.tokens.refresh_token,
+      await request({
+        path: "/oauth/revoke",
+        method: "POST",
+        body: {
+          client_id: clientId,
+          token: grant.tokens.refresh_token,
+        },
       })
     ).status,
     200,
   )
-  await assert.rejects(issuer.verifyAccessToken(grant.tokens.access_token))
+  await assert.rejects(
+    requireInitializedIssuer().verifyAccessToken(grant.tokens.access_token),
+  )
   assert.equal((await rotateCredential(grant.tokens.refresh_token)).status, 400)
   assert.equal((await exchange(grant)).status, 400)
-  const minted = await f.tokens.mintToken(f.sessions[0].owner, "manager")
-  const claims = await f.tokens.verifyToken(minted.token)
+  const minted = await requireInitializedF().tokens.mintToken(
+    requireInitializedF().sessions[0].owner,
+    "manager",
+  )
+  const claims = await requireInitializedF().tokens.verifyToken(minted.token)
   assert.ok(claims.sid)
   const other = await linked({
-    owner: f.sessions[0].owner,
+    owner: requireInitializedF().sessions[0].owner,
     sid: claims.sid,
     token: minted.token,
   })
-  f.accounts.revokeAccountSession(claims.sid)
-  await assert.rejects(issuer.verifyAccessToken(other.tokens.access_token))
+  requireInitializedF().accounts.revokeAccountSession(claims.sid)
+  await assert.rejects(
+    requireInitializedIssuer().verifyAccessToken(other.tokens.access_token),
+  )
 })
 test("explicit logout with an expired signed native token retires only its connection anchor", async (t) => {
   const session = await freshSession()
@@ -822,8 +1035,8 @@ test("explicit logout with an expired signed native token retires only its conne
   })
   assert.equal(malformed.status, 401)
   assert.ok(
-    f.db
-      .prepare("SELECT id FROM sessions WHERE id=? AND user_id=?")
+    requireInitializedF()
+      .db.prepare("SELECT id FROM sessions WHERE id=? AND user_id=?")
       .get(session.sid, session.owner),
   )
   const response = await auth.request("/logout", {
@@ -837,57 +1050,72 @@ test("explicit logout with an expired signed native token retires only its conne
   assert.equal(guest.role, "player")
   assert.notEqual(guest.clientId, session.owner)
   assert.equal(
-    f.db
-      .prepare("SELECT id FROM sessions WHERE id=? AND user_id=?")
+    requireInitializedF()
+      .db.prepare("SELECT id FROM sessions WHERE id=? AND user_id=?")
       .get(session.sid, session.owner),
     undefined,
   )
   assert.ok(
-    f.db
-      .prepare("SELECT id FROM sessions WHERE id=? AND user_id=?")
-      .get(f.sessions[1].sid, f.sessions[1].owner),
+    requireInitializedF()
+      .db.prepare("SELECT id FROM sessions WHERE id=? AND user_id=?")
+      .get(
+        requireInitializedF().sessions[1].sid,
+        requireInitializedF().sessions[1].owner,
+      ),
   )
   assert.equal((await rotateCredential(grant.tokens.refresh_token)).status, 400)
-  await assert.rejects(issuer.verifyAccessToken(grant.tokens.access_token))
+  await assert.rejects(
+    requireInitializedIssuer().verifyAccessToken(grant.tokens.access_token),
+  )
 })
 test("actual password reset deletes persistent connection anchors and invalidates refresh immediately", async () => {
   const address = "persistent-reset-fixture@example.invalid"
-  const account = await f.accounts.registerAccount(
+  const account = await requireInitializedF().accounts.registerAccount(
     address,
     "Synthetic-original-password-2026",
   )
-  const verification = f.accounts.issueCode(account.id, "verify")
-  assert.ok(f.accounts.consumeCode(address, "verify", verification))
-  const minted = await f.tokens.mintToken(account.id, "manager")
-  const claims = await f.tokens.verifyToken(minted.token)
+  const verification = requireInitializedF().accounts.issueCode(
+    account.id,
+    "verify",
+  )
+  assert.ok(
+    requireInitializedF().accounts.consumeCode(address, "verify", verification),
+  )
+  const minted = await requireInitializedF().tokens.mintToken(
+    account.id,
+    "manager",
+  )
+  const claims = await requireInitializedF().tokens.verifyToken(minted.token)
   assert.ok(claims.sid)
   const grant = await linked({
     owner: account.id,
     sid: claims.sid,
     token: minted.token,
   })
-  const reset = f.accounts.issueCode(account.id, "reset")
+  const reset = requireInitializedF().accounts.issueCode(account.id, "reset")
   assert.equal(
-    await f.accounts.resetPassword(
+    await requireInitializedF().accounts.resetPassword(
       address,
       reset,
       "Synthetic-updated-password-2026",
     ),
     true,
   )
-  await assert.rejects(f.tokens.verifyToken(minted.token))
-  await assert.rejects(issuer.verifyAccessToken(grant.tokens.access_token))
+  await assert.rejects(requireInitializedF().tokens.verifyToken(minted.token))
+  await assert.rejects(
+    requireInitializedIssuer().verifyAccessToken(grant.tokens.access_token),
+  )
   assert.equal((await rotateCredential(grant.tokens.refresh_token)).status, 400)
 })
 test("real OAuth HTTP tools persist tenant drafts, atomic CAS and durable idempotency without native writes", async () => {
-  const a = await linked(f.sessions[0])
-  const b = await linked(f.sessions[1])
-  const remote = issuer.remote({
+  const a = await linked(requireInitializedF().sessions[0])
+  const b = await linked(requireInitializedF().sessions[1])
+  const remote = requireInitializedIssuer().remote({
     allowedOrigins: [],
     dependencies: {
       authoring: policy,
-      drafts: issuer.draftRepository(policy),
-      rateLimit: async () => true,
+      drafts: requireInitializedIssuer().draftRepository(policy),
+      rateLimit: () => Promise.resolve(true),
     },
   })
   let id = 0
@@ -897,13 +1125,13 @@ test("real OAuth HTTP tools persist tenant drafts, atomic CAS and durable idempo
         method: "POST",
         headers: {
           host: new URL(origin).host,
-          authorization: "Bearer " + token,
+          authorization: `Bearer ${token}`,
           "content-type": "application/json",
           accept: "application/json, text/event-stream",
         },
         body: JSON.stringify({
           jsonrpc: "2.0",
-          id: ++id,
+          id: (id += 1),
           method: "tools/call",
           params: { name, arguments: args },
         }),
@@ -914,33 +1142,47 @@ test("real OAuth HTTP tools persist tenant drafts, atomic CAS and durable idempo
     const wire = response.headers
       .get("content-type")
       ?.startsWith("text/event-stream")
-      ? JSON.parse(
-          body
-            .split("\n")
-            .filter((line) => line.startsWith("data: "))
-            .at(-1)!
-            .slice(6),
+      ? requireOAuthObservationRecord(
+          JSON.parse(
+            requireOAuthObservationPresent(
+              body
+                .split("\n")
+                .filter((line) => line.startsWith("data: "))
+                .at(-1),
+            ).slice(6),
+          ),
         )
-      : JSON.parse(body)
+      : requireOAuthObservationRecord(JSON.parse(body))
     assert.equal(JSON.stringify(wire).includes(token), false)
-    assert.equal(JSON.stringify(wire).includes(f.syntheticSecret), false)
-    return wire.result.structuredContent
+    assert.equal(
+      JSON.stringify(wire).includes(requireInitializedF().syntheticSecret),
+      false,
+    )
+
+    return requireOAuthObservationRecord(
+      requireOAuthObservationRecord(wire.result).structuredContent,
+    )
   }
   const input = createInput("Actual synthetic OAuth draft")
   const created = await rpc(a.tokens.access_token, "create_game_draft", input)
   assert.equal(created.ok, true, JSON.stringify(created))
-  const draftId = created.data.draftId
+  const draftId = requireOAuthObservationString(
+    requireOAuthObservationRecord(created.data).draftId,
+  )
+
   assert.deepEqual(
     (await rpc(a.tokens.access_token, "create_game_draft", input)).data,
     created.data,
   )
   assert.equal(
-    (
-      await rpc(b.tokens.access_token, "get_game_draft", {
-        contractVersion: "0.1.0",
-        draftId,
-      })
-    ).error.code,
+    requireOAuthObservationRecord(
+      (
+        await rpc(b.tokens.access_token, "get_game_draft", {
+          contractVersion: "0.1.0",
+          draftId,
+        })
+      ).error,
+    ).code,
     "NOT_FOUND",
   )
   const update = {
@@ -957,54 +1199,79 @@ test("real OAuth HTTP tools persist tenant drafts, atomic CAS and durable idempo
   )
   assert.equal(results.filter((result) => result.ok).length, 1)
   assert.equal(
-    results.find((result) => !result.ok).error.code,
+    requireOAuthObservationRecord(
+      requireOAuthObservationPresent(results.find((result) => !result.ok))
+        .error,
+    ).code,
     "REVISION_CONFLICT",
   )
   const read = await rpc(a.tokens.access_token, "get_game_draft", {
     contractVersion: "0.1.0",
     draftId,
   })
-  assert.equal(read.data.revision, 2)
-  const p = await issuer.verifyAccessToken(a.tokens.access_token)
+  assert.equal(requireOAuthObservationRecord(read.data).revision, 2)
+  const p = await requireInitializedIssuer().verifyAccessToken(
+    a.tokens.access_token,
+  )
   await assert.rejects(
-    issuer.draftRepository(policy).get({ ...p }, draftId),
+    requireInitializedIssuer()
+      .draftRepository(policy)
+      .get({ ...p }, draftId),
     /SCOPE_REQUIRED/u,
   )
-  assert.equal(existsSync(join(f.root, "quizzes")), false)
+  assert.equal(existsSync(join(requireInitializedF().root, "quizzes")), false)
   assert.equal(
-    readFileSync(join(f.root, "native-sentinels/quiz.json"), "utf8"),
+    readFileSync(
+      join(requireInitializedF().root, "native-sentinels/quiz.json"),
+      "utf8",
+    ),
     '{"sentinel":"synthetic-global-do-not-touch"}\n',
   )
 })
 test("hostile headers, oversized bodies and grant journals are rejected without recovery or disclosure", async () => {
   assert.equal(
     (
-      await request("/oauth/token", "POST", {}, undefined, {
-        "content-length": "65537",
+      await request({
+        path: "/oauth/token",
+        method: "POST",
+        body: {},
+        session: undefined,
+        extra: {
+          "content-length": "65537",
+        },
       })
     ).status,
     413,
   )
   assert.equal(
     (
-      await request("/oauth/token", "POST", {}, undefined, {
-        "x-forwarded-host": "attacker.invalid",
+      await request({
+        path: "/oauth/token",
+        method: "POST",
+        body: {},
+        session: undefined,
+        extra: {
+          "x-forwarded-host": "attacker.invalid",
+        },
       })
     ).status,
     400,
   )
   const grant = await linked()
-  const path = file(f.sessions[0].owner)
-  const before = readFileSync(path)
-  writeFileSync(path + "-journal", "synthetic-unresolved-journal")
+  const path = file(requireInitializedF().sessions[0].owner)
+  const priorBytes2 = readFileSync(path)
+  writeFileSync(`${path}-journal`, "synthetic-unresolved-journal")
+
   try {
-    await assert.rejects(issuer.verifyAccessToken(grant.tokens.access_token))
-    assert.deepEqual(readFileSync(path), before)
+    await assert.rejects(
+      requireInitializedIssuer().verifyAccessToken(grant.tokens.access_token),
+    )
+    assert.deepEqual(readFileSync(path), priorBytes2)
     assert.equal(
-      readFileSync(path + "-journal", "utf8"),
+      readFileSync(`${path}-journal`, "utf8"),
       "synthetic-unresolved-journal",
     )
   } finally {
-    unlinkSync(path + "-journal")
+    unlinkSync(`${path}-journal`)
   }
 })

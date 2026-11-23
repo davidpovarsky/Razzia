@@ -26,8 +26,9 @@ export class Denied extends Error {
 }
 
 export function identifier(value: unknown): asserts value is string {
-  if (typeof value !== "string" || !/^[A-Za-z0-9_-]{1,128}$/u.test(value))
+  if (typeof value !== "string" || !/^[A-Za-z0-9_-]{1,128}$/u.test(value)) {
     throw new Denied("invalid_identifier")
+  }
 }
 
 export function validateContext(
@@ -35,8 +36,11 @@ export function validateContext(
   action: Action,
   now = Date.now(),
 ) {
-  if (!context || context.verified !== true)
+  // oxlint-disable-next-line typescript/no-unnecessary-condition, typescript/no-unnecessary-boolean-literal-compare, typescript/prefer-optional-chain -- Keep the service-boundary rejection for absent or unverified runtime credentials before any operation or reservation.
+  if (!context || context.verified !== true) {
     throw new Denied("service_required")
+  }
+
   for (const part of [
     context.owner,
     context.issuerSid,
@@ -44,23 +48,29 @@ export function validateContext(
     context.provider,
     context.service,
     context.executorId,
-  ])
+  ]) {
     identifier(part)
+  }
+
   if (
     !Number.isSafeInteger(context.expiresAt) ||
     context.expiresAt <= now ||
     !Array.isArray(context.actions) ||
     !context.actions.includes(action)
-  )
+  ) {
     throw new Denied("service_denied")
+  }
 }
 
 export const digest = (value: string) =>
   createHash("sha256").update(value).digest("hex")
+
 export function capabilityHash(capability: string) {
   // Exactly 32 bytes in one canonical lower-case hexadecimal representation.
-  if (typeof capability !== "string" || !/^[0-9a-f]{64}$/u.test(capability))
+  if (typeof capability !== "string" || !/^[0-9a-f]{64}$/u.test(capability)) {
     throw new Denied("invalid_capability")
+  }
+
   return digest(capability)
 }
 
@@ -120,6 +130,7 @@ export interface Reservation {
 
 export type RegistrationDecision =
   Reservation | { kind: "receipt"; receipt: Receipt; row?: RegistrationRow }
+
 export type OperationDecision =
   | { kind: "pending"; row: RegistrationRow }
   | { kind: "receipt"; receipt: Receipt; row?: RegistrationRow }

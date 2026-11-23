@@ -78,12 +78,18 @@ const fetchImpl = createPinnedCaFetch(tls.cert)
 const require = createRequire("/cleanup/extensions/package.json")
 const { chromium } = require("@playwright/test")
 const receipts = []
-let structural
-let host
-let server
-let browser
-let context
-let fatalError
+let structural = undefined
+
+let host = undefined
+
+let server = undefined
+
+let browser = undefined
+
+let context = undefined
+
+let fatalError = undefined
+
 const mediaIngress = {
   route: "/media/:name -> /api/media/raw/:name",
   nativeAuthorizationPreserved: true,
@@ -121,11 +127,13 @@ const writeReceipt = () => {
   }
   writeFileSync(
     join(evidence, "receipt.json"),
-    JSON.stringify(report, null, 2) + "\n",
+    `${JSON.stringify(report, null, 2)}\n`,
     { mode: 0o600 },
   )
+
   return report
 }
+
 try {
   const { verifyStoredStructure } = await import("./structural.mjs")
   const { seedStoredGameMedia } = await import("./package-fixtures.mjs")
@@ -135,7 +143,7 @@ try {
   const { registerAndLoginAccount } =
     await import("../phase3-native-consent/oauth-flow.ts")
   const port = await reserveLoopbackPort()
-  const origin = "https://127.0.0.1:" + port
+  const origin = `https://127.0.0.1:${port}`
   assert(
     process.env.TADAZZ_SITE_DIST_DIR,
     "Actual built candidate web bundle required",
@@ -162,11 +170,16 @@ try {
     webFallback: async (request) => {
       const url = new URL(request.url)
       const media = /^\/media\/([^/]+)$/u.exec(url.pathname)
-      if (!media) return serveSite(request)
+
+      if (!media) {
+        return serveSite(request)
+      }
+
       assert(["GET", "HEAD"].includes(request.method))
-      url.pathname = "/api/media/raw/" + media[1]
+      url.pathname = `/api/media/raw/${media[1]}`
       const { app } = await import("@razzia/socket/app")
-      mediaIngress.rewrittenRequests++
+      mediaIngress.rewrittenRequests += 1
+
       return app.fetch(new Request(url, request))
     },
     mcp,
@@ -179,7 +192,7 @@ try {
   })
   const credentials = {
     email: "stored-games-qa@example.invalid",
-    password: randomBytes(24).toString("base64url") + "Aa1!",
+    password: `${randomBytes(24).toString("base64url")}Aa1!`,
   }
   const registeredOwner = await registerAndLoginAccount({
     origin,
@@ -201,19 +214,19 @@ try {
   // A real login in this browser context also installs the native HttpOnly
   // media cookie; copying only the bearer token into localStorage loses it.
   const browserLogin = await context.request.post(
-    origin + "/api/accounts/login",
+    `${origin}/api/accounts/login`,
     { data: credentials },
   )
   assert.equal(browserLogin.status(), 200)
   const browserSession = await browserLogin.json()
   assert.equal(typeof browserSession.token, "string")
-  const browserOwner = await context.request.get(origin + "/api/accounts/me", {
-    headers: { Authorization: "Bearer " + browserSession.token },
+  const browserOwner = await context.request.get(`${origin}/api/accounts/me`, {
+    headers: { Authorization: `Bearer ${browserSession.token}` },
   })
   assert.equal(browserOwner.status(), 200)
   assert.equal((await browserOwner.json()).id, registeredOwner.accountId)
   const owner = { ...registeredOwner, token: browserSession.token }
-  const mediaCookie = (await context.cookies(origin + "/media/qa.png")).find(
+  const mediaCookie = (await context.cookies(`${origin}/media/qa.png`)).find(
     (cookie) => cookie.name === "tdz_media_auth",
   )
   assert(mediaCookie?.httpOnly && mediaCookie.path === "/media")
@@ -224,9 +237,10 @@ try {
     localStorage.setItem("i18nextLng", "en")
   }, owner.token)
   const tenantRoot = join(configRoot, "tenants", owner.accountId)
-  assert(tenantRoot.startsWith(configRoot + "/tenants/"))
+  assert(tenantRoot.startsWith(`${configRoot}/tenants/`))
   for (const fixture of fixtures.games) {
-    let receipt
+    let receipt = undefined
+
     try {
       assert.match(fixture.quizz.id, /^[A-Za-z0-9_-]{1,200}$/)
       // This tenant was just created by this run. Previous fixture games/pages
@@ -248,7 +262,10 @@ try {
         accountId: owner.accountId,
       })
       for (const item of media.externalAssets) {
-        if (!item.mirror) continue
+        if (!item.mirror) {
+          continue
+        }
+
         const anonymous = await fetchImpl(origin + item.mirror.nativeUrl)
         assert.equal(
           anonymous.status,
@@ -256,21 +273,23 @@ try {
           "The media rewrite must retain native anonymous denial",
         )
         await anonymous.arrayBuffer()
-        mediaIngress.anonymousDeniedRequests++
+        mediaIngress.anonymousDeniedRequests += 1
       }
       writeFileSync(
-        join(tenantRoot, "quizz", fixture.quizz.id + ".json"),
+        join(tenantRoot, "quizz", `${fixture.quizz.id}.json`),
         JSON.stringify(fixture.quizz),
         { mode: 0o600 },
       )
+
       if (fixture.extras) {
         assert.equal(fixture.extras.quizId, fixture.quizz.id)
         writeFileSync(
-          join(tenantRoot, "extensions/quizzes", fixture.quizz.id + ".json"),
+          join(tenantRoot, "extensions/quizzes", `${fixture.quizz.id}.json`),
           JSON.stringify(fixture.extras),
           { mode: 0o600 },
         )
       }
+
       receipt = await verifyStoredGameBrowser({
         fixture,
         origin,
@@ -288,12 +307,13 @@ try {
       receipt = {
         fixtureId: fixture.fixtureId,
         passed: false,
-        error: "fixture-setup: " + (error?.name ?? "Error"),
+        error: `fixture-setup: ${error?.name ?? "Error"}`,
         errorDigest: createHash("sha256")
           .update(String(error?.message ?? error))
           .digest("hex"),
       }
     }
+
     receipts.push(receipt)
     writeReceipt()
     console.log(
@@ -327,10 +347,17 @@ try {
   await context?.close()
   await browser?.close()
   await server?.close()
-  if (!server) await host?.close()
+
+  if (!server) {
+    await host?.close()
+  }
+
   trap.restore()
-  for (const key of Object.keys(process.env))
-    if (!(key in originalEnv)) delete process.env[key]
+  for (const key of Object.keys(process.env)) {
+    if (!(key in originalEnv)) {
+      delete process.env[key]
+    }
+  }
   Object.assign(process.env, originalEnv)
   rmSync(configRoot, { recursive: true, force: true })
   const report = writeReceipt()
@@ -342,5 +369,8 @@ try {
       passedGames: report.passedGames,
     }),
   )
-  if (!report.passed) process.exitCode = 1
+
+  if (!report.passed) {
+    process.exitCode = 1
+  }
 }

@@ -10,6 +10,7 @@ const frame = (phase: string) => {
   show.cards[0].correctAnswers = [2]
   const chapters = compileFullShowPreviewTimeline(show)
   const chapterIndex = chapters.findIndex((chapter) => chapter.phase === phase)
+
   return {
     chapters,
     value: applicationPreviewFrameSchema.parse({

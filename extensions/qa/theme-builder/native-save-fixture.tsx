@@ -10,8 +10,11 @@ import type { Account } from "../../src/site/adapters/client"
 import { NativeSaveConsentPage } from "../../src/components/native-save-consent/NativeSaveConsentPage"
 
 const locale = sessionStorage.getItem("qa.native-save.locale") ?? "en"
-if (!["en", "fr", "de", "es", "it", "ja", "tr", "vi"].includes(locale))
+
+if (!["en", "fr", "de", "es", "it", "ja", "tr", "vi"].includes(locale)) {
   throw new Error("qa:unsupported-locale")
+}
+
 const session = (await (await fetch("/qa/native-save/session")).json()) as {
   token: string
   account: Account
@@ -25,7 +28,13 @@ await instance.init({
   resources: { [locale]: { translation: {} } },
 })
 document.documentElement.lang = locale
-createRoot(document.getElementById("root")!).render(
+const mountElement = document.getElementById("root")
+
+if (mountElement === null) {
+  throw new Error("qa:missing-root-element")
+}
+
+createRoot(mountElement).render(
   <StrictMode>
     <I18nextProvider i18n={instance}>
       <NativeSaveConsentPage

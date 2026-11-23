@@ -19,15 +19,18 @@ const checks = [],
   errors = []
 page.on("pageerror", (e) => errors.push(e.message))
 async function shot(name, focus) {
-  if (focus) await focus.scrollIntoViewIfNeeded()
+  if (focus) {
+    await focus.scrollIntoViewIfNeeded()
+  }
+
   await page.evaluate(async () => {
     await document.fonts.ready
-    await new Promise((r) =>
-      requestAnimationFrame(() => requestAnimationFrame(r)),
-    )
+    await new Promise((r) => {
+      requestAnimationFrame(() => requestAnimationFrame(r))
+    })
   })
   await page.screenshot({
-    path: path.join(out, name + ".png"),
+    path: path.join(out, `${name}.png`),
     fullPage: true,
     animations: "disabled",
   })
@@ -58,6 +61,7 @@ async function addScene(label) {
   await page.getByTestId("studio-add-card-btn").click()
   await expect(page.getByTestId("studio-scene-preview-stage")).toBeVisible()
 }
+
 try {
   await page.addInitScript(() => localStorage.setItem("i18nextLng", "he"))
   await page.goto("http://127.0.0.1:3180/manager?lng=he")
@@ -96,7 +100,7 @@ try {
   for (const width of [1440, 390, 320]) {
     await page.setViewportSize({ width, height: 1000 })
     await shot(
-      "theme-settings-" + width,
+      `theme-settings-${width}`,
       page.getByTestId("show-theme-tadazz-classic"),
     )
   }
@@ -115,7 +119,7 @@ try {
   for (const width of [1440, 320]) {
     await page.setViewportSize({ width, height: 1000 })
     await shot(
-      "razzia-question-preview-" + width,
+      `razzia-question-preview-${width}`,
       page.getByTestId("question-live-preview"),
     )
   }
@@ -131,7 +135,7 @@ try {
   for (const width of [1440, 390, 320]) {
     await page.setViewportSize({ width, height: 1000 })
     await shot(
-      "scene-opening-" + width,
+      `scene-opening-${width}`,
       page.getByTestId("studio-scene-preview-stage"),
     )
   }
@@ -145,7 +149,7 @@ try {
   for (const width of [1440, 320]) {
     await page.setViewportSize({ width, height: 1000 })
     await shot(
-      "scene-interim-results-" + width,
+      `scene-interim-results-${width}`,
       page.getByTestId("studio-scene-preview-stage"),
     )
   }
@@ -201,7 +205,9 @@ try {
     ),
   )
 } catch (error) {
-  await shot("failure").catch(() => {})
+  await shot("failure").catch(() => {
+    /* Keep the recorded audit outcome if its diagnostic screenshot is unavailable. */
+  })
   console.log(
     JSON.stringify(
       {

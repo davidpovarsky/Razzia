@@ -11,14 +11,18 @@ import {
 } from "./schemas.ts"
 
 export const nativeSaveConsentRequestId = opaqueId.length(54)
+
 export const nativeSaveInspectInput = z.strictObject({
   consentRequestId: nativeSaveConsentRequestId,
 })
+
 export const nativeSaveApproveInput = nativeSaveInspectInput.extend({
   decision: z.literal("allow"),
   proof: digest,
 })
+
 const milliseconds = z.number().int().positive().max(Number.MAX_SAFE_INTEGER)
+
 export const nativeSaveInspection = z
   .strictObject({
     version: z.literal(1),
@@ -35,13 +39,15 @@ export const nativeSaveInspection = z
     proof: digest.optional(),
   })
   .superRefine((value, context) => {
-    if ((value.state === "pending") !== (value.proof !== undefined))
+    if ((value.state === "pending") !== (value.proof !== undefined)) {
       context.addIssue({
         code: "custom",
         path: ["proof"],
         message: "Pending consent alone requires a proof",
       })
+    }
   })
+
 export const nativeSaveApproval = z.strictObject({
   version: z.literal(1),
   state: z.literal("approved"),
@@ -50,11 +56,13 @@ export const nativeSaveApproval = z.strictObject({
   revision,
   expiresAt: milliseconds,
 })
+
 export const nativeSaveConsentFailure = z.strictObject({
   contractVersion: z.literal(CONTRACT_VERSION),
   ok: z.literal(false),
   error: errorSchema,
 })
+
 export const nativeSaveInspectResponse = z.discriminatedUnion("ok", [
   z.strictObject({
     contractVersion: z.literal(CONTRACT_VERSION),
@@ -63,6 +71,7 @@ export const nativeSaveInspectResponse = z.discriminatedUnion("ok", [
   }),
   nativeSaveConsentFailure,
 ])
+
 export const nativeSaveApproveResponse = z.discriminatedUnion("ok", [
   z.strictObject({
     contractVersion: z.literal(CONTRACT_VERSION),
@@ -71,7 +80,9 @@ export const nativeSaveApproveResponse = z.discriminatedUnion("ok", [
   }),
   nativeSaveConsentFailure,
 ])
+
 export type NativeSaveInspection = Readonly<
   z.infer<typeof nativeSaveInspection>
 >
+
 export type NativeSaveApproval = Readonly<z.infer<typeof nativeSaveApproval>>

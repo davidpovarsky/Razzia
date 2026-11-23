@@ -13,9 +13,11 @@ export interface BuiltNativeDefinitionV2 {
   definitionSha256: string
 }
 
-/** The build supplies hashes computed from its actual parsed bundled manifests.
+/**
+ * The build supplies hashes computed from its actual parsed bundled manifests.
  * Caller-supplied definitions, variant prefixes and host readiness are insufficient.
  */
+
 export function resolveBundledPreviewThemeV2(
   input: NativePreviewThemeBindingV2,
   builtDefinitions: readonly BuiltNativeDefinitionV2[],
@@ -29,6 +31,7 @@ export function resolveBundledPreviewThemeV2(
     (entry) =>
       entry.id === binding.theme.id && entry.version === binding.theme.version,
   )
+
   if (
     !definition ||
     exact.length !== 1 ||
@@ -38,6 +41,7 @@ export function resolveBundledPreviewThemeV2(
   ) {
     throw new Error("show-preview:unbuilt-native-definition")
   }
+
   for (const slot of SHOW_THEME_SLOTS) {
     if (
       !definition.slots[slot].variants.some(
@@ -51,7 +55,10 @@ export function resolveBundledPreviewThemeV2(
     role: binding.role,
     selection: { ...binding.theme, overrides: { slots: binding.slots } },
   })
-  if (theme.diagnostics.length)
+
+  if (theme.diagnostics.length) {
     throw new Error("show-preview:native-theme-resolution")
+  }
+
   return theme
 }

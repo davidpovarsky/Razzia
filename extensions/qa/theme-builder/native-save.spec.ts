@@ -1,23 +1,60 @@
 // Synthetic signed native session + exact F DTO component checks. This is not
 // the actual B/F native-save consumer, root route/login or development replay.
 import playwright from "../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
-import type * as Playwright from "../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
-const { test, expect } = playwright as unknown as typeof Playwright
+
+const { test, expect } =
+  playwright as unknown as typeof import("../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js")
+
+declare global {
+  interface Window {
+    __zod_globalConfig?: { jitless?: boolean }
+    __nativeSaveCsp: Array<{ directive: string; blocked: string }>
+
+    __nativeSaveXss?: unknown
+  }
+}
+
+function isNativeSaveRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+}
+
+function requireNativeSaveRecord(value: unknown): Record<string, unknown> {
+  if (!isNativeSaveRecord(value)) {
+    throw new Error("qa:invalid-native-save-observation")
+  }
+
+  return value
+}
+
+function requireNativeSaveString(value: unknown): string {
+  if (typeof value !== "string") {
+    throw new Error("qa:invalid-native-save-text")
+  }
+
+  return value
+}
+
 const id = (prefix = "P") =>
   (prefix + Date.now().toString(36) + Math.random().toString(36).slice(2))
     .padEnd(54, "x")
     .slice(0, 54)
 const path = (requestId: string) => `/studio/native-save-consent/${requestId}`
 const stats = async (
-  request: Playwright.APIRequestContext,
+  request: import("../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js").APIRequestContext,
   requestId: string,
-) => (await request.get(`/qa/native-save/stats?id=${requestId}`)).json()
-const open = async (
-  page: Playwright.Page,
-  requestId: string,
+): Promise<unknown> =>
+  (await request.get(`/qa/native-save/stats?id=${requestId}`)).json()
+const open = async ({
+  page,
+  requestId,
   locale = "en",
   suffix = "",
-) => {
+}: {
+  page: import("../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js").Page
+  requestId: string
+  locale?: string
+  suffix?: string
+}) => {
   await page.addInitScript(
     (value) => sessionStorage.setItem("qa.native-save.locale", value),
     locale,
@@ -30,13 +67,15 @@ test.beforeEach(async ({ page }) => {
   errors.set(page, values)
   page.on("pageerror", (error) => values.push(error.message))
   page.on("console", (message) => {
-    if (message.type() === "error") values.push(message.text())
+    if (message.type() === "error") {
+      values.push(message.text())
+    }
   })
   await page.addInitScript(() => {
-    ;(window as any).__zod_globalConfig = { jitless: false }
-    ;(window as any).__nativeSaveCsp = []
+    window.__zod_globalConfig = { jitless: false }
+    window.__nativeSaveCsp = []
     window.addEventListener("securitypolicyviolation", (event) =>
-      (window as any).__nativeSaveCsp.push({
+      window.__nativeSaveCsp.push({
         directive: event.effectiveDirective,
         blocked: event.blockedURI,
       }),
@@ -47,8 +86,8 @@ test.afterEach(async ({ page }) => {
   expect(errors.get(page)).toEqual([])
   expect(
     await page.evaluate(() => ({
-      csp: (window as any).__nativeSaveCsp,
-      jitless: (window as any).__zod_globalConfig?.jitless,
+      csp: window.__nativeSaveCsp,
+      jitless: window.__zod_globalConfig?.jitless,
     })),
   ).toEqual({ csp: [], jitless: false })
 })
@@ -93,7 +132,7 @@ for (const [locale, title, approve, cancel] of [
     request,
   }, info) => {
     const requestId = id()
-    await open(page, requestId, locale)
+    await open({ page, requestId, locale })
     await expect(
       page.getByRole("heading", { name: title, exact: true }),
     ).toBeVisible()
@@ -103,14 +142,14 @@ for (const [locale, title, approve, cancel] of [
     await expect(
       page.getByRole("button", { name: cancel, exact: true }),
     ).toBeEnabled()
-    const expected = await (
-      await request.get("/qa/native-save/snapshot")
-    ).json()
+    const expected = requireNativeSaveRecord(
+      await (await request.get("/qa/native-save/snapshot")).json(),
+    )
     expect(await page.getByTestId("native-save-snapshot").textContent()).toBe(
-      expected.authoredShowJson,
+      requireNativeSaveString(expected.authoredShowJson),
     )
     await expect(page.getByTestId("native-save-digest")).toHaveText(
-      expected.authoredDigest,
+      requireNativeSaveString(expected.authoredDigest),
     )
     await expect(page.getByTestId("native-save-revision")).toHaveText("7")
     await expect(page.getByTestId("native-save-client")).toHaveText(
@@ -122,10 +161,9 @@ for (const [locale, title, approve, cancel] of [
         .locator("img,script")
         .count(),
     ).toBe(0)
-    expect(
-      await page.evaluate(() => (window as any).__nativeSaveXss),
-    ).toBeUndefined()
+    expect(await page.evaluate(() => window.__nativeSaveXss)).toBeUndefined()
     expect(await stats(request, requestId)).toEqual({ inspect: 1, approve: 0 })
+
     if (locale === "ja") {
       await page.setViewportSize({ width: 390, height: 844 })
       const overflow = await page.evaluate(
@@ -145,11 +183,12 @@ test("only a trusted native click records one exact-revision approval and never 
 }) => {
   const requestId = id(),
     operations: string[] = []
-  page.on("request", (request) => {
-    if (request.method() === "POST")
-      operations.push(new URL(request.url()).pathname)
+  page.on("request", (observedRequest) => {
+    if (observedRequest.method() === "POST") {
+      operations.push(new URL(observedRequest.url()).pathname)
+    }
   })
-  await open(page, requestId)
+  await open({ page, requestId })
   const button = page.getByRole("button", {
     name: "Approve this revision",
     exact: true,
@@ -174,7 +213,7 @@ test("cancel discards the inspected proof without submitting approval", async ({
   request,
 }) => {
   const requestId = id()
-  await open(page, requestId)
+  await open({ page, requestId })
   await expect(
     page.getByRole("button", { name: "Approve this revision", exact: true }),
   ).toBeEnabled()
@@ -191,7 +230,17 @@ test("cancel during inspection rejects its late result", async ({
   request,
 }) => {
   const requestId = id()
-  let release!: () => void, received!: () => void
+  let release: () => void = () => {
+      throw new Error(
+        "Promise resolver release was used before executor initialization",
+      )
+    },
+    received: () => void = () => {
+      throw new Error(
+        "Promise resolver received was used before executor initialization",
+      )
+    }
+
   const held = new Promise<void>((resolve) => {
     release = resolve
   })
@@ -204,7 +253,7 @@ test("cancel during inspection rejects its late result", async ({
     await held
     await route.fulfill({ response }).catch(() => undefined)
   })
-  await open(page, requestId)
+  await open({ page, requestId })
   await inspected
   await page.getByRole("button", { name: "Cancel", exact: true }).click()
   release()
@@ -218,14 +267,19 @@ test("real cross-tab session replacement clears the private snapshot and approva
   request,
 }) => {
   const requestId = id()
-  await open(page, requestId)
+  await open({ page, requestId })
   await expect(
     page.getByRole("button", { name: "Approve this revision", exact: true }),
   ).toBeEnabled()
   const other = await context.newPage()
   await other.goto("/qa/native-save/session?owner=b")
-  const { token } = JSON.parse(await other.locator("body").innerText())
-  await other.evaluate((value) => localStorage.setItem("token", value), token)
+  const { token } = requireNativeSaveRecord(
+    JSON.parse(await other.locator("body").innerText()),
+  )
+  await other.evaluate(
+    (value) => localStorage.setItem("token", value),
+    requireNativeSaveString(token),
+  )
   await expect(page.getByRole("alert")).toHaveText(
     "This request or session has expired. Reopen the save request.",
   )
@@ -242,7 +296,7 @@ test("pending consent expires without an approval call", async ({
 }) => {
   const requestId = id()
   await page.clock.install()
-  await open(page, requestId)
+  await open({ page, requestId })
   await expect(
     page.getByRole("button", { name: "Approve this revision", exact: true }),
   ).toBeEnabled()
@@ -259,7 +313,7 @@ test("approved/publishing/saved/expired are read-only statuses, never a new appr
 }) => {
   for (const prefix of ["A", "B", "S", "E"]) {
     const requestId = id(prefix)
-    await open(page, requestId)
+    await open({ page, requestId })
     await expect(page.getByTestId("native-save-client")).toHaveText(
       "synthetic-native-save-client",
     )
@@ -274,7 +328,7 @@ test("query/hash input and missing real HEAD no-store policy fail closed", async
   request,
 }) => {
   const requestId = id()
-  await open(page, requestId, "en", "?anything=forbidden")
+  await open({ page, requestId, locale: "en", suffix: "?anything=forbidden" })
   await expect(page.getByRole("alert")).toHaveText(
     "Save approval is unavailable on this page.",
   )
@@ -290,7 +344,7 @@ test("query/hash input and missing real HEAD no-store policy fail closed", async
         })
       : route.continue(),
   )
-  await open(page, requestId)
+  await open({ page, requestId })
   await expect(page.getByRole("alert")).toHaveText(
     "This revision could not be approved. Reopen the save request.",
   )

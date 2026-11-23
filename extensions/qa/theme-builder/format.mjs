@@ -20,8 +20,11 @@ settings.plugins = [
 ]
 writeFileSync("/out/prettier.json", JSON.stringify(settings))
 const clean = (value) => {
-  if (Array.isArray(value)) return value.map(clean)
-  if (value && typeof value === "object")
+  if (Array.isArray(value)) {
+    return value.map(clean)
+  }
+
+  if (value && typeof value === "object") {
     return Object.fromEntries(
       Object.entries(value)
         .filter(
@@ -40,6 +43,8 @@ const clean = (value) => {
         )
         .map(([key, child]) => [key, clean(child)]),
     )
+  }
+
   return value
 }
 const receipts = []
@@ -48,8 +53,10 @@ for (const path of files) {
   if (
     existsSync("/out/format-scope.json") &&
     !JSON.parse(readFileSync("/out/format-scope.json", "utf8")).includes(path)
-  )
+  ) {
     continue
+  }
+
   const before = readFileSync(`${sourceRoot}/${path}`, "utf8")
   const result = spawnSync(
     process.execPath,
@@ -62,8 +69,11 @@ for (const path of files) {
     ],
     { input: before, encoding: "utf8" },
   )
-  if (result.status !== 0)
+
+  if (result.status !== 0) {
     throw new Error(`Formatter failed: ${path}: ${result.stderr}`)
+  }
+
   const plugins = path.endsWith(".mjs") ? [] : ["typescript", "jsx"]
   // Tailwind class order is the only permitted semantic string change.
   const ast = (source) =>

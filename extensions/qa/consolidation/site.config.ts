@@ -4,6 +4,13 @@ import { fileURLToPath } from "node:url"
 
 const root = fileURLToPath(new URL("../../../", import.meta.url))
 const node = process.execPath
+const fixtureServer = Array.isArray(base.webServer)
+  ? base.webServer.at(0)
+  : base.webServer
+
+if (!fixtureServer) {
+  throw new Error("Consolidation site tests require the base fixture server")
+}
 
 export default defineConfig({
   ...base,
@@ -27,10 +34,10 @@ export default defineConfig({
   ],
   webServer: [
     {
-      ...base.webServer[0],
+      ...fixtureServer,
       command: `"${node}" --import tsx qa/site-fixture-server.ts`,
       url: "http://127.0.0.1:4317/api/health",
-      env: { ...base.webServer[0].env, SOCKET_PORT: "4317" },
+      env: { ...fixtureServer.env, SOCKET_PORT: "4317" },
     },
     {
       command: `"${node}" node_modules/vite/bin/vite.js --config ../../extensions/qa/consolidation/site.vite.config.ts --configLoader runner --host 127.0.0.1 --port 4316 --strictPort`,

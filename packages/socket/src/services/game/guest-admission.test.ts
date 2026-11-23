@@ -71,7 +71,7 @@ describe("live guest admission at the game boundary", () => {
     const { game, createSocket } = setup(createQuizz([createQuestion()]), [])
     const first = createSocket("first", "existing-guest")
     expect(game.join(first, "Guest")).toBeNull()
-    const player = game.players[0]
+    const [player] = game.players
     player.points = 321
     player.streak = 2
     game.setPlayerDisconnected(first.id)

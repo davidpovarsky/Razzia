@@ -64,24 +64,31 @@ async function installPlaybackAudit(page) {
     const desiredTracks = new Set()
     const audioElements = []
     const audioPlays = []
-    let observedIdentity
+    let observedIdentity = undefined
+
     let identitySequence = 0
     const readIdentity = () => {
       const identity =
         document
           .querySelector('[data-testid="audio-cue-player-state"]')
           ?.getAttribute("data-audio-identity") ?? ""
+
       if (identity !== observedIdentity) {
         observedIdentity = identity
-        identitySequence++
+        identitySequence += 1
       }
+
       return { identity, sequence: identitySequence }
     }
     const originalPlay = HTMLMediaElement.prototype.play
-    const observedPlay = function (...args) {
-      let attempt
+    function observedPlay(...args) {
+      let attempt = undefined
+
       if (this instanceof HTMLAudioElement) {
-        if (!audioElements.includes(this)) audioElements.push(this)
+        if (!audioElements.includes(this)) {
+          audioElements.push(this)
+        }
+
         attempt = {
           url: this.getAttribute("src") ?? "",
           ...readIdentity(),
@@ -89,8 +96,10 @@ async function installPlaybackAudit(page) {
         }
         audioPlays.push(attempt)
       }
+
       try {
         const result = Reflect.apply(originalPlay, this, args)
+
         if (attempt) {
           void Promise.resolve(result).then(
             () => {
@@ -101,37 +110,55 @@ async function installPlaybackAudit(page) {
             },
           )
         }
+
         return result
       } catch (error) {
-        if (attempt) attempt.status = "rejected"
+        if (attempt) {
+          attempt.status = "rejected"
+        }
+
         throw error
       }
     }
     HTMLMediaElement.prototype.play = observedPlay
     let armed = false
-    let frame
+    let frame = undefined
+
     let samples = 0
     let minOwners = Infinity
     let maxOwners = 0
     let ownerViolations = 0
     let blockedFrames = 0
     const sample = () => {
-      if (!armed || !document.querySelector('[data-testid="tadazz-show"]'))
+      if (!armed || !document.querySelector('[data-testid="tadazz-show"]')) {
         return
+      }
+
       const owners = [
         ...document.querySelectorAll('[data-testid="audio-cue-player-state"]'),
       ]
       readIdentity()
-      samples++
+      samples += 1
+
       minOwners = Math.min(minOwners, owners.length)
       maxOwners = Math.max(maxOwners, owners.length)
-      if (owners.length !== 1) ownerViolations++
+
+      if (owners.length !== 1) {
+        ownerViolations += 1
+      }
+
       for (const owner of owners) {
-        if (owner.dataset.shouldPlay === "true")
+        if (owner.dataset.shouldPlay === "true") {
           desiredTracks.add(owner.dataset.audioUrl ?? "")
-        if (owner.dataset.audioBlocked === "true") blockedFrames++
-        if (owner.dataset.audioError === "true")
+        }
+
+        if (owner.dataset.audioBlocked === "true") {
+          blockedFrames += 1
+        }
+
+        if (owner.dataset.audioError === "true") {
           failedTracks.add(owner.dataset.audioUrl ?? "unknown")
+        }
       }
     }
     const tick = () => {
@@ -162,7 +189,8 @@ async function installPlaybackAudit(page) {
       ],
     })
     const onMediaError = (event) => {
-      const target = event.target
+      const { target } = event
+
       if (
         target instanceof HTMLMediaElement ||
         target instanceof HTMLImageElement
@@ -216,6 +244,7 @@ async function installPlaybackAudit(page) {
             element.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA &&
             element.error === null,
         )
+
         return {
           at: performance.now(),
           owners: owners.length,
@@ -242,8 +271,10 @@ async function installPlaybackAudit(page) {
         cancelAnimationFrame(frame)
         mutations.disconnect()
         document.removeEventListener("error", onMediaError, true)
-        if (HTMLMediaElement.prototype.play === observedPlay)
+
+        if (HTMLMediaElement.prototype.play === observedPlay) {
           HTMLMediaElement.prototype.play = originalPlay
+        }
       },
     }
     frame = requestAnimationFrame(tick)
@@ -262,13 +293,22 @@ const paintedFrames = (stage) =>
   )
 
 /** Compare actual coordinator transitions, permitting only its real conditional tie policy. */
-function orderedTimelineReceipt(trace, timeline, scenes, terminal) {
+function orderedTimelineReceipt({ trace, timeline, scenes, terminal }) {
   const observed = []
   for (const entry of trace) {
-    if (!entry.id) continue
+    if (!entry.id) {
+      continue
+    }
+
     const previous = observed.at(-1)
-    if (!previous || previous.id !== entry.id || previous.epoch !== entry.epoch)
+
+    if (
+      !previous ||
+      previous.id !== entry.id ||
+      previous.epoch !== entry.epoch
+    ) {
       observed.push(entry)
+    }
   }
   const skipped = []
   let expectedIndex = 0
@@ -290,8 +330,13 @@ function orderedTimelineReceipt(trace, timeline, scenes, terminal) {
       Number.isInteger(entry.stepIndex) && entry.stepIndex >= expectedIndex,
       "Authored steps never repeat or run backwards",
     )
-    while (expectedIndex < entry.stepIndex)
-      allowConditionalSkip(expectedIndex++, entry)
+
+    while (expectedIndex < entry.stepIndex) {
+      const skippedIndex = expectedIndex
+      expectedIndex += 1
+      allowConditionalSkip(skippedIndex, entry)
+    }
+
     const expected = timeline[expectedIndex]
     assert(expected, "No unexpected timeline step")
     assert.equal(
@@ -309,10 +354,15 @@ function orderedTimelineReceipt(trace, timeline, scenes, terminal) {
       }),
       "Each active step exactly matches the next authored card",
     )
-    expectedIndex++
+    expectedIndex += 1
   }
-  while (expectedIndex < timeline.length)
-    allowConditionalSkip(expectedIndex++, terminal)
+
+  while (expectedIndex < timeline.length) {
+    const skippedIndex = expectedIndex
+    expectedIndex += 1
+    allowConditionalSkip(skippedIndex, terminal)
+  }
+
   return {
     authored: timeline.length,
     observed: observed.length,
@@ -333,20 +383,28 @@ export async function verifyStoredGameBrowser(options) {
   const { fixture, context, browser, origin, token, registry } = options
   const qaUsername = usernameValidator.parse("Stored QA")
   const quizId = fixture.quizz.id
-  const headers = { Authorization: "Bearer " + token }
+  const headers = { Authorization: `Bearer ${token}` }
   const host = await context.newPage()
-  let playerContext
-  let player
-  let audio
-  let timelineReceipt
-  let externalMediaRepair
+  let playerContext = undefined
+
+  let player = undefined
+
+  let audio = undefined
+
+  let timelineReceipt = undefined
+
+  let externalMediaRepair = undefined
+
   let mirrorsAtLaunch = 0
   const repairedImageUrls = new Set()
   const repairedImageQuestions = []
   let mediaErrors = []
-  let room
-  let traceTimer
-  let stage
+  let room = undefined
+
+  let traceTimer = undefined
+
+  let stage = undefined
+
   let checkpoint = "editor-load"
   const checks = []
   const faults = []
@@ -368,11 +426,13 @@ export async function verifyStoredGameBrowser(options) {
   const knownAssets = new Set(
     (fixture.sourceSummary?.media ?? []).map((asset) => {
       const url = new URL(asset.url, origin)
+
       return url.origin + url.pathname
     }),
   )
   const isAsset = (request) => {
     const url = new URL(request.url())
+
     return (
       ["image", "media", "font", "script", "stylesheet"].includes(
         request.resourceType(),
@@ -392,6 +452,7 @@ export async function verifyStoredGameBrowser(options) {
       ...(hostAudit?.mediaErrors ?? []),
       ...(playerAudit?.mediaErrors ?? []),
     ].map(digest)
+
     if (hostAudit) {
       const { failedTracks, mediaErrors: _media, ...summary } = hostAudit
       audio = { ...summary, failedTracks: failedTracks.map(digest) }
@@ -399,8 +460,11 @@ export async function verifyStoredGameBrowser(options) {
   }
   const addExactMirrors = async (browserContext, role) => {
     for (const item of options.externalAssets ?? []) {
-      if (!item.mirror) continue
-      const mirror = item.mirror
+      if (!item.mirror) {
+        continue
+      }
+
+      const { mirror } = item
       assert.match(
         mirror.nativeUrl,
         /^\/media\/qa-external-[a-f0-9]{64}\.png$/u,
@@ -440,7 +504,7 @@ export async function verifyStoredGameBrowser(options) {
       const exact = (url) => url.href === mirror.sourceUrl
       const handler = async (route) => {
         assert.equal(route.request().method(), "GET")
-        check.requests++
+        check.requests += 1
         await route.fulfill({ status: 200, body, contentType: "image/png" })
       }
       await browserContext.route(exact, handler)
@@ -465,6 +529,7 @@ export async function verifyStoredGameBrowser(options) {
     page.on("pageerror", (error) => faults.push(digest(error.message)))
     page.on("requestfailed", (request) => {
       const reason = request.failure()?.errorText ?? "unknown"
+
       if (reason !== "net::ERR_ABORTED" && isAsset(request)) {
         assetFailures.add(
           digest({ path: new URL(request.url()).pathname, reason }),
@@ -486,10 +551,11 @@ export async function verifyStoredGameBrowser(options) {
   const read = async (path) => {
     const response = await context.request.get(origin + path, { headers })
     assert.equal(response.status(), 200, "Owned fixture API read")
+
     return response.json()
   }
   const openEditor = async () => {
-    await host.goto(origin + "/manager/quizz/" + quizId + "?lng=en", {
+    await host.goto(`${origin}/manager/quizz/${quizId}?lng=en`, {
       waitUntil: "domcontentloaded",
     })
     await expect(host.getByTestId("editor-save-btn")).toBeEnabled({
@@ -505,17 +571,22 @@ export async function verifyStoredGameBrowser(options) {
     if (!(await host.getByTestId("editor-panel-timeline").isVisible())) {
       await host.getByTestId("editor-panel-toggle-timeline").click()
     }
+
     await expect(host.getByTestId("editor-panel-timeline")).toBeVisible()
   }
   const controlsReady = async () => {
     const unlock = host.getByTestId("host-enable-audio")
-    if (await unlock.isVisible()) await unlock.click()
+
+    if (await unlock.isVisible()) {
+      await unlock.click()
+    }
   }
+
   try {
     await installPlaybackAudit(host)
     await addExactMirrors(context, "manager")
     const preview = await context.request.get(
-      origin + "/api/extensions/preview/quizzes/" + quizId,
+      `${origin}/api/extensions/preview/quizzes/${quizId}`,
       { headers },
     )
     previewStatuses.push(preview.status())
@@ -523,8 +594,8 @@ export async function verifyStoredGameBrowser(options) {
       status: preview.status(),
       passed: preview.status() === 200,
     })
-    const beforeBase = await read("/api/quizz/" + quizId)
-    const beforeExtras = (await read("/api/extensions/quizzes/" + quizId))
+    const beforeBase = await read(`/api/quizz/${quizId}`)
+    const beforeExtras = (await read(`/api/extensions/quizzes/${quizId}`))
       .extras
     await openEditor()
     await openTimeline()
@@ -532,16 +603,18 @@ export async function verifyStoredGameBrowser(options) {
     await expect(
       timeline.locator('[data-testid^="editor-question-card-"]'),
     ).toHaveCount(beforeBase.questions.length)
+
     if (beforeExtras?.timeline) {
       await expect(timeline.getByTestId("editor-scene-card")).toHaveCount(
         beforeExtras.timeline.filter((item) => item.kind !== "question").length,
       )
     }
+
     checkpoint = "editor-save"
     const save = host.waitForResponse(
       (response) =>
         new URL(response.url()).pathname ===
-          "/api/extensions/quizzes/" + quizId &&
+          `/api/extensions/quizzes/${quizId}` &&
         response.request().method() === "PUT",
     )
     await host.getByTestId("editor-save-btn").click()
@@ -551,10 +624,10 @@ export async function verifyStoredGameBrowser(options) {
       "Stored game saves through native editor",
     )
     await host.waitForURL(/\/(studio\/games|manager\/config)$/)
-    let savedBase = await read("/api/quizz/" + quizId)
-    let savedExtras = (await read("/api/extensions/quizzes/" + quizId)).extras
+    let savedBase = await read(`/api/quizz/${quizId}`)
+    let savedExtras = (await read(`/api/extensions/quizzes/${quizId}`)).extras
     const savedPreview = await context.request.get(
-      origin + "/api/extensions/preview/quizzes/" + quizId,
+      `${origin}/api/extensions/preview/quizzes/${quizId}`,
       { headers },
     )
     previewStatuses.push(savedPreview.status())
@@ -568,6 +641,7 @@ export async function verifyStoredGameBrowser(options) {
       "Editor save preserves every authored question field",
     )
     assert.equal(savedBase.id, quizId, "Editor save retains original identity")
+
     if (beforeExtras?.schemaVersion === 2) {
       for (const key of [
         "questionIds",
@@ -580,14 +654,17 @@ export async function verifyStoredGameBrowser(options) {
         assert.equal(
           digest(savedExtras[key]),
           digest(beforeExtras[key]),
-          "Editor preserves authored " + key,
+
+          `Editor preserves authored ${key}`,
         )
       }
     }
+
     record("native-editor-displays-saves-and-preserves-authored-game", {
       questions: savedBase.questions.length,
       cards: savedExtras?.timeline?.length ?? savedBase.questions.length,
     })
+
     if (options.externalAssets?.length) {
       checkpoint = "external-image-owner-repair"
       assert.deepEqual(
@@ -614,7 +691,9 @@ export async function verifyStoredGameBrowser(options) {
       externalMediaRepair.originalSidecarAbsent = beforeExtras === null
       savedBase = repaired.base
       savedExtras = repaired.extras
-      for (const url of repaired.uploadedUrls) repairedImageUrls.add(url)
+      for (const url of repaired.uploadedUrls) {
+        repairedImageUrls.add(url)
+      }
       previewStatuses.push(repaired.receipt.repairedPreviewStatus)
       const sourceUrls = new Set(
         options.externalAssets.map((item) => item.mirror.sourceUrl),
@@ -633,6 +712,7 @@ export async function verifyStoredGameBrowser(options) {
         staleRevisionStatus: externalMediaRepair.staleRevisionStatus,
       })
     }
+
     checkpoint = "editor-reopen"
     await openEditor()
     mirrorsAtLaunch = mirrorChecks.reduce(
@@ -642,9 +722,13 @@ export async function verifyStoredGameBrowser(options) {
     checkpoint = "saved-game-launch"
     await host.getByTestId("studio-tab-launch").click()
     await expect(host.getByTestId("studio-launch-btn")).toBeEnabled()
-    let roomReply
+    let roomReply = undefined
+
     const captureLaunch = async (route) => {
-      if (route.request().method() !== "POST") return route.continue()
+      if (route.request().method() !== "POST") {
+        return route.continue()
+      }
+
       const response = await route.fetch()
       assert([200, 201].includes(response.status()), "Native editor launch")
       roomReply = {
@@ -653,7 +737,7 @@ export async function verifyStoredGameBrowser(options) {
       }
       await route.fulfill({ response })
     }
-    await host.route(origin + "/api/games", captureLaunch)
+    await host.route(`${origin}/api/games`, captureLaunch)
     await host.getByTestId("studio-launch-btn").click()
     await expect.poll(() => Boolean(roomReply)).toBe(true)
     room = roomReply.body
@@ -662,13 +746,14 @@ export async function verifyStoredGameBrowser(options) {
       quizId,
       "Launch uses the saved original identity",
     )
-    await host.unroute(origin + "/api/games", captureLaunch)
-    await expect(host).toHaveURL(origin + "/party/manager/" + room.gameId)
+    await host.unroute(`${origin}/api/games`, captureLaunch)
+    await expect(host).toHaveURL(`${origin}/party/manager/${room.gameId}`)
     const game = registry.getGameById(room.gameId)
     assert(game, "Actual native engine instance exists")
     assert.equal(game.sourceQuizId, quizId)
     const snapshot = () => {
       const step = game.showCoordinator?.getAuthoritativeStepEnvelope("manager")
+
       return {
         phase: game.showCoordinator?.currentPhase ?? "legacy",
         id: step?.id ?? null,
@@ -689,6 +774,7 @@ export async function verifyStoredGameBrowser(options) {
     const observe = () => {
       const value = snapshot()
       const key = JSON.stringify(value)
+
       if (key !== previousTrace) {
         trace.push(value)
         previousTrace = key
@@ -716,7 +802,7 @@ export async function verifyStoredGameBrowser(options) {
     })
     checkpoint = "native-player-join"
     const guestPolicy = await context.request.patch(
-      origin + "/api/games/" + room.gameId + "/roster/settings",
+      `${origin}/api/games/${room.gameId}/roster/settings`,
       { headers, data: { allowUnregisteredPlayers: true } },
     )
     assert.equal(
@@ -737,7 +823,7 @@ export async function verifyStoredGameBrowser(options) {
     await addExactMirrors(playerContext, "player")
     track(player)
     await player.goto(
-      origin + "/game?pin=" + encodeURIComponent(room.inviteCode),
+      `${origin}/game?pin=${encodeURIComponent(room.inviteCode)}`,
     )
     await player.getByPlaceholder("Username here").fill(qaUsername)
     const [joinResponse] = await Promise.all([
@@ -761,7 +847,7 @@ export async function verifyStoredGameBrowser(options) {
       joined.ticket.length > 0,
       "A fresh participant receives a join ticket",
     )
-    await expect(player).toHaveURL(origin + "/party/" + room.gameId)
+    await expect(player).toHaveURL(`${origin}/party/${room.gameId}`)
     await expect
       .poll(
         () =>
@@ -777,21 +863,22 @@ export async function verifyStoredGameBrowser(options) {
     const nativeTimeline = savedExtras?.timeline ?? []
     const fragmentAudioTargets = new Map(
       nativeTimeline.flatMap((item) => {
-        const audio = item.sceneId
+        const sceneAudio = item.sceneId
           ? savedExtras.scenes[item.sceneId]?.audio
           : null
-        return audio?.mode === "custom" &&
-          typeof audio.url === "string" &&
-          audio.url.includes("#")
-          ? [[item.id, { sceneId: item.sceneId, audio }]]
+
+        return sceneAudio?.mode === "custom" &&
+          typeof sceneAudio.url === "string" &&
+          sceneAudio.url.includes("#")
+          ? [[item.id, { sceneId: item.sceneId, audio: sceneAudio }]]
           : []
       }),
     )
     fragmentAudio.authored = fragmentAudioTargets.size
     const qualifiedFragmentSteps = new Set()
     const qualifyFragmentAudio = async (active, authoredAudio) => {
-      checkpoint = "authored-fragment-audio-" + active.stepIndex
-      const url = authoredAudio.url
+      checkpoint = `authored-fragment-audio-${active.stepIndex}`
+      const { url } = authoredAudio
       const identity = `${room.gameId}:scene-music:${active.sceneId}:${url}`
       const readAudio = () =>
         host.evaluate(
@@ -801,6 +888,7 @@ export async function verifyStoredGameBrowser(options) {
         )
       const isActive = () => {
         const current = snapshot()
+
         return (
           current.id === active.id &&
           current.epoch === active.epoch &&
@@ -822,13 +910,19 @@ export async function verifyStoredGameBrowser(options) {
         sample.pendingPlaybacks === 0 &&
         sample.playing.length === 1 &&
         sample.playing[0].loop === (authoredAudio.loop ?? true)
-      let before
+      let before = undefined
+
       await expect
         .poll(
           async () => {
             const sample = await readAudio()
-            if (!matches(sample)) return false
+
+            if (!matches(sample)) {
+              return false
+            }
+
             before = sample
+
             return true
           },
           {
@@ -838,13 +932,19 @@ export async function verifyStoredGameBrowser(options) {
           },
         )
         .toBe(true)
-      let after
+      let after = undefined
+
       await expect
         .poll(
           async () => {
             const sample = await readAudio()
-            if (!matches(sample)) return false
+
+            if (!matches(sample)) {
+              return false
+            }
+
             after = sample
+
             return sample.playing[0].time > before.playing[0].time + 0.1
           },
           {
@@ -910,6 +1010,7 @@ export async function verifyStoredGameBrowser(options) {
           { timeout: sceneTimeout(expected) },
         )
         .toBe(true)
+
       if (
         !advanced() &&
         (await button.isVisible()) &&
@@ -921,14 +1022,19 @@ export async function verifyStoredGameBrowser(options) {
     for (
       let guard = 0;
       guard < Math.max(100, nativeTimeline.length * 5);
-      guard++
+      guard += 1
     ) {
       observe()
       const active = snapshot()
-      checkpoint = "playback-" + active.phase + "-" + active.questionIndex
-      if (active.phase === "finished" || active.status === "FINISHED") break
+      checkpoint = `playback-${active.phase}-${active.questionIndex}`
+
+      if (active.phase === "finished" || active.status === "FINISHED") {
+        break
+      }
+
       if (active.id && !seenSteps.has(active.id)) {
         seenSteps.add(active.id)
+
         if (active.sceneId) {
           assert(
             allowedSceneIds.has(active.sceneId),
@@ -941,11 +1047,13 @@ export async function verifyStoredGameBrowser(options) {
           })
         }
       }
+
       if (active.phase === "scene") {
         await expect(stage).toHaveAttribute("data-show-scene", "scene", {
           timeout: sceneTimeout(active),
         })
         const authoredScene = savedExtras.scenes[active.sceneId]
+
         if (
           authoredScene?.kind === "animation" &&
           isFullShowScene(authoredScene.preset)
@@ -970,7 +1078,9 @@ export async function verifyStoredGameBrowser(options) {
             stage.getByTestId("tadazz-leaderboard-screen"),
           ).toBeVisible()
         }
+
         await paintedFrames(stage)
+
         if (
           fragmentAudioTargets.has(active.id) &&
           !qualifiedFragmentSteps.has(active.id)
@@ -980,6 +1090,7 @@ export async function verifyStoredGameBrowser(options) {
             fragmentAudioTargets.get(active.id).audio,
           )
         }
+
         await next(active)
         await expect
           .poll(
@@ -988,9 +1099,12 @@ export async function verifyStoredGameBrowser(options) {
             { timeout: sceneTimeout(active) },
           )
           .toBe(true)
+
         continue
       }
+
       const index = active.questionIndex
+
       if (
         index < 0 ||
         index >= savedBase.questions.length ||
@@ -1005,8 +1119,10 @@ export async function verifyStoredGameBrowser(options) {
             { timeout: 30_000 },
           )
           .toBe(true)
+
         continue
       }
+
       if (!seenQuestions.has(index)) {
         const question = savedBase.questions[index]
         await expect
@@ -1027,6 +1143,7 @@ export async function verifyStoredGameBrowser(options) {
         await controlsReady()
         await host.bringToFront()
         await expect(stage).toHaveAttribute("data-show-scene", "voting")
+
         // Observe the actual host's answer/timer paint before the participant can
         // answer immediately and complete a one-player round in the same tick.
         if (question.type !== "estimation") {
@@ -1034,6 +1151,7 @@ export async function verifyStoredGameBrowser(options) {
         } else {
           await paintedFrames(stage)
         }
+
         if (repairedImageUrls.has(question.media?.url)) {
           await expect
             .poll(() =>
@@ -1053,22 +1171,26 @@ export async function verifyStoredGameBrowser(options) {
             .toBe(true)
           repairedImageQuestions.push(index)
         }
+
         const answer = async (answerIndex) => {
-          const pad = player.getByTestId("tadazz-pad-option-" + answerIndex)
+          const pad = player.getByTestId(`tadazz-pad-option-${answerIndex}`)
+
           if (await pad.isVisible()) {
             await expect(pad).toBeEnabled()
             await pad.click()
           } else {
             const native = player.locator("button").filter({
-              has: player.getByTestId("answer-badge-" + answerIndex),
+              has: player.getByTestId(`answer-badge-${answerIndex}`),
             })
             await expect(native).toHaveCount(1)
             await expect(native).toBeEnabled()
             await native.click()
           }
         }
+
         if (question.type === "estimation") {
           const slider = player.locator('input[type="range"]:visible')
+
           if (await slider.count()) {
             await slider.first().focus()
             await slider.first().press("Home")
@@ -1083,6 +1205,7 @@ export async function verifyStoredGameBrowser(options) {
               String(question.solutions?.[0] ?? question.options.min),
             )
           }
+
           await player
             .getByRole("button", { name: "Confirm", exact: true })
             .click()
@@ -1091,16 +1214,23 @@ export async function verifyStoredGameBrowser(options) {
             question.type === "multi" && question.solutions?.length
               ? question.solutions
               : [question.solutions?.[0] ?? 0]
-          for (const choice of choices) await answer(choice)
+          for (const choice of choices) {
+            await answer(choice)
+          }
+
           if (question.type === "multi") {
             const submit = player.getByTestId("tadazz-pad-submit")
-            if (await submit.isVisible()) await submit.click()
-            else
+
+            if (await submit.isVisible()) {
+              await submit.click()
+            } else {
               await player
                 .getByRole("button", { name: "Confirm", exact: true })
                 .click()
+            }
           }
         }
+
         await expect
           .poll(
             () =>
@@ -1112,11 +1242,13 @@ export async function verifyStoredGameBrowser(options) {
           .toBe(true)
         accepted.push(index)
         await host.bringToFront()
+
         if (game.round.isCurrentlyAcceptingAnswers) {
           const end = host.getByTestId("host-end-timer-btn")
           await expect(end).toBeEnabled()
           await end.click()
         }
+
         await expect
           .poll(() => Boolean(game.round.getQuestionLedgerEntry(index)), {
             timeout: 30_000,
@@ -1130,6 +1262,7 @@ export async function verifyStoredGameBrowser(options) {
           { timeout: 30_000 },
         )
         await paintedFrames(stage)
+
         if (question.type !== "estimation") {
           const throughResults = !authoredResults
           const sequence = await readQuestionSequence(stage, index, {
@@ -1145,6 +1278,7 @@ export async function verifyStoredGameBrowser(options) {
             newQuestionAnimations: sequence.newQuestionAnimations,
           })
         }
+
         console.log(
           JSON.stringify({
             storedGameProgress: fixture.fixtureId,
@@ -1153,10 +1287,20 @@ export async function verifyStoredGameBrowser(options) {
           }),
         )
       }
+
       const current = snapshot()
-      if (current.phase === "finished" || current.status === "FINISHED") break
-      if (current.phase === "scene") continue
-      if (current.questionIndex === index) await next(current)
+
+      if (current.phase === "finished" || current.status === "FINISHED") {
+        break
+      }
+
+      if (current.phase === "scene") {
+        continue
+      }
+
+      if (current.questionIndex === index) {
+        await next(current)
+      }
     }
     checkpoint = "completed-game-assertions"
     observe()
@@ -1177,12 +1321,12 @@ export async function verifyStoredGameBrowser(options) {
     await expect(stage).toHaveAttribute("data-show-scene", "finale", {
       timeout: 30_000,
     })
-    timelineReceipt = orderedTimelineReceipt(
+    timelineReceipt = orderedTimelineReceipt({
       trace,
-      nativeTimeline,
-      savedExtras.scenes ?? {},
-      snapshot(),
-    )
+      timeline: nativeTimeline,
+      scenes: savedExtras.scenes ?? {},
+      terminal: snapshot(),
+    })
     sceneVisits.splice(0, sceneVisits.length, ...timelineReceipt.scenes)
     // Scene IDs stay private; the receipt records ordered hashes and counts.
     delete timelineReceipt.scenes
@@ -1216,6 +1360,7 @@ export async function verifyStoredGameBrowser(options) {
       digest(fixture.expected.leaderboardAfterQuestions ?? []),
       "Authored leaderboards occur at the exact question boundaries",
     )
+
     if (savedExtras?.defaults?.leaderboardPolicy === "cardOnly") {
       assert(
         !trace.some(
@@ -1225,6 +1370,7 @@ export async function verifyStoredGameBrowser(options) {
         "No automatic duplicate leaderboards",
       )
     }
+
     await collectPlaybackAudit()
     assert(
       audio?.samples > 0,
@@ -1257,6 +1403,7 @@ export async function verifyStoredGameBrowser(options) {
     )
     assert.equal(faults.length, 0, "No browser JavaScript failures")
     assert.equal(assetFailures.size, 0, "No asset HTTP failures")
+
     if (externalMediaRepair) {
       assert(
         externalMediaRepair.passed,
@@ -1285,6 +1432,7 @@ export async function verifyStoredGameBrowser(options) {
         "Original and saved native account previews must both succeed; admission failures remain unqualified",
       )
     }
+
     record("saved-game-full-native-playback", {
       questions: starts.length,
       accepted: accepted.length,
@@ -1297,6 +1445,7 @@ export async function verifyStoredGameBrowser(options) {
       conditionalTieSkips: timelineReceipt.skipped.length,
       authoredFragmentAudio: fragmentAudio.observed,
     })
+
     return {
       fixtureId: fixture.fixtureId,
       passed: true,
@@ -1320,6 +1469,7 @@ export async function verifyStoredGameBrowser(options) {
     console.error("Stored game failed", fixture.fixtureId, checkpoint, error)
     externalMediaRepair ??= error?.repairReceipt
     await collectPlaybackAudit()
+
     return {
       fixtureId: fixture.fixtureId,
       passed: false,
@@ -1339,23 +1489,40 @@ export async function verifyStoredGameBrowser(options) {
       mirrorChecks,
       assetFailures: [...assetFailures],
       faults,
-      error: checkpoint + ": " + (error?.name ?? "Error"),
+      error: `${checkpoint}: ${error?.name ?? "Error"}`,
       errorDigest: digest(String(error?.message ?? error)),
     }
   } finally {
     clearInterval(traceTimer)
-    if (stage) await stopQuestionSequence(stage).catch(() => {})
+
+    if (stage) {
+      await stopQuestionSequence(stage).catch(() => {
+        /* Continue the remaining owned audit cleanup if stopping the sequence fails. */
+      })
+    }
+
     await host
       .evaluate(() => window.__tadazzStoredAudit?.stop())
-      .catch(() => {})
+      .catch(() => {
+        /* Continue the remaining owned audit cleanup if the page observer is unavailable. */
+      })
     await player
       ?.evaluate(() => window.__tadazzStoredAudit?.stop())
-      .catch(() => {})
+      .catch(() => {
+        /* Continue the remaining owned audit cleanup if the page observer is unavailable. */
+      })
     for (const { browserContext, exact, handler } of mirrorRoutes) {
       await browserContext.unroute(exact, handler)
     }
-    if (playerContext) await playerContext.close()
+
+    if (playerContext) {
+      await playerContext.close()
+    }
+
     await host.close()
-    if (room?.gameId) registry.removeGame(room.gameId)
+
+    if (room?.gameId) {
+      registry.removeGame(room.gameId)
+    }
   }
 }

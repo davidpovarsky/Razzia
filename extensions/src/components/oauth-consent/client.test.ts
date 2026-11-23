@@ -1,5 +1,7 @@
 import { describe, expect, it, vi } from "vitest"
 import { consentIssuerPath, createOAuthConsentClient } from "./client"
+import { synchronousPromise } from "../../core/synchronous-promise.ts"
+
 const ticket = "encrypted-ticket-".repeat(4)
 const inspection = () => ({
   clientId: "real-registered-client",
@@ -10,7 +12,12 @@ const inspection = () => ({
 const json = (value: unknown) => Response.json(value)
 describe("same-origin native OAuth consent client", () => {
   it("consumes an inspection before awaiting an in-flight approval", async () => {
-    let release!: (response: Response) => void
+    let release: (response: Response) => void = () => {
+      throw new Error(
+        "Promise resolver release was used before executor initialization",
+      )
+    }
+
     const request = vi
       .fn<typeof fetch>()
       .mockResolvedValueOnce(json(inspection()))
@@ -62,7 +69,9 @@ describe("same-origin native OAuth consent client", () => {
     expect(await client.approve(ticket, result)).toBe(
       "https://client.invalid/callback?code=exact%2Fcode&state=original",
     )
-    const [path, options] = request.mock.calls[1]!
+    const {
+      1: [path, options],
+    } = request.mock.calls
     expect(path).toBe("/oauth/approve")
     expect(options).toMatchObject({
       credentials: "same-origin",
@@ -86,14 +95,15 @@ describe("same-origin native OAuth consent client", () => {
       "/oauth?issuer=other",
       "/oauth%2fother",
       "/oauth/../admin",
-    ])
+    ]) {
       expect(() => consentIssuerPath(path)).toThrow()
+    }
     expect(consentIssuerPath("/private/oauth/")).toBe("/private/oauth")
   })
   it("rejects copied, foreign-ticket and invalidated proofs before approval IO", async () => {
     const request = vi
       .fn<typeof fetch>()
-      .mockImplementation(async () => json(inspection()))
+      .mockImplementation(() => synchronousPromise(() => json(inspection())))
     const client = createOAuthConsentClient({
       issuerBasePath: "/oauth",
       getNativeToken: () => "session-a",
@@ -103,7 +113,7 @@ describe("same-origin native OAuth consent client", () => {
     await expect(client.approve(ticket, { ...result })).rejects.toThrow(
       "expired",
     )
-    await expect(client.approve(ticket + "other", result)).rejects.toThrow(
+    await expect(client.approve(`${ticket}other`, result)).rejects.toThrow(
       "expired",
     )
     client.invalidate()
@@ -114,7 +124,12 @@ describe("same-origin native OAuth consent client", () => {
   })
   it("discards an inspect response when the native session changes in flight", async () => {
     let token = "session-a"
-    let release!: (value: Response) => void
+    let release: (value: Response) => void = () => {
+      throw new Error(
+        "Promise resolver release was used before executor initialization",
+      )
+    }
+
     const request = vi.fn<typeof fetch>().mockImplementation(
       () =>
         new Promise((resolve) => {

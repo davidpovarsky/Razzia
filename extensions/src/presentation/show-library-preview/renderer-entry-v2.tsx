@@ -20,8 +20,10 @@ let nextIdentity = 0
 /** Separate V2 ABI. It cannot register a pin, load a module or admit a V1 input. */
 export const mountCompositionPreviewCandidateV2: NativePreviewCandidateMountV2 =
   (element, onUnavailable) => {
-    if (!(element.getRootNode() instanceof ShadowRoot))
+    if (!(element.getRootNode() instanceof ShadowRoot)) {
       throw new Error("show-preview:isolated-root-required")
+    }
+
     const root = createRoot(element)
     let disposed = false
     let fitRevision = 0
@@ -33,24 +35,44 @@ export const mountCompositionPreviewCandidateV2: NativePreviewCandidateMountV2 =
       handleId: number
     }> = []
     const observe = (value: TadazzStageHandle | HTMLDivElement | null) => {
-      const next =
-        value === null ? null : (identities.get(value) ?? ++nextIdentity)
-      if (value !== null) identities.set(value, next!)
-      if (handleId === next) return
-      if (handleId !== null) lifecycle.push({ event: "disposed", handleId })
+      let next: number | null = null
+
+      if (value !== null) {
+        next = identities.get(value) ?? (nextIdentity += 1)
+        identities.set(value, next)
+      }
+
+      if (handleId === next) {
+        return
+      }
+
+      if (handleId !== null) {
+        lifecycle.push({ event: "disposed", handleId })
+      }
+
       handleId = next
-      if (next !== null) lifecycle.push({ event: "mounted", handleId: next })
-      if (lifecycle.length > 64) lifecycle.splice(0, lifecycle.length - 64)
+
+      if (next !== null) {
+        lifecycle.push({ event: "mounted", handleId: next })
+      }
+
+      if (lifecycle.length > 64) {
+        lifecycle.splice(0, lifecycle.length - 64)
+      }
     }
     const render = () => {
-      if (disposed || !current || !theme) return
+      if (disposed || !current || !theme) {
+        return
+      }
+
       const input = current
+      const renderTheme = theme
       const key = `${input.frame.role}:${input.frame.revision}:${input.frame.epoch}:${input.themeBinding.theme.id}:${input.themeBinding.compositionDocumentSha256}`
       // This is the imperative host boundary. Commit the admitted snapshot before
       // returning so a deferred React task cannot leave a previous card visible.
       flushSync(() =>
         root.render(
-          theme!.definition.rendererId === "tadazz-classic-stage" ? (
+          renderTheme.definition.rendererId === "tadazz-classic-stage" ? (
             <NativePreviewStage
               key={key}
               frame={input.frame}
@@ -59,13 +81,13 @@ export const mountCompositionPreviewCandidateV2: NativePreviewCandidateMountV2 =
               fitRevision={fitRevision}
               onUnavailable={onUnavailable}
               onStageHandle={observe}
-              resolvedTheme={theme!}
+              resolvedTheme={renderTheme}
             />
           ) : (
-            <ShowThemeScope key={key} theme={theme!}>
+            <ShowThemeScope key={key} theme={renderTheme}>
               <NativeRazziaPreviewV2
                 input={input}
-                theme={theme!}
+                theme={renderTheme}
                 rootRef={observe}
               />
             </ShowThemeScope>
@@ -74,18 +96,24 @@ export const mountCompositionPreviewCandidateV2: NativePreviewCandidateMountV2 =
       )
     }
     const resize = new ResizeObserver(() => {
-      fitRevision++
+      fitRevision += 1
+
       render()
     })
     resize.observe(element)
+
     return {
       update(input) {
-        if (disposed) throw new Error("show-preview:disposed")
+        if (disposed) {
+          throw new Error("show-preview:disposed")
+        }
+
         const parsed = nativePreviewRendererInputV2Schema.parse(input)
         const resolved = resolveBundledPreviewThemeV2(
           parsed.themeBinding,
           builtDefinitions,
         )
+
         // Classic's native choreography has not yet adopted these optional CSS
         // presets. Never accept settings that this concrete adapter would ignore.
         if (
@@ -97,12 +125,16 @@ export const mountCompositionPreviewCandidateV2: NativePreviewCandidateMountV2 =
         ) {
           throw new Error("show-preview:classic-visual-settings-unavailable")
         }
+
         current = parsed
         theme = resolved
         render()
       },
       dispose() {
-        if (disposed) return
+        if (disposed) {
+          return
+        }
+
         disposed = true
         resize.disconnect()
         root.unmount()

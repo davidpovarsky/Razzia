@@ -14,22 +14,22 @@ function question(
     inventory: {
       draftId: "draft-one",
       revision,
-      selectedChapterId: id + ":" + phase,
+      selectedChapterId: `${id}:${phase}`,
       chapters: [
         {
-          id: id + ":question",
+          id: `${id}:question`,
           cardId: id,
           kind: "question",
           duration: { kind: "known", milliseconds: 2000 },
         },
         {
-          id: id + ":voting",
+          id: `${id}:voting`,
           cardId: id,
           kind: "voting",
           duration: { kind: "known", milliseconds: 5000 },
         },
         {
-          id: id + ":results",
+          id: `${id}:results`,
           cardId: id,
           kind: "results",
           duration: { kind: "manual" },
@@ -256,7 +256,7 @@ describe("full-show question presentation readiness", () => {
     expect(owner.snapshot().clock.elapsedMs).toBe(600)
 
     owner.pause()
-    const audioEpoch = owner.snapshot().audioEpoch
+    const { audioEpoch } = owner.snapshot()
     owner.select(revised, 1)
     expect(owner.snapshot().questionPresentation).toBeNull()
     expect(owner.snapshot().userPaused).toBe(true)

@@ -13,6 +13,7 @@ const demoUrl = new URL(
   "/?view=demo&game=great-guessoff",
   process.env.GGO_PREVIEW_ORIGIN || "http://127.0.0.1:3000",
 ).href
+
 try {
   const page = await browser.newPage({
     viewport: { width: 1366, height: 900 },
@@ -95,9 +96,13 @@ try {
     .waitFor({ timeout: 20000 })
   await page.screenshot({ path: resolve("qa/phase2/ggo-native-survey.png") })
   assert.ok(await page.locator(".tzv4-stage").count())
-  await page.getByTestId("ggo-main-action").click() // top pick
+  // Top pick
+
+  await page.getByTestId("ggo-main-action").click()
   await page.locator('[data-v4-scene="top-pick"]').waitFor({ timeout: 25000 })
-  await page.getByTestId("ggo-main-action").click() // Q2
+  // Q2
+
+  await page.getByTestId("ggo-main-action").click()
   await page
     .locator('[data-v4-scene="countdown"][data-question-key="picture-trivia"]')
     .waitFor({ timeout: 25000 })
@@ -108,6 +113,7 @@ try {
       .first()
       .evaluate(async (img) => {
         await img.decode()
+
         return img.naturalWidth > 0
       }),
   )
@@ -131,11 +137,13 @@ try {
     window.__ggoObserver = new MutationObserver(() =>
       window.__ggoSceneTrace.push(stage?.getAttribute("data-v4-scene")),
     )
-    if (stage)
+
+    if (stage) {
       window.__ggoObserver.observe(stage, {
         attributes: true,
         attributeFilter: ["data-v4-scene"],
       })
+    }
   })
   await imageCard.click()
   await page.getByTestId("ggo-main-action").click()
@@ -173,7 +181,9 @@ try {
     "No Votes Locked scene for trivia",
   )
   await page.evaluate(() => window.__ggoObserver?.disconnect())
-  await page.getByTestId("ggo-main-action").click() // Q3
+  // Q3
+
+  await page.getByTestId("ggo-main-action").click()
   await page
     .locator('[data-v4-scene="countdown"][data-question-key="at-work"]')
     .waitFor({ timeout: 25000 })
@@ -182,9 +192,13 @@ try {
   await page
     .locator('[data-v4-scene="survey-results"][data-question-key="at-work"]')
     .waitFor({ timeout: 25000 })
-  await page.getByTestId("ggo-main-action").click() // top pick
+  // Top pick
+
+  await page.getByTestId("ggo-main-action").click()
   await page.locator('[data-v4-scene="top-pick"]').waitFor({ timeout: 25000 })
-  await page.getByTestId("ggo-main-action").click() // Q4
+  // Q4
+
+  await page.getByTestId("ggo-main-action").click()
   await page
     .locator('[data-v4-scene="countdown"][data-question-key="quick-trivia"]')
     .waitFor({ timeout: 25000 })
@@ -203,7 +217,9 @@ try {
     "none",
     "Text trivia: no vote percentages",
   )
-  await page.getByTestId("ggo-main-action").click() // leaderboard
+  // Leaderboard
+
+  await page.getByTestId("ggo-main-action").click()
   await page
     .locator('[data-v4-scene="leaderboard"]')
     .waitFor({ timeout: 25000 })
@@ -211,11 +227,15 @@ try {
     path: resolve("qa/phase2/ggo-native-leaderboard.png"),
     fullPage: true,
   })
-  await page.getByTestId("ggo-main-action").click() // grand finale scene
+  // Grand finale scene
+
+  await page.getByTestId("ggo-main-action").click()
   await page
     .locator('[data-v4-scene="grand-finale"]')
     .waitFor({ timeout: 25000 })
-  await page.getByTestId("ggo-main-action").click() // Q5
+  // Q5
+
+  await page.getByTestId("ggo-main-action").click()
   await page
     .locator(
       '[data-v4-scene="countdown"][data-question-key="party-personality"]',
@@ -230,10 +250,11 @@ try {
   for (const item of pictureUrls) {
     assert.ok(
       await page
-        .locator('img[src$="/' + item + '"]')
+        .locator(`img[src$="/${item}"]`)
         .first()
         .evaluate(async (img) => {
           await img.decode()
+
           return img.naturalWidth > 0
         }),
       item,
@@ -246,13 +267,19 @@ try {
       '[data-v4-scene="survey-results"][data-question-key="party-personality"]',
     )
     .waitFor({ timeout: 25000 })
-  await page.getByTestId("ggo-main-action").click() // top pick
+  // Top pick
+
+  await page.getByTestId("ggo-main-action").click()
   await page.locator('[data-v4-scene="top-pick"]').waitFor({ timeout: 25000 })
-  await page.getByTestId("ggo-main-action").click() // final leaderboard
+  // Final leaderboard
+
+  await page.getByTestId("ggo-main-action").click()
   await page
     .locator('[data-v4-scene="leaderboard"]')
     .waitFor({ timeout: 25000 })
-  await page.getByTestId("ggo-main-action").click() // winner
+  // Winner
+
+  await page.getByTestId("ggo-main-action").click()
   await page.getByTestId("tadazz-finale-screen").waitFor({ timeout: 25000 })
   assert.equal(
     (await page.getByTestId("tadazz-winner-name").textContent())?.trim(),
@@ -267,7 +294,9 @@ try {
     path: resolve("qa/phase2/ggo-native-winner.png"),
     fullPage: true,
   })
-  await page.getByTestId("ggo-main-action").click() // closing
+  // Closing
+
+  await page.getByTestId("ggo-main-action").click()
   await page.locator('[data-v4-scene="interlude"]').waitFor({ timeout: 25000 })
   await page.getByText("THANKS FOR PLAYING!").waitFor()
   assert.equal(

@@ -13,6 +13,7 @@ export const projectedChoiceSchema = z.strictObject({
   label: plainTextSchema,
   asset: assetReferenceSchema.optional(),
 })
+
 const projectedEstimationSchema = estimationOptionsValidator
   .strict()
   .refine(
@@ -44,14 +45,15 @@ const resultSchema = z.strictObject({
 })
 const leaderSchema = z.strictObject({
   label: plainTextSchema,
-  score: z.number().finite(),
+  score: z.number(),
   rank: z.number().int().positive(),
 })
 const personalSchema = z.strictObject({
   correct: z.boolean(),
-  points: z.number().finite(),
+  points: z.number(),
   rank: z.number().int().nonnegative(),
 })
+
 export const demoPresentationSnapshotSchema = z
   .strictObject({
     portVersion: z.literal(3),
@@ -71,30 +73,40 @@ export const demoPresentationSnapshotSchema = z
   })
   .superRefine((s, ctx) => {
     const ids = new Set(s.question?.choices.map((c) => c.id) ?? [])
-    if (ids.size !== (s.question?.choices.length ?? 0))
+
+    if (ids.size !== (s.question?.choices.length ?? 0)) {
       ctx.addIssue({ code: "custom", message: "show-library:duplicate-choice" })
+    }
+
     for (const id of [
       ...(s.question?.solutionAnswerIds ?? []),
       ...(s.selectedAnswerIds ?? []),
       ...(s.results?.map((r) => r.answerId) ?? []),
-    ])
-      if (!ids.has(id))
+    ]) {
+      if (!ids.has(id)) {
         ctx.addIssue({ code: "custom", message: "show-library:foreign-answer" })
+      }
+    }
+
     if (
       new Set(s.results?.map((r) => r.answerId)).size !==
       (s.results?.length ?? 0)
-    )
+    ) {
       ctx.addIssue({ code: "custom", message: "show-library:duplicate-result" })
+    }
+
     if (
       s.responders !== undefined &&
       s.eligible !== undefined &&
       s.responders > s.eligible
-    )
+    ) {
       ctx.addIssue({
         code: "custom",
         message: "show-library:invalid-vote-progress",
       })
+    }
   })
+
 export const showProjectionSchema = z
   .strictObject({
     portVersion: z.literal(3),
@@ -139,37 +151,55 @@ export const showProjectionSchema = z
   .superRefine((v, ctx) => {
     const deny = (message: string) =>
       ctx.addIssue({ code: "custom", message: `show-library:${message}` })
+
     // The producer currently emits no resource-ready references. Schema branding
     // cannot turn caller asset metadata into a trusted visual/resource grant.
-    if (v.question?.image || v.choices?.some((choice) => choice.asset))
+    if (v.question?.image || v.choices?.some((choice) => choice.asset)) {
       deny("visual-assets-unavailable")
-    if (v.canAnswer !== (v.answerReadiness === "ready"))
+    }
+
+    if (v.canAnswer !== (v.answerReadiness === "ready")) {
       deny("readiness-mismatch")
-    if (v.results && v.phase !== "results") deny("results-before-reveal")
+    }
+
+    if (v.results && v.phase !== "results") {
+      deny("results-before-reveal")
+    }
+
     if (
       v.personalResult &&
       (v.role !== "player" || v.phase !== "personalResult")
-    )
+    ) {
       deny("foreign-personal-result")
+    }
+
     if (
       v.selectedAnswerIds &&
       (v.role !== "player" || !["voting", "voteLocked"].includes(v.phase))
-    )
+    ) {
       deny("foreign-selection")
+    }
+
     if (
       v.choices &&
       !["answerCards", "voting", "voteLocked", "results"].includes(v.phase)
-    )
+    ) {
       deny("choices-before-reveal")
+    }
+
     if (
       v.question &&
       !["question", "answerCards", "voting", "voteLocked", "results"].includes(
         v.phase,
       )
-    )
+    ) {
       deny("question-outside-phase")
-    if (v.leaders && !["leaderboard", "closing"].includes(v.phase))
+    }
+
+    if (v.leaders && !["leaderboard", "closing"].includes(v.phase)) {
       deny("leaders-outside-phase")
+    }
+
     if (
       v.clock &&
       ![
@@ -179,14 +209,18 @@ export const showProjectionSchema = z
         "voteLocked",
         "interlude",
       ].includes(v.phase)
-    )
+    ) {
       deny("clock-outside-phase")
+    }
+
     if (
       v.voteProgress &&
       (v.role === "player" ||
         !["voting", "voteLocked", "results"].includes(v.phase))
-    )
+    ) {
       deny("vote-progress-role-phase")
+    }
+
     if (
       v.canAnswer &&
       (v.role !== "player" ||
@@ -200,11 +234,14 @@ export const showProjectionSchema = z
           : (v.choices?.length ?? 0) < 2) ||
         (v.clock.deadlineMs !== null &&
           v.clock.elapsedMs >= v.clock.deadlineMs))
-    )
+    ) {
       deny("cannot-answer")
+    }
   })
   .brand<"ShowProjection">()
+
 export type DemoPresentationSnapshot = z.infer<
   typeof demoPresentationSnapshotSchema
 >
+
 export type ShowProjection = z.infer<typeof showProjectionSchema>

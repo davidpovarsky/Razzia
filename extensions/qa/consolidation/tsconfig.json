@@ -6,6 +6,7 @@
     "lib": ["ESNext", "DOM", "DOM.Iterable"]
   },
   "include": [
+    "./*.ts",
     "../../src/site/bootstrap.tsx",
     "../../src/site/web/account/AccountGateway.tsx",
     "../../src/site/web/studio/Studio.tsx",

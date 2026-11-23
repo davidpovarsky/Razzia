@@ -14,8 +14,10 @@ import {
 } from "./sidecar"
 
 export const QUESTION_ID = "00000000-0000-4000-8000-000000000001"
+
 const SCENE_ID = "00000000-0000-4000-8000-000000000002"
 const ITEM_ID = "00000000-0000-4000-8000-000000000003"
+
 export const MEDIA_NAME = "synthetic.png"
 
 export function createRecoveryFixture() {
@@ -28,18 +30,23 @@ export function createRecoveryFixture() {
   const basePath = (id: string) => getPath(`quizz/${id}.json`)
   const injections: StorageInjections = {
     getPath,
-    getQuizzById: (id) => JSON.parse(fs.readFileSync(basePath(id), "utf8")),
+    getQuizzById: (id): unknown =>
+      JSON.parse(fs.readFileSync(basePath(id), "utf8")),
     saveQuizz: (data) => {
       const id = crypto.randomUUID()
       fs.writeFileSync(basePath(id), JSON.stringify(data))
+
       return { id }
     },
     updateQuizz: (id, data) => {
       fs.writeFileSync(basePath(id), JSON.stringify(data))
+
       return { id }
     },
     deleteQuizz: (id) => {
-      if (fs.existsSync(basePath(id))) fs.unlinkSync(basePath(id))
+      if (fs.existsSync(basePath(id))) {
+        fs.unlinkSync(basePath(id))
+      }
     },
   }
   function seed(id: string, referenced = true) {
@@ -122,6 +129,7 @@ export function createRecoveryFixture() {
     const validated = quizExtrasV2Schema.parse(extras)
     injections.updateQuizz(id, base)
     writeSidecar(getPath, id, validated)
+
     return {
       base,
       extras: validated,
@@ -129,6 +137,7 @@ export function createRecoveryFixture() {
       sidecarPath: getSidecarFilePath(getPath, id),
     }
   }
+
   return { root, getPath, injections, seed, basePath }
 }
 
@@ -138,11 +147,13 @@ export function fileDigest(file: string) {
 
 export function removeSyntheticFixture(root: string) {
   const resolved = path.resolve(root)
+
   if (
     path.dirname(resolved) !== path.resolve(os.tmpdir()) ||
     !path.basename(resolved).startsWith("tadazz-recovery-synthetic-")
   ) {
     throw new Error(`Refusing cleanup outside synthetic fixture: ${resolved}`)
   }
+
   fs.rmSync(resolved, { recursive: true, force: true })
 }
