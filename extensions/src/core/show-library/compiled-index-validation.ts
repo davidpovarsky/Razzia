@@ -43,17 +43,14 @@ export function parseCanonicalCompiledIndex<T>(
  * No IO/URL/module execution or claim of production byte immutability is made.
  */
 
-export function diagnoseCompiledArtifactBytes({
-  artifactInput,
-  resourceInput,
-  evidence,
-  descriptorInput,
-}: {
-  artifactInput: unknown
-  resourceInput: unknown
-  evidence: ReadonlyMap<string, Uint8Array>
-  descriptorInput?: unknown
-}) {
+export function diagnoseCompiledArtifactBytes(
+  ...[artifactInput, resourceInput, evidence, descriptorInput]: [
+    artifactInput: unknown,
+    resourceInput: unknown,
+    evidence: ReadonlyMap<string, Uint8Array>,
+    descriptorInput?: unknown,
+  ]
+) {
   const artifact = rendererArtifactIndexV2Schema.parse(artifactInput)
   const resources = nativeResourceIndexV2Schema.parse(resourceInput)
   // Use intrinsic Map operations: subclass getters/iterators/get cannot run.
@@ -66,7 +63,7 @@ export function diagnoseCompiledArtifactBytes({
     )
 
     if (!sizeDescriptor?.get) {
-      throw new Error("budget")
+      throw new Error("map-size-unavailable")
     }
 
     const size = sizeDescriptor.get.call(evidence) as number

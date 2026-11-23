@@ -231,17 +231,17 @@ export function createNativePackageAuthoring(
 
             case "complete_package_upload": {
               const a = packageInputs[name].parse(input)
-              const result = transfers.operation({
-                owner: principal.accountId,
-                kind: name,
-                key: a.idempotencyKey,
-                digest: hashJson(a),
-                action: () =>
+              const result = transfers.operation(
+                principal.accountId,
+                name,
+                a.idempotencyKey,
+                hashJson(a),
+                () =>
                   status(
-                    transfers.complete({
-                      owner: principal.accountId,
-                      id: a.transferId,
-                      upload: (bytes, key) => {
+                    transfers.complete(
+                      principal.accountId,
+                      a.transferId,
+                      (bytes, key) => {
                         if (inspectPackage(bytes).report.code && !runtime) {
                           throw new PackageError(
                             "PACKAGE_RUNTIME_DISABLED",
@@ -251,10 +251,10 @@ export function createNativePackageAuthoring(
 
                         return store.upload(native, bytes, key)
                       },
-                      read: (id) => store.details(native, id),
-                    }),
+                      (id) => store.details(native, id),
+                    ),
                   ),
-              })
+              )
 
               return { data: result }
             }
@@ -270,17 +270,17 @@ export function createNativePackageAuthoring(
               const a = packageInputs[name].parse(input)
 
               return {
-                data: transfers.operation({
-                  owner: principal.accountId,
-                  kind: name,
-                  key: a.idempotencyKey,
-                  digest: hashJson(a),
-                  action: () => {
+                data: transfers.operation(
+                  principal.accountId,
+                  name,
+                  a.idempotencyKey,
+                  hashJson(a),
+                  () => {
                     store.requestBuild(native, a.uploadId)
 
                     return status(store.details(native, a.uploadId))
                   },
-                  precondition: () => {
+                  () => {
                     const receipt = store.details(native, a.uploadId)
                     sameRevision(receipt, a.expectedRevision)
 
@@ -296,7 +296,7 @@ export function createNativePackageAuthoring(
                       throw new ToolError("VALIDATION_FAILED")
                     }
                   },
-                }),
+                ),
               }
             }
 
@@ -339,12 +339,12 @@ export function createNativePackageAuthoring(
               const a = packageInputs[name].parse(input)
 
               return {
-                data: transfers.operation({
-                  owner: principal.accountId,
-                  kind: name,
-                  key: a.idempotencyKey,
-                  digest: hashJson(a),
-                  action: () => {
+                data: transfers.operation(
+                  principal.accountId,
+                  name,
+                  a.idempotencyKey,
+                  hashJson(a),
+                  () => {
                     store.uninstall(native, a.uploadId)
 
                     return {
@@ -353,7 +353,7 @@ export function createNativePackageAuthoring(
                       deleted: true,
                     }
                   },
-                  precondition: () => {
+                  () => {
                     const receipt = store.details(native, a.uploadId)
                     sameRevision(receipt, a.expectedRevision)
 
@@ -365,7 +365,7 @@ export function createNativePackageAuthoring(
                       throw new ToolError("VALIDATION_FAILED")
                     }
                   },
-                }),
+                ),
               }
             }
 
@@ -440,12 +440,12 @@ export function createNativePackageAuthoring(
                 undefined
 
               return {
-                data: transfers.operation({
-                  owner: principal.accountId,
-                  kind: name,
-                  key: a.idempotencyKey,
-                  digest: hashJson(a),
-                  action: () => {
+                data: transfers.operation(
+                  principal.accountId,
+                  name,
+                  a.idempotencyKey,
+                  hashJson(a),
+                  () => {
                     if (!checked) {
                       throw new ToolError("DEPENDENCY_UNAVAILABLE")
                     }
@@ -469,7 +469,7 @@ export function createNativePackageAuthoring(
                       expiresAt: new Date(Date.now() + 300_000).toISOString(),
                     }
                   },
-                  precondition: () => {
+                  () => {
                     const receipt = store.details(native, a.uploadId)
                     sameRevision(receipt, a.expectedRevision)
                     checked = {
@@ -477,7 +477,7 @@ export function createNativePackageAuthoring(
                       bytes: store.export(native, a.uploadId),
                     }
                   },
-                }),
+                ),
               }
             }
           }

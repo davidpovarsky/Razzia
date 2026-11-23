@@ -1,7 +1,7 @@
 import assert from "node:assert/strict"
 import { createHash } from "node:crypto"
 import test from "node:test"
-import { requireObservedRecord, requireObservedValue } from "./fixtures.ts"
+import { requireObservedRecord } from "./fixtures.ts"
 import {
   previewIdentityDigest,
   serializePreviewIdentity,
@@ -88,12 +88,11 @@ test("V2 identity preserves same-ID/different-SHA pairs and rejects duplicate ex
       assetDigests: input.assetDigests.slice(1),
     }),
   )
-  const firstAssetDigest = requireObservedValue(input.assetDigests.at(0))
   assert.throws(
     () =>
       serializePreviewIdentity({
         ...input,
-        assetDigests: [firstAssetDigest, firstAssetDigest],
+        assetDigests: [input.assetDigests[0], input.assetDigests[0]],
       }),
     /duplicate/,
   )

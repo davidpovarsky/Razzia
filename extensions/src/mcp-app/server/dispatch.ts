@@ -59,19 +59,15 @@ function modelQuestionRefs(record: DraftRecord) {
     }))
 }
 
-export async function dispatch({
-  name,
-  raw,
-  p,
-  deps,
-  config,
-}: {
-  name: ToolName
-  raw: unknown
-  p: VerifiedPrincipal
-  deps: Dependencies
-  config: ServerConfig
-}): Promise<CallToolResult> {
+export async function dispatch(
+  ...[name, raw, p, deps, config]: [
+    name: ToolName,
+    raw: unknown,
+    p: VerifiedPrincipal,
+    deps: Dependencies,
+    config: ServerConfig,
+  ]
+): Promise<CallToolResult> {
   const correlationId = randomUUID()
 
   try {
@@ -245,12 +241,7 @@ export async function dispatch({
           data = deps.semanticDrafts
             ? await deps.semanticDrafts.state(p, a)
             : publicDraft(
-                await readDraft({
-                  deps,
-                  p,
-                  id: a.draftId,
-                  expected: a.expectedRevision,
-                }),
+                await readDraft(deps, p, a.draftId, a.expectedRevision),
               )
 
           break
@@ -258,7 +249,7 @@ export async function dispatch({
 
         case "get_game_draft": {
           const a = inputs[name].parse(raw)
-          const record = await readDraft({ deps, p, id: a.draftId })
+          const record = await readDraft(deps, p, a.draftId)
 
           if (utf8Bytes(record.authoredShowJson) > LIMITS.authored) {
             throw new ToolError("INTERNAL")
@@ -374,12 +365,12 @@ export async function dispatch({
           }
 
           const a = inputs[name].parse(raw)
-          const original = await readDraft({
+          const original = await readDraft(
             deps,
             p,
-            id: a.draftId,
-            expected: a.expectedRevision,
-          })
+            a.draftId,
+            a.expectedRevision,
+          )
           const normalized = normalizeDraft(
             JSON.stringify({
               ...JSON.parse(original.authoredShowJson),
@@ -456,12 +447,7 @@ export async function dispatch({
 
         case "preview_game": {
           const a = inputs[name].parse(raw)
-          const record = await readDraft({
-            deps,
-            p,
-            id: a.draftId,
-            expected: a.expectedRevision,
-          })
+          const record = await readDraft(deps, p, a.draftId, a.expectedRevision)
 
           if (!deps.preview && deps.previewCandidateV2) {
             const candidate = previewCandidateV2Schema.parse(
@@ -476,12 +462,12 @@ export async function dispatch({
               throw new ToolError("PREVIEW_UNAVAILABLE")
             }
 
-            const failure = failureResult({
+            const failure = failureResult(
               name,
-              error: new ToolError("PREVIEW_UNAVAILABLE"),
+              new ToolError("PREVIEW_UNAVAILABLE"),
               config,
               correlationId,
-            })
+            )
             const result = {
               ...failure,
               _meta: { [PREVIEW_CANDIDATE_META_V2]: candidate },
@@ -494,12 +480,7 @@ export async function dispatch({
             return result
           }
 
-          const result = await renderPreview({
-            deps,
-            principal: p,
-            record,
-            locale: a.locale,
-          })
+          const result = await renderPreview(deps, p, record, a.locale)
           ;({ data } = result)
           ;({ meta } = result)
 
@@ -607,6 +588,6 @@ export async function dispatch({
 
     return result
   } catch (error) {
-    return failureResult({ name, error, config, correlationId })
+    return failureResult(name, error, config, correlationId)
   }
 }

@@ -330,7 +330,6 @@
 .tzv4-stage .q-text {
   font-size: 66px;
   line-height: 1.09;
-  padding-block: 2px;
   text-align: center;
   letter-spacing: -0.038em;
   font-weight: 900;
@@ -1165,6 +1164,10 @@
 }
 .tzv4-stage .q-text {
   font-size: 62px;
+}
+.tzv4-stage:not([data-original-family]) .q-text {
+  /* Keep glyph ink inside the measured line box without changing typography. */
+  padding-block: 2px;
 }
 .tzv4-stage .answers {
   left: 77px;

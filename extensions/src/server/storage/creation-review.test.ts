@@ -108,11 +108,11 @@ describe.runIf(process.platform === "linux")(
         const receipt: Record<string, unknown> = { sibling, state: "STARTED" }
 
         try {
-          const interrupted = await creationChild({
-            mode: "before-id-return",
-            root: requireInitializedFixture().root,
-            token: requireInitializedFixture().token,
-          })
+          const interrupted = await creationChild(
+            "before-id-return",
+            requireInitializedFixture().root,
+            requireInitializedFixture().token,
+          )
           const checkpoint = requireCreationCheckpoint(
             JSON.parse(
               fs.readFileSync(
@@ -188,11 +188,11 @@ describe.runIf(process.platform === "linux")(
 
         try {
           const empty = scenario.endsWith("empty")
-          const interrupted = await creationChild({
-            mode: empty ? "before-slot-removal" : "committed-visible",
-            root: requireInitializedFixture().root,
-            token: requireInitializedFixture().token,
-          })
+          const interrupted = await creationChild(
+            empty ? "before-slot-removal" : "committed-visible",
+            requireInitializedFixture().root,
+            requireInitializedFixture().token,
+          )
           const checkpoint = requireCreationCheckpoint(
             JSON.parse(
               fs.readFileSync(

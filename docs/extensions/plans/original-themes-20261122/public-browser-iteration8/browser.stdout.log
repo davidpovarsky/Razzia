@@ -1,0 +1,12 @@
+Game cleanup task started
+{"originalThemeCheck":{"name":"eight-native-installs-and-isolated-two-to-five-choice-fixtures","passed":true,"originals":8,"rounds":32,"anonymousInstallDenied":true,"crossAccountReadDenied":true}}
+{"originalThemeCheck":{"name":"native-editor-eight-theme-round-trip-save-reload-and-history","passed":true,"switches":8,"preservedQuestionCount":6}}
+{"originalThemeCheck":{"name":"public-back-clears-current-and-future-votes","passed":true,"retainedScore":1000,"clearedQuestions":[2,3],"replay":true}}
+{"originalThemeCheck":{"name":"normal-motion-complete-public-show-royal-quiz","passed":true,"rounds":6,"checkpoints":3,"interludes":2,"replay":true}}
+{"originalThemeCheck":{"name":"normal-motion-complete-public-show-neon-arcade","passed":true,"rounds":6,"checkpoints":3,"interludes":2,"replay":true}}
+{"originalThemeCheck":{"name":"normal-motion-complete-public-show-retro-tv","passed":true,"rounds":6,"checkpoints":3,"interludes":2,"replay":true}}
+{"originalThemeCheck":{"name":"normal-motion-complete-public-show-magic-storybook","passed":true,"rounds":6,"checkpoints":3,"interludes":2,"replay":true}}
+{"originalThemeCheck":{"name":"normal-motion-complete-public-show-crystal-future","passed":true,"rounds":6,"checkpoints":3,"interludes":2,"replay":true}}
+{"originalThemeCheck":{"name":"normal-motion-complete-public-show-carnival-pop","passed":true,"rounds":6,"checkpoints":3,"interludes":2,"replay":true}}
+{"originalThemeCheck":{"name":"normal-motion-complete-public-show-sports-arena","passed":true,"rounds":6,"checkpoints":3,"interludes":2,"replay":true}}
+Game cleanup task stopped

@@ -1,3 +1,4 @@
+import { promiseFrom } from "../../shared/promise-operation.ts"
 import assert from "node:assert/strict"
 import { test } from "node:test"
 import { generateKeyPairSync, randomUUID, sign } from "node:crypto"
@@ -6,7 +7,6 @@ import {
   type ActiveOAuthGrant,
 } from "../../server/access-token.ts"
 import { config } from "./fixtures.ts"
-import { synchronousPromise } from "../../../core/synchronous-promise.ts"
 
 function fixture() {
   const { publicKey, privateKey } = generateKeyPairSync("ed25519")
@@ -36,7 +36,7 @@ function fixture() {
       },
     ],
     activeGrant: (id) =>
-      synchronousPromise(() => {
+      promiseFrom(() => {
         grantReads += 1
 
         if (grantFailure) {
@@ -46,7 +46,7 @@ function fixture() {
         return id === grant.grantId ? active : undefined
       }),
     activeAccount: (id) =>
-      synchronousPromise(() => {
+      promiseFrom(() => {
         accountReads += 1
 
         if (revokeDuringAccountCheck) {
@@ -183,6 +183,19 @@ test("signed account/client/subject substitution and changed stored grant are de
   f.replaceGrant({ ...f.grant, expiresAt: Date.now() - 1 })
   await assert.rejects(f.verify(f.token()))
 })
+test("truthy non-boolean grant activity is rejected before account authorization", async () => {
+  for (const malformed of [1, "true", {}, []]) {
+    const f = fixture()
+    f.replaceGrant({
+      ...f.grant,
+      // Deliberately inject an invalid adapter result despite the literal-true type.
+      active: malformed as unknown as true,
+    })
+    await assert.rejects(f.verify(f.token()), { message: "SCOPE_REQUIRED" })
+    assert.equal(f.counts().accountReads, 0)
+  }
+})
+
 test("cancellation and private storage errors yield a fixed safe error", async () => {
   const f = fixture()
   const controller = new AbortController()

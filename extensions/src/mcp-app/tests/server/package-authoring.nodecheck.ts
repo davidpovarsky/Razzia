@@ -1,3 +1,4 @@
+import { promiseFrom } from "../../shared/promise-operation.ts"
 import assert from "node:assert/strict"
 import test from "node:test"
 import {
@@ -8,7 +9,6 @@ import {
 import type { PackageAuthoringPort } from "../../server/package-authoring.ts"
 import { ToolError } from "../../server/errors.ts"
 import { config, harness, code, data, newKey, principal } from "./fixtures.ts"
-import { synchronousPromise } from "../../../core/synchronous-promise.ts"
 
 const capabilities = {
   installer: true,
@@ -97,7 +97,7 @@ test("package capability results retain actual disabled native features", async 
   const h = await harness({
     packages: {
       call(p, name, input) {
-        return synchronousPromise(() => {
+        return promiseFrom(() => {
           calls += 1
 
           assert.equal(p.accountId, h.account.accountId)
@@ -255,7 +255,7 @@ test("maximum valid chunk delegates exact bytes and idempotency once, without li
   const h = await harness({
     packages: {
       call(_p, name, input) {
-        return synchronousPromise(() => {
+        return promiseFrom(() => {
           calls += 1
 
           assert.equal(name, "write_package_upload_chunk")
@@ -321,7 +321,7 @@ test("package preview is exact-revision and validates its first-party destinatio
     const h = await harness({
       packages: {
         call() {
-          return synchronousPromise(() => ({
+          return promiseFrom(() => ({
             data: {
               uploadId,
               revision: 2,
@@ -357,7 +357,7 @@ test("native build may advance revision while preview and installation retain th
   const names: string[] = []
   const port: PackageAuthoringPort = {
     call(_p, name) {
-      return synchronousPromise(() => {
+      return promiseFrom(() => {
         names.push(name)
 
         if (name === "build_package") {
@@ -419,6 +419,7 @@ test("native build may advance revision while preview and installation retain th
     assert.equal(code(install), "CONSENT_REQUIRED")
     const visible = install.content.find((item) => item.type === "text")
     assert(visible)
+    assert.equal(visible.type, "text")
     assert.deepEqual(JSON.parse(visible.text), {
       ok: false,
       code: "CONSENT_REQUIRED",
@@ -441,7 +442,7 @@ test("package consent text exposes only its exact package-save route", async () 
   const h = await harness({
     packages: {
       call() {
-        return synchronousPromise(() => {
+        return promiseFrom(() => {
           throw new ToolError("CONSENT_REQUIRED", {
             consentRequestId,
             consentUrl: `${config.firstPartyOrigins[0]}/studio/native-save-consent/${consentRequestId}`,
@@ -455,6 +456,7 @@ test("package consent text exposes only its exact package-save route", async () 
     const result = await h.call("install_package", args("install_package"))
     const visible = result.content.find((item) => item.type === "text")
     assert(visible)
+    assert.equal(visible.type, "text")
     assert.deepEqual(JSON.parse(visible.text), {
       ok: false,
       code: "CONSENT_REQUIRED",

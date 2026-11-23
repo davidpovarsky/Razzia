@@ -35,6 +35,16 @@ SOURCE_PATHS = ["extensions", "packages", "package.json", "tsconfig.json",
                 "pnpm-workspace.yaml", "pnpm-lock.yaml", "oxlint.config.ts",
                 ".gitignore", ".prettierignore",
                 ".prettierrc.json", ".prettierrc", "prettier.config.mjs"]
+# Pin the maintained test selector, worker inputs and Motion reference to this exact commit.
+# Keep these as individual archive leaves: expanding their top-level roots
+# would copy unrelated historical evidence and private delivery artifacts.
+EXTRA_QA_INPUTS = [
+    "scripts/qa/ci-e2e-routing.py",
+    "scripts/qa/package-build-worker.py",
+    "scripts/qa/start-package-server.ts",
+    "scripts/tadazz/extract-motion-assets.mjs",
+    "docs/extensions/references/TADAZZ_Motion_Showcase_One_Click_20261105.html",
+]
 tracked = subprocess.check_output(["git", "ls-files", *SOURCE_PATHS], cwd=ROOT, text=True).splitlines()
 LINT_BASELINE = None
 if SUITE in ("native-launch", "full-show-selection"):
@@ -57,7 +67,7 @@ if REUSE:
     manifest = previous_input["files"]
 else:
     subprocess.run(["git", "archive", "--format=tar.gz", "-o", str(ARCHIVE), SHA,
-                    "--", *sorted({p.split('/')[0] for p in tracked})], cwd=ROOT, check=True)
+                    "--", *sorted({p.split('/')[0] for p in tracked}), *EXTRA_QA_INPUTS], cwd=ROOT, check=True)
     with tarfile.open(ARCHIVE, "r:gz") as archive:
         manifest = {}
         source_bytes = 0
@@ -159,11 +169,14 @@ host_evidence=pathlib.Path(next(m["Source"] for m in inspection["Mounts"] if m["
 owned=host_evidence/c["run"]
 assert owned.is_dir() and not owned.is_symlink()
 baseline_source=None
+baseline_original_source=None
+baseline_original_before=None
+policy_before=None
 if c["lintBaseline"]:
     assert c["lintBaseline"]["sha"]=="9c8b1081f07c608e03946deec14351d27d6cca57"
     assert c["lintBaseline"]["run"]=="tadazz-codex-9c8b1081f07c-e01312da"
-    baseline_source=host_evidence/c["lintBaseline"]["run"]/"source"
-    assert baseline_source.is_dir() and not baseline_source.is_symlink() and not baseline_source.parent.is_symlink()
+    baseline_original_source=host_evidence/c["lintBaseline"]["run"]/"source"
+    assert baseline_original_source.is_dir() and baseline_original_source.resolve()==baseline_original_source
 rootfs=pathlib.Path("/var/lib/docker/rootfs/overlayfs")/inspection["Id"]
 assert (rootfs/"cleanup").is_dir()
 original_deps=pathlib.Path("/proc")/str(inspection["State"]["Pid"])/"root/tmp/phase3-999ed90c/deps"
@@ -176,11 +189,69 @@ if deps is None:
     deps=owned/("matrix-deps-"+uuid.uuid4().hex[:8])
     shutil.copytree(original_deps,deps,symlinks=True)
 assert dependency_hashes(deps)==expected_deps
+def pinned_baseline_files(root, destination=None):
+    observed={}
+    for relative,expected in c["lintBaseline"]["manifest"].items():
+        name=pathlib.PurePosixPath(relative)
+        assert not name.is_absolute() and ".." not in name.parts and "\\" not in relative
+        path=root.joinpath(*name.parts)
+        assert path.is_file() and not path.is_symlink() and path.resolve()==path
+        raw=path.read_bytes()
+        observed[relative]=hashlib.sha256(raw).hexdigest()
+        assert observed[relative]==expected, "Historical lint baseline differs from pinned Git bytes"
+        if destination is not None:
+            copied=destination.joinpath(*name.parts)
+            copied.parent.mkdir(parents=True,exist_ok=True)
+            with copied.open("xb") as output: output.write(raw)
+            copied.chmod(path.stat().st_mode & 0o777)
+    return observed
+def policy_hashes():
+    observed={}
+    for name,root in (("baseline",baseline_source),("candidate",owned/"source")):
+        path=root/c["lintPolicy"]["configFile"]
+        assert path.is_file() and not path.is_symlink() and path.resolve()==path
+        observed[name]=hashlib.sha256(path.read_bytes()).hexdigest()
+    return observed
+if baseline_original_source is not None:
+    policy=c["lintPolicy"]
+    assert policy=={"configFile":"tadazz-lint-policy.config.ts","sourcePath":"oxlint.config.ts",
+                    "sha256":c["manifest"]["oxlint.config.ts"],"sourceSha":c["sha"]}
+    assert policy["configFile"] not in c["manifest"] and policy["configFile"] not in c["lintBaseline"]["manifest"]
+    original_config=owned/"source"/policy["sourcePath"]
+    assert original_config.is_file() and original_config.resolve()==original_config
+    policy_bytes=original_config.read_bytes()
+    assert hashlib.sha256(policy_bytes).hexdigest()==policy["sha256"]
+    # A sibling keeps the baseline out of the matrix's writable owned-run mount.
+    # Copy only exact Git-pinned files; never edit or chmod the historical tree.
+    baseline_source=host_evidence/(c["run"]+"-lint-baseline-"+uuid.uuid4().hex[:8])
+    baseline_source.mkdir(mode=0o700,exist_ok=False)
+    baseline_original_before=pinned_baseline_files(baseline_original_source,baseline_source)
+    assert pinned_baseline_files(baseline_source)==baseline_original_before
+    for directory in ["", "extensions", "packages/common", "packages/socket", "packages/web"]:
+        if (rootfs/"cleanup"/directory/"node_modules").is_dir():
+            target=baseline_source/directory/"node_modules"
+            assert not target.exists() and not target.is_symlink()
+            target.symlink_to(pathlib.Path("/cleanup")/directory/"node_modules",target_is_directory=True)
+    target=baseline_source/"extensions/src/mcp-app/node_modules"
+    assert not target.exists() and not target.is_symlink()
+    target.symlink_to("/tmp/phase3-999ed90c/deps/node_modules",target_is_directory=True)
+    for root in (baseline_source,owned/"source"):
+        alias=root/policy["configFile"]
+        if alias.exists() or alias.is_symlink():
+            assert c["reuse"] and root==owned/"source" and alias.is_file() and not alias.is_symlink()
+            assert alias.read_bytes()==policy_bytes
+        else:
+            with alias.open("xb") as output: output.write(policy_bytes)
+            alias.chmod(0o444)
+    policy_before=policy_hashes()
+    assert policy_before=={"baseline":policy["sha256"],"candidate":policy["sha256"]}
 matrix=c["run"]+"-matrix-"+uuid.uuid4().hex[:8]
 docker=["docker","run","--detach","--pull=never","--init","--read-only","--name",matrix,"--network","none","--cpus","1","--memory","2g","--memory-swap","2g","--pids-limit","384","--shm-size","256m","--tmpfs","/tmp:rw,nosuid,nodev,size=536870912","--label","com.tadazz.qa=immutable-matrix"]
 mounts=[(str(owned),base,False),(str(rootfs/"cleanup"),"/cleanup",True),(str(deps),"/tmp/phase3-999ed90c/deps",True)]
 if baseline_source is not None:
     mounts.append((str(baseline_source),"/lint-baseline",True))
+    for relative in (c["lintPolicy"]["configFile"],c["lintPolicy"]["sourcePath"]):
+        mounts.append((str(owned/"source"/relative),source+"/"+relative,True))
 for origin,target,readonly in mounts:
     docker+=["--mount","type=bind,source="+origin+",target="+target+(",readonly" if readonly else "")]
 docker+=["--entrypoint","/bin/sleep",inspection["Image"],"infinity"]
@@ -206,7 +277,7 @@ baseline_before=hashes("/lint-baseline",c["lintBaseline"]["manifest"]) if c["lin
 if baseline_before is not None:
     assert baseline_before==c["lintBaseline"]["manifest"], "Lint baseline differs from exact pinned Git revision"
 prefix = ["docker", "exec", "-w", source, "-e", "PHASE3_RECOVERY_REQUIRE_EXT4=1", "-e", "C1_FIXTURE_ROOT=" + fixture, "-e", "TSX_DISABLE_CACHE=1", "-e", "NODE_OPTIONS=--max-old-space-size=1024", container, "nice", "-n", "19", "taskset", "-c", "0", "timeout", "-k", "5"]
-tsx = ["node", "/cleanup/extensions/node_modules/tsx/dist/cli.mjs", "--tsconfig", "tsconfig.json", "--test", "--test-concurrency=1"]
+tsx = ["node", "/cleanup/extensions/node_modules/tsx/dist/cli.mjs", "--tsconfig", "tsconfig.json", "--test", "--test-reporter=tap", "--test-concurrency=1"]
 qualification = "extensions/qa/phase3-recovery/recovery-qualification.node.ts"
 invariants = "extensions/qa/phase3-recovery/recovery-invariants.node.ts"
 checks = []
@@ -238,7 +309,13 @@ widget_scope = ["extensions/src/mcp-app/" + path for path in [
 ]] + ["extensions/qa/phase3-full-show/selection.nodecheck.ts", "extensions/qa/phase3-full-show/native-save-ui.nodecheck.ts"]
 def check_legacy_lint():
     assert c["lintBaseline"] is not None
-    return check("semantic-integration-lint-baseline", 240, ["python3", "extensions/qa/phase3-recovery/lint-baseline.py", "--baseline-root", "/lint-baseline", "--current-root", source, "--baseline-sha", c["lintBaseline"]["sha"], "--output", fixture+"/semantic-lint-baseline-"+uuid.uuid4().hex[:8]])
+    command = ["python3", "extensions/qa/phase3-recovery/lint-baseline.py", "--baseline-root", "/lint-baseline", "--current-root", source, "--baseline-sha", c["lintBaseline"]["sha"], "--output", fixture+"/semantic-lint-baseline-"+uuid.uuid4().hex[:8]]
+    if c.get("lintPolicy") is not None:
+        policy = c["lintPolicy"]
+        assert policy["configFile"] == "tadazz-lint-policy.config.ts" and policy["sourcePath"] == "oxlint.config.ts"
+        assert policy["sha256"] == c["manifest"]["oxlint.config.ts"] and policy["sourceSha"] == c["sha"]
+        command += ["--policy-sha256", policy["sha256"]]
+    return check("semantic-integration-lint-baseline", 240, command)
 if c["suite"] in ("full-show-assets", "full-show-selection"):
     scope = ["extensions/src/mcp-app/server/full-show-assets.ts", "extensions/qa/phase3-full-show/assets.nodecheck.ts"]
     prefix[4:4] = ["-e", "TMPDIR=" + fixture]
@@ -326,9 +403,14 @@ changed_source = [p for p in before if before[p] != after[p]]
 baseline_after=hashes("/lint-baseline",c["lintBaseline"]["manifest"]) if c["lintBaseline"] else None
 if baseline_before is not None:
     assert baseline_after==baseline_before, "Read-only lint baseline changed"
-print(json.dumps({"sha": c["sha"], "suite": c["suite"], "run": c["run"], "source": source, "fixture": fixture, "sdkVersions": sdk_versions, "matrixContainer": matrix, "runnerImage": inspection["Image"], "network": "none", "sourceWriteScope": base, "sourceFileCount": len(before), "allHashesVerifiedBeforeAfter": not changed_source, "changedSourcePaths": changed_source, "hashesBefore": before, "hashesAfter": after, "lintBaseline": None if baseline_before is None else {"sha":c["lintBaseline"]["sha"],"run":c["lintBaseline"]["run"],"sourceReadOnly":True,"sourceFileCount":len(baseline_before),"allHashesVerifiedBeforeAfter":baseline_after==baseline_before,"hashesBefore":baseline_before,"hashesAfter":baseline_after}, "checks": checks, "customerMountAccessed": False, "productionChanged": False}, indent=2))
+    baseline_original_after=pinned_baseline_files(baseline_original_source)
+    assert baseline_original_after==baseline_original_before, "Historical lint baseline changed"
+    policy_after=policy_hashes()
+    assert policy_after==policy_before, "Pinned effective lint policy changed"
+print(json.dumps({"sha": c["sha"], "suite": c["suite"], "run": c["run"], "source": source, "fixture": fixture, "sdkVersions": sdk_versions, "matrixContainer": matrix, "runnerImage": inspection["Image"], "network": "none", "sourceWriteScope": base, "sourceFileCount": len(before), "allHashesVerifiedBeforeAfter": not changed_source, "changedSourcePaths": changed_source, "hashesBefore": before, "hashesAfter": after, "lintBaseline": None if baseline_before is None else {"sha":c["lintBaseline"]["sha"],"run":c["lintBaseline"]["run"],"sourceReadOnly":True,"sourceFileCount":len(baseline_before),"allHashesVerifiedBeforeAfter":baseline_after==baseline_before,"hashesBefore":baseline_before,"hashesAfter":baseline_after,"privateSource":str(baseline_source),"originalSource":str(baseline_original_source),"originalHashesBefore":baseline_original_before,"originalHashesAfter":baseline_original_after}, "lintPolicy": None if policy_before is None else dict(c["lintPolicy"],sourceReadOnly=True,hashesBefore=policy_before,hashesAfter=policy_after), "checks": checks, "customerMountAccessed": False, "productionChanged": False}, indent=2))
 '''
-configuration = {"sha": SHA, "suite": SUITE, "run": RUN, "reuse": REUSE, "manifest": manifest, "lintBaseline": LINT_BASELINE}
+configuration = {"sha": SHA, "suite": SUITE, "run": RUN, "reuse": REUSE, "manifest": manifest, "lintBaseline": LINT_BASELINE,
+                 "lintPolicy": None if LINT_BASELINE is None else {"configFile":"tadazz-lint-policy.config.ts","sourcePath":"oxlint.config.ts","sha256":manifest["oxlint.config.ts"],"sourceSha":SHA}}
 script = REMOTE.replace("c = CONFIG", "c = " + repr(configuration))
 result = subprocess.run([*SSH, "sudo -n python3 -"], input=script, text=True, encoding="utf8", capture_output=True, timeout=1400 if SUITE == "native-launch" else 900 if SUITE == "full-show-selection" else 950 if SUITE == "native-consent" else 650)
 (EVIDENCE / "controller.stdout.log").write_text(result.stdout, encoding="utf8")

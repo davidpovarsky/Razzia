@@ -1,5 +1,7 @@
-import playwright from "../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
-
+import playwright, {
+  type APIRequestContext,
+  type Page,
+} from "../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
 const { test, expect } =
   playwright as unknown as typeof import("../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js")
 
@@ -19,11 +21,7 @@ const callback =
   "https://consent-callback.example.invalid/callback?code=synthetic-code&state=original"
 const newTicket = (prefix = "test-") =>
   prefix + "synthetic-ticket-".repeat(4) + Math.random().toString(36).slice(2)
-const open = async (
-  page: import("../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js").Page,
-  ticket: string,
-  locale = "en",
-) => {
+const open = async (page: Page, ticket: string, locale = "en") => {
   await page.goto(
     `/studio/oauth-consent?${new URLSearchParams({ oauth_request: ticket, locale })}`,
   )
@@ -32,7 +30,7 @@ const open = async (
   )
 }
 const stats = async (
-  request: import("../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js").APIRequestContext,
+  request: APIRequestContext,
   ticket: string,
 ): Promise<unknown> =>
   (

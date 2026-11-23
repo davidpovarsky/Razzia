@@ -38,7 +38,7 @@ const circle = ({ x, y, r, colour, opacity = 1, stroke = false, width = 2 }) =>
 const rect = ({ x, y, w, h, r, colour, opacity = 1, rotation = 0 }) =>
   `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${r}" fill="${colour}" opacity="${opacity}" transform="rotate(${rotation} ${x + w / 2} ${y + h / 2})"/>`
 
-function decoration(id, [_night, _mid, accent, secondary]) {
+function decoration(id, [, , accent, secondary]) {
   switch (id) {
     case "quiz":
       return `<g fill="none" stroke="${accent}" opacity=".26" stroke-width="2">
@@ -137,22 +137,10 @@ function icon(name) {
     triangle: `<path d="M256 100L422 392H90Z" fill="${c.coral}" stroke="${c.ink}" stroke-width="12" stroke-linejoin="round"/>`,
     square: `<rect x="122" y="122" width="268" height="268" rx="20" fill="${c.blue}" stroke="${c.ink}" stroke-width="12"/>`,
     circle:
-      circle({ x: 256, y: 256, r: 142, colour: c.mint }) +
-      circle({
-        x: 256,
-        y: 256,
-        r: 142,
-        colour: c.ink,
-        opacity: 1,
-        stroke: true,
-        width: 12,
-      }),
-    star: `${star({
-      x: 256,
-      y: 260,
-      r: 175,
-      fill: c.yellow,
-    })}<path d="M256 85l48 109 118 15-87 79 25 116-104-59-104 59 25-116-87-79 118-15Z" fill="none" stroke="${c.ink}" stroke-width="12" stroke-linejoin="round"/>`,
+      circle({ x: 256, y: 256, r: 142, colour: c.mint }) + circle({ x: 256, y: 256, r: 142, colour: c.ink, opacity: 1, stroke: true, width: 12 }),
+    star: `${star(
+      { x: 256, y: 260, r: 175, fill: c.yellow },
+    )}<path d="M256 85l48 109 118 15-87 79 25 116-104-59-104 59 25-116-87-79 118-15Z" fill="none" stroke="${c.ink}" stroke-width="12" stroke-linejoin="round"/>`,
     sun: `${Array.from({ length: 12 }, (_, i) => {
       const a = (i * Math.PI) / 6
 
@@ -198,16 +186,14 @@ async function render({ name, svg, width, height }) {
     bytes: bytes.length,
   })
 }
-for (const [id, colors] of Object.entries(palettes)) {
-  // oxlint-disable-next-line no-await-in-loop -- Render backdrops sequentially on the shared page to bind viewport, content, screenshot and order.
-  await render({
-    name: `${id}-backdrop`,
-    svg: backdrop(id, colors),
-    width: 1600,
-    height: 900,
-  })
-}
-for (const name of [
+// One page owns each capture, so queue every render in its original order.
+await Object.entries(palettes).reduce(
+  (previous, [id, colors]) => previous.then(() =>
+    render({ name: `${id}-backdrop`, svg: backdrop(id, colors), width: 1600, height: 900 }),
+  ),
+  Promise.resolve(),
+)
+await [
   "triangle",
   "square",
   "circle",
@@ -221,15 +207,12 @@ for (const name of [
   "bicycle",
   "rocket",
   "train",
-]) {
-  // oxlint-disable-next-line no-await-in-loop -- Render icons sequentially on the shared page to bind viewport, content, screenshot and order.
-  await render({
-    name: `picture-${name}`,
-    svg: icon(name),
-    width: 512,
-    height: 512,
-  })
-}
+ ].reduce(
+  (previous, name) => previous.then(() =>
+    render({ name: `picture-${name}`, svg: icon(name), width: 512, height: 512 }),
+  ),
+  Promise.resolve(),
+)
 await browser.close()
 await writeFile(
   path.join(output, "gallery-assets.json"),

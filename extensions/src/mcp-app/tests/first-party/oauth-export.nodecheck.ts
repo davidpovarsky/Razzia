@@ -176,17 +176,14 @@ const grantFile = (owner: string) =>
     owner,
     "extensions/mcp-oauth/grants.sqlite",
   )
-function api({
-  path,
-  body,
-  session,
-  instance = requireInitializedIssuer(),
-}: {
-  path: string
-  body?: Record<string, string>
-  session?: Session
-  instance?: ReturnType<typeof requireInitializedIssuer>
-}) {
+function api(
+  ...[path, body, session, instance = requireInitializedIssuer()]: [
+    path: string,
+    body?: Record<string, string>,
+    session?: Session,
+    instance?: ReturnType<typeof requireInitializedIssuer>,
+  ]
+) {
   const json = path === "/oauth/inspect" || path === "/oauth/approve"
 
   return instance.fetch(
@@ -215,8 +212,8 @@ async function linked(
   scopes = allowed,
 ) {
   const verifier = randomBytes(32).toString("base64url")
-  const response = await api({
-    path: `/oauth/authorize?${new URLSearchParams({
+  const response = await api(
+    `/oauth/authorize?${new URLSearchParams({
       response_type: "code",
       client_id: clientId,
       redirect_uri: redirectUri,
@@ -225,8 +222,8 @@ async function linked(
       state: key(),
       code_challenge: createHash("sha256").update(verifier).digest("base64url"),
       code_challenge_method: "S256",
-    }).toString()}`,
-  })
+    })}`,
+  )
   assert.equal(response.status, 302)
   const ticket = requireOAuthObservationPresent(
     new URL(
@@ -235,20 +232,18 @@ async function linked(
   )
 
   const inspected = requireOAuthObservationRecord(
-    await (
-      await api({ path: "/oauth/inspect", body: { ticket }, session })
-    ).json(),
+    await (await api("/oauth/inspect", { ticket }, session)).json(),
   )
 
-  const approval = await api({
-    path: "/oauth/approve",
-    body: {
+  const approval = await api(
+    "/oauth/approve",
+    {
       ticket,
       proof: requireOAuthObservationString(inspected.proof),
       decision: "allow",
     },
     session,
-  })
+  )
   assert.equal(approval.status, 200)
   const approved = requireOAuthObservationRecord(await approval.json())
 
@@ -258,16 +253,13 @@ async function linked(
     ).searchParams.get("code"),
   )
 
-  const exchanged = await api({
-    path: "/oauth/token",
-    body: {
-      grant_type: "authorization_code",
-      client_id: clientId,
-      code,
-      code_verifier: verifier,
-      redirect_uri: redirectUri,
-      resource: config.resource,
-    },
+  const exchanged = await api("/oauth/token", {
+    grant_type: "authorization_code",
+    client_id: clientId,
+    code,
+    code_verifier: verifier,
+    redirect_uri: redirectUri,
+    resource: config.resource,
   })
   assert.equal(exchanged.status, 200)
 
@@ -497,6 +489,42 @@ test("ordinary export needs scopes/owner/rights, with no new per-export consent"
     readFileSync(grantFile(requireInitializedF().sessions[0].owner)),
     priorBytes,
   )
+})
+
+test("truthy non-boolean export policy cannot mint, replay or deliver a download", async () => {
+  const grant = await linked()
+  const created = await draft(grant.token)
+  const input = exportInput(created.draftId)
+  const permittedExport = await rpc(grant.token, "export_game", input)
+  assert.equal(permittedExport.ok, true, JSON.stringify(permittedExport))
+  const url = requireOAuthObservationString(
+    requireOAuthObservationRecord(permittedExport.data).downloadUrl,
+  )
+  const path = grantFile(requireInitializedF().sessions[0].owner)
+  const priorBytes = readFileSync(path)
+
+  try {
+    for (const malformed of [1, "true", {}, []]) {
+      // Deliberately bypass the typed host port to exercise its runtime boundary.
+      rights = malformed as unknown as boolean
+      for (const result of [
+        await rpc(grant.token, "export_game", exportInput(created.draftId)),
+        await rpc(grant.token, "export_game", input),
+      ]) {
+        assert.equal(result.ok, false)
+        assert.equal(result.data, undefined)
+        assert.equal(
+          requireOAuthObservationRecord(result.error).code,
+          "EXPORT_UNAVAILABLE",
+        )
+      }
+
+      assert.equal((await download(url)).status, 404)
+      assert.deepEqual(readFileSync(path), priorBytes)
+    }
+  } finally {
+    rights = true
+  }
 })
 
 test("enhanced export uses the existing converter/importer and does not allocate native storage", async () => {

@@ -1,0 +1,287 @@
+{
+  "actualInventory": {
+    "cases": [
+      {
+        "expectedStatus": "passed",
+        "file": "media-appearance-stage-acceptance.spec.ts",
+        "project": "chromium",
+        "results": [
+          {
+            "duration": 43202,
+            "retry": 0,
+            "status": "passed"
+          }
+        ],
+        "status": "expected",
+        "title": "2. Live Runtime & Zero-Scroll Stage Matrix (STAGE-P0) across 8 Viewports + Card Background + Single Audio + Staged Motion"
+      },
+      {
+        "expectedStatus": "passed",
+        "file": "p0-tzila-acceptance.spec.ts",
+        "project": "chromium",
+        "results": [
+          {
+            "duration": 67201,
+            "retry": 0,
+            "status": "passed"
+          }
+        ],
+        "status": "expected",
+        "title": "Full Tzila Show Lifecycle: 5-option cards, PSTN DTMF 1-5, spectator display, tie, zero votes"
+      },
+      {
+        "expectedStatus": "passed",
+        "file": "tzila-public-stage-and-toolbar.spec.ts",
+        "project": "chromium",
+        "results": [
+          {
+            "duration": 23638,
+            "retry": 0,
+            "status": "passed"
+          }
+        ],
+        "status": "expected",
+        "title": "Gate C: Responsive Host Toolbar across Viewports & Localization"
+      },
+      {
+        "expectedStatus": "passed",
+        "file": "wave1-show-import-acceptance.spec.ts",
+        "project": "chromium",
+        "results": [
+          {
+            "duration": 2712,
+            "retry": 0,
+            "status": "failed"
+          }
+        ],
+        "status": "unexpected",
+        "title": "IMPORT05: Import valid show with Hebrew note and per-question interlude, save in editor, reload, export .tada.json and .xlsx, verify byte content"
+      }
+    ],
+    "exactRequestedCaseCount": 4
+  },
+  "applicationEntry": "ordinary",
+  "buildBaseSha": "6f295c2dbd040785d9b56e2b0dc68824d69c32c3",
+  "buildContainer": {
+    "before": {
+      "exitCode": 0,
+      "oomKilled": false,
+      "status": "running"
+    },
+    "noOom": true,
+    "stopped": true
+  },
+  "buildReadOnlySourceMountsVerified": true,
+  "buildReceipt": "/home/ubuntu/tadazz-original-themes-preflight-20261122/iteration9-receipt.json",
+  "buildReceiptSha256": "265685ead2ea65ae423b382a02b8ab376431363c007ccffb62f7ca90a5d64fdd",
+  "candidateSha": "31a9d4ce6e5633b48ff00f57ce8a731c741436d1",
+  "ciBuildFlag": "TADAZZ_SITE_ENABLED=false",
+  "containerBeforeStop": {
+    "exitCode": 0,
+    "oomKilled": false,
+    "status": "running"
+  },
+  "containerStopped": true,
+  "customerMountUsed": false,
+  "exactTestCopyVerifiedBeforeAfter": true,
+  "exit": 1,
+  "expected": {
+    "media-appearance-stage-acceptance.spec.ts": "2. Live Runtime & Zero-Scroll Stage Matrix (STAGE-P0) across 8 Viewports + Card Background + Single Audio + Staged Motion",
+    "p0-tzila-acceptance.spec.ts": "Full Tzila Show Lifecycle: 5-option cards, PSTN DTMF 1-5, spectator display, tie, zero votes",
+    "tzila-public-stage-and-toolbar.spec.ts": "Gate C: Responsive Host Toolbar across Viewports & Localization",
+    "wave1-show-import-acceptance.spec.ts": "IMPORT05: Import valid show with Hebrew note and per-question interlude, save in editor, reload, export .tada.json and .xlsx, verify byte content"
+  },
+  "network": "none",
+  "noOom": true,
+  "ordinaryArtifact": "/home/ubuntu/tadazz-original-themes-preflight-20261122/p0-import05-iteration9-58287324-ordinary-dist",
+  "ordinaryArtifactAfterSha256": "870d3e23c1dfd9612cdebaf9ed9096557d3e1631aee7efaa1547514b855ef8b4",
+  "ordinaryArtifactBeforeSha256": "870d3e23c1dfd9612cdebaf9ed9096557d3e1631aee7efaa1547514b855ef8b4",
+  "ordinaryArtifactFileCount": 249,
+  "ordinaryArtifactHashesVerifiedBeforeAfter": true,
+  "ordinaryBuildExit": 0,
+  "passed": false,
+  "phases": [
+    {
+      "actualInventory": {
+        "cases": [
+          {
+            "expectedStatus": "passed",
+            "file": "media-appearance-stage-acceptance.spec.ts",
+            "project": "chromium",
+            "results": [
+              {
+                "duration": 43202,
+                "retry": 0,
+                "status": "passed"
+              }
+            ],
+            "status": "expected",
+            "title": "2. Live Runtime & Zero-Scroll Stage Matrix (STAGE-P0) across 8 Viewports + Card Background + Single Audio + Staged Motion"
+          },
+          {
+            "expectedStatus": "passed",
+            "file": "p0-tzila-acceptance.spec.ts",
+            "project": "chromium",
+            "results": [
+              {
+                "duration": 67201,
+                "retry": 0,
+                "status": "passed"
+              }
+            ],
+            "status": "expected",
+            "title": "Full Tzila Show Lifecycle: 5-option cards, PSTN DTMF 1-5, spectator display, tie, zero votes"
+          },
+          {
+            "expectedStatus": "passed",
+            "file": "tzila-public-stage-and-toolbar.spec.ts",
+            "project": "chromium",
+            "results": [
+              {
+                "duration": 23638,
+                "retry": 0,
+                "status": "passed"
+              }
+            ],
+            "status": "expected",
+            "title": "Gate C: Responsive Host Toolbar across Viewports & Localization"
+          }
+        ],
+        "errors": [],
+        "stats": {
+          "duration": 140918.845,
+          "expected": 3,
+          "flaky": 0,
+          "skipped": 0,
+          "startTime": "2026-11-22T17:47:15.820Z",
+          "unexpected": 0
+        }
+      },
+      "exit": 0,
+      "gameSpeed": 1,
+      "label": "p0",
+      "listedInventory": {
+        "cases": [
+          {
+            "expectedStatus": "passed",
+            "file": "media-appearance-stage-acceptance.spec.ts",
+            "project": "chromium",
+            "results": [],
+            "status": "skipped",
+            "title": "2. Live Runtime & Zero-Scroll Stage Matrix (STAGE-P0) across 8 Viewports + Card Background + Single Audio + Staged Motion"
+          },
+          {
+            "expectedStatus": "passed",
+            "file": "p0-tzila-acceptance.spec.ts",
+            "project": "chromium",
+            "results": [],
+            "status": "skipped",
+            "title": "Full Tzila Show Lifecycle: 5-option cards, PSTN DTMF 1-5, spectator display, tie, zero votes"
+          },
+          {
+            "expectedStatus": "passed",
+            "file": "tzila-public-stage-and-toolbar.spec.ts",
+            "project": "chromium",
+            "results": [],
+            "status": "skipped",
+            "title": "Gate C: Responsive Host Toolbar across Viewports & Localization"
+          }
+        ],
+        "errors": [],
+        "stats": {
+          "duration": 2182.074,
+          "expected": 0,
+          "flaky": 0,
+          "skipped": 3,
+          "startTime": "2026-11-22T17:47:12.914Z",
+          "unexpected": 0
+        }
+      },
+      "originalExpectTimeout": 20000,
+      "originalTestTimeout": 240000,
+      "passed": true,
+      "requestedCases": {
+        "media-appearance-stage-acceptance.spec.ts": "2. Live Runtime & Zero-Scroll Stage Matrix (STAGE-P0) across 8 Viewports + Card Background + Single Audio + Staged Motion",
+        "p0-tzila-acceptance.spec.ts": "Full Tzila Show Lifecycle: 5-option cards, PSTN DTMF 1-5, spectator display, tie, zero votes",
+        "tzila-public-stage-and-toolbar.spec.ts": "Gate C: Responsive Host Toolbar across Viewports & Localization"
+      },
+      "retries": 0,
+      "seconds": 144.72
+    },
+    {
+      "actualInventory": {
+        "cases": [
+          {
+            "expectedStatus": "passed",
+            "file": "wave1-show-import-acceptance.spec.ts",
+            "project": "chromium",
+            "results": [
+              {
+                "duration": 2712,
+                "retry": 0,
+                "status": "failed"
+              }
+            ],
+            "status": "unexpected",
+            "title": "IMPORT05: Import valid show with Hebrew note and per-question interlude, save in editor, reload, export .tada.json and .xlsx, verify byte content"
+          }
+        ],
+        "errors": [],
+        "stats": {
+          "duration": 9475.123000000001,
+          "expected": 0,
+          "flaky": 0,
+          "skipped": 0,
+          "startTime": "2026-11-22T17:49:38.950Z",
+          "unexpected": 1
+        }
+      },
+      "exit": 1,
+      "gameSpeed": 10,
+      "label": "import05",
+      "listedInventory": {
+        "cases": [
+          {
+            "expectedStatus": "passed",
+            "file": "wave1-show-import-acceptance.spec.ts",
+            "project": "chromium",
+            "results": [],
+            "status": "skipped",
+            "title": "IMPORT05: Import valid show with Hebrew note and per-question interlude, save in editor, reload, export .tada.json and .xlsx, verify byte content"
+          }
+        ],
+        "errors": [],
+        "stats": {
+          "duration": 570.176,
+          "expected": 0,
+          "flaky": 0,
+          "skipped": 1,
+          "startTime": "2026-11-22T17:49:37.634Z",
+          "unexpected": 0
+        }
+      },
+      "originalExpectTimeout": 20000,
+      "originalTestTimeout": 90000,
+      "passed": false,
+      "requestedCases": {
+        "wave1-show-import-acceptance.spec.ts": "IMPORT05: Import valid show with Hebrew note and per-question interlude, save in editor, reload, export .tada.json and .xlsx, verify byte content"
+      },
+      "retries": 0,
+      "seconds": 11.7
+    }
+  ],
+  "preparationOnly": true,
+  "productionChanged": false,
+  "readOnlyMountsVerified": true,
+  "releaseQualified": false,
+  "replacesNativeSiteAcceptance": false,
+  "run": "p0-import05-iteration9-58287324",
+  "sdkCacheHashesVerifiedBeforeAfter": true,
+  "seconds": 163.41,
+  "sourceAfterSha256": "da61e0328d821809a982b000170aaec470cef12599152453e48551eb973aff72",
+  "sourceAndBuiltHashesVerifiedBeforeAfter": true,
+  "sourceAndNativeBuildHashesAfterOrdinaryBuild": true,
+  "sourceBeforeSha256": "da61e0328d821809a982b000170aaec470cef12599152453e48551eb973aff72",
+  "sourceFileCount": 2678,
+  "sourceReadOnly": true
+}

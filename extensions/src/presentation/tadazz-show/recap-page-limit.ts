@@ -1,7 +1,10 @@
 export const CLASSIC_RECAP_MAX_ITEMS = 6
 
 export function recapPageLimit(rendererId: string): number {
-  return rendererId === "tadazz-classic-stage" ? CLASSIC_RECAP_MAX_ITEMS : 8
+  return rendererId === "tadazz-classic-stage" ||
+    rendererId === "tadazz-original-stage"
+    ? CLASSIC_RECAP_MAX_ITEMS
+    : 8
 }
 
 export function recapPageSize(

@@ -275,7 +275,7 @@ const plugins = [
               return { path: candidate }
             }
           } catch {
-            // Try the remaining supported suffixes; unresolved imports fail after this loop.
+            // A candidate path may be absent; try the remaining extensions.
           }
         }
         throw new Error(`Unresolved candidate workspace import ${args.path}`)
@@ -559,7 +559,7 @@ try {
   await page.addInitScript(() => {
     window.animationStarts = 0
     const { animate } = Element.prototype
-    Element.prototype.animate = function observeHandoffAnimation(...args) {
+    Element.prototype.animate = function observedAnimate(...args) {
       window.animationStarts += 1
 
       return animate.apply(this, args)
@@ -568,9 +568,7 @@ try {
     window.audioEvents = []
     window.startAudioElements = []
     const { play } = HTMLMediaElement.prototype
-    HTMLMediaElement.prototype.play = function observeHandoffAudioPlay(
-      ...args
-    ) {
+    HTMLMediaElement.prototype.play = function observedPlay(...args) {
       let attempt = undefined
 
       if (this instanceof HTMLAudioElement) {

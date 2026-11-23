@@ -1,0 +1,24 @@
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/core/show-library/consumer-contract.test.ts[2m > [22mcumulative public library consumer contract[2m > [22mserializes the actual native catalogs within the authoring JSON budget
+[31m[1mError[22m: show-library:json-budget[39m
+[36m [2m❯[22m visit src/core/show-library/primitives.ts:[2m77:13[22m[39m
+    [90m 75|[39m   const visit = (item: unknown, depth: number): void => {
+    [90m 76|[39m     if (++nodes > maxNodes || depth > maxDepth)
+    [90m 77|[39m       throw new Error("show-library:json-budget")
+    [90m   |[39m             [31m^[39m
+    [90m 78|[39m     if (item === null || typeof item === "boolean") return
+    [90m 79|[39m     if (typeof item === "string") {
+[90m [2m❯[22m visit src/core/show-library/primitives.ts:[2m102:7[22m[39m
+[90m [2m❯[22m visit src/core/show-library/primitives.ts:[2m102:7[22m[39m
+[90m [2m❯[22m visit src/core/show-library/primitives.ts:[2m102:7[22m[39m
+[90m [2m❯[22m visit src/core/show-library/primitives.ts:[2m102:7[22m[39m
+[90m [2m❯[22m visit src/core/show-library/primitives.ts:[2m102:7[22m[39m
+[90m [2m❯[22m visit src/core/show-library/primitives.ts:[2m102:7[22m[39m
+[90m [2m❯[22m visit src/core/show-library/primitives.ts:[2m102:7[22m[39m
+[90m [2m❯[22m visit src/core/show-library/primitives.ts:[2m102:7[22m[39m
+[90m [2m❯[22m assertBoundedJson src/core/show-library/primitives.ts:[2m106:3[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+

@@ -1,4 +1,5 @@
 import { bundledGalleryThemes } from "./bundled-gallery-themes"
+import { bundledOriginalThemes } from "./original-themes"
 import razziaManifest from "./razzia.manifest.json" with { type: "json" }
 import classicManifest from "./classic.manifest.json" with { type: "json" }
 import {
@@ -57,6 +58,9 @@ export const showThemeRegistry = new ShowThemeRegistry()
 showThemeRegistry.register(classicManifest)
 showThemeRegistry.register(razziaManifest)
 for (const theme of bundledGalleryThemes) {
+  showThemeRegistry.register(theme)
+}
+for (const theme of bundledOriginalThemes) {
   showThemeRegistry.register(theme)
 }
 

@@ -12,7 +12,7 @@ export async function watchQuestionSequence(root, options = {}) {
     const votingPhase = receivedOptions.votingPhase ?? "voting"
     const records = []
     let current = null
-    // Keep original RAF-based assertions intact; separately record passive timing evidence.
+    // Keep RAF evidence for paint assertions and observe phase transitions separately.
     const installedAt = performance.now()
     const recentPhases = []
     const recentFrames = []
@@ -39,6 +39,10 @@ export async function watchQuestionSequence(root, options = {}) {
 
         // The question mutation precedes the next RAF's new round record.
         if (current && event.phase !== "question") {
+          if (event.oldPhase === "question" && event.phase === votingPhase) {
+            current.votingPhaseAt ??= event.at
+          }
+
           if (current.diagnostic.phaseTransitions.length < 16) {
             current.diagnostic.phaseTransitions.push(event)
           } else {
@@ -141,6 +145,14 @@ export async function watchQuestionSequence(root, options = {}) {
       question: record.question,
       questionAt: record.questionAt,
       votingAt: record.votingAt,
+      questionPhaseAt: record.questionPhaseAt,
+      votingPhaseAt: record.votingPhaseAt,
+      rafLeadMs:
+        record.votingAt === null ? null : record.votingAt - record.questionAt,
+      phaseLeadMs:
+        record.questionPhaseAt === null || record.votingPhaseAt === null
+          ? null
+          : record.votingPhaseAt - record.questionPhaseAt,
       answersAt: record.answersAt,
       timerAt: record.timerAt,
       resultsAt: record.resultsAt,
@@ -233,9 +245,19 @@ export async function watchQuestionSequence(root, options = {}) {
         (previousPhase !== "question" || !current)
       ) {
         discover()
+        const questionTransition = recentPhases.findLast(
+          (event) =>
+            event.phase === "question" &&
+            event.oldPhase !== "question" &&
+            (!current || event.at > current.questionAt),
+        )
         current = {
           number: records.length,
           questionAt: now,
+          questionPhaseAt: pendingExplicitReplay
+            ? null
+            : (questionTransition?.at ?? null),
+          votingPhaseAt: null,
           question: "",
           votingAt: null,
           answersAt: null,
@@ -280,7 +302,11 @@ export async function watchQuestionSequence(root, options = {}) {
       }
 
       if (current && ["question", votingPhase, "results"].includes(phase)) {
-        if (!current.heading && now - current.questionAt < 1500) {
+        // The presented phase starts before a possibly delayed observer RAF.
+        // Explicit same-phase Replay retains its existing RAF/remount contract.
+        const questionClockAt = current.questionPhaseAt ?? current.questionAt
+
+        if (!current.heading && now - questionClockAt < 1500) {
           discover()
         }
 
@@ -332,7 +358,7 @@ export async function watchQuestionSequence(root, options = {}) {
             current.explicitReplay &&
             phase === "question" &&
             current.identityLockedAt === null &&
-            now - current.questionAt >= 1600
+            now - questionClockAt >= 1600
           ) {
             current.identityLockedAt = now
           }
@@ -355,7 +381,7 @@ export async function watchQuestionSequence(root, options = {}) {
             current.animations.add(animation)
           }
 
-          if (phase === "question" && now - current.questionAt >= 1600) {
+          if (phase === "question" && now - questionClockAt >= 1600) {
             current.baseline = geometry(heading)
             current.baselineAt = now
             current.panelBaseline = geometry(panel)
@@ -556,7 +582,21 @@ export async function readQuestionSequence(
   }
 
   assert(result.question, "Observed the actual question heading")
-  const lead = result.votingAt - result.questionAt
+  const questionClockAt = result.explicitReplay
+    ? result.questionAt
+    : result.questionPhaseAt
+  const votingClockAt = result.explicitReplay
+    ? result.votingAt
+    : result.votingPhaseAt
+  assert(
+    Number.isFinite(questionClockAt) &&
+      Number.isFinite(votingClockAt) &&
+      questionClockAt < votingClockAt &&
+      questionClockAt <= result.questionAt &&
+      votingClockAt <= result.votingAt,
+    "Observed the matching presented question and voting transitions",
+  )
+  const lead = votingClockAt - questionClockAt
   assert(
     lead >= 1800 && lead <= 2500,
 
@@ -564,7 +604,7 @@ export async function readQuestionSequence(
   )
   for (const kind of ["answers", "timer"]) {
     assert(result[`${kind}At`] !== null, `${kind} actually became visible`)
-    const delay = result[`${kind}At`] - result.questionAt
+    const delay = result[`${kind}At`] - questionClockAt
     assert(
       delay >= 1800 && delay <= 2600,
       `${kind} first paint follows the 2s lead-in: ${delay}`,
@@ -639,6 +679,9 @@ export async function readQuestionSequence(
     ...result,
     observedThrough: throughResults ? "results" : "first-voting-paint",
     leadMs: lead,
+    timingBasis: result.explicitReplay
+      ? "explicit-replay-raf"
+      : "observed-presented-phase",
     answersTimerDeltaMs: Math.abs(result.answersAt - result.timerAt),
   }
 }

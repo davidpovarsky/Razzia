@@ -1,11 +1,9 @@
 import type { PreviewPhase, PreviewRole } from "./primitives"
 
 const revealPhases: readonly PreviewPhase[] = ["results"]
-const bindingRules: Partial<
-  Record<
-    string,
-    { roles: readonly PreviewRole[]; phases: readonly PreviewPhase[] }
-  >
+const bindingRules: Record<
+  string,
+  { roles: readonly PreviewRole[]; phases: readonly PreviewPhase[] } | undefined
 > = {
   "choice-results": {
     roles: ["manager", "player", "spectator"],

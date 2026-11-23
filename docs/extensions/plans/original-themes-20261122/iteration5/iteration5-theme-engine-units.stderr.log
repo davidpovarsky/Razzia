@@ -1,0 +1,50 @@
+[90mstderr[2m | src/presentation/tadazz-v4/full-show.test.ts[2m > [22m[2mFullShowScenes: React Component Rendering & Visual Parity[2m > [22m[2mrenders GrandOpening with title, subtitle, and portal background
+[22m[39mreact-i18next:: useTranslation: You will need to pass in an i18next instance by using initReactI18next or by passing it via props or context. In monorepo setups, make sure there is only one instance of react-i18next. { code: [32m'NO_I18NEXT_INSTANCE'[39m }
+
+[90mstderr[2m | src/presentation/tadazz-v4/source-parity-export.test.ts[2m > [22m[2mNative React Show Source Parity & Visual Evidence Capture[2m > [22m[2mrenders all scenes into a standalone HTML harness and captures 1920x1080 evidence
+[22m[39mreact-i18next:: useTranslation: You will need to pass in an i18next instance by using initReactI18next or by passing it via props or context. In monorepo setups, make sure there is only one instance of react-i18next. { code: [32m'NO_I18NEXT_INSTANCE'[39m }
+
+[90mstderr[2m | src/presentation/tadazz-v4/default-event-artwork.test.ts[2m > [22m[2mNative default event artwork[2m > [22m[2mgrand opening does not inject client artwork by default
+[22m[39mreact-i18next:: useTranslation: You will need to pass in an i18next instance by using initReactI18next or by passing it via props or context. In monorepo setups, make sure there is only one instance of react-i18next. { code: [32m'NO_I18NEXT_INSTANCE'[39m }
+
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/presentation/tadazz-show/motion-spec.test.ts[2m > [22mTADAZZ motion spec — 1:1 parity with the canonical reference[2m > [22mported stylesheet and extracted assets have not drifted from the reference
+[31m[1mAssertionError[22m: expected [Function] to not throw an error but 'Error: Command failed: /usr/local/bin…' was thrown[39m
+
+[32m- Expected:[39m
+undefined
+
+[31m+ Received:[39m
+"Error: Command failed: /usr/local/bin/node /evidence/source/scripts/tadazz/extract-motion-assets.mjs --check
+node:internal/modules/cjs/loader:1568
+  throw err;
+  ^
+
+Error: Cannot find module '/evidence/source/scripts/tadazz/extract-motion-assets.mjs'
+    at Module._resolveFilename (node:internal/modules/cjs/loader:1564:15)
+    at wrapResolveFilename (node:internal/modules/cjs/loader:1118:27)
+    at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1142:10)
+    at resolveForCJSWithHooks (node:internal/modules/cjs/loader:1169:12)
+    at Module._load (node:internal/modules/cjs/loader:1341:5)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47 {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: []
+}
+
+Node.js v24.22.2
+"
+
+[36m [2m❯[22m src/presentation/tadazz-show/motion-spec.test.ts:[2m160:11[22m[39m
+    [90m158|[39m         { cwd: root, stdio: "pipe" },
+    [90m159|[39m       ),
+    [90m160|[39m     ).not.toThrow()
+    [90m   |[39m           [31m^[39m
+    [90m161|[39m   })
+    [90m162|[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+

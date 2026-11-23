@@ -22,6 +22,7 @@ import {
 import { DEFAULT_TADAZZ_STAGE_LABELS, type TadazzStageLabels } from "./labels"
 import { MotionEngine } from "./motion-engine"
 import { votingPresentation } from "./voting-presentation"
+import type { TadazzV4LivePlayback } from "../tadazz-v4/types"
 import { FINALE, INTRO, confettiBit } from "./motion-spec"
 import "./tadazz-motion-kit.css"
 import "./tadazz-show-adaptations.css"
@@ -40,6 +41,7 @@ import {
 } from "./TadazzStage"
 
 export interface TadazzV4StageAdapterProps extends TadazzStageProps {
+  livePlayback?: TadazzV4LivePlayback
   v4Labels?: Partial<TadazzV4Labels>
   guessOffLook?: boolean
   fitRevision?: number
@@ -104,6 +106,7 @@ export const TadazzV4StageAdapter = forwardRef<
     underlay,
     overlay,
     reducedMotion = false,
+    livePlayback,
     fitRevision = 0,
     className,
     onModeChange,
@@ -246,6 +249,7 @@ export const TadazzV4StageAdapter = forwardRef<
             ? Math.floor((q.number - 1) / 5) + 1
             : 1),
         totalQuestions: q.totalQuestions,
+        answerCount: q.answerCount ?? q.options.length,
         answers: toV4Answers(q.options),
         questionImage: q.questionImage,
         photoLayout: isPhotoQuestion(q),
@@ -712,7 +716,7 @@ export const TadazzV4StageAdapter = forwardRef<
           labels: v4LabelsRef.current,
         })
       },
-      async showInterlude({ title, subtitle }) {
+      async showInterlude({ title, subtitle, eyebrow }) {
         setScreenMode("none")
         setMode("custom")
         cardsOnStageKeyRef.current = null
@@ -720,6 +724,7 @@ export const TadazzV4StageAdapter = forwardRef<
         await v4Ref.current?.play("interlude", {
           title,
           subtitle,
+          eyebrow,
           backgroundUrl: p.backdropUrl,
           backgroundFit: p.backdropFit,
           backgroundPosition: p.backdropPosition,
@@ -873,6 +878,7 @@ export const TadazzV4StageAdapter = forwardRef<
         labels: v4Labels,
       }}
       reducedMotion={reducedMotion}
+      livePlayback={livePlayback}
       fitRevision={fitRevision}
       className={className}
       underlay={underlay}

@@ -1,8 +1,8 @@
+import { promiseFrom } from "../../shared/promise-operation.ts"
 import assert from "node:assert/strict"
 import test from "node:test"
 import { CallToolResultSchema } from "@modelcontextprotocol/core"
 import { harness, principal, newKey, code } from "./fixtures.ts"
-import { synchronousPromise } from "../../../core/synchronous-promise.ts"
 
 test("real SDK malformed tool calls are authenticated, limited once and sanitized before strict validation", async () => {
   const p = principal()
@@ -143,7 +143,7 @@ test("denied or missing ingress guard fails closed before token verification and
     const h = await harness({
       prevalidationLimit,
       authorize: () =>
-        synchronousPromise(() => {
+        promiseFrom(() => {
           auth += 1
 
           return principal()

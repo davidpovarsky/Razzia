@@ -1,0 +1,61 @@
+{
+  "actualInventory": {
+    "cases": [
+      {
+        "expectedStatus": "passed",
+        "file": "wave1-show-import-acceptance.spec.ts",
+        "project": "chromium",
+        "results": [
+          {
+            "duration": 2712,
+            "retry": 0,
+            "status": "failed"
+          }
+        ],
+        "status": "unexpected",
+        "title": "IMPORT05: Import valid show with Hebrew note and per-question interlude, save in editor, reload, export .tada.json and .xlsx, verify byte content"
+      }
+    ],
+    "errors": [],
+    "stats": {
+      "duration": 9475.123000000001,
+      "expected": 0,
+      "flaky": 0,
+      "skipped": 0,
+      "startTime": "2026-11-22T17:49:38.950Z",
+      "unexpected": 1
+    }
+  },
+  "exit": 1,
+  "gameSpeed": 10,
+  "label": "import05",
+  "listedInventory": {
+    "cases": [
+      {
+        "expectedStatus": "passed",
+        "file": "wave1-show-import-acceptance.spec.ts",
+        "project": "chromium",
+        "results": [],
+        "status": "skipped",
+        "title": "IMPORT05: Import valid show with Hebrew note and per-question interlude, save in editor, reload, export .tada.json and .xlsx, verify byte content"
+      }
+    ],
+    "errors": [],
+    "stats": {
+      "duration": 570.176,
+      "expected": 0,
+      "flaky": 0,
+      "skipped": 1,
+      "startTime": "2026-11-22T17:49:37.634Z",
+      "unexpected": 0
+    }
+  },
+  "originalExpectTimeout": 20000,
+  "originalTestTimeout": 90000,
+  "passed": false,
+  "requestedCases": {
+    "wave1-show-import-acceptance.spec.ts": "IMPORT05: Import valid show with Hebrew note and per-question interlude, save in editor, reload, export .tada.json and .xlsx, verify byte content"
+  },
+  "retries": 0,
+  "seconds": 11.7
+}

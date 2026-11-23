@@ -13,7 +13,6 @@ import {
   type AppTransport,
 } from "../../src/mcp-app/widget/bridge-core.ts"
 import { retainedPacket } from "./retained-schema.ts"
-import { synchronousPromise } from "../../src/core/synchronous-promise.ts"
 
 function loadRetainedPacket() {
   const raw: unknown = JSON.parse(
@@ -58,6 +57,13 @@ const summary = {
   themeVersion: "1.0.0",
   diagnostics: [],
 }
+
+const questionRefs = [
+  {
+    questionNumber: 1,
+    publicQuestionId: `preview-question-${"a".repeat(64)}`,
+  },
+]
 
 function makeResult(data: Record<string, unknown>) {
   return {
@@ -144,13 +150,13 @@ function createTransportPair(): [AppTransport, AppTransport] {
       }
     },
     send(message: TransportMessage) {
-      return synchronousPromise(() => {
-        queueMicrotask(() => {
-          if (!this.closed) {
-            this.peer?.onmessage?.(message)
-          }
-        })
+      queueMicrotask(() => {
+        if (!this.closed) {
+          this.peer?.onmessage?.(message)
+        }
       })
+
+      return Promise.resolve()
     },
   })
   const appTransport = createHalf()
@@ -258,6 +264,34 @@ async function createConnectedHarness(
   }
 }
 
+test("supplied transport connects without a window global or top-window override", async () => {
+  assert.equal(typeof window, "undefined")
+  const [appTransport, hostTransport] = createTransportPair()
+  const contexts: unknown[] = []
+  const host = new AppBridge(
+    null,
+    { name: "qa-node-host", version: "0.1.0" },
+    { serverTools: {} },
+    { hostContext: { locale: "en", theme: "light" } },
+  )
+  const widget = createWidgetBridgeCore(
+    (context) => contexts.push(context),
+    () => {
+      throw new Error("Unexpected preview mount during bridge connection")
+    },
+    { transport: appTransport, appOptions: { autoResize: false } },
+  )
+
+  try {
+    await host.connect(hostTransport)
+    await widget.connect()
+    assert.deepEqual(contexts, [{ locale: "en", theme: "light" }])
+  } finally {
+    widget.dispose()
+    await host.close()
+  }
+})
+
 test("candidate-first handling on preview() avoids intermediate unavailable status", async () => {
   const { draftId } = retainedEn.selection
   const calls: Array<{
@@ -265,10 +299,8 @@ test("candidate-first handling on preview() avoids intermediate unavailable stat
     args: Record<string, unknown> | undefined
   }> = []
   const h = await createConnectedHarness({
-    onCallTool: (toolRequest) =>
-      synchronousPromise(() => {
-        const { name, arguments: args } = toolRequest
-
+    onCallTool: ({ name, arguments: args }) =>
+      asPromise(() => {
         calls.push({ name, args })
 
         if (name === "get_game_draft") {
@@ -277,6 +309,7 @@ test("candidate-first handling on preview() avoids intermediate unavailable stat
             revision: 1,
             summary,
             authoredShowJson: '{"title":"Original"}',
+            questionRefs,
           })
         }
 
@@ -333,16 +366,15 @@ test("non-candidate REVISION_CONFLICT and V1 ready preview_game responses are no
   const { draftId } = retainedEn.selection
   let mode: "conflict" | "v1-ready" = "conflict"
   const h = await createConnectedHarness({
-    onCallTool: (toolRequest) =>
-      synchronousPromise(() => {
-        const { name } = toolRequest
-
+    onCallTool: ({ name }) =>
+      asPromise(() => {
         if (name === "get_game_draft") {
           return makeResult({
             draftId,
             revision: 1,
             summary,
             authoredShowJson: '{"title":"Original"}',
+            questionRefs,
           })
         }
 
@@ -396,6 +428,7 @@ test("duplicate in-flight preview() coalesces to a single preview_game tool call
         revision: 1,
         summary,
         authoredShowJson: '{"title":"Original"}',
+        questionRefs,
       })
     }
 
@@ -491,13 +524,14 @@ test("concurrent refresh and edit invalidate in-flight preview via existing gene
   let serverRevision = 1
   let pendingPreview = deferred<ToolResult>()
   const h = await createConnectedHarness({
-    onCallTool: async ({ name, arguments: _args }) => {
+    onCallTool: async ({ name }) => {
       if (name === "get_game_draft") {
         return makeResult({
           draftId,
           revision: serverRevision,
           summary,
           authoredShowJson: `{"title":"Rev ${serverRevision}"}`,
+          questionRefs,
         })
       }
 
@@ -560,16 +594,15 @@ test("preview after edit sends expectedRevision + 1 and disposes prior candidate
   let serverRevision = 1
   const previewRevisions: number[] = []
   const h = await createConnectedHarness({
-    onCallTool: (toolRequest) =>
-      synchronousPromise(() => {
-        const { name, arguments: args } = toolRequest
-
+    onCallTool: ({ name, arguments: args }) =>
+      asPromise(() => {
         if (name === "get_game_draft") {
           return makeResult({
             draftId,
             revision: serverRevision,
             summary,
             authoredShowJson: '{"title":"Original"}',
+            questionRefs,
           })
         }
 
@@ -617,7 +650,7 @@ test("preview after edit sends expectedRevision + 1 and disposes prior candidate
 test("adversarial tamper, stale candidate, toolcancelled, toolInfo, and plain unavailable fail closed", async () => {
   const { draftId } = retainedEn.selection
   let nextPreview: () => Promise<ToolResult> = () =>
-    synchronousPromise(() => makePlainUnavailable())
+    asPromise(() => makePlainUnavailable())
   const h = await createConnectedHarness({
     onCallTool: async ({ name }) => {
       if (name === "get_game_draft") {
@@ -626,6 +659,7 @@ test("adversarial tamper, stale candidate, toolcancelled, toolInfo, and plain un
           revision: 2,
           summary,
           authoredShowJson: '{"title":"Rev 2"}',
+          questionRefs,
         })
       }
 
@@ -639,7 +673,7 @@ test("adversarial tamper, stale candidate, toolcancelled, toolInfo, and plain un
 
     // 1. Tampered inputDigest
     nextPreview = () =>
-      synchronousPromise(() => {
+      asPromise(() => {
         const tampered = cloneForRevision(retainedEn.result, 2)
         tampered._meta["tadazz/preview-candidate-v2"].inputDigest = "0".repeat(
           64,
@@ -652,15 +686,13 @@ test("adversarial tamper, stale candidate, toolcancelled, toolInfo, and plain un
     assert.equal(h.mounts.length, 0)
 
     // 2. Stale revision (host sends rev 1 for expectedRevision 2)
-    nextPreview = () =>
-      synchronousPromise(() => structuredClone(retainedEn.result))
+    nextPreview = () => asPromise(() => structuredClone(retainedEn.result))
     await h.widget.preview()
     assert.equal(h.widget.controller.snapshot().status, "unavailable")
     assert.equal(h.mounts.length, 0)
 
     // 3. Wrong locale
-    nextPreview = () =>
-      synchronousPromise(() => cloneForRevision(retainedJa.result, 2))
+    nextPreview = () => asPromise(() => cloneForRevision(retainedJa.result, 2))
     await h.widget.preview()
     assert.equal(h.widget.controller.snapshot().status, "unavailable")
     assert.equal(h.mounts.length, 0)
@@ -683,8 +715,7 @@ test("adversarial tamper, stale candidate, toolcancelled, toolInfo, and plain un
     assert.equal(h.mounts.length, 0)
 
     // 5. Async renderer failure callback transitions to unavailable
-    nextPreview = () =>
-      synchronousPromise(() => cloneForRevision(retainedEn.result, 2))
+    nextPreview = () => asPromise(() => cloneForRevision(retainedEn.result, 2))
     await h.widget.preview()
     assert.equal(h.widget.controller.snapshot().status, "candidate")
     assert.equal(h.mounts.length, 1)
@@ -709,3 +740,8 @@ test("adversarial tamper, stale candidate, toolcancelled, toolInfo, and plain un
     await h.cleanup()
   }
 })
+
+// Preserve the immediate work and Promise rejection semantics of synchronous host doubles.
+function asPromise<T>(action: () => T): Promise<Awaited<T>> {
+  return Promise.try(action)
+}

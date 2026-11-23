@@ -320,11 +320,7 @@ describe("revision-2 diagnostic compiled indexes, never executable acceptance", 
     const { artifact, resources, data } = fixture()
     const parsed = nativeResourceIndexV2Schema.parse(resources)
     expect(Object.isFrozen(parsed.resources[0].rights)).toBe(true)
-    const result = diagnoseCompiledArtifactBytes({
-      artifactInput: artifact,
-      resourceInput: resources,
-      evidence: data,
-    })
+    const result = diagnoseCompiledArtifactBytes(artifact, resources, data)
     expect(result.issues).toEqual([
       "execution-scope-unregistered",
       "rights-unknown:native/image.png",
@@ -483,11 +479,7 @@ describe("revision-2 diagnostic compiled indexes, never executable acceptance", 
     data.set("renderer.js", new Uint8Array(data.get("renderer.js")!).fill(0))
     data.delete("LICENSE.txt")
     data.set("unexpected.bin", new Uint8Array([1]))
-    const result = diagnoseCompiledArtifactBytes({
-      artifactInput: artifact,
-      resourceInput: resources,
-      evidence: data,
-    })
+    const result = diagnoseCompiledArtifactBytes(artifact, resources, data)
     expect(result.issues).toContain("file-bytes-mismatch:renderer.js")
     expect(result.issues).toContain("missing-file:LICENSE.txt")
     expect(result.issues).toContain("unexpected-file:unexpected.bin")
@@ -500,28 +492,24 @@ describe("revision-2 diagnostic compiled indexes, never executable acceptance", 
         },
       ],
     }
-    const { issues } = diagnoseCompiledArtifactBytes({
-      artifactInput: artifact,
-      resourceInput: changed,
-      evidence: data,
-    })
+    const { issues } = diagnoseCompiledArtifactBytes(artifact, changed, data)
     expect(issues).toContain("license-file-mismatch:LICENSE.txt")
     expect(issues).toContain("resource-index-binding-mismatch")
   })
   it("requires resource source to be in the actual indexed source set", () => {
     const { artifact, resources, data } = fixture()
     expect(
-      diagnoseCompiledArtifactBytes({
-        artifactInput: {
+      diagnoseCompiledArtifactBytes(
+        {
           ...artifact,
           source: {
             ...artifact.source,
             files: [tracked("other.ts"), artifact.toolchain.buildRecipe],
           },
         },
-        resourceInput: resources,
-        evidence: data,
-      }).issues,
+        resources,
+        data,
+      ).issues,
     ).toContain("resource-source-missing:native/image.png")
   })
   it("records original pnpm row/alias, mode and SHA-512 without a tarball/signature claim", () => {
@@ -733,12 +721,12 @@ describe("revision-2 diagnostic compiled indexes, never executable acceptance", 
     expect(
       diagnoseHostReceiptAuthority(artifact, resources).compiledPins,
     ).toEqual([])
-    const diagnostics = diagnoseCompiledArtifactBytes({
-      artifactInput: artifact,
-      resourceInput: resources,
-      evidence: fixture().data,
-      descriptorInput: descriptor,
-    })
+    const diagnostics = diagnoseCompiledArtifactBytes(
+      artifact,
+      resources,
+      fixture().data,
+      descriptor,
+    )
     expect(diagnostics.issues).toContain("registry-renderer-mismatch")
     expect(diagnostics.issues).toContain("registry-index-digest-mismatch")
     expect(diagnostics.issues).toContain("registry-budget-exceeded")
@@ -1029,11 +1017,11 @@ describe("revision-2 diagnostic compiled indexes, never executable acceptance", 
       const evidence = new Map<unknown, Uint8Array>(data)
       evidence.set(bad, new Uint8Array([1]))
       expect(() =>
-        diagnoseCompiledArtifactBytes({
-          artifactInput: artifact,
-          resourceInput: resources,
-          evidence: evidence as ReadonlyMap<string, Uint8Array>,
-        }),
+        diagnoseCompiledArtifactBytes(
+          artifact,
+          resources,
+          evidence as ReadonlyMap<string, Uint8Array>,
+        ),
       ).toThrow("show-library:invalid-evidence-path")
       expect(conversions).toBe(0)
     },
@@ -1055,11 +1043,11 @@ describe("revision-2 diagnostic compiled indexes, never executable acceptance", 
       get: { value: poison },
       [Symbol.iterator]: { value: poison },
     })
-    const result = diagnoseCompiledArtifactBytes({
-      artifactInput: artifact,
-      resourceInput: resources,
-      evidence: new PoisonMap(data),
-    })
+    const result = diagnoseCompiledArtifactBytes(
+      artifact,
+      resources,
+      new PoisonMap(data),
+    )
     expect(result.issues).toEqual([
       "execution-scope-unregistered",
       "rights-unknown:native/image.png",
@@ -1077,19 +1065,15 @@ describe("revision-2 diagnostic compiled indexes, never executable acceptance", 
     }
     const proxy = new Proxy(data, { get: poison, getPrototypeOf: poison })
     expect(() =>
-      diagnoseCompiledArtifactBytes({
-        artifactInput: artifact,
-        resourceInput: resources,
-        evidence: proxy,
-      }),
+      diagnoseCompiledArtifactBytes(artifact, resources, proxy),
     ).toThrow("show-library:byte-evidence-budget")
     const object = Object.defineProperty({}, "size", { get: poison })
     expect(() =>
-      diagnoseCompiledArtifactBytes({
-        artifactInput: artifact,
-        resourceInput: resources,
-        evidence: object as ReadonlyMap<string, Uint8Array>,
-      }),
+      diagnoseCompiledArtifactBytes(
+        artifact,
+        resources,
+        object as ReadonlyMap<string, Uint8Array>,
+      ),
     ).toThrow("show-library:byte-evidence-budget")
     expect(calls).toBe(0)
   })

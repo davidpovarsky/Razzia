@@ -8,15 +8,15 @@ import {
 } from "@razzia/web/features/game/utils/constants"
 
 export interface PlayerGameViewProps {
-  gameId?: string
   status: { name: Status; data: Record<string, unknown> } | null
   viewRole?: ViewRole
+  roomId?: string
 }
 
 export const PlayerGameView = ({
-  gameId,
   status,
   viewRole = "player",
+  roomId,
 }: PlayerGameViewProps) => {
   const currentStatus = status ?? {
     name: STATUS.WAIT,
@@ -38,9 +38,9 @@ export const PlayerGameView = ({
   return (
     <TadazzRawStatusContext.Provider value={status}>
       <GameWrapper
-        gameId={gameId}
         statusName={effectiveStatusName}
         viewRole={viewRole}
+        roomId={roomId}
       >
         {CurrentComponent && <CurrentComponent data={statusData as never} />}
       </GameWrapper>

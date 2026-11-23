@@ -1,3 +1,4 @@
+import { promiseFrom } from "../../shared/promise-operation.ts"
 import assert from "node:assert/strict"
 import test from "node:test"
 import {
@@ -7,7 +8,6 @@ import {
   lifecycleHarness,
 } from "./lifecycle-fixture.ts"
 import { code, harness, newKey, principal } from "./fixtures.ts"
-import { synchronousPromise } from "../../../core/synchronous-promise.ts"
 
 test(
   "32 cancelled response writes retain the budget until public send promises settle",
@@ -130,7 +130,7 @@ test(
     const h = await lifecycleHarness(
       {
         authorize: () =>
-          synchronousPromise(() => {
+          promiseFrom(() => {
             auth += 1
 
             return auth === 1 ? a : b
@@ -147,7 +147,7 @@ test(
         },
         drafts: {
           get(p) {
-            return synchronousPromise(() => {
+            return promiseFrom(() => {
               readers.push(p.accountId)
 
               return undefined
@@ -294,7 +294,7 @@ for (const duplicate of [true, false]) {
           },
         },
         (context) =>
-          synchronousPromise(() => {
+          promiseFrom(() => {
             const write = context.mcpReq.notify({
               method: "notifications/progress",
               params: { progressToken: "synthetic-progress", progress: 1 },

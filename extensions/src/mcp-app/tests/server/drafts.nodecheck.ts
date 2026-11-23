@@ -7,7 +7,6 @@ import {
   data,
   code,
   requireObservedShow,
-  requireObservedValue,
 } from "./fixtures.ts"
 
 test("validated same-draft content edit, CAS conflict, key replay and no read writes", async () => {
@@ -30,7 +29,7 @@ test("validated same-draft content edit, CAS conflict, key replay and no read wr
     )
     assert.equal(created.draftId, replay.draftId)
     assert.equal(h.store.records.size, 1)
-    requireObservedValue(authored.cards.at(2)).question = "Edited Q3"
+    authored.cards[2].question = "Edited Q3"
     const result = await h.call("update_game_draft", {
       draftId: created.draftId,
       expectedRevision: 1,
@@ -94,10 +93,9 @@ test("concurrent CAS produces one winner without silently replacing another revi
       h.call("update_game_draft", { ...args, idempotencyKey: newKey() }),
     ])
     assert.equal(results.filter((r) => !r.isError).length, 1)
-    assert.equal(
-      code(requireObservedValue(results.find((r) => r.isError))),
-      "REVISION_CONFLICT",
-    )
+    const conflict = results.find((r) => r.isError)
+    assert.ok(conflict)
+    assert.equal(code(conflict), "REVISION_CONFLICT")
   } finally {
     await h.close()
   }
@@ -109,12 +107,9 @@ test("actual authoring answer bounds are preserved without a renderer-support cl
   try {
     for (const count of [0, 1, 2, 5, 6, 64]) {
       const authored = show()
-      requireObservedValue(authored.cards.at(0)).answers = Array.from(
-        { length: count },
-        (_, i) => ({
-          text: `Option ${i}`,
-        }),
-      )
+      authored.cards[0].answers = Array.from({ length: count }, (_, i) => ({
+        text: `Option ${i}`,
+      }))
       const result = await h.call("create_game_draft", {
         authoredShowJson: JSON.stringify(authored),
         idempotencyKey: newKey(),

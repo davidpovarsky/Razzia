@@ -29,11 +29,10 @@ export function createApplicationFrameCommitOwner() {
 
       const ownChapter = chapter
       const ownGeneration = generation
-      // oxlint-disable-next-line typescript/no-invalid-void-type -- Native withResolvers<void> is a completion Promise; this valid generic call is unsupported by the rule.
-      const result = Promise.withResolvers<void>()
+      const result = Promise.withResolvers<undefined>()
       const settle = () => {
         pending.delete(settle)
-        result.resolve()
+        result.resolve(undefined)
       }
       pending.add(settle)
       const ownsChapter = () => !disposed && chapter === ownChapter
@@ -45,8 +44,7 @@ export function createApplicationFrameCommitOwner() {
         // Only the renderer acknowledgement marks a chapter presented. An old
         // update of this same continuous chapter may acknowledge it while the
         // latest clock/preference update is still being submitted.
-        // oxlint-disable-next-line typescript/no-invalid-void-type -- TypeScript this: void declares a receiver-free callback; it is erased and is not a runtime argument.
-        acknowledge(this: void) {
+        acknowledge() {
           if (ownsChapter()) {
             presented = true
             settleAll()

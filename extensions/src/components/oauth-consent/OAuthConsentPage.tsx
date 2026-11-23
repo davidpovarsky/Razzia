@@ -56,11 +56,13 @@ export function OAuthConsentPage({
   }, [issuerBasePath])
   const ticket = useMemo(() => {
     const values = new URLSearchParams(search).getAll("oauth_request")
+    const value = values.at(0)
 
     return values.length === 1 &&
-      values[0].length >= 40 &&
-      values[0].length <= 8192
-      ? values[0]
+      value !== undefined &&
+      value.length >= 40 &&
+      value.length <= 8192
+      ? value
       : null
   }, [search])
   const [inspection, setInspection] = useState<ConsentInspection | null>(null)
@@ -299,7 +301,7 @@ export function OAuthConsentPage({
       // Exact trusted issuer response; no client-supplied callback reconstruction.
       window.location.assign(redirectUrl)
     } catch {
-      if (isCurrentApproval()) {
+      if (approval.current === abort && !abort.signal.aborted) {
         client.invalidate()
         proof.current = null
         approval.current = null

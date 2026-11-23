@@ -15,6 +15,12 @@ import {
 } from "./bindings.ts"
 import { ToolError } from "../server/errors.ts"
 
+const noFollowFlag = () => {
+  const value: unknown = Reflect.get(constants, "O_NOFOLLOW")
+
+  return typeof value === "number" ? value : 0
+}
+
 const unavailable = () => new ToolError("DEPENDENCY_UNAVAILABLE")
 const missing = (error: unknown) =>
   error instanceof Error && "code" in error && error.code === "ENOENT"
@@ -118,11 +124,7 @@ export class OwnedStorePath {
         throw unavailable()
       }
 
-      const fd = openSync(
-        file,
-        // oxlint-disable-next-line typescript/no-unnecessary-condition -- Keep the existing cross-platform fallback because this optional native flag is absent on some supported hosts.
-        constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0),
-      )
+      const fd = openSync(file, constants.O_RDONLY | noFollowFlag())
 
       try {
         const actual = fstatSync(fd)

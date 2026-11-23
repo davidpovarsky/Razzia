@@ -34,7 +34,18 @@ MCP_SCOPES = (
 MCP_CHALLENGE = ('Bearer resource_metadata="' + ORIGIN +
                  '/.well-known/oauth-protected-resource", scope="' + " ".join(MCP_SCOPES) + '"')
 HASH = re.compile(r"[a-f0-9]{64}")
-PUBLIC_CATALOGUE_IDS = ("great-guessoff", "crowd", "quiz", "story", "picture", "truth", "finale", "family", "classroom", "team")
+PUBLIC_CATALOGUE_IDS = (
+    "great-guessoff", "crowd", "quiz", "story", "picture", "truth", "finale", "family", "classroom", "team",
+    "royal-quiz", "neon-arcade", "retro-tv", "magic-storybook",
+    "crystal-future", "carnival-pop", "sports-arena", "mystery-noir",
+)
+NATIVE_APPLICATION_RENDERERS = ("tadazz-classic-stage", "razzia-native-stage", "tadazz-original-stage")
+ORIGINAL_THEME_IDS = (
+    "royal-quiz", "neon-arcade", "retro-tv", "magic-storybook",
+    "crystal-future", "carnival-pop", "sports-arena", "mystery-noir",
+)
+ORIGINAL_QA_FILES = {"extensions/qa/original-themes/" + name for name in
+                     ("account-verify.mjs", "browser-verify.mjs", "audio-observer.mjs", "contract.mjs", "linux-browser-verify.py")}
 MAX_FILE = 64 * 1024 * 1024
 MAX_TREE = 512 * 1024 * 1024
 FULL_SHOW_CHECKS = (
@@ -89,6 +100,7 @@ PROXY_PRIVACY_PROOF = {
 }
 LINT_BASELINE_SHA = "9c8b1081f07c608e03946deec14351d27d6cca57"
 LINT_BASELINE_RUN = "tadazz-codex-9c8b1081f07c-e01312da"
+LINT_POLICY_CONFIG = "tadazz-lint-policy.config.ts"
 LEGACY_LINT_FILES = tuple("extensions/src/mcp-app/" + path for path in (
     "server/drafts.ts", "first-party/oauth-grants.ts", "first-party/oauth.ts", "first-party/store.ts",
 ))
@@ -192,6 +204,10 @@ def read_bytes(path, limit=MAX_FILE):
 
 def digest(data):
     return hashlib.sha256(data).hexdigest()
+
+
+def canonical_digest(value):
+    return digest(json.dumps(value, sort_keys=True, separators=(",", ":")).encode())
 
 
 def json_file(path):
@@ -331,8 +347,9 @@ def verify_application_metadata(bundle, source_manifest, backend_artifact, web_f
     artifact_pin = digest(json.dumps(artifact, ensure_ascii=False, separators=(",", ":")).encode())
     registry_pin = digest(json.dumps(registry, ensure_ascii=False, separators=(",", ":")).encode())
     pins = native.get("pins")
-    need(isinstance(pins, list) and len(pins) == 2 and
-         {pin.get("renderer", {}).get("id") for pin in pins} == {"tadazz-classic-stage", "razzia-native-stage"},
+    need(isinstance(pins, list) and len(pins) == len(NATIVE_APPLICATION_RENDERERS) and
+         {(pin.get("renderer", {}).get("id"), pin.get("renderer", {}).get("version")) for pin in pins} ==
+         {(renderer, "1.0.0") for renderer in NATIVE_APPLICATION_RENDERERS},
          "NATIVE_APPLICATION_RENDERER_PINS_MISSING")
     for pin in pins:
         need(pin.get("portVersion") == 3 and pin.get("identityRuleVersion") == 2 and
@@ -347,6 +364,50 @@ def verify_application_metadata(bundle, source_manifest, backend_artifact, web_f
     return {"manifestSha256": digest(raw), "artifactSha256": verification["artifactSha256"],
             "registrySha256": verification["registrySha256"], "rendererBuildSha256": artifact_pin,
             "files": files, "sourceFiles": len(sources)}
+
+
+def verify_lint_policy(receipt, gate, report):
+    policy = report.get("effectivePolicy")
+    prefix = ["node", "--experimental-strip-types", "/cleanup/node_modules/oxlint/bin/oxlint", "-c"]
+    if policy is None:
+        need(receipt.get("lintPolicy") is None, "SEMANTIC_LINT_POLICY_REPORT_MISSING")
+        need(report["baselineHashes"]["oxlint.config.ts"] == report["candidateHashes"]["oxlint.config.ts"],
+             "SEMANTIC_LINT_RULES_CHANGED")
+        need(report.get("command") == [*prefix, "oxlint.config.ts", "--format=json", *LEGACY_LINT_FILES],
+             "SEMANTIC_LINT_COMMAND_MISMATCH")
+        return
+    outer = receipt.get("lintPolicy")
+    need(isinstance(policy, dict) and isinstance(outer, dict), "SEMANTIC_LINT_POLICY_PROOF_MISSING")
+    expected = receipt["hashesBefore"]["oxlint.config.ts"]
+    observed = {"baseline": expected, "candidate": expected}
+    for proof in (policy, outer):
+        need(proof.get("configFile") == LINT_POLICY_CONFIG and proof.get("sourcePath") == "oxlint.config.ts" and
+             proof.get("sha256") == expected and proof.get("hashesBefore") == observed and
+             proof.get("hashesAfter") == observed, "SEMANTIC_LINT_EFFECTIVE_POLICY_MISMATCH")
+    need(outer.get("sourceSha") == receipt.get("sha") and isinstance(receipt.get("sha"), str) and
+         re.fullmatch(r"[a-f0-9]{40}", receipt["sha"]) and outer.get("sourceReadOnly") is True and
+         receipt.get("hashesAfter", {}).get("oxlint.config.ts") == expected,
+         "SEMANTIC_LINT_POLICY_PROVENANCE_INVALID")
+    need(report.get("workingDirectories") == {"baseline": "/lint-baseline", "candidate": receipt.get("source")} and
+         isinstance(receipt.get("source"), str) and receipt["source"].startswith("/") and
+         receipt["source"] != "/lint-baseline", "SEMANTIC_LINT_POLICY_WORKING_DIRECTORY_MISMATCH")
+    need(report.get("command") == [*prefix, LINT_POLICY_CONFIG, "--format=json", *LEGACY_LINT_FILES],
+         "SEMANTIC_LINT_COMMAND_MISMATCH")
+    command = gate.get("command", [])
+    script = "extensions/qa/phase3-recovery/lint-baseline.py"
+    need(isinstance(command, list) and all(isinstance(value, str) for value in command) and
+         command.count(script) == 1 and command.count("--policy-sha256") == 1,
+         "SEMANTIC_LINT_POLICY_EXECUTION_MISMATCH")
+    position = command.index(script)
+    need(position > 0 and command[position - 1] == "python3", "SEMANTIC_LINT_POLICY_EXECUTION_MISMATCH")
+    tail = command[position + 1:]
+    need(len(tail) == 10 and tail[:7] == ["--baseline-root", "/lint-baseline", "--current-root", receipt["source"],
+         "--baseline-sha", LINT_BASELINE_SHA, "--output"] and tail[8:] == ["--policy-sha256", expected],
+         "SEMANTIC_LINT_POLICY_EXECUTION_MISMATCH")
+    fixture = receipt.get("fixture")
+    need(isinstance(fixture, str) and fixture.startswith("/") and
+         re.fullmatch(re.escape(fixture.rstrip("/") + "/semantic-lint-baseline-") + r"[a-f0-9]{8}", tail[7]),
+         "SEMANTIC_LINT_POLICY_OUTPUT_SCOPE_INVALID")
 
 
 def verify_semantic_matrix(receipt):
@@ -379,32 +440,6 @@ def verify_semantic_matrix(receipt):
         report = json.loads(gate.get("stdout", ""))
     except (TypeError, json.JSONDecodeError):
         raise GateError("SEMANTIC_LINT_BASELINE_REPORT_INVALID") from None
-    if report.get("configurationChanged") is True:
-        need(report.get("method") == "current-policy clean lint; no historical diagnostic comparison" and
-             report.get("historicalComparisonPerformed") is False and
-             report.get("baselineSha") == LINT_BASELINE_SHA and report.get("files") == list(LEGACY_LINT_FILES) and
-             report.get("gatePass") is True and report.get("sourceHashesUnchanged") is True and
-             report.get("wholeLegacyLintPass") is True and
-             type(report.get("candidateLintExit")) is int and report["candidateLintExit"] == 0 and
-             type(report.get("candidateDiagnosticCount")) is int and report["candidateDiagnosticCount"] == 0 and
-             all(key in report and report[key] is None for key in (
-                 "baselineLintExit", "baselineDiagnosticCount", "matchedInheritedCount", "unmatchedCount")),
-             "SEMANTIC_CURRENT_POLICY_LINT_NOT_CLEAN")
-        need(receipt["hashesBefore"].get("extensions/qa/phase3-recovery/lint-baseline.py") ==
-             "290d1636365838284f1857950c9cba84b2148547dbc195e8d964c9ce1780dc59",
-             "SEMANTIC_CURRENT_POLICY_LINT_PRODUCER_CHANGED")
-        for path in (*LEGACY_LINT_FILES, "oxlint.config.ts"):
-            need(report.get("baselineHashes", {}).get(path) == hashes.get(path) and
-                 report.get("candidateHashes", {}).get(path) == receipt["hashesBefore"].get(path) and
-                 isinstance(hashes.get(path), str) and HASH.fullmatch(hashes[path]) and
-                 isinstance(receipt["hashesBefore"].get(path), str) and HASH.fullmatch(receipt["hashesBefore"][path]),
-                 "SEMANTIC_LINT_SOURCE_PIN_MISMATCH")
-        need(report["baselineHashes"]["oxlint.config.ts"] != report["candidateHashes"]["oxlint.config.ts"],
-             "SEMANTIC_CURRENT_POLICY_BRANCH_REQUIRES_CHANGED_RULES")
-        need(report.get("command") == ["node", "--experimental-strip-types", "/cleanup/node_modules/oxlint/bin/oxlint",
-                                       "-c", "oxlint.config.ts", "--format=json", *LEGACY_LINT_FILES],
-             "SEMANTIC_LINT_COMMAND_MISMATCH")
-        return
     need(report.get("baselineSha") == LINT_BASELINE_SHA and report.get("files") == list(LEGACY_LINT_FILES) and
          report.get("gatePass") is True and report.get("sourceHashesUnchanged") is True and
          report.get("unmatchedCount") == 0, "SEMANTIC_LINT_NEW_DIAGNOSTIC")
@@ -420,11 +455,7 @@ def verify_semantic_matrix(receipt):
              isinstance(hashes.get(path), str) and HASH.fullmatch(hashes[path]) and
              isinstance(receipt["hashesBefore"].get(path), str) and HASH.fullmatch(receipt["hashesBefore"][path]),
              "SEMANTIC_LINT_SOURCE_PIN_MISMATCH")
-    need(report["baselineHashes"]["oxlint.config.ts"] == report["candidateHashes"]["oxlint.config.ts"],
-         "SEMANTIC_LINT_RULES_CHANGED")
-    need(report.get("command") == ["node", "--experimental-strip-types", "/cleanup/node_modules/oxlint/bin/oxlint",
-                                   "-c", "oxlint.config.ts", "--format=json", *LEGACY_LINT_FILES],
-         "SEMANTIC_LINT_COMMAND_MISMATCH")
+    verify_lint_policy(receipt, gate, report)
 
 
 def tap_success(output):
@@ -439,6 +470,72 @@ def tap_success(output):
     need(counts["tests"] == counts["pass"] > 0 and
          all(counts[name] == 0 for name in ("fail", "cancelled", "skipped", "todo")),
          "NODE_TESTS_NOT_ALL_PASSED")
+
+
+def original_theme_checks():
+    checks = {
+        "eight-native-installs-and-isolated-two-to-five-choice-fixtures": {
+            "originals": 8, "rounds": 32, "anonymousInstallDenied": True, "crossAccountReadDenied": True},
+        "native-editor-eight-theme-round-trip-save-reload-and-history": {
+            "switches": 8, "preservedQuestionCount": 6},
+        "public-back-clears-current-and-future-votes": {
+            "retainedScore": 1000, "clearedQuestions": [2, 3], "replay": True},
+        "nine-locales-and-eight-reduced-motion-hebrew-mobile-votes": {
+            "locales": 9, "mobileRounds": 8, "storybookFinalRecapEntries": 6},
+        "native-pause-replay-previous-and-confirmed-skip": {
+            "retainedPausedTimer": True, "replayDiscardsOldVotes": True},
+        "original-browser-console-and-resource-integrity": {},
+        "immutable-public-masters-after-editor-and-live-games": {},
+    }
+    for theme in ORIGINAL_THEME_IDS:
+        checks["normal-motion-complete-public-show-" + theme] = {
+            "rounds": 6, "checkpoints": 3, "interludes": 2, "replay": True}
+        checks["reduced-motion-native-two-to-five-choices-votes-images-and-audio-" + theme] = {
+            "questions": 4, "realPlayers": 2, "tie": True, "zeroVotes": True,
+            "answerImages": 14, "questionImages": 1, "votingLayoutChecks": 4, "resultsLayoutChecks": 4}
+    return {name: {"name": name, "passed": True, **detail} for name, detail in checks.items()}
+
+
+def verify_originals(receipt, revision, source_run, manifest, artifacts):
+    need(isinstance(receipt, dict) and receipt.get("format") == "tadazz-original-themes-acceptance" and
+         type(receipt.get("version")) is int and receipt["version"] == 1 and
+         receipt.get("sha") == revision and receipt.get("sourceRun") == source_run and
+         isinstance(receipt.get("run"), str) and
+         re.fullmatch(r"tadazz-originals-" + revision[:12] + r"-[a-f0-9]{8}", receipt["run"]),
+         "ORIGINALS_IDENTITY_MISMATCH")
+    need(type(receipt.get("exit")) is int and receipt["exit"] == 0 and receipt.get("passed") is True and
+         receipt.get("oomKilled") is False and receipt.get("network") == "none" and
+         receipt.get("manualListeningPerformed") is False, "ORIGINALS_LINUX_GATE_MISSING")
+    no_live_data(receipt, "customerMountUsed")
+    for field in ("allSourceHashesVerified", "candidateSourceHashesVerifiedBeforeAfter", "sdkCacheHashesVerifiedBeforeAfter",
+                  "applicationSourcesEqualCandidate", "runtimeQaSourceEqualsCandidate", "sourceReadOnly",
+                  "readOnlyMountsVerified", "builtArtifactHashesVerifiedBeforeAfter"):
+        need(receipt.get(field) is True, "ORIGINALS_INPUT_CHANGED")
+    need(ORIGINAL_QA_FILES <= manifest.keys() and
+         all(isinstance(manifest[name], str) and HASH.fullmatch(manifest[name]) for name in ORIGINAL_QA_FILES) and
+         receipt.get("qaSourceSha256") == {name: manifest[name] for name in ORIGINAL_QA_FILES} and
+         receipt.get("sourceManifestSha256") == canonical_digest(manifest), "ORIGINALS_SOURCE_PIN_MISMATCH")
+    need(set(artifacts) == {"web", "widget", "application", "backend"} and all(artifacts.values()) and
+         receipt.get("builtArtifactsBefore") == artifacts and receipt.get("builtArtifactsAfter") == artifacts,
+         "ORIGINALS_BUILT_ARTIFACT_MISMATCH")
+    inner = receipt.get("browserReceipt")
+    need(isinstance(inner, dict) and inner.get("passed") is True and inner.get("platform") == "linux" and
+         inner.get("sourceSha") == revision and inner.get("isolatedNativeHost") is True and
+         inner.get("customerMountUsed") is False and inner.get("realEmailSent") is False and
+         inner.get("manualListeningPerformed") is False and not inner.get("error"), "ORIGINALS_BROWSER_GATE_MISSING")
+    expected = original_theme_checks()
+    results = inner.get("results")
+    need(isinstance(results, list) and len(results) == len(expected) and
+         all(isinstance(item, dict) and isinstance(item.get("name"), str) for item in results),
+         "ORIGINALS_SCENARIOS_INCOMPLETE")
+    actual = {item["name"]: item for item in results}
+    need(len(actual) == len(results) and set(actual) == set(expected), "ORIGINALS_SCENARIOS_INCOMPLETE")
+    need(canonical_digest(actual) == canonical_digest(expected), "ORIGINALS_SCENARIO_PROOF_MISMATCH")
+    return {"format": "tadazz-original-themes-release-proof", "version": 1, "passed": True,
+            "sourceSha": revision, "sourceRun": source_run, "run": receipt["run"],
+            "familyIds": list(ORIGINAL_THEME_IDS), "requiredChecks": sorted(expected),
+            "sourceManifestSha256": receipt["sourceManifestSha256"], "qaSourceSha256": receipt["qaSourceSha256"],
+            "builtArtifactsSha256": canonical_digest(artifacts)}
 
 
 def verify_fullshow(receipt, revision, manifest_pin, widget):
@@ -805,7 +902,7 @@ def qualify_inputs(args):
     source = plain(EVIDENCE_ROOT / args.source_run / "source", directory=True)
     web_source = plain(EVIDENCE_ROOT / args.web_source_run / "source", directory=True)
     receipts = {key: json_file(getattr(args, key + "_receipt"))
-                for key in ("host", "launch", "web", "browser", "full_show", "proxy")}
+                for key in ("host", "launch", "web", "browser", "full_show", "proxy", "originals")}
     required = {"native-http", "native-types", "native-lint", "native-format"}
     manifest = matrix_receipt(receipts["host"], args.revision, args.source_run, "native-launch",
                               required | {"native-widget-build", "native-launch-build", "native-site-build"} | SEMANTIC_REQUIRED_CHECKS | NATIVE_APP_CHECKS)
@@ -898,10 +995,13 @@ def qualify_inputs(args):
     verify_fullshow(receipts["full_show"], args.revision, widget_pin, widget)
     verify_proxy(receipts["proxy"], (args.revision, args.source_run, manifest, args.base_image,
                                     receipts["full_show"].get("sdkCacheManifestSha256")))
+    originals = verify_originals(receipts["originals"], args.revision, args.source_run, manifest,
+                                 {"web": web_files, "widget": tree(widget_root),
+                                  "application": tree(native_root), "backend": tree(built)})
     return {"source": source, "webSource": web_source, "manifest": manifest, "built": built,
             "artifact": artifact, "widget": widget, "widgetPin": widget_pin, "widgetRoot": widget_root,
             "webRoot": web_root, "webFiles": web_files, "receipts": receipts,
-            "nativeApplication": native_application, "nativeRoot": native_root}
+            "nativeApplication": native_application, "nativeRoot": native_root, "originalThemes": originals}
 
 
 def stage_release(args):
@@ -994,6 +1094,7 @@ RUN chmod -R a+rX /app/web && chmod 600 /app/socket/index.cjs /app/mcp/full-show
             "widgetManifestSha256": inputs["widgetPin"], "widgetHtmlSha256": inputs["widget"]["sha256"],
             "rendererBuildId": inputs["widget"]["rendererBuildId"],
             "nativeApplicationPreview": inputs["nativeApplication"],
+            "originalThemes": inputs["originalThemes"],
             "publicAssetCount": len(inputs["widget"]["publicAssets"]),
             "artifacts": {name: spec["sha256"] for name, spec in payload.items()},
             "artifactBytes": {name: spec["bytes"] for name, spec in payload.items()},
@@ -1014,6 +1115,89 @@ RUN chmod -R a+rX /app/web && chmod 600 /app/socket/index.cjs /app/mcp/full-show
     finally:
         write_json(stage / "stage-result.json", report)
         print(json.dumps(report, sort_keys=True))
+
+
+def self_test_lint_policy_gates(sample, legacy_report):
+    value = json.loads(json.dumps(sample))
+    value.update(sha="c" * 40, source="/source", fixture="/evidence/test/fixtures")
+    value["hashesAfter"] = dict(value["hashesBefore"])
+    for key in ("hashesBefore", "hashesAfter"):
+        value["lintBaseline"][key]["oxlint.config.ts"] = "b" * 64
+    report = json.loads(json.dumps(legacy_report))
+    report["baselineHashes"]["oxlint.config.ts"] = "b" * 64
+    common = {
+        "configFile": LINT_POLICY_CONFIG, "sourcePath": "oxlint.config.ts", "sha256": "a" * 64,
+        "hashesBefore": {"baseline": "a" * 64, "candidate": "a" * 64},
+        "hashesAfter": {"baseline": "a" * 64, "candidate": "a" * 64},
+    }
+    report["effectivePolicy"] = json.loads(json.dumps(common))
+    report["workingDirectories"] = {"baseline": "/lint-baseline", "candidate": "/source"}
+    report["command"][4] = LINT_POLICY_CONFIG
+    value["lintPolicy"] = dict(common, sourceSha=value["sha"], sourceReadOnly=True)
+    gate = value["checks"][-1]
+    gate["command"] = ["python3", "extensions/qa/phase3-recovery/lint-baseline.py",
+                       "--baseline-root", "/lint-baseline", "--current-root", "/source",
+                       "--baseline-sha", LINT_BASELINE_SHA,
+                       "--output", "/evidence/test/fixtures/semantic-lint-baseline-1234abcd",
+                       "--policy-sha256", "a" * 64]
+    gate["stdout"] = json.dumps(report)
+    verify_semantic_matrix(value)
+    witnessed = ["same-effective-policy-with-preserved-original-configs"]
+    for failure in ("policy-missing-inner-proof", "policy-missing-controller-proof", "policy-controller-mutation",
+                    "policy-inner-mutation", "policy-not-candidate-config", "policy-source-revision",
+                    "policy-source-not-readonly", "policy-source-config-mutated", "policy-baseline-config-rewritten",
+                    "policy-absolute-config-command", "policy-wrong-cwd", "policy-missing-flag",
+                    "policy-duplicate-flag", "policy-wrong-pin-flag", "policy-wrong-baseline-root",
+                    "policy-wrong-interpreter", "policy-unowned-output", "policy-extra-diagnostic"):
+        changed = json.loads(json.dumps(value))
+        result = json.loads(changed["checks"][-1]["stdout"])
+        argv = changed["checks"][-1]["command"]
+        if failure == "policy-missing-inner-proof":
+            result.pop("effectivePolicy")
+        elif failure == "policy-missing-controller-proof":
+            changed.pop("lintPolicy")
+        elif failure == "policy-controller-mutation":
+            changed["lintPolicy"]["hashesAfter"]["baseline"] = "d" * 64
+        elif failure == "policy-inner-mutation":
+            result["effectivePolicy"]["hashesAfter"]["candidate"] = "d" * 64
+        elif failure == "policy-not-candidate-config":
+            for proof in (result["effectivePolicy"], changed["lintPolicy"]):
+                proof["sha256"] = "d" * 64
+                proof["hashesBefore"] = proof["hashesAfter"] = {"baseline": "d" * 64, "candidate": "d" * 64}
+        elif failure == "policy-source-revision":
+            changed["lintPolicy"]["sourceSha"] = "d" * 40
+        elif failure == "policy-source-not-readonly":
+            changed["lintPolicy"]["sourceReadOnly"] = False
+        elif failure == "policy-source-config-mutated":
+            changed["hashesAfter"]["oxlint.config.ts"] = "d" * 64
+        elif failure == "policy-baseline-config-rewritten":
+            result["baselineHashes"]["oxlint.config.ts"] = "a" * 64
+        elif failure == "policy-absolute-config-command":
+            result["command"][4] = "/source/" + LINT_POLICY_CONFIG
+        elif failure == "policy-wrong-cwd":
+            result["workingDirectories"]["baseline"] = "/source"
+        elif failure == "policy-missing-flag":
+            del argv[-2:]
+        elif failure == "policy-duplicate-flag":
+            argv.extend(["--policy-sha256", "a" * 64])
+        elif failure == "policy-wrong-pin-flag":
+            argv[-1] = "d" * 64
+        elif failure == "policy-wrong-baseline-root":
+            argv[3] = "/source"
+        elif failure == "policy-wrong-interpreter":
+            argv[0] = "echo"
+        elif failure == "policy-unowned-output":
+            argv[9] = "/source/semantic-lint-baseline-1234abcd"
+        elif failure == "policy-extra-diagnostic":
+            result.update(unmatchedCount=1, gatePass=False)
+        changed["checks"][-1]["stdout"] = json.dumps(result)
+        try:
+            verify_semantic_matrix(changed)
+        except GateError:
+            witnessed.append(failure)
+        else:
+            raise AssertionError("Invalid effective policy accepted: " + failure)
+    return witnessed
 
 
 def self_test_semantic_gates():
@@ -1046,7 +1230,7 @@ def self_test_semantic_gates():
         ],
     }
     verify_semantic_matrix(sample)
-    witnessed = []
+    witnessed = self_test_lint_policy_gates(sample, report)
     for name in ("protocol", "http", "access-token", "drafts", "integrity", "boundaries", "oauth-client-isolation"):
         folder = "extensions/qa/phase3-native-consent/" if name == "oauth-client-isolation" else "extensions/src/mcp-app/tests/server/"
         value = json.loads(json.dumps(sample))
@@ -1229,7 +1413,7 @@ def self_test_application_gate():
               "pins": [{"portVersion": 3, "identityRuleVersion": 2, "registry": registry,
                         "registrySha256": digest(compact(registry)), "renderer": {"id": renderer, "version": "1.0.0"},
                         "rendererBuildSha256": digest(compact(artifact))}
-                       for renderer in ("tadazz-classic-stage", "razzia-native-stage")]}
+                       for renderer in NATIVE_APPLICATION_RENDERERS]}
     raw, artifact_raw, registry_raw = packed(native), packed(artifact), packed(registry)
     verification = {"format": "tadazz-application-preview-verification", "mode": "verify-manifest",
                     "verifiedManifest": True, "generatedSourceChanged": False, "liveAuthorityInputs": [],
@@ -1242,7 +1426,9 @@ def self_test_application_gate():
     web = {"tadazz-application-runtime/" + item["name"]: {"sha256": item["sha256"], "bytes": item["bytes"]} for item in files}
     verify_application_metadata(bundle, source, backend, web)
     witnessed = []
-    for failure in ("generation", "packaged-change", "backend-mismatch", "source-change", "live-authority"):
+    for failure in ("generation", "packaged-change", "backend-mismatch", "source-change", "live-authority",
+                    "legacy-renderers-only", "duplicate-renderer", "foreign-renderer", "renderer-version",
+                    "admission-port-version", "admission-identity-version", "admission-artifact-pin", "admission-registry-pin"):
         changed_bundle = {**bundle, "verification": json.loads(json.dumps(verification))}
         changed_source, changed_backend, changed_web = dict(source), json.loads(json.dumps(backend)), json.loads(json.dumps(web))
         if failure == "generation":
@@ -1253,11 +1439,39 @@ def self_test_application_gate():
             changed_backend["files"][0]["sha256"] = "d" * 64
         elif failure == "source-change":
             changed_source[entry] = "d" * 64
-        else:
+        elif failure == "live-authority":
             changed_bundle["verification"]["liveAuthorityInputs"] = ["packages/web/src/features/game/stores/live.ts"]
+        else:
+            changed_native = json.loads(raw)
+            if failure == "legacy-renderers-only":
+                changed_native["pins"] = [pin for pin in changed_native["pins"]
+                                          if pin["renderer"]["id"] != "tadazz-original-stage"]
+            elif failure == "duplicate-renderer":
+                changed_native["pins"][-1]["renderer"] = dict(changed_native["pins"][0]["renderer"])
+            elif failure == "foreign-renderer":
+                changed_native["pins"][-1]["renderer"]["id"] = "unreviewed-stage"
+            elif failure == "renderer-version":
+                changed_native["pins"][-1]["renderer"]["version"] = "1.0.1"
+            elif failure == "admission-port-version":
+                changed_native["pins"][-1]["portVersion"] = 2
+            elif failure == "admission-identity-version":
+                changed_native["pins"][-1]["identityRuleVersion"] = 1
+            elif failure == "admission-artifact-pin":
+                changed_native["pins"][-1]["rendererBuildSha256"] = "d" * 64
+            else:
+                changed_native["pins"][-1]["registrySha256"] = "d" * 64
+            changed_raw = packed(changed_native)
+            changed_bundle["manifestBytes"] = changed_raw
+            changed_bundle["verification"]["manifestSha256"] = digest(changed_raw)
+            changed_source[NATIVE_APP_MANIFEST] = digest(changed_raw)
+            changed_backend["files"][0].update(sha256=digest(changed_raw), bytes=len(changed_raw))
         try:
             verify_application_metadata(changed_bundle, changed_source, changed_backend, changed_web)
-        except GateError:
+        except GateError as error:
+            if failure in ("legacy-renderers-only", "duplicate-renderer", "foreign-renderer", "renderer-version"):
+                need(str(error) == "NATIVE_APPLICATION_RENDERER_PINS_MISSING", "SELFTEST_RENDERER_GATE_MISMATCH")
+            elif failure.startswith("admission-"):
+                need(str(error) == "NATIVE_APPLICATION_ADMISSION_PIN_MISMATCH", "SELFTEST_ADMISSION_GATE_MISMATCH")
             witnessed.append("native-application-" + failure)
         else:
             raise AssertionError("Unqualified native application accepted: " + failure)
@@ -1352,8 +1566,11 @@ def self_test_public_preview_gate():
             rejected.append("public-preview-missing-" + field)
         else:
             raise AssertionError("Incomplete public preview proof accepted")
-    for ids in ([], list(PUBLIC_CATALOGUE_IDS[:-1]),
-                [*PUBLIC_CATALOGUE_IDS[:-1], "unreviewed-example"]):
+    for ids in ([], list(PUBLIC_CATALOGUE_IDS[:10]), list(PUBLIC_CATALOGUE_IDS[:-1]),
+                list(reversed(PUBLIC_CATALOGUE_IDS)),
+                [*PUBLIC_CATALOGUE_IDS[:-1], PUBLIC_CATALOGUE_IDS[0]],
+                [*PUBLIC_CATALOGUE_IDS[:-1], "unreviewed-example"],
+                [*PUBLIC_CATALOGUE_IDS, "unreviewed-example"]):
         try:
             verify_native_preview_proof({**proof, "publicCatalogueIds": ids}, files)
         except GateError:
@@ -1361,6 +1578,68 @@ def self_test_public_preview_gate():
         else:
             raise AssertionError("Unreviewed public catalogue accepted")
     return ["public-preview-enabled-default-proof"] + rejected
+
+
+def self_test_originals_gate():
+    revision = "b" * 40
+    source_run = "tadazz-codex-" + revision[:12] + "-12345678"
+    source = {name: "a" * 64 for name in ORIGINAL_QA_FILES}
+    artifacts = {name: {"synthetic.bin": {"bytes": 3, "sha256": "c" * 64}}
+                 for name in ("web", "widget", "application", "backend")}
+    results = list(original_theme_checks().values())
+    receipt = {"format": "tadazz-original-themes-acceptance", "version": 1,
+               "sha": revision, "sourceRun": source_run, "run": "tadazz-originals-" + revision[:12] + "-12345678",
+               "passed": True, "exit": 0, "oomKilled": False, "network": "none",
+               "sourceReadOnly": True, "customerMountUsed": False, "productionChanged": False,
+               "manualListeningPerformed": False, "allSourceHashesVerified": True,
+               "candidateSourceHashesVerifiedBeforeAfter": True, "sdkCacheHashesVerifiedBeforeAfter": True,
+               "applicationSourcesEqualCandidate": True, "runtimeQaSourceEqualsCandidate": True,
+               "readOnlyMountsVerified": True, "builtArtifactHashesVerifiedBeforeAfter": True,
+               "sourceManifestSha256": canonical_digest(source), "qaSourceSha256": source,
+               "builtArtifactsBefore": artifacts, "builtArtifactsAfter": artifacts,
+               "browserReceipt": {"passed": True, "platform": "linux", "sourceSha": revision,
+                                  "isolatedNativeHost": True, "customerMountUsed": False,
+                                  "realEmailSent": False, "manualListeningPerformed": False, "results": results}}
+    proof = verify_originals(receipt, revision, source_run, source, artifacts)
+    need(len(proof["requiredChecks"]) == 23 and len(proof["familyIds"]) == 8, "SELFTEST_ORIGINALS_INVENTORY")
+    native_index = next(index for index, item in enumerate(results) if item["name"] ==
+                        "reduced-motion-native-two-to-five-choices-votes-images-and-audio-royal-quiz")
+    mobile_index = next(index for index, item in enumerate(results) if item["name"] ==
+                        "nine-locales-and-eight-reduced-motion-hebrew-mobile-votes")
+    failures = (
+        ("revision", ("sha",), "c" * 40, "ORIGINALS_IDENTITY_MISMATCH"),
+        ("source-run", ("sourceRun",), source_run[:-8] + "00000000", "ORIGINALS_IDENTITY_MISMATCH"),
+        ("exit", ("exit",), 1, "ORIGINALS_LINUX_GATE_MISSING"),
+        ("oom", ("oomKilled",), True, "ORIGINALS_LINUX_GATE_MISSING"),
+        ("network", ("network",), "bridge", "ORIGINALS_LINUX_GATE_MISSING"),
+        ("customer-data", ("customerMountUsed",), True, "RECEIPT_ISOLATION_MISSING"),
+        ("qa-overlay", ("runtimeQaSourceEqualsCandidate",), False, "ORIGINALS_INPUT_CHANGED"),
+        ("source-manifest", ("sourceManifestSha256",), "d" * 64, "ORIGINALS_SOURCE_PIN_MISMATCH"),
+        ("controller-pin", ("qaSourceSha256", "extensions/qa/original-themes/linux-browser-verify.py"), "d" * 64, "ORIGINALS_SOURCE_PIN_MISMATCH"),
+        ("built-artifact", ("builtArtifactsBefore", "application", "synthetic.bin", "sha256"), "d" * 64, "ORIGINALS_BUILT_ARTIFACT_MISMATCH"),
+        ("changed-after", ("builtArtifactsAfter", "web", "synthetic.bin", "sha256"), "d" * 64, "ORIGINALS_BUILT_ARTIFACT_MISMATCH"),
+        ("non-linux", ("browserReceipt", "platform"), "win32", "ORIGINALS_BROWSER_GATE_MISSING"),
+        ("missing-family", ("browserReceipt", "results"), results[:-1], "ORIGINALS_SCENARIOS_INCOMPLETE"),
+        ("duplicate-case", ("browserReceipt", "results"), [*results[:-1], results[0]], "ORIGINALS_SCENARIOS_INCOMPLETE"),
+        ("failed-case", ("browserReceipt", "results", native_index, "passed"), False, "ORIGINALS_SCENARIO_PROOF_MISMATCH"),
+        ("missing-results-geometry", ("browserReceipt", "results", native_index, "resultsLayoutChecks"), 3, "ORIGINALS_SCENARIO_PROOF_MISMATCH"),
+        ("truncated-storybook", ("browserReceipt", "results", mobile_index, "storybookFinalRecapEntries"), 2, "ORIGINALS_SCENARIO_PROOF_MISMATCH"),
+    )
+    witnessed = ["originals-eight-families-23-exact-scenarios-and-built-artifacts"]
+    for name, path, value, expected in failures:
+        changed = json.loads(json.dumps(receipt))
+        target = changed
+        for key in path[:-1]:
+            target = target[key]
+        target[path[-1]] = value
+        try:
+            verify_originals(changed, revision, source_run, source, artifacts)
+        except GateError as error:
+            need(str(error) == expected, "SELFTEST_ORIGINALS_WRONG_FAILURE")
+            witnessed.append("originals-rejects-" + name)
+        else:
+            raise AssertionError("Unqualified originals accepted: " + name)
+    return witnessed
 
 
 def self_test():
@@ -1419,7 +1698,7 @@ def self_test():
                 pass
             else:
                 raise AssertionError(name + " release gate accepted")
-    print(json.dumps({"selfTest": "PASS", "checks": ["traversal", "same-size-tamper", "changed-after-qualification-copy", "symlink", "tap-spec-summary"] + list(rejected) + self_test_semantic_gates() + self_test_application_gate() + self_test_proxy_gate() + self_test_public_preview_gate()}))
+    print(json.dumps({"selfTest": "PASS", "checks": ["traversal", "same-size-tamper", "changed-after-qualification-copy", "symlink", "tap-spec-summary"] + list(rejected) + self_test_semantic_gates() + self_test_application_gate() + self_test_proxy_gate() + self_test_public_preview_gate() + self_test_originals_gate()}))
 
 
 def main():
@@ -1433,7 +1712,7 @@ def main():
     parser.add_argument("--release-dir", required=True)
     parser.add_argument("--image", required=True)
     parser.add_argument("--base-image", default=BASE_IMAGE)
-    for name in ("host", "launch", "web", "browser", "full-show", "proxy"):
+    for name in ("host", "launch", "web", "browser", "full-show", "proxy", "originals"):
         parser.add_argument("--" + name + "-receipt", required=True)
     args = parser.parse_args()
     args.web_source_run = args.web_source_run or args.source_run

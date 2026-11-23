@@ -126,7 +126,12 @@ try {
   await results({ page, key: "quick-trivia", choice: 2, kind: "quiz" })
   await next(page)
   await scene(page, "countdown", "party-personality")
-  await results({ page, key: "party-personality", choice: 3, kind: "survey" })
+  await results({
+    page,
+    key: "party-personality",
+    choice: 3,
+    kind: "survey",
+  })
   await next(page)
   await page.getByTestId("tadazz-finale-screen").waitFor({ timeout: 30000 })
   await page.locator('[data-ggo-phase="winner"]').waitFor({ timeout: 30000 })
@@ -157,7 +162,7 @@ try {
   )
   const trace = await page
     .getByTestId("tadazz-stage")
-    .evaluate((_el) => window.ggoTrace || [])
+    .evaluate(() => window.ggoTrace || [])
   assert.equal(
     trace.filter((x) => x === "leaderboard").length,
     1,

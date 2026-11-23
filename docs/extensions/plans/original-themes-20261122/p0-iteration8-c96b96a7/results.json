@@ -1,0 +1,380 @@
+{
+  "config": {
+    "argv": [
+      "/usr/local/bin/node",
+      "/cleanup/extensions/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "playwright.p0-oracle.config.ts",
+      "--tsconfig",
+      "tsconfig.json",
+      "tests/media-appearance-stage-acceptance.spec.ts",
+      "tests/tzila-public-stage-and-toolbar.spec.ts",
+      "tests/p0-tzila-acceptance.spec.ts",
+      "--grep",
+      "(?:2\\.\\ Live\\ Runtime\\ \\&\\ Zero\\-Scroll\\ Stage\\ Matrix\\ \\(STAGE\\-P0\\)\\ across\\ 8\\ Viewports\\ \\+\\ Card\\ Background\\ \\+\\ Single\\ Audio\\ \\+\\ Staged\\ Motion|Gate\\ C:\\ Responsive\\ Host\\ Toolbar\\ across\\ Viewports\\ \\&\\ Localization|Full\\ Tzila\\ Show\\ Lifecycle:\\ 5\\-option\\ cards,\\ PSTN\\ DTMF\\ 1\\-5,\\ spectator\\ display,\\ tie,\\ zero\\ votes)$",
+      "--reporter=list,json"
+    ],
+    "configFile": "/evidence/runtime/packages/e2e/playwright.p0-oracle.config.ts",
+    "rootDir": "/evidence/runtime/packages/e2e/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": "/evidence/runtime/packages/e2e/utils/seed-tzila-show.ts",
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/evidence/runtime/packages/e2e/test-results/p0-acceptance",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/evidence/runtime/packages/e2e/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "/(p0-tzila-acceptance|tzila-public-stage-and-toolbar|tzila-exact-player-screen|media-appearance-stage-acceptance|cinematic-video-overlays)\\.spec\\.ts$/"
+        ],
+        "timeout": 240000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/evidence/runtime/packages/e2e/test-results/p0-acceptance",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "/evidence/runtime/packages/e2e/tests",
+        "snapshotDir": "/evidence/runtime/packages/e2e/tests",
+        "testIgnore": [],
+        "testMatch": {},
+        "timeout": 240000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3010",
+          "locale": "en-US",
+          "trace": "retain-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "media-appearance-stage-acceptance.spec.ts",
+      "file": "media-appearance-stage-acceptance.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audio, Staged Motion & Zero-Scroll Stage",
+          "file": "media-appearance-stage-acceptance.spec.ts",
+          "line": 513,
+          "column": 6,
+          "specs": [
+            {
+              "title": "2. Live Runtime & Zero-Scroll Stage Matrix (STAGE-P0) across 8 Viewports + Card Background + Single Audio + Staged Motion",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 22691,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/\\/manager\\/config$/u\u001b[39m\nReceived string:  \u001b[31m\"http://127.0.0.1:3010/studio/games\"\u001b[39m\nTimeout: 20000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 20000ms\u001b[22m\n\u001b[2m    - waiting for navigation to finish...\u001b[22m\n\u001b[2m    - navigated to \"http://127.0.0.1:3010/studio/games\"\u001b[22m\n\u001b[2m    42 × locator resolved to <html lang=\"en\" dir=\"ltr\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"http://127.0.0.1:3010/studio/games\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/\\/manager\\/config$/u\u001b[39m\nReceived string:  \u001b[31m\"http://127.0.0.1:3010/studio/games\"\u001b[39m\nTimeout: 20000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 20000ms\u001b[22m\n\u001b[2m    - waiting for navigation to finish...\u001b[22m\n\u001b[2m    - navigated to \"http://127.0.0.1:3010/studio/games\"\u001b[22m\n\u001b[2m    42 × locator resolved to <html lang=\"en\" dir=\"ltr\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"http://127.0.0.1:3010/studio/games\"\u001b[22m\n\n    at loginManager (/evidence/runtime/packages/e2e/utils/manager.ts:27:24)\n    at /evidence/runtime/packages/e2e/tests/media-appearance-stage-acceptance.spec.ts:706:5",
+                        "location": {
+                          "file": "/evidence/runtime/packages/e2e/utils/manager.ts",
+                          "column": 24,
+                          "line": 27
+                        },
+                        "snippet": "   at ../utils/manager.ts:27\n\n  25 |     await passwordInput.fill(MANAGER_PASSWORD)\n  26 |     await page.getByRole(\"button\", { name: t(\"common:submit\") }).click()\n> 27 |     await expect(page).toHaveURL(/\\/manager\\/config$/u)\n     |                        ^\n  28 |   }\n  29 | }\n  30 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/evidence/runtime/packages/e2e/utils/manager.ts",
+                            "column": 24,
+                            "line": 27
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/\\/manager\\/config$/u\u001b[39m\nReceived string:  \u001b[31m\"http://127.0.0.1:3010/studio/games\"\u001b[39m\nTimeout: 20000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 20000ms\u001b[22m\n\u001b[2m    - waiting for navigation to finish...\u001b[22m\n\u001b[2m    - navigated to \"http://127.0.0.1:3010/studio/games\"\u001b[22m\n\u001b[2m    42 × locator resolved to <html lang=\"en\" dir=\"ltr\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"http://127.0.0.1:3010/studio/games\"\u001b[22m\n\n\n   at ../utils/manager.ts:27\n\n  25 |     await passwordInput.fill(MANAGER_PASSWORD)\n  26 |     await page.getByRole(\"button\", { name: t(\"common:submit\") }).click()\n> 27 |     await expect(page).toHaveURL(/\\/manager\\/config$/u)\n     |                        ^\n  28 |   }\n  29 | }\n  30 |\n    at loginManager (/evidence/runtime/packages/e2e/utils/manager.ts:27:24)\n    at /evidence/runtime/packages/e2e/tests/media-appearance-stage-acceptance.spec.ts:706:5"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-22T17:20:06.298Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/evidence/runtime/packages/e2e/test-results/p0-acceptance/media-appearance-stage-acc-cf8ee--Single-Audio-Staged-Motion-chromium/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/evidence/runtime/packages/e2e/test-results/p0-acceptance/media-appearance-stage-acc-cf8ee--Single-Audio-Staged-Motion-chromium/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/evidence/runtime/packages/e2e/utils/manager.ts",
+                        "column": 24,
+                        "line": 27
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "8139181b32b7de6381ab-2959cb16274ff78c173e",
+              "file": "media-appearance-stage-acceptance.spec.ts",
+              "line": 700,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "p0-tzila-acceptance.spec.ts",
+      "file": "p0-tzila-acceptance.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "P0: Tzila Five-Option Picture Polls & Projector Acceptance",
+          "file": "p0-tzila-acceptance.spec.ts",
+          "line": 33,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Full Tzila Show Lifecycle: 5-option cards, PSTN DTMF 1-5, spectator display, tie, zero votes",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 22497,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/\\/manager\\/config$/u\u001b[39m\nReceived string:  \u001b[31m\"http://127.0.0.1:3010/studio/games\"\u001b[39m\nTimeout: 20000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 20000ms\u001b[22m\n\u001b[2m    - waiting for \"http://127.0.0.1:3010/studio/games\" navigation to finish...\u001b[22m\n\u001b[2m    - navigated to \"http://127.0.0.1:3010/studio/games\"\u001b[22m\n\u001b[2m    42 × locator resolved to <html lang=\"en\" dir=\"ltr\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"http://127.0.0.1:3010/studio/games\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/\\/manager\\/config$/u\u001b[39m\nReceived string:  \u001b[31m\"http://127.0.0.1:3010/studio/games\"\u001b[39m\nTimeout: 20000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 20000ms\u001b[22m\n\u001b[2m    - waiting for \"http://127.0.0.1:3010/studio/games\" navigation to finish...\u001b[22m\n\u001b[2m    - navigated to \"http://127.0.0.1:3010/studio/games\"\u001b[22m\n\u001b[2m    42 × locator resolved to <html lang=\"en\" dir=\"ltr\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"http://127.0.0.1:3010/studio/games\"\u001b[22m\n\n    at loginManager (/evidence/runtime/packages/e2e/utils/manager.ts:27:24)\n    at createGame (/evidence/runtime/packages/e2e/utils/manager.ts:55:3)\n    at /evidence/runtime/packages/e2e/tests/p0-tzila-acceptance.spec.ts:39:17",
+                        "location": {
+                          "file": "/evidence/runtime/packages/e2e/utils/manager.ts",
+                          "column": 24,
+                          "line": 27
+                        },
+                        "snippet": "   at ../utils/manager.ts:27\n\n  25 |     await passwordInput.fill(MANAGER_PASSWORD)\n  26 |     await page.getByRole(\"button\", { name: t(\"common:submit\") }).click()\n> 27 |     await expect(page).toHaveURL(/\\/manager\\/config$/u)\n     |                        ^\n  28 |   }\n  29 | }\n  30 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/evidence/runtime/packages/e2e/utils/manager.ts",
+                            "column": 24,
+                            "line": 27
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/\\/manager\\/config$/u\u001b[39m\nReceived string:  \u001b[31m\"http://127.0.0.1:3010/studio/games\"\u001b[39m\nTimeout: 20000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 20000ms\u001b[22m\n\u001b[2m    - waiting for \"http://127.0.0.1:3010/studio/games\" navigation to finish...\u001b[22m\n\u001b[2m    - navigated to \"http://127.0.0.1:3010/studio/games\"\u001b[22m\n\u001b[2m    42 × locator resolved to <html lang=\"en\" dir=\"ltr\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"http://127.0.0.1:3010/studio/games\"\u001b[22m\n\n\n   at ../utils/manager.ts:27\n\n  25 |     await passwordInput.fill(MANAGER_PASSWORD)\n  26 |     await page.getByRole(\"button\", { name: t(\"common:submit\") }).click()\n> 27 |     await expect(page).toHaveURL(/\\/manager\\/config$/u)\n     |                        ^\n  28 |   }\n  29 | }\n  30 |\n    at loginManager (/evidence/runtime/packages/e2e/utils/manager.ts:27:24)\n    at createGame (/evidence/runtime/packages/e2e/utils/manager.ts:55:3)\n    at /evidence/runtime/packages/e2e/tests/p0-tzila-acceptance.spec.ts:39:17"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-22T17:20:31.124Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/evidence/runtime/packages/e2e/test-results/p0-acceptance/p0-tzila-acceptance-P0-Tzi-9cf84-ator-display-tie-zero-votes-chromium/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/evidence/runtime/packages/e2e/test-results/p0-acceptance/p0-tzila-acceptance-P0-Tzi-9cf84-ator-display-tie-zero-votes-chromium/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/evidence/runtime/packages/e2e/utils/manager.ts",
+                        "column": 24,
+                        "line": 27
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "02f49f93738cbb4ab814-54c35e61358c26c098e6",
+              "file": "p0-tzila-acceptance.spec.ts",
+              "line": 34,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "tzila-public-stage-and-toolbar.spec.ts",
+      "file": "tzila-public-stage-and-toolbar.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolbar",
+          "file": "tzila-public-stage-and-toolbar.spec.ts",
+          "line": 35,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Gate C: Responsive Host Toolbar across Viewports & Localization",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 240000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 22729,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/\\/manager\\/config$/u\u001b[39m\nReceived string:  \u001b[31m\"http://127.0.0.1:3010/studio/games\"\u001b[39m\nTimeout: 20000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 20000ms\u001b[22m\n\u001b[2m    - waiting for navigation to finish...\u001b[22m\n\u001b[2m    - navigated to \"http://127.0.0.1:3010/studio/games\"\u001b[22m\n\u001b[2m    42 × locator resolved to <html lang=\"en\" dir=\"ltr\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"http://127.0.0.1:3010/studio/games\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/\\/manager\\/config$/u\u001b[39m\nReceived string:  \u001b[31m\"http://127.0.0.1:3010/studio/games\"\u001b[39m\nTimeout: 20000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 20000ms\u001b[22m\n\u001b[2m    - waiting for navigation to finish...\u001b[22m\n\u001b[2m    - navigated to \"http://127.0.0.1:3010/studio/games\"\u001b[22m\n\u001b[2m    42 × locator resolved to <html lang=\"en\" dir=\"ltr\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"http://127.0.0.1:3010/studio/games\"\u001b[22m\n\n    at loginManager (/evidence/runtime/packages/e2e/utils/manager.ts:27:24)\n    at createGame (/evidence/runtime/packages/e2e/utils/manager.ts:55:3)\n    at /evidence/runtime/packages/e2e/tests/tzila-public-stage-and-toolbar.spec.ts:436:17",
+                        "location": {
+                          "file": "/evidence/runtime/packages/e2e/utils/manager.ts",
+                          "column": 24,
+                          "line": 27
+                        },
+                        "snippet": "   at ../utils/manager.ts:27\n\n  25 |     await passwordInput.fill(MANAGER_PASSWORD)\n  26 |     await page.getByRole(\"button\", { name: t(\"common:submit\") }).click()\n> 27 |     await expect(page).toHaveURL(/\\/manager\\/config$/u)\n     |                        ^\n  28 |   }\n  29 | }\n  30 |"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/evidence/runtime/packages/e2e/utils/manager.ts",
+                            "column": 24,
+                            "line": 27
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/\\/manager\\/config$/u\u001b[39m\nReceived string:  \u001b[31m\"http://127.0.0.1:3010/studio/games\"\u001b[39m\nTimeout: 20000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 20000ms\u001b[22m\n\u001b[2m    - waiting for navigation to finish...\u001b[22m\n\u001b[2m    - navigated to \"http://127.0.0.1:3010/studio/games\"\u001b[22m\n\u001b[2m    42 × locator resolved to <html lang=\"en\" dir=\"ltr\">…</html>\u001b[22m\n\u001b[2m       - unexpected value \"http://127.0.0.1:3010/studio/games\"\u001b[22m\n\n\n   at ../utils/manager.ts:27\n\n  25 |     await passwordInput.fill(MANAGER_PASSWORD)\n  26 |     await page.getByRole(\"button\", { name: t(\"common:submit\") }).click()\n> 27 |     await expect(page).toHaveURL(/\\/manager\\/config$/u)\n     |                        ^\n  28 |   }\n  29 | }\n  30 |\n    at loginManager (/evidence/runtime/packages/e2e/utils/manager.ts:27:24)\n    at createGame (/evidence/runtime/packages/e2e/utils/manager.ts:55:3)\n    at /evidence/runtime/packages/e2e/tests/tzila-public-stage-and-toolbar.spec.ts:436:17"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-22T17:20:55.374Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/evidence/runtime/packages/e2e/test-results/p0-acceptance/tzila-public-stage-and-too-8792c-ross-Viewports-Localization-chromium/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/evidence/runtime/packages/e2e/test-results/p0-acceptance/tzila-public-stage-and-too-8792c-ross-Viewports-Localization-chromium/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/evidence/runtime/packages/e2e/utils/manager.ts",
+                        "column": 24,
+                        "line": 27
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "13f454acff4512f0fa8d-1df178b68e519ab23d32",
+              "file": "tzila-public-stage-and-toolbar.spec.ts",
+              "line": 431,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-22T17:19:58.095Z",
+    "duration": 80479.991,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 3,
+    "flaky": 0
+  }
+}

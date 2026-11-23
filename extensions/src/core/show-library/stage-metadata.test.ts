@@ -43,12 +43,7 @@ describe("bound current-question stage metadata", () => {
     expect(Object.isFrozen(metadata)).toBe(true)
     expect(Reflect.set(metadata, "ordinal", 1)).toBe(false)
     expect(() =>
-      assertBoundPreviewStageMetadata({
-        draft,
-        plan,
-        currentQuestionId: id,
-        metadata,
-      }),
+      assertBoundPreviewStageMetadata(draft, plan, id, metadata),
     ).not.toThrow()
     expect(JSON.stringify(metadata)).not.toContain("Synthetic question")
     expect(JSON.stringify(metadata)).not.toContain(questionId("question-4"))
@@ -172,39 +167,29 @@ describe("bound current-question stage metadata", () => {
       previewStageMetadataSchema.parse({ ...metadata, ordinal: 2 }),
     ]) {
       expect(() =>
-        assertBoundPreviewStageMetadata({
-          draft: f.draft,
-          plan: f.plan,
-          currentQuestionId: id,
-          metadata: value as typeof metadata,
-        }),
+        assertBoundPreviewStageMetadata(
+          f.draft,
+          f.plan,
+          id,
+          value as typeof metadata,
+        ),
       ).toThrow("unbound-stage-metadata")
     }
     expect(() =>
-      assertBoundPreviewStageMetadata({
-        draft: f.draft,
-        plan: f.plan,
-        currentQuestionId: f.questionId("question-2"),
+      assertBoundPreviewStageMetadata(
+        f.draft,
+        f.plan,
+        f.questionId("question-2"),
         metadata,
-      }),
+      ),
     ).toThrow("unbound-stage-metadata")
     const other = fixture(),
       otherMetadata = derivePreviewStageMetadata(other.draft, other.plan, id)
     expect(() =>
-      assertBoundPreviewStageMetadata({
-        draft: f.draft,
-        plan: f.plan,
-        currentQuestionId: id,
-        metadata: otherMetadata,
-      }),
+      assertBoundPreviewStageMetadata(f.draft, f.plan, id, otherMetadata),
     ).toThrow("unbound-stage-metadata")
     expect(() =>
-      assertBoundPreviewStageMetadata({
-        draft: other.draft,
-        plan: other.plan,
-        currentQuestionId: id,
-        metadata,
-      }),
+      assertBoundPreviewStageMetadata(other.draft, other.plan, id, metadata),
     ).toThrow("unbound-stage-metadata")
   })
   it("is informational for a genuine unavailable plan and activates no capability or pin", () => {

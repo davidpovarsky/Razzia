@@ -51,7 +51,7 @@ const frame = {
   mediaRevealed: false,
   appearanceRevision: 0,
 }
-const frameScript = `(${async function installNativeFontAudit() {
+const frameScript = `(${async function inspectNativeFrame() {
   const { mount } = await import("/renderer.mjs")
   const rendererCss = await fetch("/renderer.css").then((r) => r.text())
   const rendererFrame = await fetch("/frame.json").then((r) => r.json())
@@ -160,7 +160,7 @@ const frameScript = `(${async function installNativeFontAudit() {
       return faces()
     },
   }
-}.toString()})()`
+}})()`
 const serve = async (req, res) => {
   res.setHeader("Content-Security-Policy", csp)
   const url = new URL(req.url, "http://127.0.0.1")

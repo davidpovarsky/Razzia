@@ -88,11 +88,13 @@ export interface CompositionPreviewIdentityEnvelopeV2 {
 export type PreviewIdentityDigestInput =
   PreviewIdentityEnvelope | CompositionPreviewIdentityEnvelopeV2
 
+const supportedIdentityVersion = (version: unknown): version is 1 | 2 =>
+  version === 1 || version === 2
+
 export function serializePreviewIdentity(
   input: PreviewIdentityDigestInput,
 ): string {
-  // oxlint-disable-next-line typescript/no-unnecessary-condition -- Reject unsupported runtime identity versions before hashing even when a caller bypasses the typed envelope.
-  if (input.version !== 1 && input.version !== 2) {
+  if (!supportedIdentityVersion(input.version)) {
     throw new Error("Unsupported preview identity version")
   }
 

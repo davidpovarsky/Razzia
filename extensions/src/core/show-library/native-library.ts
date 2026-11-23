@@ -1,15 +1,17 @@
 import classic from "../show-themes/classic.manifest.json" with { type: "json" }
 import razzia from "../show-themes/razzia.manifest.json" with { type: "json" }
 import { showThemeDefinitionSchema } from "../show-themes/definition"
+import { bundledOriginalThemes } from "../show-themes/original-themes"
 import {
   SHOW_THEME_AUDIO_EVENTS,
   SHOW_THEME_SLOTS,
 } from "../show-themes/selection"
 import { canonicalJson, sha256 } from "./digest"
 import { freeze } from "./primitives"
+import { createNativeLibraryPager } from "./native-library-page"
 
 /** Catalog metadata is not an executable preview pin or a media authorization. */
-const families = [classic, razzia].map((input) => {
+const families = [classic, razzia, ...bundledOriginalThemes].map((input) => {
   const definition = showThemeDefinitionSchema.parse(input)
 
   return {
@@ -48,11 +50,27 @@ export type NativeShowLibrary = typeof catalog
 
 export type NativeShowLibraryFamily = NativeShowLibrary["families"][number]
 
-// Exact bundled Classic/Razzia manifests, preserving all stored IDs and defaults.
+const readPage = createNativeLibraryPager(
+  {
+    format: catalog.format,
+    schemaVersion: catalog.schemaVersion,
+    id: catalog.id,
+    version: catalog.version,
+  },
+  catalog.families.map((value) => ({ collection: "families" as const, value })),
+)
+
+// Complete in-process inventory, preserving all stored IDs and defaults.
 // No caller definitions, code, URLs, clocks or audio players are registered here.
+// Serialized consumers use getNativeShowLibraryPage to retain the JSON budget.
 //
 export function getNativeShowLibrary(): NativeShowLibrary {
   return catalog
+}
+
+/** Complete immutable metadata in bounded, snapshot-bound transfer pages. */
+export function getNativeShowLibraryPage(input: unknown = {}) {
+  return readPage(input)
 }
 
 export function findNativeShowLibraryFamily(ref: {

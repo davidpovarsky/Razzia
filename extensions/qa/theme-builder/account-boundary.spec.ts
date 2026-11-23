@@ -1,5 +1,4 @@
 import playwright from "../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
-
 import { writeFile } from "node:fs/promises"
 import { isDeepStrictEqual } from "node:util"
 import { builderDocumentFixture } from "../../src/components/theme-builder/document.fixture"

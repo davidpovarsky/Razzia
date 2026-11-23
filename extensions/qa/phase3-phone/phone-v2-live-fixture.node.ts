@@ -13,7 +13,12 @@ import { tmpdir } from "node:os"
 import { join, resolve } from "node:path"
 import { after, test } from "node:test"
 import { io as connect } from "socket.io-client"
-import { EVENTS, QUIZZ_MODES, SESSION_ROLES } from "@razzia/common/constants"
+import {
+  EVENTS,
+  QUESTION_LEAD_IN_SECONDS,
+  QUIZZ_MODES,
+  SESSION_ROLES,
+} from "@razzia/common/constants"
 import { STATUS } from "@razzia/common/types/game/status"
 import type {
   Action,
@@ -63,7 +68,8 @@ const remember = (secret: string) => {
 
 process.env.CONFIG_PATH = configRoot
 process.env.JWT_SECRET = fixtureJwtSecret
-process.env.GAME_SPEED = process.env.PHASE3_PHONE_GAME_SPEED ?? "10"
+// Durable gateway custody uses real HTTP and filesystem time.
+process.env.GAME_SPEED = process.env.PHASE3_PHONE_GAME_SPEED ?? "1"
 process.env.TADAZZ_ACCOUNTS_ENABLED = "true"
 process.env.TADAZZ_BILLING_ENABLED = "false"
 process.env.RESEND_API_KEY = "synthetic-never-sent"
@@ -96,6 +102,19 @@ assert.equal(
   Number(process.env.GAME_SPEED),
   "@razzia/socket/env loaded before fixture GAME_SPEED initialization",
 )
+
+assert.ok(
+  Number.isFinite(envGameSpeed) && envGameSpeed > 0,
+  "Phone fixture GAME_SPEED must be finite and positive",
+)
+const gameTimeMs = (seconds: number) =>
+  Math.ceil((seconds * 1000) / envGameSpeed)
+const preparationSeconds = 2 + QUESTION_LEAD_IN_SECONDS
+const startupMs =
+  Math.max(1200, gameTimeMs(3)) + gameTimeMs(3 + preparationSeconds)
+const transitionAllowanceMs = 12_000
+const questionWaitMs = (seconds: number) =>
+  transitionAllowanceMs + gameTimeMs(seconds)
 
 const accountDb = await import("@razzia/socket/services/account-db")
 const account = await import("@razzia/socket/services/account-auth")
@@ -252,12 +271,7 @@ async function setupRoom(quizz: ReturnType<typeof createQuizz>) {
     key: keyPort,
   })
   adapter.initializeEmpty()
-  await factory.deliverGatewayAttempt({
-    token: subject.token,
-    attempt,
-    destination: adapter,
-    expectedStoredVersion: 0,
-  })
+  await factory.deliverGatewayAttempt(subject.token, attempt, adapter, 0)
   assert.equal((await adapter.activate(randomUUID())).state, "ACTIVE")
 
   return { subject, game, factory, adapter, target, keyPort }
@@ -332,6 +346,64 @@ async function waitFor(predicate: () => boolean, label: string, ms = 12_000) {
   }
 }
 
+function observeVoteTiming(
+  room: Awaited<ReturnType<typeof setupRoom>>,
+  seconds: number,
+) {
+  const startedAt = Date.now()
+  const windowMs = gameTimeMs(seconds)
+  const remainingBefore = room.game.roundManager.getPauseSnapshot().remainingMs
+
+  return () => ({
+    gameSpeed: envGameSpeed,
+    windowMs,
+    elapsedBeforePreparationMs:
+      remainingBefore === null ? null : windowMs - remainingBefore,
+    custodyOperationMs: Date.now() - startedAt,
+    remainingAfterReceiptMs:
+      room.game.roundManager.getPauseSnapshot().remainingMs,
+  })
+}
+
+function scoreEvidence(
+  room: Awaited<ReturnType<typeof setupRoom>>,
+  expected: {
+    rosterPlayerId: string
+    epoch: number
+    questionIndex: number
+    answerIndex: number
+  },
+) {
+  const round = room.game.roundManager
+  const state = room.game.getQuestionStateForGateway(expected.rosterPlayerId)
+  const ledger = round.getQuestionLedgerEntry(expected.questionIndex)
+  const answer = ledger?.answers[0]
+  const evidence = {
+    questionIndex: state.questionIndex,
+    engineEpoch: state.epoch,
+    phase: round.currentStepName,
+    paused: round.isPaused,
+    acceptingAnswers: state.acceptingAnswers,
+    ledgerAnswerCount: ledger?.answers.length ?? null,
+    rawAnswerPoints: answer?.points ?? null,
+    verdictEpoch: state.lastVerdict?.epoch ?? null,
+    verdictCorrect: state.lastVerdict?.correct ?? null,
+    verdictPoints: state.lastVerdict?.points ?? null,
+    totalPoints: state.points,
+  }
+  const detail = JSON.stringify(evidence)
+  assert.equal(round.isPaused, false, detail)
+  assert.equal(round.currentStepName, "reveal", detail)
+  assert.equal(state.acceptingAnswers, false, detail)
+  assert.equal(state.questionIndex, expected.questionIndex, detail)
+  assert.equal(state.epoch, expected.epoch, detail)
+  assert.equal(ledger?.skipped, false, detail)
+  assert.equal(ledger.answers.length, 1, detail)
+  assert.deepEqual(answer?.answerIds, [expected.answerIndex], detail)
+
+  return evidence
+}
+
 async function connectManager(room: Awaited<ReturnType<typeof setupRoom>>) {
   const socket = connect(baseUrl, {
     path: "/ws",
@@ -382,6 +454,7 @@ async function connectManager(room: Awaited<ReturnType<typeof setupRoom>>) {
       await waitFor(
         () => room.game.getQuestionStateForGateway().acceptingAnswers,
         "Q1 acceptingAnswers",
+        transitionAllowanceMs + startupMs,
       )
     },
     async advanceTo(predicate: () => boolean, label: string) {
@@ -501,7 +574,7 @@ after(async () => {
 
 test(
   "FULL-CHAIN-INVITE-AND-DENIALS: negative auth/invite checks and pre-registered 35-char caller scores via gateway-v2 custody",
-  { timeout: 45_000 },
+  { timeout: 45_000 + startupMs + gameTimeMs(20) },
   async () => {
     const q1 = createQuestion({
       answers: ["A", "B", "C", "D"],
@@ -569,6 +642,7 @@ test(
     const pollEpoch = requireEpoch(pollReceipt)
     assert.ok(pollEpoch >= 1)
 
+    const finishVoteTiming = observeVoteTiming(room, q1.time)
     const answerOp = makeOperation(room, invited.host, {
       operationId: randomUUID(),
       registrationId: bound.registrationId,
@@ -578,6 +652,7 @@ test(
       answerIndex: 1,
     })
     const answerReceipt = await answerOp.execute()
+    const voteTiming = finishVoteTiming()
     assert.equal(answerReceipt.ok, true)
     assert.equal(answerReceipt.status, "accepted")
 
@@ -586,24 +661,38 @@ test(
         !room.game.getQuestionStateForGateway(bound.rosterPlayerId)
           .acceptingAnswers,
       "Q1 voting window closed",
+      questionWaitMs(q1.time),
     )
+    const score = scoreEvidence(room, {
+      rosterPlayerId: bound.rosterPlayerId,
+      epoch: pollEpoch,
+      questionIndex: 0,
+      answerIndex: 1,
+    })
     const afterPoll = await makeOperation(room, invited.host, {
       operationId: randomUUID(),
       registrationId: bound.registrationId,
       generation: bound.generation,
       action: "poll",
     }).execute()
-    assert.ok((afterPoll.points ?? 0) > 0)
+    assert.ok(
+      (afterPoll.points ?? 0) > 0,
+      JSON.stringify({ voteTiming, score }),
+    )
     observations.push({
       test: "FULL-CHAIN-INVITE-AND-DENIALS",
       points: afterPoll.points,
+      voteTiming,
+      score,
     })
   },
 )
 
 test(
   "FULL-CHAIN-20S-WINDOW-SKIP-AND-REPLACEMENT: full gateway-v2 custody enforces 20s window, unbricked rejections, manual skip, and A->B replacement",
-  { timeout: 60_000 },
+  {
+    timeout: 60_000 + startupMs + gameTimeMs(40 + 2 * preparationSeconds),
+  },
   async () => {
     const q1 = createQuestion({
       answers: ["One", "Two", "Three", "Four"],
@@ -690,6 +779,7 @@ test(
     assert.equal(room.game.roundManager.resumeGame(), true)
 
     // Caller votes correctly on Q1; duplicate press rejects cleanly
+    const finishQ1VoteTiming = observeVoteTiming(room, q1.time)
     const voteQ1 = await makeOperation(room, callA.host, {
       operationId: randomUUID(),
       registrationId: boundA.registrationId,
@@ -698,6 +788,7 @@ test(
       epoch: q1Epoch,
       answerIndex: 2,
     }).execute()
+    const q1VoteTiming = finishQ1VoteTiming()
     assert.equal(voteQ1.ok, true)
     assert.equal(voteQ1.status, "accepted")
 
@@ -718,6 +809,7 @@ test(
         !room.game.getQuestionStateForGateway(boundA.rosterPlayerId)
           .acceptingAnswers,
       "Q1 20s window close",
+      questionWaitMs(q1.time),
     )
     const lateIntent: GatewayOperationIntent = {
       operationId: randomUUID(),
@@ -733,10 +825,16 @@ test(
     assert.equal(lateFirst.status, "not_accepting_answers")
     assert.deepEqual(await lateOp.execute(), lateFirst)
 
+    const q1Score = scoreEvidence(room, {
+      rosterPlayerId: boundA.rosterPlayerId,
+      epoch: q1Epoch,
+      questionIndex: 0,
+      answerIndex: 2,
+    })
     const pointsQ1 = room.game.getQuestionStateForGateway(
       boundA.rosterPlayerId,
     ).points
-    assert.ok(pointsQ1 > 0)
+    assert.ok(pointsQ1 > 0, JSON.stringify({ q1VoteTiming, q1Score }))
 
     // Advance to Q2 (estimation) -> unsupported_question_type does not brick binding
     await host.advanceTo(
@@ -792,6 +890,7 @@ test(
         room.game.getQuestionStateForGateway(boundA.rosterPlayerId)
           .acceptingAnswers,
       "Q3 acceptingAnswers",
+      questionWaitMs(preparationSeconds),
     )
 
     const attemptB: GatewayCallAttempt = {
@@ -813,6 +912,7 @@ test(
     assert.equal(room.game.players[0]?.connected, true)
 
     // B votes on Q3 and earns additional points
+    const finishQ3VoteTiming = observeVoteTiming(room, q3.time)
     const voteQ3 = await makeOperation(room, callB.host, {
       operationId: randomUUID(),
       registrationId: boundB.registrationId,
@@ -821,6 +921,7 @@ test(
       epoch: postSkip.epoch,
       answerIndex: 0,
     }).execute()
+    const q3VoteTiming = finishQ3VoteTiming()
     assert.equal(voteQ3.ok, true)
     assert.equal(voteQ3.status, "accepted")
 
@@ -829,11 +930,21 @@ test(
         !room.game.getQuestionStateForGateway(boundB.rosterPlayerId)
           .acceptingAnswers,
       "Q3 window closed",
+      questionWaitMs(q3.time),
     )
+    const q3Score = scoreEvidence(room, {
+      rosterPlayerId: boundB.rosterPlayerId,
+      epoch: postSkip.epoch,
+      questionIndex: 2,
+      answerIndex: 0,
+    })
     const finalPoints = room.game.getQuestionStateForGateway(
       boundB.rosterPlayerId,
     ).points
-    assert.ok(finalPoints > pointsQ1)
+    assert.ok(
+      finalPoints > pointsQ1,
+      JSON.stringify({ pointsQ1, q3VoteTiming, q3Score }),
+    )
     assert.equal(room.game.getHostPresenceSnapshot().connectedNow, 1)
 
     // B hangs up cleanly -> TERMINAL blocks subsequent redial C
@@ -860,6 +971,10 @@ test(
       test: "FULL-CHAIN-20S-WINDOW-SKIP-AND-REPLACEMENT",
       pointsQ1,
       finalPoints,
+      q1VoteTiming,
+      q1Score,
+      q3VoteTiming,
+      q3Score,
     })
   },
 )

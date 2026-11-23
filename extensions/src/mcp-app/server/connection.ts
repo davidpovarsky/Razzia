@@ -80,8 +80,7 @@ export function guardedConnection(
         lives.settledWork(op)
       }
     },
-    // oxlint-disable-next-line typescript/no-invalid-void-type -- TypeScript this: void declares a receiver-free callback; it is erased and is not a runtime argument.
-    async connect(this: void, inner: Transport) {
+    async connect(inner: Transport) {
       if (connected || lives.closed) {
         throw new Error("One guarded connection per factory")
       }
@@ -101,7 +100,7 @@ export function guardedConnection(
 
         transport.onclose?.()
       }
-      closeInner = () => {
+      const closeTransport = () => {
         // Terminal BEFORE awaiting the underlying transport.
 
         end()
@@ -114,12 +113,12 @@ export function guardedConnection(
 
         return closePromise
       }
-      const closeConnectedTransport = closeInner
+      closeInner = closeTransport
       const terminate = (message: string) => {
         report(message)
         // Failure is already reported safely.
 
-        void closeConnectedTransport().catch(() => {
+        void closeTransport().catch(() => {
           /* The close path already reports its failure through the guarded transport. */
         })
       }
@@ -188,7 +187,7 @@ export function guardedConnection(
             )
           } catch {
             report("Transport send failed")
-            await closeConnectedTransport().catch(() => {
+            await closeTransport().catch(() => {
               /* Preserve the original send failure after the close attempt settles. */
             })
             throw new Error("Transport send failed")
@@ -200,7 +199,7 @@ export function guardedConnection(
             releaseSend()
           }
         },
-        close: () => closeConnectedTransport(),
+        close: () => closeTransport(),
         async start() {
           inner.onclose = end
           inner.onerror = () => terminate("Transport failure")
@@ -275,17 +274,16 @@ export function guardedConnection(
               params?: { name?: unknown }
             }
             const name = toolNames.find((n) => n === incoming.params?.name)
-            const isCurrentOperation = (operation: Operation) =>
-              lives.current(operation) && !operation.cancelled
+            const isCurrent = () => lives.current(op) && !op.cancelled
             void (async () => {
               try {
-                if (!isCurrentOperation(op)) {
+                if (!isCurrent()) {
                   return
                 }
 
-                const principal = await authorize({ name, extra, deps, config })
+                const principal = await authorize(name, extra, deps, config)
 
-                if (!isCurrentOperation(op)) {
+                if (!isCurrent()) {
                   return
                 }
 
@@ -304,12 +302,12 @@ export function guardedConnection(
                 op.principal = principal
                 forward()
               } catch (error) {
-                if (!isCurrentOperation(op)) {
+                if (!isCurrent()) {
                   return
                 }
 
                 const result = server.server.projectCallToolResult(
-                  failureResult({ name, error, config }),
+                  failureResult(name, error, config),
                   undefined,
                 )
                 await transport.send(
@@ -344,8 +342,7 @@ export function guardedConnection(
         throw new Error("Transport connection failed")
       }
     },
-    // oxlint-disable-next-line typescript/no-invalid-void-type -- TypeScript this: void declares a receiver-free callback; it is erased and is not a runtime argument.
-    async close(this: void) {
+    async close() {
       if (closeInner) {
         await closeInner()
       } else {

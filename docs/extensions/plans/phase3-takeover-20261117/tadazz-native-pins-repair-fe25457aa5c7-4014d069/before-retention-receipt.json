@@ -1,0 +1,11 @@
+{
+  "archiveSha256": "6890b494e330d0a2480ac1a23fccab8bd5a13b113d8935a524e0ea924f2f9c90",
+  "archiveBytes": 1380412,
+  "captureReceiptSha256": "e0416907575add726138747b620bf702eb87f1f0c580c9fa7a67dbfe3361f16f",
+  "failedNativeReceiptSha256": "b99b70e104136f42d9a3a69fa23d09a24e940b8a17a792e70b756872f73ad539",
+  "inputManifestSha256": "bb651d7dec9b0e4afb34afa1fd29cbaac5cc6f7b5d0af4d3e62bfd823ebd8ba1",
+  "sourceTreeSha256": "0b1e4879e6a50999ada3ecbc55d3a87fdba5c7d9d871910a7f47f2d58fabec9b",
+  "sourceEntries": 2680,
+  "allExtractedHashesVerified": true,
+  "sourceMutationStarted": false
+}

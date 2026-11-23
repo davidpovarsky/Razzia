@@ -686,8 +686,11 @@ async function runChild() {
   }
 
   if (phase === "after-f-outcome") {
-    // oxlint-disable-next-line typescript/unbound-method -- This synthetic crash child calls the raw SQLite method with each live connection receiver; binding it to the prototype would change the fault injection.
-    const original = DatabaseSync.prototype.exec
+    const original = Object.getOwnPropertyDescriptor(
+      DatabaseSync.prototype,
+      "exec",
+    )?.value as ((this: DatabaseSync, sql: string) => void) | undefined
+    assert.ok(typeof original === "function")
     DatabaseSync.prototype.exec = function exec(sql: string) {
       const result = original.call(this, sql)
 
@@ -1206,178 +1209,177 @@ if (childMode) {
     assert.equal(nativeCount(), nativeCountAfter2)
   })
 
-  async function verifyNativeRetryPhase(
-    phase: "before-native" | "after-native" | "after-f-outcome",
-  ) {
-    const token = await linked()
-    const prepared = await pending(token, `Crash snapshot ${phase}`)
-    await inspectAndApprove(prepared)
-    const principal = await requireInitializedIssuer().verifyAccessToken(token)
-    const nativeCountBefore7 = nativeCount()
-    const name = `actor-${phase}-${key()}`
-    const descriptor = path.join(requireInitializedF().root, `${name}.json`)
-    const checkpoint = path.join(
-      requireInitializedF().root,
-      `${name}.checkpoint.json`,
-    )
-    const reply = path.join(requireInitializedF().root, `${name}.reply.json`)
-    const { nativeSave: _native, ...publicOptions } =
-      requireInitializedOptions()
-    writeDurable(descriptor, {
-      root: requireInitializedF().root,
-      nonce: fixtureNonce,
-      owner: requireInitializedF().sessions[0].owner,
-      syntheticSecret: requireInitializedF().syntheticSecret,
-      grantId: principal.grantId,
-      token,
-      input: prepared.input,
-      options: publicOptions,
-      encryptionKey: Buffer.from(
-        requireInitializedOptions().ticketEncryptionKey,
-      ).toString("base64"),
-      checkpoint,
-      reply,
-    })
-    const bundle = fileURLToPath(import.meta.url)
-    const lost = spawnSync(
-      process.execPath,
-      [bundle, "native-child", phase, descriptor],
-      { encoding: "utf8", timeout: 20000 },
-    )
-    assert.equal(lost.signal, "SIGKILL", lost.stdout + lost.stderr)
-    assert.equal(fs.existsSync(reply), false)
-    const observed = requireNativeSaveRecord(
-      JSON.parse(fs.readFileSync(checkpoint, "utf8")),
-    )
-    assert.equal(observed.phase, phase)
-    assert.equal(
-      observed.state,
-      phase === "after-f-outcome" ? "saved" : "publishing",
-    )
-
-    if (phase === "after-native") {
-      assert.equal(
-        (
-          await rpc(token, "update_game_draft", {
-            contractVersion: "0.1.0",
-            draftId: prepared.input.draftId,
-            expectedRevision: 1,
-            authoredShowJson: requireNativeSaveString(
-              createInput("Later current draft").authoredShowJson,
-            ),
-            idempotencyKey: key(),
-          })
-        ).ok,
-        true,
-      )
-    }
-
-    const replay = spawnSync(
-      process.execPath,
-      [bundle, "native-child", "replay", descriptor],
-      { encoding: "utf8", timeout: 20000 },
-    )
-    assert.equal(replay.status, 0, replay.stdout + replay.stderr)
-    const completed = requireNativeSaveRecord(
-      JSON.parse(fs.readFileSync(reply, "utf8")),
-    )
-
-    assert.equal(
-      requireNativeSaveRecord(completed.result).ok,
-      true,
-      JSON.stringify(completed),
-    )
-    assert.equal(nativeCount(), nativeCountBefore7 + 1)
-
-    if (observed.result) {
-      assert.equal(
-        requireNativeSaveString(
-          requireNativeSaveRecord(
-            requireNativeSaveRecord(completed.result).data,
-          ).quizId,
-        ),
-        requireNativeSaveString(
-          requireNativeSaveRecord(observed.result).quizId,
-        ),
-      )
-    }
-
-    if (observed.outcome) {
-      assert.deepEqual(
-        requireNativeSaveRecord(completed.result).data,
-        observed.outcome,
-      )
-    }
-
-    const loaded = await requireInitializedF().as(
-      requireInitializedF().sessions[0],
-      () =>
-        requireInitializedNative().getQuizzById(
-          requireNativeSaveString(
-            requireNativeSaveRecord(
-              requireNativeSaveRecord(completed.result).data,
-            ).quizId,
-          ),
-        ),
-    )
-    assert.equal(loaded.subject, `Crash snapshot ${phase}`)
-
-    if (phase === "after-f-outcome") {
-      await requireInitializedF().as(requireInitializedF().sessions[0], () =>
-        requireInitializedNative().deleteQuizz(
-          requireNativeSaveString(
-            requireNativeSaveRecord(
-              requireNativeSaveRecord(completed.result).data,
-            ).quizId,
-          ),
-        ),
-      )
-      fs.unlinkSync(
-        path.join(
+  ;(["before-native", "after-native", "after-f-outcome"] as const).forEach(
+    (phase) => {
+      test(`fresh real F/C1 retry after genuine SIGKILL ${phase} retains one operation and target`, async () => {
+        const token = await linked()
+        const prepared = await pending(token, `Crash snapshot ${phase}`)
+        await inspectAndApprove(prepared)
+        const principal =
+          await requireInitializedIssuer().verifyAccessToken(token)
+        const nativeCountBefore7 = nativeCount()
+        const name = `actor-${phase}-${key()}`
+        const descriptor = path.join(requireInitializedF().root, `${name}.json`)
+        const checkpoint = path.join(
           requireInitializedF().root,
-          "tenants",
-          requireInitializedF().sessions[0].owner,
-          "extensions/quizzes",
-          `${requireNativeSaveString(requireNativeSaveRecord(requireNativeSaveRecord(completed.result).data).quizId)}.json`,
-        ),
-      )
-      const afterDelete = nativeCount()
-      assert.deepEqual(
-        (await rpc(token, "save_game", prepared.input)).data,
-        requireNativeSaveRecord(completed.result).data,
-      )
-      assert.equal(nativeCount(), afterDelete)
-    }
-
-    writeDurable(
-      path.join(requireInitializedF().root, `${name}.verified.json`),
-      {
-        phase,
-        killedPid: observed.pid,
-        signal: lost.signal,
-        replayPid: completed.pid,
-        replayExit: replay.status,
-        result: requireNativeSaveRecord(completed.result).data,
-        nativeCountBefore: nativeCountBefore7,
-        nativeCountAfter: nativeCount(),
-        finalState: savedRow({
+          `${name}.checkpoint.json`,
+        )
+        const reply = path.join(
+          requireInitializedF().root,
+          `${name}.reply.json`,
+        )
+        const { nativeSave: _native, ...publicOptions } =
+          requireInitializedOptions()
+        writeDurable(descriptor, {
           root: requireInitializedF().root,
+          nonce: fixtureNonce,
           owner: requireInitializedF().sessions[0].owner,
+          syntheticSecret: requireInitializedF().syntheticSecret,
           grantId: principal.grantId,
-          requestKey: prepared.input.idempotencyKey,
-        }).state,
-      },
-    )
-  }
+          token,
+          input: prepared.input,
+          options: publicOptions,
+          encryptionKey: Buffer.from(
+            requireInitializedOptions().ticketEncryptionKey,
+          ).toString("base64"),
+          checkpoint,
+          reply,
+        })
+        const bundle = fileURLToPath(import.meta.url)
+        const lost = spawnSync(
+          process.execPath,
+          [bundle, "native-child", phase, descriptor],
+          { encoding: "utf8", timeout: 20000 },
+        )
+        assert.equal(lost.signal, "SIGKILL", lost.stdout + lost.stderr)
+        assert.equal(fs.existsSync(reply), false)
+        const observed = requireNativeSaveRecord(
+          JSON.parse(fs.readFileSync(checkpoint, "utf8")),
+        )
+        assert.equal(observed.phase, phase)
+        assert.equal(
+          observed.state,
+          phase === "after-f-outcome" ? "saved" : "publishing",
+        )
 
-  for (const phase of [
-    "before-native",
-    "after-native",
-    "after-f-outcome",
-  ] as const) {
-    test(`fresh real F/C1 retry after genuine SIGKILL ${phase} retains one operation and target`, () =>
-      verifyNativeRetryPhase(phase))
-  }
+        if (phase === "after-native") {
+          assert.equal(
+            (
+              await rpc(token, "update_game_draft", {
+                contractVersion: "0.1.0",
+                draftId: prepared.input.draftId,
+                expectedRevision: 1,
+                authoredShowJson: requireNativeSaveString(
+                  createInput("Later current draft").authoredShowJson,
+                ),
+                idempotencyKey: key(),
+              })
+            ).ok,
+            true,
+          )
+        }
+
+        const replay = spawnSync(
+          process.execPath,
+          [bundle, "native-child", "replay", descriptor],
+          { encoding: "utf8", timeout: 20000 },
+        )
+        assert.equal(replay.status, 0, replay.stdout + replay.stderr)
+        const completed = requireNativeSaveRecord(
+          JSON.parse(fs.readFileSync(reply, "utf8")),
+        )
+
+        assert.equal(
+          requireNativeSaveRecord(completed.result).ok,
+          true,
+          JSON.stringify(completed),
+        )
+        assert.equal(nativeCount(), nativeCountBefore7 + 1)
+
+        if (observed.result) {
+          assert.equal(
+            requireNativeSaveString(
+              requireNativeSaveRecord(
+                requireNativeSaveRecord(completed.result).data,
+              ).quizId,
+            ),
+            requireNativeSaveString(
+              requireNativeSaveRecord(observed.result).quizId,
+            ),
+          )
+        }
+
+        if (observed.outcome) {
+          assert.deepEqual(
+            requireNativeSaveRecord(completed.result).data,
+            observed.outcome,
+          )
+        }
+
+        const loaded = await requireInitializedF().as(
+          requireInitializedF().sessions[0],
+          () =>
+            requireInitializedNative().getQuizzById(
+              requireNativeSaveString(
+                requireNativeSaveRecord(
+                  requireNativeSaveRecord(completed.result).data,
+                ).quizId,
+              ),
+            ),
+        )
+        assert.equal(loaded.subject, `Crash snapshot ${phase}`)
+
+        if (phase === "after-f-outcome") {
+          await requireInitializedF().as(
+            requireInitializedF().sessions[0],
+            () =>
+              requireInitializedNative().deleteQuizz(
+                requireNativeSaveString(
+                  requireNativeSaveRecord(
+                    requireNativeSaveRecord(completed.result).data,
+                  ).quizId,
+                ),
+              ),
+          )
+          fs.unlinkSync(
+            path.join(
+              requireInitializedF().root,
+              "tenants",
+              requireInitializedF().sessions[0].owner,
+              "extensions/quizzes",
+              `${requireNativeSaveString(requireNativeSaveRecord(requireNativeSaveRecord(completed.result).data).quizId)}.json`,
+            ),
+          )
+          const afterDelete = nativeCount()
+          assert.deepEqual(
+            (await rpc(token, "save_game", prepared.input)).data,
+            requireNativeSaveRecord(completed.result).data,
+          )
+          assert.equal(nativeCount(), afterDelete)
+        }
+
+        writeDurable(
+          path.join(requireInitializedF().root, `${name}.verified.json`),
+          {
+            phase,
+            killedPid: observed.pid,
+            signal: lost.signal,
+            replayPid: completed.pid,
+            replayExit: replay.status,
+            result: requireNativeSaveRecord(completed.result).data,
+            nativeCountBefore: nativeCountBefore7,
+            nativeCountAfter: nativeCount(),
+            finalState: savedRow({
+              root: requireInitializedF().root,
+              owner: requireInitializedF().sessions[0].owner,
+              grantId: principal.grantId,
+              requestKey: prepared.input.idempotencyKey,
+            }).state,
+          },
+        )
+      })
+    },
+  )
 
   test("an uncertain private ledger journal is preserved and cannot authorize another native save", async () => {
     const token = await linked()

@@ -135,7 +135,7 @@ describe("independent native asset/audio metadata without new playback authority
     expect(new Set(library.events.map((entry) => entry.event)).size).toBe(16)
     expect(library.playbackOwner).toBe("existing-audio-cue-player")
     for (const event of library.events) {
-      expect(event.families).toHaveLength(2)
+      expect(event.families).toHaveLength(10)
       for (const item of event.families) {
         const family = getNativeShowLibrary().families.find(
           (value) => value.ref.id === item.theme.id,

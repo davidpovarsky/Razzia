@@ -2,7 +2,7 @@ import { createServer } from "node:http"
 import { readFile, mkdir, writeFile } from "node:fs/promises"
 import { createHash } from "node:crypto"
 import assert from "node:assert/strict"
-import { resolve as resolvePath } from "node:path"
+import { resolve } from "node:path"
 import { pathToFileURL } from "node:url"
 import { chromium, webkit } from "../../node_modules/@playwright/test/index.mjs"
 
@@ -18,7 +18,7 @@ const getEvidenceLocation = () => {
     }
 
     return new URL(
-      pathToFileURL(resolvePath(rawEvidence)).href.replace(/\/?$/u, "/"),
+      pathToFileURL(resolve(rawEvidence)).href.replace(/\/?$/u, "/"),
     )
   }
 
@@ -90,8 +90,8 @@ const server = createServer((request, response) => {
 let browser = null
 
 try {
-  await new Promise((resolve) => {
-    server.listen(0, "127.0.0.1", resolve)
+  await new Promise((listening) => {
+    server.listen(0, "127.0.0.1", listening)
   })
   const address = server.address()
 
@@ -369,8 +369,8 @@ try {
   })
 } finally {
   await browser?.close()
-  await new Promise((resolve) => {
-    server.close(resolve)
+  await new Promise((closed) => {
+    server.close(closed)
   })
   report.ownBrowserAndLoopbackClosed = true
   await writeFile(

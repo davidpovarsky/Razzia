@@ -279,46 +279,59 @@ describe("explicit composition V2 while preserving V1 admission and data", () =>
 })
 
 describe("bound V2 renderer input with the existing asset-free frame", () => {
-  it.each(["tadazz-classic", "razzia-original"])(
-    "binds actual %s defaults and all15 effective native slots",
-    (id) => {
-      const f = fixture(id),
-        result = produceCompositionNativePreviewInputV2(
-          f.preview,
-          f.snapshot,
-          f.binding,
-        )
-      expect(result.kind).toBe("candidate")
-
-      if (result.kind !== "candidate") {
-        throw new Error("fixture")
-      }
-
-      const family = findNativeShowLibraryFamily({ id, version: "1.0.0" })!
-      expect(result.input.themeBinding.theme).toEqual(family.ref)
-      expect(result.input.themeBinding.definitionSha256).toBe(
-        family.definitionSha256,
+  it.each([
+    "tadazz-classic",
+    "razzia-original",
+    "royal-quiz",
+    "neon-arcade",
+    "retro-tv",
+    "magic-storybook",
+    "crystal-future",
+    "carnival-pop",
+    "sports-arena",
+    "mystery-noir",
+  ])("binds actual %s defaults and all15 effective native slots", (id) => {
+    const f = fixture(id),
+      result = produceCompositionNativePreviewInputV2(
+        f.preview,
+        f.snapshot,
+        f.binding,
       )
-      expect(Object.keys(result.input.themeBinding.slots)).toHaveLength(15)
-      expect(
-        nativePreviewFrameV1Schema.safeParse(result.input.frame).success,
-      ).toBe(true)
-      expect(
-        nativePreviewRendererInputV1Schema.safeParse(result.input).success,
-      ).toBe(false)
-      expect(result.executableAcceptance).toBe(false)
-      expect(result.input.frame.seconds).toBe(20)
-      expect(JSON.stringify(result.input)).not.toContain("Synthetic question 4")
-      expect(JSON.stringify(result.input)).not.toContain("https://")
-      expect(() =>
-        assertCompositionNativePreviewInputV2(
-          f.preview,
-          f.binding,
-          result.input,
-        ),
-      ).not.toThrow()
-    },
-  )
+    expect(result.kind).toBe("candidate")
+
+    if (result.kind !== "candidate") {
+      throw new Error("fixture")
+    }
+
+    const family = findNativeShowLibraryFamily({ id, version: "1.0.0" })!
+    expect(result.input.themeBinding.theme).toEqual(family.ref)
+    let expectedRenderer = "tadazz-original-stage"
+
+    if (id === "tadazz-classic") {
+      expectedRenderer = "tadazz-classic-stage"
+    } else if (id === "razzia-original") {
+      expectedRenderer = "razzia-native-stage"
+    }
+
+    expect(result.input.themeBinding.rendererId).toBe(expectedRenderer)
+    expect(result.input.themeBinding.definitionSha256).toBe(
+      family.definitionSha256,
+    )
+    expect(Object.keys(result.input.themeBinding.slots)).toHaveLength(15)
+    expect(
+      nativePreviewFrameV1Schema.safeParse(result.input.frame).success,
+    ).toBe(true)
+    expect(
+      nativePreviewRendererInputV1Schema.safeParse(result.input).success,
+    ).toBe(false)
+    expect(result.executableAcceptance).toBe(false)
+    expect(result.input.frame.seconds).toBe(20)
+    expect(JSON.stringify(result.input)).not.toContain("Synthetic question 4")
+    expect(JSON.stringify(result.input)).not.toContain("https://")
+    expect(() =>
+      assertCompositionNativePreviewInputV2(f.preview, f.binding, result.input),
+    ).not.toThrow()
+  })
   it("uses native role/card precedence without changing the authoritative clock or replaying on ticks", () => {
     const settings = {
       ...presentation(),

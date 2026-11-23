@@ -1348,23 +1348,38 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         )
       }
 
-      // The native header places its title and timer in separate columns.
-      // Keep the vertical-stack assertions below for the player reveal layout.
+      // 4. Native title and timer sit side by side; their visible boxes must not intersect.
+      const questionTitle = spectatorPage
+        .getByTestId("tadazz-question-panel")
+        .locator(".q-text")
+      const questionTimer = spectatorPage.getByTestId("tadazz-timer")
+      await expect(questionTitle).toBeVisible()
+      await expect(questionTimer).toBeVisible()
       const [titleBox, timerBox] = await Promise.all([
-        spectatorPage
-          .locator('[data-testid="tadazz-question-panel"] .q-text')
-          .boundingBox(),
-        spectatorPage.getByTestId("tadazz-timer").boundingBox(),
+        questionTitle.boundingBox(),
+        questionTimer.boundingBox(),
       ])
 
       if (!titleBox || !timerBox) {
-        throw new Error(`Native title or timer is missing @ ${vp.name}`)
+        throw new Error(`Q1 Title / Timer bounds missing @ ${vp.name}`)
+      }
+
+      for (const bounds of [titleBox, timerBox]) {
+        expect(bounds.width, `Q1 positive width @ ${vp.name}`).toBeGreaterThan(
+          0,
+        )
+        expect(
+          bounds.height,
+          `Q1 positive height @ ${vp.name}`,
+        ).toBeGreaterThan(0)
       }
 
       expect(
-        titleBox.x + titleBox.width <= timerBox.x + 2 ||
-          timerBox.x + timerBox.width <= titleBox.x + 2,
-        `Native title and timer overlap horizontally @ ${vp.name}`,
+        titleBox.x + titleBox.width <= timerBox.x ||
+          timerBox.x + timerBox.width <= titleBox.x ||
+          titleBox.y + titleBox.height <= timerBox.y ||
+          timerBox.y + timerBox.height <= titleBox.y,
+        `Q1 Title / Timer overlap @ ${vp.name}: ${JSON.stringify({ titleBox, timerBox })}`,
       ).toBe(true)
 
       if (
@@ -1899,7 +1914,54 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       },
     )
     expect(createRes.status()).toBe(201)
-    await managerPage.reload()
+    const { quizId } = (await createRes.json()) as { quizId: string }
+    await managerPage.goto(`/manager/quizz/${quizId}`)
+    await managerPage.getByTestId("editor-mode-advanced").click()
+    const recapCard = managerPage
+      .getByTestId("editor-timeline")
+      .getByTestId("editor-scene-card")
+      .filter({
+        has: managerPage.getByRole("button", {
+          name: "Cumulative Show Answer Recap",
+          exact: true,
+        }),
+      })
+    await expect(recapCard).toHaveCount(1)
+    await recapCard.getByTestId("editor-scene-select").click()
+    const editorStage = managerPage.getByTestId("studio-scene-preview-stage")
+    const editorRecap = editorStage.getByTestId("tadazz-screen-recap")
+    await expect(editorRecap).toBeVisible()
+    await expect(
+      editorRecap.getByText("Cumulative Show Answer Recap", { exact: true }),
+    ).toBeVisible()
+    // Editor samples carry no responses: a survey retains its question text,
+    // while a quiz can show its authored correct answer without invented votes.
+    await expect(editorRecap.locator(".answer-title")).toHaveText([
+      "Wave 2 Survey Q1: Which visual theme do you prefer?",
+      "Mars",
+    ])
+    await expect(
+      editorStage.locator("[data-editor-preview-fallback]"),
+    ).toHaveCount(0)
+    const stableRecap = await editorRecap.elementHandle()
+    // Layout changes allocate equivalent scene data without replaying the scene.
+    for (const aspect of ["4-3", "16-9"]) {
+      const control = managerPage.getByTestId(`studio-preview-aspect-${aspect}`)
+      await control.click()
+      await expect(control).toHaveAttribute("aria-pressed", "true")
+      await managerPage.evaluate(
+        () =>
+          new Promise<void>((resolve) => {
+            requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+          }),
+      )
+      expect(await stableRecap.evaluate((element) => element.isConnected)).toBe(
+        true,
+      )
+    }
+    await stableRecap.dispose()
+    await saveScreenshot(managerPage, "wave2_editor_native_recap.png")
+    await managerPage.goto("/manager/config")
     const pin = await createGame(
       managerPage,
       "Wave 2 Cinema, Audio, Motion & Answer Recap Show",

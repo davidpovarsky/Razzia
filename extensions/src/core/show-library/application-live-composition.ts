@@ -3,6 +3,8 @@ import { applicationAppearanceSchema } from "./application-preview-schema"
 import { resolveApplicationTemplate } from "./application-library"
 import type { PreviewPhase, PreviewRole } from "./primitives"
 import { applicationCardScopeId } from "./application-composition-pin"
+import { resolveShowTheme } from "../show-themes/resolve"
+import { isOriginalThemeId } from "../show-themes/original-theme-families"
 
 interface Envelope {
   phase?: string
@@ -127,6 +129,20 @@ export function applicationCompositionRenderer(
 
   if (resolved.kind !== "ready") {
     return null
+  }
+
+  const defaults = envelope?.extras.defaults as
+    { showTheme?: unknown } | undefined
+  const theme = resolveShowTheme({
+    selection: defaults?.showTheme ?? resolved.appearance.document.selection,
+    role,
+  })
+
+  if (
+    theme.definition.rendererId === "tadazz-original-stage" &&
+    isOriginalThemeId(theme.definition.id)
+  ) {
+    return "tadazz-original-stage"
   }
 
   const component = resolved.template.nodes.find(

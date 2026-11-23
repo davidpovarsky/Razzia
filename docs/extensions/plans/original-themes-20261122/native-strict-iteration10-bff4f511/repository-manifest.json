@@ -1,0 +1,226 @@
+{
+  "candidateSha": "6a858c0256ae1f5fc98d67585b7d17ab3513eda0",
+  "completedFamilies": [
+    "royal-quiz",
+    "neon-arcade",
+    "retro-tv",
+    "magic-storybook",
+    "crystal-future",
+    "carnival-pop",
+    "sports-arena",
+    "mystery-noir"
+  ],
+  "diagnosticOnly": true,
+  "files": {
+    "browser.stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "browser.stdout.log": {
+      "bytes": 11625,
+      "sha256": "f9afb9c33bd851b401a70f13b1130a8e4991f8f3a8049885cb0bc1647b070fa6"
+    },
+    "browser/native-carnival-pop-2-choices.png": {
+      "bytes": 340530,
+      "sha256": "698a33e0243af1cf65fec35d5bb07fc54553ce5bc542ec3e9dafbf164a717e5a"
+    },
+    "browser/native-carnival-pop-3-choices.png": {
+      "bytes": 348919,
+      "sha256": "60f9bff0c61434eeba68afc9c95348f2430d98223ffdcef534b7603a5a1ceced"
+    },
+    "browser/native-carnival-pop-4-choices.png": {
+      "bytes": 354242,
+      "sha256": "a54f7e460d8a815809a3dbc1fc8e2407934b89d88496001b4fdd45a0a310f7ef"
+    },
+    "browser/native-carnival-pop-5-choices.png": {
+      "bytes": 396150,
+      "sha256": "f48c04ad248a8540307afadb2be0b04e5cab205e6d7314a712ab0cb50425b1b4"
+    },
+    "browser/native-carnival-pop.json": {
+      "bytes": 194460,
+      "sha256": "8d81545b1aaf478d3aafce7b2a1650273dee16897552c28a5fcbe488cea5ed8d"
+    },
+    "browser/native-crystal-future-2-choices.png": {
+      "bytes": 591672,
+      "sha256": "2ffdf5d10354c1a6687708d590db29d4e0d289a96cb0458cfd66478abc56711d"
+    },
+    "browser/native-crystal-future-3-choices.png": {
+      "bytes": 589964,
+      "sha256": "fa898425ccecc0491114f44fc8d3d9b3862afaa6c38fed4a91d54de3b31d2208"
+    },
+    "browser/native-crystal-future-4-choices.png": {
+      "bytes": 597012,
+      "sha256": "02e439d06b8058cf85609d1921d21975c382c7957b1de20d8081037fb6938103"
+    },
+    "browser/native-crystal-future-5-choices.png": {
+      "bytes": 619461,
+      "sha256": "4e578ad0ded0b02f2fa0d31715078a6cce85a9847205520315d3d6946c1c1e92"
+    },
+    "browser/native-crystal-future.json": {
+      "bytes": 181725,
+      "sha256": "9931b95dc27ea45bd4721b41b26d4a2efcd4706ff567953513f79710c747e491"
+    },
+    "browser/native-magic-storybook-2-choices.png": {
+      "bytes": 451405,
+      "sha256": "fb3c058aa30eaf3ae4b13c4812edd05eed588737cd3c7c288fe1b5589a2492a7"
+    },
+    "browser/native-magic-storybook-3-choices.png": {
+      "bytes": 465844,
+      "sha256": "a17bf405f0229d0feb1ec3c42752562e40600035486b455904c75f3b2b5a84a1"
+    },
+    "browser/native-magic-storybook-4-choices.png": {
+      "bytes": 467358,
+      "sha256": "fab26941ee49338f9166adb515acf14b3d2330beb1ba3d531daa6b30d5741793"
+    },
+    "browser/native-magic-storybook-5-choices.png": {
+      "bytes": 501280,
+      "sha256": "90317d15b954306d9be935ee19d414f5940fc950e6c8e30940fd99a1cfbffe41"
+    },
+    "browser/native-magic-storybook.json": {
+      "bytes": 189909,
+      "sha256": "2694eb6fbe6aca6dffc3205870febc2ebf94e6ab0110a1671b6cf71277c1eac7"
+    },
+    "browser/native-mystery-noir-2-choices.png": {
+      "bytes": 408581,
+      "sha256": "b57911609c48a4dc334ffb5bed12d8e10ff6689e3c920dbca5d6a72a381cc6d5"
+    },
+    "browser/native-mystery-noir-3-choices.png": {
+      "bytes": 421899,
+      "sha256": "0c05fd57afa121de6696e06144fbe2b29e44a21fd248b21616331bb4e7d64fd7"
+    },
+    "browser/native-mystery-noir-4-choices.png": {
+      "bytes": 425970,
+      "sha256": "15f42711417349d06e4c0be6df461efdf166f7fbc013f25696b1716762dd8d61"
+    },
+    "browser/native-mystery-noir-5-choices.png": {
+      "bytes": 478365,
+      "sha256": "8bb5b23e38541e7c918c76617d988c29fef1ebd463d3eedfb95d3a9a35264813"
+    },
+    "browser/native-mystery-noir.json": {
+      "bytes": 194987,
+      "sha256": "3803bbae679fa2fdd350300135a53e10f1f41d607a4c32fc2d90548e0cff5c63"
+    },
+    "browser/native-neon-arcade-2-choices.png": {
+      "bytes": 409277,
+      "sha256": "0dc91f6cc5f18a62c5ba96899e1ddcdf54ae951e3d5881855ca8c9c162d4970b"
+    },
+    "browser/native-neon-arcade-3-choices.png": {
+      "bytes": 426426,
+      "sha256": "d1fd1ab043390c78eee1ce088a13455cd96e28803d835425793bf2ffa185f686"
+    },
+    "browser/native-neon-arcade-4-choices.png": {
+      "bytes": 428845,
+      "sha256": "ac1c395a68b97be40a3e57000e95c1829527daf993240cf7ee55deecb7a58e6b"
+    },
+    "browser/native-neon-arcade-5-choices.png": {
+      "bytes": 464885,
+      "sha256": "d0e094ed643f4e78cf082f72e29adf1364c6624183d33b73ddf2cf0903850bba"
+    },
+    "browser/native-neon-arcade.json": {
+      "bytes": 187667,
+      "sha256": "79936dca09bef563647fabd02e6bdbd68ebee86a93fa00fd57c5c99e1ceb297c"
+    },
+    "browser/native-retro-tv-2-choices.png": {
+      "bytes": 319831,
+      "sha256": "dd7f679b26ad689b05fe1a871cb92b25a047070806b2888791b15acca29c798b"
+    },
+    "browser/native-retro-tv-3-choices.png": {
+      "bytes": 335586,
+      "sha256": "5b786112bee56cf3e9c319d91bb3101d60e8340612b1ff8ef317a4b57cadb92b"
+    },
+    "browser/native-retro-tv-4-choices.png": {
+      "bytes": 340482,
+      "sha256": "4b9021c1abc9ffbd6b3d016672144a7f5a8e3f950e51d956942225b54fd5ed91"
+    },
+    "browser/native-retro-tv-5-choices.png": {
+      "bytes": 365740,
+      "sha256": "1df69238d33423d4a50acbedd30888ec2a6284ac48ca208207becdd2582c02af"
+    },
+    "browser/native-retro-tv.json": {
+      "bytes": 193637,
+      "sha256": "bb7874d43e6353ec3150809cf1032144314a449b53a8c44838f797cb5a6a3673"
+    },
+    "browser/native-royal-quiz-2-choices.png": {
+      "bytes": 400521,
+      "sha256": "ce72a17711f2bbe5ac54c79b2d3243aaf9d2383d900df2f085a7eeca0740e1ed"
+    },
+    "browser/native-royal-quiz-3-choices.png": {
+      "bytes": 419885,
+      "sha256": "ffdc1b99db56e5b5ce94b1fdffba160475f38404c2c516abd0e39c52b8d02e2f"
+    },
+    "browser/native-royal-quiz-4-choices.png": {
+      "bytes": 424959,
+      "sha256": "875e2fc62f7230c7423fc7c7cb28270ff679b5f3d09dff973b492062eca90ee8"
+    },
+    "browser/native-royal-quiz-5-choices.png": {
+      "bytes": 463550,
+      "sha256": "8090f3ef9c396022433b60e4f0146622af41a98bab34aa34e2a0925100ea0a6d"
+    },
+    "browser/native-royal-quiz.json": {
+      "bytes": 274521,
+      "sha256": "41d10a16019e5d87b97d23fcc20c6de8565b3c605ee79269a8234268c4c3a9ce"
+    },
+    "browser/native-sports-arena-2-choices.png": {
+      "bytes": 321477,
+      "sha256": "acd7faee6cc7d3abadf7326bcf665135f6aee90a0c619b11755170a4a2617afa"
+    },
+    "browser/native-sports-arena-3-choices.png": {
+      "bytes": 335826,
+      "sha256": "3aec7cf5d0ed5a8aca74962a6a2c911e7e3575e015fb04b26e3b2e158136e4c0"
+    },
+    "browser/native-sports-arena-4-choices.png": {
+      "bytes": 338886,
+      "sha256": "ee6a94145a336c5fe1a40624fc510b000db4edca259182dbd7cf0a145ad1a3d3"
+    },
+    "browser/native-sports-arena-5-choices.png": {
+      "bytes": 385910,
+      "sha256": "c9cf2a2c282434b35a850ccbf86d5a4c29a041b4537e0d00f2694bb9dfa07b63"
+    },
+    "browser/native-sports-arena.json": {
+      "bytes": 192955,
+      "sha256": "30f31cc7a7b19065953054f4e735e12a1571110dcc6f12222d85837f9c40a914"
+    },
+    "browser/receipt.json": {
+      "bytes": 4948,
+      "sha256": "08c7283398008d8897af55bbaaa5f10c1178c6ca29881dd47a929411ab1d0573"
+    },
+    "container-plan.json": {
+      "bytes": 1757,
+      "sha256": "1c335ef2ced4435f69cc5bf599721364197cc8f5a5e15f8634862271bf3ba97c"
+    },
+    "diagnostic-receipt.json": {
+      "bytes": 10615,
+      "sha256": "7fff68b362d2e990ca23c0b6991efd1ff58d04e8fa308f8dbbcbfb6d0e9fa8d3"
+    },
+    "execution-plan.json": {
+      "bytes": 1778,
+      "sha256": "5a570179b682699925c3596ad090e7b00eeb63373d33cd4bccb4089372274841"
+    },
+    "overlay-plan.json": {
+      "bytes": 2482,
+      "sha256": "67203850d31c10312fe45078e588bd0e1b73ba99b0e6133d6bce8a6e13ca39d2"
+    },
+    "source-after.json": {
+      "bytes": 445741,
+      "sha256": "c61b0688c3bdf9a32ba2f9d20327ae2b2d11382a918cd75ec9228ede5338ff0a"
+    },
+    "source-before.json": {
+      "bytes": 445741,
+      "sha256": "c61b0688c3bdf9a32ba2f9d20327ae2b2d11382a918cd75ec9228ede5338ff0a"
+    },
+    "transfer-manifest.json": {
+      "bytes": 8376,
+      "sha256": "e6058a961612324a6ab37f943cdee36eb34a08b5bc3cabc9340083c6bc3df79c"
+    }
+  },
+  "format": "tadazz-original-themes-repository-evidence-v1",
+  "noAuthenticationConfigurationOrStateIncluded": true,
+  "passed": true,
+  "rawBytesPreserved": true,
+  "releaseQualified": false,
+  "run": "native-strict-iteration10-bff4f511",
+  "runtimeQaSourceEqualsCandidate": false,
+  "sourceArchiveSha256": "cb716a6ce0ddba5e296b15196a99eff93473af8326ab1f0dcee754d694268b39",
+  "sourceTransferManifestSha256": "e6058a961612324a6ab37f943cdee36eb34a08b5bc3cabc9340083c6bc3df79c",
+  "strictNativeCoverageVerified": true
+}

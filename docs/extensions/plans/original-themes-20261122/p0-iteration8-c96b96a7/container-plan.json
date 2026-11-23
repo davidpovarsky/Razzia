@@ -1,0 +1,49 @@
+{
+  "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+  "memory": 2147483648,
+  "mounts": [
+    {
+      "Destination": "/source",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/ubuntu/tadazz-original-themes-preflight-20261122/source",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/evidence",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": true,
+      "Source": "/home/ubuntu/tadazz-original-themes-preflight-20261122/p0-iteration8-c96b96a7",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/cleanup",
+      "Mode": "",
+      "Propagation": "rslave",
+      "RW": false,
+      "Source": "/var/lib/docker/rootfs/overlayfs/07b64bb4f99518e306a2e3f5a693266a6ca543fdd1676627161af7077e818872/cleanup",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/root/.cache/ms-playwright",
+      "Mode": "",
+      "Propagation": "rslave",
+      "RW": false,
+      "Source": "/var/lib/docker/rootfs/overlayfs/07b64bb4f99518e306a2e3f5a693266a6ca543fdd1676627161af7077e818872/root/.cache/ms-playwright",
+      "Type": "bind"
+    },
+    {
+      "Destination": "/tmp/phase3-999ed90c/deps",
+      "Mode": "",
+      "Propagation": "rprivate",
+      "RW": false,
+      "Source": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-browser-c4125d58a746-8e0c29d3/mcp-deps",
+      "Type": "bind"
+    }
+  ],
+  "nanoCpus": 2000000000,
+  "network": "none",
+  "readOnlyRootfs": true
+}

@@ -428,7 +428,8 @@ function bridge(
       input === "/oauth/native-save/inspect" ||
         input === "/oauth/native-save/approve",
     )
-    assert.equal(init?.credentials, "same-origin")
+    assert.ok(init)
+    assert.equal(init.credentials, "same-origin")
     assert.equal(init.cache, "no-store")
     assert.equal(init.redirect, "error")
     assert.equal(init.referrerPolicy, "no-referrer")

@@ -257,13 +257,13 @@ describe.runIf(process.platform === "linux")(
         fs.existsSync(path.join(requireInitializedFixture().root, "quizz")),
       ).toBe(false)
       const baseline = creationTree(requireInitializedFixture().root)
-      const interrupted = await creationChild({
-        mode: "before-id-return",
-        root: requireInitializedFixture().root,
-        token: requireInitializedFixture().token,
-        sequence: "",
-        owner: owners[0],
-      })
+      const interrupted = await creationChild(
+        "before-id-return",
+        requireInitializedFixture().root,
+        requireInitializedFixture().token,
+        "",
+        owners[0],
+      )
       expect(interrupted.signal, interrupted.stderr).toBe("SIGKILL")
       expect(interrupted.timedOut).toBe(false)
       process.env.TADAZZ_ACCOUNTS_ENABLED = "false"
@@ -357,11 +357,11 @@ describe.runIf(process.platform === "linux")(
           const baseline = publicFiles(
             creationTree(requireInitializedFixture().root),
           )
-          const interrupted = await creationChild({
-            mode: boundary,
-            root: requireInitializedFixture().root,
-            token: requireInitializedFixture().token,
-          })
+          const interrupted = await creationChild(
+            boundary,
+            requireInitializedFixture().root,
+            requireInitializedFixture().token,
+          )
           const checkpoint = requireQuizCreationObservationRecord(
             JSON.parse(
               fs.readFileSync(

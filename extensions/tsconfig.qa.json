@@ -1,4 +1,12 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["qa/**/*.ts", "../scripts/qa/**/*.ts"]
+  "include": [
+    "qa/**/*.ts",
+    "qa/**/*.tsx",
+    "../scripts/qa/**/*.ts",
+    "src/presentation/show-library-preview/renderer-v2.env.d.ts"
+  ],
+  "compilerOptions": {
+    "types": ["node", "vite/client"]
+  }
 }

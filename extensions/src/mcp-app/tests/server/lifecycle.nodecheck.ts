@@ -1,3 +1,4 @@
+import { promiseFrom } from "../../shared/promise-operation.ts"
 import assert from "node:assert/strict"
 import test from "node:test"
 import {
@@ -7,7 +8,6 @@ import {
   lifecycleHarness,
 } from "./lifecycle-fixture.ts"
 import { code, principal, harness, newKey } from "./fixtures.ts"
-import { synchronousPromise } from "../../../core/synchronous-promise.ts"
 
 test(
   "SDK cancellation during pending authorization restores capacity only after real work settles",
@@ -280,7 +280,7 @@ test(
       },
       drafts: {
         get(p) {
-          return synchronousPromise(() => {
+          return promiseFrom(() => {
             readers.push(p.accountId)
 
             return undefined

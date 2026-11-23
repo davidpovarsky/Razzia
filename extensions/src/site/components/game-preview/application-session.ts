@@ -600,9 +600,11 @@ export function createApplicationPreviewSession(options: {
       const theme = resolveShowTheme({ selection, role: "spectator" })
 
       if (
-        !["tadazz-classic-stage", "razzia-native-stage"].includes(
-          theme.definition.rendererId,
-        ) ||
+        ![
+          "tadazz-classic-stage",
+          "tadazz-original-stage",
+          "razzia-native-stage",
+        ].includes(theme.definition.rendererId) ||
         theme.diagnostics.length
       ) {
         throw new Error("Unsupported preview theme")

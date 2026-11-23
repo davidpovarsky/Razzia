@@ -24,8 +24,10 @@ export function packagePreviewScene(
     return { kind: "lobby", key: "package-preview-lobby" }
   }
 
-  const card = frame.show.cards[chapter.cardIndex] as
-    (typeof frame.show.cards)[number] | undefined
+  const card =
+    Number.isSafeInteger(chapter.cardIndex) && chapter.cardIndex >= 0
+      ? frame.show.cards.at(chapter.cardIndex)
+      : undefined
 
   if (!card) {
     throw new Error("Package preview chapter unavailable")

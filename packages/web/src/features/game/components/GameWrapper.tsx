@@ -21,6 +21,7 @@ import {
   EXTENSION_EVENTS,
   RAZZIA_THEME_ID,
   readPlatformOpening,
+  isOriginalThemeId,
 } from "@razzia/extensions/core"
 import { PlatformGameOpening } from "./PlatformGameOpening"
 import { PlatformGameClosing } from "./PlatformGameClosing"
@@ -83,12 +84,13 @@ import {
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
 type Props = PropsWithChildren & {
-  gameId?: string
   statusName: Status | undefined
   onNext?: () => void
   onBack?: () => void
   manager?: boolean
   viewRole?: ViewRole
+  /** Route identity stays available while the player/manager stores hydrate. */
+  roomId?: string
 }
 const GameWrapperView = ({
   children,
@@ -137,15 +139,22 @@ const GameWrapperView = ({
     "native.original-stage": "razzia-native-stage",
     "native.cinematic-stage": "tadazz-classic-stage",
   }
-  const forcedRenderer = renderers[rootComponent ?? ""]
+  const originalFamily =
+    theme.definition.rendererId === "tadazz-original-stage" &&
+    isOriginalThemeId(theme.definition.id)
+  const forcedRenderer = originalFamily
+    ? "tadazz-original-stage"
+    : renderers[rootComponent ?? ""]
   // The host and audience share one theme stage. Fullscreen only hides chrome;
   // it must never switch renderer, lobby content or the active audio owner.
   // Player input stays on its dedicated responsive surface.
   const cinematicSurface =
     effectiveRole !== "player" ||
     Boolean(theme.definition.runtime) ||
-    forcedRenderer === "tadazz-classic-stage"
+    forcedRenderer === "tadazz-classic-stage" ||
+    (originalFamily && rootComponent === "native.cinematic-stage")
   const usesTadazzCanvas =
+    originalFamily ||
     forcedRenderer === "tadazz-classic-stage" ||
     (forcedRenderer !== "razzia-native-stage" &&
       isTadazzShowActive(extensionState))
@@ -631,10 +640,8 @@ const GameWrapper = (props: Props) => {
   const presentationRootRef = useRef<HTMLDivElement | null>(null)
   const managerGameId = useManagerStore((state) => state.gameId)
   const playerGameId = usePlayerStore((state) => state.gameId)
-  // The route knows the room before reconnect fills the player store. Keep the
-  // scope stable while reconnect status and extension packets arrive together.
   const gameId =
-    props.gameId ??
+    props.roomId ??
     (props.manager || props.viewRole === "spectator"
       ? managerGameId
       : playerGameId)

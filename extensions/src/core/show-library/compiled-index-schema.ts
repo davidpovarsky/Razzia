@@ -24,12 +24,24 @@ const packageName = z
   .string()
   .max(214)
   .regex(/^(?:@[a-z0-9][a-z0-9._-]*\/)?[a-z0-9][a-z0-9._-]*$/u)
+function hasForbiddenCodePoint(value: string, includeSpace = false): boolean {
+  return Array.from(value).some((character) => {
+    const point = character.codePointAt(0)
+
+    return (
+      point !== undefined &&
+      (point <= (includeSpace ? 0x20 : 0x1f) ||
+        point === 0x7f ||
+        (point >= 0xd800 && point <= 0xdfff))
+    )
+  })
+}
+
 const text = z
   .string()
   .min(1)
   .max(1000)
-  // oxlint-disable-next-line eslint/no-control-regex -- Reject C0/DEL controls and unpaired surrogates in compiled display text.
-  .refine((s) => !/[\u0000-\u001f\u007f\ud800-\udfff]/u.test(s))
+  .refine((s) => !hasForbiddenCodePoint(s))
 const relativePath = z
   .string()
   .min(1)
@@ -37,8 +49,8 @@ const relativePath = z
   .refine(
     (s) =>
       !s.startsWith("/") &&
-      // oxlint-disable-next-line eslint/no-control-regex -- Reject control characters and whitespace in untrusted compiled relative paths.
-      !/[\\:%?#\u0000-\u0020\u007f\ud800-\udfff]/u.test(s) &&
+      !/[\\:%?#]/u.test(s) &&
+      !hasForbiddenCodePoint(s, true) &&
       s
         .split("/")
         .every(

@@ -1,12 +1,6 @@
 import assert from "node:assert/strict"
 import { createHash } from "node:crypto"
-import {
-  copyFileSync,
-  mkdtempSync,
-  readFileSync,
-  rmSync,
-  writeFileSync,
-} from "node:fs"
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { dirname, join, resolve } from "node:path"
 import { test } from "node:test"
@@ -56,6 +50,195 @@ const factory = (verify = verifySource) =>
     publicAssets: publicPins,
     verifyCurrentAsset: verify,
   })
+
+const originalFamilies = [
+  "royal-quiz",
+  "neon-arcade",
+  "retro-tv",
+  "magic-storybook",
+  "crystal-future",
+  "carnival-pop",
+  "sports-arena",
+  "mystery-noir",
+] as const
+
+test("original families admit only their own exact generated PNG backgrounds and WAV audio", () => {
+  const assets = factory()
+  for (const family of originalFamilies) {
+    for (const purpose of ["background", "audio"] as const) {
+      const selected = context(purpose, family)
+      const choices = assets.listAssets(selected, "en")
+      assert.equal(choices.length, purpose === "background" ? 2 : 12)
+      assert.equal(
+        new Set(choices.map((choice) => choice.ref.assetId)).size,
+        choices.length,
+      )
+      for (const choice of choices) {
+        semanticAssetChoiceSchema.parse(choice)
+        assert.equal(
+          choice.mime,
+          purpose === "background" ? "image/png" : "audio/wav",
+        )
+        assert(
+          choice.publicUrl.startsWith(
+            `https://tadazz.com/tadazz-show/originals/${family}/`,
+          ),
+        )
+        assert.equal(choice.ref.theme.id, family)
+        assert.deepEqual(assets.resolveAsset(choice.ref, selected), {
+          ref: choice.ref,
+          publicUrl: choice.publicUrl,
+        })
+        assert.deepEqual(assets.resolveStoredUrl(choice.publicUrl, selected), {
+          ref: choice.ref,
+          publicUrl: choice.publicUrl,
+        })
+
+        // Rebinding the ref to a different theme must not bypass the row's
+        // family grant, even when the requested bytes and URL are genuine.
+        for (const foreign of [
+          "tadazz-classic",
+          "razzia-original",
+          ...originalFamilies,
+        ]) {
+          if (foreign === family) {
+            continue
+          }
+
+          const other = context(purpose, foreign)
+          assert.equal(
+            assets.resolveStoredUrl(choice.publicUrl, other),
+            undefined,
+          )
+          assert.equal(
+            assets.resolveAsset({ ...choice.ref, theme: other.theme }, other),
+            undefined,
+          )
+        }
+        for (const wrongPurpose of [
+          "background",
+          "answer-image",
+          "audio",
+        ] as const) {
+          if (wrongPurpose === purpose) {
+            continue
+          }
+
+          assert.equal(
+            assets.resolveStoredUrl(
+              choice.publicUrl,
+              context(wrongPurpose, family),
+            ),
+            undefined,
+          )
+        }
+      }
+    }
+    assert.deepEqual(
+      assets.listAssets(context("answer-image", family), "en"),
+      [],
+    )
+    // Shared intro playback is intrinsic to the platform. It does not extend
+    // the semantic port's separate existing-family media grants.
+    assert.equal(
+      assets.resolveStoredUrl(
+        "https://tadazz.com/sounds/answersMusic.mp3",
+        context("audio", family),
+      ),
+      undefined,
+    )
+    assert.equal(
+      assets.resolveStoredUrl(
+        "https://tadazz.com/tadazz-show/v4/question-bg.webp",
+        context("background", family),
+      ),
+      undefined,
+    )
+  }
+})
+
+test("original public references preserve version, operation, URL and deployment-byte restrictions", () => {
+  const assets = factory()
+  for (const family of originalFamilies) {
+    for (const purpose of ["background", "audio"] as const) {
+      const selected = context(purpose, family)
+      const [choice] = assets.listAssets(selected, "he")
+      assert(choice)
+      for (const operation of [
+        "store",
+        "preview",
+        "json-reference-export",
+      ] as const) {
+        assert(assets.resolveAsset(choice.ref, { ...selected, operation }))
+      }
+      assert.equal(
+        assets.resolveAsset(choice.ref, { ...selected, operation: "export" }),
+        undefined,
+      )
+      assert.deepEqual(
+        assets.listAssets({ ...selected, operation: "export" }, "en"),
+        [],
+      )
+      for (const theme of [
+        { id: family, version: "2.0.0" },
+        { id: `${family}-foreign`, version: "1.0.0" },
+      ]) {
+        assert.equal(
+          assets.resolveAsset({ ...choice.ref, theme }, { ...selected, theme }),
+          undefined,
+        )
+      }
+      assert.equal(
+        assets.resolveAsset(
+          { ...choice.ref, sha256: "0".repeat(64) },
+          selected,
+        ),
+        undefined,
+      )
+      for (const url of [
+        `${choice.publicUrl}?download=1`,
+        `${choice.publicUrl}#fragment`,
+        choice.publicUrl.replace("https://", "http://"),
+        choice.publicUrl.replace("tadazz.com", "example.invalid"),
+        choice.publicUrl.replace(
+          `/originals/${family}/`,
+          `/originals/${family}/../${family}/`,
+        ),
+      ]) {
+        assert.equal(assets.resolveStoredUrl(url, selected), undefined)
+      }
+      const pin = publicPins.find(
+        (entry) =>
+          entry.path ===
+          choice.publicUrl.replace("https://tadazz.com", "packages/web/public"),
+      )
+      assert(pin)
+      const verification = { reads: 0 }
+      for (const forgedPin of [
+        { ...pin, bytes: pin.bytes + 1 },
+        { ...pin, sha256: "0".repeat(64) },
+      ]) {
+        const forged = createBuiltinAssetResolver({
+          origin: "https://tadazz.com",
+          publicAssets: [forgedPin],
+          verifyCurrentAsset: () => {
+            verification.reads += 1
+
+            return true
+          },
+        })
+        assert.equal(forged.resolveAsset(choice.ref, selected), undefined)
+      }
+      assert.equal(verification.reads, 0)
+      const changed = factory(() => false)
+      assert.equal(changed.resolveAsset(choice.ref, selected), undefined)
+      assert.equal(
+        changed.resolveStoredUrl(choice.publicUrl, selected),
+        undefined,
+      )
+    }
+  }
+})
 
 test("reviewed built-ins resolve actual source bytes under both existing native families", () => {
   const assets = factory()
@@ -214,7 +397,11 @@ test("changed deployed bytes and a forged manifest cannot reuse an earlier admis
 
   try {
     const file = join(temporary, "owned.svg")
-    copyFileSync(join(root, pin.path), file)
+    // The private tamper copy must be writable even when source assets are read-only.
+    writeFileSync(file, readFileSync(join(root, pin.path)), {
+      flag: "wx",
+      mode: 0o600,
+    })
     const assets = factory((entry) => {
       const bytes = readFileSync(file)
 

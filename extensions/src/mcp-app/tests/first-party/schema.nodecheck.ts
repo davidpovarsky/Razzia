@@ -103,22 +103,22 @@ async function rejected(name: string, alter: (db: DatabaseSync) => void) {
     { visibleVersion: 1, ownerMatches: true, beforeState },
     file,
   )
-  const get = await requireInitializedF().request({
+  const get = await requireInitializedF().request(
     session,
-    path: `/drafts/${draft.draftId}`,
-  })
+    `/drafts/${draft.draftId}`,
+  )
   assert.equal(get.status, 503)
   assert.equal(
     requireObservedRecord(requireObservedRecord(await get.json()).error).code,
     "DEPENDENCY_UNAVAILABLE",
   )
   assert.deepEqual(snapshot(requireInitializedF().root), beforeState)
-  const mutation = await requireInitializedF().request({
+  const mutation = await requireInitializedF().request(
     session,
-    path: "/drafts",
-    method: "POST",
-    body: createInput(),
-  })
+    "/drafts",
+    "POST",
+    createInput(),
+  )
   assert.equal(mutation.status, 503)
   assert.equal(
     requireObservedRecord(requireObservedRecord(await mutation.json()).error)
@@ -181,10 +181,7 @@ test("exact old producer schema1 remains readable and mutable without a migratio
   }
 
   const beforeState = snapshot(requireInitializedF().root)
-  const get = await requireInitializedF().request({
-    session,
-    path: `/drafts/${id}`,
-  })
+  const get = await requireInitializedF().request(session, `/drafts/${id}`)
   assert.equal(get.status, 200)
   assert.equal(
     requireObservedRecord(requireObservedRecord(await get.json()).data)
@@ -194,12 +191,12 @@ test("exact old producer schema1 remains readable and mutable without a migratio
   assert.deepEqual(snapshot(requireInitializedF().root), beforeState)
   assert.equal(
     (
-      await requireInitializedF().request({
+      await requireInitializedF().request(
         session,
-        path: "/drafts",
-        method: "POST",
-        body: createInput(),
-      })
+        "/drafts",
+        "POST",
+        createInput(),
+      )
     ).status,
     201,
   )

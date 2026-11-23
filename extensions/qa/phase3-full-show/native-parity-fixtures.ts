@@ -81,6 +81,11 @@ function seal(
   const frame = fullShowFrameV3Schema.parse(candidate)
   assert.equal(frame.rendererBuildId, source.rendererBuildId)
   assert.deepEqual(frame.theme, source.theme)
+  const family = source.theme.id
+  assert(
+    family === "tadazz-classic" || family === "razzia-original",
+    "Native parity fixtures support only Tadazz Classic and Razzia Original",
+  )
 
   return {
     ...identity,
@@ -89,7 +94,7 @@ function seal(
     frameSha256: hashJson(frame),
     rendererBuildId: frame.rendererBuildId,
     definitionSha256: frame.theme.definitionSha256,
-    sourceModules: [...sources, ...familySources[source.theme.id]],
+    sourceModules: [...sources, ...familySources[family]],
     frame,
   }
 }

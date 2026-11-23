@@ -11,22 +11,21 @@ import type {
 } from "./dependencies.ts"
 import { ToolError } from "./errors.ts"
 
+const isV1Identity = (version: unknown): version is 1 => version === 1
+
 /**
  * MCP boundary only. The accepted injected SB port owns plan/identity/pin
  * validation and the actual renderer. No phase/clock/role engine lives here.
  */
 
-export async function renderPreview({
-  deps,
-  principal,
-  record,
-  locale,
-}: {
-  deps: Dependencies
-  principal: VerifiedPrincipal
-  record: DraftRecord
-  locale?: string
-}) {
+export async function renderPreview(
+  ...[deps, principal, record, locale]: [
+    deps: Dependencies,
+    principal: VerifiedPrincipal,
+    record: DraftRecord,
+    locale?: string,
+  ]
+) {
   if (!deps.preview) {
     throw new ToolError("PREVIEW_UNAVAILABLE")
   }
@@ -46,8 +45,7 @@ export async function renderPreview({
     view.sbRegistryVersion !== deps.preview.registryVersion ||
     result.identity.compiledPin === null ||
     result.identity.identityMap === null ||
-    // oxlint-disable-next-line typescript/no-unnecessary-condition -- The host preview port must reject a runtime successor or malformed envelope before accepting this version-1 result.
-    result.identity.version !== 1 ||
+    !isV1Identity(result.identity.version) ||
     result.identity.draftId !== record.draftId ||
     result.identity.revision !== record.revision ||
     canonicalJson(result.identity.normalizedAuthoredContent) !==

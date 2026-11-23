@@ -1,0 +1,9 @@
+[90mstderr[2m | src/presentation/tadazz-v4/full-show.test.ts[2m > [22m[2mFullShowScenes: React Component Rendering & Visual Parity[2m > [22m[2mrenders GrandOpening with title, subtitle, and portal background
+[22m[39mreact-i18next:: useTranslation: You will need to pass in an i18next instance by using initReactI18next or by passing it via props or context. In monorepo setups, make sure there is only one instance of react-i18next. { code: [32m'NO_I18NEXT_INSTANCE'[39m }
+
+[90mstderr[2m | src/presentation/tadazz-v4/source-parity-export.test.ts[2m > [22m[2mNative React Show Source Parity & Visual Evidence Capture[2m > [22m[2mrenders all scenes into a standalone HTML harness and captures 1920x1080 evidence
+[22m[39mreact-i18next:: useTranslation: You will need to pass in an i18next instance by using initReactI18next or by passing it via props or context. In monorepo setups, make sure there is only one instance of react-i18next. { code: [32m'NO_I18NEXT_INSTANCE'[39m }
+
+[90mstderr[2m | src/presentation/tadazz-v4/default-event-artwork.test.ts[2m > [22m[2mNative default event artwork[2m > [22m[2mgrand opening does not inject client artwork by default
+[22m[39mreact-i18next:: useTranslation: You will need to pass in an i18next instance by using initReactI18next or by passing it via props or context. In monorepo setups, make sure there is only one instance of react-i18next. { code: [32m'NO_I18NEXT_INSTANCE'[39m }
+

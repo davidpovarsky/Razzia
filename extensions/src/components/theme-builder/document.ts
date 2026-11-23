@@ -237,12 +237,8 @@ export function editBuilderDocument(
             )
           }
         }
-        let { [edit.port]: siblings } = parent.children
-
-        if (!siblings) {
-          siblings = []
-          parent.children[edit.port] = siblings
-        }
+        const siblings = parent.children[edit.port] ?? []
+        parent.children[edit.port] = siblings
 
         if (edit.index > siblings.length) {
           throw new Error("theme-builder:invalid-move")

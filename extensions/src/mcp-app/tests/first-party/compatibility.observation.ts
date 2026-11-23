@@ -189,7 +189,7 @@ try {
   const beforeGet = snapshot(f.root)
   preserveWitness("actual-ad895-before-get", { ...identity, beforeGet }, file)
   // Actual JWT HTTP GET passes through the c322 inspector, read-only/query-only.
-  const get = await f.request({ session, path: `/drafts/${id}` })
+  const get = await f.request(session, `/drafts/${id}`)
   assert.equal(get.status, 200)
   const first = requireObservedRecord(
     requireObservedRecord(await get.json(), "compatibility GET envelope").data,
@@ -215,12 +215,7 @@ try {
       .authoredShowJson,
     idempotencyKey: key(),
   }
-  const put = await f.request({
-    session,
-    path: `/drafts/${id}`,
-    method: "PUT",
-    body: update,
-  })
+  const put = await f.request(session, `/drafts/${id}`, "PUT", update)
   assert.equal(put.status, 200)
   const changed = requireObservedRecord(
     requireObservedRecord(await put.json(), "compatibility PUT envelope").data,

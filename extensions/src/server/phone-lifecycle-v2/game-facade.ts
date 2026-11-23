@@ -59,6 +59,24 @@ export type PublicPhoneGame = Pick<
   | "disconnectPhoneCallerByRosterId"
 >
 
+function hasBoundRegistration(
+  game: PublicPhoneGame,
+  row: RegistrationRow,
+): row is RegistrationRow & { roster_id: string } {
+  const entry = row.roster_id ? game.getRosterEntry(row.roster_id) : null
+
+  return (
+    entry !== null &&
+    entry.clientId === row.client_id &&
+    typeof entry.phoneE164 === "string" &&
+    entry.phoneE164.length > 0 &&
+    digest(entry.phoneE164) === row.caller_hash &&
+    entry.activeCallId === row.registration_id &&
+    entry.status === "connected" &&
+    game.players.some((p) => p.clientId === row.client_id && p.connected)
+  )
+}
+
 // This facade calls the real Game. It has no substitute roster/scoring engine.
 export class RealGameFacade {
   readonly executorId = randomUUID()
@@ -81,32 +99,14 @@ export class RealGameFacade {
       : undefined
   }
 
-  private static bound(
-    game: PublicPhoneGame,
-    row: RegistrationRow,
-  ): row is RegistrationRow & { roster_id: string } {
-    const entry = row.roster_id ? game.getRosterEntry(row.roster_id) : null
-
-    return (
-      entry !== null &&
-      entry.clientId === row.client_id &&
-      typeof entry.phoneE164 === "string" &&
-      entry.phoneE164.length > 0 &&
-      digest(entry.phoneE164) === row.caller_hash &&
-      entry.activeCallId === row.registration_id &&
-      entry.status === "connected" &&
-      game.players.some((p) => p.clientId === row.client_id && p.connected)
-    )
-  }
-
   exists(context: VerifiedServiceContext) {
-    return this.game(context) !== undefined
+    return Boolean(this.game(context))
   }
 
   matches(context: VerifiedServiceContext, row: RegistrationRow) {
     const game = this.game(context)
 
-    return game !== undefined && RealGameFacade.bound(game, row)
+    return game !== undefined && hasBoundRegistration(game, row)
   }
 
   admit(
@@ -122,7 +122,7 @@ export class RealGameFacade {
 
     const previous = reservation.predecessor
 
-    if (previous && !RealGameFacade.bound(game, previous)) {
+    if (previous && !hasBoundRegistration(game, previous)) {
       return fail("game_binding_changed")
     }
 
@@ -151,7 +151,7 @@ export class RealGameFacade {
     if (
       !result.rosterPlayerId ||
       !result.clientId ||
-      !RealGameFacade.bound(game, row)
+      !hasBoundRegistration(game, row)
     ) {
       return fail("projection_outcome_unknown")
     }
@@ -177,7 +177,7 @@ export class RealGameFacade {
       return fail("game_unavailable")
     }
 
-    if (!RealGameFacade.bound(game, row)) {
+    if (!hasBoundRegistration(game, row)) {
       return fail("game_binding_changed")
     }
 
@@ -202,9 +202,7 @@ export class RealGameFacade {
       const { answerIndex } = input
 
       if (answerIndex === undefined) {
-        throw new Error(
-          "Phone answer reached the facade without an admitted index",
-        )
+        return fail("invalid_answer")
       }
 
       const answer = game.submitPhoneAnswerByRosterId(

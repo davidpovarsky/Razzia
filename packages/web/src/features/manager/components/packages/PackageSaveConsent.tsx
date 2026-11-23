@@ -45,6 +45,41 @@ interface SessionBinding {
 type State =
   "loading" | "ready" | "failed" | "expired" | "saving" | "uncertain" | "saved"
 
+interface ConsentState {
+  identity: string
+  attempt: number
+  state: State
+  inspection: SaveInspection | null
+  read: boolean
+}
+
+function inspectionStartState(allowed: boolean, authorized: boolean): State {
+  if (!allowed) {
+    return "failed"
+  }
+
+  return authorized ? "loading" : "expired"
+}
+
+function invalidatedConsent(
+  current: ConsentState,
+  identity: string,
+  attempt: number,
+): ConsentState {
+  if (current.identity !== identity || current.attempt !== attempt) {
+    return current
+  }
+
+  const uncertain = current.state === "saving" || current.state === "uncertain"
+
+  return {
+    ...current,
+    state: uncertain ? "uncertain" : "expired",
+    inspection: null,
+    read: false,
+  }
+}
+
 const opaque = /^[A-Za-z0-9_-]{22,64}$/u
 const digest = /^[a-f0-9]{64}$/u
 const contentId = /^[a-z][a-z0-9-]{1,79}$/u
@@ -197,84 +232,147 @@ export function PackageSaveConsent({ requestId }: { requestId: string }) {
     ? language
     : "en"
   const text = packageSaveText(locale)
-  const [state, setState] = useState<State>("loading")
-  const [inspection, setInspection] = useState<SaveInspection | null>(null)
-  const [refresh, setRefresh] = useState(0)
+  const token = getToken()
+  const owner = getClientId()
+  const role = getRole()
+  const allowed =
+    opaque.test(requestId) &&
+    !window.location.search &&
+    !window.location.hash &&
+    window.top === window.self
+  const identity = JSON.stringify([requestId, token, owner, role, allowed])
+  const authorized = Boolean(token && owner && role === SESSION_ROLES.MANAGER)
+  const startState = inspectionStartState(allowed, authorized)
+  const [consent, setConsent] = useState<ConsentState>(() => ({
+    identity,
+    attempt: 0,
+    state: startState,
+    inspection: null,
+    read: startState === "loading",
+  }))
+
+  if (consent.identity !== identity) {
+    // Never commit an inspection or approval control from the previous identity.
+    // Losing an approval response remains uncertain until an explicit read.
+    const interrupted =
+      consent.state === "saving" || consent.state === "uncertain"
+    setConsent({
+      identity,
+      attempt: consent.attempt + 1,
+      state: interrupted ? "uncertain" : startState,
+      inspection: null,
+      read: !interrupted && startState === "loading",
+    })
+  }
+
+  const { state, inspection, attempt, read } = consent
   const snapshot = useRef<SaveInspection | null>(null)
   const session = useRef<SessionBinding | null>(null)
-  const approval = useRef<AbortController | null>(null)
+  const approval = useRef<{
+    controller: AbortController
+    identity: string
+    attempt: number
+  } | null>(null)
 
   useEffect(() => {
+    if (!read || !allowed || !authorized || !token) {
+      return
+    }
+
     const controller = new AbortController()
-    const token = getToken()
-    const owner = getClientId()
-    const bound = token && owner ? { token, owner, requestId } : null
+    const bound = { token, owner, requestId }
     session.current = bound
     snapshot.current = null
-    setInspection(null)
-    setState("loading")
-
+    const matches = (current: ConsentState) =>
+      current.identity === identity && current.attempt === attempt
     const invalidate = () => {
-      const saving = Boolean(approval.current)
       controller.abort()
-      approval.current?.abort()
+      const operation = approval.current
+
+      if (operation?.identity === identity && operation.attempt === attempt) {
+        operation.controller.abort()
+      }
+
       session.current = null
       snapshot.current = null
-      setInspection(null)
-      setState(saving ? "uncertain" : "expired")
+      setConsent((current) => invalidatedConsent(current, identity, attempt))
     }
 
-    if (
-      !opaque.test(requestId) ||
-      window.location.search ||
-      window.location.hash ||
-      window.top !== window.self
-    ) {
-      setState("failed")
-
-      return () => controller.abort()
-    }
-
-    if (!sameSession(bound, requestId)) {
-      setState("expired")
-
-      return () => controller.abort()
-    }
-
-    void packageJson<unknown>(`/save-consents/${requestId}`, {
-      signal: controller.signal,
-      referrerPolicy: "no-referrer",
-    })
-      .then((raw) => {
-        if (controller.signal.aborted) {
-          return
-        }
-
-        if (!sameSession(bound, requestId)) {
-          invalidate()
-
-          return
-        }
-
-        const value = parseInspection(raw, requestId)
-
-        if (Date.parse(value.expiresAt) <= Date.now()) {
-          invalidate()
-
-          return
-        }
-
-        snapshot.current = value
-        setInspection(value)
-        setState(value.outcome ? "saved" : "ready")
+    // A session can change between render and effect setup. The independent
+    // monitor handles that race without issuing a read for the previous session.
+    if (sameSession(bound, requestId)) {
+      void packageJson<unknown>(`/save-consents/${requestId}`, {
+        signal: controller.signal,
+        referrerPolicy: "no-referrer",
       })
-      .catch(() => {
-        if (!controller.signal.aborted) {
-          setState("failed")
-        }
-      })
+        .then((raw) => {
+          if (controller.signal.aborted) {
+            return
+          }
+
+          if (!sameSession(bound, requestId)) {
+            invalidate()
+
+            return
+          }
+
+          const value = parseInspection(raw, requestId)
+
+          if (Date.parse(value.expiresAt) <= Date.now()) {
+            invalidate()
+
+            return
+          }
+
+          snapshot.current = value
+          setConsent((current) =>
+            matches(current)
+              ? {
+                  ...current,
+                  inspection: value,
+                  state: value.outcome ? "saved" : "ready",
+                }
+              : current,
+          )
+        })
+        .catch(() => {
+          if (!controller.signal.aborted) {
+            setConsent((current) =>
+              matches(current) ? { ...current, state: "failed" } : current,
+            )
+          }
+        })
+    }
+
+    // A read ending does not end the identity or its uncertain approval.
+    return () => controller.abort()
+  }, [requestId, identity, token, owner, attempt, read, allowed, authorized])
+
+  useEffect(() => {
+    if (!allowed || !authorized || !token) {
+      return
+    }
+
+    const bound = { token, owner, requestId }
+    let active = true
+    const invalidate = () => {
+      if (!active) {
+        return
+      }
+
+      active = false
+      const operation = approval.current
+
+      if (operation?.identity === identity && operation.attempt === attempt) {
+        operation.controller.abort()
+      }
+
+      session.current = null
+      snapshot.current = null
+      setConsent((current) => invalidatedConsent(current, identity, attempt))
+    }
     const check = () => {
-      if (controller.signal.aborted) {
+      if (!active) {
         return
       }
 
@@ -301,23 +399,29 @@ export function PackageSaveConsent({ requestId }: { requestId: string }) {
     window.addEventListener("storage", onStorage)
 
     return () => {
-      controller.abort()
-      approval.current?.abort()
-      approval.current = null
+      active = false
+      const operation = approval.current
+
+      if (operation?.identity === identity && operation.attempt === attempt) {
+        operation.controller.abort()
+        approval.current = null
+      }
+
       session.current = null
       snapshot.current = null
       window.clearInterval(interval)
       window.removeEventListener("focus", check)
       window.removeEventListener("storage", onStorage)
     }
-  }, [requestId, refresh])
+  }, [requestId, identity, token, owner, attempt, allowed, authorized])
 
   const save = async () => {
-    const { current } = snapshot
+    const current = inspection
     const bound = session.current
 
     if (
       approval.current ||
+      consent.identity !== identity ||
       state !== "ready" ||
       !current?.canInstall ||
       current.outcome
@@ -325,18 +429,39 @@ export function PackageSaveConsent({ requestId }: { requestId: string }) {
       return
     }
 
+    const matches = (value: ConsentState) =>
+      value.identity === identity && value.attempt === attempt
+
     if (
       !sameSession(bound, requestId) ||
       Date.parse(current.expiresAt) <= Date.now()
     ) {
-      setState("expired")
+      session.current = null
+      snapshot.current = null
+      setConsent((value) =>
+        matches(value)
+          ? { ...value, state: "expired", inspection: null, read: false }
+          : value,
+      )
 
       return
     }
 
     const controller = new AbortController()
-    approval.current = controller
-    setState("saving")
+    const operation = { controller, identity, attempt }
+    approval.current = operation
+    const onAbort = () => {
+      // Aborting transport cannot establish whether the server saved the package.
+      setConsent((value) =>
+        matches(value)
+          ? { ...value, state: "uncertain", inspection: null, read: false }
+          : value,
+      )
+    }
+    controller.signal.addEventListener("abort", onAbort, { once: true })
+    setConsent((value) =>
+      matches(value) ? { ...value, state: "saving" } : value,
+    )
 
     try {
       const result = parseOutcome(
@@ -354,6 +479,8 @@ export function PackageSaveConsent({ requestId }: { requestId: string }) {
       )
 
       if (controller.signal.aborted || !sameSession(bound, requestId)) {
+        controller.abort()
+
         return
       }
 
@@ -366,19 +493,38 @@ export function PackageSaveConsent({ requestId }: { requestId: string }) {
 
       const saved = { ...current, outcome: result }
       snapshot.current = saved
-      setInspection(saved)
-      setState("saved")
+      setConsent((value) =>
+        matches(value)
+          ? { ...value, inspection: saved, state: "saved" }
+          : value,
+      )
       window.dispatchEvent(new Event("tadazz:packages-changed"))
     } catch {
       // A lost response is reconciled with a read; never retry approval automatically.
       if (!controller.signal.aborted) {
-        setState("uncertain")
+        setConsent((value) =>
+          matches(value)
+            ? { ...value, state: "uncertain", read: false }
+            : value,
+        )
       }
     } finally {
-      if (approval.current === controller) {
+      controller.signal.removeEventListener("abort", onAbort)
+
+      if (approval.current === operation) {
         approval.current = null
       }
     }
+  }
+
+  const refresh = () => {
+    setConsent((current) => ({
+      identity,
+      attempt: current.attempt + 1,
+      state: startState,
+      inspection: null,
+      read: startState === "loading",
+    }))
   }
 
   const game = inspection?.contents.find((item) => item.kind === "game")
@@ -474,10 +620,7 @@ export function PackageSaveConsent({ requestId }: { requestId: string }) {
               {(state === "failed" ||
                 state === "uncertain" ||
                 (state === "ready" && !inspection?.canInstall)) && (
-                <Button
-                  data-testid="package-save-check"
-                  onClick={() => setRefresh((value) => value + 1)}
-                >
+                <Button data-testid="package-save-check" onClick={refresh}>
                   {text.check}
                 </Button>
               )}

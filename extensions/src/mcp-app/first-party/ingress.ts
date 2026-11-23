@@ -1,5 +1,7 @@
-/* oxlint-disable max-classes-per-file -- The typed rejection and request budget form one private ingress enforcement boundary. */
 import { ToolError } from "../server/errors.ts"
+import { HttpRejection } from "./http-rejection.ts"
+
+export { HttpRejection } from "./http-rejection.ts"
 
 export const HTTP_LIMITS = Object.freeze({
   bytes: 65_536,
@@ -10,12 +12,6 @@ export const HTTP_LIMITS = Object.freeze({
 
 export type Route =
   { kind: "create" } | { kind: "get" | "replace" | "prepare-save"; id: string }
-
-export class HttpRejection extends Error {
-  constructor(readonly status: 400 | 403 | 404 | 405 | 413 | 415 | 429) {
-    super("HTTP_REJECTED")
-  }
-}
 
 /**
  * Observe cancellation at explicit request/authorization boundaries. This
@@ -50,9 +46,8 @@ export function route(request: Request, origin: URL): Route {
 
   let headerCount = 0
   let headerBytes = 0
-  const headerState = { forwarded: false }
-  // oxlint-disable-next-line eslint/array-callback-return -- Oxc 1.90.0 treats throws as returns here; this Headers callback returns no value.
-  request.headers.forEach((value, name) => {
+  let forwarded = false
+  for (const [name, value] of request.headers) {
     headerCount += 1
 
     if (headerCount > 32 || name.length > 128 || value.length > 4096) {
@@ -66,15 +61,15 @@ export function route(request: Request, origin: URL): Route {
     }
 
     if (name === "forwarded" || name.startsWith("x-forwarded-")) {
-      headerState.forwarded = true
+      forwarded = true
     }
-  })
+  }
   const url = new URL(request.url)
 
   if (
     url.origin !== origin.origin ||
     request.headers.get("host") !== origin.host ||
-    headerState.forwarded
+    forwarded
   ) {
     throw new HttpRejection(403)
   }
@@ -167,10 +162,8 @@ export class IngressBudget {
       this.used = 0
     }
 
-    this.used += 1
-
     if (
-      this.used > HTTP_LIMITS.perMinute ||
+      (this.used += 1) > HTTP_LIMITS.perMinute ||
       this.inFlight >= HTTP_LIMITS.inFlight
     ) {
       throw new HttpRejection(429)
@@ -203,7 +196,6 @@ export async function bodyText(request: Request): Promise<string> {
   const reader = request.body.getReader()
   const chunks: Uint8Array[] = []
   let size = 0
-
   let rejectInterrupted: (error: Error) => void = () => {
     /* The following Promise executor installs this callback synchronously. */
   }
@@ -223,7 +215,7 @@ export async function bodyText(request: Request): Promise<string> {
 
     for (;;) {
       reading = reader.read()
-      // oxlint-disable-next-line no-await-in-loop -- Consume one stream read/abort race at a time to preserve byte limits and cancellation ownership.
+      // oxlint-disable-next-line no-await-in-loop -- Consume one read/abort race at a time to preserve original scheduling and reader ownership.
       const part = await Promise.race([reading, interrupted])
       reading = undefined
 
@@ -233,13 +225,14 @@ export async function bodyText(request: Request): Promise<string> {
         break
       }
 
-      size += part.value.byteLength
+      const chunk = part.value
+      size += chunk.byteLength
 
       if (size > HTTP_LIMITS.bytes) {
         throw new HttpRejection(413)
       }
 
-      chunks.push(part.value)
+      chunks.push(chunk)
     }
 
     const bytes = new Uint8Array(size)

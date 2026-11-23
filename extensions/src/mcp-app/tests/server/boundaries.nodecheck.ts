@@ -1,7 +1,7 @@
+import { promiseFrom } from "../../shared/promise-operation.ts"
 import assert from "node:assert/strict"
 import test from "node:test"
 import { harness, show, newKey, data } from "./fixtures.ts"
-import { synchronousPromise } from "../../../core/synchronous-promise.ts"
 
 test("invalid authored/schema/settings/media rejected without mutation", async () => {
   const h = await harness()
@@ -53,7 +53,7 @@ test("scoped ordinary export delegates without adding a new consent stage", asyn
   const h = await harness({
     exports: {
       createAuthorizedDownload(_p, selection, format) {
-        return synchronousPromise(() => {
+        return promiseFrom(() => {
           exports += 1
 
           return {

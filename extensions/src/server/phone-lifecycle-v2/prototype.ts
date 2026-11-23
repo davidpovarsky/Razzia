@@ -140,8 +140,8 @@ export class LifecyclePrototype {
       if (
         input.action === "answer" &&
         (!Number.isSafeInteger(input.epoch) ||
-          !Number.isSafeInteger(input.answerIndex) ||
           typeof input.answerIndex !== "number" ||
+          !Number.isSafeInteger(input.answerIndex) ||
           input.answerIndex < 0)
       ) {
         return fail("invalid_answer")

@@ -1,0 +1,73 @@
+{
+  "format": "tadazz-native-pin-failed-state-capture-v1",
+  "sourceRun": "tadazz-codex-fe25457aa5c7-53880a3e",
+  "sourceSha": "fe25457aa5c79e7ac24c36ef55ff2235d97dd9d4",
+  "inputManifestSha256": "bb651d7dec9b0e4afb34afa1fd29cbaac5cc6f7b5d0af4d3e62bfd823ebd8ba1",
+  "sourceTreeSha256": "0b1e4879e6a50999ada3ecbc55d3a87fdba5c7d9d871910a7f47f2d58fabec9b",
+  "sourceEntries": 2680,
+  "files": {
+    "source/extensions/dist/application-preview/artifact.json": {
+      "sha256": "f2af59030407de6cc101f7949e8ad055334b7992b862a57aae74fb705e28af24",
+      "bytes": 926061
+    },
+    "source/extensions/dist/application-preview/original-definitions.mjs": {
+      "sha256": "f77dc14a673723fb117e1c722f6bf6b3f56c19e95b6b0e674ed27b1edb3048a7",
+      "bytes": 125176
+    },
+    "source/extensions/dist/application-preview/registry.json": {
+      "sha256": "424a1c3ff42aad612af9593dd8d5b15eca4eb0177a17162b87f1f61d74c9f1f8",
+      "bytes": 468984
+    },
+    "source/extensions/dist/application-preview/renderer.css": {
+      "sha256": "b0a57cd56feaf8ac8c873026e61c9ed88f991e9be127d9fdae5203cfa8f295de",
+      "bytes": 467317
+    },
+    "source/extensions/dist/application-preview/renderer.mjs": {
+      "sha256": "c05abb71b8dc9c4cf0d611a6af7c534e9ac848058c488e8e4835f33b54cb2726",
+      "bytes": 2819661
+    },
+    "source/extensions/dist/application-preview/verification.json": {
+      "sha256": "29a8cea4834cf0a760723080e675d1fb01faa7ef5f34edbaf2416a15bfd0e29c",
+      "bytes": 813
+    },
+    "source/extensions/qa/build-application-preview.mjs": {
+      "sha256": "634e463b09dc0b51993e27b0455dd2baeb1cabeed94ee17bde28beb41acaa21d",
+      "bytes": 12081
+    },
+    "source/extensions/qa/phase3-full-show/native-parity-fixtures.ts": {
+      "sha256": "c9965a90a0702caac5180409930daf6dd5cbfc240a75e386f3e005dfafb68470",
+      "bytes": 11454
+    },
+    "source/extensions/src/core/show-library/application-preview-build.json": {
+      "sha256": "c3c8c1f99a2903a7117cf9b47ee5a7bf2226afb526eb8410a40ba8666b31c410",
+      "bytes": 1754
+    },
+    "input-manifest.json": {
+      "sha256": "bb651d7dec9b0e4afb34afa1fd29cbaac5cc6f7b5d0af4d3e62bfd823ebd8ba1",
+      "bytes": 290767
+    },
+    "source-before-inventory.json": {
+      "sha256": "9cc4a887ae9545c1a38f2097e28d1ded834e3a4db7f3c63348a0dc6765189c94",
+      "bytes": 445909
+    }
+  },
+  "artifactGeneratedWidgetSources": [
+    "extensions/src/mcp-app/widget/dist/full-show.css",
+    "extensions/src/mcp-app/widget/dist/full-show.html",
+    "extensions/src/mcp-app/widget/dist/full-show.js"
+  ],
+  "consumerGuard": {
+    "cacheException": "07b64bb4f99518e306a2e3f5a693266a6ca543fdd1676627161af7077e818872",
+    "cacheImage": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "cacheOnlySleep": true,
+    "cacheNetworkNone": true,
+    "cacheNoPorts": true,
+    "activeSourceMounts": [
+      "07b64bb4f99518e306a2e3f5a693266a6ca543fdd1676627161af7077e818872"
+    ],
+    "noOtherContainerOrProcessConsumer": true
+  },
+  "sourceUnchangedDuringCapture": true,
+  "productionChanged": false,
+  "releaseQualified": false
+}

@@ -231,7 +231,11 @@ app.get("*", (c) => {
 const requestListener = getRequestListener(app.fetch)
 const server = createServer((request, response) => {
   void requestListener(request, response).catch((error: unknown) => {
-    server.emit("error", error)
+    response.destroy(
+      error instanceof Error
+        ? error
+        : new Error("qa:request-failed", { cause: error }),
+    )
   })
 })
 server.listen(0, "127.0.0.1", () => {

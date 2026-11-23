@@ -1,3 +1,4 @@
+import { promiseFrom } from "../../shared/promise-operation.ts"
 import assert from "node:assert/strict"
 import { before, after, test } from "node:test"
 import { generateKeyPairSync, randomBytes, createHash } from "node:crypto"
@@ -23,7 +24,6 @@ import {
   createInput,
   type Session,
 } from "./fixtures.ts"
-import { synchronousPromise } from "../../../core/synchronous-promise.ts"
 
 type PreviewSelectionParameters = Parameters<
   Parameters<typeof createPreviewCandidatePortV2>[1]["select"]
@@ -190,17 +190,14 @@ before(async () => {
             },
           ),
           project(prepared) {
-            return synchronousPromise(() => {
+            return promiseFrom(() => {
               const card = requirePreviewPresent(
                 prepared.draft.show.cards.find(
                   (c) => c.kind === "quiz" || c.kind === "survey",
                 ),
               )
 
-              // oxlint-disable-next-line typescript/no-unnecessary-condition -- Keep the fixture producer boundary check so an unsupported runtime card cannot fabricate a preview frame.
-              if (card.kind !== "quiz" && card.kind !== "survey") {
-                throw Error("fixture card")
-              }
+              assert.ok(["quiz", "survey"].includes(card.kind), "fixture card")
 
               const id = getPreviewIdentityId(
                 prepared.draft.input.identityMap,
@@ -341,7 +338,7 @@ async function linked(
       state: key(),
       code_challenge: createHash("sha256").update(verifier).digest("base64url"),
       code_challenge_method: "S256",
-    }).toString()}`,
+    })}`,
   )
   assert.equal(started.status, 302)
   const ticket = requirePreviewPresent(
@@ -574,6 +571,43 @@ test("data policy denial, player role and false current question fail closed wit
     await c.close()
   }
 })
+test("truthy non-boolean preview policy is rejected at initial and final disclosure checks", async () => {
+  const c = await connect(await linked())
+  const malformedPolicyAt = (boundary: number, malformed: unknown) => () => {
+    if (policyCalls === boundary) {
+      // Deliberately bypass the typed host port to exercise its runtime boundary.
+      rights = malformed as boolean
+    }
+  }
+
+  try {
+    const d = await created(c)
+
+    for (const malformed of [1, "true", {}, []]) {
+      for (const boundary of [1, 2]) {
+        rights = true
+        policyCalls = 0
+        policyEffect = malformedPolicyAt(boundary, malformed)
+        const result = await preview(c, d)
+        assert.equal(policyCalls, boundary)
+        assert.equal(result.isError, true)
+        assert.equal(meta(result), undefined)
+        assert.equal(
+          requirePreviewRecord(
+            requirePreviewRecord(result.structuredContent).error,
+          ).code,
+          "PREVIEW_UNAVAILABLE",
+        )
+      }
+    }
+  } finally {
+    rights = true
+    policyEffect = undefined
+    policyCalls = 0
+    await c.close()
+  }
+})
+
 test("a draft edit during host selection cannot publish a stale candidate", async () => {
   const c = await connect(await linked())
 

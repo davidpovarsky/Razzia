@@ -1,7 +1,9 @@
 // Synthetic signed native session + exact F DTO component checks. This is not
 // the actual B/F native-save consumer, root route/login or development replay.
-import playwright from "../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
-
+import playwright, {
+  type APIRequestContext,
+  type Page,
+} from "../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
 const { test, expect } =
   playwright as unknown as typeof import("../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js")
 
@@ -40,7 +42,7 @@ const id = (prefix = "P") =>
     .slice(0, 54)
 const path = (requestId: string) => `/studio/native-save-consent/${requestId}`
 const stats = async (
-  request: import("../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js").APIRequestContext,
+  request: APIRequestContext,
   requestId: string,
 ): Promise<unknown> =>
   (await request.get(`/qa/native-save/stats?id=${requestId}`)).json()
@@ -50,7 +52,7 @@ const open = async ({
   locale = "en",
   suffix = "",
 }: {
-  page: import("../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js").Page
+  page: Page
   requestId: string
   locale?: string
   suffix?: string
@@ -328,7 +330,12 @@ test("query/hash input and missing real HEAD no-store policy fail closed", async
   request,
 }) => {
   const requestId = id()
-  await open({ page, requestId, locale: "en", suffix: "?anything=forbidden" })
+  await open({
+    page,
+    requestId,
+    locale: "en",
+    suffix: "?anything=forbidden",
+  })
   await expect(page.getByRole("alert")).toHaveText(
     "Save approval is unavailable on this page.",
   )

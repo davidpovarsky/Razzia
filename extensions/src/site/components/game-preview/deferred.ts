@@ -22,8 +22,7 @@ export function createDeferred<T>() {
     resolve(value: T | PromiseLike<T>) {
       settle(value)
     },
-    // oxlint-disable-next-line typescript/no-invalid-void-type -- TypeScript this: void declares a receiver-free callback; it is erased and is not a runtime argument.
-    reject(this: void, reason?: unknown) {
+    reject(reason?: unknown) {
       fail(reason)
     },
   }

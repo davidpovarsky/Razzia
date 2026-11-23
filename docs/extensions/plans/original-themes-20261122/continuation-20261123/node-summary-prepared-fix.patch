@@ -1,0 +1,11 @@
+--- a/faa-successor-preparation-oracle.py
++++ b/faa-successor-preparation-oracle.py
+@@ -378,7 +378,7 @@
+     if label == "builtin-and-signed-catalog-policy":
+         values = {}
+         for key in ("tests", "pass", "fail", "cancelled", "skipped", "todo"):
+-            matches = re.findall(r"^# " + key + r" (\d+)\s*$", text, re.MULTILINE)
++            matches = re.findall(r"^(?:#|ℹ) " + key + r" (\d+)\s*$", text, re.MULTILINE)
+             assert len(matches) == 1, "Missing unambiguous policy count: " + key
+             values[key] = int(matches[0])
+         assert values["tests"] == values["pass"] >= 16

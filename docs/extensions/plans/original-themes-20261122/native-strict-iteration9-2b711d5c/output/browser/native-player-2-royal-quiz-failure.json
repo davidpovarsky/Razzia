@@ -1,0 +1,20 @@
+{
+  "family": "royal-quiz",
+  "url": "https://127.0.0.1:45249/party/01a2045d-5102-7660-a521-59f8ef7549e9",
+  "error": "Error: All 5 image, label and result choices fit royal-quiz results\n\nAll 5 image, label and result choices fit royal-quiz results\n\nexpect(received).toEqual(expected) // deep equality\n\n- Expected  - 1\n+ Received  + 8\n\n- Array []\n+ Array [\n+   Object {\n+     \"index\": 0,\n+     \"problems\": Array [\n+       \"og-choice-title answer-title: clipped by answer body\",\n+     ],\n+   },\n+ ]\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate\n    at captureRawStack (/cleanup/node_modules/.pnpm/playwright-core@1.64.0/node_modules/playwright-core/lib/coreBundle.js:9282:17)\n    at callMatcherAsStep (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13316:57)\n    at Object.toEqual (/cleanup/node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/lib/matchers/expect.js:13308:23)\n    at verifyChoiceLayout (/overlay/extensions/qa/original-themes/browser-verify.mjs:115:6)\n    at async verifyNative (/overlay/extensions/qa/original-themes/browser-verify.mjs:1003:9)\n    at async verifyOriginalThemeBrowser (/overlay/extensions/qa/original-themes/browser-verify.mjs:1157:5)\n    at async <anonymous> (/overlay/extensions/qa/original-themes/account-verify.mjs:249:3)",
+  "layout": {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "phase": "results",
+    "hostToolbar": null,
+    "hostActionRow": null,
+    "stageViewport": null,
+    "stage": null,
+    "question": null,
+    "answers": null,
+    "cards": [],
+    "visibleText": "4 / 4\nNice!\n\nYou finished 2nd place, behind Original QA 1\n\n+970\n\nOriginal QA 2\n\n970"
+  }
+}

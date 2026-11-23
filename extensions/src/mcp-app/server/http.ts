@@ -1,3 +1,4 @@
+import { promiseFrom } from "../shared/promise-operation.ts"
 import type {
   Dependencies,
   ServerConfig,
@@ -15,7 +16,6 @@ import {
   HttpRejection,
   bodyText,
 } from "../first-party/ingress.ts"
-import { synchronousPromise } from "../../core/synchronous-promise.ts"
 
 export interface RemoteMcpOptions {
   config: ServerConfig
@@ -25,8 +25,6 @@ export interface RemoteMcpOptions {
   responseTimeoutMs?: number
   /** Signature, issuer, exact audience, expiry, live grant and account verifier. */
   verifyAccessToken(
-    // oxlint-disable-next-line typescript/no-invalid-void-type -- TypeScript this: void declares a receiver-free callback; it is erased and is not a runtime argument.
-    this: void,
     token: string,
     signal: AbortSignal,
   ): Promise<VerifiedPrincipal>
@@ -68,8 +66,6 @@ async function completeLegacyResponse(
   const reader = response.body.getReader()
   const chunks: Uint8Array[] = []
   let size = 0
-  let complete = false
-  let reading: ReturnType<typeof reader.read> | undefined = undefined
   let interrupt: (error: Error) => void = () => {
     throw new Error(
       "Promise resolver interrupt was used before executor initialization",
@@ -79,6 +75,8 @@ async function completeLegacyResponse(
   const interrupted = new Promise<never>((_, reject) => {
     interrupt = reject
   })
+  let reading: ReturnType<typeof reader.read> | undefined = undefined
+  let complete = false
   const abort = () => interrupt(new HttpRejection(400))
   signal.addEventListener("abort", abort, { once: true })
 
@@ -89,7 +87,7 @@ async function completeLegacyResponse(
 
     for (;;) {
       reading = reader.read()
-      // oxlint-disable-next-line no-await-in-loop -- Consume one stream read/abort race at a time to preserve byte limits and cancellation ownership.
+      // oxlint-disable-next-line no-await-in-loop -- Consume one read/abort race at a time to preserve original scheduling and reader ownership.
       const part = await Promise.race([reading, interrupted])
       reading = undefined
 
@@ -99,13 +97,14 @@ async function completeLegacyResponse(
         break
       }
 
-      size += part.value.byteLength
+      const chunk = part.value
+      size += chunk.byteLength
 
       if (size > limit + 4096) {
         throw new Error("Response limit exceeded")
       }
 
-      chunks.push(part.value.slice())
+      chunks.push(chunk.slice())
     }
 
     return new Response(Buffer.concat(chunks), {
@@ -169,7 +168,7 @@ class RequestWork {
   }
   async drain() {
     while (this.pending.size) {
-      // oxlint-disable-next-line no-await-in-loop -- Recheck pending work after each settled snapshot because more work may have joined the set.
+      // oxlint-disable-next-line no-await-in-loop -- Recheck each settled snapshot without retaining a recursive Promise chain while new work joins.
       await Promise.allSettled([...this.pending])
     }
   }
@@ -196,6 +195,7 @@ export function createRemoteMcpApp(options: RemoteMcpOptions) {
       throw new Error("Exact HTTPS browser origins required")
     }
   }
+  // oxlint-disable-next-line typescript/unbound-method -- Preserve the original receiver-free callback snapshot; calls must not acquire options as this.
   const verifyToken = options.verifyAccessToken
   const deps = Object.freeze({ ...options.dependencies })
   const budget = new IngressBudget()
@@ -299,8 +299,8 @@ export function createRemoteMcpApp(options: RemoteMcpOptions) {
           const url = new URL(request.url)
           let headerBytes = 0
           let headerCount = 0
-          const headerState = { invalid: false }
-          request.headers.forEach((value, name) => {
+          let invalidHeaders = false
+          for (const [name, value] of request.headers) {
             headerBytes += Buffer.byteLength(name + value)
 
             headerCount += 1
@@ -312,11 +312,11 @@ export function createRemoteMcpApp(options: RemoteMcpOptions) {
               name === "forwarded" ||
               name.startsWith("x-forwarded-")
             ) {
-              headerState.invalid = true
+              invalidHeaders = true
             }
-          })
+          }
 
-          if (headerState.invalid) {
+          if (invalidHeaders) {
             return rejected(400)
           }
 
@@ -411,10 +411,10 @@ export function createRemoteMcpApp(options: RemoteMcpOptions) {
             verify: () => verifyToken(token, request.signal),
           })
           const verified = async () =>
-            authorize({
-              name: undefined,
-              extra: undefined,
-              deps: {
+            authorize(
+              undefined,
+              undefined,
+              {
                 authorize: authority.verify,
                 ...(deps.principalAccepted
                   ? { principalAccepted: deps.principalAccepted }
@@ -423,7 +423,7 @@ export function createRemoteMcpApp(options: RemoteMcpOptions) {
                 rateLimit: () => Promise.resolve(true),
               },
               config,
-            })
+            )
           let initial: VerifiedPrincipal | undefined = undefined
 
           try {
@@ -542,7 +542,7 @@ export function createRemoteMcpApp(options: RemoteMcpOptions) {
               return p
             },
             prevalidationLimit: () =>
-              synchronousPromise(() => !request.signal.aborted),
+              promiseFrom(() => !request.signal.aborted),
             ...(deps.drafts ? { drafts: work.wrap(deps.drafts) } : {}),
             ...(deps.semanticDrafts
               ? { semanticDrafts: work.wrap(deps.semanticDrafts) }

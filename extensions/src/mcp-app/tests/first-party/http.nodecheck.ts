@@ -110,13 +110,13 @@ test("wrong Host/Origin, forwarded headers, routes, methods and body types are r
   for (const [path, method, headers, status] of cases) {
     assert.equal(
       (
-        await requireInitializedF().request({
-          session: requireInitializedF().sessions[0],
+        await requireInitializedF().request(
+          requireInitializedF().sessions[0],
           path,
           method,
-          body: method === "GET" ? undefined : {},
+          method === "GET" ? undefined : {},
           headers,
-        })
+        )
       ).status,
       status,
     )
@@ -160,12 +160,12 @@ test("malformed JSON and native/enhanced envelopes are rejected before private/n
   ]) {
     assert.equal(
       (
-        await requireInitializedF().request({
-          session: requireInitializedF().sessions[1],
-          path: "/drafts",
-          method: "POST",
+        await requireInitializedF().request(
+          requireInitializedF().sessions[1],
+          "/drafts",
+          "POST",
           body,
-        })
+        )
       ).status,
       400,
     )
@@ -179,12 +179,12 @@ test("malformed JSON and native/enhanced envelopes are rejected before private/n
   assert.deepEqual(snapshot(requireInitializedF().root), priorSnapshot3)
 })
 test("create/read/replace use actual auth and SQLite; pending save has no success/consent/native URL", async () => {
-  const created = await requireInitializedF().request({
-    session: requireInitializedF().sessions[0],
-    path: "/drafts",
-    method: "POST",
-    body: createInput(),
-  })
+  const created = await requireInitializedF().request(
+    requireInitializedF().sessions[0],
+    "/drafts",
+    "POST",
+    createInput(),
+  )
   assert.equal(created.status, 201)
   assert.equal(created.headers.get("cache-control"), "no-store")
   const body = requireObservedRecord(
@@ -197,10 +197,10 @@ test("create/read/replace use actual auth and SQLite; pending save has no succes
     "HTTP draft id",
   )
 
-  const read = await requireInitializedF().request({
-    session: requireInitializedF().sessions[0],
-    path: `/drafts/${id}`,
-  })
+  const read = await requireInitializedF().request(
+    requireInitializedF().sessions[0],
+    `/drafts/${id}`,
+  )
   assert.equal(read.status, 200)
   assert.deepEqual(
     requireObservedRecord(await read.json(), "HTTP read draft envelope").data,
@@ -215,21 +215,21 @@ test("create/read/replace use actual auth and SQLite; pending save has no succes
   }
   assert.equal(
     (
-      await requireInitializedF().request({
-        session: requireInitializedF().sessions[0],
-        path: `/drafts/${key()}`,
-        method: "PUT",
-        body: input,
-      })
+      await requireInitializedF().request(
+        requireInitializedF().sessions[0],
+        `/drafts/${key()}`,
+        "PUT",
+        input,
+      )
     ).status,
     400,
   )
-  const replace = await requireInitializedF().request({
-    session: requireInitializedF().sessions[0],
-    path: `/drafts/${id}`,
-    method: "PUT",
-    body: input,
-  })
+  const replace = await requireInitializedF().request(
+    requireInitializedF().sessions[0],
+    `/drafts/${id}`,
+    "PUT",
+    input,
+  )
   assert.equal(replace.status, 200)
   assert.equal(
     requireObservedRecord(
@@ -241,18 +241,18 @@ test("create/read/replace use actual auth and SQLite; pending save has no succes
     ).revision,
     2,
   )
-  const saved = await requireInitializedF().request({
-    session: requireInitializedF().sessions[0],
-    path: `/drafts/${id}/save-intents`,
-    method: "POST",
-    body: {
+  const saved = await requireInitializedF().request(
+    requireInitializedF().sessions[0],
+    `/drafts/${id}/save-intents`,
+    "POST",
+    {
       contractVersion: "0.1.0",
       draftId: id,
       expectedRevision: 2,
       intent: "createNew",
       idempotencyKey: key(),
     },
-  })
+  )
   assert.equal(saved.status, 409)
   const outcome = requireObservedRecord(
     await saved.json(),
@@ -460,10 +460,10 @@ test("32 real authenticated body lifetimes exhaust anonymous admission until the
     ])
     assert.equal(
       (
-        await requireInitializedF().request({
-          session: requireInitializedF().sessions[0],
-          path: `/drafts/${key()}`,
-        })
+        await requireInitializedF().request(
+          requireInitializedF().sessions[0],
+          `/drafts/${key()}`,
+        )
       ).status,
       429,
     )
@@ -477,10 +477,10 @@ test("32 real authenticated body lifetimes exhaust anonymous admission until the
   }
   assert.equal(
     (
-      await requireInitializedF().request({
-        session: requireInitializedF().sessions[0],
-        path: `/drafts/${key()}`,
-      })
+      await requireInitializedF().request(
+        requireInitializedF().sessions[0],
+        `/drafts/${key()}`,
+      )
     ).status,
     404,
   )

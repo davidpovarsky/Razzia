@@ -1,0 +1,16 @@
+test_baseline_mount_exception_is_opt_in_pinned_and_retains_count_and_other_mount_gates (__main__.RuntimeOperatorTests.test_baseline_mount_exception_is_opt_in_pinned_and_retains_count_and_other_mount_gates) ... ok
+test_default_preserves_off_policy_and_optional_flag_changes_only_three_runtime_values (__main__.RuntimeOperatorTests.test_default_preserves_off_policy_and_optional_flag_changes_only_three_runtime_values) ... ok
+test_explicit_pins_and_installer_are_required (__main__.RuntimeOperatorTests.test_explicit_pins_and_installer_are_required) ... ok
+test_failed_runtime_readiness_prevents_any_application_stop (__main__.RuntimeOperatorTests.test_failed_runtime_readiness_prevents_any_application_stop) ... ok
+test_live_probe_requires_external_health_and_both_empty_denials_with_security_headers (__main__.RuntimeOperatorTests.test_live_probe_requires_external_health_and_both_empty_denials_with_security_headers) ... ok
+test_only_exact_read_only_runtime_topology_is_accepted (__main__.RuntimeOperatorTests.test_only_exact_read_only_runtime_topology_is_accepted) ... ok
+test_origin_requires_canonical_distinct_https (__main__.RuntimeOperatorTests.test_origin_requires_canonical_distinct_https) ... ok
+test_qualification_binds_desired_runtime_policy_operator_hash_and_runtime_pins (__main__.RuntimeOperatorTests.test_qualification_binds_desired_runtime_policy_operator_hash_and_runtime_pins) ... ok
+test_request_keeps_https_host_and_rejects_redirect_without_following (__main__.RuntimeOperatorTests.test_request_keeps_https_host_and_rejects_redirect_without_following) ... ok
+test_rollback_restores_original_off_container_and_probes_original_policy (__main__.RuntimeOperatorTests.test_rollback_restores_original_off_container_and_probes_original_policy) ... ok
+test_runtime_revision_is_independent_but_exact_on_both_image_and_container (__main__.RuntimeOperatorTests.test_runtime_revision_is_independent_but_exact_on_both_image_and_container) ... ok
+
+----------------------------------------------------------------------
+Ran 11 tests in 0.023s
+
+OK

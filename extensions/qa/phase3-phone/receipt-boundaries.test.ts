@@ -211,12 +211,7 @@ describe("Phone persisted receipt boundaries", () => {
       initialActions: ["register", "poll", "answer", "hangup"],
     }
     const request = { requestId: "authority_issue_1", expectedVersion: 0 }
-    const issued = writer.issue({
-      binding,
-      input: request,
-      actorSid: binding.issuerSid,
-      check,
-    })
+    const issued = writer.issue(binding, request, binding.issuerSid, check)
     expect(issued.credential).toMatch(/^[a-f0-9]{64}$/u)
     expect(issued.receipt).toMatchObject({
       ok: true,
@@ -224,14 +219,7 @@ describe("Phone persisted receipt boundaries", () => {
       state: "PENDING_DELIVERY",
       version: 1,
     })
-    expect(
-      writer.issue({
-        binding,
-        input: request,
-        actorSid: binding.issuerSid,
-        check,
-      }),
-    ).toEqual({
+    expect(writer.issue(binding, request, binding.issuerSid, check)).toEqual({
       receipt: issued.receipt,
     })
     const invalid = JSON.stringify({
@@ -250,12 +238,7 @@ describe("Phone persisted receipt boundaries", () => {
       ).toBe(1)
     })
     expect(() =>
-      writer.issue({
-        binding,
-        input: request,
-        actorSid: binding.issuerSid,
-        check,
-      }),
+      writer.issue(binding, request, binding.issuerSid, check),
     ).toThrow("authority_unavailable")
     files.read((db) => {
       expect(
@@ -274,14 +257,7 @@ describe("Phone persisted receipt boundaries", () => {
         "UPDATE control_receipts SET metadata=? WHERE request_id=?",
       ).run(JSON.stringify(issued.receipt), request.requestId)
     })
-    expect(
-      writer.issue({
-        binding,
-        input: request,
-        actorSid: binding.issuerSid,
-        check,
-      }),
-    ).toEqual({
+    expect(writer.issue(binding, request, binding.issuerSid, check)).toEqual({
       receipt: issued.receipt,
     })
   })

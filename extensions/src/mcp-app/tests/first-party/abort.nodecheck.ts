@@ -1,3 +1,4 @@
+import { captureMethod } from "../method-snapshot.ts"
 import { after, before, test } from "node:test"
 import assert from "node:assert/strict"
 import { existsSync } from "node:fs"
@@ -44,8 +45,7 @@ test("post-body abort retains pending real authentication work and creates no pr
   const [session] = requireInitializedF().sessions
   const controller = new AbortController()
   const { subtle } = globalThis.crypto
-  // oxlint-disable-next-line typescript/unbound-method -- Keep the raw verify intrinsic for fault injection; Reflect.apply below supplies its captured SubtleCrypto receiver.
-  const original = subtle.verify
+  const original = captureMethod(subtle, "verify")
   const descriptor = Object.getOwnPropertyDescriptor(subtle, "verify")
   let calls = 0
   let reached: () => void = () => {
@@ -188,13 +188,9 @@ test("abort at the verified-principal promise handoff prevents private work", as
 test("postcommit abort withholds disclosure without claiming rollback", async () => {
   const [session] = requireInitializedF().sessions
   const controller = new AbortController()
-  // oxlint-disable-next-line typescript/unbound-method -- Scoped SQLite fault injection calls the raw method with its live receiver and restores this exact function in finally.
-  const original = DatabaseSync.prototype.exec
+  const original = captureMethod(DatabaseSync.prototype, "exec")
   let committed = false
-  DatabaseSync.prototype.exec = function observeCommitAbort(
-    this: DatabaseSync,
-    sql: string,
-  ) {
+  DatabaseSync.prototype.exec = function exec(this: DatabaseSync, sql: string) {
     const result = original.call(this, sql)
 
     if (sql === "COMMIT") {

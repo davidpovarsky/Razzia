@@ -271,13 +271,13 @@ test("model-facing question refs follow authored order and drive real issuer que
     resourceMetadataUrl: `${origin}/.well-known/oauth-protected-resource`,
   }
   const read = () =>
-    dispatch({
-      name: "get_game_draft",
-      raw: { contractVersion: "0.1.0", draftId: original.draftId },
-      p: a,
+    dispatch(
+      "get_game_draft",
+      { contractVersion: "0.1.0", draftId: original.draftId },
+      a,
       deps,
       config,
-    })
+    )
   const first = await read()
   const firstOutput = outputs.get_game_draft.parse(first.structuredContent)
   assert(firstOutput.ok)
@@ -296,17 +296,17 @@ test("model-facing question refs follow authored order and drive real issuer que
     "publicQuestionId",
     "questionNumber",
   ])
-  const textResult = await dispatch({
-    name: "apply_game_edit",
-    raw: command(original, {
+  const textResult = await dispatch(
+    "apply_game_edit",
+    command(original, {
       kind: "set-question-text",
       publicQuestionId: third.publicQuestionId,
       text: "Question three selected only from model-visible references",
     }),
-    p: a,
+    a,
     deps,
     config,
-  })
+  )
   assert(outputs.apply_game_edit.parse(textResult.structuredContent).ok)
   const edited = await loadCurrent(original.draftId)
   const expected = readSemanticShow(original.authoredShowJson)
@@ -316,19 +316,19 @@ test("model-facing question refs follow authored order and drive real issuer que
     "Question three selected only from model-visible references"
   assert.equal(edited.authoredShowJson, canonicalJson(expected))
 
-  const catalog = await dispatch({
-    name: "list_editing_assets",
-    raw: {
+  const catalog = await dispatch(
+    "list_editing_assets",
+    {
       contractVersion: "0.1.0",
       draftId: edited.draftId,
       expectedRevision: edited.revision,
       purpose: "answer-image",
       locale: "en",
     },
-    p: a,
+    a,
     deps,
     config,
-  })
+  )
   const catalogOutput = outputs.list_editing_assets.parse(
     catalog.structuredContent,
   )
@@ -337,9 +337,9 @@ test("model-facing question refs follow authored order and drive real issuer que
     catalogOutput.data,
   ).assets
   assert(choice)
-  const pictured = await dispatch({
-    name: "apply_game_edit",
-    raw: command(edited, {
+  const pictured = await dispatch(
+    "apply_game_edit",
+    command(edited, {
       kind: "set-answer-pictures",
       publicQuestionId: third.publicQuestionId,
       pictures: [1, 2, 3, 4, 5].map((answerNumber) => ({
@@ -349,10 +349,10 @@ test("model-facing question refs follow authored order and drive real issuer que
         display: "both" as const,
       })),
     }),
-    p: a,
+    a,
     deps,
     config,
-  })
+  )
   assert(outputs.apply_game_edit.parse(pictured.structuredContent).ok)
   const final = readSemanticShow(
     (await loadCurrent(original.draftId)).authoredShowJson,
@@ -371,13 +371,13 @@ test("model-facing question refs follow authored order and drive real issuer que
     dataSchemas.get_game_draft.parse(rereadOutput.data).questionRefs,
     data.questionRefs,
   )
-  const foreign = await dispatch({
-    name: "get_game_draft",
-    raw: { contractVersion: "0.1.0", draftId: original.draftId },
-    p: b,
+  const foreign = await dispatch(
+    "get_game_draft",
+    { contractVersion: "0.1.0", draftId: original.draftId },
+    b,
     deps,
     config,
-  })
+  )
   const foreignOutput = outputs.get_game_draft.parse(foreign.structuredContent)
   assert.equal(foreignOutput.ok, false)
   assert.equal(Object.hasOwn(foreignOutput, "data"), false)

@@ -103,16 +103,16 @@ export function assertCreationScope(
   }
 }
 
-export function creationFamily(scope: CreationScope) {
+export function creationFamily(
+  scope: Omit<CreationScope, "mode"> & { mode: unknown },
+) {
   if (
     path.resolve(scope.configuredRoot) !== scope.configuredRoot ||
     (scope.mode === "tenant"
       ? !scope.owner ||
         !OWNER.test(scope.owner) ||
         scope.root !== path.join(scope.configuredRoot, "tenants", scope.owner)
-      : /* oxlint-disable typescript/no-unnecessary-condition -- Persisted creation scopes still require a known runtime mode even when their declared union is bypassed. */
-        scope.mode !==
-          "legacy-global" /* oxlint-enable typescript/no-unnecessary-condition */ ||
+      : scope.mode !== "legacy-global" ||
         scope.owner !== null ||
         scope.root !== scope.configuredRoot)
   ) {

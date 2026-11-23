@@ -388,11 +388,11 @@ describe.runIf(process.platform === "linux")(
         const receipt: Record<string, unknown> = { fault, state: "STARTED" }
 
         try {
-          const interrupted = await creationChild({
-            mode: "before-id-return",
-            root: requireInitializedFixture().root,
-            token: requireInitializedFixture().token,
-          })
+          const interrupted = await creationChild(
+            "before-id-return",
+            requireInitializedFixture().root,
+            requireInitializedFixture().token,
+          )
           const [{ file, entry }] = creationIntents(
             requireInitializedFixture().root,
           )

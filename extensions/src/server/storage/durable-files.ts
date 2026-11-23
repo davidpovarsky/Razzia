@@ -237,6 +237,27 @@ export function syncOwnedFile(file: string, expected: DurableImage) {
   }
 }
 
+function verifyCreatedFile(
+  file: string,
+  raw: string,
+  created: DurableIdentity | undefined,
+) {
+  const result = readDurableFile(file)
+
+  if (
+    !result ||
+    !created ||
+    fs.lstatSync(file, { bigint: true }).nlink !== 1n ||
+    !sameDurableIdentity(result, created) ||
+    result.raw !== raw ||
+    result.length !== Buffer.byteLength(raw)
+  ) {
+    throw new Error("Creation write verification failed")
+  }
+
+  return result
+}
+
 export function writeDurableExclusive(file: string, raw: string) {
   assertDirectoryChain(path.dirname(file))
   const fd = fs.openSync(
@@ -269,17 +290,7 @@ export function writeDurableExclusive(file: string, raw: string) {
     fs.closeSync(fd)
   }
 
-  const result = readDurableFile(file)
-
-  if (
-    !result ||
-    fs.lstatSync(file, { bigint: true }).nlink !== 1n ||
-    !sameDurableIdentity(result, created) ||
-    result.raw !== raw ||
-    result.length !== Buffer.byteLength(raw)
-  ) {
-    throw new Error("Creation write verification failed")
-  }
+  const result = verifyCreatedFile(file, raw, created)
 
   syncDirectory(path.dirname(file))
   const fenced = readDurableFile(file)

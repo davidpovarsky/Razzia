@@ -1,0 +1,998 @@
+{
+  "assets/EditorCanvasFrame-BHJHTstD.js": {
+    "bytes": 2888,
+    "sha256": "248876565bc95c6a130437b4ce2c338f486bfd4ff7df1c1fa504ac15d13e7d6f"
+  },
+  "assets/PackageManager-BmNUthD_.js": {
+    "bytes": 62,
+    "sha256": "78b8d672b353384878aabdcceb3eeaea8a27757513a8e114be6e8578b71ee3d4"
+  },
+  "assets/PackageManager-CKOg7esA.js": {
+    "bytes": 28370,
+    "sha256": "7959a3608ae88c54f16edd3c46181bef962b96e4d069b09a5952e1ce81d22432"
+  },
+  "assets/QuestionLivePreview-vP2m90BI.js": {
+    "bytes": 8754,
+    "sha256": "99f885e5806e55591827c9ce6e2ead21e5068d1325bfe81b6282a5603d7040a0"
+  },
+  "assets/application-preview-stage-BZdxq9cg.js": {
+    "bytes": 29644,
+    "sha256": "8378407b6d69c79a8793c32b38280973eb3f983d4ef25c0b1f734e8f59c482d9"
+  },
+  "assets/background-CMjhDDHd.png": {
+    "bytes": 2777381,
+    "sha256": "39615d76461d456e303bdb4c90d7a1c0ec38c3beb7d679ea66b8d28c91bf6085"
+  },
+  "assets/constants-yS6Mfn0D.js": {
+    "bytes": 225338,
+    "sha256": "ca1b8bd53e2a1cfd6ac6eda8f304a8361ec61eb07e14ab0598b3cf5597e8bf2c"
+  },
+  "assets/howler-DvpfHRP7.js": {
+    "bytes": 35943,
+    "sha256": "6bde5a81ee3770a016e796c84ceee7a092a991817c6d56210afba780b59e3074"
+  },
+  "assets/index-CorfOvcK.js": {
+    "bytes": 782604,
+    "sha256": "ef48f6e9129e9032911048eea407268d6b542fbc6e1e88466be2a208b3771e42"
+  },
+  "assets/index-LqR4vK9Y.css": {
+    "bytes": 134771,
+    "sha256": "dddb3cc25ac18d201228c8abda1c230bb53128000912d695ff4986482fe58594"
+  },
+  "assets/presentation-CBerkwK_.css": {
+    "bytes": 187090,
+    "sha256": "2668b7653b6ceae858e61f4c50d4092b87d329cb552589c43f29eef9f9356c73"
+  },
+  "assets/presentation-HQ_jN3D7.js": {
+    "bytes": 1974627,
+    "sha256": "54f941d941e4ff084517eb898756ff67b1d911d2b5df047e55fe4b79b4b41aa7"
+  },
+  "assets/projection-bOsRyIg3.js": {
+    "bytes": 440980,
+    "sha256": "6fcea6e9abd581ff9344f58c9077da85dbbee1061157fc1210b0860f66860b10"
+  },
+  "assets/rolldown-runtime-hePW80VL.js": {
+    "bytes": 716,
+    "sha256": "580ad8c58061a4dde99bde0a56905e382f0568516ee2f5b84dbfb52085709021"
+  },
+  "assets/rubik-arabic-wght-normal-CGnJ-sf6.woff2": {
+    "bytes": 32468,
+    "sha256": "f5052e4870bf211fc22df5b85e791a292a77b9baef8cef1dc5a8e62a783ea1e0"
+  },
+  "assets/rubik-cyrillic-ext-wght-normal-BjodpZir.woff2": {
+    "bytes": 12388,
+    "sha256": "35e30483bb79be6fd8de0fec4e038fda9e637fc7337f6ff61418c7d08077878b"
+  },
+  "assets/rubik-cyrillic-wght-normal-DveCct9I.woff2": {
+    "bytes": 15112,
+    "sha256": "bdb2b33ab916e9e7b42edb61f8aea5f5dd83ad773d6ee4e9b55665daf8954ce8"
+  },
+  "assets/rubik-hebrew-wght-normal-BIkpbuMU.woff2": {
+    "bytes": 9348,
+    "sha256": "197b6dbe5c6bec7276c59b02d70a16ee6acd44322fc2f8d0226c07f8d57976c2"
+  },
+  "assets/rubik-latin-ext-wght-normal-OacczzuJ.woff2": {
+    "bytes": 19400,
+    "sha256": "09472f217ad1ebb61a7669cf532f9f2f80685e07652ee862fde9a79665aef479"
+  },
+  "assets/rubik-latin-wght-normal-CnQIisVs.woff2": {
+    "bytes": 35348,
+    "sha256": "691cd1d9b4c0cdf31a1dcf04259c86f92c85e69f6622abab7964d81e36890691"
+  },
+  "assets/tadazz-question-background-BnsH8I8M.png": {
+    "bytes": 1610338,
+    "sha256": "fb3dba4bc8587abf8e10165f02191c649610923f4c6bc8625218065965c3a31c"
+  },
+  "icon.svg": {
+    "bytes": 988,
+    "sha256": "7594a69ec11c73e9f8c04d189bd3ac6d5533bfe00f65dedb4d420478ea4bcadb"
+  },
+  "index.html": {
+    "bytes": 1597,
+    "sha256": "6e579f15e1e22b9b9b35108f9c2cf2ddf3b1331301201aca66a421aee881ee2a"
+  },
+  "media/blue-sky.png": {
+    "bytes": 70,
+    "sha256": "c414cd0e204de974f73753c7e28d7638e7b3691bb8b1a2bab6b25bb7fed7ce77"
+  },
+  "motion/tadazz-motion-runtime.html": {
+    "bytes": 992496,
+    "sha256": "d5980f1d673271274eba650ed00a9d62284d48fd4607e8cd83d5ef1f05aba8b6"
+  },
+  "sounds/answersMusic.mp3": {
+    "bytes": 1246763,
+    "sha256": "d1ebc0f3046aa0916ba5f2604df4f1f8f4087402d4d237ce75fa21f0a1de3cc6"
+  },
+  "sounds/answersSound.mp3": {
+    "bytes": 28212,
+    "sha256": "14a1a33ddf0b7b1a5b45cf3c6e4f87892ae6bc09ca06c4a12df43b0ba2972d5b"
+  },
+  "sounds/boump.mp3": {
+    "bytes": 5878,
+    "sha256": "4569d220e4dfd88a61390ea3139806021dd015eabac73fa23dac311295c63224"
+  },
+  "sounds/first.mp3": {
+    "bytes": 164093,
+    "sha256": "9fcd09708b798984a0d2ad7edb46efaad5cc4bda7123ee06133fa99c476f6e90"
+  },
+  "sounds/results.mp3": {
+    "bytes": 52845,
+    "sha256": "851de7da474e2bd62978bcde5ef4f3fbca67eb4fdb4396751d6e95d0b5695382"
+  },
+  "sounds/second.mp3": {
+    "bytes": 77750,
+    "sha256": "75e490e301325354d62fb2f44876a90999e3da322e064961876fe9973a9f1cdb"
+  },
+  "sounds/show.mp3": {
+    "bytes": 7941,
+    "sha256": "e3e2d6b871982ffcef21d2329109fc477103fa6e6243fb2958432e7225757649"
+  },
+  "sounds/snearRoll.mp3": {
+    "bytes": 390765,
+    "sha256": "0928c8cf6063808a14e674a04aa370a29941c802c41c4e31e471e00ca3701212"
+  },
+  "sounds/tadazz-confirm-20261108.mp3": {
+    "bytes": 8193,
+    "sha256": "2d9152323b9061b99512b8876da2d26dac250ce17c3c7f132c62a6fbcba7da94"
+  },
+  "sounds/tadazz-reveal-bright-20261108.mp3": {
+    "bytes": 28255,
+    "sha256": "f264ded0b6135806df49240840de23054d936c0bf0c3c0b26c6efb2d4d234823"
+  },
+  "sounds/tadazz-silky-transition-20261108.mp3": {
+    "bytes": 18476,
+    "sha256": "4c3c0a5b880c5a1eae787c3895fae6a4cab4b4b7538eadb3b0b66955ce87e104"
+  },
+  "sounds/tadazz-soft-reveal-20261108.mp3": {
+    "bytes": 17647,
+    "sha256": "0b7f14b455819166fa3576b92c2a2f5c1271a6aaba3cd7e1231ab46abb7ec427"
+  },
+  "sounds/tadazz-timer-end-368edc1d9522.mp3": {
+    "bytes": 25974,
+    "sha256": "368edc1d95220e8255c853850f02b447a128c06b59e1a8756fb02b6b9f4ab8e4"
+  },
+  "sounds/tadazz-timer-final-20261108.mp3": {
+    "bytes": 9447,
+    "sha256": "623deeb6e312c17f6feeb4d2fad8482d4c967055f7a5df975a84f8962e03630e"
+  },
+  "sounds/tadazz-timer-tick-20261108.mp3": {
+    "bytes": 5058,
+    "sha256": "efcd6b041fc7f13e565e30a6ee878965d5caab7d29aa6ad86b657dbf3444c275"
+  },
+  "sounds/tadazz-timer-urgent-20261108.mp3": {
+    "bytes": 5685,
+    "sha256": "dcb2f17e811e0107cd324b541fecdd1334fd2dd19b8a9f8fed7feb0302960047"
+  },
+  "sounds/three.mp3": {
+    "bytes": 61238,
+    "sha256": "374b3a93f05832dd1544e645d69413b82272fdf8f88416ffc23c3a30686ea997"
+  },
+  "tadazz-favicon-z-20261108.png": {
+    "bytes": 1223522,
+    "sha256": "0773459d325e1903f56fdc8542560a98c9021e2a26e8b4c1ccfa5ae61b2a410f"
+  },
+  "tadazz-show/demos/cosmic/v1/backdrop.png": {
+    "bytes": 2228060,
+    "sha256": "7a613b3b59e2c6f89f081ca2b5cf4cd84e4f54e94341212a45da726b36446fe7"
+  },
+  "tadazz-show/demos/cosmic/v1/logo.png": {
+    "bytes": 11791,
+    "sha256": "9057bad3a21e098f26494c056fa725b05943d2ed53a4df67116ae16fe7f9007a"
+  },
+  "tadazz-show/demos/cosmic/v1/opening.json": {
+    "bytes": 1121,
+    "sha256": "4ec6b0de97a844b7f46ae1190d806fe90f7cda7f18f773e65c3e0dca51ad136b"
+  },
+  "tadazz-show/demos/cosmic/v1/opening.webm": {
+    "bytes": 145492,
+    "sha256": "a517338c881a4f1b674a862839d03f849e770a3ee27a35356c0aa0d7a4d338a0"
+  },
+  "tadazz-show/demos/cosmic/v2/backdrop.png": {
+    "bytes": 2228060,
+    "sha256": "7a613b3b59e2c6f89f081ca2b5cf4cd84e4f54e94341212a45da726b36446fe7"
+  },
+  "tadazz-show/demos/cosmic/v2/opening.json": {
+    "bytes": 574,
+    "sha256": "e02fddf90cafac0427d291fa658b3b6dcd4e8af76e45fe4cc8b369cbdabd7697"
+  },
+  "tadazz-show/demos/cosmic/v2/opening.webm": {
+    "bytes": 151150,
+    "sha256": "09919adec55d6463e8bb532b98abe20a5d0ff9e3334b2486e0eff7d9537a7304"
+  },
+  "tadazz-show/demos/jade/v1/backdrop.png": {
+    "bytes": 2183148,
+    "sha256": "4ea30988916082f5600ec49ae27472fa90490b21e160bc34a828add0c07baebd"
+  },
+  "tadazz-show/demos/jade/v1/logo.png": {
+    "bytes": 11217,
+    "sha256": "ef6eb964850cd2992416104dbf161a1d369acb5413f60fcee810c7635460ed1e"
+  },
+  "tadazz-show/demos/jade/v1/opening.json": {
+    "bytes": 1120,
+    "sha256": "2232e53b589b83df629dcc772c4996af010750ba37b0e6582662424d08ee048c"
+  },
+  "tadazz-show/demos/jade/v1/opening.webm": {
+    "bytes": 158881,
+    "sha256": "2f570937511660da009fa1dcc65fd406d461bc7e027b34a99d84b0445b2bc485"
+  },
+  "tadazz-show/demos/jade/v2/backdrop.png": {
+    "bytes": 2183148,
+    "sha256": "4ea30988916082f5600ec49ae27472fa90490b21e160bc34a828add0c07baebd"
+  },
+  "tadazz-show/demos/jade/v2/opening.json": {
+    "bytes": 573,
+    "sha256": "ea3bc7bba8f09cd73b98bee3c49e7fdae1852766c93723ec2203c377b1e9d107"
+  },
+  "tadazz-show/demos/jade/v2/opening.webm": {
+    "bytes": 157352,
+    "sha256": "e9d119aeb6b20b8a74c3bf5b9da6f56a056198375acd21a2b7f03b14c6ee3894"
+  },
+  "tadazz-show/gallery/classroom-backdrop.png": {
+    "bytes": 940184,
+    "sha256": "84c60d60ddc6705014f4076988cbc4fdb5d30fbd056bda8c07355ea00502d8f2"
+  },
+  "tadazz-show/gallery/crowd-backdrop.png": {
+    "bytes": 835183,
+    "sha256": "cfcf740185d8ea3fceb6aec1ab41cd5e610eb8047577f07ab74ad08a32458a61"
+  },
+  "tadazz-show/gallery/family-backdrop.png": {
+    "bytes": 749007,
+    "sha256": "81661db1335b650938936bf8702c98192101b6e2d946504e74530f02a5676d23"
+  },
+  "tadazz-show/gallery/finale-backdrop.png": {
+    "bytes": 768508,
+    "sha256": "ef1d48e912d19dd1421b3a77ef77eb9221f1c5fd8880fcba8aecea00c21b6d7e"
+  },
+  "tadazz-show/gallery/picture-backdrop.png": {
+    "bytes": 749990,
+    "sha256": "b074c5cbcb9fe6ade519b2bab7ad3017a2ef3d51fdb6e4adb441de9dbf9c9e40"
+  },
+  "tadazz-show/gallery/picture-balloon.png": {
+    "bytes": 20407,
+    "sha256": "f6a94336a4b886a88a4536917fbaa75b75851b89d78b9ae47922e7632a864939"
+  },
+  "tadazz-show/gallery/picture-bicycle.png": {
+    "bytes": 26444,
+    "sha256": "17412045e0b555ced3c10161484737890bba70edd1def4fc12599b2be2d7c436"
+  },
+  "tadazz-show/gallery/picture-boat.png": {
+    "bytes": 19555,
+    "sha256": "f6ac0b8e71804d9a875944a39e16af2e4e2ef2f1a3cabdf8f8e6e96fdddb5be7"
+  },
+  "tadazz-show/gallery/picture-circle.png": {
+    "bytes": 19152,
+    "sha256": "156c276eed8103a31d394db26813e3a4f0dd0ee164fe3f453dd5c24b62632563"
+  },
+  "tadazz-show/gallery/picture-cloud.png": {
+    "bytes": 20139,
+    "sha256": "796dfd8f3dcc5dff7a1f596c01d2eaf62a7c41b5b118f3286fcce9aad0a1e65f"
+  },
+  "tadazz-show/gallery/picture-leaf.png": {
+    "bytes": 26881,
+    "sha256": "8ca834a1151c1e56176dbcbc77f416434bff4b3959400a055a203ce331cdf3c0"
+  },
+  "tadazz-show/gallery/picture-rocket.png": {
+    "bytes": 25318,
+    "sha256": "91a8ad9028260c992f7ab580456ca28c7159bea15fa613456da5263f743aad2b"
+  },
+  "tadazz-show/gallery/picture-square.png": {
+    "bytes": 10223,
+    "sha256": "46bdc7dc816164bd5e4acc5abf025ad1deeea4cf6f328ebd71f74ab0de6cdb8e"
+  },
+  "tadazz-show/gallery/picture-star.png": {
+    "bytes": 23708,
+    "sha256": "75af93d0b4f9ae4e9fb4bd247a71bf05c3e424ade0d4286e32521bebca4bb249"
+  },
+  "tadazz-show/gallery/picture-sun.png": {
+    "bytes": 23324,
+    "sha256": "65ab4fab47cc04dd648d707dd647a69ee2dcb3c97103003d446defc424f64684"
+  },
+  "tadazz-show/gallery/picture-train.png": {
+    "bytes": 17211,
+    "sha256": "a747cefc8431f62e9c98529cd2f4fb2e507e8798bd4478fc24f908b4f984fbd9"
+  },
+  "tadazz-show/gallery/picture-triangle.png": {
+    "bytes": 17220,
+    "sha256": "836ff9ffe35a7b87e29585a83ccf0a526f4f8c233ed3cd0895f5a064f21c6cc3"
+  },
+  "tadazz-show/gallery/picture-umbrella.png": {
+    "bytes": 24010,
+    "sha256": "6bdd09cf2131b0b12b773a1839f08edeac660860911cf77f2756d3f34a7899b6"
+  },
+  "tadazz-show/gallery/quiz-backdrop.png": {
+    "bytes": 734295,
+    "sha256": "7ab696a8198b8e7e81c964cf311dd45d2989a24e99dcc685156cc932a58ff03d"
+  },
+  "tadazz-show/gallery/story-backdrop.png": {
+    "bytes": 901875,
+    "sha256": "25dcb1b0fbf29a3704cebdf3bde28b2d1303f4dab402dc44274660ff0f6ffad8"
+  },
+  "tadazz-show/gallery/team-backdrop.png": {
+    "bytes": 722035,
+    "sha256": "d25d1daa7fa72f142186961f0fcd0ad4f25d854b489e84d7e98d6d2aa4330cd2"
+  },
+  "tadazz-show/gallery/truth-backdrop.png": {
+    "bytes": 686251,
+    "sha256": "2cbc4b2a003c008fef54642023bc48d464d89695be24b2acbeb38267f5a22821"
+  },
+  "tadazz-show/great-guessoff/banana.webp": {
+    "bytes": 14294,
+    "sha256": "e44f8561d297021b8a94dc39d3c439fa0aaee59f190e2fbf754b4d992eec3097"
+  },
+  "tadazz-show/great-guessoff/cherry.webp": {
+    "bytes": 36770,
+    "sha256": "4650312d662191d34760e42ed1fb0be2174995a69759511a17653bcdc3fa69cc"
+  },
+  "tadazz-show/great-guessoff/entertainer.webp": {
+    "bytes": 36614,
+    "sha256": "fd0481ec67574c24ccd148686a4b4fe93bbd979b6a56c6fc943f6375d53772db"
+  },
+  "tadazz-show/great-guessoff/organiser.webp": {
+    "bytes": 35640,
+    "sha256": "e44111b0850900cb3b3a8b18505ebf818f1449a5b7e94c320d4bb7a37d10f03e"
+  },
+  "tadazz-show/great-guessoff/photographer.webp": {
+    "bytes": 32198,
+    "sha256": "76e319d433c653bf998a1de812f39b8e37d15a88fefbc10005d7a13f6ee835a9"
+  },
+  "tadazz-show/great-guessoff/raspberry.webp": {
+    "bytes": 60670,
+    "sha256": "27f7d9f54361b86dd573c53d5752f33c1df7f8b528df1f2f30a542e614ef78ca"
+  },
+  "tadazz-show/great-guessoff/snack-hunter.webp": {
+    "bytes": 41866,
+    "sha256": "88d90d5463b4e399f133b1a9d618a115ed7c22cb8f409b05dc87977e04b80f41"
+  },
+  "tadazz-show/great-guessoff/strawberry.webp": {
+    "bytes": 56568,
+    "sha256": "e83e15aea67e1a93091a9536b336fe26ed79518819f92b07302e05b0e99e9574"
+  },
+  "tadazz-show/motion/backdrop.webp": {
+    "bytes": 94502,
+    "sha256": "a76a50432f43313d29e78f625302a256e7e7b71db322612c4b66ee3aef0cf37e"
+  },
+  "tadazz-show/motion/logo.webp": {
+    "bytes": 151654,
+    "sha256": "4a925b8950ac3ba4ba878b849b88d1ce8dd44cf91d4e444547826251b1b1b672"
+  },
+  "tadazz-show/music/balloons-forever.ogg": {
+    "bytes": 2962473,
+    "sha256": "63c963f6f90fe9aec17061089271038833dc161f9e08a3f40109eeb58f552b5a"
+  },
+  "tadazz-show/music/credits.html": {
+    "bytes": 1125,
+    "sha256": "3bf75206f9b0728ab5a6ff13d303f138d1d873e838ca7656c1c266fc759814ed"
+  },
+  "tadazz-show/music/cutie-patootie.mp3": {
+    "bytes": 784914,
+    "sha256": "1c3cafcf431726d25105ed8346271a9e69e35bdb09d40e418c55d46b6272f80c"
+  },
+  "tadazz-show/music/epic-main-menu.mp3": {
+    "bytes": 839514,
+    "sha256": "36377deb75d643232d583e509126919ec8feeb14a16dee734b1a9cbc778adf36"
+  },
+  "tadazz-show/music/platform/tadazz-boss-battle-20261106.mp3": {
+    "bytes": 3046160,
+    "sha256": "84cb8fc344ae1d52a9c8d25d38a633137994a9632c8a68568f38418a5a3f1960"
+  },
+  "tadazz-show/music/platform/tadazz-determination-20261106.mp3": {
+    "bytes": 5231002,
+    "sha256": "6a9821e5320933dd0b4445847911287563ec794cf0162291b882ffbb07fa1ebc"
+  },
+  "tadazz-show/music/platform/tadazz-epic-endgame-20261106.mp3": {
+    "bytes": 2156220,
+    "sha256": "b0ae9562d2c9c8e3a5d445789ed9e1f6f0b201bdc2b57f07897eac9a03a66c36"
+  },
+  "tadazz-show/music/platform/tadazz-exploration-20261106.mp3": {
+    "bytes": 2553620,
+    "sha256": "432f9dc04fbbcffe9f14e5559e2d17a9167d7a2ca5fb5bc887543200ad6248a8"
+  },
+  "tadazz-show/music/platform/tadazz-fantasy-orchestral-20261106.mp3": {
+    "bytes": 3914876,
+    "sha256": "8bc3c4df066c16916bd6a44008bcbd571e06396f4b335013e9c11c81d6239c15"
+  },
+  "tadazz-show/music/platform/tadazz-prepare-to-fight-20261106.mp3": {
+    "bytes": 2426921,
+    "sha256": "755aa38c6583016480671354bde7aabf2f1ada789eb2c99b3e2504e507cf4ed6"
+  },
+  "tadazz-show/music/platform/tadazz-production-intro-20261106.wav": {
+    "bytes": 2116310,
+    "sha256": "65aca17e6c1b0ff067aeda6251c900e3a4eff3033c018598002f2a6432b05c07"
+  },
+  "tadazz-show/music/platform/tzila-determined-pursuit-20261105.mp3": {
+    "bytes": 2161415,
+    "sha256": "bbd4db307419437e490b9285e594a0c15a30c29de87a384c36567e0c36201f3d"
+  },
+  "tadazz-show/opening/Animate_gameshow_stage_loop_c01e8a8a_1080p.mp4": {
+    "bytes": 5028530,
+    "sha256": "74e5f1d1114053ea55805af1d4b327eedab8092ef5ac088321220251175d4fac"
+  },
+  "tadazz-show/opening/Scene-1.json": {
+    "bytes": 1354334,
+    "sha256": "7da27b375f06da524a04fd51fadd651f91fb6a54a04a4f1b6dc39353fbdfe06b"
+  },
+  "tadazz-show/opening/TADAZZ-Opening-4-5s.json": {
+    "bytes": 1212173,
+    "sha256": "48037458d5aedef5055d6ca85f167b8fc079aa91e109b540eb81c554fa266f78"
+  },
+  "tadazz-show/originals/carnival-pop/backdrop.png": {
+    "bytes": 525426,
+    "sha256": "df0bb818ea6cfdec8f1d83bdee246bd003679c7b6ed8da4afa2bc6881520f815"
+  },
+  "tadazz-show/originals/carnival-pop/closing.wav": {
+    "bytes": 846764,
+    "sha256": "3d1cd6b7a0ae9b108ef93cb82cbd7fae95b2d68e16ba9845703fc01d7d23b0f2"
+  },
+  "tadazz-show/originals/carnival-pop/confirm.wav": {
+    "bytes": 60020,
+    "sha256": "859504a36618071c1bc335e29e9379fcbe6856dcf01bd6039be429b2f34f0fc2"
+  },
+  "tadazz-show/originals/carnival-pop/final.wav": {
+    "bytes": 40616,
+    "sha256": "0c1a3d726d44096405c42ac861a7110d171f28d02c025f966787bdae312d0c9e"
+  },
+  "tadazz-show/originals/carnival-pop/leaderboard.wav": {
+    "bytes": 458684,
+    "sha256": "70b34c5f032fe18ef9275d258316e5da0cb23027d5b997778b7e4c4be44b01d2"
+  },
+  "tadazz-show/originals/carnival-pop/lock.wav": {
+    "bytes": 88244,
+    "sha256": "2be59a52363c80a7b4795129f65c77311e9ec50f2d97ded95c4c250e98076ea6"
+  },
+  "tadazz-show/originals/carnival-pop/podium.wav": {
+    "bytes": 670364,
+    "sha256": "2a58b01a2a2ad8d77d4e957a6fb37567704929213b606a562982da392f88aa6d"
+  },
+  "tadazz-show/originals/carnival-pop/poster.png": {
+    "bytes": 478743,
+    "sha256": "aca9637b25090608db243562d612994e40b08a0e8b8ee796ba612b3c248d0afd"
+  },
+  "tadazz-show/originals/carnival-pop/reveal.wav": {
+    "bytes": 291104,
+    "sha256": "d342ddae4fd735f27afcd015c954e6c30f09a94f23f2f437cd8a12774b52f3c2"
+  },
+  "tadazz-show/originals/carnival-pop/tick.wav": {
+    "bytes": 21212,
+    "sha256": "3041466c7977dcdad62af136822243e4347b5a736ba21e0c41e355007ebf6281"
+  },
+  "tadazz-show/originals/carnival-pop/timer-end.wav": {
+    "bytes": 149984,
+    "sha256": "4df52cc3f6105adcd089619a8132aa6be0b1253c8a0750723329f59d8e01e474"
+  },
+  "tadazz-show/originals/carnival-pop/transition.wav": {
+    "bytes": 132344,
+    "sha256": "05311c1b871c3b98846c6e97e1f3014ee0060d828a909f74a791c76261a4e1a2"
+  },
+  "tadazz-show/originals/carnival-pop/urgent.wav": {
+    "bytes": 28268,
+    "sha256": "aeb01d3a385ed79e8825b4c3ea791d36c9e37f497d8a2427ea710de64b240c7c"
+  },
+  "tadazz-show/originals/carnival-pop/voting-bed.wav": {
+    "bytes": 3136044,
+    "sha256": "47c4e2ef2f880bf7499a9b8fc0d5e130369de161d0c2588c4ee2290aeeca4f1e"
+  },
+  "tadazz-show/originals/crystal-future/backdrop.png": {
+    "bytes": 775296,
+    "sha256": "e3144117a6605907a8cc875dcff0bdcc10143fe82153cf58eff99feaf94429f0"
+  },
+  "tadazz-show/originals/crystal-future/closing.wav": {
+    "bytes": 846764,
+    "sha256": "5322ed3ecedd9bb5686a15eac37406a0b28aeba997e85f060563344eeba18641"
+  },
+  "tadazz-show/originals/crystal-future/confirm.wav": {
+    "bytes": 60020,
+    "sha256": "2441858b03752c84b5e029aebf15775b6e709d0fa8501d0650fa56fc939cb648"
+  },
+  "tadazz-show/originals/crystal-future/final.wav": {
+    "bytes": 40616,
+    "sha256": "fb7f0d8a1676139f979c88674ec103073b3e2a78ff1940ffeaf94031894d9c2f"
+  },
+  "tadazz-show/originals/crystal-future/leaderboard.wav": {
+    "bytes": 458684,
+    "sha256": "b03d7cbea0b1b6035e87350734b69ed9a09635a496c946783aea53de46ecb4fc"
+  },
+  "tadazz-show/originals/crystal-future/lock.wav": {
+    "bytes": 88244,
+    "sha256": "7693cf82cc39d4d652c52e7978c46aee40c60db6497145da4746284842e0ad3f"
+  },
+  "tadazz-show/originals/crystal-future/podium.wav": {
+    "bytes": 670364,
+    "sha256": "2b203d8743beaaf2a16cface35fdf0ea75766c55297bdc566143353f871dc3d5"
+  },
+  "tadazz-show/originals/crystal-future/poster.png": {
+    "bytes": 690468,
+    "sha256": "1e0ce70c91b9447e4a6ca99f3bf70857173e02e8806a8f0e601c84d36f78b355"
+  },
+  "tadazz-show/originals/crystal-future/reveal.wav": {
+    "bytes": 291104,
+    "sha256": "bd19b4c17e3d27b66797dc026d9b37034104cbc011e6fc6f228e3477475f39c8"
+  },
+  "tadazz-show/originals/crystal-future/tick.wav": {
+    "bytes": 21212,
+    "sha256": "96e7c8edbe37cc557e9eed9a6046436afe6601e901b40a44280397d94ea4efa2"
+  },
+  "tadazz-show/originals/crystal-future/timer-end.wav": {
+    "bytes": 149984,
+    "sha256": "4cfab8e521061f271101c0ce76668e4b4838a66b25986143a27e39e08e1405a0"
+  },
+  "tadazz-show/originals/crystal-future/transition.wav": {
+    "bytes": 132344,
+    "sha256": "4be02a7bce643025f003119bc118c308727627da1c19134a69794b0739f2e8d4"
+  },
+  "tadazz-show/originals/crystal-future/urgent.wav": {
+    "bytes": 28268,
+    "sha256": "d6981597679528c3dfbc6cbe8bfbccf6d032bc61212622655630e932d9d5b0a0"
+  },
+  "tadazz-show/originals/crystal-future/voting-bed.wav": {
+    "bytes": 4233644,
+    "sha256": "1218a114752cb3dfdc758942ec3725747f3b952a1654feb4fee04ebc87e3f97a"
+  },
+  "tadazz-show/originals/magic-storybook/backdrop.png": {
+    "bytes": 566857,
+    "sha256": "4d804e6222a6a42cd945dd7e0bc771570964b085cc366d88af79bf2c15bbd22f"
+  },
+  "tadazz-show/originals/magic-storybook/closing.wav": {
+    "bytes": 846764,
+    "sha256": "38c8a0efe1bb911194867cae4161e884fbb49dc2222ef9f62cfbcee53f17f13b"
+  },
+  "tadazz-show/originals/magic-storybook/confirm.wav": {
+    "bytes": 60020,
+    "sha256": "8d4da399ca5d0a684301b8615828eb1d7d3dd6d92d0ef06217e7b3429287d40a"
+  },
+  "tadazz-show/originals/magic-storybook/final.wav": {
+    "bytes": 40616,
+    "sha256": "997321f3f18f0ccb986db0803f67a76cc81426161210712feed285ff20f23e73"
+  },
+  "tadazz-show/originals/magic-storybook/leaderboard.wav": {
+    "bytes": 458684,
+    "sha256": "864a44711a1d3a8af4fa1a5614f79204d587b4e642b00564ac73902b707f032f"
+  },
+  "tadazz-show/originals/magic-storybook/lock.wav": {
+    "bytes": 88244,
+    "sha256": "29d2c91aa2b88e6614dea8bb849d94c4e89aa4f68523275df9fa6d6d1208756d"
+  },
+  "tadazz-show/originals/magic-storybook/podium.wav": {
+    "bytes": 670364,
+    "sha256": "f3a2306433768f52271f8829a6c8923480c0fb3bec25c0c0a1defb2b675b8d5f"
+  },
+  "tadazz-show/originals/magic-storybook/poster.png": {
+    "bytes": 481791,
+    "sha256": "f5b8a2ad2e6142df5bd350de40058ee152b932ad32f14cbe9b447397a3467ffd"
+  },
+  "tadazz-show/originals/magic-storybook/reveal.wav": {
+    "bytes": 291104,
+    "sha256": "493b512bf5e0fc752d8b114eafa81e69353a18611ebfc6a52db57e496497e114"
+  },
+  "tadazz-show/originals/magic-storybook/tick.wav": {
+    "bytes": 21212,
+    "sha256": "debe2efa90bc1ee78eb2341bd05472815ded39a4977bf8f4eb4696b26727abac"
+  },
+  "tadazz-show/originals/magic-storybook/timer-end.wav": {
+    "bytes": 149984,
+    "sha256": "b928d99f1d49922e03f40b52399e4b373bca311bf31f4c3bf2ea41f54e6686f2"
+  },
+  "tadazz-show/originals/magic-storybook/transition.wav": {
+    "bytes": 132344,
+    "sha256": "60cd8041bba4e9486625612f6141799ecb4a45da29b029de5daee6ed8ca68f79"
+  },
+  "tadazz-show/originals/magic-storybook/urgent.wav": {
+    "bytes": 28268,
+    "sha256": "b7d8fc05f906d1252a4240df8a6e3692d21dc804459240bf2e74b031b2a798a5"
+  },
+  "tadazz-show/originals/magic-storybook/voting-bed.wav": {
+    "bytes": 4704044,
+    "sha256": "7eed15bb7b0870973e5b8c8624328b5a69de5842839e70bf450f7743a0b08c45"
+  },
+  "tadazz-show/originals/mystery-noir/backdrop.png": {
+    "bytes": 588421,
+    "sha256": "ac36a7fd5537a4c5c50c9782d548b98dfe73886796bd5571de97568057dd43b5"
+  },
+  "tadazz-show/originals/mystery-noir/closing.wav": {
+    "bytes": 846764,
+    "sha256": "a5c9519a0533964f24c17d83a7e35952957c67e1778f7f281520e6fc3059d228"
+  },
+  "tadazz-show/originals/mystery-noir/confirm.wav": {
+    "bytes": 60020,
+    "sha256": "646240679dcbc5326b8585a8354a49825002cf8b04c3d635a7cbd219f12a0a42"
+  },
+  "tadazz-show/originals/mystery-noir/final.wav": {
+    "bytes": 40616,
+    "sha256": "cce4012fe25d8cd32804f3510c09d935f6dcf7685b82cb35dc2f314335ad15fd"
+  },
+  "tadazz-show/originals/mystery-noir/leaderboard.wav": {
+    "bytes": 458684,
+    "sha256": "04924998782cec6ad5ac09bd68631f82ae67f1e0b9d26041dff9a7f566cdfa11"
+  },
+  "tadazz-show/originals/mystery-noir/lock.wav": {
+    "bytes": 88244,
+    "sha256": "85293bf50992a0b995ec45a9b7b12e6e94089437691648529cf8765648910293"
+  },
+  "tadazz-show/originals/mystery-noir/podium.wav": {
+    "bytes": 670364,
+    "sha256": "9ca81fa686721d12de1ac44442cc5c62843e7ec5dea33c76903c992e6620b6f7"
+  },
+  "tadazz-show/originals/mystery-noir/poster.png": {
+    "bytes": 525537,
+    "sha256": "032346a08b2970f6ae60bb34d711ad7070e91c7885d7ed1eaa9f4fdeb16b2f7e"
+  },
+  "tadazz-show/originals/mystery-noir/reveal.wav": {
+    "bytes": 291104,
+    "sha256": "e7e81e415c5c5803c5e62c340588580f3144c76ff100df25c09691fe2aa3a84f"
+  },
+  "tadazz-show/originals/mystery-noir/tick.wav": {
+    "bytes": 21212,
+    "sha256": "6fb0d5e6d2b15c41ea1406010d4d93a8b33d888b62f1bb6d6a7fa847ff414748"
+  },
+  "tadazz-show/originals/mystery-noir/timer-end.wav": {
+    "bytes": 149984,
+    "sha256": "c8c8473bb217cf455abd0da2505904089df62d93c6a001d5e85db4fe4f79770b"
+  },
+  "tadazz-show/originals/mystery-noir/transition.wav": {
+    "bytes": 132344,
+    "sha256": "a84a419f17db1dcd0c3dbfc6606796eff76d3c819e4445aae0f80cc5bb72e8fe"
+  },
+  "tadazz-show/originals/mystery-noir/urgent.wav": {
+    "bytes": 28268,
+    "sha256": "229aecd00ccbbd9bac81c871d81b55e84469913170633cf9e04c3cbc23d930eb"
+  },
+  "tadazz-show/originals/mystery-noir/voting-bed.wav": {
+    "bytes": 4838444,
+    "sha256": "5ee3f05bab720a670bed53a2d5c0d88994314cf7891fc237f52c4f0f27efc00a"
+  },
+  "tadazz-show/originals/neon-arcade/backdrop.png": {
+    "bytes": 606339,
+    "sha256": "c77b05374b4aa4ce71ee9d458439291a22628e101ca03df97db18095a5dfaf15"
+  },
+  "tadazz-show/originals/neon-arcade/closing.wav": {
+    "bytes": 846764,
+    "sha256": "c18ddd684e77174f2ccc825708db7fb3506bb8485b17ceb0cdfb11e747120f7e"
+  },
+  "tadazz-show/originals/neon-arcade/confirm.wav": {
+    "bytes": 60020,
+    "sha256": "14516c75d63229cc57e6450286a576df3022ff95ecc758b5d592e3220884ee29"
+  },
+  "tadazz-show/originals/neon-arcade/final.wav": {
+    "bytes": 40616,
+    "sha256": "4c1ead6756e7d52be621b997c1f759cb3f1f966659f9c9b6c53ca9799b6ad0b4"
+  },
+  "tadazz-show/originals/neon-arcade/leaderboard.wav": {
+    "bytes": 458684,
+    "sha256": "42dc45f04a23a81f1fa57b5593507a40e08dd8a54588ecb6ec45ee734d2163b1"
+  },
+  "tadazz-show/originals/neon-arcade/lock.wav": {
+    "bytes": 88244,
+    "sha256": "1196455d3e76f55119d770b0b2c24cb12cdaac3292082183cb0f84da45992bee"
+  },
+  "tadazz-show/originals/neon-arcade/podium.wav": {
+    "bytes": 670364,
+    "sha256": "1651c3ccd893d69eba37fc23ea320bbb75856008124b8f8a46dde364db80eeaa"
+  },
+  "tadazz-show/originals/neon-arcade/poster.png": {
+    "bytes": 530669,
+    "sha256": "baac844166e47c092bb5c8e475b2fbb926ae62436bbd94089ef9f842e7ff8122"
+  },
+  "tadazz-show/originals/neon-arcade/reveal.wav": {
+    "bytes": 291104,
+    "sha256": "d3bcc98ed85dd1b0babe8a60a9046651368ba3ca264526d55655d8c428ccaac9"
+  },
+  "tadazz-show/originals/neon-arcade/tick.wav": {
+    "bytes": 21212,
+    "sha256": "6062bf7714866bfdd6f8d95d08de15a57f4cf64739b041ea70327acf26b7f85e"
+  },
+  "tadazz-show/originals/neon-arcade/timer-end.wav": {
+    "bytes": 149984,
+    "sha256": "19b3afd3e784c331a0a15bef9f83beb86ea8a2830ef72c1a239d573982104954"
+  },
+  "tadazz-show/originals/neon-arcade/transition.wav": {
+    "bytes": 132344,
+    "sha256": "676846cf3ad90240bc938651d6884881281c2f40d491f11f135072abb99d8dd1"
+  },
+  "tadazz-show/originals/neon-arcade/urgent.wav": {
+    "bytes": 28268,
+    "sha256": "cf5d78ddda62c2e1cb8d3c0ead51b98fa18b16182e2137a6f21da6438937b24e"
+  },
+  "tadazz-show/originals/neon-arcade/voting-bed.wav": {
+    "bytes": 3024044,
+    "sha256": "5065e072b6f140131f0b8bf3fea3fc3d62bb47d1af6889fb6c6301da0d271022"
+  },
+  "tadazz-show/originals/retro-tv/backdrop.png": {
+    "bytes": 456962,
+    "sha256": "6ca77ceb52622fe770026ffc88eb512018f2198960c94a3c264a94ad1d5549f5"
+  },
+  "tadazz-show/originals/retro-tv/closing.wav": {
+    "bytes": 846764,
+    "sha256": "3d8823b633c9a21bad6d94177ea8207f8ea78d7f00cc6ca2d6da7911e4abaaee"
+  },
+  "tadazz-show/originals/retro-tv/confirm.wav": {
+    "bytes": 60020,
+    "sha256": "4f3cdcb1e00d49eb7cf2b020ac280a65d1e7cd7e2684e951dc35e6620b860b70"
+  },
+  "tadazz-show/originals/retro-tv/final.wav": {
+    "bytes": 40616,
+    "sha256": "310e4d5ee5c177531a0775c83acbe377e3796f0453784335a622bafcdf7dc16d"
+  },
+  "tadazz-show/originals/retro-tv/leaderboard.wav": {
+    "bytes": 458684,
+    "sha256": "b219a97d59c19712b09890d4c763e9afd1648b5b468d7a09f82fcba00b9010d9"
+  },
+  "tadazz-show/originals/retro-tv/lock.wav": {
+    "bytes": 88244,
+    "sha256": "e769c135f9ee803582304facd4e423bcb98d3f04aa9ef6e70224068ff173cabf"
+  },
+  "tadazz-show/originals/retro-tv/podium.wav": {
+    "bytes": 670364,
+    "sha256": "00bc2d651b11ee8f48fad477c298381b9af534b8b68a5a4a38517d314b45269f"
+  },
+  "tadazz-show/originals/retro-tv/poster.png": {
+    "bytes": 405065,
+    "sha256": "560caceca5814a2efa9b5d892cf1774c6d13bf7a130417fce1fc8e6e56ddc8f9"
+  },
+  "tadazz-show/originals/retro-tv/reveal.wav": {
+    "bytes": 291104,
+    "sha256": "32fe780121a18bdfd9ea3f8b68abf5a40b58ecad08f85d7dea2e509ab8cd5cb2"
+  },
+  "tadazz-show/originals/retro-tv/tick.wav": {
+    "bytes": 21212,
+    "sha256": "1430b8c2268a9476e466c7c9519258db334f530f16af4aa33e0c4fb3f3827184"
+  },
+  "tadazz-show/originals/retro-tv/timer-end.wav": {
+    "bytes": 149984,
+    "sha256": "0a4e5c7b73ce3671f863c60cc9cbc872ba0a6e67f327efc6a2554d3d0a3dbbe9"
+  },
+  "tadazz-show/originals/retro-tv/transition.wav": {
+    "bytes": 132344,
+    "sha256": "f1dc9a2bb0c5a8dec7010cf99c966f1fa9289d9a7220280a79266b18d6570f2f"
+  },
+  "tadazz-show/originals/retro-tv/urgent.wav": {
+    "bytes": 28268,
+    "sha256": "0ab54808d3c36e18e7fb35b875536e5df37dc60717e86f05adce115766e0d931"
+  },
+  "tadazz-show/originals/retro-tv/voting-bed.wav": {
+    "bytes": 3386924,
+    "sha256": "82ca6fc5bcec14199fb56bbe8147af801f3392014b9e86f1f3256395ff5e8b39"
+  },
+  "tadazz-show/originals/royal-quiz/backdrop.png": {
+    "bytes": 809860,
+    "sha256": "de6b0789fab788d78dae61ea44f490b35500099ee592b5929fcae074ad588f68"
+  },
+  "tadazz-show/originals/royal-quiz/closing.wav": {
+    "bytes": 846764,
+    "sha256": "f1b6a07691cef91513781da209315487b11f28edafb8d5516de4105488726a5c"
+  },
+  "tadazz-show/originals/royal-quiz/confirm.wav": {
+    "bytes": 60020,
+    "sha256": "27c9381a3fab0072aebbc41851080649da2babc4bc1f7bef649171a5a3dc8ced"
+  },
+  "tadazz-show/originals/royal-quiz/final.wav": {
+    "bytes": 40616,
+    "sha256": "f9ae91e68b1dd4c145792134bc539e87b6515a3eb334052051dbb17707546767"
+  },
+  "tadazz-show/originals/royal-quiz/leaderboard.wav": {
+    "bytes": 458684,
+    "sha256": "99630ea453519e5c755c18faa677a8ba5572d503513325f5742761b4ec6ec57d"
+  },
+  "tadazz-show/originals/royal-quiz/lock.wav": {
+    "bytes": 88244,
+    "sha256": "9b2c15a8a2ac8035de01e1221738d6644ca4635dd077382cfcb877dd8a3dfd97"
+  },
+  "tadazz-show/originals/royal-quiz/podium.wav": {
+    "bytes": 670364,
+    "sha256": "bb386f56bb426537c6321096ed1f81435f0749bea1515c1eddb69fb04f2b2d32"
+  },
+  "tadazz-show/originals/royal-quiz/poster.png": {
+    "bytes": 665028,
+    "sha256": "ac56aa628bfc0c9526732030462830ecf3f27b9628d8c6a58c605f1f0022cf50"
+  },
+  "tadazz-show/originals/royal-quiz/reveal.wav": {
+    "bytes": 291104,
+    "sha256": "00d81a0031aace27927bb6ce166a494def7961a38aa0dfc5a496366165d3d17f"
+  },
+  "tadazz-show/originals/royal-quiz/tick.wav": {
+    "bytes": 21212,
+    "sha256": "1d31b72174afa03c125b27a6e29f68dd51506a1e425b9c1702d07a3cd3b69cab"
+  },
+  "tadazz-show/originals/royal-quiz/timer-end.wav": {
+    "bytes": 149984,
+    "sha256": "1bd840e813495ae4b0117e409b42c4483903ec30e9bc878a458a82537b209131"
+  },
+  "tadazz-show/originals/royal-quiz/transition.wav": {
+    "bytes": 132344,
+    "sha256": "6084c8956d384409c5f1589e1f2d384a8bd68abf89235191dbe3ddb42b29ecd5"
+  },
+  "tadazz-show/originals/royal-quiz/urgent.wav": {
+    "bytes": 28268,
+    "sha256": "18fa66452c713fce66a2508fac434c37198bd95515a011d27a1a7d17e17b644b"
+  },
+  "tadazz-show/originals/royal-quiz/voting-bed.wav": {
+    "bytes": 4032044,
+    "sha256": "56dd2eaa69186e3430580f4f6e6127348cd91a2f2bcfcb19083da23b7d5b2029"
+  },
+  "tadazz-show/originals/sports-arena/backdrop.png": {
+    "bytes": 609856,
+    "sha256": "605ad7762d48b407707e1d94be94f2fdac047356ce89ebbd3d0d325221733e1c"
+  },
+  "tadazz-show/originals/sports-arena/closing.wav": {
+    "bytes": 846764,
+    "sha256": "69f2b22ff06d133b18c0f0fc084e73beb0deabc35b180d0e1eff81574fa0daa8"
+  },
+  "tadazz-show/originals/sports-arena/confirm.wav": {
+    "bytes": 60020,
+    "sha256": "a39a03e221a8676e81ad61ac015b92160e2d15f7fb7249fc8a5ed63e65e5b5e9"
+  },
+  "tadazz-show/originals/sports-arena/final.wav": {
+    "bytes": 40616,
+    "sha256": "518c9bd0ab2c37724b5e0930a29bffae0ac1ceae447e2f209f8600e85874c134"
+  },
+  "tadazz-show/originals/sports-arena/leaderboard.wav": {
+    "bytes": 458684,
+    "sha256": "2cb7fcc5ae7d3bf54a17f822abcd6592ffaef274b687c420218abd43213930f9"
+  },
+  "tadazz-show/originals/sports-arena/lock.wav": {
+    "bytes": 88244,
+    "sha256": "3b6fe417bfdb4788a294e6d7173c4cd396d619e40bee74f00907caf6f7828bc7"
+  },
+  "tadazz-show/originals/sports-arena/podium.wav": {
+    "bytes": 670364,
+    "sha256": "c3b76eee4b6d8122742f218fd7953ab1f9976465dde171d52a767643472e6374"
+  },
+  "tadazz-show/originals/sports-arena/poster.png": {
+    "bytes": 543216,
+    "sha256": "8e7b85d816656f3cf2df917ce58c3b04c9449f99f6769af3abde5234545394c8"
+  },
+  "tadazz-show/originals/sports-arena/reveal.wav": {
+    "bytes": 291104,
+    "sha256": "f8ca5669177c94261f6f72a5558d37e07cb7140e8c4e479ea29a2b64b0d02d9c"
+  },
+  "tadazz-show/originals/sports-arena/tick.wav": {
+    "bytes": 21212,
+    "sha256": "d81e0887d3158b385c5c7d9f7ff0f2961e1a747d7b941c7ebd0070f5c5ad200b"
+  },
+  "tadazz-show/originals/sports-arena/timer-end.wav": {
+    "bytes": 149984,
+    "sha256": "93efcb32e53dd4ca1a847d5974f37a816bc5cc7eecf2ec588e8668fb43c8d594"
+  },
+  "tadazz-show/originals/sports-arena/transition.wav": {
+    "bytes": 132344,
+    "sha256": "2924f6d13472fe399c45e75365c607d49517540fd7b070d2791e0e67ef45f0d3"
+  },
+  "tadazz-show/originals/sports-arena/urgent.wav": {
+    "bytes": 28268,
+    "sha256": "a197783811b277f219ee974efb3730063c1bb233714d990b0a42172d2897bd1f"
+  },
+  "tadazz-show/originals/sports-arena/voting-bed.wav": {
+    "bytes": 2919768,
+    "sha256": "671791c6ff070aff2272b6d2890af594f2fead79ad520e53de2703599621b277"
+  },
+  "tadazz-show/razzia-original/background.png": {
+    "bytes": 2777381,
+    "sha256": "39615d76461d456e303bdb4c90d7a1c0ec38c3beb7d679ea66b8d28c91bf6085"
+  },
+  "tadazz-show/second-library/cards/dog.svg": {
+    "bytes": 1962,
+    "sha256": "e7c59ed107687236ca2975b6c63150ddb53d6d0e38295d69f079d383a377fa5a"
+  },
+  "tadazz-show/second-library/cards/lamplighter.svg": {
+    "bytes": 2039,
+    "sha256": "64347234d0627c91643abdbcab2073d30837a7ca45f20163de0c6d7f39a87b3b"
+  },
+  "tadazz-show/second-library/cards/pirate.svg": {
+    "bytes": 1923,
+    "sha256": "686c5abfdfa22e39d44347725bd2b67555f7b9b0f22b09b96c90270b488a16bb"
+  },
+  "tadazz-show/second-library/cards/shadchan.svg": {
+    "bytes": 1932,
+    "sha256": "0fb4004f0f9e8cfac27f12bc67f49eb9bc84fdb99308d18243d6992e935bd564"
+  },
+  "tadazz-show/second-library/cards/therapist.svg": {
+    "bytes": 1847,
+    "sha256": "3f6cbb9afac04b7728b7d8ac31d2bde7a1649ccc08c7db6477e32415f0461bbe"
+  },
+  "tadazz-show/second-library/creating-worlds-intro.png": {
+    "bytes": 2410686,
+    "sha256": "2a9b5838016d41442079a2c3c533df6c1565a5e3f4ed40c1c8a4175640b7bbfd"
+  },
+  "tadazz-show/second-library/curtain-left.png": {
+    "bytes": 1132717,
+    "sha256": "429ab6d5f360406bb22be1f4a833359543fd09f1f415583a20f0a319968df060"
+  },
+  "tadazz-show/second-library/curtain-right.png": {
+    "bytes": 1132143,
+    "sha256": "9a46bb396bbbb104f0b398f0f9b52c38e6915d7013b010a8830404f85cf408fa"
+  },
+  "tadazz-show/second-library/question-bg.webp": {
+    "bytes": 87904,
+    "sha256": "2f6912d851d8600e08d9a47d58e73dd40144fe30a908b82d10b3ba4036554321"
+  },
+  "tadazz-show/second-library/show-stage.webp": {
+    "bytes": 261066,
+    "sha256": "9f3d1fe8d4458e98441303e728bba996b9a314295bbf5108f581c229f6db2d20"
+  },
+  "tadazz-show/second-library/tadazz-brand-logo.png": {
+    "bytes": 1976726,
+    "sha256": "e50aaf5f62f60a83b5a84ea1d55a8068c2e754df5c917681da553771756ebabd"
+  },
+  "tadazz-show/second-library/teaser-screen-source.jpg": {
+    "bytes": 266631,
+    "sha256": "eaef71e6f2b59595eca49a5fb72df70e45f47a80351ea4d35e03d91f28851c17"
+  },
+  "tadazz-show/second-library/teaser-screen.jpg": {
+    "bytes": 3780431,
+    "sha256": "77b4214d75bbb2c3f61af285b0aca09678bbc78d217c47c904fb5e082eddf34d"
+  },
+  "tadazz-show/story/672dd07f229b8c36.mp3": {
+    "bytes": 1222052,
+    "sha256": "672dd07f229b8c36f9c56484975fad7e28bedff9623fea049d2ca475022e84f8"
+  },
+  "tadazz-show/story/7ff12046cb1aac7b.png": {
+    "bytes": 412633,
+    "sha256": "7ff12046cb1aac7be6fbdd3131bc8e5854a96f34b5560446f3183170731de037"
+  },
+  "tadazz-show/story/84acdb923677d591.webp": {
+    "bytes": 134540,
+    "sha256": "84acdb923677d591d7641d8452eb185aad360b4b990d6e0879905ad0494dbdc6"
+  },
+  "tadazz-show/story/9db4acdc6c4e411c.mp3": {
+    "bytes": 91052,
+    "sha256": "9db4acdc6c4e411ced75f9c85b31b136a775a9ea43543f867a2976da1f1fd36b"
+  },
+  "tadazz-show/story/b789ffb48c74e55d.webp": {
+    "bytes": 60174,
+    "sha256": "b789ffb48c74e55dad7cee0275c9e1ad32edc19b45e9ef7c84a99d979f30f748"
+  },
+  "tadazz-show/story/fef87578b7d57eae.webp": {
+    "bytes": 178706,
+    "sha256": "fef87578b7d57eae4b94709ff8fa909ed566a3336c84b7b041b795cba3007371"
+  },
+  "tadazz-show/v4/cards/dog.svg": {
+    "bytes": 1962,
+    "sha256": "e7c59ed107687236ca2975b6c63150ddb53d6d0e38295d69f079d383a377fa5a"
+  },
+  "tadazz-show/v4/cards/lamplighter.svg": {
+    "bytes": 2039,
+    "sha256": "64347234d0627c91643abdbcab2073d30837a7ca45f20163de0c6d7f39a87b3b"
+  },
+  "tadazz-show/v4/cards/pirate.svg": {
+    "bytes": 1923,
+    "sha256": "686c5abfdfa22e39d44347725bd2b67555f7b9b0f22b09b96c90270b488a16bb"
+  },
+  "tadazz-show/v4/cards/shadchan.svg": {
+    "bytes": 1932,
+    "sha256": "0fb4004f0f9e8cfac27f12bc67f49eb9bc84fdb99308d18243d6992e935bd564"
+  },
+  "tadazz-show/v4/cards/therapist.svg": {
+    "bytes": 1847,
+    "sha256": "3f6cbb9afac04b7728b7d8ac31d2bde7a1649ccc08c7db6477e32415f0461bbe"
+  },
+  "tadazz-show/v4/creating-worlds-intro.png": {
+    "bytes": 2410686,
+    "sha256": "2a9b5838016d41442079a2c3c533df6c1565a5e3f4ed40c1c8a4175640b7bbfd"
+  },
+  "tadazz-show/v4/curtain-left.png": {
+    "bytes": 1132717,
+    "sha256": "429ab6d5f360406bb22be1f4a833359543fd09f1f415583a20f0a319968df060"
+  },
+  "tadazz-show/v4/curtain-right.png": {
+    "bytes": 1132143,
+    "sha256": "9a46bb396bbbb104f0b398f0f9b52c38e6915d7013b010a8830404f85cf408fa"
+  },
+  "tadazz-show/v4/question-bg.webp": {
+    "bytes": 87904,
+    "sha256": "2f6912d851d8600e08d9a47d58e73dd40144fe30a908b82d10b3ba4036554321"
+  },
+  "tadazz-show/v4/show-stage.webp": {
+    "bytes": 261066,
+    "sha256": "9f3d1fe8d4458e98441303e728bba996b9a314295bbf5108f581c229f6db2d20"
+  },
+  "tadazz-show/v4/tadazz-brand-logo.png": {
+    "bytes": 1976726,
+    "sha256": "e50aaf5f62f60a83b5a84ea1d55a8068c2e754df5c917681da553771756ebabd"
+  },
+  "tadazz-show/v4/teaser-screen-source.jpg": {
+    "bytes": 266631,
+    "sha256": "eaef71e6f2b59595eca49a5fb72df70e45f47a80351ea4d35e03d91f28851c17"
+  },
+  "tadazz-show/v4/teaser-screen.jpg": {
+    "bytes": 3780431,
+    "sha256": "77b4214d75bbb2c3f61af285b0aca09678bbc78d217c47c904fb5e082eddf34d"
+  }
+}

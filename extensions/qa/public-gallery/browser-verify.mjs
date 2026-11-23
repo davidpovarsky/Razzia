@@ -1,5 +1,11 @@
 /** Real browser acceptance against a Linux-hosted candidate or the deployed site. */
 import assert from "node:assert/strict"
+import {
+  LEGACY_GALLERY_IDS,
+  ORIGINAL_GALLERY_IDS,
+  PUBLIC_GALLERY_IDS,
+  PUBLIC_QUESTION_COUNT,
+} from "./catalogue-inventory.mjs"
 import { createRequire } from "node:module"
 import { mkdirSync, writeFileSync } from "node:fs"
 import { join, resolve } from "node:path"
@@ -39,18 +45,8 @@ mkdirSync(evidence, { recursive: true })
 const sourceSha = process.env.TADAZZ_GALLERY_SOURCE_SHA ?? "uncommitted"
 const require = createRequire("/cleanup/extensions/package.json")
 const { chromium, expect } = require("@playwright/test")
-const ids = [
-  "great-guessoff",
-  "crowd",
-  "quiz",
-  "story",
-  "picture",
-  "truth",
-  "finale",
-  "family",
-  "classroom",
-  "team",
-]
+const ids = LEGACY_GALLERY_IDS
+
 const observations = {
   pageErrors: [],
   failedAssets: [],
@@ -534,11 +530,17 @@ try {
   )
   assert.equal(response.status(), 200)
   const { games } = await response.json()
-  assert.deepEqual(games.map((game) => game.id).sort(), [...ids].sort())
-  assert.equal(new Set(games.map((game) => game.themeId)).size, 10)
+  assert.deepEqual(
+    games.map((game) => game.id).sort(),
+    [...PUBLIC_GALLERY_IDS].sort(),
+  )
+  assert.equal(
+    new Set(games.map((game) => game.themeId)).size,
+    PUBLIC_GALLERY_IDS.length,
+  )
   assert.equal(
     games.reduce((count, game) => count + game.questionCount, 0),
-    77,
+    PUBLIC_QUESTION_COUNT,
   )
   const previews = new Map()
   for (const game of games) {
@@ -573,19 +575,32 @@ try {
     404,
   )
   record("all-public-catalogue-and-preview-bindings", {
-    games: 10,
-    questions: 77,
-    themes: 10,
+    games: PUBLIC_GALLERY_IDS.length,
+    questions: PUBLIC_QUESTION_COUNT,
+    themes: PUBLIC_GALLERY_IDS.length,
   })
 
   await goto(page, "/?view=store")
-  await expect(page.locator("[data-catalogue-card]")).toHaveCount(10)
+  await expect(page.locator("[data-catalogue-card]")).toHaveCount(
+    PUBLIC_GALLERY_IDS.length,
+  )
   await imageDecode(page, true)
   await verifyCatalogueCovers(page, "public-desktop", evidence)
   await screenshot(page, "gallery-desktop")
-  record("desktop-gallery-all-ten-cards")
+  record("desktop-gallery-complete-public-catalogue", {
+    cards: PUBLIC_GALLERY_IDS.length,
+  })
 
-  for (const game of games) {
+  // Preserve the established 77-round regression. The eight originals have
+  // their own authored-scene/structural acceptance; this receipt does not claim it.
+  const legacyGames = games.filter((game) =>
+    LEGACY_GALLERY_IDS.includes(game.id),
+  )
+  assert.equal(
+    legacyGames.reduce((sum, game) => sum + game.questionCount, 0),
+    77,
+  )
+  for (const game of legacyGames) {
     const animatedPreview = ["great-guessoff", "family", "picture"].includes(
       game.id,
     )
@@ -824,7 +839,14 @@ try {
           await chooseNative(page, answer)
           await expect(gameRoot).toHaveAttribute("data-game-phase", "results")
           await expect(next).toBeEnabled({ timeout: 30_000 })
-          questionSequences.push(await readQuestionSequence(gameRoot, index))
+          questionSequences.push(
+            await readQuestionSequence(gameRoot, index, {
+              evidencePath: join(
+                evidence,
+                `question-sequence-${game.id}-${index}.json`,
+              ),
+            }),
+          )
 
           if (index === 0) {
             await verifyNativePalette({
@@ -859,120 +881,125 @@ try {
   }
 
   async function verifyResponsiveMode(mode) {
-    const responsiveContext = await browser.newContext({
-      viewport: { width: 390, height: 844 },
-      locale: mode === "hebrew" ? "he-IL" : "en-GB",
-      reducedMotion: "reduce",
-      ignoreHTTPSErrors: url.hostname !== "tadazz.com",
-    })
-    const responsivePage = await responsiveContext.newPage()
-    activePage = responsivePage
-    inspect(responsivePage)
+    await attempt(`responsive-${mode}`, async () => {
+      const responsiveContext = await browser.newContext({
+        viewport: { width: 390, height: 844 },
+        locale: mode === "hebrew" ? "he-IL" : "en-GB",
+        reducedMotion: "reduce",
+        ignoreHTTPSErrors: url.hostname !== "tadazz.com",
+      })
+      const responsivePage = await responsiveContext.newPage()
+      activePage = responsivePage
+      inspect(responsivePage)
 
-    try {
-      const languageQuery = mode === "hebrew" ? "&lng=he" : ""
-      await goto(responsivePage, `/?view=store${languageQuery}`)
-      await expect(responsivePage.locator("[data-catalogue-card]")).toHaveCount(
-        10,
-      )
+      try {
+        const languageQuery = mode === "hebrew" ? "&lng=he" : ""
+        await goto(responsivePage, `/?view=store${languageQuery}`)
+        await expect(
+          responsivePage.locator("[data-catalogue-card]"),
+        ).toHaveCount(PUBLIC_GALLERY_IDS.length)
 
-      if (mode === "hebrew") {
-        await expect(responsivePage.locator("html")).toHaveAttribute(
-          "dir",
-          "rtl",
+        if (mode === "hebrew") {
+          await expect(responsivePage.locator("html")).toHaveAttribute(
+            "dir",
+            "rtl",
+          )
+        }
+
+        const overflow = await responsivePage.evaluate(
+          () => document.documentElement.scrollWidth - window.innerWidth,
         )
-      }
+        assert(overflow <= 1, `No horizontal overflow: ${mode}`)
+        await imageDecode(responsivePage, true)
+        await verifyCatalogueCovers(responsivePage, `public-${mode}`, evidence)
+        await screenshot(responsivePage, `gallery-${mode}`)
+        const priorFailures = observations.checkFailures.length
+        for (const id of ["family", "picture", "great-guessoff"]) {
+          await attempt(`active-${mode}-${id}`, async () => {
+            await goto(responsivePage, `/?view=store${languageQuery}`)
+            await responsivePage
+              .locator(`[data-catalogue-open="${id}"]`)
+              .click()
+            await responsivePage.getByTestId("catalogue-play-sample").click()
 
-      const overflow = await responsivePage.evaluate(
-        () => document.documentElement.scrollWidth - window.innerWidth,
-      )
-      assert(overflow <= 1, `No horizontal overflow: ${mode}`)
-      await imageDecode(responsivePage, true)
-      await verifyCatalogueCovers(responsivePage, `public-${mode}`, evidence)
-      await screenshot(responsivePage, `gallery-${mode}`)
-      const priorFailures = observations.checkFailures.length
-      for (const id of ["family", "picture", "great-guessoff"]) {
-        await attempt(`active-${mode}-${id}`, async () => {
-          await goto(responsivePage, `/?view=store${languageQuery}`)
-          await responsivePage.locator(`[data-catalogue-open="${id}"]`).click()
-          await responsivePage.getByTestId("catalogue-play-sample").click()
-
-          if (mode === "hebrew") {
-            await expect(responsivePage.locator("html")).toHaveAttribute(
-              "dir",
-              "rtl",
-            )
-          }
-
-          const isGuessoff = id === "great-guessoff"
-          const gameRoot = responsivePage.getByTestId(
-            isGuessoff ? "great-guessoff-demo" : "catalogue-game-demo",
-          )
-          const phaseAttribute = isGuessoff
-            ? "data-ggo-phase"
-            : "data-game-phase"
-          const next = responsivePage.getByTestId(
-            isGuessoff ? "ggo-main-action" : "catalogue-next",
-          )
-          const questions = previews
-            .get(id)
-            .show.cards.filter((card) => ["quiz", "survey"].includes(card.kind))
-            .slice(0, isGuessoff ? 2 : 1)
-          await expect(gameRoot).toHaveAttribute(phaseAttribute, "intro")
-          await next.click()
-          for (let index = 0; index < questions.length; index += 1) {
-            const question = questions[index]
-            await expect(gameRoot).toHaveAttribute(phaseAttribute, "voting", {
-              timeout: 30_000,
-            })
-            const metrics = await verifyActiveMobileQuestion({
-              page: responsivePage,
-              question,
-              id,
-              mode,
-              index,
-            })
-            const selected = question.correctAnswers[0]
-              ? question.correctAnswers[0] - 1
-              : 0
-            await chooseNative(responsivePage, selected)
-            await expect(gameRoot).toHaveAttribute(phaseAttribute, "results")
-            await verifyMobileResult(responsivePage, question, selected)
-            record(`active-${mode}-${id}-${index}`, {
-              questionKey: question.key,
-              chosenAnswer: selected,
-              realChoice: true,
-              ...metrics,
-            })
-
-            if (index + 1 < questions.length) {
-              await expect(next).toBeEnabled({ timeout: 30_000 })
-              await next.click()
+            if (mode === "hebrew") {
+              await expect(responsivePage.locator("html")).toHaveAttribute(
+                "dir",
+                "rtl",
+              )
             }
-          }
-          await screenshot(responsivePage, `play-${mode}-${id}`)
 
-          if (
-            (mode === "mobile" && id === "picture") ||
-            (mode === "hebrew" && id === "family")
-          ) {
-            await screenshot(responsivePage, `play-${mode}`)
-          }
-        })
+            const isGuessoff = id === "great-guessoff"
+            const gameRoot = responsivePage.getByTestId(
+              isGuessoff ? "great-guessoff-demo" : "catalogue-game-demo",
+            )
+            const phaseAttribute = isGuessoff
+              ? "data-ggo-phase"
+              : "data-game-phase"
+            const next = responsivePage.getByTestId(
+              isGuessoff ? "ggo-main-action" : "catalogue-next",
+            )
+            const questions = previews
+              .get(id)
+              .show.cards.filter((card) =>
+                ["quiz", "survey"].includes(card.kind),
+              )
+              .slice(0, isGuessoff ? 2 : 1)
+            await expect(gameRoot).toHaveAttribute(phaseAttribute, "intro")
+            await next.click()
+            for (let index = 0; index < questions.length; index += 1) {
+              const question = questions[index]
+              await expect(gameRoot).toHaveAttribute(phaseAttribute, "voting", {
+                timeout: 30_000,
+              })
+              const metrics = await verifyActiveMobileQuestion({
+                page: responsivePage,
+                question,
+                id,
+                mode,
+                index,
+              })
+              const selected = question.correctAnswers[0]
+                ? question.correctAnswers[0] - 1
+                : 0
+              await chooseNative(responsivePage, selected)
+              await expect(gameRoot).toHaveAttribute(phaseAttribute, "results")
+              await verifyMobileResult(responsivePage, question, selected)
+              record(`active-${mode}-${id}-${index}`, {
+                questionKey: question.key,
+                chosenAnswer: selected,
+                realChoice: true,
+                ...metrics,
+              })
+
+              if (index + 1 < questions.length) {
+                await expect(next).toBeEnabled({ timeout: 30_000 })
+                await next.click()
+              }
+            }
+            await screenshot(responsivePage, `play-${mode}-${id}`)
+
+            if (
+              (mode === "mobile" && id === "picture") ||
+              (mode === "hebrew" && id === "family")
+            ) {
+              await screenshot(responsivePage, `play-${mode}`)
+            }
+          })
+        }
+        assert.equal(
+          observations.checkFailures.length,
+          priorFailures,
+          "Every active mobile game must pass",
+        )
+        record(`${mode}-gallery-and-real-vote`, { games: 3, rounds: 4 })
+      } finally {
+        await responsiveContext.close()
       }
-      assert.equal(
-        observations.checkFailures.length,
-        priorFailures,
-        "Every active mobile game must pass",
-      )
-      record(`${mode}-gallery-and-real-vote`, { games: 3, rounds: 4 })
-    } finally {
-      await responsiveContext.close()
-    }
+    })
   }
-
   for (const mode of ["mobile", "hebrew"]) {
-    await attempt(`responsive-${mode}`, () => verifyResponsiveMode(mode))
+    await verifyResponsiveMode(mode)
   }
   await verifyPublicViewers({
     browser,
@@ -1008,6 +1035,11 @@ try {
         complete: true,
         passed: true,
         sourceSha,
+        deepPlayScope: {
+          gameIds: LEGACY_GALLERY_IDS,
+          rounds: 77,
+          originalsRequireSeparateAcceptance: ORIGINAL_GALLERY_IDS,
+        },
         origin,
         platform: process.platform,
         browser: "chromium",
@@ -1024,7 +1056,7 @@ try {
       await screenshot(activePage, "failure")
     }
   } catch {
-    // Preserve the original failure receipt if its optional screenshot also fails.
+    // Preserve the original failure even when its diagnostic screenshot fails.
   }
 
   writeFileSync(
@@ -1034,6 +1066,11 @@ try {
         complete: true,
         passed: false,
         sourceSha,
+        deepPlayScope: {
+          gameIds: LEGACY_GALLERY_IDS,
+          rounds: 77,
+          originalsRequireSeparateAcceptance: ORIGINAL_GALLERY_IDS,
+        },
         origin,
         platform: process.platform,
         results,

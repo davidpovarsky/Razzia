@@ -59,6 +59,7 @@ export interface AccessTokenOptions {
 }
 
 const denied = () => new ToolError("SCOPE_REQUIRED")
+const isActive = (value: unknown): value is true => value === true
 const decode = (part: string) => {
   if (!/^[A-Za-z0-9_-]+$/u.test(part)) {
     throw denied()
@@ -202,10 +203,8 @@ export function createAccessTokenVerifier(options: AccessTokenOptions) {
         current()
 
         if (
-          // oxlint-disable-next-line typescript/prefer-optional-chain -- Preserve the explicit missing-grant boundary before inspecting the runtime authorization result.
           !grant ||
-          // oxlint-disable-next-line typescript/no-unnecessary-condition, typescript/no-unnecessary-boolean-literal-compare -- The live grant adapter is a runtime authorization boundary; retain the explicit inactive-grant rejection.
-          grant.active !== true ||
+          !isActive(grant.active) ||
           grant.grantId !== claims.grant_id ||
           grant.subject !== claims.sub ||
           grant.clientId !== claims.client_id ||

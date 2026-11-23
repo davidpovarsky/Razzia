@@ -4,7 +4,6 @@ import { ThemeBuilderShell } from "../../src/components/theme-builder/ThemeBuild
 import { builderDocumentFixture } from "../../src/components/theme-builder/document.fixture"
 import { createBuilderClient } from "../../src/components/theme-builder/client"
 import type { PreviewLocale } from "../../src/presentation/show-library-preview/i18n"
-import { synchronousPromise } from "../../src/core/synchronous-promise.ts"
 
 if (location.pathname === "/studio/oauth-consent") {
   await import("./oauth-fixture")
@@ -18,7 +17,7 @@ if (location.pathname === "/studio/oauth-consent") {
 
   const token = (await (await fetch("/qa/session")).json()) as { token: string }
   const client = createBuilderClient("tenant-a", () =>
-    synchronousPromise(() => token.token),
+    Promise.resolve(token.token),
   )
   const document = builderDocumentFixture()
   document.id = params.get("draft") ?? document.id
@@ -27,13 +26,13 @@ if (location.pathname === "/studio/oauth-consent") {
       ? await client.read(document.id, AbortSignal.timeout(15_000))
       : { document, revision: 0 }
   globalThis.document.documentElement.lang = locale
-  const mountElement = globalThis.document.getElementById("root")
+  const mount = globalThis.document.getElementById("root")
 
-  if (mountElement === null) {
-    throw new Error("qa:missing-root-element")
+  if (!mount) {
+    throw new Error("qa:missing-root")
   }
 
-  createRoot(mountElement).render(
+  createRoot(mount).render(
     <ThemeBuilderShell
       locale={locale as PreviewLocale}
       initialDocument={initial.document}

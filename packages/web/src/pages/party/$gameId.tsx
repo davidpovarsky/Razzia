@@ -103,7 +103,7 @@ const PlayerGamePage = () => {
   }
 
   return (
-    <PlayerGameView gameId={gameIdParam} status={status} viewRole="player" />
+    <PlayerGameView status={status} viewRole="player" roomId={gameIdParam} />
   )
 }
 

@@ -137,21 +137,23 @@ const file = (owner: string) =>
     owner,
     "extensions/mcp-oauth/grants.sqlite",
   )
-function request({
-  path,
-  method = "GET",
-  body,
-  session,
-  extra = {},
-  instance = requireInitializedIssuer(),
-}: {
-  path: string
-  method?: string
-  body?: Record<string, string>
-  session?: Session
-  extra?: Record<string, string>
-  instance?: ReturnType<typeof requireInitializedIssuer>
-}) {
+function request(
+  ...[
+    path,
+    method = "GET",
+    body,
+    session,
+    extra = {},
+    instance = requireInitializedIssuer(),
+  ]: [
+    path: string,
+    method?: string,
+    body?: Record<string, string>,
+    session?: Session,
+    extra?: Record<string, string>,
+    instance?: ReturnType<typeof requireInitializedIssuer>,
+  ]
+) {
   const firstParty = path === "/oauth/inspect" || path === "/oauth/approve"
 
   return instance.fetch(
@@ -194,9 +196,9 @@ async function begin(changes: Record<string, string> = {}) {
     code_challenge_method: "S256",
     ...changes,
   }
-  const response = await request({
-    path: `/oauth/authorize?${new URLSearchParams(params).toString()}`,
-  })
+  const response = await request(
+    `/oauth/authorize?${new URLSearchParams(params)}`,
+  )
 
   return {
     response,
@@ -215,29 +217,29 @@ async function approve(
 ) {
   const begun = await begin()
   assert.equal(begun.response.status, 302)
-  const inspected = await request({
-    path: "/oauth/inspect",
-    method: "POST",
-    body: { ticket: begun.ticket },
+  const inspected = await request(
+    "/oauth/inspect",
+    "POST",
+    { ticket: begun.ticket },
     session,
-    extra: {},
+    {},
     instance,
-  })
+  )
   assert.equal(inspected.status, 200)
   const review = requireOAuthObservationRecord(await inspected.json())
   assert.deepEqual(review.scopes, scope.split(" "))
-  const allowed = await request({
-    path: "/oauth/approve",
-    method: "POST",
-    body: {
+  const allowed = await request(
+    "/oauth/approve",
+    "POST",
+    {
       ticket: begun.ticket,
       proof: requireOAuthObservationString(review.proof),
       decision: "allow",
     },
     session,
-    extra: {},
+    {},
     instance,
-  })
+  )
   assert.equal(allowed.status, 200, await allowed.clone().text())
   const result = requireOAuthObservationRecord(await allowed.json())
   const redirect = new URL(requireOAuthObservationString(result.redirectUrl))
@@ -256,10 +258,10 @@ async function exchange(
   changes: Record<string, string> = {},
   instance = requireInitializedIssuer(),
 ) {
-  return request({
-    path: "/oauth/token",
-    method: "POST",
-    body: {
+  return request(
+    "/oauth/token",
+    "POST",
+    {
       grant_type: "authorization_code",
       client_id: clientId,
       code: grant.code,
@@ -268,10 +270,10 @@ async function exchange(
       resource: config.resource,
       ...changes,
     },
-    session: undefined,
-    extra: {},
+    undefined,
+    {},
     instance,
-  })
+  )
 }
 const tokenResponseSchema = z.strictObject({
   access_token: z.string().min(1),
@@ -311,20 +313,20 @@ function rotateCredential(
   changes: Record<string, string> = {},
   instance = requireInitializedIssuer(),
 ) {
-  return request({
-    path: "/oauth/token",
-    method: "POST",
-    body: {
+  return request(
+    "/oauth/token",
+    "POST",
+    {
       grant_type: "refresh_token",
       client_id: clientId,
       resource: config.resource,
       refresh_token: credential,
       ...changes,
     },
-    session: undefined,
-    extra: {},
+    undefined,
+    {},
     instance,
-  })
+  )
 }
 async function legacyConnection(session: Session) {
   // Reconstruct only the historical token/store representation after a real
@@ -360,16 +362,16 @@ async function legacyConnection(session: Session) {
   return { ...grant, credential, expiresAt }
 }
 test("discovery and JWKS expose public configuration without creating a tenant grant store", async () => {
-  const response = await request({
-    path: "/.well-known/oauth-authorization-server/oauth",
-  })
+  const response = await request(
+    "/.well-known/oauth-authorization-server/oauth",
+  )
   assert.equal(response.status, 200)
   const metadata = requireOAuthObservationRecord(await response.json())
   assert.equal(metadata.issuer, config.issuer)
   assert.deepEqual(metadata.code_challenge_methods_supported, ["S256"])
   assert.deepEqual(metadata.token_endpoint_auth_methods_supported, ["none"])
   const jwks = requireOAuthObservationRecord(
-    await (await request({ path: "/oauth/jwks.json" })).json(),
+    await (await request("/oauth/jwks.json")).json(),
   )
 
   assert.equal(
@@ -400,9 +402,7 @@ test("exact client/redirect/resource/PKCE/scope admission rejects unsafe authori
   ] as Array<Record<string, string>>) {
     assert.equal((await begin(changes)).response.status, 400)
   }
-  const response = await request({
-    path: "/oauth/authorize?client_id=a&client_id=b",
-  })
+  const response = await request("/oauth/authorize?client_id=a&client_id=b")
   assert.equal(response.status, 400)
   assert.equal(response.headers.get("location"), null)
 })
@@ -416,12 +416,12 @@ test("ChatGPT authorization hints are ignored without altering exact client, PKC
   }
   const begun = await begin(extras)
   assert.equal(begun.response.status, 302)
-  const inspect = await request({
-    path: "/oauth/inspect",
-    method: "POST",
-    body: { ticket: begun.ticket },
-    session: requireInitializedF().sessions[0],
-  })
+  const inspect = await request(
+    "/oauth/inspect",
+    "POST",
+    { ticket: begun.ticket },
+    requireInitializedF().sessions[0],
+  )
   assert.equal(inspect.status, 200)
   const responseText = await inspect.text()
   assert.equal(responseText.includes(hint), false)
@@ -431,12 +431,12 @@ test("ChatGPT authorization hints are ignored without altering exact client, PKC
     .object({ scopes: z.array(z.string()), proof: z.string() })
     .parse(JSON.parse(responseText) as unknown)
   assert.deepEqual(review.scopes, scope.split(" "))
-  const allowed = await request({
-    path: "/oauth/approve",
-    method: "POST",
-    body: { ticket: begun.ticket, proof: review.proof, decision: "allow" },
-    session: requireInitializedF().sessions[0],
-  })
+  const allowed = await request(
+    "/oauth/approve",
+    "POST",
+    { ticket: begun.ticket, proof: review.proof, decision: "allow" },
+    requireInitializedF().sessions[0],
+  )
   assert.equal(allowed.status, 200)
   const approved = z
     .object({ redirectUrl: z.string() })
@@ -447,17 +447,13 @@ test("ChatGPT authorization hints are ignored without altering exact client, PKC
   assert.equal(redirect.searchParams.get("iss"), config.issuer)
   const authorizationCode = redirect.searchParams.get("code")
   assert.ok(authorizationCode)
-  const tokenResponse = await request({
-    path: "/oauth/token",
-    method: "POST",
-    body: {
-      grant_type: "authorization_code",
-      client_id: clientId,
-      code: authorizationCode,
-      code_verifier: begun.verifier,
-      redirect_uri: redirectUri,
-      resource: config.resource,
-    },
+  const tokenResponse = await request("/oauth/token", "POST", {
+    grant_type: "authorization_code",
+    client_id: clientId,
+    code: authorizationCode,
+    code_verifier: begun.verifier,
+    redirect_uri: redirectUri,
+    resource: config.resource,
   })
   assert.equal(tokenResponse.status, 200)
   const tokens = z
@@ -485,65 +481,55 @@ test("ChatGPT authorization hints are ignored without altering exact client, PKC
 test("consent requires real manager identity, same origin and the exact account/session/ticket proof", async () => {
   const begun = await begin()
   assert.equal(
-    (
-      await request({
-        path: "/oauth/inspect",
-        method: "POST",
-        body: { ticket: begun.ticket },
-      })
-    ).status,
+    (await request("/oauth/inspect", "POST", { ticket: begun.ticket })).status,
     401,
   )
   assert.equal(
     (
-      await request({
-        path: "/oauth/inspect",
-        method: "POST",
-        body: { ticket: begun.ticket },
-        session: requireInitializedF().sessions[0],
-        extra: { origin: "https://attacker.invalid" },
-      })
+      await request(
+        "/oauth/inspect",
+        "POST",
+        { ticket: begun.ticket },
+        requireInitializedF().sessions[0],
+        { origin: "https://attacker.invalid" },
+      )
     ).status,
     403,
   )
   const review = requireOAuthObservationRecord(
     await (
-      await request({
-        path: "/oauth/inspect",
-        method: "POST",
-        body: { ticket: begun.ticket },
-        session: requireInitializedF().sessions[0],
-      })
+      await request(
+        "/oauth/inspect",
+        "POST",
+        { ticket: begun.ticket },
+        requireInitializedF().sessions[0],
+      )
     ).json(),
   )
 
   assert.equal(
     (
-      await request({
-        path: "/oauth/approve",
-        method: "POST",
-        body: {
+      await request(
+        "/oauth/approve",
+        "POST",
+        {
           ticket: begun.ticket,
           proof: requireOAuthObservationString(review.proof),
           decision: "allow",
         },
-        session: requireInitializedF().sessions[1],
-      })
+        requireInitializedF().sessions[1],
+      )
     ).status,
     403,
   )
   assert.equal(
     (
-      await request({
-        path: "/oauth/approve",
-        method: "POST",
-        body: {
-          ticket: begun.ticket,
-          proof: "0".repeat(64),
-          decision: "allow",
-        },
-        session: requireInitializedF().sessions[0],
-      })
+      await request(
+        "/oauth/approve",
+        "POST",
+        { ticket: begun.ticket, proof: "0".repeat(64), decision: "allow" },
+        requireInitializedF().sessions[0],
+      )
     ).status,
     403,
   )
@@ -618,11 +604,7 @@ test("refresh rotates once, and replay after the retry window durably revokes ol
     refresh_token: grant.tokens.refresh_token,
     resource: config.resource,
   }
-  const response = await request({
-    path: "/oauth/token",
-    method: "POST",
-    body: refresh,
-  })
+  const response = await request("/oauth/token", "POST", refresh)
   assert.equal(response.status, 200)
   const rotated = requireOAuthObservationRecord(await response.json())
 
@@ -635,11 +617,7 @@ test("refresh rotates once, and replay after the retry window durably revokes ol
   )
   const now = Date.now()
   t.mock.method(Date, "now", () => now + 31_000)
-  assert.equal(
-    (await request({ path: "/oauth/token", method: "POST", body: refresh }))
-      .status,
-    400,
-  )
+  assert.equal((await request("/oauth/token", "POST", refresh)).status, 400)
   await assert.rejects(
     requireInitializedIssuer().verifyAccessToken(grant.tokens.access_token),
   )
@@ -930,13 +908,9 @@ test("legacy renewal cannot resurrect explicit grant/session revocation or a dis
       if (reason === "grant") {
         assert.equal(
           (
-            await request({
-              path: "/oauth/revoke",
-              method: "POST",
-              body: {
-                client_id: clientId,
-                token: grant.credential,
-              },
+            await request("/oauth/revoke", "POST", {
+              client_id: clientId,
+              token: grant.credential,
             })
           ).status,
           200,
@@ -991,13 +965,9 @@ test("client revocation and actual native-session logout revoke OAuth access", a
   const grant = await linked()
   assert.equal(
     (
-      await request({
-        path: "/oauth/revoke",
-        method: "POST",
-        body: {
-          client_id: clientId,
-          token: grant.tokens.refresh_token,
-        },
+      await request("/oauth/revoke", "POST", {
+        client_id: clientId,
+        token: grant.tokens.refresh_token,
       })
     ).status,
     200,
@@ -1231,28 +1201,16 @@ test("real OAuth HTTP tools persist tenant drafts, atomic CAS and durable idempo
 test("hostile headers, oversized bodies and grant journals are rejected without recovery or disclosure", async () => {
   assert.equal(
     (
-      await request({
-        path: "/oauth/token",
-        method: "POST",
-        body: {},
-        session: undefined,
-        extra: {
-          "content-length": "65537",
-        },
+      await request("/oauth/token", "POST", {}, undefined, {
+        "content-length": "65537",
       })
     ).status,
     413,
   )
   assert.equal(
     (
-      await request({
-        path: "/oauth/token",
-        method: "POST",
-        body: {},
-        session: undefined,
-        extra: {
-          "x-forwarded-host": "attacker.invalid",
-        },
+      await request("/oauth/token", "POST", {}, undefined, {
+        "x-forwarded-host": "attacker.invalid",
       })
     ).status,
     400,

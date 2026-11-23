@@ -1,3 +1,4 @@
+import { promiseFrom } from "../shared/promise-operation.ts"
 import {
   McpServer,
   createMcpHandler,
@@ -35,7 +36,6 @@ import { dispatch } from "./dispatch.ts"
 import { guardedConnection } from "./connection.ts"
 import { failureResult } from "./results.ts"
 import { preparePreviewUiResource } from "./preview-resource.ts"
-import { synchronousPromise } from "../../core/synchronous-promise.ts"
 
 // Creates ONE independent SDK server per session/request, never a shared
 // singleton transport. No HTTP listener, route mount, env, account or disk access.
@@ -61,8 +61,10 @@ export function createTadazzMcpServer(
   connection = guardedConnection(server, deps, config)
 
   return {
-    connect: requireGuardedConnection().connect,
-    close: requireGuardedConnection().close,
+    connect: (
+      ...args: Parameters<ReturnType<typeof guardedConnection>["connect"]>
+    ) => requireGuardedConnection().connect(...args),
+    close: () => requireGuardedConnection().close(),
   }
 }
 
@@ -81,16 +83,11 @@ export function createTadazzMcpHttpHandler(
     () =>
       registeredServer(config, deps, async (name, _context, handler) => {
         try {
-          const principal = await authorize({
-            name,
-            extra: undefined,
-            deps,
-            config,
-          })
+          const principal = await authorize(name, undefined, deps, config)
 
           return await handler(principal)
         } catch (error) {
-          return failureResult({ name, error, config })
+          return failureResult(name, error, config)
         }
       }),
     { legacy: "stateless", responseMode: "json", maxRequestBodySize: 65_536 },
@@ -158,7 +155,7 @@ function registeredServer(
       settings,
       async (args: unknown, context: ServerContext) =>
         run(name, context, (principal) =>
-          dispatch({ name, raw: args, p: principal, deps, config }),
+          dispatch(name, args, principal, deps, config),
         ),
     )
   }
@@ -179,7 +176,7 @@ function registeredServer(
         },
       },
       () =>
-        synchronousPromise(() => ({
+        promiseFrom(() => ({
           contents: [
             {
               uri: PREVIEW_RESOURCE,
@@ -224,7 +221,7 @@ function registeredServer(
     "tadazz://authoring/v1/schema.json",
     { mimeType: "application/schema+json" },
     (uri) =>
-      synchronousPromise(() => ({
+      promiseFrom(() => ({
         contents: [
           {
             uri: uri.href,
@@ -244,7 +241,7 @@ function registeredServer(
     "tadazz://authoring/v1/guide.md",
     { mimeType: "text/markdown" },
     (uri) =>
-      synchronousPromise(() => ({
+      promiseFrom(() => ({
         contents: [
           {
             uri: uri.href,

@@ -84,35 +84,37 @@ export async function fixture() {
   const db = database.getAccountDb()
   const owners = [randomUUID(), randomUUID()]
   const sessions: Session[] = []
-  for (const [i, owner] of owners.entries()) {
-    db.prepare(
-      "INSERT INTO accounts(id,email,salt,hash,verified_at,created_at) VALUES(?,?,?,?,?,?)",
-    ).run(
-      owner,
-      `synthetic-${i}@example.invalid`,
-      "fixture-unused",
-      "fixture-unused",
-      Date.now(),
-      Date.now(),
-    )
-    // oxlint-disable-next-line no-await-in-loop -- Keep owner order stable and mint this owner's session before verifying it.
-    const result = await tokens.mintToken(owner, "manager")
-    // oxlint-disable-next-line no-await-in-loop -- Verify the newly minted session before appending it and moving to the next owner.
-    const claims = await tokens.verifyToken(result.token)
+  await owners.reduce(
+    (pending, owner, i) =>
+      pending.then(async () => {
+        db.prepare(
+          "INSERT INTO accounts(id,email,salt,hash,verified_at,created_at) VALUES(?,?,?,?,?,?)",
+        ).run(
+          owner,
+          `synthetic-${i}@example.invalid`,
+          "fixture-unused",
+          "fixture-unused",
+          Date.now(),
+          Date.now(),
+        )
+        const result = await tokens.mintToken(owner, "manager")
+        const claims = await tokens.verifyToken(result.token)
 
-    if (!claims.sid) {
-      throw new Error("Actual manager mint did not create sid")
-    }
+        if (!claims.sid) {
+          throw new Error("Actual manager mint did not create sid")
+        }
 
-    sessions.push({ token: result.token, owner, sid: claims.sid })
-    mkdirSync(join(root, "tenants", owner, "native-sentinels"), {
-      recursive: true,
-    })
-    writeFileSync(
-      join(root, "tenants", owner, "native-sentinels", "quiz.json"),
-      '{"sentinel":"synthetic-native-do-not-touch"}\n',
-    )
-  }
+        sessions.push({ token: result.token, owner, sid: claims.sid })
+        mkdirSync(join(root, "tenants", owner, "native-sentinels"), {
+          recursive: true,
+        })
+        writeFileSync(
+          join(root, "tenants", owner, "native-sentinels", "quiz.json"),
+          '{"sentinel":"synthetic-native-do-not-touch"}\n',
+        )
+      }),
+    Promise.resolve(),
+  )
   mkdirSync(join(root, "native-sentinels"))
   writeFileSync(
     join(root, "native-sentinels", "quiz.json"),
@@ -126,21 +128,22 @@ export async function fixture() {
     operation: (p: FirstPartySessionPrincipal) => T | Promise<T>,
   ): Promise<T> {
     const app = new Hono<ApiEnv>()
-    let value: T | undefined = undefined
-
-    let error: unknown = undefined
-
-    const admission = { called: false }
+    const outcome: { value?: T; error?: Error; called: boolean } = {
+      called: false,
+    }
     app.use("*", auth.requireManager)
     app.get("/", async (c) => {
       try {
         const p = await auth.principal(c)
-        value = await operation(p)
-        admission.called = true
+        outcome.value = await operation(p)
+        outcome.called = true
 
         return c.body(null, 204)
       } catch (caught) {
-        error = caught
+        outcome.error =
+          caught instanceof Error
+            ? caught
+            : new Error("Fixture operation failed", { cause: caught })
 
         return c.body(null, 500)
       }
@@ -149,35 +152,30 @@ export async function fixture() {
       headers: { authorization: `Bearer ${session.token}` },
     })
 
-    if (error) {
-      // oxlint-disable-next-line typescript/only-throw-error -- Preserve the exact operation failure captured by the request; wrapping would change assertion identity.
-      throw error
+    if (outcome.error) {
+      throw outcome.error
     }
 
-    if (!admission.called || response.status !== 204) {
+    if (!outcome.called || response.status !== 204) {
       throw new Error("Actual fixture manager authorization rejected")
     }
 
-    return value as T
+    return outcome.value as T
   }
   const app = await createFirstPartyApp({
     origin,
     configRoot: root,
     authoring: policy,
   })
-  function request({
-    session,
-    path,
-    method = "GET",
-    body,
-    headers = {},
-  }: {
-    session: Session | undefined
-    path: string
-    method?: string
-    body?: unknown
-    headers?: Record<string, string>
-  }) {
+  function request(
+    ...[session, path, method = "GET", body, headers = {}]: [
+      session: Session | undefined,
+      path: string,
+      method?: string,
+      body?: unknown,
+      headers?: Record<string, string>,
+    ]
+  ) {
     return app.fetch(
       new Request(origin + path, {
         method,
@@ -221,11 +219,7 @@ export async function fixture() {
       database.closeAccountDb()
       for (const [name, value] of Object.entries(previous)) {
         if (value === undefined) {
-          if (!Reflect.deleteProperty(process.env, name)) {
-            throw new TypeError(
-              "Unable to restore an absent environment variable",
-            )
-          }
+          Reflect.deleteProperty(process.env, name)
         } else {
           process.env[name] = value
         }

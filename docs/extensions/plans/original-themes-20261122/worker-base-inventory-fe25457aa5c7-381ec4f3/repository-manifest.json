@@ -1,0 +1,62 @@
+{
+  "applicationExecuted": false,
+  "authOrCustomerStateIncluded": false,
+  "candidateSha": "fe25457aa5c79e7ac24c36ef55ff2235d97dd9d4",
+  "customerStorageAccessed": false,
+  "dockerBuildPerformed": false,
+  "files": {
+    "base-inventory.json": {
+      "bytes": 232477,
+      "sha256": "19aa21197494ce911f2a93dfc4635c6ece5bd40279da1d4612457655b418a237"
+    },
+    "base-inventory.stderr.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "delta-estimate.json": {
+      "bytes": 265841,
+      "sha256": "d4bc256f4959a2674b0d861da77d8c93904928c7f3b1ac3136b9bd9749c9766b"
+    },
+    "execution-plan.json": {
+      "bytes": 1954,
+      "sha256": "a175ceaf170f59ca15841c036f799d755c6b44dfa1de90827aeea7fd2e39366f"
+    },
+    "final-package-worker-README.md": {
+      "bytes": 8878,
+      "sha256": "22cf231e4c1f818e1d9425499db6661411a5db50d57f95974dd3553b1dca59ff"
+    },
+    "final-package-worker-base-inventory.py": {
+      "bytes": 9186,
+      "sha256": "e7cf3f48773eb3b53d4fd9614af4e34330695aa86e493535c96da2d4e901d98a"
+    },
+    "final-package-worker-driver.mts": {
+      "bytes": 11072,
+      "sha256": "1ce87c4f7404234acc28cd43e473b5035ae07edfc1f54e39124d25f22ee9ffe8"
+    },
+    "final-package-worker-preparation.json": {
+      "bytes": 1865,
+      "sha256": "9d1d7fc010e8b36ff542167c5c2bb6129874488c08c02e443e599a0319a9e9e9"
+    },
+    "final-package-worker-qualify.py": {
+      "bytes": 27038,
+      "sha256": "c99ad68c39393135bf475e1e8bdb72ee081d1b22f53e1c5f30f07ba6d87a0993"
+    },
+    "receipt.json": {
+      "bytes": 1501,
+      "sha256": "eb4ff8fa809533803b52de722457891dbb869fd50bc3b8a17161a183429f6613"
+    },
+    "requested-source-files.json": {
+      "bytes": 290714,
+      "sha256": "675db96bd2825bdc5425398b2c6dfca7da2a5ea27b8b0bd401282e9def68aab0"
+    }
+  },
+  "format": "tadazz-bounded-metadata-evidence-copy-v1",
+  "metadataOnly": true,
+  "productionChanged": false,
+  "qualificationPerformed": false,
+  "rawOracleEvidencePreserved": true,
+  "receiptSha256": "eb4ff8fa809533803b52de722457891dbb869fd50bc3b8a17161a183429f6613",
+  "releaseQualified": false,
+  "run": "worker-base-inventory-fe25457aa5c7-381ec4f3",
+  "source": "/home/ubuntu/tadazz-worker-base-inventory-fe25457aa5c7-381ec4f3"
+}

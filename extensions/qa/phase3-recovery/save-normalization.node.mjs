@@ -1,4 +1,3 @@
-/* oxlint-disable max-classes-per-file -- Keep the two private error identities inside the same isolated save-method VM fixture. */
 // Scoped unit tests of the real save method. Schema/journal doubles deliberately
 // do not claim Zod, filesystem, crash replay or Linux durability acceptance.
 import assert from "node:assert/strict"
@@ -7,7 +6,7 @@ import { stripTypeScriptTypes } from "node:module"
 import test from "node:test"
 import { SourceTextModule, SyntheticModule } from "node:vm"
 import { computeCanonicalBaseDigest as digest } from "../../src/core/digest.ts"
-import { synchronousPromise } from "../../src/core/synchronous-promise.ts"
+import { createStorageError } from "./save-normalization.fixture.mjs"
 
 const source = stripTypeScriptTypes(
   fs.readFileSync(
@@ -31,12 +30,7 @@ async function fixture(schemaVersion = 2) {
   }
   const schema = { safeParse: () => state.result }
 
-  class StorageError extends Error {
-    constructor(message, status) {
-      super(message)
-      this.status = status
-    }
-  }
+  const StorageError = createStorageError()
 
   class RevisionError extends Error {}
 
@@ -90,21 +84,19 @@ async function fixture(schemaVersion = 2) {
     },
   }
   const module = new SourceTextModule(source)
-  await module.link((specifier) =>
-    synchronousPromise(() => {
-      const values = modules[specifier]
-      assert.ok(values, `Unexpected dependency ${specifier}`)
+  await module.link((specifier) => {
+    const values = modules[specifier]
+    assert.ok(values, `Unexpected dependency ${specifier}`)
 
-      return new SyntheticModule(
-        Object.keys(values),
-        function exportSyntheticValues() {
-          for (const [key, value] of Object.entries(values)) {
-            this.setExport(key, value)
-          }
-        },
-      )
-    }),
-  )
+    return new SyntheticModule(
+      Object.keys(values),
+      function exposeFixtureExports() {
+        for (const [key, value] of Object.entries(values)) {
+          this.setExport(key, value)
+        }
+      },
+    )
+  })
   await module.evaluate()
   const service = new module.namespace.CompositeStorageService({
     getPath: () => "synthetic-only",

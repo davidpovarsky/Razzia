@@ -213,35 +213,35 @@ export async function verifyWorkspaceControls({
       element.style.height = `${nextHeight}px`
       element.style.display = "block"
     }, height)
-    await child.evaluate(async () => {
-      await new Promise(requestAnimationFrame)
-      await new Promise(requestAnimationFrame)
-    })
     const wide = width >= 1100
     await iframe
       .locator(
         `[data-testid="editor-workspace"][data-layout="${wide ? "wide" : "compact"}"]`,
       )
       .waitFor()
-    await child.waitForFunction(() => {
-      const surface = document
-        .querySelector('[data-testid="full-show-native-surface"]')
-        .getBoundingClientRect()
+    await child.waitForFunction(
+      () => {
+        const surface = document
+          .querySelector('[data-testid="full-show-native-surface"]')
+          .getBoundingClientRect()
 
-      const canvas = document
-        .querySelector('[data-testid="editor-workspace-canvas"]')
-        .getBoundingClientRect()
+        const canvas = document
+          .querySelector('[data-testid="editor-workspace-canvas"]')
+          .getBoundingClientRect()
 
-      return (
-        Math.abs(canvas.bottom - innerHeight) <= 1 &&
-        surface.bottom <= innerHeight + 1 &&
-        Math.abs(
-          surface.width - Math.min(canvas.width, (canvas.height * 16) / 9),
-        ) <= 1 &&
-        surface.width > 100 &&
-        Math.abs(surface.width / surface.height - 16 / 9) < 0.02
-      )
-    })
+        return (
+          Math.abs(canvas.bottom - innerHeight) <= 1 &&
+          surface.bottom <= innerHeight + 1 &&
+          Math.abs(
+            surface.width - Math.min(canvas.width, (canvas.height * 16) / 9),
+          ) <= 1 &&
+          surface.width > 100 &&
+          Math.abs(surface.width / surface.height - 16 / 9) < 0.02
+        )
+      },
+      undefined,
+      { polling: 100, timeout: 10000 },
+    )
     const geometry = await child.evaluate(() => {
       const bounds = (selector) => {
         const node = document.querySelector(selector)

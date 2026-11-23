@@ -259,7 +259,27 @@ export function resolvePhysicalBase(
   return matches[0] ?? null
 }
 
-export function preparePhysicalBinding({
+export function preparePhysicalBinding(
+  ...args: [
+    getPath: GetPath,
+    quizId: string,
+    kind: RecordKind,
+    relativePath: string,
+    target: unknown,
+  ]
+): PhysicalBinding {
+  const [getPath, quizId, kind, relativePath, target] = args
+
+  return preparePhysicalBindingFromRequest({
+    getPath,
+    quizId,
+    kind,
+    relativePath,
+    target,
+  })
+}
+
+function preparePhysicalBindingFromRequest({
   getPath,
   quizId,
   kind,

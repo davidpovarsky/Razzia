@@ -46,9 +46,10 @@ export class RequestLifetimes {
       throw new Error("Invalid request lifetime")
     }
 
+    this.next += 1
     const op: Operation = {
       wireId: id,
-      sdkId: `${this.prefix}${(this.next += 1)}`,
+      sdkId: `${this.prefix}${this.next}`,
       tool,
       work: tool ? 1 : 0,
       sdkPending: false,
@@ -85,7 +86,7 @@ export class RequestLifetimes {
   /** Hold each owner once through PUBLIC send completion, not remote receipt. */
   retainSend(...owners: Array<Operation | undefined>) {
     const unique = [
-      ...new Set(owners.filter((op): op is Operation => op !== undefined)),
+      ...new Set(owners.filter((op): op is Operation => Boolean(op))),
     ]
 
     if (unique.some((op) => !this.current(op) || op.cancelled)) {

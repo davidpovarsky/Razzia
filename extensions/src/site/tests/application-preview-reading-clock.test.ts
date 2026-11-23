@@ -80,8 +80,7 @@ function fixture(withPreviousScene = false) {
   sessions.push(session)
   const holdNext = (matches: (frame: ApplicationPreviewFrame) => boolean) => {
     const entered = Promise.withResolvers<ApplicationPreviewFrame>()
-    // oxlint-disable-next-line typescript/no-invalid-void-type -- Native withResolvers<void> is a completion Promise; this valid generic call is unsupported by the rule.
-    const released = Promise.withResolvers<void>()
+    const released = Promise.withResolvers<undefined>()
     waitForFrame = (frame) => {
       if (!matches(frame)) {
         return undefined
@@ -93,7 +92,10 @@ function fixture(withPreviousScene = false) {
       return released.promise
     }
 
-    return { entered: entered.promise, release: released.resolve }
+    return {
+      entered: entered.promise,
+      release: () => released.resolve(undefined),
+    }
   }
   const phase = () =>
     session.chapters.find(

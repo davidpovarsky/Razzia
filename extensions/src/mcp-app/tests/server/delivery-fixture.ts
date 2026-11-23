@@ -53,15 +53,15 @@ export class MemoryDeliveries {
         return structuredClone(prior.result)
       }
 
-      const draft = await readDraft({
-        deps: {
+      const draft = await readDraft(
+        {
           drafts: this.drafts,
           authoring: { allowedPublicAssetUrls: new Set() },
         },
         p,
-        id: selected.draftId,
-        expected: selected.expectedRevision,
-      })
+        selected.draftId,
+        selected.expectedRevision,
+      )
 
       if (!format && !this.consent) {
         throw new ToolError("CONSENT_REQUIRED")
@@ -109,11 +109,12 @@ export class MemoryDeliveries {
     s: DraftSelection,
     m: MutationIdentity,
   ) => this.run({ p, tool: "save_game", selected: s, m })
-  // eslint-disable-next-line max-params -- Exercises the existing positional Dependencies["exports"].createAuthorizedDownload port.
   createAuthorizedDownload = (
-    p: VerifiedPrincipal,
-    s: DraftSelection,
-    format: "tada-json" | "enhanced-bundle",
-    m: MutationIdentity,
+    ...[p, s, format, m]: [
+      p: VerifiedPrincipal,
+      s: DraftSelection,
+      format: "tada-json" | "enhanced-bundle",
+      m: MutationIdentity,
+    ]
   ) => this.run({ p, tool: "export_game", selected: s, m, format })
 }

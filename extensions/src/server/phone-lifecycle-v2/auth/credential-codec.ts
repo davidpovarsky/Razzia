@@ -112,7 +112,15 @@ export const fingerprint = (values: readonly unknown[]) =>
   createHash("sha256").update(JSON.stringify(values)).digest("hex")
 
 // Public, deterministic server selector; its secrecy is never authorization.
-export function deriveServiceId({
+export function deriveServiceId(
+  ...args: [owner: string, game: string, provider: string, requestId: string]
+) {
+  const [owner, game, provider, requestId] = args
+
+  return deriveServiceIdFromRequest({ owner, game, provider, requestId })
+}
+
+function deriveServiceIdFromRequest({
   owner,
   game,
   provider,

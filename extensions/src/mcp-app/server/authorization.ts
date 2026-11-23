@@ -32,8 +32,12 @@ export function validateConfig(config: ServerConfig): ServerConfig {
 
     if (
       value.length > 2048 ||
-      // oxlint-disable-next-line eslint/no-control-regex -- Reject controls and whitespace before admitting an exact OAuth HTTPS URL.
-      /[\u0000-\u0020"\\]/u.test(value) ||
+      Array.from(value).some(
+        (character) =>
+          character.charCodeAt(0) <= 0x20 ||
+          character === '"' ||
+          character === "\\",
+      ) ||
       url.protocol !== "https:" ||
       url.username ||
       url.password ||
@@ -57,17 +61,14 @@ export function validateConfig(config: ServerConfig): ServerConfig {
   })
 }
 
-export async function authorize({
-  name,
-  extra,
-  deps,
-  config,
-}: {
-  name: ToolName | undefined
-  extra: MessageExtraInfo | undefined
-  deps: Dependencies
-  config: ServerConfig
-}): Promise<VerifiedPrincipal> {
+export async function authorize(
+  ...[name, extra, deps, config]: [
+    name: ToolName | undefined,
+    extra: MessageExtraInfo | undefined,
+    deps: Dependencies,
+    config: ServerConfig,
+  ]
+): Promise<VerifiedPrincipal> {
   if (!deps.prevalidationLimit) {
     throw new ToolError("DEPENDENCY_UNAVAILABLE")
   }

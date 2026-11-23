@@ -227,8 +227,8 @@ export async function verifyGuessOffResult(root, expect, unanswered) {
   }
 }
 
-export async function readGuessOffContract(root) {
-  return await root.evaluate((element) => element.__guessOffContract.stop())
+export function readGuessOffContract(root) {
+  return root.evaluate((element) => element.__guessOffContract.stop())
 }
 
 /** Validate only after the complete observed trace has been persisted. */

@@ -248,7 +248,29 @@ export class PackageTransferStore {
 
     return result
   }
-  operation<T>({
+  operation<T>(
+    ...args: [
+      owner: string,
+      kind: string,
+      key: string,
+      digest: string,
+      action: () => T,
+      precondition?: () => void,
+    ]
+  ): T {
+    const [owner, kind, key, digest, action, precondition] = args
+
+    return this.operationRequest({
+      owner,
+      kind,
+      key,
+      digest,
+      action,
+      precondition,
+    })
+  }
+
+  private operationRequest<T>({
     owner,
     kind,
     key,
@@ -292,7 +314,7 @@ export class PackageTransferStore {
       .prepare("INSERT INTO package_tool_operations VALUES(?,?,?,?,NULL)")
       .run(owner, kind, key, digest)
 
-    // Keep the intent: callers must inspect status after any uncertain mutation.
+    // Keep the intent if action or persistence throws: the mutation may be uncertain.
     const result = action()
     this.db
       .prepare(
@@ -350,8 +372,11 @@ export class PackageTransferStore {
       input.totalBytes > PACKAGE_LIMITS.archiveBytes ||
       input.filename.length < 8 ||
       input.filename.length > 160 ||
-      // oxlint-disable-next-line eslint/no-control-regex -- The filename allowlist intentionally excludes C0/DEL controls and path separators.
-      !/^[^/\\:\u0000-\u001f\u007f]+\.tadazz$/u.test(input.filename)
+      !/^[^/\\:]+\.tadazz$/u.test(input.filename) ||
+      Array.from(input.filename).some(
+        (character) =>
+          character.charCodeAt(0) < 32 || character.charCodeAt(0) === 127,
+      )
     ) {
       throw new PackageError("PACKAGE_TRANSFER_INPUT", 422)
     }
@@ -703,7 +728,20 @@ export class PackageTransferStore {
       complete: input.offset + bytes.length === row.bytes,
     }
   }
-  complete<T extends { uploadId: string }>({
+  complete<T extends { uploadId: string }>(
+    ...args: [
+      owner: string,
+      id: string,
+      upload: (bytes: Buffer, key: string) => T,
+      read: (uploadId: string) => T,
+    ]
+  ): T {
+    const [owner, id, upload, read] = args
+
+    return this.completeRequest({ owner, id, upload, read })
+  }
+
+  private completeRequest<T extends { uploadId: string }>({
     owner,
     id,
     upload,

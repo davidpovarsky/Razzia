@@ -419,11 +419,8 @@ export function executeMediaDeleteTransaction(
         path.relative(getPath(), quarantinePath).split(path.sep).join("/"),
       )
 
-      if (!originalBinary) {
-        throw new Error("Missing original media fingerprint")
-      }
-
       if (
+        !originalBinary ||
         copied.sha256 !== originalBinary.sha256 ||
         copied.length !== originalBinary.length
       ) {
@@ -456,23 +453,20 @@ export function executeMediaDeleteTransaction(
       show.extras,
     )
     const bindings = {
-      base: preparePhysicalBinding({
+      base: preparePhysicalBinding(
         getPath,
-        quizId: show.id,
-        kind: "base",
-        relativePath: path
-          .relative(getPath(), show.filePath)
-          .split(path.sep)
-          .join("/"),
-        target: detached.quizz,
-      }),
-      sidecar: preparePhysicalBinding({
+        show.id,
+        "base",
+        path.relative(getPath(), show.filePath).split(path.sep).join("/"),
+        detached.quizz,
+      ),
+      sidecar: preparePhysicalBinding(
         getPath,
-        quizId: show.id,
-        kind: "sidecar",
-        relativePath: `extensions/quizzes/${show.id}.json`,
-        target: detached.extras,
-      }),
+        show.id,
+        "sidecar",
+        `extensions/quizzes/${show.id}.json`,
+        detached.extras,
+      ),
     }
 
     return {
@@ -693,6 +687,15 @@ export function executeMediaDeleteTransaction(
 
     return allSucceeded
   }
+  function requireJournalShow(quizId: string) {
+    const record = journalShows.find((entry) => entry.quizId === quizId)
+
+    if (!record) {
+      throw new Error("Missing staged physical binding")
+    }
+
+    return record
+  }
   const detachedFromShows: string[] = []
 
   try {
@@ -720,28 +723,15 @@ export function executeMediaDeleteTransaction(
       )
 
       if (fs.existsSync(show.filePath)) {
-        const showJournal = journalShows.find(
-          (record) => record.quizId === show.id,
+        publishPhysicalTarget(
+          getPath,
+          requireJournalShow(show.id).bindings.base,
         )
-
-        if (!showJournal) {
-          throw new Error("Missing staged media journal for show")
-        }
-
-        publishPhysicalTarget(getPath, showJournal.bindings.base)
       }
 
       if (detached.extras) {
         assertPhysicalGroup(getPath, physicalBindings)
-        const showJournal = journalShows.find(
-          (record) => record.quizId === show.id,
-        )
-
-        if (!showJournal) {
-          throw new Error("Missing staged media journal for show")
-        }
-
-        const binding = showJournal.bindings.sidecar
+        const binding = requireJournalShow(show.id).bindings.sidecar
 
         if (!binding.original) {
           publishPhysicalTarget(getPath, binding)

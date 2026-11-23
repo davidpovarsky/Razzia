@@ -590,13 +590,13 @@ test("1. tenantA 6 C1 process-loss checkpoints + startup replay across account f
 
     closeAccountDb()
     process.env.TADAZZ_ACCOUNTS_ENABLED = "true"
-    const interrupted = await creationChild({
-      mode: boundary,
+    const interrupted = await creationChild(
+      boundary,
       root,
       token,
-      sequence: "",
-      owner: tenantA.id,
-    })
+      "",
+      tenantA.id,
+    )
 
     assert.equal(interrupted.signal, "SIGKILL", interrupted.stderr)
     assert.equal(interrupted.timedOut, false)

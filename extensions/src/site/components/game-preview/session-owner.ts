@@ -100,7 +100,10 @@ export function createPreviewSessionOwner({
         throw new Error("inline-preview:cleanup-unavailable")
       }
     }
-    void cleanup().then(() => settled.resolve(undefined), settled.reject)
+    void cleanup().then(
+      () => settled.resolve(undefined),
+      (error: unknown) => settled.reject(error),
+    )
 
     return settled.promise
   }

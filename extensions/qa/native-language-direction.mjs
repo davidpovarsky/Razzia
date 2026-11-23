@@ -19,9 +19,6 @@ const { build } = require("esbuild")
 const { chromium } = createRequire(
   path.join(deps, "packages/e2e/package.json"),
 )("@playwright/test")
-const _resolveModule = createRequire(
-  path.join(deps, "packages/web/package.json"),
-)
 const adapter = path.join(
   source,
   "extensions/src/presentation/tadazz-show/TadazzV4StageAdapter.tsx",
@@ -81,7 +78,9 @@ if (before) {
     throw new Error("Prior provider-only scope extraction failed")
   }
 
-  baselineBoundary = `import {useMemo,type ReactNode} from "react";import {I18nextProvider,useTranslation} from "react-i18next";\n${baselineBoundary}`
+  baselineBoundary = `import {useMemo,type ReactNode} from "react";import {I18nextProvider,useTranslation} from "react-i18next";\n${
+    baselineBoundary
+  }`
 }
 
 await fs.mkdir(evidence, { recursive: true })
@@ -128,7 +127,7 @@ const plugins = [
               return { path: file }
             }
           } catch {
-            // Try the remaining supported suffixes; unresolved imports fail after this loop.
+            // A candidate path may be absent; try the remaining extensions.
           }
         }
         throw new Error(`Unresolved actual workspace ${args.path}`)
@@ -312,10 +311,7 @@ try {
     }, c)
     await page.locator(".q-text").waitFor({ state: "visible" })
     await page.evaluate(() => {
-      const originalQuestionNode = document.querySelector(".q-text")
-      window.originalQuestionNode = originalQuestionNode
-
-      return originalQuestionNode
+      window.originalQuestionNode = document.querySelector(".q-text")
     })
     await page.evaluate(() => window.languageStage.answers())
     await page.locator('[data-testid="tadazz-card-0"]').click()

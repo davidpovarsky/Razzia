@@ -332,9 +332,8 @@ function orderedTimelineReceipt({ trace, timeline, scenes, terminal }) {
     )
 
     while (expectedIndex < entry.stepIndex) {
-      const skippedIndex = expectedIndex
       expectedIndex += 1
-      allowConditionalSkip(skippedIndex, entry)
+      allowConditionalSkip(expectedIndex - 1, entry)
     }
 
     const expected = timeline[expectedIndex]
@@ -358,9 +357,8 @@ function orderedTimelineReceipt({ trace, timeline, scenes, terminal }) {
   }
 
   while (expectedIndex < timeline.length) {
-    const skippedIndex = expectedIndex
     expectedIndex += 1
-    allowConditionalSkip(skippedIndex, terminal)
+    allowConditionalSkip(expectedIndex - 1, terminal)
   }
 
   return {
@@ -1338,8 +1336,12 @@ export async function verifyStoredGameBrowser(options) {
     )
     fragmentAudio.expectedActive = expectedFragmentSteps.length
     assert.deepEqual(
-      [...qualifiedFragmentSteps].map(digest).sort(),
-      expectedFragmentSteps.map(digest).sort(),
+      [...qualifiedFragmentSteps]
+        .map(digest)
+        .sort((left, right) => left.localeCompare(right)),
+      expectedFragmentSteps
+        .map(digest)
+        .sort((left, right) => left.localeCompare(right)),
       "Every active authored fragment-audio scene has actual playback proof",
     )
     assert.equal(

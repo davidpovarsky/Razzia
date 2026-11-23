@@ -1,0 +1,681 @@
+{
+  "allFamiliesCompleted": true,
+  "candidateSha": "31a9d4ce6e5633b48ff00f57ce8a731c741436d1",
+  "copiedBytes": 67405683,
+  "copiedFiles": 164,
+  "diagnosticOnly": true,
+  "files": {
+    "browser.stderr.log": {
+      "bytes": 25804,
+      "sha256": "966b7dfa64ea89c5ff00afac43d36af2894943cf0b0ab0e9957a0c66c9f43bd8"
+    },
+    "browser.stdout.log": {
+      "bytes": 12161,
+      "sha256": "1b80194ba842269b62d37defad4c0b7df78772ffea5a5e74e53e4164ebe6e903"
+    },
+    "container-plan.json": {
+      "bytes": 1755,
+      "sha256": "71dc2c6979f55c00324a87b7f91670738377a20f74328d758952566e5eb3d196"
+    },
+    "diagnostic-receipt.json": {
+      "bytes": 5741621,
+      "sha256": "fd019cebc8122655a518ee2aaf67b560b4c612f622b6fb63c13afe9914b8bd7e"
+    },
+    "execution-plan.json": {
+      "bytes": 1777,
+      "sha256": "be4fa5e294588db65ea9631d2bdfa574e19959e23d55d17c3efb760b104d782f"
+    },
+    "output/browser/browser-failure-screenshot.json": {
+      "bytes": 276,
+      "sha256": "3a007024ebc3664cf52451380a19095b3c52902fdb8bc799b8c744554bbafeeb"
+    },
+    "output/browser/browser-failure.json": {
+      "bytes": 329,
+      "sha256": "cda34ba89040565fd065428d2586d10e47d31e078721e37af62cef4be7345190"
+    },
+    "output/browser/choice-layout-carnival-pop-2-results.json": {
+      "bytes": 317519,
+      "sha256": "0bb734703d1395d6fef518ed3a417c00204775db4f7ef3764d96ed45bc85d43e"
+    },
+    "output/browser/choice-layout-carnival-pop-2-voting.json": {
+      "bytes": 306719,
+      "sha256": "c78bdfda0c9dfbd59856fbdb0d4565a093d6c156c96d05e7d4fbedbe841c8f01"
+    },
+    "output/browser/choice-layout-carnival-pop-3-results.json": {
+      "bytes": 321132,
+      "sha256": "2c1d85ef326778e4cfb3ad686942879eaf5b6d344efce2b2321f53fa6ae7f3e3"
+    },
+    "output/browser/choice-layout-carnival-pop-3-voting.json": {
+      "bytes": 313690,
+      "sha256": "6d4a3dc168033f1581cac53f60c46da612ce319f15ee51635f365e1875d3ff62"
+    },
+    "output/browser/choice-layout-carnival-pop-4-results.json": {
+      "bytes": 329339,
+      "sha256": "55d39d29009ba9bf0f8fe3f4c86fceeddb71dbef846fd96350e8a00c4d27a592"
+    },
+    "output/browser/choice-layout-carnival-pop-4-voting.json": {
+      "bytes": 324398,
+      "sha256": "6078ee08e9ec63eb088b1ab3b64bda8a95e6d4e6fa35ce0b2f12d9ffe36c9d69"
+    },
+    "output/browser/choice-layout-carnival-pop-5-results-failure.png": {
+      "bytes": 397775,
+      "sha256": "a33fa614728f84f698c60b5cafb0d20b973a0c99995018992c9b0dc406f4dc77"
+    },
+    "output/browser/choice-layout-carnival-pop-5-results.json": {
+      "bytes": 342956,
+      "sha256": "2f04c5ebdb87e556894a71457a1d89c8270672b7e3242d34760e9d7cee851a32"
+    },
+    "output/browser/choice-layout-carnival-pop-5-voting.json": {
+      "bytes": 331012,
+      "sha256": "109f00305243d35e2023f33cccffd520386b9a7efecb86440b0bb3bcdb097206"
+    },
+    "output/browser/choice-layout-crystal-future-2-results.json": {
+      "bytes": 315760,
+      "sha256": "c2372dba71dd3ab28433a477eac1e0e930d4052e2dfce24b94c7d250f4f04e40"
+    },
+    "output/browser/choice-layout-crystal-future-2-voting.json": {
+      "bytes": 303460,
+      "sha256": "284acbfbef61a1c64c0c128ba9dce668153949fd5a6ad06eba843a6243f2d04c"
+    },
+    "output/browser/choice-layout-crystal-future-3-results.json": {
+      "bytes": 318464,
+      "sha256": "1553b4633d3d65b5ca5fd937321ee475e28cfdb467fc638f16a7fb0d694e763e"
+    },
+    "output/browser/choice-layout-crystal-future-3-voting.json": {
+      "bytes": 311182,
+      "sha256": "fb1f065cb6e330e9ab5d3fa61f20b98294164ddda5486cad7b39cc95852a7c0e"
+    },
+    "output/browser/choice-layout-crystal-future-4-results.json": {
+      "bytes": 324199,
+      "sha256": "d86197bea1f72b12fd05794fea755f36776aae0a3667bb8fa9094202a938e0cd"
+    },
+    "output/browser/choice-layout-crystal-future-4-voting.json": {
+      "bytes": 319766,
+      "sha256": "554c08f57e312773b5162f934db32d8a4a4c853564d738167510858d6d5844d4"
+    },
+    "output/browser/choice-layout-crystal-future-5-results-failure.png": {
+      "bytes": 621663,
+      "sha256": "ade314ac75bfd5d0c2c0252c0bae771c478fd2509017b48ef998145e22b888ab"
+    },
+    "output/browser/choice-layout-crystal-future-5-results.json": {
+      "bytes": 338448,
+      "sha256": "98656e30bbe9cf5e9e1e3ea0c06ca551fe3bee53485dc8f7cab1882465dd3f57"
+    },
+    "output/browser/choice-layout-crystal-future-5-voting.json": {
+      "bytes": 327561,
+      "sha256": "874ec9330e6df40721fcc61b6d0932e8cd8def6c16e862381f1ef87a7399802e"
+    },
+    "output/browser/choice-layout-magic-storybook-2-results.json": {
+      "bytes": 317675,
+      "sha256": "a871057153a0659f1a10a70399538c3bc6181e04b5f09657ef6ebc26a9dcf0c8"
+    },
+    "output/browser/choice-layout-magic-storybook-2-voting.json": {
+      "bytes": 306962,
+      "sha256": "fb13d639a8bd9b1ea3bfbf8c19c1f252a9068e81be6f57feb07384f29284c792"
+    },
+    "output/browser/choice-layout-magic-storybook-3-results.json": {
+      "bytes": 319943,
+      "sha256": "bec68f30754bd0412a80bf75aaf949b70cf8b55b3246e5db65199b4302325551"
+    },
+    "output/browser/choice-layout-magic-storybook-3-voting.json": {
+      "bytes": 311632,
+      "sha256": "6df2896608ef8738b3eb4fc117ed7d945f09e8f433ca6a45134877783b2cc149"
+    },
+    "output/browser/choice-layout-magic-storybook-4-results.json": {
+      "bytes": 332516,
+      "sha256": "db48260be06664d24b992582488dde957dccc867c353b43825ba210778f75c04"
+    },
+    "output/browser/choice-layout-magic-storybook-4-voting.json": {
+      "bytes": 328132,
+      "sha256": "884f8edd884e60a9086036aee55caec477b415c56bba9a69966237e2dbde4f38"
+    },
+    "output/browser/choice-layout-magic-storybook-5-results-failure.png": {
+      "bytes": 508626,
+      "sha256": "dd6702b68f9c7fd1ea96cda53377fedbd94226e23a9065b7dff8348914862d82"
+    },
+    "output/browser/choice-layout-magic-storybook-5-results.json": {
+      "bytes": 373554,
+      "sha256": "a4bb0471ce8fca34e1bd167e3af72259e88a3e556a58979280b43e1e2e4224a5"
+    },
+    "output/browser/choice-layout-magic-storybook-5-voting-failure.png": {
+      "bytes": 501384,
+      "sha256": "57f3b1aa695e68d96e6c782b2c711abac8da1b28ef9919fad6daef8c1eee6f91"
+    },
+    "output/browser/choice-layout-magic-storybook-5-voting.json": {
+      "bytes": 372535,
+      "sha256": "25aa0f066b14a05b7f2f7ecc4ac2566263e488387e702696bfdf6b15422d20cc"
+    },
+    "output/browser/choice-layout-mystery-noir-2-results.json": {
+      "bytes": 322672,
+      "sha256": "49ce257a287aa9689923ae7b362bb97bf6a9771eff979988cf13266f823405fe"
+    },
+    "output/browser/choice-layout-mystery-noir-2-voting.json": {
+      "bytes": 310256,
+      "sha256": "60506f915e773c529d8bb37d4c765592d4f3e64a1afc9e92bbef5f3d9802d462"
+    },
+    "output/browser/choice-layout-mystery-noir-3-results.json": {
+      "bytes": 324381,
+      "sha256": "208d8310936cf04ae5db645e11a4fe3c60d6862ea7d1bb0066229758aa1f9c6f"
+    },
+    "output/browser/choice-layout-mystery-noir-3-voting.json": {
+      "bytes": 313989,
+      "sha256": "fd53f82db0dcac0d3a6ceb11b4c8829bfb4e7ba33edc9aacea770cda3a4f238b"
+    },
+    "output/browser/choice-layout-mystery-noir-4-results.json": {
+      "bytes": 328346,
+      "sha256": "d593700ea72c8a301de59de492f2ddbac51d23540effa8b7adc62b446b5d07c1"
+    },
+    "output/browser/choice-layout-mystery-noir-4-voting.json": {
+      "bytes": 322806,
+      "sha256": "ad5aa97b1fc4937d2084e8fa1cb4b81e1c6ff88b099ec0dee3e0cec850b00565"
+    },
+    "output/browser/choice-layout-mystery-noir-5-results-failure.png": {
+      "bytes": 479134,
+      "sha256": "d966085fe9573bd6ca4afcf4bcc4934683e5baf10b51fecc2ab21c9b8132373b"
+    },
+    "output/browser/choice-layout-mystery-noir-5-results.json": {
+      "bytes": 344181,
+      "sha256": "a37e0da315db272575a1eab8f2dff0a255c673403f70a4a37b9678c67b4efe63"
+    },
+    "output/browser/choice-layout-mystery-noir-5-voting.json": {
+      "bytes": 330450,
+      "sha256": "b5a7410612c60cba1952039d3582d49fc4cb71b46f79ebf037cd78386c06c6ee"
+    },
+    "output/browser/choice-layout-neon-arcade-2-results.json": {
+      "bytes": 313096,
+      "sha256": "5761f35ec706fb73de1374e11bfa7517481eacf828f4070611b1437b9e49a7db"
+    },
+    "output/browser/choice-layout-neon-arcade-2-voting.json": {
+      "bytes": 303577,
+      "sha256": "a66c2b774e8585fba70bfc1a8d60237032589dfaf083a5b3cecc8defcb8de532"
+    },
+    "output/browser/choice-layout-neon-arcade-3-results.json": {
+      "bytes": 322284,
+      "sha256": "803f1753cc80a06a221b15a8ac358143d31249d0c5ff17a3c6f1f186f5e97953"
+    },
+    "output/browser/choice-layout-neon-arcade-3-voting.json": {
+      "bytes": 313653,
+      "sha256": "a688db61ea15ba7128ef1d3e5d45a64030f772a91ff70534766580671247af8d"
+    },
+    "output/browser/choice-layout-neon-arcade-4-results.json": {
+      "bytes": 323671,
+      "sha256": "fb4f7fac736d87de90fa17b11b219d621d9e4d79a2c3d01967348900290c7e42"
+    },
+    "output/browser/choice-layout-neon-arcade-4-voting.json": {
+      "bytes": 319283,
+      "sha256": "c84af14ef489ec7a247009979d3e90649c2e14128c3cc060e2b059736254b706"
+    },
+    "output/browser/choice-layout-neon-arcade-5-results.json": {
+      "bytes": 338054,
+      "sha256": "de6f2a510e23eec8a4ed60c135f1e6ae93dc3cc6e66388948608432e0e8cbe4e"
+    },
+    "output/browser/choice-layout-neon-arcade-5-voting.json": {
+      "bytes": 329873,
+      "sha256": "e9e188197024ca74f644b238561ce6ae1ac009adb312be8876635c4bb5e18f6d"
+    },
+    "output/browser/choice-layout-retro-tv-2-results.json": {
+      "bytes": 319273,
+      "sha256": "e8804dc2d04cf9c28d647cbd4ca0334b051573705eacc4fba5d25ce9d8105469"
+    },
+    "output/browser/choice-layout-retro-tv-2-voting.json": {
+      "bytes": 310464,
+      "sha256": "05be07194c1f5d5e46f2d80b2713b3462874a550296e677d4f9b31b13c6f50ce"
+    },
+    "output/browser/choice-layout-retro-tv-3-results.json": {
+      "bytes": 323981,
+      "sha256": "d49ba50e4e8e16f4fa61b354bf572c1ba06d81f21b40dc322aa11a636eb8fe49"
+    },
+    "output/browser/choice-layout-retro-tv-3-voting.json": {
+      "bytes": 315052,
+      "sha256": "294f124a8fc1e0db4b36eea7e1efb6682489b37ae929d969c02c4c1b4cf7e064"
+    },
+    "output/browser/choice-layout-retro-tv-4-results.json": {
+      "bytes": 327310,
+      "sha256": "a09e5daf5c09ac0753dcb8d65cd3a085f916caa22c7b84cb28765d96a7852e77"
+    },
+    "output/browser/choice-layout-retro-tv-4-voting.json": {
+      "bytes": 322851,
+      "sha256": "a474682a021d7e0360e7f52d6051b16854c1ca49d79be5482ad358378106e35d"
+    },
+    "output/browser/choice-layout-retro-tv-5-results-failure.png": {
+      "bytes": 378806,
+      "sha256": "1d34c3cbb79ae0b9c427e15e653adc0712b32fd35ac2486bafbd92d2532c5d12"
+    },
+    "output/browser/choice-layout-retro-tv-5-results.json": {
+      "bytes": 369676,
+      "sha256": "e85d5d96d8fa1edfb6c68aec2b08a7c32cc1fc6dba03b0f726d17fd7aba56be0"
+    },
+    "output/browser/choice-layout-retro-tv-5-voting-failure.png": {
+      "bytes": 385386,
+      "sha256": "dcb6c7bf4d1c7e281ed37acd17b4556131bae83dd722f34fd66bc70dce4e32e0"
+    },
+    "output/browser/choice-layout-retro-tv-5-voting.json": {
+      "bytes": 368377,
+      "sha256": "cc9d57ffaba5ad030c24a69fa0d3a747177eb3ec6b1df547a70b2317a9da749c"
+    },
+    "output/browser/choice-layout-royal-quiz-2-results.json": {
+      "bytes": 339034,
+      "sha256": "3b629041915ddea4da5b5a096190ccfcbcf9e5d614f6d33e234f736d00c30d44"
+    },
+    "output/browser/choice-layout-royal-quiz-2-voting.json": {
+      "bytes": 305369,
+      "sha256": "434a2ce036bc43bf33e632ab99d78aea061bc19ffd6e1b05d8c4fbf1ead7dbea"
+    },
+    "output/browser/choice-layout-royal-quiz-3-results.json": {
+      "bytes": 324412,
+      "sha256": "9375619ff710c3ce3f45bc28bf8906b1244c5f994fa86df4d64ab1413a2510dc"
+    },
+    "output/browser/choice-layout-royal-quiz-3-voting.json": {
+      "bytes": 313790,
+      "sha256": "c25182c4575a3d4cc9f0a262664decd56bb5fdf08b9ef309d9e4347db57a8eda"
+    },
+    "output/browser/choice-layout-royal-quiz-4-results.json": {
+      "bytes": 325915,
+      "sha256": "402e56f4aa123f0583f929bf705a4e27e96fd5d25198e8e981027b814e911250"
+    },
+    "output/browser/choice-layout-royal-quiz-4-voting.json": {
+      "bytes": 321065,
+      "sha256": "b0bb5bb02e08be2162f17dfc7128c93f9343b9c27be3ebbd88d3aa110345b92d"
+    },
+    "output/browser/choice-layout-royal-quiz-5-results-failure.png": {
+      "bytes": 469293,
+      "sha256": "fba124a3aff5138a01f0ae05bfd25cfefca5ce46fcc9e5ac40403354893496a6"
+    },
+    "output/browser/choice-layout-royal-quiz-5-results.json": {
+      "bytes": 340523,
+      "sha256": "fc221e204cef3cd1b8058a37a6f0a5cb246855ffcdb54938e9811faf888575de"
+    },
+    "output/browser/choice-layout-royal-quiz-5-voting.json": {
+      "bytes": 330019,
+      "sha256": "ca7c6ab465744cba738d54309aaff3786a527cf4efab51a8de826ce70e97cf44"
+    },
+    "output/browser/choice-layout-sports-arena-2-results.json": {
+      "bytes": 320167,
+      "sha256": "20d3c5c21c607d3371855ac06e6f7e72a185761649732451f204ee2e3eca9391"
+    },
+    "output/browser/choice-layout-sports-arena-2-voting.json": {
+      "bytes": 309345,
+      "sha256": "4131f565e43165ef58659a29f49907bf2c2d61eaa690ed2a4a6ea7203e28157b"
+    },
+    "output/browser/choice-layout-sports-arena-3-results.json": {
+      "bytes": 322589,
+      "sha256": "7b71268e05456f690ec685de7bb2e4ba9e5663e9bcfb652f561c4c6c089a49b6"
+    },
+    "output/browser/choice-layout-sports-arena-3-voting.json": {
+      "bytes": 311992,
+      "sha256": "73429f0f3366a085b05b98fe1468cc3115ad82ac9786bf7ac7ca551fc2ca215c"
+    },
+    "output/browser/choice-layout-sports-arena-4-results.json": {
+      "bytes": 333269,
+      "sha256": "21a8d2c647dfbea74d38ab84d6c3dc9780d4115170124bf8b875ec3d34f981db"
+    },
+    "output/browser/choice-layout-sports-arena-4-voting.json": {
+      "bytes": 327789,
+      "sha256": "9fe6d74b9c19dde3e009f92ccc2ff0a13261a4cbb0b44c45d2d8373801313bce"
+    },
+    "output/browser/choice-layout-sports-arena-5-results-failure.png": {
+      "bytes": 349943,
+      "sha256": "7dbfb57104f4cb964d076a1ca72f0d318452a5760d85396ecbf54bc3cd3ddadd"
+    },
+    "output/browser/choice-layout-sports-arena-5-results.json": {
+      "bytes": 373218,
+      "sha256": "7fc953c4c8117276fe990c24b48e5c8a2fe5b8afbf323540db5cbce8362610ec"
+    },
+    "output/browser/choice-layout-sports-arena-5-voting-failure.png": {
+      "bytes": 354474,
+      "sha256": "a5e7d2814f1ca5a4eda1cc2cc01a11a933af0b1157b3573a6c80f5bf748e1877"
+    },
+    "output/browser/choice-layout-sports-arena-5-voting.json": {
+      "bytes": 372144,
+      "sha256": "7b0e6b5d94319cbbd102514fa7743c24721953f06e3f6bc4a030868bdb506d79"
+    },
+    "output/browser/native-carnival-pop-2-choices.png": {
+      "bytes": 340506,
+      "sha256": "2c105b40775581673e7c4d9b008ae3e0a670f595049f19929ca49f9dd6126392"
+    },
+    "output/browser/native-carnival-pop-3-choices.png": {
+      "bytes": 348901,
+      "sha256": "d4d53983dec6e542915f3028a7b12b3829c181a6b309a335d1a8d2cfddd4195d"
+    },
+    "output/browser/native-carnival-pop-4-choices.png": {
+      "bytes": 354219,
+      "sha256": "5824eaece1fa541d9c555f6aaa591810b59a397b186586f716e77d288e782098"
+    },
+    "output/browser/native-carnival-pop-5-choices.png": {
+      "bytes": 397775,
+      "sha256": "a33fa614728f84f698c60b5cafb0d20b973a0c99995018992c9b0dc406f4dc77"
+    },
+    "output/browser/native-carnival-pop.json": {
+      "bytes": 208070,
+      "sha256": "fc229644909655597a477def6826226ae14c11a95daa2da6feb6b3a43febc5b6"
+    },
+    "output/browser/native-crystal-future-2-choices.png": {
+      "bytes": 591897,
+      "sha256": "8a6445727d1754dc8cfc75ed6f127386c5b61ddb6fb8ef3da132b9e70151f29a"
+    },
+    "output/browser/native-crystal-future-3-choices.png": {
+      "bytes": 592545,
+      "sha256": "5b475f0605f6189882315dab2fbb80786a57d2b58181d491571fd52bf2c78026"
+    },
+    "output/browser/native-crystal-future-4-choices.png": {
+      "bytes": 597236,
+      "sha256": "86e4860175b922d53671fc4f7ee1b98205bd54377a19eb3231e489079a85676f"
+    },
+    "output/browser/native-crystal-future-5-choices.png": {
+      "bytes": 621663,
+      "sha256": "ade314ac75bfd5d0c2c0252c0bae771c478fd2509017b48ef998145e22b888ab"
+    },
+    "output/browser/native-crystal-future.json": {
+      "bytes": 195042,
+      "sha256": "4ae969713a421806f4402b1cf2f65f29c4da3bc59f1640af4a770c52484179f1"
+    },
+    "output/browser/native-layout-diagnostic.json": {
+      "bytes": 5588843,
+      "sha256": "5b85c79d476428bb96b3ad046af1b9ddaf3b87c9c6ab64c1e529bb5c3898845e"
+    },
+    "output/browser/native-magic-storybook-2-choices.png": {
+      "bytes": 451693,
+      "sha256": "66974d345a1cb8a6e48fb07f691e83099b57f8fdee04a39125ae54400ee14fee"
+    },
+    "output/browser/native-magic-storybook-3-choices.png": {
+      "bytes": 468504,
+      "sha256": "186fbed0b6ee00075074cea71fbdefe4bc9900d3b35b5c4c5b206d1670ee11d3"
+    },
+    "output/browser/native-magic-storybook-4-choices.png": {
+      "bytes": 474380,
+      "sha256": "e072800f74240504d96e02c7800ba43c1d0555f3d16e54efb6efc5f649ef73be"
+    },
+    "output/browser/native-magic-storybook-5-choices.png": {
+      "bytes": 508626,
+      "sha256": "dd6702b68f9c7fd1ea96cda53377fedbd94226e23a9065b7dff8348914862d82"
+    },
+    "output/browser/native-magic-storybook.json": {
+      "bytes": 260226,
+      "sha256": "0836abf8da734546e7203a985749bb6cff365527fadaee56b8c2151a8d851a4f"
+    },
+    "output/browser/native-mystery-noir-2-choices.png": {
+      "bytes": 409048,
+      "sha256": "03d87a232c81ae7f6a0c52c530aee63afbd94618e635bbd39023a78641011b4d"
+    },
+    "output/browser/native-mystery-noir-3-choices.png": {
+      "bytes": 424594,
+      "sha256": "96d3c46968b08c99bd4f664de866ed425531fb7edde0455972236a80164a18a7"
+    },
+    "output/browser/native-mystery-noir-4-choices.png": {
+      "bytes": 426449,
+      "sha256": "4ef6892ef75c6aa35373224921e21bc37fe006018f02be3142794697d2e80065"
+    },
+    "output/browser/native-mystery-noir-5-choices.png": {
+      "bytes": 479134,
+      "sha256": "d966085fe9573bd6ca4afcf4bcc4934683e5baf10b51fecc2ab21c9b8132373b"
+    },
+    "output/browser/native-mystery-noir.json": {
+      "bytes": 217572,
+      "sha256": "2162ebd6fbc58b46b30d0e2f749ee42b7040cd999e87778ef4f9b4d8cd33c70a"
+    },
+    "output/browser/native-neon-arcade-2-choices.png": {
+      "bytes": 409236,
+      "sha256": "4c27f2b90cfb73388a9879633f37da01c93d1562c2cf9e5489032d4335899dc4"
+    },
+    "output/browser/native-neon-arcade-3-choices.png": {
+      "bytes": 424407,
+      "sha256": "ffe3593e7d20b4973f894a04818af8c4c0f6db30d84a69988dbe00074320c68f"
+    },
+    "output/browser/native-neon-arcade-4-choices.png": {
+      "bytes": 430880,
+      "sha256": "eeab61faf79d8d566176a7eaa5ce60004072a593bdd015972a97cd5baf8e292b"
+    },
+    "output/browser/native-neon-arcade-5-choices.png": {
+      "bytes": 467082,
+      "sha256": "071063606b26bc8c61928cef8ae94e5eed7d7c7a86bc3f84b83fe4e521708e87"
+    },
+    "output/browser/native-neon-arcade.json": {
+      "bytes": 197731,
+      "sha256": "a4d7964bfd891910af92de86be70f76021827ae38337443f5b302f8d81b253e6"
+    },
+    "output/browser/native-retro-tv-2-choices.png": {
+      "bytes": 320088,
+      "sha256": "ac0a9babdd8b8bc9dc1701b60ab262e90da4257964a09f3b0c35b329f0889396"
+    },
+    "output/browser/native-retro-tv-3-choices.png": {
+      "bytes": 335854,
+      "sha256": "62ee5d935ce3ac9ed353cc23c020938e03c4381cb04506ca1f49100814680346"
+    },
+    "output/browser/native-retro-tv-4-choices.png": {
+      "bytes": 340751,
+      "sha256": "77fda86cf70ee3697b772f436323a8080b12f02a51a5f9c59b6597c10ab14a94"
+    },
+    "output/browser/native-retro-tv-5-choices.png": {
+      "bytes": 378806,
+      "sha256": "1d34c3cbb79ae0b9c427e15e653adc0712b32fd35ac2486bafbd92d2532c5d12"
+    },
+    "output/browser/native-retro-tv.json": {
+      "bytes": 238738,
+      "sha256": "cb8a0b96214522c0dbb7f6032a0fed95b8270e7d2819fd9e5c292484772efb03"
+    },
+    "output/browser/native-royal-quiz-2-choices.png": {
+      "bytes": 403305,
+      "sha256": "3a884c2c3bdccddf21abe1973dbd4e667f3b576bdfd1a7517c2cf126c1d839e8"
+    },
+    "output/browser/native-royal-quiz-3-choices.png": {
+      "bytes": 422696,
+      "sha256": "885e3b9edc2af1b152b95b55d3eb7f37608f9cb0d762c73db473331475efd3fd"
+    },
+    "output/browser/native-royal-quiz-4-choices.png": {
+      "bytes": 427605,
+      "sha256": "9676d3acbfa75cce60ba8e223e38611a38b4415e9acf64c99140a30c14a32da3"
+    },
+    "output/browser/native-royal-quiz-5-choices.png": {
+      "bytes": 469293,
+      "sha256": "fba124a3aff5138a01f0ae05bfd25cfefca5ce46fcc9e5ac40403354893496a6"
+    },
+    "output/browser/native-royal-quiz.json": {
+      "bytes": 274117,
+      "sha256": "4a33569e1c027f7738183e9290a1f8b21da6eb7d691ff1568c109e57de235203"
+    },
+    "output/browser/native-sports-arena-2-choices.png": {
+      "bytes": 321720,
+      "sha256": "131ad96f61f7267a83676ebf6970681afa10fdf39e516271c4a8011bf826c38c"
+    },
+    "output/browser/native-sports-arena-3-choices.png": {
+      "bytes": 337945,
+      "sha256": "c53c66b0bff3741de457f87dc42499ff42675bd3b8f7607c4215ffb907bcb7d3"
+    },
+    "output/browser/native-sports-arena-4-choices.png": {
+      "bytes": 329807,
+      "sha256": "1c5b577dc9baa019f0c3592d4bcc35863bec72176536a1232059363d15abbb80"
+    },
+    "output/browser/native-sports-arena-5-choices.png": {
+      "bytes": 349943,
+      "sha256": "7dbfb57104f4cb964d076a1ca72f0d318452a5760d85396ecbf54bc3cd3ddadd"
+    },
+    "output/browser/native-sports-arena.json": {
+      "bytes": 266817,
+      "sha256": "eeb136fe98d49fb723aa4949e7acafb2bc6bd8a9a67c7068ee0a190bfdec3922"
+    },
+    "output/browser/question-sequence-carnival-pop-2-results.json": {
+      "bytes": 369247,
+      "sha256": "ccf8f7957ca87489d501e0f09540a2730882f8e9de2df877ae19fe61825f9d1c"
+    },
+    "output/browser/question-sequence-carnival-pop-3-results.json": {
+      "bytes": 367070,
+      "sha256": "c65b7dcd1cd4dd54a37852b126a1bd6864a980bc5cdf48877246b34f6f2d430f"
+    },
+    "output/browser/question-sequence-carnival-pop-4-results.json": {
+      "bytes": 375643,
+      "sha256": "518389190e5045edda31b45b4a859fa235f4c3746cc4cd3892318136dc48000e"
+    },
+    "output/browser/question-sequence-carnival-pop-5-results.json": {
+      "bytes": 386152,
+      "sha256": "eb6ae11e90ba99d8f3b8f4a1025d5fd00e5df89a17b58e06c4f81079ec8ccdb5"
+    },
+    "output/browser/question-sequence-crystal-future-2-results.json": {
+      "bytes": 365880,
+      "sha256": "26199055a51aa1b4db25cdab7123d7168a0a15dc558412bad1878d91b78de3a8"
+    },
+    "output/browser/question-sequence-crystal-future-3-results.json": {
+      "bytes": 361915,
+      "sha256": "f3ba1010eaf509abf340e6e2a9ec36535ab06b0031edb0f5c2e6af0a387e5ee9"
+    },
+    "output/browser/question-sequence-crystal-future-4-results.json": {
+      "bytes": 365688,
+      "sha256": "7eb862a0b5270a7fc990883e1a57c8aa666d189b9c683a61b7b7ab6d4d60d0fd"
+    },
+    "output/browser/question-sequence-crystal-future-5-results.json": {
+      "bytes": 378580,
+      "sha256": "08d69bdeebc542aa7cf5ba855346a7caee137800a4f71344768c2aefdde3d2a9"
+    },
+    "output/browser/question-sequence-magic-storybook-2-results.json": {
+      "bytes": 369532,
+      "sha256": "d0e16d15bed3f80d399b4b2a090bed8a9d794987dce3167662ef2dd054c2692a"
+    },
+    "output/browser/question-sequence-magic-storybook-3-results.json": {
+      "bytes": 364711,
+      "sha256": "bc82416b204c33db3cdef077c99cb9e8e6d4e98e0a4363993e3338226aa8edde"
+    },
+    "output/browser/question-sequence-magic-storybook-4-results-failure.png": {
+      "bytes": 472172,
+      "sha256": "94bf425444c3fbb3fdc0eeaff5b84a18dbe549f74f92fad127cb686b94da1fda"
+    },
+    "output/browser/question-sequence-magic-storybook-4-results.json": {
+      "bytes": 386863,
+      "sha256": "d2b7a761105bf96ab8c48983f20441b2c2a740d0a8d549769b7d5ea16d875b25"
+    },
+    "output/browser/question-sequence-magic-storybook-5-results-failure.png": {
+      "bytes": 508626,
+      "sha256": "dd6702b68f9c7fd1ea96cda53377fedbd94226e23a9065b7dff8348914862d82"
+    },
+    "output/browser/question-sequence-magic-storybook-5-results.json": {
+      "bytes": 451721,
+      "sha256": "554cf41b49b09a0626e99ea916deb869fe843d9eaa31e1e550e51b440cb85619"
+    },
+    "output/browser/question-sequence-mystery-noir-2-results.json": {
+      "bytes": 379218,
+      "sha256": "2e7ec81fd215d6a45edf35c8aa8ecd7c5fdfbcd59707b05ce03dee3d866b5b47"
+    },
+    "output/browser/question-sequence-mystery-noir-3-results.json": {
+      "bytes": 373335,
+      "sha256": "d94a3d8b787693737e78855afda2e58c639fec61c14e079c534917afe55a4d50"
+    },
+    "output/browser/question-sequence-mystery-noir-4-results.json": {
+      "bytes": 373706,
+      "sha256": "bbb93ab76b3df36932564bdeef226d155bd4bb2d2f092806c35866a00ddde83a"
+    },
+    "output/browser/question-sequence-mystery-noir-5-results.json": {
+      "bytes": 389585,
+      "sha256": "45518308d0b7d6cc48bf854eb210f3fcdd782077ed2d60061e2b9caf94170aca"
+    },
+    "output/browser/question-sequence-neon-arcade-2-results.json": {
+      "bytes": 360763,
+      "sha256": "3e568fd066f8c9382cb46c68680250a2708487382d091a92a019edf09cc5ecfd"
+    },
+    "output/browser/question-sequence-neon-arcade-3-results.json": {
+      "bytes": 369340,
+      "sha256": "3d12f63ee507648fd2f205fa1b39c8603ef06cd9d38211cbeb968342f031288e"
+    },
+    "output/browser/question-sequence-neon-arcade-4-results.json": {
+      "bytes": 364702,
+      "sha256": "cd8ef04417d33253c9ff0e0997cff9c6b3e2ecb4e337b8a95890c48140ad53de"
+    },
+    "output/browser/question-sequence-neon-arcade-5-results.json": {
+      "bytes": 382846,
+      "sha256": "7752a0618837628e63ee7d384191ff43f96d868453f339f11ab3d72ae244fe53"
+    },
+    "output/browser/question-sequence-retro-tv-2-results.json": {
+      "bytes": 372728,
+      "sha256": "815eac4df573fb2955b0fed76a44184089cf298c8ff24a41e8f0ba2b6125170b"
+    },
+    "output/browser/question-sequence-retro-tv-3-results.json": {
+      "bytes": 372684,
+      "sha256": "3c3bc2495acf720b4a755a66c45ae773523cb9321c079b565db9849405b112a0"
+    },
+    "output/browser/question-sequence-retro-tv-4-results.json": {
+      "bytes": 371791,
+      "sha256": "8cb5b21b0f0c1ac5650e75ac3ee6b1aa57e152c29828857891725ccd6ab0126d"
+    },
+    "output/browser/question-sequence-retro-tv-5-results.json": {
+      "bytes": 439039,
+      "sha256": "8b7346fb6b0cfe6981852b2a6db70e01316c5b577b8949a243f23fbee0241ade"
+    },
+    "output/browser/question-sequence-royal-quiz-2-results.json": {
+      "bytes": 410857,
+      "sha256": "a078a721626b6a6308e19460e57614730c27839643c75be565710600a396d6a6"
+    },
+    "output/browser/question-sequence-royal-quiz-3-results.json": {
+      "bytes": 373476,
+      "sha256": "ec0a4e9d76dbd9fccfe8d548d517b01ae69f6c1fe1e5e79a345c341d60f2b754"
+    },
+    "output/browser/question-sequence-royal-quiz-4-results.json": {
+      "bytes": 369174,
+      "sha256": "9c04821ec0c5556d04e49e185a71df5c68b7029969da537c4f25b38f1a0bf009"
+    },
+    "output/browser/question-sequence-royal-quiz-5-replayed-results.json": {
+      "bytes": 376234,
+      "sha256": "a09223f939c906314b4a0079e20c71b3eb97849857f40a82f60dce034f49f8dd"
+    },
+    "output/browser/question-sequence-royal-quiz-5-results.json": {
+      "bytes": 382713,
+      "sha256": "5c42ed572d4da0013f7c1babb6b6e10a2594178510402219a9f87549a17581dd"
+    },
+    "output/browser/question-sequence-sports-arena-2-results.json": {
+      "bytes": 374512,
+      "sha256": "6bffac330eb3eb7f8cebb60bdfabaa5719c51e811c0e4a39ddd62ad76da76559"
+    },
+    "output/browser/question-sequence-sports-arena-3-results.json": {
+      "bytes": 369996,
+      "sha256": "b7d3d6e439234560b4e37d565d01e8e556bc98fefecdd0822f5e8574afdb44d7"
+    },
+    "output/browser/question-sequence-sports-arena-4-results-failure.png": {
+      "bytes": 327782,
+      "sha256": "a82e75536ab9b47f0048950a2f2e20cddb40e45eecc3196b60e659a5c711de87"
+    },
+    "output/browser/question-sequence-sports-arena-4-results.json": {
+      "bytes": 388530,
+      "sha256": "62da7c6551584dce07d70521ed92967e54ec4681921e834e810b9b622f5cae67"
+    },
+    "output/browser/question-sequence-sports-arena-5-results-failure.png": {
+      "bytes": 349943,
+      "sha256": "7dbfb57104f4cb964d076a1ca72f0d318452a5760d85396ecbf54bc3cd3ddadd"
+    },
+    "output/browser/question-sequence-sports-arena-5-results.json": {
+      "bytes": 451317,
+      "sha256": "6acf3686f6f8cf1b85f38dd5f3b99d8cd7e21af03dfed081415519d326da90d4"
+    },
+    "output/browser/receipt.json": {
+      "bytes": 5962,
+      "sha256": "08ec8da97518a9073c855336c31297fc43c47225f4ba833e4eeafdf4f3284b00"
+    },
+    "overlay-plan.json": {
+      "bytes": 2180,
+      "sha256": "2523875d76467357f33a9702dea1a3cbed61e464fbdd552e66426cc0661039de"
+    },
+    "source-after.json": {
+      "bytes": 445741,
+      "sha256": "2d244db485d1212802a0fe2fe9811cf2c7548e27f816faf810022cbcc7ac0b6a"
+    },
+    "source-before.json": {
+      "bytes": 445741,
+      "sha256": "2d244db485d1212802a0fe2fe9811cf2c7548e27f816faf810022cbcc7ac0b6a"
+    },
+    "transfer-manifest.json": {
+      "bytes": 27287,
+      "sha256": "2bfa7d6205b22820ae40b1466c7dcbf32273000af55006df64b10e51f3957106"
+    }
+  },
+  "format": "tadazz-originals-diagnostic-repository-manifest",
+  "jobId": "job_ef8a2ddf7864",
+  "manifestExcludesItself": true,
+  "noAuthConfigOrStateCopied": true,
+  "observedChecks": 97,
+  "observedFailures": 14,
+  "passed": false,
+  "releaseQualified": false,
+  "run": "native-layout-iteration9-13d36c55",
+  "runtimeQaSourceEqualsCandidate": false,
+  "sourceArchive": {
+    "filename": "native-layout-evidence.tgz",
+    "sha256": "57c4e078bbe2a99f4daadc16f9157df9828281387eaec177c1f321f7c935650c"
+  },
+  "sourceTransferManifestSha256": "2bfa7d6205b22820ae40b1466c7dcbf32273000af55006df64b10e51f3957106",
+  "version": 1
+}

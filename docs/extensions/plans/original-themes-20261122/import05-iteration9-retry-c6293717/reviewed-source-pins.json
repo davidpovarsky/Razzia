@@ -1,0 +1,15 @@
+{
+  "extensions/src/core/show-authoring-convert.ts": "8c72eeca75d5c4781f45e2d9a385cd16856ce6b3f52a3f669f26a94ec205290c",
+  "extensions/src/core/show-authoring-schema.ts": "e08b4f1c598efc7403357923eec78cad6ca2b1070c8215a452af0931a0e9aaba",
+  "extensions/src/core/show-workbook.ts": "759a994191362e494fd6249a39186037219de59e2d6411be2cfa83e8722d7de8",
+  "packages/e2e/playwright.config.ts": "01cd177e8e6fd438fbb49a2d5716392a28e2e738aa02e35e73dc044e012f6d4d",
+  "packages/e2e/playwright.p0-acceptance.config.ts": "67dedc7c81ebf2871da248dab9605a4a52eb14e44ddf3200cbf9c9b282b6f303",
+  "packages/e2e/tests/media-appearance-stage-acceptance.spec.ts": "45fb9ac391098cbac7e47a1fe1110d7c3b9f274fb4c1d99d4a1435231e18ae3f",
+  "packages/e2e/tests/p0-tzila-acceptance.spec.ts": "5ecc1afcbf3ffe6beda71f0663604adfd5987eeffb8ea9e2826e7e7b84d27957",
+  "packages/e2e/tests/tzila-public-stage-and-toolbar.spec.ts": "b6e3ae2783f85370a767894d24e6fd8526af03d1ee847e9cf107d2f9d3d56ef0",
+  "packages/e2e/tests/wave1-show-import-acceptance.spec.ts": "6ccf070b8aadcf15861afc21a6302ea7772f4ef6b8814bf199affdd6dabaa71b",
+  "packages/e2e/utils/fixtures.ts": "285dc7ebb5a5b39a85ac748c3fd691c904e8855d86cc7eafbdc45ca9db3112a4",
+  "packages/e2e/utils/manager.ts": "a3965cf7ef39df1b17c006eb87f0c8f5d44472710a6991f54795b28eaf1f5fcb",
+  "packages/e2e/utils/seed-tzila-show.ts": "69ed1e1a55dae52db1e24c0b390dd4aec62ba05345f48dca3954defde99a4315",
+  "packages/e2e/utils/tzila-stage.ts": "9b9395006b2795f08354fc043353f646db65edafbeb55c65908a31204677dd6f"
+}

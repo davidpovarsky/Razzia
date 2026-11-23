@@ -1,7 +1,6 @@
 import assert from "node:assert/strict"
 import { before, after, test } from "node:test"
 import fs from "node:fs"
-import _path from "node:path"
 import { createHash, generateKeyPairSync, randomBytes } from "node:crypto"
 import i18next from "i18next"
 import {
@@ -104,6 +103,18 @@ function requireInitializedCatalog(): InitializedCatalogValue {
   return catalog
 }
 const receipts: unknown[] = []
+const expectedThemeRefs = [
+  "tadazz-classic",
+  "razzia-original",
+  "royal-quiz",
+  "neon-arcade",
+  "retro-tv",
+  "magic-storybook",
+  "crystal-future",
+  "carnival-pop",
+  "sports-arena",
+  "mystery-noir",
+].map((themeId) => [themeId, "1.0.0"])
 before(async () => {
   f = await fixture()
   await translator.init({
@@ -344,7 +355,7 @@ function body(result: Awaited<ReturnType<typeof call>>) {
   }
 }
 
-test("real issuer/SDK catalog returns only exact D metadata and signed two-page continuation without private writes", async () => {
+test("real issuer/SDK catalog returns two existing and eight original themes through signed continuation without private writes", async () => {
   language = "en"
   const c = await connect(await linked())
 
@@ -355,16 +366,39 @@ test("real issuer/SDK catalog returns only exact D metadata and signed two-page 
     assert.equal(first.data.items.length, 1)
     assert.ok(first.data.nextCursor)
     assert.ok(first.data.nextCursor.length <= 128)
-    const second = body(
-      await call(c, { limit: 1, cursor: first.data.nextCursor }),
+    const source = getNativeShowLibrary().families
+    assert.equal(source.length, 10)
+    assert.deepEqual(
+      source.map((family) => [family.ref.id, family.ref.version]),
+      expectedThemeRefs,
     )
-    assert.equal(second.ok, true)
-    assert.equal(second.data.nextCursor, undefined)
-    const all = [...first.data.items, ...second.data.items],
-      source = getNativeShowLibrary().families
+    const all = [...first.data.items]
+    const cursors = new Set<string>()
+
+    async function appendFollowingPage(
+      cursor: string | undefined,
+    ): Promise<void> {
+      if (!cursor) {
+        return
+      }
+
+      assert.equal(cursors.has(cursor), false)
+      assert.ok(cursors.size < source.length)
+      assert.ok(cursor.length <= 128)
+      cursors.add(cursor)
+      const next = body(await call(c, { limit: 1, cursor }))
+      assert.equal(next.ok, true)
+      assert.equal(next.data.items.length, 1)
+      all.push(...next.data.items)
+      await appendFollowingPage(next.data.nextCursor)
+    }
+
+    await appendFollowingPage(first.data.nextCursor)
+    assert.equal(all.length, 10)
+    assert.equal(cursors.size, 9)
     assert.deepEqual(
       all.map((i) => [i.themeId, i.version]),
-      source.map((i) => [i.ref.id, i.ref.version]),
+      expectedThemeRefs,
     )
     for (const item of all) {
       assert.equal(item.previewAvailable, false)
@@ -448,7 +482,10 @@ test("cursor proof cannot be altered or transplanted to another real grant or ac
         "VALIDATION_FAILED",
       )
     }
-    const changed = `${cursor.slice(0, -2)}${cursor.at(-2) === "a" ? "b" : "a"}${requireObservedString(cursor.at(-1), "catalog continuation final character")}`
+    const changed =
+      cursor.slice(0, -2) +
+      (cursor.at(-2) === "a" ? "b" : "a") +
+      cursor.slice(-1)
     assert.equal(
       body(await call(a, { cursor: changed })).error.code,
       "VALIDATION_FAILED",
@@ -499,22 +536,28 @@ test("forged principal and missing catalog scope cannot call the actual catalog 
 test("actual revoked grant denies cached principal and its cursor; stable issuer keys permit genuine cursor reuse on reopen", async () => {
   const token = await linked(),
     p = await requireInitializedIssuer().verifyAccessToken(token),
-    first = (await requireInitializedCatalog().listThemes(p, { limit: 1 })) as {
-      nextCursor: string
-    }
+    first = (await requireInitializedCatalog().listThemes(p, {
+      limit: 1,
+    })) as ReturnType<typeof body>["data"]
+  assert.equal(first.items.length, 1)
+  assert.ok(first.nextCursor)
   const reopened = await createFirstPartyOAuth(requireInitializedOptions()),
     again = reopened.catalog({
       locale: () => "en",
       translate: (name, lang) => translator.t(name, { lng: lang }),
     }),
     fresh = await reopened.verifyAccessToken(token)
-  assert.equal(
-    (
-      (await again.listThemes(fresh, { cursor: first.nextCursor })) as {
-        items: unknown[]
-      }
-    ).items.length,
-    1,
+  const continuation = (await again.listThemes(fresh, {
+    cursor: first.nextCursor,
+  })) as ReturnType<typeof body>["data"]
+  assert.equal(continuation.items.length, 9)
+  assert.equal(continuation.nextCursor, undefined)
+  assert.deepEqual(
+    [...first.items, ...continuation.items].map((item) => [
+      item.themeId,
+      item.version,
+    ]),
+    expectedThemeRefs,
   )
   assert.equal(
     (

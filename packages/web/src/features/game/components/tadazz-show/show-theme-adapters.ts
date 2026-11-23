@@ -16,6 +16,7 @@ export const SHOW_THEME_ADAPTERS = {
   "tadazz-classic-stage": TadazzShowView,
   "razzia-native-stage": NativeShowThemeView,
   "tadazz-sandbox-stage": TadazzShowView,
+  "tadazz-original-stage": TadazzShowView,
 } as const
 
 export const SHOW_THEME_PREVIEW_ADAPTERS: Readonly<
@@ -27,4 +28,5 @@ export const SHOW_THEME_PREVIEW_ADAPTERS: Readonly<
   "tadazz-classic-stage": ClassicShowThemePreview,
   "razzia-native-stage": NativeShowThemePreview,
   "tadazz-sandbox-stage": SandboxShowThemePreview,
+  "tadazz-original-stage": ClassicShowThemePreview,
 }

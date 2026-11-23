@@ -134,10 +134,11 @@ test("actual player, malformed JWT, expired JWT and invalid sid are rejected", a
     "player",
   )
   for (const token of ["bad.jwt.token", player.token]) {
-    const response = await requireInitializedF().request({
-      session: { ...requireInitializedF().sessions[0], token },
-      path: `/drafts/${key()}`,
-    })
+    const response = await requireInitializedF().request(
+      { ...requireInitializedF().sessions[0], token },
+
+      `/drafts/${key()}`,
+    )
     assert.equal(response.status, 401)
   }
   const { sign } = await import("hono/jwt")
@@ -162,10 +163,10 @@ test("actual player, malformed JWT, expired JWT and invalid sid are rejected", a
     )
     assert.equal(
       (
-        await requireInitializedF().request({
-          session: { ...requireInitializedF().sessions[0], token },
-          path: `/drafts/${key()}`,
-        })
+        await requireInitializedF().request(
+          { ...requireInitializedF().sessions[0], token },
+          `/drafts/${key()}`,
+        )
       ).status,
       401,
     )
@@ -203,10 +204,10 @@ test("closed startup account handle fails GET without reinitializing account sid
   const owned = snapshot(requireInitializedF().root)
   assert.equal(
     (
-      await requireInitializedF().request({
-        session: requireInitializedF().sessions[1],
-        path: `/drafts/${key()}`,
-      })
+      await requireInitializedF().request(
+        requireInitializedF().sessions[1],
+        `/drafts/${key()}`,
+      )
     ).status,
     503,
   )

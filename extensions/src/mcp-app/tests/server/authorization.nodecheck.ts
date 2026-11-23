@@ -1,3 +1,4 @@
+import { promiseFrom } from "../../shared/promise-operation.ts"
 import assert from "node:assert/strict"
 import test from "node:test"
 import {
@@ -9,7 +10,6 @@ import {
   principal,
   MemoryDrafts,
 } from "./fixtures.ts"
-import { synchronousPromise } from "../../../core/synchronous-promise.ts"
 
 test("two real SDK sessions retain account isolation and revoked replay is denied", async () => {
   const shared = new MemoryDrafts()
@@ -55,8 +55,7 @@ for (const invalid of [
 ]) {
   test(`invalid principal fails before account store: ${Object.keys(invalid).join()}`, async () => {
     const h = await harness({
-      authorize: () =>
-        synchronousPromise(() => ({ ...principal(), ...invalid })),
+      authorize: () => promiseFrom(() => ({ ...principal(), ...invalid })),
     })
 
     try {

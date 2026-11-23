@@ -98,9 +98,7 @@ afterAll(async () => {
     const value = previous[key]
 
     if (value === undefined) {
-      if (!Reflect.deleteProperty(process.env, key)) {
-        throw new TypeError("Unable to restore an absent environment variable")
-      }
+      Reflect.deleteProperty(process.env, key)
     } else {
       process.env[key] = value
     }

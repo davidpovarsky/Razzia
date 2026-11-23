@@ -1,0 +1,200 @@
+{
+  "candidateBaseSha": "2e9ee96541baf8f0ea16bd4b6b7bd9d89f2eba04",
+  "inputHashes": {
+    "extensions/deployment/deploy-mcp-site.py": "c319ccb648bc19403f5d040b2905175278bcae88f3f89285333caaa9b0ffcb8c",
+    "extensions/deployment/stage-mcp-site.py": "cdcb367191902cb2256ac88a1ee436db2454e51ae1bfc0015b49a9b5634a4140",
+    "extensions/qa/build-application-preview.mjs": "634e463b09dc0b51993e27b0455dd2baeb1cabeed94ee17bde28beb41acaa21d",
+    "extensions/qa/editor-hebrew/generate-native-pins.py": "f84db21ec9d4a4377c6be783a6f206adae3fcdded941ab61cfd341d3a677258f",
+    "extensions/qa/original-themes/README.md": "a2632979dfb6646d531fe1f78f1972e07d5592321e7e520f0d051a6e4a6e3e1c",
+    "extensions/qa/original-themes/account-verify.mjs": "f55342b0eb6fef8af9621e35eac0fabcf0652fa5d69f16ac7f0b1623834f9ca7",
+    "extensions/qa/original-themes/audio-observer.mjs": "7815dc7945d6c1b11d57e555ee90ab11857abada98411580e9f305a72d0d7117",
+    "extensions/qa/original-themes/browser-verify.mjs": "ba37cc7f1806310649f84934fe10172b5e5f11b7d7c8dbd5854e975e5e45a4f5",
+    "extensions/qa/original-themes/contract.mjs": "ca76fa21f782b30f258297dfe4ff5e899b04298ba328b64e34c6560a29401ca0",
+    "extensions/qa/original-themes/generate-artwork.ts": "98209bbec7dd367e1742989cf44f7abf447de2683e139a4dd8b50c7d3c1e5520",
+    "extensions/qa/original-themes/generate-audio.py": "d0563a4619a4cf966bca246eecea7642146f51b26c12a16f993d1ddbba6674f2",
+    "extensions/qa/original-themes/linux-browser-verify.py": "fff7689f387deb5e86b7d9537a2d4c4244772becce41ac8b197e593a6ac83b98",
+    "extensions/qa/phase3-native-consent/builtin-asset-policy.nodecheck.ts": "d8372313e1705bf6f439f67a9994b0397e9ff3de695f2a3cb0620c2ae0faa0f3",
+    "extensions/qa/public-gallery/account-verify.mjs": "dbc4b12d039c8ad9f60a5f11660da9940ff09d805c488f77ce187fa7d89247f7",
+    "extensions/qa/public-gallery/browser-verify.mjs": "50869c60f53b0ed29b85f8a57d2b77a68b54ee049f255599d93a60dd78b04a73",
+    "extensions/qa/public-gallery/catalogue-inventory.mjs": "d3eee47ee63e81c4c4043e862c61de15cad05c9b6f86915ae6fbf6950efcc102",
+    "extensions/qa/public-gallery/editor-verify.mjs": "dd997bcc243d19f9decce245b46a16939091e854092e0fbd7f31e8c83ea26839",
+    "extensions/qa/public-gallery/palette-verify.mjs": "df2146e379e3540ca2055cec2f79a767d669f52b01a3c8c170a208943904cf39",
+    "extensions/qa/public-gallery/viewer-controls-verify.mjs": "fd28f2fa6d9a10aef4e81ffbf6b7ef75d11a9a50a91568c4ec8651deab8a984b",
+    "extensions/src/core/show-library/application-live-composition.ts": "7de06adbbe332e9137611bdc13df3d440089dda50c9487f9ea7d069e81e0eb3a",
+    "extensions/src/core/show-library/application-preview-build.json": "bfc24da1fb6ad79d70620c98561cbc8f59d389e398763a2bb3e5f6bcc3345173",
+    "extensions/src/core/show-library/application-preview-input.test.ts": "7b6b90b825d4e106733068335c37bc4bc18aa62f40c15def9139a754a0590c2f",
+    "extensions/src/core/show-library/composition-preview-v2.test.ts": "5452f4c162bba482f3d162ce34864fc643c1da2320b2729db25a8d64d66558cf",
+    "extensions/src/core/show-library/composition-repository.test.ts": "955e8910011b1ccf32170272f82d96d231d29594f737e3fc257b6f39f821da2c",
+    "extensions/src/core/show-library/consumer-contract.test.ts": "6624409fb78a111417167d28a1cc7854bb07ec89e3c18ed4d09c70f7880ade84",
+    "extensions/src/core/show-library/index.ts": "f744380f2dc18b2fbeb4e79c517022dbd998bcf8536b8f9377fe03055f68fd5b",
+    "extensions/src/core/show-library/native-library-page.ts": "3bbf8f0fa9044d86f351a621ebf89fca92c9974a9b2cdc68b8e2c7f0d11ee7c2",
+    "extensions/src/core/show-library/native-library.ts": "b53dbde3906cef0e88bb9f0f1de6920588ce718a8ad2ecce207b6d087f28c854",
+    "extensions/src/core/show-library/native-media-library.test.ts": "4c28d49aef027eefad5cbbbd7b1a97f1603c20401f143bc246f190b1633ea714",
+    "extensions/src/core/show-library/native-media-library.ts": "ffde86fa13610c8c0ced3ef998031e5a7191f30196b23a4f51e5d41771f8399d",
+    "extensions/src/core/show-library/native-motion-library.ts": "91bdf2440fe03779caefa858a2c71262ed7a6d8af79b1b1c5fa9269cc409544c",
+    "extensions/src/core/show-library/native-preview-renderer-v2-schema.ts": "ed0b9269df14a3d5733f383cfb6f9718c557c7aea58a60dd35bdd1dd3f83f6de",
+    "extensions/src/core/show-library/original-theme-demos.ts": "3c8be2d894c8b2c71339c5bc661a3690022dfefab7e04f79ee9bcc73b4071b9d",
+    "extensions/src/core/show-library/public-demo-authoring.ts": "84835c4d367f9ad8a9d35f44c1d4bc1c206cdf9e88133a90f60fe04107ff4c1d",
+    "extensions/src/core/show-library/public-demo-catalogue.test.ts": "0def1aca57d86fc73e4e16cc3efc24721ff302e90be533b9840837faeb3d3f03",
+    "extensions/src/core/show-library/public-demo-catalogue.ts": "9058a214e636e265d60a747f94c451b6d582fa93890b6b0a50c2937db4a0ed19",
+    "extensions/src/core/show-themes/definition.ts": "c4c65a1a27b4f43b6e6dd76d6c662ea7c9edb0d37927db98cd5f7dbcc1ace01c",
+    "extensions/src/core/show-themes/index.ts": "da15ec1db1b9e535e5c8e23ab26ad67a1e2c494804a2197e0aba0d11a6410e8a",
+    "extensions/src/core/show-themes/original-audio-assets.json": "1a9a45536e8c00ccbfd9b82d1f57a03e61a8c00546348ed3c6517496c5008cee",
+    "extensions/src/core/show-themes/original-theme-assets.json": "3e2ba3bf400b6d2062b673fb51aa49da0a0bfa7e862b0711b0838302424cd22f",
+    "extensions/src/core/show-themes/original-theme-families.ts": "5b7db59c90478a1117cf00d9c949d89e6801c37ea733a46c5ccf2dfa856def4f",
+    "extensions/src/core/show-themes/original-themes.test.ts": "ec54b1fad37ac219b4f6f64aa2f31f7fc64dae5d51e6b0aadaf9182878184500",
+    "extensions/src/core/show-themes/original-themes.ts": "98170de4eb8efaf0f98a1a9f648de0587c7502269ccc6aef5946cbff9d4922f7",
+    "extensions/src/core/show-themes/registry.ts": "98371b33411006c7c5c3fb15a695471525719e6e85babbc61e85473ef9638df0",
+    "extensions/src/core/show-themes/show-themes.test.ts": "c982443eb58a2aaae87dd7bc93cc4f217d90d186ed4761cd7930aa3cba6f1e72",
+    "extensions/src/mcp-app/contracts/full-show-frame.ts": "91032238e7cda605cd9092f7a0d67dffa5d857a79b01b1152e0a279fe1ce46f3",
+    "extensions/src/mcp-app/native-host/builtin-asset-policy.ts": "88345521389900c14cce871825aadef6b02f4657a6d620feb07f218675ae7e82",
+    "extensions/src/mcp-app/native-host/reviewed-builtin-assets.ts": "ffd238ed3a336ec37ca46c3b86720ee439762d02c7a8a359c943d135539f4e4b",
+    "extensions/src/mcp-app/tests/first-party/catalog.nodecheck.ts": "0103baf0a28ba482e8ed9735cbed7975fd11d30429898487dfe51726f9999d47",
+    "extensions/src/mcp-app/widget/full-show-demo-question.tsx": "16d1d8006d96b341f989bb8102d3ad278c98e87b276bccf26721c92891114e0d",
+    "extensions/src/mcp-app/widget/full-show-stage.tsx": "76f1628936c87413a89841018e0e36668b0da56870ab2759fb3582e65ac704c6",
+    "extensions/src/presentation/original-themes/OriginalThemeScene.tsx": "78a813658192dbcfdda915ab70daee629fbe548dbcac319dc196bf96f28eed1a",
+    "extensions/src/presentation/original-themes/original-themes.css": "a341801698c833a9058dda81c10b16c3851b4b16b288c9cd8badaf233a8078a0",
+    "extensions/src/presentation/original-themes/theme-motion.ts": "2052f36e168cb08ad4db5d65039fa04453b17325d03baff22ca78741f922ce59",
+    "extensions/src/presentation/show-library-preview/application-preview-stage.tsx": "5f5da5211f64163588aef203b12a05c9921460085736d640eaf56272ab90fb06",
+    "extensions/src/presentation/show-library-preview/renderer-entry-v2.tsx": "e54c4b5aa12da01c4a9f6454957e87c23595c9e695c8845d0479c9b15022d602",
+    "extensions/src/presentation/tadazz-show/TadazzStage.tsx": "6317fefbd627c49b12a749b87111e9a3a1e4e42c4ccaea651532b6dd20013cbd",
+    "extensions/src/presentation/tadazz-show/TadazzV4StageAdapter.tsx": "d80e094946743d7f3c97bdf8242122703f8ec44bc898022b8dd355565a921b49",
+    "extensions/src/presentation/tadazz-show/presentation-scene.test.ts": "cb55b74753680f751e1816156676daa06af86c20853902f6df6616f7a7cd862c",
+    "extensions/src/presentation/tadazz-show/recap-page-limit.test.ts": "6284008ac83fa196034dbb8382e128e2b01cc29f8b16bfdfd042567ab2ee434b",
+    "extensions/src/presentation/tadazz-show/recap-page-limit.ts": "2aac0f64378fd646837fd52679015fc9594274ac009b603e8394015325411cbf",
+    "extensions/src/presentation/tadazz-show/show-director.ts": "57ef8e71f7c6e40084e67cd4ff26e3f64e3e6eff2ad1a9747d673143f3514d2d",
+    "extensions/src/presentation/tadazz-v4/TadazzV4Stage.tsx": "460d74ee0e0b696bb3780a76f2087e893e28099f3b360cb4efa54adcd0b8fe07",
+    "extensions/src/presentation/tadazz-v4/components.tsx": "05f4ee48ccc7968983c74356a028615e84ff7bf9e19d81355d1c31fd100ade1e",
+    "extensions/src/presentation/tadazz-v4/motion.ts": "be8883a469ffe661a67d22109f1f61800919dbeb623d4d41076c00fa01a0c511",
+    "extensions/src/presentation/tadazz-v4/tadazz-v4.css": "cdfbf8bbb11a124d0b1825353067307705c210673f22f3c7b3ad14548709f715",
+    "extensions/src/server/show-themes/application-composition-admission.ts": "1b5f16c636e15e442270416e56395b3d197f9ee91901b8c4aeeb272c7979845e",
+    "extensions/src/site/components/game-preview/application-session.ts": "d1d6b6591434c7e69c63aacfef328c0eb8f4eda8a5c858cff01d7ed8415496d7",
+    "extensions/src/site/locales/de.json": "f22daf501bc8639616b91e220cb72755bb4ea4fbb7d148a77631b8147562c89a",
+    "extensions/src/site/locales/en.json": "395cd8e7427f961bc0e206ea9df5eee7748338bfda44cd1b2533f9af009b55e8",
+    "extensions/src/site/locales/es.json": "0dd3e4ca3b7faf51684a89fffff400ef7a7f9a50881d1805bb9394da555531de",
+    "extensions/src/site/locales/fr.json": "2d480273ca247988fc2e0d48d470e4351c4046eea4dfa3508d1e9dfa0d8edc0f",
+    "extensions/src/site/locales/he.json": "497a8754808eb6bad3851bc9b8050e6cb220d440c6a954f09ad6241c0f296be1",
+    "extensions/src/site/locales/it.json": "a6b4499a14d73b4329911b4ced696223a017f6ccf20cff382d59a22fa80c20d0",
+    "extensions/src/site/locales/ja.json": "628bd69a69bc07d4479b99f2d259dacdb5604a65e07f8f6ac798bedc9f808eca",
+    "extensions/src/site/locales/tr.json": "03942344f8db88a85fdabfdb9345c820c71beb3ff5221eb01fe53826cd1fce64",
+    "extensions/src/site/locales/vi.json": "04a227fc357df491f188ab8892b4d21f336cec847328a2cbbb6418629fbe7652",
+    "extensions/src/site/web/marketing/Catalogue.tsx": "0a7be6f302747f3652b642c3ba438f5c01f95ebef0a6aec15173875fd69178dd",
+    "extensions/src/site/web/marketing/CatalogueGameDemo.tsx": "20d744d7a4563f1ac53840ab8739535104a38f8b149020f4435e445ede5bbea1",
+    "extensions/src/site/web/marketing/catalogue-mobile-question.css": "3ff4bc7a42f783002e50751a5b3c62052e18427f359d0651165de612a692eaff",
+    "packages/e2e/scripts/generate-theme-lab.ts": "e1644d301ff12f5b4da56fe4c3b37eb9f5a08a63c07509e8a17bc739cd67212a",
+    "packages/e2e/tests/media-appearance-stage-acceptance.spec.ts": "8e19ea3f77401f6fa0cf4a97cf44c562a7575f6151b840790694822ef10ba123",
+    "packages/e2e/tests/tadazz-full-show-parity.spec.ts": "8b524acd4b60fca1a98984f8937dbb078172f633c84c27dbe9c76dbe86141d11",
+    "packages/e2e/tests/theme-installation-preview.spec.ts": "808e1f890145db3367f821e123c80c454c4d274f95c702e44e03da3fbd8b6c9f",
+    "packages/e2e/tests/tzila-public-stage-and-toolbar.spec.ts": "b6e3ae2783f85370a767894d24e6fd8526af03d1ee847e9cf107d2f9d3d56ef0",
+    "packages/e2e/utils/tzila-stage.ts": "523ff2a22799d319714262c65344a54188a9efc998d4dd695ac60959f84064cb",
+    "packages/web/src/features/game/components/GameWrapper.tsx": "eaeefd49699bf7974feefeecc142957f9b6d8ccde6df541f258556e163eb47cc",
+    "packages/web/src/features/game/components/PlayerGameView.tsx": "6973fd5f622fc3e3f593017ba7a03182adf7e2b10465dfd2c974a2840b04b97c",
+    "packages/web/src/features/game/components/tadazz-show/TadazzShowView.tsx": "7862994c61761a0c893a40581dc7971b4a3164a610341caa2621d39f52a4b725",
+    "packages/web/src/features/game/components/tadazz-show/show-theme-adapters.ts": "32f3ad21585e73c72a182a9a1fdf272ac5657822b823f93056a4adb4bfa8295e",
+    "packages/web/src/pages/display/$gameId.tsx": "520216bd359aa13c4099c04b2b5fb3b5f757a93015b823d3d5d78f0cab501e5e",
+    "packages/web/src/pages/party/$gameId.tsx": "6865531b086c3f9c2084af7c86fd300423ab1e99af7a636955f67c698766883c"
+  },
+  "formattedChangedPaths": [
+    "extensions/qa/original-themes/browser-verify.mjs",
+    "extensions/src/core/show-library/application-preview-build.json",
+    "extensions/src/core/show-library/consumer-contract.test.ts",
+    "extensions/src/core/show-library/native-library-page.ts",
+    "extensions/src/site/web/marketing/CatalogueGameDemo.tsx",
+    "packages/e2e/tests/media-appearance-stage-acceptance.spec.ts",
+    "packages/e2e/tests/tadazz-full-show-parity.spec.ts",
+    "packages/e2e/utils/tzila-stage.ts",
+    "packages/web/src/features/game/components/GameWrapper.tsx",
+    "packages/web/src/pages/party/$gameId.tsx"
+  ],
+  "preparationOnly": true,
+  "releaseQualified": false,
+  "productionChanged": false,
+  "checks": [
+    {
+      "label": "format",
+      "exit": 0,
+      "seconds": 9.26
+    },
+    {
+      "label": "theme-engine-units",
+      "exit": 1,
+      "seconds": 43.85
+    },
+    {
+      "label": "web-types",
+      "exit": 0,
+      "seconds": 13.49
+    },
+    {
+      "label": "widget-types",
+      "exit": 0,
+      "seconds": 5.45
+    },
+    {
+      "label": "native-types",
+      "exit": 0,
+      "seconds": 8.0
+    },
+    {
+      "label": "extensions-types",
+      "exit": 137,
+      "seconds": 20.5
+    },
+    {
+      "label": "e2e-types",
+      "exit": 0,
+      "seconds": 5.11
+    },
+    {
+      "label": "source-lint",
+      "exit": 1,
+      "seconds": 13.44
+    },
+    {
+      "label": "baseline-lint",
+      "exit": 1,
+      "seconds": 11.82
+    },
+    {
+      "label": "source-lint-new-diagnostics",
+      "exit": 0,
+      "inherited": 85,
+      "new": 0
+    },
+    {
+      "label": "stage-release-self-test",
+      "exit": 0,
+      "seconds": 0.14
+    },
+    {
+      "label": "deploy-release-self-test",
+      "exit": 1,
+      "seconds": 0.18
+    },
+    {
+      "label": "deployment-runtime-operators",
+      "exit": 0,
+      "seconds": 0.22
+    },
+    {
+      "label": "builtin-and-signed-catalog-policy",
+      "exit": 1,
+      "seconds": 5.37
+    },
+    {
+      "label": "native-preview-build",
+      "exit": 0,
+      "seconds": 3.97
+    },
+    {
+      "label": "widget-build",
+      "exit": 0,
+      "seconds": 9.36
+    },
+    {
+      "label": "site-build",
+      "exit": 0,
+      "seconds": 6.9
+    }
+  ]
+}

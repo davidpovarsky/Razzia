@@ -50,3 +50,21 @@ docs/design-reference/upstream/**
 /docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/context/provenance/verify-and-build.mjs
 /docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/prepare-source-pins.mjs
 /extensions/src/mcp-app/tests/first-party/ad895-producer/provenance.json
+
+# Preserve exact original-theme reproduction, failure, and worker evidence bytes.
+/docs/extensions/plans/original-themes-20261122/native-browser-iteration6b/native-only-browser-verify.mjs
+/docs/extensions/plans/original-themes-20261122/native-browser-iteration7/native-only-browser-verify.mjs
+/docs/extensions/plans/original-themes-20261122/p0-import05-iteration9-58287324/import05-test-results/wave1-show-import-acceptan-8d58b-nd-xlsx-verify-byte-content-chromium/error-context.md
+/docs/extensions/plans/original-themes-20261122/p0-iteration8-c96b96a7/runtime/packages/e2e/test-results/p0-acceptance/media-appearance-stage-acc-cf8ee--Single-Audio-Staged-Motion-chromium/error-context.md
+/docs/extensions/plans/original-themes-20261122/p0-iteration8-c96b96a7/runtime/packages/e2e/test-results/p0-acceptance/p0-tzila-acceptance-P0-Tzi-9cf84-ator-display-tie-zero-votes-chromium/error-context.md
+/docs/extensions/plans/original-themes-20261122/p0-iteration8-c96b96a7/runtime/packages/e2e/test-results/p0-acceptance/tzila-public-stage-and-too-8792c-ross-Viewports-Localization-chromium/error-context.md
+/docs/extensions/plans/original-themes-20261122/p0-iteration8b-024444f1/runtime/packages/e2e/test-results/p0-acceptance/media-appearance-stage-acc-cf8ee--Single-Audio-Staged-Motion-chromium/error-context.md
+/docs/extensions/plans/original-themes-20261122/paused-countdown-iteration8/diagnostics/paused-countdown-late-display-diagnostic.mjs
+/docs/extensions/plans/original-themes-20261122/paused-countdown-iteration8b/diagnostics/paused-countdown-late-display-diagnostic.mjs
+/docs/extensions/plans/original-themes-20261122/paused-countdown-iteration9/diagnostics/paused-countdown-late-display-diagnostic.mjs
+/docs/extensions/plans/original-themes-20261122/paused-display-iteration6/paused-results-late-display-diagnostic.mjs
+/docs/extensions/plans/original-themes-20261122/paused-display-iteration6b/diagnostics/paused-results-late-display-diagnostic.mjs
+/docs/extensions/plans/original-themes-20261122/paused-display-iteration8/diagnostics/paused-results-late-display-diagnostic.mjs
+/docs/extensions/plans/original-themes-20261122/preview-pause-seek-iteration10-observe/observation-inputs/phase-continuity.mjs
+/docs/extensions/plans/original-themes-20261122/worker-base-inventory-fe25457aa5c7-381ec4f3/final-package-worker-driver.mts
+/docs/extensions/plans/original-themes-20261122/worker-base-inventory-fe25457aa5c7-381ec4f3/final-package-worker-README.md

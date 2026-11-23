@@ -1,5 +1,4 @@
 import playwright from "../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
-
 const { defineConfig } =
   playwright as unknown as typeof import("../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js")
 const url = new URL(process.env.TADAZZ_QA_BASE ?? "")

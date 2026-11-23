@@ -1,3 +1,4 @@
+import { promiseFrom } from "../../shared/promise-operation.ts"
 import { randomUUID } from "node:crypto"
 import { Client } from "@modelcontextprotocol/client"
 import type { Transport } from "@modelcontextprotocol/server"
@@ -13,7 +14,6 @@ import { createTadazzMcpServer } from "../../server/factory.ts"
 import { ToolError } from "../../server/errors.ts"
 import { jsonObject, opaqueId } from "../../contracts/schemas.ts"
 import { scopes, type ToolName } from "../../contracts/tools.ts"
-import { synchronousPromise } from "../../../core/synchronous-promise.ts"
 
 export const config = {
   issuer: "https://auth.example.invalid",
@@ -97,7 +97,7 @@ export class MemoryDrafts {
     return structuredClone(result)
   }
   create(p: VerifiedPrincipal, value: NormalizedDraft, m: MutationIdentity) {
-    return synchronousPromise(() =>
+    return promiseFrom(() =>
       this.replay({
         p,
         tool: "create",
@@ -115,21 +115,22 @@ export class MemoryDrafts {
     )
   }
   get(p: VerifiedPrincipal, id: string) {
-    return synchronousPromise(() => {
+    return promiseFrom(() => {
       const found = this.records.get(`${MemoryDrafts.owner(p)}:${id}`)
 
       return found ? structuredClone(found) : undefined
     })
   }
-  // eslint-disable-next-line max-params -- Exercises the existing positional DraftRepository.replace port.
   replace(
-    p: VerifiedPrincipal,
-    id: string,
-    revision: number,
-    value: NormalizedDraft,
-    m: MutationIdentity,
+    ...[p, id, revision, value, m]: [
+      p: VerifiedPrincipal,
+      id: string,
+      revision: number,
+      value: NormalizedDraft,
+      m: MutationIdentity,
+    ]
   ) {
-    return synchronousPromise(() =>
+    return promiseFrom(() =>
       this.replay({
         p,
         tool: "replace",
@@ -169,11 +170,11 @@ function linkedTransportPair(): [Transport, Transport] {
       /* This synthetic transport is connected in memory and needs no startup work. */
     },
     send: (message) =>
-      synchronousPromise(() => {
+      promiseFrom(() => {
         queueMicrotask(() => b.onmessage?.(structuredClone(message)))
       }),
     close: () =>
-      synchronousPromise(() => {
+      promiseFrom(() => {
         a.onclose?.()
       }),
   }
@@ -182,11 +183,11 @@ function linkedTransportPair(): [Transport, Transport] {
       /* This synthetic transport is connected in memory and needs no startup work. */
     },
     send: (message) =>
-      synchronousPromise(() => {
+      promiseFrom(() => {
         queueMicrotask(() => a.onmessage?.(structuredClone(message)))
       }),
     close: () =>
-      synchronousPromise(() => {
+      promiseFrom(() => {
         b.onclose?.()
       }),
   }
@@ -277,14 +278,6 @@ export function requireObservedShow(
     throw new Error(
       "Expected the observed authored show to contain object cards",
     )
-  }
-
-  return value
-}
-
-export function requireObservedValue<T>(value: T): NonNullable<T> {
-  if (value === undefined || value === null) {
-    throw new Error("Expected the required fixture value to be present")
   }
 
   return value

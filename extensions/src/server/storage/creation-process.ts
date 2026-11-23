@@ -131,7 +131,28 @@ export function requireCreationCheckpoint(
   return value
 }
 
-export function creationChild({
+export function creationChild(
+  ...args: [
+    mode:
+      | "before-public"
+      | "after-sidecar"
+      | "before-id-return"
+      | "committed-visible"
+      | "private-cleanup"
+      | "before-slot-removal"
+      | CreationRecoveryMode,
+    root: string,
+    token: string,
+    sequence?: string,
+    owner?: string,
+  ]
+) {
+  const [mode, root, token, sequence, owner] = args
+
+  return creationChildFromRequest({ mode, root, token, sequence, owner })
+}
+
+function creationChildFromRequest({
   mode,
   root,
   token,
@@ -208,7 +229,7 @@ export async function creationReplayTwice(
   fenceFails: boolean | CreationRecoveryMode = false,
 ) {
   const runs: unknown[] = []
-  for (const sequence of ["1", "2"]) {
+  async function replay(sequence: string) {
     const getRecoveryMode = (): CreationRecoveryMode => {
       if (typeof fenceFails === "string") {
         return fenceFails
@@ -221,13 +242,7 @@ export async function creationReplayTwice(
       return "recover"
     }
 
-    // oxlint-disable-next-line no-await-in-loop -- Replay the same tree in order so the second recovery observes the first recovery's writes.
-    const result = await creationChild({
-      mode: getRecoveryMode(),
-      root,
-      token,
-      sequence,
-    })
+    const result = await creationChild(getRecoveryMode(), root, token, sequence)
     const file = path.join(root, `.c1-recovery-${sequence}.json`)
     runs.push({
       process: result,
@@ -236,6 +251,9 @@ export async function creationReplayTwice(
         : { missingReceipt: true }),
     })
   }
+
+  await replay("1")
+  await replay("2")
 
   return runs
 }

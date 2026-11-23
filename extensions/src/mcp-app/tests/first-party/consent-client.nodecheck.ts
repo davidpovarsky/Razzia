@@ -78,14 +78,14 @@ async function begin() {
     code_challenge_method: "S256",
   })
   const response = await requireInitializedIssuer().fetch(
-    new Request(`${origin}/oauth/authorize?${query.toString()}`, {
+    new Request(`${origin}/oauth/authorize?${query}`, {
       headers: { host: new URL(origin).host },
     }),
   )
   assert.equal(response.status, 302)
-  const target = new URL(
-    requireObservedString(response.headers.get("location")),
-  )
+  const location = response.headers.get("location")
+  assert.ok(location)
+  const target = new URL(location)
   assert.equal(
     target.origin + target.pathname,
     `${origin}/studio/oauth-consent`,
@@ -109,7 +109,8 @@ function bridge(
   const request: typeof fetch = async (input, init) => {
     assert.equal(typeof input, "string")
     assert.ok(input === "/oauth/inspect" || input === "/oauth/approve")
-    assert.equal(init?.credentials, "same-origin")
+    assert.ok(init)
+    assert.equal(init.credentials, "same-origin")
     assert.equal(init.redirect, "error")
     assert.equal(init.referrerPolicy, "no-referrer")
     const headers = new Headers(init.headers)

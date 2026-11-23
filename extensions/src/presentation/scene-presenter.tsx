@@ -1454,7 +1454,8 @@ export const ScenePresenter = ({
                               : "my-1.5",
                           )}
                         >
-                          {/* Dominant Centered Hero Winner(s) */}
+                          {/* Size both result groups inside the remaining card region.
+                              Text keeps its size; photo frames absorb any height reduction. */}
                           <div
                             data-testid="results-hero-section"
                             className={clsx(
@@ -1462,7 +1463,7 @@ export const ScenePresenter = ({
                               useCompactRows && "shrink-0",
                               winners.length === 1
                                 ? "grid-cols-1"
-                                : "grid-cols-2",
+                                : "grid-cols-4",
                               isUltraCompact || availableHeight <= 600
                                 ? "mb-1 gap-1.5"
                                 : "mb-2 gap-2 sm:gap-4",
@@ -1501,12 +1502,16 @@ export const ScenePresenter = ({
                                       `tada-entrance-${resultsSlot.preset}`,
                                     winners.length === 1
                                       ? "max-w-xs sm:max-w-sm md:max-w-md"
-                                      : "max-w-xs sm:max-w-sm",
+                                      : "col-span-2 max-w-xs sm:max-w-sm",
+                                    winners.length > 1 &&
+                                      winners.length % 2 === 1 &&
+                                      wIdx === winners.length - 1 &&
+                                      "col-start-2",
                                   )}
                                 >
                                   <div
                                     className={clsx(
-                                      "z-10 flex w-full items-center justify-between gap-1",
+                                      "z-10 flex w-full shrink-0 items-center justify-between gap-1",
                                       useCompactRows
                                         ? "col-start-2 row-start-1 min-w-0"
                                         : "mb-0.5",
@@ -1555,7 +1560,7 @@ export const ScenePresenter = ({
 
                                   <div
                                     className={clsx(
-                                      "relative flex min-h-6 w-full items-center justify-center overflow-hidden rounded-lg border border-black/20 shadow-inner sm:min-h-8 sm:rounded-xl md:min-h-9",
+                                      "relative flex min-h-0 w-full shrink items-center justify-center overflow-hidden rounded-lg border border-black/20 shadow-inner sm:rounded-xl",
                                       useCompactRows &&
                                         "col-start-1 row-span-3 row-start-1",
                                     )}
@@ -1628,7 +1633,7 @@ export const ScenePresenter = ({
                                   <span
                                     data-testid="winner-caption"
                                     className={clsx(
-                                      "w-full text-center leading-tight font-black break-words text-white drop-shadow-md",
+                                      "w-full shrink-0 text-center leading-tight font-black break-words text-white drop-shadow-md",
                                       useCompactRows
                                         ? "col-start-2 row-start-2 min-w-0"
                                         : "mt-0.5",
@@ -1642,7 +1647,7 @@ export const ScenePresenter = ({
 
                                   <div
                                     className={clsx(
-                                      "h-1 w-full overflow-hidden rounded-full bg-white/25 sm:h-1.5",
+                                      "h-1 w-full shrink-0 overflow-hidden rounded-full bg-white/25 sm:h-1.5",
                                       useCompactRows
                                         ? "col-start-2 row-start-3 self-end"
                                         : "mt-0.5",
@@ -1708,7 +1713,7 @@ export const ScenePresenter = ({
                                   >
                                     <div
                                       className={clsx(
-                                        "z-10 flex w-full items-center justify-between gap-1",
+                                        "z-10 flex w-full shrink-0 items-center justify-between gap-1",
                                         useCompactRows
                                           ? "col-start-2 row-start-1 min-w-0"
                                           : "mb-0.5",
@@ -1738,7 +1743,7 @@ export const ScenePresenter = ({
 
                                     <div
                                       className={clsx(
-                                        "relative flex min-h-5 w-full items-center justify-center overflow-hidden rounded-md border border-black/15 shadow-inner sm:rounded-lg",
+                                        "relative flex min-h-0 w-full shrink items-center justify-center overflow-hidden rounded-md border border-black/15 shadow-inner sm:rounded-lg",
                                         useCompactRows &&
                                           "col-start-1 row-span-3 row-start-1",
                                       )}
@@ -1799,7 +1804,7 @@ export const ScenePresenter = ({
 
                                     <span
                                       className={clsx(
-                                        "w-full text-center text-[10px] leading-tight font-bold break-words text-white drop-shadow-md sm:text-[11px]",
+                                        "w-full shrink-0 text-center text-[10px] leading-tight font-bold break-words text-white drop-shadow-md sm:text-[11px]",
                                         useCompactRows
                                           ? "col-start-2 row-start-2 min-w-0"
                                           : "mt-0.5",
@@ -1810,7 +1815,7 @@ export const ScenePresenter = ({
 
                                     <div
                                       className={clsx(
-                                        "h-1 w-full overflow-hidden rounded-full bg-white/20",
+                                        "h-1 w-full shrink-0 overflow-hidden rounded-full bg-white/20",
                                         useCompactRows
                                           ? "col-start-2 row-start-3 self-end"
                                           : "mt-0.5",

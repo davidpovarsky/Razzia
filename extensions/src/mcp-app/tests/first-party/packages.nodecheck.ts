@@ -1,3 +1,4 @@
+import { promiseFrom } from "../../shared/promise-operation.ts"
 import assert from "node:assert/strict"
 import { after, before, test } from "node:test"
 import { createHash, generateKeyPairSync, randomBytes } from "node:crypto"
@@ -9,7 +10,6 @@ import { createFirstPartyOAuth } from "../../first-party/oauth.ts"
 import type { PackageAuthoringPort } from "../../server/package-authoring.ts"
 import { ToolError } from "../../server/errors.ts"
 import { fixture, origin, key, type Session } from "./fixtures.ts"
-import { synchronousPromise } from "../../../core/synchronous-promise.ts"
 
 function isObservedRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value)
@@ -129,7 +129,7 @@ async function linked(
       state: key(),
       code_challenge: createHash("sha256").update(verifier).digest("base64url"),
       code_challenge_method: "S256",
-    }).toString()}`,
+    })}`,
   )
   assert.equal(started.status, 302)
   const location = started.headers.get("location")
@@ -235,7 +235,7 @@ test("real issuer and SDK derive each package owner from the verified account", 
   const seen: string[] = []
   const adapter: PackageAuthoringPort = {
     call(p, name, input) {
-      return synchronousPromise(() => {
+      return promiseFrom(() => {
         assert.equal(name, "get_package_status")
         seen.push(p.accountId)
 
@@ -422,7 +422,7 @@ test("revoked authority cannot replay an earlier package mutation or reach cache
   let calls = 0
   const port = requireInitializedIssuer().packages({
     call() {
-      return synchronousPromise(() => {
+      return promiseFrom(() => {
         calls += 1
 
         return {

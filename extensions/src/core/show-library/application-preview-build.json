@@ -4,13 +4,13 @@
   "files": [
     {
       "name": "renderer.mjs",
-      "bytes": 2693011,
-      "sha256": "34291a27e391a44d60f3cf8087278df88f531e2b701a498fefddd02a88cf2a42"
+      "bytes": 2820705,
+      "sha256": "b436ef5de704117e3d81f0bceba7e37031474a4a5901e117726c4cb0eea79759"
     },
     {
       "name": "renderer.css",
-      "bytes": 467896,
-      "sha256": "795ce47f1eafa47ee0a8ee52b848b6c44764f290ef9fc01d6f9a4ac7f6278d97"
+      "bytes": 467777,
+      "sha256": "f564b23ffa2abac79669f8889fc8ab3379acac01050a20696f963be0c545edd0"
     }
   ],
   "pins": [
@@ -21,12 +21,12 @@
         "id": "tadazz-native-application",
         "version": "1.0.0"
       },
-      "registrySha256": "bbf9e1a3907b34ed3e1da1c7d9501dc0f77b2bba72c31d0285105ed8a0f61ed1",
+      "registrySha256": "f2df518ddff01b3c3aa75382c2632bd1898a510e1d2fde8bcad9a2a6e4cba2b4",
       "renderer": {
         "id": "tadazz-classic-stage",
         "version": "1.0.0"
       },
-      "rendererBuildSha256": "193495cad1077fa5d308af7fb38570e92ad8cbd952e1816e6dac8f46ac28bfea"
+      "rendererBuildSha256": "9cee64a5d57a7ca0915652d5a2903b53af0598abeed1e886ab8930bbb284deb2"
     },
     {
       "portVersion": 3,
@@ -35,12 +35,26 @@
         "id": "tadazz-native-application",
         "version": "1.0.0"
       },
-      "registrySha256": "bbf9e1a3907b34ed3e1da1c7d9501dc0f77b2bba72c31d0285105ed8a0f61ed1",
+      "registrySha256": "f2df518ddff01b3c3aa75382c2632bd1898a510e1d2fde8bcad9a2a6e4cba2b4",
       "renderer": {
         "id": "razzia-native-stage",
         "version": "1.0.0"
       },
-      "rendererBuildSha256": "193495cad1077fa5d308af7fb38570e92ad8cbd952e1816e6dac8f46ac28bfea"
+      "rendererBuildSha256": "9cee64a5d57a7ca0915652d5a2903b53af0598abeed1e886ab8930bbb284deb2"
+    },
+    {
+      "portVersion": 3,
+      "identityRuleVersion": 2,
+      "registry": {
+        "id": "tadazz-native-application",
+        "version": "1.0.0"
+      },
+      "registrySha256": "f2df518ddff01b3c3aa75382c2632bd1898a510e1d2fde8bcad9a2a6e4cba2b4",
+      "renderer": {
+        "id": "tadazz-original-stage",
+        "version": "1.0.0"
+      },
+      "rendererBuildSha256": "9cee64a5d57a7ca0915652d5a2903b53af0598abeed1e886ab8930bbb284deb2"
     }
   ]
 }

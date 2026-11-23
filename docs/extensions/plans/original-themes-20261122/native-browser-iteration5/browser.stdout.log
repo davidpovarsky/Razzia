@@ -1,0 +1,16 @@
+Game cleanup task started
+{"originalThemeCheck":{"name":"eight-native-installs-and-isolated-two-to-five-choice-fixtures","passed":true,"originals":8,"rounds":32,"anonymousInstallDenied":true,"crossAccountReadDenied":true}}
+New game created: 531034 subject: Original acceptance royal-quiz
+Game 01a20414-a29e-702a-9304-f108775c58c6 added. Total games: 1
+Game 01a20414-a29e-702a-9304-f108775c58c6 marked as empty. Total empty games: 1
+A user connected: socketId: 9brGULQInmG59LygAAAA, clientId: e834fd4a-697f-40e4-bfc6-927ce429dcc4
+Game 01a20414-a29e-702a-9304-f108775c58c6 reactivated. Remaining empty games: 0
+Manager reconnected to game 531034
+A user connected: socketId: 9t3Lpq2L5LsqlldFAAAB, clientId: 01a20414-b02c-7086-9857-0cfd37c1e989
+A user connected: socketId: 8VspNA2oxIFd5ZSGAAAC, clientId: 01a20414-b8a7-7432-b1a8-85d72c692166
+A user disconnected : 9t3Lpq2L5LsqlldFAAAB
+A user disconnected : 8VspNA2oxIFd5ZSGAAAC
+A user disconnected : 9brGULQInmG59LygAAAA
+Manager disconnected from game 531034
+Game 01a20414-a29e-702a-9304-f108775c58c6 marked as empty. Total empty games: 1
+Game cleanup task stopped

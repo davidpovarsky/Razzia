@@ -103,18 +103,20 @@ export function createPlatformAudioExtras(): AudioExtras {
 
 /** Recognize only the former untouched factory shape, never a partial custom mix. */
 function isLegacyPlaceholderAudio(audio: AudioExtras | undefined): boolean {
+  const savedCues: Partial<Record<CueId, AudioCueSetting>> | undefined =
+    audio?.cues
+
   return Boolean(
     audio &&
     !Object.keys(audio.soundtrack ?? {}).length &&
     CUE_IDS.every((cueId) => {
-      const persistedCues: Partial<AudioExtras["cues"]> = audio.cues
-      const cue = persistedCues[cueId]
+      const cue = savedCues?.[cueId]
 
       return (
         cue?.source === "default" &&
         !cue.url &&
         cue.volume === 0.8 &&
-        // oxlint-disable-next-line typescript/no-unnecessary-boolean-literal-compare -- Match only the exact former factory boolean; never classify a truthy custom persisted value as untouched.
+        // oxlint-disable-next-line typescript/no-unnecessary-boolean-literal-compare -- Persisted factory data must contain literal true; truthy custom values must not trigger migration.
         cue.enabled === true &&
         cue.loop === (cueId === "answersMusic")
       )
@@ -135,10 +137,10 @@ export function normalizePlatformAudioSettings(
 export function resolvePlatformAudioDefaults(audio?: AudioExtras): AudioExtras {
   const defaults = createPlatformAudioExtras()
   const saved = normalizePlatformAudioSettings(audio)
+  const savedCues: Partial<Record<CueId, AudioCueSetting>> = saved.cues
   const cues = Object.fromEntries(
     CUE_IDS.map((cueId) => {
-      const persistedCues: Partial<AudioExtras["cues"]> = saved.cues
-      const setting = persistedCues[cueId] ?? defaults.cues[cueId]
+      const setting = savedCues[cueId] ?? defaults.cues[cueId]
 
       return [
         cueId,

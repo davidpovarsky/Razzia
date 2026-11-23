@@ -1,3 +1,4 @@
+import { promiseFrom } from "../../shared/promise-operation.ts"
 import assert from "node:assert/strict"
 import { test } from "node:test"
 import { assertCurrentToolDiscovery } from "./discovery-fixture.ts"
@@ -22,7 +23,6 @@ import type {
   Dependencies,
   VerifiedPrincipal,
 } from "../../server/dependencies.ts"
-import { synchronousPromise } from "../../../core/synchronous-promise.ts"
 
 const tokenA = "synthetic-oauth-access-token-A"
 const tokenB = "synthetic-oauth-access-token-B"
@@ -38,7 +38,7 @@ function setup(overrides: Dependencies = {}, responseTimeoutMs?: number) {
     ...(responseTimeoutMs === undefined ? {} : { responseTimeoutMs }),
     allowedOrigins: ["https://chat.example.invalid"],
     verifyAccessToken: (token) =>
-      synchronousPromise(() => {
+      promiseFrom(() => {
         const p = tokens.get(token)
 
         if (!p) {
@@ -54,19 +54,15 @@ function setup(overrides: Dependencies = {}, responseTimeoutMs?: number) {
       ...overrides,
     },
   })
-  const request = ({
-    body,
-    headers = {},
-    path = config.resource,
-    method = "POST",
-    signal,
-  }: {
-    body?: unknown
-    headers?: Record<string, string>
-    path?: typeof config.resource
-    method?: string
-    signal?: AbortSignal
-  }) =>
+  const request = (
+    ...[body, headers = {}, path = config.resource, method = "POST", signal]: [
+      body?: unknown,
+      headers?: Record<string, string>,
+      path?: typeof config.resource,
+      method?: string,
+      signal?: AbortSignal,
+    ]
+  ) =>
     new Request(path, {
       method,
       headers: {
@@ -173,7 +169,7 @@ test("HTTP draft CAS preserves tenant boundaries, revoked token denial and safe 
       "PREVIEW_UNAVAILABLE",
     )
     h.tokens.delete(tokenA)
-    const response = await h.app.fetch(h.request({ body: list }))
+    const response = await h.app.fetch(h.request(list))
     assert.equal(response.status, 401)
     assert.match(
       response.headers.get("www-authenticate") ?? "",
@@ -188,12 +184,12 @@ test("HTTP draft CAS preserves tenant boundaries, revoked token denial and safe 
 test("metadata and initial OAuth challenge advertise all current tool scopes", async () => {
   const h = setup()
   const response = await h.app.fetch(
-    h.request({
-      body: undefined,
-      headers: { authorization: "" },
-      path: config.resourceMetadataUrl,
-      method: "GET",
-    }),
+    h.request(
+      undefined,
+      { authorization: "" },
+      config.resourceMetadataUrl,
+      "GET",
+    ),
   )
   assert.equal(response.status, 200)
   const metadata = requireObservedRecord(await response.json())
@@ -212,9 +208,7 @@ test("metadata and initial OAuth challenge advertise all current tool scopes", a
     expected,
   )
   assert.deepEqual(metadata.scopes_supported, expected)
-  const challenge = await h.app.fetch(
-    h.request({ body: list, headers: { authorization: "" } }),
-  )
+  const challenge = await h.app.fetch(h.request(list, { authorization: "" }))
   assert.equal(challenge.status, 401)
   assert.equal(
     challenge.headers.get("www-authenticate"),
@@ -239,64 +233,18 @@ test("origin/host/TLS/query/proxy/session/body and method attacks fail before pr
     },
   })
   for (const [request, expected] of [
-    [
-      h.request({
-        body: list,
-        headers: { origin: "https://attacker.invalid" },
-      }),
-      403,
-    ],
-    [h.request({ body: list, headers: { host: "attacker.invalid" } }), 403],
-    [
-      h.request({
-        body: list,
-        headers: {},
-        path: config.resource.replace("https:", "http:"),
-      }),
-      403,
-    ],
-    [
-      h.request({
-        body: list,
-        headers: {},
-        path: `${config.resource}?access_token=secret`,
-      }),
-      400,
-    ],
-    [
-      h.request({
-        body: list,
-        headers: { "x-forwarded-host": "attacker.invalid" },
-      }),
-      400,
-    ],
-    [
-      h.request({
-        body: list,
-        headers: { authorization: "Bearer manager-token" },
-      }),
-      401,
-    ],
-    [
-      h.request({
-        body: list,
-        headers: { "mcp-session-id": "stolen-session" },
-      }),
-      400,
-    ],
-    [h.request({ body: list, headers: { "content-type": "text/plain" } }), 415],
-    [h.request({ body: list, headers: { "content-length": "65537" } }), 413],
-    [h.request({ body: { padding: "x".repeat(65_537) } }), 413],
-    [h.request({ body: [list] }), 400],
-    [
-      h.request({
-        body: undefined,
-        headers: {},
-        path: config.resource,
-        method: "GET",
-      }),
-      405,
-    ],
+    [h.request(list, { origin: "https://attacker.invalid" }), 403],
+    [h.request(list, { host: "attacker.invalid" }), 403],
+    [h.request(list, {}, config.resource.replace("https:", "http:")), 403],
+    [h.request(list, {}, `${config.resource}?access_token=secret`), 400],
+    [h.request(list, { "x-forwarded-host": "attacker.invalid" }), 400],
+    [h.request(list, { authorization: "Bearer manager-token" }), 401],
+    [h.request(list, { "mcp-session-id": "stolen-session" }), 400],
+    [h.request(list, { "content-type": "text/plain" }), 415],
+    [h.request(list, { "content-length": "65537" }), 413],
+    [h.request({ padding: "x".repeat(65_537) }), 413],
+    [h.request([list]), 400],
+    [h.request(undefined, {}, config.resource, "GET"), 405],
   ] as const) {
     assert.equal((await h.app.fetch(request)).status, expected)
   }
@@ -305,12 +253,9 @@ test("origin/host/TLS/query/proxy/session/body and method attacks fail before pr
 test("allowed browser origins can read OAuth challenge, while arbitrary preflight headers are rejected", async () => {
   const h = setup()
   const response = await h.app.fetch(
-    h.request({
-      body: list,
-      headers: {
-        authorization: "",
-        origin: "https://chat.example.invalid",
-      },
+    h.request(list, {
+      authorization: "",
+      origin: "https://chat.example.invalid",
     }),
   )
   assert.equal(response.status, 401)
@@ -323,29 +268,29 @@ test("allowed browser origins can read OAuth challenge, while arbitrary prefligh
     /WWW-Authenticate/u,
   )
   const allowed = await h.app.fetch(
-    h.request({
-      body: undefined,
-      headers: {
+    h.request(
+      undefined,
+      {
         origin: "https://chat.example.invalid",
         "access-control-request-method": "POST",
         "access-control-request-headers": "authorization, mcp-method, mcp-name",
       },
-      path: config.resource,
-      method: "OPTIONS",
-    }),
+      config.resource,
+      "OPTIONS",
+    ),
   )
   assert.equal(allowed.status, 204)
   const denied = await h.app.fetch(
-    h.request({
-      body: undefined,
-      headers: {
+    h.request(
+      undefined,
+      {
         origin: "https://chat.example.invalid",
         "access-control-request-method": "POST",
         "access-control-request-headers": "x-account-id",
       },
-      path: config.resource,
-      method: "OPTIONS",
-    }),
+      config.resource,
+      "OPTIONS",
+    ),
   )
   assert.equal(denied.status, 403)
 })
@@ -452,8 +397,8 @@ test("legacy SSE retains all32 cancelled handler admissions until actual depende
   const controllers = Array.from({ length: 32 }, () => new AbortController())
   const calls = controllers.map((controller, id) =>
     h.app.fetch(
-      h.request({
-        body: {
+      h.request(
+        {
           jsonrpc: "2.0",
           id,
           method: "tools/call",
@@ -462,11 +407,11 @@ test("legacy SSE retains all32 cancelled handler admissions until actual depende
             arguments: { contractVersion: "0.1.0" },
           },
         },
-        headers: {},
-        path: config.resource,
-        method: "POST",
-        signal: controller.signal,
-      }),
+        {},
+        config.resource,
+        "POST",
+        controller.signal,
+      ),
     ),
   )
   await allEntered
@@ -476,14 +421,14 @@ test("legacy SSE retains all32 cancelled handler admissions until actual depende
   await new Promise<void>((resolve) => {
     setImmediate(resolve)
   })
-  assert.equal((await h.app.fetch(h.request({ body: list }))).status, 429)
+  assert.equal((await h.app.fetch(h.request(list))).status, 429)
   release({ items: [] })
   assert.deepEqual(
     (await Promise.all(calls)).map((response) => response.status),
     Array(32).fill(400),
   )
   await h.app.drain()
-  assert.equal((await h.app.fetch(h.request({ body: list }))).status, 200)
+  assert.equal((await h.app.fetch(h.request(list))).status, 200)
 })
 
 test(
@@ -523,14 +468,12 @@ test(
     )
     const call = h.app.fetch(
       h.request({
-        body: {
-          jsonrpc: "2.0",
-          id: 1,
-          method: "tools/call",
-          params: {
-            name: "list_game_templates",
-            arguments: { contractVersion: "0.1.0" },
-          },
+        jsonrpc: "2.0",
+        id: 1,
+        method: "tools/call",
+        params: {
+          name: "list_game_templates",
+          arguments: { contractVersion: "0.1.0" },
         },
       }),
     )
@@ -547,7 +490,7 @@ test(
     release({ items: [] })
     await closing
     assert.equal(closed, true)
-    assert.equal((await h.app.fetch(h.request({ body: list }))).status, 503)
+    assert.equal((await h.app.fetch(h.request(list))).status, 503)
   },
 )
 
@@ -597,17 +540,15 @@ test("cancelled V2 candidate work retains admission and shutdown until its real 
   await client.close()
   const call = h.app.fetch(
     h.request({
-      body: {
-        jsonrpc: "2.0",
-        id: 1,
-        method: "tools/call",
-        params: {
-          name: "preview_game",
-          arguments: {
-            contractVersion: "0.1.0",
-            draftId: draft.draftId,
-            expectedRevision: 1,
-          },
+      jsonrpc: "2.0",
+      id: 1,
+      method: "tools/call",
+      params: {
+        name: "preview_game",
+        arguments: {
+          contractVersion: "0.1.0",
+          draftId: draft.draftId,
+          expectedRevision: 1,
         },
       },
     }),

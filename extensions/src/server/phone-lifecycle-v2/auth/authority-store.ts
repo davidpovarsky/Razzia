@@ -1,7 +1,6 @@
-/* oxlint-disable max-classes-per-file -- The read-only lease reader and authority writer share private validation and storage ownership in this module. */
 import { randomBytes } from "node:crypto"
 import type { DatabaseSync } from "node:sqlite"
-import { identifier, type Action } from "../contracts"
+import { identifier } from "../contracts"
 import {
   authorityDenied,
   canonicalActions,
@@ -20,10 +19,17 @@ import type {
   ServiceCredentialBinding,
   ServiceLeaseRecord,
   SynchronousReauthorize,
-  SynchronousServiceLeaseReader,
 } from "./contracts"
 
-const WHERE = "owner=? AND game=? AND provider=? AND service=?"
+import {
+  LEASE_WHERE as WHERE,
+  leaseAddressValues as scope,
+  readServiceLease as row,
+  ReadonlyServiceLeaseReader,
+} from "./service-lease-reader"
+
+export { ReadonlyServiceLeaseReader }
+
 const SCHEMA = `
 CREATE TABLE authority_meta(singleton INTEGER PRIMARY KEY CHECK(singleton=1),schema_version INTEGER NOT NULL,store_id TEXT NOT NULL);
 CREATE TABLE leases(
@@ -38,87 +44,6 @@ CREATE TABLE control_receipts(
  metadata TEXT NOT NULL,created_at INTEGER NOT NULL,
  PRIMARY KEY(owner,game,provider,service,request_id));`
 
-const scope = (address: ServiceAddress) => [
-  address.owner,
-  address.game,
-  address.provider,
-  address.service,
-]
-type SqlRow = Record<string, unknown>
-
-function decode(leaseRow: SqlRow | undefined): ServiceLeaseRecord | undefined {
-  if (!leaseRow) {
-    return undefined
-  }
-
-  const text = (key: string) => {
-    if (typeof leaseRow[key] !== "string") {
-      authorityDenied()
-    }
-
-    return leaseRow[key]
-  }
-  const integer = (key: string) => {
-    if (!Number.isSafeInteger(leaseRow[key])) {
-      authorityDenied()
-    }
-
-    return leaseRow[key] as number
-  }
-  const initial = canonicalActions(
-    JSON.parse(text("initial_actions")) as Action[],
-  )
-  const current = canonicalActions(
-    JSON.parse(text("current_actions")) as Action[],
-  )
-  const address = copyAddress({
-    owner: text("owner"),
-    game: text("game"),
-    provider: text("provider"),
-    service: text("service"),
-    version: integer("version"),
-  })
-  const issuerSid = text("issuer_sid"),
-    executorId = text("executor_id"),
-    expiresAt = integer("expires_at")
-  identifier(issuerSid)
-  identifier(executorId)
-  const state = text("state"),
-    revoked = leaseRow.revoked_at,
-    hash = text("capability_hash")
-
-  if (
-    !initial.includes("register") ||
-    current.some((action) => !initial.includes(action)) ||
-    expiresAt <= 0 ||
-    !["PENDING_DELIVERY", "ACTIVE", "REVOKED"].includes(state) ||
-    (revoked !== null &&
-      (!Number.isSafeInteger(revoked) || (revoked as number) <= 0)) ||
-    !/^[0-9a-f]{64}$/u.test(hash) ||
-    (state === "REVOKED"
-      ? revoked === null || current.length !== 0
-      : revoked !== null)
-  ) {
-    authorityDenied()
-  }
-
-  return Object.freeze({
-    ...address,
-    issuerSid,
-    executorId,
-    expiresAt,
-    initialActions: initial,
-    currentActions: current,
-    state: state as ServiceLeaseRecord["state"],
-    revokedAt: revoked as number | null,
-    capabilityHash: hash,
-  })
-}
-function row(db: DatabaseSync, address: ServiceAddress) {
-  return decode(
-    db.prepare(`SELECT * FROM leases WHERE ${WHERE}`).get(...scope(address)),
-  )
-}
 function request(input: ControlRequest) {
   identifier(input.requestId)
 
@@ -294,22 +219,26 @@ function finish({
   return { receipt: Object.freeze(safe) }
 }
 
-export class ReadonlyServiceLeaseReader implements SynchronousServiceLeaseReader {
-  constructor(private readonly files: PrivateAuthorityFiles) {}
-  readCurrent(input: ServiceAddress): ServiceLeaseRecord | undefined {
-    const address = copyAddress(input)
-
-    return this.files.read((db) => row(db, address))
-  }
-}
-
 export class ServiceAuthorityWriter {
   constructor(private readonly files: PrivateAuthorityFiles) {}
   initialize(check: SynchronousReauthorize) {
     this.files.initialize(check, SCHEMA)
   }
 
-  issue({
+  issue(
+    ...args: [
+      binding: ServiceCredentialBinding,
+      input: ControlRequest,
+      actorSid: string,
+      check: SynchronousReauthorize,
+    ]
+  ): SecretAttempt {
+    const [binding, input, actorSid, check] = args
+
+    return this.issueRequest({ binding, input, actorSid, check })
+  }
+
+  private issueRequest({
     binding,
     input,
     actorSid,
@@ -435,7 +364,20 @@ export class ServiceAuthorityWriter {
     })
   }
 
-  rotate({
+  rotate(
+    ...args: [
+      binding: ServiceCredentialBinding,
+      input: ControlRequest,
+      actorSid: string,
+      check: SynchronousReauthorize,
+    ]
+  ): SecretAttempt {
+    const [binding, input, actorSid, check] = args
+
+    return this.rotateRequest({ binding, input, actorSid, check })
+  }
+
+  private rotateRequest({
     binding,
     input,
     actorSid,
@@ -526,7 +468,20 @@ export class ServiceAuthorityWriter {
     })
   }
 
-  activate({
+  activate(
+    ...args: [
+      inputAddress: ServiceAddress,
+      capability: string,
+      input: ControlRequest,
+      check: SynchronousReauthorize,
+    ]
+  ): SecretAttempt {
+    const [inputAddress, capability, input, check] = args
+
+    return this.activateRequest({ inputAddress, capability, input, check })
+  }
+
+  private activateRequest({
     inputAddress,
     capability,
     input,
@@ -601,7 +556,20 @@ export class ServiceAuthorityWriter {
     })
   }
 
-  revoke({
+  revoke(
+    ...args: [
+      binding: ServiceCredentialBinding,
+      input: ControlRequest,
+      actorSid: string,
+      check: SynchronousReauthorize,
+    ]
+  ): SecretAttempt {
+    const [binding, input, actorSid, check] = args
+
+    return this.revokeRequest({ binding, input, actorSid, check })
+  }
+
+  private revokeRequest({
     binding,
     input,
     actorSid,

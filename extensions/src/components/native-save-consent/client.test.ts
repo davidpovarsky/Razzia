@@ -1,17 +1,21 @@
+import { promiseFrom } from "../../mcp-app/shared/promise-operation.ts"
 import { describe, expect, it } from "vitest"
 import {
   createNativeSaveConsentClient,
   nativeSaveRequestIdFromPath,
   NATIVE_SAVE_CONSENT_PATH,
 } from "./client"
-import { synchronousPromise } from "../../core/synchronous-promise.ts"
 
-function requireNativeConsentString(value: unknown, label: string): string {
-  if (typeof value !== "string") {
-    throw new Error(`Expected native consent ${label} to be a string`)
+function requestUrl(input: Parameters<typeof fetch>[0]): string {
+  if (typeof input === "string") {
+    return input
   }
 
-  return value
+  if (input instanceof URL) {
+    return input.href
+  }
+
+  return input.url
 }
 
 const accountId = "d8c27613-c6b8-49bf-9f92-c333f38beb3a"
@@ -66,12 +70,13 @@ async function fixture() {
   let requestFailure: Error | null = null
   let waitForApproval: Promise<void> | null = null
   const request: typeof fetch = async (input, init) => {
-    const path = requireNativeConsentString(input, "request URL")
-    calls.push({
-      path,
-      init: init!,
-      body: JSON.parse(requireNativeConsentString(init?.body, "JSON body")),
-    })
+    const path = requestUrl(input)
+
+    if (!init || typeof init.body !== "string") {
+      throw new Error("Native save fixture requires a JSON request body")
+    }
+
+    calls.push({ path, init, body: JSON.parse(init.body) })
 
     if (requestFailure) {
       throw requestFailure
@@ -322,8 +327,8 @@ describe("separate native exact-revision consent client", () => {
     expect(f.calls).toHaveLength(0)
     const calls: string[] = []
     const request: typeof fetch = (input) =>
-      synchronousPromise(() => {
-        calls.push(requireNativeConsentString(input, "request URL"))
+      promiseFrom(() => {
+        calls.push(requestUrl(input))
 
         return json(
           {
@@ -339,6 +344,7 @@ describe("separate native exact-revision consent client", () => {
           403,
         )
       })
+
     await expect(
       createNativeSaveConsentClient({ ...f.options, request }).inspect(
         requestId,

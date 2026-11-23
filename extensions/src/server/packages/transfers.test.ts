@@ -128,12 +128,7 @@ describe("MCP package staging", () => {
       return { uploadId }
     }
     expect(() =>
-      f.store.complete({
-        owner: f.owner,
-        id: f.transfer.transferId,
-        upload,
-        read,
-      }),
+      f.store.complete(f.owner, f.transfer.transferId, upload, read),
     ).toThrow("INCOMPLETE")
     expect(calls).toBe(0)
     f.store.receiveTicket(
@@ -141,20 +136,10 @@ describe("MCP package staging", () => {
       f.bytes,
     )
     expect(
-      f.store.complete({
-        owner: f.owner,
-        id: f.transfer.transferId,
-        upload,
-        read,
-      }),
+      f.store.complete(f.owner, f.transfer.transferId, upload, read),
     ).toEqual({ uploadId })
     expect(
-      f.store.complete({
-        owner: f.owner,
-        id: f.transfer.transferId,
-        upload,
-        read,
-      }),
+      f.store.complete(f.owner, f.transfer.transferId, upload, read),
     ).toEqual({ uploadId })
     expect(calls).toBe(1)
     expect(
@@ -210,44 +195,17 @@ describe("MCP package staging", () => {
       return { count: calls }
     }
     expect(() =>
-      f.store.operation({
-        owner: f.owner,
-        kind: "build",
-        key,
-        digest: input,
-        action,
-        precondition: guard,
-      }),
+      f.store.operation(f.owner, "build", key, input, action, guard),
     ).toThrow("not ready")
     ready = true
     expect(
-      f.store.operation({
-        owner: f.owner,
-        kind: "build",
-        key,
-        digest: input,
-        action,
-        precondition: guard,
-      }),
+      f.store.operation(f.owner, "build", key, input, action, guard),
     ).toEqual({ count: 1 })
     expect(
-      f.store.operation({
-        owner: f.owner,
-        kind: "build",
-        key,
-        digest: input,
-        action,
-        precondition: guard,
-      }),
+      f.store.operation(f.owner, "build", key, input, action, guard),
     ).toEqual({ count: 1 })
     expect(() =>
-      f.store.operation({
-        owner: f.owner,
-        kind: "build",
-        key,
-        digest: "b".repeat(64),
-        action,
-      }),
+      f.store.operation(f.owner, "build", key, "b".repeat(64), action),
     ).toThrow("IDEMPOTENCY_CONFLICT")
   })
   it("keeps save consent owned and exact, requires explicit approval and replays installed game IDs", () => {

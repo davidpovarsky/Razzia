@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url"
 import { execFileSync } from "node:child_process"
 import { extname } from "node:path"
 import { retainedPacket } from "./retained-schema.ts"
-import { qaNativeV2Input } from "../../../docs/extensions/qa-evidence/show-ui-20261115/qa-native-v2-host.ts"
+import { qaNativeV2Input } from "./native-v2-fixture.ts"
 const mime = new Map([
   [".html", "text/html"],
   [".css", "text/css"],

@@ -1,3 +1,4 @@
+import { promiseFrom } from "../shared/promise-operation.ts"
 import {
   constants,
   closeSync,
@@ -59,7 +60,6 @@ import {
   createNativeCatalog,
   type FirstPartyCatalogOptions,
 } from "./oauth-catalog.ts"
-import { synchronousPromise } from "../../core/synchronous-promise.ts"
 
 const TABLES = {
   metadata:
@@ -94,6 +94,18 @@ export type StoredOAuthGrant = z.infer<typeof grantSchema>
 
 type StoredGrant = StoredOAuthGrant
 const unavailable = () => new OAuthError("temporarily_unavailable")
+function closeGrantDatabase(db: DatabaseSync | undefined): void {
+  try {
+    db?.close()
+  } catch {
+    throw unavailable()
+  }
+}
+const noFollowFlag = () => {
+  const value: unknown = Reflect.get(constants, "O_NOFOLLOW")
+
+  return typeof value === "number" ? value : 0
+}
 const invalid = () => new OAuthError("invalid_grant")
 const missing = (error: unknown) =>
   error instanceof Error && "code" in error && error.code === "ENOENT"
@@ -191,11 +203,7 @@ export class FirstPartyOAuthGrants {
         throw unavailable()
       }
 
-      const fd = openSync(
-        file,
-        // oxlint-disable-next-line typescript/no-unnecessary-condition -- Keep the existing cross-platform fallback because this optional native flag is absent on some supported hosts.
-        constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0),
-      )
+      const fd = openSync(file, constants.O_RDONLY | noFollowFlag())
 
       try {
         const opened = fstatSync(fd)
@@ -228,8 +236,7 @@ export class FirstPartyOAuthGrants {
         constants.O_CREAT |
           constants.O_EXCL |
           constants.O_WRONLY |
-          // oxlint-disable-next-line typescript/no-unnecessary-condition -- Keep the existing cross-platform fallback because this optional native flag is absent on some supported hosts.
-          (constants.O_NOFOLLOW ?? 0),
+          noFollowFlag(),
         0o600,
       )
       closeSync(fd)
@@ -422,12 +429,7 @@ export class FirstPartyOAuthGrants {
         ? error
         : unavailable()
     } finally {
-      try {
-        db?.close()
-      } catch {
-        // oxlint-disable-next-line eslint/no-unsafe-finally -- An owned database close failure intentionally invalidates the result and reports only temporarily_unavailable.
-        throw unavailable()
-      }
+      closeGrantDatabase(db)
     }
   }
 
@@ -858,12 +860,7 @@ export class FirstPartyOAuthGrants {
 
       throw unavailable()
     } finally {
-      try {
-        db?.close()
-      } catch {
-        // oxlint-disable-next-line eslint/no-unsafe-finally -- An owned database close failure intentionally invalidates the result and reports only temporarily_unavailable.
-        throw unavailable()
-      }
+      closeGrantDatabase(db)
     }
   }
   revokeToken(clientId: string, encoded: string) {
@@ -1054,17 +1051,17 @@ export class FirstPartyOAuthGrants {
 
             return action(db)
           } finally {
-            try {
-              db?.close()
-            } catch {
-              // eslint-disable-next-line no-unsafe-finally -- An uncertain SQLite close must prevent successful data disclosure.
-              throw unavailable()
-            }
+            closeGrantDatabase(db)
           }
         },
-        // eslint-disable-next-line max-params -- Preserve the existing ledger audit port's transaction and mutation binding.
-        audit: (db, grantId, kind, mutation) =>
-          FirstPartyOAuthGrants.audit({ db, grantId, kind, mutation }),
+        audit: (
+          ...[db, grantId, kind, mutation]: [
+            db: DatabaseSync,
+            grantId: string,
+            kind: string,
+            mutation: MutationIdentity | undefined,
+          ]
+        ) => FirstPartyOAuthGrants.audit({ db, grantId, kind, mutation }),
       },
       options,
     )
@@ -1162,9 +1159,17 @@ export class FirstPartyOAuthGrants {
     assertIssued: (p: VerifiedPrincipal) => void,
   ): NonNullable<Dependencies["exports"]> {
     return {
-      // eslint-disable-next-line max-params -- Implements the existing positional Dependencies["exports"].createAuthorizedDownload port.
-      createAuthorizedDownload: (p, selected, format, mutation) =>
-        synchronousPromise(() => {
+      createAuthorizedDownload: (
+        ...[p, selected, format, mutation]: [
+          p: VerifiedPrincipal,
+          selected: Parameters<
+            NonNullable<Dependencies["exports"]>["createAuthorizedDownload"]
+          >[1],
+          format: ExportFormat,
+          mutation: MutationIdentity,
+        ]
+      ) =>
+        promiseFrom(() => {
           try {
             assertIssued(p)
             const parsed = inputs.export_game.safeParse({
@@ -1431,12 +1436,7 @@ export class FirstPartyOAuthGrants {
 
       return { body: receipt.body, data: receipt.data }
     } finally {
-      try {
-        db?.close()
-      } catch {
-        // oxlint-disable-next-line eslint/no-unsafe-finally -- An owned database close failure intentionally invalidates the result and reports only temporarily_unavailable.
-        throw unavailable()
-      }
+      closeGrantDatabase(db)
     }
   }
 
@@ -1708,12 +1708,19 @@ export class FirstPartyOAuthGrants {
     return {
       semantic,
       create: (p, draft, mutation) =>
-        synchronousPromise(() =>
+        promiseFrom(() =>
           safe(() => mutate({ p, kind: "create", draft, mutation })),
         ),
-      // eslint-disable-next-line max-params -- Implements the existing positional DraftRepository.replace port.
-      replace: (p, id, revision, draft, mutation) =>
-        synchronousPromise(() =>
+      replace: (
+        ...[p, id, revision, draft, mutation]: [
+          p: VerifiedPrincipal,
+          id: string,
+          revision: number,
+          draft: NormalizedDraft,
+          mutation: MutationIdentity,
+        ]
+      ) =>
+        promiseFrom(() =>
           safe(() =>
             mutate({
               p,
@@ -1725,7 +1732,7 @@ export class FirstPartyOAuthGrants {
           ),
         ),
       get: (p, id) =>
-        synchronousPromise(() =>
+        promiseFrom(() =>
           safe(() => {
             assertIssued(p)
             let db: DatabaseSync | undefined = undefined
@@ -1743,12 +1750,7 @@ export class FirstPartyOAuthGrants {
 
               return result
             } finally {
-              try {
-                db?.close()
-              } catch {
-                // oxlint-disable-next-line eslint/no-unsafe-finally -- An owned database close failure intentionally invalidates the result and reports only temporarily_unavailable.
-                throw unavailable()
-              }
+              closeGrantDatabase(db)
             }
           }),
         ),

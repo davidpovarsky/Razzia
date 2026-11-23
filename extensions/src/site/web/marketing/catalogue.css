@@ -269,7 +269,11 @@
 .catalogue-player .tzv4-stage .stage-teaser {
   display: none;
 }
-.catalogue-player[data-game-media="text"] .tzv4-stage .answers {
+/* Classic catalogue geometry must not reposition an authored original world.
+   :where preserves the existing specificity for every legacy demo. */
+.catalogue-player[data-game-media="text"]
+  .tzv4-stage:where(:not([data-original-family]))
+  .answers {
   top: 355px;
   left: 225px !important;
   right: 225px !important;
@@ -278,22 +282,34 @@
   grid-auto-rows: 220px;
   gap: 26px 28px;
 }
-.catalogue-player[data-game-media="text"] .tzv4-stage .choice-slot,
-.catalogue-player[data-game-media="text"] .tzv4-stage .answer-card {
+.catalogue-player[data-game-media="text"]
+  .tzv4-stage:where(:not([data-original-family]))
+  .choice-slot,
+.catalogue-player[data-game-media="text"]
+  .tzv4-stage:where(:not([data-original-family]))
+  .answer-card {
   height: 220px;
   min-height: 220px;
 }
-.catalogue-player[data-game-media="text"] .tzv4-stage .answer-card {
+.catalogue-player[data-game-media="text"]
+  .tzv4-stage:where(:not([data-original-family]))
+  .answer-card {
   padding: 24px 30px;
 }
-.catalogue-player[data-game-media="text"] .tzv4-stage .tz-photo-frame {
+.catalogue-player[data-game-media="text"]
+  .tzv4-stage:where(:not([data-original-family]))
+  .tz-photo-frame {
   display: none;
 }
-.catalogue-player[data-game-media="text"] .tzv4-stage .answer-figure {
+.catalogue-player[data-game-media="text"]
+  .tzv4-stage:where(:not([data-original-family]))
+  .answer-figure {
   height: 100%;
   justify-content: center;
 }
-.catalogue-player[data-game-media="text"] .tzv4-stage .answer-title {
+.catalogue-player[data-game-media="text"]
+  .tzv4-stage:where(:not([data-original-family]))
+  .answer-title {
   height: 100%;
   min-height: 0;
   padding: 15px 72px 15px 10px;
@@ -305,7 +321,7 @@
   overflow-wrap: anywhere;
 }
 .catalogue-player[data-game-media="text"]
-  .tzv4-stage
+  .tzv4-stage:where(:not([data-original-family]))
   .choice-slot
   .answer-index {
   position: absolute;
@@ -316,10 +332,14 @@
   font-size: 35px;
   margin: 0;
 }
-.catalogue-player[data-answer-count="2"] .tzv4-stage .answers {
+.catalogue-player[data-answer-count="2"]
+  .tzv4-stage:where(:not([data-original-family]))
+  .answers {
   top: 450px;
 }
-.catalogue-player[data-game-phase="results"] .tzv4-stage .winner-tag {
+.catalogue-player[data-game-phase="results"]
+  .tzv4-stage:where(:not([data-original-family]))
+  .winner-tag {
   display: none;
 }
 .catalogue-player[data-game-phase="transition"] .tzv4-stage .tzv4-scene-root {

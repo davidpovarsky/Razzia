@@ -1,0 +1,57 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90m/evidence/source/extensions[39m
+
+ [32m✓[39m src/core/show-library/compiled-index.test.ts [2m([22m[2m53 tests[22m[2m)[22m[32m 170[2mms[22m[39m
+ [32m✓[39m src/core/show-library/composition-preview-v2.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 297[2mms[22m[39m
+ [32m✓[39m src/core/show-library/composition-repository.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 103[2mms[22m[39m
+ [32m✓[39m src/core/show-themes/platform-audio-inheritance.test.ts [2m([22m[2m9 tests[22m[2m)[22m[33m 394[2mms[22m[39m
+ [32m✓[39m src/core/show-library/native-preview-frame.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 206[2mms[22m[39m
+ [32m✓[39m src/core/show-themes/original-themes.test.ts [2m([22m[2m19 tests[22m[2m)[22m[33m 404[2mms[22m[39m
+ [32m✓[39m src/core/show-library/identity.test.ts [2m([22m[2m71 tests[22m[2m)[22m[32m 147[2mms[22m[39m
+ [32m✓[39m src/core/show-library/registry.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 63[2mms[22m[39m
+ [32m✓[39m src/core/show-library/projection.test.ts [2m([22m[2m35 tests[22m[2m)[22m[32m 115[2mms[22m[39m
+ [32m✓[39m src/core/show-library/stage-metadata.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 167[2mms[22m[39m
+ [32m✓[39m src/core/show-library/projection-assets.test.ts [2m([22m[2m24 tests[22m[2m)[22m[32m 114[2mms[22m[39m
+ [32m✓[39m src/core/show-library/composition-validation.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 82[2mms[22m[39m
+ [32m✓[39m src/core/show-library/application-preview-input.test.ts [2m([22m[2m26 tests[22m[2m)[22m[33m 1642[2mms[22m[39m
+   [32m✓[39m account application preview source binding [2m(26)[22m
+     [33m[2m✓[22m[39m resolves every public catalogue game through its exact bundled theme and shared production renderer[33m 1161[2mms[22m[39m
+ [32m✓[39m src/core/show-themes/show-themes.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 105[2mms[22m[39m
+ [32m✓[39m src/core/show-library/composition-restore.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 124[2mms[22m[39m
+ [32m✓[39m src/core/show-themes/change.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 84[2mms[22m[39m
+ [32m✓[39m src/core/show-library/public-demo-catalogue.test.ts [2m([22m[2m32 tests[22m[2m)[22m[33m 780[2mms[22m[39m
+ [32m✓[39m src/core/show-themes/history-audio.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 68[2mms[22m[39m
+ [32m✓[39m src/core/show-themes/roundtrip.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 66[2mms[22m[39m
+ [32m✓[39m src/core/show-library/preview-port.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 94[2mms[22m[39m
+ [32m✓[39m src/core/show-library/native-media-library.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 61[2mms[22m[39m
+ [32m✓[39m src/core/show-library/application-composition-pin.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m src/core/show-library/native-motion-library.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 50[2mms[22m[39m
+ [32m✓[39m src/core/show-library/application-package-preview.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 202[2mms[22m[39m
+ [32m✓[39m src/core/show-library/application-library.test.ts [2m([22m[2m5 tests[22m[2m)[22m[33m 333[2mms[22m[39m
+   [32m✓[39m compiled first-party application composition [2m(5)[22m
+     [33m[2m✓[22m[39m has both original renderers and two structural layouts without losing system bindings[32m 300[2mms[22m[39m
+ [32m✓[39m src/core/show-library/registry-locked.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/core/show-library/registry-motion-references.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m src/core/show-library/full-show-preview-timeline.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [31m❯[39m src/core/show-library/consumer-contract.test.ts [2m([22m[2m3 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[32m 50[2mms[22m[39m
+   [31m❯[39m cumulative public library consumer contract [2m(3)[22m
+[31m     [31m×[31m serializes the actual native catalogs within the authoring JSON budget[39m[32m 8[2mms[22m[39m
+     [32m✓[39m exposes explicit V1/V2 data APIs while keeping fixtures/authority/renderers/clocks out[32m 2[2mms[22m[39m
+     [32m✓[39m keeps V1 renderer input strict and V2 admission explicit[32m 38[2mms[22m[39m
+ [32m✓[39m src/core/show-library/native-preview-scopes.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m src/core/show-library/composition-reset.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m src/core/show-themes/product-brand.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 47[2mms[22m[39m
+ [32m✓[39m src/core/show-themes/hebrew-compatibility.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 51[2mms[22m[39m
+ [32m✓[39m src/core/show-library/original-renderer-contract.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m src/presentation/tadazz-show/recap-page-limit.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m src/core/show-library/sanitized-authored-preview.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 6[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m35 passed[39m[22m[90m (36)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m502 passed[39m[22m[90m (503)[39m
+[2m   Start at [22m 15:19:50
+[2m   Duration [22m 30.86s[2m (import 59%, tests 25%, transform 15%, worker 1%)[22m
+
+[2m     Import [22m [33m461 modules were evaluated 678 times[39m[2m · 14.48s total, 59% of tracked time[22m
+[2m            [22m [2m~4.63s faster with [22m[33misolate: false[39m[2m — shared modules are evaluated once per worker instead of once per file[22m
+[2m            [22m [2mlearn more: https://vitest.dev/guide/improving-performance#test-isolation[22m
+

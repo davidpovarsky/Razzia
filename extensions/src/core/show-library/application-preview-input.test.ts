@@ -111,6 +111,16 @@ describe("account application preview source binding", () => {
     expect(() => normalizeApplicationPreviewDraft(input, context)).toThrow()
   })
   it("resolves every public catalogue game through its exact bundled theme and shared production renderer", () => {
+    const { pins } = getApplicationPreviewManifest()
+
+    if (pins.length) {
+      expect(pins.map((pin) => pin.renderer.id).sort()).toEqual([
+        "razzia-native-stage",
+        "tadazz-classic-stage",
+        "tadazz-original-stage",
+      ])
+    }
+
     for (const metadata of publicDemoCatalogue) {
       const example = getPublicDemo(metadata.id)!
       const draft = normalizeApplicationPreviewDraft(
@@ -128,7 +138,7 @@ describe("account application preview source binding", () => {
       const plan = resolveApplicationPreviewPlan(draft)
       expect(plan.resolution.requested.id).toBe(metadata.themeId)
 
-      if (getApplicationPreviewManifest().pins.length) {
+      if (pins.length) {
         expect(plan.resolution.kind).toBe("exact")
         expect(plan.resolution.effective?.id).toBe(metadata.themeId)
         expect(plan.diagnostics).toEqual([])

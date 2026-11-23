@@ -1,3 +1,4 @@
+import { promiseFrom } from "../../shared/promise-operation.ts"
 import assert from "node:assert/strict"
 import test from "node:test"
 import {
@@ -8,10 +9,8 @@ import {
   newKey,
   data,
   code,
-  requireObservedValue,
 } from "./fixtures.ts"
 import { MemoryDeliveries } from "./delivery-fixture.ts"
-import { synchronousPromise } from "../../../core/synchronous-promise.ts"
 
 for (const tool of ["save_game", "export_game"] as const) {
   test(`${
@@ -26,7 +25,7 @@ for (const tool of ["save_game", "export_game"] as const) {
       {
         ...adapters,
         authorize: () =>
-          synchronousPromise(() => (revoked ? { ...p, active: false } : p)),
+          promiseFrom(() => (revoked ? { ...p, active: false } : p)),
       },
       p,
     )
@@ -49,7 +48,7 @@ for (const tool of ["save_game", "export_game"] as const) {
       }
       const first = data(await h.call(tool, args))
       const edited = show()
-      requireObservedValue(edited.cards.at(2)).question = "Q3 changed"
+      edited.cards[2].question = "Q3 changed"
       assert.equal(
         data(
           await h.call("update_game_draft", {

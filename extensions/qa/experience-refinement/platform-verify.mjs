@@ -41,7 +41,7 @@ function recordMedia() {
       : null,
   })
   const { play } = HTMLMediaElement.prototype
-  HTMLMediaElement.prototype.play = function observePlatformAudioPlay() {
+  HTMLMediaElement.prototype.play = function observedPlay() {
     let attempt = undefined
 
     if (this instanceof HTMLAudioElement) {

@@ -218,7 +218,12 @@ try {
         await expect(
           page.getByTestId("editor-preview-viewport"),
         ).toHaveAttribute("data-preview-aspect", aspect)
-        await measure({ label: "question", width, height, aspect })
+        await measure({
+          label: "question",
+          width,
+          height,
+          aspect,
+        })
 
         if (width === 320 || width === 390) {
           const toolbar = await page

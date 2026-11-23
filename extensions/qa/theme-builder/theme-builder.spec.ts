@@ -1,5 +1,4 @@
 import playwright from "../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
-
 import { writeFile } from "node:fs/promises"
 import { builderText } from "../../src/components/theme-builder/strings"
 const { test, expect } =

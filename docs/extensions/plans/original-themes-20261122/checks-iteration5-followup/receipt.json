@@ -1,0 +1,26 @@
+{
+  "diagnosticOnly": true,
+  "releaseQualified": false,
+  "productionChanged": false,
+  "sourceReadOnly": true,
+  "memoryBytes": 3221225472,
+  "oomKilled": false,
+  "temporaryDirectory": "/home/ubuntu/tadazz-original-themes-preflight-20261122/checks-iteration5-followup/tmp",
+  "checks": [
+    {
+      "label": "motion-canonical-reference",
+      "exit": 0,
+      "seconds": 1.12
+    },
+    {
+      "label": "extensions-types",
+      "exit": 0,
+      "seconds": 22.18
+    },
+    {
+      "label": "deploy-release-self-test",
+      "exit": 0,
+      "seconds": 0.28
+    }
+  ]
+}

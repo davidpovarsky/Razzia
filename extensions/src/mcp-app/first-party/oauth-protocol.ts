@@ -436,17 +436,14 @@ export function createOAuthProtocol(options: OAuthCryptoOptions) {
         )
         .digest("hex")
     },
-    checkConsentProof({
-      accountId,
-      sid,
-      ticket,
-      proof,
-    }: {
-      accountId: string
-      sid: string
-      ticket: string
-      proof: string
-    }) {
+    checkConsentProof(
+      ...[accountId, sid, ticket, proof]: [
+        accountId: string,
+        sid: string,
+        ticket: string,
+        proof: string,
+      ]
+    ) {
       if (!/^[a-f0-9]{64}$/u.test(proof)) {
         return fail("access_denied")
       }

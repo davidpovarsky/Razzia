@@ -122,13 +122,13 @@ async function native(theme) {
 
   return preview
 }
-async function state(preview, theme) {
+function state(preview, theme) {
   const target =
     theme === "tadazz-classic"
       ? preview.getByTestId("tadazz-backdrop")
       : preview.locator("[data-original-razzia-preview]")
 
-  return await target.evaluate((el) => {
+  return target.evaluate((el) => {
     const s = getComputedStyle(el)
 
     return {
@@ -170,7 +170,9 @@ try {
     ]) {
       appearance = test.value
       await page.goto(
-        `http://127.0.0.1:3180/manager/quizz/VgCunRFT_E04gIAMbv8CU?lng=en&background=${theme}${test.name}`,
+        `http://127.0.0.1:3180/manager/quizz/VgCunRFT_E04gIAMbv8CU?lng=en&background=${
+          theme
+        }${test.name}`,
       )
       await page.getByTestId("editor-save-btn").waitFor()
       await selectTheme(theme)

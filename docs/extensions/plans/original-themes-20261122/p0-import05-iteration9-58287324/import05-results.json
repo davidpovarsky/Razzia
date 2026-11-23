@@ -1,0 +1,210 @@
+{
+  "config": {
+    "argv": [
+      "/usr/local/bin/node",
+      "/cleanup/extensions/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "playwright.import05-oracle.config.ts",
+      "--tsconfig",
+      "tsconfig.json",
+      "tests/wave1-show-import-acceptance.spec.ts",
+      "--grep",
+      "(?:IMPORT05:\\ Import\\ valid\\ show\\ with\\ Hebrew\\ note\\ and\\ per\\-question\\ interlude,\\ save\\ in\\ editor,\\ reload,\\ export\\ \\.tada\\.json\\ and\\ \\.xlsx,\\ verify\\ byte\\ content)$",
+      "--workers=1",
+      "--retries=0",
+      "--reporter=list,json"
+    ],
+    "configFile": "/evidence/runtime/packages/e2e/playwright.import05-oracle.config.ts",
+    "rootDir": "/evidence/runtime/packages/e2e/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/evidence/import05-test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/evidence/runtime/packages/e2e/tests",
+        "testIgnore": [
+          "**/theme-lab.spec.ts"
+        ],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 90000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/evidence/import05-test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "/evidence/runtime/packages/e2e/tests",
+        "snapshotDir": "/evidence/runtime/packages/e2e/tests",
+        "testIgnore": "**/theme-lab.spec.ts",
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 90000,
+        "use": {
+          "baseURL": "http://localhost:3000",
+          "locale": "en-US",
+          "trace": "retain-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list"
+      ],
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "wave1-show-import-acceptance.spec.ts",
+      "file": "wave1-show-import-acceptance.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "TADA Studio Show Import/Export Acceptance (JSON + Excel)",
+          "file": "wave1-show-import-acceptance.spec.ts",
+          "line": 113,
+          "column": 6,
+          "specs": [
+            {
+              "title": "IMPORT05: Import valid show with Hebrew note and per-question interlude, save in editor, reload, export .tada.json and .xlsx, verify byte content",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 90000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 2712,
+                      "error": {
+                        "message": "Error: ENOENT: no such file or directory, open '/evidence/runtime/packages/e2e/test-results/show-import-acceptance/temp_import05.tada.json'",
+                        "stack": "Error: ENOENT: no such file or directory, open '/evidence/runtime/packages/e2e/test-results/show-import-acceptance/temp_import05.tada.json'\n    at /evidence/runtime/packages/e2e/tests/wave1-show-import-acceptance.spec.ts:466:8",
+                        "location": {
+                          "file": "/evidence/runtime/packages/e2e/tests/wave1-show-import-acceptance.spec.ts",
+                          "column": 8,
+                          "line": 466
+                        },
+                        "snippet": "  464 |\n  465 |     const tmpJsonFile = join(SCREENSHOT_DIR, \"temp_import05.tada.json\")\n> 466 |     fs.writeFileSync(\n      |        ^\n  467 |       tmpJsonFile,\n  468 |       JSON.stringify(syntheticShow, null, 2),\n  469 |       \"utf-8\","
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/evidence/runtime/packages/e2e/tests/wave1-show-import-acceptance.spec.ts",
+                            "column": 8,
+                            "line": 466
+                          },
+                          "message": "Error: ENOENT: no such file or directory, open '/evidence/runtime/packages/e2e/test-results/show-import-acceptance/temp_import05.tada.json'\n\n  464 |\n  465 |     const tmpJsonFile = join(SCREENSHOT_DIR, \"temp_import05.tada.json\")\n> 466 |     fs.writeFileSync(\n      |        ^\n  467 |       tmpJsonFile,\n  468 |       JSON.stringify(syntheticShow, null, 2),\n  469 |       \"utf-8\",\n    at /evidence/runtime/packages/e2e/tests/wave1-show-import-acceptance.spec.ts:466:8"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-11-22T17:49:45.138Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/evidence/import05-test-results/wave1-show-import-acceptan-8d58b-nd-xlsx-verify-byte-content-chromium/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/evidence/import05-test-results/wave1-show-import-acceptan-8d58b-nd-xlsx-verify-byte-content-chromium/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/evidence/runtime/packages/e2e/tests/wave1-show-import-acceptance.spec.ts",
+                        "column": 8,
+                        "line": 466
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "d6c33e06ffa1086255ec-d77c0ce0ed5671e78e84",
+              "file": "wave1-show-import-acceptance.spec.ts",
+              "line": 337,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-22T17:49:38.950Z",
+    "duration": 9475.123000000001,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

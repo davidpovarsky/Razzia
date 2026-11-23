@@ -1,3 +1,4 @@
+import { promiseFrom } from "../shared/promise-operation.ts"
 import { createPublicKey } from "node:crypto"
 import { Hono } from "hono"
 import type { ApiEnv } from "@razzia/socket/api/factory"
@@ -26,7 +27,6 @@ import {
   nativeSaveInspectInput,
   nativeSaveApproveInput,
 } from "../contracts/native-save.ts"
-import { synchronousPromise } from "../../core/synchronous-promise.ts"
 
 export type {
   FirstPartyExportPolicy,
@@ -205,9 +205,9 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
       },
     ],
     activeGrant: (grantId, accountId) =>
-      synchronousPromise(() => grants.activeGrant(accountId, grantId)),
+      promiseFrom(() => grants.activeGrant(accountId, grantId)),
     activeAccount: (accountId) =>
-      synchronousPromise(() => auth.delegatedAccountActive(accountId)),
+      promiseFrom(() => auth.delegatedAccountActive(accountId)),
     maxLifetimeSeconds: 300,
   })
   const verifyAccessToken = async (token: string, signal?: AbortSignal) => {
@@ -275,8 +275,8 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
 
         let bytes = 0
         let count = 0
-        const headerState = { invalid: false }
-        request.headers.forEach((value, name) => {
+        let badHeaders = false
+        for (const [name, value] of request.headers) {
           bytes += Buffer.byteLength(name + value)
           count += 1
 
@@ -287,11 +287,11 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
             name === "forwarded" ||
             name.startsWith("x-forwarded-")
           ) {
-            headerState.invalid = true
+            badHeaders = true
           }
-        })
+        }
 
-        if (headerState.invalid) {
+        if (badHeaders) {
           throw new OAuthError("invalid_request")
         }
 
@@ -446,12 +446,12 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
             }
 
             const body = approvalBody.parse(raw)
-            protocol.checkConsentProof({
-              accountId: p.accountId,
-              sid: p.sid,
-              ticket: body.ticket,
-              proof: body.proof,
-            })
+            protocol.checkConsentProof(
+              p.accountId,
+              p.sid,
+              body.ticket,
+              body.proof,
+            )
             active(request.signal)
             const result = grants.approve(p, body.ticket)
             active(request.signal)

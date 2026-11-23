@@ -40,12 +40,12 @@ export function produceNativePreviewFrameV1(
     throw new Error("show-preview:unsupported-projection")
   }
 
-  assertBoundPreviewStageMetadata({
-    draft: binding.draft,
-    plan: binding.plan,
-    currentQuestionId: question.id,
+  assertBoundPreviewStageMetadata(
+    binding.draft,
+    binding.plan,
+    question.id,
     metadata,
-  })
+  )
   // The projector already checked current-card identity, kind, labels and clock.
   const clock =
     projection.clock ??

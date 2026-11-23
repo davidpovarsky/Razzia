@@ -1,0 +1,50 @@
+{
+  "passed": true,
+  "platform": "linux",
+  "sourceSha": "7c6057aeee58459787dc771fe1abbffd80819579",
+  "diagnosticOnly": true,
+  "releaseQualified": false,
+  "runtimeQaSourceEqualsCandidate": false,
+  "isolatedNativeHost": true,
+  "customerMountUsed": false,
+  "realEmailSent": false,
+  "manualListeningPerformed": false,
+  "results": [
+    {
+      "name": "eight-native-installs-and-isolated-two-to-five-choice-fixtures",
+      "passed": true,
+      "originals": 8,
+      "rounds": 32,
+      "anonymousInstallDenied": true,
+      "crossAccountReadDenied": true,
+      "diagnosticOnly": true,
+      "releaseQualified": false,
+      "runtimeQaSourceEqualsCandidate": false
+    },
+    {
+      "name": "normal-motion-complete-public-show-mystery-noir",
+      "passed": true,
+      "rounds": 6,
+      "checkpoints": 3,
+      "interludes": 2,
+      "replay": true,
+      "diagnosticOnly": true,
+      "releaseQualified": false,
+      "runtimeQaSourceEqualsCandidate": false
+    },
+    {
+      "name": "original-browser-console-and-resource-integrity",
+      "passed": true,
+      "diagnosticOnly": true,
+      "releaseQualified": false,
+      "runtimeQaSourceEqualsCandidate": false
+    },
+    {
+      "name": "immutable-public-masters-after-editor-and-live-games",
+      "passed": true,
+      "diagnosticOnly": true,
+      "releaseQualified": false,
+      "runtimeQaSourceEqualsCandidate": false
+    }
+  ]
+}

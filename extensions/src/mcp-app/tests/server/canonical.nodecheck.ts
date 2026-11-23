@@ -1,7 +1,6 @@
 import assert from "node:assert/strict"
 import { createHash } from "node:crypto"
 import test from "node:test"
-import { requireObservedValue } from "./fixtures.ts"
 import { timelineQuestionItemSchema } from "@razzia/extensions/core"
 import {
   canonicalJson,
@@ -43,11 +42,10 @@ test("one browser-compatible serializer binds exact adopted envelope and preserv
     previewIdentityDigest(input),
     previewIdentityDigest({ ...input, revision: 3 }),
   )
-  const firstAssetDigest = requireObservedValue(input.assetDigests.at(0))
   assert.throws(() =>
     serializePreviewIdentity({
       ...input,
-      assetDigests: [firstAssetDigest, firstAssetDigest],
+      assetDigests: [input.assetDigests[0], input.assetDigests[0]],
     }),
   )
   assert.throws(() => canonicalJson({ n: Infinity }))

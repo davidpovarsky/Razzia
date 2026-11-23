@@ -128,7 +128,7 @@ const plugins = [
               return { path: candidate }
             }
           } catch {
-            // Try the remaining supported suffixes; unresolved imports fail after this loop.
+            // A candidate path may be absent; try the remaining extensions.
           }
         }
         throw new Error(`Unresolved workspace import ${args.path}`)

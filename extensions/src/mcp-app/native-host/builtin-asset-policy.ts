@@ -1,4 +1,5 @@
 import { REVIEWED_BUILTIN_ASSETS } from "./reviewed-builtin-assets.ts"
+import { isOriginalThemeId } from "../../core/show-themes/original-theme-families.ts"
 import type {
   ResolvedSemanticAsset,
   SemanticAssetChoice,
@@ -129,7 +130,8 @@ function currentContext(context: SemanticAssetContext): boolean {
       context.operation === "json-reference-export") &&
     context.theme.version === "1.0.0" &&
     (context.theme.id === "tadazz-classic" ||
-      context.theme.id === "razzia-original")
+      context.theme.id === "razzia-original" ||
+      isOriginalThemeId(context.theme.id))
   )
 }
 

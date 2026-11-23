@@ -188,13 +188,11 @@ export class UnmountedPhoneAuthority {
       serviceDenied()
     }
 
-    const { adoption } = this
-
-    if (!adoption) {
+    if (!this.adoption) {
       serviceDenied()
     }
 
-    adoption.adopt(game)
+    this.adoption.adopt(game)
     this.staged.add(game)
     this.pin(game)
   }
@@ -395,7 +393,25 @@ export class UnmountedPhoneAuthority {
     }
   }
 
-  async deliverGatewayAttempt({
+  deliverGatewayAttempt(
+    ...args: [
+      token: string,
+      attempt: SecretAttempt,
+      destination: GatewayDeliveryDestination,
+      expectedStoredVersion: number,
+    ]
+  ): Promise<GatewayDeliveryAck> {
+    const [token, attempt, destination, expectedStoredVersion] = args
+
+    return this.deliverGatewayRequest({
+      token,
+      attempt,
+      destination,
+      expectedStoredVersion,
+    })
+  }
+
+  private async deliverGatewayRequest({
     token,
     attempt,
     destination,
@@ -605,12 +621,12 @@ export class UnmountedPhoneAuthority {
         owner: live.owner,
         game: input.game,
         provider: input.provider,
-        service: deriveServiceId({
-          owner: live.owner,
-          game: input.game,
-          provider: input.provider,
-          requestId: input.requestId,
-        }),
+        service: deriveServiceId(
+          live.owner,
+          input.game,
+          input.provider,
+          input.requestId,
+        ),
         version: 1,
         issuerSid: live.issuerSid,
         executorId: facade.executorId,
@@ -618,11 +634,11 @@ export class UnmountedPhoneAuthority {
         initialActions: initial,
       }
       const result = await withAccount(live.owner, () => {
-        const issuedResult = this.writer.issue({
+        const issuedResult = this.writer.issue(
           binding,
-          input: { requestId: input.requestId, expectedVersion: 0 },
-          actorSid: live.issuerSid,
-          check: () => {
+          { requestId: input.requestId, expectedVersion: 0 },
+          live.issuerSid,
+          () => {
             this.managerCheck({
               prepared,
               game: live.nativeGame,
@@ -630,7 +646,7 @@ export class UnmountedPhoneAuthority {
               issuerSid: live.issuerSid,
             })
           },
-        })
+        )
         this.managerCheck({
           prepared,
           game: live.nativeGame,
@@ -722,11 +738,11 @@ export class UnmountedPhoneAuthority {
         sameIssuer: true,
       })
       const result = await withAccount(live.owner, () => {
-        const rotatedResult = this.writer.rotate({
-          binding: record,
+        const rotatedResult = this.writer.rotate(
+          record,
           input,
-          actorSid: live.issuerSid,
-          check: () => {
+          live.issuerSid,
+          () => {
             this.managerCheck({
               prepared,
               game: live.nativeGame,
@@ -734,7 +750,7 @@ export class UnmountedPhoneAuthority {
               issuerSid: record.issuerSid,
             })
           },
-        })
+        )
         this.managerCheck({
           prepared,
           game: live.nativeGame,
@@ -782,18 +798,18 @@ export class UnmountedPhoneAuthority {
         sameIssuer: false,
       })
       const result = await withAccount(live.owner, () => {
-        const revokedResult = this.writer.revoke({
-          binding: record,
+        const revokedResult = this.writer.revoke(
+          record,
           input,
-          actorSid: live.issuerSid,
-          check: () => {
+          live.issuerSid,
+          () => {
             this.managerCheck({
               prepared,
               game: live.nativeGame,
               executorId: facade.executorId,
             })
           },
-        })
+        )
         this.managerCheck({
           prepared,
           game: live.nativeGame,
@@ -852,12 +868,12 @@ export class UnmountedPhoneAuthority {
       }
     }
     const result = await withAccount(proof.lease.owner, () => {
-      const activatedResult = this.writer.activate({
-        inputAddress: proof.address,
+      const activatedResult = this.writer.activate(
+        proof.address,
         capability,
         input,
         check,
-      })
+      )
       check()
 
       return activatedResult

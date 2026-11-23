@@ -31,7 +31,7 @@ async function check(name, fn) {
     console.log(`PASS ${name}`)
   } catch (e) {
     failures.push({ name, error: String(e) })
-    console.log(`FAIL ${name} ${String(e)}`)
+    console.log(`FAIL ${name} ${e}`)
 
     if (current) {
       await current

@@ -20,17 +20,14 @@ export function firstPartyUrl(value: string, config: ServerConfig) {
   }
 }
 
-export function failureResult({
-  name,
-  error,
-  config,
-  correlationId = randomUUID(),
-}: {
-  name: ToolName | undefined
-  error: unknown
-  config: ServerConfig
-  correlationId?: ReturnType<typeof randomUUID>
-}) {
+export function failureResult(
+  ...[name, error, config, correlationId = randomUUID()]: [
+    name: ToolName | undefined,
+    error: unknown,
+    config: ServerConfig,
+    correlationId?: string,
+  ]
+) {
   const failure = safeError(error)
 
   if (failure.consentUrl) {

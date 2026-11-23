@@ -97,7 +97,9 @@ export function previewSteps(
     }
 
     const ordered = frame.choices.map((choice) => {
-      const result = results.find((r) => r.answerId === choice.id)
+      const result = results.find(
+        (candidate) => candidate.answerId === choice.id,
+      )
 
       if (!result) {
         throw new Error("show-preview:missing-choice-result")

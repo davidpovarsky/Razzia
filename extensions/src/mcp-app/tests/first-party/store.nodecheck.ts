@@ -1,3 +1,4 @@
+import { captureMethod } from "../method-snapshot.ts"
 import { after, before, test } from "node:test"
 import assert from "node:assert/strict"
 import { DatabaseSync } from "node:sqlite"
@@ -232,7 +233,8 @@ test("replace and pending save replay precede current revision; pending never co
   const operation = rows(
     requireInitializedF().sessions[0].owner,
   ).operations.find((row) => row.request_key === intent.idempotencyKey)
-  assert.equal(operation?.state, "PENDING_C1")
+  assert.ok(operation)
+  assert.equal(operation.state, "PENDING_C1")
   assert.equal(operation.native_id, null)
   assert.equal(
     (
@@ -245,10 +247,9 @@ test("replace and pending save replay precede current revision; pending never co
 })
 test("SQLite audit failure rolls draft and operation back together", async () => {
   const priorRows3 = rows(requireInitializedF().sessions[0].owner)
-  // oxlint-disable-next-line typescript/unbound-method -- Scoped SQLite fault injection calls the raw method with its live receiver and restores this exact function in finally.
-  const original = DatabaseSync.prototype.prepare
+  const original = captureMethod(DatabaseSync.prototype, "prepare")
   let attemptedAfterDraftAndOperation = false
-  DatabaseSync.prototype.prepare = function observeAuditPreparation(
+  DatabaseSync.prototype.prepare = function prepare(
     this: DatabaseSync,
     sql: string,
   ) {
@@ -284,13 +285,9 @@ test("SQLite audit failure rolls draft and operation back together", async () =>
 test("revoke between precommit check and COMMIT hides outcome but honestly preserves committed rows", async () => {
   const session = await freshSession(requireInitializedF().sessions[0].owner)
   const priorRows4 = rows(session.owner)
-  // oxlint-disable-next-line typescript/unbound-method -- Scoped SQLite fault injection calls the raw method with its live receiver and restores this exact function in finally.
-  const original = DatabaseSync.prototype.exec
+  const original = captureMethod(DatabaseSync.prototype, "exec")
   let committed = false
-  DatabaseSync.prototype.exec = function observeCommitRevocation(
-    this: DatabaseSync,
-    sql: string,
-  ) {
+  DatabaseSync.prototype.exec = function exec(this: DatabaseSync, sql: string) {
     if (sql === "COMMIT" && !committed) {
       committed = true
       requireInitializedF().accounts.revokeAccountSession(session.sid)
@@ -316,8 +313,7 @@ test("revoke between precommit check and COMMIT hides outcome but honestly prese
   assert.equal(data.operations.length, priorRows4.operations.length + 1)
   assert.equal(data.audit.length, priorRows4.audit.length + 1)
   assert.equal(
-    (await requireInitializedF().request({ session, path: `/drafts/${key()}` }))
-      .status,
+    (await requireInitializedF().request(session, `/drafts/${key()}`)).status,
     401,
   )
 })

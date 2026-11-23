@@ -1,0 +1,93 @@
+{
+  "baselineSha": "53c2d04fea97096622204858affe94a614637fca",
+  "candidateBaseSha": "916c332c210ab5956f9eb134e3df4ad2982eba37",
+  "method": "same unchanged rules/dependencies; every labelled span maps to exact unchanged source lines",
+  "baselineCount": 88,
+  "candidateCount": 90,
+  "inheritedCount": 85,
+  "newCount": 5,
+  "passed": false,
+  "wholeChangedSourceLintPass": false,
+  "unmatchedDiagnostics": [
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/src/presentation/tadazz-v4/TadazzV4Stage.tsx",
+      "labels": [
+        {
+          "span": {
+            "offset": 12549,
+            "length": 27,
+            "line": 430,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "packages/web/src/features/game/components/tadazz-show/TadazzShowView.tsx",
+      "labels": [
+        {
+          "span": {
+            "offset": 15800,
+            "length": 28,
+            "line": 525,
+            "column": 7
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "packages/web/src/features/game/components/tadazz-show/TadazzShowView.tsx",
+      "labels": [
+        {
+          "span": {
+            "offset": 15968,
+            "length": 28,
+            "line": 535,
+            "column": 5
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/qa/original-themes/browser-verify.mjs",
+      "labels": [
+        {
+          "span": {
+            "offset": 22714,
+            "length": 63,
+            "line": 640,
+            "column": 13
+          }
+        }
+      ]
+    },
+    {
+      "message": "Expected blank line before this statement.",
+      "code": "@stylistic(padding-line-between-statements)",
+      "severity": "error",
+      "filename": "extensions/qa/original-themes/browser-verify.mjs",
+      "labels": [
+        {
+          "span": {
+            "offset": 23101,
+            "length": 18,
+            "line": 651,
+            "column": 13
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -32,12 +32,14 @@ export function identifier(value: unknown): asserts value is string {
 }
 
 export function validateContext(
-  context: VerifiedServiceContext,
+  context:
+    | (Omit<VerifiedServiceContext, "verified"> & { verified?: unknown })
+    | null
+    | undefined,
   action: Action,
   now = Date.now(),
 ) {
-  // oxlint-disable-next-line typescript/no-unnecessary-condition, typescript/no-unnecessary-boolean-literal-compare, typescript/prefer-optional-chain -- Keep the service-boundary rejection for absent or unverified runtime credentials before any operation or reservation.
-  if (!context || context.verified !== true) {
+  if (context?.verified !== true) {
     throw new Denied("service_required")
   }
 

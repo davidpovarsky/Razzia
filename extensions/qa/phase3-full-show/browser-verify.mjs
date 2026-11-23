@@ -61,6 +61,23 @@ import { hashJson } from "../../src/mcp-app/contracts/canonical.ts"
 import { tadaShowV1Schema } from "../../src/core/show-authoring-schema.ts"
 import { presentationControlText } from "../../src/platform-ui/presentation-control-labels.ts"
 
+// This opt-in belongs only to the Linux Fullshow QA launcher.
+const webkitQaBackend =
+  process.env.TADAZZ_FULL_SHOW_WEBKIT_BACKEND ?? "headless"
+assert(
+  ["headless", "gtk-xvfb"].includes(webkitQaBackend),
+  "Unsupported Fullshow WebKit QA backend",
+)
+const gtkWebkit = webkitQaBackend === "gtk-xvfb"
+if (gtkWebkit) {
+  assert.equal(process.platform, "linux", "GTK Fullshow QA requires Linux")
+  assert.match(
+    process.env.DISPLAY ?? "",
+    /^:\d+(?:\.\d+)?$/,
+    "GTK Fullshow QA requires a local Xvfb DISPLAY",
+  )
+}
+
 const expectedLocaleText = {
   he: { previous: "הכרטיס הקודם", editing: "עריכת הטיוטה הזו" },
   en: {
@@ -666,10 +683,16 @@ try {
     browser = await (engine === "webkit" ? webkit : chromium).launch(
       engine === "chromium" && process.platform === "win32"
         ? { channel: "msedge", headless: true }
-        : { headless: true },
+        : { headless: engine !== "webkit" || !gtkWebkit },
     )
     const browserVersion = browser.version()
-    engines.push({ name: engine, version: browserVersion })
+    engines.push({
+      name: engine,
+      version: browserVersion,
+      ...(engine === "webkit"
+        ? { qaBackend: webkitQaBackend, headless: !gtkWebkit }
+        : {}),
+    })
     for (const theme of (
       process.env.TADAZZ_FULL_SHOW_THEMES ?? "tadazz-classic,razzia-original"
     ).split(",")) {
@@ -2649,9 +2672,12 @@ try {
                     "0",
                   )
                   title = list.getByRole("heading", { level: 2 })
-                  expectedNativeTitle = labels.v4Labels.teamLeaderboard
+                  expectedNativeTitle =
+                    expected.sceneTitle || labels.v4Labels.teamLeaderboard
                   nativeScene = "leaderboard"
-                  titleContract = "native-family-heading"
+                  titleContract = expected.sceneTitle
+                    ? "authored-scene-title"
+                    : "native-family-heading"
                   emptyCounts.teamRows = await list.locator(".team-row").count()
                   assert.equal(emptyCounts.teamRows, 0)
                 } else if (classic && fixture.id === "animation-spotlight") {
@@ -2792,7 +2818,8 @@ try {
                 }
 
                 // Await the actual native component's title, not only the outer
-                // chapter wrapper. Classic intentionally owns two scene headings.
+                // chapter wrapper. Classic preserves authored leaderboard titles;
+                // its spotlight fixture retains the localized native heading.
                 await title.waitFor({ state: "visible" })
                 const visibleTitle = (await title.innerText()).trim()
                 assert.equal(visibleTitle, expectedNativeTitle)

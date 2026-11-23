@@ -29,10 +29,13 @@ const stage =
     "packages/web/src/features/game/components/tadazz-show/PackageStage.tsx",
   )
 const runtime = path.join(source, "extensions/src/presentation/package-runtime")
+const requestAuth = path.join(source, "packages/web/src/lib/request-auth.ts")
 const js = JSON.stringify
 const result = {
   fixture: "actual PackageStage, ThemeSandboxHost, SDK and BMS source",
   checks: [],
+  clockChecks: [],
+  expectedClockChecks: 2,
   network: "loopback-only",
   customerData: false,
 }
@@ -44,6 +47,7 @@ import {PackageStage} from ${js(stage)};
 const root = createRoot(document.getElementById('root'));
 const phases=['opening','lobby','question','answerCards','voting','voteLocked','results','leaderboard','interlude','closing','personalResult'];
 window.__theme={definition:{id:'bms-memory-files',runtime:{sourceDigest:'a'.repeat(64),buildDigest:'b'.repeat(64)},sandbox:{slots:Object.fromEntries(phases.map(x=>[x,'implemented'])),roles:['manager','spectator','player']}}};
+window.__serverClockOffset=0;
 window.__nativeFrames=0;
 new MutationObserver(()=>{if(document.querySelector('[data-native-fixture]')) window.__nativeFrames++;}).observe(document.getElementById('root'),{childList:true,subtree:true});
 let props;
@@ -51,7 +55,7 @@ window.__render=(phase,id='q1',extra={})=>{
  const question={key:id,question:'Who was the last speaker that we had in sem?',number:id==='q1'?1:2,totalQuestions:2,answerCount:3,options:phase==='question'?[]:[{label:'Answer one'},{label:'Answer two'},{label:'Answer three'}]};
  const base={key:phase+':'+id,question,questionType:'single'};
  let scene=phase==='wait'?{kind:'wait',key:'wait:question-content',text:''}:phase==='results'?{...base,kind:'results',reveal:{mode:'quiz',counts:[1,2,0],percentages:[33,67,0],solutions:[1]}}:phase==='question'?{...base,kind:'question'}:{...base,kind:'voting',answers:question.options.map(x=>x.label),seconds:25,remainingSeconds:25,totalPlayers:3};
- props={scene,roomId:'fixture-room',questionId:id,epoch:extra.epoch??1,sequence:1,role:extra.role??'manager',paused:!!extra.paused,canAnswer:extra.role==='player'&&phase==='voting',voteLocked:phase==='voteLocked',remainingMs:25000,deadline:Date.now()+25000,serverTime:Date.now(),onSubmit:()=>window.__submitted=(window.__submitted??0)+1,onFallback:()=>window.__fallbacks=(window.__fallbacks??0)+1};
+ props={scene,roomId:'fixture-room',questionId:id,epoch:extra.epoch??1,sequence:1,role:extra.role??'manager',paused:!!extra.paused,canAnswer:extra.role==='player'&&phase==='voting',voteLocked:phase==='voteLocked',remainingMs:25000,deadline:Date.now()+window.__serverClockOffset+25000,serverTime:Date.now()+window.__serverClockOffset,serverClockOffset:window.__serverClockOffset,onSubmit:()=>window.__submitted=(window.__submitted??0)+1,onFallback:()=>window.__fallbacks=(window.__fallbacks??0)+1};
  flushSync(()=>root.render(<PackageStage {...props}><div data-native-fixture>Native question</div></PackageStage>));
 };
 window.__render('question');
@@ -73,6 +77,15 @@ const aliases = {
 const plugin = {
   name: "isolated-platform-services",
   setup(builder) {
+    builder.onResolve({ filter: /^@razzia\/web\/lib\/request-auth$/ }, () => ({
+      path: requestAuth,
+    }))
+    builder.onResolve({ filter: /^\.\/session$/ }, (args) => {
+      if (args.importer === requestAuth) {
+        return { path: "@razzia/web/lib/session", namespace: "service" }
+      }
+    })
+
     builder.onResolve(
       { filter: /^(?:react(?:-dom)?(?:\/.*)?|zod)$/ },
       (args) => ({
@@ -240,6 +253,40 @@ function check(name, pass, details) {
   result.checks.push({ name, passed: Boolean(pass), ...details })
 }
 
+async function checkClockCalibration({ name, offset, ageSeconds, renew }) {
+  await page.goto(`http://127.0.0.1:${parent.address().port}`)
+  await frame()
+  await page.waitForTimeout(600)
+  const first = await capture()
+  const requestsAtLaunch = capabilityRequests
+  await page.evaluate((value) => {
+    window.__serverClockOffset = value
+    window.__render("question")
+  }, offset)
+
+  for (let second = 0; second < ageSeconds; second += 1) {
+    await page.clock.runFor(1000)
+    await page.evaluate(() => Promise.resolve())
+  }
+
+  const sameQuestion = await capture()
+  await page.evaluate(() => window.__render("question", "q2", { epoch: 3 }))
+  await page.waitForTimeout(750)
+  const next = await capture()
+  result.clockChecks.push({
+    name,
+    passed:
+      sameQuestion.document === first.document &&
+      next.document !== first.document &&
+      capabilityRequests === requestsAtLaunch + Number(renew) &&
+      errors.length === 0,
+    offset,
+    ageSeconds,
+    requestsAtLaunch,
+    capabilityRequests,
+  })
+}
+
 try {
   await page.goto(`http://127.0.0.1:${parent.address().port}`)
   await frame()
@@ -345,8 +392,24 @@ try {
     {},
   )
   check("no unexpected browser errors", errors.length === 0, { errors })
-  result.passed = result.checks.every((item) => item.passed)
   await page.screenshot({ path: path.join(evidence, "fallback.png") })
+  await checkClockCalibration({
+    name: "forward calibration does not renew a fresh launch capability",
+    offset: 600_000,
+    ageSeconds: 0,
+    renew: false,
+  })
+  await checkClockCalibration({
+    name: "backward calibration does not reuse an expired launch capability",
+    offset: -600_000,
+    ageSeconds: 301,
+    renew: true,
+  })
+  result.passed =
+    result.checks.length === 10 &&
+    result.checks.every((item) => item.passed) &&
+    result.clockChecks.length === result.expectedClockChecks &&
+    result.clockChecks.every((item) => item.passed)
 } catch (error) {
   result.error = String(error)
   result.errors = errors
