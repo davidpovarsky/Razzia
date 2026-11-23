@@ -411,7 +411,7 @@ test("native build may advance revision while preview and installation retain th
     })
     assert.equal(code(install), "CONSENT_REQUIRED")
     const visible = install.content.find((item) => item.type === "text")
-    assert(visible && visible.type === "text")
+    assert(visible?.type === "text")
     assert.deepEqual(JSON.parse(visible.text), {
       ok: false,
       code: "CONSENT_REQUIRED",
@@ -445,7 +445,7 @@ test("package consent text exposes only its exact package-save route", async () 
   try {
     const result = await h.call("install_package", args("install_package"))
     const visible = result.content.find((item) => item.type === "text")
-    assert(visible && visible.type === "text")
+    assert(visible?.type === "text")
     assert.deepEqual(JSON.parse(visible.text), {
       ok: false,
       code: "CONSENT_REQUIRED",

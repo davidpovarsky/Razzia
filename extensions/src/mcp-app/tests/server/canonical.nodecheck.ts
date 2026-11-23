@@ -45,7 +45,7 @@ test("one browser-compatible serializer binds exact adopted envelope and preserv
   assert.throws(() =>
     serializePreviewIdentity({
       ...input,
-      assetDigests: [input.assetDigests[0]!, input.assetDigests[0]!],
+      assetDigests: [input.assetDigests[0], input.assetDigests[0]],
     }),
   )
   assert.throws(() => canonicalJson({ n: Infinity }))

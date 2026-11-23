@@ -520,7 +520,7 @@ try {
   activePage = page
   inspect(page)
   const response = await context.request.get(
-    origin + "/api/extensions/catalogue",
+    `${origin}/api/extensions/catalogue`,
   )
   assert.equal(response.status(), 200)
   const { games } = await response.json()
@@ -539,9 +539,9 @@ try {
   const previews = new Map()
   for (const game of games) {
     const previewResponse = await context.request.get(
-      origin + "/api/extensions/preview/public/" + game.id,
+      `${origin}/api/extensions/preview/public/${game.id}`,
     )
-    assert.equal(previewResponse.status(), 200, game.id + " preview API")
+    assert.equal(previewResponse.status(), 200, `${game.id} preview API`)
     const payload = await previewResponse.json()
     assert.equal(payload.source.kind, "published-demo")
     assert.equal(payload.source.catalogueId, game.id)
@@ -556,14 +556,14 @@ try {
     )
     assert(!JSON.stringify(payload).includes("accountId"))
     const cover = await context.request.get(origin + game.coverUrl)
-    assert.equal(cover.status(), 200, "Public cover: " + game.id)
+    assert.equal(cover.status(), 200, `Public cover: ${game.id}`)
     assert.match(cover.headers()["content-type"], /^image\//)
     previews.set(game.id, payload)
   }
   assert.equal(
     (
       await context.request.get(
-        origin + "/api/extensions/preview/public/not-a-public-game",
+        `${origin}/api/extensions/preview/public/not-a-public-game`,
       )
     ).status(),
     404,
@@ -601,14 +601,14 @@ try {
     await page.emulateMedia({
       reducedMotion: animatedPreview ? "no-preference" : "reduce",
     })
-    await attempt("preview-" + game.id, async () => {
+    await attempt(`preview-${game.id}`, async () => {
       await goto(page, "/?view=store")
-      await page.locator('[data-catalogue-preview="' + game.id + '"]').click()
+      await page.locator(`[data-catalogue-preview="${game.id}"]`).click()
       await expect
         .poll(() => new URL(page.url()).searchParams.get("game"))
         .toBe(game.id)
       await readyPreview(page, 0)
-      await verifyViewerGeometry(page, { label: "preview-" + game.id })
+      await verifyViewerGeometry(page, { label: `preview-${game.id}` })
       const slider = page
         .locator('.game-preview-timeline input[type="range"]')
         .first()
@@ -616,7 +616,7 @@ try {
       const last = await slider.getAttribute("max")
       assert(
         Number(last) >= game.questionCount,
-        "Actual authored chapter timeline: " + game.id,
+        `Actual authored chapter timeline: ${game.id}`,
       )
       await slider.focus()
       await page.keyboard.press("End")
@@ -670,7 +670,7 @@ try {
             firstQuestion.answers.every((answer) => !answer.imageUrl),
           evidencePath: join(
             evidence,
-            "full-preview-question-sequence-" + game.id + ".json",
+            `full-preview-question-sequence-${game.id}.json`,
           ),
         })
         await stopQuestionSequence(nativeStage)
@@ -683,18 +683,18 @@ try {
 
       await imageDecode(page)
       await page.screenshot({
-        path: join(evidence, "preview-" + game.id + ".png"),
+        path: join(evidence, `preview-${game.id}.png`),
         fullPage: false,
       })
-      record("preview-" + game.id, {
+      record(`preview-${game.id}`, {
         chapters: Number(last) + 1,
         ...(nativeQuestionSequence ? { nativeQuestionSequence } : {}),
       })
     })
     await page.emulateMedia({ reducedMotion: "reduce" })
-    await attempt("play-" + game.id, async () => {
+    await attempt(`play-${game.id}`, async () => {
       await goto(page, "/?view=store")
-      await page.locator('[data-catalogue-open="' + game.id + '"]').click()
+      await page.locator(`[data-catalogue-open="${game.id}"]`).click()
       await expect(page.getByTestId("catalogue-play-sample")).toBeVisible()
       await expect(page.getByTestId("catalogue-use-game")).toBeVisible()
       await expect(page.getByTestId("catalogue-customise")).toBeVisible()
@@ -774,13 +774,13 @@ try {
         )
         assertGuessOffContract(nativeContract)
         writeFileSync(
-          join(evidence, "question-sequence-" + game.id + ".json"),
+          join(evidence, `question-sequence-${game.id}.json`),
           `${JSON.stringify(questionSequences, null, 2)}\n`,
         )
-        await screenshot(page, "complete-" + game.id)
+        await screenshot(page, `complete-${game.id}`)
         await next.click()
         await expect(gameRoot).toHaveAttribute("data-ggo-phase", "intro")
-        record("play-complete-" + game.id, {
+        record(`play-complete-${game.id}`, {
           rounds: votingRounds,
           replay: true,
           questionSequences: questionSequences.length,
@@ -833,7 +833,7 @@ try {
           if (index === 0) {
             await verifyNativePalette(page, game.themeId, "solo", evidence)
             await imageDecode(page)
-            await screenshot(page, "play-" + game.id)
+            await screenshot(page, `play-${game.id}`)
           }
 
           await next.click()
@@ -841,14 +841,14 @@ try {
         await expect(gameRoot).toHaveAttribute("data-game-phase", "finish")
         await stopQuestionSequence(gameRoot)
         writeFileSync(
-          join(evidence, "question-sequence-" + game.id + ".json"),
+          join(evidence, `question-sequence-${game.id}.json`),
           `${JSON.stringify(questionSequences, null, 2)}\n`,
         )
         await expect(next).toBeEnabled({ timeout: 30_000 })
-        await screenshot(page, "complete-" + game.id)
+        await screenshot(page, `complete-${game.id}`)
         await next.click()
         await expect(gameRoot).toHaveAttribute("data-game-phase", "intro")
-        record("play-complete-" + game.id, {
+        record(`play-complete-${game.id}`, {
           rounds: questions.length,
           replay: true,
           questionSequences: questionSequences.length,

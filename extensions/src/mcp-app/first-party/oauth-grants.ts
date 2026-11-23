@@ -322,7 +322,7 @@ export class FirstPartyOAuthGrants {
       .prepare("SELECT * FROM grants WHERE owner=? AND id=?")
       .get(accountId, grantId)
 
-    if (!raw || raw.state !== "active" || typeof raw.scope !== "string") {
+    if (raw?.state !== "active" || typeof raw.scope !== "string") {
       throw invalid()
     }
 
@@ -1103,7 +1103,7 @@ export class FirstPartyOAuthGrants {
     if (
       !grant.scopes.includes("tadazz.drafts.read") ||
       !grant.scopes.includes("tadazz.exports.read") ||
-      policy.canExport(context, draft, format) !== true
+      !policy.canExport(context, draft, format)
     ) {
       throw new ToolError("EXPORT_UNAVAILABLE")
     }

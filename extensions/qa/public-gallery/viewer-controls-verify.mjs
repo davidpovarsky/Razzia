@@ -45,7 +45,7 @@ function observeMedia() {
   const refs = []
   let nextId = 0
   const original = HTMLMediaElement.prototype.play
-  HTMLMediaElement.prototype.play = function () {
+  HTMLMediaElement.prototype.play = function play() {
     let state = states.get(this)
 
     if (!state) {
@@ -101,9 +101,7 @@ async function controlSnapshot(dialog, locale) {
     actions,
   )
   for (const action of actions) {
-    const button = controls.locator(
-      '[data-presentation-action="' + action + '"]',
-    )
+    const button = controls.locator(`[data-presentation-action="${action}"]`)
     await expect(button).toHaveAttribute(
       "aria-label",
       expectedLabels[locale][action],
@@ -189,44 +187,44 @@ export async function verifyViewerGeometry(
     })
   const metrics = await measure()
   const { stage, header, controls, viewport } = metrics
-  assert(stage && header && controls, label + ": complete shared viewer")
+  assert(stage && header && controls, `${label}: complete shared viewer`)
   assert(
     Math.abs(stage.width / stage.height / (16 / 9) - 1) <= 0.01,
-    label + ": true landscape 16:9",
+    `${label}: true landscape 16:9`,
   )
   assert(
     stage.x >= -1 &&
       stage.right <= viewport.width + 1 &&
       stage.y >= -1 &&
       stage.bottom <= viewport.height + 1,
-    label + ": entire stage fits the viewport",
+    `${label}: entire stage fits the viewport`,
   )
   assert(
     controls.y >= stage.bottom - 1,
-    label + ": controls stay outside the game picture",
+    `${label}: controls stay outside the game picture`,
   )
   assert(
     metrics.dialogOverflow <= 1 && metrics.pageOverflow <= 1,
-    label + ": no horizontal clipping",
+    `${label}: no horizontal clipping`,
   )
   assert.equal(
     metrics.detailsOpen,
     false,
-    label + ": secondary details start collapsed",
+    `${label}: secondary details start collapsed`,
   )
 
   if (desktop) {
     assert(
       stage.width >= viewport.width * 0.75,
-      label + ": game uses at least 75% of viewport width",
+      `${label}: game uses at least 75% of viewport width`,
     )
     assert(
       stage.height >= viewport.height * 0.6,
-      label + ": game uses at least 60% of viewport height",
+      `${label}: game uses at least 60% of viewport height`,
     )
     assert(
       header.height + controls.height <= 128,
-      label + ": compact header and toolbar",
+      `${label}: compact header and toolbar`,
     )
   }
 
@@ -311,7 +309,7 @@ const phaseAttribute = (id) =>
   id === "great-guessoff" ? "data-ggo-phase" : "data-game-phase"
 async function gotoDemo(page, origin, id, locale) {
   const response = await page.goto(
-    origin + "/?view=demo&game=" + encodeURIComponent(id) + "&lng=" + locale,
+    `${origin}/?view=demo&game=${encodeURIComponent(id)}&lng=${locale}`,
     { waitUntil: "domcontentloaded" },
   )
   assert.equal(response?.status(), 200)
@@ -545,10 +543,9 @@ export async function verifyPublicViewers({
           assert.deepEqual(
             controls,
             baseline,
-            "Identical root-owned button styles across every game: " +
-              id +
-              "/" +
-              locale,
+            `Identical root-owned button styles across every game: ${id}/${
+              locale
+            }`,
           )
         }
 
@@ -593,7 +590,7 @@ export async function verifyPublicViewers({
         ]) {
           await page.setViewportSize(viewport)
           geometries.push(
-            await verifyViewerGeometry(page, { label: id + "/" + locale }),
+            await verifyViewerGeometry(page, { label: `${id}/${locale}` }),
           )
           await retainedViewer(dialog, handles)
         }
@@ -641,10 +638,10 @@ export async function verifyPublicViewers({
           audio: audio ? { before: beforeAudio, after: audio } : null,
         }
         writeFileSync(
-          join(directory, "desktop-" + locale + "-" + id + ".json"),
+          join(directory, `desktop-${locale}-${id}.json`),
           `${JSON.stringify(detail, null, 2)}\n`,
         )
-        record("shared-viewer-desktop-" + locale + "-" + id, {
+        record(`shared-viewer-desktop-${locale}-${id}`, {
           viewports: 2,
           retainedRenderer: true,
           audioRetained: Boolean(audio),
@@ -662,12 +659,12 @@ export async function verifyPublicViewers({
           await dialog.getByTestId("game-viewer-expand").click()
           const detail = await verifyViewerGeometry(page, {
             desktop: false,
-            label: id + "/" + locale + "/" + viewport.width,
+            label: `${id}/${locale}/${viewport.width}`,
           })
           await page.screenshot({
             path: join(
               directory,
-              "mobile-" + locale + "-" + viewport.width + "-" + id + ".png",
+              `mobile-${locale}-${viewport.width}-${id}.png`,
             ),
           })
 
@@ -687,7 +684,7 @@ export async function verifyPublicViewers({
           }
 
           record(
-            "shared-viewer-mobile-" + locale + "-" + viewport.width + "-" + id,
+            `shared-viewer-mobile-${locale}-${viewport.width}-${id}`,
             detail,
           )
         }
@@ -781,7 +778,7 @@ export async function verifyStudioViewer(options) {
   const errors = []
   const failedAssets = []
   const results = []
-  const headers = { Authorization: "Bearer " + token }
+  const headers = { Authorization: `Bearer ${token}` }
   let ownedQuizId = undefined
 
   page.on("pageerror", (error) => errors.push(error.message))
@@ -807,7 +804,7 @@ export async function verifyStudioViewer(options) {
       ]) {
         await page.setViewportSize(viewport)
         const response = await page.goto(
-          origin + "/studio/explore?lng=" + locale,
+          `${origin}/studio/explore?lng=${locale}`,
           { waitUntil: "domcontentloaded" },
         )
         assert.equal(response?.status(), 200)
@@ -838,10 +835,7 @@ export async function verifyStudioViewer(options) {
           locale === "he" ? "rtl" : "ltr",
         )
         await page.screenshot({
-          path: join(
-            evidence,
-            "preview-" + locale + "-" + viewport.width + ".png",
-          ),
+          path: join(evidence, `preview-${locale}-${viewport.width}.png`),
         })
         await page.keyboard.press("Escape")
         await expect(openDialog(page)).toHaveCount(0)
@@ -852,8 +846,7 @@ export async function verifyStudioViewer(options) {
         await expect(openDialog(page)).toHaveCount(0)
         await expect(trigger).toBeFocused()
         results.push({
-          name:
-            "studio-preview-modal-keyboard-" + locale + "-" + viewport.width,
+          name: `studio-preview-modal-keyboard-${locale}-${viewport.width}`,
           passed: true,
           geometry,
         })
@@ -886,7 +879,7 @@ export async function verifyStudioViewer(options) {
         time: 5,
         media: {
           type: "image",
-          url: origin + "/tadazz-show/great-guessoff/banana.webp",
+          url: `${origin}/tadazz-show/great-guessoff/banana.webp`,
         },
       })),
     }
@@ -909,7 +902,7 @@ export async function verifyStudioViewer(options) {
       },
     }
     const saved = await context.request.post(
-      origin + "/api/extensions/quizzes",
+      `${origin}/api/extensions/quizzes`,
       { headers, data: { quizz, extras } },
     )
     assert.equal(
@@ -923,7 +916,7 @@ export async function verifyStudioViewer(options) {
     await page.emulateMedia({ reducedMotion: "no-preference" })
     await page.setViewportSize({ width: 1440, height: 900 })
     await page.goto(
-      origin + "/manager/quizz/" + encodeURIComponent(ownedQuizId) + "?lng=en",
+      `${origin}/manager/quizz/${encodeURIComponent(ownedQuizId)}?lng=en`,
     )
     const preview = page.getByTestId("question-live-preview")
     await expect(preview).toBeVisible({ timeout: 30_000 })
@@ -1185,7 +1178,7 @@ export async function verifyStudioViewer(options) {
 
     if (ownedQuizId) {
       const removed = await context.request.delete(
-        origin + "/api/extensions/quizzes/" + encodeURIComponent(ownedQuizId),
+        `${origin}/api/extensions/quizzes/${encodeURIComponent(ownedQuizId)}`,
         { headers },
       )
       assert.equal(

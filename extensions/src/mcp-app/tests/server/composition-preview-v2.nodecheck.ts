@@ -139,7 +139,7 @@ test("V2 binds revision, role, authored content, selected theme and native setti
 
 test("V2 retains explicit scope/card associations and rejects guessed or cloned preparation", () => {
   const show = authoredFixture()
-  show.cards[0]!.key = "constructor"
+  show.cards[0].key = "constructor"
   const input = previewInputFixture(show)
   const doc = document("razzia-original", true)
   const prepared = prepareCompositionPreviewV2(input, doc, {
@@ -203,7 +203,7 @@ test("V2 preserves and orders same-ID native family assets by their exact SHA pa
     () =>
       serializePreviewIdentity({
         ...identity,
-        assetDigests: [assets[0]!, assets[0]!],
+        assetDigests: [assets[0], assets[0]],
       }),
     /duplicate/,
   )

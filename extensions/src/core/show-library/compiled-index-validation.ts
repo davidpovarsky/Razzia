@@ -145,8 +145,7 @@ export function diagnoseCompiledArtifactBytes(
       const licenseFile = expected.get(license.artifactPath)
 
       if (
-        !licenseFile ||
-        licenseFile.kind !== "license" ||
+        licenseFile?.kind !== "license" ||
         licenseFile.sha256 !== license.sha256
       ) {
         issues.push(`license-file-mismatch:${license.artifactPath}`)

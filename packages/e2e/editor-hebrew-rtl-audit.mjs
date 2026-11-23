@@ -116,7 +116,7 @@ async function snapshot(name, focus) {
 async function widthShots(name, target, widths = [1440, 390, 320]) {
   for (const width of widths) {
     await page.setViewportSize({ width, height: 1000 })
-    await snapshot(name + "-" + width, target)
+    await snapshot(`${name}-${width}`, target)
   }
 }
 async function confirmType() {

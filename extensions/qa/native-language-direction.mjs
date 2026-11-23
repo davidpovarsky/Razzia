@@ -81,9 +81,9 @@ if (before) {
     throw new Error("Prior provider-only scope extraction failed")
   }
 
-  baselineBoundary =
-    'import {useMemo,type ReactNode} from "react";import {I18nextProvider,useTranslation} from "react-i18next";\n' +
+  baselineBoundary = `import {useMemo,type ReactNode} from "react";import {I18nextProvider,useTranslation} from "react-i18next";\n${
     baselineBoundary
+  }`
 }
 
 await fs.mkdir(evidence, { recursive: true })
@@ -131,13 +131,13 @@ const plugins = [
             }
           } catch {}
         }
-        throw new Error("Unresolved actual workspace " + args.path)
+        throw new Error(`Unresolved actual workspace ${args.path}`)
       })
       builder.onResolve({ filter: /^[^./]/ }, async (args) => {
         if (
           args.pluginData?.cachedDependency ||
           args.path.startsWith("@razzia/") ||
-          args.importer.startsWith(deps + "/")
+          args.importer.startsWith(`${deps}/`)
         ) {
           return
         }
@@ -153,7 +153,7 @@ const plugins = [
             return { path: resolved.path, external: resolved.external }
           }
         }
-        throw new Error("Unresolved cached browser dependency " + args.path)
+        throw new Error(`Unresolved cached browser dependency ${args.path}`)
       })
       builder.onLoad({ filter: /presentation-locale\.tsx$/ }, async (args) =>
         args.path === boundary
@@ -268,7 +268,7 @@ try {
   const page = await browser.newPage({ viewport: { width: 1366, height: 768 } })
   const errors = []
   page.on("pageerror", (e) => errors.push(e.message))
-  await page.goto("http://127.0.0.1:" + server.address().port)
+  await page.goto(`http://127.0.0.1:${server.address().port}`)
   await page.waitForFunction(() => window.languageStage?.language())
   const cases = [
     {
@@ -372,7 +372,7 @@ try {
       })
       .map((x) => x.index)
     check(
-      c.id + ": answer order follows show locale",
+      `${c.id}: answer order follows show locale`,
       JSON.stringify(reading) ===
         JSON.stringify(Array.from({ length: c.count }, (_, i) => i)),
       { reading },
@@ -382,7 +382,7 @@ try {
         ? observed.last.left >= observed.previous.right - 2
         : observed.last.right <= observed.previous.left + 2
     check(
-      c.id + ": terminal punctuation follows question content",
+      `${c.id}: terminal punctuation follows question content`,
       punctuation && observed.questionDirection === c.dir,
       {
         direction: observed.questionDirection,
@@ -391,7 +391,7 @@ try {
       },
     )
     check(
-      c.id + ": original answer index and correct choice stay bound",
+      `${c.id}: original answer index and correct choice stay bound`,
       JSON.stringify(voting.selection) === "[0]" &&
         observed.cards.every(
           (x) =>
@@ -399,18 +399,18 @@ try {
         ),
     )
     check(
-      c.id + ": question node persists through answers and reveal",
+      `${c.id}: question node persists through answers and reveal`,
       voting.sameQuestion &&
         observed.sameQuestion &&
         observed.questionCount === 1,
     )
     check(
-      c.id + ": per-show language leaves editor document unchanged",
+      `${c.id}: per-show language leaves editor document unchanged`,
       observed.language === c.locale && observed.documentDirection === "rtl",
     )
 
     if (c.id === "english-three" || c.id === "hebrew-three") {
-      await page.screenshot({ path: path.join(evidence, c.id + ".png") })
+      await page.screenshot({ path: path.join(evidence, `${c.id}.png`) })
     }
   }
   check("no browser runtime errors", errors.length === 0, { errors })

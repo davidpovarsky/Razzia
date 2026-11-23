@@ -46,7 +46,7 @@ for (const tool of ["save_game", "export_game"] as const) {
       }
       const first = data(await h.call(tool, args))
       const edited = show()
-      edited.cards[2]!.question = "Q3 changed"
+      edited.cards[2].question = "Q3 changed"
       assert.equal(
         data(
           await h.call("update_game_draft", {

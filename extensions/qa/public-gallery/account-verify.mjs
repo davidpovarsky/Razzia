@@ -66,7 +66,7 @@ try {
   const { computeCanonicalBaseDigest } =
     await import("../../src/core/digest.ts")
   const port = await reserveLoopbackPort()
-  const origin = "https://127.0.0.1:" + port
+  const origin = `https://127.0.0.1:${port}`
   host = await native.createNativeConsentHost({
     enabled: true,
     configRoot,
@@ -91,7 +91,7 @@ try {
     fetchImpl(origin + path, {
       ...init,
       headers: {
-        ...(token ? { Authorization: "Bearer " + token } : {}),
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...(init.body ? { "Content-Type": "application/json" } : {}),
         ...init.headers,
       },
@@ -111,7 +111,7 @@ try {
   for (const game of catalog) {
     beforePublic.set(
       game.id,
-      JSON.stringify(await json("/api/extensions/preview/public/" + game.id)),
+      JSON.stringify(await json(`/api/extensions/preview/public/${game.id}`)),
     )
   }
   const denied = await request(
@@ -138,18 +138,18 @@ try {
   const installed = new Map()
   for (const game of catalog) {
     const response = await request(
-      "/api/extensions/catalogue/" + game.id + "/install",
+      `/api/extensions/catalogue/${game.id}/install`,
       alice.token,
       { method: "POST", body: "{}" },
     )
-    assert.equal(response.status, 201, "First account installation: " + game.id)
+    assert.equal(response.status, 201, `First account installation: ${game.id}`)
     const result = await response.json()
     assert.equal(result.created, true)
-    assert.equal(result.editorUrl, "/manager/quizz/" + result.quizzId)
-    assert.equal(result.launchUrl, "/studio/prepare?quiz=" + result.quizzId)
-    const nativeQuiz = await json("/api/quizz/" + result.quizzId, alice.token)
+    assert.equal(result.editorUrl, `/manager/quizz/${result.quizzId}`)
+    assert.equal(result.launchUrl, `/studio/prepare?quiz=${result.quizzId}`)
+    const nativeQuiz = await json(`/api/quizz/${result.quizzId}`, alice.token)
     const extras = await json(
-      "/api/extensions/quizzes/" + result.quizzId,
+      `/api/extensions/quizzes/${result.quizzId}`,
       alice.token,
     )
     assert.equal(nativeQuiz.subject, game.title)
@@ -157,23 +157,23 @@ try {
     assert.equal(extras.extras.defaults.showTheme.id, game.themeId)
     assert(
       showThemeRegistry.get(game.themeId, "1.0.0"),
-      "Site-wide registered theme: " + game.themeId,
+      `Site-wide registered theme: ${game.themeId}`,
     )
     const reopenedPreview = await json(
-      "/api/extensions/preview/quizzes/" + result.quizzId,
+      `/api/extensions/preview/quizzes/${result.quizzId}`,
       alice.token,
     )
     assert.equal(reopenedPreview.source.kind, "account-owned")
     assert.equal(reopenedPreview.show.title, game.title)
     assert.equal(reopenedPreview.show.defaults.showTheme.id, game.themeId)
     assert.notEqual(
-      (await request("/api/quizz/" + result.quizzId, bob.token)).status,
+      (await request(`/api/quizz/${result.quizzId}`, bob.token)).status,
       200,
     )
     assert.notEqual(
       (
         await request(
-          "/api/extensions/preview/quizzes/" + result.quizzId,
+          `/api/extensions/preview/quizzes/${result.quizzId}`,
           bob.token,
         )
       ).status,
@@ -191,9 +191,9 @@ try {
   })
 
   const family = installed.get("family")
-  const nativeQuiz = await json("/api/quizz/" + family.quizzId, alice.token)
+  const nativeQuiz = await json(`/api/quizz/${family.quizzId}`, alice.token)
   const extrasReply = await json(
-    "/api/extensions/quizzes/" + family.quizzId,
+    `/api/extensions/quizzes/${family.quizzId}`,
     alice.token,
   )
   const editedTitle = "My private family gallery copy"
@@ -207,7 +207,7 @@ try {
     overrides: {},
   }
   const saved = await request(
-    "/api/extensions/quizzes/" + family.quizzId,
+    `/api/extensions/quizzes/${family.quizzId}`,
     alice.token,
     {
       method: "PUT",
@@ -233,11 +233,11 @@ try {
   assert.equal(reused.quizzId, family.quizzId)
   assert.equal(reused.created, false)
   assert.equal(
-    (await json("/api/quizz/" + family.quizzId, alice.token)).subject,
+    (await json(`/api/quizz/${family.quizzId}`, alice.token)).subject,
     editedTitle,
   )
   assert.equal(
-    (await json("/api/extensions/quizzes/" + family.quizzId, alice.token))
+    (await json(`/api/extensions/quizzes/${family.quizzId}`, alice.token))
       .extras.defaults.showTheme.id,
     "tadazz-midnight-club",
   )
@@ -256,7 +256,7 @@ try {
   const bobCopy = await other.json()
   assert.notEqual(bobCopy.quizzId, family.quizzId)
   const bobPreview = await json(
-    "/api/extensions/preview/quizzes/" + bobCopy.quizzId,
+    `/api/extensions/preview/quizzes/${bobCopy.quizzId}`,
     bob.token,
   )
   assert.equal(
@@ -267,7 +267,7 @@ try {
   assert.equal((await json("/api/quizz", bob.token)).quizz.length, 1)
   for (const game of catalog) {
     assert.equal(
-      JSON.stringify(await json("/api/extensions/preview/public/" + game.id)),
+      JSON.stringify(await json(`/api/extensions/preview/public/${game.id}`)),
       beforePublic.get(game.id),
       "Public master remains unchanged",
     )
@@ -299,7 +299,7 @@ try {
         child.once("exit", (code) =>
           code === 0
             ? resolveObservation()
-            : reject(new Error("Candidate public browser exited " + code)),
+            : reject(new Error(`Candidate public browser exited ${code}`)),
         )
       })
       record("candidate-public-catalogue-and-legacy-ten-full-play")
@@ -321,9 +321,9 @@ try {
       expectedQuestions: nativeQuiz.questions,
       themeDefinitions: showThemeRegistry.list(),
       evidence,
-      readQuiz: () => json("/api/quizz/" + family.quizzId, alice.token),
+      readQuiz: () => json(`/api/quizz/${family.quizzId}`, alice.token),
       readExtras: () =>
-        json("/api/extensions/quizzes/" + family.quizzId, alice.token),
+        json(`/api/extensions/quizzes/${family.quizzId}`, alice.token),
     })
     writeFileSync(
       join(evidence, "editor-receipt.json"),

@@ -77,7 +77,7 @@ async function begin() {
     code_challenge_method: "S256",
   })
   const response = await requireInitializedIssuer().fetch(
-    new Request(origin + "/oauth/authorize?" + query, {
+    new Request(`${origin}/oauth/authorize?${query}`, {
       headers: { host: new URL(origin).host },
     }),
   )

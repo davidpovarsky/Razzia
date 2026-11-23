@@ -448,8 +448,8 @@ try {
     "Authored question-to-scene conversion cancels safely and replaces only the selected duplicate",
     async () => {
       originalLegacyQuestionId = await page.evaluate(async (id) => {
-        const r = await fetch("/api/extensions/quizzes/" + id, {
-          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+        const r = await fetch(`/api/extensions/quizzes/${id}`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         })
 
         return (await r.json()).extras.questionIds[0]
@@ -559,8 +559,8 @@ try {
       await save()
       await reopen(legacyId)
       const snapshot = await page.evaluate(async (id) => {
-        const r = await fetch("/api/extensions/quizzes/" + id, {
-          headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+        const r = await fetch(`/api/extensions/quizzes/${id}`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
         })
 
         return r.json()

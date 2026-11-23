@@ -41,8 +41,8 @@ const receipts = JSON.parse(readFileSync("/out/format-receipts.json", "utf8"))
 const results = []
 for (const record of receipts) {
   const { path } = record
-  const before = readFileSync("/work/" + path, "utf8"),
-    after = readFileSync("/out/formatted/" + path, "utf8")
+  const before = readFileSync(`/work/${path}`, "utf8"),
+    after = readFileSync(`/out/formatted/${path}`, "utf8")
 
   if (hash(before) !== source[path]) {
     throw new Error(`Executed source mismatch: ${path}`)
@@ -63,7 +63,7 @@ for (const record of receipts) {
   const lang = getParserLanguage()
   const emit = async (text) =>
     (
-      await vite.transformWithOxc(text, "/work/" + path, {
+      await vite.transformWithOxc(text, `/work/${path}`, {
         lang,
         jsx: { runtime: "automatic" },
         sourcemap: false,

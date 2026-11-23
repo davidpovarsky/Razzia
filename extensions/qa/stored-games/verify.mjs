@@ -143,7 +143,7 @@ try {
   const { registerAndLoginAccount } =
     await import("../phase3-native-consent/oauth-flow.ts")
   const port = await reserveLoopbackPort()
-  const origin = "https://127.0.0.1:" + port
+  const origin = `https://127.0.0.1:${port}`
   assert(
     process.env.TADAZZ_SITE_DIST_DIR,
     "Actual built candidate web bundle required",
@@ -176,7 +176,7 @@ try {
       }
 
       assert(["GET", "HEAD"].includes(request.method))
-      url.pathname = "/api/media/raw/" + media[1]
+      url.pathname = `/api/media/raw/${media[1]}`
       const { app } = await import("@razzia/socket/app")
       mediaIngress.rewrittenRequests++
 
@@ -221,7 +221,7 @@ try {
   const browserSession = await browserLogin.json()
   assert.equal(typeof browserSession.token, "string")
   const browserOwner = await context.request.get(`${origin}/api/accounts/me`, {
-    headers: { Authorization: "Bearer " + browserSession.token },
+    headers: { Authorization: `Bearer ${browserSession.token}` },
   })
   assert.equal(browserOwner.status(), 200)
   assert.equal((await browserOwner.json()).id, registeredOwner.accountId)
@@ -237,7 +237,7 @@ try {
     localStorage.setItem("i18nextLng", "en")
   }, owner.token)
   const tenantRoot = join(configRoot, "tenants", owner.accountId)
-  assert(tenantRoot.startsWith(configRoot + "/tenants/"))
+  assert(tenantRoot.startsWith(`${configRoot}/tenants/`))
   for (const fixture of fixtures.games) {
     let receipt = undefined
 
@@ -276,7 +276,7 @@ try {
         mediaIngress.anonymousDeniedRequests++
       }
       writeFileSync(
-        join(tenantRoot, "quizz", fixture.quizz.id + ".json"),
+        join(tenantRoot, "quizz", `${fixture.quizz.id}.json`),
         JSON.stringify(fixture.quizz),
         { mode: 0o600 },
       )
@@ -284,7 +284,7 @@ try {
       if (fixture.extras) {
         assert.equal(fixture.extras.quizId, fixture.quizz.id)
         writeFileSync(
-          join(tenantRoot, "extensions/quizzes", fixture.quizz.id + ".json"),
+          join(tenantRoot, "extensions/quizzes", `${fixture.quizz.id}.json`),
           JSON.stringify(fixture.extras),
           { mode: 0o600 },
         )
@@ -307,7 +307,7 @@ try {
       receipt = {
         fixtureId: fixture.fixtureId,
         passed: false,
-        error: "fixture-setup: " + (error?.name ?? "Error"),
+        error: `fixture-setup: ${error?.name ?? "Error"}`,
         errorDigest: createHash("sha256")
           .update(String(error?.message ?? error))
           .digest("hex"),

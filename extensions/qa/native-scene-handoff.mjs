@@ -276,14 +276,14 @@ const plugins = [
             }
           } catch {}
         }
-        throw new Error("Unresolved candidate workspace import " + args.path)
+        throw new Error(`Unresolved candidate workspace import ${args.path}`)
       })
       builder.onResolve({ filter: /^[^./]/ }, async (args) => {
         const relative = path.relative(source, args.resolveDir)
 
         if (
           relative === ".." ||
-          relative.startsWith(".." + path.sep) ||
+          relative.startsWith(`..${path.sep}`) ||
           path.isAbsolute(relative)
         ) {
           return undefined
@@ -626,7 +626,7 @@ try {
       return promise
     }
   })
-  await page.goto("http://127.0.0.1:" + server.address().port)
+  await page.goto(`http://127.0.0.1:${server.address().port}`)
   await page.waitForFunction(() => window.handoff?.mode())
   const startAttemptCount = () =>
     page.evaluate(
@@ -971,7 +971,7 @@ try {
       (receivedTestCase) =>
         window.handoff.authored({
           kind: "scene",
-          key: "authored:" + receivedTestCase.name,
+          key: `authored:${receivedTestCase.name}`,
           scene: receivedTestCase.scene,
           activeSceneData: receivedTestCase.data,
         }),
@@ -1010,9 +1010,7 @@ try {
         }
       : null
     check(
-      "native " +
-        testCase.name +
-        " retains sole ownership after a parent re-render",
+      `native ${testCase.name} retains sole ownership after a parent re-render`,
       painted.mode === testCase.expectedMode &&
         painted.customVisible === false &&
         (!title ||

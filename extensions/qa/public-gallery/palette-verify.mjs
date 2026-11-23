@@ -7,7 +7,7 @@ import { join } from "node:path"
 
 const require = createRequire("/cleanup/extensions/package.json")
 const { expect } = require("@playwright/test")
-const rgb = (values) => "rgb(" + values.join(", ") + ")"
+const rgb = (values) => `rgb(${values.join(", ")})`
 const expected = {
   "tadazz-midnight-club": {
     mid: [20, 58, 88],
@@ -125,12 +125,12 @@ export async function verifyNativePalette(
       sample.question.backgroundImage,
 
       `linear-gradient(150deg, ${rgb(colors.mid)}, ${rgb(colors.night)})`,
-      context + " question palette",
+      `${context} question palette`,
     )
     assert.equal(
       sample.question.borderColor,
       rgb(colors.secondary),
-      context + " question border",
+      `${context} question border`,
     )
     assert.equal(
       sample.answer.backgroundImage,
@@ -138,26 +138,26 @@ export async function verifyNativePalette(
       `linear-gradient(165deg, ${rgb(colors.mid)}, ${rgb(
         colors.night,
       )} 49%, ${rgb(colors.mid)})`,
-      context + " answer palette",
+      `${context} answer palette`,
     )
     assert.equal(
       sample.answer.borderColor,
       rgb(sample.selected ? colors.accent : colors.secondary),
-      context + " answer border",
+      `${context} answer border`,
     )
 
     if (sample.monogram) {
       assert.equal(
         sample.monogram.color,
         rgb(colors.accent),
-        context + " monogram accent",
+        `${context} monogram accent`,
       )
     }
 
     assert.equal(
       sample.title.color,
       "rgb(255, 249, 239)",
-      context + " answer text",
+      `${context} answer text`,
     )
   } else {
     assert(
@@ -188,7 +188,7 @@ export async function verifyNativePalette(
     ["editor", "preview", "solo", "host"].includes(context)
   ) {
     await stage.screenshot({
-      path: join(evidence, "palette-" + context + "-" + themeId + ".png"),
+      path: join(evidence, `palette-${context}-${themeId}.png`),
     })
   }
 
@@ -261,41 +261,41 @@ export async function verifyCatalogueCovers(page, context, evidence) {
   for (const row of rows) {
     assert(
       row.cover?.width && row.cover?.height,
-      context + ": rendered artwork " + row.id,
+      `${context}: rendered artwork ${row.id}`,
     )
 
     if (row.title?.width && row.title?.height) {
       assert(
         inside(row.title, row.cover),
-        context + ": overlay title inside cover " + row.id,
+        `${context}: overlay title inside cover ${row.id}`,
       )
 
       if (row.trigger?.width && row.trigger?.height) {
         assert(
           !overlaps(row.title, row.trigger),
-          context + ": title clear of Preview " + row.id,
+          `${context}: title clear of Preview ${row.id}`,
         )
       }
     } else {
       assert(
         context.startsWith("public-"),
-        context + ": expected visible Studio cover title " + row.id,
+        `${context}: expected visible Studio cover title ${row.id}`,
       )
       assert(
         row.bodyTitle?.width && row.bodyTitle?.height,
-        context + ": visible body title " + row.id,
+        `${context}: visible body title ${row.id}`,
       )
       assert(
         inside(row.bodyTitle, row.card) &&
           row.bodyTitle.top >= row.cover.bottom - 1,
-        context + ": title inside card below artwork " + row.id,
+        `${context}: title inside card below artwork ${row.id}`,
       )
     }
 
     if (row.trigger?.width && row.trigger?.height) {
       assert(
         inside(row.trigger, row.cover),
-        context + ": Preview inside artwork " + row.id,
+        `${context}: Preview inside artwork ${row.id}`,
       )
     }
 
@@ -303,7 +303,7 @@ export async function verifyCatalogueCovers(page, context, evidence) {
       for (let b = a + 1; b < row.controls.length; b += 1) {
         assert(
           !overlaps(row.controls[a], row.controls[b]),
-          context + ": explicit card actions do not overlap " + row.id,
+          `${context}: explicit card actions do not overlap ${row.id}`,
         )
       }
     }

@@ -190,7 +190,7 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
   const metadataPath = `/.well-known/oauth-authorization-server${base === "" ? "" : base}`
 
   const budget = new IngressBudget()
-  const issued = new WeakSet<object>()
+  const issued = new WeakSet()
   const verify = createAccessTokenVerifier({
     config: protocol.config,
     keys: [

@@ -247,7 +247,10 @@ test("SQLite audit failure rolls draft and operation back together", async () =>
   const priorRows3 = rows(requireInitializedF().sessions[0].owner)
   const original = DatabaseSync.prototype.prepare
   let attemptedAfterDraftAndOperation = false
-  DatabaseSync.prototype.prepare = function (this: DatabaseSync, sql: string) {
+  DatabaseSync.prototype.prepare = function prepare(
+    this: DatabaseSync,
+    sql: string,
+  ) {
     if (sql.startsWith("INSERT INTO audit(")) {
       const drafts = original
         .call(this, "SELECT count(*) AS n FROM drafts")
@@ -282,7 +285,7 @@ test("revoke between precommit check and COMMIT hides outcome but honestly prese
   const priorRows4 = rows(session.owner)
   const original = DatabaseSync.prototype.exec
   let committed = false
-  DatabaseSync.prototype.exec = function (this: DatabaseSync, sql: string) {
+  DatabaseSync.prototype.exec = function exec(this: DatabaseSync, sql: string) {
     if (sql === "COMMIT" && !committed) {
       committed = true
       requireInitializedF().accounts.revokeAccountSession(session.sid)

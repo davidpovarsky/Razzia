@@ -12,7 +12,7 @@ export async function verifyGuestAdmission(options) {
   assert.equal(new URL(options.origin).hostname, "127.0.0.1")
   const { browser, context, origin, token, evidence } = options
   assert(browser && context && options.page && options.player && options.room)
-  const headers = { Authorization: "Bearer " + token }
+  const headers = { Authorization: `Bearer ${token}` }
   const results = []
   const created = []
   const errors = []
@@ -25,7 +25,7 @@ export async function verifyGuestAdmission(options) {
   }
   const presence = async (room) => {
     const response = await context.request.get(
-      origin + "/api/games/" + room.gameId + "/roster",
+      `${origin}/api/games/${room.gameId}/roster`,
       { headers },
     )
     assert.equal(response.status(), 200, "Owner roster readback")
@@ -36,7 +36,7 @@ export async function verifyGuestAdmission(options) {
   }
   const policy = async (room, value) => {
     const response = await context.request.patch(
-      origin + "/api/games/" + room.gameId + "/roster/settings",
+      `${origin}/api/games/${room.gameId}/roster/settings`,
       { headers, data: value },
     )
     assert.equal(response.status(), 200, "Owner admission policy update")
@@ -57,7 +57,7 @@ export async function verifyGuestAdmission(options) {
     return { context: owned, page }
   }
   const enter = async (page, pin, name) => {
-    await page.goto(origin + "/game?pin=" + encodeURIComponent(pin))
+    await page.goto(`${origin}/game?pin=${encodeURIComponent(pin)}`)
     await expect(page.getByPlaceholder("Username here")).toBeVisible({
       timeout: 30_000,
     })
@@ -96,7 +96,7 @@ export async function verifyGuestAdmission(options) {
     )
     assert(original && original.clientId, `${label} has an admitted identity`)
     await page.reload()
-    await expect(page).toHaveURL(origin + "/party/" + room.gameId)
+    await expect(page).toHaveURL(`${origin}/party/${room.gameId}`)
     await expect
       .poll(
         async () => {
@@ -142,7 +142,7 @@ export async function verifyGuestAdmission(options) {
     const originalViewport = host.viewportSize()
     const owned = []
     const ownedRosterIds = new Set()
-    const endpoint = origin + "/api/games/" + room.gameId + "/roster/settings"
+    const endpoint = `${origin}/api/games/${room.gameId}/roster/settings`
     const rejectSave = (route) =>
       route.fulfill({
         status: 403,
@@ -203,7 +203,7 @@ export async function verifyGuestAdmission(options) {
         "Fresh anonymous session exists independently of site account",
       )
       const unauthorized = await guest.context.request.patch(endpoint, {
-        headers: { Authorization: "Bearer " + guestToken },
+        headers: { Authorization: `Bearer ${guestToken}` },
         data: { allowUnregisteredPlayers: true },
       })
       assert(
@@ -219,7 +219,7 @@ export async function verifyGuestAdmission(options) {
       const registeredName = `Registered ${label}`
 
       const added = await context.request.post(
-        origin + "/api/games/" + room.gameId + "/roster",
+        `${origin}/api/games/${room.gameId}/roster`,
         { headers, data: { displayName: registeredName } },
       )
       assert.equal(added.status(), 200)
@@ -237,7 +237,7 @@ export async function verifyGuestAdmission(options) {
         200,
         "Pre-registered participant is accepted while OFF",
       )
-      await expect(registered.page).toHaveURL(origin + "/party/" + room.gameId)
+      await expect(registered.page).toHaveURL(`${origin}/party/${room.gameId}`)
       const registeredRow = await joinedRow(room, registeredName)
       assert.equal(registeredRow.rosterPlayerId, registeredId)
       results.push({
@@ -274,7 +274,7 @@ export async function verifyGuestAdmission(options) {
         200,
         `${label} ON allows the previously rejected guest`,
       )
-      await expect(guest.page).toHaveURL(origin + "/party/" + room.gameId)
+      await expect(guest.page).toHaveURL(`${origin}/party/${room.gameId}`)
       const guestRow = await joinedRow(room, guestName)
       ownedRosterIds.add(guestRow.rosterPlayerId)
       await keyboardToggle(false)
@@ -366,11 +366,7 @@ export async function verifyGuestAdmission(options) {
       await policy(room, { phoneInviteOnly: original.phoneInviteOnly })
       for (const id of ownedRosterIds) {
         const response = await context.request.delete(
-          origin +
-            "/api/games/" +
-            room.gameId +
-            "/roster/" +
-            encodeURIComponent(id),
+          `${origin}/api/games/${room.gameId}/roster/${encodeURIComponent(id)}`,
           { headers },
         )
         assert(
@@ -405,14 +401,14 @@ export async function verifyGuestAdmission(options) {
       gameMode: originalQuiz.gameMode,
       questions: [structuredClone(originalQuiz.questions[0])],
     }
-    const saved = await context.request.post(origin + "/api/quizz", {
+    const saved = await context.request.post(`${origin}/api/quizz`, {
       headers,
       data: nativeCopy,
     })
     assert.equal(saved.status(), 201, "Create only a disposable native quiz")
     const nativeQuiz = await saved.json()
     assert(nativeQuiz.id)
-    const createdRoom = await context.request.post(origin + "/api/games", {
+    const createdRoom = await context.request.post(`${origin}/api/games`, {
       headers,
       data: { quizzId: nativeQuiz.id },
     })
@@ -422,7 +418,7 @@ export async function verifyGuestAdmission(options) {
 
     nativeHost = await context.newPage()
     track(nativeHost)
-    await nativeHost.goto(origin + "/party/manager/" + room.gameId + "?lng=en")
+    await nativeHost.goto(`${origin}/party/manager/${room.gameId}?lng=en`)
     await expect(nativeHost.getByTestId("platform-opening-start")).toBeEnabled({
       timeout: 30_000,
     })

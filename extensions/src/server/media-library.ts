@@ -48,7 +48,7 @@ const sameBinary = (
   expected: BinarySnapshot | undefined,
   objectIdentity = true,
 ) =>
-  !!expected &&
+  Boolean(expected) &&
   actual.sha256 === expected.sha256 &&
   actual.length === expected.length &&
   (!objectIdentity ||

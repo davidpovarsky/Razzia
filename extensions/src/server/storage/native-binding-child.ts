@@ -117,7 +117,7 @@ function main() {
     const original = native.getQuizzById(descriptor.quizId)
     const extras = readSidecar(native.getPath, descriptor.quizId)
 
-    if (!extras || extras.schemaVersion !== 2) {
+    if (extras?.schemaVersion !== 2) {
       throw new Error("Expected real native V2 sidecar")
     }
 

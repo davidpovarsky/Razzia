@@ -133,7 +133,7 @@ function seedExternalMirror(fixtureRoot, config, tenantRelative, media) {
       asset.sourceHttpStatus === 200 &&
       asset.contentType === "image/png" &&
       Number.isFinite(Date.parse(asset.verifiedAt)) &&
-      asset.targetRelativePath === "media/qa-external-" + asset.sha256 + ".png",
+      asset.targetRelativePath === `media/qa-external-${asset.sha256}.png`,
     "EXTERNAL_PROVENANCE",
   )
   const bytes = fixtureBytes(fixtureRoot, asset)
@@ -148,7 +148,7 @@ function seedExternalMirror(fixtureRoot, config, tenantRelative, media) {
   )
   copyVerified(
     config,
-    tenantRelative + "/" + asset.targetRelativePath,
+    `${tenantRelative}/${asset.targetRelativePath}`,
     bytes,
     asset.sha256,
   )
@@ -157,7 +157,7 @@ function seedExternalMirror(fixtureRoot, config, tenantRelative, media) {
     ...summary(media, "offline-mirror-seeded"),
     mirror: {
       sourceUrl: asset.sourceUrl,
-      nativeUrl: "/" + asset.targetRelativePath,
+      nativeUrl: `/${asset.targetRelativePath}`,
       sha256: asset.sha256,
       bytes: asset.bytes,
       contentType: asset.contentType,
@@ -206,7 +206,7 @@ export async function seedStoredGameMedia({
       Array.isArray(packageRecords),
     "MANIFEST_REQUIRED",
   )
-  const tenantRelative = "tenants/" + accountId
+  const tenantRelative = `tenants/${accountId}`
   const tenantRoot = checkedPath(config, tenantRelative)
   mkdirSync(tenantRoot, { recursive: true, mode: 0o700 })
   const result = {
@@ -241,7 +241,7 @@ export async function seedStoredGameMedia({
       )
       copyVerified(
         config,
-        tenantRelative + "/" + media.targetRelativePath,
+        `${tenantRelative}/${media.targetRelativePath}`,
         bytes,
         media.sha256,
       )
@@ -314,25 +314,19 @@ export async function seedStoredGameMedia({
       const entry = record.report.manifest.files.find(
         (file) =>
           !["descriptor", "source", "style", "font"].includes(file.kind) &&
-          "pkg_" +
-            record.source.slice(0, 24) +
-            "_" +
-            file.sha256 +
-            "." +
-            file.path.split(".").at(-1).toLowerCase() ===
-            name,
+          `pkg_${record.source.slice(0, 24)}_${file.sha256}.${file.path
+            .split(".")
+            .at(-1)
+            .toLowerCase()}` === name,
       )
       requireFixture(
         entry?.sha256 === media.sha256 && entry.bytes === media.bytes,
         "PACKAGE_ASSET_METADATA",
       )
-      const relative =
-        path
-          .relative(config, store.tenantRoot(accountId))
-          .split(path.sep)
-          .join("/") +
-        "/objects/" +
-        media.sha256
+      const relative = `${path
+        .relative(config, store.tenantRoot(accountId))
+        .split(path.sep)
+        .join("/")}/objects/${media.sha256}`
       copyVerified(config, relative, bytes, media.sha256)
     }
 

@@ -76,13 +76,19 @@ const result = await build({
             ),
           }),
         )
-        bundler.onLoad({ filter: /original-themes\.css$/ }, async (loadArgs) => {
-          if (loadArgs.path !== originalStyle) {
-            return
-          }
+        bundler.onLoad(
+          { filter: /original-themes\.css$/ },
+          async (loadArgs) => {
+            if (loadArgs.path !== originalStyle) {
+              return
+            }
 
-          return { contents: await readFile(loadArgs.path, "utf8"), loader: "text" }
-        })
+            return {
+              contents: await readFile(loadArgs.path, "utf8"),
+              loader: "text",
+            }
+          },
+        )
         bundler.onResolve(
           { filter: /^\/(tadazz-show|sounds)\// },
           (resolveArgs) => ({

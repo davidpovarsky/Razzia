@@ -19,7 +19,7 @@ function requireBoundaryDocument(value: unknown): BuilderDocument {
     throw new Error("qa:invalid-builder-body")
   }
 
-  const document = value.document
+  const { document } = value
 
   if (!isRawBoundaryDocument(document)) {
     throw new Error("qa:transformed-builder-document")

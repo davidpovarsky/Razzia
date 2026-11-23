@@ -187,7 +187,7 @@ async function begin(changes: Record<string, string> = {}) {
     ...changes,
   }
   const response = await request(
-    "/oauth/authorize?" + new URLSearchParams(params),
+    `/oauth/authorize?${new URLSearchParams(params)}`,
   )
 
   return {

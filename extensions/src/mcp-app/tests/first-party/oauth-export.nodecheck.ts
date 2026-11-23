@@ -210,19 +210,16 @@ async function linked(
 ) {
   const verifier = randomBytes(32).toString("base64url")
   const response = await api(
-    "/oauth/authorize?" +
-      new URLSearchParams({
-        response_type: "code",
-        client_id: clientId,
-        redirect_uri: redirectUri,
-        resource: config.resource,
-        scope: scopes.join(" "),
-        state: key(),
-        code_challenge: createHash("sha256")
-          .update(verifier)
-          .digest("base64url"),
-        code_challenge_method: "S256",
-      }),
+    `/oauth/authorize?${new URLSearchParams({
+      response_type: "code",
+      client_id: clientId,
+      redirect_uri: redirectUri,
+      resource: config.resource,
+      scope: scopes.join(" "),
+      state: key(),
+      code_challenge: createHash("sha256").update(verifier).digest("base64url"),
+      code_challenge_method: "S256",
+    })}`,
   )
   assert.equal(response.status, 302)
   const ticket = requireOAuthObservationPresent(

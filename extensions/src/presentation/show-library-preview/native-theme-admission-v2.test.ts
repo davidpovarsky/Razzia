@@ -14,7 +14,7 @@ const built = families.map((family) => ({
   definitionSha256: family.definitionSha256,
 }))
 const bindingFor = (index: number) => {
-  const family = families[index]!
+  const family = families[index]
 
   return nativePreviewThemeBindingV2Schema.parse({
     format: "tadazz-native-preview-theme",
@@ -76,7 +76,7 @@ describe("V2 exact built native theme admission", () => {
       "unbuilt-native-definition",
     )
     expect(() =>
-      resolveBundledPreviewThemeV2(binding, [...built, built[0]!]),
+      resolveBundledPreviewThemeV2(binding, [...built, built[0]]),
     ).toThrow("unbuilt-native-definition")
     expect(() =>
       resolveBundledPreviewThemeV2(

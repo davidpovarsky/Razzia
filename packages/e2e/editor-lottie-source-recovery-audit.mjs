@@ -54,7 +54,7 @@ try {
     "",
   )
   const initial = await asset.inputValue()
-  const player = page.getByTestId("cinematic-overlay-player-" + id)
+  const player = page.getByTestId(`cinematic-overlay-player-${id}`)
   await expect(player).toHaveAttribute("data-lottie-ready", "true", {
     timeout: 25000,
   })
@@ -73,7 +73,7 @@ try {
   checks.push("Controlled scrub advances actual rendered frames")
   await asset.fill("/media/deliberately-missing-editor-lottie.json")
   const err = page
-    .getByTestId("cinematic-overlay-" + id)
+    .getByTestId(`cinematic-overlay-${id}`)
     .locator("[data-lottie-error]")
   await expect(err).toHaveAttribute("data-lottie-error", /deliberately-missing/)
   const before = await err.getAttribute("data-lottie-error")

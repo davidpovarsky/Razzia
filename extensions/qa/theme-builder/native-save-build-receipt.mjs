@@ -32,7 +32,7 @@ for (const id of graph.modules) {
   const mount = mounts.find(
     (m) =>
       observedRealpath === m.destination ||
-      observedRealpath.startsWith(m.destination + "/"),
+      observedRealpath.startsWith(`${m.destination}/`),
   )
 
   if (!mount) {
@@ -50,7 +50,7 @@ for (const id of graph.modules) {
 }
 const foreign = JSON.parse(readFileSync("/out/foreign-inputs.json", "utf8"))
 for (const input of foreign.inputs) {
-  const observed = inputs.find((value) => value.id === "/work/" + input.path)
+  const observed = inputs.find((value) => value.id === `/work/${input.path}`)
 
   if (!observed || observed.sha256 !== input.sha256) {
     throw new Error(`F DTO source mismatch: ${input.path}`)
@@ -60,7 +60,7 @@ const outputs = []
 function visit(root, prefix = "") {
   for (const entry of readdirSync(root, { withFileTypes: true })) {
     const path = prefix + entry.name,
-      absolute = root + "/" + entry.name
+      absolute = `${root}/${entry.name}`
 
     if (entry.isDirectory()) {
       visit(absolute, `${path}/`)

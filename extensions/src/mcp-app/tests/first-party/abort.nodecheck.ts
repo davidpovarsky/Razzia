@@ -71,7 +71,7 @@ test("post-body abort retains pending real authentication work and creates no pr
       }
 
       // Actual WebCrypto verification, not a fabricated valid-token result.
-      return Reflect.apply(original, subtle, args) as Promise<boolean>
+      return Reflect.apply(original, subtle, args)
     },
   })
   const beforeState = snapshot(requireInitializedF().root)
@@ -189,7 +189,7 @@ test("postcommit abort withholds disclosure without claiming rollback", async ()
   const controller = new AbortController()
   const original = DatabaseSync.prototype.exec
   let committed = false
-  DatabaseSync.prototype.exec = function (this: DatabaseSync, sql: string) {
+  DatabaseSync.prototype.exec = function exec(this: DatabaseSync, sql: string) {
     const result = original.call(this, sql)
 
     if (sql === "COMMIT") {

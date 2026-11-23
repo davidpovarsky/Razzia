@@ -113,7 +113,7 @@ function isLegacyPlaceholderAudio(audio: AudioExtras | undefined): boolean {
         cue?.source === "default" &&
         !cue.url &&
         cue.volume === 0.8 &&
-        cue.enabled === true &&
+        cue.enabled &&
         cue.loop === (cueId === "answersMusic")
       )
     }),

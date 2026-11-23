@@ -235,9 +235,7 @@ export function requireObservedRecord(value: unknown): Record<string, unknown> {
   return value
 }
 
-function isObservedShow(
-  value: unknown,
-): value is Record<string, unknown> & {
+function isObservedShow(value: unknown): value is Record<string, unknown> & {
   cards: Array<Record<string, unknown>>
 } {
   return (

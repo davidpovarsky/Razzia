@@ -36,7 +36,7 @@ export function validateContext(
   action: Action,
   now = Date.now(),
 ) {
-  if (!context || context.verified !== true) {
+  if (context?.verified !== true) {
     throw new Denied("service_required")
   }
 

@@ -74,7 +74,7 @@ export function createShowLibraryRegistry(
 
     const root = nodes.get(template.rootNodeId)
 
-    if (!root || root.port !== "stage-root") {
+    if (root?.port !== "stage-root") {
       throw new Error("show-library:invalid-root")
     }
 

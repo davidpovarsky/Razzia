@@ -154,7 +154,7 @@ export async function verifyPlatformDefaults(options) {
   assert(token && browser && context, "Existing authenticated fixture required")
   const evidence = join(options.evidence, "platform-refinement")
   mkdirSync(evidence, { recursive: true })
-  const headers = { Authorization: "Bearer " + token }
+  const headers = { Authorization: `Bearer ${token}` }
   const results = []
   const created = []
   const errors = []
@@ -175,7 +175,7 @@ export async function verifyPlatformDefaults(options) {
     assert.equal(
       response.status(),
       201,
-      path + ": " + (await response.text()).slice(0, 500),
+      `${path}: ${(await response.text()).slice(0, 500)}`,
     )
 
     return response.json()
@@ -185,7 +185,7 @@ export async function verifyPlatformDefaults(options) {
     pageRoles.set(page, role)
     await page.addInitScript(recordMedia)
     await page.emulateMedia({ reducedMotion: "no-preference" })
-    page.on("pageerror", (error) => errors.push(role + ": " + error.message))
+    page.on("pageerror", (error) => errors.push(`${role}: ${error.message}`))
     page.on("response", (response) => {
       const path = new URL(response.url()).pathname
 
@@ -240,7 +240,7 @@ export async function verifyPlatformDefaults(options) {
     opening,
   }) => {
     const quizz = {
-      subject: "Platform acceptance " + theme + " " + randomUUID(),
+      subject: `Platform acceptance ${theme} ${randomUUID()}`,
       gameMode: "quiz",
       questions: [
         {
@@ -333,7 +333,7 @@ export async function verifyPlatformDefaults(options) {
     assert(quizId, "Saved disposable quiz ID")
     const room = await post("/api/games", { quizzId: quizId })
     const settings = await context.request.patch(
-      origin + "/api/games/" + room.gameId + "/settings",
+      `${origin}/api/games/${room.gameId}/settings`,
       {
         headers,
         data: {
@@ -348,7 +348,7 @@ export async function verifyPlatformDefaults(options) {
       "Bounded progression in this disposable room",
     )
     const policy = await context.request.patch(
-      origin + "/api/games/" + room.gameId + "/roster/settings",
+      `${origin}/api/games/${room.gameId}/roster/settings`,
       { headers, data: { allowUnregisteredPlayers: true } },
     )
     assert.equal(policy.status(), 200, "Open only this disposable room")
@@ -360,8 +360,8 @@ export async function verifyPlatformDefaults(options) {
       finale,
       opening,
     })
-    const host = await watch(await context.newPage(), "host-" + theme)
-    await host.goto(origin + "/party/manager/" + room.gameId + "?lng=en")
+    const host = await watch(await context.newPage(), `host-${theme}`)
+    await host.goto(`${origin}/party/manager/${room.gameId}?lng=en`)
     await expect(host.getByTestId("platform-opening-start")).toBeEnabled({
       timeout: 30_000,
     })
@@ -372,7 +372,7 @@ export async function verifyPlatformDefaults(options) {
   const enter = async (room, name) => {
     const player = await anonymous(name, { width: 390, height: 844 })
     await player.goto(
-      origin + "/game?pin=" + encodeURIComponent(room.inviteCode),
+      `${origin}/game?pin=${encodeURIComponent(room.inviteCode)}`,
     )
     await expect(player.getByPlaceholder("Username here")).toBeVisible({
       timeout: 30_000,
@@ -385,7 +385,7 @@ export async function verifyPlatformDefaults(options) {
     )
     await player.getByRole("button", { name: "Submit", exact: true }).click()
     assert.equal((await joined).status(), 200, "Disposable player joins")
-    await expect(player).toHaveURL(origin + "/party/" + room.gameId)
+    await expect(player).toHaveURL(`${origin}/party/${room.gameId}`)
 
     return player
   }
@@ -460,7 +460,7 @@ export async function verifyPlatformDefaults(options) {
     ]) {
       const { host, room } = await fixture({ theme, legacy, finale })
       const display = await anonymous(`display-${theme}`)
-      await display.goto(origin + "/display/" + room.gameId + "?lng=en")
+      await display.goto(`${origin}/display/${room.gameId}?lng=en`)
       await expect(
         display.getByTestId("platform-game-opening"),
       ).toHaveAttribute("data-platform-opening-stage", "standby")
@@ -584,7 +584,7 @@ export async function verifyPlatformDefaults(options) {
         const phaseCues = (await mediaState(host)).events
           .filter((event) => event.name === "phase-showQuestion")
           .map((event) => event.identity)
-        assert.deepEqual(phaseCues, [room.gameId + ":1:phase:showQuestion"])
+        assert.deepEqual(phaseCues, [`${room.gameId}:1:phase:showQuestion`])
         record("native-question-handoff-emits-one-authoritative-phase-cue")
       }
 
@@ -829,7 +829,7 @@ export async function verifyPlatformDefaults(options) {
           })),
         }))
         .catch((failure) => ({ error: String(failure) }))
-      const screenshot = "failure-page-" + index + ".png"
+      const screenshot = `failure-page-${index}.png`
       await page.screenshot({ path: join(evidence, screenshot) }).catch(() => {
         /* Keep the recorded audit outcome if its diagnostic screenshot is unavailable. */
       })

@@ -70,7 +70,7 @@ export async function verifyGalleryEditor(options) {
     const panel = page.getByTestId("editor-panel-themes")
     await expect(panel).toBeVisible()
     for (const theme of options.themeDefinitions) {
-      await expect(panel.getByTestId("show-theme-" + theme.id)).toHaveCount(1)
+      await expect(panel.getByTestId(`show-theme-${theme.id}`)).toHaveCount(1)
     }
 
     return panel
@@ -151,7 +151,7 @@ export async function verifyGalleryEditor(options) {
       )
       await page.getByTestId("editor-save-btn").click()
       assert.equal((await saved).status(), 200, "Native editor composite save")
-      await page.waitForURL(options.origin + "/studio/games")
+      await page.waitForURL(`${options.origin}/studio/games`)
       await openEditor()
       await expect(page.getByTestId("editor-save-btn")).toBeVisible()
       await expect(page.locator('input[name="subject"]')).toHaveValue(
@@ -209,7 +209,7 @@ export async function verifyGalleryEditor(options) {
     }
     await page.getByTestId("editor-panel-close-themes").click()
 
-    await page.goto(options.origin + "/studio/explore")
+    await page.goto(`${options.origin}/studio/explore`)
     await expect(page.locator("[data-catalogue-card]")).toHaveCount(
       PUBLIC_GALLERY_IDS.length,
     )
@@ -237,16 +237,16 @@ export async function verifyGalleryEditor(options) {
       passed: true,
     })
 
-    await page.goto(options.origin + "/?view=product&game=family")
+    await page.goto(`${options.origin}/?view=product&game=family`)
     await page.getByTestId("catalogue-customise").click()
     await expect(page).toHaveURL(options.origin + editor)
     await expect(page.locator('input[name="subject"]')).toHaveValue(
       options.expectedTitle,
     )
-    await page.goto(options.origin + "/?view=product&game=family")
+    await page.goto(`${options.origin}/?view=product&game=family`)
     let capturedRoom = undefined
 
-    await page.route(options.origin + "/api/games", async (route) => {
+    await page.route(`${options.origin}/api/games`, async (route) => {
       if (route.request().method() !== "POST") {
         await route.continue()
 
@@ -267,7 +267,7 @@ export async function verifyGalleryEditor(options) {
     assert.equal(capturedRoom.quizId, options.quizId)
     const room = capturedRoom.body
     await expect(page).toHaveURL(
-      options.origin + "/party/manager/" + room.gameId,
+      `${options.origin}/party/manager/${room.gameId}`,
     )
     await expect(page.getByTestId("platform-opening-start")).toBeEnabled({
       timeout: 30_000,
@@ -308,12 +308,12 @@ export async function verifyGalleryEditor(options) {
     )
     const player = await playerContext.newPage()
     player.on("pageerror", (error) =>
-      pageErrors.push("player: " + error.message),
+      pageErrors.push(`player: ${error.message}`),
     )
-    await player.goto(options.origin + "/game?pin=" + encodeURIComponent(pin))
+    await player.goto(`${options.origin}/game?pin=${encodeURIComponent(pin)}`)
     await player.getByPlaceholder("Username here").fill("Gallery QA player")
     await player.getByRole("button", { name: "Submit", exact: true }).click()
-    await expect(player).toHaveURL(options.origin + "/party/" + room.gameId)
+    await expect(player).toHaveURL(`${options.origin}/party/${room.gameId}`)
     await expect(
       page
         .getByRole("status")

@@ -67,7 +67,7 @@ describe("same-origin native OAuth consent client", () => {
     expect(await client.approve(ticket, result)).toBe(
       "https://client.invalid/callback?code=exact%2Fcode&state=original",
     )
-    const [path, options] = request.mock.calls[1]!
+    const [path, options] = request.mock.calls[1]
     expect(path).toBe("/oauth/approve")
     expect(options).toMatchObject({
       credentials: "same-origin",

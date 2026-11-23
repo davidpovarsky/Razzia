@@ -29,7 +29,7 @@ test("validated same-draft content edit, CAS conflict, key replay and no read wr
     )
     assert.equal(created.draftId, replay.draftId)
     assert.equal(h.store.records.size, 1)
-    authored.cards[2]!.question = "Edited Q3"
+    authored.cards[2].question = "Edited Q3"
     const result = await h.call("update_game_draft", {
       draftId: created.draftId,
       expectedRevision: 1,
@@ -105,7 +105,7 @@ test("actual authoring answer bounds are preserved without a renderer-support cl
   try {
     for (const count of [0, 1, 2, 5, 6, 64]) {
       const authored = show()
-      authored.cards[0]!.answers = Array.from({ length: count }, (_, i) => ({
+      authored.cards[0].answers = Array.from({ length: count }, (_, i) => ({
         text: `Option ${i}`,
       }))
       const result = await h.call("create_game_draft", {

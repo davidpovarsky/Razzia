@@ -239,8 +239,7 @@ export function createWidgetBridgeCore(
       const key = `${args.draftId}:${args.expectedRevision}:${args.locale ?? ""}`
 
       if (
-        inFlightPreview &&
-        inFlightPreview.generation === generation &&
+        inFlightPreview?.generation === generation &&
         inFlightPreview.key === key
       ) {
         return inFlightPreview.promise
@@ -285,9 +284,7 @@ export function createWidgetBridgeCore(
     },
     async connect() {
       try {
-        const top =
-          options.isTopWindow?.() ??
-          (typeof window !== "undefined" && window.parent === window)
+        const top = options.isTopWindow?.() ?? window.parent === window
 
         if (top) {
           controller.unavailable()

@@ -153,14 +153,14 @@ try {
     network,
   }
   await page
-    .screenshot({ path: path.join(out, run + ".png"), fullPage: true })
+    .screenshot({ path: path.join(out, `${run}.png`), fullPage: true })
     .catch(() => {
       /* Keep the recorded audit outcome if its diagnostic screenshot is unavailable. */
     })
   process.exitCode = 1
 } finally {
   fs.writeFileSync(
-    path.join(out, run + ".json"),
+    path.join(out, `${run}.json`),
     JSON.stringify(result, null, 2),
   )
   console.log(JSON.stringify(result))

@@ -26,7 +26,7 @@ const claimsSchema = z.object({
     .max(Number.MAX_SAFE_INTEGER / 1000),
 })
 const unavailable = () => new ToolError("ACCOUNT_UNAVAILABLE")
-const trustedBindings = new WeakSet<object>()
+const trustedBindings = new WeakSet()
 
 /**
  * No actual auth module is imported until configuration is explicitly ready.
@@ -69,7 +69,7 @@ export async function loadFirstPartyBindings(configRoot: string) {
     throw unavailable()
   }
 
-  const issued = new WeakSet<object>()
+  const issued = new WeakSet()
   let liveDb: DatabaseSync | undefined = undefined
   const expectedFile = join(root, "tadazz-accounts.sqlite")
   const checkDatabase = (db: DatabaseSync) => {
@@ -258,7 +258,7 @@ export async function loadFirstPartyBindings(configRoot: string) {
 
       checkDatabase(liveDb)
 
-      return !!accounts.activeAccount(accountId)
+      return Boolean(accounts.activeAccount(accountId))
     },
     delegatedSessionActive(accountId: string, sid: string) {
       configured()
@@ -274,7 +274,7 @@ export async function loadFirstPartyBindings(configRoot: string) {
       checkDatabase(liveDb)
 
       return (
-        !!accounts.activeAccount(accountId) &&
+        Boolean(accounts.activeAccount(accountId)) &&
         accounts.isAccountSessionValid(accountId, sid)
       )
     },

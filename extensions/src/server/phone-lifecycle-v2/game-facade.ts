@@ -85,9 +85,9 @@ export class RealGameFacade {
     const entry = row.roster_id ? game.getRosterEntry(row.roster_id) : null
 
     return (
-      !!entry &&
+      Boolean(entry) &&
       entry.clientId === row.client_id &&
-      !!entry.phoneE164 &&
+      Boolean(entry.phoneE164) &&
       digest(entry.phoneE164) === row.caller_hash &&
       entry.activeCallId === row.registration_id &&
       entry.status === "connected" &&
@@ -96,13 +96,13 @@ export class RealGameFacade {
   }
 
   exists(context: VerifiedServiceContext) {
-    return !!this.game(context)
+    return Boolean(this.game(context))
   }
 
   matches(context: VerifiedServiceContext, row: RegistrationRow) {
     const game = this.game(context)
 
-    return !!game && this.bound(game, row)
+    return Boolean(game) && this.bound(game, row)
   }
 
   admit(

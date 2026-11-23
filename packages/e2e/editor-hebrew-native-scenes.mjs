@@ -56,7 +56,7 @@ try {
         .map((img) => img.src)
     })
     expect(images).toEqual([])
-    const name = scene + "-1920"
+    const name = `${scene}-1920`
     await page.screenshot({
       path: path.join(out, `${name}.png`),
       animations: "disabled",

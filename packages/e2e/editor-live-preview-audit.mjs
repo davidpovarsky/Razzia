@@ -31,12 +31,12 @@ async function check(name, fn) {
     console.log(`PASS ${name}`)
   } catch (e) {
     failures.push({ name, error: String(e) })
-    console.log("FAIL " + name + " " + e)
+    console.log(`FAIL ${name} ${e}`)
 
     if (current) {
       await current
         .screenshot({
-          path: path.join(out, "failure-" + failures.length + ".png"),
+          path: path.join(out, `failure-${failures.length}.png`),
           fullPage: true,
         })
         .catch(() => {
@@ -61,7 +61,7 @@ async function nativeState(page, container) {
     renderer: el
       .querySelector("[data-editor-preview-renderer]")
       ?.getAttribute("data-editor-preview-renderer"),
-    fallback: !!el.querySelector("[data-editor-preview-fallback]"),
+    fallback: Boolean(el.querySelector("[data-editor-preview-fallback]")),
     engine: el
       .querySelector("[data-preview-engine]")
       ?.getAttribute("data-preview-engine"),
@@ -71,7 +71,7 @@ async function nativeState(page, container) {
     slot: el
       .querySelector("[data-preview-theme-slot]")
       ?.getAttribute("data-preview-theme-slot"),
-    original: !!el.querySelector("[data-original-razzia-preview]"),
+    original: Boolean(el.querySelector("[data-original-razzia-preview]")),
     text: el.innerText,
     rect: (() => {
       const r = el
@@ -249,8 +249,8 @@ try {
       await scenePreview.waitFor()
       await page
         .getByPlaceholder("Card title...")
-        .fill(label + " live " + theme)
-      await check(theme + " " + kind + " exact native", async () => {
+        .fill(`${label} live ${theme}`)
+      await check(`${theme} ${kind} exact native`, async () => {
         const state = await nativeState(page, scenePreview)
         expect(state.fallback).toBe(false)
         expect(state.theme).toBe(theme)
@@ -263,14 +263,14 @@ try {
             answerRecap: "resultsReveal",
           }[kind] ?? "interlude"
         expect(state.slot).toBe(expectedSlot)
-        await capture(page, theme + "-" + kind, scenePreview)
+        await capture(page, `${theme}-${kind}`, scenePreview)
 
         return state
       })
 
       if (["opening", "closing"].includes(kind)) {
         await check(
-          theme + " " + kind + " truthful native preset title controls",
+          `${theme} ${kind} truthful native preset title controls`,
           async () => {
             if (theme === "tadazz-classic") {
               await expect(
@@ -341,7 +341,7 @@ try {
             await capture(page, `${theme}-transition-max120`, scenePreview)
             await page
               .getByTestId("scene-title-input")
-              .fill(label + " live " + theme)
+              .fill(`${label} live ${theme}`)
 
             return bounds
           },
@@ -349,7 +349,7 @@ try {
       }
 
       await page.getByTestId("studio-preview-aspect-4-3").click()
-      await check(theme + " " + kind + " aspect 4:3", async () => {
+      await check(`${theme} ${kind} aspect 4:3`, async () => {
         const rect = await scenePreview.boundingBox()
         expect(Math.abs(rect.width / rect.height - 4 / 3)).toBeLessThan(0.03)
 
@@ -358,7 +358,7 @@ try {
       await page.getByTestId("studio-preview-aspect-16-9").click()
 
       if (!["leaderboard", "interimResults", "answerRecap"].includes(kind)) {
-        await check(theme + " " + kind + " play scrub reset", async () => {
+        await check(`${theme} ${kind} play scrub reset`, async () => {
           const slider = page.getByTestId("studio-preview-scrub-slider")
 
           if (kind === "countdown") {
@@ -396,7 +396,7 @@ try {
         })
       } else {
         await check(
-          theme + " " + kind + " hides inapplicable transport",
+          `${theme} ${kind} hides inapplicable transport`,
           async () => {
             await expect(
               page.getByTestId("studio-preview-play-pause"),
@@ -412,7 +412,7 @@ try {
 
       if (["opening", "closing"].includes(kind)) {
         await check(
-          theme + " " + kind + " layer edit and native stage",
+          `${theme} ${kind} layer edit and native stage`,
           async () => {
             await page.getByTestId("scene-preview-mode-layers").click()
             await expect(
@@ -447,9 +447,9 @@ try {
                 "",
               )
               await asset.fill("/tadazz-show/opening/TADAZZ-Opening-4-5s.json")
-              const overlay = page.getByTestId("cinematic-overlay-" + id)
+              const overlay = page.getByTestId(`cinematic-overlay-${id}`)
               await expect(overlay).toBeVisible()
-              const player = page.getByTestId("cinematic-overlay-player-" + id)
+              const player = page.getByTestId(`cinematic-overlay-player-${id}`)
               await expect(player).toHaveAttribute(
                 "data-lottie-ready",
                 "true",
@@ -461,7 +461,7 @@ try {
                   Number(await player.getAttribute("data-lottie-frame")),
                 )
                 .toBeGreaterThan(0)
-              const x = page.getByTestId("studio-overlay-x-" + id)
+              const x = page.getByTestId(`studio-overlay-x-${id}`)
               const before = Number(await x.inputValue())
               await overlay.focus()
               await overlay.press("ArrowRight")
@@ -496,7 +496,7 @@ try {
               })
             }
 
-            await capture(page, theme + "-" + kind + "-layers", scenePreview)
+            await capture(page, `${theme}-${kind}-layers`, scenePreview)
             await page.getByTestId("scene-preview-mode-stage").click()
             const state = await nativeState(page, scenePreview)
             expect(state.fallback).toBe(false)

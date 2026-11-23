@@ -23,7 +23,7 @@ export async function verifyEditorMutations(options) {
   await page.setViewportSize({ width: 1440, height: 1000 })
   const errors = []
   page.on("pageerror", (error) => errors.push(error.message))
-  const headers = { Authorization: "Bearer " + options.token }
+  const headers = { Authorization: `Bearer ${options.token}` }
   const questionIds = [randomUUID(), randomUUID()]
   const sceneId = randomUUID()
   const quizz = {
@@ -94,7 +94,7 @@ export async function verifyEditorMutations(options) {
     await expect(panel).toBeVisible()
   }
   const openEditor = async () => {
-    await page.goto(options.origin + "/manager/quizz/" + quizId + "?lng=en")
+    await page.goto(`${options.origin}/manager/quizz/${quizId}?lng=en`)
     await expect(page.getByTestId("editor-save-btn")).toBeEnabled({
       timeout: 30_000,
     })
@@ -106,7 +106,7 @@ export async function verifyEditorMutations(options) {
     const saved = page.waitForResponse(
       (response) =>
         new URL(response.url()).pathname ===
-          "/api/extensions/quizzes/" + quizId &&
+          `/api/extensions/quizzes/${quizId}` &&
         response.request().method() === "PUT",
     )
     await page.getByTestId("editor-save-btn").click()
@@ -114,7 +114,7 @@ export async function verifyEditorMutations(options) {
     await page.waitForURL(/\/(studio\/games|manager\/config)$/)
   }
   const saveWithPendingCheck = async (overwrite = false) => {
-    const apiUrl = options.origin + "/api/extensions/quizzes/" + quizId
+    const apiUrl = `${options.origin}/api/extensions/quizzes/${quizId}`
     let requestArrived = false
     let release = undefined
 
@@ -186,7 +186,7 @@ export async function verifyEditorMutations(options) {
 
   try {
     const created = await page.request.post(
-      options.origin + "/api/extensions/quizzes",
+      `${options.origin}/api/extensions/quizzes`,
       { headers, data: { quizz, extras } },
     )
     assert([200, 201].includes(created.status()), "Create disposable quiz")
@@ -211,8 +211,8 @@ export async function verifyEditorMutations(options) {
     await editPanel.getByTestId("answer-text-1").fill("Middle second answer")
     await saveWithPendingCheck()
 
-    let stored = await read("/api/quizz/" + quizId)
-    let storedExtras = (await read("/api/extensions/quizzes/" + quizId)).extras
+    let stored = await read(`/api/quizz/${quizId}`)
+    let storedExtras = (await read(`/api/extensions/quizzes/${quizId}`)).extras
     assert.deepEqual(
       stored.questions.map((question) => question.question),
       [
@@ -255,8 +255,8 @@ export async function verifyEditorMutations(options) {
       .getByRole("button", { name: "Convert All", exact: true })
       .click()
     await save()
-    stored = await read("/api/quizz/" + quizId)
-    storedExtras = (await read("/api/extensions/quizzes/" + quizId)).extras
+    stored = await read(`/api/quizz/${quizId}`)
+    storedExtras = (await read(`/api/extensions/quizzes/${quizId}`)).extras
     assert.deepEqual(
       stored.questions.map((question) => question.playMode),
       ["quiz", "quiz", "quiz"],
@@ -273,7 +273,7 @@ export async function verifyEditorMutations(options) {
 
     await openEditor()
     await openPanel("edit")
-    const failedSaveUrl = options.origin + "/api/extensions/quizzes/" + quizId
+    const failedSaveUrl = `${options.origin}/api/extensions/quizzes/${quizId}`
     const failSave = async (route) => {
       if (route.request().method() === "PUT") {
         await route.fulfill({
@@ -324,7 +324,7 @@ export async function verifyEditorMutations(options) {
     await expect(page.getByTestId("conflict-modal")).toBeVisible()
     await page.getByTestId("conflict-overwrite-button").click()
     await saveWithPendingCheck(true)
-    stored = await read("/api/quizz/" + quizId)
+    stored = await read(`/api/quizz/${quizId}`)
     assert.deepEqual(
       stored.questions.map((question) => question.solutions),
       [[1], [0], [10]],
@@ -343,7 +343,7 @@ export async function verifyEditorMutations(options) {
     assert([200, 201].includes(launchResponse.status()))
     const room = await launchResponse.json()
     await expect(page).toHaveURL(
-      options.origin + "/party/manager/" + room.gameId,
+      `${options.origin}/party/manager/${room.gameId}`,
     )
     await expect(page.getByTestId("platform-opening-start")).toBeEnabled({
       timeout: 30_000,
@@ -365,7 +365,7 @@ export async function verifyEditorMutations(options) {
       localStorage.setItem("i18nextLng", "en"),
     )
     const player = await playerContext.newPage()
-    player.on("pageerror", (error) => errors.push("player: " + error.message))
+    player.on("pageerror", (error) => errors.push(`player: ${error.message}`))
     const pin =
       room.inviteCode ??
       (
@@ -374,12 +374,12 @@ export async function verifyEditorMutations(options) {
           .first()
           .textContent()
       ).trim()
-    await player.goto(options.origin + "/game?pin=" + encodeURIComponent(pin))
+    await player.goto(`${options.origin}/game?pin=${encodeURIComponent(pin)}`)
     await player
       .getByPlaceholder("Username here")
       .fill("Editor mutation player")
     await player.getByRole("button", { name: "Submit", exact: true }).click()
-    await expect(player).toHaveURL(options.origin + "/party/" + room.gameId)
+    await expect(player).toHaveURL(`${options.origin}/party/${room.gameId}`)
     await toolbar.getByRole("button", { name: "Start", exact: true }).click()
     const stage = page.getByTestId("tadazz-show")
     for (const [index, question] of stored.questions.entries()) {
@@ -442,7 +442,7 @@ export async function verifyEditorMutations(options) {
 
     if (quizId) {
       const removed = await page.request.delete(
-        options.origin + "/api/extensions/quizzes/" + quizId,
+        `${options.origin}/api/extensions/quizzes/${quizId}`,
         { headers },
       )
       assert([200, 204, 404].includes(removed.status()), "Remove owned QA quiz")

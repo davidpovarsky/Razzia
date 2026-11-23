@@ -60,7 +60,7 @@ if (esbuild.version !== "0.28.2") {
       dependencyInputs[relative] = digest
     } else {
       if (manifest.files[relative] !== digest) {
-        throw new Error("UNPINNED_SOURCE:" + relative)
+        throw new Error(`UNPINNED_SOURCE:${relative}`)
       }
 
       sourceInputs[relative] = digest
@@ -69,7 +69,7 @@ if (esbuild.version !== "0.28.2") {
   const proof = {
     sourceRevision: manifest.appRevision,
     workerSourceRevision: manifest.revision,
-    compiler: "esbuild@" + esbuild.version,
+    compiler: `esbuild@${esbuild.version}`,
     sourceInputs,
     dependencyInputs,
     runtimeSha256: crypto.createHash("sha256").update(bytes).digest("hex"),

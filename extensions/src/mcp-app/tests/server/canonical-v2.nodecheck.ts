@@ -92,7 +92,7 @@ test("V2 identity preserves same-ID/different-SHA pairs and rejects duplicate ex
     () =>
       serializePreviewIdentity({
         ...input,
-        assetDigests: [input.assetDigests[0]!, input.assetDigests[0]!],
+        assetDigests: [input.assetDigests[0], input.assetDigests[0]],
       }),
     /duplicate/,
   )

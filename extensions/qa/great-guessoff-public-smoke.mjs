@@ -130,7 +130,7 @@ try {
   )
 
   if (unexpectedErrors.length) {
-    throw new Error("PAGEERRORS: " + unexpectedErrors.join(","))
+    throw new Error(`PAGEERRORS: ${unexpectedErrors.join(",")}`)
   }
 
   console.log(

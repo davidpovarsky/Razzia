@@ -35,7 +35,7 @@ const relativePath = z
   .max(240)
   .refine(
     (s) =>
-      !/^\//u.test(s) &&
+      !s.startsWith("/") &&
       !/[\\:%?#\u0000-\u0020\u007f\ud800-\udfff]/u.test(s) &&
       s
         .split("/")

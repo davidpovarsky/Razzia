@@ -129,7 +129,7 @@ const plugins = [
             }
           } catch {}
         }
-        throw new Error("Unresolved workspace import " + args.path)
+        throw new Error(`Unresolved workspace import ${args.path}`)
       })
       builder.onResolve({ filter: /^[^./]/ }, (args) => {
         if (

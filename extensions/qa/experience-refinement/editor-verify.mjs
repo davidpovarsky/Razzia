@@ -23,7 +23,7 @@ export async function verifyEditorRefinements(options) {
   mkdirSync(evidence, { recursive: true })
   const apiPath = `/api/extensions/quizzes/${quizId}`
   const headers = options.token
-    ? { Authorization: "Bearer " + options.token }
+    ? { Authorization: `Bearer ${options.token}` }
     : {}
   const read = async (path) => {
     const response = await page.request.get(origin + path, { headers })
@@ -31,7 +31,7 @@ export async function verifyEditorRefinements(options) {
 
     return response.json()
   }
-  const readQuiz = options.readQuiz ?? (() => read("/api/quizz/" + quizId))
+  const readQuiz = options.readQuiz ?? (() => read(`/api/quizz/${quizId}`))
   const readExtras = options.readExtras ?? (() => read(apiPath))
   const writeComposite =
     options.writeComposite ??
@@ -97,7 +97,7 @@ export async function verifyEditorRefinements(options) {
   const titles = new Map()
   for (const preset of [...CREATING_WORLDS_PRESETS, "spotlight"]) {
     const sceneId = randomUUID()
-    const title = "Semantic QA · " + preset
+    const title = `Semantic QA · ${preset}`
     titles.set(preset, title)
     fixtureExtras.scenes[sceneId] = {
       id: sceneId,
@@ -116,10 +116,10 @@ export async function verifyEditorRefinements(options) {
   const report = []
   const record = (name, detail = {}) =>
     report.push({ name, passed: true, ...detail })
-  const editor = origin + "/manager/quizz/" + quizId
+  const editor = `${origin}/manager/quizz/${quizId}`
   let language = "en"
   const openEditor = async () => {
-    await page.goto(editor + "?lng=" + language)
+    await page.goto(`${editor}?lng=${language}`)
     await expect(page.getByTestId("editor-save-btn")).toBeVisible({
       timeout: 30_000,
     })
@@ -247,11 +247,11 @@ export async function verifyEditorRefinements(options) {
         !(await item.locator("svg").first().getAttribute("class")).includes(
           "lucide-sparkles",
         ),
-        "Semantic preset needs its own icon: " + preset,
+        `Semantic preset needs its own icon: ${preset}`,
       )
       assert(
         !(await item.textContent()).includes("extensions:"),
-        "Translated semantic title and description: " + preset,
+        `Translated semantic title and description: ${preset}`,
       )
       await item.getByTestId("editor-scene-select").click()
       await expect(item.getByTestId("editor-scene-select")).toHaveAttribute(
@@ -288,7 +288,7 @@ export async function verifyEditorRefinements(options) {
     )
     await page.getByTestId("editor-save-btn").click()
     assert.equal((await saved).status(), 200)
-    await page.waitForURL(origin + "/studio/games")
+    await page.waitForURL(`${origin}/studio/games`)
     await openEditor()
     const afterQuiz = await readQuiz()
     const afterExtras = (await readExtras()).extras

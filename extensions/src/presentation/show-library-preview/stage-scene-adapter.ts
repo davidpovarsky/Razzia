@@ -137,7 +137,7 @@ export function pausedPreviewSteps(
     )
     const [step] = cards.steps
 
-    if (!step || step.op !== "presentOptions") {
+    if (step?.op !== "presentOptions") {
       throw new Error("show-preview:invalid-resume")
     }
 

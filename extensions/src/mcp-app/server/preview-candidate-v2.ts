@@ -116,7 +116,7 @@ export function createPreviewCandidatePortV2(
         },
       )
 
-      if (options.canPreview(p, prepared) !== true) {
+      if (!options.canPreview(p, prepared)) {
         throw new ToolError("PREVIEW_UNAVAILABLE")
       }
 
@@ -155,7 +155,7 @@ export function createPreviewCandidatePortV2(
         throw new ToolError("PREVIEW_UNAVAILABLE")
       }
 
-      if (options.canPreview(p, prepared) !== true) {
+      if (!options.canPreview(p, prepared)) {
         throw new ToolError("PREVIEW_UNAVAILABLE")
       }
 

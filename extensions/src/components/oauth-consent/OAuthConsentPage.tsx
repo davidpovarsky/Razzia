@@ -58,9 +58,9 @@ export function OAuthConsentPage({
     const values = new URLSearchParams(search).getAll("oauth_request")
 
     return values.length === 1 &&
-      values[0]!.length >= 40 &&
-      values[0]!.length <= 8192
-      ? values[0]!
+      values[0].length >= 40 &&
+      values[0].length <= 8192
+      ? values[0]
       : null
   }, [search])
   const [inspection, setInspection] = useState<ConsentInspection | null>(null)

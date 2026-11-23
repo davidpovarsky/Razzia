@@ -202,8 +202,7 @@ export function createAccessTokenVerifier(options: AccessTokenOptions) {
         current()
 
         if (
-          !grant ||
-          grant.active !== true ||
+          grant?.active !== true ||
           grant.grantId !== claims.grant_id ||
           grant.subject !== claims.sub ||
           grant.clientId !== claims.client_id ||

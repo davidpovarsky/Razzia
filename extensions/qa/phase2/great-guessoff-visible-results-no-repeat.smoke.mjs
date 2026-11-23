@@ -27,9 +27,7 @@ async function phase(name) {
 async function scene(name, key) {
   await page
     .locator(
-      `[data-v4-scene="${name}"]${
-        key ? '[data-question-key="' + key + '"]' : ""
-      }`,
+      `[data-v4-scene="${name}"]${key ? `[data-question-key="${key}"]` : ""}`,
     )
     .waitFor({ timeout: 25000 })
 }

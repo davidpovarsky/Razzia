@@ -24,7 +24,7 @@ const inputs = graph.modules.map(({ id }) => {
     const real = realpathSync(path),
       bytes = readFileSync(real),
       mount = mounts.find(
-        (m) => real === m.destination || real.startsWith(m.destination + "/"),
+        (m) => real === m.destination || real.startsWith(`${m.destination}/`),
       )
 
     return {

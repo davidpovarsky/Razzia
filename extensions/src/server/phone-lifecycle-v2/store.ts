@@ -254,11 +254,13 @@ export class PrototypeStore {
       .get(...this.scope, requestId) as unknown as RegistrationRow | undefined
   }
   private pending(callerHash: string) {
-    return !!this.sql
-      .prepare(
-        `SELECT 1 FROM operations WHERE owner=? AND game=? AND provider=? AND caller_hash=? AND state='PENDING' LIMIT 1`,
-      )
-      .get(...this.scope, callerHash)
+    return Boolean(
+      this.sql
+        .prepare(
+          `SELECT 1 FROM operations WHERE owner=? AND game=? AND provider=? AND caller_hash=? AND state='PENDING' LIMIT 1`,
+        )
+        .get(...this.scope, callerHash),
+    )
   }
 
   reserveRegistration(

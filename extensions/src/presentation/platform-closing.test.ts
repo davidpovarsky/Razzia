@@ -6,7 +6,7 @@ import { Finale, type FullShowInput } from "./tadazz-v4/FullShowScenes"
 import { PLATFORM_CLOSING_DURATION_MS } from "../core/platform-opening"
 
 describe("shared product curtain ownership", () => {
-  const finale = () => createElement(Finale, { data: {} as FullShowInput })
+  const finale = () => createElement(Finale, { data: {} })
 
   it("retains the authored curtain in standalone scene previews", () => {
     const html = renderToStaticMarkup(finale())

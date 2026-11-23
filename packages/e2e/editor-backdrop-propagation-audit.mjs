@@ -170,9 +170,9 @@ try {
     ]) {
       appearance = test.value
       await page.goto(
-        "http://127.0.0.1:3180/manager/quizz/VgCunRFT_E04gIAMbv8CU?lng=en&background=" +
-          theme +
-          test.name,
+        `http://127.0.0.1:3180/manager/quizz/VgCunRFT_E04gIAMbv8CU?lng=en&background=${
+          theme
+        }${test.name}`,
       )
       await page.getByTestId("editor-save-btn").waitFor()
       await selectTheme(theme)
@@ -198,7 +198,7 @@ try {
         (e) => getComputedStyle(e).opacity,
       )
       await preview.screenshot({
-        path: path.join(out, theme + "-" + test.name + ".png"),
+        path: path.join(out, `${theme}-${test.name}.png`),
       })
       checks.push({
         theme,
