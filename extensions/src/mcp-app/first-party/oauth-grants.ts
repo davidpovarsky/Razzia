@@ -1146,7 +1146,8 @@ export class FirstPartyOAuthGrants {
     if (
       !grant.scopes.includes("tadazz.drafts.read") ||
       !grant.scopes.includes("tadazz.exports.read") ||
-      !policy.canExport(context, draft, format)
+      // oxlint-disable-next-line typescript/no-unnecessary-boolean-literal-compare -- Runtime export policy must explicitly authorize with true; truthy values are not approval.
+      policy.canExport(context, draft, format) !== true
     ) {
       throw new ToolError("EXPORT_UNAVAILABLE")
     }

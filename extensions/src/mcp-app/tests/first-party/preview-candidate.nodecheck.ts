@@ -571,6 +571,43 @@ test("data policy denial, player role and false current question fail closed wit
     await c.close()
   }
 })
+test("truthy non-boolean preview policy is rejected at initial and final disclosure checks", async () => {
+  const c = await connect(await linked())
+  const malformedPolicyAt = (boundary: number, malformed: unknown) => () => {
+    if (policyCalls === boundary) {
+      // Deliberately bypass the typed host port to exercise its runtime boundary.
+      rights = malformed as boolean
+    }
+  }
+
+  try {
+    const d = await created(c)
+
+    for (const malformed of [1, "true", {}, []]) {
+      for (const boundary of [1, 2]) {
+        rights = true
+        policyCalls = 0
+        policyEffect = malformedPolicyAt(boundary, malformed)
+        const result = await preview(c, d)
+        assert.equal(policyCalls, boundary)
+        assert.equal(result.isError, true)
+        assert.equal(meta(result), undefined)
+        assert.equal(
+          requirePreviewRecord(
+            requirePreviewRecord(result.structuredContent).error,
+          ).code,
+          "PREVIEW_UNAVAILABLE",
+        )
+      }
+    }
+  } finally {
+    rights = true
+    policyEffect = undefined
+    policyCalls = 0
+    await c.close()
+  }
+})
+
 test("a draft edit during host selection cannot publish a stale candidate", async () => {
   const c = await connect(await linked())
 

@@ -116,7 +116,8 @@ export function createPreviewCandidatePortV2(
         },
       )
 
-      if (!options.canPreview(p, prepared)) {
+      // oxlint-disable-next-line typescript/no-unnecessary-boolean-literal-compare -- Runtime preview policy must explicitly return true; reject every other value.
+      if (options.canPreview(p, prepared) !== true) {
         throw new ToolError("PREVIEW_UNAVAILABLE")
       }
 
@@ -155,7 +156,8 @@ export function createPreviewCandidatePortV2(
         throw new ToolError("PREVIEW_UNAVAILABLE")
       }
 
-      if (!options.canPreview(p, prepared)) {
+      // oxlint-disable-next-line typescript/no-unnecessary-boolean-literal-compare -- Runtime preview policy must explicitly return true; reject every other value.
+      if (options.canPreview(p, prepared) !== true) {
         throw new ToolError("PREVIEW_UNAVAILABLE")
       }
 

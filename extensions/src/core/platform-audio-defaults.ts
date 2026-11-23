@@ -116,7 +116,8 @@ function isLegacyPlaceholderAudio(audio: AudioExtras | undefined): boolean {
         cue?.source === "default" &&
         !cue.url &&
         cue.volume === 0.8 &&
-        cue.enabled &&
+        // oxlint-disable-next-line typescript/no-unnecessary-boolean-literal-compare -- Persisted factory data must contain literal true; truthy custom values must not trigger migration.
+        cue.enabled === true &&
         cue.loop === (cueId === "answersMusic")
       )
     }),

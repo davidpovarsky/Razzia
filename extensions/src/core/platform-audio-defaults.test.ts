@@ -78,6 +78,11 @@ describe("shared Creating Worlds audio defaults", () => {
       PLATFORM_AUDIO_URLS.lobby,
     )
     expect(JSON.stringify(legacy)).toBe(before)
+    for (const enabled of [1, "true", {}, []]) {
+      const malformed = structuredClone(legacy)
+      malformed.cues.answersMusic.enabled = enabled as unknown as boolean
+      expect(normalizePlatformAudioSettings(malformed)).toBe(malformed)
+    }
     legacy.cues.answersMusic.volume = 0.23
     expect(normalizePlatformAudioSettings(legacy)).toBe(legacy)
     expect(resolvePlatformAudioDefaults(legacy).cues.answersMusic.volume).toBe(

@@ -491,6 +491,42 @@ test("ordinary export needs scopes/owner/rights, with no new per-export consent"
   )
 })
 
+test("truthy non-boolean export policy cannot mint, replay or deliver a download", async () => {
+  const grant = await linked()
+  const created = await draft(grant.token)
+  const input = exportInput(created.draftId)
+  const permittedExport = await rpc(grant.token, "export_game", input)
+  assert.equal(permittedExport.ok, true, JSON.stringify(permittedExport))
+  const url = requireOAuthObservationString(
+    requireOAuthObservationRecord(permittedExport.data).downloadUrl,
+  )
+  const path = grantFile(requireInitializedF().sessions[0].owner)
+  const priorBytes = readFileSync(path)
+
+  try {
+    for (const malformed of [1, "true", {}, []]) {
+      // Deliberately bypass the typed host port to exercise its runtime boundary.
+      rights = malformed as unknown as boolean
+      for (const result of [
+        await rpc(grant.token, "export_game", exportInput(created.draftId)),
+        await rpc(grant.token, "export_game", input),
+      ]) {
+        assert.equal(result.ok, false)
+        assert.equal(result.data, undefined)
+        assert.equal(
+          requireOAuthObservationRecord(result.error).code,
+          "EXPORT_UNAVAILABLE",
+        )
+      }
+
+      assert.equal((await download(url)).status, 404)
+      assert.deepEqual(readFileSync(path), priorBytes)
+    }
+  } finally {
+    rights = true
+  }
+})
+
 test("enhanced export uses the existing converter/importer and does not allocate native storage", async () => {
   const grant = await linked()
   const created = await draft(grant.token)

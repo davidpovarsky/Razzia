@@ -257,6 +257,34 @@ async function createConnectedHarness(
   }
 }
 
+test("supplied transport connects without a window global or top-window override", async () => {
+  assert.equal(typeof window, "undefined")
+  const [appTransport, hostTransport] = createTransportPair()
+  const contexts: unknown[] = []
+  const host = new AppBridge(
+    null,
+    { name: "qa-node-host", version: "0.1.0" },
+    { serverTools: {} },
+    { hostContext: { locale: "en", theme: "light" } },
+  )
+  const widget = createWidgetBridgeCore(
+    (context) => contexts.push(context),
+    () => {
+      throw new Error("Unexpected preview mount during bridge connection")
+    },
+    { transport: appTransport, appOptions: { autoResize: false } },
+  )
+
+  try {
+    await host.connect(hostTransport)
+    await widget.connect()
+    assert.deepEqual(contexts, [{ locale: "en", theme: "light" }])
+  } finally {
+    widget.dispose()
+    await host.close()
+  }
+})
+
 test("candidate-first handling on preview() avoids intermediate unavailable status", async () => {
   const { draftId } = retainedEn.selection
   const calls: Array<{

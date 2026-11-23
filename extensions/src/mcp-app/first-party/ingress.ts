@@ -1,6 +1,5 @@
 import { ToolError } from "../server/errors.ts"
 import { HttpRejection } from "./http-rejection.ts"
-import { interruptibleChunks } from "../shared/stream-chunks.ts"
 
 export { HttpRejection } from "./http-rejection.ts"
 
@@ -206,14 +205,27 @@ export async function bodyText(request: Request): Promise<string> {
   const abort = () => rejectInterrupted(new HttpRejection(400))
   request.signal.addEventListener("abort", abort, { once: true })
   const timer = setTimeout(abort, HTTP_LIMITS.bodyMs)
-  const stream = interruptibleChunks(reader, interrupted)
+  let reading: ReturnType<typeof reader.read> | undefined = undefined
+  let complete = false
 
   try {
     if (request.signal.aborted) {
       abort()
     }
 
-    for await (const chunk of stream) {
+    for (;;) {
+      reading = reader.read()
+      // oxlint-disable-next-line no-await-in-loop -- Consume one read/abort race at a time to preserve original scheduling and reader ownership.
+      const part = await Promise.race([reading, interrupted])
+      reading = undefined
+
+      if (part.done) {
+        complete = true
+
+        break
+      }
+
+      const chunk = part.value
       size += chunk.byteLength
 
       if (size > HTTP_LIMITS.bytes) {
@@ -240,12 +252,12 @@ export async function bodyText(request: Request): Promise<string> {
 
     request.signal.removeEventListener("abort", abort)
 
-    if (!stream.complete) {
+    if (!complete) {
       // Keep ownership through BOTH the pending read and public cancel promise.
       const cancellation = reader.cancel().catch(() => {
         /* Cancellation rejection still settles before the owned reader is released. */
       })
-      await Promise.allSettled([stream.pendingRead, cancellation])
+      await Promise.allSettled([reading, cancellation])
     }
 
     reader.releaseLock()

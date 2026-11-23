@@ -284,7 +284,10 @@ export function createWidgetBridgeCore(
     },
     async connect() {
       try {
-        const top = options.isTopWindow?.() ?? window.parent === window
+        const top =
+          options.isTopWindow?.() ??
+          // oxlint-disable-next-line typescript/prefer-optional-chain -- typeof also guards an undeclared window in the supported non-browser host.
+          (typeof window !== "undefined" && window.parent === window)
 
         if (top) {
           controller.unavailable()

@@ -1,5 +1,4 @@
 import { promiseFrom } from "../shared/promise-operation.ts"
-import { interruptibleChunks } from "../shared/stream-chunks.ts"
 import type {
   Dependencies,
   ServerConfig,
@@ -76,7 +75,8 @@ async function completeLegacyResponse(
   const interrupted = new Promise<never>((_, reject) => {
     interrupt = reject
   })
-  const stream = interruptibleChunks(reader, interrupted)
+  let reading: ReturnType<typeof reader.read> | undefined = undefined
+  let complete = false
   const abort = () => interrupt(new HttpRejection(400))
   signal.addEventListener("abort", abort, { once: true })
 
@@ -85,7 +85,19 @@ async function completeLegacyResponse(
       abort()
     }
 
-    for await (const chunk of stream) {
+    for (;;) {
+      reading = reader.read()
+      // oxlint-disable-next-line no-await-in-loop -- Consume one read/abort race at a time to preserve original scheduling and reader ownership.
+      const part = await Promise.race([reading, interrupted])
+      reading = undefined
+
+      if (part.done) {
+        complete = true
+
+        break
+      }
+
+      const chunk = part.value
       size += chunk.byteLength
 
       if (size > limit + 4096) {
@@ -103,9 +115,9 @@ async function completeLegacyResponse(
   } finally {
     signal.removeEventListener("abort", abort)
 
-    if (!stream.complete) {
+    if (!complete) {
       await Promise.allSettled([
-        stream.pendingRead,
+        reading,
         reader.cancel().catch(() => {
           /* Cancellation rejection still settles before the owned reader is released. */
         }),
@@ -155,9 +167,9 @@ class RequestWork {
     })
   }
   async drain() {
-    if (this.pending.size) {
+    while (this.pending.size) {
+      // oxlint-disable-next-line no-await-in-loop -- Recheck each settled snapshot without retaining a recursive Promise chain while new work joins.
       await Promise.allSettled([...this.pending])
-      await this.drain()
     }
   }
 }
@@ -183,7 +195,8 @@ export function createRemoteMcpApp(options: RemoteMcpOptions) {
       throw new Error("Exact HTTPS browser origins required")
     }
   }
-  const verifyToken = options.verifyAccessToken.bind(options)
+  // oxlint-disable-next-line typescript/unbound-method -- Preserve the original receiver-free callback snapshot; calls must not acquire options as this.
+  const verifyToken = options.verifyAccessToken
   const deps = Object.freeze({ ...options.dependencies })
   const budget = new IngressBudget()
   const responseTimeout = options.responseTimeoutMs ?? 30_000
