@@ -216,7 +216,7 @@ baseline_before=hashes("/lint-baseline",c["lintBaseline"]["manifest"]) if c["lin
 if baseline_before is not None:
     assert baseline_before==c["lintBaseline"]["manifest"], "Lint baseline differs from exact pinned Git revision"
 prefix = ["docker", "exec", "-w", source, "-e", "PHASE3_RECOVERY_REQUIRE_EXT4=1", "-e", "C1_FIXTURE_ROOT=" + fixture, "-e", "TSX_DISABLE_CACHE=1", "-e", "NODE_OPTIONS=--max-old-space-size=1024", container, "nice", "-n", "19", "taskset", "-c", "0", "timeout", "-k", "5"]
-tsx = ["node", "/cleanup/extensions/node_modules/tsx/dist/cli.mjs", "--tsconfig", "tsconfig.json", "--test", "--test-concurrency=1"]
+tsx = ["node", "/cleanup/extensions/node_modules/tsx/dist/cli.mjs", "--tsconfig", "tsconfig.json", "--test", "--test-reporter=tap", "--test-concurrency=1"]
 qualification = "extensions/qa/phase3-recovery/recovery-qualification.node.ts"
 invariants = "extensions/qa/phase3-recovery/recovery-invariants.node.ts"
 checks = []
@@ -248,7 +248,13 @@ widget_scope = ["extensions/src/mcp-app/" + path for path in [
 ]] + ["extensions/qa/phase3-full-show/selection.nodecheck.ts", "extensions/qa/phase3-full-show/native-save-ui.nodecheck.ts"]
 def check_legacy_lint():
     assert c["lintBaseline"] is not None
-    return check("semantic-integration-lint-baseline", 240, ["python3", "extensions/qa/phase3-recovery/lint-baseline.py", "--baseline-root", "/lint-baseline", "--current-root", source, "--baseline-sha", c["lintBaseline"]["sha"], "--output", fixture+"/semantic-lint-baseline-"+uuid.uuid4().hex[:8]])
+    command = ["python3", "extensions/qa/phase3-recovery/lint-baseline.py", "--baseline-root", "/lint-baseline", "--current-root", source, "--baseline-sha", c["lintBaseline"]["sha"], "--output", fixture+"/semantic-lint-baseline-"+uuid.uuid4().hex[:8]]
+    if c.get("lintPolicy") is not None:
+        policy = c["lintPolicy"]
+        assert policy["configFile"] == "tadazz-lint-policy.config.ts" and policy["sourcePath"] == "oxlint.config.ts"
+        assert policy["sha256"] == c["manifest"]["oxlint.config.ts"] and policy["sourceSha"] == c["sha"]
+        command += ["--policy-sha256", policy["sha256"]]
+    return check("semantic-integration-lint-baseline", 240, command)
 if c["suite"] in ("full-show-assets", "full-show-selection"):
     scope = ["extensions/src/mcp-app/server/full-show-assets.ts", "extensions/qa/phase3-full-show/assets.nodecheck.ts"]
     prefix[4:4] = ["-e", "TMPDIR=" + fixture]

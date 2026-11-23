@@ -100,6 +100,7 @@ PROXY_PRIVACY_PROOF = {
 }
 LINT_BASELINE_SHA = "9c8b1081f07c608e03946deec14351d27d6cca57"
 LINT_BASELINE_RUN = "tadazz-codex-9c8b1081f07c-e01312da"
+LINT_POLICY_CONFIG = "tadazz-lint-policy.config.ts"
 LEGACY_LINT_FILES = tuple("extensions/src/mcp-app/" + path for path in (
     "server/drafts.ts", "first-party/oauth-grants.ts", "first-party/oauth.ts", "first-party/store.ts",
 ))
@@ -365,6 +366,50 @@ def verify_application_metadata(bundle, source_manifest, backend_artifact, web_f
             "files": files, "sourceFiles": len(sources)}
 
 
+def verify_lint_policy(receipt, gate, report):
+    policy = report.get("effectivePolicy")
+    prefix = ["node", "--experimental-strip-types", "/cleanup/node_modules/oxlint/bin/oxlint", "-c"]
+    if policy is None:
+        need(receipt.get("lintPolicy") is None, "SEMANTIC_LINT_POLICY_REPORT_MISSING")
+        need(report["baselineHashes"]["oxlint.config.ts"] == report["candidateHashes"]["oxlint.config.ts"],
+             "SEMANTIC_LINT_RULES_CHANGED")
+        need(report.get("command") == [*prefix, "oxlint.config.ts", "--format=json", *LEGACY_LINT_FILES],
+             "SEMANTIC_LINT_COMMAND_MISMATCH")
+        return
+    outer = receipt.get("lintPolicy")
+    need(isinstance(policy, dict) and isinstance(outer, dict), "SEMANTIC_LINT_POLICY_PROOF_MISSING")
+    expected = receipt["hashesBefore"]["oxlint.config.ts"]
+    observed = {"baseline": expected, "candidate": expected}
+    for proof in (policy, outer):
+        need(proof.get("configFile") == LINT_POLICY_CONFIG and proof.get("sourcePath") == "oxlint.config.ts" and
+             proof.get("sha256") == expected and proof.get("hashesBefore") == observed and
+             proof.get("hashesAfter") == observed, "SEMANTIC_LINT_EFFECTIVE_POLICY_MISMATCH")
+    need(outer.get("sourceSha") == receipt.get("sha") and isinstance(receipt.get("sha"), str) and
+         re.fullmatch(r"[a-f0-9]{40}", receipt["sha"]) and outer.get("sourceReadOnly") is True and
+         receipt.get("hashesAfter", {}).get("oxlint.config.ts") == expected,
+         "SEMANTIC_LINT_POLICY_PROVENANCE_INVALID")
+    need(report.get("workingDirectories") == {"baseline": "/lint-baseline", "candidate": receipt.get("source")} and
+         isinstance(receipt.get("source"), str) and receipt["source"].startswith("/") and
+         receipt["source"] != "/lint-baseline", "SEMANTIC_LINT_POLICY_WORKING_DIRECTORY_MISMATCH")
+    need(report.get("command") == [*prefix, LINT_POLICY_CONFIG, "--format=json", *LEGACY_LINT_FILES],
+         "SEMANTIC_LINT_COMMAND_MISMATCH")
+    command = gate.get("command", [])
+    script = "extensions/qa/phase3-recovery/lint-baseline.py"
+    need(isinstance(command, list) and all(isinstance(value, str) for value in command) and
+         command.count(script) == 1 and command.count("--policy-sha256") == 1,
+         "SEMANTIC_LINT_POLICY_EXECUTION_MISMATCH")
+    position = command.index(script)
+    need(position > 0 and command[position - 1] == "python3", "SEMANTIC_LINT_POLICY_EXECUTION_MISMATCH")
+    tail = command[position + 1:]
+    need(len(tail) == 10 and tail[:7] == ["--baseline-root", "/lint-baseline", "--current-root", receipt["source"],
+         "--baseline-sha", LINT_BASELINE_SHA, "--output"] and tail[8:] == ["--policy-sha256", expected],
+         "SEMANTIC_LINT_POLICY_EXECUTION_MISMATCH")
+    fixture = receipt.get("fixture")
+    need(isinstance(fixture, str) and fixture.startswith("/") and
+         re.fullmatch(re.escape(fixture.rstrip("/") + "/semantic-lint-baseline-") + r"[a-f0-9]{8}", tail[7]),
+         "SEMANTIC_LINT_POLICY_OUTPUT_SCOPE_INVALID")
+
+
 def verify_semantic_matrix(receipt):
     checks = {item["label"]: item for item in receipt["checks"]}
     need(SEMANTIC_REQUIRED_CHECKS <= checks.keys(), "SEMANTIC_MATRIX_REQUIRED_CHECK_MISSING")
@@ -410,11 +455,7 @@ def verify_semantic_matrix(receipt):
              isinstance(hashes.get(path), str) and HASH.fullmatch(hashes[path]) and
              isinstance(receipt["hashesBefore"].get(path), str) and HASH.fullmatch(receipt["hashesBefore"][path]),
              "SEMANTIC_LINT_SOURCE_PIN_MISMATCH")
-    need(report["baselineHashes"]["oxlint.config.ts"] == report["candidateHashes"]["oxlint.config.ts"],
-         "SEMANTIC_LINT_RULES_CHANGED")
-    need(report.get("command") == ["node", "--experimental-strip-types", "/cleanup/node_modules/oxlint/bin/oxlint",
-                                   "-c", "oxlint.config.ts", "--format=json", *LEGACY_LINT_FILES],
-         "SEMANTIC_LINT_COMMAND_MISMATCH")
+    verify_lint_policy(receipt, gate, report)
 
 
 def tap_success(output):
@@ -1076,6 +1117,89 @@ RUN chmod -R a+rX /app/web && chmod 600 /app/socket/index.cjs /app/mcp/full-show
         print(json.dumps(report, sort_keys=True))
 
 
+def self_test_lint_policy_gates(sample, legacy_report):
+    value = json.loads(json.dumps(sample))
+    value.update(sha="c" * 40, source="/source", fixture="/evidence/test/fixtures")
+    value["hashesAfter"] = dict(value["hashesBefore"])
+    for key in ("hashesBefore", "hashesAfter"):
+        value["lintBaseline"][key]["oxlint.config.ts"] = "b" * 64
+    report = json.loads(json.dumps(legacy_report))
+    report["baselineHashes"]["oxlint.config.ts"] = "b" * 64
+    common = {
+        "configFile": LINT_POLICY_CONFIG, "sourcePath": "oxlint.config.ts", "sha256": "a" * 64,
+        "hashesBefore": {"baseline": "a" * 64, "candidate": "a" * 64},
+        "hashesAfter": {"baseline": "a" * 64, "candidate": "a" * 64},
+    }
+    report["effectivePolicy"] = json.loads(json.dumps(common))
+    report["workingDirectories"] = {"baseline": "/lint-baseline", "candidate": "/source"}
+    report["command"][4] = LINT_POLICY_CONFIG
+    value["lintPolicy"] = dict(common, sourceSha=value["sha"], sourceReadOnly=True)
+    gate = value["checks"][-1]
+    gate["command"] = ["python3", "extensions/qa/phase3-recovery/lint-baseline.py",
+                       "--baseline-root", "/lint-baseline", "--current-root", "/source",
+                       "--baseline-sha", LINT_BASELINE_SHA,
+                       "--output", "/evidence/test/fixtures/semantic-lint-baseline-1234abcd",
+                       "--policy-sha256", "a" * 64]
+    gate["stdout"] = json.dumps(report)
+    verify_semantic_matrix(value)
+    witnessed = ["same-effective-policy-with-preserved-original-configs"]
+    for failure in ("policy-missing-inner-proof", "policy-missing-controller-proof", "policy-controller-mutation",
+                    "policy-inner-mutation", "policy-not-candidate-config", "policy-source-revision",
+                    "policy-source-not-readonly", "policy-source-config-mutated", "policy-baseline-config-rewritten",
+                    "policy-absolute-config-command", "policy-wrong-cwd", "policy-missing-flag",
+                    "policy-duplicate-flag", "policy-wrong-pin-flag", "policy-wrong-baseline-root",
+                    "policy-wrong-interpreter", "policy-unowned-output", "policy-extra-diagnostic"):
+        changed = json.loads(json.dumps(value))
+        result = json.loads(changed["checks"][-1]["stdout"])
+        argv = changed["checks"][-1]["command"]
+        if failure == "policy-missing-inner-proof":
+            result.pop("effectivePolicy")
+        elif failure == "policy-missing-controller-proof":
+            changed.pop("lintPolicy")
+        elif failure == "policy-controller-mutation":
+            changed["lintPolicy"]["hashesAfter"]["baseline"] = "d" * 64
+        elif failure == "policy-inner-mutation":
+            result["effectivePolicy"]["hashesAfter"]["candidate"] = "d" * 64
+        elif failure == "policy-not-candidate-config":
+            for proof in (result["effectivePolicy"], changed["lintPolicy"]):
+                proof["sha256"] = "d" * 64
+                proof["hashesBefore"] = proof["hashesAfter"] = {"baseline": "d" * 64, "candidate": "d" * 64}
+        elif failure == "policy-source-revision":
+            changed["lintPolicy"]["sourceSha"] = "d" * 40
+        elif failure == "policy-source-not-readonly":
+            changed["lintPolicy"]["sourceReadOnly"] = False
+        elif failure == "policy-source-config-mutated":
+            changed["hashesAfter"]["oxlint.config.ts"] = "d" * 64
+        elif failure == "policy-baseline-config-rewritten":
+            result["baselineHashes"]["oxlint.config.ts"] = "a" * 64
+        elif failure == "policy-absolute-config-command":
+            result["command"][4] = "/source/" + LINT_POLICY_CONFIG
+        elif failure == "policy-wrong-cwd":
+            result["workingDirectories"]["baseline"] = "/source"
+        elif failure == "policy-missing-flag":
+            del argv[-2:]
+        elif failure == "policy-duplicate-flag":
+            argv.extend(["--policy-sha256", "a" * 64])
+        elif failure == "policy-wrong-pin-flag":
+            argv[-1] = "d" * 64
+        elif failure == "policy-wrong-baseline-root":
+            argv[3] = "/source"
+        elif failure == "policy-wrong-interpreter":
+            argv[0] = "echo"
+        elif failure == "policy-unowned-output":
+            argv[9] = "/source/semantic-lint-baseline-1234abcd"
+        elif failure == "policy-extra-diagnostic":
+            result.update(unmatchedCount=1, gatePass=False)
+        changed["checks"][-1]["stdout"] = json.dumps(result)
+        try:
+            verify_semantic_matrix(changed)
+        except GateError:
+            witnessed.append(failure)
+        else:
+            raise AssertionError("Invalid effective policy accepted: " + failure)
+    return witnessed
+
+
 def self_test_semantic_gates():
     pins = {path: "a" * 64 for path in (*LEGACY_LINT_FILES, "oxlint.config.ts")}
     report = {
@@ -1106,7 +1230,7 @@ def self_test_semantic_gates():
         ],
     }
     verify_semantic_matrix(sample)
-    witnessed = []
+    witnessed = self_test_lint_policy_gates(sample, report)
     for name in ("protocol", "http", "access-token", "drafts", "integrity", "boundaries", "oauth-client-isolation"):
         folder = "extensions/qa/phase3-native-consent/" if name == "oauth-client-isolation" else "extensions/src/mcp-app/tests/server/"
         value = json.loads(json.dumps(sample))

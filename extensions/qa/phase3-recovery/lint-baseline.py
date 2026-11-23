@@ -1,4 +1,4 @@
-"""Compare exact legacy diagnostics under unchanged lint rules and dependencies.
+"""Compare exact legacy diagnostics under one pinned lint policy and dependency set.
 
 New helpers are checked separately with zero errors. This gate preserves the
 complete legacy reports and accepts only diagnostics whose every labeled span
@@ -11,10 +11,12 @@ import difflib
 import hashlib
 import json
 import pathlib
+import re
 import subprocess
 import sys
 
 BASELINE_SHA = "9c8b1081f07c608e03946deec14351d27d6cca57"
+POLICY_CONFIG = "tadazz-lint-policy.config.ts"
 FILES = tuple("extensions/src/mcp-app/" + item for item in (
     "server/drafts.ts", "first-party/oauth-grants.ts",
     "first-party/oauth.ts", "first-party/store.ts",
@@ -92,6 +94,38 @@ def hashes(root):
     return {path: hashlib.sha256((root / path).read_bytes()).hexdigest() for path in (*FILES, "oxlint.config.ts")}
 
 
+def policy_hashes(baseline, current):
+    result = {}
+    for name, directory in (("baseline", baseline), ("candidate", current)):
+        path = directory / POLICY_CONFIG
+        if path.is_symlink() or not path.is_file():
+            raise ValueError("Effective lint policy must be a regular file beside each original config")
+        result[name] = hashlib.sha256(path.read_bytes()).hexdigest()
+    return result
+
+
+def verify_policy_unchanged(baseline, current, expected):
+    observed = policy_hashes(baseline, current)
+    if observed != expected:
+        raise ValueError("Effective lint policy changed during lint")
+    return observed
+
+
+def select_policy(baseline, current, before_hashes, current_hashes, expected):
+    if expected is None:
+        if before_hashes["oxlint.config.ts"] != current_hashes["oxlint.config.ts"]:
+            raise ValueError("Lint configuration changed; baseline comparison refused")
+        return "oxlint.config.ts", None
+    if not isinstance(expected, str) or re.fullmatch(r"[a-f0-9]{64}", expected) is None:
+        raise ValueError("Invalid effective lint policy pin")
+    if expected != current_hashes["oxlint.config.ts"]:
+        raise ValueError("Effective lint policy must equal the pinned candidate configuration")
+    observed = policy_hashes(baseline, current)
+    if observed != {"baseline": expected, "candidate": expected}:
+        raise ValueError("Effective lint policy differs between source trees or from its pin")
+    return POLICY_CONFIG, observed
+
+
 def run(args):
     if args.baseline_sha != BASELINE_SHA:
         raise ValueError("Unexpected lint baseline revision")
@@ -100,14 +134,17 @@ def run(args):
     if baseline == current:
         raise ValueError("Baseline and candidate must be separate trees")
     before_hashes, current_hashes = hashes(baseline), hashes(current)
-    if before_hashes["oxlint.config.ts"] != current_hashes["oxlint.config.ts"]:
-        raise ValueError("Lint configuration changed; baseline comparison refused")
+    config_file, policy_before = select_policy(
+        baseline, current, before_hashes, current_hashes, args.policy_sha256
+    )
     previous = {path: (baseline / path).read_bytes() for path in FILES}
     selected = {path: (current / path).read_bytes() for path in FILES}
     args.output.mkdir(mode=0o700, exist_ok=False)
-    command = ["node", "--experimental-strip-types", "/cleanup/node_modules/oxlint/bin/oxlint", "-c", "oxlint.config.ts", "--format=json", *FILES]
+    command = ["node", "--experimental-strip-types", "/cleanup/node_modules/oxlint/bin/oxlint", "-c", config_file, "--format=json", *FILES]
     results = []
     for name, directory in (("baseline", baseline), ("candidate", current)):
+        if policy_before is not None:
+            verify_policy_unchanged(baseline, current, policy_before)
         result = subprocess.run(command, cwd=directory, capture_output=True, timeout=105)
         (args.output / (name + ".stdout.json")).write_bytes(result.stdout)
         (args.output / (name + ".stderr.log")).write_bytes(result.stderr)
@@ -121,6 +158,7 @@ def run(args):
         results.append((result.returncode, payload["diagnostics"]))
     if before_hashes != hashes(baseline) or current_hashes != hashes(current):
         raise ValueError("Source/configuration changed during lint")
+    policy_after = verify_policy_unchanged(baseline, current, policy_before) if policy_before is not None else None
     matched, unmatched = compare(results[0][1], results[1][1], previous, selected)
     receipt = {
         "baselineSha": BASELINE_SHA, "method": "same rules/dependencies; every labeled span on exact unchanged source lines",
@@ -131,9 +169,74 @@ def run(args):
         "sourceHashesUnchanged": True, "wholeLegacyLintPass": results[1][0] == 0,
         "gatePass": not unmatched,
     }
+    if policy_before is not None:
+        receipt["effectivePolicy"] = {
+            "configFile": POLICY_CONFIG, "sourcePath": "oxlint.config.ts",
+            "sha256": args.policy_sha256, "hashesBefore": policy_before, "hashesAfter": policy_after,
+        }
+        receipt["workingDirectories"] = {"baseline": str(baseline), "candidate": str(current)}
     (args.output / "receipt.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf8")
     print(json.dumps({key: value for key, value in receipt.items() if key != "unmatchedDiagnostics"}, indent=2))
     return 1 if unmatched else 0
+
+
+def self_test_policy():
+    import tempfile
+    witnessed = []
+    with tempfile.TemporaryDirectory(prefix="tadazz-lint-policy-self-test-") as temporary:
+        baseline, current = (pathlib.Path(temporary) / name for name in ("baseline", "candidate"))
+        baseline.mkdir()
+        current.mkdir()
+        original, policy = b"historical config bytes\n", b"candidate config bytes\n"
+        old_pin, pin = (hashlib.sha256(value).hexdigest() for value in (original, policy))
+        before, after = {"oxlint.config.ts": old_pin}, {"oxlint.config.ts": pin}
+        (baseline / "oxlint.config.ts").write_bytes(original)
+        (current / "oxlint.config.ts").write_bytes(policy)
+        for root in (baseline, current):
+            (root / POLICY_CONFIG).write_bytes(policy)
+        expected = {"baseline": pin, "candidate": pin}
+        assert select_policy(baseline, current, before, after, pin) == (POLICY_CONFIG, expected)
+        assert (baseline / "oxlint.config.ts").read_bytes() == original
+        witnessed.append("different original config preserved under one pinned candidate policy")
+        for case in ("changed-config-without-policy", "invalid-pin", "not-candidate-policy",
+                     "different-alias-bytes", "missing-alias", "symlink-alias"):
+            alias = baseline / POLICY_CONFIG
+            if alias.exists() or alias.is_symlink():
+                alias.unlink()
+            alias.write_bytes(policy)
+            supplied = pin
+            if case == "changed-config-without-policy":
+                supplied = None
+            elif case == "invalid-pin":
+                supplied = "not-a-sha256"
+            elif case == "not-candidate-policy":
+                supplied = old_pin
+            elif case == "different-alias-bytes":
+                alias.write_bytes(original)
+            elif case == "missing-alias":
+                alias.unlink()
+            elif case == "symlink-alias":
+                alias.unlink()
+                alias.symlink_to(current / POLICY_CONFIG)
+            try:
+                select_policy(baseline, current, before, after, supplied)
+            except ValueError:
+                witnessed.append(case)
+            else:
+                raise AssertionError("Invalid lint policy accepted: " + case)
+        alias = baseline / POLICY_CONFIG
+        if alias.exists() or alias.is_symlink():
+            alias.unlink()
+        alias.write_bytes(policy)
+        observed = policy_hashes(baseline, current)
+        alias.write_bytes(original)
+        try:
+            verify_policy_unchanged(baseline, current, observed)
+        except ValueError:
+            witnessed.append("policy mutation rejected")
+        else:
+            raise AssertionError("Mutated lint policy accepted")
+    return witnessed
 
 
 def self_test():
@@ -156,7 +259,7 @@ def self_test():
         raise AssertionError("Malformed span accepted")
     except ValueError:
         pass
-    print(json.dumps({"selfTest": "PASS", "checks": ["shifted UTF8 unchanged line", "added line rejected", "duplicate diagnostic rejected", "changed multi-line span rejected", "all labels required", "malformed span rejected"]}))
+    print(json.dumps({"selfTest": "PASS", "checks": ["shifted UTF8 unchanged line", "added line rejected", "duplicate diagnostic rejected", "changed multi-line span rejected", "all labels required", "malformed span rejected"] + self_test_policy()}))
     return 0
 
 
@@ -166,6 +269,7 @@ if __name__ == "__main__":
     parser.add_argument("--baseline-root", type=pathlib.Path)
     parser.add_argument("--current-root", type=pathlib.Path)
     parser.add_argument("--baseline-sha")
+    parser.add_argument("--policy-sha256", help="Use the candidate policy pinned beside both original configs")
     parser.add_argument("--output", type=pathlib.Path)
     arguments = parser.parse_args()
     if arguments.self_test:
