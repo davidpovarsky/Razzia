@@ -1,9 +1,17 @@
 import assert from "node:assert/strict"
 import test from "node:test"
-import { harness, show, newKey, data, code } from "./fixtures.ts"
+import {
+  harness,
+  show,
+  newKey,
+  data,
+  code,
+  requireObservedShow,
+} from "./fixtures.ts"
 
 test("validated same-draft content edit, CAS conflict, key replay and no read writes", async () => {
   const h = await harness()
+
   try {
     const authored = show()
     const key = newKey()
@@ -33,7 +41,9 @@ test("validated same-draft content edit, CAS conflict, key replay and no read wr
     const read = data(
       await h.call("get_game_draft", { draftId: created.draftId }),
     )
-    const normalized = JSON.parse(String(read.authoredShowJson))
+    const normalized = requireObservedShow(
+      JSON.parse(String(read.authoredShowJson)),
+    )
     assert.equal(normalized.cards[2].question, "Edited Q3")
     assert.equal(normalized.cards[0].key, "q1")
     assert.equal(normalized.cards[0].question, "Question 1")
@@ -65,6 +75,7 @@ test("validated same-draft content edit, CAS conflict, key replay and no read wr
 
 test("concurrent CAS produces one winner without silently replacing another revision", async () => {
   const h = await harness()
+
   try {
     const first = data(
       await h.call("create_game_draft", {
@@ -90,11 +101,12 @@ test("concurrent CAS produces one winner without silently replacing another revi
 
 test("actual authoring answer bounds are preserved without a renderer-support claim", async () => {
   const h = await harness()
+
   try {
     for (const count of [0, 1, 2, 5, 6, 64]) {
       const authored = show()
       authored.cards[0]!.answers = Array.from({ length: count }, (_, i) => ({
-        text: "Option " + i,
+        text: `Option ${i}`,
       }))
       const result = await h.call("create_game_draft", {
         authoredShowJson: JSON.stringify(authored),
@@ -103,7 +115,8 @@ test("actual authoring answer bounds are preserved without a renderer-support cl
       assert.equal(
         result.isError === true,
         count < 2 || count > 5,
-        "answer count " + count,
+
+        `answer count ${count}`,
       )
     }
   } finally {

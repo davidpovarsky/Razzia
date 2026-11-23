@@ -4,9 +4,12 @@ import { fork } from "node:child_process"
 import { createRequire } from "node:module"
 import { fileURLToPath, pathToFileURL } from "node:url"
 import { createCreationProcessObserver } from "./creation-process-observer"
+import { isCreationRecord, requireCreationRecord } from "./creation-fixture"
+import type { recoverCreationReservations } from "./creation-reservation"
 
 const repository = fileURLToPath(new URL("../../../../", import.meta.url))
 const installed = createRequire(import.meta.url)
+
 export type CreationRecoveryMode =
   | "recover"
   | "recover-fence-fails"
@@ -14,6 +17,120 @@ export type CreationRecoveryMode =
   | "recover-sidecar-fence-fails"
   | "recover-active-move-fence-fails"
   | "recover-resolved-move-fence-fails"
+
+interface CreationEvidenceState {
+  pid: number
+  state: Record<string, unknown>
+  phases: { active: string[]; resolved: string[] }
+}
+
+interface CreationRecoveryRun extends CreationEvidenceState {
+  process: {
+    pid?: number
+    code: number | null
+    signal: string | null
+    timedOut: boolean
+    stderr: string
+  }
+  faultActivations: number
+  report?: ReturnType<typeof recoverCreationReservations>
+  error?: string
+}
+
+function isStringList(value: unknown): value is string[] {
+  return (
+    Array.isArray(value) &&
+    value.every((entry: unknown) => typeof entry === "string")
+  )
+}
+
+function isCreationEvidenceState(
+  value: unknown,
+): value is CreationEvidenceState {
+  return (
+    isCreationRecord(value) &&
+    typeof value.pid === "number" &&
+    isCreationRecord(value.state) &&
+    isCreationRecord(value.phases) &&
+    isStringList(value.phases.active) &&
+    isStringList(value.phases.resolved)
+  )
+}
+
+function isCreationRecoveryReport(
+  value: unknown,
+): value is ReturnType<typeof recoverCreationReservations> {
+  return (
+    isCreationRecord(value) &&
+    typeof value.recovered === "number" &&
+    isStringList(value.unresolved) &&
+    typeof value.qualified === "boolean"
+  )
+}
+
+function isCreationRecoveryRun(value: unknown): value is CreationRecoveryRun {
+  if (!isCreationRecord(value) || !isCreationEvidenceState(value)) {
+    return false
+  }
+
+  const processResult = value.process
+
+  return (
+    !Object.hasOwn(value, "missingReceipt") &&
+    isCreationRecord(processResult) &&
+    (processResult.pid === undefined ||
+      typeof processResult.pid === "number") &&
+    (processResult.code === null || typeof processResult.code === "number") &&
+    (processResult.signal === null ||
+      typeof processResult.signal === "string") &&
+    typeof processResult.timedOut === "boolean" &&
+    typeof processResult.stderr === "string" &&
+    typeof value.faultActivations === "number" &&
+    (value.error === undefined || typeof value.error === "string") &&
+    (value.report === undefined || isCreationRecoveryReport(value.report))
+  )
+}
+
+export function assertCreationRuns(
+  value: unknown,
+): asserts value is [CreationRecoveryRun, CreationRecoveryRun] {
+  if (
+    !Array.isArray(value) ||
+    value.length !== 2 ||
+    !value.every(isCreationRecoveryRun)
+  ) {
+    throw new Error("Invalid or missing synthetic creation recovery receipt")
+  }
+}
+
+export function creationRecoveryReport(run: CreationRecoveryRun) {
+  if (!run.report) {
+    throw new Error("Missing synthetic creation recovery report")
+  }
+
+  return run.report
+}
+
+function isCreationCheckpoint(
+  value: unknown,
+): value is CreationEvidenceState & { mode: string } {
+  return (
+    isCreationRecord(value) &&
+    isCreationEvidenceState(value) &&
+    typeof value.mode === "string"
+  )
+}
+
+export function requireCreationCheckpoint(
+  value: unknown,
+): CreationEvidenceState & { mode: string } {
+  if (!isCreationCheckpoint(value)) {
+    throw new Error("Invalid synthetic creation interruption checkpoint")
+  }
+
+  return value
+}
+
 export function creationChild(
   mode:
     | "before-public"
@@ -63,8 +180,10 @@ export function creationChild(
       timedOut = true
       child.kill("SIGKILL")
     }, 25000)
-    child.stderr?.on("data", (data) => {
-      stderr = (stderr + data).slice(-128000)
+    child.stderr?.on("data", (data: Buffer | string) => {
+      stderr = (
+        stderr + (typeof data === "string" ? data : data.toString("utf8"))
+      ).slice(-128000)
     })
     child.once("error", (error) => {
       clearTimeout(timer)
@@ -76,35 +195,44 @@ export function creationChild(
     })
   })
 }
+
 export async function creationReplayTwice(
   root: string,
   token: string,
   fenceFails: boolean | CreationRecoveryMode = false,
 ) {
-  const runs = []
+  const runs: unknown[] = []
   for (const sequence of ["1", "2"]) {
-    const result = await creationChild(
-      typeof fenceFails === "string"
-        ? fenceFails
-        : fenceFails
-          ? "recover-fence-fails"
-          : "recover",
-      root,
-      token,
-      sequence,
-    )
+    const getRecoveryMode = (): CreationRecoveryMode => {
+      if (typeof fenceFails === "string") {
+        return fenceFails
+      }
+
+      if (fenceFails) {
+        return "recover-fence-fails"
+      }
+
+      return "recover"
+    }
+
+    const result = await creationChild(getRecoveryMode(), root, token, sequence)
     const file = path.join(root, `.c1-recovery-${sequence}.json`)
     runs.push({
       process: result,
       ...(fs.existsSync(file)
-        ? JSON.parse(fs.readFileSync(file, "utf8"))
+        ? requireCreationRecord(JSON.parse(fs.readFileSync(file, "utf8")))
         : { missingReceipt: true }),
     })
   }
+
   return runs
 }
+
 export function retainCreationReceipt(name: string, receipt: unknown) {
-  if (!process.env.C1_RECEIPT_ROOT) return
+  if (!process.env.C1_RECEIPT_ROOT) {
+    return
+  }
+
   fs.mkdirSync(process.env.C1_RECEIPT_ROOT, { recursive: true })
   fs.writeFileSync(
     path.join(process.env.C1_RECEIPT_ROOT, `${name}.json`),

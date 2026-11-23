@@ -61,9 +61,9 @@ test("concrete native-ID boundary: preview-prefixed identities are not persisted
   })
   assert.equal(valid.success, true)
   const incompatible = timelineQuestionItemSchema.safeParse({
-    id: "preview-card-" + "a".repeat(64),
+    id: `preview-card-${"a".repeat(64)}`,
     kind: "question",
-    questionId: "preview-question-" + "b".repeat(64),
+    questionId: `preview-question-${"b".repeat(64)}`,
   })
   assert.equal(incompatible.success, false)
   // No native schema was changed/cast to make preview-local identities persist.

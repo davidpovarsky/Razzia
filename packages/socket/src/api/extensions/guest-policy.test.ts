@@ -29,6 +29,7 @@ async function createRoom() {
   const { id: quizzId } = saveQuizz(createQuizz([createQuestion()]))
   const response = await request("/games", ownerToken, { quizzId })
   expect(response.status).toBe(201)
+
   return (await response.json()) as { gameId: string; inviteCode: string }
 }
 

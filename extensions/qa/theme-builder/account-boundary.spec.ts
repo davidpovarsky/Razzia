@@ -1,9 +1,33 @@
 import playwright from "../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
 import type * as Playwright from "../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
 import { writeFile } from "node:fs/promises"
+import { isDeepStrictEqual } from "node:util"
 import { builderDocumentFixture } from "../../src/components/theme-builder/document.fixture"
-import { builderDigest } from "../../src/components/theme-builder/document"
+import {
+  builderDigest,
+  parseBuilderDocument,
+  type BuilderDocument,
+} from "../../src/components/theme-builder/document"
 const { test, expect } = playwright as unknown as typeof Playwright
+
+function isRawBoundaryDocument(value: unknown): value is BuilderDocument {
+  return isDeepStrictEqual(parseBuilderDocument(value), value)
+}
+
+function requireBoundaryDocument(value: unknown): BuilderDocument {
+  if (typeof value !== "object" || value === null || !("document" in value)) {
+    throw new Error("qa:invalid-builder-body")
+  }
+
+  const document = value.document
+
+  if (!isRawBoundaryDocument(document)) {
+    throw new Error("qa:transformed-builder-document")
+  }
+
+  return document
+}
+
 const receipt = (tenant: string) => {
   const document = builderDocumentFixture()
   document.id = `private-${tenant}`
@@ -12,7 +36,12 @@ const receipt = (tenant: string) => {
   return { document, revision: 1, digest: builderDigest(document) }
 }
 const deferred = () => {
-  let resolve!: () => void
+  let resolve: () => void = () => {
+    throw new Error(
+      "Promise resolver resolve was used before executor initialization",
+    )
+  }
+
   const promise = new Promise<void>((done) => {
     resolve = done
   })
@@ -32,7 +61,10 @@ for (const mode of ["edited", "reading", "saving"] as const) {
     const workspace = deferred()
     page.on("pageerror", (error) => errors.push(error.message))
     await page.route("**/api/themes/workspaces", async (route) => {
-      if (blockWorkspace) await workspace.promise
+      if (blockWorkspace) {
+        await workspace.promise
+      }
+
       await route
         .fulfill({
           json: {
@@ -50,6 +82,7 @@ for (const mode of ["edited", "reading", "saving"] as const) {
         body: request.postDataJSON(),
       })
       const tenant = path.includes("/tenant-a/") ? "tenant-a" : "tenant-b"
+
       if (path.endsWith("/documents")) {
         await route.fulfill({
           json: {
@@ -62,22 +95,28 @@ for (const mode of ["edited", "reading", "saving"] as const) {
             ],
           },
         })
+
         return
       }
+
       const blocked =
         tenant === "tenant-a" &&
         (mode === "reading" ||
           (mode === "saving" && request.method() === "PUT"))
+
       if (blocked) {
         entered.resolve()
         await gate.promise
       }
+
       const value =
         request.method() === "PUT"
           ? {
-              document: request.postDataJSON().document,
+              document: requireBoundaryDocument(request.postDataJSON()),
               revision: 2,
-              digest: builderDigest(request.postDataJSON().document),
+              digest: builderDigest(
+                requireBoundaryDocument(request.postDataJSON()),
+              ),
             }
           : receipt(tenant)
       await route.fulfill({ json: value }).catch(() => {})
@@ -89,17 +128,24 @@ for (const mode of ["edited", "reading", "saving"] as const) {
     const name = page
       .getByRole("textbox", { name: "Theme name", exact: true })
       .last()
+
     if (mode !== "reading") {
       await expect(name).toHaveValue("Private tenant-a")
       await name.fill("Private tenant-a edited")
-      if (mode === "saving")
+
+      if (mode === "saving") {
         await page
           .getByRole("button", { name: "Save draft", exact: true })
           .click()
+      }
     }
-    if (mode !== "edited") await entered.promise
+
+    if (mode !== "edited") {
+      await entered.promise
+    }
+
     blockWorkspace = true
-    await page.evaluate(() => (window as any).__qaBoundary.account("tenant-b"))
+    await page.evaluate(() => window.__qaBoundary.account("tenant-b"))
     // This must hold while the new workspace authority request is still blocked.
     await expect
       .poll(() =>

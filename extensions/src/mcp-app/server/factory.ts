@@ -22,13 +22,14 @@ import {
   scopes,
   toolNames,
   widgetTools,
+  type ToolName,
 } from "../contracts/tools.ts"
 import type {
   Dependencies,
   ServerConfig,
   VerifiedPrincipal,
 } from "./dependencies.ts"
-import type { ToolName } from "../contracts/tools.ts"
+
 import { authorize, validateConfig } from "./authorization.ts"
 import { dispatch } from "./dispatch.ts"
 import { guardedConnection } from "./connection.ts"
@@ -43,13 +44,25 @@ export function createTadazzMcpServer(
 ) {
   const config = validateConfig(configInput)
   const deps = Object.freeze({ ...dependencies })
-  let connection: ReturnType<typeof guardedConnection>
+  let connection: ReturnType<typeof guardedConnection> | undefined = undefined
+
+  function requireGuardedConnection(): ReturnType<typeof guardedConnection> {
+    if (connection === undefined) {
+      throw new Error("Local state connection was read before initialization")
+    }
+
+    return connection
+  }
+
   const server = registeredServer(config, deps, (_name, context, handler) =>
-    connection.run(context, handler),
+    requireGuardedConnection().run(context, handler),
   )
   connection = guardedConnection(server, deps, config)
 
-  return { connect: connection.connect, close: connection.close }
+  return {
+    connect: requireGuardedConnection().connect,
+    close: requireGuardedConnection().close,
+  }
 }
 
 // Official SDK HTTP entry owns protocol-era negotiation and per-request

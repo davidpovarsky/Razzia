@@ -14,7 +14,7 @@ import { PackageStore } from "../../src/server/packages/store.ts"
 const sha256 = (bytes) => createHash("sha256").update(bytes).digest("hex")
 const requireFixture = (condition, code) => {
   if (!condition) {
-    throw new Error("STORED_GAME_MEDIA_" + code)
+    throw new Error(`STORED_GAME_MEDIA_${code}`)
   }
 }
 
@@ -35,11 +35,13 @@ function checkedPath(root, relative) {
   for (const part of parts) {
     current = path.join(current, part)
     const entry = lstatSync(current, { throwIfNoEntry: false })
+
     if (entry) {
       requireFixture(!entry.isSymbolicLink(), "SYMLINK")
     }
   }
   requireFixture(current.startsWith(root + path.sep), "PATH_BOUNDARY")
+
   return current
 }
 
@@ -55,12 +57,14 @@ function fixtureBytes(fixtureRoot, media) {
   requireFixture(info.isFile() && info.size === media.bytes, "BLOB_SIZE")
   const bytes = readFileSync(source)
   requireFixture(sha256(bytes) === media.sha256, "BLOB_DIGEST")
+
   return bytes
 }
 
 function copyVerified(root, relative, bytes, expectedSha256) {
   const target = checkedPath(root, relative)
   mkdirSync(path.dirname(target), { recursive: true, mode: 0o700 })
+
   if (existsSync(target)) {
     requireFixture(lstatSync(target).isFile(), "DESTINATION_TYPE")
     requireFixture(
@@ -70,6 +74,7 @@ function copyVerified(root, relative, bytes, expectedSha256) {
   } else {
     writeFileSync(target, bytes, { flag: "wx", mode: 0o600 })
   }
+
   requireFixture(sha256(readFileSync(target)) === expectedSha256, "COPY_DIGEST")
 }
 
@@ -83,9 +88,11 @@ function summary(media, status) {
 
 function seedExternalMirror(fixtureRoot, config, tenantRelative, media) {
   const manifestPath = checkedPath(fixtureRoot, "external-assets.json")
+
   if (!existsSync(manifestPath)) {
     return summary(media, "external-not-fetched")
   }
+
   const manifestBytes = readFileSync(manifestPath)
   const manifestSha256 = sha256(manifestBytes)
   requireFixture(
@@ -105,11 +112,13 @@ function seedExternalMirror(fixtureRoot, config, tenantRelative, media) {
   const matches = manifest.assets.filter(
     (asset) => asset.sourceUrl === media.url,
   )
+
   if (matches.length === 0) {
     return summary(media, "external-not-fetched")
   }
+
   requireFixture(matches.length === 1, "EXTERNAL_MANIFEST_DUPLICATE")
-  const asset = matches[0]
+  const [asset] = matches
   const source = new URL(asset.sourceUrl)
   requireFixture(
     source.protocol === "https:" &&
@@ -143,6 +152,7 @@ function seedExternalMirror(fixtureRoot, config, tenantRelative, media) {
     bytes,
     asset.sha256,
   )
+
   return {
     ...summary(media, "offline-mirror-seeded"),
     mirror: {
@@ -211,13 +221,18 @@ export async function seedStoredGameMedia({
       result.externalAssets.push(
         seedExternalMirror(fixtures, config, tenantRelative, media),
       )
+
       continue
     }
+
     if (media.kind === "embedded") {
       result.externalAssets.push(summary(media, "embedded"))
+
       continue
     }
+
     const bytes = fixtureBytes(fixtures, media)
+
     if (media.kind === "media") {
       requireFixture(
         typeof media.targetRelativePath === "string" &&
@@ -242,6 +257,7 @@ export async function seedStoredGameMedia({
       packages.push({ media, bytes })
     }
   }
+
   if (packages.length === 0) {
     return result
   }
@@ -252,16 +268,18 @@ export async function seedStoredGameMedia({
     "packages.sqlite-wal",
     "packages.sqlite-shm",
   ]) {
-    checkedPath(config, "extensions/packages/" + name)
+    checkedPath(config, `extensions/packages/${name}`)
   }
   const store = new PackageStore(
     packageRoot,
     "qa-fixtures-no-signing-authority",
     (tenant) => {
       requireFixture(tenant === accountId, "TENANT_BOUNDARY")
+
       return tenantRoot
     },
   )
+
   try {
     const records = new Map()
     for (const { media } of packages) {
@@ -269,7 +287,7 @@ export async function seedStoredGameMedia({
         (record) => record.recordKey === media.packageRecordKey,
       )
       requireFixture(matches.length === 1, "PACKAGE_RECORD")
-      const record = matches[0]
+      const [record] = matches
       requireFixture(
         record.sourceKey === fixture.sourceKey &&
           record.phase === "installed" &&
@@ -319,6 +337,7 @@ export async function seedStoredGameMedia({
     }
 
     store.db.exec("BEGIN IMMEDIATE")
+
     try {
       for (const record of records.values()) {
         const metadata = [
@@ -335,6 +354,7 @@ export async function seedStoredGameMedia({
             "SELECT * FROM packages WHERE tenant=? AND package_id=? AND version=?",
           )
           .get(accountId, record.packageId, record.version)
+
         if (row) {
           requireFixture(
             row.source === record.source &&
@@ -365,6 +385,7 @@ export async function seedStoredGameMedia({
             )
           row = { upload }
         }
+
         const active = store.db
           .prepare(
             "SELECT upload FROM package_active WHERE tenant=? AND package_id=?",
@@ -374,6 +395,7 @@ export async function seedStoredGameMedia({
           !active || active.upload === row.upload,
           "PACKAGE_ACTIVE_CONFLICT",
         )
+
         if (!active) {
           store.db
             .prepare(
@@ -401,6 +423,7 @@ export async function seedStoredGameMedia({
       )
       result.packageMedia.push(summary(media, "package-store-read-verified"))
     }
+
     return result
   } finally {
     store.close()

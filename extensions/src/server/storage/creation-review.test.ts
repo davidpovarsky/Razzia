@@ -16,11 +16,15 @@ import {
   creationInput,
   creationTree,
   removeCreationFixture,
+  requireCreationRecord,
 } from "./creation-fixture"
 import {
+  assertCreationRuns,
   creationChild,
+  creationRecoveryReport,
   creationReplayTwice,
   retainCreationReceipt,
+  requireCreationCheckpoint,
   type CreationRecoveryMode,
 } from "./creation-process"
 import { CREATION_FAMILY, discoverCreationScopes } from "./creation-scope"
@@ -41,16 +45,34 @@ const publics = (state: Record<string, unknown>) =>
     ),
   )
 const readyPhase = (state: Record<string, unknown>) => {
-  const record = witnesses(state)["intent.json"] as { hex: string }
-  return JSON.parse(Buffer.from(record.hex, "hex").toString()).phase
+  const record = requireCreationRecord(witnesses(state)["intent.json"])
+
+  if (typeof record.hex !== "string") {
+    throw new Error("Missing synthetic creation intent byte image")
+  }
+
+  return requireCreationRecord(
+    JSON.parse(Buffer.from(record.hex, "hex").toString()),
+  ).phase
 }
 
 describe.runIf(process.platform === "linux")(
   "C1 independent review regressions",
   () => {
-    let fixture: ReturnType<typeof createCreationFixture>
-    let outside: ReturnType<typeof createCreationFixture> | undefined
-    let config: string | undefined, accounts: string | undefined
+    type InitializedFixtureValue = ReturnType<typeof createCreationFixture>
+    let fixture: InitializedFixtureValue | undefined = undefined
+    function requireInitializedFixture(): InitializedFixtureValue {
+      if (fixture === undefined) {
+        throw new Error("Fixture state fixture was read before initialization")
+      }
+
+      return fixture
+    }
+    let outside: ReturnType<typeof createCreationFixture> | undefined =
+      undefined
+
+    let config: string | undefined = undefined,
+      accounts: string | undefined = undefined
     beforeEach(() => {
       config = process.env.CONFIG_PATH
       accounts = process.env.TADAZZ_ACCOUNTS_ENABLED
@@ -59,35 +81,56 @@ describe.runIf(process.platform === "linux")(
     })
     afterEach(() => {
       vi.restoreAllMocks()
-      removeCreationFixture(fixture.root, fixture.token)
-      if (outside) removeCreationFixture(outside.root, outside.token)
-      if (config === undefined) delete process.env.CONFIG_PATH
-      else process.env.CONFIG_PATH = config
-      if (accounts === undefined) delete process.env.TADAZZ_ACCOUNTS_ENABLED
-      else process.env.TADAZZ_ACCOUNTS_ENABLED = accounts
+      removeCreationFixture(
+        requireInitializedFixture().root,
+        requireInitializedFixture().token,
+      )
+
+      if (outside) {
+        removeCreationFixture(outside.root, outside.token)
+      }
+
+      if (config === undefined) {
+        delete process.env.CONFIG_PATH
+      } else {
+        process.env.CONFIG_PATH = config
+      }
+
+      if (accounts === undefined) {
+        delete process.env.TADAZZ_ACCOUNTS_ENABLED
+      } else {
+        process.env.TADAZZ_ACCOUNTS_ENABLED = accounts
+      }
     })
     it.each(["base", "sidecar"])(
       "re-fences warm absent %s parent before releasing witnesses",
       async (sibling) => {
         const receipt: Record<string, unknown> = { sibling, state: "STARTED" }
+
         try {
           const interrupted = await creationChild(
             "before-id-return",
-            fixture.root,
-            fixture.token,
+            requireInitializedFixture().root,
+            requireInitializedFixture().token,
           )
-          const checkpoint = JSON.parse(
-            fs.readFileSync(
-              path.join(fixture.root, ".c1-interrupted.json"),
-              "utf8",
+          const checkpoint = requireCreationCheckpoint(
+            JSON.parse(
+              fs.readFileSync(
+                path.join(
+                  requireInitializedFixture().root,
+                  ".c1-interrupted.json",
+                ),
+                "utf8",
+              ),
             ),
           )
           const failed = await creationReplayTwice(
-            fixture.root,
-            fixture.token,
+            requireInitializedFixture().root,
+            requireInitializedFixture().token,
             `recover-${sibling}-fence-fails` as CreationRecoveryMode,
           )
           Object.assign(receipt, { interrupted, checkpoint, failed })
+          assertCreationRuns(failed)
           expect(interrupted.signal).toBe("SIGKILL")
           expect(interrupted.timedOut).toBe(false)
           expect(checkpoint.pid).toBe(interrupted.pid)
@@ -103,10 +146,12 @@ describe.runIf(process.platform === "linux")(
           }
           expect(Object.keys(publics(failed[1].state))).toHaveLength(0)
           const recovered = await creationReplayTwice(
-            fixture.root,
-            fixture.token,
+            requireInitializedFixture().root,
+            requireInitializedFixture().token,
           )
           receipt.recovered = recovered
+          assertCreationRuns(recovered)
+
           expect(
             new Set([
               interrupted.pid,
@@ -119,7 +164,7 @@ describe.runIf(process.platform === "linux")(
             expect(run.process.timedOut).toBe(false)
             expect(Object.keys(run.state)).toHaveLength(0)
           }
-          expect(recovered[1].report.recovered).toBe(0)
+          expect(creationRecoveryReport(recovered[1]).recovered).toBe(0)
           receipt.state = "PASS"
         } catch (error) {
           receipt.state = "FAIL"
@@ -140,26 +185,33 @@ describe.runIf(process.platform === "linux")(
       "re-establishes both move parents at %s and retries twice",
       async (scenario) => {
         const receipt: Record<string, unknown> = { scenario, state: "STARTED" }
+
         try {
           const empty = scenario.endsWith("empty")
           const interrupted = await creationChild(
             empty ? "before-slot-removal" : "committed-visible",
-            fixture.root,
-            fixture.token,
+            requireInitializedFixture().root,
+            requireInitializedFixture().token,
           )
-          const checkpoint = JSON.parse(
-            fs.readFileSync(
-              path.join(fixture.root, ".c1-interrupted.json"),
-              "utf8",
+          const checkpoint = requireCreationCheckpoint(
+            JSON.parse(
+              fs.readFileSync(
+                path.join(
+                  requireInitializedFixture().root,
+                  ".c1-interrupted.json",
+                ),
+                "utf8",
+              ),
             ),
           )
           const phase = scenario.startsWith("active") ? "active" : "resolved"
           const failed = await creationReplayTwice(
-            fixture.root,
-            fixture.token,
+            requireInitializedFixture().root,
+            requireInitializedFixture().token,
             `recover-${phase}-move-fence-fails` as CreationRecoveryMode,
           )
           Object.assign(receipt, { interrupted, checkpoint, failed })
+          assertCreationRuns(failed)
           expect(interrupted.signal).toBe("SIGKILL")
           expect(interrupted.timedOut).toBe(false)
           expect(checkpoint.pid).toBe(interrupted.pid)
@@ -178,10 +230,12 @@ describe.runIf(process.platform === "linux")(
             expect(publics(run.state)).toStrictEqual(publics(checkpoint.state))
           }
           const recovered = await creationReplayTwice(
-            fixture.root,
-            fixture.token,
+            requireInitializedFixture().root,
+            requireInitializedFixture().token,
           )
           receipt.recovered = recovered
+          assertCreationRuns(recovered)
+
           expect(
             new Set([
               interrupted.pid,
@@ -196,7 +250,7 @@ describe.runIf(process.platform === "linux")(
             expect(publics(run.state)).toStrictEqual(publics(checkpoint.state))
             expect(witnesses(run.state)).toEqual({})
           }
-          expect(recovered[1].report.recovered).toBe(0)
+          expect(creationRecoveryReport(recovered[1]).recovered).toBe(0)
           receipt.state = "PASS"
         } catch (error) {
           receipt.state = "FAIL"
@@ -209,25 +263,30 @@ describe.runIf(process.platform === "linux")(
       150000,
     )
     it("refuses an unknown phase without changing any evidence", () => {
-      fixture.port.create(creationInput(), creationExtras())
+      requireInitializedFixture().port.create(creationInput(), creationExtras())
       const unknown = path.join(
-        fixture.root,
+        requireInitializedFixture().root,
         CREATION_FAMILY,
         "legacy-global",
         "future-phase",
       )
       fs.mkdirSync(unknown, { mode: 0o700 })
       fs.writeFileSync(path.join(unknown, "unresolved-intent"), "retain me")
-      const before = creationTree(fixture.root)
-      expect(() => recoverCreationReservations(fixture.root)).toThrow(
-        /Unknown.*phase/,
+      const before = creationTree(requireInitializedFixture().root)
+      expect(() =>
+        recoverCreationReservations(requireInitializedFixture().root),
+      ).toThrow(/Unknown.*phase/)
+      expect(creationTree(requireInitializedFixture().root)).toStrictEqual(
+        before,
       )
-      expect(creationTree(fixture.root)).toStrictEqual(before)
     })
     it.each(["registry", "tenants", "owner"])(
       "refuses nonprivate %s intermediate before replay",
       (component) => {
-        const registry = path.join(fixture.root, CREATION_FAMILY)
+        const registry = path.join(
+          requireInitializedFixture().root,
+          CREATION_FAMILY,
+        )
         const tenants = path.join(registry, "tenants")
         const owner = path.join(tenants, "00000000-0000-4000-8000-0000000000AF")
         fs.mkdirSync(owner, { recursive: true, mode: 0o700 })
@@ -235,21 +294,23 @@ describe.runIf(process.platform === "linux")(
           component as "registry" | "tenants" | "owner"
         ]
         fs.chmodSync(changed, 0o750)
-        const before = creationTree(fixture.root),
-          mode = fs.statSync(changed).mode
-        expect(() => discoverCreationScopes(fixture.root)).toThrow(
-          /not private/,
+        const before = creationTree(requireInitializedFixture().root),
+          { mode } = fs.statSync(changed)
+        expect(() =>
+          discoverCreationScopes(requireInitializedFixture().root),
+        ).toThrow(/not private/)
+        expect(() =>
+          recoverCreationReservations(requireInitializedFixture().root),
+        ).toThrow(/not private/)
+        expect(creationTree(requireInitializedFixture().root)).toStrictEqual(
+          before,
         )
-        expect(() => recoverCreationReservations(fixture.root)).toThrow(
-          /not private/,
-        )
-        expect(creationTree(fixture.root)).toStrictEqual(before)
         expect(fs.statSync(changed).mode).toBe(mode)
       },
     )
     it("leaves a supported legacy symlink root alone when C1 is absent", () => {
-      const legacy = path.join(fixture.root, "legacy")
-      const alias = path.join(fixture.root, "legacy-alias")
+      const legacy = path.join(requireInitializedFixture().root, "legacy")
+      const alias = path.join(requireInitializedFixture().root, "legacy-alias")
       fs.mkdirSync(legacy)
       fs.writeFileSync(path.join(legacy, "sentinel"), "legacy bytes")
       fs.symlinkSync(legacy, alias)
@@ -262,9 +323,9 @@ describe.runIf(process.platform === "linux")(
     })
     it("denies a linked quiz lookup before preparation and performs zero target reads", () => {
       outside = createCreationFixture()
-      process.env.CONFIG_PATH = fixture.root
+      process.env.CONFIG_PATH = requireInitializedFixture().root
       const foreign = outside.root
-      const quizz = path.join(fixture.root, "quizz")
+      const quizz = path.join(requireInitializedFixture().root, "quizz")
       fs.writeFileSync(
         path.join(foreign, "sentinel.json"),
         JSON.stringify(creationInput()),
@@ -278,8 +339,13 @@ describe.runIf(process.platform === "linux")(
         file: fs.PathOrFileDescriptor,
         ...args: unknown[]
       ) => {
-        if (String(file).startsWith(quizz) || String(file).startsWith(foreign))
+        if (
+          String(file).startsWith(quizz) ||
+          String(file).startsWith(foreign)
+        ) {
           reads.push(String(file))
+        }
+
         return (readFile as (...args: unknown[]) => unknown)(file, ...args)
       }) as typeof fs.readFileSync)
       vi.spyOn(fs, "readdirSync").mockImplementation(((
@@ -289,15 +355,17 @@ describe.runIf(process.platform === "linux")(
         if (
           String(directory).startsWith(quizz) ||
           String(directory).startsWith(foreign)
-        )
+        ) {
           reads.push(String(directory))
+        }
+
         return (readDirectory as (...args: unknown[]) => unknown)(
           directory,
           ...args,
         )
       }) as typeof fs.readdirSync)
       const port = createNativeCreationPort({
-        configuredRoot: () => fixture.root,
+        configuredRoot: () => requireInitializedFixture().root,
         getPath: native.getPath,
         accountsEnabled,
         activeOwner: activeAccount,

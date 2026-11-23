@@ -19,6 +19,38 @@ import {
   type VerifiedServiceContext,
 } from "./contracts"
 
+function isReceipt(value: unknown): value is Receipt {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return false
+  }
+
+  const data = value as Record<string, unknown>
+
+  return (
+    typeof data.ok === "boolean" &&
+    typeof data.status === "string" &&
+    ["registrationId", "rosterPlayerId", "clientId"].every(
+      (key) => data[key] === undefined || typeof data[key] === "string",
+    ) &&
+    ["generation", "epoch", "points"].every(
+      (key) => data[key] === undefined || typeof data[key] === "number",
+    ) &&
+    ["accepted", "answered"].every(
+      (key) => data[key] === undefined || typeof data[key] === "boolean",
+    )
+  )
+}
+
+function parseReceipt(raw: string): Receipt {
+  const value: unknown = JSON.parse(raw)
+
+  if (!isReceipt(value)) {
+    throw new Denied("receipt_invalid")
+  }
+
+  return value
+}
+
 // Unmounted, synthetic-only foundation. There is no customer storage factory,
 // lease provisioner, global fallback, migration, retention or recovery worker.
 export class PrototypeStore {
@@ -33,41 +65,59 @@ export class PrototypeStore {
       action: Action,
     ) => boolean,
   ) {
-    validateContext(context, "register") // Must run BEFORE any filesystem access.
-    if (!verifyLiveAuthority(context, "register"))
+    // Must run BEFORE any filesystem access.
+
+    validateContext(context, "register")
+
+    if (!verifyLiveAuthority(context, "register")) {
       throw new Denied("service_denied")
+    }
+
     this.context = Object.freeze({
       ...context,
       actions: Object.freeze([...context.actions]),
     })
     const root = resolve(privateRoot)
+
     if (
       !isAbsolute(privateRoot) ||
       root !== realpathSync(root) ||
       !lstatSync(root).isDirectory()
-    )
+    ) {
       throw new Denied("private_synthetic_root_required")
+    }
+
     const marker = join(root, "PHONE_V2A_SYNTHETIC_ONLY")
+
     if (
       !lstatSync(marker).isFile() ||
       lstatSync(marker).isSymbolicLink() ||
       readFileSync(marker, "utf8") !== "synthetic-v2a-only\n"
-    )
+    ) {
       throw new Denied("private_synthetic_root_required")
-    if (process.platform !== "win32" && (lstatSync(root).mode & 0o077) !== 0)
+    }
+
+    if (process.platform !== "win32" && (lstatSync(root).mode & 0o077) !== 0) {
       throw new Denied("private_root_permissions_required")
+    }
+
     const path = join(root, "phone-lifecycle-v2a.sqlite")
-    for (const candidate of [path, path + "-wal", path + "-shm"]) {
+    for (const candidate of [path, `${path}-wal`, `${path}-shm`]) {
       try {
         const stat = lstatSync(candidate)
-        if (!stat.isFile() || stat.isSymbolicLink() || stat.nlink !== 1)
+
+        if (!stat.isFile() || stat.isSymbolicLink() || stat.nlink !== 1) {
           throw new Denied("unsafe_database_file")
+        }
       } catch (error) {
-        if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error
+        if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
+          throw error
+        }
       }
     }
     const prior = process.umask(0o077)
-    let opened: DatabaseSync | undefined
+    let opened: DatabaseSync | undefined = undefined
+
     try {
       this.sql = opened = new DatabaseSync(path, { timeout: 2000 })
       this.sql.exec(`PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL;
@@ -123,20 +173,25 @@ export class PrototypeStore {
           .get(...this.scope) as
           | { service: string; issuer_sid: string; executor_id: string }
           | undefined
+
         if (
           !authority ||
           authority.service !== context.service ||
           authority.issuer_sid !== context.issuerSid ||
           authority.executor_id !== context.executorId
-        )
+        ) {
           throw new Denied("game_authority_conflict")
+        }
       })
+
       if (process.platform !== "win32") {
-        for (const file of [path, path + "-wal", path + "-shm"]) {
+        for (const file of [path, `${path}-wal`, `${path}-shm`]) {
           try {
             chmodSync(file, 0o600)
           } catch (error) {
-            if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error
+            if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
+              throw error
+            }
           }
         }
       }
@@ -151,8 +206,11 @@ export class PrototypeStore {
   authorize(context: VerifiedServiceContext, action: Action) {
     validateContext(context, action)
     validateContext(this.context, action)
-    if (!this.verifyLiveAuthority(context, action))
+
+    if (!this.verifyLiveAuthority(context, action)) {
       throw new Denied("service_denied")
+    }
+
     if (
       [
         "owner",
@@ -167,8 +225,9 @@ export class PrototypeStore {
           context[key as keyof VerifiedServiceContext] !==
           this.context[key as keyof VerifiedServiceContext],
       )
-    )
+    ) {
       throw new Denied("scope_mismatch")
+    }
   }
 
   private get scope() {
@@ -176,9 +235,11 @@ export class PrototypeStore {
   }
   private transaction<T>(fn: () => T): T {
     this.sql.exec("BEGIN IMMEDIATE")
+
     try {
       const result = fn()
       this.sql.exec("COMMIT")
+
       return result
     } catch (error) {
       this.sql.exec("ROLLBACK")
@@ -212,14 +273,20 @@ export class PrototypeStore {
     },
   ): RegistrationDecision {
     this.authorize(context, "register")
+
     return this.transaction(() => {
       this.authorize(context, "register")
       const prior = this.row(input.requestId)
+
       if (prior) {
-        if (prior.fingerprint !== input.fingerprint)
+        if (prior.fingerprint !== input.fingerprint) {
           return { kind: "receipt", receipt: fail("request_conflict") }
-        if (prior.state === "RETIRED")
+        }
+
+        if (prior.state === "RETIRED") {
           return { kind: "receipt", receipt: fail("registration_retired") }
+        }
+
         if (prior.state === "ACTIVE") {
           const current = this.sql
             .prepare(
@@ -227,35 +294,42 @@ export class PrototypeStore {
             )
             .get(...this.scope, prior.caller_hash) as
             { state: string; request_id: string } | undefined
+
           if (
             current?.state !== "ACTIVE" ||
             current.request_id !== prior.request_id ||
             this.pending(prior.caller_hash)
-          )
+          ) {
             return { kind: "receipt", receipt: fail("binding_pending_unknown") }
+          }
         }
+
         return {
           kind: "receipt",
           row: prior,
           receipt: prior.receipt
-            ? JSON.parse(prior.receipt)
+            ? parseReceipt(prior.receipt)
             : fail("registration_pending_unknown"),
         }
       }
+
       const denied = this.sql
         .prepare(
           `SELECT fingerprint,receipt FROM registration_denials WHERE owner=? AND game=? AND provider=? AND request_id=?`,
         )
         .get(...this.scope, input.requestId) as
         { fingerprint: string; receipt: string } | undefined
-      if (denied)
+
+      if (denied) {
         return {
           kind: "receipt",
           receipt:
             denied.fingerprint === input.fingerprint
-              ? JSON.parse(denied.receipt)
+              ? parseReceipt(denied.receipt)
               : fail("request_conflict"),
         }
+      }
+
       const reject = (status: string): RegistrationDecision => {
         const receipt = fail(status)
         this.sql
@@ -268,6 +342,7 @@ export class PrototypeStore {
             input.fingerprint,
             JSON.stringify(receipt),
           )
+
         return { kind: "receipt", receipt }
       }
       const reused = this.sql
@@ -275,28 +350,44 @@ export class PrototypeStore {
           `SELECT 1 FROM registrations WHERE owner=? AND game=? AND provider=? AND reference_hash=?`,
         )
         .get(...this.scope, input.referenceHash)
-      if (reused) return reject("reference_reuse_ambiguous")
+
+      if (reused) {
+        return reject("reference_reuse_ambiguous")
+      }
+
       const binding = this.sql
         .prepare(
           `SELECT generation,request_id,state FROM bindings WHERE owner=? AND game=? AND provider=? AND caller_hash=?`,
         )
         .get(...this.scope, input.callerHash) as
         { generation: number; request_id: string; state: string } | undefined
+
       if (
         (binding && binding.state !== "ACTIVE") ||
         this.pending(input.callerHash)
-      )
+      ) {
         return reject("binding_pending_unknown")
-      if ((binding?.generation ?? 0) !== input.expectedPredecessor)
+      }
+
+      if ((binding?.generation ?? 0) !== input.expectedPredecessor) {
         return reject("predecessor_conflict")
-      const predecessor = binding ? this.row(binding.request_id)! : null
+      }
+
+      const predecessor = binding ? this.row(binding.request_id) : null
+
+      if (binding && !predecessor) {
+        return reject("predecessor_conflict")
+      }
+
       if (
         predecessor &&
         (predecessor.state !== "ACTIVE" ||
           predecessor.service !== context.service ||
           predecessor.issuer_sid !== context.issuerSid)
-      )
+      ) {
         return reject("predecessor_conflict")
+      }
+
       const generation = input.expectedPredecessor + 1
       const registrationId = randomUUID()
       this.sql
@@ -321,7 +412,17 @@ export class PrototypeStore {
         ON CONFLICT(owner,game,provider,caller_hash) DO UPDATE SET generation=excluded.generation,request_id=excluded.request_id,state='RESERVED'`,
         )
         .run(...this.scope, input.callerHash, generation, input.requestId)
-      return { kind: "reserved", row: this.row(input.requestId)!, predecessor }
+      const reserved = this.row(input.requestId)
+
+      if (!reserved) {
+        throw new Denied("reservation_conflict")
+      }
+
+      return {
+        kind: "reserved",
+        row: reserved,
+        predecessor: predecessor ?? null,
+      }
     })
   }
 
@@ -331,15 +432,18 @@ export class PrototypeStore {
     result: Receipt,
   ) {
     this.authorize(context, "register")
+
     return this.transaction(() => {
       this.authorize(context, "register")
       const row = this.row(reservation.row.request_id)
+
       if (
-        !row ||
-        row.state !== "RESERVED" ||
+        row?.state !== "RESERVED" ||
         row.fingerprint !== reservation.row.fingerprint
-      )
+      ) {
         throw new Denied("reservation_conflict")
+      }
+
       const changed = this.sql
         .prepare(
           `UPDATE bindings SET state=? WHERE owner=? AND game=? AND provider=? AND caller_hash=? AND request_id=? AND generation=? AND state='RESERVED'`,
@@ -351,10 +455,15 @@ export class PrototypeStore {
           row.request_id,
           row.generation,
         )
-      if (Number(changed.changes) !== 1)
+
+      if (Number(changed.changes) !== 1) {
         throw new Denied("reservation_conflict")
-      if (result.ok && (!result.rosterPlayerId || !result.clientId))
+      }
+
+      if (result.ok && (!result.rosterPlayerId || !result.clientId)) {
         throw new Denied("admission_not_observed")
+      }
+
       this.sql
         .prepare(
           `UPDATE registrations SET state=?,roster_id=?,client_id=?,receipt=? WHERE owner=? AND game=? AND provider=? AND request_id=? AND state='RESERVED'`,
@@ -367,6 +476,7 @@ export class PrototypeStore {
           ...this.scope,
           row.request_id,
         )
+
       if (reservation.predecessor) {
         this.sql
           .prepare(
@@ -374,6 +484,7 @@ export class PrototypeStore {
           )
           .run(...this.scope, reservation.predecessor.request_id)
       }
+
       return result
     })
   }
@@ -400,9 +511,11 @@ export class PrototypeStore {
         context.service,
       ]),
     )
+
     return this.transaction(() => {
       this.authorize(context, input.action)
       const row = this.row(input.requestId)
+
       if (
         !row ||
         row.issuer_sid !== context.issuerSid ||
@@ -413,41 +526,60 @@ export class PrototypeStore {
           Buffer.from(row.capability_hash, "hex"),
           Buffer.from(capHash, "hex"),
         )
-      )
+      ) {
         return { kind: "receipt", receipt: fail("binding_denied") }
-      if (row.state === "RETIRED")
+      }
+
+      if (row.state === "RETIRED") {
         return { kind: "receipt", receipt: fail("registration_retired") }
+      }
+
       const binding = this.sql
         .prepare(
           `SELECT state,request_id FROM bindings WHERE owner=? AND game=? AND provider=? AND caller_hash=?`,
         )
         .get(...this.scope, row.caller_hash) as
         { state: string; request_id: string } | undefined
+
       if (
         row.state !== "ACTIVE" ||
         binding?.state !== "ACTIVE" ||
         binding.request_id !== row.request_id
-      )
+      ) {
         return { kind: "receipt", receipt: fail("binding_denied") }
+      }
+
       const prior = this.sql
         .prepare(
           `SELECT fingerprint,receipt FROM operations WHERE owner=? AND game=? AND provider=? AND operation_id=?`,
         )
         .get(...this.scope, input.operationId) as
         { fingerprint: string; receipt: string | null } | undefined
-      if (prior)
+
+      if (prior) {
+        const getPriorReceipt = () => {
+          if (prior.fingerprint !== fingerprint) {
+            return fail("operation_conflict")
+          }
+
+          if (prior.receipt) {
+            return parseReceipt(prior.receipt)
+          }
+
+          return fail("operation_pending_unknown")
+        }
+
         return {
           kind: "receipt",
           row,
-          receipt:
-            prior.fingerprint !== fingerprint
-              ? fail("operation_conflict")
-              : prior.receipt
-                ? JSON.parse(prior.receipt)
-                : fail("operation_pending_unknown"),
+          receipt: getPriorReceipt(),
         }
-      if (this.pending(row.caller_hash))
+      }
+
+      if (this.pending(row.caller_hash)) {
         return { kind: "receipt", receipt: fail("binding_pending_unknown") }
+      }
+
       this.sql
         .prepare(
           `INSERT INTO operations(owner,game,provider,operation_id,request_id,caller_hash,fingerprint,state) VALUES(?,?,?,?,?,?,?,'PENDING')`,
@@ -459,6 +591,7 @@ export class PrototypeStore {
           row.caller_hash,
           fingerprint,
         )
+
       return { kind: "pending", row }
     })
   }
@@ -469,6 +602,7 @@ export class PrototypeStore {
     result: Receipt,
   ) {
     this.authorize(context, input.action)
+
     return this.transaction(() => {
       this.authorize(context, input.action)
       const changed = this.sql
@@ -482,7 +616,11 @@ export class PrototypeStore {
           input.operationId,
           input.requestId,
         )
-      if (Number(changed.changes) !== 1) throw new Denied("operation_conflict")
+
+      if (Number(changed.changes) !== 1) {
+        throw new Denied("operation_conflict")
+      }
+
       if (input.action === "hangup" && result.ok) {
         this.sql
           .prepare(
@@ -498,6 +636,7 @@ export class PrototypeStore {
           )
           .run(...this.scope, input.requestId)
       }
+
       return result
     })
   }

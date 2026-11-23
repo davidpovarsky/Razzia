@@ -1,6 +1,7 @@
 import assert from "node:assert/strict"
 import { createHash } from "node:crypto"
 import test from "node:test"
+import { requireObservedRecord } from "./fixtures.ts"
 import {
   prepareCompositionPreviewV2,
   getCompositionPreviewDigestContentV2,
@@ -79,7 +80,10 @@ test("V2 uses the full genuine prepared D content in the sole MCP digest", () =>
     previewIdentityDigest(identity),
     content.compositionDocumentSha256,
   )
-  assert.deepEqual(JSON.parse(encoded).compositionPreviewContent, content)
+  assert.deepEqual(
+    requireObservedRecord(JSON.parse(encoded)).compositionPreviewContent,
+    content,
+  )
   assert.throws(
     () => createCompositionPreviewIdentityV2({ ...prepared }, "draft-v2"),
     /unprepared/,
@@ -127,7 +131,9 @@ test("V2 binds revision, role, authored content, selected theme and native setti
       { draftRevision: 4 },
     ),
   ]
-  for (const variant of variants) assert.notEqual(digest(variant), expected)
+  for (const variant of variants) {
+    assert.notEqual(digest(variant), expected)
+  }
   assert.equal(input.authoredShowJson, previewInputFixture().authoredShowJson)
 })
 

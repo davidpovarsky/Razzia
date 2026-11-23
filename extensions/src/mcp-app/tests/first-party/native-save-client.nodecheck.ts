@@ -19,10 +19,74 @@ import {
   type Session,
 } from "./fixtures.ts"
 
-let f: Awaited<ReturnType<typeof fixture>>
-let issuer: Awaited<ReturnType<typeof createFirstPartyOAuth>>
-let remote: ReturnType<typeof issuer.remote>
-let native: typeof import("@razzia/socket/services/config")
+function isNativeClientObservationRecord(
+  value: unknown,
+): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value)
+}
+
+function requireNativeClientObservationRecord(
+  value: unknown,
+): Record<string, unknown> {
+  if (!isNativeClientObservationRecord(value)) {
+    throw new Error("Invalid native client evidence record")
+  }
+
+  return value
+}
+
+function requireNativeClientObservationString(value: unknown): string {
+  if (typeof value !== "string") {
+    throw new Error("Missing native client evidence text")
+  }
+
+  return value
+}
+
+function requireNativeClientObservationPresent<T>(value: T): NonNullable<T> {
+  if (value === null || value === undefined) {
+    throw new Error("Missing native client evidence value")
+  }
+
+  return value
+}
+
+type InitializedFValue = Awaited<ReturnType<typeof fixture>>
+let f: InitializedFValue | undefined = undefined
+function requireInitializedF(): InitializedFValue {
+  if (f === undefined) {
+    throw new Error("Fixture state f was read before initialization")
+  }
+
+  return f
+}
+type InitializedIssuerValue = Awaited<ReturnType<typeof createFirstPartyOAuth>>
+let issuer: InitializedIssuerValue | undefined = undefined
+function requireInitializedIssuer(): InitializedIssuerValue {
+  if (issuer === undefined) {
+    throw new Error("Fixture state issuer was read before initialization")
+  }
+
+  return issuer
+}
+type InitializedRemoteValue = ReturnType<InitializedIssuerValue["remote"]>
+let remote: InitializedRemoteValue | undefined = undefined
+function requireInitializedRemote(): InitializedRemoteValue {
+  if (remote === undefined) {
+    throw new Error("Fixture state remote was read before initialization")
+  }
+
+  return remote
+}
+type InitializedNativeValue = typeof import("@razzia/socket/services/config")
+let native: InitializedNativeValue | undefined = undefined
+function requireInitializedNative(): InitializedNativeValue {
+  if (native === undefined) {
+    throw new Error("Fixture state native was read before initialization")
+  }
+
+  return native
+}
 const config = {
   issuer: `${origin}/oauth`,
   resource: `${origin}/mcp`,
@@ -40,15 +104,25 @@ let sequence = 0
 const publicReceipts: unknown[] = []
 const count = () =>
   fs
-    .readdirSync(path.join(f.root, "tenants", f.sessions[0].owner, "quizz"))
+    .readdirSync(
+      path.join(
+        requireInitializedF().root,
+        "tenants",
+        requireInitializedF().sessions[0].owner,
+        "quizz",
+      ),
+    )
     .filter((n) => n.endsWith(".json")).length
 before(async () => {
   assert.equal(process.platform, "linux")
   f = await fixture()
-  assert.equal(path.dirname(f.root), "/home/david/tadazz-phase1-20261116")
-  assert.equal(fs.statfsSync(f.root).type, 0xef53)
+  assert.equal(
+    path.dirname(requireInitializedF().root),
+    "/home/david/tadazz-phase1-20261116",
+  )
+  assert.equal(fs.statfsSync(requireInitializedF().root).type, 0xef53)
   fs.writeFileSync(
-    path.join(f.root, ".f-native-save-client-fixture.json"),
+    path.join(requireInitializedF().root, ".f-native-save-client-fixture.json"),
     JSON.stringify({
       version: 1,
       kind: "F-real-E-native-save-client",
@@ -56,28 +130,31 @@ before(async () => {
     }),
     { flag: "wx", mode: 0o600 },
   )
-  for (const s of f.sessions) {
-    fs.mkdirSync(path.join(f.root, "tenants", s.owner, "quizz"), {
-      recursive: true,
-    })
+  for (const s of requireInitializedF().sessions) {
+    fs.mkdirSync(
+      path.join(requireInitializedF().root, "tenants", s.owner, "quizz"),
+      {
+        recursive: true,
+      },
+    )
   }
-  native = await f.scope.withAccount(
-    f.sessions[0].owner,
+  native = await requireInitializedF().scope.withAccount(
+    requireInitializedF().sessions[0].owner,
     () => import("@razzia/socket/services/config"),
   )
   const port = createNativeCreationPort({
-    configuredRoot: () => f.root,
-    accountsEnabled: f.scope.accountsEnabled,
-    activeOwner: f.scope.activeAccount,
-    getPath: native.getPath,
-    prepare: native.prepareNativeQuizCreation,
+    configuredRoot: () => requireInitializedF().root,
+    accountsEnabled: requireInitializedF().scope.accountsEnabled,
+    activeOwner: requireInitializedF().scope.activeAccount,
+    getPath: requireInitializedNative().getPath,
+    prepare: requireInitializedNative().prepareNativeQuizCreation,
     enableOperationBindings: true,
   })
   assert.ok(port.operations)
   const pair = generateKeyPairSync("ed25519")
   issuer = await createFirstPartyOAuth({
     config,
-    configRoot: f.root,
+    configRoot: requireInitializedF().root,
     keyId: "synthetic-native-client-key",
     signingPrivateKeyPem: pair.privateKey
       .export({ type: "pkcs8", format: "pem" })
@@ -92,20 +169,20 @@ before(async () => {
       consentPageUrl: `${origin}/studio/native-save-consent`,
     },
   })
-  remote = issuer.remote({
+  remote = requireInitializedIssuer().remote({
     allowedOrigins: [],
     dependencies: {
       authoring: policy,
-      drafts: issuer.draftRepository(policy),
-      storage: issuer.storage,
-      rateLimit: async () => true,
+      drafts: requireInitializedIssuer().draftRepository(policy),
+      storage: requireInitializedIssuer().storage,
+      rateLimit: () => Promise.resolve(true),
     },
   })
   console.log(
     JSON.stringify({
       runtime: process.version,
       platform: process.platform,
-      filesystemMagic: fs.statfsSync(f.root).type,
+      filesystemMagic: fs.statfsSync(requireInitializedF().root).type,
     }),
   )
 })
@@ -114,37 +191,50 @@ after(async () => {
 
   if (f) {
     for (const prefix of [
-      f.root,
-      ...f.sessions.map((s) => path.join(f.root, "tenants", s.owner)),
+      requireInitializedF().root,
+      ...requireInitializedF().sessions.map((s) =>
+        path.join(requireInitializedF().root, "tenants", s.owner),
+      ),
     ]) {
       assert.equal(
         fs.readFileSync(
           path.join(prefix, "native-sentinels/quiz.json"),
           "utf8",
         ),
-        JSON.stringify({
+        `${JSON.stringify({
           sentinel:
-            prefix === f.root
+            prefix === requireInitializedF().root
               ? "synthetic-global-do-not-touch"
               : "synthetic-native-do-not-touch",
-        }) + "\n",
+        })}\n`,
       )
     }
-    assert.equal(fs.existsSync(path.join(f.root, "quizz")), false)
+    assert.equal(
+      fs.existsSync(path.join(requireInitializedF().root, "quizz")),
+      false,
+    )
     assert.deepEqual(
       fs.readdirSync(
-        path.join(f.root, "tenants", f.sessions[1].owner, "quizz"),
+        path.join(
+          requireInitializedF().root,
+          "tenants",
+          requireInitializedF().sessions[1].owner,
+          "quizz",
+        ),
       ),
       [],
     )
     fs.writeFileSync(
-      path.join(f.root, "public-native-client-results.json"),
+      path.join(
+        requireInitializedF().root,
+        "public-native-client-results.json",
+      ),
       `${JSON.stringify(
         {
           runtime: process.version,
           platform: process.platform,
-          filesystemMagic: fs.statfsSync(f.root).type,
-          retainedRoot: f.root,
+          filesystemMagic: fs.statfsSync(requireInitializedF().root).type,
+          retainedRoot: requireInitializedF().root,
           nativeGames: count(),
           receipts: publicReceipts,
           sentinelsUnchanged: true,
@@ -156,10 +246,10 @@ after(async () => {
       )}\n`,
       { flag: "wx", mode: 0o600 },
     )
-    f.db.close()
+    requireInitializedF().db.close()
     console.log(
       JSON.stringify({
-        retainedSyntheticRoot: f.root,
+        retainedSyntheticRoot: requireInitializedF().root,
         publicReceipt: "public-native-client-results.json",
       }),
     )
@@ -172,7 +262,7 @@ async function api(
 ) {
   const json = route === "/oauth/inspect" || route === "/oauth/approve"
 
-  return issuer.fetch(
+  return requireInitializedIssuer().fetch(
     new Request(origin + route, {
       method: body ? "POST" : "GET",
       headers: {
@@ -210,33 +300,51 @@ async function linked() {
       })}`,
     )
   assert.equal(started.status, 302)
-  const ticket = new URL(started.headers.get("location")!).searchParams.get(
-    "oauth_request",
-  )!
-  const inspected = await (
-    await api("/oauth/inspect", { ticket }, f.sessions[0])
-  ).json()
-  const approved = await (
-    await api(
-      "/oauth/approve",
-      { ticket, decision: "allow", proof: inspected.proof },
-      f.sessions[0],
-    )
-  ).json()
+  const ticket = requireNativeClientObservationPresent(
+    new URL(
+      requireNativeClientObservationPresent(started.headers.get("location")),
+    ).searchParams.get("oauth_request"),
+  )
+
+  const inspected = requireNativeClientObservationRecord(
+    await (
+      await api("/oauth/inspect", { ticket }, requireInitializedF().sessions[0])
+    ).json(),
+  )
+
+  const approved = requireNativeClientObservationRecord(
+    await (
+      await api(
+        "/oauth/approve",
+        {
+          ticket,
+          decision: "allow",
+          proof: requireNativeClientObservationString(inspected.proof),
+        },
+        requireInitializedF().sessions[0],
+      )
+    ).json(),
+  )
   const token = await api("/oauth/token", {
     grant_type: "authorization_code",
     client_id: clientId,
     redirect_uri: callback,
     resource: config.resource,
-    code: new URL(approved.redirectUrl).searchParams.get("code")!,
+    code: requireNativeClientObservationPresent(
+      new URL(
+        requireNativeClientObservationString(approved.redirectUrl),
+      ).searchParams.get("code"),
+    ),
     code_verifier: verifier,
   })
   assert.equal(token.status, 200)
 
-  return (await token.json()).access_token as string
+  return requireNativeClientObservationString(
+    requireNativeClientObservationRecord(await token.json()).access_token,
+  )
 }
 async function rpc(token: string, name: string, args: unknown) {
-  const response = await remote.fetch(
+  const response = await requireInitializedRemote().fetch(
     new Request(config.resource, {
       method: "POST",
       headers: {
@@ -247,7 +355,7 @@ async function rpc(token: string, name: string, args: unknown) {
       },
       body: JSON.stringify({
         jsonrpc: "2.0",
-        id: ++sequence,
+        id: (sequence += 1),
         method: "tools/call",
         params: { name, arguments: args },
       }),
@@ -256,42 +364,60 @@ async function rpc(token: string, name: string, args: unknown) {
   assert.equal(response.status, 200)
   const text = await response.text()
 
-  return (
-    response.headers.get("content-type")?.startsWith("text/event-stream")
-      ? JSON.parse(
-          text
-            .split("\n")
-            .filter((l) => l.startsWith("data: "))
-            .at(-1)!
-            .slice(6),
-        )
-      : JSON.parse(text)
-  ).result.structuredContent
+  return requireNativeClientObservationRecord(
+    requireNativeClientObservationRecord(
+      (response.headers.get("content-type")?.startsWith("text/event-stream")
+        ? requireNativeClientObservationRecord(
+            JSON.parse(
+              requireNativeClientObservationPresent(
+                text
+                  .split("\n")
+                  .filter((l) => l.startsWith("data: "))
+                  .at(-1),
+              ).slice(6),
+            ),
+          )
+        : requireNativeClientObservationRecord(JSON.parse(text))
+      ).result,
+    ).structuredContent,
+  )
 }
 async function pending(token: string, title: string) {
   const created = await rpc(token, "create_game_draft", createInput(title))
   assert.equal(created.ok, true)
   const input = {
       contractVersion: "0.1.0",
-      draftId: created.data.draftId,
+      draftId: requireNativeClientObservationString(
+        requireNativeClientObservationRecord(created.data).draftId,
+      ),
       expectedRevision: 1,
       intent: "createNew",
       idempotencyKey: key(),
     },
     result = await rpc(token, "save_game", input)
-  assert.equal(result.error.code, "CONSENT_REQUIRED")
-  const url = new URL(result.error.consentUrl)
+  assert.equal(
+    requireNativeClientObservationRecord(result.error).code,
+    "CONSENT_REQUIRED",
+  )
+  const url = new URL(
+    requireNativeClientObservationString(
+      requireNativeClientObservationRecord(result.error).consentUrl,
+    ),
+  )
   assert.equal(url.search, "")
   assert.equal(url.hash, "")
   const id = nativeSaveRequestIdFromPath(url.pathname, url.search, url.hash)
-  assert.equal(id, result.error.consentRequestId)
+  assert.equal(
+    id,
+    requireNativeClientObservationRecord(result.error).consentRequestId,
+  )
 
-  return { input, id: id! }
+  return { input, id: requireNativeClientObservationPresent(id) }
 }
 // Actual E fetch client; only browser-added Host/Origin are supplied. No auth,
 // DTO, issuer, grant/session/SQLite or native creation implementation is mocked.
 function bridge(
-  session = f.sessions[0],
+  session = requireInitializedF().sessions[0],
   getToken = () => session.token as string | null,
   receive?: (response: Response) => Promise<Response>,
 ) {
@@ -309,7 +435,7 @@ function bridge(
     headers.set("host", new URL(origin).host)
     headers.set("origin", origin)
     calls.push(String(input))
-    const response = await issuer.fetch(
+    const response = await requireInitializedIssuer().fetch(
       new Request(origin + input, { ...init, headers }),
     )
     assert.equal(response.headers.get("cache-control"), "no-store")
@@ -335,11 +461,12 @@ test("exact real E client inspects and approves without native allocation; origi
     { client, calls } = bridge()
   const inspected = await client.inspect(prepared.id)
   assert.equal(inspected.state, "pending")
-  assert.equal(inspected.accountId, f.sessions[0].owner)
+  assert.equal(inspected.accountId, requireInitializedF().sessions[0].owner)
   assert.equal(inspected.draftId, prepared.input.draftId)
   assert.equal(inspected.revision, 1)
   assert.equal(
-    JSON.parse(inspected.authoredShowJson).title,
+    requireNativeClientObservationRecord(JSON.parse(inspected.authoredShowJson))
+      .title,
     "E client exact save",
   )
   assert.ok(Object.isFrozen(inspected))
@@ -358,10 +485,21 @@ test("exact real E client inspects and approves without native allocation; origi
   const saved = await rpc(token, "save_game", prepared.input)
   assert.equal(saved.ok, true, JSON.stringify(saved))
   assert.equal(count(), before + 1)
-  const actual = await f.as(f.sessions[0], () =>
-    native.getQuizzById(saved.data.quizId),
+  const actual = await requireInitializedF().as(
+    requireInitializedF().sessions[0],
+    () =>
+      requireInitializedNative().getQuizzById(
+        requireNativeClientObservationString(
+          requireNativeClientObservationRecord(saved.data).quizId,
+        ),
+      ),
   )
-  assert.equal(actual.id, saved.data.quizId)
+  assert.equal(
+    actual.id,
+    requireNativeClientObservationString(
+      requireNativeClientObservationRecord(saved.data).quizId,
+    ),
+  )
   assert.equal(actual.subject, "E client exact save")
   assert.deepEqual(
     (await rpc(token, "save_game", prepared.input)).data,
@@ -380,14 +518,35 @@ test("real E client discards a genuine inspect response after native session cha
   const token = await linked(),
     prepared = await pending(token, "Discard delayed native inspection"),
     before = count()
-  let current: string | null = f.sessions[0].token,
-    release!: (r: Response) => void,
-    entered!: () => void,
-    real!: Response
-  const ready = new Promise<void>((r) => (entered = r)),
-    held = new Promise<Response>((r) => (release = r))
+  let current: string | null = requireInitializedF().sessions[0].token,
+    release: (r: Response) => void = () => {
+      throw new Error(
+        "Promise resolver release was used before executor initialization",
+      )
+    },
+    entered: () => void = () => {
+      throw new Error(
+        "Promise resolver entered was used before executor initialization",
+      )
+    },
+    real: Response | undefined = undefined
+
+  function requireRealResponse(): Response {
+    if (real === undefined) {
+      throw new Error("Local state real was read before initialization")
+    }
+
+    return real
+  }
+
+  const ready = new Promise<void>((r) => {
+      entered = r
+    }),
+    held = new Promise<Response>((r) => {
+      release = r
+    })
   const { client, calls } = bridge(
-    f.sessions[0],
+    requireInitializedF().sessions[0],
     () => current,
     async (response) => {
       real = response
@@ -398,12 +557,12 @@ test("real E client discards a genuine inspect response after native session cha
   )
   const inspecting = client.inspect(prepared.id)
   await ready
-  current = f.sessions[1].token
-  release(real)
+  current = requireInitializedF().sessions[1].token
+  release(requireRealResponse())
   await assert.rejects(inspecting, /session-changed/)
   assert.equal(calls.length, 1)
   assert.equal(count(), before)
-  const foreign = bridge(f.sessions[1])
+  const foreign = bridge(requireInitializedF().sessions[1])
   await assert.rejects(
     foreign.client.inspect(prepared.id),
     (e) => e instanceof NativeSaveConsentError,
@@ -451,12 +610,18 @@ test("lost approval ACK from actual F commit is uncertain to E and never auto-re
     before = count()
   let lost = false
   const { client, calls } = bridge(
-    f.sessions[0],
-    () => f.sessions[0].token,
+    requireInitializedF().sessions[0],
+    () => requireInitializedF().sessions[0].token,
     async (response) => {
       if (calls.at(-1) === "/oauth/native-save/approve") {
         assert.equal(response.status, 200)
-        assert.equal((await response.clone().json()).data.state, "approved")
+        assert.equal(
+          requireNativeClientObservationRecord(
+            requireNativeClientObservationRecord(await response.clone().json())
+              .data,
+          ).state,
+          "approved",
+        )
         lost = true
         throw new Error("synthetic-network-loss-after-real-approval")
       }
@@ -500,15 +665,20 @@ test("revoked actual native session cannot approve through E and no game is allo
   const token = await linked(),
     prepared = await pending(token, "E revoked native approval"),
     before = count(),
-    minted = await f.tokens.mintToken(f.sessions[0].owner, "manager"),
-    claims = await f.tokens.verifyToken(minted.token),
+    minted = await requireInitializedF().tokens.mintToken(
+      requireInitializedF().sessions[0].owner,
+      "manager",
+    ),
+    claims = await requireInitializedF().tokens.verifyToken(minted.token),
     { client, calls } = bridge({
       token: minted.token,
-      owner: f.sessions[0].owner,
-      sid: claims.sid!,
+      owner: requireInitializedF().sessions[0].owner,
+      sid: requireNativeClientObservationPresent(claims.sid),
     })
   const inspected = await client.inspect(prepared.id)
-  f.accounts.revokeAccountSession(claims.sid!)
+  requireInitializedF().accounts.revokeAccountSession(
+    requireNativeClientObservationPresent(claims.sid),
+  )
   await assert.rejects(
     client.approve(prepared.id, inspected),
     (e) => e instanceof NativeSaveConsentError,
@@ -516,7 +686,9 @@ test("revoked actual native session cannot approve through E and no game is allo
   await assert.rejects(client.approve(prepared.id, inspected), /expired/)
   assert.equal(calls.length, 2)
   assert.equal(
-    (await rpc(token, "save_game", prepared.input)).error.code,
+    requireNativeClientObservationRecord(
+      (await rpc(token, "save_game", prepared.input)).error,
+    ).code,
     "CONSENT_REQUIRED",
   )
   assert.equal(count(), before)

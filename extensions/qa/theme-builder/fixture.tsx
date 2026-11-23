@@ -10,8 +10,11 @@ if (location.pathname === "/studio/oauth-consent") {
 } else {
   const params = new URLSearchParams(location.search)
   const locale = params.get("locale") ?? "en"
-  if (!["en", "fr", "de", "es", "it", "ja", "tr", "vi"].includes(locale))
+
+  if (!["en", "fr", "de", "es", "it", "ja", "tr", "vi"].includes(locale)) {
     throw new Error("qa:unsupported-locale")
+  }
+
   const token = (await (await fetch("/qa/session")).json()) as { token: string }
   const client = createBuilderClient("tenant-a", async () => token.token)
   const document = builderDocumentFixture()

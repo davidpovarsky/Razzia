@@ -4,27 +4,49 @@ import { assertBoundedJson } from "./primitives"
 export function canonicalJson(value: unknown): string {
   assertBoundedJson(value)
   const encode = (item: unknown): string => {
-    if (item === null) return "null"
+    if (item === null) {
+      return "null"
+    }
+
     if (Array.isArray(item)) {
       if (
         Object.keys(item).length !== item.length ||
         Array.from({ length: item.length }, (_, i) => String(i)).some(
           (key) => !Object.hasOwn(item, key),
         )
-      )
+      ) {
         throw new Error("show-library:sparse-array")
+      }
+
       return `[${item.map(encode).join(",")}]`
     }
+
     if (typeof item === "object") {
       return `{${Object.entries(item)
-        .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+        .sort(([a], [b]) => {
+          if (a < b) {
+            return -1
+          }
+
+          if (a > b) {
+            return 1
+          }
+
+          return 0
+        })
         .map(([key, child]) => `${JSON.stringify(key)}:${encode(child)}`)
         .join(",")}}`
     }
+
     const encoded = JSON.stringify(item)
-    if (encoded === undefined) throw new Error("show-library:non-json-value")
+
+    if (encoded === undefined) {
+      throw new Error("show-library:non-json-value")
+    }
+
     return encoded
   }
+
   return encode(value)
 }
 
@@ -58,8 +80,10 @@ export function sha256(text: string): string {
   ]
   const w = new Uint32Array(64)
   for (let start = 0; start < bytes.length; start += 64) {
-    for (let i = 0; i < 16; i++) w[i] = view.getUint32(start + i * 4)
-    for (let i = 16; i < 64; i++) {
+    for (let i = 0; i < 16; i += 1) {
+      w[i] = view.getUint32(start + i * 4)
+    }
+    for (let i = 16; i < 64; i += 1) {
       const a = w[i - 15],
         b = w[i - 2]
       w[i] =
@@ -70,7 +94,7 @@ export function sha256(text: string): string {
         0
     }
     let [a, b, c, d, e, f, g, j] = h
-    for (let i = 0; i < 64; i++) {
+    for (let i = 0; i < 64; i += 1) {
       const t1 =
         (j +
           (rotate(e, 6) ^ rotate(e, 11) ^ rotate(e, 25)) +
@@ -92,7 +116,10 @@ export function sha256(text: string): string {
       a = (t1 + t2) >>> 0
     }
     const next = [a, b, c, d, e, f, g, j]
-    for (let i = 0; i < 8; i++) h[i] = (h[i] + next[i]) >>> 0
+    for (let i = 0; i < 8; i += 1) {
+      h[i] = (h[i] + next[i]) >>> 0
+    }
   }
+
   return h.map((n) => n.toString(16).padStart(8, "0")).join("")
 }

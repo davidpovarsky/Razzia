@@ -12,26 +12,38 @@ export async function watchGuessOffContract(root) {
     const trace = { frames: 0, transitions: [], rounds: [], violations: [] }
     let previous = ""
     let previousPhase = ""
-    let currentRound
-    let frame
+    let currentRound = undefined
+
+    let frame = undefined
+
     let stopped = false
     const visible = (node) => {
-      if (!node) return false
+      if (!node) {
+        return false
+      }
+
       const rect = node.getBoundingClientRect()
-      if (!rect.width || !rect.height) return false
+
+      if (!rect.width || !rect.height) {
+        return false
+      }
+
       for (
         let ancestor = node;
         ancestor instanceof Element;
         ancestor = ancestor.parentElement
       ) {
         const style = getComputedStyle(ancestor)
+
         if (
           style.display === "none" ||
           style.visibility === "hidden" ||
           Number(style.opacity) <= 0.01
-        )
+        ) {
           return false
+        }
       }
+
       return true
     }
     const sample = () => {
@@ -41,21 +53,26 @@ export async function watchGuessOffContract(root) {
         .querySelector(".tzv4-stage")
         ?.getAttribute("data-v4-scene")
       const identity = [phase, scene].join(":")
+
       if (identity !== previous) {
         trace.transitions.push({ phase, scene })
         previous = identity
       }
+
       if (forbidden.has(scene) || phase === "locked") {
         if (
           !trace.violations.some(
             (item) => item.phase === phase && item.scene === scene,
           )
-        )
+        ) {
           trace.violations.push({ phase, scene })
+        }
       }
+
       if (scene === "grand-finale" && phase !== "closing") {
         trace.violations.push({ kind: "early-curtain", phase, scene })
       }
+
       if (
         phase === "closing" &&
         [
@@ -64,6 +81,7 @@ export async function watchGuessOffContract(root) {
       ) {
         trace.violations.push({ kind: "visible-final-glyph", phase, scene })
       }
+
       if (phase === "voting" && previousPhase !== "voting") {
         currentRound = {
           index: trace.rounds.length,
@@ -75,12 +93,14 @@ export async function watchGuessOffContract(root) {
         }
         trace.rounds.push(currentRound)
       }
+
       if (currentRound && phase === "voting") {
         currentRound.selected ||=
           element.querySelector(".choice-slot.is-selected") !== null
         const timers = [
           ...element.querySelectorAll('[data-testid="tadazz-timer"]'),
         ].filter(visible)
+
         if (
           timers.length > 1 &&
           !trace.violations.some(
@@ -95,11 +115,13 @@ export async function watchGuessOffContract(root) {
             count: timers.length,
           })
         }
+
         if (timers.length === 1) {
           // CountdownFloaterV4 and its real WAAPI clock render 20, 19, ... 01.
           // Keep the painted text as evidence; never infer time from captions.
           const text = timers[0].textContent.trim()
           const seconds = /^\d{2}$/u.test(text) ? Number(text) : null
+
           if (currentRound.timerSamples.at(-1)?.text !== text) {
             currentRound.timerSamples.push({
               text,
@@ -108,10 +130,13 @@ export async function watchGuessOffContract(root) {
               elapsedMs: performance.now() - currentRound.startedAt,
             })
           }
-          if (seconds !== null && currentRound.timerValues.at(-1) !== seconds)
+
+          if (seconds !== null && currentRound.timerValues.at(-1) !== seconds) {
             currentRound.timerValues.push(seconds)
+          }
         }
       }
+
       if (
         currentRound &&
         phase === "results" &&
@@ -121,10 +146,14 @@ export async function watchGuessOffContract(root) {
         currentRound.selected ||=
           element.querySelector(".choice-slot.is-selected") !== null
       }
+
       previousPhase = phase
     }
     const tick = () => {
-      if (stopped) return
+      if (stopped) {
+        return
+      }
+
       trace.frames += 1
       sample()
       frame = requestAnimationFrame(tick)
@@ -136,6 +165,7 @@ export async function watchGuessOffContract(root) {
         stopped = true
         cancelAnimationFrame(frame)
         sample()
+
         return trace
       },
     }
@@ -153,25 +183,33 @@ export async function verifyGuessOffResult(root, expect, unanswered) {
             ...element.querySelectorAll(".choice-slot .winner-tag"),
           ].filter((node) => {
             const rect = node.getBoundingClientRect()
-            if (!rect.width || !rect.height) return false
+
+            if (!rect.width || !rect.height) {
+              return false
+            }
+
             for (
               let ancestor = node;
               ancestor instanceof Element;
               ancestor = ancestor.parentElement
             ) {
               const style = getComputedStyle(ancestor)
+
               if (
                 style.display === "none" ||
                 style.visibility === "hidden" ||
                 Number(style.opacity) <= 0.01
-              )
+              ) {
                 return false
+              }
             }
+
             return true
           })
           const expected =
             mode === "quiz" ? "CORRECT ANSWER" : "AUDIENCE FAVOURITE"
           const slot = tags[0]?.closest(".choice-slot")
+
           return (
             tags.length === 1 &&
             tags[0].textContent.trim() === expected &&
@@ -183,8 +221,10 @@ export async function verifyGuessOffResult(root, expect, unanswered) {
       { timeout: 10_000 },
     )
     .toBe(true)
-  if (unanswered)
+
+  if (unanswered) {
     await expect(root.locator(".choice-slot.is-selected")).toHaveCount(0)
+  }
 }
 
 export async function readGuessOffContract(root) {
@@ -237,5 +277,6 @@ export function assertGuessOffContract(trace) {
       "Observe the last second before natural expiry",
     )
   }
+
   return trace
 }

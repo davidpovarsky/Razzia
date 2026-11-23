@@ -40,6 +40,7 @@ export default defineConfig({
             if (request.url === "/") {
               request.url = "/account-boundary.html"
             }
+
             next()
           }
         })

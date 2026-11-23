@@ -15,15 +15,18 @@ const checks = [],
   errors = []
 page.on("pageerror", (e) => errors.push(e.message))
 async function snap(name, focus) {
-  if (focus) await focus.scrollIntoViewIfNeeded()
+  if (focus) {
+    await focus.scrollIntoViewIfNeeded()
+  }
+
   await page.evaluate(async () => {
     await document.fonts.ready
-    await new Promise((r) =>
-      requestAnimationFrame(() => requestAnimationFrame(r)),
-    )
+    await new Promise((r) => {
+      requestAnimationFrame(() => requestAnimationFrame(r))
+    })
   })
   await page.screenshot({
-    path: path.join(out, name + ".png"),
+    path: path.join(out, `${name}.png`),
     fullPage: true,
     animations: "disabled",
   })
@@ -47,8 +50,10 @@ async function hebrewError(id) {
   await expect(e).toBeVisible()
   expect(await e.innerText()).toMatch(/[א-ת]/u)
   expect(await e.innerText()).not.toMatch(/\b(?:errors|roster)[.:]/u)
+
   return e
 }
+
 try {
   await page.addInitScript(() => localStorage.setItem("i18nextLng", "he"))
   await page.goto("http://127.0.0.1:3180/manager?lng=he")
@@ -65,7 +70,7 @@ try {
   await expect(page.getByTestId("panel-roster")).toBeVisible()
   for (const width of [1440, 390, 320]) {
     await page.setViewportSize({ width, height: 1000 })
-    await snap("roster-empty-" + width)
+    await snap(`roster-empty-${width}`)
   }
   await page.getByTestId("roster-save-participant-btn").click()
   await snap("roster-name-error", await hebrewError("roster-form-error"))
@@ -93,7 +98,7 @@ try {
   for (const width of [1440, 390, 320]) {
     await page.setViewportSize({ width, height: 1000 })
     await snap(
-      "roster-one-" + width,
+      `roster-one-${width}`,
       page.getByTestId("panel-roster").locator("table"),
     )
   }
@@ -145,8 +150,8 @@ try {
     "Valid Hebrew CSV preview and in-memory approval add second isolated QA row",
   )
   for (const tab of ["settings", "launch", "questions", "participants"]) {
-    await page.getByTestId("studio-tab-" + tab).click()
-    await expect(page.getByTestId("studio-tab-" + tab)).toHaveAttribute(
+    await page.getByTestId(`studio-tab-${tab}`).click()
+    await expect(page.getByTestId(`studio-tab-${tab}`)).toHaveAttribute(
       "aria-pressed",
       "true",
     )
@@ -164,7 +169,9 @@ try {
     ),
   )
 } catch (error) {
-  await snap("failure").catch(() => {})
+  await snap("failure").catch(() => {
+    /* Keep the recorded audit outcome if its diagnostic screenshot is unavailable. */
+  })
   console.log(
     JSON.stringify(
       {

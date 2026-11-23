@@ -1,0 +1,19 @@
+{
+  "kind": "continuation-source-restoration",
+  "sourceRun": "tadazz-coherent-lint-b88dc058f770-22c887e4",
+  "base": "b88dc058f770044d9d7f8bd8948f34b7d2cfa7bd",
+  "candidateFiles": 296,
+  "archiveSha256": "a12e87ad46376c5a6b6409fc51f89fdc2c47aa9fbcf8d8de48e11ad21512d1f9",
+  "formattedManifestSha256": "dee950d8a5c5d2712f638c316755e0a4c95d08beb62f9164bcc532de135a35da",
+  "restorationReceiptSha256": "25e544a7ede54933e0c61524fa3e37be42dd64954115b25668900131941e4ad5",
+  "priorResults": {
+    "passedTests": 560,
+    "passedTypeChecks": 4,
+    "lintErrors": 718,
+    "lintWarnings": 15,
+    "formatPassed": false,
+    "overallPassed": false
+  },
+  "releaseQualified": false,
+  "originalsPreserved": true
+}

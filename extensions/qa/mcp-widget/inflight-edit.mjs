@@ -9,14 +9,26 @@ import { chromium, webkit } from "../../node_modules/@playwright/test/index.mjs"
 const baseline = process.argv.includes("--baseline")
 const name = baseline ? "before" : "after"
 const rawEvidence = process.env.TADAZZ_WIDGET_EVIDENCE
-const evidence = rawEvidence
-  ? rawEvidence.startsWith("file://")
-    ? new URL(rawEvidence.endsWith("/") ? rawEvidence : `${rawEvidence}/`)
-    : new URL(pathToFileURL(resolve(rawEvidence)).href.replace(/\/?$/u, "/"))
-  : new URL(
-      "../../../docs/extensions/qa-evidence/mcp-widget-20261115/inflight-edit-20261116/",
-      import.meta.url,
+const getEvidenceLocation = () => {
+  if (rawEvidence) {
+    if (rawEvidence.startsWith("file://")) {
+      return new URL(
+        rawEvidence.endsWith("/") ? rawEvidence : `${rawEvidence}/`,
+      )
+    }
+
+    return new URL(
+      pathToFileURL(resolve(rawEvidence)).href.replace(/\/?$/u, "/"),
     )
+  }
+
+  return new URL(
+    "../../../docs/extensions/qa-evidence/mcp-widget-20261115/inflight-edit-20261116/",
+    import.meta.url,
+  )
+}
+
+const evidence = getEvidenceLocation()
 const dist = new URL("../../src/mcp-app/widget/dist/", import.meta.url)
 const html = await readFile(new URL("widget.html", dist))
 const host = await readFile(new URL("host.js", dist))

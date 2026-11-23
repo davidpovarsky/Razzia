@@ -27,8 +27,10 @@ const star = (x, y, r, fill, opacity = 1) => {
   const points = Array.from({ length: 10 }, (_, i) => {
     const angle = ((i * 36 - 90) * Math.PI) / 180
     const radius = i % 2 ? r * 0.42 : r
+
     return `${x + Math.cos(angle) * radius},${y + Math.sin(angle) * radius}`
   }).join(" ")
+
   return `<polygon points="${points}" fill="${fill}" opacity="${opacity}"/>`
 }
 const circle = (x, y, r, colour, opacity = 1, stroke = false, width = 2) =>
@@ -45,6 +47,7 @@ function decoration(id, [night, mid, accent, secondary]) {
         <path d="M40 40h1520v820H40zM54 54h1492v792H54z" opacity=".45"/></g>
         ${star(1310, 180, 34, accent, 0.7)}${star(292, 720, 16, secondary, 0.55)}
         ${circle(226, 220, 66, accent, 0.12)}${circle(1378, 682, 64, secondary, 0.08)}`
+
     case "story":
       return `<g fill="${secondary}" opacity=".12">
         <path d="M0 900V370C130 460 170 660 100 900ZM1600 900V320c-140 160-180 380-100 580Z"/>
@@ -55,6 +58,7 @@ function decoration(id, [night, mid, accent, secondary]) {
         </g><path d="M-60 830Q420 660 850 840T1700 760V900H0" fill="${accent}" opacity=".09"/>
         ${Array.from({ length: 20 }, (_, i) => star(80 + ((i * 137) % 1460), 75 + ((i * 97) % 750), 3 + (i % 3), accent, 0.2 + (i % 4) * 0.08)).join("")}
         <path d="M126 288q100-78 170 0v135q-70-76-170 0zm170 0q100-78 170 0v135q-70-76-170 0z" fill="${accent}" opacity=".12"/>`
+
     case "picture":
       return `${rect(-90, 85, 340, 340, 48, accent, 0.24, -14)}${rect(25, 72, 250, 250, 32, secondary, 0.25, 12)}
         ${rect(1310, 530, 330, 330, 50, secondary, 0.21, 14)}${rect(1350, 580, 220, 220, 30, accent, 0.23, -9)}
@@ -62,6 +66,7 @@ function decoration(id, [night, mid, accent, secondary]) {
         <path d="M0 900V710l220 190Z" fill="${secondary}" opacity=".20"/>
         ${circle(1420, 165, 60, accent, 0.22, true, 16)}${circle(250, 760, 43, secondary, 0.26)}
         ${star(1260, 100, 24, accent, 0.4)}`
+
     case "truth":
       return `<defs><pattern id="grid" width="44" height="44" patternUnits="userSpaceOnUse">${circle(2, 2, 1.3, secondary, 0.13)}</pattern></defs>
         <rect width="1600" height="900" fill="url(#grid)"/>
@@ -70,17 +75,20 @@ function decoration(id, [night, mid, accent, secondary]) {
         <path d="M146 400h140m-70-70v140M1280 160h120m-60-60v120"/>
         </g>${circle(135, 715, 90, secondary, 0.17, true, 3)}${circle(135, 715, 45, accent, 0.18, true, 3)}
         ${circle(1400, 395, 26, accent, 0.35)}${star(350, 120, 13, secondary, 0.28)}`
+
     case "finale":
       return `<g fill="${accent}" opacity=".10"><path d="M0 0h230l510 900H580ZM1600 0h-230L860 900h160Z"/></g>
         <g fill="none" stroke="${accent}" opacity=".22" stroke-width="2"><path d="M40 40h1520v820H40z"/><path d="M40 160h150L340 40m1070 0-150 120h300M40 740h150l150 120m1070 0-150-120h300"/></g>
         ${Array.from({ length: 18 }, (_, i) => star(80 + ((i * 173) % 1450), 70 + ((i * 131) % 730), 5 + (i % 4) * 3, accent, 0.18 + (i % 3) * 0.08)).join("")}
         ${circle(800, 800, 470, accent, 0.1, true, 2)}${circle(800, 800, 490, accent, 0.07, true, 2)}`
+
     case "family":
       return `<path d="M-30 120Q320-70 550 90T1110 80T1630 100" fill="none" stroke="${secondary}" stroke-width="3" opacity=".2"/>
         ${Array.from({ length: 14 }, (_, i) => `<path d="M${i * 120 - 15} ${80 + Math.sin(i) * 30}l28 65 45-63Z" fill="${i % 2 ? secondary : accent}" opacity=".17"/>`).join("")}
         ${circle(40, 740, 210, accent, 0.12)}${circle(1540, 700, 220, secondary, 0.11)}
         ${Array.from({ length: 20 }, (_, i) => rect((i * 139) % 1550, 180 + ((i * 131) % 650), 8, 25, 3, i % 2 ? accent : secondary, 0.25, i * 29)).join("")}
         <path d="M1460 200c-45-50-100 10 0 85 100-75 45-135 0-85Z" fill="${accent}" opacity=".25"/>`
+
     case "classroom":
       return `<g fill="none" stroke="${accent}" opacity=".24" stroke-width="2">
         <ellipse cx="120" cy="195" rx="180" ry="58" transform="rotate(32 120 195)"/>
@@ -90,11 +98,13 @@ function decoration(id, [night, mid, accent, secondary]) {
         </g>${circle(120, 195, 24, secondary, 0.35)}${circle(1444, 196, 78, accent, 0.12)}
         ${Array.from({ length: 25 }, (_, i) => circle(60 + ((i * 173) % 1490), 60 + ((i * 89) % 790), 2.4, secondary, 0.23)).join("")}
         ${rect(88, 650, 155, 45, 8, secondary, 0.13, -12)}${rect(118, 700, 155, 45, 8, accent, 0.14, 8)}`
+
     case "team":
       return `<g stroke="${secondary}" opacity=".18" stroke-width="3" fill="none"><path d="M85 150l205 110-150 190m150-190 80-180M1475 710l-195-110 150-190m-150 190-85 180"/></g>
         ${rect(25, 90, 120, 120, 30, accent, 0.22, -7)}${rect(230, 200, 120, 120, 30, secondary, 0.22, 8)}${rect(90, 390, 110, 110, 28, accent, 0.15, -8)}
         ${rect(1410, 650, 120, 120, 30, secondary, 0.22, 8)}${rect(1220, 540, 120, 120, 30, accent, 0.2, -8)}${rect(1380, 345, 110, 110, 28, secondary, 0.15, 7)}
         ${circle(1295, 125, 35, accent, 0.25)}${circle(345, 770, 28, secondary, 0.25)}`
+
     default:
       return `${circle(120, 140, 230, accent, 0.12)}${circle(120, 140, 170, accent, 0.19, true, 3)}${circle(120, 140, 125, accent, 0.15, true, 3)}
         ${circle(1510, 730, 270, secondary, 0.14)}${circle(1510, 730, 210, accent, 0.18, true, 3)}${circle(1510, 730, 150, accent, 0.13, true, 3)}
@@ -128,11 +138,15 @@ function icon(name) {
     square: `<rect x="122" y="122" width="268" height="268" rx="20" fill="${c.blue}" stroke="${c.ink}" stroke-width="12"/>`,
     circle:
       circle(256, 256, 142, c.mint) + circle(256, 256, 142, c.ink, 1, true, 12),
-    star:
-      star(256, 260, 175, c.yellow) +
-      `<path d="M256 85l48 109 118 15-87 79 25 116-104-59-104 59 25-116-87-79 118-15Z" fill="none" stroke="${c.ink}" stroke-width="12" stroke-linejoin="round"/>`,
+    star: `${star(
+      256,
+      260,
+      175,
+      c.yellow,
+    )}<path d="M256 85l48 109 118 15-87 79 25 116-104-59-104 59 25-116-87-79 118-15Z" fill="none" stroke="${c.ink}" stroke-width="12" stroke-linejoin="round"/>`,
     sun: `${Array.from({ length: 12 }, (_, i) => {
       const a = (i * Math.PI) / 6
+
       return `<path d="M${256 + Math.cos(a) * 135} ${256 + Math.sin(a) * 135}l${Math.cos(a) * 40} ${Math.sin(a) * 40}" stroke="${c.ink}" stroke-width="14" stroke-linecap="round"/>`
     }).join(
       "",
@@ -146,6 +160,7 @@ function icon(name) {
     rocket: `<path d="M207 346q-23 76 49 110 72-34 49-110Z" fill="${c.yellow}" stroke="${c.ink}" stroke-width="10"/><path d="M197 245l-70 100 65-10m123-90 70 100-65-10" fill="${c.coral}" stroke="${c.ink}" stroke-width="11" stroke-linejoin="round"/><path d="M256 62q-110 100-65 289h130q45-189-65-289Z" fill="${c.cream}" stroke="${c.ink}" stroke-width="12"/>${circle(256, 217, 48, c.blue)}${circle(256, 217, 48, c.ink, 1, true, 10)}<path d="M210 128q45-16 92 0" fill="none" stroke="${c.ink}" stroke-width="10"/>`,
     train: `<rect x="125" y="85" width="262" height="309" rx="50" fill="${c.blue}" stroke="${c.ink}" stroke-width="12"/><rect x="156" y="140" width="200" height="116" rx="18" fill="${c.cream}" stroke="${c.ink}" stroke-width="10"/><path d="M256 143v110M192 100h128" stroke="${c.ink}" stroke-width="10" stroke-linecap="round"/>${circle(186, 324, 21, c.yellow)}${circle(326, 324, 21, c.yellow)}<path d="M172 394l-45 61m213-61 45 61m-246-18h234" fill="none" stroke="${c.ink}" stroke-width="13" stroke-linecap="round"/>`,
   }
+
   return `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512"><rect width="512" height="512" rx="36" fill="#f7f2e8"/>${circle(256, 256, 220, "#eee5d5", 0.5)}${shapes[name]}</svg>`
 }
 
@@ -174,8 +189,9 @@ async function render(name, svg, width, height) {
     bytes: bytes.length,
   })
 }
-for (const [id, colors] of Object.entries(palettes))
+for (const [id, colors] of Object.entries(palettes)) {
   await render(`${id}-backdrop`, backdrop(id, colors), 1600, 900)
+}
 for (const name of [
   "triangle",
   "square",
@@ -190,12 +206,13 @@ for (const name of [
   "bicycle",
   "rocket",
   "train",
-])
+]) {
   await render(`picture-${name}`, icon(name), 512, 512)
+}
 await browser.close()
 await writeFile(
   path.join(output, "gallery-assets.json"),
-  JSON.stringify(assets, null, 2) + "\n",
+  `${JSON.stringify(assets, null, 2)}\n`,
 )
 console.log(
   JSON.stringify({

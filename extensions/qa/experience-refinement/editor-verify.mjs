@@ -28,6 +28,7 @@ export async function verifyEditorRefinements(options) {
   const read = async (path) => {
     const response = await page.request.get(origin + path, { headers })
     assert.equal(response.status(), 200, path)
+
     return response.json()
   }
   const readQuiz = options.readQuiz ?? (() => read("/api/quizz/" + quizId))
@@ -44,6 +45,7 @@ export async function verifyEditorRefinements(options) {
         data: body,
       })
       assert.equal(response.status(), 200, "Fixture composite write")
+
       return response.json()
     })
   const { computeCanonicalBaseDigest } =
@@ -65,6 +67,7 @@ export async function verifyEditorRefinements(options) {
   const cleanQuiz = (quiz) => {
     const result = structuredClone(quiz)
     delete result.id
+
     return result
   }
   const fixtureQuiz = cleanQuiz(originalQuiz)
@@ -80,7 +83,7 @@ export async function verifyEditorRefinements(options) {
   }
   const fixtureExtras = structuredClone(originalExtras)
   fixtureExtras.baseDigest = computeCanonicalBaseDigest(fixtureQuiz)
-  const firstQuestionId = fixtureExtras.questionIds[0]
+  const [firstQuestionId] = fixtureExtras.questionIds
   const existingQuestionExtras =
     fixtureExtras.perQuestion[firstQuestionId] ?? {}
   fixtureExtras.perQuestion[firstQuestionId] = {
@@ -123,17 +126,24 @@ export async function verifyEditorRefinements(options) {
     const question = page.getByTestId("editor-question-card-0")
     const closeDrawer = async () => {
       const visibleClose = page.locator("[data-editor-drawer-close]:visible")
-      if (await visibleClose.count()) await visibleClose.first().click()
+
+      if (await visibleClose.count()) {
+        await visibleClose.first().click()
+      }
     }
+
     if (!(await question.isVisible())) {
       await closeDrawer()
       await page.getByTestId("editor-panel-toggle-timeline").click()
     }
+
     await question.click()
+
     if (!(await page.getByTestId("editor-question-guide").isVisible())) {
       await closeDrawer()
       await page.getByTestId("editor-panel-toggle-edit").click()
     }
+
     await expect(page.getByTestId("editor-question-guide")).toBeVisible()
     await expect(page.getByTestId("editor-editing-mode")).toBeVisible()
   }
@@ -151,6 +161,7 @@ export async function verifyEditorRefinements(options) {
     }
   }
   let fixtureWritten = false
+
   try {
     await writeComposite({
       expectedRevision: originalExtras.revision,
@@ -334,8 +345,9 @@ export async function verifyEditorRefinements(options) {
     }
     writeFileSync(
       join(evidence, "receipt.json"),
-      JSON.stringify(receipt, null, 2) + "\n",
+      `${JSON.stringify(receipt, null, 2)}\n`,
     )
+
     return receipt
   } catch (error) {
     const numericInputs = await page
@@ -351,7 +363,7 @@ export async function verifyEditorRefinements(options) {
       .catch(() => [])
     writeFileSync(
       join(evidence, "partial-receipt.json"),
-      JSON.stringify(
+      `${JSON.stringify(
         {
           passed: false,
           results: report,
@@ -361,17 +373,20 @@ export async function verifyEditorRefinements(options) {
         },
         null,
         2,
-      ) + "\n",
+      )}\n`,
     )
     await page
       .screenshot({
         path: join(evidence, "editor-refinement-failure.png"),
         fullPage: true,
       })
-      .catch(() => {})
+      .catch(() => {
+        /* Keep the recorded audit outcome if its diagnostic screenshot is unavailable. */
+      })
     throw error
   } finally {
     page.off("request", onRequest)
+
     if (fixtureWritten) {
       const latest = (await readExtras()).extras
       const restoredQuiz = cleanQuiz(originalQuiz)
@@ -385,11 +400,21 @@ export async function verifyEditorRefinements(options) {
         },
       })
     }
-    await page.evaluate((language) => {
-      if (language === null) localStorage.removeItem("i18nextLng")
-      else localStorage.setItem("i18nextLng", language)
+
+    await page.evaluate((receivedLanguage) => {
+      if (receivedLanguage === null) {
+        localStorage.removeItem("i18nextLng")
+      } else {
+        localStorage.setItem("i18nextLng", receivedLanguage)
+      }
     }, originalLanguage)
-    if (originalViewport) await page.setViewportSize(originalViewport)
-    if (originalUrl.startsWith(origin)) await page.goto(originalUrl)
+
+    if (originalViewport) {
+      await page.setViewportSize(originalViewport)
+    }
+
+    if (originalUrl.startsWith(origin)) {
+      await page.goto(originalUrl)
+    }
   }
 }

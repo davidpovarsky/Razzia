@@ -22,7 +22,8 @@ const names = [
 ]
 const kinds = ["survey", "quiz", "survey", "quiz", "survey"]
 const picks = [0, 0, 1, 2, 3]
-let page
+let page = undefined
+
 async function waitForGame() {
   await page.getByTestId("great-guessoff-demo").waitFor({ timeout: 30000 })
 }
@@ -48,17 +49,13 @@ async function intro() {
 }
 async function voteAndCheck(index) {
   await page
-    .locator(
-      '[data-v4-scene="countdown"][data-question-key="' + names[index] + '"]',
-    )
+    .locator(`[data-v4-scene="countdown"][data-question-key="${names[index]}"]`)
     .waitFor({ timeout: 30000 })
-  await page.getByTestId("tadazz-card-" + picks[index]).click()
+  await page.getByTestId(`tadazz-card-${picks[index]}`).click()
   await page.locator('[data-ggo-phase="results"]').waitFor()
   await page
     .locator(
-      '[data-v4-scene="survey-results"][data-question-key="' +
-        names[index] +
-        '"]',
+      `[data-v4-scene="survey-results"][data-question-key="${names[index]}"]`,
     )
     .waitFor()
   const heading = page.locator(".q-frame .eyebrow")
@@ -80,6 +77,7 @@ async function voteAndCheck(index) {
       cards = results.map((c) => c.getBoundingClientRect())
     const fs = getComputedStyle(title),
       qs = getComputedStyle(question)
+
     return {
       labelFont: parseFloat(fs.fontSize),
       questionFont: parseFloat(qs.fontSize),
@@ -118,14 +116,17 @@ async function voteAndCheck(index) {
     "Question should be full sized but fit gracefully",
   )
   assert.equal(geometry.cardCount, 4)
+
   if (index === 0 || index === 1) {
     await page.screenshot({
-      path: resolve("qa/phase2/ggo-balanced-result-" + index + ".png"),
+      path: resolve(`qa/phase2/ggo-balanced-result-${index}.png`),
       fullPage: true,
     })
   }
+
   return geometry
 }
+
 try {
   page = await browser.newPage({
     viewport: { width: 1366, height: 900 },
@@ -137,9 +138,10 @@ try {
   await intro()
   await page.getByTestId("ggo-main-action").click()
   const geometry = []
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 5; i += 1) {
     geometry.push(await voteAndCheck(i))
     await page.getByTestId("ggo-main-action").click()
+
     if (i === 2) {
       await page.locator('[data-v4-scene="leaderboard"]').waitFor()
       await page.getByTestId("ggo-main-action").click()

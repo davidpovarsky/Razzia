@@ -47,11 +47,13 @@ const bindingRules: Record<
     phases: ["answerCards", "voting", "voteLocked", "results"],
   },
 }
+
 export function bindingAllowed(
   binding: string,
   role: PreviewRole,
   phase: PreviewPhase,
 ): boolean {
   const rule = bindingRules[binding]
+
   return !rule || (rule.roles.includes(role) && rule.phases.includes(phase))
 }

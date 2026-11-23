@@ -307,10 +307,12 @@ export const recoverJournals = (
       // validated quiz payloads. Accept its digest with that exact identity
       // omitted as well as legacy digests that included it.
       let backupDigestMatches = !parsedExtras
+
       if (parsedExtras) {
         backupDigestMatches =
           parsedExtras.baseDigest ===
           computeCanonicalBaseDigest(entry.backupBase)
+
         if (
           typeof entry.backupBase === "object" &&
           entry.backupBase !== null &&
@@ -320,12 +322,16 @@ export const recoverJournals = (
             string,
             unknown
           >
-          if (storedId !== cleanId)
+
+          if (storedId !== cleanId) {
             throw new Error(`Backup base identity mismatch for quiz ${cleanId}`)
+          }
+
           backupDigestMatches ||=
             parsedExtras.baseDigest === computeCanonicalBaseDigest(payload)
         }
       }
+
       if (
         parsedExtras &&
         (parsedExtras.quizId !== cleanId ||
@@ -339,33 +345,45 @@ export const recoverJournals = (
       }
 
       // 5. Rollback base quiz without swallowing errors
-      if (entry.backupBase !== null && entry.backupBase !== undefined)
+      if (entry.backupBase !== null && entry.backupBase !== undefined) {
         recoveryBasePayload(entry.backupBase, cleanId)
-      if (entry.targetBase !== null && entry.targetBase !== undefined)
+      }
+
+      if (entry.targetBase !== null && entry.targetBase !== undefined) {
         recoveryBasePayload(entry.targetBase, cleanId)
+      }
+
       injections.recoveryBoundary?.(cleanId, "before-base")
+
       if (entry.backupBase !== null && entry.backupBase !== undefined) {
         injections.updateQuizz(cleanId, entry.backupBase)
       } else {
         const currentBase = readRecoveryBase(injections, cleanId)
+
         if (currentBase) {
           // A creation journal owns only the exact newly saved payload. Never
           // delete a subsequently changed quiz during cleanup replay.
           const baseRecord = { ...(currentBase as Record<string, unknown>) }
           const targetRecord = entry.targetBase as Record<string, unknown>
-          if (!("id" in targetRecord)) delete baseRecord.id
+
+          if (!("id" in targetRecord)) {
+            delete baseRecord.id
+          }
+
           if (
             computeCanonicalBaseDigest(baseRecord) !==
             computeCanonicalBaseDigest(targetRecord)
           ) {
             throw new Error(`Created quiz ${cleanId} changed before rollback`)
           }
+
           injections.deleteQuizz(cleanId)
         }
       }
 
       // 6. Rollback sidecar
       injections.recoveryBoundary?.(cleanId, "before-sidecar")
+
       if (parsedExtras) {
         writeSidecar(
           injections.getPath,
@@ -377,6 +395,7 @@ export const recoverJournals = (
       } else {
         deleteSidecar(injections.getPath, cleanId)
       }
+
       injections.recoveryBoundary?.(cleanId, "after-sidecar")
 
       // 7. Verification before removing journal
@@ -389,8 +408,9 @@ export const recoverJournals = (
           if (
             (error as { code?: string }).code ===
             "TADAZZ_NATIVE_RECOVERY_BINDING"
-          )
+          ) {
             throw error
+          }
           // GetQuizzById may throw if unmocked or missing
         }
 
@@ -415,6 +435,7 @@ export const recoverJournals = (
         }
       } else {
         const remainingBase = readRecoveryBase(injections, cleanId)
+
         if (remainingBase) {
           throw new Error(`Base quiz ${cleanId} survived rollback deletion`)
         }

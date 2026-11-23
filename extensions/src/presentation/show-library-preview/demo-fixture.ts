@@ -18,5 +18,6 @@ export function prepareDemoFixture(
     context: { ...input.context, role, locale, reducedMotion },
   })
   const plan = resolvePreviewPlan(draft)
+
   return { draft, plan }
 }

@@ -10,7 +10,7 @@ import { retainedPacket, retainedSelection } from "./retained-schema.ts"
 type PreviewMode = "retained" | "tampered" | "stale" | "unavailable"
 type RetainedEntry = ReturnType<typeof retainedPacket.parse>["results"][number]
 
-const searchParams = new URL(window.location.href).searchParams
+const { searchParams } = new URL(window.location.href)
 const candidateParam = searchParams.get("candidate")
 const previewParam = searchParams.get("preview")
 let id = "widget_draft_A_123456789012"

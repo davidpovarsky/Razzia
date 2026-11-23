@@ -27,7 +27,7 @@ export async function verifyEditorMutations(options) {
   const questionIds = [randomUUID(), randomUUID()]
   const sceneId = randomUUID()
   const quizz = {
-    subject: "Editor mutation acceptance " + randomUUID(),
+    subject: `Editor mutation acceptance ${randomUUID()}`,
     gameMode: "quiz",
     questions: [
       {
@@ -72,20 +72,25 @@ export async function verifyEditorMutations(options) {
     sceneId,
   })
   const results = []
-  let quizId
-  let playerContext
+  let quizId = undefined
+
+  let playerContext = undefined
+
   const record = (name, details = {}) =>
     results.push({ name, passed: true, ...details })
   const read = async (path) => {
     const response = await page.request.get(options.origin + path, { headers })
     assert.equal(response.status(), 200, path)
+
     return response.json()
   }
   const openPanel = async (name) => {
-    const panel = page.getByTestId("editor-panel-" + name)
+    const panel = page.getByTestId(`editor-panel-${name}`)
+
     if (!(await panel.isVisible())) {
-      await page.getByTestId("editor-panel-toggle-" + name).click()
+      await page.getByTestId(`editor-panel-toggle-${name}`).click()
     }
+
     await expect(panel).toBeVisible()
   }
   const openEditor = async () => {
@@ -111,7 +116,8 @@ export async function verifyEditorMutations(options) {
   const saveWithPendingCheck = async (overwrite = false) => {
     const apiUrl = options.origin + "/api/extensions/quizzes/" + quizId
     let requestArrived = false
-    let release
+    let release = undefined
+
     const released = new Promise((resolve) => {
       release = resolve
     })
@@ -124,8 +130,10 @@ export async function verifyEditorMutations(options) {
     const delayedSave = async (route) => {
       if (route.request().method() !== "PUT") {
         await route.continue()
+
         return
       }
+
       const response = await route.fetch()
       assert.equal(response.status(), 200)
       requestArrived = true
@@ -133,6 +141,7 @@ export async function verifyEditorMutations(options) {
       await route.fulfill({ response })
     }
     await page.route(apiUrl, delayedSave)
+
     try {
       await page
         .getByTestId(
@@ -146,6 +155,7 @@ export async function verifyEditorMutations(options) {
       )
       await expect(page.locator("#studio-content")).toHaveAttribute("inert", "")
       await expect(page.locator('input[name="subject"]')).toBeDisabled()
+
       if (overwrite) {
         await expect(
           page.getByTestId("conflict-confirm-overwrite-button"),
@@ -159,25 +169,29 @@ export async function verifyEditorMutations(options) {
           previousTitle,
         )
       }
+
       release()
       await page.waitForURL(/\/(studio\/games|manager\/config)$/)
     } finally {
       release()
       await page.unroute(apiUrl, delayedSave)
     }
+
     record(
       overwrite
         ? "pending-conflict-overwrite-locks-editor-and-resolution-actions"
         : "pending-save-locks-editor-and-preserves-submitted-content",
     )
   }
+
   try {
     const created = await page.request.post(
       options.origin + "/api/extensions/quizzes",
       { headers, data: { quizz, extras } },
     )
     assert([200, 201].includes(created.status()), "Create disposable quiz")
-    quizId = (await created.json()).quizId
+    ;({ quizId } = await created.json())
+
     assert(quizId)
     await openEditor()
     await openPanel("edit")
@@ -272,6 +286,7 @@ export async function verifyEditorMutations(options) {
       }
     }
     await page.route(failedSaveUrl, failSave)
+
     try {
       const failedResponse = page.waitForResponse(
         (response) =>
@@ -292,6 +307,7 @@ export async function verifyEditorMutations(options) {
     } finally {
       await page.unroute(failedSaveUrl, failSave)
     }
+
     record("failed-save-unlocks-editing-and-retains-form-content")
 
     const { id: _id, ...cleanQuiz } = stored
@@ -395,13 +411,14 @@ export async function verifyEditorMutations(options) {
     const receipt = { passed: true, results, errors }
     writeFileSync(
       join(evidence, "receipt.json"),
-      JSON.stringify(receipt, null, 2) + "\n",
+      `${JSON.stringify(receipt, null, 2)}\n`,
     )
+
     return receipt
   } catch (error) {
     writeFileSync(
       join(evidence, "partial-receipt.json"),
-      JSON.stringify(
+      `${JSON.stringify(
         {
           passed: false,
           results,
@@ -410,14 +427,19 @@ export async function verifyEditorMutations(options) {
         },
         null,
         2,
-      ) + "\n",
+      )}\n`,
     )
     await page
       .screenshot({ path: join(evidence, "failure.png"), fullPage: true })
-      .catch(() => {})
+      .catch(() => {
+        /* Keep the recorded audit outcome if its diagnostic screenshot is unavailable. */
+      })
     throw error
   } finally {
-    if (playerContext) await playerContext.close()
+    if (playerContext) {
+      await playerContext.close()
+    }
+
     if (quizId) {
       const removed = await page.request.delete(
         options.origin + "/api/extensions/quizzes/" + quizId,
@@ -425,6 +447,7 @@ export async function verifyEditorMutations(options) {
       )
       assert([200, 204, 404].includes(removed.status()), "Remove owned QA quiz")
     }
+
     await page.close()
   }
 }

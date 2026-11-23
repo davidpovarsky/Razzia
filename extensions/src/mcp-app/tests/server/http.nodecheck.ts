@@ -16,6 +16,7 @@ import {
   newKey,
   data,
   code,
+  requireObservedRecord,
 } from "./fixtures.ts"
 import type {
   Dependencies,
@@ -37,11 +38,15 @@ function setup(overrides: Dependencies = {}, responseTimeoutMs?: number) {
     allowedOrigins: ["https://chat.example.invalid"],
     verifyAccessToken: async (token) => {
       const p = tokens.get(token)
-      if (!p) throw new Error("private backend detail must not escape")
+
+      if (!p) {
+        throw new Error("private backend detail must not escape")
+      }
+
       return p
     },
     dependencies: {
-      rateLimit: async () => true,
+      rateLimit: () => Promise.resolve(true),
       drafts: new MemoryDrafts(),
       authoring: { allowedPublicAssetUrls: new Set() },
       ...overrides,
@@ -58,7 +63,7 @@ function setup(overrides: Dependencies = {}, responseTimeoutMs?: number) {
       method,
       headers: {
         host: new URL(config.resource).host,
-        authorization: "Bearer " + tokenA,
+        authorization: `Bearer ${tokenA}`,
         "content-type": "application/json",
         accept: "application/json, text/event-stream",
         ...headers,
@@ -70,10 +75,11 @@ function setup(overrides: Dependencies = {}, responseTimeoutMs?: number) {
     const transport = new StreamableHTTPClientTransport(
       new URL(config.resource),
       {
-        authProvider: { token: async () => token },
+        authProvider: { token: () => Promise.resolve(token) },
         fetch: async (input, init) => {
           const r = new Request(input, init)
           r.headers.set("host", new URL(config.resource).host)
+
           return app.fetch(r)
         },
       },
@@ -83,14 +89,17 @@ function setup(overrides: Dependencies = {}, responseTimeoutMs?: number) {
       version: "1",
     })
     await client.connect(transport)
+
     return client
   }
+
   return { app, a, b, tokens, request, connect }
 }
 const list = { jsonrpc: "2.0", id: 1, method: "tools/list", params: {} }
 test("official HTTP client discovers twenty-five strict tools without a missing UI artifact", async () => {
   const h = setup()
   const client = await h.connect()
+
   try {
     const tools = await client.listTools()
     assertCurrentToolDiscovery(tools.tools)
@@ -115,6 +124,7 @@ test("HTTP draft CAS preserves tenant boundaries, revoked token denial and safe 
     authoredShowJson: JSON.stringify(show()),
     idempotencyKey: newKey(),
   }
+
   try {
     const created = data(
       await a.callTool({ name: "create_game_draft", arguments: args }),
@@ -177,7 +187,7 @@ test("metadata and initial OAuth challenge advertise all current tool scopes", a
     ),
   )
   assert.equal(response.status, 200)
-  const metadata = await response.json()
+  const metadata = requireObservedRecord(await response.json())
   assert.equal(metadata.resource, config.resource)
   assert.deepEqual(metadata.authorization_servers, [config.issuer])
   const expected = [
@@ -205,13 +215,15 @@ test("origin/host/TLS/query/proxy/session/body and method attacks fail before pr
   let writes = 0
   const h = setup({
     catalog: {
-      listThemes: async () => {
-        writes++
-        return {}
+      listThemes: () => {
+        writes += 1
+
+        return Promise.resolve({})
       },
-      listTemplates: async () => {
-        writes++
-        return {}
+      listTemplates: () => {
+        writes += 1
+
+        return Promise.resolve({})
       },
     },
   })
@@ -219,7 +231,7 @@ test("origin/host/TLS/query/proxy/session/body and method attacks fail before pr
     [h.request(list, { origin: "https://attacker.invalid" }), 403],
     [h.request(list, { host: "attacker.invalid" }), 403],
     [h.request(list, {}, config.resource.replace("https:", "http:")), 403],
-    [h.request(list, {}, config.resource + "?access_token=secret"), 400],
+    [h.request(list, {}, `${config.resource}?access_token=secret`), 400],
     [h.request(list, { "x-forwarded-host": "attacker.invalid" }), 400],
     [h.request(list, { authorization: "Bearer manager-token" }), 401],
     [h.request(list, { "mcp-session-id": "stolen-session" }), 400],
@@ -228,8 +240,9 @@ test("origin/host/TLS/query/proxy/session/body and method attacks fail before pr
     [h.request({ padding: "x".repeat(65_537) }), 413],
     [h.request([list]), 400],
     [h.request(undefined, {}, config.resource, "GET"), 405],
-  ] as const)
+  ] as const) {
     assert.equal((await h.app.fetch(request)).status, expected)
+  }
   assert.equal(writes, 0)
 })
 test("allowed browser origins can read OAuth challenge, while arbitrary preflight headers are rejected", async () => {
@@ -277,9 +290,19 @@ test("allowed browser origins can read OAuth challenge, while arbitrary prefligh
   assert.equal(denied.status, 403)
 })
 test("aborted unsettled authorization keeps all 32 HTTP slots occupied until real work settles", async () => {
-  let release!: (p: VerifiedPrincipal) => void
+  let release: (p: VerifiedPrincipal) => void = () => {
+    throw new Error(
+      "Promise resolver release was used before executor initialization",
+    )
+  }
+
   let started = 0
-  let entered!: () => void
+  let entered: () => void = () => {
+    throw new Error(
+      "Promise resolver entered was used before executor initialization",
+    )
+  }
+
   const allEntered = new Promise<void>((resolve) => {
     entered = resolve
   })
@@ -291,7 +314,12 @@ test("aborted unsettled authorization keeps all 32 HTTP slots occupied until rea
     config,
     allowedOrigins: [],
     verifyAccessToken: async () => {
-      if (++started === 32) entered()
+      started += 1
+
+      if (started === 32) {
+        entered()
+      }
+
       return held
     },
     dependencies: {},
@@ -303,7 +331,7 @@ test("aborted unsettled authorization keeps all 32 HTTP slots occupied until rea
       signal,
       headers: {
         host: new URL(config.resource).host,
-        authorization: "Bearer " + tokenA,
+        authorization: `Bearer ${tokenA}`,
         "content-type": "application/json",
         accept: "application/json, text/event-stream",
       },
@@ -312,7 +340,9 @@ test("aborted unsettled authorization keeps all 32 HTTP slots occupied until rea
   const pending = controllers.map((c) => app.fetch(request(c.signal)))
   await allEntered
   controllers.forEach((c) => c.abort())
-  await new Promise<void>((resolve) => setImmediate(resolve))
+  await new Promise<void>((resolve) => {
+    setImmediate(resolve)
+  })
   assert.equal((await app.fetch(request())).status, 429)
   release(p)
   assert.deepEqual(
@@ -324,8 +354,18 @@ test("aborted unsettled authorization keeps all 32 HTTP slots occupied until rea
 })
 
 test("legacy SSE retains all32 cancelled handler admissions until actual dependency work settles", async () => {
-  let release!: (value: unknown) => void
-  let entered!: () => void
+  let release: (value: unknown) => void = () => {
+    throw new Error(
+      "Promise resolver release was used before executor initialization",
+    )
+  }
+
+  let entered: () => void = () => {
+    throw new Error(
+      "Promise resolver entered was used before executor initialization",
+    )
+  }
+
   let started = 0
   const allEntered = new Promise<void>((resolve) => {
     entered = resolve
@@ -335,9 +375,14 @@ test("legacy SSE retains all32 cancelled handler admissions until actual depende
   })
   const h = setup({
     catalog: {
-      listThemes: async () => ({ items: [] }),
+      listThemes: () => Promise.resolve({ items: [] }),
       listTemplates: async () => {
-        if (++started === 32) entered()
+        started += 1
+
+        if (started === 32) {
+          entered()
+        }
+
         return held
       },
     },
@@ -364,7 +409,9 @@ test("legacy SSE retains all32 cancelled handler admissions until actual depende
   )
   await allEntered
   controllers.forEach((controller) => controller.abort())
-  await new Promise<void>((resolve) => setImmediate(resolve))
+  await new Promise<void>((resolve) => {
+    setImmediate(resolve)
+  })
   assert.equal((await h.app.fetch(h.request(list))).status, 429)
   release({ items: [] })
   assert.deepEqual(
@@ -379,8 +426,18 @@ test(
   "HTTP deadline responds while shutdown still waits for actual legacy dependency settlement",
   { timeout: 5000 },
   async () => {
-    let release!: (value: unknown) => void
-    let entered!: () => void
+    let release: (value: unknown) => void = () => {
+      throw new Error(
+        "Promise resolver release was used before executor initialization",
+      )
+    }
+
+    let entered: () => void = () => {
+      throw new Error(
+        "Promise resolver entered was used before executor initialization",
+      )
+    }
+
     const started = new Promise<void>((resolve) => {
       entered = resolve
     })
@@ -390,9 +447,10 @@ test(
     const h = setup(
       {
         catalog: {
-          listThemes: async () => ({ items: [] }),
+          listThemes: () => Promise.resolve({ items: [] }),
           listTemplates: async () => {
             entered()
+
             return held
           },
         },
@@ -416,7 +474,9 @@ test(
     const closing = h.app.close().then(() => {
       closed = true
     })
-    await new Promise<void>((resolve) => setImmediate(resolve))
+    await new Promise<void>((resolve) => {
+      setImmediate(resolve)
+    })
     assert.equal(closed, false)
     release({ items: [] })
     await closing
@@ -426,9 +486,23 @@ test(
 )
 
 test("cancelled V2 candidate work retains admission and shutdown until its real host promise settles", async () => {
-  let release!: () => void, entered!: () => void
-  const held = new Promise<void>((resolve) => (release = resolve)),
-    started = new Promise<void>((resolve) => (entered = resolve))
+  let release: () => void = () => {
+      throw new Error(
+        "Promise resolver release was used before executor initialization",
+      )
+    },
+    entered: () => void = () => {
+      throw new Error(
+        "Promise resolver entered was used before executor initialization",
+      )
+    }
+
+  const held = new Promise<void>((resolve) => {
+      release = resolve
+    }),
+    started = new Promise<void>((resolve) => {
+      entered = resolve
+    })
   const store = new MemoryDrafts()
   const h = setup(
     {
@@ -476,7 +550,9 @@ test("cancelled V2 candidate work retains admission and shutdown until its real 
   const closing = h.app.close().then(() => {
     closed = true
   })
-  await new Promise<void>((resolve) => setImmediate(resolve))
+  await new Promise<void>((resolve) => {
+    setImmediate(resolve)
+  })
   assert.equal(closed, false)
   release()
   await closing

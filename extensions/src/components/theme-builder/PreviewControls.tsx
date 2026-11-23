@@ -5,6 +5,7 @@ import type { PreviewLocale } from "../../presentation/show-library-preview/i18n
 /** All controls stay disabled until a reviewed renderer and controller exist. */
 export function PreviewControls({ locale }: { locale: PreviewLocale }) {
   const t = previewText(locale)
+
   return (
     <div
       style={{
@@ -14,11 +15,25 @@ export function PreviewControls({ locale }: { locale: PreviewLocale }) {
         alignItems: "end",
       }}
     >
-      <Select label={t("role")} disabled value="spectator" onChange={() => {}}>
+      <Select
+        label={t("role")}
+        disabled
+        value="spectator"
+        onChange={() => {
+          /* The disabled preview role control cannot change its selected value. */
+        }}
+      >
         <option value="spectator">{t("spectator")}</option>
         <option value="manager">{t("manager")}</option>
       </Select>
-      <Select label={t("phase")} disabled value="question" onChange={() => {}}>
+      <Select
+        label={t("phase")}
+        disabled
+        value="question"
+        onChange={() => {
+          /* The disabled preview phase control cannot change its selected value. */
+        }}
+      >
         {(
           [
             "question",

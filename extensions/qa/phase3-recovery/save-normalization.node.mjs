@@ -28,13 +28,16 @@ async function fixture(schemaVersion = 2) {
     writeError: null,
   }
   const schema = { safeParse: () => state.result }
+
   class StorageError extends Error {
     constructor(message, status) {
       super(message)
       this.status = status
     }
   }
+
   class RevisionError extends Error {}
+
   const modules = {
     "http-status-codes": {
       StatusCodes: {
@@ -76,7 +79,10 @@ async function fixture(schemaVersion = 2) {
       sidecarExists: undefined,
       readSidecar: () => state.existing,
       writeSidecar: (_path, _id, data) => {
-        if (state.writeError) throw state.writeError
+        if (state.writeError) {
+          throw state.writeError
+        }
+
         calls.push(["sidecar", data])
       },
     },
@@ -85,9 +91,11 @@ async function fixture(schemaVersion = 2) {
   await module.link(async (specifier) => {
     const values = modules[specifier]
     assert.ok(values, `Unexpected dependency ${specifier}`)
+
     return new SyntheticModule(Object.keys(values), function () {
-      for (const [key, value] of Object.entries(values))
+      for (const [key, value] of Object.entries(values)) {
         this.setExport(key, value)
+      }
     })
   })
   await module.evaluate()
@@ -103,6 +111,7 @@ async function fixture(schemaVersion = 2) {
       quizz,
       extras: raw,
     })
+
   return { calls, state, raw, normalized, save, RevisionError }
 }
 

@@ -14,15 +14,14 @@ const url = new URL(
 ).href
 const errors = []
 async function scene(page, name, key) {
-  const selector =
-    '[data-v4-scene="' +
-    name +
-    '"]' +
-    (key ? '[data-question-key="' + key + '"]' : "")
+  const selector = `[data-v4-scene="${name}"]${
+    key ? `[data-question-key="${key}"]` : ""
+  }`
+
   await page.locator(selector).waitFor({ timeout: 30000 })
 }
 async function results(page, key, choice, kind) {
-  await page.getByTestId("tadazz-card-" + choice).click()
+  await page.getByTestId(`tadazz-card-${choice}`).click()
   await scene(page, "survey-results", key)
   await page.locator('[data-ggo-phase="results"]').waitFor({ timeout: 30000 })
   const label = await page.locator(".q-frame .eyebrow").innerText()
@@ -31,6 +30,7 @@ async function results(page, key, choice, kind) {
     .locator(".q-frame .eyebrow")
     .evaluate((el) => parseFloat(getComputedStyle(el).fontSize))
   assert.ok(size >= 36, "Result headline must be large and prominent")
+
   if (kind === "quiz") {
     assert.equal(
       await page
@@ -41,7 +41,7 @@ async function results(page, key, choice, kind) {
     )
     assert.ok(
       await page
-        .getByTestId("tadazz-card-" + (key === "picture-trivia" ? 0 : 2))
+        .getByTestId(`tadazz-card-${key === "picture-trivia" ? 0 : 2}`)
         .evaluate((el) => el.classList.contains("is-correct")),
     )
   }
@@ -51,6 +51,7 @@ async function next(page) {
   assert.equal((await button.innerText()).trim(), "Next")
   await button.click()
 }
+
 try {
   const page = await browser.newPage({
     viewport: { width: 1366, height: 900 },

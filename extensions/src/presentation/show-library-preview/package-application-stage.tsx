@@ -142,14 +142,20 @@ export function PackageApplicationPreviewStage({
     setReadyUrl("")
   }, [runtimeUrl, imagesKey, platformSlot])
   useEffect(() => {
-    if (!context || !sandbox || platformSlot) return
+    if (!context || !sandbox || platformSlot) {
+      return
+    }
+
     const abort = new AbortController()
     const urls = [...new Set(JSON.parse(imagesKey) as string[])]
     void Promise.all(
       urls.map(async (url) => {
         const asset = context.assets.find((entry) => entry.url === url)
-        if (!asset || asset.bytes > 5_000_000)
+
+        if (!asset || asset.bytes > 5_000_000) {
           throw new Error("Preview image is not admitted")
+        }
+
         const response = await fetch(url, {
           credentials: "same-origin",
           cache: "no-store",
@@ -157,20 +163,29 @@ export function PackageApplicationPreviewStage({
           signal: abort.signal,
         })
         const mime = response.headers.get("Content-Type")?.split(";")[0] ?? ""
+
         if (
           !response.ok ||
           !["image/png", "image/jpeg", "image/webp", "image/gif"].includes(mime)
-        )
+        ) {
           throw new Error("Preview image unavailable")
+        }
+
         const bytes = await response.arrayBuffer()
-        if (bytes.byteLength !== asset.bytes)
+
+        if (bytes.byteLength !== asset.bytes) {
           throw new Error("Preview image size changed")
+        }
+
         const digest = Array.from(
           new Uint8Array(await crypto.subtle.digest("SHA-256", bytes)),
           (b) => b.toString(16).padStart(2, "0"),
         ).join("")
-        if (digest !== asset.sha256)
+
+        if (digest !== asset.sha256) {
           throw new Error("Preview image digest changed")
+        }
+
         const data = await new Promise<string>((resolve, reject) => {
           const reader = new FileReader()
           reader.onload = () =>
@@ -180,16 +195,21 @@ export function PackageApplicationPreviewStage({
           reader.onerror = () => reject(reader.error)
           reader.readAsDataURL(new Blob([bytes], { type: mime }))
         })
+
         return [url, data] as const
       }),
     )
       .then((entries) => {
-        if (!abort.signal.aborted)
+        if (!abort.signal.aborted) {
           setImages({ key: imagesKey, urls: Object.fromEntries(entries) })
+        }
       })
       .catch(() => {
-        if (!abort.signal.aborted) callbacks.current.onUnavailable()
+        if (!abort.signal.aborted) {
+          callbacks.current.onUnavailable()
+        }
       })
+
     return () => abort.abort()
   }, [context?.assets, imagesKey, sandbox, platformSlot])
   useLayoutEffect(() => {
@@ -223,6 +243,7 @@ export function PackageApplicationPreviewStage({
     frame.role,
     frame.clock.epoch,
   ])
+
   if (
     !context ||
     !chapter ||
@@ -230,22 +251,32 @@ export function PackageApplicationPreviewStage({
     !native.ok ||
     !native.bundleDraft ||
     theme.diagnostics.length
-  )
+  ) {
     return null
-  if (!sandbox) return renderNative({ ...frame, locale: effectiveLocale })
+  }
+
+  if (!sandbox) {
+    return renderNative({ ...frame, locale: effectiveLocale })
+  }
+
   if (platformSlot) {
     const {
       packageContext: _packageContext,
       appearance: _appearance,
       ...nativeFrame
     } = frame
+
     return renderNative({
       ...nativeFrame,
       show: platformShow,
       locale: effectiveLocale,
     })
   }
-  if (!runtimeUrl || images.key !== imagesKey) return null
+
+  if (!runtimeUrl || images.key !== imagesKey) {
+    return null
+  }
+
   const now = Date.now()
   const scene = packagePreviewScene(frame, chapter)
   const count = frame.show.cards.filter(
@@ -361,6 +392,7 @@ export function PackageApplicationPreviewStage({
     sceneKind: audioSceneKind,
     scenePreset: scene.kind === "scene" ? scene.scene.preset : undefined,
   })
+
   return (
     <I18nextProvider i18n={labels.i18n}>
       <ShowThemeScope theme={theme}>

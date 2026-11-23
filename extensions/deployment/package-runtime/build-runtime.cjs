@@ -12,7 +12,10 @@ const esbuild = tool("esbuild")
 const manifest = JSON.parse(
   fs.readFileSync("/input/source-manifest.json", "utf8"),
 )
-if (esbuild.version !== "0.28.2") throw new Error("COMPILER_PIN")
+
+if (esbuild.version !== "0.28.2") {
+  throw new Error("COMPILER_PIN")
+}
 
 ;(async () => {
   const result = await esbuild.build({
@@ -30,7 +33,11 @@ if (esbuild.version !== "0.28.2") throw new Error("COMPILER_PIN")
       js: 'import { createRequire as __tadazzCreateRequire } from "node:module"; const require = __tadazzCreateRequire(import.meta.url);',
     },
   })
-  if (result.warnings.length) throw new Error("COMPILER_WARNINGS")
+
+  if (result.warnings.length) {
+    throw new Error("COMPILER_WARNINGS")
+  }
+
   const bytes = result.outputFiles.find(
     (file) => file.path === "/output/runtime.mjs",
   ).contents
@@ -48,11 +55,14 @@ if (esbuild.version !== "0.28.2") throw new Error("COMPILER_PIN")
       .createHash("sha256")
       .update(fs.readFileSync(absolute))
       .digest("hex")
+
     if (relative.includes("node_modules/")) {
       dependencyInputs[relative] = digest
     } else {
-      if (manifest.files[relative] !== digest)
+      if (manifest.files[relative] !== digest) {
         throw new Error("UNPINNED_SOURCE:" + relative)
+      }
+
       sourceInputs[relative] = digest
     }
   }

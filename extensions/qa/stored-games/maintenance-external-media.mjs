@@ -16,12 +16,14 @@ const requireGate = (condition, code) => {
 const writePrivate = (file, value) => {
   const temporary = `${file}.pending`
   const fd = fs.openSync(temporary, "wx", 0o600)
+
   try {
     fs.writeFileSync(fd, `${JSON.stringify(value, null, 2)}\n`)
     fs.fsyncSync(fd)
   } finally {
     fs.closeSync(fd)
   }
+
   fs.renameSync(temporary, file)
 }
 const readRegular = (file, limit) => {
@@ -39,6 +41,7 @@ const readRegular = (file, limit) => {
       before.mtimeMs === after.mtimeMs,
     "INPUT_CHANGED_DURING_READ",
   )
+
   return bytes
 }
 const relativeFile = (root, relative) => {
@@ -53,11 +56,15 @@ const relativeFile = (root, relative) => {
   )
   const result = path.join(root, relative)
   requireGate(result.startsWith(`${root}${path.sep}`), "PATH_ESCAPE")
+
   return result
 }
 // Every old authored property must survive, apart from the two reviewed URLs.
 function preserveOriginal(original, result, allowed, pointer = "") {
-  if (allowed.has(pointer)) return
+  if (allowed.has(pointer)) {
+    return
+  }
+
   if (Array.isArray(original)) {
     requireGate(
       Array.isArray(result) && original.length === result.length,
@@ -89,6 +96,7 @@ const state = {
   productionListenerStarted: false,
   saves: [],
 }
+
 try {
   requireGate(
     process.platform === "linux" && ["qualify", "apply"].includes(mode),
@@ -140,6 +148,7 @@ try {
     "PNG_DIMENSIONS_CHANGED",
   )
   let qualification = null
+
   if (mode === "apply") {
     const raw = readRegular("/input/qualified-native-result.json", 4_000_000)
     requireGate(
@@ -257,6 +266,7 @@ try {
           extras.questionIds.length === normalized.questions.length,
         "PREPARED_EXTRAS_REQUIRED",
       )
+
       if (mode === "apply") {
         requireGate(
           qualified &&
@@ -264,6 +274,7 @@ try {
           "QUALIFIED_EXTRA_IDS_CHANGED",
         )
       }
+
       prepared.push({ target, stored, normalized, extras: persisted(extras) })
     })
   }
@@ -310,8 +321,9 @@ try {
         "UPLOADED_BYTES_CHANGED",
       )
       const next = structuredClone(normalized)
-      for (const index of target.questionIndices)
+      for (const index of target.questionIndices) {
         next.questions[index].media.url = uploaded.url
+      }
       const allowed = new Set(
         target.questionIndices.map((index) => `/questions/${index}/media/url`),
       )
@@ -396,11 +408,13 @@ try {
       : "NATIVE_REPAIR_FAILED"
   state.errorDigest = digest(String(error?.stack ?? error))
   state.finishedAt = new Date().toISOString()
+
   try {
     writePrivate(resultPath, state)
   } catch {
     /* Preserve the original private failure log. */
   }
+
   console.error(error)
   console.log(
     JSON.stringify({

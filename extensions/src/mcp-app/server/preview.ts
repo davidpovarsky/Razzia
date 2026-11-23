@@ -11,15 +11,21 @@ import type {
 } from "./dependencies.ts"
 import { ToolError } from "./errors.ts"
 
-/** MCP boundary only. The accepted injected SB port owns plan/identity/pin
- * validation and the actual renderer. No phase/clock/role engine lives here. */
+/**
+ * MCP boundary only. The accepted injected SB port owns plan/identity/pin
+ * validation and the actual renderer. No phase/clock/role engine lives here.
+ */
+
 export async function renderPreview(
   deps: Dependencies,
   principal: VerifiedPrincipal,
   record: DraftRecord,
   locale?: string,
 ) {
-  if (!deps.preview) throw new ToolError("PREVIEW_UNAVAILABLE")
+  if (!deps.preview) {
+    throw new ToolError("PREVIEW_UNAVAILABLE")
+  }
+
   const result = await deps.preview.render(
     principal,
     record,
@@ -28,6 +34,7 @@ export async function renderPreview(
   const view = previewData.parse(result.data)
   const widget = previewMetaSchema.parse(result.meta)
   deps.preview.assertAcceptedIdentity(result.identity)
+
   if (
     view.rendererStatus === "unavailable" ||
     !view.sbRegistryVersion ||
@@ -55,14 +62,32 @@ export async function renderPreview(
   ) {
     throw new ToolError("PREVIEW_UNAVAILABLE")
   }
+
   const assetPairs = widget.assetManifest
     .map(({ assetId, sha256 }) => ({ assetId, sha256 }))
-    .sort((a, b) =>
-      a.assetId < b.assetId ? -1 : a.assetId > b.assetId ? 1 : 0,
-    )
-  const digestPairs = [...result.identity.assetDigests].sort((a, b) =>
-    a.assetId < b.assetId ? -1 : a.assetId > b.assetId ? 1 : 0,
-  )
+    .sort((a, b) => {
+      if (a.assetId < b.assetId) {
+        return -1
+      }
+
+      if (a.assetId > b.assetId) {
+        return 1
+      }
+
+      return 0
+    })
+  const digestPairs = [...result.identity.assetDigests].sort((a, b) => {
+    if (a.assetId < b.assetId) {
+      return -1
+    }
+
+    if (a.assetId > b.assetId) {
+      return 1
+    }
+
+    return 0
+  })
+
   if (
     canonicalJson(assetPairs) !== canonicalJson(digestPairs) ||
     widget.assetManifest.some(
@@ -73,7 +98,10 @@ export async function renderPreview(
   ) {
     throw new ToolError("PREVIEW_UNAVAILABLE")
   }
-  if (utf8Bytes(JSON.stringify(widget)) > LIMITS.preview)
+
+  if (utf8Bytes(JSON.stringify(widget)) > LIMITS.preview) {
     throw new ToolError("INTERNAL")
+  }
+
   return { data: view, meta: { "tadazz/preview": widget } }
 }

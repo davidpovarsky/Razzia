@@ -13,11 +13,14 @@ const checks = [],
   responses = []
 page.on("pageerror", (e) => errors.push(e.message))
 page.on("response", (r) => {
-  if (r.status() >= 400) responses.push({ url: r.url(), status: r.status() })
+  if (r.status() >= 400) {
+    responses.push({ url: r.url(), status: r.status() })
+  }
 })
-let appearance,
+let appearance = undefined,
   legacy = false,
-  sourceReceipt
+  sourceReceipt = undefined
+
 await page.route("**/media/background-position-proof.png", (route) =>
   route.fulfill({
     status: 200,
@@ -32,24 +35,34 @@ await page.route(
   async (route) => {
     const response = await route.fetch()
     const data = await response.json()
-    const extras = data.extras
-    if (!extras) throw new Error("Expected actual fixture sidecar")
+    const { extras } = data
+
+    if (!extras) {
+      throw new Error("Expected actual fixture sidecar")
+    }
+
     for (const id of extras.questionIds) {
       const per = extras.perQuestion[id] ?? {}
       delete per.themeOverrides
-      if (appearance)
+
+      if (appearance) {
         per.background = {
           url: "/media/background-position-proof.png",
           fit: "cover",
           ...appearance,
         }
-      else delete per.background
+      } else {
+        delete per.background
+      }
+
       extras.perQuestion[id] = per
     }
+
     if (legacy) {
       extras.defaults.motionKit = "legacy"
       delete extras.defaults.showTheme
     }
+
     delete extras.defaults.tadazzBackground
     sourceReceipt = {
       method:
@@ -74,13 +87,19 @@ await page.route(
 )
 async function selectTheme(id) {
   await page.getByTestId("studio-tab-settings").click()
-  const button = page.getByTestId("show-theme-" + id).getByRole("button")
-  if (await button.isEnabled()) await button.click()
-  if (await page.getByRole("alertdialog").isVisible())
+  const button = page.getByTestId(`show-theme-${id}`).getByRole("button")
+
+  if (await button.isEnabled()) {
+    await button.click()
+  }
+
+  if (await page.getByRole("alertdialog").isVisible()) {
     await page
       .getByRole("alertdialog")
       .getByRole("button", { name: "Use this theme", exact: true })
       .click()
+  }
+
   await page.getByTestId("studio-tab-questions").click()
 }
 async function native(theme) {
@@ -96,10 +115,11 @@ async function native(theme) {
   )
   await page.evaluate(async () => {
     await document.fonts.ready
-    await new Promise((r) =>
-      requestAnimationFrame(() => requestAnimationFrame(r)),
-    )
+    await new Promise((r) => {
+      requestAnimationFrame(() => requestAnimationFrame(r))
+    })
   })
+
   return preview
 }
 async function state(preview, theme) {
@@ -107,8 +127,10 @@ async function state(preview, theme) {
     theme === "tadazz-classic"
       ? preview.getByTestId("tadazz-backdrop")
       : preview.locator("[data-original-razzia-preview]")
+
   return target.evaluate((el) => {
     const s = getComputedStyle(el)
+
     return {
       backgroundPosition: s.backgroundPosition,
       backgroundImage: s.backgroundImage,
@@ -117,6 +139,7 @@ async function state(preview, theme) {
   })
 }
 let result = {}
+
 try {
   await page.addInitScript(() => localStorage.setItem("i18nextLng", "en"))
   await page.goto("http://127.0.0.1:3180/manager?lng=en")
@@ -156,9 +179,13 @@ try {
       const preview = await native(theme)
       const actual = await state(preview, theme)
       expect(actual.backgroundPosition.split(", ").at(-1)).toBe(test.pos)
-      if (test.alpha === 0)
+
+      if (test.alpha === 0) {
         expect(actual.backgroundImage).not.toContain("linear-gradient")
-      else expect(actual.backgroundImage).toContain("rgba(0, 0, 0, 0.65)")
+      } else {
+        expect(actual.backgroundImage).toContain("rgba(0, 0, 0, 0.65)")
+      }
+
       expect(actual.opacity).toBe("1")
       const foreground = preview.getByText("Which colour is the sky?", {
         exact: true,
@@ -234,7 +261,9 @@ try {
   result = { ok: false, error: String(e), checks, errors, responses }
   await page
     .screenshot({ path: path.join(out, "failure.png"), fullPage: true })
-    .catch(() => {})
+    .catch(() => {
+      /* Keep the recorded audit outcome if its diagnostic screenshot is unavailable. */
+    })
   process.exitCode = 1
 } finally {
   fs.writeFileSync(

@@ -55,8 +55,8 @@ const frameScript =
   "(" +
   async function () {
     const { mount } = await import("/renderer.mjs")
-    const css = await fetch("/renderer.css").then((r) => r.text())
-    const frame = await fetch("/frame.json").then((r) => r.json())
+    const rendererCss = await fetch("/renderer.css").then((r) => r.text())
+    const rendererFrame = await fetch("/frame.json").then((r) => r.json())
     const instances = new Map()
     const violations = []
     const failures = []
@@ -85,29 +85,42 @@ const frameScript =
           "width:960px;height:540px;position:relative;overflow:hidden;margin:0;"
         document.body.append(target)
         const originalReplace = CSSStyleSheet.prototype.replaceSync
-        if (fallback) CSSStyleSheet.prototype.replaceSync = undefined
-        let instance
-        try {
-          instance = mount(target, css, () => failures.push(name))
-        } finally {
-          if (fallback) CSSStyleSheet.prototype.replaceSync = originalReplace
+
+        if (fallback) {
+          CSSStyleSheet.prototype.replaceSync = undefined
         }
+
+        let instance = undefined
+
+        try {
+          instance = mount(target, rendererCss, () => failures.push(name))
+        } finally {
+          if (fallback) {
+            CSSStyleSheet.prototype.replaceSync = originalReplace
+          }
+        }
+
         instances.set(name, { instance, target })
-        const result = instance.update(frame)
-        if (immediateDispose) instance.dispose()
+        const result = instance.update(rendererFrame)
+
+        if (immediateDispose) {
+          instance.dispose()
+        }
+
         await Promise.race([
           result,
-          new Promise((_, reject) =>
+          new Promise((_, reject) => {
             setTimeout(
               () => reject(new Error("Native update did not settle")),
               15000,
-            ),
-          ),
+            )
+          }),
         ])
         await document.fonts.ready
-        await new Promise((resolve) =>
-          requestAnimationFrame(() => requestAnimationFrame(resolve)),
-        )
+        await new Promise((resolve) => {
+          requestAnimationFrame(() => requestAnimationFrame(resolve))
+        })
+
         return this.snapshot(name)
       },
       snapshot(name) {
@@ -122,6 +135,7 @@ const frameScript =
                 ),
             )
           : []
+
         return {
           faces: faces(),
           fontsReady: document.fonts.status,
@@ -147,6 +161,7 @@ const frameScript =
         entry.instance.dispose()
         entry.target.remove()
         instances.delete(name)
+
         return faces()
       },
     }
@@ -155,6 +170,7 @@ const frameScript =
 const serve = async (req, res) => {
   res.setHeader("Content-Security-Policy", csp)
   const url = new URL(req.url, "http://127.0.0.1")
+
   try {
     if (url.pathname === "/") {
       res.setHeader("Content-Type", "text/html; charset=utf-8")
@@ -185,10 +201,14 @@ const serve = async (req, res) => {
       const publicRoot = path.join(root, "packages/web/public")
       const filename = path.resolve(
         publicRoot,
-        "." + decodeURIComponent(url.pathname),
+
+        `.${decodeURIComponent(url.pathname)}`,
       )
-      if (!filename.startsWith(publicRoot + path.sep))
+
+      if (!filename.startsWith(publicRoot + path.sep)) {
         throw new Error("Outside fixture")
+      }
+
       const types = {
         ".webp": "image/webp",
         ".png": "image/png",
@@ -208,7 +228,9 @@ const serve = async (req, res) => {
   }
 }
 const server = createServer((req, res) => void serve(req, res))
-await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve))
+await new Promise((resolve) => {
+  server.listen(0, "127.0.0.1", resolve)
+})
 const base = "http://127.0.0.1:" + server.address().port
 const browser = await chromium.launch({ channel: "msedge", headless: true })
 const page = await browser.newPage({ viewport: { width: 1000, height: 1120 } })
@@ -231,6 +253,7 @@ const receipt = {
   errors,
   requests,
 }
+
 try {
   await page.goto(base)
   const iframeA = page.frames().find((item) => item.name() === "native-a")
@@ -356,7 +379,7 @@ try {
   receipt.finishedAt = new Date().toISOString()
   await writeFile(
     path.join(output, "iframe-font-proof.json"),
-    JSON.stringify(receipt, null, 2) + "\n",
+    `${JSON.stringify(receipt, null, 2)}\n`,
   )
   console.log(
     JSON.stringify({
@@ -367,5 +390,7 @@ try {
     }),
   )
   await browser.close()
-  await new Promise((resolve) => server.close(resolve))
+  await new Promise((resolve) => {
+    server.close(resolve)
+  })
 }

@@ -2,9 +2,11 @@ import { chromium, expect } from "@playwright/test"
 import fs from "node:fs"
 import path from "node:path"
 const evidenceName = process.env.TADAZZ_EDITOR_AUDIT_EVIDENCE ?? "functional"
+
 if (!/^[a-z0-9][a-z0-9-]{0,79}$/.test(evidenceName)) {
   throw new Error("Invalid editor audit evidence basename")
 }
+
 const root = path.resolve("../.."),
   out = path.join(
     root,
@@ -17,7 +19,7 @@ const dictionaries = Object.fromEntries(
     ns,
     JSON.parse(
       fs.readFileSync(
-        path.join(root, "packages/web/src/locales/en", ns + ".json"),
+        path.join(root, "packages/web/src/locales/en", `${ns}.json`),
         "utf8",
       ),
     ),
@@ -29,14 +31,18 @@ const resolve = (v, parts) =>
 const t = (key) => {
   const [ns, k] = key.split(":")
   const value = resolve(dictionaries[ns], k.split("."))
-  if (typeof value !== "string")
-    throw Error("Missing fixture translation " + key)
+
+  if (typeof value !== "string") {
+    throw Error(`Missing fixture translation ${key}`)
+  }
+
   return value
 }
-const subject = "Editor end-to-end " + Date.now(),
-  legacyId = "editor-legacy-" + Date.now()
+const subject = `Editor end-to-end ${Date.now()}`,
+  legacyId = `editor-legacy-${Date.now()}`
+
 fs.writeFileSync(
-  path.resolve(".config/quizz", legacyId + ".json"),
+  path.resolve(".config/quizz", `${legacyId}.json`),
   JSON.stringify({
     id: legacyId,
     subject: legacyId,
@@ -67,20 +73,22 @@ const checks = [],
   httpErrors = []
 page.on("pageerror", (e) => errors.push(e.message))
 page.on("response", (r) => {
-  if (r.status() >= 400)
+  if (r.status() >= 400) {
     httpErrors.push({ status: r.status(), path: new URL(r.url()).pathname })
+  }
 })
 await page.addInitScript(() => localStorage.setItem("i18nextLng", "en"))
 const check = async (name, fn) => {
   await fn()
   checks.push(name)
-  console.log("PASS " + name)
+  console.log(`PASS ${name}`)
 }
 const title = () => page.locator('input[name$=".question"]')
 const fillQuestion = async (label, answers) => {
   await title().fill(label)
-  for (let i = 0; i < answers.length; i++)
-    await page.getByTestId("answer-text-" + i).fill(answers[i])
+  for (let i = 0; i < answers.length; i += 1) {
+    await page.getByTestId(`answer-text-${i}`).fill(answers[i])
+  }
 }
 const save = async () => {
   await page.getByTestId("editor-save-btn").click()
@@ -103,7 +111,10 @@ const readSaved = () =>
       JSON.parse(fs.readFileSync(path.resolve(".config/quizz", n), "utf8")),
     )
     .find((q) => q.subject === subject)
-let saved, mediaUrl, originalLegacyQuestionId
+let saved = undefined,
+  mediaUrl = undefined,
+  originalLegacyQuestionId = undefined
+
 try {
   await check(
     "Unauthenticated editor navigation and composite API require manager access",
@@ -179,12 +190,12 @@ try {
     },
   )
   await check("Answer count limits and five live answers work", async () => {
-    for (let i = 2; i < 5; i++) {
+    for (let i = 2; i < 5; i += 1) {
       await page
         .getByRole("button", { name: t("quizz:addAnswer"), exact: true })
         .click()
       await page
-        .getByTestId("answer-text-" + i)
+        .getByTestId(`answer-text-${i}`)
         .fill(["Red", "Yellow", "Purple"][i - 2])
     }
     await expect(
@@ -368,7 +379,7 @@ try {
       await save()
       const legacy = JSON.parse(
         fs.readFileSync(
-          path.resolve(".config/quizz", legacyId + ".json"),
+          path.resolve(".config/quizz", `${legacyId}.json`),
           "utf8",
         ),
       )
@@ -383,7 +394,8 @@ try {
     "Failed metadata disables editing and saving; explicit retry recovers",
     async () => {
       await page.getByTestId("editor-exit-btn").click()
-      const routePattern = "**/api/extensions/quizzes/" + legacyId
+      const routePattern = `**/api/extensions/quizzes/${legacyId}`
+
       await page.route(routePattern, (route) =>
         route.fulfill({
           status: 500,
@@ -439,6 +451,7 @@ try {
         const r = await fetch("/api/extensions/quizzes/" + id, {
           headers: { Authorization: "Bearer " + localStorage.getItem("token") },
         })
+
         return (await r.json()).extras.questionIds[0]
       }, legacyId)
       await page
@@ -480,9 +493,11 @@ try {
       await expect(wrapper).toHaveAttribute("aria-pressed", "true")
       await page.evaluate(
         () =>
-          new Promise((resolve) =>
-            requestAnimationFrame(() => requestAnimationFrame(resolve)),
-          ),
+          new Promise((resolveObservation) => {
+            requestAnimationFrame(() =>
+              requestAnimationFrame(resolveObservation),
+            )
+          }),
       )
       await wrapper.press("ArrowUp")
       await expect(
@@ -510,13 +525,14 @@ try {
         .getByRole("button", { name: t("quizz:media.library"), exact: true })
         .click()
       const dialog = page.getByRole("dialog"),
-        name = "discard-proof-" + Date.now()
+        name = `discard-proof-${Date.now()}`
+
       await dialog.locator('input[type="file"]').setInputFiles({
-        name: name + ".png",
+        name: `${name}.png`,
         mimeType: "image/png",
         buffer: png,
       })
-      const item = dialog.getByTitle(new RegExp("^" + name + "-.+\\.png$"))
+      const item = dialog.getByTitle(new RegExp(`^${name}-.+\\.png$`))
       await item.waitFor()
       await item
         .locator("..")
@@ -546,6 +562,7 @@ try {
         const r = await fetch("/api/extensions/quizzes/" + id, {
           headers: { Authorization: "Bearer " + localStorage.getItem("token") },
         })
+
         return r.json()
       }, legacyId)
       expect(snapshot.extras.timeline.map((i) => i.kind)).toEqual([
@@ -574,7 +591,9 @@ try {
 } catch (error) {
   await page
     .screenshot({ path: path.join(out, "failure.png"), fullPage: true })
-    .catch(() => {})
+    .catch(() => {
+      /* Keep the recorded audit outcome if its diagnostic screenshot is unavailable. */
+    })
   fs.writeFileSync(
     path.join(out, "result.json"),
     JSON.stringify(

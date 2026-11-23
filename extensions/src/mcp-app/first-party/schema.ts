@@ -16,9 +16,10 @@ export function initialize(db: DatabaseSync, accountId: string) {
   db.exec(
     "PRAGMA journal_mode=DELETE; PRAGMA synchronous=FULL; BEGIN IMMEDIATE",
   )
+
   try {
     // Exact original producer1 DDL, including checks and implicit PK indexes.
-    db.exec(Object.values(TABLE_SQL).join(";\n") + ";")
+    db.exec(`${Object.values(TABLE_SQL).join(";\n")};`)
     db.prepare("INSERT INTO metadata(owner,version) VALUES(?,1)").run(accountId)
     db.exec("PRAGMA user_version=1; COMMIT")
   } catch (error) {
@@ -38,17 +39,32 @@ function inspectStructure(db: DatabaseSync) {
         typeof row.name !== "string" ||
         typeof row.tbl_name !== "string" ||
         (row.sql !== null && typeof row.sql !== "string")
-      )
+      ) {
         throw unavailable()
+      }
+
       return [row.type, row.name, row.tbl_name, row.sql] as const
     })
-    .sort((a, b) => (a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0))
+    .sort((a, b) => {
+      if (a[1] < b[1]) {
+        return -1
+      }
+
+      if (a[1] > b[1]) {
+        return 1
+      }
+
+      return 0
+    })
   // Hash exact stored object definitions. Never trim/normalize arbitrary DDL
   // into a supported version. Triggers/views/extra tables/indexes also fail.
   const fingerprint = createHash("sha256")
     .update(JSON.stringify(objects))
     .digest("hex")
-  if (fingerprint !== SCHEMA_OBJECT_SHA256) throw unavailable()
+
+  if (fingerprint !== SCHEMA_OBJECT_SHA256) {
+    throw unavailable()
+  }
 
   for (const table of Object.keys(TABLE_SQL) as Array<keyof typeof TABLE_SQL>) {
     const columns = db
@@ -66,7 +82,10 @@ function inspectStructure(db: DatabaseSync) {
         row.hidden,
       ])
     const expected = COLUMNS[table].map((column, cid) => [cid, ...column])
-    if (!equal(columns, expected)) throw unavailable()
+
+    if (!equal(columns, expected)) {
+      throw unavailable()
+    }
 
     const indexes = db
       .prepare(
@@ -75,7 +94,11 @@ function inspectStructure(db: DatabaseSync) {
       .all(table)
       .map((row) => [row.name, row.unique, row.origin, row.partial])
     const index = PRIMARY_INDEX[table]
-    if (!equal(indexes, index ? [[index, 1, "pk", 0]] : [])) throw unavailable()
+
+    if (!equal(indexes, index ? [[index, 1, "pk", 0]] : [])) {
+      throw unavailable()
+    }
+
     if (index) {
       const keys = COLUMNS[table]
         .map((column, cid) => ({ column, cid }))
@@ -103,7 +126,10 @@ function inspectStructure(db: DatabaseSync) {
           row.coll,
           row.key,
         ])
-      if (!equal(actualIndex, expectedIndex)) throw unavailable()
+
+      if (!equal(actualIndex, expectedIndex)) {
+        throw unavailable()
+      }
     }
   }
 }
@@ -111,17 +137,22 @@ function inspectStructure(db: DatabaseSync) {
 export function inspect(db: DatabaseSync, accountId: string) {
   const version = db.prepare("PRAGMA user_version").get()
   const journal = db.prepare("PRAGMA journal_mode").get()
-  if (version?.user_version !== 1 || journal?.journal_mode !== "delete")
+
+  if (version?.user_version !== 1 || journal?.journal_mode !== "delete") {
     throw unavailable()
+  }
+
   // Attest the schema before selecting any declared application table.
   inspectStructure(db)
   const owners = db.prepare("SELECT owner,version FROM metadata").all()
   const integrity = db.prepare("PRAGMA quick_check(1)").get()
+
   if (
     owners.length !== 1 ||
     owners[0]?.owner !== accountId ||
     owners[0]?.version !== 1 ||
     integrity?.quick_check !== "ok"
-  )
+  ) {
     throw unavailable()
+  }
 }

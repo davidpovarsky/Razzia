@@ -14,13 +14,19 @@ let result = {}
 page.on("pageerror", (e) => errors.push(e.message))
 async function theme(id) {
   await page.getByTestId("studio-tab-settings").click()
-  const button = page.getByTestId("show-theme-" + id).getByRole("button")
-  if (await button.isEnabled()) await button.click()
-  if (await page.getByRole("alertdialog").isVisible())
+  const button = page.getByTestId(`show-theme-${id}`).getByRole("button")
+
+  if (await button.isEnabled()) {
+    await button.click()
+  }
+
+  if (await page.getByRole("alertdialog").isVisible()) {
     await page
       .getByRole("alertdialog")
       .getByRole("button", { name: "Use this theme", exact: true })
       .click()
+  }
+
   await page.getByTestId("studio-tab-questions").click()
 }
 async function cap(id, max, value, name) {
@@ -29,12 +35,13 @@ async function cap(id, max, value, name) {
   await expect(input).toHaveAttribute("max", String(max))
   await expect(input).toHaveValue(String(value))
   await expect(
-    page.getByText("Questions Per Stage Page (1–" + max + ")", { exact: true }),
+    page.getByText(`Questions Per Stage Page (1–${max})`, { exact: true }),
   ).toBeVisible()
   checks.push({ name, theme: id, max, value })
   await input.scrollIntoViewIfNeeded()
-  await page.screenshot({ path: path.join(out, name + ".png"), fullPage: true })
+  await page.screenshot({ path: path.join(out, `${name}.png`), fullPage: true })
 }
+
 try {
   await page.addInitScript(() => localStorage.setItem("i18nextLng", "en"))
   await page.goto("http://127.0.0.1:3180/manager?lng=en")
@@ -63,7 +70,9 @@ try {
   result = { ok: false, error: String(e), checks, errors }
   await page
     .screenshot({ path: path.join(out, "failure.png"), fullPage: true })
-    .catch(() => {})
+    .catch(() => {
+      /* Keep the recorded audit outcome if its diagnostic screenshot is unavailable. */
+    })
   process.exitCode = 1
 } finally {
   fs.writeFileSync(

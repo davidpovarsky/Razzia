@@ -16,9 +16,12 @@ import {
   creationIntents,
   creationTree,
   removeCreationFixture,
+  requireCreationRecord,
 } from "./creation-fixture"
 import {
+  assertCreationRuns,
   creationChild,
+  creationRecoveryReport,
   creationReplayTwice,
   retainCreationReceipt,
 } from "./creation-process"
@@ -26,8 +29,17 @@ import {
 describe.runIf(process.platform === "linux")(
   "C1 private creation ownership and uncertainty",
   () => {
-    let fixture: ReturnType<typeof createCreationFixture>
-    let config: string | undefined, accounts: string | undefined
+    type InitializedFixtureValue = ReturnType<typeof createCreationFixture>
+    let fixture: InitializedFixtureValue | undefined = undefined
+    function requireInitializedFixture(): InitializedFixtureValue {
+      if (fixture === undefined) {
+        throw new Error("Fixture state fixture was read before initialization")
+      }
+
+      return fixture
+    }
+    let config: string | undefined = undefined,
+      accounts: string | undefined = undefined
     beforeEach(() => {
       config = process.env.CONFIG_PATH
       accounts = process.env.TADAZZ_ACCOUNTS_ENABLED
@@ -35,15 +47,26 @@ describe.runIf(process.platform === "linux")(
     })
     afterEach(() => {
       vi.restoreAllMocks()
-      removeCreationFixture(fixture.root, fixture.token)
-      if (config === undefined) delete process.env.CONFIG_PATH
-      else process.env.CONFIG_PATH = config
-      if (accounts === undefined) delete process.env.TADAZZ_ACCOUNTS_ENABLED
-      else process.env.TADAZZ_ACCOUNTS_ENABLED = accounts
+      removeCreationFixture(
+        requireInitializedFixture().root,
+        requireInitializedFixture().token,
+      )
+
+      if (config === undefined) {
+        delete process.env.CONFIG_PATH
+      } else {
+        process.env.CONFIG_PATH = config
+      }
+
+      if (accounts === undefined) {
+        delete process.env.TADAZZ_ACCOUNTS_ENABLED
+      } else {
+        process.env.TADAZZ_ACCOUNTS_ENABLED = accounts
+      }
     })
     const portWith = (prepare: typeof native.prepareNativeQuizCreation) =>
       createNativeCreationPort({
-        configuredRoot: () => fixture.root,
+        configuredRoot: () => requireInitializedFixture().root,
         getPath: native.getPath,
         accountsEnabled,
         activeOwner: activeAccount,
@@ -61,14 +84,21 @@ describe.runIf(process.platform === "linux")(
                 full.questionIds,
                 full.baseDigest,
               )
-        const created = fixture.service.createCompositeQuiz({
-          quizz: creationInput(),
-          extras,
-        })
-        const bundle = fixture.service.exportEnhancedBundle(created.quizId)
+        const created = requireInitializedFixture().service.createCompositeQuiz(
+          {
+            quizz: creationInput(),
+            extras,
+          },
+        )
+        const bundle = requireInitializedFixture().service.exportEnhancedBundle(
+          created.quizId,
+        )
         const input = JSON.stringify(bundle)
-        const imported = fixture.service.importEnhancedBundle(bundle)
-        const reloaded = fixture.service.getCompositeQuiz(imported.quizId)
+        const imported =
+          requireInitializedFixture().service.importEnhancedBundle(bundle)
+        const reloaded = requireInitializedFixture().service.getCompositeQuiz(
+          imported.quizId,
+        )
         expect(imported.quizId).not.toBe(created.quizId)
         expect(reloaded.digestMatches).toBe(true)
         expect(reloaded.extras?.schemaVersion).toBe(version)
@@ -76,6 +106,7 @@ describe.runIf(process.platform === "linux")(
           bundle.extras.questionIds[0],
         )
         expect(JSON.stringify(bundle)).toBe(input)
+
         if (
           reloaded.extras?.schemaVersion === 2 &&
           bundle.extras.schemaVersion === 2
@@ -91,7 +122,7 @@ describe.runIf(process.platform === "linux")(
       },
     )
     it("preserves authored-show note and opening metadata through the native reservation path", () => {
-      const result = fixture.service.importEnhancedBundle({
+      const result = requireInitializedFixture().service.importEnhancedBundle({
         format: "tada-show",
         version: 1,
         title: "C1 authored import",
@@ -116,11 +147,16 @@ describe.runIf(process.platform === "linux")(
         ],
         settings: [],
       })
-      const composite = fixture.service.getCompositeQuiz(result.quizId)
+      const composite = requireInitializedFixture().service.getCompositeQuiz(
+        result.quizId,
+      )
       expect(composite.digestMatches).toBe(true)
       expect(composite.extras?.schemaVersion).toBe(2)
-      if (composite.extras?.schemaVersion !== 2)
+
+      if (composite.extras?.schemaVersion !== 2) {
         throw new Error("Expected full V2")
+      }
+
       expect(composite.extras.authoring?.showNote).toBe("C1 full metadata")
       expect(composite.extras.timeline.map((item) => item.kind)).toEqual([
         "opening",
@@ -132,21 +168,33 @@ describe.runIf(process.platform === "linux")(
       let failures = 0
       vi.spyOn(fs, "fsyncSync").mockImplementation((fd) => {
         if (fs.fstatSync(fd).isFile()) {
-          failures++
+          failures += 1
+
           throw new Error("EIO first intent file fence")
         }
+
         sync(fd)
       })
       expect(() =>
-        fixture.port.create(creationInput(), creationExtras()),
+        requireInitializedFixture().port.create(
+          creationInput(),
+          creationExtras(),
+        ),
       ).toThrow(/reservation failed/)
       vi.restoreAllMocks()
       expect(failures).toBe(1)
       expect(fs.readdirSync(native.getPath("quizz"))).toEqual([])
       expect(fs.readdirSync(native.getPath("extensions/quizzes"))).toEqual([])
-      expect(creationIntents(fixture.root)[0].entry.phase).toBe("preparing")
-      const before = creationTree(fixture.root)
-      const runs = await creationReplayTwice(fixture.root, fixture.token)
+      expect(
+        creationIntents(requireInitializedFixture().root)[0].entry.phase,
+      ).toBe("preparing")
+      const before = creationTree(requireInitializedFixture().root)
+      const runs = await creationReplayTwice(
+        requireInitializedFixture().root,
+        requireInitializedFixture().token,
+      )
+      assertCreationRuns(runs)
+
       for (const run of runs) {
         expect(run.process.code).toBe(2)
         expect(run.state).toStrictEqual(before)
@@ -162,18 +210,22 @@ describe.runIf(process.platform === "linux")(
     it("fails EXDEV without publication and reports a verified complete rollback", () => {
       let failures = 0
       vi.spyOn(fs, "linkSync").mockImplementation(() => {
-        failures++
+        failures += 1
+
         throw Object.assign(new Error("EXDEV same-filesystem requirement"), {
           code: "EXDEV",
         })
       })
       expect(() =>
-        fixture.port.create(creationInput(), creationExtras()),
+        requireInitializedFixture().port.create(
+          creationInput(),
+          creationExtras(),
+        ),
       ).toThrow(/rollback complete/)
       expect(failures).toBe(1)
       expect(fs.readdirSync(native.getPath("quizz"))).toEqual([])
       expect(fs.readdirSync(native.getPath("extensions/quizzes"))).toEqual([])
-      expect(creationIntents(fixture.root)).toEqual([])
+      expect(creationIntents(requireInitializedFixture().root)).toEqual([])
     })
     it("catches an enhanced sidecar EEXIST race before base publication and retains foreign bytes plus intent", async () => {
       const link = fs.linkSync.bind(fs)
@@ -184,19 +236,28 @@ describe.runIf(process.platform === "linux")(
             `${path.sep}extensions${path.sep}quizzes${path.sep}`,
           )
         ) {
-          activations++
+          activations += 1
+
           fs.writeFileSync(to, "foreign raced sidecar", { flag: "wx" })
         }
+
         link(from, to)
       })
       expect(() =>
-        fixture.port.create(creationInput(), creationExtras()),
+        requireInitializedFixture().port.create(
+          creationInput(),
+          creationExtras(),
+        ),
       ).toThrow(/unresolved/)
       vi.restoreAllMocks()
       expect(activations).toBe(1)
       expect(fs.readdirSync(native.getPath("quizz"))).toEqual([])
-      const before = creationTree(fixture.root)
-      const runs = await creationReplayTwice(fixture.root, fixture.token)
+      const before = creationTree(requireInitializedFixture().root)
+      const runs = await creationReplayTwice(
+        requireInitializedFixture().root,
+        requireInitializedFixture().token,
+      )
+      assertCreationRuns(runs)
       for (const run of runs) {
         expect(run.process.code).toBe(2)
         expect(run.state).toStrictEqual(before)
@@ -215,7 +276,7 @@ describe.runIf(process.platform === "linux")(
       const input = creationInput(),
         extras = creationExtras()
       const cap = port.reserve(input, extras)
-      const staged = creationIntents(fixture.root)[0].entry
+      const staged = creationIntents(requireInitializedFixture().root)[0].entry
       expect(staged.phase).toBe("ready")
       expect(staged.base).not.toBeNull()
       expect(staged.sidecar).not.toBeNull()
@@ -225,7 +286,9 @@ describe.runIf(process.platform === "linux")(
       expect(() => port.create(creationInput(), creationExtras())).toThrow(
         /busy/,
       )
-      expect(() => fixture.port.publish(cap)).toThrow(/Foreign/)
+      expect(() => requireInitializedFixture().port.publish(cap)).toThrow(
+        /Foreign/,
+      )
       const result = port.publish(cap)
       expect(prepare).toHaveBeenCalledTimes(1)
       expect(result.quizId).toBe(staged.quizId)
@@ -238,9 +301,11 @@ describe.runIf(process.platform === "linux")(
           "utf8",
         ),
       ).toBe(staged.targetSidecar!.raw)
-      const before = creationTree(fixture.root)
+      const before = creationTree(requireInitializedFixture().root)
       expect(() => port.publish(cap)).toThrow(/consumed/)
-      expect(creationTree(fixture.root)).toStrictEqual(before)
+      expect(creationTree(requireInitializedFixture().root)).toStrictEqual(
+        before,
+      )
     })
     it("rejects root storage-ID mismatch before preparation, allocation or filesystem changes", () => {
       const prepare = vi.fn(native.prepareNativeQuizCreation)
@@ -248,7 +313,7 @@ describe.runIf(process.platform === "linux")(
         ...native,
         creation: portWith(prepare),
       })
-      const before = creationTree(fixture.root)
+      const before = creationTree(requireInitializedFixture().root)
       expect(() =>
         service.importEnhancedBundle({
           bundleVersion: 1,
@@ -257,7 +322,9 @@ describe.runIf(process.platform === "linux")(
         }),
       ).toThrow(/identity/)
       expect(prepare).not.toHaveBeenCalled()
-      expect(creationTree(fixture.root)).toStrictEqual(before)
+      expect(creationTree(requireInitializedFixture().root)).toStrictEqual(
+        before,
+      )
     })
     it("denies a pre-existing orphan sidecar before legacy base publication and retains exact foreign bytes", () => {
       let sidecar = "",
@@ -272,7 +339,8 @@ describe.runIf(process.platform === "linux")(
           quizId: prepared.id,
         })
         fs.writeFileSync(sidecar, bytes)
-        ino = fs.statSync(sidecar, { bigint: true }).ino
+        ;({ ino } = fs.statSync(sidecar, { bigint: true }))
+
         return prepared
       })
       expect(() => portWith(prepare).create(creationInput(), null)).toThrow(
@@ -284,17 +352,30 @@ describe.runIf(process.platform === "linux")(
       expect(fs.statSync(sidecar, { bigint: true }).ino).toBe(ino)
     })
     it("expiry rejects publication and preserves intent without using the timer as cleanup authority", async () => {
-      const cap = fixture.port.reserve(creationInput(), creationExtras())
-      const staged = creationIntents(fixture.root)[0].entry
-      const before = creationTree(fixture.root)
+      const cap = requireInitializedFixture().port.reserve(
+        creationInput(),
+        creationExtras(),
+      )
+      const staged = creationIntents(requireInitializedFixture().root)[0].entry
+      const before = creationTree(requireInitializedFixture().root)
       vi.spyOn(Date, "now").mockReturnValue(staged.expiresAt + 1)
-      expect(() => fixture.port.publish(cap)).toThrow(/Expired/)
-      expect(creationTree(fixture.root)).toStrictEqual(before)
+      expect(() => requireInitializedFixture().port.publish(cap)).toThrow(
+        /Expired/,
+      )
+      expect(creationTree(requireInitializedFixture().root)).toStrictEqual(
+        before,
+      )
       vi.restoreAllMocks()
-      const runs = await creationReplayTwice(fixture.root, fixture.token)
-      for (const run of runs)
+      const runs = await creationReplayTwice(
+        requireInitializedFixture().root,
+        requireInitializedFixture().token,
+      )
+      assertCreationRuns(runs)
+
+      for (const run of runs) {
         expect(run.process.code, run.process.stderr).toBe(0)
-      expect(runs[1].report.recovered).toBe(0)
+      }
+      expect(creationRecoveryReport(runs[1]).recovered).toBe(0)
     }, 70000)
     it.each([
       "base-replacement",
@@ -305,17 +386,21 @@ describe.runIf(process.platform === "linux")(
       "retains BOTH siblings and complete evidence on %s in two fresh replays",
       async (fault) => {
         const receipt: Record<string, unknown> = { fault, state: "STARTED" }
+
         try {
           const interrupted = await creationChild(
             "before-id-return",
-            fixture.root,
-            fixture.token,
+            requireInitializedFixture().root,
+            requireInitializedFixture().token,
           )
-          const { file, entry } = creationIntents(fixture.root)[0]
+          const [{ file, entry }] = creationIntents(
+            requireInitializedFixture().root,
+          )
           const base = native.getPath(`quizz/${entry.baseFileName}`)
           const sidecar = native.getPath(
             `extensions/quizzes/${entry.quizId}.json`,
           )
+
           if (fault === "base-replacement") {
             const original = fs.statSync(base, { bigint: true }).ino
             const bytes = fs.readFileSync(base)
@@ -324,16 +409,25 @@ describe.runIf(process.platform === "linux")(
             expect(fs.statSync(base, { bigint: true }).ino).not.toBe(original)
           } else if (fault === "sidecar-in-place") {
             const inode = fs.statSync(sidecar, { bigint: true }).ino
-            const data = JSON.parse(fs.readFileSync(sidecar, "utf8"))
+            const data = requireCreationRecord(
+              JSON.parse(fs.readFileSync(sidecar, "utf8")),
+            )
             data.revision = 9
             fs.writeFileSync(sidecar, JSON.stringify(data))
             expect(fs.statSync(sidecar, { bigint: true }).ino).toBe(inode)
-          } else if (fault === "missing-witness")
+          } else if (fault === "missing-witness") {
             fs.unlinkSync(path.join(path.dirname(file), "base.record"))
-          else fs.writeFileSync(file, JSON.stringify({ ...entry, version: 99 }))
-          const before = creationTree(fixture.root)
-          const runs = await creationReplayTwice(fixture.root, fixture.token)
+          } else {
+            fs.writeFileSync(file, JSON.stringify({ ...entry, version: 99 }))
+          }
+
+          const before = creationTree(requireInitializedFixture().root)
+          const runs = await creationReplayTwice(
+            requireInitializedFixture().root,
+            requireInitializedFixture().token,
+          )
           Object.assign(receipt, { interrupted, before, runs })
+          assertCreationRuns(runs)
           expect(interrupted.signal).toBe("SIGKILL")
           expect(interrupted.timedOut).toBe(false)
           expect(
@@ -359,24 +453,32 @@ describe.runIf(process.platform === "linux")(
       const link = fs.linkSync.bind(fs)
       let activations = 0
       vi.spyOn(fs, "linkSync").mockImplementation((from, to) => {
-        const entry = creationIntents(fixture.root)[0].entry
+        const [{ entry }] = creationIntents(requireInitializedFixture().root)
+
         if (String(to).endsWith(entry.baseFileName)) {
-          activations++
+          activations += 1
+
           fs.writeFileSync(
             native.getPath(`extensions/quizzes/${entry.quizId}.json`),
             JSON.stringify({ external: "not a cooperating C1 writer" }),
             { flag: "wx" },
           )
         }
+
         link(from, to)
       })
-      expect(() => fixture.port.create(creationInput(), null)).toThrow(
-        /unresolved/,
-      )
+      expect(() =>
+        requireInitializedFixture().port.create(creationInput(), null),
+      ).toThrow(/unresolved/)
       vi.restoreAllMocks()
       expect(activations).toBe(1)
-      const before = creationTree(fixture.root)
-      const runs = await creationReplayTwice(fixture.root, fixture.token)
+      const before = creationTree(requireInitializedFixture().root)
+      const runs = await creationReplayTwice(
+        requireInitializedFixture().root,
+        requireInitializedFixture().token,
+      )
+      assertCreationRuns(runs)
+
       for (const run of runs) {
         expect(run.process.code).toBe(2)
         expect(run.state).toStrictEqual(before)
@@ -398,42 +500,58 @@ describe.runIf(process.platform === "linux")(
         failures = 0
       vi.spyOn(fs, "renameSync").mockImplementation((from, to) => {
         rename(from, to)
+
         if (
           String(to).endsWith("intent.json") &&
-          JSON.parse(fs.readFileSync(to, "utf8")).phase === "committed"
-        )
+          requireCreationRecord(JSON.parse(fs.readFileSync(to, "utf8")))
+            .phase === "committed"
+        ) {
           committedVisible = true
+        }
       })
       vi.spyOn(fs, "fsyncSync").mockImplementation((fd) => {
         if (committedVisible && fs.fstatSync(fd).isDirectory()) {
-          failures++
+          failures += 1
+
           throw new Error("EIO warm committed directory")
         }
+
         sync(fd)
       })
       expect(() =>
-        fixture.port.create(creationInput(), creationExtras()),
+        requireInitializedFixture().port.create(
+          creationInput(),
+          creationExtras(),
+        ),
       ).toThrow(/unresolved/)
       vi.restoreAllMocks()
       expect(failures).toBe(1)
-      const before = creationTree(fixture.root)
+      const before = creationTree(requireInitializedFixture().root)
       const blocked = await creationReplayTwice(
-        fixture.root,
-        fixture.token,
+        requireInitializedFixture().root,
+        requireInitializedFixture().token,
         true,
       )
+      assertCreationRuns(blocked)
+
       for (const run of blocked) {
         expect(run.process.code).toBe(2)
         expect(run.state).toStrictEqual(before)
       }
-      const runs = await creationReplayTwice(fixture.root, fixture.token)
+      const runs = await creationReplayTwice(
+        requireInitializedFixture().root,
+        requireInitializedFixture().token,
+      )
+      assertCreationRuns(runs)
       for (const run of runs) {
         expect(run.process.code, run.process.stderr).toBe(0)
         for (const name of Object.keys(before).filter(
-          (name) =>
-            name.startsWith("quizz/") || name.startsWith("extensions/quizzes/"),
-        ))
+          (entryName) =>
+            entryName.startsWith("quizz/") ||
+            entryName.startsWith("extensions/quizzes/"),
+        )) {
           expect(run.state[name]).toStrictEqual(before[name])
+        }
       }
       retainCreationReceipt("warm-visible-commit", {
         state: "PASS",

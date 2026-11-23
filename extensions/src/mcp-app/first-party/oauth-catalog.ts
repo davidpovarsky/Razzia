@@ -47,6 +47,7 @@ export function createNativeCatalog(
         ) {
           throw invalid()
         }
+
         if (!options.template) {
           throw unavailable()
         }

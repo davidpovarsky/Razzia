@@ -11,6 +11,7 @@ const entries = getNativeShowLibrary().families.map((family) => ({
 const sources = ["classic", "razzia"].map((name) => {
   const path = `/work/extensions/src/core/show-themes/${name}.manifest.json`
   const data = readFileSync(path)
+
   return {
     path,
     bytes: data.length,

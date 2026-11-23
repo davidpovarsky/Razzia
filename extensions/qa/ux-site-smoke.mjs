@@ -41,13 +41,17 @@ const games = [
 let createMode = "success"
 let createCount = 0
 let forgotCount = 0
-let releasePending = () => {}
-let pendingReached = () => {}
+let releasePending = () => {
+  /* The held synthetic request installs its release callback before it is used. */
+}
+let pendingReached = () => {
+  /* The pending-request observer is installed before the held scenario begins. */
+}
 let listFailure = false
 
 await page.addInitScript(
-  ({ token }) => {
-    localStorage.setItem("token", token)
+  ({ token: receivedToken }) => {
+    localStorage.setItem("token", receivedToken)
     localStorage.setItem("i18nextLng", "en")
     window.__uxPageShows = []
     addEventListener("pageshow", (event) => {
@@ -59,42 +63,69 @@ await page.addInitScript(
 await page.route("**/api/**", async (route) => {
   const url = new URL(route.request().url())
   const body = (json, status = 200) => route.fulfill({ status, json })
-  if (url.pathname === "/api/auth/mode") return body({ accountsEnabled: true })
-  if (url.pathname === "/api/accounts/me") return body(account)
-  if (url.pathname === "/api/auth/session")
+
+  if (url.pathname === "/api/auth/mode") {
+    return body({ accountsEnabled: true })
+  }
+
+  if (url.pathname === "/api/accounts/me") {
+    return body(account)
+  }
+
+  if (url.pathname === "/api/auth/session") {
     return body({
       token,
       clientId: account.id,
       role: "manager",
       expiresAt: Math.floor(Date.now() / 1000) + 3600,
     })
-  if (url.pathname === "/api/quizz")
+  }
+
+  if (url.pathname === "/api/quizz") {
     return body(
       listFailure ? { error: "synthetic-unavailable" } : { quizz: games },
       listFailure ? 503 : 200,
     )
-  if (url.pathname === "/api/results") return body({ results: [] })
-  if (url.pathname === "/api/billing/config") return body({ enabled: false })
+  }
+
+  if (url.pathname === "/api/results") {
+    return body({ results: [] })
+  }
+
+  if (url.pathname === "/api/billing/config") {
+    return body({ enabled: false })
+  }
+
   if (url.pathname === "/api/accounts/forgot") {
     forgotCount += 1
     expect(route.request().postDataJSON().email).toBe(account.email)
+
     return body({})
   }
+
   if (url.pathname === "/api/games" && route.request().method() === "POST") {
     createCount += 1
+
     if (createMode === "held") {
       pendingReached()
-      await new Promise((resolve) => {
-        releasePending = resolve
+      await new Promise((resolvePending) => {
+        releasePending = resolvePending
       })
+
       return body({ gameId: "ux-stale-room", inviteCode: "123456" }).catch(
-        () => {},
+        () => {
+          /* The stale-request scenario may close its page before this delayed reply. */
+        },
       )
     }
-    if (createMode === "fail")
+
+    if (createMode === "fail") {
       return body({ error: "synthetic-capacity-unavailable" }, 503)
+    }
+
     return body({ gameId: "ux-acknowledged-room", inviteCode: "123456" })
   }
+
   return body({ error: "synthetic-unsupported" }, 404)
 })
 await page.route("**/party/manager/ux-acknowledged-room", (route) =>
@@ -122,6 +153,7 @@ try {
       )
       for (const width of [1440, 768, 390]) {
         await page.setViewportSize({ width, height: 900 })
+
         if (width <= 760) {
           await expect
             .poll(() =>
@@ -137,6 +169,7 @@ try {
             }),
           ).toBeVisible()
         }
+
         const row = await page
           .locator(".list-toolbar .button-row")
           .evaluate((node) =>
@@ -145,6 +178,7 @@ try {
                 ? child
                 : child.querySelector("select")
               const rect = control.getBoundingClientRect()
+
               return { top: rect.top, height: rect.height, left: rect.left }
             }),
           )
@@ -302,8 +336,8 @@ try {
     async () => {
       await page.goto(`${baseURL}/studio/prepare?quiz=ux-alpha`)
       createMode = "held"
-      const reached = new Promise((resolve) => {
-        pendingReached = resolve
+      const reached = new Promise((resolveReached) => {
+        pendingReached = resolveReached
       })
       await page
         .getByRole("button", { name: "Open show room", exact: true })
@@ -372,7 +406,9 @@ try {
 } catch (error) {
   await page
     .screenshot({ path: resolve(evidence, "failure.png"), fullPage: true })
-    .catch(() => {})
+    .catch(() => {
+      /* Keep the recorded audit outcome if its diagnostic screenshot is unavailable. */
+    })
   writeFileSync(
     resolve(evidence, "receipt.json"),
     JSON.stringify(

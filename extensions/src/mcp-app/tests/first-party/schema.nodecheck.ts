@@ -6,12 +6,27 @@ import { dirname } from "node:path"
 import { DatabaseSync } from "node:sqlite"
 import { canonicalJson } from "../../contracts/canonical.ts"
 import { normalizeDraft } from "../../server/authoring.ts"
-import { fixture, createInput, key, policy, snapshot } from "./fixtures.ts"
-import type { Session } from "./fixtures.ts"
+import {
+  fixture,
+  createInput,
+  key,
+  policy,
+  snapshot,
+  requireObservedRecord,
+  type Session,
+} from "./fixtures.ts"
 import { legacyTableSql } from "./schema-ad895.fixture.ts"
 import { preserveWitness } from "./review-evidence.fixture.ts"
 
-let f: Awaited<ReturnType<typeof fixture>>
+type InitializedFValue = Awaited<ReturnType<typeof fixture>>
+let f: InitializedFValue | undefined = undefined
+function requireInitializedF(): InitializedFValue {
+  if (f === undefined) {
+    throw new Error("Fixture state f was read before initialization")
+  }
+
+  return f
+}
 before(async () => {
   f = await fixture()
 })
@@ -19,21 +34,22 @@ after(() => f?.close())
 
 async function account(): Promise<Session> {
   const owner = randomUUID()
-  f.db
-    .prepare(
+  requireInitializedF()
+    .db.prepare(
       "INSERT INTO accounts(id,email,salt,hash,verified_at,created_at) VALUES(?,?,?,?,?,?)",
     )
     .run(
       owner,
-      owner + "@example.invalid",
+      `${owner}@example.invalid`,
       "synthetic-unused",
       "synthetic-unused",
       Date.now(),
       Date.now(),
     )
-  const result = await f.tokens.mintToken(owner, "manager")
-  const claims = await f.tokens.verifyToken(result.token)
+  const result = await requireInitializedF().tokens.mintToken(owner, "manager")
+  const claims = await requireInitializedF().tokens.verifyToken(result.token)
   assert.ok(claims.sid)
+
   return { owner, token: result.token, sid: claims.sid }
 }
 
@@ -68,32 +84,51 @@ function assertSameVisibleShape(db: DatabaseSync, owner: string) {
 
 async function rejected(name: string, alter: (db: DatabaseSync) => void) {
   const session = await account()
-  const draft = await f.as(session, (p) => f.store().create(p, createInput()))
-  const file = f.file(session.owner)
+  const draft = await requireInitializedF().as(session, (p) =>
+    requireInitializedF().store().create(p, createInput()),
+  )
+  const file = requireInitializedF().file(session.owner)
   const db = new DatabaseSync(file)
+
   try {
     alter(db)
     assertSameVisibleShape(db, session.owner)
   } finally {
     db.close()
   }
-  const beforeState = snapshot(f.root)
+
+  const beforeState = snapshot(requireInitializedF().root)
   preserveWitness(
-    name + "-rejected-before",
+    `${name}-rejected-before`,
     { visibleVersion: 1, ownerMatches: true, beforeState },
     file,
   )
-  const get = await f.request(session, "/drafts/" + draft.draftId)
+  const get = await requireInitializedF().request(
+    session,
+    `/drafts/${draft.draftId}`,
+  )
   assert.equal(get.status, 503)
-  assert.equal((await get.json()).error.code, "DEPENDENCY_UNAVAILABLE")
-  assert.deepEqual(snapshot(f.root), beforeState)
-  const mutation = await f.request(session, "/drafts", "POST", createInput())
+  assert.equal(
+    requireObservedRecord(requireObservedRecord(await get.json()).error).code,
+    "DEPENDENCY_UNAVAILABLE",
+  )
+  assert.deepEqual(snapshot(requireInitializedF().root), beforeState)
+  const mutation = await requireInitializedF().request(
+    session,
+    "/drafts",
+    "POST",
+    createInput(),
+  )
   assert.equal(mutation.status, 503)
-  assert.equal((await mutation.json()).error.code, "DEPENDENCY_UNAVAILABLE")
-  const afterState = snapshot(f.root)
+  assert.equal(
+    requireObservedRecord(requireObservedRecord(await mutation.json()).error)
+      .code,
+    "DEPENDENCY_UNAVAILABLE",
+  )
+  const afterState = snapshot(requireInitializedF().root)
   assert.deepEqual(afterState, beforeState)
   preserveWitness(
-    name + "-rejected-after",
+    `${name}-rejected-after`,
     { getStatus: get.status, mutationStatus: mutation.status, afterState },
     file,
   )
@@ -103,6 +138,7 @@ function replaceOperations(db: DatabaseSync, ddl: string) {
   db.exec(
     "BEGIN IMMEDIATE; ALTER TABLE operations RENAME TO original_operations",
   )
+
   try {
     db.exec(ddl)
     db.exec(
@@ -116,15 +152,16 @@ function replaceOperations(db: DatabaseSync, ddl: string) {
 
 test("exact old producer schema1 remains readable and mutable without a migration", async () => {
   const session = await account()
-  const file = f.file(session.owner)
+  const file = requireInitializedF().file(session.owner)
   mkdirSync(dirname(file), { recursive: true, mode: 0o700 })
   writeFileSync(file, Buffer.alloc(0), { flag: "wx", mode: 0o600 })
   const normalized = normalizeDraft(createInput().authoredShowJson, policy)
   const id = key()
   const db = new DatabaseSync(file)
+
   try {
     db.exec("PRAGMA journal_mode=DELETE; BEGIN IMMEDIATE")
-    db.exec(legacyTableSql.join(";\n") + ";")
+    db.exec(`${legacyTableSql.join(";\n")};`)
     db.prepare("INSERT INTO metadata(owner,version) VALUES(?,1)").run(
       session.owner,
     )
@@ -142,16 +179,25 @@ test("exact old producer schema1 remains readable and mutable without a migratio
   } finally {
     db.close()
   }
-  const beforeState = snapshot(f.root)
-  const get = await f.request(session, "/drafts/" + id)
+
+  const beforeState = snapshot(requireInitializedF().root)
+  const get = await requireInitializedF().request(session, `/drafts/${id}`)
   assert.equal(get.status, 200)
   assert.equal(
-    (await get.json()).data.authoredShowJson,
+    requireObservedRecord(requireObservedRecord(await get.json()).data)
+      .authoredShowJson,
     normalized.authoredShowJson,
   )
-  assert.deepEqual(snapshot(f.root), beforeState)
+  assert.deepEqual(snapshot(requireInitializedF().root), beforeState)
   assert.equal(
-    (await f.request(session, "/drafts", "POST", createInput())).status,
+    (
+      await requireInitializedF().request(
+        session,
+        "/drafts",
+        "POST",
+        createInput(),
+      )
+    ).status,
     201,
   )
 })

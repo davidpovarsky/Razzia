@@ -15,27 +15,48 @@ import { config, principal, newKey } from "./fixtures.ts"
 import { setImmediate as immediate } from "node:timers/promises"
 
 export function deferred<T = void>() {
-  let resolve!: (value: T | PromiseLike<T>) => void
-  let reject!: (error: unknown) => void
+  let resolve: (value: T | PromiseLike<T>) => void = () => {
+    throw new Error(
+      "Promise resolver resolve was used before executor initialization",
+    )
+  }
+
+  let reject: (error: unknown) => void = () => {
+    throw new Error(
+      "Promise resolver reject was used before executor initialization",
+    )
+  }
+
   const promise = new Promise<T>((yes, no) => {
     resolve = yes
     reject = no
   })
+
   return { promise, resolve, reject }
 }
+
 export async function drain() {
-  for (let i = 0; i < 8; i++) await immediate()
+  for (let i = 0; i < 8; i += 1) {
+    await immediate()
+  }
 }
+
 export async function until(check: () => boolean) {
-  for (let i = 0; i < 500; i++) {
-    if (check()) return
+  for (let i = 0; i < 500; i += 1) {
+    if (check()) {
+      return
+    }
+
     await immediate()
   }
   throw new Error("Expected lifecycle state")
 }
 
-/** Test-only read-only linked transports. The observed mode uses public SDK
- * APIs to observe errors/signals on the SAME guarded connection implementation. */
+/**
+ * Test-only read-only linked transports. The observed mode uses public SDK
+ * APIs to observe errors/signals on the SAME guarded connection implementation.
+ */
+
 export async function lifecycleHarness(
   overrides: Dependencies = {},
   work?: (context: ServerContext) => Promise<CallToolResult>,
@@ -46,25 +67,26 @@ export async function lifecycleHarness(
 ) {
   const p = principal()
   const deps: Dependencies = {
-    prevalidationLimit: async () => true,
-    authorize: async () => p,
-    rateLimit: async () => true,
+    prevalidationLimit: () => Promise.resolve(true),
+    authorize: () => Promise.resolve(p),
+    rateLimit: () => Promise.resolve(true),
     authoring: { allowedPublicAssetUrls: new Set() },
     drafts: {
-      async get() {
-        return undefined
+      get() {
+        return Promise.resolve(undefined)
       },
-      async create() {
-        throw new Error("Read only fixture")
+      create() {
+        return Promise.reject(new Error("Read only fixture"))
       },
-      async replace() {
-        throw new Error("Read only fixture")
+      replace() {
+        return Promise.reject(new Error("Read only fixture"))
       },
     },
     ...overrides,
   }
   const errors: string[] = []
-  let server: ReturnType<typeof createTadazzMcpServer>
+  let server: ReturnType<typeof createTadazzMcpServer> | undefined = undefined
+
   if (work) {
     const sdk = new McpServer({ name: "lifecycle-observer", version: "1" })
     sdk.server.onerror = (error) => errors.push(error.message)
@@ -75,9 +97,16 @@ export async function lifecycleHarness(
       (_args, context) => guarded.run(context, () => work(context)),
     )
     server = { connect: guarded.connect, close: guarded.close }
-  } else server = createTadazzMcpServer(config, deps)
+  } else {
+    server = createTadazzMcpServer(config, deps)
+  }
+
   const client = new Client({ name: "synthetic-lifecycle", version: "1" })
-  client.onerror = () => {} // Raw-ID witnesses deliberately have no client pending promise.
+  // Raw-ID witnesses deliberately have no client pending promise.
+
+  client.onerror = () => {
+    /* Raw-ID witnesses deliberately have no client pending promise to reject. */
+  }
   const clientMessages: JSONRPCMessage[] = []
   const serverMessages: JSONRPCMessage[] = []
   const flags = {
@@ -88,13 +117,18 @@ export async function lifecycleHarness(
     closes: 0,
   }
   const closeBoth = () => {
-    if (flags.closed) return
+    if (flags.closed) {
+      return
+    }
+
     flags.closed = true
     ct.onclose?.()
     st.onclose?.()
   }
   const ct: Transport = {
-    start: async () => {},
+    start: async () => {
+      /* This synthetic transport is connected in memory and needs no startup work. */
+    },
     send: async (message) => {
       clientMessages.push(structuredClone(message))
       queueMicrotask(() => st.onmessage?.(structuredClone(message)))
@@ -102,22 +136,33 @@ export async function lifecycleHarness(
     close: async () => closeBoth(),
   }
   const st: Transport = {
-    start: async () => {},
+    start: async () => {
+      /* This synthetic transport is connected in memory and needs no startup work. */
+    },
     send: async (message, options) => {
       flags.sends++
-      if (flags.failSend) throw new Error("synthetic-secret-send")
+
+      if (flags.failSend) {
+        throw new Error("synthetic-secret-send")
+      }
+
       await beforeSend?.(message, options)
       serverMessages.push(structuredClone(message))
       queueMicrotask(() => ct.onmessage?.(structuredClone(message)))
     },
     close: async () => {
       flags.closes++
-      if (flags.failClose) throw new Error("synthetic-secret-close")
+
+      if (flags.failClose) {
+        throw new Error("synthetic-secret-close")
+      }
+
       closeBoth()
     },
   }
   await server.connect(st)
   await client.connect(ct)
+
   return {
     p,
     client,
@@ -164,7 +209,9 @@ export async function lifecycleHarness(
     },
     async close() {
       await client.close()
-      await server.close().catch(() => {})
+      await server.close().catch(() => {
+        /* Fixture shutdown may revisit the deliberately failed transport close. */
+      })
     },
   }
 }

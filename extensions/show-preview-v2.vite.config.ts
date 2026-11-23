@@ -1,26 +1,58 @@
-import { fileURLToPath } from "node:url"
+import { fileURLToPath, pathToFileURL } from "node:url"
 import { readFileSync } from "node:fs"
 import { createRequire } from "node:module"
-import { pathToFileURL } from "node:url"
+
 import base from "./show-preview.vite.config.ts"
+function isDefaultFactory(value: unknown): value is { default: () => unknown } {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "default" in value &&
+    typeof value.default === "function"
+  )
+}
+
+function requireDefaultFactory(value: unknown): () => unknown {
+  if (!isDefaultFactory(value)) {
+    throw new Error("show-preview:missing-tailwind-factory")
+  }
+
+  return value.default
+}
+
+function hasDefinitionDigest(
+  value: unknown,
+): value is { definitionSha256: string } {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    !Array.isArray(value) &&
+    "definitionSha256" in value &&
+    typeof value.definitionSha256 === "string" &&
+    /^[a-f0-9]{64}$/u.test(value.definitionSha256)
+  )
+}
+
 const require = createRequire(
   new URL("../packages/web/package.json", import.meta.url),
 )
-const tailwindcss = (
-  await import(pathToFileURL(require.resolve("@tailwindcss/vite")).href)
-).default
+const tailwindcss = requireDefaultFactory(
+  await import(pathToFileURL(require.resolve("@tailwindcss/vite")).href),
+)
 
 // The host-only prebuild calculates these canonical definition digests from the
 // same parsed source manifests included in this build. No hashing enters payload.
-const definitions = JSON.parse(
+const definitions: unknown = JSON.parse(
   readFileSync("/out/native-v2-built-definitions.json", "utf8"),
 )
+
 if (
   !Array.isArray(definitions) ||
   definitions.length !== 2 ||
-  definitions.some((entry) => !/^[a-f0-9]{64}$/u.test(entry.definitionSha256))
-)
+  definitions.some((entry: unknown) => !hasDefinitionDigest(entry))
+) {
   throw new Error("show-preview:missing-built-native-definitions")
+}
 
 export default {
   ...base,

@@ -54,7 +54,8 @@ function fixture(withPreviousScene = false) {
   const plan = resolveApplicationPreviewPlan(draft)
   expect(plan.resolution.kind).toBe("exact")
   let waitForFrame:
-    ((frame: ApplicationPreviewFrame) => Promise<void> | undefined) | undefined
+    | ((frame: ApplicationPreviewFrame) => Promise<void> | undefined)
+    | undefined = undefined
   const frames: ApplicationPreviewFrame[] = []
   const session = createApplicationPreviewSession({
     source: draft.source,
@@ -67,6 +68,7 @@ function fixture(withPreviousScene = false) {
       mount: () => ({
         update: (frame) => {
           frames.push(frame)
+
           return waitForFrame?.(frame) ?? Promise.resolve()
         },
         mediaElement: () => null,
@@ -83,16 +85,20 @@ function fixture(withPreviousScene = false) {
       if (!matches(frame)) {
         return undefined
       }
+
       waitForFrame = undefined
       entered.resolve(frame)
+
       return released.promise
     }
+
     return { entered: entered.promise, release: released.resolve }
   }
   const phase = () =>
     session.chapters.find(
       (chapter) => chapter.id === session.snapshot().chapterId,
     )?.phase
+
   return { session, holdNext, phase, frames }
 }
 

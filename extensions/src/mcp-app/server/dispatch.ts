@@ -77,8 +77,9 @@ export async function dispatch(
       throw new ToolError("VALIDATION_FAILED")
     }
 
-    let data: unknown
-    let meta: Record<string, unknown> | undefined
+    let data: unknown = undefined
+
+    let meta: Record<string, unknown> | undefined = undefined
 
     if (isPackageTool(name)) {
       if (!deps.packages) {
@@ -121,11 +122,19 @@ export async function dispatch(
         "receivedBytes" in packaged
       ) {
         const chunk = packageInputs.write_package_upload_chunk.parse(raw)
-        const padding = chunk.bytesBase64.endsWith("==")
-          ? 2
-          : chunk.bytesBase64.endsWith("=")
-            ? 1
-            : 0
+        const getBase64Padding = () => {
+          if (chunk.bytesBase64.endsWith("==")) {
+            return 2
+          }
+
+          if (chunk.bytesBase64.endsWith("=")) {
+            return 1
+          }
+
+          return 0
+        }
+
+        const padding = getBase64Padding()
         const chunkBytes = (chunk.bytesBase64.length / 4) * 3 - padding
 
         if (packaged.receivedBytes < chunk.offset + chunkBytes) {
@@ -136,19 +145,22 @@ export async function dispatch(
       if ("uploadUrl" in packaged && packaged.uploadUrl) {
         firstPartyUrl(packaged.uploadUrl, config)
       }
+
       if ("previewUrl" in packaged) {
         firstPartyUrl(packaged.previewUrl, config)
       }
+
       if ("studioUrl" in packaged && packaged.studioUrl) {
         firstPartyUrl(packaged.studioUrl, config)
       }
+
       if ("downloadUrl" in packaged && packaged.downloadUrl) {
         firstPartyUrl(packaged.downloadUrl, config)
       }
 
       data = packaged
-      meta = result.meta
-    } else
+      ;({ meta } = result)
+    } else {
       switch (name) {
         case "list_game_templates": {
           if (!deps.catalog) {
@@ -467,8 +479,8 @@ export async function dispatch(
           }
 
           const result = await renderPreview(deps, p, record, a.locale)
-          data = result.data
-          meta = result.meta
+          ;({ data } = result)
+          ;({ meta } = result)
 
           break
         }
@@ -539,6 +551,7 @@ export async function dispatch(
           break
         }
       }
+    }
 
     const structuredContent = jsonObject.parse(
       outputs[name].parse({

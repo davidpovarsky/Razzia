@@ -63,12 +63,15 @@ async function fixture() {
     if (requestFailure) {
       throw requestFailure
     }
+
     if (path.endsWith("/inspect")) {
       return json(success(inspected))
     }
+
     if (waitForApproval) {
       await waitForApproval
     }
+
     return json(
       success(
         approvalResponse ?? {
@@ -239,7 +242,12 @@ describe("separate native exact-revision consent client", () => {
   it("consumes before in-flight approval and never retries an unknown outcome", async () => {
     const f = await fixture()
     const inspected = await f.client.inspect(requestId)
-    let release!: () => void
+    let release: () => void = () => {
+      throw new Error(
+        "Promise resolver release was used before executor initialization",
+      )
+    }
+
     f.approvalWait(
       new Promise<void>((resolve) => {
         release = resolve

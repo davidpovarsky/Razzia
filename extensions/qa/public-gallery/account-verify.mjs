@@ -52,8 +52,9 @@ process.env.TADAZZ_AUTH_EMAIL_FROM = "Gallery QA <auth@example.invalid>"
 const trap = installResendVerificationTrap()
 const tls = createLoopbackTlsCertificate()
 const fetchImpl = createPinnedCaFetch(tls.cert)
-let host
-let server
+let host = undefined
+
+let server = undefined
 
 try {
   const native = await import("../../src/mcp-app/native-host/index.ts")
@@ -97,16 +98,18 @@ try {
   const json = async (path, token) => {
     const response = await request(path, token)
     assert.equal(response.status, 200, path)
+
     return response.json()
   }
   const catalog = (await json("/api/extensions/catalogue")).games
   assert.equal(catalog.length, 10)
   const beforePublic = new Map()
-  for (const game of catalog)
+  for (const game of catalog) {
     beforePublic.set(
       game.id,
       JSON.stringify(await json("/api/extensions/preview/public/" + game.id)),
     )
+  }
   const denied = await request(
     "/api/extensions/catalogue/family/install",
     undefined,
@@ -117,14 +120,14 @@ try {
     origin,
     fetchImpl,
     email: "gallery-alice@example.invalid",
-    password: randomBytes(24).toString("base64url") + "Aa1!",
+    password: `${randomBytes(24).toString("base64url")}Aa1!`,
     codes: trap.codes,
   })
   const bob = await registerAndLoginAccount({
     origin,
     fetchImpl,
     email: "gallery-bob@example.invalid",
-    password: randomBytes(24).toString("base64url") + "Aa1!",
+    password: `${randomBytes(24).toString("base64url")}Aa1!`,
     codes: trap.codes,
   })
   record("real-registration-login-and-anonymous-install-denial")
@@ -258,14 +261,16 @@ try {
     )
   }
   record("second-account-independent-copy-and-immutable-public-masters")
+
   if (process.env.TADAZZ_GALLERY_BROWSER === "true") {
     assert(
       process.env.TADAZZ_SITE_DIST_DIR,
       "Built production site required for editor acceptance",
     )
-    let publicBrowserError
+    let publicBrowserError = undefined
+
     try {
-      await new Promise((resolve, reject) => {
+      await new Promise((resolveObservation, reject) => {
         const child = spawn(
           process.execPath,
           [fileURLToPath(new URL("./browser-verify.mjs", import.meta.url))],
@@ -281,7 +286,7 @@ try {
         child.once("error", reject)
         child.once("exit", (code) =>
           code === 0
-            ? resolve()
+            ? resolveObservation()
             : reject(new Error("Candidate public browser exited " + code)),
         )
       })
@@ -294,6 +299,7 @@ try {
         error: String(error?.stack ?? error),
       })
     }
+
     const { verifyGalleryEditor } = await import("./editor-verify.mjs")
     const editorReceipt = await verifyGalleryEditor({
       origin,
@@ -309,17 +315,21 @@ try {
     })
     writeFileSync(
       join(evidence, "editor-receipt.json"),
-      JSON.stringify(editorReceipt, null, 2) + "\n",
+      `${JSON.stringify(editorReceipt, null, 2)}\n`,
     )
     record(
       "native-editor-eleven-themes-switch-save-reload-and-catalogue-links",
       { checks: editorReceipt.results.length },
     )
-    if (publicBrowserError) throw publicBrowserError
+
+    if (publicBrowserError) {
+      throw publicBrowserError
+    }
   }
+
   writeFileSync(
     join(evidence, "receipt.json"),
-    JSON.stringify(
+    `${JSON.stringify(
       {
         passed: true,
         platform: process.platform,
@@ -331,12 +341,12 @@ try {
       },
       null,
       2,
-    ) + "\n",
+    )}\n`,
   )
 } catch (error) {
   writeFileSync(
     join(evidence, "receipt.json"),
-    JSON.stringify(
+    `${JSON.stringify(
       {
         passed: false,
         platform: process.platform,
@@ -349,16 +359,23 @@ try {
       },
       null,
       2,
-    ) + "\n",
+    )}\n`,
   )
   console.error(error)
   process.exitCode = 1
 } finally {
   await server?.close()
-  if (!server) await host?.close()
+
+  if (!server) {
+    await host?.close()
+  }
+
   trap.restore()
-  for (const key of Object.keys(process.env))
-    if (!(key in originalEnv)) delete process.env[key]
+  for (const key of Object.keys(process.env)) {
+    if (!(key in originalEnv)) {
+      delete process.env[key]
+    }
+  }
   Object.assign(process.env, originalEnv)
   rmSync(configRoot, { recursive: true, force: true })
 }

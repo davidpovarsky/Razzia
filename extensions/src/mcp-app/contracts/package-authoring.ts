@@ -80,11 +80,19 @@ export const packageInputs = {
       ...key,
     })
     .refine((value) => {
-      const padding = value.bytesBase64.endsWith("==")
-        ? 2
-        : value.bytesBase64.endsWith("=")
-          ? 1
-          : 0
+      const getBase64Padding = () => {
+        if (value.bytesBase64.endsWith("==")) {
+          return 2
+        }
+
+        if (value.bytesBase64.endsWith("=")) {
+          return 1
+        }
+
+        return 0
+      }
+
+      const padding = getBase64Padding()
 
       return (
         value.offset + (value.bytesBase64.length / 4) * 3 - padding <=
@@ -219,15 +227,19 @@ export const packageDataSchemas = {
 }
 
 export type PackageToolName = keyof typeof packageInputs
+
 export type PackageToolInput<N extends PackageToolName = PackageToolName> =
   z.infer<(typeof packageInputs)[N]>
+
 export type PackageToolData<N extends PackageToolName = PackageToolName> =
   z.infer<(typeof packageDataSchemas)[N]>
+
 export type PackageStatus = z.infer<typeof packageStatusSchema>
 
 export const packageToolNames = Object.freeze(
   Object.keys(packageInputs) as PackageToolName[],
 )
+
 const packageNames: ReadonlySet<string> = new Set(packageToolNames)
 
 export function isPackageTool(name: string): name is PackageToolName {

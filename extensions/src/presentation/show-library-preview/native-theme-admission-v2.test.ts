@@ -7,7 +7,7 @@ import {
 } from "../../core/card-appearance"
 import { resolveBundledPreviewThemeV2 } from "./native-theme-admission-v2"
 
-const families = getNativeShowLibrary().families
+const { families } = getNativeShowLibrary()
 const built = families.map((family) => ({
   ...family.ref,
   rendererId: family.definition.rendererId,
@@ -15,6 +15,7 @@ const built = families.map((family) => ({
 }))
 const bindingFor = (index: number) => {
   const family = families[index]!
+
   return nativePreviewThemeBindingV2Schema.parse({
     format: "tadazz-native-preview-theme",
     schemaVersion: 2,
@@ -47,10 +48,11 @@ describe("V2 exact built native theme admission", () => {
       const theme = resolveBundledPreviewThemeV2(binding, built)
       expect(theme.definition.id).toBe(binding.theme.id)
       expect(Object.keys(theme.slots)).toHaveLength(15)
-      for (const [slot, value] of Object.entries(binding.slots))
+      for (const [slot, value] of Object.entries(binding.slots)) {
         expect(theme.slots[slot as keyof typeof theme.slots].id).toBe(
           value.variantId,
         )
+      }
     },
   )
   it("rejects a valid-shaped foreign definition digest", () => {

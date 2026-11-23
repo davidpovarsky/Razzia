@@ -68,8 +68,10 @@ export async function verifyGalleryEditor(options) {
     for (const theme of options.themeDefinitions) {
       await expect(panel.getByTestId("show-theme-" + theme.id)).toHaveCount(1)
     }
+
     return panel
   }
+
   try {
     await openEditor()
     await expect(page.getByTestId("editor-game-backdrop")).toHaveAttribute(
@@ -92,6 +94,7 @@ export async function verifyGalleryEditor(options) {
             images
               .filter((image) => {
                 const bounds = image.getBoundingClientRect()
+
                 return (
                   bounds.top < window.innerHeight &&
                   bounds.bottom > 0 &&
@@ -119,7 +122,7 @@ export async function verifyGalleryEditor(options) {
         (asset) => asset.id === theme.adapterAssets.showBackdrop,
       ).url
       await panel
-        .getByTestId("show-theme-" + themeId)
+        .getByTestId(`show-theme-${themeId}`)
         .getByRole("button", { name: "Use this theme", exact: true })
         .click()
       const confirm = page.getByRole("alertdialog")
@@ -128,7 +131,7 @@ export async function verifyGalleryEditor(options) {
         .getByRole("button", { name: "Use this theme", exact: true })
         .click()
       await expect(
-        panel.getByTestId("show-theme-" + themeId).getByRole("button"),
+        panel.getByTestId(`show-theme-${themeId}`).getByRole("button"),
       ).toBeDisabled()
       await expect(page.getByTestId("editor-game-backdrop")).toHaveAttribute(
         "data-editor-theme",
@@ -187,15 +190,15 @@ export async function verifyGalleryEditor(options) {
       )
       await page.evaluate(() => window.scrollTo(0, 0))
       await page.screenshot({
-        path: join(options.evidence, "native-editor-saved-" + themeId + ".png"),
+        path: join(options.evidence, `native-editor-saved-${themeId}.png`),
         fullPage: true,
       })
       panel = await openThemes()
       await expect(
-        panel.getByTestId("show-theme-" + themeId).getByRole("button"),
+        panel.getByTestId(`show-theme-${themeId}`).getByRole("button"),
       ).toBeDisabled()
       report.push({
-        name: "native-editor-save-reload-" + themeId,
+        name: `native-editor-save-reload-${themeId}`,
         passed: true,
         questionCount: actualQuiz.questions.length,
       })
@@ -235,12 +238,15 @@ export async function verifyGalleryEditor(options) {
       options.expectedTitle,
     )
     await page.goto(options.origin + "/?view=product&game=family")
-    let capturedRoom
+    let capturedRoom = undefined
+
     await page.route(options.origin + "/api/games", async (route) => {
       if (route.request().method() !== "POST") {
         await route.continue()
+
         return
       }
+
       const response = await route.fetch()
       capturedRoom = {
         status: response.status(),
@@ -341,6 +347,7 @@ export async function verifyGalleryEditor(options) {
       buttons: [...document.querySelectorAll("button")].map((button) => {
         const bounds = button.getBoundingClientRect()
         const style = getComputedStyle(button)
+
         return {
           text: button.innerText?.trim(),
           firstAnswerBadge: Boolean(
@@ -370,7 +377,7 @@ export async function verifyGalleryEditor(options) {
     }))
     writeFileSync(
       join(options.evidence, "native-player-voting-controls.json"),
-      JSON.stringify(playerDiagnostic, null, 2) + "\n",
+      `${JSON.stringify(playerDiagnostic, null, 2)}\n`,
     )
     const observedChoice = playerDiagnostic.buttons.filter(
       (button) => button.firstAnswerBadge && button.visible && !button.disabled,
@@ -402,10 +409,11 @@ export async function verifyGalleryEditor(options) {
     await expect(
       page.getByTestId("tadazz-card-0").locator(".result-percentage"),
     ).toHaveText("100%")
-    for (const index of [1, 2, 3])
+    for (const index of [1, 2, 3]) {
       await expect(
-        page.getByTestId("tadazz-card-" + index).locator(".result-percentage"),
+        page.getByTestId(`tadazz-card-${index}`).locator(".result-percentage"),
       ).toHaveAttribute("data-target-percentage", "0")
+    }
     await player.screenshot({
       path: join(options.evidence, "native-player-gallery-answer-sent.png"),
       fullPage: true,
@@ -481,11 +489,12 @@ export async function verifyGalleryEditor(options) {
 
     assert.deepEqual(pageErrors, [], "No editor browser JavaScript errors")
     assert.deepEqual(failedAssets, [], "No editor asset failures")
+
     return { passed: true, results: report, pageErrors, failedAssets }
   } catch (error) {
     writeFileSync(
       join(options.evidence, "native-editor-partial-receipt.json"),
-      JSON.stringify(
+      `${JSON.stringify(
         {
           passed: false,
           results: report,
@@ -495,14 +504,16 @@ export async function verifyGalleryEditor(options) {
         },
         null,
         2,
-      ) + "\n",
+      )}\n`,
     )
     await page
       .screenshot({
         path: join(options.evidence, "native-editor-failure.png"),
         fullPage: true,
       })
-      .catch(() => {})
+      .catch(() => {
+        /* Keep the recorded audit outcome if its diagnostic screenshot is unavailable. */
+      })
     throw error
   } finally {
     await browser.close()

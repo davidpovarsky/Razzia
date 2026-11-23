@@ -67,7 +67,11 @@ export function PackageManager({
           const result = await packageJson<PackageReceipt>(
             `/uploads/${encodeURIComponent(initial)}`,
           )
-          if (!active) return
+
+          if (!active) {
+            return
+          }
+
           if (
             result.uploadId !== initial ||
             (initialExpectedRevision !== undefined &&
@@ -79,8 +83,10 @@ export function PackageManager({
               ))
           ) {
             setError("PACKAGE_PREVIEW_STALE")
+
             return
           }
+
           setReceipt(result)
           setSelected(result.manifest.contents.map((c) => c.id))
           setPreview(true)

@@ -19,19 +19,17 @@ const names = [
 ]
 const kinds = ["survey", "quiz", "survey", "quiz", "survey"]
 const picks = [0, 0, 1, 2, 3]
-let page
+let page = undefined
+
 async function phase(name) {
-  await page
-    .locator('[data-ggo-phase="' + name + '"]')
-    .waitFor({ timeout: 25000 })
+  await page.locator(`[data-ggo-phase="${name}"]`).waitFor({ timeout: 25000 })
 }
 async function scene(name, key) {
   await page
     .locator(
-      '[data-v4-scene="' +
-        name +
-        '"]' +
-        (key ? '[data-question-key="' + key + '"]' : ""),
+      `[data-v4-scene="${name}"]${
+        key ? '[data-question-key="' + key + '"]' : ""
+      }`,
     )
     .waitFor({ timeout: 25000 })
 }
@@ -52,6 +50,7 @@ async function assertResult(index) {
     const answer = el.parentElement
       ?.querySelector(".q-text")
       ?.getBoundingClientRect()
+
     return {
       display: s.display,
       visibility: s.visibility,
@@ -73,8 +72,9 @@ async function assertResult(index) {
     metrics.fontSize >= 32 && metrics.insidePanel && metrics.noOverlap,
     "Result label must be large and not clipped or overlap the question",
   )
+
   if (kinds[index] === "quiz") {
-    const answer = page.getByTestId("tadazz-card-" + picks[index])
+    const answer = page.getByTestId(`tadazz-card-${picks[index]}`)
     assert.ok(
       await answer.evaluate((el) => el.classList.contains("is-correct")),
     )
@@ -95,6 +95,7 @@ async function assertResult(index) {
       "Audience Favourite tag on the winning answer",
     )
   }
+
   const cards = page.locator(".choice-slot")
   const cardMetrics = await cards.first().evaluate((el) => ({
     opacity: parseFloat(getComputedStyle(el).opacity),
@@ -106,22 +107,28 @@ async function assertResult(index) {
     cardMetrics.opacity >= expectedOpacity && cardMetrics.transform === "none",
     "Result cards must NOT disappear and re-enter; intentionally dim incorrect quiz answers",
   )
-  if (index === 0 || index === 1)
+
+  if (index === 0 || index === 1) {
     await page.screenshot({
-      path: resolve("qa/phase2/ggo-visible-" + index + ".png"),
+      path: resolve(`qa/phase2/ggo-visible-${index}.png`),
       fullPage: true,
     })
+  }
+
   return { index, txt, metrics }
 }
 async function assertNextQuestion(index) {
   await page.getByTestId("ggo-main-action").click()
+
   if (index === 2) {
     await scene("leaderboard")
     await page.getByTestId("ggo-main-action").click()
   }
+
   await phase("question-transition")
   const transition = await page.getByTestId("tadazz-stage").evaluate((el) => {
     const root = el.querySelector(".tzv4-scene-root")
+
     return {
       visibility: getComputedStyle(root).visibility,
       cards: root.querySelectorAll(".choice-slot").length,
@@ -141,8 +148,10 @@ async function assertNextQuestion(index) {
     "visible",
     "New question cards return when voting starts",
   )
+
   return { next: index + 1, transition }
 }
+
 try {
   page = await browser.newPage({
     viewport: { width: 1366, height: 900 },
@@ -169,10 +178,14 @@ try {
   await phase("voting")
   await scene("countdown", names[0])
   const stages = []
-  for (let i = 0; i < 5; i++) {
-    await page.getByTestId("tadazz-card-" + picks[i]).click()
+  for (let i = 0; i < 5; i += 1) {
+    await page.getByTestId(`tadazz-card-${picks[i]}`).click()
     stages.push(await assertResult(i))
-    if (i === 4) break
+
+    if (i === 4) {
+      break
+    }
+
     stages.push(await assertNextQuestion(i))
   }
   await page.getByTestId("ggo-main-action").click()

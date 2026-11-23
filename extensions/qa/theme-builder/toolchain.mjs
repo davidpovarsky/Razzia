@@ -4,25 +4,34 @@ import { dirname, join } from "node:path"
 const require = createRequire("/work/extensions/package.json")
 function packageInfo(name, lookup = require) {
   try {
-    let path
+    let path = undefined
+
     try {
       path = lookup.resolve(`${name}/package.json`)
     } catch {
       let directory = dirname(lookup.resolve(name))
-      for (let depth = 0; depth < 12; depth++) {
+      for (let depth = 0; depth < 12; depth += 1) {
         const candidate = join(directory, "package.json")
+
         if (
           existsSync(candidate) &&
           JSON.parse(readFileSync(candidate, "utf8")).name === name
         ) {
           path = candidate
+
           break
         }
+
         directory = dirname(directory)
       }
     }
-    if (!path) return { name, status: "not-resolved" }
+
+    if (!path) {
+      return { name, status: "not-resolved" }
+    }
+
     const value = JSON.parse(readFileSync(path, "utf8"))
+
     return { name, version: value.version, packageJson: path }
   } catch (error) {
     return { name, status: "not-resolved", code: error.code }
@@ -39,8 +48,11 @@ const packages = [
   "esbuild",
   "playwright",
 ].map((name) => packageInfo(name))
-if (vite.packageJson)
+
+if (vite.packageJson) {
   packages.push(packageInfo("rolldown", createRequire(vite.packageJson)))
+}
+
 writeFileSync(
   "/out/runtime-toolchain.json",
   JSON.stringify(

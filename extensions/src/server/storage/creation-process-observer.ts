@@ -7,10 +7,12 @@ import type { ChildProcess } from "node:child_process"
 // reference before tests install fsync selectors, including late close/error.
 const fenceObservation = fs.fsyncSync.bind(fs)
 
-/** Node fixture observation only. No app imports, global hooks or import-time IO.
+/**
+ * Node fixture observation only. No app imports, global hooks or import-time IO.
  * Disabled unless the runner supplies an exact receipt subdirectory. The raw
  * stream files and result precede the caller's checkpoint read on close/error.
  */
+
 export function createCreationProcessObserver(context: {
   mode: string
   root: string
@@ -18,21 +20,33 @@ export function createCreationProcessObserver(context: {
   owner: string
 }) {
   const selected = process.env.C1_PROCESS_OBSERVER_ROOT
-  if (!selected) return undefined
+
+  if (!selected) {
+    return undefined
+  }
+
   const receipts = process.env.C1_RECEIPT_ROOT
-  if (!receipts || selected !== path.join(receipts, "process-observations"))
+
+  if (!receipts || selected !== path.join(receipts, "process-observations")) {
     throw new Error("C1 process observer must use the runner receipt subtree")
-  if (fs.realpathSync(receipts) !== receipts)
+  }
+
+  if (fs.realpathSync(receipts) !== receipts) {
     throw new Error("Linked process receipt parent")
+  }
+
   fs.mkdirSync(selected, { recursive: true, mode: 0o700 })
   const directory = fs.lstatSync(selected)
+
   if (
     directory.isSymbolicLink() ||
     !directory.isDirectory() ||
     fs.realpathSync(selected) !== selected ||
     (directory.mode & 0o077) !== 0
-  )
+  ) {
     throw new Error("Untrusted process observation directory")
+  }
+
   const id = randomUUID()
   const errors: string[] = []
   const open = (name: string) =>
@@ -45,13 +59,15 @@ export function createCreationProcessObserver(context: {
       0o600,
     )
   const stdoutFd = open("stdout.log")
-  let stderrFd: number
+  let stderrFd: number | undefined = undefined
+
   try {
     stderrFd = open("stderr.log")
   } catch (error) {
     fs.closeSync(stdoutFd)
     throw error
   }
+
   const streams = {
     stdout: { fd: stdoutFd, bytes: 0, hash: createHash("sha256") },
     stderr: { fd: stderrFd, bytes: 0, hash: createHash("sha256") },
@@ -64,16 +80,19 @@ export function createCreationProcessObserver(context: {
   const record = (name: string, value: unknown) => {
     try {
       const fd = open(name)
+
       try {
-        fs.writeFileSync(fd, JSON.stringify(value, null, 2) + "\n")
+        fs.writeFileSync(fd, `${JSON.stringify(value, null, 2)}\n`)
         fenceObservation(fd)
       } finally {
         fs.closeSync(fd)
       }
+
       const parent = fs.openSync(
         selected,
         fs.constants.O_RDONLY | fs.constants.O_DIRECTORY,
       )
+
       try {
         fenceObservation(parent)
       } finally {
@@ -83,6 +102,7 @@ export function createCreationProcessObserver(context: {
       failure(error)
     }
   }
+
   return {
     attach(child: ChildProcess) {
       const startedNs = process.hrtime.bigint().toString()
@@ -92,11 +112,17 @@ export function createCreationProcessObserver(context: {
             const bytes = Buffer.from(chunk)
             const stream = streams[name]
             let offset = 0
+
             while (offset < bytes.length) {
               const count = fs.writeSync(stream.fd, bytes, offset)
-              if (count <= 0) throw new Error("Incomplete process capture")
+
+              if (count <= 0) {
+                throw new Error("Incomplete process capture")
+              }
+
               offset += count
             }
+
             stream.bytes += bytes.length
             stream.hash.update(bytes)
           } catch (error) {
@@ -130,11 +156,13 @@ export function createCreationProcessObserver(context: {
             } catch (error) {
               failure(error)
             }
+
             try {
               fs.closeSync(stream.fd)
             } catch (error) {
               failure(error)
             }
+
             return [
               name,
               {

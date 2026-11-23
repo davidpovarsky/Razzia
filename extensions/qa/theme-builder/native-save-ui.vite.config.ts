@@ -1,6 +1,7 @@
 import { fileURLToPath } from "node:url"
 import { writeFileSync } from "node:fs"
 import { defineConfig } from "vite"
+
 export default defineConfig({
   root: fileURLToPath(new URL(".", import.meta.url)),
   publicDir: false,
@@ -30,10 +31,12 @@ export default defineConfig({
           "/out/native-save-browser-closure.json",
           JSON.stringify({ modules, forbidden }, null, 2),
         )
-        if (forbidden.length)
+
+        if (forbidden.length) {
           throw new Error(
             `Unexpected browser authority modules: ${forbidden.join(",")}`,
           )
+        }
       },
     },
   ],

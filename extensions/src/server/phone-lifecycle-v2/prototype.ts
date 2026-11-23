@@ -29,9 +29,14 @@ export class LifecyclePrototype {
 
   private authorize(context: VerifiedServiceContext, action: Action) {
     this.store.authorize(context, action)
-    if (!this.verifyLiveAuthority(context, action))
+
+    if (!this.verifyLiveAuthority(context, action)) {
       throw new Denied("service_denied")
-    if (!this.game.exists(context)) throw new Denied("game_unavailable")
+    }
+
+    if (!this.game.exists(context)) {
+      throw new Denied("game_unavailable")
+    }
   }
 
   register(context: VerifiedServiceContext, input: RegistrationInput): Receipt {
@@ -39,15 +44,22 @@ export class LifecyclePrototype {
       this.authorize(context, "register")
       identifier(input.requestId)
       identifier(input.providerReference)
+
       if (
         !Number.isSafeInteger(input.expectedPredecessor) ||
         input.expectedPredecessor < 0 ||
         input.expectedPredecessor >= Number.MAX_SAFE_INTEGER
-      )
+      ) {
         return fail("invalid_predecessor")
+      }
+
       const phone =
         typeof input.phone === "string" ? normalizePhoneE164(input.phone) : null
-      if (!phone) return fail("invalid_phone")
+
+      if (!phone) {
+        return fail("invalid_phone")
+      }
+
       const capHash = capabilityHash(input.capability)
       const callerHash = digest(phone),
         referenceHash = digest(input.providerReference)
@@ -68,9 +80,13 @@ export class LifecyclePrototype {
           input.expectedPredecessor,
         ]),
       )
+
       // Even a cached successful receipt cannot be used to target another room
       // after backend loss. No active/global fallback exists here.
-      if (!this.game.exists(context)) return fail("game_unavailable")
+      if (!this.game.exists(context)) {
+        return fail("game_unavailable")
+      }
+
       const decision = this.store.reserveRegistration(context, {
         requestId: input.requestId,
         callerHash,
@@ -79,18 +95,28 @@ export class LifecyclePrototype {
         expectedPredecessor: input.expectedPredecessor,
         fingerprint,
       })
-      this.authorize(context, "register") // Recheck after SQLite wait and on receipt replay.
+      // Recheck after SQLite wait and on receipt replay.
+
+      this.authorize(context, "register")
+
       if (decision.kind === "receipt") {
         if (
           decision.receipt.ok &&
           decision.row &&
           !this.game.matches(context, decision.row)
-        )
+        ) {
           return fail("game_binding_changed")
+        }
+
         return decision.receipt
       }
+
       const result = this.game.admit(context, decision, phone)
-      if (result.status.endsWith("_unknown")) return result
+
+      if (result.status.endsWith("_unknown")) {
+        return result
+      }
+
       return this.store.completeRegistration(context, decision, result)
     } catch (error) {
       // Exceptions after a reservation leave it durably pending. A coarse
@@ -101,32 +127,50 @@ export class LifecyclePrototype {
 
   operate(context: VerifiedServiceContext, input: OperationInput): Receipt {
     try {
-      if (!["poll", "answer", "hangup"].includes(input.action))
+      if (!["poll", "answer", "hangup"].includes(input.action)) {
         return fail("invalid_action")
+      }
+
       this.authorize(context, input.action)
-      if (!Number.isSafeInteger(input.generation) || input.generation < 1)
+
+      if (!Number.isSafeInteger(input.generation) || input.generation < 1) {
         return fail("invalid_generation")
+      }
+
       if (
         input.action === "answer" &&
         (!Number.isSafeInteger(input.epoch) ||
           !Number.isSafeInteger(input.answerIndex) ||
           input.answerIndex! < 0)
-      )
+      ) {
         return fail("invalid_answer")
-      if (!this.game.exists(context)) return fail("game_unavailable")
+      }
+
+      if (!this.game.exists(context)) {
+        return fail("game_unavailable")
+      }
+
       const decision = this.store.reserveOperation(context, input)
       this.authorize(context, input.action)
+
       if (decision.kind === "receipt") {
         if (
           decision.receipt.ok &&
           decision.row &&
           !this.game.matches(context, decision.row)
-        )
+        ) {
           return fail("game_binding_changed")
+        }
+
         return decision.receipt
       }
+
       const result = this.game.operate(context, decision.row, input)
-      if (result.status.endsWith("_unknown")) return result
+
+      if (result.status.endsWith("_unknown")) {
+        return result
+      }
+
       return this.store.completeOperation(context, input, result)
     } catch (error) {
       return fail(error instanceof Denied ? error.reason : "outcome_unknown")

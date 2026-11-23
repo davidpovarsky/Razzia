@@ -83,6 +83,7 @@ async function fixture(
   )
   await page.goto(`/party/manager/${room.gameId}?lng=${language}`)
   await skipPlatformOpening(page)
+
   return { ...room, headers }
 }
 
@@ -192,6 +193,7 @@ for (const variant of [
     )
     const bounds = await toggle.evaluate((node) => {
       const rect = node.getBoundingClientRect()
+
       return {
         left: rect.left,
         right: rect.right,

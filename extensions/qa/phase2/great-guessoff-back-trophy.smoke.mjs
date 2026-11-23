@@ -16,18 +16,16 @@ const errors = []
 const scene = (page, value, key) =>
   page
     .locator(
-      '[data-v4-scene="' +
-        value +
-        '"]' +
-        (key ? '[data-question-key="' + key + '"]' : ""),
+      `[data-v4-scene="${value}"]${key ? `[data-question-key="${key}"]` : ""}`,
     )
     .waitFor({ timeout: 30000 })
 const back = (page) => page.getByTestId("ggo-back-action").click()
 const next = (page) => page.getByTestId("ggo-main-action").click()
 const choose = async (page, index, key) => {
-  await page.getByTestId("tadazz-card-" + index).click()
+  await page.getByTestId(`tadazz-card-${index}`).click()
   await scene(page, "survey-results", key)
 }
+
 try {
   const page = await browser.newPage({
     viewport: { width: 1366, height: 900 },

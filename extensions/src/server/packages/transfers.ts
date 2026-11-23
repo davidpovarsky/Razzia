@@ -29,11 +29,13 @@ interface TransferRow {
 const sha = (bytes: Uint8Array) =>
   createHash("sha256").update(bytes).digest("hex")
 const denied = () => new PackageError("PACKAGE_NOT_FOUND", 404)
+
 export interface PackageInstallOutcome {
   uploadId: string
   revision: number
   installedGameIds: string[]
 }
+
 export interface PackageInstallIntent {
   uploadId: string
   revision: number
@@ -42,9 +44,12 @@ export interface PackageInstallIntent {
   selectedContentIds: string[]
 }
 
-/** Durable staging only. Bytes cannot execute or enter a library until the
+/**
+ * Durable staging only. Bytes cannot execute or enter a library until the
  * authenticated complete operation passes the ordinary PackageStore preflight.
- * The optional upload ticket grants only one exact hash/size write, never reads. */
+ * The optional upload ticket grants only one exact hash/size write, never reads.
+ */
+
 export class PackageTransferStore {
   readonly db: DatabaseSync
   readonly root: string
@@ -83,8 +88,11 @@ export class PackageTransferStore {
     input: PackageInstallIntent & { idempotencyKey: string },
   ) {
     const { idempotencyKey, ...selection } = input
-    if (!keyPattern.test(idempotencyKey))
+
+    if (!keyPattern.test(idempotencyKey)) {
       throw new PackageError("PACKAGE_TRANSFER_INPUT", 422)
+    }
+
     const digest = sha(Buffer.from(JSON.stringify(selection)))
     const old = this.db
       .prepare(
@@ -92,12 +100,19 @@ export class PackageTransferStore {
       )
       .get(owner, idempotencyKey) as
       { id: string; digest: string; expires: number } | undefined
+
     if (old) {
-      if (old.digest !== digest)
+      if (old.digest !== digest) {
         throw new PackageError("PACKAGE_IDEMPOTENCY_CONFLICT", 409)
-      if (old.expires < Date.now()) throw denied()
+      }
+
+      if (old.expires < Date.now()) {
+        throw denied()
+      }
+
       return { requestId: old.id }
     }
+
     const id = randomUUID()
     this.db
       .prepare("INSERT INTO package_install_consents VALUES(?,?,?,?,?,?,NULL)")
@@ -109,6 +124,7 @@ export class PackageTransferStore {
         JSON.stringify(selection),
         Date.now() + UPLOAD_TTL,
       )
+
     return { requestId: id }
   }
   readInstallIntent(owner: string, id: string) {
@@ -118,7 +134,11 @@ export class PackageTransferStore {
       )
       .get(owner, id) as
       { selection: string; expires: number; outcome: string | null } | undefined
-    if (!row || row.expires < Date.now()) throw denied()
+
+    if (!row || row.expires < Date.now()) {
+      throw denied()
+    }
+
     return {
       requestId: id,
       ...(JSON.parse(row.selection) as PackageInstallIntent),
@@ -142,7 +162,11 @@ export class PackageTransferStore {
     },
   ) {
     const intent = this.readInstallIntent(owner, id)
-    if (intent.outcome) return intent.outcome
+
+    if (intent.outcome) {
+      return intent.outcome
+    }
+
     // PackageStore.install has its own durable write-ahead recovery and returns the
     // same installed games on retry; no duplicate native game is created here.
     const result = action(intent)
@@ -151,20 +175,27 @@ export class PackageTransferStore {
         "UPDATE package_install_consents SET outcome=? WHERE owner=? AND id=?",
       )
       .run(JSON.stringify(result), owner, id)
+
     return result
   }
-  /** Explicit scoped tool requests are sufficient for private installation. This
+
+  /**
+   * Explicit scoped tool requests are sufficient for private installation. This
    * journal records the requested source/build/selection, not reviewer approval
-   * or a browser consent event. Native installation owns durable crash recovery. */
+   * or a browser consent event. Native installation owns durable crash recovery.
+   */
+
   installAuthorized(
     owner: string,
     input: PackageInstallIntent & { idempotencyKey: string },
     action: (selection: PackageInstallIntent) => PackageInstallOutcome,
   ): PackageInstallOutcome {
     const { idempotencyKey, ...selection } = input
+
     if (!owner || !keyPattern.test(idempotencyKey)) {
       throw new PackageError("PACKAGE_TRANSFER_INPUT", 422)
     }
+
     const serialized = JSON.stringify(selection)
     const digest = sha(Buffer.from(serialized))
     const old = this.db
@@ -173,12 +204,15 @@ export class PackageTransferStore {
       )
       .get(owner, idempotencyKey) as
       { digest: string; selection: string; outcome: string | null } | undefined
+
     if (old && (old.digest !== digest || old.selection !== serialized)) {
       throw new PackageError("PACKAGE_IDEMPOTENCY_CONFLICT", 409)
     }
+
     if (old?.outcome) {
       return JSON.parse(old.outcome) as PackageInstallOutcome
     }
+
     if (!old) {
       // A retry of a pre-upgrade request retains its original selection. A
       // completed legacy request remains a replay; no consent is fabricated.
@@ -188,16 +222,20 @@ export class PackageTransferStore {
         )
         .get(owner, idempotencyKey) as
         { digest: string; outcome: string | null } | undefined
+
       if (legacy && legacy.digest !== digest) {
         throw new PackageError("PACKAGE_IDEMPOTENCY_CONFLICT", 409)
       }
+
       if (legacy?.outcome) {
         return JSON.parse(legacy.outcome) as PackageInstallOutcome
       }
+
       this.db
         .prepare("INSERT INTO package_direct_installs VALUES(?,?,?,?,NULL)")
         .run(owner, idempotencyKey, digest, serialized)
     }
+
     // An interrupted call reuses the same exact selection. PackageStore.install
     // checks immutable revision/selection and reconciles its write-ahead journal,
     // so replay cannot allocate a second account game.
@@ -207,6 +245,7 @@ export class PackageTransferStore {
         "UPDATE package_direct_installs SET outcome=? WHERE owner=? AND request_key=? AND digest=?",
       )
       .run(JSON.stringify(result), owner, idempotencyKey, digest)
+
     return result
   }
   operation<T>(
@@ -217,26 +256,35 @@ export class PackageTransferStore {
     action: () => T,
     precondition?: () => void,
   ): T {
-    if (!keyPattern.test(key) || !hex.test(digest))
+    if (!keyPattern.test(key) || !hex.test(digest)) {
       throw new PackageError("PACKAGE_TRANSFER_INPUT", 422)
+    }
+
     const old = this.db
       .prepare(
         "SELECT digest,outcome FROM package_tool_operations WHERE owner=? AND kind=? AND request_key=?",
       )
       .get(owner, kind, key) as
       { digest: string; outcome: string | null } | undefined
+
     if (old) {
-      if (old.digest !== digest)
+      if (old.digest !== digest) {
         throw new PackageError("PACKAGE_IDEMPOTENCY_CONFLICT", 409)
+      }
+
       // A process failure between two stores is uncertain, never permission to replay a mutation blindly.
-      if (old.outcome === null)
+      if (old.outcome === null) {
         throw new PackageError("PACKAGE_OPERATION_UNCERTAIN", 409)
+      }
+
       return JSON.parse(old.outcome) as T
     }
+
     precondition?.()
     this.db
       .prepare("INSERT INTO package_tool_operations VALUES(?,?,?,?,NULL)")
       .run(owner, kind, key, digest)
+
     try {
       const result = action()
       this.db
@@ -244,6 +292,7 @@ export class PackageTransferStore {
           "UPDATE package_tool_operations SET outcome=? WHERE owner=? AND kind=? AND request_key=?",
         )
         .run(JSON.stringify(result), owner, kind, key)
+
       return result
     } catch (error) {
       // Keep the intent: callers must inspect status after any uncertain mutation.
@@ -251,14 +300,21 @@ export class PackageTransferStore {
     }
   }
   private file(id: string) {
-    if (!/^[a-f0-9-]{36}$/u.test(id)) throw denied()
+    if (!/^[a-f0-9-]{36}$/u.test(id)) {
+      throw denied()
+    }
+
     return path.join(this.root, `${id}.part`)
   }
   private row(owner: string, id: string): TransferRow {
     const row = this.db
       .prepare("SELECT * FROM transfers WHERE owner=? AND id=?")
       .get(owner, id) as unknown as TransferRow | undefined
-    if (!row || row.expires < Date.now()) throw denied()
+
+    if (!row || row.expires < Date.now()) {
+      throw denied()
+    }
+
     return row
   }
   private sweep(owner: string) {
@@ -295,10 +351,12 @@ export class PackageTransferStore {
     ) {
       throw new PackageError("PACKAGE_TRANSFER_INPUT", 422)
     }
+
     this.sweep(owner)
     const previous = this.db
       .prepare("SELECT * FROM transfers WHERE owner=? AND begin_key=?")
       .get(owner, input.idempotencyKey) as unknown as TransferRow | undefined
+
     if (previous) {
       if (
         previous.bytes !== input.totalBytes ||
@@ -307,14 +365,20 @@ export class PackageTransferStore {
       ) {
         throw new PackageError("PACKAGE_IDEMPOTENCY_CONFLICT", 409)
       }
+
       return this.describe(previous)
     }
+
     const count = this.db
       .prepare(
         "SELECT COUNT(*) AS count FROM transfers WHERE owner=? AND upload IS NULL",
       )
       .get(owner) as { count: number }
-    if (count.count >= 3) throw new PackageError("PACKAGE_QUOTA", 413)
+
+    if (count.count >= 3) {
+      throw new PackageError("PACKAGE_QUOTA", 413)
+    }
+
     const row: TransferRow = {
       id: randomUUID(),
       owner,
@@ -330,6 +394,7 @@ export class PackageTransferStore {
       flag: "wx",
       mode: 0o600,
     })
+
     try {
       this.db
         .prepare("INSERT INTO transfers VALUES(?,?,?,?,?,?,?,?,NULL)")
@@ -347,6 +412,7 @@ export class PackageTransferStore {
       fs.rmSync(this.file(row.id), { force: true })
       throw error
     }
+
     return this.describe(row)
   }
   private describe(row: TransferRow) {
@@ -370,18 +436,32 @@ export class PackageTransferStore {
         exp: Math.min(row.expires, Date.now() + TICKET_TTL),
       }),
     ).toString("base64url")
+
     return `${body}.${createHmac("sha256", this.secret).update(`package-upload:${body}`).digest("base64url")}`
   }
   private ticket(token: string) {
-    if (token.length > 2000) throw denied()
+    if (token.length > 2000) {
+      throw denied()
+    }
+
     const parts = token.split(".")
-    if (parts.length !== 2) throw denied()
+
+    if (parts.length !== 2) {
+      throw denied()
+    }
+
     const expected = createHmac("sha256", this.secret)
       .update(`package-upload:${parts[0]}`)
       .digest()
     const actual = Buffer.from(parts[1], "base64url")
-    if (actual.length !== expected.length || !timingSafeEqual(actual, expected))
+
+    if (
+      actual.length !== expected.length ||
+      !timingSafeEqual(actual, expected)
+    ) {
       throw denied()
+    }
+
     const payload = JSON.parse(
       Buffer.from(parts[0], "base64url").toString("utf8"),
     ) as {
@@ -392,26 +472,41 @@ export class PackageTransferStore {
       bytes: number
       exp: number
     }
+
     if (
       payload.v !== 1 ||
       !Number.isFinite(payload.exp) ||
       payload.exp < Date.now() ||
       payload.exp > Date.now() + TICKET_TTL
-    )
+    ) {
       throw denied()
+    }
+
     const row = this.row(payload.owner, payload.id)
-    if (row.digest !== payload.digest || row.bytes !== payload.bytes)
+
+    if (row.digest !== payload.digest || row.bytes !== payload.bytes) {
       throw denied()
+    }
+
     return row
   }
   receiveTicket(token: string, bytes: Buffer) {
     const row = this.ticket(token)
-    if (bytes.length !== row.bytes || sha(bytes) !== row.digest)
+
+    if (bytes.length !== row.bytes || sha(bytes) !== row.digest) {
       throw new PackageError("PACKAGE_DIGEST_CHANGED", 409)
-    if (row.upload) return { receivedBytes: row.bytes, complete: true }
-    if (row.received && row.received !== row.bytes)
+    }
+
+    if (row.upload) {
+      return { receivedBytes: row.bytes, complete: true }
+    }
+
+    if (row.received && row.received !== row.bytes) {
       throw new PackageError("PACKAGE_TRANSFER_OFFSET", 409)
+    }
+
     const fd = fs.openSync(this.file(row.id), "r+")
+
     try {
       fs.writeFileSync(fd, bytes)
       fs.ftruncateSync(fd, bytes.length)
@@ -419,11 +514,13 @@ export class PackageTransferStore {
     } finally {
       fs.closeSync(fd)
     }
+
     this.db
       .prepare(
         "UPDATE transfers SET received=? WHERE id=? AND owner=? AND upload IS NULL",
       )
       .run(bytes.length, row.id, row.owner)
+
     return { receivedBytes: bytes.length, complete: true }
   }
   ticketUploadSize(token: string) {
@@ -441,18 +538,32 @@ export class PackageTransferStore {
         exp: Date.now() + TICKET_TTL,
       }),
     ).toString("base64url")
+
     return `${body}.${createHmac("sha256", this.secret).update(`package-export:${body}`).digest("base64url")}`
   }
   readExportTicket(token: string) {
-    if (token.length > 2000) throw denied()
+    if (token.length > 2000) {
+      throw denied()
+    }
+
     const parts = token.split(".")
-    if (parts.length !== 2) throw denied()
+
+    if (parts.length !== 2) {
+      throw denied()
+    }
+
     const expected = createHmac("sha256", this.secret)
       .update(`package-export:${parts[0]}`)
       .digest()
     const actual = Buffer.from(parts[1], "base64url")
-    if (actual.length !== expected.length || !timingSafeEqual(actual, expected))
+
+    if (
+      actual.length !== expected.length ||
+      !timingSafeEqual(actual, expected)
+    ) {
       throw denied()
+    }
+
     const payload = JSON.parse(
       Buffer.from(parts[0], "base64url").toString("utf8"),
     ) as {
@@ -463,6 +574,7 @@ export class PackageTransferStore {
       revision: number
       exp: number
     }
+
     if (
       payload.purpose !== "package-export" ||
       typeof payload.owner !== "string" ||
@@ -473,8 +585,10 @@ export class PackageTransferStore {
       !Number.isFinite(payload.exp) ||
       payload.exp < Date.now() ||
       payload.exp > Date.now() + TICKET_TTL
-    )
+    ) {
       throw denied()
+    }
+
     return payload
   }
   chunk(
@@ -489,6 +603,7 @@ export class PackageTransferStore {
   ) {
     const row = this.row(owner, input.transferId)
     const bytes = Buffer.from(input.bytesBase64, "base64")
+
     if (
       !keyPattern.test(input.idempotencyKey) ||
       !hex.test(input.sha256) ||
@@ -499,8 +614,10 @@ export class PackageTransferStore {
       !Number.isSafeInteger(input.offset) ||
       input.offset < 0 ||
       input.offset + bytes.length > row.bytes
-    )
+    ) {
       throw new PackageError("PACKAGE_TRANSFER_INPUT", 422)
+    }
+
     const previous = this.db
       .prepare(
         "SELECT * FROM transfer_chunks WHERE transfer_id=? AND (offset=? OR request_key=?)",
@@ -511,6 +628,7 @@ export class PackageTransferStore {
       digest: string
       request_key: string
     }>
+
     if (previous.length) {
       if (
         previous.length !== 1 ||
@@ -521,33 +639,45 @@ export class PackageTransferStore {
       ) {
         throw new PackageError("PACKAGE_IDEMPOTENCY_CONFLICT", 409)
       }
+
       return {
         transferId: row.id,
         receivedBytes: row.received,
         complete: row.received === row.bytes,
       }
     }
-    if (row.upload || input.offset !== row.received)
+
+    if (row.upload || input.offset !== row.received) {
       throw new PackageError("PACKAGE_TRANSFER_OFFSET", 409)
+    }
+
     const fd = fs.openSync(this.file(row.id), "r+")
+
     try {
       if (
         fs.writeSync(fd, bytes, 0, bytes.length, input.offset) !== bytes.length
-      )
+      ) {
         throw new PackageError("PACKAGE_TRANSFER_WRITE", 409)
+      }
+
       fs.fsyncSync(fd)
     } finally {
       fs.closeSync(fd)
     }
+
     this.db.exec("BEGIN IMMEDIATE")
+
     try {
       const changed = this.db
         .prepare(
           "UPDATE transfers SET received=? WHERE id=? AND owner=? AND received=? AND upload IS NULL",
         )
         .run(input.offset + bytes.length, row.id, owner, input.offset)
-      if (changed.changes !== 1)
+
+      if (changed.changes !== 1) {
         throw new PackageError("PACKAGE_TRANSFER_OFFSET", 409)
+      }
+
       this.db
         .prepare("INSERT INTO transfer_chunks VALUES(?,?,?,?,?)")
         .run(
@@ -562,6 +692,7 @@ export class PackageTransferStore {
       this.db.exec("ROLLBACK")
       throw error
     }
+
     return {
       transferId: row.id,
       receivedBytes: input.offset + bytes.length,
@@ -575,18 +706,28 @@ export class PackageTransferStore {
     read: (uploadId: string) => T,
   ): T {
     const row = this.row(owner, id)
-    if (row.upload) return read(row.upload)
-    if (row.received !== row.bytes)
+
+    if (row.upload) {
+      return read(row.upload)
+    }
+
+    if (row.received !== row.bytes) {
       throw new PackageError("PACKAGE_TRANSFER_INCOMPLETE", 409)
+    }
+
     const bytes = fs.readFileSync(this.file(id))
-    if (bytes.length !== row.bytes || sha(bytes) !== row.digest)
+
+    if (bytes.length !== row.bytes || sha(bytes) !== row.digest) {
       throw new PackageError("PACKAGE_DIGEST_CHANGED", 409)
+    }
+
     // PackageStore's durable idempotency handles a crash after upload but before this link.
     const result = upload(bytes, `mcp-package-${row.id}`)
     this.db
       .prepare("UPDATE transfers SET upload=? WHERE id=? AND owner=?")
       .run(result.uploadId, id, owner)
     fs.rmSync(this.file(id), { force: true })
+
     return result
   }
 }

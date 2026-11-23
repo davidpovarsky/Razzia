@@ -16,6 +16,7 @@ const page = await browser.newPage({
 const snapshots = [],
   errors = []
 page.on("pageerror", (e) => errors.push(e.message))
+
 try {
   await page.route("**/__hebrew-native-scenes__", (route) =>
     route.fulfill({
@@ -27,19 +28,29 @@ try {
   await page.goto("http://127.0.0.1:3180/__hebrew-native-scenes__")
   for (const scene of receipt.scenes) {
     await page.setViewportSize({ width: 1920, height: 1080 })
-    await page.evaluate((scene) => window.showScene(scene), scene)
+    await page.evaluate(
+      (receivedScene) => window.showScene(receivedScene),
+      scene,
+    )
     await page.evaluate(async () => {
       await document.fonts.ready
-      await new Promise((r) =>
-        requestAnimationFrame(() => requestAnimationFrame(r)),
-      )
+      await new Promise((r) => {
+        requestAnimationFrame(() => requestAnimationFrame(r))
+      })
     })
     const visible = page.locator(".scene-container.active")
     expect(await visible.innerText()).not.toMatch(
       /AWAITING THE VOTE|PHONE VOTING|KEYPAD VOTING|LIVE CONNECTIONS|EQUAL VOTES|ROUND 0[12]|Choice [12]|fullShow\./u,
     )
     const images = await visible.locator("img").evaluateAll(async (imgs) => {
-      await Promise.all(imgs.map((img) => img.decode().catch(() => {})))
+      await Promise.all(
+        imgs.map((img) =>
+          img.decode().catch(() => {
+            /* The following naturalWidth assertion reports images that could not decode. */
+          }),
+        ),
+      )
+
       return imgs
         .filter((img) => img.src && !img.naturalWidth)
         .map((img) => img.src)
@@ -47,7 +58,7 @@ try {
     expect(images).toEqual([])
     const name = scene + "-1920"
     await page.screenshot({
-      path: path.join(out, name + ".png"),
+      path: path.join(out, `${name}.png`),
       animations: "disabled",
     })
     snapshots.push({
@@ -64,16 +75,20 @@ try {
     "grand-opening",
   ]) {
     await page.setViewportSize({ width: 320, height: 180 })
-    await page.evaluate((scene) => window.showScene(scene), scene)
+    await page.evaluate(
+      (receivedScene2) => window.showScene(receivedScene2),
+      scene,
+    )
     await page.evaluate(async () => {
       await document.fonts.ready
-      await new Promise((r) =>
-        requestAnimationFrame(() => requestAnimationFrame(r)),
-      )
+      await new Promise((r) => {
+        requestAnimationFrame(() => requestAnimationFrame(r))
+      })
     })
-    const name = scene + "-320"
+    const name = `${scene}-320`
+
     await page.screenshot({
-      path: path.join(out, name + ".png"),
+      path: path.join(out, `${name}.png`),
       animations: "disabled",
     })
     snapshots.push({ name, scene, width: 320 })

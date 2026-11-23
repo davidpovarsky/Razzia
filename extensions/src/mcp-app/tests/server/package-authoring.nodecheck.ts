@@ -44,8 +44,10 @@ function status(uploadId = newKey()) {
 function args(name: PackageToolName): Record<string, unknown> {
   switch (name) {
     case "get_authoring_capabilities":
+
     case "list_packages":
       return {}
+
     case "begin_package_upload":
       return {
         filename: "bms.tadazz",
@@ -53,6 +55,7 @@ function args(name: PackageToolName): Record<string, unknown> {
         sha256: "a".repeat(64),
         idempotencyKey: newKey(),
       }
+
     case "write_package_upload_chunk":
       return {
         transferId: newKey(),
@@ -61,12 +64,16 @@ function args(name: PackageToolName): Record<string, unknown> {
         sha256: "a".repeat(64),
         idempotencyKey: newKey(),
       }
+
     case "complete_package_upload":
       return { transferId: newKey(), idempotencyKey: newKey() }
+
     case "get_package_status":
       return { uploadId: newKey() }
+
     case "preview_package":
       return { uploadId: newKey(), expectedRevision: 2, gameId: "bms-game" }
+
     case "install_package":
       return {
         uploadId: newKey(),
@@ -74,6 +81,7 @@ function args(name: PackageToolName): Record<string, unknown> {
         selectedContentIds: ["bms-theme", "bms-game"],
         idempotencyKey: newKey(),
       }
+
     default:
       return {
         uploadId: newKey(),
@@ -88,15 +96,18 @@ test("package capability results retain actual disabled native features", async 
   const h = await harness({
     packages: {
       async call(p, name, input) {
-        calls++
+        calls += 1
+
         assert.equal(p.accountId, h.account.accountId)
         assert.equal(name, "get_authoring_capabilities")
         assert.deepEqual(input, { contractVersion: "0.1.0" })
+
         return { data: capabilities }
       },
     },
   })
   const missing = await harness()
+
   try {
     assert.deepEqual(
       data(await h.call("get_authoring_capabilities", {})),
@@ -116,7 +127,7 @@ test("package capability results retain actual disabled native features", async 
 })
 
 // Deliberately independent of the implementation's packageScopes table.
-const scopeCases: readonly [PackageToolName, readonly string[]][] = [
+const scopeCases: ReadonlyArray<[PackageToolName, readonly string[]]> = [
   ["get_authoring_capabilities", ["tadazz.catalog.read"]],
   ["list_packages", ["tadazz.drafts.read"]],
   ["begin_package_upload", ["tadazz.drafts.write"]],
@@ -139,14 +150,18 @@ for (const [name, required] of scopeCases) {
       const h = await harness(
         {
           packages: {
-            async call() {
+            call() {
               called = true
-              throw new Error("must not reach native package operations")
+
+              return Promise.reject(
+                new Error("must not reach native package operations"),
+              )
             },
           },
         },
         p,
       )
+
       try {
         const result = await h.call(name, args(name))
         assert.equal(code(result), "SCOPE_REQUIRED")
@@ -163,13 +178,16 @@ test("package strict inputs reject identity forgery, invalid archive names and o
   let calls = 0
   const h = await harness({
     packages: {
-      async call() {
-        calls++
-        throw new Error("invalid inputs must not reach the package engine")
+      call() {
+        calls += 1
+
+        return Promise.reject(
+          new Error("invalid inputs must not reach the package engine"),
+        )
       },
     },
   })
-  const invalid: [PackageToolName, Record<string, unknown>][] = [
+  const invalid: Array<[PackageToolName, Record<string, unknown>]> = [
     ["get_package_status", { accountId: newKey() }],
     ["get_package_status", { tenantId: newKey() }],
     ["begin_package_upload", { filename: "../bms.tadazz" }],
@@ -198,6 +216,7 @@ test("package strict inputs reject identity forgery, invalid archive names and o
     ["preview_package", { expectedRevision: 0 }],
     ["list_packages", { limit: 21 }],
   ]
+
   try {
     for (const [name, invalidFields] of invalid) {
       const result = await h.call(name, { ...args(name), ...invalidFields })
@@ -233,9 +252,11 @@ test("maximum valid chunk delegates exact bytes and idempotency once, without li
   const h = await harness({
     packages: {
       async call(_p, name, input) {
-        calls++
+        calls += 1
+
         assert.equal(name, "write_package_upload_chunk")
         assert.deepEqual(input, { contractVersion: "0.1.0", ...sent })
+
         return {
           data: {
             transferId: sent.transferId,
@@ -246,6 +267,7 @@ test("maximum valid chunk delegates exact bytes and idempotency once, without li
       },
     },
   })
+
   try {
     assert.deepEqual(data(await h.call("write_package_upload_chunk", sent)), {
       transferId: sent.transferId,
@@ -267,11 +289,12 @@ test("package status rejects extra source data and cross-upload results", async 
   ]) {
     const h = await harness({
       packages: {
-        async call() {
-          return { data: unsafe }
+        call() {
+          return Promise.resolve({ data: unsafe })
         },
       },
     })
+
     try {
       const result = await h.call("get_package_status", { uploadId })
       assert.equal(code(result), "INTERNAL")
@@ -298,15 +321,14 @@ test("package preview is exact-revision and validates its first-party destinatio
               uploadId,
               revision: 2,
               gameId: "bms-game",
-              previewUrl:
-                "https://studio.example.invalid/studio/package-preview/" +
-                uploadId,
+              previewUrl: `https://studio.example.invalid/studio/package-preview/${uploadId}`,
               ...override,
             },
           }
         },
       },
     })
+
     try {
       assert.equal(
         code(
@@ -331,30 +353,34 @@ test("native build may advance revision while preview and installation retain th
   const port: PackageAuthoringPort = {
     async call(_p, name) {
       names.push(name)
-      if (name === "build_package") return { data: status(uploadId) }
-      if (name === "preview_package")
+
+      if (name === "build_package") {
+        return { data: status(uploadId) }
+      }
+
+      if (name === "preview_package") {
         return {
           data: {
             uploadId,
             revision: 2,
             gameId: "bms-game",
-            previewUrl:
-              "https://studio.example.invalid/studio/package-preview/" +
-              uploadId,
+            previewUrl: `https://studio.example.invalid/studio/package-preview/${uploadId}`,
           },
         }
-      if (name === "install_package")
+      }
+
+      if (name === "install_package") {
         throw new ToolError("CONSENT_REQUIRED", {
           consentRequestId,
-          consentUrl:
-            config.firstPartyOrigins[0] +
-            "/studio/package-save-consent/" +
-            consentRequestId,
+          consentUrl: `${config.firstPartyOrigins[0]}/studio/package-save-consent/${consentRequestId}`,
         })
+      }
+
       throw new Error("Unexpected package operation")
     },
   }
   const h = await harness({ packages: port })
+
   try {
     assert.equal(
       data(
@@ -390,10 +416,7 @@ test("native build may advance revision while preview and installation retain th
       ok: false,
       code: "CONSENT_REQUIRED",
       consentRequestId,
-      consentUrl:
-        config.firstPartyOrigins[0] +
-        "/studio/package-save-consent/" +
-        consentRequestId,
+      consentUrl: `${config.firstPartyOrigins[0]}/studio/package-save-consent/${consentRequestId}`,
     })
     assert.equal(h.store.records.size, 0)
     assert.deepEqual(names, [
@@ -413,14 +436,12 @@ test("package consent text exposes only its exact package-save route", async () 
       async call() {
         throw new ToolError("CONSENT_REQUIRED", {
           consentRequestId,
-          consentUrl:
-            config.firstPartyOrigins[0] +
-            "/studio/native-save-consent/" +
-            consentRequestId,
+          consentUrl: `${config.firstPartyOrigins[0]}/studio/native-save-consent/${consentRequestId}`,
         })
       },
     },
   })
+
   try {
     const result = await h.call("install_package", args("install_package"))
     const visible = result.content.find((item) => item.type === "text")

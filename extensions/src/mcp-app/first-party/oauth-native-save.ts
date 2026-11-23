@@ -180,8 +180,10 @@ export function createNativeSaveAdapter(
     if (!record.delegatedAuthorization) {
       throw unavailable()
     }
+
     const { authorizationMac: _mac, ...authorization } =
       record.delegatedAuthorization
+
     return { intentMac: record.intentMac, ...authorization }
   }
   const authorizeRequest = (
@@ -206,6 +208,7 @@ export function createNativeSaveAdapter(
       "delegated-tool",
       delegatedValue(authorized),
     )
+
     return authorized
   }
   const binding = (record: SaveRecord): NativeCreationOperationBinding => {
@@ -220,6 +223,7 @@ export function createNativeSaveAdapter(
         }),
       })
     }
+
     if (!record.approved) {
       throw unavailable()
     }
@@ -293,6 +297,7 @@ export function createNativeSaveAdapter(
         ) {
           throw unavailable()
         }
+
         protocol.checkNativeSaveMac(
           "delegated-tool",
           delegatedValue(record),
@@ -307,6 +312,7 @@ export function createNativeSaveAdapter(
         ) {
           throw unavailable()
         }
+
         protocol.checkNativeSaveMac(
           "approval",
           approvalValue(record),
@@ -573,22 +579,28 @@ export function createNativeSaveAdapter(
                 // uncertain/reserved publication must never become a new target.
                 if (existing.state !== "pending") {
                   const status = options.operations.lookup(binding(existing))
+
                   if (status.status === "committed") {
                     return existing
                   }
+
                   if (status.status !== "absent") {
                     throw unavailable()
                   }
                 }
+
                 const current = currentDraft(db, p.accountId, selection.draftId)
+
                 if (current.revision !== selection.expectedRevision) {
                   throw new ToolError("REVISION_CONFLICT", {
                     currentRevision: current.revision,
                   })
                 }
+
                 if (canonicalJson(current) !== canonicalJson(existing.draft)) {
                   throw unavailable()
                 }
+
                 const {
                   delegatedAuthorization: _previousAuthorization,
                   ...historical
@@ -627,8 +639,10 @@ export function createNativeSaveAdapter(
                 )
                 ledger.audit(db, p.grantId, "save-direct-requested", mutation)
                 authority(db, p)
+
                 return authorized
               }
+
               return existing
             }
 
@@ -671,9 +685,11 @@ export function createNativeSaveAdapter(
               "intent",
               intentValue(record),
             )
+
             if (!options.requireFirstPartyConsent) {
               record = authorizeRequest(record, p)
             }
+
             db.prepare(
               "INSERT INTO operations(grant_id,kind,request_key,digest,outcome) VALUES(?,'save',?,?,?)",
             ).run(
@@ -682,6 +698,7 @@ export function createNativeSaveAdapter(
               record.inputDigest,
               canonicalJson(checked(record)),
             )
+
             if (options.requireFirstPartyConsent) {
               const mapping = mappingSchema.parse({
                 version: 1,
@@ -699,6 +716,7 @@ export function createNativeSaveAdapter(
                 canonicalJson(mapping),
               )
             }
+
             ledger.audit(
               db,
               p.grantId,
@@ -908,6 +926,7 @@ export function createNativeSaveAdapter(
 
         const visibleState =
           record.state === "authorized" ? "publishing" : record.state
+
         return nativeSaveInspection.parse({
           version: 1,
           consentRequestId: id,

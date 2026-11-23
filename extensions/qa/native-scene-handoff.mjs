@@ -9,8 +9,11 @@ const evidence = process.env.TADAZZ_HANDOFF_EVIDENCE
 const adapterOverride = process.env.TADAZZ_HANDOFF_ADAPTER
 const legacySceneIdentity =
   process.env.TADAZZ_HANDOFF_LEGACY_SCENE_IDENTITY === "1"
-if (!source || !deps || !evidence)
+
+if (!source || !deps || !evidence) {
   throw new Error("Explicit isolated source/deps/evidence required")
+}
+
 const require = createRequire(path.join(deps, "extensions/package.json"))
 const { build } = require("esbuild")
 const dotLottieEntry = createRequire(
@@ -266,20 +269,26 @@ const plugins = [
         const requested = path.join(base, ...parts)
         for (const suffix of ["", ".ts", ".tsx", "/index.ts", "/index.tsx"]) {
           const candidate = requested + suffix
+
           try {
-            if ((await fs.stat(candidate)).isFile()) return { path: candidate }
+            if ((await fs.stat(candidate)).isFile()) {
+              return { path: candidate }
+            }
           } catch {}
         }
         throw new Error("Unresolved candidate workspace import " + args.path)
       })
       builder.onResolve({ filter: /^[^./]/ }, async (args) => {
         const relative = path.relative(source, args.resolveDir)
+
         if (
           relative === ".." ||
           relative.startsWith(".." + path.sep) ||
           path.isAbsolute(relative)
-        )
+        ) {
           return undefined
+        }
+
         // Candidate code uses the matching installed workspace. Once resolved
         // into that dependency tree, esbuild follows each real importer itself
         // (including pnpm's private transitive dependencies).
@@ -287,7 +296,11 @@ const plugins = [
           resolveDir: path.join(deps, relative),
           kind: args.kind,
         })
-        if (!resolved.errors.length) return resolved
+
+        if (!resolved.errors.length) {
+          return resolved
+        }
+
         // Presentation peers are supplied by the web host. Use esbuild here,
         // too, so conditional package exports retain their browser branch.
         return builder.resolve(args.path, {
@@ -295,7 +308,8 @@ const plugins = [
           kind: args.kind,
         })
       })
-      if (adapterOverride)
+
+      if (adapterOverride) {
         builder.onLoad(
           { filter: /TadazzV4StageAdapter\.tsx$/ },
           async (args) =>
@@ -307,6 +321,7 @@ const plugins = [
                 }
               : undefined,
         )
+      }
     },
   },
 ]
@@ -370,54 +385,77 @@ const serverFailures = []
 const server = http.createServer(async (request, response) => {
   try {
     const url = new URL(request.url, "http://localhost")
-    let file
-    if (url.pathname === "/fixture.js" || url.pathname === "/fixture.css")
+    let file = undefined
+
+    if (url.pathname === "/fixture.js" || url.pathname === "/fixture.css") {
       file = path.join(evidence, url.pathname.slice(1))
-    else if (url.pathname === "/api/extensions/lottie-wasm")
+    } else if (url.pathname === "/api/extensions/lottie-wasm") {
       file = dotLottieWasm
-    else if (url.pathname === "/media/fixture-animation.json")
+    } else if (url.pathname === "/media/fixture-animation.json") {
       file = path.join(evidence, "fixture-animation.json")
-    else if (url.pathname === "/media/fixture-start.mp3")
+    } else if (url.pathname === "/media/fixture-start.mp3") {
       file = path.join(source, "packages/web/public/sounds/boump.mp3")
-    else if (url.pathname === "/assets/tadazz-question-background.png")
+    } else if (url.pathname === "/assets/tadazz-question-background.png") {
       file = path.join(
         source,
         "extensions/assets/tadazz-question-background.png",
       )
-    else if (url.pathname === "/media/fixture-recap.mp3")
+    } else if (url.pathname === "/media/fixture-recap.mp3") {
       file = path.join(
         source,
         "packages/web/public/tadazz-show/music/cutie-patootie.mp3",
       )
-    else if (
+    } else if (
       url.pathname.startsWith("/tadazz-show/") ||
       url.pathname.startsWith("/sounds/")
-    )
+    ) {
       file = path.join(source, "packages/web/public", url.pathname.slice(1))
-    else {
+    } else {
       response.writeHead(200, { "Content-Type": "text/html" })
       response.end(
         '<!doctype html><meta charset="utf-8"><link rel="stylesheet" href="/fixture.css"><style>html,body,#root{width:100%;height:100%;margin:0;overflow:hidden;background:#101a31}</style><div id="root"></div><script type="module" src="/fixture.js"></script>',
       )
+
       return
     }
-    const mime = file.endsWith(".wasm")
-      ? "application/wasm"
-      : file.endsWith(".json")
-        ? "application/json"
-        : file.endsWith(".js")
-          ? "text/javascript"
-          : file.endsWith(".css")
-            ? "text/css"
-            : file.endsWith(".mp3")
-              ? "audio/mpeg"
-              : file.endsWith(".png")
-                ? "image/png"
-                : file.endsWith(".svg")
-                  ? "image/svg+xml"
-                  : file.endsWith(".woff2")
-                    ? "font/woff2"
-                    : "image/jpeg"
+
+    const getAssetContentType = () => {
+      if (file.endsWith(".wasm")) {
+        return "application/wasm"
+      }
+
+      if (file.endsWith(".json")) {
+        return "application/json"
+      }
+
+      if (file.endsWith(".js")) {
+        return "text/javascript"
+      }
+
+      if (file.endsWith(".css")) {
+        return "text/css"
+      }
+
+      if (file.endsWith(".mp3")) {
+        return "audio/mpeg"
+      }
+
+      if (file.endsWith(".png")) {
+        return "image/png"
+      }
+
+      if (file.endsWith(".svg")) {
+        return "image/svg+xml"
+      }
+
+      if (file.endsWith(".woff2")) {
+        return "font/woff2"
+      }
+
+      return "image/jpeg"
+    }
+
+    const mime = getAssetContentType()
     const bytes = await fs.readFile(file)
     response.writeHead(200, {
       "Content-Type": mime,
@@ -430,7 +468,9 @@ const server = http.createServer(async (request, response) => {
     response.end()
   }
 })
-await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve))
+await new Promise((resolve) => {
+  server.listen(0, "127.0.0.1", resolve)
+})
 const browser = await chromium.launch({
   headless: true,
   args: ["--no-sandbox"],
@@ -462,11 +502,14 @@ page.on("requestfailed", (request) =>
   failedRequests.push({ url: request.url(), failure: request.failure() }),
 )
 page.on("response", (response) => {
-  if (response.status() >= 400)
+  if (response.status() >= 400) {
     failedResponses.push({ url: response.url(), status: response.status() })
+  }
 })
 page.on("console", (message) => {
-  if (message.type() === "error") consoleErrors.push(message.text())
+  if (message.type() === "error") {
+    consoleErrors.push(message.text())
+  }
 })
 async function captureAudio(label) {
   const state = await page.evaluate(() => ({
@@ -509,20 +552,23 @@ async function captureAudio(label) {
     consoleErrors: [...consoleErrors],
   })
 }
+
 try {
   await page.addInitScript(() => {
     window.animationStarts = 0
-    const animate = Element.prototype.animate
+    const { animate } = Element.prototype
     Element.prototype.animate = function (...args) {
       window.animationStarts += 1
+
       return animate.apply(this, args)
     }
     window.audioAttempts = []
     window.audioEvents = []
     window.startAudioElements = []
-    const play = HTMLMediaElement.prototype.play
+    const { play } = HTMLMediaElement.prototype
     HTMLMediaElement.prototype.play = function (...args) {
-      let attempt
+      let attempt = undefined
+
       if (this instanceof HTMLAudioElement) {
         attempt = {
           src: this.src,
@@ -532,6 +578,7 @@ try {
           status: "pending",
         }
         window.audioAttempts.push(attempt)
+
         if (!window.startAudioElements.includes(this)) {
           window.startAudioElements.push(this)
           for (const name of [
@@ -544,7 +591,7 @@ try {
             "ended",
           ]) {
             this.addEventListener(name, () => {
-              if (window.audioEvents.length < 200)
+              if (window.audioEvents.length < 200) {
                 window.audioEvents.push({
                   name,
                   src: this.src,
@@ -556,12 +603,15 @@ try {
                     message: this.error.message,
                   },
                 })
+              }
             })
           }
         }
       }
+
       const promise = play.apply(this, args)
-      if (attempt)
+
+      if (attempt) {
         promise.then(
           () => {
             attempt.status = "fulfilled"
@@ -571,6 +621,8 @@ try {
             attempt.error = { name: error.name, message: error.message }
           },
         )
+      }
+
       return promise
     }
   })
@@ -591,6 +643,7 @@ try {
       '[data-testid="audio-cue-player-state"]',
     )
     const url = state?.getAttribute("data-audio-url")
+
     return (
       state?.getAttribute("data-audio-blocked") === "true" ||
       window.startAudioElements.some(
@@ -601,12 +654,17 @@ try {
       )
     )
   })
-  if (await unlock.isVisible()) await unlock.click()
+
+  if (await unlock.isVisible()) {
+    await unlock.click()
+  }
+
   await page.waitForFunction(() => {
     const state = document.querySelector(
       '[data-testid="audio-cue-player-state"]',
     )
     const url = state?.getAttribute("data-audio-url")
+
     return (
       state?.getAttribute("data-audio-blocked") === "false" &&
       window.startAudioElements.some(
@@ -785,11 +843,21 @@ try {
     window.gapFrames = { total: 0, empty: 0, changed: 0 }
     window.sampleGap = true
     const sample = () => {
-      if (!window.sampleGap) return
+      if (!window.sampleGap) {
+        return
+      }
+
       const n = document.querySelector('[data-testid="handoff-prepared"]')
       window.gapFrames.total++
-      if (!n || n.getBoundingClientRect().width === 0) window.gapFrames.empty++
-      if (n !== window.preparedNode) window.gapFrames.changed++
+
+      if (!n || n.getBoundingClientRect().width === 0) {
+        window.gapFrames.empty++
+      }
+
+      if (n !== window.preparedNode) {
+        window.gapFrames.changed++
+      }
+
       requestAnimationFrame(sample)
     }
     requestAnimationFrame(sample)
@@ -798,6 +866,7 @@ try {
   await page.waitForTimeout(900)
   const observed = await page.evaluate(() => {
     window.sampleGap = false
+
     return {
       ...window.gapFrames,
       mode: window.handoff.mode(),
@@ -899,21 +968,21 @@ try {
   ]
   for (const testCase of authoredCases) {
     await page.evaluate(
-      (testCase) =>
+      (receivedTestCase) =>
         window.handoff.authored({
           kind: "scene",
-          key: "authored:" + testCase.name,
-          scene: testCase.scene,
-          activeSceneData: testCase.data,
+          key: "authored:" + receivedTestCase.name,
+          scene: receivedTestCase.scene,
+          activeSceneData: receivedTestCase.data,
         }),
       testCase,
     )
     await page.evaluate(() => window.handoff.rerenderCustom())
     await page.evaluate(
       () =>
-        new Promise((resolve) =>
-          requestAnimationFrame(() => requestAnimationFrame(resolve)),
-        ),
+        new Promise((resolve) => {
+          requestAnimationFrame(() => requestAnimationFrame(resolve))
+        }),
     )
     const painted = await page.evaluate(() => ({
       mode: window.handoff.mode(),
@@ -925,12 +994,14 @@ try {
         ?.getAttribute("data-v4-scene"),
     }))
     let titleSelector = null
+
     if (testCase.scene.kind === "leaderboard") {
       titleSelector =
         '[data-testid="tadazz-leaderboard-screen"] .leader-head h2'
     } else if (testCase.scene.kind === "interimResults") {
       titleSelector = '[data-testid="tadazz-question-panel"] .eyebrow'
     }
+
     const title = titleSelector
       ? {
           count: await page.locator(titleSelector).count(),
@@ -968,34 +1039,53 @@ try {
   }
   for (const guessOff of [false, true]) {
     const cases = [3, 4, 5].map((count) => ({ count, images: false }))
-    if (guessOff) cases.push({ count: 5, images: true })
+
+    if (guessOff) {
+      cases.push({ count: 5, images: true })
+    }
+
     for (const { count, images } of cases) {
       await page.evaluate(
-        ({ count, guessOff, images }) =>
-          window.handoff.choices(count, guessOff, images),
+        ({
+          count: choiceCount,
+          guessOff: choicesGuessOff,
+          images: choicesWithImages,
+        }) =>
+          window.handoff.choices(
+            choiceCount,
+            choicesGuessOff,
+            choicesWithImages,
+          ),
         { count, guessOff, images },
       )
+
       if (images) {
-        await page.waitForFunction((count) => {
-          const images = [
+        await page.waitForFunction((receivedCount) => {
+          const choiceImages = [
             ...document.querySelectorAll(".choice-slot .tz-photo-frame img"),
           ]
+
           return (
-            images.length === count &&
-            images.every((image) => image.complete && image.naturalWidth > 0)
+            choiceImages.length === receivedCount &&
+            choiceImages.every(
+              (image) => image.complete && image.naturalWidth > 0,
+            )
           )
         }, count)
       }
+
       const geometry = await page.evaluate(() => {
         const cards = [
           ...document.querySelectorAll('[data-testid^="tadazz-card-"]'),
         ]
+
         return cards.map((card) => {
           const rect = card.getBoundingClientRect(),
             title = card.querySelector(".answer-title")
           const range = document.createRange()
           range.selectNodeContents(title)
           const text = range.getBoundingClientRect()
+
           return {
             left: rect.left,
             right: rect.right,
@@ -1041,7 +1131,10 @@ try {
       )
       const votingLayout = await page.evaluate(() => {
         const bounds = (node) => {
-          if (!node) return null
+          if (!node) {
+            return null
+          }
+
           const rect = node.getBoundingClientRect()
           let visible = rect.width > 0 && rect.height > 0
           for (
@@ -1050,13 +1143,16 @@ try {
             ancestor = ancestor.parentElement
           ) {
             const style = getComputedStyle(ancestor)
+
             if (
               style.display === "none" ||
               style.visibility === "hidden" ||
               Number(style.opacity) <= 0.01
-            )
+            ) {
               visible = false
+            }
           }
+
           return {
             left: rect.left,
             right: rect.right,
@@ -1087,6 +1183,7 @@ try {
         const badges = [
           ...document.querySelectorAll(".choice-slot .answer-index"),
         ].map(bounds)
+
         return {
           banner,
           badges,
@@ -1095,7 +1192,8 @@ try {
         }
       })
       const badgeOverlaps = votingLayout.badges.some((badge) => {
-        const banner = votingLayout.banner
+        const { banner } = votingLayout
+
         return (
           !badge ||
           !banner ||
@@ -1135,24 +1233,35 @@ try {
         const rect = question.getBoundingClientRect()
         const before = window.choiceQuestionBaseline
         const visible = (node) => {
-          if (!node) return false
+          if (!node) {
+            return false
+          }
+
           const bounds = node.getBoundingClientRect()
-          if (!bounds.width || !bounds.height) return false
+
+          if (!bounds.width || !bounds.height) {
+            return false
+          }
+
           for (
             let ancestor = node;
             ancestor instanceof Element;
             ancestor = ancestor.parentElement
           ) {
             const style = getComputedStyle(ancestor)
+
             if (
               style.display === "none" ||
               style.visibility === "hidden" ||
               Number(style.opacity) <= 0.01
-            )
+            ) {
               return false
+            }
           }
+
           return true
         }
+
         return {
           heading: document
             .querySelector(".q-frame .eyebrow")
@@ -1207,9 +1316,9 @@ try {
       await page.evaluate(() => window.handoff.rerenderCustom())
       await page.evaluate(
         () =>
-          new Promise((resolve) =>
-            requestAnimationFrame(() => requestAnimationFrame(resolve)),
-          ),
+          new Promise((resolve) => {
+            requestAnimationFrame(() => requestAnimationFrame(resolve))
+          }),
       )
       const afterRefresh = await page.evaluate(() => ({
         cues: window.handoff.cues(),
@@ -1239,7 +1348,11 @@ try {
     const audio = window.startAudioElements.findLast((item) =>
       item.src.endsWith(url || "missing"),
     )
-    if (!audio || audio.currentTime <= 0.05 || audio.paused) return false
+
+    if (!audio || audio.currentTime <= 0.05 || audio.paused) {
+      return false
+    }
+
     window.finaleAudio = audio
     window.finaleBeforeClose = {
       url,
@@ -1248,6 +1361,7 @@ try {
         .length,
       identity: state.getAttribute("data-audio-identity"),
     }
+
     return true
   })
   await page.evaluate(() =>
@@ -1260,6 +1374,7 @@ try {
     )
     const before = window.finaleBeforeClose,
       audio = window.finaleAudio
+
     return {
       before,
       time: audio.currentTime,
@@ -1288,8 +1403,9 @@ try {
   await page.evaluate(() => {
     window.previewPhaseEvents = []
     window.addEventListener("tadazz:sfx", (event) => {
-      if (event.detail?.name?.startsWith("phase-"))
+      if (event.detail?.name?.startsWith("phase-")) {
         window.previewPhaseEvents.push(event.detail.name)
+      }
     })
     window.mountAuthoredPreview()
   })
@@ -1300,13 +1416,14 @@ try {
       const owners = [
         ...document.querySelectorAll('[data-testid="audio-cue-player-state"]'),
       ]
-      const owner = owners[0]
+      const [owner] = owners
       const active = window.startAudioElements.filter(
         (audio) =>
           !audio.paused && !audio.ended && !audio.muted && audio.volume > 0,
       )
       const matching = active.filter((audio) => audio.src.endsWith(url))
-      const audio = matching[0]
+      const [audio] = matching
+
       return {
         owners: owners.length,
         url: owner?.getAttribute("data-audio-url"),
@@ -1336,6 +1453,7 @@ try {
     const owner = document.querySelector(
       '[data-testid="audio-cue-player-state"]',
     )
+
     return (
       owner?.getAttribute("data-audio-blocked") === "true" ||
       window.startAudioElements.some(
@@ -1345,7 +1463,11 @@ try {
     )
   }, previewUrl)
   const previewUnlock = page.getByTestId("preview-unlock-audio")
-  if (await previewUnlock.isVisible()) await previewUnlock.click()
+
+  if (await previewUnlock.isVisible()) {
+    await previewUnlock.click()
+  }
+
   await page.waitForFunction(
     (url) =>
       window.startAudioElements.some(
@@ -1449,7 +1571,8 @@ try {
       const owners = [
         ...document.querySelectorAll('[data-testid="audio-cue-player-state"]'),
       ]
-      const owner = owners[0]
+      const [owner] = owners
+
       return {
         owners: owners.length,
         attributes: Object.fromEntries(
@@ -1479,15 +1602,16 @@ try {
       (audio) => audio.url === url && !audio.paused && !audio.ended,
     )
   const waitForEdgeAudio = async (url) => {
-    await page.waitForFunction((url) => {
+    await page.waitForFunction((receivedUrl) => {
       const owner = document.querySelector(
         '[data-testid="audio-cue-player-state"]',
       )
+
       return (
         owner?.getAttribute("data-audio-blocked") === "true" ||
         window.startAudioElements.some(
           (audio) =>
-            audio.getAttribute("src") === url &&
+            audio.getAttribute("src") === receivedUrl &&
             !audio.paused &&
             !audio.ended &&
             audio.currentTime > 0.05,
@@ -1496,89 +1620,99 @@ try {
     }, url)
     for (const testId of ["preview-unlock-audio", "host-enable-audio"]) {
       const control = page.getByTestId(testId)
-      if (await control.isVisible()) await control.click()
+
+      if (await control.isVisible()) {
+        await control.click()
+      }
     }
     await page.waitForFunction(
-      (url) =>
+      (receivedUrl2) =>
         window.startAudioElements.some(
           (audio) =>
-            audio.getAttribute("src") === url &&
+            audio.getAttribute("src") === receivedUrl2 &&
             !audio.paused &&
             !audio.ended &&
             audio.currentTime > 0.1,
         ),
       url,
     )
+
     return readEdgeAudio()
   }
   for (const mode of ["absent", "inherit", "mute"]) {
     const attemptStart = await page.evaluate(() => window.audioAttempts.length)
-    await page.evaluate((mode) => {
+    await page.evaluate((receivedMode) => {
       window.previewPhaseEvents = []
       window.previewCommitted = false
       window.previewUnavailable = false
-      window.mountAuthoredPreview(mode)
+      window.mountAuthoredPreview(receivedMode)
     }, mode)
     await page.waitForFunction(() => window.previewCommitted === true)
     const expected = await page.evaluate(
       () => window.previewScene.info().expectedRecap,
     )
-    if (mode !== "mute") await waitForEdgeAudio(expected)
-    else await page.waitForTimeout(150)
+
+    if (mode !== "mute") {
+      await waitForEdgeAudio(expected)
+    } else {
+      await page.waitForTimeout(150)
+    }
+
     const before = await readEdgeAudio()
     await page.evaluate(() => window.previewScene.clock({ elapsedMs: 700 }))
     await page.waitForTimeout(250)
-    const after = await readEdgeAudio()
+    const audioAfter = await readEdgeAudio()
     check(
-      mode + "-schema-retains-mode-and-authored-url",
+      `${mode}-schema-retains-mode-and-authored-url`,
       mode === "absent" ||
         (before.preview.audio?.mode === mode &&
           before.preview.audio?.url === previewUrl),
     )
     check(
-      mode + "-never-starts-inactive-authored-url",
-      after.attempts
+      `${mode}-never-starts-inactive-authored-url`,
+      audioAfter.attempts
         .slice(attemptStart)
         .every((attempt) => !attempt.src.endsWith(previewUrl)),
     )
     check(
-      mode + "-no-implicit-opening-effect",
+      `${mode}-no-implicit-opening-effect`,
       !before.phaseEvents.includes("phase-start") &&
-        !after.phaseEvents.includes("phase-start"),
-      { before: before.phaseEvents, after: after.phaseEvents },
+        !audioAfter.phaseEvents.includes("phase-start"),
+      { before: before.phaseEvents, after: audioAfter.phaseEvents },
     )
+
     if (mode === "mute") {
       check(
         "mute-remains-silent",
-        after.owners === 1 &&
-          after.attributes["data-audio-url"] === "" &&
-          after.audio.every((audio) => audio.paused || audio.ended),
-        { after },
+        audioAfter.owners === 1 &&
+          audioAfter.attributes["data-audio-url"] === "" &&
+          audioAfter.audio.every((audio) => audio.paused || audio.ended),
+        { after: audioAfter },
       )
     } else {
       const initial = activeEdgeAudio(before, expected),
-        next = activeEdgeAudio(after, expected)
+        next = activeEdgeAudio(audioAfter, expected)
       check(
-        mode + "-single-recap-bed-advances-without-replay",
+        `${mode}-single-recap-bed-advances-without-replay`,
         before.owners === 1 &&
-          after.owners === 1 &&
+          audioAfter.owners === 1 &&
           before.attributes["data-soundtrack-slot"] === "recap" &&
-          after.attributes["data-soundtrack-slot"] === "recap" &&
+          audioAfter.attributes["data-soundtrack-slot"] === "recap" &&
           before.attributes["data-audio-url"] === expected &&
-          after.attributes["data-audio-url"] === expected &&
+          audioAfter.attributes["data-audio-url"] === expected &&
           initial.length === 1 &&
           next.length === 1 &&
           initial[0].element === next[0].element &&
           next[0].time > initial[0].time &&
-          before.attempts.length === after.attempts.length,
-        { expected, before, after },
+          before.attempts.length === audioAfter.attempts.length,
+        { expected, before, after: audioAfter },
       )
     }
   }
   for (const role of ["manager", "spectator"]) {
-    await page.evaluate((role) => {
+    await page.evaluate((receivedRole) => {
       window.previewPhaseEvents = []
-      window.mountTerminalHandoff(role)
+      window.mountTerminalHandoff(receivedRole)
     }, role)
     const url = await page.evaluate(() => window.terminalHandoff.expectedFinale)
     const started = await waitForEdgeAudio(url)
@@ -1588,7 +1722,7 @@ try {
     await page.evaluate(() => window.terminalHandoff.pause(false))
     const before = await waitForEdgeAudio(url)
     check(
-      role + "-finale-pause-resume-keeps-element-and-position",
+      `${role}-finale-pause-resume-keeps-element-and-position`,
       activeEdgeAudio(started, url).length === 1 &&
         activeEdgeAudio(paused, url).length === 0 &&
         activeEdgeAudio(before, url).length === 1 &&
@@ -1608,11 +1742,12 @@ try {
     await page.waitForTimeout(350)
     const finished = await readEdgeAudio()
     const observations = [closing, closed, finished],
-      initial = activeEdgeAudio(before, url)[0]
+      [initial] = activeEdgeAudio(before, url)
     check(
-      role + "-authored-finale-split-status-keeps-one-track",
+      `${role}-authored-finale-split-status-keeps-one-track`,
       observations.every((state) => {
         const active = activeEdgeAudio(state, url)
+
         return (
           state.owners === 1 &&
           active.length === 1 &&
@@ -1626,7 +1761,7 @@ try {
       { before, closing, closed, finished },
     )
     check(
-      role + "-closing-handoff-does-not-replay-question",
+      `${role}-closing-handoff-does-not-replay-question`,
       closing.stage.mode === before.stage.mode &&
         closed.stage.mode === before.stage.mode &&
         observations.every(
@@ -1650,7 +1785,7 @@ try {
       },
     )
     check(
-      role + "-same-platform-curtain-remains-closed",
+      `${role}-same-platform-curtain-remains-closed`,
       closing.curtain === "closing" &&
         closed.curtain === "closed" &&
         finished.curtain === "closed",
@@ -1661,7 +1796,7 @@ try {
     await page.waitForTimeout(900)
     const replay = await readEdgeAudio()
     check(
-      role + "-same-game-replay-releases-final-ending",
+      `${role}-same-game-replay-releases-final-ending`,
       replay.terminal.scene.kind === "question" &&
         replay.attributes["data-soundtrack-slot"] === "question" &&
         activeEdgeAudio(replay, url).length === 0,
@@ -1673,7 +1808,7 @@ try {
     await page.waitForTimeout(250)
     const newGame = await readEdgeAudio()
     check(
-      role + "-new-game-does-not-inherit-final-ending",
+      `${role}-new-game-does-not-inherit-final-ending`,
       newGame.terminal.gameId === "new-game-diagnostic" &&
         newGame.terminal.scene.kind === "question" &&
         newGame.attributes["data-soundtrack-slot"] === "question" &&
@@ -1686,7 +1821,7 @@ try {
     await page.waitForTimeout(200)
     const staleLaunch = await readEdgeAudio()
     check(
-      role + "-active-question-rejects-stale-closing-launch",
+      `${role}-active-question-rejects-stale-closing-launch`,
       staleLaunch.terminal.scene.kind === "question" &&
         staleLaunch.attributes["data-soundtrack-slot"] === "question" &&
         activeEdgeAudio(staleLaunch, url).length === 0,
@@ -1699,6 +1834,7 @@ try {
   await foregroundAudio.waitFor({ state: "attached" })
   await page.waitForFunction(() => {
     const audio = document.querySelector('[data-testid="scene-audio"]')
+
     return audio instanceof HTMLAudioElement && audio.readyState >= 2
   })
   await page.evaluate(() => {
@@ -1709,6 +1845,7 @@ try {
   const readForeground = () =>
     page.evaluate(() => {
       const audio = document.querySelector('[data-testid="scene-audio"]')
+
       return {
         count: document.querySelectorAll('[data-testid="scene-audio"]').length,
         same: audio === window.foregroundElement,
@@ -1756,6 +1893,7 @@ try {
   await page.getByTestId("foreground-preview-resume").click()
   await page.waitForFunction(() => {
     const audio = document.querySelector('[data-testid="scene-audio"]')
+
     return (
       audio instanceof HTMLAudioElement &&
       !audio.paused &&
@@ -1777,6 +1915,7 @@ try {
   )
   await page.waitForFunction(() => {
     const audio = document.querySelector('[data-testid="scene-audio"]')
+
     return (
       audio instanceof HTMLAudioElement &&
       audio.paused &&
@@ -1798,6 +1937,7 @@ try {
   await page.getByTestId("foreground-preview-resume").click()
   await page.waitForFunction(() => {
     const audio = document.querySelector('[data-testid="scene-audio"]')
+
     return (
       audio instanceof HTMLAudioElement &&
       !audio.paused &&
@@ -1822,6 +1962,7 @@ try {
   const lottie = page.getByTestId("scene-lottie-player")
   await page.waitForFunction(() => {
     const player = document.querySelector('[data-testid="scene-lottie-player"]')
+
     return player?.getAttribute("data-lottie-ready") === "true"
   })
   await page.evaluate(() => window.foregroundPreview.clock({ elapsedMs: 1000 }))
@@ -1861,6 +2002,7 @@ try {
   await page.getByTestId("live-foreground-resume").click()
   await page.waitForFunction(() => {
     const audio = document.querySelector('[data-testid="scene-audio"]')
+
     return (
       audio instanceof HTMLAudioElement &&
       !audio.paused &&
@@ -1875,6 +2017,7 @@ try {
   await page.getByTestId("live-foreground-resume").click()
   await page.waitForFunction((heldTime) => {
     const audio = document.querySelector('[data-testid="scene-audio"]')
+
     return (
       audio instanceof HTMLAudioElement &&
       !audio.paused &&
@@ -1907,11 +2050,13 @@ try {
 } catch (error) {
   result.error = String(error)
   result.passed = false
+
   try {
     await captureAudio("failure")
   } catch (captureError) {
     result.diagnosticError = String(captureError)
   }
+
   try {
     await page.screenshot({ path: path.join(evidence, "failure.png") })
   } catch (captureError) {
@@ -1919,11 +2064,17 @@ try {
   }
 } finally {
   await browser.close()
-  await new Promise((resolve) => server.close(resolve))
+  await new Promise((resolve) => {
+    server.close(resolve)
+  })
 }
+
 await fs.writeFile(
   path.join(evidence, "receipt.json"),
   JSON.stringify(result, null, 2),
 )
 console.log(JSON.stringify(result))
-if (!result.passed) process.exitCode = 1
+
+if (!result.passed) {
+  process.exitCode = 1
+}

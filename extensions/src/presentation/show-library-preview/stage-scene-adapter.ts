@@ -24,9 +24,11 @@ export interface NativePreviewPresentation {
 }
 
 export type PreviewFrame = NativePreviewFrameV1
+
 export function validatePreviewFrame(value: PreviewFrame): void {
   nativePreviewFrameV1Schema.parse(value)
 }
+
 // oxlint-disable-next-line max-params -- Preserve the existing positional native API with optional admitted presentation.
 export function previewSteps(
   frame: PreviewFrame,
@@ -61,14 +63,20 @@ export function previewSteps(
             }
           }),
   }
-  if (frame.phase === "answerCards")
+
+  if (frame.phase === "answerCards") {
     return { steps: [{ op: "presentOptions", question: q }], scene: previous }
-  if (frame.phase === "voteLocked")
+  }
+
+  if (frame.phase === "voteLocked") {
     return { steps: [{ op: "lockVoting" }], scene: previous }
-  let scene: ShowScene
-  if (frame.phase === "question")
+  }
+
+  let scene: ShowScene | undefined = undefined
+
+  if (frame.phase === "question") {
     scene = { kind: "question", key: `question:${q.key}`, question: q }
-  else if (frame.phase === "voting") {
+  } else if (frame.phase === "voting") {
     const deadline = previewVotingDeadline(frame.clock, wallNow)
     scene = {
       kind: "voting",
@@ -105,12 +113,15 @@ export function previewSteps(
       },
     }
   }
+
   return { steps: planTransition(previous, scene, stage, wallNow), scene }
 }
 
-/** Rebuild only the current phase, without a fabricated voting scene.
+/**
+ * Rebuild only the current phase, without a fabricated voting scene.
  * Also used for a newly selected current-card snapshot; does not pause its clock.
  */
+
 export function pausedPreviewSteps(
   frame: PreviewFrame,
   wallNow: number,
@@ -124,11 +135,18 @@ export function pausedPreviewSteps(
       wallNow,
       presentation,
     )
-    const step = cards.steps[0]
-    if (!step || step.op !== "presentOptions")
+    const [step] = cards.steps
+
+    if (!step || step.op !== "presentOptions") {
       throw new Error("show-preview:invalid-resume")
+    }
+
     const steps: StageStep[] = [{ op: "showQuestion", question: step.question }]
-    if (frame.phase === "voteLocked") steps.push({ op: "lockVoting" })
+
+    if (frame.phase === "voteLocked") {
+      steps.push({ op: "lockVoting" })
+    }
+
     return {
       steps,
       scene: {
@@ -138,6 +156,7 @@ export function pausedPreviewSteps(
       },
     }
   }
+
   const planned = previewSteps(
     frame,
     null,
@@ -145,5 +164,6 @@ export function pausedPreviewSteps(
     wallNow,
     presentation,
   )
+
   return { steps: collapseForResume(planned.steps), scene: planned.scene }
 }

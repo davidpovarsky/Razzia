@@ -65,30 +65,46 @@ export function packageRuntimePhase(
     case "scene":
       switch (scene.scene.kind) {
         case "opening":
+
         case "closing":
+
         case "leaderboard":
           return scene.scene.kind
+
         case "interimResults":
           return "results"
+
         default:
           return "interlude"
       }
+
     case "start":
       return "opening"
+
     case "prepared":
       return "answerCards"
+
     case "player-result":
       return "personalResult"
+
     case "finale":
+
     case "summary":
       return "closing"
+
     case "question":
+
     case "voting":
+
     case "results":
+
     case "leaderboard":
+
     case "lobby":
+
     case "interlude":
       return scene.kind
+
     default:
       return "lobby"
   }

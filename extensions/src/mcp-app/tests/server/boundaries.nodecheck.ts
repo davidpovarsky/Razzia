@@ -4,6 +4,7 @@ import { harness, show, newKey, data } from "./fixtures.ts"
 
 test("invalid authored/schema/settings/media rejected without mutation", async () => {
   const h = await harness()
+
   try {
     for (const raw of [
       "{}",
@@ -51,13 +52,14 @@ test("scoped ordinary export delegates without adding a new consent stage", asyn
   const h = await harness({
     exports: {
       async createAuthorizedDownload(_p, selection, format) {
-        exports++
+        exports += 1
+
         return {
           exportId: newKey(),
           draftId: selection.draftId,
           revision: selection.expectedRevision,
           format,
-          downloadUrl: "https://studio.example.invalid/download/" + newKey(),
+          downloadUrl: `https://studio.example.invalid/download/${newKey()}`,
           expiresAt: new Date(Date.now() + 60_000).toISOString(),
           sha256: "a".repeat(64),
           bytes: 10,
@@ -65,6 +67,7 @@ test("scoped ordinary export delegates without adding a new consent stage", asyn
       },
     },
   })
+
   try {
     const draft = data(
       await h.call("create_game_draft", {

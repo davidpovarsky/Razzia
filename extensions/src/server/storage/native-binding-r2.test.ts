@@ -8,7 +8,13 @@ import * as native from "../../../../packages/socket/src/services/config"
 import { computeCanonicalBaseDigest } from "../../core/index"
 import { executeMediaDeleteTransaction } from "../media-library"
 import {
+  assertNativeRuns,
   byteHash,
+  nativeRecoveryReport,
+  requireNativeRecord,
+  requireNativeRecordList,
+  requireNativeString,
+  isNativeRecord,
   makeNativeFixture,
   nativeFixtureState,
   nativeInput,
@@ -55,11 +61,15 @@ function child(
       timedOut = true
       processChild.kill("SIGKILL")
     }, 20000)
-    processChild.stdout?.on("data", (data) => {
-      stdout = (stdout + data).slice(-128000)
+    processChild.stdout?.on("data", (data: Buffer | string) => {
+      stdout = (
+        stdout + (typeof data === "string" ? data : data.toString("utf8"))
+      ).slice(-128000)
     })
-    processChild.stderr?.on("data", (data) => {
-      stderr = (stderr + data).slice(-128000)
+    processChild.stderr?.on("data", (data: Buffer | string) => {
+      stderr = (
+        stderr + (typeof data === "string" ? data : data.toString("utf8"))
+      ).slice(-128000)
     })
     processChild.once("error", (error) => {
       clearTimeout(timeout)
@@ -72,7 +82,10 @@ function child(
   })
 }
 function retain(name: string, data: unknown) {
-  if (!process.env.RECOVERY_NATIVE_RECEIPT_ROOT) return
+  if (!process.env.RECOVERY_NATIVE_RECEIPT_ROOT) {
+    return
+  }
+
   fs.mkdirSync(process.env.RECOVERY_NATIVE_RECEIPT_ROOT, { recursive: true })
   fs.writeFileSync(
     path.join(process.env.RECOVERY_NATIVE_RECEIPT_ROOT, `r2-${name}.json`),
@@ -80,34 +93,45 @@ function retain(name: string, data: unknown) {
   )
 }
 async function recoverTwice(root: string, token: string) {
-  const runs = []
+  const runs: unknown[] = []
   for (const sequence of ["1", "2"]) {
     const processResult = await child("recover", root, token, sequence)
-    const state = JSON.parse(
-      fs.readFileSync(
-        path.join(root, `.native-recovery-${sequence}.json`),
-        "utf8",
+    const state = requireNativeRecord(
+      JSON.parse(
+        fs.readFileSync(
+          path.join(root, `.native-recovery-${sequence}.json`),
+          "utf8",
+        ),
       ),
     )
     runs.push({ process: processResult, ...state })
   }
+
   return runs
 }
 
 describe("R2 recorded physical ownership and logical digest controls", () => {
-  let previousConfig: string | undefined
-  let previousAccounts: string | undefined
+  let previousConfig: string | undefined = undefined
+
+  let previousAccounts: string | undefined = undefined
   beforeEach(() => {
     previousConfig = process.env.CONFIG_PATH
     previousAccounts = process.env.TADAZZ_ACCOUNTS_ENABLED
   })
   afterEach(() => {
     vi.restoreAllMocks()
-    if (previousConfig === undefined) delete process.env.CONFIG_PATH
-    else process.env.CONFIG_PATH = previousConfig
-    if (previousAccounts === undefined)
+
+    if (previousConfig === undefined) {
+      delete process.env.CONFIG_PATH
+    } else {
+      process.env.CONFIG_PATH = previousConfig
+    }
+
+    if (previousAccounts === undefined) {
       delete process.env.TADAZZ_ACCOUNTS_ENABLED
-    else process.env.TADAZZ_ACCOUNTS_ENABLED = previousAccounts
+    } else {
+      process.env.TADAZZ_ACCOUNTS_ENABLED = previousAccounts
+    }
   })
 
   it.each(["create", "import"] as const)(
@@ -115,26 +139,36 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
     async (operation) => {
       const { root, descriptor } = makeNativeFixture(operation)
       const receipt: Record<string, unknown> = { operation, state: "STARTED" }
+
       try {
         const before = nativeFixtureState(root)
         const killed = await child("interrupt", root, descriptor.token)
         receipt.interrupted = killed
         expect(killed.timedOut, killed.stderr).toBe(false)
-        if (process.platform === "win32") expect(killed.code).toBe(86)
-        else expect(killed.signal, killed.stderr).toBe("SIGKILL")
+
+        if (process.platform === "win32") {
+          expect(killed.code).toBe(86)
+        } else {
+          expect(killed.signal, killed.stderr).toBe("SIGKILL")
+        }
+
         const staged = nativeFixtureState(root)
         receipt.before = before
         receipt.staged = staged
         expect(staged.journals).toHaveLength(1)
-        const entry = staged.journals[0].entry as { quizId: string }
+        const entry = requireNativeRecord(staged.journals[0].entry)
+
         expect(entry.quizId).not.toBe(descriptor.quizId)
         const createdBase = Object.entries(staged.files).find(
           ([key, file]) =>
             key.startsWith("quizz/") &&
-            (file.json as { id?: string })?.id === entry.quizId,
+            isNativeRecord(file.json) &&
+            file.json.id === entry.quizId,
         )
         expect(createdBase).toBeDefined()
-        expect(createdBase![0]).not.toBe(`quizz/${entry.quizId}.json`)
+        expect(createdBase![0]).not.toBe(
+          `quizz/${requireNativeString(entry.quizId)}.json`,
+        )
         const idless = "quizz/idless-r2-after-id.json"
         fs.writeFileSync(
           path.join(root, idless),
@@ -154,6 +188,8 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
         }
         const runs = await recoverTwice(root, descriptor.token)
         receipt.recoveries = runs
+        assertNativeRuns(runs)
+
         expect(new Set([killed.pid, ...runs.map((run) => run.pid)]).size).toBe(
           3,
         )
@@ -164,7 +200,7 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
           expect(run.state.files).toStrictEqual(expectedFiles)
           expect(run.state.journals).toHaveLength(0)
         }
-        expect(runs[1].report.status).toBe("clean")
+        expect(nativeRecoveryReport(runs[1]).status).toBe("clean")
         receipt.state = "PASS"
       } catch (error) {
         receipt.state = "FAIL"
@@ -181,27 +217,40 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
   it("recovers a legacy-tagged Media record only with unchanged complete pre-mutation physical proof", async () => {
     const { root, descriptor } = makeNativeFixture("media")
     const receipt: Record<string, unknown> = { state: "STARTED" }
+
     try {
       const before = nativeFixtureState(root)
       const killed = await child("interrupt", root, descriptor.token)
       receipt.interrupted = killed
       expect(killed.timedOut).toBe(false)
-      if (process.platform === "win32") expect(killed.code).toBe(86)
-      else expect(killed.signal).toBe("SIGKILL")
+
+      if (process.platform === "win32") {
+        expect(killed.code).toBe(86)
+      } else {
+        expect(killed.signal).toBe("SIGKILL")
+      }
+
       const staged = nativeFixtureState(root)
       const journal = path.join(root, staged.journals[0].path)
-      const entry = JSON.parse(fs.readFileSync(journal, "utf8"))
-      const capturedProof = structuredClone(
-        entry.shows.map((show: { bindings: unknown }) => show.bindings),
+      const entry = requireNativeRecord(
+        JSON.parse(fs.readFileSync(journal, "utf8")),
       )
-      entry.version = 1 // protocol tag only; never fabricate or rebind ownership
+
+      const capturedProof = structuredClone(
+        requireNativeRecordList(entry.shows).map((show) => show.bindings),
+      )
+      // Protocol tag only; never fabricate or rebind ownership
+
+      entry.version = 1
       fs.writeFileSync(journal, JSON.stringify(entry, null, 2))
       expect(
-        entry.shows.map((show: { bindings: unknown }) => show.bindings),
+        requireNativeRecordList(entry.shows).map((show) => show.bindings),
       ).toStrictEqual(capturedProof)
       receipt.recordedBeforeTagChange = staged
       const runs = await recoverTwice(root, descriptor.token)
       receipt.recoveries = runs
+      assertNativeRuns(runs)
+
       expect(new Set([killed.pid, ...runs.map((run) => run.pid)]).size).toBe(3)
       for (const run of runs) {
         expect(run.pid).toBe(run.process.pid)
@@ -210,7 +259,7 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
         expect(run.state.files).toStrictEqual(before.files)
         expect(run.state.journals).toHaveLength(0)
       }
-      expect(runs[1].report.status).toBe("clean")
+      expect(nativeRecoveryReport(runs[1]).status).toBe("clean")
       receipt.state = "PASS"
     } catch (error) {
       receipt.state = "FAIL"
@@ -243,12 +292,18 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
         media ? "media" : "quiz-base",
       )
       const receipt: Record<string, unknown> = { fault, state: "STARTED" }
+
       try {
         const killed = await child("interrupt", root, descriptor.token)
         receipt.interrupted = killed
         expect(killed.timedOut, killed.stderr).toBe(false)
-        if (process.platform === "win32") expect(killed.code).toBe(86)
-        else expect(killed.signal, killed.stderr).toBe("SIGKILL")
+
+        if (process.platform === "win32") {
+          expect(killed.code).toBe(86)
+        } else {
+          expect(killed.signal, killed.stderr).toBe("SIGKILL")
+        }
+
         const base = path.join(root, "quizz", descriptor.baseName)
         const sidecar = path.join(
           root,
@@ -257,13 +312,16 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
         )
         const before = nativeFixtureState(root)
         const journal = path.join(root, before.journals[0].path)
+
         if (fault.endsWith("inode")) {
           const target = fault.includes("base") ? base : sidecar
           const originalIdentity = fs.lstatSync(target, { bigint: true })
           const originalBytes = byteHash(fs.readFileSync(target))
           const replacement = `${target}.foreign-r2`
           fs.copyFileSync(target, replacement)
-          fs.renameSync(replacement, target) // identical bytes, distinct inode
+          // Identical bytes, distinct inode
+
+          fs.renameSync(replacement, target)
           const replacementIdentity = fs.lstatSync(target, { bigint: true })
           receipt.replacement = {
             relativePath: path.relative(root, target),
@@ -286,7 +344,9 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
             foreign,
             JSON.stringify(
               {
-                ...JSON.parse(fs.readFileSync(base, "utf8")),
+                ...requireNativeRecord(
+                  JSON.parse(fs.readFileSync(base, "utf8")),
+                ),
                 id: "foreign-r2",
               },
               null,
@@ -307,29 +367,57 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
           }
         } else if (fault.endsWith("content") || fault === "newer-sidecar") {
           const target = fault.includes("base") ? base : sidecar
-          const data = JSON.parse(fs.readFileSync(target, "utf8"))
-          if (fault === "newer-sidecar") data.revision = 999
-          else if (fault.includes("base"))
+          const data = requireNativeRecord(
+            JSON.parse(fs.readFileSync(target, "utf8")),
+          )
+
+          if (fault === "newer-sidecar") {
+            data.revision = 999
+          } else if (fault.includes("base")) {
             data.subject = "Foreign same-ID content"
-          else data.authoring.showNote = "Foreign same-revision content"
+          } else {
+            requireNativeRecord(data.authoring).showNote =
+              "Foreign same-revision content"
+          }
+
           fs.writeFileSync(target, JSON.stringify(data, null, 2))
         } else {
-          const entry = JSON.parse(fs.readFileSync(journal, "utf8"))
+          const entry = requireNativeRecord(
+            JSON.parse(fs.readFileSync(journal, "utf8")),
+          )
           entry.version = 1
           delete entry.bindings
-          if (fault === "old-quiz-record") delete entry.targetBase
-          if (Array.isArray(entry.shows))
-            for (const show of entry.shows) delete show.bindings
-          if (fault === "legacy-sidecar-as-base") {
-            entry.shows[0].filePath = sidecar
-            entry.shows[0].originalBaseRaw = fs.readFileSync(sidecar, "utf8")
+
+          if (fault === "old-quiz-record") {
+            delete entry.targetBase
           }
+
+          if (Array.isArray(entry.shows)) {
+            for (const show of requireNativeRecordList(entry.shows)) {
+              delete show.bindings
+            }
+          }
+
+          if (fault === "legacy-sidecar-as-base") {
+            requireNativeRecord(
+              requireNativeRecordList(entry.shows).at(0),
+            ).filePath = sidecar
+            requireNativeRecord(
+              requireNativeRecordList(entry.shows).at(0),
+            ).originalBaseRaw = fs.readFileSync(sidecar, "utf8")
+          }
+
           fs.writeFileSync(journal, JSON.stringify(entry, null, 2))
         }
+
         const rejectedState = nativeFixtureState(root)
         const runs = await recoverTwice(root, descriptor.token)
         receipt.beforeRecovery = rejectedState
-        receipt.recoveries = runs // capture BOTH before outcome assertions
+        // Capture BOTH before outcome assertions
+
+        receipt.recoveries = runs
+
+        assertNativeRuns(runs)
         expect(new Set([killed.pid, ...runs.map((run) => run.pid)]).size).toBe(
           3,
         )
@@ -356,6 +444,7 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
   it("does not reattach references when actual rollback binary restoration fails", async () => {
     const { root, descriptor } = makeNativeFixture("media")
     const receipt: Record<string, unknown> = { state: "STARTED" }
+
     try {
       const before = nativeFixtureState(root)
       const copy = fs.copyFileSync.bind(fs)
@@ -364,8 +453,10 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
           if (
             String(source).includes("quarantine") &&
             String(destination) === native.getPath("media/r1-native.png")
-          )
+          ) {
             throw new Error("EIO actual binary rollback copy failure")
+          }
+
           return copy(source, destination, flags)
         },
       )
@@ -388,24 +479,30 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
       expect(result.allowed).toBe(false)
       expect(failed.files["media/r1-native.png"]).toBeUndefined()
       expect(
-        (
-          failed.files[`quizz/${descriptor.baseName}`].json as {
-            questions: Array<{ media?: unknown }>
-          }
-        ).questions[0].media,
+        requireNativeRecord(
+          requireNativeRecordList(
+            requireNativeRecord(
+              failed.files[`quizz/${descriptor.baseName}`].json,
+            ).questions,
+          ).at(0),
+        ).media,
       ).toBeUndefined()
       expect(failed.journals).toHaveLength(1)
-      const entry = failed.journals[0].entry as { quarantinePath: string }
-      expect(byteHash(fs.readFileSync(entry.quarantinePath))).toBe(
-        before.files["media/r1-native.png"].sha256,
-      )
+      const entry = requireNativeRecord(failed.journals[0].entry)
+
+      expect(
+        byteHash(fs.readFileSync(requireNativeString(entry.quarantinePath))),
+      ).toBe(before.files["media/r1-native.png"].sha256)
       const runs = await recoverTwice(root, descriptor.token)
       receipt.recoveries = runs
+      assertNativeRuns(runs)
+
       expect(new Set(runs.map((run) => run.pid)).size).toBe(2)
       expect(runs[0].process.code).toBe(0)
-      expect(runs[1].report.status).toBe("clean")
-      for (const run of runs)
+      expect(nativeRecoveryReport(runs[1]).status).toBe("clean")
+      for (const run of runs) {
         expect(run.state.files).toStrictEqual(before.files)
+      }
       receipt.state = "PASS"
     } catch (error) {
       receipt.state = "FAIL"
@@ -433,26 +530,48 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
       descriptor.sidecarName,
     )
     const base = path.join(root, "quizz", descriptor.baseName)
+
     try {
-      const record = JSON.parse(fs.readFileSync(base, "utf8"))
+      const record = requireNativeRecord(
+        JSON.parse(fs.readFileSync(base, "utf8")),
+      )
       const { id: _storageId, ...payload } = record
-      const extras = JSON.parse(fs.readFileSync(sidecar, "utf8"))
-      if (representation === "id-bearing")
+      const extras = requireNativeRecord(
+        JSON.parse(fs.readFileSync(sidecar, "utf8")),
+      )
+
+      if (representation === "id-bearing") {
         extras.baseDigest = computeCanonicalBaseDigest(record)
-      if (representation === "changed-content")
+      }
+
+      if (representation === "changed-content") {
         extras.baseDigest = computeCanonicalBaseDigest({
           ...payload,
           subject: "Different content",
         })
-      if (representation === "mismatched-id")
+      }
+
+      if (representation === "mismatched-id") {
         extras.baseDigest = computeCanonicalBaseDigest({
           ...record,
           id: "foreign-id",
         })
-      if (representation === "sidecar-id-mismatch") extras.quizId = "foreign-id"
-      if (representation === "extra-field")
+      }
+
+      if (representation === "sidecar-id-mismatch") {
+        extras.quizId = "foreign-id"
+      }
+
+      if (representation === "extra-field") {
         record.unknownPreservedField = { value: ["1", 1, null, false] }
-      if (representation === "question-id-type") record.questions[0].id = 17
+      }
+
+      if (representation === "question-id-type") {
+        requireNativeRecord(
+          requireNativeRecordList(record.questions).at(0),
+        ).id = 17
+      }
+
       fs.writeFileSync(base, JSON.stringify(record, null, 2))
       fs.writeFileSync(sidecar, JSON.stringify(extras, null, 2))
       const sidecarBytes = fs.readFileSync(sidecar)
@@ -481,6 +600,7 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
   it("imports an actual native exported bundle with a fresh ID and consistent logical digest", () => {
     const { root, descriptor } = makeNativeFixture("media")
     const receipt: Record<string, unknown> = { state: "STARTED" }
+
     try {
       const service = new CompositeStorageService({ ...native })
       const input = nativeInput("R2 actual native enhanced roundtrip")
@@ -505,11 +625,14 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
         before,
         after,
       })
+
       if (
         fetched.extras?.schemaVersion !== 2 ||
         exported.extras.schemaVersion !== 2
-      )
+      ) {
         throw new Error("Expected complete V2 roundtrip fixtures")
+      }
+
       expect(imported.quizId).not.toBe(created.quizId)
       expect(id).toBe(imported.quizId)
       expect(completePayload).toStrictEqual(input)
@@ -522,8 +645,9 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
       expect(reExported.extras).toStrictEqual(fetched.extras)
       expect(reExported.extras.baseDigest).toBe(imported.baseDigest)
       expect(exported).toStrictEqual(unchanged)
-      for (const [relative, file] of Object.entries(before.files))
+      for (const [relative, file] of Object.entries(before.files)) {
         expect(after.files[relative]).toStrictEqual(file)
+      }
       for (const key of [
         "scenes",
         "defaults",
@@ -532,9 +656,10 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
         "roster",
         "authoring",
         "mediaCatalog",
-      ] as const)
+      ] as const) {
         expect(fetched.extras[key]).toStrictEqual(exported.extras[key])
-      expect(Object.values(fetched.extras?.perQuestion ?? {})).toStrictEqual(
+      }
+      expect(Object.values(fetched.extras.perQuestion)).toStrictEqual(
         Object.values(exported.extras.perQuestion),
       )
       expect(fetched.extras.questionIds).not.toEqual(
@@ -561,6 +686,7 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
 
   it("rejects an imported root ID that does not match its source sidecar before allocation", () => {
     const { root, descriptor } = makeNativeFixture("media")
+
     try {
       const service = new CompositeStorageService({ ...native })
       const input = nativeInput("R2 source identity denial")
@@ -578,6 +704,7 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
         ...native,
         saveQuizz: (data) => {
           allocationCalls += 1
+
           return native.saveQuizz(data)
         },
       })
@@ -599,10 +726,16 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
 
   it("rejects a returned storage ID that does not match the requested identity", () => {
     const { root, descriptor } = makeNativeFixture("media")
+
     try {
       const before = nativeFixtureState(root)
-      const record = JSON.parse(
-        fs.readFileSync(path.join(root, "quizz", descriptor.baseName), "utf8"),
+      const record = requireNativeRecord(
+        JSON.parse(
+          fs.readFileSync(
+            path.join(root, "quizz", descriptor.baseName),
+            "utf8",
+          ),
+        ),
       )
       const service = new CompositeStorageService({
         ...native,

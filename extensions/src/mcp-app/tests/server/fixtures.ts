@@ -21,6 +21,7 @@ export const config = {
     "https://mcp.example.invalid/.well-known/oauth-protected-resource",
   firstPartyOrigins: ["https://studio.example.invalid"],
 }
+
 export const principal = (): VerifiedPrincipal => ({
   issuer: config.issuer,
   audience: config.resource,
@@ -33,28 +34,33 @@ export const principal = (): VerifiedPrincipal => ({
   active: true,
   accountsEnabled: true,
 })
+
 export const show = () => ({
   format: "tada-show",
   version: 1,
   title: "Synthetic test",
   cards: [1, 2, 3, 4, 5].map((n) => ({
-    key: "q" + n,
+    key: `q${n}`,
     kind: "quiz",
-    question: "Question " + n,
+    question: `Question ${n}`,
     timeSeconds: 20,
     answers: [{ text: "A" }, { text: "B" }],
     correctAnswers: [1],
   })),
   settings: [],
 })
-/** Test-only volatile store. It is NEVER exported/imported by server code and
- * does not establish filesystem, durable-idempotency, consent or crash acceptance. */
+
+/**
+ * Test-only volatile store. It is NEVER exported/imported by server code and
+ * does not establish filesystem, durable-idempotency, consent or crash acceptance.
+ */
+
 export class MemoryDrafts {
   records = new Map<string, DraftRecord>()
   outcomes = new Map<string, { digest: string; result: DraftRecord }>()
   audit: string[] = []
   private owner(p: VerifiedPrincipal) {
-    return p.accountId + ":" + p.subject
+    return `${p.accountId}:${p.subject}`
   }
   private replay(
     p: VerifiedPrincipal,
@@ -64,17 +70,22 @@ export class MemoryDrafts {
   ) {
     const key = [this.owner(p), p.grantId, tool, m.idempotencyKey].join(":")
     const prior = this.outcomes.get(key)
+
     if (prior) {
-      if (prior.digest !== m.inputDigest)
+      if (prior.digest !== m.inputDigest) {
         throw new ToolError("REQUEST_KEY_REUSED")
+      }
+
       return structuredClone(prior.result)
     }
+
     const result = run()
     this.outcomes.set(key, {
       digest: m.inputDigest,
       result: structuredClone(result),
     })
     this.audit.push(tool)
+
     return structuredClone(result)
   }
   async create(
@@ -85,14 +96,16 @@ export class MemoryDrafts {
     return this.replay(p, "create", m, () => {
       const result = { ...value, draftId: randomUUID(), revision: 1 }
       this.records.set(
-        this.owner(p) + ":" + result.draftId,
+        `${this.owner(p)}:${result.draftId}`,
         structuredClone(result),
       )
+
       return result
     })
   }
   async get(p: VerifiedPrincipal, id: string) {
-    const found = this.records.get(this.owner(p) + ":" + id)
+    const found = this.records.get(`${this.owner(p)}:${id}`)
+
     return found ? structuredClone(found) : undefined
   }
   async replace(
@@ -103,13 +116,19 @@ export class MemoryDrafts {
     m: MutationIdentity,
   ) {
     return this.replay(p, "replace", m, () => {
-      const key = this.owner(p) + ":" + id
+      const key = `${this.owner(p)}:${id}`
       const current = this.records.get(key)
-      if (!current) throw new ToolError("NOT_FOUND")
-      if (current.revision !== revision)
+
+      if (!current) {
+        throw new ToolError("NOT_FOUND")
+      }
+
+      if (current.revision !== revision) {
         throw new ToolError("REVISION_CONFLICT", {
           currentRevision: current.revision,
         })
+      }
+
       const result = {
         ...current,
         ...value,
@@ -117,13 +136,17 @@ export class MemoryDrafts {
         revision: revision + 1,
       }
       this.records.set(key, structuredClone(result))
+
       return result
     })
   }
 }
+
 function linkedTransportPair(): [Transport, Transport] {
   const a: Transport = {
-    start: async () => {},
+    start: async () => {
+      /* This synthetic transport is connected in memory and needs no startup work. */
+    },
     send: async (message) => {
       queueMicrotask(() => b.onmessage?.(structuredClone(message)))
     },
@@ -132,7 +155,9 @@ function linkedTransportPair(): [Transport, Transport] {
     },
   }
   const b: Transport = {
-    start: async () => {},
+    start: async () => {
+      /* This synthetic transport is connected in memory and needs no startup work. */
+    },
     send: async (message) => {
       queueMicrotask(() => a.onmessage?.(structuredClone(message)))
     },
@@ -140,17 +165,19 @@ function linkedTransportPair(): [Transport, Transport] {
       b.onclose?.()
     },
   }
+
   return [a, b]
 }
+
 export async function harness(
   overrides: Dependencies = {},
   account = principal(),
 ) {
   const store = new MemoryDrafts()
   const deps: Dependencies = {
-    authorize: async () => account,
-    prevalidationLimit: async () => true,
-    rateLimit: async () => true,
+    authorize: () => Promise.resolve(account),
+    prevalidationLimit: () => Promise.resolve(true),
+    rateLimit: () => Promise.resolve(true),
     authoring: { allowedPublicAssetUrls: new Set() },
     drafts: store,
     ...overrides,
@@ -160,6 +187,7 @@ export async function harness(
   const [ct, st] = linkedTransportPair()
   await server.connect(st)
   await client.connect(ct)
+
   return {
     account,
     store,
@@ -178,13 +206,55 @@ export async function harness(
     },
   }
 }
+
 export function data(result: { structuredContent?: unknown }) {
   const envelope = jsonObject.parse(result.structuredContent)
-  if (envelope.ok !== true)
-    throw new Error("Expected success: " + JSON.stringify(envelope.error))
+
+  if (envelope.ok !== true) {
+    throw new Error(`Expected success: ${JSON.stringify(envelope.error)}`)
+  }
+
   return jsonObject.parse(envelope.data)
 }
+
 export function code(result: { structuredContent?: unknown }) {
   return jsonObject.parse(jsonObject.parse(result.structuredContent).error).code
 }
+
 export const newKey = () => opaqueId.parse(randomUUID())
+
+function isObservedRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+}
+
+export function requireObservedRecord(value: unknown): Record<string, unknown> {
+  if (!isObservedRecord(value)) {
+    throw new Error("Expected an object in the observed JSON response")
+  }
+
+  return value
+}
+
+function isObservedShow(
+  value: unknown,
+): value is Record<string, unknown> & {
+  cards: Array<Record<string, unknown>>
+} {
+  return (
+    isObservedRecord(value) &&
+    Array.isArray(value.cards) &&
+    value.cards.every(isObservedRecord)
+  )
+}
+
+export function requireObservedShow(
+  value: unknown,
+): Record<string, unknown> & { cards: Array<Record<string, unknown>> } {
+  if (!isObservedShow(value)) {
+    throw new Error(
+      "Expected the observed authored show to contain object cards",
+    )
+  }
+
+  return value
+}

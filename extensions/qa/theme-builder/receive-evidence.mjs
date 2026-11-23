@@ -4,18 +4,21 @@ import { createWriteStream, createReadStream, writeFileSync } from "node:fs"
 import { pipeline } from "node:stream/promises"
 import { createHash } from "node:crypto"
 import { resolve } from "node:path"
-const name = process.argv[2],
+const [, , name] = process.argv,
   output = resolve(process.argv[3] ?? "")
+
 if (
   !/^tadazz-show-ui-E-[a-zA-Z0-9-]+$/u.test(name ?? "") ||
   (!output.startsWith(
-    resolve("docs/extensions/qa-evidence/show-ui-20261115") + "/",
+    `${resolve("docs/extensions/qa-evidence/show-ui-20261115")}/`,
   ) &&
     !output.startsWith(
-      resolve("docs/extensions/qa-evidence/show-ui-20261115") + "\\",
+      `${resolve("docs/extensions/qa-evidence/show-ui-20261115")}\\`,
     ))
-)
+) {
   throw new Error("Invalid owned evidence destination")
+}
+
 const command = [
   "-o",
   "StrictHostKeyChecking=yes",
@@ -49,7 +52,7 @@ const receipt = {
   receivedUtc: new Date().toISOString(),
   remoteArchiveWritten: false,
 }
-writeFileSync(output + ".receipt.json", JSON.stringify(receipt, null, 2), {
+writeFileSync(`${output}.receipt.json`, JSON.stringify(receipt, null, 2), {
   flag: "wx",
 })
-process.stdout.write(JSON.stringify(receipt) + "\n")
+process.stdout.write(`${JSON.stringify(receipt)}\n`)

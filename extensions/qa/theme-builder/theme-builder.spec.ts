@@ -3,6 +3,18 @@ import type * as Playwright from "../../../node_modules/.pnpm/playwright@1.64.0/
 import { writeFile } from "node:fs/promises"
 import { builderText } from "../../src/components/theme-builder/strings"
 const { test, expect } = playwright as unknown as typeof Playwright
+function isObservedRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+}
+
+function requireObservedRecord(value: unknown): Record<string, unknown> {
+  if (!isObservedRecord(value)) {
+    throw new Error("Expected an object in the observed JSON value")
+  }
+
+  return value
+}
+
 const logs = new WeakMap<object, unknown[]>()
 test.beforeEach(async ({ page }) => {
   const log: unknown[] = []
@@ -11,8 +23,9 @@ test.beforeEach(async ({ page }) => {
     log.push({ type: "pageerror", message: error.message }),
   )
   page.on("console", (message) => {
-    if (message.type() === "error")
+    if (message.type() === "error") {
       log.push({ type: "console", text: message.text() })
+    }
   })
   page.on("requestfailed", (request) =>
     log.push({
@@ -122,13 +135,15 @@ test("draft conflict preserves local edits", async ({ page }, info) => {
   await page.route(
     `**/api/themes/builder/tenant-a/documents/${id}`,
     async (route) => {
-      if (route.request().method() === "PUT" && conflict)
+      if (route.request().method() === "PUT" && conflict) {
         await route.fulfill({
           status: 409,
           contentType: "application/json",
           body: '{"error":"Draft revision conflict"}',
         })
-      else await route.continue()
+      } else {
+        await route.continue()
+      }
     },
   )
   await page.getByRole("button", { name: "Save draft", exact: true }).click()
@@ -154,7 +169,16 @@ test("read-only UI and authenticated cross-tenant API denial", async ({
   expect(
     (await request.get("/api/themes/builder/tenant-a/documents")).status(),
   ).toBe(401)
-  const session = await (await request.get("/qa/session")).json()
+  const session = requireObservedRecord(
+    await (await request.get("/qa/session")).json(),
+  )
+
+  if (typeof session.token !== "string") {
+    throw new Error(
+      "Expected the synthetic builder session token to be a string",
+    )
+  }
+
   expect(
     (
       await request.get("/api/themes/builder/tenant-b/documents", {
@@ -198,7 +222,7 @@ test("edits made during a real save remain dirty after acknowledgment", async ({
     (r) => r.request().method() === "PUT" && r.url().endsWith(`/${id}`),
   )
   await page.getByRole("button", { name: "Save draft", exact: true }).click()
-  expect((await (await response).json()).revision).toBe(2)
+  expect(requireObservedRecord(await (await response).json()).revision).toBe(2)
 })
 
 for (const viewport of [
@@ -224,6 +248,7 @@ for (const viewport of [
       .getByTestId("theme-builder")
       .evaluate((element) => {
         const style = getComputedStyle(element)
+
         return { text: style.color, background: style.backgroundColor }
       })
     expect(colours.background).not.toBe("rgba(0, 0, 0, 0)")

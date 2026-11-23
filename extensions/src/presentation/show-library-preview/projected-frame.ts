@@ -18,8 +18,11 @@ export function projectedFrame(
     metadata,
     revision,
   )
+
   // Preserve the old assertion argument for existing callers; it cannot override data.
-  if (expectedSeconds !== undefined && expectedSeconds !== frame.seconds)
+  if (expectedSeconds !== undefined && expectedSeconds !== frame.seconds) {
     throw new Error("show-preview:authored-duration-mismatch")
+  }
+
   return frame
 }

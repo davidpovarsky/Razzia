@@ -17,6 +17,7 @@ const browser = await chromium.launch({
 const failures = []
 const page = await browser.newPage({ viewport: { width: 1240, height: 950 } })
 page.on("pageerror", (error) => failures.push(error.message))
+
 try {
   await page.goto(origin, { waitUntil: "networkidle", timeout: 30000 })
   await expect(
@@ -32,7 +33,7 @@ try {
   await expect(
     page.getByText("The Great Guess-off", { exact: true }).first(),
   ).toBeVisible()
-  await page.screenshot({ path: shot + "/guessoff-intro.png", fullPage: false })
+  await page.screenshot({ path: `${shot}/guessoff-intro.png`, fullPage: false })
   await page.getByRole("button", { name: /Start playing/i }).click()
 
   await expect(page.getByText(/What causes the biggest delay/)).toBeVisible()
@@ -41,7 +42,7 @@ try {
   await expect(page.getByText(/Here's how the audience voted!/)).toBeVisible()
   await expect(page.getByText(/Sample votes are simulated/)).toBeVisible()
   await page.screenshot({
-    path: shot + "/guessoff-survey.png",
+    path: `${shot}/guessoff-survey.png`,
     fullPage: false,
   })
   await page.getByRole("button", { name: /Next question/ }).click()
@@ -52,7 +53,7 @@ try {
   await expect(page.getByAltText("Banana")).toBeVisible()
   await expect(page.getByAltText("Cherry")).toBeVisible()
   await page.screenshot({
-    path: shot + "/guessoff-pictures.png",
+    path: `${shot}/guessoff-pictures.png`,
     fullPage: false,
   })
   await page.getByRole("button", { name: /Banana/ }).click()
@@ -74,7 +75,7 @@ try {
   await expect(
     page.getByRole("heading", { name: /The leaderboard/ }),
   ).toBeVisible()
-  await page.screenshot({ path: shot + "/guessoff-board.png", fullPage: false })
+  await page.screenshot({ path: `${shot}/guessoff-board.png`, fullPage: false })
   await page.getByRole("button", { name: /Go to the grand finale/ }).click()
 
   await expect(page.getByText(/Which one are YOU at a party/)).toBeVisible()
@@ -89,7 +90,7 @@ try {
   await page.getByRole("button", { name: /Reveal the winner/ }).click()
   await expect(page.getByRole("heading", { name: /YOU!/ })).toBeVisible()
   await page.screenshot({
-    path: shot + "/guessoff-winner.png",
+    path: `${shot}/guessoff-winner.png`,
     fullPage: false,
   })
 
@@ -97,16 +98,16 @@ try {
   await expect(
     page.getByRole("button", { name: /Start playing/ }),
   ).toBeVisible()
-  await page.goto(origin + "/?view=store")
+  await page.goto(`${origin}/?view=store`)
   await expect(
     page.getByRole("heading", { name: "The Great Guess-off" }),
   ).toBeVisible()
   await page.screenshot({
-    path: shot + "/guessoff-library.png",
+    path: `${shot}/guessoff-library.png`,
     fullPage: false,
   })
   await page.setViewportSize({ width: 390, height: 844 })
-  await page.goto(origin + "/?view=demo&game=guessoff")
+  await page.goto(`${origin}/?view=demo&game=guessoff`)
   await expect(
     page.getByRole("button", { name: /Start playing/i }),
   ).toBeVisible()
@@ -115,18 +116,23 @@ try {
     content: el.scrollWidth,
     width: el.clientWidth,
   }))
+
   if (dimensions.content > dimensions.width + 2) {
-    throw new Error("MOBILE_STAGE_OVERFLOW: " + JSON.stringify(dimensions))
+    throw new Error(`MOBILE_STAGE_OVERFLOW: ${JSON.stringify(dimensions)}`)
   }
+
   await page.screenshot({
-    path: shot + "/guessoff-mobile.png",
+    path: `${shot}/guessoff-mobile.png`,
     fullPage: false,
   })
   const unexpectedErrors = failures.filter(
     (m) => !m.includes("errors:auth.sessionFailed"),
   )
-  if (unexpectedErrors.length)
+
+  if (unexpectedErrors.length) {
     throw new Error("PAGEERRORS: " + unexpectedErrors.join(","))
+  }
+
   console.log(
     "PASS: homepage CTA, 5 questions, 8 images, 3 polls, 2 trivia, 2 scoreboards, champion, restart and library",
   )

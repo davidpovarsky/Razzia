@@ -10,7 +10,9 @@ import { canonicalJson, sha256 } from "./digest"
 import type { z } from "zod"
 
 export type ShowLibraryRegistry = z.infer<typeof libraryRegistrySchema>
+
 const key = (ref: { id: string; version: string }) => `${ref.id}@${ref.version}`
+
 /** A candidate registry validates contracts. It never registers executable code. */
 export function createShowLibraryRegistry(
   input: unknown,
@@ -24,8 +26,10 @@ export function createShowLibraryRegistry(
   ]) {
     const seen = new Set<string>()
     for (const entry of entries) {
-      if (seen.has(key(entry)))
+      if (seen.has(key(entry))) {
         throw new Error("show-library:duplicate-version")
+      }
+
       seen.add(key(entry))
     }
   }
@@ -39,53 +43,86 @@ export function createShowLibraryRegistry(
     }
   }
   for (const component of registry.components) {
-    for (const port of component.childPorts)
+    for (const port of component.childPorts) {
       for (const ref of port.allowedComponents) {
-        if (!components.has(key(ref)))
+        if (!components.has(key(ref))) {
           throw new Error("show-library:unknown-child-component")
+        }
       }
+    }
     for (const ref of component.motions) {
       const motion = motions.get(key(ref))
-      if (!motion || !motion.components.some((c) => key(c) === key(component)))
+
+      if (
+        !motion ||
+        !motion.components.some((c) => key(c) === key(component))
+      ) {
         throw new Error("show-library:incompatible-motion")
+      }
     }
   }
   for (const template of registry.templates) {
-    if (new Set(template.layouts).size !== 3)
+    if (new Set(template.layouts).size !== 3) {
       throw new Error("show-library:responsive-layouts")
+    }
+
     const nodes = new Map(template.nodes.map((n) => [n.nodeId, n]))
-    if (nodes.size !== template.nodes.length)
+
+    if (nodes.size !== template.nodes.length) {
       throw new Error("show-library:duplicate-node")
+    }
+
     const root = nodes.get(template.rootNodeId)
-    if (!root || root.port !== "stage-root")
+
+    if (!root || root.port !== "stage-root") {
       throw new Error("show-library:invalid-root")
+    }
+
     const parents = new Map<string, number>()
     const bindings = new Set<string>()
     const visited = new Set<string>(),
       active = new Set<string>()
     const visit = (id: string, depth: number): void => {
-      if (depth > 8 || active.has(id))
+      if (depth > 8 || active.has(id)) {
         throw new Error("show-library:graph-depth-or-cycle")
+      }
+
       const node = nodes.get(id)
-      if (!node) throw new Error("show-library:unknown-child-node")
+
+      if (!node) {
+        throw new Error("show-library:unknown-child-node")
+      }
+
       const component = components.get(key(node.component))
-      if (!component || !component.allowedPorts.includes(node.port))
+
+      if (!component || !component.allowedPorts.includes(node.port)) {
         throw new Error("show-library:component-port")
-      for (const role of template.roles)
-        if (!component.capabilities.roles.includes(role))
+      }
+
+      for (const role of template.roles) {
+        if (!component.capabilities.roles.includes(role)) {
           throw new Error("show-library:role-capability")
-      if (!component.capabilities.phases.includes(template.phase))
+        }
+      }
+
+      if (!component.capabilities.phases.includes(template.phase)) {
         throw new Error("show-library:phase-capability")
+      }
+
       if (
         template.questionType &&
         !component.capabilities.questionTypes.includes(template.questionType)
-      )
+      ) {
         throw new Error("show-library:question-type-capability")
+      }
+
       if (
         template.playMode &&
         !component.capabilities.playModes.includes(template.playMode)
-      )
+      ) {
         throw new Error("show-library:play-mode-capability")
+      }
+
       for (const [inputName, binding] of Object.entries(node.bindings)) {
         if (
           [
@@ -100,44 +137,63 @@ export function createShowLibraryRegistry(
             "estimation",
           ].includes(binding) &&
           node.layout.lane !== "content"
-        )
+        ) {
           throw new Error("show-library:system-content-lane")
-        if (inputName !== binding)
+        }
+
+        if (inputName !== binding) {
           throw new Error("show-library:binding-input-name")
-        if (!component.bindings.includes(binding))
+        }
+
+        if (!component.bindings.includes(binding)) {
           throw new Error("show-library:binding-whitelist")
-        for (const role of template.roles)
-          if (!bindingAllowed(binding, role, template.phase))
+        }
+
+        for (const role of template.roles) {
+          if (!bindingAllowed(binding, role, template.phase)) {
             throw new Error("show-library:binding-role-phase")
+          }
+        }
         bindings.add(binding)
       }
       for (const motion of node.motions) {
         const registered = motions.get(key(motion))
+
         if (
           !registered ||
           !registered.ports.includes(node.port) ||
           !component.motions.some((m) => key(m) === key(motion))
-        )
+        ) {
           throw new Error("show-library:node-motion")
+        }
       }
       active.add(id)
       for (const [port, children] of Object.entries(node.children)) {
         const spec = component.childPorts.find((p) => p.id === port)
-        if (!spec || children.length > spec.maxChildren)
+
+        if (!spec || children.length > spec.maxChildren) {
           throw new Error("show-library:child-port")
+        }
+
         for (const child of children) {
           const target = nodes.get(child)
+
           if (
             !target ||
             target.port !== port ||
             !spec.allowedComponents.some(
               (c) => key(c) === key(target.component),
             )
-          )
+          ) {
             throw new Error("show-library:child-type")
+          }
+
           parents.set(child, (parents.get(child) ?? 0) + 1)
-          if ((parents.get(child) ?? 0) > 1)
+
+          if ((parents.get(child) ?? 0) > 1) {
             throw new Error("show-library:multiple-parents")
+          }
+
           visit(child, depth + 1)
         }
       }
@@ -145,8 +201,11 @@ export function createShowLibraryRegistry(
       visited.add(id)
     }
     visit(root.nodeId, 1)
-    if (parents.has(root.nodeId) || visited.size !== nodes.size)
+
+    if (parents.has(root.nodeId) || visited.size !== nodes.size) {
       throw new Error("show-library:unreachable-or-root-cycle")
+    }
+
     const answers =
       template.questionType === "estimation" ? "estimation" : "choices"
     const required: Partial<Record<PreviewPhase, string[]>> = {
@@ -159,9 +218,11 @@ export function createShowLibraryRegistry(
       leaderboard: ["leaderboard"],
       personalResult: ["personal-result"],
     }
-    for (const binding of required[template.phase] ?? [])
-      if (!bindings.has(binding))
+    for (const binding of required[template.phase] ?? []) {
+      if (!bindings.has(binding)) {
         throw new Error("show-library:missing-system-binding")
+      }
+    }
     const answerCapability =
       template.questionType === "estimation"
         ? "valid-estimation-options"
@@ -176,10 +237,13 @@ export function createShowLibraryRegistry(
       leaderboard: ["public-leaderboard"],
       personalResult: ["own-player-result"],
     }
-    for (const capability of system[template.phase] ?? [])
-      if (!template.requiredSystemCapabilities.some((c) => c === capability))
+    for (const capability of system[template.phase] ?? []) {
+      if (!template.requiredSystemCapabilities.some((c) => c === capability)) {
         throw new Error("show-library:missing-system-capability")
+      }
+    }
   }
+
   return freeze(registry)
 }
 
@@ -193,10 +257,17 @@ export class ImmutableRegistryCatalog {
     const registry = createShowLibraryRegistry(input)
     const digest = sha256(canonicalJson(registry)),
       previous = this.versions.get(key(registry))
-    if (previous && previous.digest !== digest)
+
+    if (previous && previous.digest !== digest) {
       throw new Error("show-library:immutable-version-conflict")
-    if (previous) return previous.registry
+    }
+
+    if (previous) {
+      return previous.registry
+    }
+
     this.versions.set(key(registry), { digest, registry })
+
     return registry
   }
   get(ref: {
@@ -228,6 +299,7 @@ export function inspectCandidateCapabilities(
       : request.answerCount !== null &&
         request.answerCount >= c.minAnswers &&
         request.answerCount <= c.maxAnswers)
+
   return freeze({
     compatible,
     support: "unavailable" as const,

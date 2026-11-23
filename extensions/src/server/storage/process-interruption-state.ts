@@ -4,6 +4,7 @@ import path from "node:path"
 import { createHash } from "node:crypto"
 
 export const PROCESS_MEDIA_NAME = "synthetic.png"
+
 export const PROCESS_BOUNDARIES = [
   "quarantine-copy",
   "staged-journal",
@@ -16,20 +17,41 @@ export const PROCESS_BOUNDARIES = [
   "quiz-base-write",
   "quiz-sidecar-write",
 ] as const
+
 export type ProcessBoundary = (typeof PROCESS_BOUNDARIES)[number]
+
+function isProcessRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value)
+}
+
+export function requireProcessRecord(value: unknown): Record<string, unknown> {
+  if (!isProcessRecord(value)) {
+    throw new Error("Invalid synthetic process evidence record")
+  }
+
+  return value
+}
 
 export function assertProcessFixture(root: string, token: string) {
   const resolved = fs.realpathSync(root)
+
   if (
     path.dirname(resolved) !== fs.realpathSync(os.tmpdir()) ||
     !path.basename(resolved).startsWith("tadazz-recovery-synthetic-")
-  )
+  ) {
     throw new Error("Refusing non-synthetic process fixture")
-  const marker = JSON.parse(
-    fs.readFileSync(path.join(resolved, ".process-fixture.json"), "utf8"),
+  }
+
+  const marker = requireProcessRecord(
+    JSON.parse(
+      fs.readFileSync(path.join(resolved, ".process-fixture.json"), "utf8"),
+    ),
   )
-  if (marker.token !== token || marker.kind !== "recovery-process-test")
+
+  if (marker.token !== token || marker.kind !== "recovery-process-test") {
     throw new Error("Process fixture ownership token mismatch")
+  }
+
   return resolved
 }
 
@@ -40,15 +62,16 @@ export function processFixtureState(root: string) {
     ["show-a", "show-b", "unrelated"].map((id) => {
       const base = path.join(root, "quizz", `${id}.json`)
       const sidecar = path.join(root, "extensions/quizzes", `${id}.json`)
+
       return [
         id,
         {
-          base: JSON.parse(fs.readFileSync(base, "utf8")),
-          extras: JSON.parse(fs.readFileSync(sidecar, "utf8")),
+          base: JSON.parse(fs.readFileSync(base, "utf8")) as unknown,
+          extras: JSON.parse(fs.readFileSync(sidecar, "utf8")) as unknown,
           baseSha256: digest(base),
           sidecarSha256: digest(sidecar),
         },
-      ]
+      ] as const
     }),
   )
   const journalRoot = path.join(root, "extensions/quizzes/.journal")
@@ -71,9 +94,10 @@ export function processFixtureState(root: string) {
   ].map((file) => ({
     path: path.relative(root, file),
     sha256: digest(file),
-    entry: JSON.parse(fs.readFileSync(file, "utf8")),
+    entry: JSON.parse(fs.readFileSync(file, "utf8")) as unknown,
   }))
   const media = path.join(root, "media", PROCESS_MEDIA_NAME)
+
   return {
     shows,
     mediaSha256: fs.existsSync(media) ? digest(media) : null,
@@ -85,4 +109,51 @@ export function processFixtureState(root: string) {
     })),
   }
 }
+
 export type ProcessFixtureState = ReturnType<typeof processFixtureState>
+
+function isProcessFixtureState(value: unknown): value is ProcessFixtureState {
+  if (!isProcessRecord(value)) {
+    return false
+  }
+
+  const { shows, journals, quarantine } = value
+
+  return (
+    isProcessRecord(shows) &&
+    ["show-a", "show-b", "unrelated"].every((id) => Object.hasOwn(shows, id)) &&
+    Object.values(shows).every(
+      (show) =>
+        isProcessRecord(show) &&
+        Object.hasOwn(show, "base") &&
+        Object.hasOwn(show, "extras") &&
+        typeof show.baseSha256 === "string" &&
+        typeof show.sidecarSha256 === "string",
+    ) &&
+    (value.mediaSha256 === null || typeof value.mediaSha256 === "string") &&
+    typeof value.unrelatedMediaSha256 === "string" &&
+    Array.isArray(journals) &&
+    journals.every(
+      (entry: unknown) =>
+        isProcessRecord(entry) &&
+        typeof entry.path === "string" &&
+        typeof entry.sha256 === "string" &&
+        Object.hasOwn(entry, "entry"),
+    ) &&
+    Array.isArray(quarantine) &&
+    quarantine.every(
+      (entry: unknown) =>
+        isProcessRecord(entry) &&
+        typeof entry.name === "string" &&
+        typeof entry.sha256 === "string",
+    )
+  )
+}
+
+export function requireProcessState(value: unknown): ProcessFixtureState {
+  if (!isProcessFixtureState(value)) {
+    throw new Error("Invalid synthetic process evidence state")
+  }
+
+  return value
+}

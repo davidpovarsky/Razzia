@@ -8,10 +8,13 @@ export const PHONE_ACTIONS: readonly Action[] = [
   "answer",
   "hangup",
 ]
+
 export const DUMMY_HASH = "0".repeat(64)
+
 export function authorityDenied(): never {
   throw new Denied("authority_unavailable")
 }
+
 export function serviceDenied(): never {
   throw new Denied("service_denied")
 }
@@ -29,23 +32,35 @@ export function copyAddress(input: ServiceAddress): ServiceAddress {
     address.game,
     address.provider,
     address.service,
-  ])
+  ]) {
     identifier(part)
-  if (!Number.isSafeInteger(address.version) || address.version < 1)
+  }
+
+  if (!Number.isSafeInteger(address.version) || address.version < 1) {
     serviceDenied()
+  }
+
   return address
 }
+
 export function canonicalActions(
   actions: readonly Action[],
 ): readonly Action[] {
+  const validatedActions: readonly unknown[] = actions
+
   if (
     !Array.isArray(actions) ||
     actions.length !== new Set(actions).size ||
-    actions.some((action) => !PHONE_ACTIONS.includes(action))
-  )
+    !validatedActions.every((action): action is Action =>
+      PHONE_ACTIONS.some((allowed) => allowed === action),
+    )
+  ) {
     serviceDenied()
-  return Object.freeze([...actions].sort())
+  }
+
+  return Object.freeze([...validatedActions].sort())
 }
+
 export function sameHash(a: string, b: string): boolean {
   return (
     /^[0-9a-f]{64}$/u.test(a) &&
@@ -53,18 +68,26 @@ export function sameHash(a: string, b: string): boolean {
     timingSafeEqual(Buffer.from(a, "hex"), Buffer.from(b, "hex"))
   )
 }
+
 export function serviceCapabilityHash(
   input: ServiceCredentialBinding,
   capability: string,
 ): string {
   const address = copyAddress(input)
-  if (typeof capability !== "string" || !/^[0-9a-f]{64}$/u.test(capability))
+
+  if (typeof capability !== "string" || !/^[0-9a-f]{64}$/u.test(capability)) {
     serviceDenied()
+  }
+
   identifier(input.issuerSid)
   identifier(input.executorId)
-  if (!Number.isSafeInteger(input.expiresAt) || input.expiresAt < 0)
+
+  if (!Number.isSafeInteger(input.expiresAt) || input.expiresAt < 0) {
     serviceDenied()
+  }
+
   const initial = canonicalActions(input.initialActions)
+
   return createHash("sha256")
     .update("tadazz:phone-service:v2\0")
     .update(
@@ -84,6 +107,7 @@ export function serviceCapabilityHash(
     .update(Buffer.from(capability, "hex"))
     .digest("hex")
 }
+
 export const fingerprint = (values: readonly unknown[]) =>
   createHash("sha256").update(JSON.stringify(values)).digest("hex")
 
@@ -94,6 +118,9 @@ export function deriveServiceId(
   provider: string,
   requestId: string,
 ) {
-  for (const value of [owner, game, provider, requestId]) identifier(value)
+  for (const value of [owner, game, provider, requestId]) {
+    identifier(value)
+  }
+
   return fingerprint(["phone-service-id-v1", owner, game, provider, requestId])
 }

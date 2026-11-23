@@ -7,6 +7,7 @@ import { safeError, ToolError } from "./errors.ts"
 
 export function firstPartyUrl(value: string, config: ServerConfig) {
   const u = new URL(value)
+
   if (
     u.protocol !== "https:" ||
     u.username ||
@@ -14,8 +15,9 @@ export function firstPartyUrl(value: string, config: ServerConfig) {
     u.hash ||
     u.search ||
     !config.firstPartyOrigins?.includes(u.origin)
-  )
+  ) {
     throw new ToolError("INTERNAL")
+  }
 }
 
 export function failureResult(
@@ -25,6 +27,7 @@ export function failureResult(
   correlationId = randomUUID(),
 ) {
   const failure = safeError(error)
+
   if (failure.consentUrl) {
     try {
       firstPartyUrl(failure.consentUrl, config)
@@ -36,6 +39,7 @@ export function failureResult(
       failure.retryable = false
     }
   }
+
   // Every tool has this same strict failure branch. Unknown names are never echoed.
   const structuredContent = jsonObject.parse(
     outputs[name ?? "get_game_draft"].parse({
@@ -45,6 +49,7 @@ export function failureResult(
       error: failure,
     }),
   )
+
   return {
     isError: true,
     content: [

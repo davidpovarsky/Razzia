@@ -11,7 +11,8 @@ const checks = [],
   errors = [],
   responses = [],
   screenshots = []
-let current
+let current = undefined
+
 const scenes = [
   ["transition", "Transition"],
   ["animation", "Animation"],
@@ -27,17 +28,21 @@ async function check(name, fn) {
   try {
     const detail = await fn()
     checks.push({ name, ...detail })
-    console.log("PASS " + name)
+    console.log(`PASS ${name}`)
   } catch (e) {
     failures.push({ name, error: String(e) })
     console.log("FAIL " + name + " " + e)
-    if (current)
+
+    if (current) {
       await current
         .screenshot({
           path: path.join(out, "failure-" + failures.length + ".png"),
           fullPage: true,
         })
-        .catch(() => {})
+        .catch(() => {
+          /* Keep the recorded audit outcome if its diagnostic screenshot is unavailable. */
+        })
+    }
   }
 }
 async function nativeState(page, container) {
@@ -47,10 +52,11 @@ async function nativeState(page, container) {
   await expect(stage).toBeVisible({ timeout: 15000 })
   await page.evaluate(async () => {
     await document.fonts.ready
-    await new Promise((r) =>
-      requestAnimationFrame(() => requestAnimationFrame(r)),
-    )
+    await new Promise((r) => {
+      requestAnimationFrame(() => requestAnimationFrame(r))
+    })
   })
+
   return container.evaluate((el) => ({
     renderer: el
       .querySelector("[data-editor-preview-renderer]")
@@ -71,12 +77,14 @@ async function nativeState(page, container) {
       const r = el
         .querySelector("[data-testid=editor-preview-viewport]")
         ?.getBoundingClientRect()
+
       return r ? { width: r.width, height: r.height } : null
     })(),
     innerRect: (() => {
       const r = el
         .querySelector("[data-original-razzia-preview]>div, .tzv4-stage")
         ?.getBoundingClientRect()
+
       return r ? { width: r.width, height: r.height } : null
     })(),
     media: [...el.querySelectorAll("audio,video")].map((m) => ({
@@ -90,14 +98,15 @@ async function nativeState(page, container) {
 async function capture(page, name, container) {
   await page.evaluate(async () => {
     await document.fonts.ready
-    await new Promise((r) =>
-      requestAnimationFrame(() => requestAnimationFrame(r)),
-    )
+    await new Promise((r) => {
+      requestAnimationFrame(() => requestAnimationFrame(r))
+    })
   })
   await container.scrollIntoViewIfNeeded()
-  await container.screenshot({ path: path.join(out, name + ".png") })
-  screenshots.push(name + ".png")
+  await container.screenshot({ path: path.join(out, `${name}.png`) })
+  screenshots.push(`${name}.png`)
 }
+
 try {
   for (const theme of ["razzia-original", "tadazz-classic"]) {
     const context = await browser.newContext({
@@ -108,11 +117,12 @@ try {
     const page = await context.newPage()
     current = page
     page.setDefaultTimeout(15000)
-    console.log("START " + theme)
+    console.log(`START ${theme}`)
     page.on("pageerror", (e) => errors.push({ theme, error: e.message }))
     page.on("response", (r) => {
-      if (r.status() >= 400)
+      if (r.status() >= 400) {
         responses.push({ theme, status: r.status(), url: r.url() })
+      }
     })
     await page.addInitScript(() => localStorage.setItem("i18nextLng", "en"))
     await page.goto("http://127.0.0.1:3180/manager?lng=en")
@@ -123,26 +133,32 @@ try {
     await page.getByTestId("editor-save-btn").waitFor()
     await page
       .getByPlaceholder("Quizz title...")
-      .fill("Live preview proof " + theme)
+      .fill(`Live preview proof ${theme}`)
     await page
       .getByPlaceholder("Start typing your question...")
       .fill("Which color is the sky?")
     await page.getByTestId("answer-text-0").fill("Blue")
     await page.getByTestId("answer-text-1").fill("Green")
     await page.getByTestId("studio-tab-settings").click()
-    const themeCard = page.getByTestId("show-theme-" + theme)
+    const themeCard = page.getByTestId(`show-theme-${theme}`)
     const choose = themeCard.getByRole("button")
-    if (await choose.isEnabled()) await choose.click()
-    if (await page.getByRole("alertdialog").isVisible())
+
+    if (await choose.isEnabled()) {
+      await choose.click()
+    }
+
+    if (await page.getByRole("alertdialog").isVisible()) {
       await page
         .getByRole("alertdialog")
         .getByRole("button", { name: "Use this theme", exact: true })
         .click()
+    }
+
     await page.getByTestId("studio-tab-questions").click()
     const preview = page.getByTestId("question-live-preview")
     for (const phase of ["question", "answers", "results"]) {
-      await page.getByTestId("question-preview-phase-" + phase).click()
-      await check(theme + " question " + phase + " exact native", async () => {
+      await page.getByTestId(`question-preview-phase-${phase}`).click()
+      await check(`${theme} question ${phase} exact native`, async () => {
         const state = await nativeState(page, preview)
         expect(state.fallback).toBe(false)
         expect(state.theme).toBe(theme)
@@ -151,13 +167,14 @@ try {
             ? "razzia-native-stage"
             : "tadazz-classic-stage",
         )
-        await capture(page, theme + "-question-" + phase, preview)
+        await capture(page, `${theme}-question-${phase}`, preview)
+
         return state
       })
     }
     await page.getByTestId("question-preview-phase-answers").click()
     await check(
-      theme + " unsaved question and answer text update",
+      `${theme} unsaved question and answer text update`,
       async () => {
         await page
           .getByPlaceholder("Start typing your question...")
@@ -172,25 +189,27 @@ try {
             .getByTestId("answer-text-0")
             .evaluate((e) => e === document.activeElement),
         ).toBe(true)
+
         return state
       },
     )
     for (const aspect of ["4-3", "16-9"]) {
-      await page.getByTestId("question-preview-aspect-" + aspect).click()
-      await check(theme + " question aspect " + aspect, async () => {
+      await page.getByTestId(`question-preview-aspect-${aspect}`).click()
+      await check(`${theme} question aspect ${aspect}`, async () => {
         const state = await nativeState(page, preview)
         const ratio = aspect === "4-3" ? 4 / 3 : 16 / 9
         expect(
           Math.abs(state.rect.width / state.rect.height - ratio),
         ).toBeLessThan(0.02)
-        await capture(page, theme + "-question-aspect-" + aspect, preview)
+        await capture(page, `${theme}-question-aspect-${aspect}`, preview)
+
         return { rect: state.rect }
       })
     }
     for (const width of [390, 320]) {
       await page.setViewportSize({ width, height: 900 })
       await check(
-        theme + " actual inner stage fills mobile " + width,
+        `${theme} actual inner stage fills mobile ${width}`,
         async () => {
           const state = await nativeState(page, preview)
           expect(state.innerRect).not.toBeNull()
@@ -200,13 +219,14 @@ try {
           expect(
             Math.abs(state.innerRect.height - state.rect.height),
           ).toBeLessThan(2)
-          await capture(page, theme + "-mobile-" + width, preview)
+          await capture(page, `${theme}-mobile-${width}`, preview)
+
           return { rect: state.rect, innerRect: state.innerRect }
         },
       )
     }
     await page.setViewportSize({ width: 1600, height: 1000 })
-    await check(theme + " question hide show replay", async () => {
+    await check(`${theme} question hide show replay`, async () => {
       await preview
         .getByRole("button", { name: "Hide preview", exact: true })
         .click()
@@ -218,6 +238,7 @@ try {
         .click()
       await page.getByTestId("question-preview-replay").click()
       const state = await nativeState(page, preview)
+
       return state
     })
     for (const [kind, label] of scenes) {
@@ -243,8 +264,10 @@ try {
           }[kind] ?? "interlude"
         expect(state.slot).toBe(expectedSlot)
         await capture(page, theme + "-" + kind, scenePreview)
+
         return state
       })
+
       if (["opening", "closing"].includes(kind)) {
         await check(
           theme + " " + kind + " truthful native preset title controls",
@@ -264,10 +287,12 @@ try {
                 page.getByPlaceholder("Card description or subtitle..."),
               ).toBeVisible()
             }
+
             return {}
           },
         )
       }
+
       if (kind === "transition" && theme === "tadazz-classic") {
         await check(
           "Classic maximum120character transition remains inside native stage",
@@ -279,6 +304,7 @@ try {
                 stage = el.querySelector(".tzv4-stage")
               const t = title.getBoundingClientRect(),
                 s = stage.getBoundingClientRect()
+
               return {
                 title: {
                   x: t.x,
@@ -312,24 +338,29 @@ try {
             expect(bounds.scrollWidth).toBeLessThanOrEqual(
               bounds.clientWidth + 1,
             )
-            await capture(page, theme + "-transition-max120", scenePreview)
+            await capture(page, `${theme}-transition-max120`, scenePreview)
             await page
               .getByTestId("scene-title-input")
               .fill(label + " live " + theme)
+
             return bounds
           },
         )
       }
+
       await page.getByTestId("studio-preview-aspect-4-3").click()
       await check(theme + " " + kind + " aspect 4:3", async () => {
         const rect = await scenePreview.boundingBox()
         expect(Math.abs(rect.width / rect.height - 4 / 3)).toBeLessThan(0.03)
+
         return { rect }
       })
       await page.getByTestId("studio-preview-aspect-16-9").click()
+
       if (!["leaderboard", "interimResults", "answerRecap"].includes(kind)) {
         await check(theme + " " + kind + " play scrub reset", async () => {
           const slider = page.getByTestId("studio-preview-scrub-slider")
+
           if (kind === "countdown") {
             await slider.fill("7000")
             await expect(
@@ -337,10 +368,11 @@ try {
             ).toBeVisible()
             await capture(
               page,
-              theme + "-countdown-scrub-seven-seconds",
+              `${theme}-countdown-scrub-seven-seconds`,
               scenePreview,
             )
           }
+
           await slider.fill("1000")
           await expect(slider).toHaveValue("1000")
           await page.getByTestId("studio-preview-play-pause").click()
@@ -354,6 +386,7 @@ try {
             .poll(async () => Number(await slider.inputValue()))
             .toBeLessThan(Number(elapsed) + 500)
           await page.getByTestId("studio-preview-play-pause").click()
+
           return {
             playedTo: elapsed,
             readout: await page
@@ -371,10 +404,12 @@ try {
             await expect(
               page.getByTestId("studio-preview-scrub-slider"),
             ).toHaveCount(0)
+
             return {}
           },
         )
       }
+
       if (["opening", "closing"].includes(kind)) {
         await check(
           theme + " " + kind + " layer edit and native stage",
@@ -383,8 +418,10 @@ try {
             await expect(
               scenePreview.locator("[data-native-application-preview]"),
             ).toHaveCount(0)
+
             if (kind === "opening") {
               await page.getByTestId("studio-overlay-add-btn").click()
+
               if (
                 (await page
                   .locator('[data-testid^="studio-overlay-asset-"]')
@@ -401,6 +438,7 @@ try {
                     ),
                   )
               }
+
               const asset = page
                 .locator('[data-testid^="studio-overlay-asset-"]')
                 .last()
@@ -449,18 +487,20 @@ try {
                 page.getByPlaceholder("Card description or subtitle..."),
               ).toBeVisible()
               checks.push({
-                name:
-                  theme +
-                  " opening real Lottie layer keyboard+drag updates unsaved position",
+                name: `${
+                  theme
+                } opening real Lottie layer keyboard+drag updates unsaved position`,
                 id,
                 before,
                 after: await x.inputValue(),
               })
             }
+
             await capture(page, theme + "-" + kind + "-layers", scenePreview)
             await page.getByTestId("scene-preview-mode-stage").click()
             const state = await nativeState(page, scenePreview)
             expect(state.fallback).toBe(false)
+
             return state
           },
         )
@@ -477,10 +517,14 @@ try {
       .innerText()
       .catch(() => "NO BODY"),
   )
-  if (current)
+
+  if (current) {
     await current
       .screenshot({ path: path.join(out, "unhandled.png"), fullPage: true })
-      .catch(() => {})
+      .catch(() => {
+        /* Keep the recorded audit outcome if its diagnostic screenshot is unavailable. */
+      })
+  }
 } finally {
   fs.writeFileSync(
     path.join(out, "audit.json"),
@@ -500,5 +544,8 @@ try {
     }),
   )
   await browser.close()
-  if (failures.length || errors.length) process.exitCode = 1
+
+  if (failures.length || errors.length) {
+    process.exitCode = 1
+  }
 }

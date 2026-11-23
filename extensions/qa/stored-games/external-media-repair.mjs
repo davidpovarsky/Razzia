@@ -43,7 +43,11 @@ export function planQuestionImageRepair({ base, extras, replacements }) {
   const counts = new Map([...targets.keys()].map((url) => [url, 0]))
   for (const [index, question] of nextBase.questions.entries()) {
     const target = targets.get(question.media?.url)
-    if (!target) continue
+
+    if (!target) {
+      continue
+    }
+
     assert.equal(
       question.media.type,
       "image",
@@ -60,6 +64,7 @@ export function planQuestionImageRepair({ base, extras, replacements }) {
   )
   const { id: _storageIdentity, ...quizz } = nextBase
   const baseDigest = digest(quizz)
+
   return {
     base: nextBase,
     paths,
@@ -77,10 +82,11 @@ export function planQuestionImageRepair({ base, extras, replacements }) {
 }
 
 /**
- * request is the existing Playwright APIRequestContext of the synthetic owner.
+ * The request is the existing Playwright APIRequestContext of the synthetic owner.
  * Mirror bytes are read through its authenticated native /media route, verified,
  * then uploaded through POST /api/media. The mirror URL is never saved directly.
  */
+
 export async function qualifyOwnerImageRepair(options) {
   assert.equal(process.platform, "linux")
   assert.equal(process.env.TADAZZ_QA_OWNED_RUN_DIR, "1")
@@ -115,6 +121,7 @@ export async function qualifyOwnerImageRepair(options) {
   const read = async (suffix) => {
     const response = await request.get(origin + suffix, { headers })
     assert.equal(response.status(), 200, "Authenticated owner read")
+
     return response.json()
   }
   const snapshot = async () => ({
@@ -124,7 +131,7 @@ export async function qualifyOwnerImageRepair(options) {
   const savePrivate = (name, value) =>
     writeFileSync(
       join(privateDirectory, fixtureId + "." + name + ".json"),
-      JSON.stringify(value, null, 2) + "\n",
+      `${JSON.stringify(value, null, 2)}\n`,
       { mode: 0o600, flag: "wx" },
     )
   const receipt = {
@@ -139,6 +146,7 @@ export async function qualifyOwnerImageRepair(options) {
     assets: [],
   }
   let phase = "original-preview"
+
   try {
     const originalPreview = await request.get(origin + previewPath, { headers })
     receipt.originalPreviewStatus = originalPreview.status()
@@ -349,6 +357,7 @@ export async function qualifyOwnerImageRepair(options) {
     receipt.externalUrlStillDeniedStatus = 422
     receipt.passed = true
     savePrivate("receipt", receipt)
+
     return {
       base: after.base,
       extras: after.composite.extras,

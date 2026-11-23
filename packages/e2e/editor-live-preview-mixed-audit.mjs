@@ -9,15 +9,16 @@ const browser = await chromium.launch({ channel: "msedge", headless: true })
 const checks = [],
   failures = [],
   errors = []
-let page
+let page = undefined
+
 async function shot(name) {
   await page.evaluate(async () => {
     await document.fonts.ready
-    await new Promise((r) =>
-      requestAnimationFrame(() => requestAnimationFrame(r)),
-    )
+    await new Promise((r) => {
+      requestAnimationFrame(() => requestAnimationFrame(r))
+    })
   })
-  await page.screenshot({ path: path.join(out, name + ".png"), fullPage: true })
+  await page.screenshot({ path: path.join(out, `${name}.png`), fullPage: true })
 }
 async function exact(theme) {
   const preview = page.getByTestId("question-live-preview")
@@ -31,6 +32,7 @@ async function exact(theme) {
     "data-preview-theme",
     theme,
   )
+
   return preview.evaluate((e) => ({
     text: e.innerText,
     theme: e
@@ -49,6 +51,7 @@ async function exact(theme) {
     })),
   }))
 }
+
 try {
   for (const theme of ["tadazz-classic", "razzia-original"]) {
     const context = await browser.newContext({
@@ -68,53 +71,70 @@ try {
     )
     await page.getByTestId("editor-save-btn").waitFor()
     await page.getByTestId("studio-tab-settings").click()
-    const choose = page.getByTestId("show-theme-" + theme).getByRole("button")
-    if (await choose.isEnabled()) await choose.click()
-    if (await page.getByRole("alertdialog").isVisible())
+    const choose = page.getByTestId(`show-theme-${theme}`).getByRole("button")
+
+    if (await choose.isEnabled()) {
+      await choose.click()
+    }
+
+    if (await page.getByRole("alertdialog").isVisible()) {
       await page
         .getByRole("alertdialog")
         .getByRole("button", { name: "Use this theme", exact: true })
         .click()
+    }
+
     await page.getByTestId("studio-tab-questions").click()
     await page.getByTestId("editor-question-card-0").click()
     for (const mode of ["both", "image", "text"]) {
-      await page.getByTestId("answer-mode-0-" + mode).click()
+      await page.getByTestId(`answer-mode-0-${mode}`).click()
       const state = await exact(theme)
       expect(state.number).toBe("1")
       expect(state.total).toBe("3")
       const mediaImages = state.images.filter((n) =>
         (n.src ?? "").includes("/media/"),
       )
-      if (mode === "text") expect(mediaImages).toHaveLength(0)
-      else expect(mediaImages.some((n) => n.naturalWidth > 0)).toBe(true)
+
+      if (mode === "text") {
+        expect(mediaImages).toHaveLength(0)
+      } else {
+        expect(mediaImages.some((n) => n.naturalWidth > 0)).toBe(true)
+      }
+
       if (mode === "image") {
         const caption = page
           .getByTestId("question-preview-native-stage")
           .getByText("Blue", { exact: true })
+
         if (await caption.count()) {
           const className = await caption.getAttribute("class")
-          if (!className?.includes("sr-only"))
+
+          if (!className?.includes("sr-only")) {
             await expect(caption).toBeHidden()
+          }
         }
       }
-      if (mode !== "image")
+
+      if (mode !== "image") {
         await expect(
           page.getByTestId("question-preview-native-stage"),
         ).toContainText("Blue")
+      }
+
       checks.push({
-        name: theme + " current valid question beside estimation; " + mode,
+        name: `${theme} current valid question beside estimation; ${mode}`,
         state,
       })
-      await shot(theme + "-" + mode)
+      await shot(`${theme}-${mode}`)
     }
     await page.getByTestId("editor-question-card-1").click()
     const multi = await exact(theme)
     expect(multi.number).toBe("2")
     expect(multi.total).toBe("3")
-    checks.push({ name: theme + " multi exact", state: multi })
+    checks.push({ name: `${theme} multi exact`, state: multi })
     await page.getByTestId("editor-question-card-2").click()
     for (const phase of ["question", "answers", "results"]) {
-      await page.getByTestId("question-preview-phase-" + phase).click()
+      await page.getByTestId(`question-preview-phase-${phase}`).click()
       await expect(
         page.getByTestId("question-preview-native-stage"),
       ).toBeVisible()
@@ -126,11 +146,11 @@ try {
       const text = await page.getByTestId("question-live-preview").innerText()
       expect(text).not.toContain("fields are incomplete")
       checks.push({
-        name: theme + " estimation native primitive " + phase,
+        name: `${theme} estimation native primitive ${phase}`,
         renderer: "native-estimation-fallback",
         text,
       })
-      await shot(theme + "-estimation-" + phase)
+      await shot(`${theme}-estimation-${phase}`)
     }
     await page.getByTestId("studio-card-kind-select").click()
     await page
@@ -149,22 +169,24 @@ try {
       "Which colour is the sky?",
       "Choose the primary colours",
       "Estimate the number",
-    ])
+    ]) {
       expect(recap).toContain(title)
+    }
     await expect(
       page
         .getByTestId("studio-scene-preview-stage")
         .getByRole("button", { name: "Next", exact: true }),
     ).toHaveCount(0)
     checks.push({
-      name: theme + " exact recap preserves all3 prior native questions",
+      name: `${theme} exact recap preserves all3 prior native questions`,
       recap,
     })
-    await shot(theme + "-recap-all-native-questions")
+    await shot(`${theme}-recap-all-native-questions`)
     await context.close()
   }
 } catch (e) {
   failures.push(String(e))
+
   if (page) {
     console.log(
       (
@@ -174,7 +196,9 @@ try {
           .catch(() => "")
       ).slice(0, 5000),
     )
-    await shot("failure").catch(() => {})
+    await shot("failure").catch(() => {
+      /* Keep the recorded audit outcome if its diagnostic screenshot is unavailable. */
+    })
   }
 } finally {
   const result = { checks, failures, errors }
@@ -184,5 +208,8 @@ try {
   )
   console.log(JSON.stringify(result))
   await browser.close()
-  if (failures.length || errors.length) process.exitCode = 1
+
+  if (failures.length || errors.length) {
+    process.exitCode = 1
+  }
 }
