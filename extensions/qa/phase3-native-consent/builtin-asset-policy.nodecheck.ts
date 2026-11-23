@@ -1,12 +1,6 @@
 import assert from "node:assert/strict"
 import { createHash } from "node:crypto"
-import {
-  copyFileSync,
-  mkdtempSync,
-  readFileSync,
-  rmSync,
-  writeFileSync,
-} from "node:fs"
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { dirname, join, resolve } from "node:path"
 import { test } from "node:test"
@@ -403,7 +397,11 @@ test("changed deployed bytes and a forged manifest cannot reuse an earlier admis
 
   try {
     const file = join(temporary, "owned.svg")
-    copyFileSync(join(root, pin.path), file)
+    // The private tamper copy must be writable even when source assets are read-only.
+    writeFileSync(file, readFileSync(join(root, pin.path)), {
+      flag: "wx",
+      mode: 0o600,
+    })
     const assets = factory((entry) => {
       const bytes = readFileSync(file)
 
