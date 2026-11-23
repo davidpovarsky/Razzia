@@ -111,7 +111,7 @@ export async function verifyEditorMutations(options) {
     )
     await page.getByTestId("editor-save-btn").click()
     assert.equal((await saved).status(), 200, "Editor composite save")
-    await page.waitForURL(/\/(studio\/games|manager\/config)$/)
+    await page.waitForURL(`${options.origin}/studio/games`)
   }
   const saveWithPendingCheck = async (overwrite = false) => {
     const apiUrl = `${options.origin}/api/extensions/quizzes/${quizId}`
@@ -171,7 +171,7 @@ export async function verifyEditorMutations(options) {
       }
 
       release()
-      await page.waitForURL(/\/(studio\/games|manager\/config)$/)
+      await page.waitForURL(`${options.origin}/studio/games`)
     } finally {
       release()
       await page.unroute(apiUrl, delayedSave)

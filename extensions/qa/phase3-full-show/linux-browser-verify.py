@@ -5,6 +5,7 @@ No network, published ports, customer mount, installs, old restart or deletion.
 The 1800s ceiling bounds all 40 checks and 44 renderer fixtures. The fresh
 offline browser container uses a two-CPU quota for its renderer and fixture host.
 Behavioral assertions and their individual timeouts remain unchanged.
+Linux Fullshow explicitly selects installed GTK WebKit under local Xvfb.
 The optional transport-race argument runs both browsers against the focused
 Classic transport proof in a separate diagnostic-only receipt namespace.
 """
@@ -96,6 +97,8 @@ def resources():
     result=subprocess.run(["docker","exec",container,"python3","-c",resource_code],capture_output=True,text=True,check=True,timeout=15)
     return json.loads(result.stdout)
 try:
+    display_tools=subprocess.run(["docker","exec",container,"python3","-c","import shutil,sys;sys.exit(0 if all(shutil.which(name) for name in ('xvfb-run','Xvfb','xauth')) else 1)"],capture_output=True,text=True,timeout=15)
+    assert display_tools.returncode==0,"FULLSHOW_GTK_XVFB_TOOLS_MISSING"
     resources_before=resources()
     assert resources_before["memoryLimitBytes"]==memory_limit_bytes and resources_before["memorySwapLimitBytes"]==0,"QA_RESOURCE_LIMIT_MISMATCH"
     assert resources_before["cpuMax"][0]==2*resources_before["cpuMax"][1]>0,"QA_CPU_LIMIT_MISMATCH"
@@ -111,7 +114,7 @@ try:
         assert item["path"] in c["manifest"] and c["manifest"][item["path"]]==item["sha256"]
     # Keep nice 19 and allow both cores within the two-CPU QA quota.
     # A CPU 0 pin starved native browser frames while CPU 1 was idle in QA.
-    argv=["docker","exec","-w","/source","-e","TMPDIR=/tmp","-e","HOME=/tmp","-e","PLAYWRIGHT_BROWSERS_PATH=/root/.cache/ms-playwright","-e","TSX_DISABLE_CACHE=1","-e","NODE_OPTIONS=--max-old-space-size=1024","-e","TADAZZ_FULL_SHOW_EVIDENCE=/evidence/full-show","-e","TADAZZ_FULL_SHOW_SOURCE_SHA="+c["sha"],"-e","TADAZZ_FULL_SHOW_BROWSERS=chromium,webkit",container,"nice","-n","19","timeout","-k","5","1800","node","/cleanup/extensions/node_modules/tsx/dist/cli.mjs","--tsconfig","tsconfig.json","extensions/qa/phase3-full-show/browser-verify.mjs"]
+    argv=["docker","exec","-w","/source","-e","TMPDIR=/tmp","-e","HOME=/tmp","-e","PLAYWRIGHT_BROWSERS_PATH=/root/.cache/ms-playwright","-e","TSX_DISABLE_CACHE=1","-e","NODE_OPTIONS=--max-old-space-size=1024","-e","TADAZZ_FULL_SHOW_EVIDENCE=/evidence/full-show","-e","TADAZZ_FULL_SHOW_SOURCE_SHA="+c["sha"],"-e","TADAZZ_FULL_SHOW_BROWSERS=chromium,webkit","-e","TADAZZ_FULL_SHOW_WEBKIT_BACKEND=gtk-xvfb",container,"nice","-n","19","timeout","-k","5","1800","xvfb-run","-a","-s","-screen 0 1920x1600x24 -nolisten tcp","node","/cleanup/extensions/node_modules/tsx/dist/cli.mjs","--tsconfig","tsconfig.json","extensions/qa/phase3-full-show/browser-verify.mjs"]
     if c["mode"]=="transport-race":
         position=argv.index(container)
         argv[position:position]=["-e","TADAZZ_FULL_SHOW_DIAGNOSTIC=transport-race","-e","TADAZZ_FULL_SHOW_THEMES=tadazz-classic"]
@@ -135,6 +138,8 @@ try:
     inner_path=owned/"full-show/receipt.json"
     inner=json.loads(inner_path.read_text()) if inner_path.is_file() else None
     assert inner is not None, "Full-show browser receipt missing"
+    webkit_engines=[engine for engine in inner.get("engines",[]) if engine.get("name")=="webkit"]
+    assert len(webkit_engines)==1 and webkit_engines[0].get("qaBackend")=="gtk-xvfb" and webkit_engines[0].get("headless") is False,"FULLSHOW_WEBKIT_BACKEND_MISMATCH"
     assert inner["artifactSha256"]==artifact["sha256"]
     assert inner["rendererBuildId"]==artifact["rendererBuildId"]
     engines={entry["name"].split(" / ")[0] for entry in inner["entries"]}
