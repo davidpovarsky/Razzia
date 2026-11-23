@@ -51,21 +51,21 @@
 
 Every phase below is an actual **Asana subtask** under master `1220402777392717`. Update its description with a checkpoint and mark completed **only** when its exit criteria have been tested and attached/linked. Do not close the parent until all phases and the release gate are accepted. An independent agent must be able to resume purely from the repo checkpoint and Asana.
 
-| Phase | Asana task GID | Result |
-| --- | --- | --- |
-| TDS-00 | `1220402430946120` | Baseline, ownership and freeze |
-| TDS-01 | `1220402455305251` | Rules, naming and compatibility contract |
-| TDS-02 | `1220402647256448` | Component inventory and dependency map |
-| TDS-03 | `1220402777623967` | Shared tokens and scoped themes |
-| TDS-04 | `1220402719463680` | Canonical React UI components |
-| TDS-05 | `1220402777822480` | Live component catalog and governance |
-| TDS-06 | `1220402777861386` | Website and Studio polish (not editor) |
+| Phase  | Asana task GID     | Result                                     |
+| ------ | ------------------ | ------------------------------------------ |
+| TDS-00 | `1220402430946120` | Baseline, ownership and freeze             |
+| TDS-01 | `1220402455305251` | Rules, naming and compatibility contract   |
+| TDS-02 | `1220402647256448` | Component inventory and dependency map     |
+| TDS-03 | `1220402777623967` | Shared tokens and scoped themes            |
+| TDS-04 | `1220402719463680` | Canonical React UI components              |
+| TDS-05 | `1220402777822480` | Live component catalog and governance      |
+| TDS-06 | `1220402777861386` | Website and Studio polish (not editor)     |
 | TDS-07 | `1220402729693747` | Full-window stage background and join core |
-| TDS-08 | `1220402719392041` | Host controls, fullscreen modals |
-| TDS-09 | `1220402539686302` | Roster and package/admin dialogs |
-| TDS-10 | `1220402539658409` | Scoped UI motion system |
-| TDS-11 | `1220402430879047` | Naming/brand cleanup, compatibility |
-| TDS-12 | `1220402539686110` | Cross-platform regression, final handoff |
+| TDS-08 | `1220402719392041` | Host controls, fullscreen modals           |
+| TDS-09 | `1220402539686302` | Roster and package/admin dialogs           |
+| TDS-10 | `1220402539658409` | Scoped UI motion system                    |
+| TDS-11 | `1220402430879047` | Naming/brand cleanup, compatibility        |
+| TDS-12 | `1220402539686110` | Cross-platform regression, final handoff   |
 
 ### TDS-00 — Baseline, ownership, freeze (MUST come first)
 
@@ -185,24 +185,24 @@ Every phase below is an actual **Asana subtask** under master `1220402777392717`
 
 ## 4. Source pointers (initial inspection; verify latest paths)
 
-| Concern | Likely current file(s) |
-| --- | --- |
-| New Studio site shell | `extensions/src/site/web/studio/Studio.tsx` |
-| Games listing / duplicated actions | `extensions/src/site/web/studio/MyGames.tsx`, `extensions/src/site/themes/studio.ts` |
-| Site styles, dialog | `extensions/src/site/themes/studio.ts`, `extensions/src/site/web/shared/ReferenceCanvas.tsx`, `extensions/src/site/themes/native.css` |
-| Existing package tool | `extensions/src/site/web/studio/PackageTools.tsx`, `extensions/src/site/themes/packages.ts` |
-| Marketing demo | `extensions/src/site/web/marketing/MarketingSite.tsx` |
-| Old classroom underlay | `packages/web/src/components/GameBackground.tsx`, `packages/web/src/assets/background.png` |
-| Stage host shell | `packages/web/src/features/game/components/GameWrapper.tsx`, `ManagerControlToolbar.tsx` |
-| Host keyboard help | `packages/web/src/features/game/components/HostShortcutsDialog.tsx` |
-| Roster/dialogs | `packages/web/src/features/game/components/HostPlayersModal.tsx`, `GameSettingsModal/index.tsx`, `HistoryDialog.tsx` |
-| Legacy join | `packages/web/src/features/game/components/states/Room.tsx` |
-| Tadazz join | `packages/web/src/features/game/components/tadazz-show/TadazzScreens.tsx` |
-| Creating Worlds seating | `extensions/src/presentation/tadazz-v4/reference-story/SeatingPlan.tsx` |
-| Native cinematic stage | `extensions/src/presentation/tadazz-v4/TadazzV4Stage.tsx`, `motion.ts`, `extensions/src/presentation/tadazz-show/TadazzV4StageAdapter.tsx` |
-| Theme versions/contracts | `extensions/src/core/show-themes/definition.ts`, `classic.manifest.json`, `razzia.manifest.json` |
-| Old serialized authored show | `extensions/src/core/show-authoring-schema.ts`, `show-authoring-convert.ts`, `show-import-preflight.ts` |
-| Original Razzia editor (freeze) | `packages/web/src/features/quizz/**`, `extensions/src/editor/**` |
+| Concern                            | Likely current file(s)                                                                                                                     |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| New Studio site shell              | `extensions/src/site/web/studio/Studio.tsx`                                                                                                |
+| Games listing / duplicated actions | `extensions/src/site/web/studio/MyGames.tsx`, `extensions/src/site/themes/studio.ts`                                                       |
+| Site styles, dialog                | `extensions/src/site/themes/studio.ts`, `extensions/src/site/web/shared/ReferenceCanvas.tsx`, `extensions/src/site/themes/native.css`      |
+| Existing package tool              | `extensions/src/site/web/studio/PackageTools.tsx`, `extensions/src/site/themes/packages.ts`                                                |
+| Marketing demo                     | `extensions/src/site/web/marketing/MarketingSite.tsx`                                                                                      |
+| Old classroom underlay             | `packages/web/src/components/GameBackground.tsx`, `packages/web/src/assets/background.png`                                                 |
+| Stage host shell                   | `packages/web/src/features/game/components/GameWrapper.tsx`, `ManagerControlToolbar.tsx`                                                   |
+| Host keyboard help                 | `packages/web/src/features/game/components/HostShortcutsDialog.tsx`                                                                        |
+| Roster/dialogs                     | `packages/web/src/features/game/components/HostPlayersModal.tsx`, `GameSettingsModal/index.tsx`, `HistoryDialog.tsx`                       |
+| Legacy join                        | `packages/web/src/features/game/components/states/Room.tsx`                                                                                |
+| Tadazz join                        | `packages/web/src/features/game/components/tadazz-show/TadazzScreens.tsx`                                                                  |
+| Creating Worlds seating            | `extensions/src/presentation/tadazz-v4/reference-story/SeatingPlan.tsx`                                                                    |
+| Native cinematic stage             | `extensions/src/presentation/tadazz-v4/TadazzV4Stage.tsx`, `motion.ts`, `extensions/src/presentation/tadazz-show/TadazzV4StageAdapter.tsx` |
+| Theme versions/contracts           | `extensions/src/core/show-themes/definition.ts`, `classic.manifest.json`, `razzia.manifest.json`                                           |
+| Old serialized authored show       | `extensions/src/core/show-authoring-schema.ts`, `show-authoring-convert.ts`, `show-import-preflight.ts`                                    |
+| Original Razzia editor (freeze)    | `packages/web/src/features/quizz/**`, `extensions/src/editor/**`                                                                           |
 
 **Important implementation nuance:** These paths describe consumers/owners, not automatic authorization to modify them. When the only candidate fix involves a protected `packages/**` path, design a downstream adapter, injected component, wrapper or style composition first, then document any truly unavoidable surgical seam and request consent. Do not confuse repository path visibility with ownership.
 

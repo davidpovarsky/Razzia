@@ -26,8 +26,10 @@ import {
   TadazzV4StageAdapter,
   collapseForResume,
   computeShowScene,
+  isShowSceneContentPending,
   isTadazzV4Active,
   planTransition,
+  usesSharedScenePresenter,
   showSceneTransitionIdentity,
   resolveStageBackdrop,
   resolveTadazzAudioPolicy,
@@ -322,6 +324,8 @@ function TadazzShowContent(props: TadazzShowViewProps) {
     () => showSceneTransitionIdentity(scene),
     [scene],
   )
+  const waitingForFinale =
+    scene.kind === "wait" && scene.key === "wait:finale-content"
   const showGameId =
     managerState.gameId ?? extensionState?.gameId ?? playerGameId ?? "show"
   const composition = useNativeCompositionResolution(
@@ -371,20 +375,6 @@ function TadazzShowContent(props: TadazzShowViewProps) {
     !scene.question.questionImage &&
     !scene.question.hasAnswerImages &&
     scene.question.options.every((option) => !option.image)
-
-  if (typeof document !== "undefined") {
-    document.documentElement.style.background =
-      theme.definition.tokens.background
-    document.body.style.background = theme.definition.tokens.background
-  }
-
-  useEffect(
-    () => () => {
-      document.documentElement.style.background = ""
-      document.body.style.background = ""
-    },
-    [],
-  )
 
   const stageRef = useRef<TadazzStageHandle>(null)
   const showRootRef = useRef<HTMLElement | null>(null)
@@ -513,12 +503,16 @@ function TadazzShowContent(props: TadazzShowViewProps) {
 
     return () => clearTimeout(timer)
   }, [scene.kind, votingStartsAt, isPaused])
+  const pausedCountdownRemainingMs =
+    isPaused && scene.kind === "voting"
+      ? (extensionState?.pause?.remainingMs ?? undefined)
+      : undefined
   useEffect(() => {
     const stage = stageRef.current
     const media = showRootRef.current?.querySelectorAll("video, audio") ?? []
 
     if (isPaused) {
-      stage?.pauseAnimations?.()
+      stage?.pauseAnimations?.(pausedCountdownRemainingMs)
       media.forEach((element) => {
         ;(element as HTMLMediaElement).pause()
       })
@@ -534,7 +528,7 @@ function TadazzShowContent(props: TadazzShowViewProps) {
         void mediaElement.play().catch(() => undefined)
       }
     })
-  }, [isPaused])
+  }, [isPaused, pausedCountdownRemainingMs])
   // ── Director: authoritative scene → reference animation methods ────────
   const prevSceneRef = useRef<ShowScene | null>(null)
   const pendingRef = useRef<ShowScene | null>(null)
@@ -632,7 +626,7 @@ function TadazzShowContent(props: TadazzShowViewProps) {
   useEffect(() => {
     // Keep the painted scene and director history until status content and its
     // separately delivered counter/extension envelope describe one question.
-    if (scene.kind === "wait" && scene.key === "wait:question-content") {
+    if (isShowSceneContentPending(scene)) {
       return
     }
 
@@ -953,7 +947,11 @@ function TadazzShowContent(props: TadazzShowViewProps) {
         )
 
       case "wait":
-        if (submitted || Boolean(stageRef.current?.questionKey)) {
+        if (
+          waitingForFinale ||
+          submitted ||
+          Boolean(stageRef.current?.questionKey)
+        ) {
           return null
         }
 
@@ -1028,6 +1026,8 @@ function TadazzShowContent(props: TadazzShowViewProps) {
           <TadazzEstimationResultScreen
             question={scene.question.question}
             estimation={scene.estimation}
+            note={scene.note}
+            isManager={role === "manager"}
           />
         ) : null
 
@@ -1041,6 +1041,10 @@ function TadazzShowContent(props: TadazzShowViewProps) {
 
       case "scene": {
         const s = scene.scene
+
+        if (usesSharedScenePresenter(s)) {
+          return props.nativeContent
+        }
 
         if (
           s.kind === "animation" &&
@@ -1216,6 +1220,8 @@ function TadazzShowContent(props: TadazzShowViewProps) {
 
     return resolveTadazzAudioPolicy({
       statusName: props.statusName,
+      presentationLaunch: extensionState?.extras.presentationLaunch,
+      activeTimelineStep: extensionState?.extras.activeTimelineStep,
       extensionPhase: extensionState?.phase,
       sceneKind: descriptor?.kind ?? scene.kind,
       scenePreset:
@@ -1226,10 +1232,20 @@ function TadazzShowContent(props: TadazzShowViewProps) {
           : null,
       openingActive: false,
     })
-  }, [extensionState?.phase, props.statusName, scene])
+  }, [
+    extensionState?.phase,
+    extensionState?.extras.presentationLaunch,
+    extensionState?.extras.activeTimelineStep,
+    props.statusName,
+    scene,
+  ])
   let overlay: React.ReactNode = null
 
-  if (scene.kind === "scene" && isCinematicScene(scene.scene)) {
+  if (
+    scene.kind === "scene" &&
+    !usesSharedScenePresenter(scene.scene) &&
+    isCinematicScene(scene.scene)
+  ) {
     const s = scene.scene
     const kind: CinematicLayerStackProps["sceneKind"] =
       s.kind === "opening" || s.kind === "closing" ? s.kind : "media"
@@ -1244,6 +1260,9 @@ function TadazzShowContent(props: TadazzShowViewProps) {
         <CinematicLayerStack
           sceneId={s.id ?? s.kind}
           sceneKind={kind}
+          titleSlot={customScreen}
+          titleSlotLayout="stage"
+          titleSlotVisible={s.textOverlay !== false}
           epoch={extensionState?.epoch}
           serverStartedAt={scene.startedAt}
           mediaUrl={s.mediaUrl}
@@ -1286,6 +1305,8 @@ function TadazzShowContent(props: TadazzShowViewProps) {
         <CinematicLayerStack
           sceneId={`interlude-${extensionState?.epoch ?? 0}`}
           sceneKind="media"
+          titleSlot={customScreen}
+          titleSlotLayout="stage"
           epoch={extensionState?.epoch}
           serverStartedAt={scene.startedAt}
           mediaUrl={scene.interlude.url}
@@ -1297,6 +1318,10 @@ function TadazzShowContent(props: TadazzShowViewProps) {
       </div>
     )
   }
+
+  // The cinematic title layer owns this content. A truthy empty screen also
+  // clears the adapter's retained custom screen without mounting it twice.
+  const stageCustomScreen = overlay ? <></> : customScreen
 
   // ── Layout ──────────────────────────────────────────────────────────────
   const [viewportSize, setViewportSize] = useState(() => ({
@@ -1621,7 +1646,7 @@ function TadazzShowContent(props: TadazzShowViewProps) {
                       scene.kind === "voting" && scene.questionType === "multi"
                     }
                     onSelectOption={onSelectOption}
-                    customScreen={customScreen}
+                    customScreen={stageCustomScreen}
                     underlay={underlay}
                     overlay={overlay}
                     reducedMotion={reduced}
@@ -1647,7 +1672,7 @@ function TadazzShowContent(props: TadazzShowViewProps) {
                       scene.kind === "voting" && scene.questionType === "multi"
                     }
                     onSelectOption={onSelectOption}
-                    customScreen={customScreen}
+                    customScreen={stageCustomScreen}
                     underlay={underlay}
                     overlay={overlay}
                     reducedMotion={reduced}
@@ -1737,10 +1762,17 @@ function TadazzShowContent(props: TadazzShowViewProps) {
 
           {extensionState && (
             <AudioCuePlayer
-              eventOnly={role === "player" || scene.kind === "wait"}
+              eventOnly={
+                role === "player" ||
+                (scene.kind === "wait" && !waitingForFinale)
+              }
               showTrack={referenceStoryTrack}
               stageOwnsReveal={useV4 || Boolean(theme.definition.sandbox)}
-              cueId={resolveNativePhaseAudioCue(scene.kind, props.audioCueId)}
+              cueId={
+                waitingForFinale
+                  ? undefined
+                  : resolveNativePhaseAudioCue(scene.kind, props.audioCueId)
+              }
               audioExtras={
                 extensionState.extras.audio as QuizExtrasV1["audio"] | undefined
               }
@@ -1749,7 +1781,9 @@ function TadazzShowContent(props: TadazzShowViewProps) {
                   CardAudioOverrides | undefined
               }
               sceneAudio={
-                (isStoryReading ? undefined : props.sceneAudio) as never
+                (isStoryReading || waitingForFinale
+                  ? undefined
+                  : props.sceneAudio) as never
               }
               gameId={extensionState.gameId}
               activeCardKey={extensionState.questionId ?? props.activeCardKey}

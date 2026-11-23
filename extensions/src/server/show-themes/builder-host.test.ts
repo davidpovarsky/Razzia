@@ -28,7 +28,7 @@ const keys = [
   "NODE_ENV",
 ] as const
 const previous = Object.fromEntries(keys.map((key) => [key, process.env[key]]))
-let server: ReturnType<typeof serve> | undefined,
+let server: ReturnType<typeof serve> | undefined = undefined,
   base = "",
   owner = "",
   authorToken = "",
@@ -68,28 +68,62 @@ beforeAll(async () => {
   playerToken = (await mintToken("builder-player", SESSION_ROLES.PLAYER)).token
   const app = new Hono().route("/api/themes", themeRoutes)
   server = serve({ fetch: app.fetch, hostname: "127.0.0.1", port: 0 })
-  if ("keepAliveTimeout" in server) server.keepAliveTimeout = 60_000
-  if (!server.listening) await once(server, "listening")
+
+  if ("keepAliveTimeout" in server) {
+    server.keepAliveTimeout = 60_000
+  }
+
+  if (!server.listening) {
+    await once(server, "listening")
+  }
+
   const address = server.address()
-  if (!address || typeof address === "string")
+
+  if (!address || typeof address === "string") {
     throw new Error("Missing loopback port")
+  }
+
   base = `http://127.0.0.1:${address.port}/api/themes/builder/${owner}/documents`
 }, 90_000)
 afterAll(async () => {
-  if (server)
-    await new Promise<void>((resolve, reject) =>
-      server!.close((error) => (error ? reject(error) : resolve())),
-    )
+  if (server) {
+    await new Promise<void>((resolve, reject) => {
+      server!.close((error) => (error ? reject(error) : resolve()))
+    })
+  }
+
   closeThemeInstallationStore()
   closeAccountDb()
   for (const key of keys) {
     const value = previous[key]
-    if (value === undefined) delete process.env[key]
-    else process.env[key] = value
+
+    if (value === undefined) {
+      if (!Reflect.deleteProperty(process.env, key)) {
+        throw new TypeError("Unable to restore an absent environment variable")
+      }
+    } else {
+      process.env[key] = value
+    }
   }
   rmSync(root, { recursive: true, force: true })
 })
-async function http(path: string, token?: string, input?: unknown) {
+function isObservedRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+}
+
+function requireObservedRecord(value: unknown): Record<string, unknown> {
+  if (!isObservedRecord(value)) {
+    throw new Error("Expected an object in the observed JSON value")
+  }
+
+  return value
+}
+
+async function http(
+  path: string,
+  token?: string,
+  input?: unknown,
+): Promise<{ status: number; body: unknown }> {
   const response = await fetch(base + path, {
     method: input ? "PUT" : "GET",
     headers: {
@@ -99,6 +133,7 @@ async function http(path: string, token?: string, input?: unknown) {
     ...(input ? { body: JSON.stringify(input) } : {}),
   })
   const text = await response.text()
+
   return { status: response.status, body: text ? JSON.parse(text) : null }
 }
 it("uses actual verified account auth, tenant assignment, atomic CAS and the existing OFF gate", async () => {
@@ -111,10 +146,11 @@ it("uses actual verified account auth, tenant assignment, atomic CAS and the exi
     document,
   })
   expect(first.status).toBe(200)
-  expect(first.body.revision).toBe(1)
-  expect((await http("/test-draft", authorToken)).body.document).toEqual(
-    document,
-  )
+  expect(requireObservedRecord(first.body).revision).toBe(1)
+  expect(
+    requireObservedRecord((await http("/test-draft", authorToken)).body)
+      .document,
+  ).toEqual(document)
   expect((await http("/test-draft", strangerToken)).status).toBe(404)
   expect(
     (await http("/test-draft", authorToken, { expectedRevision: 0, document }))
@@ -137,9 +173,15 @@ it("uses actual verified account auth, tenant assignment, atomic CAS and the exi
       })
     ).status,
   ).toBe(400)
-  expect((await http("/test-draft", authorToken)).body.revision).toBe(1)
+  expect(
+    requireObservedRecord((await http("/test-draft", authorToken)).body)
+      .revision,
+  ).toBe(1)
   process.env.TADAZZ_THEME_INSTALLER_ENABLED = "false"
   expect((await http("", authorToken)).status).toBe(404)
   process.env.TADAZZ_THEME_INSTALLER_ENABLED = "true"
-  expect((await http("/test-draft", authorToken)).body.revision).toBe(1)
+  expect(
+    requireObservedRecord((await http("/test-draft", authorToken)).body)
+      .revision,
+  ).toBe(1)
 }, 90_000)

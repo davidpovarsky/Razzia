@@ -12,18 +12,19 @@ import {
   demoPresentationSnapshotSchema,
   showProjectionSchema,
 } from "./projection-schema"
-import { snapshotFixture } from "./preview-fixtures"
+import {
+  snapshotFixture,
+  previewInputFixture,
+  authoredFixture,
+  sharedPreviewFixtures,
+} from "./preview-fixtures"
 import { projectShowBindings } from "./projection"
 import { describe, expect, it } from "vitest"
 import { createHash } from "node:crypto"
 import fs from "node:fs"
 import { diagnostic } from "./primitives"
 import { normalizePreviewDraft } from "./identity"
-import {
-  previewInputFixture,
-  authoredFixture,
-  sharedPreviewFixtures,
-} from "./preview-fixtures"
+
 import { resolvePreviewPlan, getPreviewDigestContent } from "./preview-resolve"
 import {
   getCompiledPreviewManifest,
@@ -44,7 +45,7 @@ describe("no forged executable preview readiness", () => {
   it.each(["en", "fr", "de", "es", "it", "ja", "tr", "vi"])(
     "uses existing diagnostic translations in %s without shared resource edits",
     (locale) => {
-      const errors = JSON.parse(
+      const errors: unknown = JSON.parse(
         fs.readFileSync(
           new URL(
             `../../../../packages/web/src/locales/${locale}/errors.json`,
@@ -62,11 +63,12 @@ describe("no forged executable preview readiness", () => {
           .messageKey.replace(/^errors:/u, "")
           .split(".")
         let value: unknown = errors
-        for (const part of key)
+        for (const part of key) {
           value =
             typeof value === "object" && value !== null
               ? Reflect.get(value, part)
               : undefined
+        }
         expect(typeof value).toBe("string")
       }
     },
@@ -184,8 +186,9 @@ it("rejects all older/mixed internal versions while authored format stays v1", (
   ] as const
   for (const [schema, value] of cases) {
     expect(schema.safeParse(value).success).toBe(true)
-    for (const portVersion of [1, 2])
+    for (const portVersion of [1, 2]) {
       expect(schema.safeParse({ ...value, portVersion }).success).toBe(false)
+    }
     expect(schema.safeParse({ ...value, identityRuleVersion: 1 }).success).toBe(
       false,
     )

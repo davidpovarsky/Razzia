@@ -12,7 +12,7 @@ export async function verifyGuestAdmission(options) {
   assert.equal(new URL(options.origin).hostname, "127.0.0.1")
   const { browser, context, origin, token, evidence } = options
   assert(browser && context && options.page && options.player && options.room)
-  const headers = { Authorization: "Bearer " + token }
+  const headers = { Authorization: `Bearer ${token}` }
   const results = []
   const created = []
   const errors = []
@@ -25,20 +25,22 @@ export async function verifyGuestAdmission(options) {
   }
   const presence = async (room) => {
     const response = await context.request.get(
-      origin + "/api/games/" + room.gameId + "/roster",
+      `${origin}/api/games/${room.gameId}/roster`,
       { headers },
     )
     assert.equal(response.status(), 200, "Owner roster readback")
     const body = await response.json()
     assert.equal(body.presence.gameId, room.gameId)
+
     return body.presence
   }
   const policy = async (room, value) => {
     const response = await context.request.patch(
-      origin + "/api/games/" + room.gameId + "/roster/settings",
+      `${origin}/api/games/${room.gameId}/roster/settings`,
       { headers, data: value },
     )
     assert.equal(response.status(), 200, "Owner admission policy update")
+
     return (await response.json()).presence
   }
   const anonymous = async () => {
@@ -51,10 +53,11 @@ export async function verifyGuestAdmission(options) {
     await owned.addInitScript(() => localStorage.setItem("i18nextLng", "en"))
     const page = await owned.newPage()
     track(page)
+
     return { context: owned, page }
   }
   const enter = async (page, pin, name) => {
-    await page.goto(origin + "/game?pin=" + encodeURIComponent(pin))
+    await page.goto(`${origin}/game?pin=${encodeURIComponent(pin)}`)
     await expect(page.getByPlaceholder("Username here")).toBeVisible({
       timeout: 30_000,
     })
@@ -65,6 +68,7 @@ export async function verifyGuestAdmission(options) {
         response.request().method() === "POST",
     )
     await page.getByRole("button", { name: "Submit", exact: true }).click()
+
     return answer
   }
   const joinedRow = async (room, name) => {
@@ -72,6 +76,7 @@ export async function verifyGuestAdmission(options) {
       .poll(
         async () => {
           const snapshot = await presence(room)
+
           return snapshot.players.some(
             (row) => row.displayName === name && row.status === "connected",
           )
@@ -79,22 +84,24 @@ export async function verifyGuestAdmission(options) {
         { timeout: 30_000 },
       )
       .toBe(true)
+
     return (await presence(room)).players.find(
       (row) => row.displayName === name && row.status === "connected",
     )
   }
-  const reconnect = async (room, page, row, label) => {
+  const reconnect = async ({ room, page, row, label }) => {
     const before = await presence(room)
     const original = before.players.find(
       (entry) => entry.rosterPlayerId === row.rosterPlayerId,
     )
-    assert(original && original.clientId, label + " has an admitted identity")
+    assert(original && original.clientId, `${label} has an admitted identity`)
     await page.reload()
-    await expect(page).toHaveURL(origin + "/party/" + room.gameId)
+    await expect(page).toHaveURL(`${origin}/party/${room.gameId}`)
     await expect
       .poll(
         async () => {
           const after = await presence(room)
+
           return after.players.find(
             (entry) => entry.rosterPlayerId === row.rosterPlayerId,
           )?.status
@@ -109,23 +116,24 @@ export async function verifyGuestAdmission(options) {
     assert.equal(
       restored.clientId,
       original.clientId,
-      label + " client identity",
+      `${label} client identity`,
     )
-    assert.equal(restored.points, original.points, label + " points")
+    assert.equal(restored.points, original.points, `${label} points`)
     assert.equal(
       restored.answeredCurrentQuestion,
       original.answeredCurrentQuestion,
-      label + " accepted answer state",
+      `${label} accepted answer state`,
     )
     assert.equal(
       after.registeredTotal,
       before.registeredTotal,
       "No duplicate roster row",
     )
+
     return restored
   }
 
-  async function verifyRoom(host, room, label, existingPlayer) {
+  async function verifyRoom({ host, room, label, existingPlayer }) {
     track(host)
     const original = await presence(room)
     assert.equal(typeof original.allowUnregisteredPlayers, "boolean")
@@ -134,7 +142,7 @@ export async function verifyGuestAdmission(options) {
     const originalViewport = host.viewportSize()
     const owned = []
     const ownedRosterIds = new Set()
-    const endpoint = origin + "/api/games/" + room.gameId + "/roster/settings"
+    const endpoint = `${origin}/api/games/${room.gameId}/roster/settings`
     const rejectSave = (route) =>
       route.fulfill({
         status: 403,
@@ -151,11 +159,12 @@ export async function verifyGuestAdmission(options) {
       await toggle.focus()
       await toggle.press("Space")
       const saved = await response
-      assert.equal(saved.status(), 200, label + " keyboard update")
+      assert.equal(saved.status(), 200, `${label} keyboard update`)
       const body = await saved.json()
       assert.equal(body.presence.allowUnregisteredPlayers, expected)
       await expect(toggle).toHaveAttribute("aria-checked", String(expected))
       assert.equal((await presence(room)).allowUnregisteredPlayers, expected)
+
       return body.presence
     }
 
@@ -172,12 +181,13 @@ export async function verifyGuestAdmission(options) {
 
       const guest = await anonymous()
       owned.push(guest.context)
-      const guestName = "Unlisted " + label
+      const guestName = `Unlisted ${label}`
+
       const denied = await enter(guest.page, room.inviteCode, guestName)
       assert.equal(
         denied.status(),
         403,
-        label + " fresh anonymous admission is denied",
+        `${label} fresh anonymous admission is denied`,
       )
       assert.equal((await denied.json()).reason, "roster_only")
       assert(
@@ -193,7 +203,7 @@ export async function verifyGuestAdmission(options) {
         "Fresh anonymous session exists independently of site account",
       )
       const unauthorized = await guest.context.request.patch(endpoint, {
-        headers: { Authorization: "Bearer " + guestToken },
+        headers: { Authorization: `Bearer ${guestToken}` },
         data: { allowUnregisteredPlayers: true },
       })
       assert(
@@ -202,13 +212,14 @@ export async function verifyGuestAdmission(options) {
       )
       assert.equal((await presence(room)).allowUnregisteredPlayers, false)
       results.push({
-        name: label + "-keyboard-off-denies-fresh-anonymous-and-owner-action",
+        name: `${label}-keyboard-off-denies-fresh-anonymous-and-owner-action`,
         passed: true,
       })
 
-      const registeredName = "Registered " + label
+      const registeredName = `Registered ${label}`
+
       const added = await context.request.post(
-        origin + "/api/games/" + room.gameId + "/roster",
+        `${origin}/api/games/${room.gameId}/roster`,
         { headers, data: { displayName: registeredName } },
       )
       assert.equal(added.status(), 200)
@@ -226,11 +237,11 @@ export async function verifyGuestAdmission(options) {
         200,
         "Pre-registered participant is accepted while OFF",
       )
-      await expect(registered.page).toHaveURL(origin + "/party/" + room.gameId)
+      await expect(registered.page).toHaveURL(`${origin}/party/${room.gameId}`)
       const registeredRow = await joinedRow(room, registeredName)
       assert.equal(registeredRow.rosterPlayerId, registeredId)
       results.push({
-        name: label + "-registered-player-enters-while-off",
+        name: `${label}-registered-player-enters-while-off`,
         passed: true,
       })
 
@@ -251,8 +262,9 @@ export async function verifyGuestAdmission(options) {
       const enabledReadback = await presence(room)
       assert.equal(enabledReadback.phoneInviteOnly, false)
       results.push({
-        name:
-          label + "-rejected-save-shows-error-and-on-clears-phone-restriction",
+        name: `${
+          label
+        }-rejected-save-shows-error-and-on-clears-phone-restriction`,
         passed: true,
       })
 
@@ -260,35 +272,42 @@ export async function verifyGuestAdmission(options) {
       assert.equal(
         guestAccepted.status(),
         200,
-        label + " ON allows the previously rejected guest",
+        `${label} ON allows the previously rejected guest`,
       )
-      await expect(guest.page).toHaveURL(origin + "/party/" + room.gameId)
+      await expect(guest.page).toHaveURL(`${origin}/party/${room.gameId}`)
       const guestRow = await joinedRow(room, guestName)
       ownedRosterIds.add(guestRow.rosterPlayerId)
       await keyboardToggle(false)
-      await reconnect(room, guest.page, guestRow, label + " admitted guest")
-      await reconnect(
+      await reconnect({
         room,
-        registered.page,
-        registeredRow,
-        label + " registered player",
-      )
+        page: guest.page,
+        row: guestRow,
+        label: `${label} admitted guest`,
+      })
+      await reconnect({
+        room,
+        page: registered.page,
+        row: registeredRow,
+        label: `${label} registered player`,
+      })
+
       if (existingPlayer) {
         const existing = (await presence(room)).players.find(
           (row) => row.displayName === "Gallery QA player",
         )
         assert(existing, "Original voted gallery player remains present")
-        await reconnect(
+        await reconnect({
           room,
-          existingPlayer,
-          existing,
-          "Original voted gallery player",
-        )
+          page: existingPlayer,
+          row: existing,
+          label: "Original voted gallery player",
+        })
       }
+
       results.push({
-        name:
-          label +
-          "-off-keeps-admitted-and-registered-reconnect-score-and-answer",
+        name: `${
+          label
+        }-off-keeps-admitted-and-registered-reconnect-score-and-answer`,
         passed: true,
       })
 
@@ -312,6 +331,7 @@ export async function verifyGuestAdmission(options) {
         .getByTestId("host-guest-join-control")
         .evaluate((node) => {
           const bounds = node.getBoundingClientRect()
+
           return {
             left: bounds.left,
             right: bounds.right,
@@ -325,21 +345,23 @@ export async function verifyGuestAdmission(options) {
       )
       assert(geometry.overflow <= 1, "Host page has no horizontal overflow")
       await host.screenshot({
-        path: join(evidence, "guest-policy-" + label + "-he-360.png"),
+        path: join(evidence, `guest-policy-${label}-he-360.png`),
         fullPage: true,
       })
       results.push({
-        name: label + "-authoritative-reload-and-hebrew-mobile-layout",
+        name: `${label}-authoritative-reload-and-hebrew-mobile-layout`,
         passed: true,
         geometry,
       })
     } catch (error) {
       await host
         .screenshot({
-          path: join(evidence, "guest-policy-" + label + "-failure.png"),
+          path: join(evidence, `guest-policy-${label}-failure.png`),
           fullPage: true,
         })
-        .catch(() => {})
+        .catch(() => {
+          /* Keep the recorded audit outcome if its diagnostic screenshot is unavailable. */
+        })
       throw error
     } finally {
       await host.unroute(endpoint, rejectSave)
@@ -349,11 +371,7 @@ export async function verifyGuestAdmission(options) {
       await policy(room, { phoneInviteOnly: original.phoneInviteOnly })
       for (const id of ownedRosterIds) {
         const response = await context.request.delete(
-          origin +
-            "/api/games/" +
-            room.gameId +
-            "/roster/" +
-            encodeURIComponent(id),
+          `${origin}/api/games/${room.gameId}/roster/${encodeURIComponent(id)}`,
           { headers },
         )
         assert(
@@ -361,8 +379,14 @@ export async function verifyGuestAdmission(options) {
           "Remove only the helper's roster fixture",
         )
       }
-      for (const ownedContext of owned) await ownedContext.close()
-      if (originalViewport) await host.setViewportSize(originalViewport)
+      for (const ownedContext of owned) {
+        await ownedContext.close()
+      }
+
+      if (originalViewport) {
+        await host.setViewportSize(originalViewport)
+      }
+
       if (!host.isClosed()) {
         await host.goto(originalUrl)
         await expect(toggle).toBeVisible({ timeout: 30_000 })
@@ -370,25 +394,31 @@ export async function verifyGuestAdmission(options) {
     }
   }
 
-  let nativeHost
+  let nativeHost = undefined
+
   try {
     await expect(options.page.getByTestId("tadazz-show")).toBeVisible()
-    await verifyRoom(options.page, options.room, "cinematic", options.player)
+    await verifyRoom({
+      host: options.page,
+      room: options.room,
+      label: "cinematic",
+      existingPlayer: options.player,
+    })
 
     const originalQuiz = await options.readQuiz()
     const nativeCopy = {
-      subject: "Guest native QA " + Date.now(),
+      subject: `Guest native QA ${Date.now()}`,
       gameMode: originalQuiz.gameMode,
       questions: [structuredClone(originalQuiz.questions[0])],
     }
-    const saved = await context.request.post(origin + "/api/quizz", {
+    const saved = await context.request.post(`${origin}/api/quizz`, {
       headers,
       data: nativeCopy,
     })
     assert.equal(saved.status(), 201, "Create only a disposable native quiz")
     const nativeQuiz = await saved.json()
     assert(nativeQuiz.id)
-    const createdRoom = await context.request.post(origin + "/api/games", {
+    const createdRoom = await context.request.post(`${origin}/api/games`, {
       headers,
       data: { quizzId: nativeQuiz.id },
     })
@@ -398,7 +428,7 @@ export async function verifyGuestAdmission(options) {
 
     nativeHost = await context.newPage()
     track(nativeHost)
-    await nativeHost.goto(origin + "/party/manager/" + room.gameId + "?lng=en")
+    await nativeHost.goto(`${origin}/party/manager/${room.gameId}?lng=en`)
     await expect(nativeHost.getByTestId("platform-opening-start")).toBeEnabled({
       timeout: 30_000,
     })
@@ -419,13 +449,14 @@ export async function verifyGuestAdmission(options) {
     await expect(
       nativeHost.locator('[data-native-layout="true"]'),
     ).toBeVisible()
-    await verifyRoom(nativeHost, room, "native")
+    await verifyRoom({ host: nativeHost, room, label: "native" })
     assert.deepEqual(errors, [], "No guest policy browser JavaScript errors")
+
     return { passed: true, results, createdFixtures: created }
   } catch (error) {
     writeFileSync(
       join(evidence, "guest-policy-partial-receipt.json"),
-      JSON.stringify(
+      `${JSON.stringify(
         {
           passed: false,
           results,
@@ -435,10 +466,12 @@ export async function verifyGuestAdmission(options) {
         },
         null,
         2,
-      ) + "\n",
+      )}\n`,
     )
     throw error
   } finally {
-    if (nativeHost && !nativeHost.isClosed()) await nativeHost.close()
+    if (nativeHost && !nativeHost.isClosed()) {
+      await nativeHost.close()
+    }
   }
 }

@@ -10,7 +10,12 @@ import {
   next,
   startGame,
 } from "@razzia/e2e/utils/manager"
-import { endTimer } from "@razzia/e2e/utils/extension-manager"
+import {
+  endRecordedVote,
+  observeLiveFlow,
+  setManualProgression,
+  waitForRecordedVoting,
+} from "@razzia/e2e/utils/extension-manager"
 import { joinGame } from "@razzia/e2e/utils/player"
 import type { Page } from "@playwright/test"
 const SCREENSHOT_DIR = join(
@@ -25,6 +30,37 @@ const saveScreenshot = async (page: Page, filename: string) => {
     path: join(SCREENSHOT_DIR, filename),
     fullPage: false,
   })
+}
+
+async function openStudioPanel(
+  page: Page,
+  id: "edit" | "preview" | "timeline",
+) {
+  const openDrawer = page.locator("[data-editor-drawer-close]:visible")
+  const drawerCount = await openDrawer.count()
+  expect(drawerCount).toBeLessThanOrEqual(1)
+
+  if (drawerCount === 1) {
+    await openDrawer.click()
+  }
+
+  const panel = page.getByTestId(`editor-panel-${id}`)
+
+  if (!(await panel.isVisible())) {
+    await page.getByTestId(`editor-panel-toggle-${id}`).click()
+  }
+
+  await expect(panel).toBeVisible()
+
+  return panel
+}
+
+async function advanceAuthoredScene(manager: Page) {
+  await expect(manager.getByTestId("host-end-timer-btn")).toHaveCount(0)
+  const advance = manager.getByTestId("host-next-screen-btn")
+  await expect(advance).toHaveCount(1)
+  await expect(advance).toBeEnabled()
+  await advance.click()
 }
 
 // --- CRC32 & PNG / ZIP Helpers for Deterministic Engineering Fixtures ---
@@ -855,10 +891,12 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
       url: string
     }
 
-    // 1D. Create a show with Opening (video + 2 initial overlays) & Closing (reusing assetA)
+    // 1D. Keep the original opening, question and closing, and add a native
+    // editor recap of that same question before the closing.
     const q1Id = "00000000-0000-4000-8000-000000000501"
     const openSceneId = "00000000-0000-4000-8000-000000000601"
     const closeSceneId = "00000000-0000-4000-8000-000000000602"
+    const recapSceneId = "00000000-0000-4000-8000-000000000603"
     const createShowRes = await page.request.post(
       `${SOCKET_ORIGIN}/api/extensions/quizzes`,
       {
@@ -896,6 +934,11 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
                 id: "00000000-0000-4000-8000-000000000702",
                 kind: "question",
                 questionId: q1Id,
+              },
+              {
+                id: "00000000-0000-4000-8000-000000000704",
+                kind: "answerRecap",
+                sceneId: recapSceneId,
               },
               {
                 id: "00000000-0000-4000-8000-000000000703",
@@ -968,6 +1011,19 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
                   },
                 ],
               },
+              [recapSceneId]: {
+                id: recapSceneId,
+                kind: "answerRecap",
+                title: "Editor Answer Recap",
+                subtitle: "Cinema question highlights",
+                startQuestionId: q1Id,
+                mode: "correctAnswer",
+                maxItemsPerPage: 4,
+                showCounts: true,
+                showPercentages: true,
+                durationMs: 6000,
+                advance: "manual",
+              },
               [closeSceneId]: {
                 id: closeSceneId,
                 kind: "closing",
@@ -1036,12 +1092,26 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
     })
     await page.goto(`/manager/quizz/${createdShow.quizId}`)
     await expect(
-      page.locator('[data-testid="studio-card-type-bar"]'),
+      page.locator(
+        '[data-testid="studio-card-type-bar"][data-embedded="false"]',
+      ),
     ).toBeVisible({
       timeout: 15_000,
     })
 
-    // Opening card is selected first; verify Overlay Animations section is visible
+    // Select the authored opening, then edit its existing layers in the Edit panel.
+    const openingCard = page
+      .getByTestId("editor-timeline")
+      .getByTestId("editor-scene-card")
+      .filter({
+        has: page.getByRole("button", {
+          name: "Grand Opening Act",
+          exact: true,
+        }),
+      })
+    await expect(openingCard).toHaveCount(1)
+    await openingCard.getByTestId("editor-scene-select").click()
+    await openStudioPanel(page, "edit")
     const overlaySection = page.locator(
       '[data-testid="studio-overlay-animations-section"]',
     )
@@ -1082,7 +1152,9 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
       .locator(`[data-testid="studio-overlay-duration-${thirdRowId}"]`)
       .fill("2")
 
-    // Test 16:9 and 4:3 preview switch inside existing preview
+    // Use the controlled layer preview before changing aspect ratio or scrubbing.
+    const previewPanel = await openStudioPanel(page, "preview")
+    await previewPanel.getByTestId("scene-preview-mode-layers").click()
     await page.locator('[data-testid="studio-preview-aspect-4-3"]').click()
     await expect(
       page.locator('[data-testid="studio-scene-preview-stage"]'),
@@ -1132,6 +1204,8 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
       page.locator(`[data-testid="cinematic-overlay-${thirdRowId}"]`),
     ).toHaveAttribute("data-overlay-phase", "playing")
 
+    // Return to the editable inspector; the preview drawer makes the canvas inert.
+    await openStudioPanel(page, "edit")
     // Test Duplicate & Remove layer (Remove detaches from scene without deleting file from library)
     await page
       .locator(`[data-testid="studio-overlay-duplicate-${thirdRowId}"]`)
@@ -1220,12 +1294,72 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
     expect(reimportedData.extras.scenes[openSceneId].mediaEndFallbackMs).toBe(
       25000,
     )
+
+    // 1H. Actual authored recap items use the live director and native V4
+    // cards in the editor, including the saved title and subtitle.
+    const timeline = await openStudioPanel(page, "timeline")
+    const recapCard = timeline.getByTestId("editor-scene-card").filter({
+      has: page.getByRole("button", {
+        name: "Editor Answer Recap",
+        exact: true,
+      }),
+    })
+    await expect(recapCard).toHaveCount(1)
+    await recapCard.getByTestId("editor-scene-select").click()
+    const recapEdit = await openStudioPanel(page, "edit")
+    await expect(recapEdit.getByTestId("answer-recap-settings")).toBeVisible()
+    const editorPreview = page.getByTestId("studio-scene-preview-stage")
+    const nativePreview = editorPreview.locator(
+      '[data-editor-preview-renderer="application-native"]',
+    )
+    await expect(nativePreview).toHaveCount(1)
+    await expect(nativePreview.getByTestId("tadazz-stage")).toHaveAttribute(
+      "data-v4-scene",
+      "round-recap",
+    )
+    await expect(nativePreview.getByTestId("tadazz-custom-screen")).toBeHidden()
+    await expect(
+      editorPreview.locator("[data-editor-preview-fallback]"),
+    ).toHaveCount(0)
+    const editorRecap = nativePreview.getByTestId("tadazz-screen-recap")
+    await expect(editorRecap).toBeVisible()
+    await expect(editorRecap.locator(".choice-slot")).toHaveCount(1)
+    const recapAnswer = editorRecap.getByTestId("tadazz-card-0")
+    await expect(recapAnswer).toBeVisible()
+    await expect(recapAnswer).toBeDisabled()
+    await expect(recapAnswer.locator(".answer-title")).toHaveText("Yes")
+    await expect(editorRecap.getByTestId("tadazz-recap-title")).toHaveText(
+      "Editor Answer Recap",
+    )
+    await expect(editorRecap.getByTestId("tadazz-recap-subtitle")).toHaveText(
+      "Cinema question highlights",
+    )
+    await expect(editorRecap.getByTestId("tadazz-recap-title")).toBeVisible()
+    await expect(editorRecap.getByTestId("tadazz-recap-subtitle")).toBeVisible()
+
+    // Genuine inspector edits update the native content. Recaps have no
+    // timed-preview controls, so this asserts no synthetic seek contract.
+    await recapEdit
+      .getByTestId("scene-title-input")
+      .fill("Updated Editor Answer Recap")
+    await expect(editorRecap.getByTestId("tadazz-recap-title")).toHaveText(
+      "Updated Editor Answer Recap",
+    )
+    await recapEdit
+      .getByPlaceholder("Card description or subtitle...", { exact: true })
+      .fill("Updated cinema question highlights")
+    await expect(editorRecap.getByTestId("tadazz-recap-subtitle")).toHaveText(
+      "Updated cinema question highlights",
+    )
+    await expect(recapAnswer.locator(".answer-title")).toHaveText("Yes")
+    await expect(nativePreview.getByTestId("tadazz-custom-screen")).toBeHidden()
   })
   test("2. Live Show E2E: Real 8s MP4 + 3 Timed Transparent Overlays in SAME Opening Scene, No Premature Cut at 5s, Timeline Checkpoints, Late-Join Sync & 8 Viewports × 8 Locales", async ({
     page: managerPage,
     browser,
   }) => {
     const SOCKET_ORIGIN = "http://127.0.0.1:3011"
+    const observations = observeLiveFlow(managerPage)
     await loginManager(managerPage)
     const token = await managerPage.evaluate(() =>
       localStorage.getItem("token"),
@@ -1693,6 +1827,7 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
       "Cinema Multi-Lottie Live Acceptance Show",
     )
     expect(pin).toMatch(/^\d{6}$/u)
+    await setManualProgression(managerPage)
     const gameIdMatch = /\/party\/manager\/([^/?#]+)/u.exec(managerPage.url())
     expect(gameIdMatch).not.toBeNull()
     const { 1: gameId } = gameIdMatch!
@@ -1718,12 +1853,10 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
     const playerPage = await playerContext.newPage()
     await joinGame(playerPage, pin, "CinemaPlayerOne")
     await expect(
-      managerPage.getByRole("button", {
-        name: /1 \/ 1 Players/i,
-      }),
-    ).toBeVisible({
-      timeout: 10_000,
-    })
+      managerPage
+        .getByTestId("host-bottom-players-btn")
+        .getByTestId("host-connected-counter"),
+    ).toHaveText(/^1(?:\s*\/\s*1)?$/u)
 
     // Start the show -> Opening Cinema Scene starts immediately without legacy 6s countdown!
     await startGame(managerPage)
@@ -1746,11 +1879,15 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
       ),
     ).toHaveAttribute("data-overlay-phase", "beforeStart")
     await saveScreenshot(spectatorPage, "03_live_opening_t0_1s.png")
+    const openingTitle = openingStack
+      .getByTestId("cinematic-layer-native-title")
+      .getByTestId("tadazz-screen-message")
+      .locator(".tz-x-headline")
+    await expect(openingTitle).toHaveText("Cinematic Opening Premiere")
+    await expect(openingTitle).toBeVisible()
     await expect(
-      spectatorPage.getByRole("heading", {
-        name: "Cinematic Opening Premiere",
-      }),
-    ).toBeVisible()
+      spectatorPage.getByTestId("tadazz-screen-message"),
+    ).toHaveCount(1)
 
     // Verify full-bleed cinema stage (no max-w-6xl card box) and transparent pointer-events-none overlays
     const stageArchitecture = await spectatorPage.evaluate(() => {
@@ -1865,24 +2002,29 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
 
     // Checkpoint 5 (t ~ 9.5s): Foreground MP4 genuinely finishes -> advances ONCE automatically to Survey Q1!
     await expect(
-      spectatorPage.getByRole("button", {
-        name: /Crimson Pulse/i,
-      }),
+      spectatorPage.getByTestId("tadazz-card-0").locator(".answer-title"),
     ).toBeVisible({
       timeout: 14_000,
     })
+    await expect(
+      spectatorPage.getByTestId("tadazz-card-0").locator(".answer-title"),
+    ).toHaveText("Crimson Pulse")
     await saveScreenshot(
       spectatorPage,
       "07_auto_advanced_to_survey_q1_after_8s_video.png",
     )
 
-    // Complete Survey Q1 (5 image answers)
+    // Complete Survey Q1 only after the real server opens voting for this question.
+    await waitForRecordedVoting(observations, q1Id)
     await playerPage
       .getByRole("button", {
         name: /Emerald Aurora/i,
       })
       .click()
-    await endTimer(managerPage)
+    await endRecordedVote(managerPage, observations, {
+      questionId: q1Id,
+      count: 1,
+    })
 
     // Advance to Media Audio Scene
     await next(managerPage)
@@ -1893,11 +2035,7 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
     })
 
     // Advance to Standalone Animation Scene
-    await managerPage
-      .getByRole("button", {
-        name: /Advance Scene/i,
-      })
-      .click()
+    await advanceAuthoredScene(managerPage)
     await expect(
       spectatorPage.locator('[data-testid="scene-animation-preset-spotlight"]'),
     ).toBeVisible({
@@ -1905,46 +2043,55 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
     })
 
     // Advance to Quiz Q2
-    await managerPage
-      .getByRole("button", {
-        name: /Advance Scene/i,
-      })
-      .click()
+    await advanceAuthoredScene(managerPage)
     await expect(
-      spectatorPage.getByRole("button", {
-        name: /Three/i,
-      }),
+      spectatorPage.getByTestId("tadazz-card-1").locator(".answer-title"),
     ).toBeVisible({
       timeout: 12_000,
     })
+    await expect(
+      spectatorPage.getByTestId("tadazz-card-1").locator(".answer-title"),
+    ).toHaveText("Three")
+    await waitForRecordedVoting(observations, q2Id)
     await playerPage
       .getByRole("button", {
         name: /Three/i,
       })
       .click()
-    await endTimer(managerPage)
+    await endRecordedVote(managerPage, observations, {
+      questionId: q2Id,
+      count: 1,
+    })
 
     // Advance to Cumulative Answer Recap Scene
     await next(managerPage)
-    await expect(
-      spectatorPage.locator('[data-testid="scene-answer-recap"]'),
-    ).toBeVisible({
+    const recap = spectatorPage.getByTestId("tadazz-screen-recap")
+    await expect(recap).toBeVisible({
       timeout: 10_000,
     })
+    await expect(recap.locator(".choice-slot")).toHaveCount(2)
+    for (const [index, answer] of ["Emerald Aurora", "Three"].entries()) {
+      const card = recap.getByTestId(`tadazz-card-${index}`)
+      await expect(card).toBeVisible()
+      await expect(card).toBeDisabled()
+      await expect(card.locator(".answer-title")).toHaveText(answer)
+    }
+    await expect(
+      recap.getByRole("heading", {
+        name: "Cumulative Show Recap",
+        exact: true,
+      }),
+    ).toBeVisible()
     const recapText =
       (await spectatorPage
-        .locator('[data-testid="scene-answer-recap"]')
+        .locator('[data-testid="tadazz-screen-recap"]')
         .textContent()) ?? ""
     expect(recapText).toContain("Emerald Aurora")
     expect(recapText).toContain("Three")
     expect(recapText).not.toContain("CinemaPlayerOne")
 
     // Advance to Closing Cinema Scene (MP4 + 3 simultaneous overlays, manual advance)
-    await managerPage
-      .getByRole("button", {
-        name: /Advance Scene/i,
-      })
-      .click()
+    await advanceAuthoredScene(managerPage)
     const closingStack = spectatorPage.locator(
       '[data-testid="cinematic-layer-stack-closing"]',
     )
@@ -2059,11 +2206,15 @@ test.describe("Cinematic Video + Multiple Timed Lottie Overlays (Gates 1–7)", 
         spectatorPage,
         `Closing Cinema + 3 Overlays @ ${vp.name}`,
       )
+      const closingTitle = closingStack
+        .getByTestId("cinematic-layer-native-title")
+        .getByTestId("tadazz-screen-message")
+        .locator(".tz-x-headline")
+      await expect(closingTitle).toHaveText("Grand Cinema Finale")
+      await expect(closingTitle).toBeVisible()
       await expect(
-        spectatorPage.getByRole("heading", {
-          name: "Grand Cinema Finale",
-        }),
-      ).toBeVisible()
+        spectatorPage.getByTestId("tadazz-screen-message"),
+      ).toHaveCount(1)
 
       if (
         vp.name === "1920x1080" ||

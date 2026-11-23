@@ -141,7 +141,7 @@ export function PackageStage({
     scene.media?.type.toLowerCase() === "image"
       ? scene.media.url
       : undefined)
-  const options = useMemo(() => question?.options ?? [], [question?.options])
+  const options = question?.options ?? []
   const imageKey = [
     ...options.map((a) => a.image ?? ""),
     ...(scene.kind === "scene" && scene.scene.kind === "interimResults"
@@ -167,6 +167,7 @@ export function PackageStage({
       Date.now() - capability.current.issuedAt < 240_000
     ) {
       capability.current.lifetime = capabilityLifetime
+
       return
     }
 
@@ -341,12 +342,11 @@ export function PackageStage({
         pending,
       })
     : available
-  const awaitingSandbox = Boolean(
+  const awaitingSandbox =
     questionFamily &&
     packageQuestionContentSupported(content) === true &&
     pending &&
-    !usingSandbox,
-  )
+    !usingSandbox
   const wasSandbox = useRef(false)
   const wasAwaitingSandbox = useRef(false)
   const fallbackCallback = useRef(onFallback)

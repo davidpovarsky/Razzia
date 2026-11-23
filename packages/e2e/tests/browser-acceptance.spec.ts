@@ -1,21 +1,43 @@
 import fs from "node:fs"
 import { join } from "node:path"
-import { BASIC_QUIZZ, CONFIG_PATH } from "@razzia/e2e/utils/constants"
+import { EVENTS } from "@razzia/common/constants"
+import { STATUS } from "@razzia/common/types/game/status"
+import {
+  BASIC_QUIZZ,
+  CONFIG_PATH,
+  TZILA_PILOT_SECRET,
+} from "@razzia/e2e/utils/constants"
 import {
   addAnswer,
+  questionCard,
   answerInput,
+  numberSetting,
   openQuizzTab,
   quizzRow,
+  readQuizz,
   seedQuizz,
   toggleSolution,
 } from "@razzia/e2e/utils/editor"
+import { pngFile } from "@razzia/e2e/utils/media"
+import {
+  endRecordedVote,
+  latestState,
+  liveRecord,
+  observeLiveFlow,
+  setManualProgression,
+  waitForRecordedVoting,
+} from "@razzia/e2e/utils/extension-manager"
 import { expect, test } from "@razzia/e2e/utils/fixtures"
 import { t } from "@razzia/e2e/utils/i18n"
 import { createGame, next, startGame } from "@razzia/e2e/utils/manager"
 import { answer, confirm, joinGame } from "@razzia/e2e/utils/player"
 import {
   buildXlsxBuffer,
+  SHOW_THEME_AUDIO_EVENTS,
   createDefaultQuizExtras,
+  computeCanonicalBaseDigest,
+  EXTENSION_EVENTS,
+  upgradeLegacyExtrasToV2,
 } from "@razzia/extensions/core"
 import {
   EXTENSION_LOCALES,
@@ -47,6 +69,25 @@ const saveScreenshots = async (page: Page, filename: string) => {
   }
 }
 
+const seedImage = (name: string) => {
+  const file = pngFile(`${name}-${crypto.randomUUID()}`)
+  const mediaDir = join(CONFIG_PATH, "media")
+  fs.mkdirSync(mediaDir, { recursive: true })
+  fs.writeFileSync(join(mediaDir, file.name), file.buffer, { flag: "wx" })
+
+  return `/media/${file.name}`
+}
+
+const seededQuizz = (subject: string) => {
+  const quizz = readQuizz(subject)
+
+  if (!quizz) {
+    throw new Error(`The actual seeded quiz is required: ${subject}`)
+  }
+
+  return quizz
+}
+
 test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
   test("Scenario 1: QuizzEditorProvider Lifecycle, Enhancements, First-Save Disk Persistence & Stable Asset Association", async ({
     page,
@@ -71,70 +112,83 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     await answerInput(page, 3).fill("Be")
     await toggleSolution(page, 0)
 
-    // 3. Open Enhancements Panel
-    const toggleBtn = page.locator('[data-testid="toggle-enhancements-button"]')
-    await expect(toggleBtn).toBeVisible()
-    await toggleBtn.click({ force: true })
-
-    const enhancementPanel = page.locator(
-      '[data-testid="editor-enhancement-panel"]',
+    // Use the current native answer controls and the shared real media library.
+    const mediaTag = `lifecycle-answer-${crypto.randomUUID()}`
+    await page.getByTestId("answer-mode-0-image").click()
+    await page.getByTestId("answer-pick-image-0").click()
+    const library = page
+      .getByRole("dialog", { name: t("quizz:media.library"), exact: true })
+      .filter({ has: page.getByPlaceholder(t("quizz:media.search")) })
+    await expect(library).toHaveCount(1)
+    const uploadPromise = page.waitForResponse(
+      (response) =>
+        response.request().method() === "POST" &&
+        /^\/api\/media\/?$/u.test(new URL(response.url()).pathname),
     )
-    await expect(enhancementPanel).toBeVisible()
+    await library
+      .locator("input[type=file][multiple]")
+      .setInputFiles(pngFile(mediaTag))
+    const uploadResponse = await uploadPromise
+    expect(uploadResponse.status()).toBe(201)
+    const uploaded = liveRecord(await uploadResponse.json())
+    expect(uploaded.type).toBe("image")
 
-    // 4. Configure Visuals Tab (Answer 0 Image, Answer 1 Both)
-    const tabVisuals = page.locator('[data-testid="tab-visuals"]')
-    await tabVisuals.click()
-    await expect(page.locator('[data-testid="panel-visuals"]')).toBeVisible()
+    if (typeof uploaded.name !== "string" || typeof uploaded.url !== "string") {
+      throw new Error(
+        "The real media upload must return its stored name and URL",
+      )
+    }
 
-    const displaySelect0 = page.locator('[data-testid="display-select-0"]')
-    await expect(displaySelect0).toBeVisible()
-    await displaySelect0.selectOption("image")
-    const mediaInput0 = page.locator('[data-testid="media-url-input-0"]')
-    await expect(mediaInput0).toBeVisible()
-    await mediaInput0.fill("/media/blue-sky.png")
-    const altInput0 = page.locator('[data-testid="alt-input-0"]')
-    await expect(altInput0).toBeVisible()
-    await altInput0.fill("Hydrogen gas cloud")
+    // The server normalizes and truncates upload names; select its actual result.
+    await library.getByPlaceholder(t("quizz:media.search")).fill(uploaded.name)
+    await library.getByTitle(uploaded.name, { exact: true }).click()
+    await expect(library).toBeHidden()
+    const firstPreview = page.getByTestId("answer-image-preview-0")
+    await expect(firstPreview).toBeVisible()
+    const uploadedImageUrl = await firstPreview.getAttribute("src")
+    expect(uploadedImageUrl).toMatch(/^\/media\//u)
+    expect(uploadedImageUrl).toBe(uploaded.url)
+    await page.getByTestId("answer-alt-input-0").fill("Hydrogen gas cloud")
+    await page.getByTestId("answer-mode-1-both").click()
+    await page.getByTestId("answer-pick-image-1").click()
+    await library.getByPlaceholder(t("quizz:media.search")).fill(uploaded.name)
+    await library.getByTitle(uploaded.name, { exact: true }).click()
+    await page.getByTestId("answer-alt-input-1").fill("Helium balloon")
+    await expect(page.getByTestId("answer-image-preview-1")).toHaveAttribute(
+      "src",
+      uploadedImageUrl ?? "",
+    )
 
-    const displaySelect1 = page.locator('[data-testid="display-select-1"]')
-    await expect(displaySelect1).toBeVisible()
-    await displaySelect1.selectOption("both")
-    const mediaInput1 = page.locator('[data-testid="media-url-input-1"]')
-    await expect(mediaInput1).toBeVisible()
-    await mediaInput1.fill("/media/blue-sky.png")
-    const altInput1 = page.locator('[data-testid="alt-input-1"]')
-    await expect(altInput1).toBeVisible()
-    await altInput1.fill("Helium balloon")
+    // Teams remain editable on the native Participants page.
+    await page.getByTestId("studio-tab-participants").click()
+    await expect(page.getByTestId("panel-teams")).toBeVisible()
+    await page.getByTestId("toggle-teams").check()
+    await page.getByTestId("add-team-button").click()
 
-    // 5. Configure Teams Tab
-    const tabTeams = page.locator('[data-testid="tab-teams"]')
-    await tabTeams.click()
-    await expect(page.locator('[data-testid="panel-teams"]')).toBeVisible()
+    // The single native policy editor updates both V2 defaults and runtime policy.
+    await page.getByTestId("studio-tab-settings").click()
+    const leaderboardSettings = page.getByTestId("studio-leaderboard-settings")
+    await leaderboardSettings.getByRole("combobox").click()
+    await page
+      .getByRole("option", {
+        name: t("extensions:studio.settings.policyEveryN"),
+        exact: true,
+      })
+      .click()
+    await page.getByTestId("every-n-input").fill("2")
 
-    const toggleTeams = page.locator('[data-testid="toggle-teams"]')
-    await toggleTeams.click()
-    const addTeamBtn = page.locator('[data-testid="add-team-button"]')
-    await expect(addTeamBtn).toBeVisible()
-    await addTeamBtn.click()
-
-    // 6. Configure Leaderboard Tab
-    const tabLeaderboard = page.locator('[data-testid="tab-leaderboard"]')
-    await tabLeaderboard.click()
-    await expect(
-      page.locator('[data-testid="panel-leaderboard"]'),
-    ).toBeVisible()
-
-    const radioEveryN = page.locator('[data-testid="mode-radio-everyN"]')
-    await radioEveryN.click()
-    const everyNInput = page.locator('[data-testid="every-n-input"]')
-    await everyNInput.fill("2")
-
-    // 7. Configure Interlude Tab on Q1
-    const tabInterlude = page.locator('[data-testid="tab-interlude"]')
-    await tabInterlude.click()
-    await expect(page.locator('[data-testid="panel-interlude"]')).toBeVisible()
-    const toggleInterlude = page.locator('[data-testid="toggle-interlude"]')
-    await toggleInterlude.click()
+    // Interludes in V2 are authored timeline cards, so edit the active representation.
+    await page.getByTestId("studio-tab-questions").click()
+    await page.getByTestId("editor-mode-advanced").click()
+    await page.getByTestId("studio-card-kind-select").click()
+    await page
+      .getByRole("option", {
+        name: t("extensions:timeline.transition"),
+        exact: true,
+      })
+      .click()
+    await page.getByTestId("studio-add-card-btn").click()
+    await page.getByTestId("scene-title-input").fill("First-question interlude")
 
     // Save screenshot of editor enhancements
     await saveScreenshots(page, "gate3-editor-enhancements.png")
@@ -181,18 +235,24 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
 
     const sidecarData = JSON.parse(fs.readFileSync(sidecarPath, "utf-8")) as {
       revision?: number
+      schemaVersion: number
+      defaults: { leaderboardPolicy: string }
+      timeline: Array<{ kind: string; questionId?: string; sceneId?: string }>
+      scenes: Record<string, { kind: string; title?: string }>
       teams?: { enabled: boolean }
       leaderboard?: { mode: string; everyN?: number }
       questionIds: string[]
       perQuestion: Record<
         string,
         {
-          answerVisuals?: Array<{ alt: string }>
+          answerVisuals?: Array<{ alt: string; url?: string }>
           interlude?: { kind: string }
         }
       >
     }
+    expect(sidecarData.schemaVersion).toBe(2)
     expect(sidecarData.revision).toBe(1)
+    expect(sidecarData.defaults.leaderboardPolicy).toBe("everyN")
     expect(sidecarData.teams?.enabled).toBe(true)
     expect(sidecarData.leaderboard?.mode).toBe("everyN")
     expect(sidecarData.leaderboard?.everyN).toBe(2)
@@ -201,7 +261,19 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     expect(sidecarData.perQuestion[initialQ0Id]?.answerVisuals?.[0]?.alt).toBe(
       "Hydrogen gas cloud",
     )
-    expect(sidecarData.perQuestion[initialQ0Id]?.interlude?.kind).toBe("title")
+    expect(sidecarData.perQuestion[initialQ0Id]?.answerVisuals?.[0]?.url).toBe(
+      uploadedImageUrl,
+    )
+    expect(sidecarData.timeline.map((item) => item.kind)).toEqual([
+      "question",
+      "transition",
+    ])
+    const [, { sceneId: interludeSceneId }] = sidecarData.timeline
+    expect(interludeSceneId).toBeTruthy()
+    expect(sidecarData.scenes[interludeSceneId!]).toMatchObject({
+      kind: "transition",
+      title: "First-question interlude",
+    })
 
     // 10. Reopen the quiz and test QuizzEditorProvider Lifecycle
     await openQuizzTab(page)
@@ -211,11 +283,20 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     await expect(page).toHaveURL(
       new RegExp(`/manager/quizz/${actualQuizId}$`, "u"),
     )
-    await toggleBtn.click({ force: true })
-    await expect(enhancementPanel).toBeVisible()
+    await expect(page.getByTestId("answer-alt-input-0")).toHaveValue(
+      "Hydrogen gas cloud",
+    )
+    await expect(page.getByTestId("answer-image-preview-0")).toHaveAttribute(
+      "src",
+      uploadedImageUrl ?? "",
+    )
 
     // 11. Add Question 2
-    await page.getByRole("button", { name: t("quizz:addQuestion") }).click()
+    await page.getByTestId("studio-card-kind-select").click()
+    await page
+      .getByRole("option", { name: t("extensions:timeline.quiz"), exact: true })
+      .click()
+    await page.getByTestId("studio-add-card-btn").click()
     await page
       .getByPlaceholder(t("quizz:question.placeholder"))
       .fill("What is the boiling point of water?")
@@ -225,14 +306,14 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
 
     // 12. Duplicate Question 1
     // Hover and click Duplicate on Question 1 in sidebar
-    const card1 = page.locator("aside").getByText("1").first()
+    const card1 = questionCard(page, 0)
     await card1.click()
     await expect(
       page.getByPlaceholder(t("quizz:question.placeholder")),
     ).toHaveValue("What is the chemical symbol for Hydrogen?")
 
     await card1.hover()
-    const duplicateBtn = page.getByRole("button", {
+    const duplicateBtn = card1.getByRole("button", {
       name: t("quizz:question.duplicateQuestion", {
         defaultValue: "Duplicate question",
       }),
@@ -241,17 +322,21 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     await duplicateBtn.click()
 
     // Verify 3 questions now exist in sidebar
-    await expect(page.locator("aside").getByText("3")).toBeVisible()
+    await expect(
+      page
+        .getByTestId("editor-timeline")
+        .locator('[data-testid^="editor-question-card-"]'),
+    ).toHaveCount(3)
 
     // 13. Delete Question 3 (water question, which shifted to 3 after insertion at 1)
-    const card3 = page.locator("aside").getByText("3").first()
+    const card3 = questionCard(page, 2)
     await card3.click()
     await expect(
       page.getByPlaceholder(t("quizz:question.placeholder")),
     ).toHaveValue("What is the boiling point of water?")
 
     await card3.hover()
-    const deleteBtn = page.getByRole("button", {
+    const deleteBtn = card3.getByRole("button", {
       name: t("quizz:question.deleteQuestion"),
       exact: true,
     })
@@ -290,6 +375,12 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
       "Hydrogen gas cloud",
     )
     expect(Object.keys(sidecarData2.perQuestion)).toHaveLength(2)
+    expect(sidecarData2.scenes[interludeSceneId!]).toEqual(
+      sidecarData.scenes[interludeSceneId!],
+    )
+    expect(
+      sidecarData2.timeline.filter((item) => item.kind === "transition"),
+    ).toEqual([sidecarData.timeline[1]])
   })
 
   test("Scenario 2: Asynchronous Sidecar-Loading Race Condition Handling", async ({
@@ -297,6 +388,8 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
   }) => {
     const subject = `Async Race Quizz ${Date.now()}`
     const quizzId = subject.toLowerCase().replace(/\W+/gu, "-")
+
+    const imageUrl = seedImage("async-sidecar")
 
     // 1. Seed quiz with extension sidecar on disk
     seedQuizz(subject, {
@@ -315,13 +408,17 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     const sidecarDir = join(CONFIG_PATH, "extensions", "quizzes")
     fs.mkdirSync(sidecarDir, { recursive: true })
     const qIds = [crypto.randomUUID()]
-    const extras = createDefaultQuizExtras(quizzId, qIds, "c".repeat(64))
+    const extras = createDefaultQuizExtras(
+      quizzId,
+      qIds,
+      computeCanonicalBaseDigest(seededQuizz(subject)),
+    )
     extras.perQuestion[qIds[0]] = {
       answerVisuals: [
         {
           answerIndex: 0,
           display: "image",
-          url: "/media/blue-sky.png",
+          url: imageUrl,
           alt: "Sidecar Photo",
         },
       ],
@@ -332,58 +429,83 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
       "utf-8",
     )
 
-    // 2. Intercept composite API request and delay response by 1200ms
+    // Hold the real composite read before opening the editor. The current Studio
+    // locks editing until identities and extras are ready, preventing this race.
+    let releaseSidecar: () => void = () => undefined
+    const sidecarGate = new Promise<void>((resolve) => {
+      releaseSidecar = resolve
+    })
     await page.route(`**/api/extensions/quizzes/${quizzId}`, async (route) => {
-      await new Promise<void>((resolve) => {
-        setTimeout(resolve, 1200)
-      })
+      if (route.request().method() === "GET") {
+        await sidecarGate
+      }
+
       await route.continue()
     })
-
-    // 3. Open quiz in editor
+    const compositeResponse = page.waitForResponse(
+      (res) =>
+        res.request().method() === "GET" &&
+        new URL(res.url()).pathname === `/api/extensions/quizzes/${quizzId}`,
+    )
     await openQuizzTab(page)
     await quizzRow(page, subject)
       .getByRole("button", { name: t("manager:quizz.edit") })
       .click()
     await expect(page).toHaveURL(new RegExp(`/manager/quizz/${quizzId}$`, "u"))
-
-    // 4. Begin typing/editing immediately before the 1200ms delay finishes
     const questionInput = page.getByPlaceholder(t("quizz:question.placeholder"))
-    await questionInput.fill("Question Edited Before Sidecar Resolved")
 
-    // 5. Wait for the sidecar response to arrive and complete
-    await page.waitForResponse((res) =>
-      res.url().includes(`/api/extensions/quizzes/${quizzId}`),
-    )
+    try {
+      await expect(page.getByTestId("studio-load-state")).toBeVisible()
+      await expect(questionInput).toHaveCount(0)
+      await expect(page.getByTestId("editor-save-btn")).toBeDisabled()
+      await expect(
+        page.getByPlaceholder(t("quizz:titleQuizzPlaceholder")),
+      ).toBeDisabled()
+    } finally {
+      releaseSidecar()
+    }
 
-    // 6. Assert user edits are NOT silently overwritten by delayed sidecar response
-    await expect(questionInput).toHaveValue(
-      "Question Edited Before Sidecar Resolved",
-    )
-
-    // 7. Verify the sidecar attachment is still associated with this question
-    const toggleBtn = page.locator('[data-testid="toggle-enhancements-button"]')
-    await toggleBtn.click({ force: true })
-    const tabVisuals = page.locator('[data-testid="tab-visuals"]')
-    await tabVisuals.click()
-    const altInput0 = page.locator('[data-testid="alt-input-0"]')
+    expect((await compositeResponse).status()).toBe(200)
+    await expect(page.getByTestId("studio-load-state")).toHaveCount(0)
+    await expect(questionInput).toHaveValue("Original Question One")
+    await questionInput.fill("Question Edited After Sidecar Resolved")
+    const altInput0 = page.getByTestId("answer-alt-input-0")
     await expect(altInput0).toBeVisible()
     await expect(altInput0).toHaveValue("Sidecar Photo")
-
-    // 8. Save and verify server persistence reflects both user edit and sidecar extras
-    const savePromise = page.waitForResponse(
-      (res) => res.url().includes("/quizz") && res.status() === 200,
+    await expect(page.getByTestId("answer-image-preview-0")).toHaveAttribute(
+      "src",
+      imageUrl,
     )
-    const saveBtn = page.getByRole("button", { name: t("common:save") })
-    await saveBtn.click()
+    expect((await page.request.get(imageUrl)).status()).toBe(200)
+    await expect(questionInput).toHaveValue(
+      "Question Edited After Sidecar Resolved",
+    )
+
+    // The same composite save must persist both the real edit and its association.
+    const savePromise = page.waitForResponse(
+      (res) =>
+        res.request().method() === "PUT" &&
+        new URL(res.url()).pathname === `/api/extensions/quizzes/${quizzId}` &&
+        res.status() === 200,
+    )
+    await page.getByTestId("editor-save-btn").click()
     await savePromise
     await expect(page).toHaveURL(/\/manager\/config$/u)
-
     const savedBase = JSON.parse(
       fs.readFileSync(join(CONFIG_PATH, "quizz", `${quizzId}.json`), "utf-8"),
     ) as { questions: Array<{ question: string }> }
     expect(savedBase.questions[0].question).toBe(
-      "Question Edited Before Sidecar Resolved",
+      "Question Edited After Sidecar Resolved",
+    )
+    const savedExtras = JSON.parse(
+      fs.readFileSync(join(sidecarDir, `${quizzId}.json`), "utf-8"),
+    ) as {
+      questionIds: string[]
+      perQuestion: Record<string, { answerVisuals?: Array<{ alt: string }> }>
+    }
+    expect(savedExtras.questionIds).toEqual(qIds)
+    expect(savedExtras.perQuestion[qIds[0]]?.answerVisuals?.[0]?.alt).toBe(
+      "Sidecar Photo",
     )
   })
 
@@ -411,7 +533,11 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     const sidecarDir = join(CONFIG_PATH, "extensions", "quizzes")
     fs.mkdirSync(sidecarDir, { recursive: true })
     const qIds = [crypto.randomUUID()]
-    const extras = createDefaultQuizExtras(quizzId, qIds, "d".repeat(64))
+    const extras = createDefaultQuizExtras(
+      quizzId,
+      qIds,
+      computeCanonicalBaseDigest(seededQuizz(subject)),
+    )
     extras.leaderboard = { mode: "everyN", everyN: 1 }
     fs.writeFileSync(
       join(sidecarDir, `${quizzId}.json`),
@@ -438,17 +564,16 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     )
 
     // 3. Session 1 modifies Leaderboard everyN to 5 and saves (revision becomes 2)
-    const toggle1 = session1.locator(
-      '[data-testid="toggle-enhancements-button"]',
-    )
-    await toggle1.click({ force: true })
-    await session1.locator('[data-testid="tab-leaderboard"]').click()
+    await session1.getByTestId("studio-tab-settings").click()
     const everyN1 = session1.locator('[data-testid="every-n-input"]')
     await expect(everyN1).toBeVisible()
     await everyN1.fill("5")
 
     const savePromise1 = session1.waitForResponse(
-      (res) => res.url().includes("/quizz") && res.status() === 200,
+      (res) =>
+        res.request().method() === "PUT" &&
+        new URL(res.url()).pathname === `/api/extensions/quizzes/${quizzId}` &&
+        res.status() === 200,
     )
     await session1.getByRole("button", { name: t("common:save") }).click()
     await savePromise1
@@ -462,11 +587,7 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     expect(diskSidecar1.leaderboard?.everyN).toBe(5)
 
     // 4. Session 2 (has expectedRevision 1) modifies everyN to 3 and tries to save -> 409 Conflict
-    const toggle2 = session2.locator(
-      '[data-testid="toggle-enhancements-button"]',
-    )
-    await toggle2.click({ force: true })
-    await session2.locator('[data-testid="tab-leaderboard"]').click()
+    await session2.getByTestId("studio-tab-settings").click()
     const everyN2 = session2.locator('[data-testid="every-n-input"]')
     await expect(everyN2).toBeVisible()
     await everyN2.fill("3")
@@ -512,11 +633,13 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     await quizzRow(session1, subject)
       .getByRole("button", { name: t("manager:quizz.edit") })
       .click()
-    await toggle1.click({ force: true })
-    await session1.locator('[data-testid="tab-leaderboard"]').click()
+    await session1.getByTestId("studio-tab-settings").click()
     await session1.locator('[data-testid="every-n-input"]').fill("9")
     const savePromise3 = session1.waitForResponse(
-      (res) => res.url().includes("/quizz") && res.status() === 200,
+      (res) =>
+        res.request().method() === "PUT" &&
+        new URL(res.url()).pathname === `/api/extensions/quizzes/${quizzId}` &&
+        res.status() === 200,
     )
     await session1.getByRole("button", { name: t("common:save") }).click()
     await savePromise3
@@ -565,6 +688,9 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     const subject = `Gameplay Team Quizz ${Date.now()}`
     const quizzId = subject.toLowerCase().replace(/\W+/gu, "-")
 
+    const imageUrl = seedImage("phone-team-reveal")
+    const hostWire = observeLiveFlow(manager)
+
     // 1. Seed quiz with extension extras (teams and reveal)
     seedQuizz(subject, {
       questions: [
@@ -575,10 +701,10 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
           solutions: [0],
           media: {
             type: "image",
-            url: "/media/blue-sky.png",
+            url: imageUrl,
           },
           cooldown: 3,
-          time: 60,
+          time: 600,
         },
         {
           type: "single",
@@ -586,7 +712,7 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
           answers: ["20", "30", "40", "50"],
           solutions: [0],
           cooldown: 3,
-          time: 60,
+          time: 600,
         },
       ],
     })
@@ -595,7 +721,11 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     fs.mkdirSync(sidecarDir, { recursive: true })
 
     const qIds = [crypto.randomUUID(), crypto.randomUUID()]
-    const extras = createDefaultQuizExtras(quizzId, qIds, "a".repeat(64))
+    const extras = createDefaultQuizExtras(
+      quizzId,
+      qIds,
+      computeCanonicalBaseDigest(seededQuizz(subject)),
+    )
     extras.leaderboard = {
       mode: "everyN",
       everyN: 1,
@@ -620,29 +750,42 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
           {
             answerIndex: 0,
             display: "both",
-            url: "/media/blue-sky.png",
+            url: imageUrl,
             alt: "Clear blue sky",
           },
         ],
       },
     }
 
+    const liveExtras = upgradeLegacyExtrasToV2(seededQuizz(subject), extras, {
+      quizId: quizzId,
+      baseDigest: extras.baseDigest,
+    })
+    liveExtras.defaults.showTheme = {
+      id: "razzia-original",
+      version: "1.0.0",
+      overrides: {},
+    }
     fs.writeFileSync(
       join(sidecarDir, `${quizzId}.json`),
-      JSON.stringify(extras, null, 2),
+      JSON.stringify(liveExtras, null, 2),
       "utf-8",
     )
 
     // 2. Create game as authenticated manager
     const pin = await createGame(manager, subject)
+    await setManualProgression(manager)
+    expect((await manager.request.get(imageUrl)).status()).toBe(200)
 
     // 3. Join Web Player 1 (Alice)
     const player1 = await newPage()
+    const player1Wire = observeLiveFlow(player1)
     await joinGame(player1, pin, "Alice")
     await expect(manager.getByText("Alice").first()).toBeVisible()
 
     // 4. Join Web Player 2 (Bob)
     const player2 = await newPage()
+    const player2Wire = observeLiveFlow(player2)
     await joinGame(player2, pin, "Bob")
     await expect(manager.getByText("Bob").first()).toBeVisible()
 
@@ -654,7 +797,7 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     const bridge = new TelephonyBridge({
       transport: realTransport,
       provider: mockProvider,
-      baseUrl: "http://localhost:3001",
+      baseUrl: new URL(manager.url()).origin,
     })
     const sim = new KeypadSimulatorCore(bridge, { callId: "browser_phone_001" })
     await sim.startCall("07700900101")
@@ -693,11 +836,20 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     expect(await revealContainer.getAttribute("data-effect")).toBe("blur")
     const revealImg = manager.locator('[data-testid="reveal-media-image"]')
     await expect(revealImg).toBeVisible()
+    await expect
+      .poll(() =>
+        revealImg.evaluate(
+          (element: HTMLImageElement) =>
+            element.complete && element.naturalWidth > 0,
+        ),
+      )
+      .toBe(true)
     await expect(revealContainer).toHaveAttribute("data-revealed", "true", {
       timeout: 10000,
     })
 
     // 8. Phone player answers correctly via DTMF '1' ("Mars")
+    await waitForRecordedVoting(hostWire, qIds[0])
     const dtmfDirective = await sim.pressKey("1")
     expect(dtmfDirective.message).toContain("submitted")
 
@@ -705,24 +857,51 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     await answer(player1, "Mars")
 
     // 10. Host ends timer early via host toolbar button (before natural countdown expires)
-    const endTimerBtn = manager.getByRole("button", {
-      name: t("extensions:host.endTimer"),
-    })
-    await expect(endTimerBtn).toBeVisible()
-    await endTimerBtn.click()
+    await endRecordedVote(manager, hostWire, { questionId: qIds[0], count: 2 })
 
     // 11. Results revealed immediately upon timer end
     await expect(player1.getByText(t("game:correct"))).toBeVisible()
-    const player1Score = player1.locator("div.rounded-lg.bg-gray-800")
-    await expect(player1Score).not.toHaveText("0")
+    await expect
+      .poll(
+        () =>
+          player1Wire.findLast((row) => row.name === STATUS.SHOW_RESULT)?.data
+            .correct,
+      )
+      .toBe(true)
+    const player1Result = player1Wire.findLast(
+      (row) => row.name === STATUS.SHOW_RESULT,
+    )?.data
+    expect(player1Result?.points).toBeGreaterThan(0)
+    expect(player1Result?.myPoints).toBe(player1Result?.points)
+    await expect(
+      player1.getByTestId("native-razzia-player-result"),
+    ).toContainText(`+${String(player1Result?.points)}`)
 
     // 12. Player 2 reconnect test (simulates connection drop & rejoin during results)
+    const replayStart = player2Wire.length
     await player2.reload()
-    expect(
-      player2
-        .getByText(t("game:reconnecting"))
-        .or(player2.getByRole("button", { name: /^A /u })),
-    ).toBeDefined()
+    await expect(
+      player2.getByTestId("native-razzia-player-result"),
+    ).toBeVisible()
+    await expect
+      .poll(
+        () =>
+          player2Wire
+            .slice(replayStart)
+            .findLast((row) => row.name === EVENTS.PLAYER.SUCCESS_RECONNECT)
+            ?.data,
+      )
+      .toMatchObject({
+        currentQuestion: { current: 1, total: 2 },
+        status: {
+          name: STATUS.SHOW_RESULT,
+          data: { correct: false, points: 0, myPoints: 0 },
+        },
+        player: { username: "Bob", points: 0 },
+      })
+    await expect(
+      player2.getByRole("button", { name: "1 Mars", exact: true }),
+    ).toHaveCount(0)
 
     await next(manager)
     const teamLeaderboard = manager.locator(
@@ -786,7 +965,7 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     /* oxlint-disable eslint/no-await-in-loop */
     for (const loc of locales) {
       // Check landing page
-      await page.goto(`/?lng=${loc}`)
+      await page.goto(`/game?lng=${loc}`)
       await expect(page.locator("body")).toBeVisible()
 
       const bodyText = (await page.locator("body").textContent()) ?? ""
@@ -801,59 +980,55 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
         new RegExp(`/manager/quizz/${locQuizzId}`, "u"),
       )
 
-      // Open enhancements panel
-      const toggleBtn = page.locator(
-        '[data-testid="toggle-enhancements-button"]',
-      )
-      await expect(toggleBtn).toBeVisible()
-      await toggleBtn.click({ force: true })
-
-      const enhancementPanel = page.locator(
-        '[data-testid="editor-enhancement-panel"]',
-      )
-      await expect(enhancementPanel).toBeVisible()
-
-      // Verify localized tab labels
       const locData = EXTENSION_LOCALES[loc]
-      await expect(page.locator('[data-testid="tab-visuals"]')).toContainText(
-        locData.tabs.visuals,
+      await expect(page.getByTestId("studio-tab-questions")).toHaveText(
+        locData.studio.tabs.questions,
       )
-      await expect(page.locator('[data-testid="tab-interlude"]')).toContainText(
-        locData.tabs.interludes,
+      await expect(page.getByTestId("studio-tab-participants")).toHaveText(
+        locData.studio.tabs.participants,
       )
-      await expect(
-        page.locator('[data-testid="tab-leaderboard"]'),
-      ).toContainText(locData.tabs.leaderboard)
-      await expect(page.locator('[data-testid="tab-teams"]')).toContainText(
-        locData.tabs.teams,
+      await expect(page.getByTestId("studio-tab-settings")).toHaveText(
+        locData.studio.tabs.settings,
       )
-      await expect(page.locator('[data-testid="tab-audio"]')).toContainText(
-        locData.tabs.audio,
-      )
+      const visuals = page.getByTestId("answer-display-mode-0")
+      await expect(visuals).toContainText(locData.visuals.displayText)
+      await expect(visuals).toContainText(locData.visuals.displayImage)
+      await expect(visuals).toContainText(locData.visuals.displayBoth)
 
-      // Click Teams tab and verify localized elements
-      await page.locator('[data-testid="tab-teams"]').click()
-      await expect(page.locator('[data-testid="panel-teams"]')).toBeVisible()
-      await expect(page.locator('[data-testid="panel-teams"]')).toContainText(
+      await page.getByTestId("studio-tab-participants").click()
+      await expect(page.getByTestId("panel-teams")).toBeVisible()
+      await expect(page.getByTestId("panel-teams")).toContainText(
         locData.teams.enableTeams,
       )
+      await expect(page.getByTestId("panel-roster")).toBeVisible()
 
-      // Click Audio tab and verify localized elements
-      await page.locator('[data-testid="tab-audio"]').click()
-      await expect(page.locator('[data-testid="panel-audio"]')).toBeVisible()
-      await expect(page.locator('[data-testid="panel-audio"]')).toContainText(
-        locData.audio.cuesTitle,
-      )
+      await page.getByTestId("studio-tab-settings").click()
+      const nativeAudio = page
+        .getByTestId("show-theme-settings")
+        .locator("details")
+        .filter({
+          has: page
+            .locator("summary")
+            .getByText(locData.themes.sections.audio, { exact: true }),
+        })
+      await expect(nativeAudio).toHaveCount(1)
+      await nativeAudio.locator("summary").click()
+      for (const event of SHOW_THEME_AUDIO_EVENTS) {
+        await expect(
+          nativeAudio.getByTestId(`theme-audio-${event}`),
+        ).toContainText(locData.themes.audio[event])
+      }
 
       // Verify no untranslated keys exist in panel
-      const panelContent = (await enhancementPanel.textContent()) ?? ""
+      const panelContent =
+        (await page.locator("#studio-content").textContent()) ?? ""
       expect(panelContent).not.toContain("extensions:")
       expect(panelContent).not.toContain("errors:")
     }
     /* oxlint-enable eslint/no-await-in-loop */
 
     // Take screenshot of localized UI
-    await page.goto("/?lng=fr")
+    await page.goto("/game?lng=fr")
     await saveScreenshots(page, "gate3-locales-verified.png")
   })
 
@@ -864,6 +1039,8 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     const subject = `PhaseA Full Flow ${Date.now()}`
     const quizzId = subject.toLowerCase().replace(/\W+/gu, "-")
 
+    const hostWire = observeLiveFlow(manager)
+
     // 1. Seed 3 questions
     seedQuizz(subject, {
       questions: [
@@ -873,7 +1050,7 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
           answers: ["Paris", "London", "Berlin", "Madrid"],
           solutions: [0],
           cooldown: 3,
-          time: 60,
+          time: 600,
         },
         {
           type: "multi",
@@ -881,7 +1058,7 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
           answers: ["2", "3", "4", "5"],
           solutions: [0, 1, 3],
           cooldown: 3,
-          time: 60,
+          time: 600,
         },
         {
           type: "single",
@@ -889,7 +1066,7 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
           answers: ["4", "5"],
           solutions: [0],
           cooldown: 3,
-          time: 60,
+          time: 600,
         },
       ],
     })
@@ -898,7 +1075,11 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     fs.mkdirSync(sidecarDir, { recursive: true })
 
     const qIds = [crypto.randomUUID(), crypto.randomUUID(), crypto.randomUUID()]
-    const extras = createDefaultQuizExtras(quizzId, qIds, "b".repeat(64))
+    const extras = createDefaultQuizExtras(
+      quizzId,
+      qIds,
+      computeCanonicalBaseDigest(seededQuizz(subject)),
+    )
     extras.leaderboard = {
       mode: "everyN",
       everyN: 1,
@@ -915,21 +1096,48 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
       },
     }
 
+    // The canonical migration makes the legacy interlude one active V2 card.
+    const liveExtras = upgradeLegacyExtrasToV2(seededQuizz(subject), extras, {
+      quizId: quizzId,
+      baseDigest: extras.baseDigest,
+    })
+    liveExtras.defaults.showTheme = {
+      id: "razzia-original",
+      version: "1.0.0",
+      overrides: {},
+    }
+    expect(liveExtras.timeline.map((item) => item.kind)).toEqual([
+      "question",
+      "transition",
+      "question",
+      "question",
+    ])
+    const [, transitionStep] = liveExtras.timeline
+
+    if (transitionStep.kind !== "transition") {
+      throw new Error("The migrated interlude must be one transition card")
+    }
+
+    const { sceneId: interludeSceneId } = transitionStep
+    expect(interludeSceneId).toBeTruthy()
     fs.writeFileSync(
       join(sidecarDir, `${quizzId}.json`),
-      JSON.stringify(extras, null, 2),
+      JSON.stringify(liveExtras, null, 2),
       "utf-8",
     )
 
     // 2. Create game as authenticated manager
     const pin = await createGame(manager, subject)
+    await setManualProgression(manager)
 
     // 3. Two browser players join
     const alice = await newPage()
+    const aliceWire = observeLiveFlow(alice)
     await joinGame(alice, pin, "Alice")
     await expect(manager.getByText("Alice").first()).toBeVisible()
 
     const bob = await newPage()
+    const bobWire = observeLiveFlow(bob)
     await joinGame(bob, pin, "Bob")
     await expect(manager.getByText("Bob").first()).toBeVisible()
 
@@ -937,19 +1145,29 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     await startGame(manager)
 
     // 5. Question 1 begins: Alice answers "Paris", Bob does not answer
+    await waitForRecordedVoting(hostWire, qIds[0])
     await answer(alice, "Paris")
 
     // 6. Host ends timer via actual manager button (closes answers early without waiting 60s)
-    const endTimerButton = manager.getByRole("button", {
-      name: t("extensions:host.endTimer"),
-    })
-    await expect(endTimerButton).toBeVisible()
-    await endTimerButton.click()
+    await endRecordedVote(manager, hostWire, { questionId: qIds[0], count: 1 })
 
     // 7. Player answers are scored and personally displayed immediately upon timer end
     await expect(alice.getByText(t("game:correct"))).toBeVisible()
-    const aliceScore = alice.locator("div.rounded-lg.bg-gray-800")
-    await expect(aliceScore).not.toHaveText("0")
+    await expect
+      .poll(
+        () =>
+          aliceWire.findLast((row) => row.name === STATUS.SHOW_RESULT)?.data
+            .correct,
+      )
+      .toBe(true)
+    const aliceResult = aliceWire.findLast(
+      (row) => row.name === STATUS.SHOW_RESULT,
+    )?.data
+    expect(aliceResult?.points).toBeGreaterThan(0)
+    expect(aliceResult?.myPoints).toBe(aliceResult?.points)
+    await expect(
+      alice.getByTestId("native-razzia-player-result"),
+    ).toContainText(`+${String(aliceResult?.points)}`)
 
     // 8. Verify Responses screen & response bars (100% for Paris, 0% for others)
     await expect(manager.getByRole("button", { name: /Paris/u })).toContainText(
@@ -959,30 +1177,62 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
       manager.getByRole("button", { name: /London/u }),
     ).toContainText("0%")
 
-    // 8. Keyboard navigation: Host presses Space to advance to Leaderboard
-    await manager.keyboard.press("Space")
-    await expect(manager.getByText(t("game:leaderboard"))).toBeVisible()
+    // Current host navigation requires two matching ArrowRight presses.
+    await manager.getByTestId("host-question-counter").click()
+    const nextCommandCount = () =>
+      hostWire.filter(
+        (row) =>
+          row.name === `sent:${EXTENSION_EVENTS.COMMAND}` &&
+          row.data.action === "NEXT_SCREEN",
+      ).length
+    const beforeNext = nextCommandCount()
+    await manager.keyboard.press("ArrowRight")
+    expect(nextCommandCount()).toBe(beforeNext)
+    await manager.keyboard.press("ArrowRight")
+    await expect.poll(nextCommandCount).toBe(beforeNext + 1)
+    await expect(
+      manager.getByRole("heading", {
+        name: t("game:leaderboard"),
+        exact: true,
+      }),
+    ).toBeVisible()
 
     // 9. Advance to Interlude
     await next(manager)
-    const interludePresenter = manager.locator(
-      '[data-testid="interlude-presenter"]',
-    )
+    const interludePresenter = manager.getByTestId("studio-scene-presenter")
+    await expect(interludePresenter).toHaveCount(1)
     await expect(interludePresenter).toBeVisible()
-    await expect(manager.getByText("Mid-Quiz Interlude")).toBeVisible()
+    await expect(interludePresenter).toHaveAttribute("data-kind", "transition")
+    await expect(
+      interludePresenter.getByText("Mid-Quiz Interlude", { exact: true }),
+    ).toBeVisible()
+    await expect
+      .poll(
+        () =>
+          liveRecord(
+            liveRecord(latestState(hostWire)?.extras).activeTimelineStep,
+          ).sceneId,
+      )
+      .toBe(interludeSceneId)
+    await expect(manager.getByTestId("host-end-timer-btn")).toHaveCount(0)
+    await expect(manager.getByTestId("host-restart-question-btn")).toHaveCount(
+      0,
+    )
+    await expect(
+      alice.getByRole("button", { name: "1 Paris", exact: true }),
+    ).toHaveCount(0)
 
-    // Interlude manual skip produces exactly one transition to Question 2
-    const skipInterludeBtn = manager.getByRole("button", {
-      name: t("extensions:interludes.skipInterlude"),
-    })
-    await expect(skipInterludeBtn).toBeVisible()
-    await skipInterludeBtn.click()
+    // The existing host Next control advances the single migrated scene once.
+    const beforeSceneNext = nextCommandCount()
+    await manager.getByTestId("host-next-screen-btn").click()
+    await expect.poll(nextCommandCount).toBe(beforeSceneNext + 1)
 
     // 10. Question 2 (Multi-choice) begins
     await expect(manager.getByText("2 / 3")).toBeVisible()
     await expect(alice.getByText("2 / 3")).toBeVisible()
 
     // Alice selects "2" and "3", submits
+    await waitForRecordedVoting(hostWire, qIds[1])
     await answer(alice, "2")
     await answer(alice, "3")
     await confirm(alice)
@@ -991,29 +1241,28 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     await answer(bob, "2")
     await answer(bob, "5")
     await confirm(bob)
+    await endRecordedVote(manager, hostWire, { questionId: qIds[1], count: 2 })
 
     // Both players get personal results immediately
     await expect(alice.getByText(t("game:correct"))).toBeVisible()
     await expect(bob.getByText(t("game:correct"))).toBeVisible()
 
     // 11. Manager's response bars display authoritative multi-choice percentages (sum can exceed 100%)
-    await expect(manager.getByRole("button", { name: /^A 2/u })).toContainText(
+    await expect(manager.getByRole("button", { name: /^1 2/u })).toContainText(
       "100%",
     )
-    await expect(manager.getByRole("button", { name: /^B 3/u })).toContainText(
+    await expect(manager.getByRole("button", { name: /^2 3/u })).toContainText(
       "50%",
     )
-    await expect(manager.getByRole("button", { name: /^D 5/u })).toContainText(
+    await expect(manager.getByRole("button", { name: /^4 5/u })).toContainText(
       "50%",
     )
-    await expect(manager.getByRole("button", { name: /^C 4/u })).toContainText(
+    await expect(manager.getByRole("button", { name: /^3 4/u })).toContainText(
       "0%",
     )
 
-    // 12. Host clicks Previous (History Viewer Modal)
-    const previousBtn = manager.getByRole("button", {
-      name: t("extensions:host.previous"),
-    })
+    // 12. History has its own control; Previous performs a real one-step rollback.
+    const previousBtn = manager.getByTestId("host-history-btn")
     await expect(previousBtn).toBeVisible()
     await previousBtn.click()
 
@@ -1030,7 +1279,14 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
 
     // 13. Keyboard modal focus protection: pressing Space while modal is open does NOT trigger live action
     await manager.getByText("What is the capital of France?").click()
+    const beforeModalState = latestState(hostWire)
+    const beforeModalNext = nextCommandCount()
     await manager.keyboard.press("Space")
+    await manager.keyboard.press("Space")
+    await manager.keyboard.press("ArrowRight")
+    await manager.keyboard.press("ArrowRight")
+    expect(nextCommandCount()).toBe(beforeModalNext)
+    expect(latestState(hostWire)).toEqual(beforeModalState)
     await expect(
       manager.getByRole("heading", { name: t("extensions:host.previous") }),
     ).toBeVisible()
@@ -1046,22 +1302,46 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     await expect(
       manager.getByRole("heading", { name: t("extensions:host.previous") }),
     ).toBeVisible()
-    await manager.waitForTimeout(900)
     const replayBtn = manager.getByRole("button", {
       name: t("extensions:host.replayFromHere"),
     })
     await expect(replayBtn).toBeVisible()
+    await expect(replayBtn).toBeEnabled()
+    const replayCommands = () =>
+      hostWire.filter(
+        (row) =>
+          row.name === `sent:${EXTENSION_EVENTS.COMMAND}` &&
+          row.data.action === "REPLAY_FROM_CHECKPOINT",
+      )
+    const beforeReplayCount = replayCommands().length
+    const previousEpoch = latestState(hostWire)?.epoch
     await replayBtn.click()
 
     // Confirm dialog
     await expect(
       manager.getByText(t("extensions:host.replayConfirmTitle")),
     ).toBeVisible()
-    await manager.waitForTimeout(900)
-    await manager
-      .getByRole("button", { name: t("extensions:host.replayFromHere") })
-      .last()
-      .click()
+    const replayConfirmation = manager.getByRole("alertdialog", {
+      name: t("extensions:host.replayConfirmTitle"),
+      exact: true,
+    })
+    const confirmReplay = replayConfirmation.getByRole("button", {
+      name: t("extensions:host.replayFromHere"),
+      exact: true,
+    })
+    await expect(confirmReplay).toBeEnabled()
+    await confirmReplay.click()
+    await expect.poll(() => replayCommands().length).toBe(beforeReplayCount + 1)
+    expect(replayCommands().at(-1)?.data).toMatchObject({
+      payload: {
+        questionIndex: 0,
+        confirmed: true,
+        epoch: previousEpoch,
+      },
+    })
+    await expect
+      .poll(() => latestState(hostWire)?.epoch)
+      .toBeGreaterThan(Number(previousEpoch))
 
     // 15. Verify Question 1 is restored (epoch rollback & new live question)
     await expect(manager.getByText("1 / 3")).toBeVisible({ timeout: 10000 })
@@ -1071,13 +1351,30 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     // 16. Reconnect & refresh test: Bob reloads page during Question 1
     await bob.reload()
     await expect(bob.locator("body")).toBeVisible()
+    await waitForRecordedVoting(hostWire, qIds[0])
+    const beforeReplayResultCount = bobWire.filter(
+      (row) => row.name === STATUS.SHOW_RESULT,
+    ).length
     await answer(bob, "Paris")
+    await endRecordedVote(manager, hostWire, { questionId: qIds[0], count: 1 })
     await expect(bob.getByText(t("game:correct"))).toBeVisible()
+    await expect
+      .poll(
+        () => bobWire.filter((row) => row.name === STATUS.SHOW_RESULT).length,
+      )
+      .toBeGreaterThan(beforeReplayResultCount)
+    const replayResult = bobWire.findLast(
+      (row) => row.name === STATUS.SHOW_RESULT,
+    )?.data
+    expect(replayResult?.correct).toBe(true)
+    expect(replayResult?.points).toBeGreaterThan(0)
+    expect(replayResult?.myPoints).toBe(replayResult?.points)
 
     // Manager immediately shows updated responses for replayed Question 1
     await expect(manager.getByRole("button", { name: /Paris/u })).toContainText(
       "100%",
     )
+    expect(replayCommands()).toHaveLength(beforeReplayCount + 1)
     await saveScreenshots(manager, "gate3-phase-a-flow-replay.png")
   })
 
@@ -1086,6 +1383,7 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     newPage,
   }) => {
     const subject = `P0 Phone Roster Quiz ${Date.now()}`
+    const hostWire = observeLiveFlow(manager)
 
     // 1. Open Quiz Editor and configure Roster tab with manual entry + XLSX import preview
     await openQuizzTab(manager)
@@ -1108,16 +1406,18 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     await answerInput(manager, 3).fill("9")
     await toggleSolution(manager, 0)
 
-    const toggleBtn = manager.locator(
-      '[data-testid="toggle-enhancements-button"]',
+    // Keep the real finite question timer open for the live roster operations.
+    await manager.getByTestId("editor-mode-advanced").click()
+    await manager.getByTestId("editor-panel-toggle-settings").click()
+    await expect(manager.getByTestId("editor-panel-settings")).toBeVisible()
+    await numberSetting(manager, t("quizz:question.config.answerTime")).fill(
+      "600",
     )
-    await toggleBtn.click({ force: true })
-    await expect(
-      manager.locator('[data-testid="editor-enhancement-panel"]'),
-    ).toBeVisible()
+    await manager.getByTestId("editor-panel-close-settings").click()
+    await expect(manager.getByTestId("editor-panel-settings")).toBeHidden()
 
-    // Switch to Phone & Roster tab
-    await manager.locator('[data-testid="tab-roster"]').click()
+    // The existing native Participants page owns the same roster controls.
+    await manager.getByTestId("studio-tab-participants").click()
     await expect(manager.locator('[data-testid="panel-roster"]')).toBeVisible()
 
     // Toggle Phone Invite Only ON
@@ -1159,7 +1459,16 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     await expect(previewBox).toBeVisible()
     await expect(previewBox).toContainText("Miriam UK")
     await expect(previewBox).toContainText("+447911223344")
-    await expect(previewBox).toContainText("Invalid telephone number")
+    await expect(previewBox).toContainText(
+      t("extensions:roster.errors.invalidPhoneNumber"),
+    )
+    await expect(previewBox).toContainText(
+      t("extensions:roster.previewSummary", {
+        valid: 2,
+        total: 3,
+        invalid: 1,
+      }),
+    )
 
     // Cancel import first -> ensure Miriam UK is NOT added
     await manager.locator('[data-testid="roster-import-cancel-btn"]').click()
@@ -1203,6 +1512,7 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
 
     // 2. Start a live game from this quiz
     const pin = await createGame(manager, subject)
+    await setManualProgression(manager)
 
     // Verify bottom counter shows 0 / 3 initially (3 pre-registered in roster, 0 connected)
     const bottomCounter = manager.locator(
@@ -1212,6 +1522,7 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
 
     // 3. Yossi Cohen dials in via pilot-phone endpoint
     const yossiJoin = await manager.request.post("/api/games/pilot-phone", {
+      headers: { "x-tada-pilot-secret": TZILA_PILOT_SECRET },
       data: {
         action: "join_or_poll",
         inviteCode: pin,
@@ -1226,6 +1537,7 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
 
     // Miriam UK dials in
     const miriamJoin = await manager.request.post("/api/games/pilot-phone", {
+      headers: { "x-tada-pilot-secret": TZILA_PILOT_SECRET },
       data: {
         action: "join_or_poll",
         inviteCode: pin,
@@ -1264,16 +1576,43 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     await expect(modalTable).toContainText("+972528889900")
     await expect(modalTable).toContainText("WebPlayerOne")
 
-    // Verify pressing Space while Host Players Modal is open does NOT end the question timer!
+    // The modal owns even fully confirmed host shortcuts while the real timer runs.
     await manager.locator('[data-testid="host-modal-search-input"]').click()
+    const beforeModalCommands = hostWire.filter(
+      (row) => row.name === `sent:${EXTENSION_EVENTS.COMMAND}`,
+    ).length
+    const modalQuestionId = latestState(hostWire)?.questionId
+
+    if (typeof modalQuestionId !== "string") {
+      throw new Error(
+        "The live roster modal must belong to the active question",
+      )
+    }
+
+    await waitForRecordedVoting(hostWire, modalQuestionId)
+    const beforeModalPhase = latestState(hostWire)?.phase
+    const beforeModalEpoch = latestState(hostWire)?.epoch
+    expect(beforeModalPhase).toBe("question")
     await manager.keyboard.press("Space")
+    await manager.keyboard.press("Space")
+    await manager.keyboard.press("Enter")
+    await manager.keyboard.press("Enter")
+    await manager.keyboard.press("ArrowRight")
+    await manager.keyboard.press("ArrowRight")
     await manager.locator('[data-testid="host-modal-search-input"]').fill("")
+    expect(
+      hostWire.filter((row) => row.name === `sent:${EXTENSION_EVENTS.COMMAND}`),
+    ).toHaveLength(beforeModalCommands)
+    expect(latestState(hostWire)?.phase).toBe(beforeModalPhase)
+    expect(latestState(hostWire)?.epoch).toBe(beforeModalEpoch)
+    await waitForRecordedVoting(hostWire, modalQuestionId)
     await expect(
       manager.locator("button", { hasText: t("extensions:host.endTimer") }),
     ).toBeVisible()
 
     // 5. Simulate Yossi hanging up -> status becomes Disconnected and bottom counter becomes 2 / 4
     await manager.request.post("/api/games/pilot-phone", {
+      headers: { "x-tada-pilot-secret": TZILA_PILOT_SECRET },
       data: {
         action: "hangup",
         inviteCode: pin,
@@ -1290,6 +1629,7 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
 
     // 6. Yossi redials with a brand-new CallId -> status returns to Connected and bottom counter becomes 3 / 4
     await manager.request.post("/api/games/pilot-phone", {
+      headers: { "x-tada-pilot-secret": TZILA_PILOT_SECRET },
       data: {
         action: "join_or_poll",
         inviteCode: pin,

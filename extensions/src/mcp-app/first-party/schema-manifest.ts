@@ -1,6 +1,7 @@
 // Exact producer-ad895 schema1. No input DDL is normalized into trust.
 export const SCHEMA_OBJECT_SHA256 =
   "b23f8155290acc986cfbec7f4129f39342c11a6d8f793b18973d76ab3296ae6b"
+
 export const TABLE_SQL = {
   metadata:
     "CREATE TABLE metadata (owner TEXT PRIMARY KEY, version INTEGER NOT NULL CHECK(version=1))",
@@ -11,6 +12,7 @@ export const TABLE_SQL = {
   audit:
     "CREATE TABLE audit (\n      seq INTEGER PRIMARY KEY, owner TEXT NOT NULL, sid TEXT NOT NULL,\n      kind TEXT NOT NULL, request_key TEXT NOT NULL, digest TEXT NOT NULL,\n      disposition TEXT NOT NULL, created_ms INTEGER NOT NULL\n    )",
 } as const
+
 export const COLUMNS = {
   metadata: [
     ["owner", "TEXT", 0, null, 1, 0],
@@ -46,6 +48,7 @@ export const COLUMNS = {
     ["created_ms", "INTEGER", 1, null, 0, 0],
   ],
 } as const
+
 export const PRIMARY_INDEX = {
   metadata: "sqlite_autoindex_metadata_1",
   drafts: "sqlite_autoindex_drafts_1",

@@ -1706,6 +1706,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
             key: cardKey,
             kind: "answerRecap",
             title: titleVal || undefined,
+            subtitle: subtitleVal || undefined,
             ...(startQKey
               ? {
                   startQuestionKey: startQKey,
@@ -2344,6 +2345,7 @@ export function exportTadaShowWorkbook(
 
         case "answerRecap":
           title = card.title ?? ""
+          subtitle = card.subtitle ?? ""
           questionKeyCol = card.startQuestionKey ?? ""
           preset = card.mode ?? "mostSelected"
           durationMs = String(card.durationMs ?? 8000)

@@ -16,12 +16,14 @@ const requireGate = (condition, code) => {
 const writePrivate = (file, value) => {
   const temporary = `${file}.pending`
   const fd = fs.openSync(temporary, "wx", 0o600)
+
   try {
     fs.writeFileSync(fd, `${JSON.stringify(value, null, 2)}\n`)
     fs.fsyncSync(fd)
   } finally {
     fs.closeSync(fd)
   }
+
   fs.renameSync(temporary, file)
 }
 const readRegular = (file, limit) => {
@@ -39,6 +41,7 @@ const readRegular = (file, limit) => {
       before.mtimeMs === after.mtimeMs,
     "INPUT_CHANGED_DURING_READ",
   )
+
   return bytes
 }
 const relativeFile = (root, relative) => {
@@ -53,19 +56,28 @@ const relativeFile = (root, relative) => {
   )
   const result = path.join(root, relative)
   requireGate(result.startsWith(`${root}${path.sep}`), "PATH_ESCAPE")
+
   return result
 }
 // Every old authored property must survive, apart from the two reviewed URLs.
-function preserveOriginal(original, result, allowed, pointer = "") {
-  if (allowed.has(pointer)) return
+function preserveOriginal({ original, result, allowed, pointer = "" }) {
+  if (allowed.has(pointer)) {
+    return
+  }
+
   if (Array.isArray(original)) {
     requireGate(
       Array.isArray(result) && original.length === result.length,
       "AUTHORED_ARRAY_CHANGED",
     )
-    original.forEach((value, index) =>
-      preserveOriginal(value, result[index], allowed, `${pointer}/${index}`),
-    )
+    original.forEach((value, index) => {
+      preserveOriginal({
+        original: value,
+        result: result[index],
+        allowed,
+        pointer: `${pointer}/${index}`,
+      })
+    })
   } else if (original && typeof original === "object") {
     requireGate(
       result && typeof result === "object" && !Array.isArray(result),
@@ -73,7 +85,12 @@ function preserveOriginal(original, result, allowed, pointer = "") {
     )
     for (const [key, value] of Object.entries(original)) {
       requireGate(Object.hasOwn(result, key), "AUTHORED_PROPERTY_REMOVED")
-      preserveOriginal(value, result[key], allowed, `${pointer}/${key}`)
+      preserveOriginal({
+        original: value,
+        result: result[key],
+        allowed,
+        pointer: `${pointer}/${key}`,
+      })
     }
   } else {
     requireGate(isDeepStrictEqual(original, result), "AUTHORED_VALUE_CHANGED")
@@ -89,6 +106,7 @@ const state = {
   productionListenerStarted: false,
   saves: [],
 }
+
 try {
   requireGate(
     process.platform === "linux" && ["qualify", "apply"].includes(mode),
@@ -140,6 +158,7 @@ try {
     "PNG_DIMENSIONS_CHANGED",
   )
   let qualification = null
+
   if (mode === "apply") {
     const raw = readRegular("/input/qualified-native-result.json", 4_000_000)
     requireGate(
@@ -218,7 +237,11 @@ try {
       const normalized = validators.quizzValidator.parse(
         validators.normalizeLegacyQuizz(stored),
       )
-      preserveOriginal(stored, { id: stored.id, ...normalized }, new Set())
+      preserveOriginal({
+        original: stored,
+        result: { id: stored.id, ...normalized },
+        allowed: new Set(),
+      })
       requireGate(
         normalized.questions.length === 4 &&
           isDeepStrictEqual(target.questionIndices, [1, 2]),
@@ -257,6 +280,7 @@ try {
           extras.questionIds.length === normalized.questions.length,
         "PREPARED_EXTRAS_REQUIRED",
       )
+
       if (mode === "apply") {
         requireGate(
           qualified &&
@@ -264,6 +288,7 @@ try {
           "QUALIFIED_EXTRA_IDS_CHANGED",
         )
       }
+
       prepared.push({ target, stored, normalized, extras: persisted(extras) })
     })
   }
@@ -310,12 +335,17 @@ try {
         "UPLOADED_BYTES_CHANGED",
       )
       const next = structuredClone(normalized)
-      for (const index of target.questionIndices)
+      for (const index of target.questionIndices) {
         next.questions[index].media.url = uploaded.url
+      }
       const allowed = new Set(
         target.questionIndices.map((index) => `/questions/${index}/media/url`),
       )
-      preserveOriginal(stored, { id: stored.id, ...next }, allowed)
+      preserveOriginal({
+        original: stored,
+        result: { id: stored.id, ...next },
+        allowed,
+      })
       const targetExtras = {
         ...structuredClone(extras),
         baseDigest: core.computeCanonicalBaseDigest(next),
@@ -334,7 +364,7 @@ try {
       const physical = JSON.parse(
         readRegular(relativeFile(configRoot, target.baseRelative), 1_048_576),
       )
-      preserveOriginal(stored, physical, allowed)
+      preserveOriginal({ original: stored, result: physical, allowed })
       requireGate(
         isDeepStrictEqual(physical, { id: target.quizId, ...next }),
         "SAVED_BASE_CHANGED",
@@ -396,11 +426,13 @@ try {
       : "NATIVE_REPAIR_FAILED"
   state.errorDigest = digest(String(error?.stack ?? error))
   state.finishedAt = new Date().toISOString()
+
   try {
     writePrivate(resultPath, state)
   } catch {
     /* Preserve the original private failure log. */
   }
+
   console.error(error)
   console.log(
     JSON.stringify({

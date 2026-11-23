@@ -107,12 +107,14 @@ function isLegacyPlaceholderAudio(audio: AudioExtras | undefined): boolean {
     audio &&
     !Object.keys(audio.soundtrack ?? {}).length &&
     CUE_IDS.every((cueId) => {
-      const cue = audio.cues[cueId]
+      const persistedCues: Partial<AudioExtras["cues"]> = audio.cues
+      const cue = persistedCues[cueId]
 
       return (
         cue?.source === "default" &&
         !cue.url &&
         cue.volume === 0.8 &&
+        // oxlint-disable-next-line typescript/no-unnecessary-boolean-literal-compare -- Match only the exact former factory boolean; never classify a truthy custom persisted value as untouched.
         cue.enabled === true &&
         cue.loop === (cueId === "answersMusic")
       )
@@ -135,7 +137,8 @@ export function resolvePlatformAudioDefaults(audio?: AudioExtras): AudioExtras {
   const saved = normalizePlatformAudioSettings(audio)
   const cues = Object.fromEntries(
     CUE_IDS.map((cueId) => {
-      const setting = saved?.cues[cueId] ?? defaults.cues[cueId]
+      const persistedCues: Partial<AudioExtras["cues"]> = saved.cues
+      const setting = persistedCues[cueId] ?? defaults.cues[cueId]
 
       return [
         cueId,
@@ -145,12 +148,12 @@ export function resolvePlatformAudioDefaults(audio?: AudioExtras): AudioExtras {
       ]
     }),
   ) as AudioExtras["cues"]
-  const soundtrack = { ...saved?.soundtrack }
+  const soundtrack = { ...saved.soundtrack }
 
   for (const [slot, setting] of Object.entries(
     PLATFORM_SOUNDTRACK_DEFAULTS,
   ) as Array<[SoundtrackSlotId, SoundtrackSetting]>) {
-    const configured = saved?.soundtrack?.[slot]
+    const configured = saved.soundtrack?.[slot]
 
     if (!configured || configured.mode === "inherit") {
       soundtrack[slot] = {

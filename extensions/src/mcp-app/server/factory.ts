@@ -22,18 +22,20 @@ import {
   scopes,
   toolNames,
   widgetTools,
+  type ToolName,
 } from "../contracts/tools.ts"
 import type {
   Dependencies,
   ServerConfig,
   VerifiedPrincipal,
 } from "./dependencies.ts"
-import type { ToolName } from "../contracts/tools.ts"
+
 import { authorize, validateConfig } from "./authorization.ts"
 import { dispatch } from "./dispatch.ts"
 import { guardedConnection } from "./connection.ts"
 import { failureResult } from "./results.ts"
 import { preparePreviewUiResource } from "./preview-resource.ts"
+import { synchronousPromise } from "../../core/synchronous-promise.ts"
 
 // Creates ONE independent SDK server per session/request, never a shared
 // singleton transport. No HTTP listener, route mount, env, account or disk access.
@@ -43,13 +45,25 @@ export function createTadazzMcpServer(
 ) {
   const config = validateConfig(configInput)
   const deps = Object.freeze({ ...dependencies })
-  let connection: ReturnType<typeof guardedConnection>
+  let connection: ReturnType<typeof guardedConnection> | undefined = undefined
+
+  function requireGuardedConnection(): ReturnType<typeof guardedConnection> {
+    if (connection === undefined) {
+      throw new Error("Local state connection was read before initialization")
+    }
+
+    return connection
+  }
+
   const server = registeredServer(config, deps, (_name, context, handler) =>
-    connection.run(context, handler),
+    requireGuardedConnection().run(context, handler),
   )
   connection = guardedConnection(server, deps, config)
 
-  return { connect: connection.connect, close: connection.close }
+  return {
+    connect: requireGuardedConnection().connect,
+    close: requireGuardedConnection().close,
+  }
 }
 
 // Official SDK HTTP entry owns protocol-era negotiation and per-request
@@ -67,11 +81,16 @@ export function createTadazzMcpHttpHandler(
     () =>
       registeredServer(config, deps, async (name, _context, handler) => {
         try {
-          const principal = await authorize(name, undefined, deps, config)
+          const principal = await authorize({
+            name,
+            extra: undefined,
+            deps,
+            config,
+          })
 
           return await handler(principal)
         } catch (error) {
-          return failureResult(name, error, config)
+          return failureResult({ name, error, config })
         }
       }),
     { legacy: "stateless", responseMode: "json", maxRequestBodySize: 65_536 },
@@ -139,7 +158,7 @@ function registeredServer(
       settings,
       async (args: unknown, context: ServerContext) =>
         run(name, context, (principal) =>
-          dispatch(name, args, principal, deps, config),
+          dispatch({ name, raw: args, p: principal, deps, config }),
         ),
     )
   }
@@ -159,20 +178,21 @@ function registeredServer(
           },
         },
       },
-      async () => ({
-        contents: [
-          {
-            uri: PREVIEW_RESOURCE,
-            mimeType: RESOURCE_MIME_TYPE,
-            text: previewResource.read(),
-            _meta: {
-              ui: {
-                csp: previewResource.csp,
+      () =>
+        synchronousPromise(() => ({
+          contents: [
+            {
+              uri: PREVIEW_RESOURCE,
+              mimeType: RESOURCE_MIME_TYPE,
+              text: previewResource.read(),
+              _meta: {
+                ui: {
+                  csp: previewResource.csp,
+                },
               },
             },
-          },
-        ],
-      }),
+          ],
+        })),
     )
   }
 
@@ -203,34 +223,36 @@ function registeredServer(
     "tadazz-authoring-schema",
     "tadazz://authoring/v1/schema.json",
     { mimeType: "application/schema+json" },
-    async (uri) => ({
-      contents: [
-        {
-          uri: uri.href,
-          mimeType: "application/schema+json",
-          text: JSON.stringify({
-            ...z.toJSONSchema(tadaShowV1Schema, { unrepresentable: "any" }),
-            $id: "tadazz://authoring/v1/schema.json",
-            $comment:
-              "Generated from approved source8a43c99 tadaShowV1Schema. Source refinements and narrower MCP policy always execute; schema is guidance only. MVP: empty settings,50 cards,25 questions,32768 UTF8 bytes.",
-          }),
-        },
-      ],
-    }),
+    (uri) =>
+      synchronousPromise(() => ({
+        contents: [
+          {
+            uri: uri.href,
+            mimeType: "application/schema+json",
+            text: JSON.stringify({
+              ...z.toJSONSchema(tadaShowV1Schema, { unrepresentable: "any" }),
+              $id: "tadazz://authoring/v1/schema.json",
+              $comment:
+                "Generated from approved source8a43c99 tadaShowV1Schema. Source refinements and narrower MCP policy always execute; schema is guidance only. MVP: empty settings,50 cards,25 questions,32768 UTF8 bytes.",
+            }),
+          },
+        ],
+      })),
   )
   server.registerResource(
     "tadazz-authoring-guide",
     "tadazz://authoring/v1/guide.md",
     { mimeType: "text/markdown" },
-    async (uri) => ({
-      contents: [
-        {
-          uri: uri.href,
-          mimeType: "text/markdown",
-          text: "# Tadazz authored-show v1\nUse format tada-show/version 1; unique stable card keys; 1-based answer indices; empty settings; no arbitrary media URLs or raw theme/audio overrides. Use apply_game_edit for bounded native theme/audio/background/picture edits and list_editing_assets for exact authorized asset references. Existing authored-schema refinements and preflight are authoritative. Preview is a demo with no live room. Durable account save/download and real preview adapters may be unavailable.\n",
-        },
-      ],
-    }),
+    (uri) =>
+      synchronousPromise(() => ({
+        contents: [
+          {
+            uri: uri.href,
+            mimeType: "text/markdown",
+            text: "# Tadazz authored-show v1\nUse format tada-show/version 1; unique stable card keys; 1-based answer indices; empty settings; no arbitrary media URLs or raw theme/audio overrides. Use apply_game_edit for bounded native theme/audio/background/picture edits and list_editing_assets for exact authorized asset references. Existing authored-schema refinements and preflight are authoritative. Preview is a demo with no live room. Durable account save/download and real preview adapters may be unavailable.\n",
+          },
+        ],
+      })),
   )
 
   return server

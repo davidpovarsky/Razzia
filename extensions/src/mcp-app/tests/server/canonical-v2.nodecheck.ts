@@ -1,6 +1,7 @@
 import assert from "node:assert/strict"
 import { createHash } from "node:crypto"
 import test from "node:test"
+import { requireObservedRecord, requireObservedValue } from "./fixtures.ts"
 import {
   previewIdentityDigest,
   serializePreviewIdentity,
@@ -9,7 +10,7 @@ import {
 } from "../../contracts/canonical.ts"
 
 test("V1 bytes stay frozen when the explicit V2 digest input is added", () => {
-  const identity: PreviewIdentityEnvelope = {
+  const previewIdentity: PreviewIdentityEnvelope = {
     version: 1,
     draftId: "draft-v1",
     revision: 2,
@@ -21,21 +22,21 @@ test("V1 bytes stay frozen when the explicit V2 digest input is added", () => {
       { assetId: "a", sha256: "a".repeat(64) },
     ],
   }
-  const expected =
-    '{"assetDigests":[{"assetId":"a","sha256":"' +
-    "a".repeat(64) +
-    '"},{"assetId":"z","sha256":"' +
-    "f".repeat(64) +
-    '"}],"compiledPin":null,"draftId":"draft-v1","identityMap":[],"normalizedAuthoredContent":{"cards":["b","a"]},"revision":2,"version":1}'
-  assert.equal(serializePreviewIdentity(identity), expected)
+  const expected = `{"assetDigests":[{"assetId":"a","sha256":"${"a".repeat(
+    64,
+  )}"},{"assetId":"z","sha256":"${"f".repeat(
+    64,
+  )}"}],"compiledPin":null,"draftId":"draft-v1","identityMap":[],"normalizedAuthoredContent":{"cards":["b","a"]},"revision":2,"version":1}`
+
+  assert.equal(serializePreviewIdentity(previewIdentity), expected)
   assert.equal(
-    previewIdentityDigest(identity),
+    previewIdentityDigest(previewIdentity),
     createHash("sha256").update(expected).digest("hex"),
   )
   assert.throws(
     () =>
       serializePreviewIdentity({
-        ...identity,
+        ...previewIdentity,
         assetDigests: [
           { assetId: "classic-poster", sha256: "a".repeat(64) },
           { assetId: "classic-poster", sha256: "f".repeat(64) },
@@ -87,11 +88,12 @@ test("V2 identity preserves same-ID/different-SHA pairs and rejects duplicate ex
       assetDigests: input.assetDigests.slice(1),
     }),
   )
+  const firstAssetDigest = requireObservedValue(input.assetDigests.at(0))
   assert.throws(
     () =>
       serializePreviewIdentity({
         ...input,
-        assetDigests: [input.assetDigests[0]!, input.assetDigests[0]!],
+        assetDigests: [firstAssetDigest, firstAssetDigest],
       }),
     /duplicate/,
   )
@@ -118,10 +120,12 @@ test("V2 binds the full returned content, context and revision through the exist
         original: input.compositionPreviewContent,
       },
     },
-  ])
+  ]) {
     assert.notEqual(previewIdentityDigest({ ...input, ...change }), expected)
+  }
   assert.deepEqual(
-    JSON.parse(serializePreviewIdentity(input)).compositionPreviewContent,
+    requireObservedRecord(JSON.parse(serializePreviewIdentity(input)))
+      .compositionPreviewContent,
     input.compositionPreviewContent,
   )
   assert.throws(() =>

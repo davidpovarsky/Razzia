@@ -2,13 +2,11 @@ import { PlatformButton } from "../../presentation/platform-controls"
 import {
   createPlatformAudioExtras,
   normalizePlatformAudioSettings,
-} from "@razzia/extensions/core"
-import type {
-  AudioCueSetting,
-  CueId,
-  QuizExtrasV1,
-  SoundtrackSetting,
-  SoundtrackSlotId,
+  type AudioCueSetting,
+  type CueId,
+  type QuizExtrasV1,
+  type SoundtrackSetting,
+  type SoundtrackSlotId,
 } from "@razzia/extensions/core"
 import { resolveAudioCue } from "@razzia/extensions/presentation"
 import { Play, Square } from "lucide-react"

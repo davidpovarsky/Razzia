@@ -12,7 +12,7 @@ for (const viewport of [
     await page.setViewportSize(viewport)
     await page.goto("/manager")
 
-    await expect(page).toHaveTitle("TADAZZ")
+    await expect(page).toHaveTitle("Tadazz")
     await expect(page.getByTestId("tadazz-manager-logo")).toBeVisible()
     await expect(
       page.getByTestId("tadazz-manager-stage-background"),

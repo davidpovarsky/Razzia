@@ -37,6 +37,7 @@ import {
   collapseForResume,
   planTransition,
   runSteps,
+  showSceneTransitionIdentity,
   type StageStep,
 } from "../tadazz-show/show-director"
 import type { ShowScene } from "../tadazz-show/presentation-scene"
@@ -243,21 +244,27 @@ function NativeApplicationPreviewStage({
         : undefined,
     [config, frame.soundEnabled],
   )
-  const scenePlan = useMemo(() => {
-    if (!card || card.kind === "quiz" || card.kind === "survey") {
-      return []
-    }
-
-    const scene: ShowScene = {
-      kind: "scene",
-      key: card.key,
-      scene: { ...card, id: card.key },
-      elapsedMs: frame.clock.elapsedMs,
-      paused: frame.clock.paused,
-    }
-
-    return planTransition(null, scene, { mode: "idle", questionKey: null })
-  }, [card, key])
+  const scene: ShowScene | null =
+    card && card.kind !== "quiz" && card.kind !== "survey"
+      ? {
+          kind: "scene",
+          key: card.key,
+          scene: { ...card, id: card.key },
+          activeSceneData: activeSceneData ?? undefined,
+          elapsedMs: frame.clock.elapsedMs,
+          paused: frame.clock.paused,
+        }
+      : null
+  // The editor recreates data objects on clock renders. Reuse the live
+  // director identity so only presentation changes can re-enter the scene.
+  const sceneIdentity = scene ? showSceneTransitionIdentity(scene) : null
+  const scenePlan = useMemo(
+    () =>
+      scene
+        ? planTransition(null, scene, { mode: "idle", questionKey: null })
+        : [],
+    [card, key, sceneIdentity],
+  )
   const audioPolicy = resolveTadazzAudioPolicy({
     sceneKind:
       chapter?.phase === "answerCards" || chapter?.phase === "voteLocked"
@@ -502,6 +509,7 @@ function NativeApplicationPreviewStage({
     theme,
     original,
     questionPosition,
+    scenePlan,
   ])
   useLayoutEffect(() => {
     const element = presentationRoot.current
@@ -716,6 +724,7 @@ function NativeApplicationPreviewStage({
                 ? card.audioCues
                 : undefined
             }
+            sceneAudio={audition ? undefined : config?.audio}
             showTrack={audition ? auditionTrack : undefined}
             gameId="read-only-preview"
             activeCardKey={card.key}

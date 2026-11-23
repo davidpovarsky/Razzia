@@ -102,7 +102,7 @@ const Answers = ({
 
   const popupMedia: QuestionMediaType[] = [MEDIA_TYPES.IMAGE, MEDIA_TYPES.VIDEO]
   const isPopupMedia = popupMedia.includes(media?.type)
-  const showAnswersOnly = isVisualPlayerMode && answersOnly
+  const showAnswersOnly = viewRole === "player" && answersOnly
   const showMediaInPopup =
     isVisualPlayerMode && width < MOBILE_BREAKPOINT && isPopupMedia
 
@@ -274,16 +274,15 @@ const Answers = ({
 
         {showAnswersOnly ? (
           <>
-            {isPopupMedia && (
-              <QuestionDialog
-                question={question}
-                media={media}
-                label={t("game:question.show")}
-                className="hover:bg-accent absolute top-4 right-4 flex size-11 items-center justify-center rounded-md bg-white text-black shadow-lg"
-              >
-                <CircleQuestionMark className="size-6" />
-              </QuestionDialog>
-            )}
+            <QuestionDialog
+              question={question}
+              media={media}
+              showQuestion
+              label={t("game:question.show")}
+              className="hover:bg-accent mr-2 ml-auto flex size-11 items-center justify-center rounded-md bg-white text-black shadow-lg"
+            >
+              <CircleQuestionMark className="size-6" />
+            </QuestionDialog>
 
             {media?.type === MEDIA_TYPES.AUDIO && (
               <div className="mt-1 flex justify-center">

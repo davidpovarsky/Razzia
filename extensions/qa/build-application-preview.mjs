@@ -58,10 +58,13 @@ const result = await build({
     {
       name: "existing-native-public-resources",
       setup(bundler) {
-        bundler.onResolve({ filter: /^\/(tadazz-show|sounds)\// }, (args) => ({
-          path: args.path,
-          external: true,
-        }))
+        bundler.onResolve(
+          { filter: /^\/(tadazz-show|sounds)\// },
+          (resolveArgs) => ({
+            path: resolveArgs.path,
+            external: true,
+          }),
+        )
         bundler.onResolve(
           { filter: /^@razzia\/extensions\/presentation$/ },
           () => ({
@@ -325,6 +328,7 @@ if (verifyManifest) {
       "Native preview build does not reproduce the committed manifest",
     )
   }
+
   if (!(await readFile(manifestPath)).equals(previousManifest)) {
     throw new Error("Native preview manifest changed during verification")
   }

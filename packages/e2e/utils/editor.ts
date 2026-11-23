@@ -1,5 +1,9 @@
 import { expect, type Page } from "@playwright/test"
 import type { Question, Quizz } from "@razzia/common/types/game"
+import {
+  computeCanonicalBaseDigest,
+  createDefaultQuizExtrasV2,
+} from "@razzia/extensions/core"
 import { CONFIG_PATH } from "@razzia/e2e/utils/constants"
 import { t } from "@razzia/e2e/utils/i18n"
 import { loginManager } from "@razzia/e2e/utils/manager"
@@ -82,14 +86,37 @@ export const seedQuizz = (
   {
     gameMode = "quiz",
     questions = DEFAULT_SEED_QUESTIONS,
-  }: Partial<Pick<Quizz, "gameMode" | "questions">> = {},
+    leaderboard,
+  }: Partial<Pick<Quizz, "gameMode" | "questions">> & {
+    leaderboard?: "upstream"
+  } = {},
 ) => {
   const id = subject.toLowerCase().replace(/\W+/gu, "-")
+  const quizz = { id, gameMode, subject, questions }
 
   fs.writeFileSync(
     join(CONFIG_PATH, "quizz", `${id}.json`),
-    JSON.stringify({ id, gameMode, subject, questions }),
+    JSON.stringify(quizz),
   )
+
+  // Intermediate boards are opt-in; the production V2 default is cardOnly.
+  if (leaderboard) {
+    const extras = createDefaultQuizExtrasV2(
+      id,
+      questions.map(() => crypto.randomUUID()),
+      computeCanonicalBaseDigest(quizz),
+    )
+    extras.defaults.showTheme = {
+      id: "razzia-original",
+      version: "1.0.0",
+      overrides: {},
+    }
+    extras.defaults.leaderboardPolicy = leaderboard
+    extras.leaderboard = { mode: leaderboard }
+    const sidecarDir = join(CONFIG_PATH, "extensions", "quizzes")
+    fs.mkdirSync(sidecarDir, { recursive: true })
+    fs.writeFileSync(join(sidecarDir, `${id}.json`), JSON.stringify(extras))
+  }
 }
 
 /** Existing Studio card composition: selection and action visibility are separate. */

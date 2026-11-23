@@ -1,7 +1,7 @@
 import assert from "node:assert/strict"
 import { before, after, test } from "node:test"
 import fs from "node:fs"
-import path from "node:path"
+import _path from "node:path"
 import { createHash, generateKeyPairSync, randomBytes } from "node:crypto"
 import i18next from "i18next"
 import {
@@ -22,13 +22,60 @@ import { createFirstPartyOAuth } from "../../first-party/oauth.ts"
 import { fixture, origin, key, snapshot, type Session } from "./fixtures.ts"
 import type { FirstPartyCatalogOptions } from "../../first-party/oauth-catalog.ts"
 
-let f: Awaited<ReturnType<typeof fixture>>,
-  issuer: Awaited<ReturnType<typeof createFirstPartyOAuth>>,
-  remote: ReturnType<typeof issuer.remote>
+function isObservedRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+}
+
+function requireObservedRecord(
+  value: unknown,
+  label: string,
+): Record<string, unknown> {
+  if (!isObservedRecord(value)) {
+    throw new Error(`Expected raw object: ${label}`)
+  }
+
+  return value
+}
+
+function requireObservedString(value: unknown, label: string): string {
+  if (typeof value !== "string") {
+    throw new Error(`Expected raw string: ${label}`)
+  }
+
+  return value
+}
+
+type InitializedFValue = Awaited<ReturnType<typeof fixture>>
+type InitializedIssuerValue = Awaited<ReturnType<typeof createFirstPartyOAuth>>
+type InitializedRemoteValue = ReturnType<InitializedIssuerValue["remote"]>
+let f: InitializedFValue | undefined = undefined,
+  issuer: InitializedIssuerValue | undefined = undefined,
+  remote: InitializedRemoteValue | undefined = undefined
+function requireInitializedF(): InitializedFValue {
+  if (f === undefined) {
+    throw new Error("Fixture state f was read before initialization")
+  }
+
+  return f
+}
+function requireInitializedIssuer(): InitializedIssuerValue {
+  if (issuer === undefined) {
+    throw new Error("Fixture state issuer was read before initialization")
+  }
+
+  return issuer
+}
+function requireInitializedRemote(): InitializedRemoteValue {
+  if (remote === undefined) {
+    throw new Error("Fixture state remote was read before initialization")
+  }
+
+  return remote
+}
 const translator = i18next.createInstance()
 const resources = { en, fr, de, es, it, ja, tr, vi }
 let language: ReturnType<FirstPartyCatalogOptions["locale"]> = "en"
-let translationEffect: (() => void) | undefined
+let translationEffect: (() => void) | undefined = undefined
 const config = {
   issuer: `${origin}/oauth`,
   resource: `${origin}/mcp`,
@@ -38,8 +85,24 @@ const config = {
 const clientId = "synthetic-real-native-catalog",
   callback = "https://host.example.invalid/catalog/callback"
 const refreshTokens = new Map<string, string>()
-let options: Parameters<typeof createFirstPartyOAuth>[0]
-let catalog: ReturnType<typeof issuer.catalog>
+type InitializedOptionsValue = Parameters<typeof createFirstPartyOAuth>[0]
+let options: InitializedOptionsValue | undefined = undefined
+function requireInitializedOptions(): InitializedOptionsValue {
+  if (options === undefined) {
+    throw new Error("Fixture state options was read before initialization")
+  }
+
+  return options
+}
+type InitializedCatalogValue = ReturnType<InitializedIssuerValue["catalog"]>
+let catalog: InitializedCatalogValue | undefined = undefined
+function requireInitializedCatalog(): InitializedCatalogValue {
+  if (catalog === undefined) {
+    throw new Error("Fixture state catalog was read before initialization")
+  }
+
+  return catalog
+}
 const receipts: unknown[] = []
 before(async () => {
   f = await fixture()
@@ -59,11 +122,12 @@ before(async () => {
   const pair = generateKeyPairSync("ed25519")
   options = {
     config,
-    configRoot: f.root,
+    configRoot: requireInitializedF().root,
     keyId: "synthetic-catalog-key",
-    signingPrivateKeyPem: pair.privateKey
-      .export({ type: "pkcs8", format: "pem" })
-      .toString(),
+    signingPrivateKeyPem: pair.privateKey.export({
+      type: "pkcs8",
+      format: "pem",
+    }),
     ticketEncryptionKey: randomBytes(32),
     consentPageUrl: `${origin}/studio/oauth-consent`,
     clients: [
@@ -74,18 +138,21 @@ before(async () => {
       },
     ],
   }
-  issuer = await createFirstPartyOAuth(options)
-  catalog = issuer.catalog({
+  issuer = await createFirstPartyOAuth(requireInitializedOptions())
+  catalog = requireInitializedIssuer().catalog({
     locale: () => language,
     translate: (name, lang) => {
       translationEffect?.()
 
-      return String(translator.t(name, { lng: lang }))
+      return translator.t(name, { lng: lang })
     },
   })
-  remote = issuer.remote({
+  remote = requireInitializedIssuer().remote({
     allowedOrigins: [],
-    dependencies: { catalog, rateLimit: async () => true },
+    dependencies: {
+      catalog: requireInitializedCatalog(),
+      rateLimit: () => Promise.resolve(true),
+    },
   })
 })
 after(async () => {
@@ -95,42 +162,43 @@ after(async () => {
   if (f) {
     console.log(
       JSON.stringify({
-        retainedSyntheticRoot: f.root,
+        retainedSyntheticRoot: requireInitializedF().root,
         newCatalogReceipts: receipts.length,
       }),
     )
   }
+
   if (process.env.TADAZZ_CATALOG_QA_OUTPUT) {
     fs.writeFileSync(
       process.env.TADAZZ_CATALOG_QA_OUTPUT,
-      JSON.stringify(
+      `${JSON.stringify(
         {
           runtime: process.version,
           platform: process.platform,
-          fixtureRoot: f.root,
+          fixtureRoot: requireInitializedF().root,
           receipts,
         },
         null,
         2,
-      ) + "\n",
+      )}\n`,
       { flag: "wx" },
     )
   }
 })
 async function api(
   route: string,
-  body?: Record<string, string>,
+  requestBody?: Record<string, string>,
   session?: Session,
 ) {
   const json = route === "/oauth/inspect" || route === "/oauth/approve"
 
-  return issuer.fetch(
+  return requireInitializedIssuer().fetch(
     new Request(origin + route, {
-      method: body ? "POST" : "GET",
+      method: requestBody ? "POST" : "GET",
       headers: {
         host: new URL(origin).host,
         ...(session ? { authorization: `Bearer ${session.token}` } : {}),
-        ...(body
+        ...(requestBody
           ? {
               "content-type": json
                 ? "application/json"
@@ -139,14 +207,18 @@ async function api(
           : {}),
         ...(json ? { origin } : {}),
       },
-      ...(body
-        ? { body: json ? JSON.stringify(body) : new URLSearchParams(body) }
+      ...(requestBody
+        ? {
+            body: json
+              ? JSON.stringify(requestBody)
+              : new URLSearchParams(requestBody),
+          }
         : {}),
     }),
   )
 }
 async function linked(
-  session = f.sessions[0],
+  session = requireInitializedF().sessions[0],
   scopes = ["tadazz.catalog.read"],
 ) {
   const verifier = randomBytes(32).toString("base64url"),
@@ -165,32 +237,66 @@ async function linked(
       })}`,
     )
   assert.equal(started.status, 302)
-  const ticket = new URL(started.headers.get("location")!).searchParams.get(
-    "oauth_request",
-  )!
-  const inspection = await (
-    await api("/oauth/inspect", { ticket }, session)
-  ).json()
-  const approval = await (
-    await api(
-      "/oauth/approve",
-      { ticket, decision: "allow", proof: inspection.proof },
-      session,
-    )
-  ).json()
+  const ticket = requireObservedString(
+    new URL(
+      requireObservedString(
+        started.headers.get("location"),
+        "catalog authorization location",
+      ),
+    ).searchParams.get("oauth_request"),
+    "catalog consent ticket",
+  )
+
+  const inspection = requireObservedRecord(
+    await (await api("/oauth/inspect", { ticket }, session)).json(),
+    "catalog consent inspection",
+  )
+
+  const approval = requireObservedRecord(
+    await (
+      await api(
+        "/oauth/approve",
+        {
+          ticket,
+          decision: "allow",
+          proof: requireObservedString(
+            inspection.proof,
+            "catalog consent proof",
+          ),
+        },
+        session,
+      )
+    ).json(),
+    "catalog consent approval",
+  )
   const response = await api("/oauth/token", {
     grant_type: "authorization_code",
     client_id: clientId,
     redirect_uri: callback,
     resource: config.resource,
-    code: new URL(approval.redirectUrl).searchParams.get("code")!,
+    code: requireObservedString(
+      new URL(
+        requireObservedString(
+          approval.redirectUrl,
+          "catalog approval redirect",
+        ),
+      ).searchParams.get("code"),
+      "catalog authorization code",
+    ),
     code_verifier: verifier,
   })
   assert.equal(response.status, 200)
-  const tokens = await response.json()
-  refreshTokens.set(tokens.access_token, tokens.refresh_token)
+  const tokens = requireObservedRecord(
+    await response.json(),
+    "catalog token response",
+  )
 
-  return tokens.access_token as string
+  refreshTokens.set(
+    requireObservedString(tokens.access_token, "catalog access token"),
+    requireObservedString(tokens.refresh_token, "catalog refresh token"),
+  )
+
+  return requireObservedString(tokens.access_token, "catalog access token")
 }
 async function connect(token: string) {
   const client = new Client({
@@ -199,12 +305,12 @@ async function connect(token: string) {
   })
   await client.connect(
     new StreamableHTTPClientTransport(new URL(config.resource), {
-      authProvider: { token: async () => token },
+      authProvider: { token: () => Promise.resolve(token) },
       fetch: async (input, init) => {
         const request = new Request(input, init)
         request.headers.set("host", new URL(config.resource).host)
 
-        return remote.fetch(request)
+        return requireInitializedRemote().fetch(request)
       },
     }),
   )
@@ -243,7 +349,7 @@ test("real issuer/SDK catalog returns only exact D metadata and signed two-page 
   const c = await connect(await linked())
 
   try {
-    const before = snapshot(f.root),
+    const priorSnapshot = snapshot(requireInitializedF().root),
       first = body(await call(c, { limit: 1 }))
     assert.equal(first.ok, true)
     assert.equal(first.data.items.length, 1)
@@ -276,7 +382,7 @@ test("real issuer/SDK catalog returns only exact D metadata and signed two-page 
     }
     assert.equal(JSON.stringify(all).includes("data:image"), false)
     assert.equal(JSON.stringify(all).includes("https://"), false)
-    assert.deepEqual(snapshot(f.root), before)
+    assert.deepEqual(snapshot(requireInitializedF().root), priorSnapshot)
     receipts.push({
       case: "real metadata/read-only pages",
       items: all,
@@ -304,7 +410,7 @@ test("all eight existing i18next/D locales resolve real family names; locale cha
             family.definition,
             family.definition.nameKey,
             lang,
-            (name) => String(translator.t(name, { lng: lang })),
+            (name) => translator.t(name, { lng: lang }),
           ),
         ),
       )
@@ -327,19 +433,22 @@ test("all eight existing i18next/D locales resolve real family names; locale cha
 test("cursor proof cannot be altered or transplanted to another real grant or account", async () => {
   const a = await connect(await linked()),
     sameOwner = await connect(await linked()),
-    other = await connect(await linked(f.sessions[1]))
+    other = await connect(await linked(requireInitializedF().sessions[1]))
 
   try {
     const first = body(await call(a, { limit: 1 })),
-      cursor = first.data.nextCursor!
+      cursor = requireObservedString(
+        first.data.nextCursor,
+        "catalog continuation cursor",
+      )
+
     for (const c of [sameOwner, other]) {
       assert.equal(
         body(await call(c, { cursor })).error.code,
         "VALIDATION_FAILED",
       )
     }
-    const changed =
-      cursor.slice(0, -2) + (cursor.at(-2) === "a" ? "b" : "a") + cursor.at(-1)
+    const changed = `${cursor.slice(0, -2)}${cursor.at(-2) === "a" ? "b" : "a"}${requireObservedString(cursor.at(-1), "catalog continuation final character")}`
     assert.equal(
       body(await call(a, { cursor: changed })).error.code,
       "VALIDATION_FAILED",
@@ -365,16 +474,21 @@ test("cursor proof cannot be altered or transplanted to another real grant or ac
 })
 test("forged principal and missing catalog scope cannot call the actual catalog port", async () => {
   const token = await linked(),
-    p = await issuer.verifyAccessToken(token)
+    p = await requireInitializedIssuer().verifyAccessToken(token)
   await assert.rejects(
-    catalog.listThemes({ ...p }, { limit: 1 }),
+    requireInitializedCatalog().listThemes({ ...p }, { limit: 1 }),
     /SCOPE_REQUIRED/,
   )
-  const noScope = await issuer.verifyAccessToken(
-    await linked(f.sessions[0], ["tadazz.drafts.read"]),
+  const noScope = await requireInitializedIssuer().verifyAccessToken(
+    await linked(requireInitializedF().sessions[0], ["tadazz.drafts.read"]),
   )
-  await assert.rejects(catalog.listThemes(noScope, {}), /SCOPE_REQUIRED/)
-  const c = await connect(await linked(f.sessions[0], ["tadazz.drafts.read"]))
+  await assert.rejects(
+    requireInitializedCatalog().listThemes(noScope, {}),
+    /SCOPE_REQUIRED/,
+  )
+  const c = await connect(
+    await linked(requireInitializedF().sessions[0], ["tadazz.drafts.read"]),
+  )
 
   try {
     assert.equal(body(await call(c)).error.code, "SCOPE_REQUIRED")
@@ -384,14 +498,14 @@ test("forged principal and missing catalog scope cannot call the actual catalog 
 })
 test("actual revoked grant denies cached principal and its cursor; stable issuer keys permit genuine cursor reuse on reopen", async () => {
   const token = await linked(),
-    p = await issuer.verifyAccessToken(token),
-    first = (await catalog.listThemes(p, { limit: 1 })) as {
+    p = await requireInitializedIssuer().verifyAccessToken(token),
+    first = (await requireInitializedCatalog().listThemes(p, { limit: 1 })) as {
       nextCursor: string
     }
-  const reopened = await createFirstPartyOAuth(options),
+  const reopened = await createFirstPartyOAuth(requireInitializedOptions()),
     again = reopened.catalog({
       locale: () => "en",
-      translate: (name, lang) => String(translator.t(name, { lng: lang })),
+      translate: (name, lang) => translator.t(name, { lng: lang }),
     }),
     fresh = await reopened.verifyAccessToken(token)
   assert.equal(
@@ -406,13 +520,16 @@ test("actual revoked grant denies cached principal and its cursor; stable issuer
     (
       await api("/oauth/revoke", {
         client_id: clientId,
-        token: refreshTokens.get(token)!,
+        token: requireObservedString(
+          refreshTokens.get(token),
+          "catalog stored refresh token",
+        ),
       })
     ).status,
     200,
   )
   await assert.rejects(
-    catalog.listThemes(p, { cursor: first.nextCursor }),
+    requireInitializedCatalog().listThemes(p, { cursor: first.nextCursor }),
     /SCOPE_REQUIRED/,
   )
   await assert.rejects(reopened.verifyAccessToken(token))
@@ -422,17 +539,23 @@ test("actual revoked grant denies cached principal and its cursor; stable issuer
   })
 })
 test("native session revoked by the host translator is rechecked before metadata disclosure", async () => {
-  const minted = await f.tokens.mintToken(f.sessions[0].owner, "manager"),
-    claims = await f.tokens.verifyToken(minted.token),
+  const minted = await requireInitializedF().tokens.mintToken(
+      requireInitializedF().sessions[0].owner,
+      "manager",
+    ),
+    claims = await requireInitializedF().tokens.verifyToken(minted.token),
     token = await linked({
       token: minted.token,
-      owner: f.sessions[0].owner,
-      sid: claims.sid!,
+      owner: requireInitializedF().sessions[0].owner,
+      sid: requireObservedString(claims.sid, "catalog native manager session"),
     }),
     c = await connect(token)
 
   try {
-    translationEffect = () => f.accounts.revokeAccountSession(claims.sid!)
+    translationEffect = () =>
+      requireInitializedF().accounts.revokeAccountSession(
+        requireObservedString(claims.sid, "catalog native manager session"),
+      )
     const result = body(await call(c))
     assert.equal(result.ok, false)
     assert.equal(result.error.code, "SCOPE_REQUIRED")
@@ -445,7 +568,7 @@ test("templates stay honestly unavailable and malformed host translations disclo
   const c = await connect(await linked())
 
   try {
-    const before = snapshot(f.root)
+    const priorSnapshot2 = snapshot(requireInitializedF().root)
     assert.equal(
       body(await call(c, {}, "list_game_templates")).error.code,
       "DEPENDENCY_UNAVAILABLE",
@@ -459,7 +582,7 @@ test("templates stay honestly unavailable and malformed host translations disclo
       JSON.stringify(result).includes("PRIVATE_TRANSLATION_DETAIL"),
       false,
     )
-    assert.deepEqual(snapshot(f.root), before)
+    assert.deepEqual(snapshot(requireInitializedF().root), priorSnapshot2)
     receipts.push({
       case: "no invented templates/private callback sanitized",
       privateSnapshotUnchanged: true,
@@ -478,18 +601,15 @@ test("an actual unconfigured i18next translator cannot expose a stripped transla
     resources: {},
     initAsync: false,
   })
-  assert.equal(
-    String(empty.t("extensions:themes.classicName")),
-    "themes.classicName",
-  )
-  const missing = issuer.catalog({
+  assert.equal(empty.t("extensions:themes.classicName"), "themes.classicName")
+  const missing = requireInitializedIssuer().catalog({
     locale: () => "en",
-    translate: (name) => String(empty.t(name)),
+    translate: (name) => empty.t(name),
   })
-  const p = await issuer.verifyAccessToken(await linked())
-  const before = snapshot(f.root)
+  const p = await requireInitializedIssuer().verifyAccessToken(await linked())
+  const priorSnapshot3 = snapshot(requireInitializedF().root)
   await assert.rejects(missing.listThemes(p, {}), /DEPENDENCY_UNAVAILABLE/)
-  assert.deepEqual(snapshot(f.root), before)
+  assert.deepEqual(snapshot(requireInitializedF().root), priorSnapshot3)
   receipts.push({
     case: "real i18next missing title is unavailable",
     privateSnapshotUnchanged: true,

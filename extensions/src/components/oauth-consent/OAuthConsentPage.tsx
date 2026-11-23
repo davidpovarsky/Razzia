@@ -14,9 +14,11 @@ import { createOAuthConsentClient, type ConsentInspection } from "./client"
 import { consentText } from "./strings"
 import { browserConsentLoginHandoff } from "./login-handoff"
 
-/** Studio mounts this only after its actual authenticated native profile query.
+/**
+ * Studio mounts this only after its actual authenticated native profile query.
  * The issuer path is trusted build configuration, never a request query parameter.
  */
+
 export function OAuthConsentPage({
   account,
   issuerBasePath,
@@ -54,10 +56,11 @@ export function OAuthConsentPage({
   }, [issuerBasePath])
   const ticket = useMemo(() => {
     const values = new URLSearchParams(search).getAll("oauth_request")
+
     return values.length === 1 &&
-      values[0]!.length >= 40 &&
-      values[0]!.length <= 8192
-      ? values[0]!
+      values[0].length >= 40 &&
+      values[0].length <= 8192
+      ? values[0]
       : null
   }, [search])
   const [inspection, setInspection] = useState<ConsentInspection | null>(null)
@@ -118,7 +121,7 @@ export function OAuthConsentPage({
       inspectionRequest.current = null
     }
 
-    if (!validSession()) {
+    if (!token || !validSession()) {
       browserConsentLoginHandoff().clear()
       setState("expired")
 
@@ -130,11 +133,13 @@ export function OAuthConsentPage({
     if (ticket && window.top === window.self) {
       browserConsentLoginHandoff().acknowledge(ticket)
     }
+
     if (!client || !ticket || window.top !== window.self) {
       setState("unavailable")
 
       return () => abort.abort()
     }
+
     // A meta frame-ancestors policy is ineffective. Require the actual mounted
     // HTML/HEAD response policy supplied by the root host before inspecting.
     void (async () => {
@@ -146,32 +151,46 @@ export function OAuthConsentPage({
         referrerPolicy: "no-referrer",
         signal: abort.signal,
       })
+
       if (
         !headers.ok ||
         headers.headers.get("referrer-policy")?.trim() !== "no-referrer" ||
         !/(?:^|;)\s*frame-ancestors\s+'none'\s*(?:;|$)/iu.test(
           headers.headers.get("content-security-policy") ?? "",
         )
-      )
+      ) {
         throw new Error("oauth-consent:page-policy-unavailable")
+      }
+
       const live = await currentAccount(abort.signal)
+
       if (
         !validSession() ||
         live.id !== account.id ||
         live.email !== account.email
-      )
+      ) {
         throw new Error("oauth-consent:session-changed")
+      }
+
       const inspected = await client.inspect(ticket, abort.signal)
-      if (abort.signal.aborted || !validSession()) return
+
+      if (abort.signal.aborted || !validSession()) {
+        return
+      }
+
       proof.current = {
-        token: token!,
+        token,
         accountId: live.id,
         email: live.email,
         ticket,
         inspection: inspected,
       }
       setInspection(inspected)
-      if (inspectionRequest.current === abort) inspectionRequest.current = null
+
+      if (inspectionRequest.current === abort) {
+        inspectionRequest.current = null
+      }
+
       setState("ready")
     })().catch(() => {
       if (!abort.signal.aborted) {
@@ -184,8 +203,9 @@ export function OAuthConsentPage({
       if (
         !validSession() ||
         (proof.current && proof.current.inspection.expiresAt <= Date.now())
-      )
+      ) {
         invalidate()
+      }
     }
     const interval = window.setInterval(check, 1000)
     const onStorage = (event: StorageEvent) => {
@@ -199,11 +219,16 @@ export function OAuthConsentPage({
     }
     window.addEventListener("storage", onStorage)
     window.addEventListener("focus", check)
+
     return () => {
       abort.abort()
       approval.current?.abort()
       approval.current = null
-      if (inspectionRequest.current === abort) inspectionRequest.current = null
+
+      if (inspectionRequest.current === abort) {
+        inspectionRequest.current = null
+      }
+
       client.invalidate()
       proof.current = null
       clearInterval(interval)
@@ -212,8 +237,12 @@ export function OAuthConsentPage({
     }
   }, [account.id, account.email, client, ticket])
   const allow = async () => {
-    if (approval.current) return
+    if (approval.current) {
+      return
+    }
+
     const bound = proof.current
+
     if (
       state !== "ready" ||
       !client ||
@@ -231,31 +260,46 @@ export function OAuthConsentPage({
       proof.current = null
       setInspection(null)
       setState("expired")
+
       return
     }
+
     const abort = new AbortController()
     approval.current = abort
+    const isCurrentApproval = () =>
+      approval.current === abort && !abort.signal.aborted
     setState("pending")
+
     try {
       const live = await currentAccount(abort.signal)
+
       if (
         live.id !== bound.accountId ||
         live.email !== bound.email ||
         getToken() !== bound.token
-      )
+      ) {
         throw new Error("oauth-consent:session-changed")
-      if (approval.current !== abort || abort.signal.aborted) return
+      }
+
+      if (!isCurrentApproval()) {
+        return
+      }
+
       const redirectUrl = await client.approve(
         ticket,
         bound.inspection,
         abort.signal,
       )
-      if (approval.current !== abort || abort.signal.aborted) return
+
+      if (!isCurrentApproval()) {
+        return
+      }
+
       proof.current = null
       // Exact trusted issuer response; no client-supplied callback reconstruction.
       window.location.assign(redirectUrl)
     } catch {
-      if (approval.current === abort && !abort.signal.aborted) {
+      if (isCurrentApproval()) {
         client.invalidate()
         proof.current = null
         approval.current = null
@@ -279,6 +323,7 @@ export function OAuthConsentPage({
       "/studio/oauth-consent",
     )
   }
+
   return (
     <PlatformScope context="platform.studio">
       <main style={{ maxWidth: 640, margin: "40px auto", padding: 16 }}>
@@ -334,7 +379,9 @@ export function OAuthConsentPage({
                 disabled={state !== "ready"}
                 loading={state === "pending"}
                 onClick={(event) => {
-                  if (event.isTrusted) void allow()
+                  if (event.isTrusted) {
+                    void allow()
+                  }
                 }}
               >
                 {text("allow")}

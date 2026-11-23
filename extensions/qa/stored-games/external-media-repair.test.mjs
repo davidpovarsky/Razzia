@@ -21,6 +21,7 @@ function input() {
       note: sourceUrl,
     })),
   }
+
   return {
     base: { id: "same-quiz", ...quizz },
     extras: {
@@ -51,7 +52,9 @@ test("repairs both typed references and preserves all other authored data and in
   ])
   assert.equal(plan.mappings[0].references, 2)
   const expected = structuredClone(original.base)
-  for (const question of expected.questions) question.media.url = targetUrl
+  for (const question of expected.questions) {
+    question.media.url = targetUrl
+  }
   assert.deepEqual(plan.base, expected)
   assert.equal(plan.payload.expectedRevision, 7)
   assert.equal(plan.payload.extras.revision, 7)
@@ -103,7 +106,7 @@ test("rejects unused, duplicated or non-owned replacement targets", () => {
   assert.throws(() =>
     planQuestionImageRepair({
       ...original,
-      replacements: [{ sourceUrl: sourceUrl + "?different", targetUrl }],
+      replacements: [{ sourceUrl: `${sourceUrl}?different`, targetUrl }],
     }),
   )
   assert.throws(() =>

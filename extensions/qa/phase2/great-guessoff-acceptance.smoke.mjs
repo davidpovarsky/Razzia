@@ -14,10 +14,7 @@ const errors = []
 async function waitScene(page, scene, key) {
   await page
     .locator(
-      '[data-v4-scene="' +
-        scene +
-        '"]' +
-        (key ? '[data-question-key="' + key + '"]' : ""),
+      `[data-v4-scene="${scene}"]${key ? `[data-question-key="${key}"]` : ""}`,
     )
     .waitFor({ timeout: 26000 })
 }
@@ -27,9 +24,10 @@ async function next(page) {
   await button.click()
 }
 async function choose(page, index, scene) {
-  await page.getByTestId("tadazz-card-" + index).click()
+  await page.getByTestId(`tadazz-card-${index}`).click()
   await waitScene(page, scene)
 }
+
 try {
   const page = await browser.newPage({
     viewport: { width: 1366, height: 900 },
@@ -102,7 +100,9 @@ try {
     (await page.locator(".countdown-value").innerText()).trim(),
   )
   assert.ok(timer > 0)
-  await choose(page, 0, "survey-results") // click auto-advances before 20 sec
+  // Click auto-advances before 20 sec
+
+  await choose(page, 0, "survey-results")
   assert.equal(await stage.getAttribute("data-question-key"), "family-fun")
   await next(page)
   await waitScene(page, "top-pick")
@@ -114,6 +114,7 @@ try {
       .first()
       .evaluate(async (img) => {
         await img.decode()
+
         return img.naturalWidth > 0
       }),
   )

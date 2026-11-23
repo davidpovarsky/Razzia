@@ -379,6 +379,32 @@ def verify_semantic_matrix(receipt):
         report = json.loads(gate.get("stdout", ""))
     except (TypeError, json.JSONDecodeError):
         raise GateError("SEMANTIC_LINT_BASELINE_REPORT_INVALID") from None
+    if report.get("configurationChanged") is True:
+        need(report.get("method") == "current-policy clean lint; no historical diagnostic comparison" and
+             report.get("historicalComparisonPerformed") is False and
+             report.get("baselineSha") == LINT_BASELINE_SHA and report.get("files") == list(LEGACY_LINT_FILES) and
+             report.get("gatePass") is True and report.get("sourceHashesUnchanged") is True and
+             report.get("wholeLegacyLintPass") is True and
+             type(report.get("candidateLintExit")) is int and report["candidateLintExit"] == 0 and
+             type(report.get("candidateDiagnosticCount")) is int and report["candidateDiagnosticCount"] == 0 and
+             all(key in report and report[key] is None for key in (
+                 "baselineLintExit", "baselineDiagnosticCount", "matchedInheritedCount", "unmatchedCount")),
+             "SEMANTIC_CURRENT_POLICY_LINT_NOT_CLEAN")
+        need(receipt["hashesBefore"].get("extensions/qa/phase3-recovery/lint-baseline.py") ==
+             "290d1636365838284f1857950c9cba84b2148547dbc195e8d964c9ce1780dc59",
+             "SEMANTIC_CURRENT_POLICY_LINT_PRODUCER_CHANGED")
+        for path in (*LEGACY_LINT_FILES, "oxlint.config.ts"):
+            need(report.get("baselineHashes", {}).get(path) == hashes.get(path) and
+                 report.get("candidateHashes", {}).get(path) == receipt["hashesBefore"].get(path) and
+                 isinstance(hashes.get(path), str) and HASH.fullmatch(hashes[path]) and
+                 isinstance(receipt["hashesBefore"].get(path), str) and HASH.fullmatch(receipt["hashesBefore"][path]),
+                 "SEMANTIC_LINT_SOURCE_PIN_MISMATCH")
+        need(report["baselineHashes"]["oxlint.config.ts"] != report["candidateHashes"]["oxlint.config.ts"],
+             "SEMANTIC_CURRENT_POLICY_BRANCH_REQUIRES_CHANGED_RULES")
+        need(report.get("command") == ["node", "--experimental-strip-types", "/cleanup/node_modules/oxlint/bin/oxlint",
+                                       "-c", "oxlint.config.ts", "--format=json", *LEGACY_LINT_FILES],
+             "SEMANTIC_LINT_COMMAND_MISMATCH")
+        return
     need(report.get("baselineSha") == LINT_BASELINE_SHA and report.get("files") == list(LEGACY_LINT_FILES) and
          report.get("gatePass") is True and report.get("sourceHashesUnchanged") is True and
          report.get("unmatchedCount") == 0, "SEMANTIC_LINT_NEW_DIAGNOSTIC")

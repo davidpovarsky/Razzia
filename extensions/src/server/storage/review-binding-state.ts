@@ -6,11 +6,17 @@ export function reviewBindingState(root: string) {
   const files: Record<string, unknown> = {}
   const walk = (relative: string) => {
     const file = path.join(root, relative)
-    if (!fs.existsSync(file)) return
+
+    if (!fs.existsSync(file)) {
+      return
+    }
+
     const stat = fs.lstatSync(file, { bigint: true })
+
     if (stat.isDirectory()) {
-      for (const name of fs.readdirSync(file).sort())
+      for (const name of fs.readdirSync(file).sort()) {
         walk(`${relative}/${name}`)
+      }
     } else {
       const bytes = fs.readFileSync(file)
       files[relative] = {
@@ -23,6 +29,9 @@ export function reviewBindingState(root: string) {
       }
     }
   }
-  for (const directory of ["quizz", "extensions", "media"]) walk(directory)
+  for (const directory of ["quizz", "extensions", "media"]) {
+    walk(directory)
+  }
+
   return files
 }

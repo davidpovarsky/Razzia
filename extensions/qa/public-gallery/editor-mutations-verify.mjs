@@ -19,14 +19,15 @@ export async function verifyEditorMutations(options) {
   const evidence = join(options.evidence, "editor-mutations")
   mkdirSync(evidence, { recursive: true })
   const page = await options.context.newPage()
+  const editPanel = page.getByTestId("editor-panel-edit")
   await page.setViewportSize({ width: 1440, height: 1000 })
   const errors = []
   page.on("pageerror", (error) => errors.push(error.message))
-  const headers = { Authorization: "Bearer " + options.token }
+  const headers = { Authorization: `Bearer ${options.token}` }
   const questionIds = [randomUUID(), randomUUID()]
   const sceneId = randomUUID()
   const quizz = {
-    subject: "Editor mutation acceptance " + randomUUID(),
+    subject: `Editor mutation acceptance ${randomUUID()}`,
     gameMode: "quiz",
     questions: [
       {
@@ -71,24 +72,29 @@ export async function verifyEditorMutations(options) {
     sceneId,
   })
   const results = []
-  let quizId
-  let playerContext
+  let quizId = undefined
+
+  let playerContext = undefined
+
   const record = (name, details = {}) =>
     results.push({ name, passed: true, ...details })
   const read = async (path) => {
     const response = await page.request.get(options.origin + path, { headers })
     assert.equal(response.status(), 200, path)
+
     return response.json()
   }
   const openPanel = async (name) => {
-    const panel = page.getByTestId("editor-panel-" + name)
+    const panel = page.getByTestId(`editor-panel-${name}`)
+
     if (!(await panel.isVisible())) {
-      await page.getByTestId("editor-panel-toggle-" + name).click()
+      await page.getByTestId(`editor-panel-toggle-${name}`).click()
     }
+
     await expect(panel).toBeVisible()
   }
   const openEditor = async () => {
-    await page.goto(options.origin + "/manager/quizz/" + quizId + "?lng=en")
+    await page.goto(`${options.origin}/manager/quizz/${quizId}?lng=en`)
     await expect(page.getByTestId("editor-save-btn")).toBeEnabled({
       timeout: 30_000,
     })
@@ -100,21 +106,23 @@ export async function verifyEditorMutations(options) {
     const saved = page.waitForResponse(
       (response) =>
         new URL(response.url()).pathname ===
-          "/api/extensions/quizzes/" + quizId &&
+          `/api/extensions/quizzes/${quizId}` &&
         response.request().method() === "PUT",
     )
     await page.getByTestId("editor-save-btn").click()
     assert.equal((await saved).status(), 200, "Editor composite save")
-    await page.waitForURL(/\/(studio\/games|manager\/config)$/)
+    await page.waitForURL(`${options.origin}/studio/games`)
   }
   const saveWithPendingCheck = async (overwrite = false) => {
-    const apiUrl = options.origin + "/api/extensions/quizzes/" + quizId
+    const apiUrl = `${options.origin}/api/extensions/quizzes/${quizId}`
     let requestArrived = false
-    let release
+    let release = undefined
+
     const released = new Promise((resolve) => {
       release = resolve
     })
-    const field = page.locator('input[name$=".question"]').first()
+    const field = editPanel.locator('input[name$=".question"]')
+    await expect(field).toHaveCount(1)
     const previousQuestion = await field.inputValue()
     const previousTitle = await page
       .locator('input[name="subject"]')
@@ -122,8 +130,10 @@ export async function verifyEditorMutations(options) {
     const delayedSave = async (route) => {
       if (route.request().method() !== "PUT") {
         await route.continue()
+
         return
       }
+
       const response = await route.fetch()
       assert.equal(response.status(), 200)
       requestArrived = true
@@ -131,6 +141,7 @@ export async function verifyEditorMutations(options) {
       await route.fulfill({ response })
     }
     await page.route(apiUrl, delayedSave)
+
     try {
       await page
         .getByTestId(
@@ -144,6 +155,7 @@ export async function verifyEditorMutations(options) {
       )
       await expect(page.locator("#studio-content")).toHaveAttribute("inert", "")
       await expect(page.locator('input[name="subject"]')).toBeDisabled()
+
       if (overwrite) {
         await expect(
           page.getByTestId("conflict-confirm-overwrite-button"),
@@ -157,25 +169,29 @@ export async function verifyEditorMutations(options) {
           previousTitle,
         )
       }
+
       release()
-      await page.waitForURL(/\/(studio\/games|manager\/config)$/)
+      await page.waitForURL(`${options.origin}/studio/games`)
     } finally {
       release()
       await page.unroute(apiUrl, delayedSave)
     }
+
     record(
       overwrite
         ? "pending-conflict-overwrite-locks-editor-and-resolution-actions"
         : "pending-save-locks-editor-and-preserves-submitted-content",
     )
   }
+
   try {
     const created = await page.request.post(
-      options.origin + "/api/extensions/quizzes",
+      `${options.origin}/api/extensions/quizzes`,
       { headers, data: { quizz, extras } },
     )
     assert([200, 201].includes(created.status()), "Create disposable quiz")
-    quizId = (await created.json()).quizId
+    ;({ quizId } = await created.json())
+
     assert(quizId)
     await openEditor()
     await openPanel("edit")
@@ -187,16 +203,16 @@ export async function verifyEditorMutations(options) {
       .getByTestId("editor-scene-select")
       .click()
     await openPanel("edit")
-    await page.locator('[data-testid="toggle-kind-quiz"]:visible').click()
+    await editPanel.getByTestId("toggle-kind-quiz").click()
     await expect(
-      page.locator('input[name="questions.1.question"]:visible'),
+      editPanel.locator('input[name="questions.1.question"]'),
     ).toHaveValue("Middle converted question")
-    await page.getByTestId("answer-text-0").fill("Middle first answer")
-    await page.getByTestId("answer-text-1").fill("Middle second answer")
+    await editPanel.getByTestId("answer-text-0").fill("Middle first answer")
+    await editPanel.getByTestId("answer-text-1").fill("Middle second answer")
     await saveWithPendingCheck()
 
-    let stored = await read("/api/quizz/" + quizId)
-    let storedExtras = (await read("/api/extensions/quizzes/" + quizId)).extras
+    let stored = await read(`/api/quizz/${quizId}`)
+    let storedExtras = (await read(`/api/extensions/quizzes/${quizId}`)).extras
     assert.deepEqual(
       stored.questions.map((question) => question.question),
       [
@@ -210,6 +226,16 @@ export async function verifyEditorMutations(options) {
       storedExtras.questionIds,
       "Native question order must match the authored timeline",
     )
+    assert.equal(
+      stored.questions[1].options,
+      undefined,
+      "Converted choice must not inherit estimation-only registered options",
+    )
+    assert.deepEqual(
+      stored.questions[2],
+      quizz.questions[1],
+      "Following estimation question must retain its complete authored values",
+    )
     assert.deepEqual(Object.keys(storedExtras.scenes), [])
     assert.equal(storedExtras.questionIds[0], questionIds[0])
     assert.equal(storedExtras.questionIds[2], questionIds[1])
@@ -220,7 +246,7 @@ export async function verifyEditorMutations(options) {
     await page.getByTestId("editor-question-card-1").click()
     await openPanel("edit")
     await expect(
-      page.locator('input[name="questions.1.question"]:visible'),
+      editPanel.locator('input[name="questions.1.question"]'),
     ).toHaveValue("Middle converted question")
     await page.getByTestId("studio-tab-settings").click()
     await page.getByRole("button", { name: "Convert All", exact: true }).click()
@@ -229,8 +255,8 @@ export async function verifyEditorMutations(options) {
       .getByRole("button", { name: "Convert All", exact: true })
       .click()
     await save()
-    stored = await read("/api/quizz/" + quizId)
-    storedExtras = (await read("/api/extensions/quizzes/" + quizId)).extras
+    stored = await read(`/api/quizz/${quizId}`)
+    storedExtras = (await read(`/api/extensions/quizzes/${quizId}`)).extras
     assert.deepEqual(
       stored.questions.map((question) => question.playMode),
       ["quiz", "quiz", "quiz"],
@@ -247,7 +273,7 @@ export async function verifyEditorMutations(options) {
 
     await openEditor()
     await openPanel("edit")
-    const failedSaveUrl = options.origin + "/api/extensions/quizzes/" + quizId
+    const failedSaveUrl = `${options.origin}/api/extensions/quizzes/${quizId}`
     const failSave = async (route) => {
       if (route.request().method() === "PUT") {
         await route.fulfill({
@@ -260,6 +286,7 @@ export async function verifyEditorMutations(options) {
       }
     }
     await page.route(failedSaveUrl, failSave)
+
     try {
       const failedResponse = page.waitForResponse(
         (response) =>
@@ -275,11 +302,12 @@ export async function verifyEditorMutations(options) {
         "",
       )
       await expect(
-        page.locator('input[name$=".question"]').first(),
+        editPanel.locator('input[name="questions.0.question"]'),
       ).toHaveValue("First authored question")
     } finally {
       await page.unroute(failedSaveUrl, failSave)
     }
+
     record("failed-save-unlocks-editing-and-retains-form-content")
 
     const { id: _id, ...cleanQuiz } = stored
@@ -296,7 +324,7 @@ export async function verifyEditorMutations(options) {
     await expect(page.getByTestId("conflict-modal")).toBeVisible()
     await page.getByTestId("conflict-overwrite-button").click()
     await saveWithPendingCheck(true)
-    stored = await read("/api/quizz/" + quizId)
+    stored = await read(`/api/quizz/${quizId}`)
     assert.deepEqual(
       stored.questions.map((question) => question.solutions),
       [[1], [0], [10]],
@@ -315,7 +343,7 @@ export async function verifyEditorMutations(options) {
     assert([200, 201].includes(launchResponse.status()))
     const room = await launchResponse.json()
     await expect(page).toHaveURL(
-      options.origin + "/party/manager/" + room.gameId,
+      `${options.origin}/party/manager/${room.gameId}`,
     )
     await expect(page.getByTestId("platform-opening-start")).toBeEnabled({
       timeout: 30_000,
@@ -337,7 +365,7 @@ export async function verifyEditorMutations(options) {
       localStorage.setItem("i18nextLng", "en"),
     )
     const player = await playerContext.newPage()
-    player.on("pageerror", (error) => errors.push("player: " + error.message))
+    player.on("pageerror", (error) => errors.push(`player: ${error.message}`))
     const pin =
       room.inviteCode ??
       (
@@ -346,12 +374,17 @@ export async function verifyEditorMutations(options) {
           .first()
           .textContent()
       ).trim()
-    await player.goto(options.origin + "/game?pin=" + encodeURIComponent(pin))
+    await player.goto(`${options.origin}/game?pin=${encodeURIComponent(pin)}`)
     await player
       .getByPlaceholder("Username here")
       .fill("Editor mutation player")
     await player.getByRole("button", { name: "Submit", exact: true }).click()
-    await expect(player).toHaveURL(options.origin + "/party/" + room.gameId)
+    await expect(player).toHaveURL(`${options.origin}/party/${room.gameId}`)
+    // The room route mounts before its socket login reaches the host.
+    await expect(page.getByTestId("host-connected-counter")).toHaveText(
+      /^1(?:\s*\/\s*1)?$/u,
+      { timeout: 30_000 },
+    )
     await toolbar.getByRole("button", { name: "Start", exact: true }).click()
     const stage = page.getByTestId("tadazz-show")
     for (const [index, question] of stored.questions.entries()) {
@@ -383,13 +416,14 @@ export async function verifyEditorMutations(options) {
     const receipt = { passed: true, results, errors }
     writeFileSync(
       join(evidence, "receipt.json"),
-      JSON.stringify(receipt, null, 2) + "\n",
+      `${JSON.stringify(receipt, null, 2)}\n`,
     )
+
     return receipt
   } catch (error) {
     writeFileSync(
       join(evidence, "partial-receipt.json"),
-      JSON.stringify(
+      `${JSON.stringify(
         {
           passed: false,
           results,
@@ -398,21 +432,27 @@ export async function verifyEditorMutations(options) {
         },
         null,
         2,
-      ) + "\n",
+      )}\n`,
     )
     await page
       .screenshot({ path: join(evidence, "failure.png"), fullPage: true })
-      .catch(() => {})
+      .catch(() => {
+        /* Keep the recorded audit outcome if its diagnostic screenshot is unavailable. */
+      })
     throw error
   } finally {
-    if (playerContext) await playerContext.close()
+    if (playerContext) {
+      await playerContext.close()
+    }
+
     if (quizId) {
       const removed = await page.request.delete(
-        options.origin + "/api/extensions/quizzes/" + quizId,
+        `${options.origin}/api/extensions/quizzes/${quizId}`,
         { headers },
       )
       assert([200, 204, 404].includes(removed.status()), "Remove owned QA quiz")
     }
+
     await page.close()
   }
 }

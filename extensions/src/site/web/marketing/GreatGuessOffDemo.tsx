@@ -25,8 +25,12 @@ import v4FullShowCss from "../../../presentation/tadazz-v4/full-show.css?inline"
 import motionKitCss from "../../../presentation/tadazz-show/tadazz-motion-kit.css?inline"
 import stageAdaptationsCss from "../../../presentation/tadazz-show/tadazz-show-adaptations.css?inline"
 
-type Answer = { label: string; image?: string }
-type Question = {
+interface Answer {
+  label: string
+  image?: string
+}
+
+interface Question {
   key: string
   heading: string
   kind: "quiz" | "survey"
@@ -162,8 +166,10 @@ function useReducedMotion() {
     setReduced(query.matches)
     const listener = () => setReduced(query.matches)
     query.addEventListener("change", listener)
+
     return () => query.removeEventListener("change", listener)
   }, [])
+
   return reduced
 }
 
@@ -183,7 +189,9 @@ export function GreatGuessOffDemo() {
   const [message, setMessage] = useState("")
   const deadlineRef = useRef(0)
   const revealRef = useRef<(chosenIndex?: number) => Promise<void>>(
-    async () => {},
+    async () => {
+      /* The ref remains inert until the current reveal callback is installed. */
+    },
   )
   const reducedMotion = useReducedMotion()
   const question = QUESTIONS[questionIndex]
@@ -243,7 +251,10 @@ export function GreatGuessOffDemo() {
   const toggleSound = () => setSoundOn((value) => !value)
 
   const run = (action: () => Promise<void>) => {
-    if (busyRef.current) return
+    if (busyRef.current) {
+      return
+    }
+
     busyRef.current = true
     setBusy(true)
     setMessage("")
@@ -279,13 +290,17 @@ export function GreatGuessOffDemo() {
   }, [leadIn])
 
   useEffect(() => {
-    if (phase !== "voting") return
+    if (phase !== "voting") {
+      return
+    }
+
     const tick = () => {
       const remaining = Math.max(
         0,
         Math.ceil((deadlineRef.current - Date.now()) / 1000),
       )
       setSecondsLeft(remaining)
+
       if (remaining === 0 && currentPhase.current === "voting") {
         // The deadline advances DIRECTLY to the same result presentation.
         // Never render the separate numbered "Votes Locked" screen.
@@ -295,12 +310,17 @@ export function GreatGuessOffDemo() {
     }
     const interval = window.setInterval(tick, 160)
     tick()
+
     return () => window.clearInterval(interval)
   }, [phase, questionIndex])
 
   const startQuestion = async (index: number) => {
     const handle = stage.current
-    if (!handle) return
+
+    if (!handle) {
+      return
+    }
+
     setQuestionIndex(index)
     setSecondsLeft(VOTING_SECONDS)
     setPhase("preparing")
@@ -333,7 +353,11 @@ export function GreatGuessOffDemo() {
 
   const reveal = async (chosenIndex?: number) => {
     const handle = stage.current
-    if (!handle) return
+
+    if (!handle) {
+      return
+    }
+
     const q = QUESTIONS[questionIndex]
     // Set result presentation BEFORE rendering so "Correct Answer" doesn't
     // first appear in the tiny question font and jump to a larger size.
@@ -358,7 +382,10 @@ export function GreatGuessOffDemo() {
   // A single tap is a complete vote. It advances straight to results rather
   // than waiting for the remaining 20-second countdown or another button.
   const choose = (index: number) => {
-    if (currentPhase.current !== "voting" || busyRef.current) return
+    if (currentPhase.current !== "voting" || busyRef.current) {
+      return
+    }
+
     setVotes((previous) => ({ ...previous, [questionIndex]: index }))
     stage.current?.setSelectedOptions([index])
     playEffect("answer-submitted", [questionIndex, "submitted"].join(":"))
@@ -367,13 +394,17 @@ export function GreatGuessOffDemo() {
 
   const next = async () => {
     const handle = stage.current
-    if (!handle) return
+
+    if (!handle) {
+      return
+    }
+
     if (questionIndex === 2) {
       playEffect("phase-leaderboard")
       await handle.showLeaderboard(leaderboard)
       setPhase("leaderboard")
     } else if (questionIndex === 4) {
-      const winner = leaderboard[0]
+      const [winner] = leaderboard
       playEffect("phase-podium1")
       // Show the Z stage backdrop before the native confetti starts: one
       // unified winner reveal, not a separate confetti screen.
@@ -390,7 +421,11 @@ export function GreatGuessOffDemo() {
   // Only visible scenes are navigable (not transient wipe/locked frames).
   const restoreResult = async (index: number) => {
     const handle = stage.current
-    if (!handle) return
+
+    if (!handle) {
+      return
+    }
+
     setQuestionIndex(index)
     currentPhase.current = "question-transition"
     setPhase("question-transition")
@@ -411,30 +446,56 @@ export function GreatGuessOffDemo() {
 
   const back = async () => {
     const handle = stage.current
-    if (!handle || phase === "intro" || phase === "question-transition") return
+
+    if (!handle || phase === "intro" || phase === "question-transition") {
+      return
+    }
+
     if (phase === "closing") {
-      const winner = leaderboard[0]
+      const [winner] = leaderboard
       // Show the Z stage backdrop before the native confetti starts: one
       // unified winner reveal, not a separate confetti screen.
       currentPhase.current = "winner"
       setPhase("winner")
       await handle.showFinale({ name: winner.name, score: winner.score })
+
       return
     }
-    if (phase === "winner") return restoreResult(4)
-    if (phase === "leaderboard") return restoreResult(2)
-    if (phase === "results") return startQuestion(questionIndex)
+
+    if (phase === "winner") {
+      return restoreResult(4)
+    }
+
+    if (phase === "leaderboard") {
+      return restoreResult(2)
+    }
+
+    if (phase === "results") {
+      return startQuestion(questionIndex)
+    }
+
     if (phase === "locked" || phase === "voting") {
-      if (questionIndex === 0) return restart()
-      if (questionIndex === 1) return restoreResult(0)
-      if (questionIndex === 2) return restoreResult(1)
+      if (questionIndex === 0) {
+        return restart()
+      }
+
+      if (questionIndex === 1) {
+        return restoreResult(0)
+      }
+
+      if (questionIndex === 2) {
+        return restoreResult(1)
+      }
+
       if (questionIndex === 3) {
         await handle.showLeaderboard(leaderboard)
         setQuestionIndex(2)
         currentPhase.current = "leaderboard"
         setPhase("leaderboard")
+
         return
       }
+
       return restoreResult(3)
     }
   }

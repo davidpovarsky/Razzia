@@ -239,8 +239,7 @@ export function createWidgetBridgeCore(
       const key = `${args.draftId}:${args.expectedRevision}:${args.locale ?? ""}`
 
       if (
-        inFlightPreview &&
-        inFlightPreview.generation === generation &&
+        inFlightPreview?.generation === generation &&
         inFlightPreview.key === key
       ) {
         return inFlightPreview.promise
@@ -287,6 +286,7 @@ export function createWidgetBridgeCore(
       try {
         const top =
           options.isTopWindow?.() ??
+          // oxlint-disable-next-line typescript/prefer-optional-chain -- typeof also guards an undeclared window in the supported non-browser host.
           (typeof window !== "undefined" && window.parent === window)
 
         if (top) {

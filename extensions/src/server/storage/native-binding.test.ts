@@ -10,7 +10,10 @@ import { computeCanonicalBaseDigest } from "../../core/index"
 import { CompositeStorageService } from "./service"
 import { executeMediaDeleteTransaction } from "../media-library"
 import {
+  assertNativeRuns,
   byteHash,
+  nativeRecoveryReport,
+  requireNativeRecord,
   makeNativeFixture,
   nativeFixtureState,
   nativeInput,
@@ -33,12 +36,17 @@ const cases: NativeBindingScenario[] = [
   "quiz-foreign",
 ]
 
-function child(
-  mode: "interrupt" | "recover",
-  root: string,
-  token: string,
+function child({
+  mode,
+  root,
+  token,
   sequence = "",
-) {
+}: {
+  mode: "interrupt" | "recover"
+  root: string
+  token: string
+  sequence?: string
+}) {
   return new Promise<{
     pid?: number
     code: number | null
@@ -66,11 +74,15 @@ function child(
       timedOut = true
       processChild.kill("SIGKILL")
     }, 20000)
-    processChild.stdout?.on("data", (data) => {
-      stdout = (stdout + data).slice(-128000)
+    processChild.stdout?.on("data", (data: Buffer | string) => {
+      stdout = (
+        stdout + (typeof data === "string" ? data : data.toString("utf8"))
+      ).slice(-128000)
     })
-    processChild.stderr?.on("data", (data) => {
-      stderr = (stderr + data).slice(-128000)
+    processChild.stderr?.on("data", (data: Buffer | string) => {
+      stderr = (
+        stderr + (typeof data === "string" ? data : data.toString("utf8"))
+      ).slice(-128000)
     })
     processChild.once("error", (error) => {
       clearTimeout(timeout)
@@ -83,7 +95,10 @@ function child(
   })
 }
 function retain(name: string, receipt: unknown) {
-  if (!process.env.RECOVERY_NATIVE_RECEIPT_ROOT) return
+  if (!process.env.RECOVERY_NATIVE_RECEIPT_ROOT) {
+    return
+  }
+
   fs.mkdirSync(process.env.RECOVERY_NATIVE_RECEIPT_ROOT, { recursive: true })
   fs.writeFileSync(
     path.join(process.env.RECOVERY_NATIVE_RECEIPT_ROOT, `${name}.json`),
@@ -92,18 +107,25 @@ function retain(name: string, receipt: unknown) {
 }
 
 describe("R1 actual native storage bindings and logical digest", () => {
-  let previousConfig: string | undefined
-  let previousAccounts: string | undefined
+  let previousConfig: string | undefined = undefined
+
+  let previousAccounts: string | undefined = undefined
   beforeEach(() => {
     previousConfig = process.env.CONFIG_PATH
     previousAccounts = process.env.TADAZZ_ACCOUNTS_ENABLED
   })
   afterEach(() => {
-    if (previousConfig === undefined) delete process.env.CONFIG_PATH
-    else process.env.CONFIG_PATH = previousConfig
-    if (previousAccounts === undefined)
+    if (previousConfig === undefined) {
+      delete process.env.CONFIG_PATH
+    } else {
+      process.env.CONFIG_PATH = previousConfig
+    }
+
+    if (previousAccounts === undefined) {
       delete process.env.TADAZZ_ACCOUNTS_ENABLED
-    else process.env.TADAZZ_ACCOUNTS_ENABLED = previousAccounts
+    } else {
+      process.env.TADAZZ_ACCOUNTS_ENABLED = previousAccounts
+    }
   })
 
   it.each(cases)(
@@ -116,19 +138,27 @@ describe("R1 actual native storage bindings and logical digest", () => {
         nativeId: descriptor.quizId,
         actualBaseName: descriptor.baseName,
       }
+
       try {
         expect(descriptor.quizId).toMatch(/^[A-Za-z0-9_-]{21}$/)
         expect(descriptor.baseName).not.toBe(`${descriptor.quizId}.json`)
         const before = nativeFixtureState(root)
         receipt.before = before
-        const killed = await child("interrupt", root, descriptor.token)
+        const killed = await child({
+          mode: "interrupt",
+          root,
+          token: descriptor.token,
+        })
         receipt.interruptedProcess = killed
         expect(killed.timedOut, killed.stderr).toBe(false)
-        if (process.platform === "win32") expect(killed.code).toBe(86)
-        else {
+
+        if (process.platform === "win32") {
+          expect(killed.code).toBe(86)
+        } else {
           expect(killed.code, killed.stderr).toBe(null)
           expect(killed.signal, killed.stderr).toBe("SIGKILL")
         }
+
         receipt.interrupted = JSON.parse(
           fs.readFileSync(path.join(root, ".native-interrupted.json"), "utf8"),
         )
@@ -141,24 +171,29 @@ describe("R1 actual native storage bindings and logical digest", () => {
           2,
         )
         fs.writeFileSync(path.join(root, idlessPath), idlessBytes)
-        const runs = []
+        const runs: unknown[] = []
         for (const sequence of ["1", "2"]) {
-          const result = await child(
-            "recover",
+          const result = await child({
+            mode: "recover",
             root,
-            descriptor.token,
+            token: descriptor.token,
             sequence,
-          )
-          const recovery = JSON.parse(
-            fs.readFileSync(
-              path.join(root, `.native-recovery-${sequence}.json`),
-              "utf8",
+          })
+          const recovery = requireNativeRecord(
+            JSON.parse(
+              fs.readFileSync(
+                path.join(root, `.native-recovery-${sequence}.json`),
+                "utf8",
+              ),
             ),
           )
+
           runs.push({ process: result, ...recovery })
         }
         // Capture BOTH production-equivalent attempts before any outcome assertion.
         receipt.recoveries = runs
+        assertNativeRuns(runs)
+
         expect(
           new Set([killed.pid, ...runs.map((run) => run.process.pid)]).size,
         ).toBe(3)
@@ -172,26 +207,29 @@ describe("R1 actual native storage bindings and logical digest", () => {
           expect(run.state.files[unrelatedKey]).toEqual(
             before.files[unrelatedKey],
           )
+
           if (descriptor.foreignName) {
             const sentinel = `quizz/${descriptor.foreignName}`
             expect(run.state.files[sentinel]).toEqual(before.files[sentinel])
           }
-          {
-            expect(run.process.code, run.process.stderr).toBe(0)
-            expect(run.report.unresolvedCount).toBe(0)
-            if (!descriptor.foreignName)
-              expect(
-                run.state.files[`quizz/${descriptor.quizId}.json`],
-              ).toBeUndefined()
-            expect(run.state.files[baseKey]).toEqual(before.files[baseKey])
-            expect(run.state.files[extrasKey]).toEqual(before.files[extrasKey])
-            expect(run.state.files["media/r1-native.png"]).toEqual(
-              before.files["media/r1-native.png"],
-            )
-            expect(run.state.journals).toHaveLength(0)
+
+          expect(run.process.code, run.process.stderr).toBe(0)
+          expect(nativeRecoveryReport(run).unresolvedCount).toBe(0)
+
+          if (!descriptor.foreignName) {
+            expect(
+              run.state.files[`quizz/${descriptor.quizId}.json`],
+            ).toBeUndefined()
           }
+
+          expect(run.state.files[baseKey]).toEqual(before.files[baseKey])
+          expect(run.state.files[extrasKey]).toEqual(before.files[extrasKey])
+          expect(run.state.files["media/r1-native.png"]).toEqual(
+            before.files["media/r1-native.png"],
+          )
+          expect(run.state.journals).toHaveLength(0)
         }
-        expect(runs[1].report.status).toBe("clean")
+        expect(nativeRecoveryReport(runs[1]).status).toBe("clean")
         expect(runs[1].state.files).toEqual(runs[0].state.files)
         receipt.state = "PASS"
       } catch (error) {
@@ -211,6 +249,7 @@ describe("R1 actual native storage bindings and logical digest", () => {
     (stripped) => {
       const { root, descriptor } = makeNativeFixture("media")
       const receipt: Record<string, unknown> = { stripped, state: "STARTED" }
+
       try {
         const input = {
           ...nativeInput("Logical digest"),
@@ -221,7 +260,9 @@ describe("R1 actual native storage bindings and logical digest", () => {
               }
             : {}),
         }
-        const normalized = quizzValidator.parse(input) // actual create route's base parser
+        // Actual create route's base parser
+
+        const normalized = quizzValidator.parse(input)
         const expectedLogical = computeCanonicalBaseDigest(normalized)
         const service = new CompositeStorageService({ ...native })
         const created = service.createCompositeQuiz({
@@ -230,7 +271,9 @@ describe("R1 actual native storage bindings and logical digest", () => {
         })
         const actualPath = knownNativePath(root, created.quizId)
         const diskBytes = fs.readFileSync(actualPath)
-        const stored = JSON.parse(diskBytes.toString("utf8"))
+        const stored = requireNativeRecord(
+          JSON.parse(diskBytes.toString("utf8")),
+        )
         const read = service.getCompositeQuiz(created.quizId)
         const exported = service.exportEnhancedBundle(created.quizId)
         receipt.inputDigest = computeCanonicalBaseDigest(input)
@@ -249,7 +292,9 @@ describe("R1 actual native storage bindings and logical digest", () => {
         expect(read.baseDigest).toBe(expectedLogical)
         expect(read.digestMatches).toBe(true)
         expect(exported.extras.baseDigest).toBe(expectedLogical)
-        expect(byteHash(diskBytes)).not.toBe(expectedLogical) // ownership never inferred from logical equality
+        // Ownership never inferred from logical equality
+
+        expect(byteHash(diskBytes)).not.toBe(expectedLogical)
         receipt.state = "PASS"
       } catch (error) {
         receipt.state = "FAIL"
@@ -272,6 +317,7 @@ describe("R1 actual native storage bindings and logical digest", () => {
         .map((relative) => {
           const file = path.join(root, relative)
           const stat = fs.lstatSync(file)
+
           return {
             relative,
             kind: stat.isDirectory() ? "directory" : "file",
@@ -282,6 +328,7 @@ describe("R1 actual native storage bindings and logical digest", () => {
         })
     const before = nativeFixtureState(root)
     const beforeTree = tree()
+
     try {
       const result = executeMediaDeleteTransaction(
         native.getPath,
@@ -311,6 +358,7 @@ describe("R1 actual native storage bindings and logical digest", () => {
 
   it("native writer baseline strips extra input independently of ownership bytes", () => {
     const { root, descriptor } = makeNativeFixture("media")
+
     try {
       const input = {
         ...nativeInput("Raw stripped witness"),
@@ -318,7 +366,7 @@ describe("R1 actual native storage bindings and logical digest", () => {
       }
       const created = native.saveQuizz(input)
       const bytes = fs.readFileSync(knownNativePath(root, created.id))
-      const stored = JSON.parse(bytes.toString("utf8"))
+      const stored = requireNativeRecord(JSON.parse(bytes.toString("utf8")))
       const normalized = quizzValidator.parse(input)
       retain("native-stripped-baseline", {
         inputDigest: computeCanonicalBaseDigest(input),

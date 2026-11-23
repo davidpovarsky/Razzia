@@ -9,11 +9,13 @@ import {
   principal,
   MemoryDrafts,
 } from "./fixtures.ts"
+import { synchronousPromise } from "../../../core/synchronous-promise.ts"
 
 test("two real SDK sessions retain account isolation and revoked replay is denied", async () => {
   const shared = new MemoryDrafts()
   const a = await harness({ drafts: shared })
   const b = await harness({ drafts: shared })
+
   try {
     const key = newKey()
     const created = data(
@@ -51,29 +53,27 @@ for (const invalid of [
   { expiresAt: 0 },
   { scopes: [] },
 ]) {
-  test(
-    "invalid principal fails before account store: " +
-      Object.keys(invalid).join(),
-    async () => {
-      const h = await harness({
-        authorize: async () => ({ ...principal(), ...invalid }),
-      })
-      try {
-        assert.equal(
-          code(
-            await h.call("create_game_draft", {
-              authoredShowJson: JSON.stringify(show()),
-              idempotencyKey: newKey(),
-            }),
-          ),
-          "SCOPE_REQUIRED",
-        )
-        assert.equal(h.store.records.size, 0)
-      } finally {
-        await h.close()
-      }
-    },
-  )
+  test(`invalid principal fails before account store: ${Object.keys(invalid).join()}`, async () => {
+    const h = await harness({
+      authorize: () =>
+        synchronousPromise(() => ({ ...principal(), ...invalid })),
+    })
+
+    try {
+      assert.equal(
+        code(
+          await h.call("create_game_draft", {
+            authoredShowJson: JSON.stringify(show()),
+            idempotencyKey: newKey(),
+          }),
+        ),
+        "SCOPE_REQUIRED",
+      )
+      assert.equal(h.store.records.size, 0)
+    } finally {
+      await h.close()
+    }
+  })
 }
 
 test("missing real authorizer/rate limiter/repository and preview/save/download fail closed", async () => {
@@ -81,6 +81,7 @@ test("missing real authorizer/rate limiter/repository and preview/save/download 
   const unauthed = await harness({ authorize: undefined })
   const noRate = await harness({ rateLimit: undefined })
   const noStore = await harness({ drafts: undefined })
+
   try {
     assert.equal(
       code(await unauthed.call("get_game_draft", { draftId: newKey() })),
@@ -134,18 +135,19 @@ test("missing real authorizer/rate limiter/repository and preview/save/download 
 })
 
 test("rate denials and unexpected dependency failures expose no raw secret or mutation", async () => {
-  const denied = await harness({ rateLimit: async () => false })
+  const denied = await harness({ rateLimit: () => Promise.resolve(false) })
   const secret = "synthetic-secret-never-echo"
   const broken = await harness({
     catalog: {
-      async listTemplates() {
-        throw new Error(secret)
+      listTemplates() {
+        return Promise.reject(new Error(secret))
       },
-      async listThemes() {
-        return { items: [] }
+      listThemes() {
+        return Promise.resolve({ items: [] })
       },
     },
   })
+
   try {
     assert.equal(
       code(

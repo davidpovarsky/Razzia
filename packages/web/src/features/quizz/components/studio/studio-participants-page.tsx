@@ -5,7 +5,7 @@ import {
   type AnyQuizExtras,
   type QuizExtrasV1,
 } from "@razzia/extensions/core"
-import { RosterSection } from "@razzia/extensions/editor"
+import { RosterSection, TeamsSection } from "@razzia/extensions/editor"
 import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 import { Users } from "lucide-react"
 import { useTranslation } from "react-i18next"
@@ -57,6 +57,12 @@ export const StudioParticipantsPage = () => {
     })
   }
 
+  const handleTeamsChange = (updated: QuizExtrasV1) => {
+    setExtras((previous) =>
+      previous ? { ...previous, teams: updated.teams } : previous,
+    )
+  }
+
   const tr = (key: string, fallback: string) =>
     t(`extensions:${key}`, { defaultValue: fallback })
 
@@ -83,6 +89,14 @@ export const StudioParticipantsPage = () => {
               </p>
             </div>
           </div>
+        </div>
+
+        <div className="border-accent bg-background rounded-xl border p-6 shadow-sm">
+          <TeamsSection
+            extras={safeExtras}
+            onChange={handleTeamsChange}
+            tr={tr}
+          />
         </div>
 
         <div className="border-accent bg-background rounded-xl border p-6 shadow-sm">

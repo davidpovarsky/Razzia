@@ -1,7 +1,9 @@
 import type { Page } from "@playwright/test"
 import {
+  addQuestionCard,
   answerInput,
   openQuizzTab,
+  questionCard,
   readQuizz,
   saveQuizz,
 } from "@razzia/e2e/utils/editor"
@@ -9,11 +11,25 @@ import { expect, test } from "@razzia/e2e/utils/fixtures"
 import { t } from "@razzia/e2e/utils/i18n"
 import { listMediaFiles, pngFile, wavFile } from "@razzia/e2e/utils/media"
 
+const openMediaPanel = async (page: Page) => {
+  await page.getByTestId("editor-panel-toggle-media").click()
+  const panel = page.getByTestId("editor-panel-media")
+  await expect(panel).toBeVisible()
+
+  return panel
+}
+
 const openLibrary = async (page: Page) => {
-  await page.getByRole("button", { name: t("quizz:media.library") }).click()
+  const panel = await openMediaPanel(page)
+  await panel
+    .getByRole("button", { name: t("quizz:media.library"), exact: true })
+    .click()
 
-  const dialog = page.getByRole("dialog", { name: t("quizz:media.library") })
+  const dialog = page
+    .getByRole("dialog", { name: t("quizz:media.library"), exact: true })
+    .filter({ has: page.getByPlaceholder(t("quizz:media.search")) })
 
+  await expect(dialog).toHaveCount(1)
   await expect(dialog).toBeVisible()
 
   return dialog
@@ -41,7 +57,7 @@ test("uploads, searches, filters and picks a media", async ({ page }) => {
   const dialog = await openLibrary(page)
 
   await dialog
-    .locator("input[type=file]")
+    .locator("input[type=file][multiple]")
     .setInputFiles([pngFile(`${tag}-image`), wavFile(`${tag}-sound`)])
   await dialog.getByPlaceholder(t("quizz:media.search")).fill(tag)
 
@@ -64,7 +80,15 @@ test("uploads, searches, filters and picks a media", async ({ page }) => {
     .getByRole("combobox", { name: t("quizz:media.filterByType") })
     .click()
   await page.getByRole("option", { name: t("quizz:media.filter.all") }).click()
-  await dialog.getByRole("radio", { name: t("quizz:media.view.list") }).click()
+  await dialog
+    .getByRole("radio", { name: t("quizz:media.view.list"), exact: true })
+    .click()
+  await expect(
+    dialog.getByRole("radio", {
+      name: t("quizz:media.view.list"),
+      exact: true,
+    }),
+  ).toHaveAttribute("data-state", "on")
   await expect(image).toContainText(t("quizz:question.media.image"))
   await expect(sound).toContainText(t("quizz:question.media.audio"))
 
@@ -75,7 +99,12 @@ test("uploads, searches, filters and picks a media", async ({ page }) => {
   await image.click()
 
   await expect(dialog).toBeHidden()
-  await expect(page.getByRole("img", { name: "Question Media" })).toBeVisible()
+  await expect(
+    page
+      .getByTestId("editor-panel-media")
+      .getByRole("img", { name: "Which media?", exact: true }),
+  ).toBeVisible()
+  await page.getByTestId("editor-panel-close-media").click()
   await saveQuizz(page)
 
   expect(readQuizz(`Library quizz ${tag}`)?.questions[0].media).toMatchObject({
@@ -91,12 +120,17 @@ test("deletes a media and detaches it from the question", async ({ page }) => {
 
   let dialog = await openLibrary(page)
 
-  await dialog.locator("input[type=file]").setInputFiles(pngFile(tag))
+  await dialog.locator("input[type=file][multiple]").setInputFiles(pngFile(tag))
   await dialog.getByPlaceholder(t("quizz:media.search")).fill(tag)
   await dialog.getByTitle(new RegExp(`^${tag}-`, "u")).click()
-  await expect(page.getByRole("img", { name: "Question Media" })).toBeVisible()
+  await expect(
+    page
+      .getByTestId("editor-panel-media")
+      .getByRole("img", { name: "Which media?", exact: true }),
+  ).toBeVisible()
+  await page.getByTestId("editor-panel-close-media").click()
 
-  await page.getByRole("button", { name: t("quizz:addQuestion") }).click()
+  await addQuestionCard(page)
   dialog = await openLibrary(page)
   await dialog.getByPlaceholder(t("quizz:media.search")).fill(tag)
   await dialog.getByRole("button", { name: t("quizz:media.delete") }).click()
@@ -109,25 +143,42 @@ test("deletes a media and detaches it from the question", async ({ page }) => {
   expect(listMediaFiles().some((file) => file.startsWith(tag))).toBe(false)
 
   await dialog.getByRole("button", { name: t("common:close") }).click()
-  await page.getByRole("button", { name: /^1 Which media\?/u }).click()
+  await page.getByTestId("editor-panel-close-media").click()
+  await questionCard(page, 0).click()
   await expect(
     page.getByPlaceholder(t("quizz:question.placeholder")),
   ).toHaveValue("Which media?")
-  await expect(page.getByRole("img", { name: "Question Media" })).toBeHidden()
+  const mediaPanel = await openMediaPanel(page)
+  await expect(
+    mediaPanel.getByRole("img", { name: "Which media?", exact: true }),
+  ).toHaveCount(0)
+  await expect(mediaPanel.locator("input[type=file]")).toHaveCount(1)
 })
 
 test("attaches a media from a URL", async ({ page }) => {
   const subject = `URL media quizz ${Date.now()}`
   const url = "https://example.com/picture.png"
 
+  const { buffer } = pngFile("url-media")
+  await page.route(url, (route) =>
+    route.fulfill({ contentType: "image/png", body: buffer }),
+  )
   await createQuestion(page, subject)
-  await page.getByRole("button", { name: t("quizz:media.fromUrl") }).click()
+  const mediaPanel = await openMediaPanel(page)
+  await mediaPanel
+    .getByRole("button", { name: t("quizz:media.fromUrl") })
+    .click()
   await page.getByPlaceholder(t("quizz:question.mediaUrlPlaceholder")).fill(url)
   await page
     .getByRole("button", { name: t("quizz:question.media.image") })
     .click()
 
-  await expect(page.getByRole("img", { name: "Question Media" })).toBeVisible()
+  await expect(
+    page
+      .getByTestId("editor-panel-media")
+      .getByRole("img", { name: "Which media?", exact: true }),
+  ).toBeVisible()
+  await page.getByTestId("editor-panel-close-media").click()
   await saveQuizz(page)
 
   expect(readQuizz(subject)?.questions[0].media).toEqual({

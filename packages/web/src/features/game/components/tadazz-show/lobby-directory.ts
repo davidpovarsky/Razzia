@@ -2,6 +2,7 @@ export interface PublicLobbyDirectory {
   dialNumber?: string
   representatives?: Array<{ table: number; name: string }>
   connectedTables?: number[]
+  seatingPlan?: boolean
   roster?: Array<{ id: string; label: string; connected: boolean }>
   joinMode?: "standard" | "phone-only"
   instructions?: string[]
@@ -38,6 +39,7 @@ export function readPublicLobbyDirectory(
     : undefined
 
   return {
+    ...(source.seatingPlan === true ? { seatingPlan: true } : {}),
     ...(source.joinMode === "standard" || source.joinMode === "phone-only"
       ? { joinMode: source.joinMode }
       : {}),

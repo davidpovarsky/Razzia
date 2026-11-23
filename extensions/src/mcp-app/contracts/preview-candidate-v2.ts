@@ -4,6 +4,7 @@ import { nativePreviewRendererInputV2Schema } from "../../core/show-library/nati
 import { digest, opaqueId, revision } from "./schemas.ts"
 
 export const PREVIEW_CANDIDATE_META_V2 = "tadazz/preview-candidate-v2"
+
 export const previewCandidateV2Schema = z
   .strictObject({
     version: z.literal(2),
@@ -16,7 +17,9 @@ export const previewCandidateV2Schema = z
     input: nativePreviewRendererInputV2Schema,
   })
   .superRefine((value, ctx) => {
-    if (value.revision !== value.input.frame.revision)
+    if (value.revision !== value.input.frame.revision) {
       ctx.addIssue({ code: "custom", message: "Preview revision mismatch" })
+    }
   })
+
 export type PreviewCandidateV2 = z.infer<typeof previewCandidateV2Schema>

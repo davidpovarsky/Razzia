@@ -28,17 +28,20 @@ describe("public authored leaderboard metadata", () => {
         ]),
         { id: randomUUID(), kind: "closing", sceneId: closingId },
       ],
-      scenes: Object.fromEntries([
-        ...leaderIds.map((id) => [
-          id,
-          {
-            id,
-            kind: "leaderboard",
-            title: "Identical honour roll title",
-            durationMs: 24000,
-            advance: "manual",
-          },
-        ]),
+      scenes: Object.fromEntries<unknown>([
+        ...leaderIds.map(
+          (id) =>
+            [
+              id,
+              {
+                id,
+                kind: "leaderboard",
+                title: "Identical honour roll title",
+                durationMs: 24000,
+                advance: "manual",
+              },
+            ] as const,
+        ),
         [
           closingId,
           {
@@ -48,7 +51,7 @@ describe("public authored leaderboard metadata", () => {
             durationMs: 6000,
             advance: "manual",
           },
-        ],
+        ] as const,
       ]),
       defaults: {},
     })
@@ -71,6 +74,7 @@ describe("public authored leaderboard metadata", () => {
       },
     })
     session.setShowCoordinator(coordinator)
+
     try {
       coordinator.start()
       for (const index of [0, 1, 2]) {

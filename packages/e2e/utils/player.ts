@@ -2,7 +2,7 @@ import { expect, type Page } from "@playwright/test"
 import { t } from "@razzia/e2e/utils/i18n"
 
 export const typePin = async (page: Page, pin: string) => {
-  await page.goto("/")
+  await page.goto("/game")
   await page
     .getByRole("textbox", { name: t("game:pinDigit", { position: 1 }) })
     .click()
@@ -22,9 +22,24 @@ export const joinGame = async (page: Page, pin: string, username: string) => {
 }
 
 export const answer = async (page: Page, label: string) => {
-  const choices = Array.from({ length: 5 }, (_, index) =>
-    page.getByRole("button", { name: `${index + 1} ${label}`, exact: true }),
-  )
+  const choices = Array.from({ length: 5 }, (_, index) => {
+    const number = index + 1
+    const photoCaption = page
+      .getByTestId(`photo-card-caption-${index}`)
+      .or(page.locator("span.sr-only"))
+      .and(page.getByText(label, { exact: true }))
+    const photoChoice = page
+      .getByTestId(`photo-card-choice-${index}`)
+      .and(page.getByRole("button"))
+      .filter({ has: photoCaption })
+
+    return page
+      .getByRole("button", { name: `${number} ${label}`, exact: true })
+      .or(
+        page.getByRole("button", { name: `${number}. ${label}`, exact: true }),
+      )
+      .or(photoChoice)
+  })
   await choices.reduce((matches, choice) => matches.or(choice)).click()
 }
 

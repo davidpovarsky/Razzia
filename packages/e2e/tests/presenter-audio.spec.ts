@@ -1,11 +1,14 @@
 import { expect, test } from "@playwright/test"
 import {
   computeCanonicalBaseDigest,
-  createDefaultQuizExtras,
+  createDefaultQuizExtrasV2,
 } from "../../../extensions/src/core"
 import { loginManager } from "../utils/manager"
 
-test("real presenter media: rejected autoplay unlocks, intro survives video end, pause retains position, one engine survives fullscreen", async ({
+const INTRO = "/tadazz-show/music/platform/tadazz-production-intro-20261106.wav"
+const LOBBY = "/tadazz-show/music/platform/tadazz-exploration-20261106.mp3"
+
+test("real presenter media: rejected autoplay unlocks, opening hands off once, pause retains position, one engine survives fullscreen", async ({
   page,
   request,
 }) => {
@@ -35,13 +38,6 @@ test("real presenter media: rejected autoplay unlocks, intro survives video end,
 
       return originalPlay.call(this)
     }
-    window.addEventListener(
-      "tadazz:audio-unlock",
-      () => {
-        qa.qaAllowAudio = true
-      },
-      true,
-    )
   })
   const title = `Audio timeline ${Date.now()}`
   const quizz = {
@@ -58,16 +54,22 @@ test("real presenter media: rejected autoplay unlocks, intro survives video end,
       },
     ],
   }
-  const extras = createDefaultQuizExtras(
+  const extras = createDefaultQuizExtrasV2(
     "draft",
     [crypto.randomUUID()],
     computeCanonicalBaseDigest(quizz),
   )
-  // Exercise the owner-cleared release recordings through the actual media route.
+  extras.defaults.showTheme = {
+    id: "tadazz-classic",
+    version: "1.0.0",
+    overrides: {},
+  }
+  // Use the release recordings included in the built site. Their ownership
+  // moves from the product opening to the selected theme at the lobby boundary.
   extras.audio.soundtrack = {
     openingIntro: {
       mode: "media",
-      url: "/media/tadazz-production-intro-20261106.wav",
+      url: INTRO,
       volume: 0.3,
       loop: false,
       fadeMs: 0,
@@ -76,7 +78,7 @@ test("real presenter media: rejected autoplay unlocks, intro survives video end,
     },
     lobby: {
       mode: "media",
-      url: "/media/tadazz-exploration-20261106.mp3",
+      url: LOBBY,
       volume: 0.2,
       loop: true,
       fadeMs: 300,
@@ -96,68 +98,85 @@ test("real presenter media: rejected autoplay unlocks, intro survives video end,
   await page.getByRole("button", { name: title, exact: true }).click()
   await page.getByRole("button", { name: "Start game", exact: true }).click()
   const audio = page.getByTestId("audio-cue-player-state")
+  await expect(page.getByTestId("platform-game-opening")).toHaveAttribute(
+    "data-platform-opening-stage",
+    "standby",
+  )
+  await page.getByTestId("platform-opening-start").click()
   await expect(audio).toHaveAttribute("data-audio-blocked", "true")
   const video = page.getByTestId("tadazz-opening-video")
   await expect(video).toBeVisible()
   expect(
     await video.evaluate((el: HTMLVideoElement) => el.muted && el.volume === 0),
   ).toBe(true)
-  await page.getByTestId("tadazz-opening-enable-sound").click()
+  // Keep the injected rejection active through the start gesture. Only the
+  // explicit recovery gesture below is allowed to retry real audio playback.
+  await page.evaluate(() => {
+    ;(window as unknown as { qaAllowAudio: boolean }).qaAllowAudio = true
+  })
+  await page.getByTestId("host-enable-audio").click()
   await expect(audio).toHaveAttribute("data-audio-blocked", "false")
   const introTime = () =>
     page.evaluate(() => {
       const qa = window as unknown as { qaAudio: HTMLAudioElement[] }
       const intro = qa.qaAudio.find((a) =>
-        a.src.endsWith("/media/tadazz-production-intro-20261106.wav"),
+        a.src.endsWith("/tadazz-production-intro-20261106.wav"),
       )
 
       return { time: intro?.currentTime ?? 0, paused: intro?.paused ?? true }
     })
   await expect.poll(async () => (await introTime()).time).toBeGreaterThan(0.2)
-  await expect(page.getByTestId("tadazz-opening")).toHaveCount(0, {
+  expect((await introTime()).paused).toBe(false)
+  await expect(audio).toHaveAttribute("data-audio-url", INTRO)
+  await expect(page.getByTestId("platform-game-opening")).toHaveCount(0, {
     timeout: 11000,
   })
   await expect(page.getByTestId("tadazz-lobby-pin")).toBeVisible()
-  const duringLobby = await introTime()
-  // The intentionally blocked soundtrack begins only after the explicit gesture.
-  expect(duringLobby.time).toBeGreaterThan(4)
-  expect(duringLobby.time).toBeLessThan(11)
-  expect(duringLobby.paused).toBe(false)
-  // Lobby has no game timer; exercise the presenter's media pause here.
+  await expect(audio).toHaveCount(1)
+  await expect(audio).toHaveAttribute("data-soundtrack-slot", "lobby")
+  await expect(audio).toHaveAttribute("data-audio-url", LOBBY)
+  const mediaState = () =>
+    page.evaluate(
+      ({ intro, lobby }) => {
+        const qa = window as unknown as { qaAudio: HTMLAudioElement[] }
+        const background = qa.qaAudio.filter((a) =>
+          [intro, lobby].some((path) => a.src.endsWith(path)),
+        )
+        const active = background.filter((a) => !a.paused && a.volume > 0)
+        const lobbyTrack = background.find((a) => a.src.endsWith(lobby))
+
+        return {
+          total: qa.qaAudio.length,
+          playing: active.length,
+          activePaths: active.map((a) => new URL(a.src).pathname),
+          lobbyTime: lobbyTrack?.currentTime ?? 0,
+          lobbyPaused: lobbyTrack?.paused ?? true,
+        }
+      },
+      { intro: INTRO, lobby: LOBBY },
+    )
+  await expect
+    .poll(async () => (await mediaState()).activePaths)
+    .toEqual([LOBBY])
+  await expect
+    .poll(async () => (await mediaState()).lobbyTime)
+    .toBeGreaterThan(0.2)
+  expect((await introTime()).paused).toBe(true)
+  expect((await mediaState()).lobbyPaused).toBe(false)
+  // The platform opening ends at its authoritative boundary. The theme now
+  // owns the single lobby soundtrack, whose local media pause retains position.
   await page.getByTestId("host-toggle-audio-pause").click()
   await expect(audio).toHaveAttribute("data-audio-paused", "true")
-  const pausedAt = (await introTime()).time
+  const pausedAt = (await mediaState()).lobbyTime
   await page.waitForTimeout(1300)
-  expect(Math.abs((await introTime()).time - pausedAt)).toBeLessThan(0.12)
+  expect(Math.abs((await mediaState()).lobbyTime - pausedAt)).toBeLessThan(0.12)
   await page.getByTestId("host-toggle-audio-pause").click()
+  await expect(audio).toHaveAttribute("data-audio-paused", "false")
   await expect
-    .poll(async () => (await introTime()).time)
+    .poll(async () => (await mediaState()).lobbyTime)
     .toBeGreaterThan(pausedAt + 0.2)
-  await expect(audio).toHaveAttribute("data-soundtrack-slot", "lobby", {
-    timeout: 7000,
-  })
-  const mediaState = () =>
-    page.evaluate(() => {
-      const qa = window as unknown as { qaAudio: HTMLAudioElement[] }
-      const background = qa.qaAudio.filter((a) =>
-        /\/tadazz-(production-intro|exploration)-20261106\.(wav|mp3)$/u.test(
-          a.src,
-        ),
-      )
-
-      return {
-        total: qa.qaAudio.length,
-        playing: background.filter((a) => !a.paused && a.volume > 0).length,
-        introTime:
-          background.find((a) =>
-            a.src.endsWith("tadazz-production-intro-20261106.wav"),
-          )?.currentTime ?? 0,
-      }
-    })
   await expect.poll(async () => (await mediaState()).playing).toBe(1)
-  const stopped = await mediaState()
-  expect(stopped.introTime).toBeGreaterThanOrEqual(11.8)
-  expect(stopped.introTime).toBeLessThan(12.5)
+  const beforeFullscreen = await mediaState()
   await page.getByTestId("host-present-from-host-btn").click()
   await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
     "data-host-presenting",
@@ -165,6 +184,6 @@ test("real presenter media: rejected autoplay unlocks, intro survives video end,
   )
   await page.keyboard.press("Escape")
   await expect(page.getByTestId("host-audio-controls")).toBeVisible()
-  expect((await mediaState()).total).toBe(stopped.total)
+  expect((await mediaState()).total).toBe(beforeFullscreen.total)
   expect((await mediaState()).playing).toBe(1)
 })

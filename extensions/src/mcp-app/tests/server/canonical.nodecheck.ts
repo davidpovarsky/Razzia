@@ -1,6 +1,7 @@
 import assert from "node:assert/strict"
 import { createHash } from "node:crypto"
 import test from "node:test"
+import { requireObservedValue } from "./fixtures.ts"
 import { timelineQuestionItemSchema } from "@razzia/extensions/core"
 import {
   canonicalJson,
@@ -42,10 +43,11 @@ test("one browser-compatible serializer binds exact adopted envelope and preserv
     previewIdentityDigest(input),
     previewIdentityDigest({ ...input, revision: 3 }),
   )
+  const firstAssetDigest = requireObservedValue(input.assetDigests.at(0))
   assert.throws(() =>
     serializePreviewIdentity({
       ...input,
-      assetDigests: [input.assetDigests[0]!, input.assetDigests[0]!],
+      assetDigests: [firstAssetDigest, firstAssetDigest],
     }),
   )
   assert.throws(() => canonicalJson({ n: Infinity }))
@@ -61,9 +63,9 @@ test("concrete native-ID boundary: preview-prefixed identities are not persisted
   })
   assert.equal(valid.success, true)
   const incompatible = timelineQuestionItemSchema.safeParse({
-    id: "preview-card-" + "a".repeat(64),
+    id: `preview-card-${"a".repeat(64)}`,
     kind: "question",
-    questionId: "preview-question-" + "b".repeat(64),
+    questionId: `preview-question-${"b".repeat(64)}`,
   })
   assert.equal(incompatible.success, false)
   // No native schema was changed/cast to make preview-local identities persist.

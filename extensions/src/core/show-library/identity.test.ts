@@ -16,6 +16,10 @@ import {
   previewDraftInputSchema,
 } from "./preview-schemas"
 
+function observedJson(value: string): unknown {
+  return JSON.parse(value)
+}
+
 describe("canonical preview identities without native wire migration", () => {
   it.each(["", "abc", "éclair 日本語", "a".repeat(1000)])(
     "matches independent Node SHA256 for %s",
@@ -51,6 +55,7 @@ describe("canonical preview identities without native wire migration", () => {
       enumerable: true,
       get() {
         called = true
+
         return 1
       },
     })
@@ -183,17 +188,21 @@ describe("canonical preview identities without native wire migration", () => {
       expect(tadaShowV1Schema.safeParse(show).success).toBe(true)
       const map = normalizePreviewDraft(previewInputFixture(show)).input
         .identityMap
-      expect(
-        getPreviewIdentityId(
-          map,
-          kind === "card"
-            ? "cards"
-            : kind === "question"
-              ? "questions"
-              : "scenes",
-          key,
-        ),
-      ).toBe(`preview-${kind}-${vector.sha256}`)
+      const getIdentityNamespace = (): "cards" | "questions" | "scenes" => {
+        if (kind === "card") {
+          return "cards"
+        }
+
+        if (kind === "question") {
+          return "questions"
+        }
+
+        return "scenes"
+      }
+
+      expect(getPreviewIdentityId(map, getIdentityNamespace(), key)).toBe(
+        `preview-${kind}-${vector.sha256}`,
+      )
       expect(
         createHash("sha256")
           .update(Buffer.from(vector.preimageHex, "hex"))
@@ -292,7 +301,7 @@ describe("canonical preview identities without native wire migration", () => {
     expect(() =>
       normalizePreviewDraft({
         ...input,
-        identityMap: JSON.parse(
+        identityMap: observedJson(
           '{"cards":[],"questions":[],"scenes":[],"__proto__":{}}',
         ),
       }),

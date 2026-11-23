@@ -44,7 +44,7 @@ export default defineConfig({
         MANAGER_PASSWORD: "e2e-password",
         JWT_SECRET: "next-local-acceptance-secret-32-characters",
         SOCKET_PORT: "3251",
-        GAME_SPEED: "3",
+        GAME_SPEED: "1",
         TADA_PILOT_SECRET: "next-local-simulation-only",
       },
     },

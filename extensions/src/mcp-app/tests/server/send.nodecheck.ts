@@ -7,6 +7,7 @@ import {
   lifecycleHarness,
 } from "./lifecycle-fixture.ts"
 import { code, harness, newKey, principal } from "./fixtures.ts"
+import { synchronousPromise } from "../../../core/synchronous-promise.ts"
 
 test(
   "32 cancelled response writes retain the budget until public send promises settle",
@@ -18,9 +19,10 @@ test(
       held = 0
     const h = await lifecycleHarness(
       {
-        authorize: async () => {
-          auth++
-          return p
+        authorize: () => {
+          auth += 1
+
+          return Promise.resolve(p)
         },
       },
       undefined,
@@ -30,15 +32,21 @@ test(
           "id" in message &&
           String(message.id).startsWith("send-budget-")
         ) {
-          held++
+          held += 1
+
           await gate.promise
         }
       },
     )
+
     try {
-      for (let i = 0; i < 32; i++) await h.injectRead("send-budget-" + i)
+      for (let i = 0; i < 32; i += 1) {
+        await h.injectRead(`send-budget-${i}`)
+      }
       await until(() => held === 32)
-      for (let i = 0; i < 32; i++) await h.cancel("send-budget-" + i)
+      for (let i = 0; i < 32; i += 1) {
+        await h.cancel(`send-budget-${i}`)
+      }
       await drain()
       await h.injectRead("send-budget-overflow")
       await until(() => h.flags.closed)
@@ -64,9 +72,10 @@ test(
     let wireId: string | number = "not-started"
     const h = await lifecycleHarness(
       {
-        authorize: async () => {
-          auth++
-          return p
+        authorize: () => {
+          auth += 1
+
+          return Promise.resolve(p)
         },
       },
       undefined,
@@ -84,6 +93,7 @@ test(
         }
       },
     )
+
     try {
       armed = true
       const controller = new AbortController()
@@ -115,28 +125,43 @@ test(
       budget = 0,
       held = false
     const readers: string[] = []
-    let related: unknown
+    let related: unknown = undefined
+
     const h = await lifecycleHarness(
       {
-        authorize: async () => (++auth === 1 ? a : b),
-        prevalidationLimit: async () => {
-          ingress++
-          return true
+        authorize: () =>
+          synchronousPromise(() => {
+            auth += 1
+
+            return auth === 1 ? a : b
+          }),
+        prevalidationLimit: () => {
+          ingress += 1
+
+          return Promise.resolve(true)
         },
-        rateLimit: async () => {
-          budget++
-          return true
+        rateLimit: () => {
+          budget += 1
+
+          return Promise.resolve(true)
         },
         drafts: {
-          async get(p) {
-            readers.push(p.accountId)
-            return undefined
+          get(p) {
+            return synchronousPromise(() => {
+              readers.push(p.accountId)
+
+              return undefined
+            })
           },
-          async create() {
-            throw 0
+          create() {
+            return Promise.reject(
+              new Error("Read-only lifecycle fixture must not create drafts"),
+            )
           },
-          async replace() {
-            throw 0
+          replace() {
+            return Promise.reject(
+              new Error("Read-only lifecycle fixture must not replace drafts"),
+            )
           },
         },
       },
@@ -154,6 +179,7 @@ test(
         }
       },
     )
+
     try {
       // Strict schema rejection sends a response AND relatedRequestId for the same owner.
       await h.injectRead("owner-overlap", { syntheticUnknown: true })
@@ -193,12 +219,16 @@ test(
       held = false
     const h = await lifecycleHarness(
       {
-        authorize: async () => {
-          auth++
-          return p
+        authorize: () => {
+          auth += 1
+
+          return Promise.resolve(p)
         },
       },
-      async () => ({ content: [{ type: "text", text: "synthetic read" }] }),
+      () =>
+        Promise.resolve({
+          content: [{ type: "text", text: "synthetic read" }],
+        }),
       async (message) => {
         if (
           !("method" in message) &&
@@ -211,6 +241,7 @@ test(
       },
     )
     const other = await harness()
+
     try {
       await h.injectRead("reject-write")
       await until(() => held)
@@ -242,32 +273,39 @@ test(
 
 for (const duplicate of [true, false]) {
   test(
-    "pending related progress keeps its parent reserved: " +
-      (duplicate ? "duplicate denied" : "settled reuse reauthorizes"),
+    `pending related progress keeps its parent reserved: ${
+      duplicate ? "duplicate denied" : "settled reuse reauthorizes"
+    }`,
     { timeout: 15_000 },
     async () => {
       const gate = deferred()
       const p = principal()
       let auth = 0,
         held = false
-      let related: unknown
-      const writes: Promise<void>[] = []
+      let related: unknown = undefined
+
+      const writes: Array<Promise<void>> = []
       const h = await lifecycleHarness(
         {
-          authorize: async () => {
-            auth++
-            return p
+          authorize: () => {
+            auth += 1
+
+            return Promise.resolve(p)
           },
         },
-        async (context) => {
-          const write = context.mcpReq.notify({
-            method: "notifications/progress",
-            params: { progressToken: "synthetic-progress", progress: 1 },
-          })
-          writes.push(write)
-          void write.catch(() => {})
-          return { content: [{ type: "text", text: "synthetic read" }] }
-        },
+        (context) =>
+          synchronousPromise(() => {
+            const write = context.mcpReq.notify({
+              method: "notifications/progress",
+              params: { progressToken: "synthetic-progress", progress: 1 },
+            })
+            writes.push(write)
+            void write.catch(() => {
+              /* The original write promise is retained for the later settlement assertions. */
+            })
+
+            return { content: [{ type: "text", text: "synthetic read" }] }
+          }),
         async (message, options) => {
           if (
             !held &&
@@ -284,12 +322,14 @@ for (const duplicate of [true, false]) {
         h.serverMessages.filter(
           (m) => !("method" in m) && "id" in m && m.id === "progress-parent",
         )
+
       try {
         await h.injectRead("progress-parent")
         await until(() => held && responses().length === 1)
         assert.equal(related, "progress-parent")
         await h.cancel("progress-parent")
         await drain()
+
         if (duplicate) {
           await h.injectRead("progress-parent")
           await until(() => h.flags.closed)

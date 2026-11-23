@@ -12,5 +12,5 @@
     "verbatimModuleSyntax": true,
     "jsx": "react-jsx"
   },
-  "include": ["src/**/*", "tds*.ts"]
+  "include": ["src/**/*", "tds*.ts", "*.vite.config.ts"]
 }

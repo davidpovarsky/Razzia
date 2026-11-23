@@ -10,16 +10,26 @@ if (!/^http:\/\/127\.0\.0\.1:\d+$/u.test(base ?? "")) {
 }
 
 const rawEvidence = process.env.TADAZZ_WIDGET_EVIDENCE
-const evidence = rawEvidence
-  ? rawEvidence.startsWith("file://")
-    ? new URL(rawEvidence.endsWith("/") ? rawEvidence : `${rawEvidence}/`)
-    : new URL(
-        pathToFileURL(resolve(rawEvidence)).href.replace(/\/?$/u, "/"),
+const getEvidenceLocation = () => {
+  if (rawEvidence) {
+    if (rawEvidence.startsWith("file://")) {
+      return new URL(
+        rawEvidence.endsWith("/") ? rawEvidence : `${rawEvidence}/`,
       )
-  : new URL(
-      "../../../docs/extensions/qa-evidence/mcp-widget-20261115/",
-      import.meta.url,
+    }
+
+    return new URL(
+      pathToFileURL(resolve(rawEvidence)).href.replace(/\/?$/u, "/"),
     )
+  }
+
+  return new URL(
+    "../../../docs/extensions/qa-evidence/mcp-widget-20261115/",
+    import.meta.url,
+  )
+}
+
+const evidence = getEvidenceLocation()
 await mkdir(evidence, { recursive: true })
 const engine =
   process.env.TADAZZ_WIDGET_BROWSER === "webkit" ? webkit : chromium
@@ -455,6 +465,7 @@ try {
         .evaluate(() => {
           const w = window
           w.__stopStatusObserver?.()
+
           return w.__statusHistory ?? []
         })
       assert.equal(
@@ -609,17 +620,18 @@ try {
         .filter({ hasText: "Revision 2" })
         .waitFor()
       await page.evaluate(() => window.__host.holdPreviews(false))
-      await frame
-        .locator("main")
-        .evaluate(
-          () =>
-            new Promise((resolve) =>
-              setTimeout(
-                () => requestAnimationFrame(() => requestAnimationFrame(resolve)),
-                50,
-              ),
-            ),
-        )
+      await frame.locator("main").evaluate(
+        () =>
+          new Promise((resolveObservation) => {
+            setTimeout(
+              () =>
+                requestAnimationFrame(() =>
+                  requestAnimationFrame(resolveObservation),
+                ),
+              50,
+            )
+          }),
+      )
       const statusAfterRefresh = await frame
         .getByTestId("widget-status")
         .innerText()
@@ -629,9 +641,7 @@ try {
         /Preview unavailable|Development candidate/u,
       )
       assert.equal(
-        await frame
-          .getByTestId("sdk-candidate-stage")
-          .isVisible(),
+        await frame.getByTestId("sdk-candidate-stage").isVisible(),
         false,
       )
       assert.equal(
@@ -663,17 +673,18 @@ try {
         .filter({ hasText: "Revision 2" })
         .waitFor()
       await page.evaluate(() => window.__host.holdPreviews(false))
-      await frame
-        .locator("main")
-        .evaluate(
-          () =>
-            new Promise((resolve) =>
-              setTimeout(
-                () => requestAnimationFrame(() => requestAnimationFrame(resolve)),
-                50,
-              ),
-            ),
-        )
+      await frame.locator("main").evaluate(
+        () =>
+          new Promise((resolveObservation2) => {
+            setTimeout(
+              () =>
+                requestAnimationFrame(() =>
+                  requestAnimationFrame(resolveObservation2),
+                ),
+              50,
+            )
+          }),
+      )
       const statusAfterEdit = await frame
         .getByTestId("widget-status")
         .innerText()
@@ -734,17 +745,18 @@ try {
         .filter({ hasText: "Cancelled" })
         .waitFor()
       await page.evaluate(() => window.__host.holdPreviews(false))
-      await frame
-        .locator("main")
-        .evaluate(
-          () =>
-            new Promise((resolve) =>
-              setTimeout(
-                () => requestAnimationFrame(() => requestAnimationFrame(resolve)),
-                50,
-              ),
-            ),
-        )
+      await frame.locator("main").evaluate(
+        () =>
+          new Promise((resolveObservation3) => {
+            setTimeout(
+              () =>
+                requestAnimationFrame(() =>
+                  requestAnimationFrame(resolveObservation3),
+                ),
+              50,
+            )
+          }),
+      )
       await frame
         .getByTestId("widget-status")
         .filter({ hasText: "Cancelled" })
@@ -771,16 +783,23 @@ try {
     assert.deepEqual(errors, [])
   })
 } finally {
+  const getBrowserSurface = () => {
+    if (process.env.TADAZZ_WIDGET_BROWSER === "webkit") {
+      return "local WebKit; genuine SDK AppBridge synthetic host, not ChatGPT/Claude installation"
+    }
+
+    if (useMsedge) {
+      return "local Edge Chromium; genuine SDK AppBridge synthetic host, not ChatGPT/Claude installation"
+    }
+
+    return "local Chromium; genuine SDK AppBridge synthetic host, not ChatGPT/Claude installation"
+  }
+
   await writeFile(
     new URL("browser-results.json", evidence),
     JSON.stringify(
       {
-        surface:
-          process.env.TADAZZ_WIDGET_BROWSER === "webkit"
-            ? "local WebKit; genuine SDK AppBridge synthetic host, not ChatGPT/Claude installation"
-            : useMsedge
-              ? "local Edge Chromium; genuine SDK AppBridge synthetic host, not ChatGPT/Claude installation"
-              : "local Chromium; genuine SDK AppBridge synthetic host, not ChatGPT/Claude installation",
+        surface: getBrowserSurface(),
         browserVersion: browser.version(),
         cases,
         errors,

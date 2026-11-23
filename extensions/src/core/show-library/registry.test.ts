@@ -195,6 +195,7 @@ describe("bounded candidate registry, never executable registration", () => {
         port: i === 0 ? "stage-root" : "question",
         children: i + 1 < length ? { question: [`child-${i + 1}`] } : {},
       }))
+
       return input
     }
     expect(() => createShowLibraryRegistry(makeChain(9))).toThrow("graph-depth")

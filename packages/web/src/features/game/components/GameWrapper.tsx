@@ -74,6 +74,7 @@ import clsx from "clsx"
 import { Maximize, Minimize } from "lucide-react"
 import {
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type PropsWithChildren,
@@ -82,6 +83,7 @@ import {
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
 type Props = PropsWithChildren & {
+  gameId?: string
   statusName: Status | undefined
   onNext?: () => void
   onBack?: () => void
@@ -136,6 +138,38 @@ const GameWrapperView = ({
     "native.cinematic-stage": "tadazz-classic-stage",
   }
   const forcedRenderer = renderers[rootComponent ?? ""]
+  // The host and audience share one theme stage. Fullscreen only hides chrome;
+  // it must never switch renderer, lobby content or the active audio owner.
+  // Player input stays on its dedicated responsive surface.
+  const cinematicSurface =
+    effectiveRole !== "player" ||
+    Boolean(theme.definition.runtime) ||
+    forcedRenderer === "tadazz-classic-stage"
+  const usesTadazzCanvas =
+    forcedRenderer === "tadazz-classic-stage" ||
+    (forcedRenderer !== "razzia-native-stage" &&
+      isTadazzShowActive(extensionState))
+  const usesCinematicStage = cinematicSurface && usesTadazzCanvas
+
+  // The game route owns its canvas across the separate product opening and
+  // theme stage. A child renderer leaving must not clear the active canvas.
+  useLayoutEffect(() => {
+    if (!usesTadazzCanvas) {
+      return
+    }
+
+    const root = document.documentElement
+    const { body } = document
+    const previousRootBackground = root.style.background
+    const previousBodyBackground = body.style.background
+    root.style.background = theme.definition.tokens.background
+    body.style.background = theme.definition.tokens.background
+
+    return () => {
+      root.style.background = previousRootBackground
+      body.style.background = previousBodyBackground
+    }
+  }, [usesTadazzCanvas, theme.definition.tokens.background])
   const isEnhancedQuiz = Boolean(extensionState?.gameId)
   const {
     isPresenting: isHostPresentingConfirmed,
@@ -369,20 +403,7 @@ const GameWrapperView = ({
     )
   }
 
-  // The host and audience share one theme stage. Fullscreen only hides chrome;
-  // it must never switch renderer, lobby content or the active audio owner.
-  // Player input stays on its dedicated responsive surface.
-  const cinematicSurface =
-    effectiveRole !== "player" ||
-    Boolean(theme.definition.runtime) ||
-    forcedRenderer === "tadazz-classic-stage"
-
-  if (
-    cinematicSurface &&
-    (forcedRenderer === "tadazz-classic-stage" ||
-      (forcedRenderer !== "razzia-native-stage" &&
-        isTadazzShowActive(extensionState)))
-  ) {
+  if (usesCinematicStage) {
     return (
       <PlatformGameClosing extensionState={extensionState} role={effectiveRole}>
         <ShowThemeRenderer
@@ -610,10 +631,13 @@ const GameWrapper = (props: Props) => {
   const presentationRootRef = useRef<HTMLDivElement | null>(null)
   const managerGameId = useManagerStore((state) => state.gameId)
   const playerGameId = usePlayerStore((state) => state.gameId)
+  // The route knows the room before reconnect fills the player store. Keep the
+  // scope stable while reconnect status and extension packets arrive together.
   const gameId =
-    props.manager || props.viewRole === "spectator"
+    props.gameId ??
+    (props.manager || props.viewRole === "spectator"
       ? managerGameId
-      : playerGameId
+      : playerGameId)
 
   return (
     <AudioPreferencesScope key={gameId ?? "pending"}>

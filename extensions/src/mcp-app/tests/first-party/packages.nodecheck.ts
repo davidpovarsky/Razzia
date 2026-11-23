@@ -9,9 +9,49 @@ import { createFirstPartyOAuth } from "../../first-party/oauth.ts"
 import type { PackageAuthoringPort } from "../../server/package-authoring.ts"
 import { ToolError } from "../../server/errors.ts"
 import { fixture, origin, key, type Session } from "./fixtures.ts"
+import { synchronousPromise } from "../../../core/synchronous-promise.ts"
 
-let f: Awaited<ReturnType<typeof fixture>>
-let issuer: Awaited<ReturnType<typeof createFirstPartyOAuth>>
+function isObservedRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value)
+}
+
+function requireObservedRecord(
+  value: unknown,
+  label: string,
+): Record<string, unknown> {
+  if (!isObservedRecord(value)) {
+    throw new Error(`Expected raw object: ${label}`)
+  }
+
+  return value
+}
+
+function requireObservedString(value: unknown, label: string): string {
+  if (typeof value !== "string") {
+    throw new Error(`Expected raw string: ${label}`)
+  }
+
+  return value
+}
+
+type InitializedFValue = Awaited<ReturnType<typeof fixture>>
+let f: InitializedFValue | undefined = undefined
+function requireInitializedF(): InitializedFValue {
+  if (f === undefined) {
+    throw new Error("Fixture state f was read before initialization")
+  }
+
+  return f
+}
+type InitializedIssuerValue = Awaited<ReturnType<typeof createFirstPartyOAuth>>
+let issuer: InitializedIssuerValue | undefined = undefined
+function requireInitializedIssuer(): InitializedIssuerValue {
+  if (issuer === undefined) {
+    throw new Error("Fixture state issuer was read before initialization")
+  }
+
+  return issuer
+}
 const clientId = "synthetic-package-authoring-client"
 const callback = "https://host.example.invalid/package/callback"
 const allScopes = [
@@ -22,9 +62,9 @@ const allScopes = [
   "tadazz.exports.read",
 ]
 const config = {
-  issuer: origin + "/oauth",
-  resource: origin + "/mcp",
-  resourceMetadataUrl: origin + "/.well-known/oauth-protected-resource/mcp",
+  issuer: `${origin}/oauth`,
+  resource: `${origin}/mcp`,
+  resourceMetadataUrl: `${origin}/.well-known/oauth-protected-resource/mcp`,
   firstPartyOrigins: [origin],
 }
 
@@ -33,13 +73,14 @@ before(async () => {
   const pair = generateKeyPairSync("ed25519")
   issuer = await createFirstPartyOAuth({
     config,
-    configRoot: f.root,
+    configRoot: requireInitializedF().root,
     keyId: "synthetic-package-key",
-    signingPrivateKeyPem: pair.privateKey
-      .export({ type: "pkcs8", format: "pem" })
-      .toString(),
+    signingPrivateKeyPem: pair.privateKey.export({
+      type: "pkcs8",
+      format: "pem",
+    }),
     ticketEncryptionKey: randomBytes(32),
-    consentPageUrl: origin + "/studio/oauth-consent",
+    consentPageUrl: `${origin}/studio/oauth-consent`,
     clients: [{ clientId, redirectUris: [callback], scopes: allScopes }],
   })
 })
@@ -48,7 +89,7 @@ after(() => f?.close())
 function api(route: string, body?: Record<string, string>, session?: Session) {
   const firstParty = route === "/oauth/inspect" || route === "/oauth/approve"
 
-  return issuer.fetch(
+  return requireInitializedIssuer().fetch(
     new Request(origin + route, {
       method: body ? "POST" : "GET",
       headers: {
@@ -73,22 +114,22 @@ function api(route: string, body?: Record<string, string>, session?: Session) {
 }
 
 /** Actual synthetic manager consent, PKCE exchange and issuer verification. */
-async function linked(session = f.sessions[0], scopes = allScopes) {
+async function linked(
+  session = requireInitializedF().sessions[0],
+  scopes = allScopes,
+) {
   const verifier = randomBytes(32).toString("base64url")
   const started = await api(
-    "/oauth/authorize?" +
-      new URLSearchParams({
-        response_type: "code",
-        client_id: clientId,
-        redirect_uri: callback,
-        resource: config.resource,
-        scope: scopes.join(" "),
-        state: key(),
-        code_challenge: createHash("sha256")
-          .update(verifier)
-          .digest("base64url"),
-        code_challenge_method: "S256",
-      }),
+    `/oauth/authorize?${new URLSearchParams({
+      response_type: "code",
+      client_id: clientId,
+      redirect_uri: callback,
+      resource: config.resource,
+      scope: scopes.join(" "),
+      state: key(),
+      code_challenge: createHash("sha256").update(verifier).digest("base64url"),
+      code_challenge_method: "S256",
+    }).toString()}`,
   )
   assert.equal(started.status, 302)
   const location = started.headers.get("location")
@@ -97,19 +138,27 @@ async function linked(session = f.sessions[0], scopes = allScopes) {
   assert(ticket)
   const inspected = await api("/oauth/inspect", { ticket }, session)
   assert.equal(inspected.status, 200)
-  const inspection = await inspected.json()
+  const inspection = requireObservedRecord(
+    await inspected.json(),
+    "package consent inspection",
+  )
   const allowed = await api(
     "/oauth/approve",
     {
       ticket,
       decision: "allow",
-      proof: inspection.proof,
+      proof: requireObservedString(inspection.proof, "package consent proof"),
     },
     session,
   )
   assert.equal(allowed.status, 200)
-  const approval = await allowed.json()
-  const code = new URL(approval.redirectUrl).searchParams.get("code")
+  const approval = requireObservedRecord(
+    await allowed.json(),
+    "package consent approval",
+  )
+  const code = new URL(
+    requireObservedString(approval.redirectUrl, "package approval redirect"),
+  ).searchParams.get("code")
   assert(code)
   const exchanged = await api("/oauth/token", {
     grant_type: "authorization_code",
@@ -127,7 +176,9 @@ async function linked(session = f.sessions[0], scopes = allScopes) {
 
   return {
     tokens,
-    principal: await issuer.verifyAccessToken(tokens.access_token),
+    principal: await requireInitializedIssuer().verifyAccessToken(
+      tokens.access_token,
+    ),
   }
 }
 
@@ -145,7 +196,12 @@ async function revoke(refresh: string) {
 }
 
 function deferred() {
-  let resolve!: () => void
+  let resolve: () => void = () => {
+    throw new Error(
+      "Promise resolver resolve was used before executor initialization",
+    )
+  }
+
   const promise = new Promise<void>((done) => {
     resolve = done
   })
@@ -171,38 +227,41 @@ function packageStatus(uploadId: string) {
 
 test("real issuer and SDK derive each package owner from the verified account", async () => {
   const a = await linked()
-  const b = await linked(f.sessions[1])
+  const b = await linked(requireInitializedF().sessions[1])
   const uploads = new Map([
-    [f.sessions[0].owner, key()],
-    [f.sessions[1].owner, key()],
+    [requireInitializedF().sessions[0].owner, key()],
+    [requireInitializedF().sessions[1].owner, key()],
   ])
   const seen: string[] = []
   const adapter: PackageAuthoringPort = {
-    async call(p, name, input) {
-      assert.equal(name, "get_package_status")
-      seen.push(p.accountId)
-      if (
-        !("uploadId" in input) ||
-        uploads.get(p.accountId) !== input.uploadId
-      ) {
-        throw new ToolError("NOT_FOUND")
-      }
+    call(p, name, input) {
+      return synchronousPromise(() => {
+        assert.equal(name, "get_package_status")
+        seen.push(p.accountId)
 
-      return { data: packageStatus(input.uploadId) }
+        if (
+          !("uploadId" in input) ||
+          uploads.get(p.accountId) !== input.uploadId
+        ) {
+          throw new ToolError("NOT_FOUND")
+        }
+
+        return { data: packageStatus(input.uploadId) }
+      })
     },
   }
-  const remote = issuer.remote({
+  const remote = requireInitializedIssuer().remote({
     allowedOrigins: [],
     dependencies: {
-      packages: issuer.packages(adapter),
-      rateLimit: async () => true,
+      packages: requireInitializedIssuer().packages(adapter),
+      rateLimit: () => Promise.resolve(true),
     },
   })
   async function connect(token: string) {
     const client = new Client({ name: "package-authority-qa", version: "1" })
     await client.connect(
       new StreamableHTTPClientTransport(new URL(config.resource), {
-        authProvider: { token: async () => token },
+        authProvider: { token: () => Promise.resolve(token) },
         fetch: async (input, init) => {
           const request = new Request(input, init)
           request.headers.set("host", new URL(config.resource).host)
@@ -230,23 +289,31 @@ test("real issuer and SDK derive each package owner from the verified account", 
   }
 
   try {
-    const ownA = uploads.get(f.sessions[0].owner)!
-    const ownB = uploads.get(f.sessions[1].owner)!
+    const ownA = requireObservedString(
+      uploads.get(requireInitializedF().sessions[0].owner),
+      "first package upload id",
+    )
+
+    const ownB = requireObservedString(
+      uploads.get(requireInitializedF().sessions[1].owner),
+      "second package upload id",
+    )
+
     assert.equal((await call(clientA, ownA)).data?.uploadId, ownA)
     assert.equal((await call(clientB, ownB)).data?.uploadId, ownB)
     assert.equal((await call(clientB, ownA)).error?.code, "NOT_FOUND")
     const count = seen.length
     await assert.rejects(
       call(clientA, ownA, {
-        accountId: f.sessions[1].owner,
+        accountId: requireInitializedF().sessions[1].owner,
       }),
       /Invalid tool request/u,
     )
     assert.equal(seen.length, count)
     assert.deepEqual(seen, [
-      f.sessions[0].owner,
-      f.sessions[1].owner,
-      f.sessions[1].owner,
+      requireInitializedF().sessions[0].owner,
+      requireInitializedF().sessions[1].owner,
+      requireInitializedF().sessions[1].owner,
     ])
   } finally {
     await Promise.all([clientA.close(), clientB.close()])
@@ -257,16 +324,16 @@ test("real issuer and SDK derive each package owner from the verified account", 
 test("a copied or forged principal cannot enter the package adapter", async () => {
   const { principal: p } = await linked()
   let calls = 0
-  const port = issuer.packages({
-    async call() {
-      calls++
+  const port = requireInitializedIssuer().packages({
+    call() {
+      calls += 1
 
-      return { data: { items: [] } }
+      return Promise.resolve({ data: { items: [] } })
     },
   })
   for (const forged of [
     { ...p },
-    { ...p, accountId: f.sessions[1].owner },
+    { ...p, accountId: requireInitializedF().sessions[1].owner },
     { ...p, subject: key() },
     { ...p, grantId: key() },
   ]) {
@@ -281,12 +348,15 @@ test("a copied or forged principal cannot enter the package adapter", async () =
 })
 
 test("genuine read-only authority cannot upload or request account installation", async () => {
-  const { principal: p } = await linked(f.sessions[0], ["tadazz.drafts.read"])
+  const { principal: p } = await linked(requireInitializedF().sessions[0], [
+    "tadazz.drafts.read",
+  ])
   let calls = 0
-  const port = issuer.packages({
-    async call() {
-      calls++
-      throw new Error("write adapter must not be called")
+  const port = requireInitializedIssuer().packages({
+    call() {
+      calls += 1
+
+      return Promise.reject(new Error("write adapter must not be called"))
     },
   })
   await assert.rejects(
@@ -317,9 +387,10 @@ test("grant revocation while a package call awaits prevents its result from esca
   const entered = deferred()
   const gate = deferred()
   let calls = 0
-  const port = issuer.packages({
+  const port = requireInitializedIssuer().packages({
     async call() {
-      calls++
+      calls += 1
+
       entered.resolve()
       await gate.promise
 
@@ -349,19 +420,21 @@ test("revoked authority cannot replay an earlier package mutation or reach cache
     idempotencyKey: key(),
   }
   let calls = 0
-  const port = issuer.packages({
-    async call() {
-      calls++
+  const port = requireInitializedIssuer().packages({
+    call() {
+      return synchronousPromise(() => {
+        calls += 1
 
-      return {
-        data: {
-          transferId,
-          totalBytes: 22,
-          receivedBytes: 0,
-          chunkBytes: 24_000,
-          expiresAt: new Date(Date.now() + 60_000).toISOString(),
-        },
-      }
+        return {
+          data: {
+            transferId,
+            totalBytes: 22,
+            receivedBytes: 0,
+            chunkBytes: 24_000,
+            expiresAt: new Date(Date.now() + 60_000).toISOString(),
+          },
+        }
+      })
     },
   })
   await port.call(linkedAccount.principal, "begin_package_upload", input)
@@ -371,7 +444,9 @@ test("revoked authority cannot replay an earlier package mutation or reach cache
     /SCOPE_REQUIRED/u,
   )
   await assert.rejects(
-    issuer.verifyAccessToken(linkedAccount.tokens.access_token),
+    requireInitializedIssuer().verifyAccessToken(
+      linkedAccount.tokens.access_token,
+    ),
     /SCOPE_REQUIRED/u,
   )
   assert.equal(calls, 1)

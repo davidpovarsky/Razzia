@@ -28,6 +28,7 @@ const claimsSchema = z.strictObject({
     .max(Number.MAX_SAFE_INTEGER / 1000),
   jti: text,
 })
+
 export interface ActiveOAuthGrant {
   grantId: string
   subject: string
@@ -37,10 +38,16 @@ export interface ActiveOAuthGrant {
   expiresAt: number
   active: true
 }
+
 export interface AccessTokenOptions {
   config: ServerConfig
   /** Deployment-owned public keys. Token-supplied URLs/JWKs are never fetched. */
-  keys: readonly { kid: string; algorithm: "RS256" | "EdDSA"; pem: string }[]
+  keys: ReadonlyArray<{
+    kid: string
+    algorithm: "RS256" | "EdDSA"
+    pem: string
+  }>
+
   /** Real durable authority checks, required on EVERY verification. */
   activeGrant(
     grantId: string,
@@ -50,58 +57,93 @@ export interface AccessTokenOptions {
   /** Maximum issued lifetime, not a clock-skew/expiry bypass. */
   maxLifetimeSeconds?: number
 }
+
 const denied = () => new ToolError("SCOPE_REQUIRED")
 const decode = (part: string) => {
-  if (!/^[A-Za-z0-9_-]+$/u.test(part)) throw denied()
+  if (!/^[A-Za-z0-9_-]+$/u.test(part)) {
+    throw denied()
+  }
+
   const bytes = Buffer.from(part, "base64url")
-  if (bytes.toString("base64url") !== part) throw denied()
+
+  if (bytes.toString("base64url") !== part) {
+    throw denied()
+  }
+
   return bytes
 }
 
-/** Resource-specific JWT verifier. This does not issue grants, implement PKCE,
- * or accept existing manager JWTs as OAuth tokens. No global key/token cache. */
+/**
+ * Resource-specific JWT verifier. This does not issue grants, implement PKCE,
+ * or accept existing manager JWTs as OAuth tokens. No global key/token cache.
+ */
+
 export function createAccessTokenVerifier(options: AccessTokenOptions) {
   const config = validateConfig(options.config)
   const maxLifetime = options.maxLifetimeSeconds ?? 600
+
   if (
     !Number.isSafeInteger(maxLifetime) ||
     maxLifetime < 1 ||
     maxLifetime > 3600
-  )
+  ) {
     throw new Error("Invalid access token lifetime")
+  }
+
   const allowedScopes = new Set(Object.values(scopes).flat())
   const keys = new Map<
     string,
     { algorithm: "RS256" | "EdDSA"; key: KeyObject }
   >()
-  if (!options.keys.length || options.keys.length > 8)
+
+  if (!options.keys.length || options.keys.length > 8) {
     throw new Error("Explicit OAuth public keys required")
+  }
+
   for (const item of options.keys) {
-    if (!text.safeParse(item.kid).success || keys.has(item.kid))
+    if (!text.safeParse(item.kid).success || keys.has(item.kid)) {
       throw new Error("Invalid OAuth key identifier")
+    }
+
     const key = createPublicKey(item.pem)
+
     if (
       (item.algorithm === "RS256" &&
         (key.asymmetricKeyType !== "rsa" ||
           (key.asymmetricKeyDetails?.modulusLength ?? 0) < 2048)) ||
       (item.algorithm === "EdDSA" && key.asymmetricKeyType !== "ed25519")
-    )
+    ) {
       throw new Error("Invalid OAuth public key type")
+    }
+
     keys.set(item.kid, { algorithm: item.algorithm, key })
   }
+
   return async function verifyAccessToken(
     token: string,
     signal?: AbortSignal,
   ): Promise<VerifiedPrincipal> {
     const current = () => {
-      if (signal?.aborted) throw denied()
+      if (signal?.aborted) {
+        throw denied()
+      }
+
       return Date.now()
     }
+
     try {
       current()
-      if (token.length > 8192) throw denied()
+
+      if (token.length > 8192) {
+        throw denied()
+      }
+
       const parts = token.split(".")
-      if (parts.length !== 3) throw denied()
+
+      if (parts.length !== 3) {
+        throw denied()
+      }
+
       const [encodedHeader, encodedClaims, encodedSignature] = parts as [
         string,
         string,
@@ -111,20 +153,27 @@ export function createAccessTokenVerifier(options: AccessTokenOptions) {
         JSON.parse(decode(encodedHeader).toString("utf8")),
       )
       const selected = keys.get(header.kid)
-      if (!selected || selected.algorithm !== header.alg) throw denied()
+
+      if (!selected || selected.algorithm !== header.alg) {
+        throw denied()
+      }
+
       if (
         !verify(
           header.alg === "RS256" ? "RSA-SHA256" : null,
-          Buffer.from(encodedHeader + "." + encodedClaims, "ascii"),
+          Buffer.from(`${encodedHeader}.${encodedClaims}`, "ascii"),
           selected.key,
           decode(encodedSignature),
         )
-      )
+      ) {
         throw denied()
+      }
+
       const claims = claimsSchema.parse(
         JSON.parse(decode(encodedClaims).toString("utf8")),
       )
       const now = current()
+
       if (
         claims.iss !== config.issuer ||
         claims.aud !== config.resource ||
@@ -133,21 +182,29 @@ export function createAccessTokenVerifier(options: AccessTokenOptions) {
         (claims.nbf !== undefined && claims.nbf * 1000 > now) ||
         claims.exp <= claims.iat ||
         claims.exp - claims.iat > maxLifetime
-      )
+      ) {
         throw denied()
+      }
+
       const grantedScopes = claims.scope.split(" ")
+
       if (
         grantedScopes.length > 20 ||
         new Set(grantedScopes).size !== grantedScopes.length ||
         grantedScopes.some((scope) => !allowedScopes.has(scope))
-      )
+      ) {
         throw denied()
+      }
+
       const checkedGrant = (
         grant: ActiveOAuthGrant | undefined,
       ): ActiveOAuthGrant => {
         current()
+
         if (
+          // oxlint-disable-next-line typescript/prefer-optional-chain -- Preserve the explicit missing-grant boundary before inspecting the runtime authorization result.
           !grant ||
+          // oxlint-disable-next-line typescript/no-unnecessary-condition, typescript/no-unnecessary-boolean-literal-compare -- The live grant adapter is a runtime authorization boundary; retain the explicit inactive-grant rejection.
           grant.active !== true ||
           grant.grantId !== claims.grant_id ||
           grant.subject !== claims.sub ||
@@ -155,22 +212,31 @@ export function createAccessTokenVerifier(options: AccessTokenOptions) {
           grant.accountId !== claims.account_id ||
           grant.expiresAt <= Date.now() ||
           grantedScopes.some((scope) => !grant.scopes.includes(scope))
-        )
+        ) {
           throw denied()
+        }
+
         return { ...grant, scopes: [...grant.scopes] }
       }
       let grant = checkedGrant(
         await options.activeGrant(claims.grant_id, claims.account_id),
       )
-      if (!(await options.activeAccount(grant.accountId))) throw denied()
+
+      if (!(await options.activeAccount(grant.accountId))) {
+        throw denied()
+      }
+
       current()
       // Do not return a stale grant across the separate asynchronous account check.
       // Atomic revocation still belongs to the authoritative backing service.
       grant = checkedGrant(
         await options.activeGrant(claims.grant_id, claims.account_id),
       )
-      if (claims.exp * 1000 <= Date.now() || grant.expiresAt <= Date.now())
+
+      if (claims.exp * 1000 <= Date.now() || grant.expiresAt <= Date.now()) {
         throw denied()
+      }
+
       return Object.freeze({
         issuer: config.issuer,
         audience: config.resource,

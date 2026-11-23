@@ -50,6 +50,7 @@ export interface CandidatePreviewOptionsV2 {
     prepared: ValidatedCompositionPreviewV2,
   ): boolean
 }
+
 export interface CandidatePreviewPortV2 {
   render(
     principal: VerifiedPrincipal,
@@ -58,34 +59,47 @@ export interface CandidatePreviewPortV2 {
   ): Promise<PreviewCandidateV2>
 }
 
-/** Use the actual issuer's draftRepository(policy), never a global/fallback store.
+/**
+ * Use the actual issuer's draftRepository(policy), never a global/fallback store.
  * Its read rechecks issued capability, live grant/session and owner before/after
  * asynchronous host work. Preparation starts from that exact canonical draft.
  */
+
 export function createPreviewCandidatePortV2(
   repository: Pick<DraftRepository, "get">,
   options: CandidatePreviewOptionsV2,
 ): CandidatePreviewPortV2 {
   const verify = async (p: VerifiedPrincipal, expected: DraftRecord) => {
     const actual = await repository.get(p, expected.draftId)
-    if (!actual) throw new ToolError("NOT_FOUND")
-    if (actual.revision !== expected.revision)
+
+    if (!actual) {
+      throw new ToolError("NOT_FOUND")
+    }
+
+    if (actual.revision !== expected.revision) {
       throw new ToolError("REVISION_CONFLICT", {
         currentRevision: actual.revision,
       })
-    if (canonicalJson(actual) !== canonicalJson(expected))
+    }
+
+    if (canonicalJson(actual) !== canonicalJson(expected)) {
       throw new ToolError("PREVIEW_UNAVAILABLE")
+    }
   }
+
   return Object.freeze({
     async render(p: VerifiedPrincipal, draft: DraftRecord, locale?: string) {
       await verify(p, draft)
       const selection = await options.select(p, draft, locale)
+
       // V2 candidate is read-only manager/spectator data, never a player action.
       if (
         selection.context.role === "player" ||
         selection.context.locale !== (locale ?? draft.locale ?? "en")
-      )
+      ) {
         throw new ToolError("PREVIEW_UNAVAILABLE")
+      }
+
       const prepared = prepareCompositionPreviewV2(
         {
           portVersion: 3,
@@ -101,16 +115,23 @@ export function createPreviewCandidatePortV2(
           scopeBindings: selection.scopeBindings,
         },
       )
-      if (options.canPreview(p, prepared) !== true)
+
+      // oxlint-disable-next-line typescript/no-unnecessary-boolean-literal-compare -- Runtime preview policy must explicitly return true; reject every other value.
+      if (options.canPreview(p, prepared) !== true) {
         throw new ToolError("PREVIEW_UNAVAILABLE")
+      }
+
       const projection = await selection.project(prepared)
       const result = produceCompositionNativePreviewInputV2(
         prepared,
         projection.snapshot,
         projection.binding,
       )
-      if (result.kind !== "candidate")
+
+      if (result.kind !== "candidate") {
         throw new ToolError("PREVIEW_UNAVAILABLE")
+      }
+
       assertCompositionNativePreviewInputV2(
         prepared,
         projection.binding,
@@ -130,11 +151,18 @@ export function createPreviewCandidatePortV2(
         inputDigest: hashJson(result.input),
         input: result.input,
       })
-      if (utf8Bytes(JSON.stringify(candidate)) > LIMITS.preview)
+
+      if (utf8Bytes(JSON.stringify(candidate)) > LIMITS.preview) {
         throw new ToolError("PREVIEW_UNAVAILABLE")
-      if (options.canPreview(p, prepared) !== true)
+      }
+
+      // oxlint-disable-next-line typescript/no-unnecessary-boolean-literal-compare -- Runtime preview policy must explicitly return true; reject every other value.
+      if (options.canPreview(p, prepared) !== true) {
         throw new ToolError("PREVIEW_UNAVAILABLE")
+      }
+
       await verify(p, draft)
+
       return Object.freeze(candidate)
     },
   })

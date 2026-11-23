@@ -16,11 +16,13 @@ import {
   newKey,
   data,
   code,
+  requireObservedRecord,
 } from "./fixtures.ts"
 import type {
   Dependencies,
   VerifiedPrincipal,
 } from "../../server/dependencies.ts"
+import { synchronousPromise } from "../../../core/synchronous-promise.ts"
 
 const tokenA = "synthetic-oauth-access-token-A"
 const tokenB = "synthetic-oauth-access-token-B"
@@ -35,30 +37,41 @@ function setup(overrides: Dependencies = {}, responseTimeoutMs?: number) {
     config,
     ...(responseTimeoutMs === undefined ? {} : { responseTimeoutMs }),
     allowedOrigins: ["https://chat.example.invalid"],
-    verifyAccessToken: async (token) => {
-      const p = tokens.get(token)
-      if (!p) throw new Error("private backend detail must not escape")
-      return p
-    },
+    verifyAccessToken: (token) =>
+      synchronousPromise(() => {
+        const p = tokens.get(token)
+
+        if (!p) {
+          throw new Error("private backend detail must not escape")
+        }
+
+        return p
+      }),
     dependencies: {
-      rateLimit: async () => true,
+      rateLimit: () => Promise.resolve(true),
       drafts: new MemoryDrafts(),
       authoring: { allowedPublicAssetUrls: new Set() },
       ...overrides,
     },
   })
-  const request = (
-    body?: unknown,
-    headers: Record<string, string> = {},
+  const request = ({
+    body,
+    headers = {},
     path = config.resource,
     method = "POST",
-    signal?: AbortSignal,
-  ) =>
+    signal,
+  }: {
+    body?: unknown
+    headers?: Record<string, string>
+    path?: typeof config.resource
+    method?: string
+    signal?: AbortSignal
+  }) =>
     new Request(path, {
       method,
       headers: {
         host: new URL(config.resource).host,
-        authorization: "Bearer " + tokenA,
+        authorization: `Bearer ${tokenA}`,
         "content-type": "application/json",
         accept: "application/json, text/event-stream",
         ...headers,
@@ -70,10 +83,11 @@ function setup(overrides: Dependencies = {}, responseTimeoutMs?: number) {
     const transport = new StreamableHTTPClientTransport(
       new URL(config.resource),
       {
-        authProvider: { token: async () => token },
+        authProvider: { token: () => Promise.resolve(token) },
         fetch: async (input, init) => {
           const r = new Request(input, init)
           r.headers.set("host", new URL(config.resource).host)
+
           return app.fetch(r)
         },
       },
@@ -83,20 +97,24 @@ function setup(overrides: Dependencies = {}, responseTimeoutMs?: number) {
       version: "1",
     })
     await client.connect(transport)
+
     return client
   }
+
   return { app, a, b, tokens, request, connect }
 }
 const list = { jsonrpc: "2.0", id: 1, method: "tools/list", params: {} }
 test("official HTTP client discovers twenty-five strict tools without a missing UI artifact", async () => {
   const h = setup()
   const client = await h.connect()
+
   try {
     const tools = await client.listTools()
     assertCurrentToolDiscovery(tools.tools)
     assert.equal(
       tools.tools.filter(
-        (t) => (t._meta?.ui as { resourceUri?: string })?.resourceUri,
+        (t) =>
+          (t._meta?.ui as { resourceUri?: string } | undefined)?.resourceUri,
       ).length,
       0,
     )
@@ -115,6 +133,7 @@ test("HTTP draft CAS preserves tenant boundaries, revoked token denial and safe 
     authoredShowJson: JSON.stringify(show()),
     idempotencyKey: newKey(),
   }
+
   try {
     const created = data(
       await a.callTool({ name: "create_game_draft", arguments: args }),
@@ -154,7 +173,7 @@ test("HTTP draft CAS preserves tenant boundaries, revoked token denial and safe 
       "PREVIEW_UNAVAILABLE",
     )
     h.tokens.delete(tokenA)
-    const response = await h.app.fetch(h.request(list))
+    const response = await h.app.fetch(h.request({ body: list }))
     assert.equal(response.status, 401)
     assert.match(
       response.headers.get("www-authenticate") ?? "",
@@ -169,15 +188,15 @@ test("HTTP draft CAS preserves tenant boundaries, revoked token denial and safe 
 test("metadata and initial OAuth challenge advertise all current tool scopes", async () => {
   const h = setup()
   const response = await h.app.fetch(
-    h.request(
-      undefined,
-      { authorization: "" },
-      config.resourceMetadataUrl,
-      "GET",
-    ),
+    h.request({
+      body: undefined,
+      headers: { authorization: "" },
+      path: config.resourceMetadataUrl,
+      method: "GET",
+    }),
   )
   assert.equal(response.status, 200)
-  const metadata = await response.json()
+  const metadata = requireObservedRecord(await response.json())
   assert.equal(metadata.resource, config.resource)
   assert.deepEqual(metadata.authorization_servers, [config.issuer])
   const expected = [
@@ -193,7 +212,9 @@ test("metadata and initial OAuth challenge advertise all current tool scopes", a
     expected,
   )
   assert.deepEqual(metadata.scopes_supported, expected)
-  const challenge = await h.app.fetch(h.request(list, { authorization: "" }))
+  const challenge = await h.app.fetch(
+    h.request({ body: list, headers: { authorization: "" } }),
+  )
   assert.equal(challenge.status, 401)
   assert.equal(
     challenge.headers.get("www-authenticate"),
@@ -205,39 +226,91 @@ test("origin/host/TLS/query/proxy/session/body and method attacks fail before pr
   let writes = 0
   const h = setup({
     catalog: {
-      listThemes: async () => {
-        writes++
-        return {}
+      listThemes: () => {
+        writes += 1
+
+        return Promise.resolve({})
       },
-      listTemplates: async () => {
-        writes++
-        return {}
+      listTemplates: () => {
+        writes += 1
+
+        return Promise.resolve({})
       },
     },
   })
   for (const [request, expected] of [
-    [h.request(list, { origin: "https://attacker.invalid" }), 403],
-    [h.request(list, { host: "attacker.invalid" }), 403],
-    [h.request(list, {}, config.resource.replace("https:", "http:")), 403],
-    [h.request(list, {}, config.resource + "?access_token=secret"), 400],
-    [h.request(list, { "x-forwarded-host": "attacker.invalid" }), 400],
-    [h.request(list, { authorization: "Bearer manager-token" }), 401],
-    [h.request(list, { "mcp-session-id": "stolen-session" }), 400],
-    [h.request(list, { "content-type": "text/plain" }), 415],
-    [h.request(list, { "content-length": "65537" }), 413],
-    [h.request({ padding: "x".repeat(65_537) }), 413],
-    [h.request([list]), 400],
-    [h.request(undefined, {}, config.resource, "GET"), 405],
-  ] as const)
+    [
+      h.request({
+        body: list,
+        headers: { origin: "https://attacker.invalid" },
+      }),
+      403,
+    ],
+    [h.request({ body: list, headers: { host: "attacker.invalid" } }), 403],
+    [
+      h.request({
+        body: list,
+        headers: {},
+        path: config.resource.replace("https:", "http:"),
+      }),
+      403,
+    ],
+    [
+      h.request({
+        body: list,
+        headers: {},
+        path: `${config.resource}?access_token=secret`,
+      }),
+      400,
+    ],
+    [
+      h.request({
+        body: list,
+        headers: { "x-forwarded-host": "attacker.invalid" },
+      }),
+      400,
+    ],
+    [
+      h.request({
+        body: list,
+        headers: { authorization: "Bearer manager-token" },
+      }),
+      401,
+    ],
+    [
+      h.request({
+        body: list,
+        headers: { "mcp-session-id": "stolen-session" },
+      }),
+      400,
+    ],
+    [h.request({ body: list, headers: { "content-type": "text/plain" } }), 415],
+    [h.request({ body: list, headers: { "content-length": "65537" } }), 413],
+    [h.request({ body: { padding: "x".repeat(65_537) } }), 413],
+    [h.request({ body: [list] }), 400],
+    [
+      h.request({
+        body: undefined,
+        headers: {},
+        path: config.resource,
+        method: "GET",
+      }),
+      405,
+    ],
+  ] as const) {
     assert.equal((await h.app.fetch(request)).status, expected)
+  }
   assert.equal(writes, 0)
 })
 test("allowed browser origins can read OAuth challenge, while arbitrary preflight headers are rejected", async () => {
   const h = setup()
   const response = await h.app.fetch(
-    h.request(list, {
-      authorization: "",
-      origin: "https://chat.example.invalid",
+    h.request({
+      body: list,
+      headers: {
+        authorization: "",
+        origin: "https://chat.example.invalid",
+      },
     }),
   )
   assert.equal(response.status, 401)
@@ -250,36 +323,46 @@ test("allowed browser origins can read OAuth challenge, while arbitrary prefligh
     /WWW-Authenticate/u,
   )
   const allowed = await h.app.fetch(
-    h.request(
-      undefined,
-      {
+    h.request({
+      body: undefined,
+      headers: {
         origin: "https://chat.example.invalid",
         "access-control-request-method": "POST",
         "access-control-request-headers": "authorization, mcp-method, mcp-name",
       },
-      config.resource,
-      "OPTIONS",
-    ),
+      path: config.resource,
+      method: "OPTIONS",
+    }),
   )
   assert.equal(allowed.status, 204)
   const denied = await h.app.fetch(
-    h.request(
-      undefined,
-      {
+    h.request({
+      body: undefined,
+      headers: {
         origin: "https://chat.example.invalid",
         "access-control-request-method": "POST",
         "access-control-request-headers": "x-account-id",
       },
-      config.resource,
-      "OPTIONS",
-    ),
+      path: config.resource,
+      method: "OPTIONS",
+    }),
   )
   assert.equal(denied.status, 403)
 })
 test("aborted unsettled authorization keeps all 32 HTTP slots occupied until real work settles", async () => {
-  let release!: (p: VerifiedPrincipal) => void
+  let release: (p: VerifiedPrincipal) => void = () => {
+    throw new Error(
+      "Promise resolver release was used before executor initialization",
+    )
+  }
+
   let started = 0
-  let entered!: () => void
+  let entered: () => void = () => {
+    throw new Error(
+      "Promise resolver entered was used before executor initialization",
+    )
+  }
+
   const allEntered = new Promise<void>((resolve) => {
     entered = resolve
   })
@@ -291,7 +374,12 @@ test("aborted unsettled authorization keeps all 32 HTTP slots occupied until rea
     config,
     allowedOrigins: [],
     verifyAccessToken: async () => {
-      if (++started === 32) entered()
+      started += 1
+
+      if (started === 32) {
+        entered()
+      }
+
       return held
     },
     dependencies: {},
@@ -303,7 +391,7 @@ test("aborted unsettled authorization keeps all 32 HTTP slots occupied until rea
       signal,
       headers: {
         host: new URL(config.resource).host,
-        authorization: "Bearer " + tokenA,
+        authorization: `Bearer ${tokenA}`,
         "content-type": "application/json",
         accept: "application/json, text/event-stream",
       },
@@ -311,8 +399,12 @@ test("aborted unsettled authorization keeps all 32 HTTP slots occupied until rea
     })
   const pending = controllers.map((c) => app.fetch(request(c.signal)))
   await allEntered
-  controllers.forEach((c) => c.abort())
-  await new Promise<void>((resolve) => setImmediate(resolve))
+  controllers.forEach((c) => {
+    c.abort()
+  })
+  await new Promise<void>((resolve) => {
+    setImmediate(resolve)
+  })
   assert.equal((await app.fetch(request())).status, 429)
   release(p)
   assert.deepEqual(
@@ -324,8 +416,18 @@ test("aborted unsettled authorization keeps all 32 HTTP slots occupied until rea
 })
 
 test("legacy SSE retains all32 cancelled handler admissions until actual dependency work settles", async () => {
-  let release!: (value: unknown) => void
-  let entered!: () => void
+  let release: (value: unknown) => void = () => {
+    throw new Error(
+      "Promise resolver release was used before executor initialization",
+    )
+  }
+
+  let entered: () => void = () => {
+    throw new Error(
+      "Promise resolver entered was used before executor initialization",
+    )
+  }
+
   let started = 0
   const allEntered = new Promise<void>((resolve) => {
     entered = resolve
@@ -335,9 +437,14 @@ test("legacy SSE retains all32 cancelled handler admissions until actual depende
   })
   const h = setup({
     catalog: {
-      listThemes: async () => ({ items: [] }),
+      listThemes: () => Promise.resolve({ items: [] }),
       listTemplates: async () => {
-        if (++started === 32) entered()
+        started += 1
+
+        if (started === 32) {
+          entered()
+        }
+
         return held
       },
     },
@@ -345,8 +452,8 @@ test("legacy SSE retains all32 cancelled handler admissions until actual depende
   const controllers = Array.from({ length: 32 }, () => new AbortController())
   const calls = controllers.map((controller, id) =>
     h.app.fetch(
-      h.request(
-        {
+      h.request({
+        body: {
           jsonrpc: "2.0",
           id,
           method: "tools/call",
@@ -355,32 +462,46 @@ test("legacy SSE retains all32 cancelled handler admissions until actual depende
             arguments: { contractVersion: "0.1.0" },
           },
         },
-        {},
-        config.resource,
-        "POST",
-        controller.signal,
-      ),
+        headers: {},
+        path: config.resource,
+        method: "POST",
+        signal: controller.signal,
+      }),
     ),
   )
   await allEntered
-  controllers.forEach((controller) => controller.abort())
-  await new Promise<void>((resolve) => setImmediate(resolve))
-  assert.equal((await h.app.fetch(h.request(list))).status, 429)
+  controllers.forEach((controller) => {
+    controller.abort()
+  })
+  await new Promise<void>((resolve) => {
+    setImmediate(resolve)
+  })
+  assert.equal((await h.app.fetch(h.request({ body: list }))).status, 429)
   release({ items: [] })
   assert.deepEqual(
     (await Promise.all(calls)).map((response) => response.status),
     Array(32).fill(400),
   )
   await h.app.drain()
-  assert.equal((await h.app.fetch(h.request(list))).status, 200)
+  assert.equal((await h.app.fetch(h.request({ body: list }))).status, 200)
 })
 
 test(
   "HTTP deadline responds while shutdown still waits for actual legacy dependency settlement",
   { timeout: 5000 },
   async () => {
-    let release!: (value: unknown) => void
-    let entered!: () => void
+    let release: (value: unknown) => void = () => {
+      throw new Error(
+        "Promise resolver release was used before executor initialization",
+      )
+    }
+
+    let entered: () => void = () => {
+      throw new Error(
+        "Promise resolver entered was used before executor initialization",
+      )
+    }
+
     const started = new Promise<void>((resolve) => {
       entered = resolve
     })
@@ -390,9 +511,10 @@ test(
     const h = setup(
       {
         catalog: {
-          listThemes: async () => ({ items: [] }),
+          listThemes: () => Promise.resolve({ items: [] }),
           listTemplates: async () => {
             entered()
+
             return held
           },
         },
@@ -401,12 +523,14 @@ test(
     )
     const call = h.app.fetch(
       h.request({
-        jsonrpc: "2.0",
-        id: 1,
-        method: "tools/call",
-        params: {
-          name: "list_game_templates",
-          arguments: { contractVersion: "0.1.0" },
+        body: {
+          jsonrpc: "2.0",
+          id: 1,
+          method: "tools/call",
+          params: {
+            name: "list_game_templates",
+            arguments: { contractVersion: "0.1.0" },
+          },
         },
       }),
     )
@@ -416,19 +540,35 @@ test(
     const closing = h.app.close().then(() => {
       closed = true
     })
-    await new Promise<void>((resolve) => setImmediate(resolve))
+    await new Promise<void>((resolve) => {
+      setImmediate(resolve)
+    })
     assert.equal(closed, false)
     release({ items: [] })
     await closing
     assert.equal(closed, true)
-    assert.equal((await h.app.fetch(h.request(list))).status, 503)
+    assert.equal((await h.app.fetch(h.request({ body: list }))).status, 503)
   },
 )
 
 test("cancelled V2 candidate work retains admission and shutdown until its real host promise settles", async () => {
-  let release!: () => void, entered!: () => void
-  const held = new Promise<void>((resolve) => (release = resolve)),
-    started = new Promise<void>((resolve) => (entered = resolve))
+  let release: () => void = () => {
+      throw new Error(
+        "Promise resolver release was used before executor initialization",
+      )
+    },
+    entered: () => void = () => {
+      throw new Error(
+        "Promise resolver entered was used before executor initialization",
+      )
+    }
+
+  const held = new Promise<void>((resolve) => {
+      release = resolve
+    }),
+    started = new Promise<void>((resolve) => {
+      entered = resolve
+    })
   const store = new MemoryDrafts()
   const h = setup(
     {
@@ -457,15 +597,17 @@ test("cancelled V2 candidate work retains admission and shutdown until its real 
   await client.close()
   const call = h.app.fetch(
     h.request({
-      jsonrpc: "2.0",
-      id: 1,
-      method: "tools/call",
-      params: {
-        name: "preview_game",
-        arguments: {
-          contractVersion: "0.1.0",
-          draftId: draft.draftId,
-          expectedRevision: 1,
+      body: {
+        jsonrpc: "2.0",
+        id: 1,
+        method: "tools/call",
+        params: {
+          name: "preview_game",
+          arguments: {
+            contractVersion: "0.1.0",
+            draftId: draft.draftId,
+            expectedRevision: 1,
+          },
         },
       },
     }),
@@ -476,7 +618,9 @@ test("cancelled V2 candidate work retains admission and shutdown until its real 
   const closing = h.app.close().then(() => {
     closed = true
   })
-  await new Promise<void>((resolve) => setImmediate(resolve))
+  await new Promise<void>((resolve) => {
+    setImmediate(resolve)
+  })
   assert.equal(closed, false)
   release()
   await closing

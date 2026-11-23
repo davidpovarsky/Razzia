@@ -10,10 +10,14 @@ import {
 } from "../../core/index"
 import { quizzValidator } from "@razzia/common/validators/quizz"
 import { writeSidecar } from "./sidecar"
+import type { StartupRecoveryResult } from "../media-library"
 
 export const NATIVE_MEDIA = "r1-native.png"
+
 export const NATIVE_QUESTION = "00000000-0000-4000-8000-000000000081"
+
 const SCENE = "00000000-0000-4000-8000-000000000082"
+
 export type NativeBindingScenario =
   | "create"
   | "import"
@@ -23,6 +27,162 @@ export type NativeBindingScenario =
   | "media-foreign"
   | "quiz-foreign"
   | "media-sidecar-only"
+
+export function isNativeRecord(
+  value: unknown,
+): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value)
+}
+
+export function requireNativeRecord(value: unknown): Record<string, unknown> {
+  if (!isNativeRecord(value)) {
+    throw new Error("Invalid synthetic native evidence record")
+  }
+
+  return value
+}
+
+function isNativeRecordList(
+  value: unknown,
+): value is Array<Record<string, unknown>> {
+  return Array.isArray(value) && value.every(isNativeRecord)
+}
+
+export function requireNativeRecordList(
+  value: unknown,
+): Array<Record<string, unknown>> {
+  if (!isNativeRecordList(value)) {
+    throw new Error("Invalid synthetic native evidence record list")
+  }
+
+  return value
+}
+
+export function requireNativeString(value: unknown): string {
+  if (typeof value !== "string") {
+    throw new Error("Invalid synthetic native evidence text")
+  }
+
+  return value
+}
+
+interface NativeRecoveryRun {
+  pid: number
+  state: ReturnType<typeof nativeFixtureState>
+  process: {
+    pid?: number
+    code: number | null
+    signal: string | null
+    timedOut: boolean
+    stdout: string
+    stderr: string
+  }
+  report?: Pick<StartupRecoveryResult, "status" | "unresolvedCount">
+  error?: string
+}
+
+function isNativeFixtureState(
+  value: unknown,
+): value is ReturnType<typeof nativeFixtureState> {
+  if (
+    !isNativeRecord(value) ||
+    !isNativeRecord(value.files) ||
+    !Array.isArray(value.journals)
+  ) {
+    return false
+  }
+
+  return (
+    Object.values(value.files).every(
+      (file: unknown) =>
+        isNativeRecord(file) &&
+        typeof file.sha256 === "string" &&
+        typeof file.length === "number",
+    ) &&
+    value.journals.every(
+      (entry: unknown) =>
+        isNativeRecord(entry) &&
+        typeof entry.path === "string" &&
+        typeof entry.sha256 === "string" &&
+        Object.hasOwn(entry, "entry"),
+    )
+  )
+}
+
+function isNativeRecoveryRun(value: unknown): value is NativeRecoveryRun {
+  if (!isNativeRecord(value) || !isNativeRecord(value.process)) {
+    return false
+  }
+
+  const processResult = value.process
+  const { report } = value
+
+  return (
+    typeof value.pid === "number" &&
+    isNativeFixtureState(value.state) &&
+    (processResult.pid === undefined ||
+      typeof processResult.pid === "number") &&
+    (processResult.code === null || typeof processResult.code === "number") &&
+    (processResult.signal === null ||
+      typeof processResult.signal === "string") &&
+    typeof processResult.timedOut === "boolean" &&
+    typeof processResult.stdout === "string" &&
+    typeof processResult.stderr === "string" &&
+    (value.error === undefined || typeof value.error === "string") &&
+    (report === undefined ||
+      (isNativeRecord(report) &&
+        typeof report.status === "string" &&
+        ["clean", "recovered", "failed"].includes(report.status) &&
+        typeof report.unresolvedCount === "number"))
+  )
+}
+
+export function assertNativeRuns(
+  value: unknown,
+): asserts value is [NativeRecoveryRun, NativeRecoveryRun] {
+  if (
+    !Array.isArray(value) ||
+    value.length !== 2 ||
+    !value.every(isNativeRecoveryRun)
+  ) {
+    throw new Error("Invalid synthetic native recovery receipts")
+  }
+}
+
+export function nativeRecoveryReport(run: NativeRecoveryRun) {
+  if (!run.report) {
+    throw new Error("Missing synthetic native recovery report")
+  }
+
+  return run.report
+}
+
+function isNativeFixtureDescriptor(
+  value: unknown,
+): value is NativeFixtureDescriptor {
+  return (
+    isNativeRecord(value) &&
+    value.kind === "native-recovery-r1" &&
+    typeof value.token === "string" &&
+    typeof value.scenario === "string" &&
+    [
+      "create",
+      "import",
+      "media",
+      "quiz-base",
+      "quiz-sidecar",
+      "media-foreign",
+      "quiz-foreign",
+      "media-sidecar-only",
+    ].includes(value.scenario) &&
+    ["quizId", "baseName", "sidecarName", "unrelatedName"].every(
+      (key) => typeof value[key] === "string",
+    ) &&
+    ["foreignName", "sidecarOnlyId"].every(
+      (key) => value[key] === undefined || typeof value[key] === "string",
+    )
+  )
+}
 
 export const nativeInput = (subject = "Native R1") => ({
   gameMode: "quiz",
@@ -39,6 +199,7 @@ export const nativeInput = (subject = "Native R1") => ({
     },
   ],
 })
+
 export const byteHash = (bytes: Buffer | string) =>
   createHash("sha256").update(bytes).digest("hex")
 
@@ -47,13 +208,18 @@ export function knownNativePath(root: string, id: string) {
   // recovery ownership inference, directory delta or cleanup algorithm.
   const matches = fs.readdirSync(path.join(root, "quizz")).filter((file) => {
     const filePath = path.join(root, "quizz", file)
+
     return (
       fs.lstatSync(filePath).isFile() &&
-      JSON.parse(fs.readFileSync(filePath, "utf8")).id === id
+      requireNativeRecord(JSON.parse(fs.readFileSync(filePath, "utf8"))).id ===
+        id
     )
   })
-  if (matches.length !== 1)
+
+  if (matches.length !== 1) {
     throw new Error("Fixture native ID must have exactly one known file")
+  }
+
   return path.join(root, "quizz", matches[0])
 }
 
@@ -126,21 +292,36 @@ export function richNativeExtras(
     enabled: true,
     loop: false,
   }
+
   return quizExtrasV2Schema.parse(extras)
 }
 
 export function assertNativeFixture(root: string, token: string) {
   const resolved = fs.realpathSync(root)
+
   if (
     path.dirname(resolved) !== fs.realpathSync(os.tmpdir()) ||
     !path.basename(resolved).startsWith("tadazz-native-recovery-synthetic-")
-  )
+  ) {
     throw new Error("Refusing non-synthetic native fixture")
-  const descriptor = JSON.parse(
+  }
+
+  const descriptor: unknown = JSON.parse(
     fs.readFileSync(path.join(resolved, ".native-fixture.json"), "utf8"),
-  ) as NativeFixtureDescriptor
-  if (descriptor.token !== token || descriptor.kind !== "native-recovery-r1")
+  )
+
+  if (
+    !isNativeRecord(descriptor) ||
+    descriptor.token !== token ||
+    descriptor.kind !== "native-recovery-r1"
+  ) {
     throw new Error("Native fixture ownership mismatch")
+  }
+
+  if (!isNativeFixtureDescriptor(descriptor)) {
+    throw new Error("Invalid synthetic native fixture descriptor")
+  }
+
   return descriptor
 }
 
@@ -171,8 +352,13 @@ export function makeNativeFixture(scenario: NativeBindingScenario) {
   const unrelated = native.saveQuizz(nativeInput("Unrelated R1"))
   const unrelatedName = path.basename(knownNativePath(root, unrelated.id))
   const unrelatedFile = path.join(root, "quizz", unrelatedName)
-  const unrelatedData = JSON.parse(fs.readFileSync(unrelatedFile, "utf8"))
-  delete unrelatedData.questions[0].media
+  const unrelatedData = requireNativeRecord(
+    JSON.parse(fs.readFileSync(unrelatedFile, "utf8")),
+  )
+
+  delete requireNativeRecord(
+    requireNativeRecordList(unrelatedData.questions).at(0),
+  ).media
   fs.writeFileSync(unrelatedFile, JSON.stringify(unrelatedData, null, 2))
   fs.writeFileSync(
     path.join(root, "media", NATIVE_MEDIA),
@@ -187,18 +373,27 @@ export function makeNativeFixture(scenario: NativeBindingScenario) {
     sidecarName: `${id}.json`,
     unrelatedName,
   }
+
   if (scenario.endsWith("foreign")) {
     const foreign = native.saveQuizz(nativeInput("Foreign sentinel"))
     const original = knownNativePath(root, foreign.id)
-    const foreignData = JSON.parse(fs.readFileSync(original, "utf8"))
-    delete foreignData.questions[0].media
+    const foreignData = requireNativeRecord(
+      JSON.parse(fs.readFileSync(original, "utf8")),
+    )
+
+    delete requireNativeRecord(
+      requireNativeRecordList(foreignData.questions).at(0),
+    ).media
     fs.writeFileSync(original, JSON.stringify(foreignData, null, 2))
     descriptor.foreignName = `${id}.json`
     fs.renameSync(original, path.join(root, "quizz", descriptor.foreignName))
   }
+
   if (scenario === "media-sidecar-only") {
     const orphan = native.saveQuizz(nativeInput("Sidecar only"))
-    fs.unlinkSync(knownNativePath(root, orphan.id)) // only this just-created fixture base
+    // Only this just-created fixture base
+
+    fs.unlinkSync(knownNativePath(root, orphan.id))
     writeSidecar(
       native.getPath,
       orphan.id,
@@ -206,10 +401,12 @@ export function makeNativeFixture(scenario: NativeBindingScenario) {
     )
     descriptor.sidecarOnlyId = orphan.id
   }
+
   fs.writeFileSync(
     path.join(root, ".native-fixture.json"),
     JSON.stringify(descriptor),
   )
+
   return { root, descriptor, input }
 }
 
@@ -220,11 +417,19 @@ export function nativeFixtureState(root: string) {
   > = {}
   for (const subPath of ["quizz", "extensions/quizzes", "media"]) {
     const directory = path.join(root, subPath)
-    if (!fs.existsSync(directory)) continue
+
+    if (!fs.existsSync(directory)) {
+      continue
+    }
+
     for (const name of fs.readdirSync(directory).sort()) {
       const file = path.join(directory, name)
       const stat = fs.lstatSync(file)
-      if (stat.isDirectory()) continue
+
+      if (stat.isDirectory()) {
+        continue
+      }
+
       if (stat.isSymbolicLink()) {
         const linkTarget = fs.readlinkSync(file)
         files[`${subPath}/${name}`] = {
@@ -232,10 +437,14 @@ export function nativeFixtureState(root: string) {
           length: Buffer.byteLength(linkTarget),
           json: { fixtureEntryKind: "symlink", linkTarget },
         }
+
         continue
       }
-      if (!stat.isFile())
+
+      if (!stat.isFile()) {
         throw new Error("Unexpected non-regular fixture entry")
+      }
+
       const bytes = fs.readFileSync(file)
       files[`${subPath}/${name}`] = {
         sha256: byteHash(bytes),
@@ -249,20 +458,27 @@ export function nativeFixtureState(root: string) {
   const journalRoot = path.join(root, "extensions/quizzes/.journal")
   const journals: Array<{ path: string; sha256: string; entry: unknown }> = []
   const walk = (directory: string) => {
-    if (!fs.existsSync(directory)) return
+    if (!fs.existsSync(directory)) {
+      return
+    }
+
     for (const name of fs.readdirSync(directory).sort()) {
       const file = path.join(directory, name)
       const stat = fs.lstatSync(file)
-      if (stat.isDirectory()) walk(file)
-      else if (stat.isFile() && name.endsWith(".json"))
+
+      if (stat.isDirectory()) {
+        walk(file)
+      } else if (stat.isFile() && name.endsWith(".json")) {
         journals.push({
           path: path.relative(root, file),
           sha256: byteHash(fs.readFileSync(file)),
           entry: JSON.parse(fs.readFileSync(file, "utf8")),
         })
+      }
     }
   }
   walk(journalRoot)
+
   return { files, journals }
 }
 

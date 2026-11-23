@@ -1,4 +1,5 @@
 import type { CueId, SoundtrackSlotId } from "@razzia/extensions/core"
+import { isNativeFinaleContentPending } from "../core/platform-opening"
 
 /** Native start ticks own the start effect; the phase still owns its music bed. */
 export function resolveNativePhaseAudioCue(
@@ -14,6 +15,8 @@ export interface TadazzAudioPolicyInput {
   sceneKind?: string | null
   scenePreset?: string | null
   openingActive?: boolean
+  presentationLaunch?: unknown
+  activeTimelineStep?: unknown
 }
 
 export interface TadazzAudioPolicy {
@@ -28,6 +31,8 @@ export function resolveTadazzAudioPolicy({
   sceneKind,
   scenePreset,
   openingActive = false,
+  presentationLaunch,
+  activeTimelineStep,
 }: TadazzAudioPolicyInput): TadazzAudioPolicy {
   if (openingActive) {
     return { slot: "openingIntro", continuityKey: "opening-intro" }
@@ -36,6 +41,11 @@ export function resolveTadazzAudioPolicy({
   const preset = scenePreset ?? ""
 
   if (
+    isNativeFinaleContentPending({
+      presentationLaunch,
+      activeTimelineStep,
+      statusName,
+    }) ||
     preset.includes("finale") ||
     sceneKind === "closing" ||
     statusName === "FINISHED" ||

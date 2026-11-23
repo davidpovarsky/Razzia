@@ -48,6 +48,29 @@ function entry(
   }
 }
 
+function legacyFixture(participantCount = 38, questionCount = 10) {
+  const extras = fixture(questionCount, false)
+
+  for (const scene of Object.values(extras.scenes)) {
+    if (scene.kind === "animation") {
+      delete scene.seatingPlan
+      delete scene.representatives
+    }
+  }
+
+  extras.roster.participants = Array.from(
+    { length: participantCount },
+    (_, index) => ({
+      rosterPlayerId: randomUUID(),
+      displayName: `Legacy Representative ${index + 1}`,
+      phoneE164: null,
+      tableNumber: (index % 31) + 1,
+    }),
+  )
+
+  return extras
+}
+
 describe("reconciled branch seating directory", () => {
   it("supports a phone-only 23-question lobby without inventing or requiring a roster", () => {
     const extras = fixture(23, false)
@@ -192,5 +215,152 @@ describe("reconciled branch seating directory", () => {
       connectedTables: [7],
       dialNumber: "TEST-NO-CALLS",
     })
+  })
+  it("recognizes complete saved legacy seating in both public paths without rewriting the 38-person roster", () => {
+    const extras = quizExtrasV2Schema.parse(legacyFixture())
+    const before = structuredClone(extras)
+    const liveEntries = extras.roster.participants.map((person, index) => ({
+      ...entry(
+        person.displayName,
+        person.tableNumber,
+        index === 0 || index === 31 ? "connected" : "not_joined",
+      ),
+      rosterPlayerId: person.rosterPlayerId,
+    }))
+    const live = buildFullShowDirectory(extras, liveEntries)
+    const lobby = buildLobbyDirectory(extras, () => live)
+    const saved = buildLobbyDirectory(extras)
+    const expected = extras.roster.participants.map((person) => ({
+      table: person.tableNumber,
+      name: person.displayName,
+    }))
+
+    for (const projection of [live, lobby, saved]) {
+      expect(projection?.seatingPlan).toBe(true)
+      expect(projection?.representatives).toEqual(expected)
+      expect(projection?.representatives).toHaveLength(38)
+      expect(
+        new Set(projection?.representatives?.map((row) => row.table)).size,
+      ).toBe(31)
+      expect(JSON.stringify(projection)).not.toContain("+10000000000")
+      expect(JSON.stringify(projection)).not.toContain("PRIVATE-CONTACT")
+      expect(JSON.stringify(projection)).not.toContain("rosterPlayerId")
+    }
+
+    expect(live.connectedTables).toEqual([1])
+    expect(lobby?.connectedTables).toEqual([1])
+    expect(saved?.connectedTables).toEqual([])
+    liveEntries.forEach((person) => {
+      person.status = "disconnected"
+    })
+    expect(buildFullShowDirectory(extras, liveEntries).connectedTables).toEqual(
+      [],
+    )
+    expect(extras).toEqual(before)
+  })
+  it("keeps all 40 unassigned representatives generic instead of inferring seating from generated indexes", () => {
+    const extras = legacyFixture(40)
+    extras.roster.participants.forEach((person) => {
+      delete person.tableNumber
+    })
+    const before = structuredClone(extras)
+    const live = buildFullShowDirectory(
+      extras,
+      extras.roster.participants.map((person) => entry(person.displayName)),
+    )
+
+    for (const projection of [live, buildLobbyDirectory(extras, () => live)]) {
+      expect(projection).not.toHaveProperty("seatingPlan")
+      expect(projection?.representatives).toHaveLength(40)
+      expect(projection?.representatives?.map((row) => row.name)).toEqual(
+        extras.roster.participants.map((person) => person.displayName),
+      )
+    }
+
+    expect(extras).toEqual(before)
+  })
+  it.each([false, null, "true", 1])(
+    "does not infer seating when an explicit flag is %s",
+    (flag) => {
+      const extras = legacyFixture()
+      Object.values(extras.scenes).forEach((scene) => {
+        Object.assign(scene, { seatingPlan: flag })
+      })
+      const before = structuredClone(extras)
+
+      expect(buildFullShowDirectory(extras, [])).not.toHaveProperty(
+        "seatingPlan",
+      )
+      expect(buildLobbyDirectory(extras)).not.toHaveProperty("seatingPlan")
+      expect(quizExtrasV2Schema.safeParse(extras).success).toBe(flag === false)
+      expect(extras).toEqual(before)
+    },
+  )
+  it("preserves explicit seating opt-in outside the legacy ten-question boundary", () => {
+    const extras = fixture(1, true)
+
+    expect(buildFullShowDirectory(extras, []).seatingPlan).toBe(true)
+    expect(buildLobbyDirectory(extras)?.seatingPlan).toBe(true)
+  })
+  it.each([undefined, 0, 32, 1.5])(
+    "requires every saved table assignment to be an integer from 1 to 31, rejecting %s",
+    (tableNumber) => {
+      const extras = legacyFixture()
+      extras.roster.participants = extras.roster.participants.map(
+        (person, index) => (index === 0 ? { ...person, tableNumber } : person),
+      )
+
+      expect(buildFullShowDirectory(extras, [])).not.toHaveProperty(
+        "seatingPlan",
+      )
+      expect(buildLobbyDirectory(extras)).not.toHaveProperty("seatingPlan")
+    },
+  )
+  it("requires all 31 distinct saved tables", () => {
+    const extras = legacyFixture()
+    extras.roster.participants.forEach((person) => {
+      if (person.tableNumber === 31) {
+        person.tableNumber = 30
+      }
+    })
+
+    expect(buildFullShowDirectory(extras, [])).not.toHaveProperty("seatingPlan")
+    expect(buildLobbyDirectory(extras)).not.toHaveProperty("seatingPlan")
+  })
+  it.each([1, 9, 11])(
+    "retains the existing legacy ten-question boundary for %s questions",
+    (questionCount) => {
+      const extras = legacyFixture(38, questionCount)
+
+      expect(buildFullShowDirectory(extras, [])).not.toHaveProperty(
+        "seatingPlan",
+      )
+      expect(buildLobbyDirectory(extras)).toBeNull()
+    },
+  )
+  it("does not infer seating over a modern lobby or authored representatives override", () => {
+    const extras = legacyFixture()
+    extras.defaults.lobby = { joinMode: "phone-only", showRoster: true }
+
+    expect(buildFullShowDirectory(extras, [])).not.toHaveProperty("seatingPlan")
+    expect(buildLobbyDirectory(extras)).not.toHaveProperty("seatingPlan")
+    delete extras.defaults.lobby
+
+    for (const representatives of [
+      [],
+      [{ table: 1, name: "Authored override" }],
+    ]) {
+      Object.values(extras.scenes).forEach((scene) => {
+        Object.assign(scene, { representatives })
+      })
+      expect(buildFullShowDirectory(extras, [])).not.toHaveProperty(
+        "seatingPlan",
+      )
+      expect(buildLobbyDirectory(extras)).not.toHaveProperty("seatingPlan")
+    }
+
+    extras.scenes = {}
+    expect(buildFullShowDirectory(extras, [])).not.toHaveProperty("seatingPlan")
+    expect(buildLobbyDirectory(extras)).toBeNull()
   })
 })

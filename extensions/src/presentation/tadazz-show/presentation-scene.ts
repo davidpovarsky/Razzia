@@ -4,6 +4,7 @@ function legacyText(value: unknown): string {
   return String(value)
 }
 import { RAZZIA_THEME_ID } from "../../core/product-branding"
+import { isNativeFinaleContentPending } from "../../core/platform-opening"
 import type { Status } from "@razzia/common/types/game/status"
 import { isLegacyShowRollback } from "../../core/show-themes/selection"
 import type {
@@ -75,6 +76,7 @@ export interface SceneDescriptor {
   endBehavior?: "holdFrame" | "advanceNext" | "fadeToTitle"
   background?: Partial<CardBackgroundOverride> & { mode?: string }
   stageLayout?: "card" | "cinema"
+  textOverlay?: boolean
 }
 
 export type ShowScene =
@@ -414,6 +416,18 @@ export function computeShowScene(input: ShowInput): ShowScene {
     }
   }
 
+  // The closing snapshot precedes the final native status. Retain the painted
+  // ending while its winner/summary arrives, never replay the previous question.
+  if (
+    isNativeFinaleContentPending({
+      presentationLaunch: extras.presentationLaunch,
+      activeTimelineStep: extras.activeTimelineStep,
+      statusName: status?.name,
+    })
+  ) {
+    return { kind: "wait", key: "wait:finale-content", text: "" }
+  }
+
   if (!status) {
     return input.isConnected
       ? { kind: "wait", key: "wait:initial", text: "game:waitingForPlayers" }
@@ -737,6 +751,15 @@ export function computeShowScene(input: ShowInput): ShowScene {
         text: "",
       }
   }
+}
+
+/** Split socket deliveries must not replace the currently painted scene. */
+export function isShowSceneContentPending(scene: ShowScene): boolean {
+  return (
+    scene.kind === "wait" &&
+    (scene.key === "wait:question-content" ||
+      scene.key === "wait:finale-content")
+  )
 }
 
 /** Per-card / per-scene authored background (card mode) overrides the show backdrop. */

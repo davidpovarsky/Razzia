@@ -11,6 +11,7 @@ import { normalizePreviewDraft } from "./identity"
 import { resolvePreviewPlan } from "./preview-resolve"
 import publicExample from "./approved-public-example.json" with { type: "json" }
 import { publicDemoCatalogue, getPublicDemo } from "./public-demo-catalogue"
+import { authoredShowToNativeBundleDraft } from "../show-authoring-convert"
 
 const context = { locale: "en", reducedMotion: false, role: "spectator" }
 function source() {
@@ -36,6 +37,79 @@ function source() {
   }
 }
 describe("account application preview source binding", () => {
+  it.each(["authored-recap-marker", "t=1.5,3", "section%3Arecap"])(
+    "preserves the exact owner audio fragment %s through preview normalization and native conversion",
+    (fragment) => {
+      const base = source()
+      const url = `/media/recap.mp3#${fragment}`
+      const audio = { mode: "custom" as const, url, volume: 1, loop: false }
+      const input = {
+        ...base,
+        show: {
+          ...base.show,
+          cards: [
+            {
+              key: "recap",
+              kind: "animation",
+              preset: "round-recap",
+              durationMs: 3000,
+              advance: "manual",
+              audio,
+            },
+            ...base.show.cards,
+          ],
+        },
+        assets: [...base.assets, { url, bytes: 73844, sha256: "c".repeat(64) }],
+      }
+      const draft = normalizeApplicationPreviewDraft(input, context)
+      expect(draft.assets.at(-1)?.url).toBe(url)
+      expect(draft.show.cards[0]).toMatchObject({ audio })
+      const native = authoredShowToNativeBundleDraft(
+        draft.show,
+        "fragment-preview",
+      ).bundleDraft!
+      const [scene] = native.extras.timeline
+
+      if (scene.kind === "question") {
+        throw new Error("Expected an authored scene")
+      }
+
+      expect(native.extras.scenes[scene.sceneId].audio).toEqual(audio)
+      const pathnameOnly = {
+        ...input,
+        assets: input.assets.map((asset) =>
+          asset.url === url ? { ...asset, url: "/media/recap.mp3" } : asset,
+        ),
+      }
+      expect(() =>
+        normalizeApplicationPreviewDraft(pathnameOnly, context),
+      ).toThrow("Unbound account preview asset")
+    },
+  )
+  it.each([
+    "/media/../recap.mp3#marker",
+    "/media/%2e%2e.mp3#marker",
+    "/media/recap.mp3?download=1#marker",
+    "/media/recap.exe#marker",
+    "/media/recap.mp3#bad%escape",
+    "/media/recap.mp3#bad%1",
+    "/media/recap.mp3#two#markers",
+    "/media/recap.mp3#bad marker",
+    "/media/recap.mp3#bad\nmarker",
+    "/media/recap.mp3#marker\n",
+    "/media/recap.mp3\n",
+    "/media/recap.mp3#<script>",
+    '/media/recap.mp3#"quoted"',
+    "/media/recap.mp3#'quoted'",
+    "/media/recap.mp3#back\\slash",
+    "https://foreign.invalid/recap.mp3#marker",
+    `/media/recap.mp3#${"x".repeat(2048)}`,
+  ])("rejects an unsafe or unowned fragment reference %s", (url) => {
+    const input = source()
+    input.assets[0].url = url
+    input.show.cards[0].background.url = url
+    expect(() => normalizeApplicationPreviewDraft(input, context)).toThrow()
+  })
   it("resolves every public catalogue game through its exact bundled theme and shared production renderer", () => {
     for (const metadata of publicDemoCatalogue) {
       const example = getPublicDemo(metadata.id)!

@@ -29,19 +29,20 @@ const errors = [],
   metrics = []
 page.on("pageerror", (error) => errors.push(error.message))
 page.on("response", (response) => {
-  if (response.status() >= 400)
+  if (response.status() >= 400) {
     httpErrors.push({
       status: response.status(),
       path: new URL(response.url()).pathname,
     })
+  }
 })
 await page.addInitScript(() => localStorage.setItem("i18nextLng", "en"))
 const settle = () =>
   page.evaluate(async () => {
     await document.fonts.ready
-    await new Promise((resolve) =>
-      requestAnimationFrame(() => requestAnimationFrame(resolve)),
-    )
+    await new Promise((resolveObservation) => {
+      requestAnimationFrame(() => requestAnimationFrame(resolveObservation))
+    })
   })
 const shot = async (name) => {
   await settle()
@@ -59,25 +60,43 @@ async function check(name, run) {
 const panel = (id) => page.getByTestId(`editor-panel-${id}`)
 const toggle = (id) => page.getByTestId(`editor-panel-toggle-${id}`)
 async function openPanel(id) {
-  if (!(await panel(id).isVisible())) await toggle(id).click()
+  if (!(await panel(id).isVisible())) {
+    await toggle(id).click()
+  }
+
   await expect(panel(id)).toBeVisible()
 }
 async function closePanel(id, escape = false) {
   // Timeline selection can remount its workspace and close the drawer itself.
-  if (!(await panel(id).isVisible())) return
-  if ((await panel(id).getAttribute("data-docked")) === "true") return
-  if (escape) await page.keyboard.press("Escape")
-  else await page.getByTestId(`editor-panel-close-${id}`).click()
+  if (!(await panel(id).isVisible())) {
+    return
+  }
+
+  if ((await panel(id).getAttribute("data-docked")) === "true") {
+    return
+  }
+
+  if (escape) {
+    await page.keyboard.press("Escape")
+  } else {
+    await page.getByTestId(`editor-panel-close-${id}`).click()
+  }
+
   await expect(panel(id)).toBeHidden()
   await expect(toggle(id)).toBeFocused()
 }
-async function measure(label, width, height, aspect) {
+async function measure({ label, width, height, aspect }) {
   await settle()
   const value = await page.evaluate(() => {
     const rect = (selector) => {
       const node = document.querySelector(selector)
-      if (!node) return null
+
+      if (!node) {
+        return null
+      }
+
       const r = node.getBoundingClientRect()
+
       return {
         top: r.top,
         bottom: r.bottom,
@@ -87,6 +106,7 @@ async function measure(label, width, height, aspect) {
         height: r.height,
       }
     }
+
     return {
       document: {
         width: document.documentElement.scrollWidth,
@@ -133,6 +153,7 @@ async function measure(label, width, height, aspect) {
   ).toBeLessThan(0.02)
   metrics.push({ label, width, height, aspect, ...value })
 }
+
 try {
   await page.goto(`${baseURL}/manager?lng=en`, {
     waitUntil: "domcontentloaded",
@@ -197,12 +218,14 @@ try {
         await expect(
           page.getByTestId("editor-preview-viewport"),
         ).toHaveAttribute("data-preview-aspect", aspect)
-        await measure("question", width, height, aspect)
+        await measure({ label: "question", width, height, aspect })
+
         if (width === 320 || width === 390) {
           const toolbar = await page
             .locator(".native-question-preview-tools")
             .evaluate((node) => {
               const bounds = node.getBoundingClientRect()
+
               return {
                 width: node.clientWidth,
                 scrollWidth: node.scrollWidth,
@@ -218,6 +241,7 @@ try {
                   ),
                 ).map((button) => {
                   const b = button.getBoundingClientRect()
+
                   return {
                     id: button.getAttribute("data-testid"),
                     left: b.left,
@@ -256,8 +280,10 @@ try {
             ...toolbar,
           })
         }
+
         await shot(`question-${width}x${height}-${aspect.replace(":", "-")}`)
       }
+
       if (width < 1100) {
         for (const id of ["timeline", "edit", "media", "settings"]) {
           await openPanel(id)
@@ -276,10 +302,15 @@ try {
           }))
           expect(documentSize.width).toBeLessThanOrEqual(width + 1)
           expect(documentSize.height).toBeLessThanOrEqual(height + 1)
-          if (width === 320) await shot(`drawer-${id}-320x640`)
+
+          if (width === 320) {
+            await shot(`drawer-${id}-320x640`)
+          }
+
           await closePanel(id, id === "settings" || id === "edit")
         }
       }
+
       for (const tab of ["participants", "settings", "launch"]) {
         await page.getByTestId(`studio-tab-${tab}`).click()
         await settle()
@@ -388,10 +419,19 @@ try {
       await expect(
         page.getByTestId("studio-scene-preview-stage"),
       ).toBeAttached()
+
       // Switching question -> scene replaces the workspace; the new drawer may be closed.
-      if (await panel("timeline").isVisible()) await closePanel("timeline")
+      if (await panel("timeline").isVisible()) {
+        await closePanel("timeline")
+      }
+
       await expect(page.getByTestId("studio-scene-preview-stage")).toBeVisible()
-      await measure("opening-scene", 390, 844, "16:9")
+      await measure({
+        label: "opening-scene",
+        width: 390,
+        height: 844,
+        aspect: "16:9",
+      })
       await shot("opening-scene-390x844")
     },
   )
@@ -410,16 +450,23 @@ try {
       const count = await cards.count()
       expect(count).toBeGreaterThan(1)
       let changed = false
-      for (let i = 0; i < count; i++) {
+      for (let i = 0; i < count; i += 1) {
         const card = cards.nth(i),
           id = await card.getAttribute("data-testid")
-        if (id === `show-theme-${beforeTheme}`) continue
+
+        if (id === `show-theme-${beforeTheme}`) {
+          continue
+        }
+
         const button = card.getByRole("button")
         const name = (await button.innerText()).trim()
         await button.click()
         const confirm = page.getByRole("alertdialog")
-        if (await confirm.isVisible())
+
+        if (await confirm.isVisible()) {
           await confirm.getByRole("button", { name, exact: true }).click()
+        }
+
         await expect(backdrop).toHaveAttribute(
           "data-editor-theme",
           id.replace("show-theme-", ""),
@@ -439,6 +486,7 @@ try {
           ),
         })
         changed = true
+
         break
       }
       expect(changed).toBe(true)
@@ -561,7 +609,12 @@ try {
         timeout: 30000,
       })
       await page.setViewportSize({ width: 320, height: 640 })
-      await measure("rtl-question", 320, 640, "16:9")
+      await measure({
+        label: "rtl-question",
+        width: 320,
+        height: 640,
+        aspect: "16:9",
+      })
       await shot("rtl-question-320x640")
       await openPanel("edit")
       await closePanel("edit", true)
@@ -580,7 +633,9 @@ try {
   )
   console.log(JSON.stringify({ passed: true, checks, errors, httpErrors }))
 } catch (error) {
-  await shot("failure").catch(() => {})
+  await shot("failure").catch(() => {
+    /* Keep the recorded audit outcome if its diagnostic screenshot is unavailable. */
+  })
   const body = await page
     .locator("body")
     .innerText()

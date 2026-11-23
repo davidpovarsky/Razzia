@@ -6,6 +6,8 @@ import { test } from "node:test"
 import { spawnSync } from "node:child_process"
 import { fileURLToPath } from "node:url"
 import { createHash, randomUUID } from "node:crypto"
+import { isDeepStrictEqual } from "node:util"
+import { quizExtrasV2Schema, type QuizExtrasV2 } from "../../src/core/index"
 import { createNativeCreationPort } from "../../src/server/storage/creation-reservation"
 import {
   nativeInput,
@@ -18,6 +20,58 @@ import {
   withAccount,
 } from "../../../packages/socket/src/services/account-scope"
 
+function isTargetShapeObservationRecord(
+  value: unknown,
+): value is Record<string, unknown> {
+  return value !== null && typeof value === "object" && !Array.isArray(value)
+}
+
+function requireTargetShapeObservationRecord(
+  value: unknown,
+): Record<string, unknown> {
+  if (!isTargetShapeObservationRecord(value)) {
+    throw new Error("Invalid target-shape evidence record")
+  }
+
+  return value
+}
+
+function requireTargetShapeObservationString(value: unknown): string {
+  if (typeof value !== "string") {
+    throw new Error("Missing target-shape evidence text")
+  }
+
+  return value
+}
+
+function requireTargetShapeObservationPresent<T>(value: T): NonNullable<T> {
+  if (value === null || value === undefined) {
+    throw new Error("Missing target-shape evidence value")
+  }
+
+  return value
+}
+
+function isTargetShapeObservationExtras(value: unknown): value is QuizExtrasV2 {
+  const parsed = quizExtrasV2Schema.safeParse(value)
+
+  return parsed.success && isDeepStrictEqual(parsed.data, value)
+}
+
+function requireTargetShapeObservationExtras(
+  value: unknown,
+): QuizExtrasV2 | null {
+  if (value === null) {
+    return value
+  }
+
+  if (!isTargetShapeObservationExtras(value)) {
+    throw new Error("Invalid raw target-shape fixture extras")
+  }
+
+  return value
+}
+
 const OWNER = "00000000-0000-4000-8000-0000000000a1"
 const binding = {
   version: 1 as const,
@@ -25,7 +79,10 @@ const binding = {
   authorizationDigest: "4".repeat(64),
 }
 const self = fileURLToPath(import.meta.url)
-const folder = process.env.C1_TARGET_SHAPE_RECEIPTS!
+const folder = requireTargetShapeObservationString(
+  process.env.C1_TARGET_SHAPE_RECEIPTS,
+)
+
 const record = (root: string) =>
   path.join(
     root,
@@ -33,16 +90,22 @@ const record = (root: string) =>
     binding.operationId,
     "operation.json",
   )
-const read = (file: string) => JSON.parse(fs.readFileSync(file, "utf8"))
+const read = (file: string) =>
+  requireTargetShapeObservationRecord(JSON.parse(fs.readFileSync(file, "utf8")))
+
 const port = () =>
-  createNativeCreationPort({
-    configuredRoot: () => process.env.CONFIG_PATH!,
-    getPath: native.getPath,
-    accountsEnabled,
-    activeOwner: activeAccount,
-    prepare: native.prepareNativeQuizCreation,
-    enableOperationBindings: true,
-  }).operations!
+  requireTargetShapeObservationPresent(
+    createNativeCreationPort({
+      configuredRoot: () =>
+        requireTargetShapeObservationString(process.env.CONFIG_PATH),
+      getPath: native.getPath,
+      accountsEnabled,
+      activeOwner: activeAccount,
+      prepare: native.prepareNativeQuizCreation,
+      enableOperationBindings: true,
+    }).operations,
+  )
+
 const scoped = <T>(fn: () => T | Promise<T>) => withAccount<T>(OWNER, fn)
 function snapshot(root: string) {
   const result: Record<string, string> = {}
@@ -78,7 +141,7 @@ function fresh(root: string, token: string, mode: string) {
   assert.equal(child.error, undefined)
   assert.equal(child.status, 0, child.stderr)
   assert.equal(child.signal, null)
-  const body = JSON.parse(child.stdout)
+  const body = requireTargetShapeObservationRecord(JSON.parse(child.stdout))
   assert.equal(body.pid, child.pid)
   assert.notEqual(body.pid, process.pid)
 
@@ -97,7 +160,7 @@ if (process.argv[2] === "child") {
   validateFixture(root, token)
   process.env.CONFIG_PATH = root
   process.env.TADAZZ_ACCOUNTS_ENABLED = "true"
-  let outcome: unknown
+  let outcome: unknown = undefined
 
   try {
     if (mode === "lookup") {
@@ -105,7 +168,11 @@ if (process.argv[2] === "child") {
     } else if (mode === "retry") {
       const request = read(path.join(root, "request.json"))
       outcome = await scoped(() =>
-        port().create(binding, request.input, request.extras),
+        port().create(
+          binding,
+          requireTargetShapeObservationRecord(request.input),
+          requireTargetShapeObservationExtras(request.extras),
+        ),
       )
     } else {
       throw Error("Unknown target fixture command")
@@ -164,15 +231,26 @@ if (process.argv[2] === "child") {
           changed = structuredClone(original)
 
         if (!field.startsWith("valid-")) {
-          assert.equal(typeof changed.target[field], "string")
-          changed.target[field] = [changed.target[field]]
+          assert.equal(
+            typeof requireTargetShapeObservationRecord(changed.target)[field],
+            "string",
+          )
+          requireTargetShapeObservationRecord(changed.target)[field] = [
+            requireTargetShapeObservationRecord(changed.target)[field],
+          ]
 
           if (field === "quizId") {
-            changed.result.quizId = [changed.result.quizId]
+            requireTargetShapeObservationRecord(changed.result).quizId = [
+              requireTargetShapeObservationRecord(changed.result).quizId,
+            ]
           }
+
           if (field === "logicalDigest") {
-            changed.result.baseDigest = [changed.result.baseDigest]
+            requireTargetShapeObservationRecord(changed.result).baseDigest = [
+              requireTargetShapeObservationRecord(changed.result).baseDigest,
+            ]
           }
+
           fs.writeFileSync(record(root), JSON.stringify(changed, null, 2))
         }
 
@@ -204,7 +282,11 @@ if (process.argv[2] === "child") {
             status: "unresolved",
             quizId: null,
           })
-          assert.equal(typeof retry.body.outcome.rejected, "string")
+          assert.equal(
+            typeof requireTargetShapeObservationRecord(retry.body.outcome)
+              .rejected,
+            "string",
+          )
         }
 
         assert.deepEqual(snapshot(root), before)

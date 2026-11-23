@@ -5,6 +5,7 @@ import { createDefaultQuizExtras } from "../../../../extensions/src/core/index.t
 import { PlatformControlsProvider } from "../../../../extensions/src/presentation/platform-controls.tsx"
 import Button from "../components/Button.tsx"
 const audios = []
+
 class ControlledAudio {
   constructor(url) {
     this.src = url
@@ -19,18 +20,20 @@ class ControlledAudio {
     audios.push(this)
   }
   play() {
-    this.playCalls++
+    this.playCalls += 1
     this.paused = false
+
     return new Promise((resolve, reject) => {
       this.resolvePlay = resolve
       this.rejectPlay = reject
     })
   }
   pause() {
-    this.pauseCalls++
+    this.pauseCalls += 1
     this.paused = true
   }
 }
+
 window.Audio = ControlledAudio
 const extras = createDefaultQuizExtras(
   "audio-preview-lifecycle",
@@ -45,7 +48,9 @@ function mount() {
       { Button },
       createElement(AudioCuesSection, {
         extras,
-        onChange: () => {},
+        onChange: () => {
+          /* This preview fixture renders audio controls without persisting edits. */
+        },
         tr: (_, fallback) => fallback,
       }),
     ),

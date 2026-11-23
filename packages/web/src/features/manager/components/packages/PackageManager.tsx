@@ -50,10 +50,10 @@ export function PackageManager({
       setCatalog(r.packages),
     )
   useEffect(() => {
-    let active = true
+    const lifetime = { active: true }
     void packageJson("/capabilities")
       .then(async () => {
-        if (!active) {
+        if (!lifetime.active) {
           return
         }
 
@@ -67,7 +67,12 @@ export function PackageManager({
           const result = await packageJson<PackageReceipt>(
             `/uploads/${encodeURIComponent(initial)}`,
           )
-          if (!active) return
+
+          // oxlint-disable-next-line typescript/no-unnecessary-condition -- Effect cleanup can revoke this lifetime while the receipt request is pending.
+          if (!lifetime.active) {
+            return
+          }
+
           if (
             result.uploadId !== initial ||
             (initialExpectedRevision !== undefined &&
@@ -79,8 +84,10 @@ export function PackageManager({
               ))
           ) {
             setError("PACKAGE_PREVIEW_STALE")
+
             return
           }
+
           setReceipt(result)
           setSelected(result.manifest.contents.map((c) => c.id))
           setPreview(true)
@@ -91,13 +98,13 @@ export function PackageManager({
         }
       })
       .catch(() => {
-        if (active) {
+        if (lifetime.active) {
           setCapabilityError(true)
         }
       })
 
     return () => {
-      active = false
+      lifetime.active = false
     }
   }, [
     themesOnly,

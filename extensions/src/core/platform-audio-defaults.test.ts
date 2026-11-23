@@ -29,7 +29,7 @@ describe("shared Creating Worlds audio defaults", () => {
     expect(stored.cues.answersMusic.source).toBe("default")
     expect(
       Object.values(stored.soundtrack ?? {}).every(
-        (track) => track?.mode === "inherit",
+        (track) => track.mode === "inherit",
       ),
     ).toBe(true)
     const resolved = resolvePlatformAudioDefaults(stored)

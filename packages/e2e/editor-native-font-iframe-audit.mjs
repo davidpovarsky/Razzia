@@ -51,110 +51,120 @@ const frame = {
   mediaRevealed: false,
   appearanceRevision: 0,
 }
-const frameScript =
-  "(" +
-  async function () {
-    const { mount } = await import("/renderer.mjs")
-    const css = await fetch("/renderer.css").then((r) => r.text())
-    const frame = await fetch("/frame.json").then((r) => r.json())
-    const instances = new Map()
-    const violations = []
-    const failures = []
-    document.addEventListener("securitypolicyviolation", (event) => {
-      violations.push({
-        directive: event.violatedDirective,
-        blocked: event.blockedURI,
-      })
+const frameScript = `(${async function installNativeFontAudit() {
+  const { mount } = await import("/renderer.mjs")
+  const rendererCss = await fetch("/renderer.css").then((r) => r.text())
+  const rendererFrame = await fetch("/frame.json").then((r) => r.json())
+  const instances = new Map()
+  const violations = []
+  const failures = []
+  document.addEventListener("securitypolicyviolation", (event) => {
+    violations.push({
+      directive: event.violatedDirective,
+      blocked: event.blockedURI,
     })
-    const faces = () =>
-      Array.from(document.fonts).map((face) => ({
-        family: face.family,
-        status: face.status,
-        weight: face.weight,
-        style: face.style,
-        unicodeRange: face.unicodeRange,
-      }))
-    window.audit = {
-      faces,
-      violations,
-      failures,
-      async create(name, { fallback = false, immediateDispose = false } = {}) {
-        const target = document.createElement("div")
-        target.id = name
-        target.style.cssText =
-          "width:960px;height:540px;position:relative;overflow:hidden;margin:0;"
-        document.body.append(target)
-        const originalReplace = CSSStyleSheet.prototype.replaceSync
-        if (fallback) CSSStyleSheet.prototype.replaceSync = undefined
-        let instance
-        try {
-          instance = mount(target, css, () => failures.push(name))
-        } finally {
-          if (fallback) CSSStyleSheet.prototype.replaceSync = originalReplace
+  })
+  const faces = () =>
+    Array.from(document.fonts).map((face) => ({
+      family: face.family,
+      status: face.status,
+      weight: face.weight,
+      style: face.style,
+      unicodeRange: face.unicodeRange,
+    }))
+  window.audit = {
+    faces,
+    violations,
+    failures,
+    async create(name, { fallback = false, immediateDispose = false } = {}) {
+      const target = document.createElement("div")
+      target.id = name
+      target.style.cssText =
+        "width:960px;height:540px;position:relative;overflow:hidden;margin:0;"
+      document.body.append(target)
+      const originalReplace = CSSStyleSheet.prototype.replaceSync
+
+      if (fallback) {
+        CSSStyleSheet.prototype.replaceSync = undefined
+      }
+
+      let instance = undefined
+
+      try {
+        instance = mount(target, rendererCss, () => failures.push(name))
+      } finally {
+        if (fallback) {
+          CSSStyleSheet.prototype.replaceSync = originalReplace
         }
-        instances.set(name, { instance, target })
-        const result = instance.update(frame)
-        if (immediateDispose) instance.dispose()
-        await Promise.race([
-          result,
-          new Promise((_, reject) =>
-            setTimeout(
-              () => reject(new Error("Native update did not settle")),
-              15000,
-            ),
-          ),
-        ])
-        await document.fonts.ready
-        await new Promise((resolve) =>
-          requestAnimationFrame(() => requestAnimationFrame(resolve)),
-        )
-        return this.snapshot(name)
-      },
-      snapshot(name) {
-        const target = instances.get(name)?.target
-        const textElements = target?.shadowRoot
-          ? Array.from(target.shadowRoot.querySelectorAll("*")).filter(
-              (element) =>
-                Array.from(element.childNodes).some(
-                  (node) =>
-                    node.nodeType === Node.TEXT_NODE &&
-                    /[\u0590-\u05ff]/u.test(node.textContent ?? ""),
-                ),
-            )
-          : []
-        return {
-          faces: faces(),
-          fontsReady: document.fonts.status,
-          checkHebrew: document.fonts.check(
-            '600 24px "Rubik Variable"',
-            "עברית",
-          ),
-          text: target?.shadowRoot?.textContent?.slice(-5000),
-          textFonts: textElements.map((element) => ({
-            tag: element.tagName,
-            text: element.textContent,
-            family: getComputedStyle(element).fontFamily,
-            weight: getComputedStyle(element).fontWeight,
-            direction: getComputedStyle(element).direction,
-          })),
-          styleParserCount: document.head.querySelectorAll(
-            'style[media="not all"]',
-          ).length,
-        }
-      },
-      dispose(name) {
-        const entry = instances.get(name)
-        entry.instance.dispose()
-        entry.target.remove()
-        instances.delete(name)
-        return faces()
-      },
-    }
-  } +
-  ")()"
+      }
+
+      instances.set(name, { instance, target })
+      const result = instance.update(rendererFrame)
+
+      if (immediateDispose) {
+        instance.dispose()
+      }
+
+      await Promise.race([
+        result,
+        new Promise((_, reject) => {
+          setTimeout(
+            () => reject(new Error("Native update did not settle")),
+            15000,
+          )
+        }),
+      ])
+      await document.fonts.ready
+      await new Promise((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(resolve))
+      })
+
+      return this.snapshot(name)
+    },
+    snapshot(name) {
+      const target = instances.get(name)?.target
+      const textElements = target?.shadowRoot
+        ? Array.from(target.shadowRoot.querySelectorAll("*")).filter(
+            (element) =>
+              Array.from(element.childNodes).some(
+                (node) =>
+                  node.nodeType === Node.TEXT_NODE &&
+                  /[\u0590-\u05ff]/u.test(node.textContent ?? ""),
+              ),
+          )
+        : []
+
+      return {
+        faces: faces(),
+        fontsReady: document.fonts.status,
+        checkHebrew: document.fonts.check('600 24px "Rubik Variable"', "עברית"),
+        text: target?.shadowRoot?.textContent?.slice(-5000),
+        textFonts: textElements.map((element) => ({
+          tag: element.tagName,
+          text: element.textContent,
+          family: getComputedStyle(element).fontFamily,
+          weight: getComputedStyle(element).fontWeight,
+          direction: getComputedStyle(element).direction,
+        })),
+        styleParserCount: document.head.querySelectorAll(
+          'style[media="not all"]',
+        ).length,
+      }
+    },
+    dispose(name) {
+      const entry = instances.get(name)
+      entry.instance.dispose()
+      entry.target.remove()
+      instances.delete(name)
+
+      return faces()
+    },
+  }
+}.toString()})()`
 const serve = async (req, res) => {
   res.setHeader("Content-Security-Policy", csp)
   const url = new URL(req.url, "http://127.0.0.1")
+
   try {
     if (url.pathname === "/") {
       res.setHeader("Content-Type", "text/html; charset=utf-8")
@@ -185,10 +195,14 @@ const serve = async (req, res) => {
       const publicRoot = path.join(root, "packages/web/public")
       const filename = path.resolve(
         publicRoot,
-        "." + decodeURIComponent(url.pathname),
+
+        `.${decodeURIComponent(url.pathname)}`,
       )
-      if (!filename.startsWith(publicRoot + path.sep))
+
+      if (!filename.startsWith(publicRoot + path.sep)) {
         throw new Error("Outside fixture")
+      }
+
       const types = {
         ".webp": "image/webp",
         ".png": "image/png",
@@ -208,8 +222,10 @@ const serve = async (req, res) => {
   }
 }
 const server = createServer((req, res) => void serve(req, res))
-await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve))
-const base = "http://127.0.0.1:" + server.address().port
+await new Promise((resolve) => {
+  server.listen(0, "127.0.0.1", resolve)
+})
+const base = `http://127.0.0.1:${server.address().port}`
 const browser = await chromium.launch({ channel: "msedge", headless: true })
 const page = await browser.newPage({ viewport: { width: 1000, height: 1120 } })
 const errors = []
@@ -231,6 +247,7 @@ const receipt = {
   errors,
   requests,
 }
+
 try {
   await page.goto(base)
   const iframeA = page.frames().find((item) => item.name() === "native-a")
@@ -238,7 +255,7 @@ try {
   assert(iframeA && iframeB)
   await Promise.all(
     [iframeA, iframeB].map((item) =>
-      item.waitForFunction(() => !!window.audit),
+      item.waitForFunction(() => Boolean(window.audit)),
     ),
   )
   receipt.checks.parentBefore = await page.evaluate(() =>
@@ -356,7 +373,7 @@ try {
   receipt.finishedAt = new Date().toISOString()
   await writeFile(
     path.join(output, "iframe-font-proof.json"),
-    JSON.stringify(receipt, null, 2) + "\n",
+    `${JSON.stringify(receipt, null, 2)}\n`,
   )
   console.log(
     JSON.stringify({
@@ -367,5 +384,7 @@ try {
     }),
   )
   await browser.close()
-  await new Promise((resolve) => server.close(resolve))
+  await new Promise((resolve) => {
+    server.close(resolve)
+  })
 }

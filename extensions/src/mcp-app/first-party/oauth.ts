@@ -7,8 +7,7 @@ import type {
   AuthoringPolicy,
   VerifiedPrincipal,
 } from "../server/dependencies.ts"
-import { createRemoteMcpApp } from "../server/http.ts"
-import type { RemoteMcpOptions } from "../server/http.ts"
+import { createRemoteMcpApp, type RemoteMcpOptions } from "../server/http.ts"
 import { loadFirstPartyBindings } from "./bindings.ts"
 import { FirstPartyOAuthGrants } from "./oauth-grants.ts"
 import {
@@ -27,6 +26,7 @@ import {
   nativeSaveInspectInput,
   nativeSaveApproveInput,
 } from "../contracts/native-save.ts"
+import { synchronousPromise } from "../../core/synchronous-promise.ts"
 
 export type {
   FirstPartyExportPolicy,
@@ -39,16 +39,25 @@ export type { FirstPartyCatalogOptions } from "./oauth-catalog.ts"
 
 export interface FirstPartyOAuthOptions extends OAuthCryptoOptions {
   configRoot: string
-  /** Existing first-party UI must inspect/display scopes and require a click.
-   * No missing consent page is silently invented or replaced by auto-approval. */
+
+  /**
+   * Existing first-party UI must inspect/display scopes and require a click.
+   * No missing consent page is silently invented or replaced by auto-approval.
+   */
+
   consentPageUrl: string
-  /** Explicit deployment-owned authoring/rights policy. Missing means no export
-   * adapter and no download route; native Save consent is unrelated. */
+
+  /**
+   * Explicit deployment-owned authoring/rights policy. Missing means no export
+   * adapter and no download route; native Save consent is unrelated.
+   */
+
   exportPolicy?: FirstPartyExportPolicy
   // Separate exact-revision native consent and actual C1 durable operation port.
   // Missing means no storage adapter or native-consent machine endpoints.
   nativeSave?: FirstPartyNativeSaveOptions
 }
+
 const ticketBody = z.strictObject({ ticket: z.string().min(40).max(8192) })
 const approvalBody = ticketBody.extend({
   decision: z.literal("allow"),
@@ -59,14 +68,14 @@ const codeBody = z.strictObject({
   client_id: z.string().min(1).max(256),
   code: z.string().min(40).max(8192),
   code_verifier: z.string().min(43).max(128),
-  redirect_uri: z.string().url().max(2048),
-  resource: z.string().url().max(2048),
+  redirect_uri: z.url().max(2048),
+  resource: z.url().max(2048),
 })
 const refreshBody = z.strictObject({
   grant_type: z.literal("refresh_token"),
   client_id: z.string().min(1).max(256),
   refresh_token: z.string().min(40).max(8192),
-  resource: z.string().url().max(2048),
+  resource: z.url().max(2048),
 })
 const revokeBody = z.strictObject({
   client_id: z.string().min(1).max(256),
@@ -81,69 +90,108 @@ const headers = {
   "content-security-policy": "frame-ancestors 'none'",
 }
 const active = (signal: AbortSignal) => {
-  if (signal.aborted) throw new OAuthError("access_denied")
+  if (signal.aborted) {
+    throw new OAuthError("access_denied")
+  }
+}
+function isEmptyParameterRecord(
+  value: unknown,
+): value is Record<string, string> {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    Object.getPrototypeOf(value) === null &&
+    Reflect.ownKeys(value).length === 0
+  )
 }
 const uniqueParameters = (parameters: URLSearchParams) => {
-  const values: Record<string, string> = Object.create(null)
+  const values: unknown = Object.create(null)
+
+  if (!isEmptyParameterRecord(values)) {
+    throw new OAuthError("invalid_request")
+  }
+
   for (const [key, value] of parameters) {
-    if (Object.hasOwn(values, key) || key.length > 100 || value.length > 8192)
+    if (Object.hasOwn(values, key) || key.length > 100 || value.length > 8192) {
       throw new OAuthError("invalid_request")
+    }
+
     values[key] = value
   }
+
   return values
 }
 function failure(error: unknown) {
-  if (error instanceof HttpRejection)
+  if (error instanceof HttpRejection) {
     return Response.json(
       { error: "invalid_request" },
       { status: error.status, headers },
     )
+  }
+
   const code =
     error instanceof OAuthError ? error.code : "temporarily_unavailable"
+
+  const getFailureStatus = () => {
+    if (code === "temporarily_unavailable") {
+      return 503
+    }
+
+    if (code === "access_denied") {
+      return 403
+    }
+
+    return 400
+  }
+
   return Response.json(
     { error: code },
     {
-      status:
-        code === "temporarily_unavailable"
-          ? 503
-          : code === "access_denied"
-            ? 403
-            : 400,
+      status: getFailureStatus(),
       headers,
     },
   )
 }
 
-/** Real account-backed, unmounted OAuth issuer. No login/password endpoint,
+/**
+ * Real account-backed, unmounted OAuth issuer. No login/password endpoint,
  * listener, provider account, public tunnel or production-key generation.
  * Consent UI and HTTPS route integration are explicit host dependencies.
  */
+
 export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
   const protocol = createOAuthProtocol(options)
   const issuer = new URL(protocol.config.issuer)
+
   if (
     options.exportPolicy &&
     !protocol.config.firstPartyOrigins?.includes(issuer.origin)
-  )
+  ) {
     throw new Error("Export delivery origin must be explicitly allowed")
+  }
+
   const consentPage = new URL(options.consentPageUrl)
+
   if (
     consentPage.protocol !== "https:" ||
     consentPage.origin !== issuer.origin ||
     consentPage.username ||
     consentPage.password ||
     consentPage.hash
-  )
+  ) {
     throw new Error("Exact same-origin first-party consent page required")
+  }
+
   const auth = await loadFirstPartyBindings(options.configRoot)
   auth.prepareRuntime()
   const grants = new FirstPartyOAuthGrants(auth, protocol)
   const base = issuer.pathname.replace(/\/$/u, "")
-  const endpoint = (name: string) => base + "/" + name
-  const metadataPath =
-    "/.well-known/oauth-authorization-server" + (base === "" ? "" : base)
+  const endpoint = (name: string) => `${base}/${name}`
+
+  const metadataPath = `/.well-known/oauth-authorization-server${base === "" ? "" : base}`
+
   const budget = new IngressBudget()
-  const issued = new WeakSet<object>()
+  const issued = new WeakSet()
   const verify = createAccessTokenVerifier({
     config: protocol.config,
     keys: [
@@ -156,23 +204,28 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
         }),
       },
     ],
-    activeGrant: async (grantId, accountId) =>
-      grants.activeGrant(accountId, grantId),
-    activeAccount: async (accountId) => auth.delegatedAccountActive(accountId),
+    activeGrant: (grantId, accountId) =>
+      synchronousPromise(() => grants.activeGrant(accountId, grantId)),
+    activeAccount: (accountId) =>
+      synchronousPromise(() => auth.delegatedAccountActive(accountId)),
     maxLifetimeSeconds: 300,
   })
   const verifyAccessToken = async (token: string, signal?: AbortSignal) => {
     const p = await verify(token, signal)
     issued.add(p)
+
     return p
   }
   const assertIssued = (p: VerifiedPrincipal) => {
-    if (!issued.has(p) || p.expiresAt <= Date.now())
+    if (!issued.has(p) || p.expiresAt <= Date.now()) {
       throw new OAuthError("invalid_grant")
+    }
   }
   const principalAccepted = (raw: unknown, accepted: VerifiedPrincipal) => {
-    if (!raw || typeof raw !== "object" || !issued.has(raw))
+    if (!raw || typeof raw !== "object" || !issued.has(raw)) {
       throw new OAuthError("invalid_grant")
+    }
+
     issued.add(accepted)
   }
   const nativeSave = options.nativeSave
@@ -193,64 +246,88 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
       ? grants.exports(options.exportPolicy, assertIssued)
       : undefined,
     storage: nativeSave?.storage,
-    remote(options: Omit<RemoteMcpOptions, "verifyAccessToken" | "config">) {
+    remote(
+      remoteOptions: Omit<RemoteMcpOptions, "verifyAccessToken" | "config">,
+    ) {
       return createRemoteMcpApp({
-        ...options,
+        ...remoteOptions,
         config: protocol.config,
         verifyAccessToken,
-        dependencies: { ...options.dependencies, principalAccepted },
+        dependencies: { ...remoteOptions.dependencies, principalAccepted },
       })
     },
     async fetch(request: Request): Promise<Response> {
-      let release: (() => void) | undefined
+      let release: (() => void) | undefined = undefined
+
       try {
         release = budget.enter()
         active(request.signal)
         const url = new URL(request.url)
+
         if (
           request.url.length > 16_384 ||
           url.origin !== issuer.origin ||
           request.headers.get("host") !== issuer.host ||
           url.hash
-        )
+        ) {
           throw new OAuthError("invalid_request")
+        }
+
         let bytes = 0
         let count = 0
-        let badHeaders = false
+        const headerState = { invalid: false }
         request.headers.forEach((value, name) => {
           bytes += Buffer.byteLength(name + value)
+          count += 1
+
           if (
-            ++count > 32 ||
+            count > 32 ||
             bytes > 16_384 ||
             value.length > 8192 ||
             name === "forwarded" ||
             name.startsWith("x-forwarded-")
-          )
-            badHeaders = true
+          ) {
+            headerState.invalid = true
+          }
         })
-        if (badHeaders) throw new OAuthError("invalid_request")
+
+        if (headerState.invalid) {
+          throw new OAuthError("invalid_request")
+        }
+
         const declared = request.headers.get("content-length")
+
         if (
           declared !== null &&
           (!/^(0|[1-9][0-9]{0,8})$/u.test(declared) ||
             Number(declared) > 65_536)
-        )
+        ) {
           throw new HttpRejection(413)
+        }
+
         const origin = request.headers.get("origin")
-        if (origin !== null && origin !== issuer.origin)
+
+        if (origin !== null && origin !== issuer.origin) {
           throw new OAuthError("access_denied")
+        }
+
         const publicJson = (value: unknown) => Response.json(value, { headers })
+
         if (request.method === "GET" && !url.search && !request.body) {
           const downloadPrefix = endpoint("downloads/")
+
           if (url.pathname.startsWith(downloadPrefix)) {
-            if (!options.exportPolicy)
+            if (!options.exportPolicy) {
               return new Response(null, { status: 404, headers })
+            }
+
             try {
               const file = grants.download(
                 url.pathname.slice(downloadPrefix.length),
                 options.exportPolicy,
               )
               active(request.signal)
+
               return new Response(file.body, {
                 headers: {
                   ...headers,
@@ -263,11 +340,16 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
               return new Response(null, { status: 404, headers })
             }
           }
-          if (url.pathname === metadataPath)
+
+          if (url.pathname === metadataPath) {
             return publicJson(protocol.metadata())
-          if (url.pathname === endpoint("jwks.json"))
+          }
+
+          if (url.pathname === endpoint("jwks.json")) {
             return publicJson(protocol.jwks())
+          }
         }
+
         if (
           url.pathname === endpoint("authorize") &&
           request.method === "GET" &&
@@ -276,17 +358,21 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
           const begun = protocol.begin(uniqueParameters(url.searchParams))
           const target = new URL(consentPage)
           target.searchParams.set("oauth_request", begun.ticket)
+
           return new Response(null, {
             status: 302,
             headers: { ...headers, location: target.href },
           })
         }
+
         if (
           url.search ||
           request.method !== "POST" ||
           request.headers.has("content-encoding")
-        )
+        ) {
           throw new OAuthError("invalid_request")
+        }
+
         const contentType = request.headers.get("content-type") ?? ""
         const isNativeConsent =
           url.pathname === endpoint("native-save/inspect") ||
@@ -300,11 +386,14 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
           if (isNativeConsent && !nativeSave) {
             return new Response(null, { status: 404, headers })
           }
+
           if (
             origin !== issuer.origin ||
             !/^application\/json(?:\s*;\s*charset=utf-8)?$/iu.test(contentType)
-          )
+          ) {
             throw new OAuthError("access_denied")
+          }
+
           const app = new Hono<ApiEnv>()
           app.use("*", auth.requireManager)
           app.post("*", async (c) => {
@@ -347,6 +436,7 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
               const body = ticketBody.parse(raw)
               const ticket = protocol.readTicket(body.ticket)
               auth.assertActive(p)
+
               return publicJson({
                 clientId: ticket.client_id,
                 scopes: ticket.scope.split(" "),
@@ -354,17 +444,19 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
                 proof: protocol.consentProof(p.accountId, p.sid, body.ticket),
               })
             }
+
             const body = approvalBody.parse(raw)
-            protocol.checkConsentProof(
-              p.accountId,
-              p.sid,
-              body.ticket,
-              body.proof,
-            )
+            protocol.checkConsentProof({
+              accountId: p.accountId,
+              sid: p.sid,
+              ticket: body.ticket,
+              proof: body.proof,
+            })
             active(request.signal)
             const result = grants.approve(p, body.ticket)
             active(request.signal)
             auth.assertActive(p)
+
             return publicJson(result)
           })
           app.onError((error) => {
@@ -409,37 +501,51 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
           })
           const result = await app.fetch(request)
           active(request.signal)
-          for (const [key, value] of Object.entries(headers))
+          for (const [key, value] of Object.entries(headers)) {
             result.headers.set(key, value)
+          }
+
           return result
         }
+
         if (
           !/^application\/x-www-form-urlencoded(?:\s*;\s*charset=utf-8)?$/iu.test(
             contentType,
           ) ||
           request.headers.has("authorization")
-        )
+        ) {
           throw new OAuthError("invalid_client")
+        }
+
         const fields = uniqueParameters(
           new URLSearchParams(await bodyText(request)),
         )
         active(request.signal)
+
         if (url.pathname === endpoint("token")) {
-          let result: unknown
-          if (fields.grant_type === "authorization_code")
+          let result: unknown = undefined
+
+          if (fields.grant_type === "authorization_code") {
             result = grants.exchange(codeBody.parse(fields))
-          else if (fields.grant_type === "refresh_token")
+          } else if (fields.grant_type === "refresh_token") {
             result = grants.rotate(refreshBody.parse(fields))
-          else throw new OAuthError("invalid_request")
+          } else {
+            throw new OAuthError("invalid_request")
+          }
+
           active(request.signal)
+
           return publicJson(result)
         }
+
         if (url.pathname === endpoint("revoke")) {
           const body = revokeBody.parse(fields)
           grants.revokeToken(body.client_id, body.token)
           active(request.signal)
+
           return new Response(null, { status: 200, headers })
         }
+
         return new Response(null, { status: 404, headers })
       } catch (error) {
         return failure(

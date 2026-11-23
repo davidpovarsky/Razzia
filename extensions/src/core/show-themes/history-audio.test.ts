@@ -5,6 +5,7 @@ import {
   updateScopedTheme,
   resetThemeSection,
   type ScopedThemeOverrides,
+  isSafeThemeAssetUrl,
 } from "./selection"
 import { resolveShowTheme } from "./resolve"
 import { collectThemeExtrasMedia, detachThemeExtrasMedia } from "./media"
@@ -202,4 +203,39 @@ it("keeps start-countdown recordings within their event and host roles", () => {
   expect(resolveThemeEffect(custom, "timer-start")?.url).toBe(
     "/media/custom-start.mp3",
   )
+})
+
+it("admits owner audio fragments only for events that permit custom media without widening theme asset URLs", () => {
+  const url = "/media/recap.mp3#authored-recap-marker"
+  expect(isSafeThemeAssetUrl(url)).toBe(false)
+
+  for (const role of ["manager", "spectator"] as const) {
+    const theme = resolveShowTheme({ role })
+    expect(themeAllowsAudioUrl(theme, "revealResults", url)).toBe(true)
+    const restricted = {
+      ...theme,
+      definition: {
+        ...theme.definition,
+        audioEvents: {
+          ...theme.definition.audioEvents,
+          revealResults: {
+            ...theme.definition.audioEvents.revealResults,
+            customMedia: false,
+          },
+        },
+      },
+    }
+    expect(themeAllowsAudioUrl(restricted, "revealResults", url)).toBe(false)
+
+    for (const unsafe of [
+      "/media/../recap.mp3#marker",
+      "/media/recap.mp3?owner=foreign#marker",
+      "/media/recap.mp3#bad%escape",
+      "/media/recap.mp3#<script>",
+      "https://foreign.invalid/recap.mp3#marker",
+      "/sounds/answersMusic.mp3#marker",
+    ]) {
+      expect(themeAllowsAudioUrl(theme, "revealResults", unsafe)).toBe(false)
+    }
+  }
 })

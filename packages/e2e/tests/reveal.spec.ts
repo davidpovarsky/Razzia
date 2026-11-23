@@ -40,7 +40,7 @@ test("keeps the answers reachable on phones when the question has an image", asy
   const showImage = player.getByRole("button", {
     name: t("game:media.showImage"),
   })
-  const answerButton = player.getByRole("button", { name: /^A Paris$/u })
+  const answerButton = player.getByRole("button", { name: /^1 Paris$/u })
 
   await expect(showImage).toBeVisible()
   await expect(answerButton).toBeInViewport()
@@ -71,7 +71,7 @@ test("shows the question image inline on desktop", async ({
   await expect(manager.getByText("Alice")).toBeVisible()
   await startGame(manager)
 
-  await expect(player.getByRole("button", { name: /^A Paris$/u })).toBeVisible()
+  await expect(player.getByRole("button", { name: /^1 Paris$/u })).toBeVisible()
   await expect(
     player.getByRole("button", { name: t("game:media.showImage") }),
   ).toHaveCount(0)

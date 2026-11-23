@@ -4,6 +4,8 @@ import type { ManagerStatusDataMap } from "@razzia/common/types/game/status"
 import type { ExtensionStateEnvelope } from "@razzia/extensions/core"
 import { useExtensionState } from "@razzia/web/features/game/contexts/extension-state-context"
 import { SFX } from "@razzia/web/features/game/utils/constants"
+import AnswerNote from "@razzia/web/features/game/components/AnswerNote"
+import { useViewRole } from "@razzia/web/features/game/contexts/view-role-context"
 import { QUESTION_REGISTRY } from "@razzia/web/features/questions"
 import useSound from "use-sound"
 
@@ -19,6 +21,7 @@ const Responses = ({
   hideHeading = false,
 }: Props) => {
   const { question, type } = data
+  const viewRole = useViewRole()
   const { ResponsesComponent } = QUESTION_REGISTRY[type]
   const contextExtensionState = useExtensionState()
 
@@ -34,27 +37,28 @@ const Responses = ({
 
   const reveal = useResponseReveal(data, extensionState, sfxResults)
 
-  // Specialized questions (e.g. estimation) retain their dedicated result renderer
-  if (ResponsesComponent) {
-    return (
-      <div className="flex h-full flex-1 flex-col items-center justify-center gap-8 pb-4">
-        {!hideHeading && (
-          <h2 className="text-center text-2xl font-bold text-white drop-shadow-lg md:text-4xl lg:text-5xl">
-            {question}
-          </h2>
-        )}
-        <ResponsesComponent data={data} />
-      </div>
-    )
-  }
-
+  // One manager-only explanation follows either existing result renderer.
   return (
-    <ChoiceResultsView
-      data={data}
-      extensionState={extensionState}
-      reveal={reveal}
-      hideHeading={hideHeading}
-    />
+    <>
+      {ResponsesComponent ? (
+        <div className="flex h-full flex-1 flex-col items-center justify-center gap-8 pb-4">
+          {!hideHeading && (
+            <h2 className="text-center text-2xl font-bold text-white drop-shadow-lg md:text-4xl lg:text-5xl">
+              {question}
+            </h2>
+          )}
+          <ResponsesComponent data={data} />
+        </div>
+      ) : (
+        <ChoiceResultsView
+          data={data}
+          extensionState={extensionState}
+          reveal={reveal}
+          hideHeading={hideHeading}
+        />
+      )}
+      <AnswerNote note={data.note} isManager={viewRole === "manager"} />
+    </>
   )
 }
 

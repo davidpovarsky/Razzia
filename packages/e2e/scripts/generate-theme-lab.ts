@@ -293,18 +293,21 @@ try {
       tr: "Classic koreografisini kullanan demo.",
       vi: "Bản trình diễn sử dụng chuyển động Classic.",
     }
-    const localizations: Record<
-      string,
-      Record<string, string>
-    > = Object.fromEntries(
-      Object.entries(descriptions).map(([locale, description]) => [
-        locale,
-        {
-          [theme.nameKey]: titleValue,
-          [theme.descriptionKey]: description,
-        },
-      ]),
-    )
+    const localizeDescription = (description: string) => ({
+      [theme.nameKey]: titleValue,
+      [theme.descriptionKey]: description,
+    })
+    const localizations = {
+      en: localizeDescription(descriptions.en),
+      fr: localizeDescription(descriptions.fr),
+      de: localizeDescription(descriptions.de),
+      es: localizeDescription(descriptions.es),
+      it: localizeDescription(descriptions.it),
+      ja: localizeDescription(descriptions.ja),
+      tr: localizeDescription(descriptions.tr),
+      vi: localizeDescription(descriptions.vi),
+    } satisfies NonNullable<ShowThemeDefinition["localizations"]>
+
     const keys = new Set(
       [
         ...Object.values(theme.slots),

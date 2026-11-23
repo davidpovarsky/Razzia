@@ -40,7 +40,15 @@ import { useInstalledThemeCatalog } from "../studio/installed-theme-catalog"
 import { useStudioEditor } from "../studio/studio-editor-context"
 import { Eye, EyeOff } from "lucide-react"
 import { useReducedMotion } from "motion/react"
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react"
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import { flushSync } from "react-dom"
 import { useFormContext, useWatch } from "react-hook-form"
 import { useTranslation } from "react-i18next"
@@ -81,7 +89,9 @@ export function QuestionLivePreview({
   >(null)
   const previewRoot = useRef<HTMLDivElement>(null)
   const currentQuestionRef = useRef(question)
-  currentQuestionRef.current = question
+  useLayoutEffect(() => {
+    currentQuestionRef.current = question
+  }, [question])
   const cancelPresentation = useRef<() => void>(() => undefined)
   const [presentedReplay, setPresentedReplay] = useState<number | null>(null)
   const [previewClock] = useState(() => createDemoClock())

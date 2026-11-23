@@ -12,6 +12,7 @@ import type { Interlude } from "@razzia/extensions/core"
 
 import { useEvent } from "@razzia/web/features/game/contexts/socket-context"
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
+import AnswerNote from "@razzia/web/features/game/components/AnswerNote"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { useTadazzShellText } from "./useTadazzLabels"
@@ -250,8 +251,12 @@ export function TadazzInterludeScreen({
 export function TadazzEstimationResultScreen({
   question,
   estimation,
+  note,
+  isManager,
 }: {
   question: string
+  note?: string
+  isManager?: boolean
   estimation?: {
     target: number
     closestGuess?: number
@@ -290,6 +295,7 @@ export function TadazzEstimationResultScreen({
           {tx("noResponses", "No responses recorded yet.")}
         </div>
       )}
+      <AnswerNote note={note} isManager={isManager} />
     </div>
   )
 }

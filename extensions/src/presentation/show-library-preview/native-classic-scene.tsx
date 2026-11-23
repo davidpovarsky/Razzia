@@ -9,7 +9,11 @@ import {
   type CinematicLayerStackProps,
 } from "../cinematic-layer-stack"
 import type { SceneDescriptor } from "../tadazz-show/presentation-scene"
-import { hasAuthoredCinematicContent } from "../tadazz-show/show-director"
+import {
+  hasAuthoredCinematicContent,
+  usesSharedScenePresenter,
+} from "../tadazz-show/show-director"
+import { ScenePresenter } from "../scene-presenter"
 import {
   TadazzCountdownScreen,
   TadazzMessageScreen,
@@ -34,6 +38,20 @@ export function NativeClassicScene({
 }) {
   const { t } = useTranslation()
   const descriptor: SceneDescriptor = scene
+
+  if (usesSharedScenePresenter(descriptor)) {
+    return (
+      <ScenePresenter
+        scene={scene}
+        activeSceneData={activeSceneData}
+        epoch={epoch}
+        controlledTimeMs={elapsedMs}
+        controlledPaused={paused}
+        tadazzEnabled
+      />
+    )
+  }
+
   let content: ReactNode = null
 
   if (scene.kind === "countdown") {
@@ -73,7 +91,7 @@ export function NativeClassicScene({
 
   return (
     <>
-      {content}
+      {!cinematic && content}
       {cinematic && (
         <div
           className="tz-scene-media"
@@ -88,6 +106,9 @@ export function NativeClassicScene({
                 : "media"
             }
             epoch={epoch}
+            titleSlot={content}
+            titleSlotLayout="stage"
+            titleSlotVisible={scene.textOverlay !== false}
             mediaUrl={descriptor.mediaUrl}
             mediaType={descriptor.mediaType}
             mediaFit={descriptor.mediaFit}

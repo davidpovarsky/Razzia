@@ -1,4 +1,5 @@
 import base from "./playwright.config.ts"
+
 export default {
   ...base,
   testMatch: "account-boundary.spec.ts",

@@ -252,7 +252,12 @@ async function setupRoom(quizz: ReturnType<typeof createQuizz>) {
     key: keyPort,
   })
   adapter.initializeEmpty()
-  await factory.deliverGatewayAttempt(subject.token, attempt, adapter, 0)
+  await factory.deliverGatewayAttempt({
+    token: subject.token,
+    attempt,
+    destination: adapter,
+    expectedStoredVersion: 0,
+  })
   assert.equal((await adapter.activate(randomUUID())).state, "ACTIVE")
 
   return { subject, game, factory, adapter, target, keyPort }

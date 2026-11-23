@@ -3,6 +3,7 @@ import type {
   TadaShowV1,
   AuthoredQuizCard,
   AuthoredSurveyCard,
+  AuthoredAnswerRecapCard,
 } from "../../../extensions/src/core/show-authoring-schema"
 /* oxlint-disable eslint/no-await-in-loop, eslint/no-plusplus */
 import fs from "node:fs"
@@ -342,6 +343,48 @@ test.describe("TADA Studio Show Import/Export Acceptance (JSON + Excel)", () => 
 
     const hebrewNote =
       'שעשועון הדגמה חי בעברית - הערת הפקה סודית 🌟\nשורה שנייה עם הנחיות למנחה: "נא להמתין לצליל!"'
+    const recapTitle = "סיכום התשובות"
+    const recapSubtitle = "החידון והסקר – highlights"
+    const savedRecapTitle = "סיכום התשובות המעודכן"
+    const savedRecapSubtitle = "תשובות החידון והסקר נשמרו 🌟"
+
+    async function closeEditorDrawer() {
+      const close = page.locator("[data-editor-drawer-close]:visible")
+      const count = await close.count()
+      expect(count).toBeLessThanOrEqual(1)
+
+      if (count === 1) {
+        await close.click()
+      }
+    }
+
+    async function openRecapEditor(title: string) {
+      await closeEditorDrawer()
+      const timeline = page.getByTestId("editor-panel-timeline")
+
+      if (!(await timeline.isVisible())) {
+        await page.getByTestId("editor-panel-toggle-timeline").click()
+      }
+
+      await expect(timeline).toBeVisible()
+      const card = timeline.getByTestId("editor-scene-card").filter({
+        has: page.getByRole("button", { name: title, exact: true }),
+      })
+      await expect(card).toHaveCount(1)
+      await card.getByTestId("editor-scene-select").click()
+      await closeEditorDrawer()
+      const edit = page.getByTestId("editor-panel-edit")
+
+      if (!(await edit.isVisible())) {
+        await page.getByTestId("editor-panel-toggle-edit").click()
+      }
+
+      await expect(edit).toBeVisible()
+      await expect(edit.getByTestId("answer-recap-settings")).toBeVisible()
+
+      return edit
+    }
+
     const quizInterlude = {
       kind: "title" as const,
       title: "מעברון שאלת בונוס",
@@ -398,6 +441,16 @@ test.describe("TADA Studio Show Import/Export Acceptance (JSON + Excel)", () => 
           answers: [{ text: "פופ" }, { text: "רוק" }],
           interlude: surveyInterlude,
         },
+        {
+          key: "RECAP01",
+          kind: "answerRecap",
+          title: recapTitle,
+          subtitle: recapSubtitle,
+          startQuestionKey: "Q01",
+          mode: "correctAnswer",
+          durationMs: 6000,
+          advance: "manual",
+        },
       ],
       settings: [
         {
@@ -430,19 +483,50 @@ test.describe("TADA Studio Show Import/Export Acceptance (JSON + Excel)", () => 
     // 3. Navigate to editor
     await expect(page).toHaveURL(/\/manager\/quizz\/[a-zA-Z0-9_-]+$/u)
     await expect(page.getByTestId("editor-save-btn")).toBeVisible()
+    const importedQuizId = new URL(page.url()).pathname.split("/").at(-1)
+    expect(importedQuizId).toBeTruthy()
     await saveScreenshot(page, "08_import05_show_editor_1280.png")
 
-    // 4. Save harmless change in editor
+    // 4. Edit real recap text, save, and reopen the same stored show.
+    const recapEdit = await openRecapEditor(recapTitle)
+    const subtitlePlaceholder = t(
+      "extensions:studio.scene.subtitlePlaceholder",
+      {
+        defaultValue: "Card description or subtitle...",
+      },
+    )
+    await expect(recapEdit.getByTestId("scene-title-input")).toHaveValue(
+      recapTitle,
+    )
+    await expect(
+      recapEdit.getByPlaceholder(subtitlePlaceholder, { exact: true }),
+    ).toHaveValue(recapSubtitle)
+    await recapEdit.getByTestId("scene-title-input").fill(savedRecapTitle)
+    await recapEdit
+      .getByPlaceholder(subtitlePlaceholder, { exact: true })
+      .fill(savedRecapSubtitle)
+    await closeEditorDrawer()
     await page.getByTestId("editor-save-btn").click()
     await expect(page).toHaveURL(/\/manager\/config$/u)
+    await page.goto(`/manager/quizz/${importedQuizId}`)
+    const reopenedRecap = await openRecapEditor(savedRecapTitle)
+    await expect(reopenedRecap.getByTestId("scene-title-input")).toHaveValue(
+      savedRecapTitle,
+    )
+    await expect(
+      reopenedRecap.getByPlaceholder(subtitlePlaceholder, { exact: true }),
+    ).toHaveValue(savedRecapSubtitle)
+    await closeEditorDrawer()
+    await page.goto("/manager/config")
     await page
       .getByRole("button", { name: t("manager:tabs.quizz"), exact: true })
       .click()
 
     // 5. Export as .tada.json and verify byte content
-    const exportTadaJsonBtn = page
-      .locator("[data-testid^='export-tada-json-']")
-      .first()
+    const exportTadaJsonBtn = page.getByTestId(
+      `export-tada-json-${importedQuizId}`,
+    )
+    await expect(exportTadaJsonBtn).toHaveCount(1)
     await expect(exportTadaJsonBtn).toBeVisible()
 
     const jsonDownloadPromise = page.waitForEvent("download")
@@ -461,21 +545,27 @@ test.describe("TADA Studio Show Import/Export Acceptance (JSON + Excel)", () => 
     const downloadedJson = JSON.parse(
       Buffer.concat(jsonChunks).toString("utf-8"),
     ) as Omit<TadaShowV1, "cards"> & {
-      cards: [AuthoredQuizCard, AuthoredSurveyCard]
+      cards: [AuthoredQuizCard, AuthoredSurveyCard, AuthoredAnswerRecapCard]
     }
     expect(downloadedJson.format).toBe("tada-show")
     expect(downloadedJson.title).toBe("מופע טריוויה וסקר חי בעברית")
     expect(downloadedJson.note).toBe(hebrewNote)
-    expect(downloadedJson.cards).toHaveLength(2)
+    expect(downloadedJson.cards).toHaveLength(3)
 
     const { 0: downloadedQ1 } = downloadedJson.cards
     expect(downloadedQ1.interlude).toEqual(quizInterlude)
 
     const { 1: downloadedSurvey } = downloadedJson.cards
     expect(downloadedSurvey.interlude).toEqual(surveyInterlude)
+    expect(downloadedJson.cards[2]).toMatchObject({
+      kind: "answerRecap",
+      title: savedRecapTitle,
+      subtitle: savedRecapSubtitle,
+    })
 
     // 6. Export as .xlsx and verify byte content
-    const exportXlsxBtn = page.locator("[data-testid^='export-xlsx-']").first()
+    const exportXlsxBtn = page.getByTestId(`export-xlsx-${importedQuizId}`)
+    await expect(exportXlsxBtn).toHaveCount(1)
     await expect(exportXlsxBtn).toBeVisible()
 
     const xlsxDownloadPromise = page.waitForEvent("download")
@@ -496,13 +586,18 @@ test.describe("TADA Studio Show Import/Export Acceptance (JSON + Excel)", () => 
 
     expect(parsedXlsx.title).toBe("מופע טריוויה וסקר חי בעברית")
     expect(parsedXlsx.note).toBe(hebrewNote)
-    expect(parsedXlsx.cards).toHaveLength(2)
+    expect(parsedXlsx.cards).toHaveLength(3)
     expect((parsedXlsx.cards[0] as AuthoredQuizCard).interlude).toEqual(
       quizInterlude,
     )
     expect((parsedXlsx.cards[1] as AuthoredSurveyCard).interlude).toEqual(
       surveyInterlude,
     )
+    expect(parsedXlsx.cards[2]).toMatchObject({
+      kind: "answerRecap",
+      title: savedRecapTitle,
+      subtitle: savedRecapSubtitle,
+    })
 
     fs.rmSync(tmpJsonFile, { force: true })
     telemetry.assertClean()

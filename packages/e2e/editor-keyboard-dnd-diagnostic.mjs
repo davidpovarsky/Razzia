@@ -8,8 +8,9 @@ fs.mkdirSync(out, { recursive: true })
 const browser = await chromium.launch({ channel: "msedge", headless: true })
 const receipts = [],
   errors = []
+
 try {
-  for (let iteration = 1; iteration <= 3; iteration++) {
+  for (let iteration = 1; iteration <= 3; iteration += 1) {
     const page = await browser.newPage({
       viewport: { width: 1440, height: 1000 },
       locale: "en-US",
@@ -24,7 +25,7 @@ try {
     await page.goto("http://127.0.0.1:3180/manager/quizz?lng=en")
     await page.getByTestId("editor-save-btn").waitFor({ timeout: 45000 })
     const title = page.locator('input[name$=".question"]')
-    await title.fill("Original DnD diagnostic " + iteration)
+    await title.fill(`Original DnD diagnostic ${iteration}`)
     await page.getByTestId("answer-text-0").fill("Yes")
     await page.getByTestId("answer-text-1").fill("No")
     await page
@@ -52,6 +53,7 @@ try {
       window.__dndObserver = new MutationObserver(() => {
         const live = collect()
         const serialized = JSON.stringify(live)
+
         if (serialized !== window.__dndLast) {
           window.__dndEvents.push({ type: "live", at: performance.now(), live })
           window.__dndLast = serialized
@@ -82,8 +84,8 @@ try {
     const inspect = async (step) => {
       states.push(
         await wrapper.evaluate(
-          (e, step) => ({
-            step,
+          (e, receivedStep) => ({
+            step: receivedStep,
             wrapper: {
               role: e.getAttribute("role"),
               tabindex: e.getAttribute("tabindex"),
@@ -123,18 +125,18 @@ try {
     await inspect("after-space")
     await page.evaluate(
       () =>
-        new Promise((r) =>
-          requestAnimationFrame(() => requestAnimationFrame(r)),
-        ),
+        new Promise((r) => {
+          requestAnimationFrame(() => requestAnimationFrame(r))
+        }),
     )
     await inspect("after-space-settled")
     await wrapper.press("ArrowUp")
     await inspect("after-arrow-up-immediate")
     await page.evaluate(
       () =>
-        new Promise((r) =>
-          requestAnimationFrame(() => requestAnimationFrame(r)),
-        ),
+        new Promise((r) => {
+          requestAnimationFrame(() => requestAnimationFrame(r))
+        }),
     )
     await inspect("after-arrow-up-settled")
     await wrapper.press("Enter")
@@ -144,7 +146,7 @@ try {
     receipt.events = events
     await page
       .getByTestId("editor-timeline")
-      .screenshot({ path: path.join(out, "reordered-" + iteration + ".png") })
+      .screenshot({ path: path.join(out, `reordered-${iteration}.png`) })
     await page.close()
   }
   expect(errors).toEqual([])
@@ -159,7 +161,7 @@ try {
           states: x.states.map((s) => ({
             step: s.step,
             pressed: s.wrapper.pressed,
-            order: s.order.map((x) => x.kind),
+            order: s.order.map((orderedItem) => orderedItem.kind),
             live: s.live,
           })),
         })),

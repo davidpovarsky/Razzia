@@ -9,8 +9,17 @@ import {
   computeCanonicalBaseDigest,
   createDefaultQuizExtrasV2,
   quizExtrasV2Schema,
+  PLATFORM_CUE_URLS,
+  showThemeRegistry,
 } from "../../../extensions/src/core"
 import { join } from "node:path"
+import { skipPlatformOpening } from "@razzia/e2e/utils/manager"
+import {
+  endRecordedVote,
+  latestState,
+  observeLiveFlow,
+  setManualProgression,
+} from "@razzia/e2e/utils/extension-manager"
 
 async function seed(
   request: APIRequestContext,
@@ -123,8 +132,11 @@ async function seed(
     (tokenValue) => localStorage.setItem("token", tokenValue),
     token,
   )
+  const hostWire = observeLiveFlow(page)
   await page.goto(`/party/manager/${game.gameId}`)
+  await skipPlatformOpening(page)
   await expect(page.getByTestId("tadazz-show")).toBeVisible()
+  await setManualProgression(page)
   await page.evaluate(() => {
     const target = window as unknown as {
       __socket?: {
@@ -155,7 +167,7 @@ async function seed(
     }
   })
 
-  return { ...game, quizId, token, extras, quizz }
+  return { ...game, quizId, token, extras, quizz, hostWire }
 }
 
 test("Classic host, player and display keep the current lobby and authoritative pause/roster", async ({
@@ -164,23 +176,18 @@ test("Classic host, player and display keep the current lobby and authoritative 
   request,
 }, testInfo) => {
   const game = await seed(request, page)
-  const skip = page.getByTestId("tadazz-opening-skip")
-
-  if (await skip.isVisible().catch(() => false)) {
-    await skip.click()
-  }
-
-  await expect(page.getByTestId("tadazz-show")).toBeVisible()
-  await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
-    "data-native-layout",
-    "true",
-  )
+  const hostStage = page.getByTestId("tadazz-show")
+  await expect(hostStage).toHaveCount(1)
+  await expect(hostStage).toHaveAttribute("data-role", "manager")
+  await expect(hostStage).toHaveAttribute("data-show-theme", "tadazz-classic")
+  await expect(hostStage.getByTestId("tadazz-stage")).toHaveCount(1)
+  await expect(hostStage.getByTestId("tadazz-stage")).toBeVisible()
   await expect(page.getByText(game.inviteCode, { exact: true })).toBeVisible()
   const playerContext = await browser.newContext({
     viewport: { width: 390, height: 844 },
   })
   const player = await playerContext.newPage()
-  await player.goto(`http://127.0.0.1:3170/?pin=${game.inviteCode}`)
+  await player.goto(new URL(`/?pin=${game.inviteCode}`, page.url()).href)
   await player.getByPlaceholder("Username here").fill("Cleanup Alice")
   await player.getByRole("button", { name: "Submit", exact: true }).click()
   await expect(page.getByTestId("host-connected-counter")).toHaveText("1 / 1")
@@ -192,7 +199,7 @@ test("Classic host, player and display keep the current lobby and authoritative 
       viewport: { width: 800, height: 600 },
     })
     const display = await displayContext.newPage()
-    await display.goto(`http://127.0.0.1:3170/display/${game.gameId}`)
+    await display.goto(new URL(`/display/${game.gameId}`, page.url()).href)
     await expect(display.getByTestId("tadazz-lobby-pin")).toHaveText(
       game.inviteCode,
     )
@@ -205,11 +212,11 @@ test("Classic host, player and display keep the current lobby and authoritative 
     await page.bringToFront()
     await page.getByRole("button", { name: "Start", exact: true }).click()
     await expect(
-      page.getByRole("heading", { name: "Isolated scene" }),
+      hostStage
+        .getByTestId("tadazz-screen-interlude")
+        .getByText("Isolated scene", { exact: true }),
     ).toBeVisible()
-    await page
-      .getByRole("button", { name: "Advance Scene", exact: true })
-      .click()
+    await page.getByTestId("host-next-screen-btn").click()
     await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
       "data-voting-open",
       "true",
@@ -246,7 +253,7 @@ test("explicit rollback uses extracted scene presenter and original Studio contr
   await expect(page.getByTestId("manager-control-toolbar")).toBeVisible()
   const participantContext = await browser.newContext()
   const participant = await participantContext.newPage()
-  await participant.goto(`http://127.0.0.1:3170/?pin=${game.inviteCode}`)
+  await participant.goto(new URL(`/?pin=${game.inviteCode}`, page.url()).href)
   await participant.getByPlaceholder("Username here").fill("Rollback Alice")
   await participant.getByRole("button", { name: "Submit", exact: true }).click()
   await expect(
@@ -267,10 +274,36 @@ test("explicit rollback uses extracted scene presenter and original Studio contr
     path: join(testInfo.outputDir, "rollback-scene.png"),
   })
   await page.goto(`/manager/quizz/${game.quizId}`)
-  await expect(page.getByTestId("studio-card-type-bar")).toBeVisible()
-  await expect(
-    page.getByText("Isolated scene", { exact: true }).first(),
-  ).toBeVisible()
+  let kinds = page.locator(
+    '[data-testid="studio-card-type-bar"][data-embedded="false"]',
+  )
+
+  if (!(await kinds.isVisible())) {
+    const editPanel = page.getByTestId("editor-panel-edit")
+
+    if (!(await editPanel.isVisible())) {
+      await page.getByTestId("editor-panel-toggle-edit").click()
+    }
+
+    await expect(editPanel).toBeVisible()
+    kinds = editPanel.locator(
+      '[data-testid="studio-card-type-bar"][data-embedded="true"]',
+    )
+  }
+
+  await expect(kinds).toHaveCount(1)
+  await expect(kinds).toBeVisible()
+  await expect(kinds.getByRole("radio", { name: /Transition/u })).toBeChecked()
+  const editPanel = page.getByTestId("editor-panel-edit")
+
+  if (!(await editPanel.isVisible())) {
+    await page.getByTestId("editor-panel-toggle-edit").click()
+  }
+
+  await expect(editPanel.getByTestId("scene-title-input")).toBeVisible()
+  await expect(editPanel.getByTestId("scene-title-input")).toHaveValue(
+    "Isolated scene",
+  )
   await page.getByTestId("editor-save-btn").click()
   await expect(page).toHaveURL(/\/manager\/config$/u)
   await participantContext.close()
@@ -385,22 +418,12 @@ test.afterEach(async ({ page }, info) => {
     })
   }
 })
-async function skipOpening(page: Page) {
-  await expect(page.getByTestId("tadazz-show")).toBeVisible()
-  const skip = page.getByTestId("tadazz-opening-skip")
-
-  if (await skip.isVisible()) {
-    await skip.click()
-  }
-}
-
 test("unknown versions preserve stored identity and warn only the manager", async ({
   page,
   browser,
   request,
 }) => {
   const game = await seed(request, page, { unknown: true })
-  await skipOpening(page)
   await expect(page.getByTestId("show-theme-warning")).toBeVisible()
   await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
     "data-theme-fallback",
@@ -408,7 +431,7 @@ test("unknown versions preserve stored identity and warn only the manager", asyn
   )
   const context = await browser.newContext()
   const display = await context.newPage()
-  await display.goto(`http://127.0.0.1:3170/display/${game.gameId}`)
+  await display.goto(new URL(`/display/${game.gameId}`, page.url()).href)
   await expect(display.getByTestId("tadazz-show")).toHaveAttribute(
     "data-show-theme",
     "tadazz-classic",
@@ -457,10 +480,9 @@ test("blocked audio waits for a user gesture without retrying on ticks", async (
     }
   })
   const game = await seed(request, page, { detailed: true })
-  await skipOpening(page)
   const context = await browser.newContext()
   const player = await context.newPage()
-  await player.goto(`http://127.0.0.1:3170/?pin=${game.inviteCode}`)
+  await player.goto(new URL(`/?pin=${game.inviteCode}`, page.url()).href)
   await player.getByPlaceholder("Username here").fill("Gesture Alice")
   await player.getByRole("button", { name: "Submit", exact: true }).click()
   await expect(page.getByTestId("host-connected-counter")).toHaveText("1 / 1")
@@ -492,7 +514,7 @@ test("blocked audio waits for a user gesture without retrying on ticks", async (
   )
   expect(
     (await probe(page)).plays.filter((item) =>
-      item.url.endsWith("/sounds/answersMusic.mp3"),
+      item.url.endsWith(PLATFORM_CUE_URLS.answersMusic),
     ),
   ).toHaveLength(1)
   await testInfo.attach("autoplay-recovery.json", {
@@ -516,7 +538,17 @@ test("Studio shows only registered built-in choices, previews locally, and persi
   const settings = page.getByTestId("show-theme-settings")
   await expect(settings.getByTestId("show-theme-tadazz-classic")).toBeVisible()
   await expect(settings.getByTestId("show-theme-razzia-original")).toBeVisible()
-  await expect(settings.locator('[data-testid^="show-theme-"]')).toHaveCount(2)
+  const registeredThemeIds = showThemeRegistry
+    .list()
+    .map((definition) => `show-theme-${definition.id}`)
+    .sort()
+  const themeChoices = settings.locator('[data-testid^="show-theme-"]')
+  await expect(themeChoices).toHaveCount(registeredThemeIds.length)
+  expect(
+    await themeChoices.evaluateAll((choices) =>
+      choices.map((choice) => choice.getAttribute("data-testid") ?? "").sort(),
+    ),
+  ).toEqual(registeredThemeIds)
   await page.screenshot({
     path: join(testInfo.outputDir, "studio-theme-family-picker.png"),
   })
@@ -534,11 +566,13 @@ test("Studio shows only registered built-in choices, previews locally, and persi
   expect((await probe(page)).plays).toEqual([])
   await settings.locator("summary").filter({ hasText: "Audio" }).click()
   const audio = settings.getByTestId("theme-audio-answersMusic")
+  const playsBeforeMute = (await probe(page)).plays.length
   await audio.getByRole("combobox").click()
   await page.getByRole("option", { name: "Silent", exact: true }).click()
   await expect(
     audio.getByRole("button", { name: "Preview", exact: true }),
-  ).toBeDisabled()
+  ).toHaveCount(0)
+  expect((await probe(page)).plays).toHaveLength(playsBeforeMute)
   await page.screenshot({
     path: join(testInfo.outputDir, "studio-theme-settings.png"),
   })
@@ -562,6 +596,11 @@ test("Studio shows only registered built-in choices, previews locally, and persi
   await expect(
     page.getByTestId("theme-audio-answersMusic").getByRole("combobox"),
   ).toHaveText("Silent")
+  await expect(
+    page
+      .getByTestId("theme-audio-answersMusic")
+      .getByRole("button", { name: "Preview", exact: true }),
+  ).toHaveCount(0)
 })
 
 test("live theme shares all roles, fits five viewports, and restarts voting music only for a new question", async ({
@@ -572,13 +611,12 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
   test.setTimeout(150_000)
   await installProbes(page)
   const game = await seed(request, page, { detailed: true })
-  await skipOpening(page)
   const context = await browser.newContext({
     viewport: { width: 390, height: 844 },
   })
   const player = await context.newPage()
   await installProbes(player)
-  await player.goto(`http://127.0.0.1:3170/?pin=${game.inviteCode}`)
+  await player.goto(new URL(`/?pin=${game.inviteCode}`, page.url()).href)
   await player.getByPlaceholder("Username here").fill("Theme Alice")
   await player.getByRole("button", { name: "Submit", exact: true }).click()
   const displayContext = await browser.newContext({
@@ -586,19 +624,23 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
   })
   const display = await displayContext.newPage()
   await installProbes(display)
-  await display.goto(`http://127.0.0.1:3170/display/${game.gameId}`)
+  await display.goto(new URL(`/display/${game.gameId}`, page.url()).href)
   for (const surface of [page, player, display]) {
     await expect(surface.getByTestId("tadazz-show")).toHaveAttribute(
       "data-show-theme",
       "tadazz-classic",
     )
   }
-  for (const native of [page, player]) {
-    await expect(native.getByTestId("tadazz-show")).toHaveAttribute(
-      "data-native-layout",
-      "true",
-    )
+  for (const cinematic of [page, display]) {
+    const stage = cinematic.getByTestId("tadazz-show")
+    await expect(stage).toHaveCount(1)
+    await expect(stage.getByTestId("tadazz-stage")).toHaveCount(1)
+    await expect(stage.getByTestId("tadazz-stage")).toBeVisible()
   }
+  await expect(player.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-native-layout",
+    "true",
+  )
   await page.bringToFront()
   await page.getByRole("button", { name: "Start", exact: true }).click()
   await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
@@ -611,7 +653,7 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
   ).toHaveCount(2)
   await expect(page.getByTestId("audio-cue-player-state")).toHaveAttribute(
     "data-audio-url",
-    /answersMusic\.mp3/u,
+    PLATFORM_CUE_URLS.answersMusic,
   )
   const enable = page.getByTestId("host-enable-audio")
 
@@ -620,11 +662,24 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
   }
 
   const musicBefore = (await probe(page)).plays.filter(
-    (item) => item.url.endsWith("/sounds/answersMusic.mp3") && item.time < 0.2,
+    (item) =>
+      item.url.endsWith(PLATFORM_CUE_URLS.answersMusic) && item.time < 0.2,
   ).length
-  await expect(page.getByRole("button", { name: /Choice [0-9]/u })).toHaveCount(
-    2,
-  )
+  const hostCards = page
+    .getByTestId("tadazz-show")
+    .locator('.choice-slot[data-testid^="tadazz-card-"]')
+  await expect(hostCards).toHaveCount(2)
+
+  for (const index of [0, 1]) {
+    const card = page
+      .getByTestId("tadazz-show")
+      .getByTestId(`tadazz-card-${index}`)
+    await expect(card).toBeVisible()
+    await expect(card).toBeDisabled()
+    await expect(
+      card.getByRole("img", { name: `Choice ${index + 1}`, exact: true }),
+    ).toBeVisible()
+  }
   await page.getByTestId("host-pause-resume-btn").click()
   await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
     "data-game-paused",
@@ -687,25 +742,35 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
   expect(
     (await probe(page)).plays.filter(
       (item) =>
-        item.url.endsWith("/sounds/answersMusic.mp3") && item.time < 0.2,
+        item.url.endsWith(PLATFORM_CUE_URLS.answersMusic) && item.time < 0.2,
     ),
   ).toHaveLength(musicBefore)
   expect(
     (await probe(player)).cues.filter((cue) => cue.name === "answer-submitted"),
   ).toHaveLength(1)
   await page.bringToFront()
-  await page.getByTestId("host-end-timer-btn").click()
+  await endRecordedVote(page, game.hostWire, {
+    questionId: game.extras.questionIds[0],
+    count: 1,
+  })
   await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
     "data-show-scene",
     "results",
   )
+  await expect
+    .poll(() => latestState(game.hostWire))
+    .toMatchObject({
+      phase: "responses",
+      questionId: game.extras.questionIds[0],
+      extras: { voteCompletionReason: "manual" },
+    })
   expect(
-    (await probe(page)).cues.filter((cue) => cue.name === "timer-ended"),
+    (await probe(page)).cues.filter((cue) => cue.name === "vote-locked"),
   ).toHaveLength(0)
   await expect
     .poll(
       async () =>
-        (await probe(page)).cues.filter((cue) => cue.name === "vote-locked")
+        (await probe(page)).cues.filter((cue) => cue.name === "timer-ended")
           .length,
     )
     .toBe(1)
@@ -713,19 +778,8 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
     (await probe(page)).plays.filter((item) =>
       item.url.includes("tadazz-timer-end-"),
     ),
-  ).toHaveLength(0)
-  for (let i = 0; i < 3; i += 1) {
-    if (
-      (await page
-        .getByTestId("tadazz-show")
-        .getAttribute("data-show-scene")) === "voting"
-    ) {
-      break
-    }
-
-    await page.getByTestId("host-next-screen-btn").click()
-    await page.waitForTimeout(700)
-  }
+  ).toHaveLength(1)
+  await page.getByTestId("host-next-screen-btn").click()
   await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
     "data-voting-open",
     "true",
@@ -735,7 +789,8 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
     display.locator('.choice-slot[data-testid^="tadazz-card-"]'),
   ).toHaveCount(3)
   const musicAfter = (await probe(page)).plays.filter(
-    (item) => item.url.endsWith("/sounds/answersMusic.mp3") && item.time < 0.2,
+    (item) =>
+      item.url.endsWith(PLATFORM_CUE_URLS.answersMusic) && item.time < 0.2,
   ).length
   await testInfo.attach("audio-question-transitions.json", {
     body: JSON.stringify(await probe(page), null, 2),
@@ -756,17 +811,24 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
     { timeout: 30_000 },
   )
   await expect
+    .poll(() => latestState(game.hostWire))
+    .toMatchObject({
+      phase: "responses",
+      questionId: game.extras.questionIds[1],
+      extras: { voteCompletionReason: "elapsed" },
+    })
+  await expect
     .poll(
       async () =>
         (await probe(page)).cues.filter((cue) => cue.name === "timer-ended")
           .length,
     )
-    .toBe(1)
+    .toBe(2)
   expect(
     (await probe(page)).plays.filter((item) =>
       item.url.includes("tadazz-timer-end-"),
     ),
-  ).toHaveLength(1)
+  ).toHaveLength(2)
   for (const surface of [page, player, display]) {
     const evidence = await probe(surface)
     expect(evidence.frames).toBeGreaterThan(0)
@@ -776,18 +838,7 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
   await page.screenshot({
     path: join(testInfo.outputDir, "question-3-cards-zero-results.png"),
   })
-  for (let index = 0; index < 3; index += 1) {
-    if (
-      (await page
-        .getByTestId("tadazz-show")
-        .getAttribute("data-show-scene")) === "voting"
-    ) {
-      break
-    }
-
-    await page.getByTestId("host-next-screen-btn").click()
-    await page.waitForTimeout(700)
-  }
+  await page.getByTestId("host-next-screen-btn").click()
   await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
     "data-voting-open",
     "true",
@@ -883,7 +934,7 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
         (await probe(page)).cues.filter((cue) => cue.name === "timer-ended")
           .length,
     )
-    .toBe(1)
+    .toBe(2)
   await page.getByTestId("host-pause-resume-btn").click()
   await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
     "data-game-paused",
@@ -895,15 +946,27 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
     "results",
   )
   await expect
+    .poll(() => latestState(game.hostWire))
+    .toMatchObject({
+      phase: "responses",
+      questionId: game.extras.questionIds[3],
+      extras: { voteCompletionReason: "manual" },
+    })
+  await expect
     .poll(
       async () =>
-        (await probe(page)).cues.filter((cue) => cue.name === "vote-locked")
+        (await probe(page)).cues.filter((cue) => cue.name === "timer-ended")
           .length,
     )
-    .toBe(2)
+    .toBe(3)
   expect(
-    (await probe(page)).cues.filter((cue) => cue.name === "timer-ended"),
-  ).toHaveLength(1)
+    (await probe(page)).cues.filter((cue) => cue.name === "vote-locked"),
+  ).toHaveLength(0)
+  expect(
+    (await probe(page)).plays.filter((item) =>
+      item.url.includes("tadazz-timer-end-"),
+    ),
+  ).toHaveLength(3)
   await testInfo.attach("complete-audio-trace.json", {
     body: JSON.stringify(
       {

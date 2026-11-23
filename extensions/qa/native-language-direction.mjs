@@ -9,14 +9,17 @@ const evidence = process.env.LANGUAGE_EVIDENCE
 const boundary = process.env.LANGUAGE_BOUNDARY
 const componentsOverride = process.env.LANGUAGE_COMPONENTS
 const before = process.env.LANGUAGE_BASELINE === "true"
-if (!source || !deps || !evidence || !boundary)
+
+if (!source || !deps || !evidence || !boundary) {
   throw new Error("Explicit isolated paths required")
+}
+
 const require = createRequire(path.join(deps, "extensions/package.json"))
 const { build } = require("esbuild")
 const { chromium } = createRequire(
   path.join(deps, "packages/e2e/package.json"),
 )("@playwright/test")
-const resolveModule = createRequire(
+const _resolveModule = createRequire(
   path.join(deps, "packages/web/package.json"),
 )
 const adapter = path.join(
@@ -31,7 +34,8 @@ const components = path.join(
   source,
   "extensions/src/presentation/tadazz-v4/components.tsx",
 )
-let baselineBoundary
+let baselineBoundary = undefined
+
 if (before) {
   const host = await fs.readFile(
     path.join(
@@ -44,8 +48,11 @@ if (before) {
     "export function TadazzShowView(props: TadazzShowViewProps) {",
   )
   const end = host.indexOf("\nfunction TadazzShowContent(", start)
-  if (start < 0 || end < 0)
+
+  if (start < 0 || end < 0) {
     throw new Error("Prior actual presentation locale scope not found")
+  }
+
   baselineBoundary = host
     .slice(start, end)
     .replace(
@@ -66,15 +73,17 @@ if (before) {
       "{presentationLocale:fixtureLocale}",
     )
     .replace("<TadazzShowContent {...props} />", "{children}")
+
   if (
     baselineBoundary.includes("props") ||
     !baselineBoundary.includes("<I18nextProvider")
-  )
+  ) {
     throw new Error("Prior provider-only scope extraction failed")
-  baselineBoundary =
-    'import {useMemo,type ReactNode} from "react";import {I18nextProvider,useTranslation} from "react-i18next";\n' +
-    baselineBoundary
+  }
+
+  baselineBoundary = `import {useMemo,type ReactNode} from "react";import {I18nextProvider,useTranslation} from "react-i18next";\n${baselineBoundary}`
 }
+
 await fs.mkdir(evidence, { recursive: true })
 const entry = `
 import React,{useRef,useState} from 'react';
@@ -113,29 +122,38 @@ const plugins = [
             : path.join(source, "packages", scope, "src")
         for (const suffix of ["", ".ts", ".tsx", "/index.ts", "/index.tsx"]) {
           const file = path.join(base, ...parts) + suffix
+
           try {
-            if ((await fs.stat(file)).isFile()) return { path: file }
-          } catch {}
+            if ((await fs.stat(file)).isFile()) {
+              return { path: file }
+            }
+          } catch {
+            // Try the remaining supported suffixes; unresolved imports fail after this loop.
+          }
         }
-        throw new Error("Unresolved actual workspace " + args.path)
+        throw new Error(`Unresolved actual workspace ${args.path}`)
       })
       builder.onResolve({ filter: /^[^./]/ }, async (args) => {
         if (
           args.pluginData?.cachedDependency ||
           args.path.startsWith("@razzia/") ||
-          args.importer.startsWith(deps + "/")
-        )
+          args.importer.startsWith(`${deps}/`)
+        ) {
           return
+        }
+
         for (const workspace of ["packages/web", "extensions"]) {
           const resolved = await builder.resolve(args.path, {
             kind: args.kind,
             resolveDir: path.join(deps, workspace),
             pluginData: { cachedDependency: true },
           })
-          if (!resolved.errors.length)
+
+          if (!resolved.errors.length) {
             return { path: resolved.path, external: resolved.external }
+          }
         }
-        throw new Error("Unresolved cached browser dependency " + args.path)
+        throw new Error(`Unresolved cached browser dependency ${args.path}`)
       })
       builder.onLoad({ filter: /presentation-locale\.tsx$/ }, async (args) =>
         args.path === boundary
@@ -148,7 +166,8 @@ const plugins = [
             }
           : undefined,
       )
-      if (componentsOverride)
+
+      if (componentsOverride) {
         builder.onLoad({ filter: /components\.tsx$/ }, async (args) =>
           args.path === components
             ? {
@@ -158,6 +177,7 @@ const plugins = [
               }
             : undefined,
         )
+      }
     },
   },
 ]
@@ -177,30 +197,47 @@ await build({
 const server = http.createServer(async (request, response) => {
   try {
     const url = new URL(request.url, "http://localhost")
-    let file
-    if (url.pathname === "/fixture.js" || url.pathname === "/fixture.css")
+    let file = undefined
+
+    if (url.pathname === "/fixture.js" || url.pathname === "/fixture.css") {
       file = path.join(evidence, url.pathname.slice(1))
-    else if (url.pathname.startsWith("/tadazz-show/"))
+    } else if (url.pathname.startsWith("/tadazz-show/")) {
       file = path.join(source, "packages/web/public", url.pathname.slice(1))
-    else {
+    } else {
       response.writeHead(200, { "Content-Type": "text/html" })
       response.end(
         '<!doctype html><html lang="he" dir="rtl"><meta charset="utf-8"><link rel="stylesheet" href="/fixture.css"><style>html,body,#root{width:100%;height:100%;margin:0;overflow:hidden;background:#101a31}</style><div id="root"></div><script src="/fixture.js"></script></html>',
       )
+
       return
     }
+
+    const getAssetContentType = () => {
+      if (file.endsWith(".js")) {
+        return "text/javascript"
+      }
+
+      if (file.endsWith(".css")) {
+        return "text/css"
+      }
+
+      if (file.endsWith(".png")) {
+        return "image/png"
+      }
+
+      if (file.endsWith(".svg")) {
+        return "image/svg+xml"
+      }
+
+      if (file.endsWith(".woff2")) {
+        return "font/woff2"
+      }
+
+      return "image/jpeg"
+    }
+
     response.writeHead(200, {
-      "Content-Type": file.endsWith(".js")
-        ? "text/javascript"
-        : file.endsWith(".css")
-          ? "text/css"
-          : file.endsWith(".png")
-            ? "image/png"
-            : file.endsWith(".svg")
-              ? "image/svg+xml"
-              : file.endsWith(".woff2")
-                ? "font/woff2"
-                : "image/jpeg",
+      "Content-Type": getAssetContentType(),
     })
     response.end(await fs.readFile(file))
   } catch {
@@ -208,7 +245,9 @@ const server = http.createServer(async (request, response) => {
     response.end()
   }
 })
-await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve))
+await new Promise((resolve) => {
+  server.listen(0, "127.0.0.1", resolve)
+})
 const browser = await chromium.launch({
   headless: true,
   args: ["--no-sandbox"],
@@ -224,11 +263,12 @@ const result = {
 }
 const check = (name, passed, details = {}) =>
   result.checks.push({ name, passed: Boolean(passed), ...details })
+
 try {
   const page = await browser.newPage({ viewport: { width: 1366, height: 768 } })
   const errors = []
   page.on("pageerror", (e) => errors.push(e.message))
-  await page.goto("http://127.0.0.1:" + server.address().port)
+  await page.goto(`http://127.0.0.1:${server.address().port}`)
   await page.waitForFunction(() => window.languageStage?.language())
   const cases = [
     {
@@ -261,14 +301,22 @@ try {
     },
   ]
   for (const c of cases) {
-    await page.evaluate((c) => {
-      window.setGameLocale(c.locale)
-      return window.languageStage.question(c.text, c.count, c.id)
+    await page.evaluate((receivedC) => {
+      window.setGameLocale(receivedC.locale)
+
+      return window.languageStage.question(
+        receivedC.text,
+        receivedC.count,
+        receivedC.id,
+      )
     }, c)
     await page.locator(".q-text").waitFor({ state: "visible" })
-    await page.evaluate(
-      () => (window.originalQuestionNode = document.querySelector(".q-text")),
-    )
+    await page.evaluate(() => {
+      const originalQuestionNode = document.querySelector(".q-text")
+      window.originalQuestionNode = originalQuestionNode
+
+      return originalQuestionNode
+    })
     await page.evaluate(() => window.languageStage.answers())
     await page.locator('[data-testid="tadazz-card-0"]').click()
     const voting = await page.evaluate(() => ({
@@ -285,6 +333,7 @@ try {
         range.setStart(text, index)
         range.setEnd(text, index + 1)
         const r = range.getBoundingClientRect()
+
         return { left: r.left, right: r.right, top: r.top }
       }
       const cards = Array.from(
@@ -296,6 +345,7 @@ try {
         number: n.querySelector(".answer-monogram")?.textContent?.trim(),
         correct: n.classList.contains("is-correct"),
       }))
+
       return {
         language: window.languageStage.language(),
         documentDirection: document.documentElement.dir,
@@ -312,16 +362,20 @@ try {
     })
     const reading = observed.cards
       .slice()
-      .sort((a, b) =>
-        Math.abs(a.top - b.top) > 10
-          ? a.top - b.top
-          : c.locale === "he"
-            ? b.left - a.left
-            : a.left - b.left,
-      )
+      .sort((a, b) => {
+        if (Math.abs(a.top - b.top) > 10) {
+          return a.top - b.top
+        }
+
+        if (c.locale === "he") {
+          return b.left - a.left
+        }
+
+        return a.left - b.left
+      })
       .map((x) => x.index)
     check(
-      c.id + ": answer order follows show locale",
+      `${c.id}: answer order follows show locale`,
       JSON.stringify(reading) ===
         JSON.stringify(Array.from({ length: c.count }, (_, i) => i)),
       { reading },
@@ -331,7 +385,7 @@ try {
         ? observed.last.left >= observed.previous.right - 2
         : observed.last.right <= observed.previous.left + 2
     check(
-      c.id + ": terminal punctuation follows question content",
+      `${c.id}: terminal punctuation follows question content`,
       punctuation && observed.questionDirection === c.dir,
       {
         direction: observed.questionDirection,
@@ -340,7 +394,7 @@ try {
       },
     )
     check(
-      c.id + ": original answer index and correct choice stay bound",
+      `${c.id}: original answer index and correct choice stay bound`,
       JSON.stringify(voting.selection) === "[0]" &&
         observed.cards.every(
           (x) =>
@@ -348,17 +402,19 @@ try {
         ),
     )
     check(
-      c.id + ": question node persists through answers and reveal",
+      `${c.id}: question node persists through answers and reveal`,
       voting.sameQuestion &&
         observed.sameQuestion &&
         observed.questionCount === 1,
     )
     check(
-      c.id + ": per-show language leaves editor document unchanged",
+      `${c.id}: per-show language leaves editor document unchanged`,
       observed.language === c.locale && observed.documentDirection === "rtl",
     )
-    if (c.id === "english-three" || c.id === "hebrew-three")
-      await page.screenshot({ path: path.join(evidence, c.id + ".png") })
+
+    if (c.id === "english-three" || c.id === "hebrew-three") {
+      await page.screenshot({ path: path.join(evidence, `${c.id}.png`) })
+    }
   }
   check("no browser runtime errors", errors.length === 0, { errors })
   result.passed = result.checks.every((x) => x.passed)
@@ -367,11 +423,17 @@ try {
   result.error = String(error)
 } finally {
   await browser.close()
-  await new Promise((resolve) => server.close(resolve))
+  await new Promise((resolve) => {
+    server.close(resolve)
+  })
 }
+
 await fs.writeFile(
   path.join(evidence, "receipt.json"),
-  JSON.stringify(result, null, 2) + "\n",
+  `${JSON.stringify(result, null, 2)}\n`,
 )
 console.log(JSON.stringify(result))
-if (!result.passed) process.exitCode = 1
+
+if (!result.passed) {
+  process.exitCode = 1
+}

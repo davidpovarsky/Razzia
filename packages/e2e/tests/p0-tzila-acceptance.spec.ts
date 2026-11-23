@@ -2,10 +2,21 @@ import fs from "node:fs"
 import { join } from "node:path"
 import { expect, test } from "@razzia/e2e/utils/fixtures"
 import { t } from "@razzia/e2e/utils/i18n"
+import { TZILA_PILOT_SECRET } from "@razzia/e2e/utils/constants"
 import { createGame, next, startGame } from "@razzia/e2e/utils/manager"
 import { endTimer } from "@razzia/e2e/utils/extension-manager"
 import { joinGame } from "@razzia/e2e/utils/player"
 import type { Page } from "@playwright/test"
+import {
+  assertNativeTzilaResult,
+  assertTzilaOpening,
+  assertResponsiveTzilaResult,
+  assertTzilaChoices,
+  nativeTzilaCards,
+  readVotingSeconds,
+  requireSpectatorAnswerRejected,
+  setTzilaPaused,
+} from "@razzia/e2e/utils/tzila-stage"
 
 const DIRS = [
   join(import.meta.dirname, "../test-results/tzila-four-visual-fixes"),
@@ -18,19 +29,6 @@ const saveScreenshot = async (page: Page, filename: string) => {
     await page.screenshot({ path: join(dir, filename), fullPage: false })
   }
 }
-
-const EXPECTED_COLORS = [
-  // Option 1 (#e69f00)
-  "rgb(230, 159, 0)",
-  // Option 2 (#56b4e9)
-  "rgb(86, 180, 233)",
-  // Option 3 (#3dbfa0)
-  "rgb(61, 191, 160)",
-  // Option 4 (#cc79a7)
-  "rgb(204, 121, 167)",
-  // Option 5 (#0072b2)
-  "rgb(0, 114, 178)",
-]
 
 test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () => {
   test("Full Tzila Show Lifecycle: 5-option cards, PSTN DTMF 1-5, spectator display, tie, zero votes", async ({
@@ -49,21 +47,19 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
       name: t("game:settings.title"),
     })
 
-    if (await settingsBtn.isVisible().catch(() => false)) {
-      await settingsBtn.click()
-      const dialog = managerPage.getByRole("dialog")
-      const answersOnlySwitch = dialog.getByRole("switch", {
-        name: t("game:settings.answersOnly.label"),
-        exact: true,
-      })
-
-      if (await answersOnlySwitch.isVisible().catch(() => false)) {
-        await answersOnlySwitch.click()
-      }
-
-      await dialog.getByRole("button", { name: t("common:save") }).click()
-      await expect(dialog).toBeHidden()
-    }
+    await expect(settingsBtn).toBeVisible()
+    await settingsBtn.click()
+    const dialog = managerPage.getByRole("dialog")
+    const answersOnlySwitch = dialog.getByRole("switch", {
+      name: t("game:settings.answersOnly.label"),
+      exact: true,
+    })
+    await expect(answersOnlySwitch).toBeVisible()
+    await expect(answersOnlySwitch).toHaveAttribute("aria-checked", "false")
+    await answersOnlySwitch.click()
+    await expect(answersOnlySwitch).toHaveAttribute("aria-checked", "true")
+    await dialog.getByRole("button", { name: t("common:save") }).click()
+    await expect(dialog).toBeHidden()
 
     // Extract gameId from manager URL
     const managerUrl = managerPage.url()
@@ -82,7 +78,10 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     await expect(
       spectatorPage.locator('[data-testid="audience-display"]'),
     ).toBeVisible()
-    await expect(spectatorPage.locator('[data-role="spectator"]')).toBeVisible()
+    await expect(spectatorPage.getByTestId("audience-display")).toHaveAttribute(
+      "data-role",
+      "spectator",
+    )
 
     // Spectator MUST NOT have manager toolbar or player bar
     await expect(
@@ -100,25 +99,21 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     await joinGame(playerPage, pin, "Alice")
 
     // Assert host sees exactly 1 player (Alice), NOT 2 (spectator must not count)
-    await expect(
-      managerPage.getByRole("button", { name: /1 \/ 1 Players/i }),
-    ).toBeVisible()
+    await expect(managerPage.getByTestId("host-connected-counter")).toHaveText(
+      /^1(?:\s*\/\s*1)?$/u,
+    )
 
     // 3. Start Game from Host
     await startGame(managerPage)
 
-    // Studio timeline starts with Show Opening scene: verify Opening scene on Spectator and Host
-    await expect(
-      spectatorPage.getByRole("heading", { name: "Build Our Story!" }),
-    ).toBeVisible({ timeout: 15_000 })
-    await expect(
-      managerPage.getByRole("heading", { name: "Build Our Story!" }),
-    ).toBeVisible({ timeout: 15_000 })
+    await assertTzilaOpening({
+      manager: managerPage,
+      player: playerPage,
+      spectator: spectatorPage,
+    })
 
     // Host clicks Advance Scene to move from Opening Scene to Question 1
-    const advanceBtn = managerPage.getByRole("button", {
-      name: /Advance Scene/i,
-    })
+    const advanceBtn = managerPage.getByTestId("host-next-screen-btn")
     await expect(advanceBtn).toBeVisible({ timeout: 5000 })
     await advanceBtn.click()
 
@@ -146,6 +141,7 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
 
     const [vote1, vote2, vote3] = await Promise.all([
       spectatorPage.request.post(socketApiUrl, {
+        headers: { "x-tada-pilot-secret": TZILA_PILOT_SECRET },
         data: {
           action: "answer",
           gameId,
@@ -155,6 +151,7 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
         },
       }),
       spectatorPage.request.post(socketApiUrl, {
+        headers: { "x-tada-pilot-secret": TZILA_PILOT_SECRET },
         data: {
           action: "answer",
           gameId,
@@ -164,6 +161,7 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
         },
       }),
       spectatorPage.request.post(socketApiUrl, {
+        headers: { "x-tada-pilot-secret": TZILA_PILOT_SECRET },
         data: {
           action: "answer",
           gameId,
@@ -180,35 +178,74 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     expect(((await vote2.json()) as { accepted: boolean }).accepted).toBe(true)
     expect(((await vote3.json()) as { accepted: boolean }).accepted).toBe(true)
 
-    // FIX D verification on joined player with answersOnly: question header is visible inline WITHOUT clicking any dialog!
-    const playerHeading = playerPage.locator(
-      '[data-testid="game-question-title"]',
-    )
-    await expect(playerHeading).toBeVisible({ timeout: 10_000 })
-    await expect(playerHeading).toContainText(q1Title)
+    // AnswersOnly hides the player's inline heading and exposes a readable dialog.
+    const playerHeading = playerPage.getByTestId("game-question-title")
+    await expect(playerHeading).toBeHidden()
+    const showQuestion = playerPage.getByRole("button", {
+      name: t("game:question.show"),
+      exact: true,
+    })
+    await expect(showQuestion).toBeVisible()
+    await showQuestion.click()
+    const questionDialog = playerPage.getByRole("dialog")
+    await expect(
+      questionDialog.getByRole("heading", { name: q1Title, exact: true }),
+    ).toBeVisible()
+    await playerPage.keyboard.press("Escape")
+    await expect(questionDialog).toBeHidden()
+    await expect(playerHeading).toBeHidden()
+    await expect(
+      managerPage.getByTestId("tadazz-question-panel"),
+    ).toContainText(q1Title)
 
-    // FIX C verification: Player large timer check at 375x667
-    const playerTimer = playerPage.locator('[role="timer"]')
+    await assertTzilaChoices({
+      page: playerPage,
+      questionIndex: 0,
+      surface: "player",
+    })
+    await assertTzilaChoices({
+      page: spectatorPage,
+      questionIndex: 0,
+      surface: "native",
+    })
+    await assertTzilaChoices({
+      page: managerPage,
+      questionIndex: 0,
+      surface: "native",
+    })
+    await requireSpectatorAnswerRejected(spectatorPage, gameId)
+    // Freeze only through the supported host pause while measuring viewport geometry.
+    await setTzilaPaused(managerPage, true)
+    const playerTimer = playerPage.getByRole("timer")
     await expect(playerTimer).toBeVisible()
-    const timerDigits = playerTimer.locator("span.font-mono")
-    const fontSize = await timerDigits.evaluate((el) =>
-      parseInt(window.getComputedStyle(el).fontSize, 10),
+    const timerDigits = playerTimer
+      .locator(":scope > span")
+      .filter({ hasText: /^\d{1,2}$/u })
+    const fontSize = await timerDigits.evaluate((element) =>
+      parseInt(getComputedStyle(element).fontSize, 10),
     )
-    // Materially larger than 24px
     expect(fontSize).toBeGreaterThanOrEqual(28)
 
-    // Geometry check: no overlap at 375x667
-    const qBox = await playerHeading.boundingBox()
+    const answerCount = playerPage
+      .getByTestId("stage-hud-answer-counter")
+      .locator("..")
+    await expect(answerCount).toBeVisible()
+    const qBox = await showQuestion.boundingBox()
     const tBox = await playerTimer.boundingBox()
+    const answerCountBox = await answerCount.boundingBox()
     const firstCardBox = await playerPage
-      .locator('[data-testid^="photo-card-choice-"]')
-      .first()
+      .getByTestId("photo-card-choice-0")
       .boundingBox()
     expect(qBox).not.toBeNull()
     expect(tBox).not.toBeNull()
+    expect(answerCountBox).not.toBeNull()
     expect(firstCardBox).not.toBeNull()
     expect(tBox!.y).toBeGreaterThanOrEqual(qBox!.y + qBox!.height - 5)
     expect(firstCardBox!.y).toBeGreaterThanOrEqual(tBox!.y + tBox!.height - 5)
+    expect(answerCountBox!.y).toBeGreaterThanOrEqual(qBox!.y + qBox!.height)
+    expect(firstCardBox!.y).toBeGreaterThanOrEqual(
+      answerCountBox!.y + answerCountBox!.height - 5,
+    )
 
     // Capture (4) Player answersOnly Question & Big Timer (375x667)
     await saveScreenshot(
@@ -216,47 +253,10 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
       "04_player_answers_only_question_big_timer_375.png",
     )
 
-    // Verify 5 Photo Cards rendered DURING voting on Spectator
-    const spectatorCards = spectatorPage.locator(
-      '[data-testid^="photo-card-choice-"]',
-    )
-    await expect(spectatorCards).toHaveCount(5)
-
-    // Verify badge numbers 1 to 5
-    for (let i = 1; i <= 5; i += 1) {
-      await expect(
-        spectatorPage.getByText(String(i), { exact: true }).first(),
-      ).toBeVisible()
-    }
-
-    // FIX A verification: Solid opaque answer-colour cards & artwork frame
-    for (let i = 0; i < 5; i += 1) {
-      const card = spectatorPage.locator(
-        `[data-testid="photo-card-choice-${i}"]`,
-      )
-      const cardBg = await card.evaluate(
-        (el) => window.getComputedStyle(el).backgroundColor,
-      )
-      expect(cardBg).toBe(EXPECTED_COLORS[i])
-      expect(cardBg).not.toContain("rgba")
-
-      // Artwork frame/padding background must also match solid canonical colour
-      const frameBg = await card
-        .locator('[data-testid^="photo-card-image-"]')
-        .locator("..")
-        .evaluate((el) => window.getComputedStyle(el).backgroundColor)
-      expect(frameBg).toBe(EXPECTED_COLORS[i])
-      expect(frameBg).not.toContain("rgba")
-
-      // Check image loaded complete
-      const img = card.locator(`[data-testid="photo-card-image-${i}"]`)
-      const isComplete = await img.evaluate(
-        (el) =>
-          (el as HTMLImageElement).complete &&
-          (el as HTMLImageElement).naturalWidth > 0,
-      )
-      expect(isComplete).toBe(true)
-    }
+    // The native host/projector and responsive participant retain the same five
+    // original labels, images and option order. Palette checks apply to the
+    // responsive PhotoCardGrid; the native theme keeps its own authored design.
+    await expect(nativeTzilaCards(spectatorPage)).toHaveCount(5)
 
     // Capture (1) Host Question with 5 Solid Image Cards (1920)
     await managerPage.setViewportSize({ width: 1920, height: 1080 })
@@ -288,36 +288,51 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     expect(scrollHeight1024).toBeLessThanOrEqual(clientHeight1024 + 10)
     await spectatorPage.setViewportSize({ width: 1920, height: 1080 })
 
+    await setTzilaPaused(managerPage, false)
+
     // 5. End Timer to Reveal Results directly on the authored interimResults scene (Single Reveal)
     await endTimer(managerPage)
 
-    // Verify interimResults scene on Spectator immediately after voting ends (Gate B: exactly one reveal)
-    const interimOptionRows = spectatorPage.locator(
-      '[data-testid="interim-option-row"]',
-    )
-    await expect(interimOptionRows.first()).toBeVisible({ timeout: 15_000 })
-
-    // FIX B verification in interimResults scene: hero plus ranked hierarchy
-    const interimWinner = spectatorPage.locator(
-      '[data-testid="interim-option-row"][data-winner="true"]',
-    )
-    await expect(interimWinner).toBeVisible()
-    await expect(interimWinner).toContainText("Doctor")
-    await expect(interimWinner).toContainText("2 votes")
+    await assertNativeTzilaResult({
+      page: spectatorPage,
+      questionIndex: 0,
+      counts: [0, 1, 0, 0, 2],
+    })
+    await assertNativeTzilaResult({
+      page: managerPage,
+      questionIndex: 0,
+      counts: [0, 1, 0, 0, 2],
+    })
+    await playerPage.setViewportSize({ width: 1280, height: 800 })
+    await assertResponsiveTzilaResult({
+      page: playerPage,
+      questionIndex: 0,
+      counts: [0, 1, 0, 0, 2],
+    })
+    const interimWinner = playerPage
+      .getByTestId("interim-option-row")
+      .filter({ has: playerPage.getByText("Doctor", { exact: true }) })
     const interimWinnerBox = await interimWinner.boundingBox()
     expect(interimWinnerBox).not.toBeNull()
-
-    const interimRunners = spectatorPage.locator(
-      '[data-testid="interim-option-row"][data-winner="false"]',
-    )
+    const interimRunners = playerPage
+      .getByTestId("interim-option-row")
+      .and(playerPage.locator('[data-winner="false"]'))
     await expect(interimRunners).toHaveCount(4)
-    const firstInterimRunnerBox = await interimRunners.first().boundingBox()
+    const firstRunner = interimRunners.filter({
+      has: playerPage.getByText("Working Girl", { exact: true }),
+    })
+    await expect(firstRunner).toHaveCount(1)
+    const firstInterimRunnerBox = await firstRunner.boundingBox()
     expect(firstInterimRunnerBox).not.toBeNull()
     expect(interimWinnerBox!.width * interimWinnerBox!.height).toBeGreaterThan(
       1.8 * firstInterimRunnerBox!.width * firstInterimRunnerBox!.height,
     )
     expect(firstInterimRunnerBox!.y).toBeGreaterThanOrEqual(
       interimWinnerBox!.y + interimWinnerBox!.height - 30,
+    )
+    await saveScreenshot(
+      playerPage,
+      "responsive_player_results_hero_plus_ranked_1280.png",
     )
 
     // Capture (6) Manager Results Hero Plus Ranked (1280)
@@ -352,13 +367,14 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
         name: t("extensions:host.endTimer"),
       }),
     ).toBeVisible({ timeout: 15_000 })
-    await expect(
-      spectatorPage.locator('[data-testid^="photo-card-choice-"]'),
-    ).toHaveCount(5, { timeout: 20_000 })
+    await expect(nativeTzilaCards(spectatorPage)).toHaveCount(5, {
+      timeout: 20_000,
+    })
 
     // Vote 1 for option 0 (Nun), Vote 1 for option 2 (Queen Elizabeth) concurrently (Tie scenario)
     await Promise.all([
       spectatorPage.request.post(socketApiUrl, {
+        headers: { "x-tada-pilot-secret": TZILA_PILOT_SECRET },
         data: {
           action: "answer",
           gameId,
@@ -368,6 +384,7 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
         },
       }),
       spectatorPage.request.post(socketApiUrl, {
+        headers: { "x-tada-pilot-secret": TZILA_PILOT_SECRET },
         data: {
           action: "answer",
           gameId,
@@ -381,16 +398,16 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     // End timer for Q2 -> transitions immediately to interimResults scene with tie
     await endTimer(managerPage)
 
-    // Verify Tie in interimResults scene: spotlight tie and exactly 2 co-winners
-    await expect(
-      spectatorPage.locator('[data-testid="spotlight-tie"]'),
-    ).toBeVisible({ timeout: 15_000 })
-
-    await expect(
-      spectatorPage.locator(
-        '[data-testid="interim-option-row"][data-winner="true"]',
-      ),
-    ).toHaveCount(2)
+    await assertNativeTzilaResult({
+      page: spectatorPage,
+      questionIndex: 1,
+      counts: [1, 0, 1, 0, 0],
+    })
+    await assertResponsiveTzilaResult({
+      page: playerPage,
+      questionIndex: 1,
+      counts: [1, 0, 1, 0, 0],
+    })
 
     // Capture (9) Interim Results First Place Tie (1280)
     await spectatorPage.setViewportSize({ width: 1280, height: 800 })
@@ -411,20 +428,23 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
         name: t("extensions:host.endTimer"),
       }),
     ).toBeVisible({ timeout: 15_000 })
-    await expect(
-      spectatorPage.locator('[data-testid^="photo-card-choice-"]'),
-    ).toHaveCount(5, { timeout: 20_000 })
+    await expect(nativeTzilaCards(spectatorPage)).toHaveCount(5, {
+      timeout: 20_000,
+    })
 
     // Cast NO votes, immediately end timer
     await endTimer(managerPage)
 
-    // Verify zero votes neutral state: no fake winner hero
-    await expect(spectatorPage.locator('[data-winner="true"]')).toHaveCount(0, {
-      timeout: 15_000,
+    await assertNativeTzilaResult({
+      page: spectatorPage,
+      questionIndex: 2,
+      counts: [0, 0, 0, 0, 0],
     })
-    await expect(
-      spectatorPage.getByText(/No votes yet|0 votes/i).first(),
-    ).toBeVisible()
+    await assertResponsiveTzilaResult({
+      page: playerPage,
+      questionIndex: 2,
+      counts: [0, 0, 0, 0, 0],
+    })
 
     // Capture (10) Zero Votes No Winner (1280)
     await spectatorPage.setViewportSize({ width: 1280, height: 800 })
@@ -466,25 +486,22 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     })
     const playerPage = await playerContext.newPage()
     await joinGame(playerPage, pin, "Alice")
-    await expect(
-      managerPage.getByRole("button", { name: /1 \/ 1 Players/i }),
-    ).toBeVisible()
+    await expect(managerPage.getByTestId("host-connected-counter")).toHaveText(
+      /^1(?:\s*\/\s*1)?$/u,
+    )
 
     // 3. Start Game from Host
     await startGame(managerPage)
 
-    // Wait for Opening Scene
-    await expect(
-      spectatorPage.getByRole("heading", { name: "Build Our Story!" }),
-    ).toBeVisible({ timeout: 15_000 })
-    await expect(
-      managerPage.getByRole("heading", { name: "Build Our Story!" }),
-    ).toBeVisible({ timeout: 15_000 })
+    // The timeline keeps the authored name; Classic owns its native bookend preset.
+    await assertTzilaOpening({
+      manager: managerPage,
+      player: playerPage,
+      spectator: spectatorPage,
+    })
 
     // Advance from Show Opening Scene to Question 1
-    const advanceBtn = managerPage.getByRole("button", {
-      name: /Advance Scene/i,
-    })
+    const advanceBtn = managerPage.getByTestId("host-next-screen-btn")
     await expect(advanceBtn).toBeVisible({ timeout: 10_000 })
     await advanceBtn.click()
 
@@ -518,6 +535,7 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
 
     // Initial Q1 vote: Caller 1 & 2 vote for Doctor (key 5 -> index 4)
     const vote1 = await spectatorPage.request.post(socketApiUrl, {
+      headers: { "x-tada-pilot-secret": TZILA_PILOT_SECRET },
       data: {
         action: "answer",
         gameId,
@@ -529,6 +547,7 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     expect(((await vote1.json()) as { accepted: boolean }).accepted).toBe(true)
 
     const vote2 = await spectatorPage.request.post(socketApiUrl, {
+      headers: { "x-tada-pilot-secret": TZILA_PILOT_SECRET },
       data: {
         action: "answer",
         gameId,
@@ -541,12 +560,16 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
 
     // End timer on Q1 -> Doctor wins with 2 votes
     await endTimer(managerPage)
-    await expect(spectatorPage.locator('[data-winner="true"]')).toBeVisible({
-      timeout: 15_000,
+    await assertNativeTzilaResult({
+      page: spectatorPage,
+      questionIndex: 0,
+      counts: [0, 0, 0, 0, 2],
     })
-    const winnerCardInitial = spectatorPage.locator('[data-winner="true"]')
-    await expect(winnerCardInitial).toContainText("Doctor")
-    await expect(winnerCardInitial).toContainText("2 votes")
+    await assertResponsiveTzilaResult({
+      page: playerPage,
+      questionIndex: 0,
+      counts: [0, 0, 0, 0, 2],
+    })
 
     // 4. Host uses visible Previous Screen button from Q1 results to reopen Question 1 for a fresh vote!
     const prevBtn = managerPage.locator(
@@ -559,11 +582,8 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     const confirmBtn = managerPage.locator(
       '[data-testid="confirm-reopen-question-btn"]',
     )
-    const hasConfirm = await confirmBtn.isVisible().catch(() => false)
-
-    if (hasConfirm) {
-      await confirmBtn.click()
-    }
+    await expect(confirmBtn).toBeVisible()
+    await confirmBtn.click()
 
     // Question 1 is reopened for a fresh vote!
     await expect(spectatorPage.getByText(q1Title)).toBeVisible({
@@ -581,11 +601,19 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     ).toBeVisible({ timeout: 15_000 })
 
     // Verify 5 Photo Cards rendered, old visual winner is cleared (0 winner cards)
-    const reopenedCards = spectatorPage.locator(
-      '[data-testid^="photo-card-choice-"]',
-    )
+    const reopenedCards = nativeTzilaCards(spectatorPage)
     await expect(reopenedCards).toHaveCount(5, { timeout: 20_000 })
-    await expect(spectatorPage.locator('[data-winner="true"]')).toHaveCount(0)
+    await expect(
+      nativeTzilaCards(spectatorPage).and(
+        spectatorPage.locator(".is-favourite"),
+      ),
+    ).toHaveCount(0)
+    const reopenedSeconds = await readVotingSeconds({
+      page: spectatorPage,
+      surface: "native",
+    })
+    expect(reopenedSeconds).toBeGreaterThan(0)
+    expect(reopenedSeconds).toBeLessThanOrEqual(20)
 
     // Capture (11) Reopened Question No Stale Winner
     await spectatorPage.setViewportSize({ width: 1280, height: 800 })
@@ -598,6 +626,7 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     // 5. Submit REVOTE via DTMF:
     // Working Girl (key 2 -> index 1)
     const revote1 = await spectatorPage.request.post(socketApiUrl, {
+      headers: { "x-tada-pilot-secret": TZILA_PILOT_SECRET },
       data: {
         action: "answer",
         gameId,
@@ -612,6 +641,7 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     )
 
     const revote2 = await spectatorPage.request.post(socketApiUrl, {
+      headers: { "x-tada-pilot-secret": TZILA_PILOT_SECRET },
       data: {
         action: "answer",
         gameId,
@@ -628,13 +658,16 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     // End timer for revoted Q1
     await endTimer(managerPage)
 
-    // Verify new results: Working Girl is now the winner with 2 votes!
-    await expect(spectatorPage.locator('[data-winner="true"]')).toBeVisible({
-      timeout: 15_000,
+    await assertNativeTzilaResult({
+      page: spectatorPage,
+      questionIndex: 0,
+      counts: [0, 2, 0, 0, 0],
     })
-    const newWinnerCard = spectatorPage.locator('[data-winner="true"]')
-    await expect(newWinnerCard).toContainText("Working Girl")
-    await expect(newWinnerCard).toContainText("2 votes")
+    await assertResponsiveTzilaResult({
+      page: playerPage,
+      questionIndex: 0,
+      counts: [0, 2, 0, 0, 0],
+    })
 
     await playerContext.close()
     await spectatorContext.close()

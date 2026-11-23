@@ -159,8 +159,9 @@ describe("Theme Builder atomic bounded authoring", () => {
   it("bounds history and preserves the save fingerprint when editing after save begins", () => {
     let history = createBuilderHistory(builderDocumentFixture())
     const saving = builderDigest(history.present)
-    for (let i = 0; i < 60; i++)
+    for (let i = 0; i < 60; i += 1) {
       history = applyBuilderEdit(history, { type: "rename", name: `Edit ${i}` })
+    }
     expect(history.past).toHaveLength(50)
     expect(history.savedDigest).toBe(saving)
     expect(builderDigest(history.present)).not.toBe(saving)

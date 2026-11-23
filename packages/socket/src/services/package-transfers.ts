@@ -6,11 +6,16 @@ import {
   packageRuntimeSecret,
 } from "./package-installation"
 
-let store: PackageTransferStore | undefined
+let store: PackageTransferStore | undefined = undefined
 let root = ""
+
 export function packageTransfers() {
-  if (!packageInstallerEnabled()) throw new Error("Package installer disabled")
+  if (!packageInstallerEnabled()) {
+    throw new Error("Package installer disabled")
+  }
+
   const current = resolveConfigRoot()
+
   if (!store || root !== current) {
     store?.close()
     store = new PackageTransferStore(
@@ -19,5 +24,6 @@ export function packageTransfers() {
     )
     root = current
   }
+
   return store
 }

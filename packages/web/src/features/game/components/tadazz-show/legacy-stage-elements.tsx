@@ -2,13 +2,14 @@ import NativeButton from "@razzia/web/components/Button"
 import { NativeAudioCuePlayer as AudioCuePlayer } from "./NativeAudioCuePlayer"
 import type { Player } from "@razzia/common/types/game"
 import { STATUS, type Status } from "@razzia/common/types/game/status"
-import type {
-  CardAudioOverrides,
-  CueId,
-  ExtensionStateEnvelope,
-  HostPresenceSnapshot,
-  QuizExtrasV1,
-  TeamDefinition,
+import {
+  isNativeFinaleContentPending,
+  type CardAudioOverrides,
+  type CueId,
+  type ExtensionStateEnvelope,
+  type HostPresenceSnapshot,
+  type QuizExtrasV1,
+  type TeamDefinition,
 } from "@razzia/extensions/core"
 import {
   TadazzAnimatedBackdrop,
@@ -129,8 +130,15 @@ export function LegacyStageAudio({
   const { t } = useTranslation()
   const themed = Boolean(extensionState && isTadazzShowActive(extensionState))
   const timerState = useRef<ThemeTimerEndState | null>(null)
+  const waitingForFinale = isNativeFinaleContentPending({
+    statusName,
+    presentationLaunch: extensionState?.extras.presentationLaunch,
+    activeTimelineStep: extensionState?.extras.activeTimelineStep,
+  })
   const audioPolicy = resolveTadazzAudioPolicy({
     statusName,
+    presentationLaunch: extensionState?.extras.presentationLaunch,
+    activeTimelineStep: extensionState?.extras.activeTimelineStep,
     extensionPhase: extensionState?.phase,
     sceneKind:
       currentSceneObj &&
@@ -195,7 +203,7 @@ export function LegacyStageAudio({
       {extensionState && (!manager || roomMediaReady) && (
         <AudioCuePlayer
           eventOnly={effectiveRole === "player"}
-          cueId={activePhaseCueId}
+          cueId={waitingForFinale ? undefined : activePhaseCueId}
           soundtrackSlot={audioPolicy.slot}
           continuityKey={audioPolicy.continuityKey}
           audioExtras={
@@ -206,15 +214,17 @@ export function LegacyStageAudio({
               CardAudioOverrides | undefined
           }
           sceneAudio={
-            (extensionState.extras.sceneAudio as
-              | {
-                  mode?: "inherit" | "mute" | "custom"
-                  cueId?: CueId
-                  url?: string
-                  volume?: number
-                  loop?: boolean
-                }
-              | undefined) ?? currentSceneObj?.audio
+            waitingForFinale
+              ? undefined
+              : ((extensionState.extras.sceneAudio as
+                  | {
+                      mode?: "inherit" | "mute" | "custom"
+                      cueId?: CueId
+                      url?: string
+                      volume?: number
+                      loop?: boolean
+                    }
+                  | undefined) ?? currentSceneObj?.audio)
           }
           gameId={extensionState.gameId}
           activeCardKey={activeCardKey}

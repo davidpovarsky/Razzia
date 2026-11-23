@@ -66,7 +66,16 @@ export function observePresentedFrame(
   onPresented: () => void,
 ): () => void {
   let stopped = false
-  let frame: number
+  let frame: number | undefined = undefined
+
+  function requirePresentedFrame(): number {
+    if (frame === undefined) {
+      throw new Error("Local state frame was read before initialization")
+    }
+
+    return frame
+  }
+
   const tick = () => {
     if (stopped) {
       return
@@ -86,7 +95,7 @@ export function observePresentedFrame(
   return () => {
     stopped = true
 
-    cancelAnimationFrame(frame)
+    cancelAnimationFrame(requirePresentedFrame())
   }
 }
 
@@ -133,7 +142,7 @@ export function observeQuestionPresentation(
       root.querySelectorAll(
         '[data-native-question-heading], [data-testid="native-razzia-question"], .q-text, .photo-question-head',
       ),
-    ).filter((heading) => Boolean(heading.textContent?.trim()))
+    ).filter((heading) => Boolean(heading.textContent.trim()))
 
     // A visible panel must never bypass a nonempty title's opacity-zero entrance.
     if (headings.length > 0) {

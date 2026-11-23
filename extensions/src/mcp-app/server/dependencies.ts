@@ -22,7 +22,9 @@ export interface VerifiedPrincipal {
   grantId: string
   accountId: string
   scopes: readonly string[]
-  expiresAt: number // Unix milliseconds, mapped by the trusted verifier.
+  // Unix milliseconds, mapped by the trusted verifier.
+
+  expiresAt: number
   active: true
   accountsEnabled: true
 }

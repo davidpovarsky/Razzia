@@ -10,7 +10,6 @@ import {
   readQuizz,
   saveQuizz,
   seedQuizz,
-  selectOption,
   solutionPicker,
   switchSetting,
   toggleSolution,
@@ -18,6 +17,7 @@ import {
 import { expect, test } from "@razzia/e2e/utils/fixtures"
 import { t } from "@razzia/e2e/utils/i18n"
 import fs from "fs"
+import type { Page } from "@playwright/test"
 
 const PNG = Buffer.from(
   "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
@@ -25,6 +25,22 @@ const PNG = Buffer.from(
 )
 
 const uniqueSubject = (name: string) => `${name} ${Date.now()}`
+
+const headerCardTypeBar = (page: Page) =>
+  page.locator('[data-testid="studio-card-type-bar"][data-embedded="false"]')
+
+const openQuestionSettings = async (page: Page) => {
+  await page.getByTestId("editor-panel-toggle-settings").click()
+  const panel = page.getByTestId("editor-panel-settings")
+  await expect(panel).toBeVisible()
+
+  return panel
+}
+
+const closeQuestionSettings = async (page: Page) => {
+  await page.getByTestId("editor-panel-close-settings").click()
+  await expect(page.getByTestId("editor-panel-settings")).toBeHidden()
+}
 
 test.beforeEach(async ({ page }) => {
   await openQuizzTab(page)
@@ -35,6 +51,7 @@ test("saves every question type and setting", async ({ page }) => {
 
   await page.getByRole("button", { name: t("manager:quizz.create") }).click()
   await page.getByPlaceholder(t("quizz:titleQuizzPlaceholder")).fill(subject)
+  await page.getByTestId("editor-mode-advanced").click()
 
   await page
     .getByPlaceholder(t("quizz:question.placeholder"))
@@ -46,7 +63,8 @@ test("saves every question type and setting", async ({ page }) => {
   await answerInput(page, 1).fill("Right")
   await toggleSolution(page, 1)
   await toggleSolution(page, 0)
-  await page
+  const settings = await openQuestionSettings(page)
+  await settings
     .getByRole("combobox", {
       name: t("quizz:question.config.categoryPlaceholder"),
     })
@@ -54,40 +72,44 @@ test("saves every question type and setting", async ({ page }) => {
   await numberSetting(page, t("quizz:question.config.maxPoints")).fill("500")
   await switchSetting(page, t("quizz:question.config.penalty")).click()
   await numberSetting(page, t("quizz:question.config.penalty")).fill("250")
-  await numberSetting(page, t("quizz:question.config.questionDisplay")).fill(
-    "4",
-  )
+  await expect(settings.getByTestId("system-question-lead-in")).toHaveText("2")
+  await expect(
+    settings.getByRole("spinbutton", {
+      name: t("quizz:question.config.questionDisplay"),
+      exact: true,
+    }),
+  ).toHaveCount(0)
   await switchSetting(page, t("quizz:question.config.answerTime")).click()
+  await closeQuestionSettings(page)
 
   await addQuestionCard(page)
   await page
     .getByPlaceholder(t("quizz:question.placeholder"))
     .fill("Multi question")
-  await selectOption(
-    page,
-    t("quizz:question.config.answerMode"),
-    t("quizz:questionType.multi"),
-  )
+  await openQuestionSettings(page)
+  await settings.getByTestId("answer-type-multi").click()
+  await closeQuestionSettings(page)
   await addAnswer(page)
   await answerInput(page, 0).fill("A")
   await answerInput(page, 1).fill("B")
   await answerInput(page, 2).fill("C")
   await toggleSolution(page, 2)
-  await selectOption(
-    page,
-    t("quizz:question.config.scoringMode"),
-    t("quizz:question.config.scoringMode.strict"),
-  )
+  await openQuestionSettings(page)
+  await settings
+    .getByRole("radio", {
+      name: t("quizz:question.config.scoringMode.strict"),
+      exact: true,
+    })
+    .click()
+  await closeQuestionSettings(page)
 
   await addQuestionCard(page)
   await page
     .getByPlaceholder(t("quizz:question.placeholder"))
     .fill("Estimation question")
-  await selectOption(
-    page,
-    t("quizz:question.config.answerMode"),
-    t("quizz:questionType.estimation"),
-  )
+  await openQuestionSettings(page)
+  await settings.getByTestId("answer-type-estimation").click()
+  await closeQuestionSettings(page)
   await page
     .getByRole("spinbutton", {
       name: t("quizz:question.config.estimation.max"),
@@ -103,11 +125,13 @@ test("saves every question type and setting", async ({ page }) => {
       name: t("quizz:question.estimation.correctAnswer"),
     })
     .fill("120")
-  await selectOption(
-    page,
-    t("quizz:question.config.estimation.inputMode"),
-    t("quizz:question.config.estimation.inputModes.input"),
-  )
+  await openQuestionSettings(page)
+  await settings
+    .getByRole("radio", {
+      name: t("quizz:question.config.estimation.inputModes.input"),
+      exact: true,
+    })
+    .click()
   await numberSetting(page, t("quizz:question.config.estimation.step")).fill(
     "5",
   )
@@ -115,6 +139,7 @@ test("saves every question type and setting", async ({ page }) => {
     "20",
   )
 
+  await closeQuestionSettings(page)
   await saveQuizz(page)
 
   expect(readQuizz(subject)).toMatchObject({
@@ -129,7 +154,7 @@ test("saves every question type and setting", async ({ page }) => {
         category: "Round 1",
         maxPoints: 500,
         penalty: 250,
-        cooldown: 4,
+        cooldown: 2,
         time: -1,
       },
       {
@@ -153,19 +178,27 @@ test("hides the scoring settings in survey mode", async ({ page }) => {
 
   await page.getByRole("button", { name: t("manager:quizz.create") }).click()
   await page.getByPlaceholder(t("quizz:titleQuizzPlaceholder")).fill(subject)
-  await page.getByRole("radio", { name: t("quizz:gameMode.survey") }).click()
+  await page.getByTestId("editor-mode-advanced").click()
+  const settings = await openQuestionSettings(page)
+  await expect(
+    settings.getByRole("heading", { name: t("quizz:question.config.scoring") }),
+  ).toBeVisible()
+  await closeQuestionSettings(page)
+  await headerCardTypeBar(page).getByTestId("toggle-kind-survey").click()
+  await openQuestionSettings(page)
 
   await expect(solutionPicker(page, 0)).toHaveCount(0)
   await expect(solutionPicker(page, 1)).toHaveCount(0)
   await expect(
-    page.getByRole("heading", { name: t("quizz:question.config.scoring") }),
+    settings.getByRole("heading", { name: t("quizz:question.config.scoring") }),
   ).toBeHidden()
   await expect(
-    page.getByRole("combobox", {
+    settings.getByRole("combobox", {
       name: t("quizz:question.config.categoryPlaceholder"),
     }),
   ).toBeHidden()
 
+  await closeQuestionSettings(page)
   await page
     .getByPlaceholder(t("quizz:question.placeholder"))
     .fill("Favorite color?")
@@ -304,13 +337,19 @@ test("attaches an uploaded image to a question", async ({ page }) => {
   await answerInput(page, 0).fill("A pixel")
   await answerInput(page, 1).fill("A cat")
 
-  await page.locator("input[type=file]").setInputFiles({
+  await page.getByTestId("editor-panel-toggle-media").click()
+  const mediaPanel = page.getByTestId("editor-panel-media")
+  await expect(mediaPanel).toBeVisible()
+  await mediaPanel.locator("input[type=file]").setInputFiles({
     name: "pixel.png",
     mimeType: "image/png",
     buffer: PNG,
   })
 
-  await expect(page.getByRole("img", { name: "Question Media" })).toBeVisible()
+  await expect(
+    mediaPanel.getByRole("img", { name: "What is this image?", exact: true }),
+  ).toBeVisible()
+  await page.getByTestId("editor-panel-close-media").click()
   await saveQuizz(page)
 
   expect(readQuizz(subject)?.questions[0].media).toMatchObject({
@@ -386,15 +425,20 @@ test("restores the quiz settings when switching back from survey", async ({
   await toggleSolution(page, 1)
   await toggleSolution(page, 0)
 
-  await page.getByRole("radio", { name: t("quizz:gameMode.survey") }).click()
+  await page.getByTestId("editor-mode-advanced").click()
+  await headerCardTypeBar(page).getByTestId("toggle-kind-survey").click()
+  const settings = await openQuestionSettings(page)
   await expect(
-    page.getByRole("heading", { name: t("quizz:question.config.scoring") }),
+    settings.getByRole("heading", { name: t("quizz:question.config.scoring") }),
   ).toBeHidden()
-  await page.getByRole("radio", { name: t("quizz:gameMode.quiz") }).click()
+  await closeQuestionSettings(page)
+  await headerCardTypeBar(page).getByTestId("toggle-kind-quiz").click()
+  await openQuestionSettings(page)
 
   await expect(
-    page.getByRole("heading", { name: t("quizz:question.config.scoring") }),
+    settings.getByRole("heading", { name: t("quizz:question.config.scoring") }),
   ).toBeVisible()
+  await closeQuestionSettings(page)
   await expect(solutionPicker(page, 1)).toHaveAttribute("aria-pressed", "true")
   await saveQuizz(page)
 
@@ -425,8 +469,17 @@ test("keeps the number settings within their limits", async ({ page }) => {
   await answerInput(page, 0).fill("A")
   await answerInput(page, 1).fill("B")
 
+  await page.getByTestId("editor-mode-advanced").click()
+  const settings = await openQuestionSettings(page)
+  await expect(settings.getByTestId("system-question-lead-in")).toHaveText("2")
+  await expect(
+    settings.getByRole("spinbutton", {
+      name: t("quizz:question.config.questionDisplay"),
+      exact: true,
+    }),
+  ).toHaveCount(0)
+
   const fields = [
-    [t("quizz:question.config.questionDisplay"), "99", "15"],
     [t("quizz:question.config.answerTime"), "1", "5"],
     [t("quizz:question.config.maxPoints"), "-50", "0"],
   ] as const
@@ -443,10 +496,11 @@ test("keeps the number settings within their limits", async ({ page }) => {
     Promise.resolve(),
   )
 
+  await closeQuestionSettings(page)
   await saveQuizz(page)
 
   expect(readQuizz(subject)?.questions[0]).toMatchObject({
-    cooldown: 15,
+    cooldown: 2,
     time: 5,
     maxPoints: 0,
   })
@@ -456,6 +510,10 @@ test("uses original Studio controls for every card kind, keyboard navigation and
   page,
 }, info) => {
   await page.getByRole("button", { name: t("manager:quizz.create") }).click()
+  await page.getByTestId("editor-mode-advanced").click()
+  const kindBar = page.locator(
+    '[data-testid="studio-card-type-bar"][data-embedded="false"]',
+  )
   const kinds = [
     "quiz",
     "survey",
@@ -470,10 +528,10 @@ test("uses original Studio controls for every card kind, keyboard navigation and
     "answerRecap",
   ]
   for (const kind of kinds) {
-    await expect(page.getByTestId(`toggle-kind-${kind}`)).toBeVisible()
+    await expect(kindBar.getByTestId(`toggle-kind-${kind}`)).toBeVisible()
   }
-  const quiz = page.getByTestId("toggle-kind-quiz")
-  const survey = page.getByTestId("toggle-kind-survey")
+  const quiz = kindBar.getByTestId("toggle-kind-quiz")
+  const survey = kindBar.getByTestId("toggle-kind-survey")
   await quiz.focus()
   await quiz.press("ArrowRight")
   await expect(survey).toBeFocused()
@@ -485,9 +543,14 @@ test("uses original Studio controls for every card kind, keyboard navigation and
   await expect(quiz).toHaveAttribute("data-state", "on")
   for (const group of ["media", "effects", "show", "results"]) {
     await expect(
-      page.getByTestId(`toggle-group-divider-${group}`),
+      kindBar.getByTestId(`toggle-group-divider-${group}`),
     ).toBeVisible()
   }
+  await page.getByTestId("answer-mode-0-both").click()
+  await expect(page.getByTestId("answer-mode-0-both")).toHaveAttribute(
+    "data-state",
+    "on",
+  )
   const imageAction = page.getByTestId("answer-pick-image-0")
   expect(
     await imageAction.evaluate(

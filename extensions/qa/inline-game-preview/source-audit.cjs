@@ -15,13 +15,18 @@ const changed = [
 const allowed =
   /^(?:extensions\/src\/site\/components\/game-preview\/|extensions\/src\/site\/server\/game-preview\/|extensions\/qa\/inline-game-preview\/|docs\/extensions\/qa-evidence\/inline-game-preview-20261115\/|extensions\/src\/site\/tests\/(?:browser\/)?inline-game-preview[^/]*$|extensions\/src\/site\/web\/marketing\/(?:Catalogue|MarketingSite)\.tsx$|extensions\/src\/site\/web\/studio\/(?:GameCard|MyGames)\.tsx$|extensions\/src\/site\/components\/HoverDevTiltCard\.tsx$|extensions\/site-assets\/(?:marketing|studio)\.css$)/
 const denied = changed.filter((name) => !allowed.test(name))
-if (denied.length) throw Error(`Outside A task lease: ${denied.join(", ")}`)
+
+if (denied.length) {
+  throw Error(`Outside A task lease: ${denied.join(", ")}`)
+}
+
 const sourceFiles = changed.filter(
   (name) => /\.(?:ts|tsx|cjs|json)$/.test(name) && !name.startsWith("docs/"),
 )
 const files = Object.fromEntries(
   sourceFiles.map((name) => {
     const data = fs.readFileSync(name)
+
     return [name, { bytes: data.length, sha256: sha(data) }]
   }),
 )
@@ -45,7 +50,11 @@ const freeze = JSON.parse(
 const inherited = inheritedNames.map((name) => {
   const current = sha(fs.readFileSync(name))
   const baseline = sha(cp.execFileSync("git", ["show", `${base}:${name}`]))
-  if (current !== baseline) throw Error(`Protected base modified: ${name}`)
+
+  if (current !== baseline) {
+    throw Error(`Protected base modified: ${name}`)
+  }
+
   return {
     path: name,
     currentSha256: current,

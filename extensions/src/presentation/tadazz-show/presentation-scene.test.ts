@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 import {
   buildReveal,
   computeShowScene,
+  isShowSceneContentPending,
   isTadazzShowActive,
   isTadazzV4Active,
   leaderboardEntries,
@@ -13,6 +14,7 @@ import {
 import {
   collapseForResume,
   planTransition,
+  usesSharedScenePresenter,
   type StageStep,
 } from "./show-director"
 
@@ -59,6 +61,95 @@ const answers = [
 ]
 
 describe("computeShowScene — every Razzia status maps to a TADAZZ screen", () => {
+  it("holds an authored finale while the closing envelope precedes final status", () => {
+    const closing = envelope(
+      {
+        currentScene: { id: "last", kind: "animation", preset: "grand-finale" },
+        activeTimelineStep: {
+          kind: "animation",
+          sceneId: "last",
+          stepIndex: 1,
+        },
+        presentationLaunch: { stage: "running", startedAt: null },
+      },
+      { phase: "scene" },
+    )
+    const previous = computeShowScene(base({ envelope: closing }))
+    expect(previous.kind).toBe("scene")
+    for (const stage of ["closing", "closed"]) {
+      for (const role of ["manager", "spectator", "player"] as const) {
+        const next = computeShowScene(
+          base({
+            role,
+            envelope: envelope(
+              { presentationLaunch: { stage, startedAt: 1000 } },
+              { phase: "responses", epoch: 4 },
+            ),
+            status: {
+              name: "SHOW_RESPONSES",
+              data: { question: "Previous question", answers, responses: {} },
+            },
+          }),
+        )
+        expect(isShowSceneContentPending(next)).toBe(true)
+        expect(
+          planTransition(previous, next, { mode: "finale", questionKey: null }),
+        ).toEqual([])
+      }
+    }
+    const finished = computeShowScene(
+      base({
+        envelope: envelope({
+          presentationLaunch: { stage: "closed", startedAt: 1000 },
+        }),
+        status: {
+          name: "FINISHED",
+          data: { top: [{ username: "Winner", points: 10 }] },
+        },
+      }),
+    )
+    expect(finished).toMatchObject({
+      kind: "finale",
+      winner: { name: "Winner", score: 10 },
+    })
+  })
+
+  it("ignores an old closing launch when an active question is authoritative", () => {
+    const scene = computeShowScene(
+      base({
+        envelope: envelope({
+          activeTimelineStep: { kind: "question", questionId: QID },
+          presentationLaunch: { stage: "closed", startedAt: 1000 },
+        }),
+        status: {
+          name: "SHOW_QUESTION",
+          data: { question: "Current question", totalAnswers: 3 },
+        },
+      }),
+    )
+    expect(scene.kind).toBe("question")
+    expect(isShowSceneContentPending(scene)).toBe(false)
+  })
+
+  it("does not retain a finished scene after replay or a new game resumes", () => {
+    for (const gameId of ["g1", "new-game"]) {
+      const resumed = computeShowScene(
+        base({
+          envelope: envelope(
+            { presentationLaunch: { stage: "running", startedAt: null } },
+            { gameId },
+          ),
+          status: {
+            name: "SHOW_QUESTION",
+            data: { question: "Replay", totalAnswers: 3 },
+          },
+        }),
+      )
+      expect(resumed.kind).toBe("question")
+      expect(isShowSceneContentPending(resumed)).toBe(false)
+    }
+  })
+
   it("maps SELECT_ANSWER with real answers + answerVisuals by answerIndex and server time", () => {
     const scene = computeShowScene(
       base({
@@ -378,6 +469,72 @@ describe("activation and backdrop priority", () => {
 })
 
 describe("planTransition — the ten reference methods are driven by real events", () => {
+  it.each([
+    {
+      kind: "media",
+      mediaType: "audio" as const,
+      mediaUrl: "/media/owned.mp3",
+    },
+    { kind: "animation", preset: "confetti", lottieUrl: "/media/owned.json" },
+  ])(
+    "keeps authored $kind content on the shared presenter through live scene resolution",
+    (authored) => {
+      for (const role of ["manager", "spectator"] as const) {
+        const scene = computeShowScene(
+          base({
+            role,
+            envelope: envelope(
+              {
+                currentScene: {
+                  id: "authored",
+                  title: "Authored media",
+                  ...authored,
+                },
+                activeTimelineStep: {
+                  kind: authored.kind,
+                  sceneId: "authored",
+                  stepIndex: 1,
+                },
+              },
+              { phase: "scene" },
+            ),
+          }),
+        )
+        expect(scene.kind).toBe("scene")
+
+        if (scene.kind !== "scene") {
+          throw new Error("The authored scene was not resolved")
+        }
+
+        expect(scene.scene).toMatchObject(authored)
+        expect(usesSharedScenePresenter(scene.scene)).toBe(true)
+        expect(
+          planTransition(null, scene, { mode: "idle", questionKey: null }),
+        ).toEqual([{ op: "custom" }])
+      }
+    },
+  )
+
+  it.each([
+    {
+      kind: "media",
+      mediaType: "image" as const,
+      mediaUrl: "/media/photo.png",
+    },
+    {
+      kind: "media",
+      mediaType: "video" as const,
+      mediaUrl: "/media/movie.mp4",
+    },
+    { kind: "animation", preset: "confetti" },
+    { kind: "animation", preset: "round-one", lottieUrl: "/media/owned.json" },
+  ])(
+    "retains the native image, video and preset owner for $kind/$preset/$mediaType",
+    (scene) => {
+      expect(usesSharedScenePresenter(scene)).toBe(false)
+    },
+  )
+
   it("shows an authored Lottie instead of the generic spotlight without replacing Creating Worlds", () => {
     const stage = { mode: "idle" as const, questionKey: null }
     const scene = {
@@ -504,6 +661,99 @@ describe("planTransition — the ten reference methods are driven by real events
     expect(ops(steps)).toEqual(["showLeaderboard", "hold", "updateLeaderboard"])
   })
 
+  it.each(["idle", "leaderboard"] as const)(
+    "keeps the authored leaderboard title when the stage is %s",
+    (mode) => {
+      const steps = planTransition(
+        null,
+        {
+          kind: "scene",
+          key: "authored-leaderboard",
+          scene: { kind: "leaderboard", title: "Mid-Game Leaderboard" },
+          activeSceneData: {
+            leaderboard: {
+              entries: [{ rank: 1, displayName: "Alice", points: 850 }],
+            },
+          },
+        },
+        { questionKey: null, mode },
+      )
+      expect(steps).toEqual([
+        {
+          op: mode === "leaderboard" ? "updateLeaderboard" : "showLeaderboard",
+          entries: [{ id: "rank:Alice", name: "Alice", score: 850 }],
+          title: "Mid-Game Leaderboard",
+        },
+      ])
+    },
+  )
+
+  it("reveals the authored interim title on the existing question", () => {
+    const steps = planTransition(
+      null,
+      {
+        kind: "scene",
+        key: "authored-interim",
+        scene: { kind: "interimResults", title: "Audience Poll Overview" },
+        activeSceneData: {
+          interimResults: {
+            sourceQuestionId: "poll",
+            questionText: "Which color?",
+            totalResponders: 2,
+            options: [
+              { answerIndex: 0, label: "Red", count: 1, percentage: 50 },
+              { answerIndex: 1, label: "Blue", count: 1, percentage: 50 },
+            ],
+            winners: [0, 1],
+            isTie: true,
+          },
+        },
+      },
+      { questionKey: "Which color?#poll", mode: "voting" },
+    )
+    expect(ops(steps)).toEqual([
+      "presentOptions",
+      "lockVoting",
+      "revealResults",
+    ])
+    expect(steps[0]).toMatchObject({
+      question: { key: "Which color?#poll", question: "Which color?" },
+    })
+    expect(steps[2]).toEqual({
+      op: "revealResults",
+      reveal: {
+        title: "Audience Poll Overview",
+        counts: [1, 1],
+        percentages: [50, 50],
+        mode: "survey",
+      },
+    })
+  })
+
+  it("keeps an untitled authored leaderboard eligible for the canonical heading", () => {
+    const steps = planTransition(
+      null,
+      {
+        kind: "scene",
+        key: "untitled-leaderboard",
+        scene: { kind: "leaderboard" },
+        activeSceneData: {
+          leaderboard: {
+            entries: [{ rank: 1, displayName: "Alice", points: 850 }],
+          },
+        },
+      },
+      { questionKey: null, mode: "leaderboard" },
+    )
+    expect(steps).toEqual([
+      {
+        op: "updateLeaderboard",
+        entries: [{ id: "rank:Alice", name: "Alice", score: 850 }],
+        title: undefined,
+      },
+    ])
+  })
+
   it("prepared after a question uses playZZWipe; finale uses showFinale; authored opening without media uses showIntro", () => {
     const results = {
       kind: "results" as const,
@@ -574,6 +824,97 @@ describe("planTransition — the ten reference methods are driven by real events
     expect(
       isTadazzV4Active(envelope({ defaults: { motionKit: "goldy-20261105" } })),
     ).toBe(false)
+  })
+
+  it("planTransition preserves authored recap title and subtitle for answer and preset scenes", () => {
+    const authored = {
+      title: "Cumulative Show Answer Recap",
+      subtitle: "Survey and quiz highlights",
+    }
+    const answerSteps = planTransition(
+      null,
+      {
+        kind: "scene",
+        key: "authored-answer-recap",
+        scene: {
+          kind: "answerRecap",
+          ...authored,
+          recapItems: [{ label: "Choice A", image: "/imgA.png" }],
+        },
+      },
+      { questionKey: null, mode: "idle" },
+    )
+    expect(answerSteps).toEqual([
+      {
+        op: "showRoundRecap",
+        ...authored,
+        winners: [{ label: "Choice A", image: "/imgA.png", alt: "Choice A" }],
+      },
+    ])
+
+    const previewSteps = planTransition(
+      null,
+      {
+        kind: "scene",
+        key: "editor-answer-recap",
+        scene: { kind: "answerRecap", title: authored.title },
+        activeSceneData: {
+          answerRecap: {
+            ...authored,
+            totalQuestionsInRange: 1,
+            completedQuestionsCount: 0,
+            mode: "correctAnswer",
+            maxItemsPerPage: 4,
+            showCounts: false,
+            showPercentages: false,
+            items: [
+              {
+                questionId: QID,
+                questionNumber: 1,
+                questionText: "An authored quiz question",
+                playMode: "quiz",
+                totalResponders: 0,
+                winningOptions: [
+                  {
+                    answerIndex: 0,
+                    label: "Choice A",
+                    count: 0,
+                    percentage: 0,
+                    imageUrl: "/imgA.png",
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      },
+      { questionKey: null, mode: "idle" },
+    )
+    expect(previewSteps).toEqual(answerSteps)
+    expect(
+      planTransition(
+        null,
+        {
+          kind: "scene",
+          key: "incomplete-editor-recap",
+          scene: { kind: "answerRecap", title: authored.title },
+        },
+        { questionKey: null, mode: "idle" },
+      ),
+    ).toEqual([{ op: "custom" }])
+
+    const presetSteps = planTransition(
+      null,
+      {
+        kind: "scene",
+        key: "authored-preset-recap",
+        scene: { kind: "animation", preset: "round-recap", ...authored },
+      },
+      { questionKey: null, mode: "idle" },
+    )
+    expect(presetSteps).toEqual([
+      { op: "showRoundRecap", ...authored, round: undefined, winners: [] },
+    ])
   })
 
   it("planTransition maps v4 timeline scenes: answerRecap, interlude, top-pick", () => {

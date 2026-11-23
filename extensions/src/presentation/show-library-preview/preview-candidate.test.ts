@@ -332,12 +332,12 @@ describe("silent preview candidate", () => {
     const metadata = derivePreviewStageMetadata(draft, plan, questionId)
     expect(metadata).toMatchObject({ ordinal: 1, totalQuestions: 5 })
     expect(() =>
-      assertBoundPreviewStageMetadata(
+      assertBoundPreviewStageMetadata({
         draft,
         plan,
-        questionId,
-        structuredClone(metadata),
-      ),
+        currentQuestionId: questionId,
+        metadata: structuredClone(metadata),
+      }),
     ).toThrow()
   })
 
@@ -395,16 +395,23 @@ describe("silent preview candidate", () => {
       responders: 0,
       eligible: 0,
     }
-    const output = projectedFrame(
+    const output = projectedFrame({
       snapshot,
-      draft.input.context,
+      context: draft.input.context,
       binding,
       metadata,
-      1,
-      20,
-    )
+      revision: 1,
+      expectedSeconds: 20,
+    })
     expect(() =>
-      projectedFrame(snapshot, draft.input.context, binding, metadata, 1, 21),
+      projectedFrame({
+        snapshot,
+        context: draft.input.context,
+        binding,
+        metadata,
+        revision: 1,
+        expectedSeconds: 21,
+      }),
     ).toThrow("authored-duration-mismatch")
     expect(output.clock).toMatchObject({ elapsedMs: 20000, paused: true })
     expect(output.question).toMatchObject({
@@ -416,31 +423,38 @@ describe("silent preview candidate", () => {
       choices.map((c) => c.id),
     )
     expect(() =>
-      projectedFrame(
-        { ...snapshot, clock: { ...clock, elapsedMs: 1 } },
-        draft.input.context,
+      projectedFrame({
+        snapshot: { ...snapshot, clock: { ...clock, elapsedMs: 1 } },
+        context: draft.input.context,
         binding,
         metadata,
-        1,
-        20,
-      ),
+        revision: 1,
+        expectedSeconds: 20,
+      }),
     ).toThrow()
     expect(() =>
-      projectedFrame(
+      projectedFrame({
         snapshot,
-        draft.input.context,
+        context: draft.input.context,
         binding,
-        structuredClone(metadata),
-        1,
-        20,
-      ),
+        metadata: structuredClone(metadata),
+        revision: 1,
+        expectedSeconds: 20,
+      }),
     ).toThrow()
     const otherId = draft.input.identityMap.questions.find(
       (q) => q.authoredKey !== card.key,
     )!.previewId
     const other = derivePreviewStageMetadata(draft, plan, otherId)
     expect(() =>
-      projectedFrame(snapshot, draft.input.context, binding, other, 1, 20),
+      projectedFrame({
+        snapshot,
+        context: draft.input.context,
+        binding,
+        metadata: other,
+        revision: 1,
+        expectedSeconds: 20,
+      }),
     ).toThrow()
   })
 })

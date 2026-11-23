@@ -3,13 +3,17 @@ import { execFileSync } from "node:child_process"
 import { readFileSync } from "node:fs"
 import { test } from "node:test"
 import { AppBridge } from "../../src/mcp-app/node_modules/@modelcontextprotocol/ext-apps/dist/src/app-bridge.js"
-import type { NativePreviewCandidateMountV2, NativePreviewRendererInputV2 } from "../../src/core/show-library/native-preview-renderer-v2-schema"
+import type {
+  NativePreviewCandidateMountV2,
+  NativePreviewRendererInputV2,
+} from "../../src/core/show-library/native-preview-renderer-v2-schema"
 import { hashJson } from "../../src/mcp-app/contracts/canonical.ts"
 import {
   createWidgetBridgeCore,
   type AppTransport,
 } from "../../src/mcp-app/widget/bridge-core.ts"
 import { retainedPacket } from "./retained-schema.ts"
+import { synchronousPromise } from "../../src/core/synchronous-promise.ts"
 
 function loadRetainedPacket() {
   const raw: unknown = JSON.parse(
@@ -116,9 +120,7 @@ function cloneForRevision(
   return cloned
 }
 
-type ToolResult = Awaited<
-  ReturnType<NonNullable<AppBridge["oncalltool"]>>
->
+type ToolResult = Awaited<ReturnType<NonNullable<AppBridge["oncalltool"]>>>
 type TransportMessage = Parameters<NonNullable<AppTransport["send"]>>[0]
 
 function createTransportPair(): [AppTransport, AppTransport] {
@@ -126,7 +128,9 @@ function createTransportPair(): [AppTransport, AppTransport] {
     peer?: AppTransport
     closed?: boolean
   } => ({
-    async start() {},
+    async start() {
+      /* This synthetic transport is connected in memory and needs no startup work. */
+    },
     async close() {
       if (this.closed) {
         return
@@ -134,15 +138,18 @@ function createTransportPair(): [AppTransport, AppTransport] {
 
       this.closed = true
       this.onclose?.()
+
       if (this.peer && !(this.peer as { closed?: boolean }).closed) {
         await this.peer.close()
       }
     },
-    async send(message: TransportMessage) {
-      queueMicrotask(() => {
-        if (!this.closed) {
-          this.peer?.onmessage?.(message)
-        }
+    send(message: TransportMessage) {
+      return synchronousPromise(() => {
+        queueMicrotask(() => {
+          if (!this.closed) {
+            this.peer?.onmessage?.(message)
+          }
+        })
       })
     },
   })
@@ -169,11 +176,13 @@ function deferred<T = unknown>() {
   return { promise, resolve, reject }
 }
 
-async function createConnectedHarness(options: {
-  locale?: string
-  onCallTool?: AppBridge["oncalltool"]
-  onInitialized?: (host: AppBridge) => void | Promise<void>
-} = {}) {
+async function createConnectedHarness(
+  options: {
+    locale?: string
+    onCallTool?: AppBridge["oncalltool"]
+    onInitialized?: (host: AppBridge) => void | Promise<void>
+  } = {},
+) {
   const [appTransport, hostTransport] = createTransportPair()
   const contexts: unknown[] = []
   const mounts: Array<{
@@ -215,18 +224,16 @@ async function createConnectedHarness(options: {
       void Promise.resolve(options.onInitialized?.(host)).then(resolve)
     })
   })
+
   if (options.onCallTool) {
     host.oncalltool = options.onCallTool
   }
-  const widget = createWidgetBridgeCore(
-    (ctx) => contexts.push(ctx),
-    mount,
-    {
-      transport: appTransport,
-      appOptions: { autoResize: false },
-      isTopWindow: () => false,
-    },
-  )
+
+  const widget = createWidgetBridgeCore((ctx) => contexts.push(ctx), mount, {
+    transport: appTransport,
+    appOptions: { autoResize: false },
+    isTopWindow: () => false,
+  })
   const statuses: string[] = []
   widget.controller.subscribe(() => {
     statuses.push(widget.controller.snapshot().status)
@@ -252,32 +259,40 @@ async function createConnectedHarness(options: {
 }
 
 test("candidate-first handling on preview() avoids intermediate unavailable status", async () => {
-  const draftId = retainedEn.selection.draftId
-  const calls: Array<{ name: string; args: Record<string, unknown> | undefined }> =
-    []
+  const { draftId } = retainedEn.selection
+  const calls: Array<{
+    name: string
+    args: Record<string, unknown> | undefined
+  }> = []
   const h = await createConnectedHarness({
-    onCallTool: async ({ name, arguments: args }) => {
-      calls.push({ name, args })
-      if (name === "get_game_draft") {
-        return makeResult({
-          draftId,
-          revision: 1,
-          summary,
-          authoredShowJson: '{"title":"Original"}',
-        })
-      }
-      if (
-        name === "preview_game" &&
-        args?.draftId === draftId &&
-        args?.expectedRevision === 1 &&
-        args?.locale === "en"
-      ) {
-        return structuredClone(retainedEn.result)
-      }
+    onCallTool: (toolRequest) =>
+      synchronousPromise(() => {
+        const { name, arguments: args } = toolRequest
 
-      return makeConflict(2)
-    },
+        calls.push({ name, args })
+
+        if (name === "get_game_draft") {
+          return makeResult({
+            draftId,
+            revision: 1,
+            summary,
+            authoredShowJson: '{"title":"Original"}',
+          })
+        }
+
+        if (
+          name === "preview_game" &&
+          args?.draftId === draftId &&
+          args.expectedRevision === 1 &&
+          args.locale === "en"
+        ) {
+          return structuredClone(retainedEn.result)
+        }
+
+        return makeConflict(2)
+      }),
   })
+
   try {
     h.widget.controller.select(draftId)
     await h.widget.controller.refresh()
@@ -303,6 +318,7 @@ test("candidate-first handling on initial toolresult avoids intermediate unavail
       await host.sendToolResult(structuredClone(retainedEn.result))
     },
   })
+
   try {
     statusSnapshot = h.statuses.slice()
     assert.equal(h.widget.controller.snapshot().status, "candidate")
@@ -314,33 +330,38 @@ test("candidate-first handling on initial toolresult avoids intermediate unavail
 })
 
 test("non-candidate REVISION_CONFLICT and V1 ready preview_game responses are not clobbered to unavailable", async () => {
-  const draftId = retainedEn.selection.draftId
+  const { draftId } = retainedEn.selection
   let mode: "conflict" | "v1-ready" = "conflict"
   const h = await createConnectedHarness({
-    onCallTool: async ({ name }) => {
-      if (name === "get_game_draft") {
+    onCallTool: (toolRequest) =>
+      synchronousPromise(() => {
+        const { name } = toolRequest
+
+        if (name === "get_game_draft") {
+          return makeResult({
+            draftId,
+            revision: 1,
+            summary,
+            authoredShowJson: '{"title":"Original"}',
+          })
+        }
+
+        if (mode === "conflict") {
+          return makeConflict(4)
+        }
+
         return makeResult({
           draftId,
           revision: 1,
           summary,
-          authoredShowJson: '{"title":"Original"}',
+          previewVersion: 1,
+          rendererStatus: "ready",
+          projectionDigest: "a".repeat(64),
+          sbRegistryVersion: "1.0.0",
         })
-      }
-      if (mode === "conflict") {
-        return makeConflict(4)
-      }
-
-      return makeResult({
-        draftId,
-        revision: 1,
-        summary,
-        previewVersion: 1,
-        rendererStatus: "ready",
-        projectionDigest: "a".repeat(64),
-        sbRegistryVersion: "1.0.0",
-      })
-    },
+      }),
   })
+
   try {
     h.widget.controller.select(draftId)
     await h.widget.controller.refresh()
@@ -365,7 +386,7 @@ test("non-candidate REVISION_CONFLICT and V1 ready preview_game responses are no
 })
 
 test("duplicate in-flight preview() coalesces to a single preview_game tool call", async () => {
-  const draftId = retainedEn.selection.draftId
+  const { draftId } = retainedEn.selection
   let previewCalls = 0
   const pending = deferred<ToolResult>()
   let callTool: NonNullable<AppBridge["oncalltool"]> = async ({ name }) => {
@@ -377,6 +398,7 @@ test("duplicate in-flight preview() coalesces to a single preview_game tool call
         authoredShowJson: '{"title":"Original"}',
       })
     }
+
     previewCalls += 1
 
     return pending.promise
@@ -384,6 +406,7 @@ test("duplicate in-flight preview() coalesces to a single preview_game tool call
   const h = await createConnectedHarness({
     onCallTool: (params, extra) => callTool(params, extra),
   })
+
   try {
     h.widget.controller.select(draftId)
     await h.widget.controller.refresh()
@@ -391,7 +414,9 @@ test("duplicate in-flight preview() coalesces to a single preview_game tool call
 
     const first = h.widget.preview()
     const second = h.widget.preview()
-    await new Promise((resolve) => setTimeout(resolve, 20))
+    await new Promise((resolve) => {
+      setTimeout(resolve, 20)
+    })
     assert.equal(previewCalls, 1)
 
     pending.resolve(structuredClone(retainedEn.result))
@@ -408,13 +433,16 @@ test("duplicate in-flight preview() coalesces to a single preview_game tool call
     callTool = async ({ name }) => {
       if (name === "preview_game") {
         previewCalls += 1
+
         return nextDeferred.promise
       }
 
       return makeConflict(2)
     }
     const third = h.widget.preview()
-    await new Promise((resolve) => setTimeout(resolve, 20))
+    await new Promise((resolve) => {
+      setTimeout(resolve, 20)
+    })
     assert.equal(previewCalls, 2)
     nextDeferred.resolve(structuredClone(retainedEn.result))
     await third
@@ -428,17 +456,24 @@ test("duplicate in-flight preview() coalesces to a single preview_game tool call
       if (name === "preview_game") {
         previewCalls += 1
         localesSeen.push(args?.locale)
+
         return args?.locale === "ja" ? fastJa.promise : slowEn.promise
       }
 
       return makeConflict(2)
     }
     const fourth = h.widget.preview()
-    await new Promise((resolve) => setTimeout(resolve, 20))
-    await h.host.setHostContext({ locale: "ja" })
-    await new Promise((resolve) => setTimeout(resolve, 20))
+    await new Promise((resolve) => {
+      setTimeout(resolve, 20)
+    })
+    h.host.setHostContext({ locale: "ja" })
+    await new Promise((resolve) => {
+      setTimeout(resolve, 20)
+    })
     const fifth = h.widget.preview()
-    await new Promise((resolve) => setTimeout(resolve, 20))
+    await new Promise((resolve) => {
+      setTimeout(resolve, 20)
+    })
     assert.deepEqual(localesSeen, ["en", "ja"])
     fastJa.resolve(structuredClone(retainedJa.result))
     await fifth
@@ -452,11 +487,11 @@ test("duplicate in-flight preview() coalesces to a single preview_game tool call
 })
 
 test("concurrent refresh and edit invalidate in-flight preview via existing generation check", async () => {
-  const draftId = retainedEn.selection.draftId
+  const { draftId } = retainedEn.selection
   let serverRevision = 1
   let pendingPreview = deferred<ToolResult>()
   const h = await createConnectedHarness({
-    onCallTool: async ({ name, arguments: args }) => {
+    onCallTool: async ({ name, arguments: _args }) => {
       if (name === "get_game_draft") {
         return makeResult({
           draftId,
@@ -465,10 +500,13 @@ test("concurrent refresh and edit invalidate in-flight preview via existing gene
           authoredShowJson: `{"title":"Rev ${serverRevision}"}`,
         })
       }
+
       if (name === "update_game_draft") {
         serverRevision += 1
+
         return makeResult({ draftId, revision: serverRevision, summary })
       }
+
       if (name === "preview_game") {
         return pendingPreview.promise
       }
@@ -476,13 +514,16 @@ test("concurrent refresh and edit invalidate in-flight preview via existing gene
       return makeConflict(serverRevision)
     },
   })
+
   try {
     h.widget.controller.select(draftId)
     await h.widget.controller.refresh()
 
     // Case 1: Concurrent refresh while preview_game rev 1 is in-flight
     const inflight1 = h.widget.preview()
-    await new Promise((resolve) => setTimeout(resolve, 20))
+    await new Promise((resolve) => {
+      setTimeout(resolve, 20)
+    })
     serverRevision = 2
     await h.widget.controller.refresh()
     assert.equal(h.widget.controller.snapshot().status, "ready")
@@ -497,7 +538,9 @@ test("concurrent refresh and edit invalidate in-flight preview via existing gene
     // Case 2: Concurrent edit (update_game_draft) while preview_game rev 2 is in-flight
     pendingPreview = deferred()
     const inflight2 = h.widget.preview()
-    await new Promise((resolve) => setTimeout(resolve, 20))
+    await new Promise((resolve) => {
+      setTimeout(resolve, 20)
+    })
     await h.widget.controller.update('{"title":"Local edit"}')
     assert.equal(h.widget.controller.snapshot().status, "acknowledged")
     assert.equal(h.widget.controller.snapshot().draft?.revision, 3)
@@ -513,35 +556,42 @@ test("concurrent refresh and edit invalidate in-flight preview via existing gene
 })
 
 test("preview after edit sends expectedRevision + 1 and disposes prior candidate on ACK", async () => {
-  const draftId = retainedEn.selection.draftId
+  const { draftId } = retainedEn.selection
   let serverRevision = 1
   const previewRevisions: number[] = []
   const h = await createConnectedHarness({
-    onCallTool: async ({ name, arguments: args }) => {
-      if (name === "get_game_draft") {
-        return makeResult({
-          draftId,
-          revision: serverRevision,
-          summary,
-          authoredShowJson: '{"title":"Original"}',
-        })
-      }
-      if (name === "update_game_draft") {
-        serverRevision += 1
-        return makeResult({ draftId, revision: serverRevision, summary })
-      }
-      if (name === "preview_game") {
-        const rev = Number(args?.expectedRevision)
-        previewRevisions.push(rev)
+    onCallTool: (toolRequest) =>
+      synchronousPromise(() => {
+        const { name, arguments: args } = toolRequest
 
-        return rev === 1
-          ? structuredClone(retainedEn.result)
-          : cloneForRevision(retainedEn.result, rev)
-      }
+        if (name === "get_game_draft") {
+          return makeResult({
+            draftId,
+            revision: serverRevision,
+            summary,
+            authoredShowJson: '{"title":"Original"}',
+          })
+        }
 
-      return makeConflict(serverRevision)
-    },
+        if (name === "update_game_draft") {
+          serverRevision += 1
+
+          return makeResult({ draftId, revision: serverRevision, summary })
+        }
+
+        if (name === "preview_game") {
+          const rev = Number(args?.expectedRevision)
+          previewRevisions.push(rev)
+
+          return rev === 1
+            ? structuredClone(retainedEn.result)
+            : cloneForRevision(retainedEn.result, rev)
+        }
+
+        return makeConflict(serverRevision)
+      }),
   })
+
   try {
     h.widget.controller.select(draftId)
     await h.widget.controller.refresh()
@@ -565,8 +615,9 @@ test("preview after edit sends expectedRevision + 1 and disposes prior candidate
 })
 
 test("adversarial tamper, stale candidate, toolcancelled, toolInfo, and plain unavailable fail closed", async () => {
-  const draftId = retainedEn.selection.draftId
-  let nextPreview: () => Promise<ToolResult> = async () => makePlainUnavailable()
+  const { draftId } = retainedEn.selection
+  let nextPreview: () => Promise<ToolResult> = () =>
+    synchronousPromise(() => makePlainUnavailable())
   const h = await createConnectedHarness({
     onCallTool: async ({ name }) => {
       if (name === "get_game_draft") {
@@ -581,28 +632,35 @@ test("adversarial tamper, stale candidate, toolcancelled, toolInfo, and plain un
       return nextPreview()
     },
   })
+
   try {
     h.widget.controller.select(draftId)
     await h.widget.controller.refresh()
 
     // 1. Tampered inputDigest
-    nextPreview = async () => {
-      const tampered = cloneForRevision(retainedEn.result, 2)
-      tampered._meta["tadazz/preview-candidate-v2"].inputDigest = "0".repeat(64)
-      return tampered
-    }
+    nextPreview = () =>
+      synchronousPromise(() => {
+        const tampered = cloneForRevision(retainedEn.result, 2)
+        tampered._meta["tadazz/preview-candidate-v2"].inputDigest = "0".repeat(
+          64,
+        )
+
+        return tampered
+      })
     await h.widget.preview()
     assert.equal(h.widget.controller.snapshot().status, "unavailable")
     assert.equal(h.mounts.length, 0)
 
     // 2. Stale revision (host sends rev 1 for expectedRevision 2)
-    nextPreview = async () => structuredClone(retainedEn.result)
+    nextPreview = () =>
+      synchronousPromise(() => structuredClone(retainedEn.result))
     await h.widget.preview()
     assert.equal(h.widget.controller.snapshot().status, "unavailable")
     assert.equal(h.mounts.length, 0)
 
     // 3. Wrong locale
-    nextPreview = async () => cloneForRevision(retainedJa.result, 2)
+    nextPreview = () =>
+      synchronousPromise(() => cloneForRevision(retainedJa.result, 2))
     await h.widget.preview()
     assert.equal(h.widget.controller.snapshot().status, "unavailable")
     assert.equal(h.mounts.length, 0)
@@ -611,9 +669,13 @@ test("adversarial tamper, stale candidate, toolcancelled, toolInfo, and plain un
     const pending = deferred<ToolResult>()
     nextPreview = () => pending.promise
     const cancelledPreview = h.widget.preview()
-    await new Promise((resolve) => setTimeout(resolve, 20))
+    await new Promise((resolve) => {
+      setTimeout(resolve, 20)
+    })
     await h.host.sendToolCancelled({ reason: "cancelled by host" })
-    await new Promise((resolve) => setTimeout(resolve, 20))
+    await new Promise((resolve) => {
+      setTimeout(resolve, 20)
+    })
     assert.equal(h.widget.controller.snapshot().status, "cancelled")
     pending.resolve(cloneForRevision(retainedEn.result, 2))
     await cancelledPreview
@@ -621,7 +683,8 @@ test("adversarial tamper, stale candidate, toolcancelled, toolInfo, and plain un
     assert.equal(h.mounts.length, 0)
 
     // 5. Async renderer failure callback transitions to unavailable
-    nextPreview = async () => cloneForRevision(retainedEn.result, 2)
+    nextPreview = () =>
+      synchronousPromise(() => cloneForRevision(retainedEn.result, 2))
     await h.widget.preview()
     assert.equal(h.widget.controller.snapshot().status, "candidate")
     assert.equal(h.mounts.length, 1)
@@ -631,13 +694,15 @@ test("adversarial tamper, stale candidate, toolcancelled, toolInfo, and plain un
     // 6. hostcontextchanged with toolInfo closes and disposes
     await h.widget.preview()
     assert.equal(h.widget.controller.snapshot().status, "candidate")
-    await h.host.setHostContext({
+    h.host.setHostContext({
       toolInfo: {
         id: "next-invocation",
         tool: { name: "preview_game", inputSchema: { type: "object" } },
       },
     })
-    await new Promise((resolve) => setTimeout(resolve, 20))
+    await new Promise((resolve) => {
+      setTimeout(resolve, 20)
+    })
     assert.equal(h.widget.controller.snapshot().status, "closed")
     assert.equal(h.mounts[1]?.disposed, true)
   } finally {

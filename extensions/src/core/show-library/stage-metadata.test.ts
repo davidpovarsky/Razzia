@@ -16,6 +16,7 @@ function fixture(show: unknown = authoredFixture(2, 5)) {
     plan = resolvePreviewPlan(draft)
   const questionId = (key: string) =>
     getPreviewIdentityId(draft.input.identityMap, "questions", key)
+
   return { draft, plan, questionId }
 }
 
@@ -42,7 +43,12 @@ describe("bound current-question stage metadata", () => {
     expect(Object.isFrozen(metadata)).toBe(true)
     expect(Reflect.set(metadata, "ordinal", 1)).toBe(false)
     expect(() =>
-      assertBoundPreviewStageMetadata(draft, plan, id, metadata),
+      assertBoundPreviewStageMetadata({
+        draft,
+        plan,
+        currentQuestionId: id,
+        metadata,
+      }),
     ).not.toThrow()
     expect(JSON.stringify(metadata)).not.toContain("Synthetic question")
     expect(JSON.stringify(metadata)).not.toContain(questionId("question-4"))
@@ -93,7 +99,7 @@ describe("bound current-question stage metadata", () => {
   })
   it("counts actual quiz and survey questions without allocating new identities", () => {
     const show = authoredFixture(2, 2)
-    const { correctAnswers: _removed, ...second } = show.cards[1]
+    const [, { correctAnswers: _removed, ...second }] = show.cards
     const { draft, plan, questionId } = fixture({
       ...show,
       cards: [
@@ -132,16 +138,17 @@ describe("bound current-question stage metadata", () => {
       "scene",
     )
     for (const id of [
-      "preview-question-" + "0".repeat(64),
+      `preview-question-${"0".repeat(64)}`,
       card,
       scene,
       "question-1",
       "00000000-0000-4000-8000-000000000000",
       "",
-    ])
+    ]) {
       expect(() => derivePreviewStageMetadata(draft, plan, id)).toThrow(
         "unknown-stage-question",
       )
+    }
   })
   it("rejects cloned/forged drafts and cloned/foreign plans", () => {
     const { draft, plan, questionId } = fixture(),
@@ -149,10 +156,11 @@ describe("bound current-question stage metadata", () => {
     expect(() => derivePreviewStageMetadata({ ...draft }, plan, id)).toThrow(
       "unvalidated-draft",
     )
-    for (const otherPlan of [{ ...plan }, fixture().plan])
+    for (const otherPlan of [{ ...plan }, fixture().plan]) {
       expect(() => derivePreviewStageMetadata(draft, otherPlan, id)).toThrow(
         "unbound-preview-plan",
       )
+    }
   })
   it("does not let schema parsing, copying, another question or another genuine association manufacture trust", () => {
     const f = fixture(),
@@ -162,30 +170,41 @@ describe("bound current-question stage metadata", () => {
       { ...metadata },
       previewStageMetadataSchema.parse(metadata),
       previewStageMetadataSchema.parse({ ...metadata, ordinal: 2 }),
-    ])
+    ]) {
       expect(() =>
-        assertBoundPreviewStageMetadata(
-          f.draft,
-          f.plan,
-          id,
-          value as typeof metadata,
-        ),
+        assertBoundPreviewStageMetadata({
+          draft: f.draft,
+          plan: f.plan,
+          currentQuestionId: id,
+          metadata: value as typeof metadata,
+        }),
       ).toThrow("unbound-stage-metadata")
+    }
     expect(() =>
-      assertBoundPreviewStageMetadata(
-        f.draft,
-        f.plan,
-        f.questionId("question-2"),
+      assertBoundPreviewStageMetadata({
+        draft: f.draft,
+        plan: f.plan,
+        currentQuestionId: f.questionId("question-2"),
         metadata,
-      ),
+      }),
     ).toThrow("unbound-stage-metadata")
     const other = fixture(),
       otherMetadata = derivePreviewStageMetadata(other.draft, other.plan, id)
     expect(() =>
-      assertBoundPreviewStageMetadata(f.draft, f.plan, id, otherMetadata),
+      assertBoundPreviewStageMetadata({
+        draft: f.draft,
+        plan: f.plan,
+        currentQuestionId: id,
+        metadata: otherMetadata,
+      }),
     ).toThrow("unbound-stage-metadata")
     expect(() =>
-      assertBoundPreviewStageMetadata(other.draft, other.plan, id, metadata),
+      assertBoundPreviewStageMetadata({
+        draft: other.draft,
+        plan: other.plan,
+        currentQuestionId: id,
+        metadata,
+      }),
     ).toThrow("unbound-stage-metadata")
   })
   it("is informational for a genuine unavailable plan and activates no capability or pin", () => {
@@ -208,26 +227,39 @@ describe("bound current-question stage metadata", () => {
       expect(parsed.module.dynamicImports).toEqual([])
       const dependencies: unknown[] = []
       const visit = (value: unknown): void => {
-        if (!value || typeof value !== "object") return
+        if (!value || typeof value !== "object") {
+          return
+        }
+
         const node = value as Record<string, unknown>
+
         if (
           node.type === "ImportDeclaration" ||
           node.type === "ExportNamedDeclaration" ||
           node.type === "ExportAllDeclaration"
         ) {
           const dependency = node.source as { value?: unknown } | null
-          if (dependency) dependencies.push(dependency.value)
+
+          if (dependency) {
+            dependencies.push(dependency.value)
+          }
         }
+
         expect(node.type).not.toBe("TSImportEqualsDeclaration")
+
         if (node.type === "CallExpression") {
           const callee = node.callee as { type?: string; name?: string }
           expect(
             callee.type === "Identifier" && callee.name === "require",
           ).toBe(false)
         }
+
         for (const child of Object.values(node)) {
-          if (Array.isArray(child)) child.forEach(visit)
-          else visit(child)
+          if (Array.isArray(child)) {
+            child.forEach(visit)
+          } else {
+            visit(child)
+          }
         }
       }
       visit(parsed.program)
@@ -239,8 +271,9 @@ describe("bound current-question stage metadata", () => {
       '\nexport * from "./manifest"',
       '\nvoid import("./digest")',
       '\nrequire("./primitives")',
-    ])
+    ]) {
       expect(() => assertLeaf(source + forbidden)).toThrow()
+    }
   })
   it.each([
     { ordinal: 0 },

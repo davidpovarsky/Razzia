@@ -38,8 +38,12 @@ import {
   serviceCapabilityHash,
   serviceDenied,
 } from "./credential-codec"
-import type { ControlRequest, SecretAttempt, ServiceAddress } from "./contracts"
-import type { ServiceLeaseRecord } from "./contracts"
+import type {
+  ControlRequest,
+  SecretAttempt,
+  ServiceAddress,
+  ServiceLeaseRecord,
+} from "./contracts"
 import {
   GATEWAY_DELIVERY_PURPOSE,
   type GatewayCallAuthorityPort,
@@ -68,6 +72,7 @@ interface IssueInput {
   readonly expiresAt: number
   readonly initialActions: readonly Action[]
 }
+
 export interface UnmountedAuthorityOptions {
   readonly authorityRoot: string
   readonly allowedProviders: readonly string[]
@@ -105,15 +110,25 @@ export class UnmountedPhoneAuthority {
     if (
       options.allowedProviders.length === 0 ||
       typeof options.lifecycleRoot !== "function"
-    )
+    ) {
       serviceDenied()
-    for (const provider of options.allowedProviders) identifier(provider)
+    }
+
+    for (const provider of options.allowedProviders) {
+      identifier(provider)
+    }
     this.providers = Object.freeze([...new Set(options.allowedProviders)])
     this.rootResolver = options.lifecycleRoot
     this.gatewayEnabled = options.gatewayDelivery === true
-    if (this.gatewayEnabled && options.nativeAdoption !== true) serviceDenied()
-    if (options.nativeAdoption === true)
+
+    if (this.gatewayEnabled && options.nativeAdoption !== true) {
+      serviceDenied()
+    }
+
+    if (options.nativeAdoption === true) {
       this.adoption = new NativePhoneAdoption()
+    }
+
     // Constructors only capture fixed paths. No SQL/file creation at assembly.
     const files = new PrivateAuthorityFiles(options.authorityRoot)
     this.reader = new ReadonlyServiceLeaseReader(files)
@@ -122,30 +137,45 @@ export class UnmountedPhoneAuthority {
   }
 
   private assertOpen() {
-    if (this.closed) serviceDenied()
+    if (this.closed) {
+      serviceDenied()
+    }
   }
   private provider(provider: string) {
     this.assertOpen()
     identifier(provider)
-    if (!this.providers.includes(provider)) serviceDenied()
+
+    if (!this.providers.includes(provider)) {
+      serviceDenied()
+    }
   }
   private pin(game: Game) {
-    if (this.gatewayEnabled && !this.staged.has(game)) serviceDenied()
-    if (this.adoption) this.adoption.adopt(game)
-    else if (isPhoneLifecycleV2Adopted(game)) serviceDenied()
+    if (this.gatewayEnabled && !this.staged.has(game)) {
+      serviceDenied()
+    }
+
+    if (this.adoption) {
+      this.adoption.adopt(game)
+    } else if (isPhoneLifecycleV2Adopted(game)) {
+      serviceDenied()
+    }
+
     let facade = this.facades.get(game)
+
     if (!facade) {
       facade = new RealGameFacade(game, (id, owner) =>
         Registry.getInstance().getManagerGame(id, owner),
       )
       this.facades.set(game, facade)
     }
+
     return facade
   }
   // Trusted host calls immediately after a genuine new Game constructor and
   // before publishing it. An empty roster alone cannot prove freshness.
   stageFreshGatewayGame(game: Game): void {
     this.assertOpen()
+
     if (
       !this.gatewayEnabled ||
       this.staged.has(game) ||
@@ -154,9 +184,17 @@ export class UnmountedPhoneAuthority {
       game.started ||
       game.players.length !== 0 ||
       !game.canAdoptPhoneLifecycleV2()
-    )
+    ) {
       serviceDenied()
-    this.adoption!.adopt(game)
+    }
+
+    const { adoption } = this
+
+    if (!adoption) {
+      serviceDenied()
+    }
+
+    adoption.adopt(game)
     this.staged.add(game)
     this.pin(game)
   }
@@ -167,20 +205,28 @@ export class UnmountedPhoneAuthority {
   ): ServiceLeaseRecord {
     this.assertOpen()
     this.provider(address.provider)
-    if (!this.gatewayEnabled || !this.staged.has(game)) serviceDenied()
+
+    if (!this.gatewayEnabled || !this.staged.has(game)) {
+      serviceDenied()
+    }
+
     const record = this.reader.readCurrent(address)
+
     if (
       !record ||
       record.state === "REVOKED" ||
       record.revokedAt !== null ||
       record.issuerSid !== issuerSid ||
       record.executorId !== this.facades.get(game)?.executorId
-    )
+    ) {
       serviceDenied()
+    }
+
     this.accounts.assertLiveOwner(record, game)
+
     return record
   }
-  private gatewayDescriptor(record: ServiceLeaseRecord): GatewayBinding {
+  private static gatewayDescriptor(record: ServiceLeaseRecord): GatewayBinding {
     return gatewayBinding({
       protocol: 1,
       purpose: GATEWAY_DELIVERY_PURPOSE,
@@ -195,19 +241,32 @@ export class UnmountedPhoneAuthority {
       initialActions: record.initialActions,
     })
   }
-  private ticket(
-    result: SecretAttempt,
-    game: Game,
-    address: ServiceAddress,
-    requestId: string,
-    issuerSid: string,
-  ) {
-    if (!this.gatewayEnabled || result.credential === undefined) return
+  private ticket({
+    result,
+    game,
+    address,
+    requestId,
+    issuerSid,
+  }: {
+    result: SecretAttempt
+    game: Game
+    address: ServiceAddress
+    requestId: string
+    issuerSid: string
+  }) {
+    if (!this.gatewayEnabled || result.credential === undefined) {
+      return
+    }
+
     const record = this.gatewayRecord(game, address, issuerSid)
-    if (record.version !== result.receipt.version) serviceDenied()
+
+    if (record.version !== result.receipt.version) {
+      serviceDenied()
+    }
+
     this.deliveries.set(result, {
       game,
-      binding: this.gatewayDescriptor(record),
+      binding: UnmountedPhoneAuthority.gatewayDescriptor(record),
       requestId,
     })
   }
@@ -218,6 +277,7 @@ export class UnmountedPhoneAuthority {
   ): Promise<GatewayCallAuthorityPort> {
     this.assertOpen()
     const prepared = await this.accounts.prepareManager(token, target.game)
+
     try {
       const live = this.accounts.revalidateManager(prepared)
       const address = Object.freeze({
@@ -235,20 +295,27 @@ export class UnmountedPhoneAuthority {
         capability: string,
         action?: Action,
       ) => {
-        const expected = this.gatewayDescriptor(current())
-        if (bindingText(gatewayBinding(input)) !== bindingText(expected))
+        const expected = UnmountedPhoneAuthority.gatewayDescriptor(current())
+
+        if (bindingText(gatewayBinding(input)) !== bindingText(expected)) {
           serviceDenied()
+        }
+
         const proof = this.verifier.authorizeActivation(
           expected,
           capability,
           (game) => this.facades.get(game),
         )
+
         if (
           proof.nativeGame !== live.nativeGame ||
-          bindingText(this.gatewayDescriptor(proof.lease)) !==
-            bindingText(expected)
-        )
+          bindingText(
+            UnmountedPhoneAuthority.gatewayDescriptor(proof.lease),
+          ) !== bindingText(expected)
+        ) {
           serviceDenied()
+        }
+
         if (action !== undefined) {
           const context = this.verifier.begin(
             expected,
@@ -256,20 +323,30 @@ export class UnmountedPhoneAuthority {
             action,
             (game) => this.facades.get(game),
           )
+
           try {
-            if (!this.verifier.verifyCurrent(context, action)) serviceDenied()
+            if (!this.verifier.verifyCurrent(context, action)) {
+              serviceDenied()
+            }
           } finally {
             this.verifier.release(context)
           }
         }
       }
+
       return Object.freeze({
         current: () => {
           const record = current()
-          if (record.state !== "PENDING_DELIVERY" && record.state !== "ACTIVE")
+
+          if (
+            record.state !== "PENDING_DELIVERY" &&
+            record.state !== "ACTIVE"
+          ) {
             serviceDenied()
+          }
+
           return Object.freeze({
-            binding: this.gatewayDescriptor(record),
+            binding: UnmountedPhoneAuthority.gatewayDescriptor(record),
             state: record.state,
             allowedActions: canonicalActions(record.currentActions),
           })
@@ -309,6 +386,7 @@ export class UnmountedPhoneAuthority {
             expectedVersion: input.version,
           })
           assertCredential(input, capability)
+
           return result.receipt
         },
       })
@@ -317,44 +395,58 @@ export class UnmountedPhoneAuthority {
     }
   }
 
-  async deliverGatewayAttempt(
-    token: string,
-    attempt: SecretAttempt,
-    destination: GatewayDeliveryDestination,
-    expectedStoredVersion: number,
-  ): Promise<GatewayDeliveryAck> {
+  async deliverGatewayAttempt({
+    token,
+    attempt,
+    destination,
+    expectedStoredVersion,
+  }: {
+    token: string
+    attempt: SecretAttempt
+    destination: GatewayDeliveryDestination
+    expectedStoredVersion: number
+  }): Promise<GatewayDeliveryAck> {
     const ticket = this.deliveries.get(attempt)
-    this.deliveries.delete(attempt) // Consume before the first await, including failures.
+    // Consume before the first await, including failures.
+
+    this.deliveries.delete(attempt)
     this.assertOpen()
-    if (!ticket || attempt.credential === undefined) serviceDenied()
+
+    if (!ticket || attempt.credential === undefined) {
+      serviceDenied()
+    }
+
     integer(expectedStoredVersion)
     const capability = attempt.credential
     const prepared = await this.accounts.prepareManager(
       token,
       ticket.binding.game,
     )
+
     try {
       const check = () => {
-        this.managerLive(
+        this.managerLive({
           prepared,
-          ticket.game,
-          ticket.binding.executorId,
-          ticket.binding.issuerSid,
-        )
+          game: ticket.game,
+          executorId: ticket.binding.executorId,
+          issuerSid: ticket.binding.issuerSid,
+        })
         const record = this.gatewayRecord(
           ticket.game,
           ticket.binding,
           ticket.binding.issuerSid,
         )
+
         if (
-          bindingText(this.gatewayDescriptor(record)) !==
+          bindingText(UnmountedPhoneAuthority.gatewayDescriptor(record)) !==
             bindingText(ticket.binding) ||
           !sameHash(
             serviceCapabilityHash(record, capability),
             record.capabilityHash,
           )
-        )
+        ) {
           serviceDenied()
+        }
       }
       check()
       const deliveryId = digest(
@@ -376,12 +468,15 @@ export class UnmountedPhoneAuthority {
       )
       check()
       const ack = acknowledgement(result)
+
       if (
         ack.deliveryId !== deliveryId ||
         ack.service !== ticket.binding.service ||
         ack.storedVersion !== ticket.binding.version
-      )
+      ) {
         serviceDenied()
+      }
+
       return ack
     } catch {
       // A destination exception is untrusted and may echo the in-flight secret.
@@ -390,39 +485,58 @@ export class UnmountedPhoneAuthority {
       this.accounts.releaseManager(prepared)
     }
   }
-  private managerLive(
-    prepared: PreparedManagerAuthority,
-    game: Game,
-    executorId?: string,
-    issuerSid?: string,
-  ): void {
+  private managerLive({
+    prepared,
+    game,
+    executorId,
+    issuerSid,
+  }: {
+    prepared: PreparedManagerAuthority
+    game: Game
+    executorId?: string
+    issuerSid?: string
+  }): void {
     this.assertOpen()
     const live = this.accounts.revalidateManager(prepared)
+
     if (
       live.nativeGame !== game ||
       (issuerSid !== undefined && live.issuerSid !== issuerSid) ||
       (executorId !== undefined &&
         this.facades.get(game)?.executorId !== executorId)
-    )
+    ) {
       serviceDenied()
+    }
   }
-  private managerCheck(
-    prepared: PreparedManagerAuthority,
-    game: Game,
-    executorId?: string,
-    issuerSid?: string,
-  ): void {
-    this.managerLive(prepared, game, executorId, issuerSid)
-    if (scopedAccount() !== this.accounts.revalidateManager(prepared).owner)
+  private managerCheck({
+    prepared,
+    game,
+    executorId,
+    issuerSid,
+  }: {
+    prepared: PreparedManagerAuthority
+    game: Game
+    executorId?: string
+    issuerSid?: string
+  }): void {
+    this.managerLive({ prepared, game, executorId, issuerSid })
+
+    if (scopedAccount() !== this.accounts.revalidateManager(prepared).owner) {
       serviceDenied()
+    }
   }
   private credentialDisclosure(result: SecretAttempt, address: ServiceAddress) {
     this.assertOpen()
-    if (result.credential === undefined) return
+
+    if (result.credential === undefined) {
+      return
+    }
+
     const current = this.reader.readCurrent({
       ...address,
       version: result.receipt.version,
     })
+
     if (
       !current ||
       current.version !== result.receipt.version ||
@@ -432,26 +546,33 @@ export class UnmountedPhoneAuthority {
         serviceCapabilityHash(current, result.credential),
         current.capabilityHash,
       )
-    )
+    ) {
       serviceDenied()
+    }
   }
 
   async initializeAuthority(
     token: string,
     game: string,
   ): Promise<{ status: "ready" }> {
-    if (this.closed) serviceDenied()
+    if (this.closed) {
+      serviceDenied()
+    }
+
     const prepared = await this.accounts.prepareManager(token, game)
+
     try {
       const live = this.accounts.revalidateManager(prepared)
       const result = await withAccount(live.owner, () => {
         this.writer.initialize(() => {
-          this.managerCheck(prepared, live.nativeGame)
+          this.managerCheck({ prepared, game: live.nativeGame })
         })
-        this.managerCheck(prepared, live.nativeGame)
+        this.managerCheck({ prepared, game: live.nativeGame })
+
         return { status: "ready" as const }
       })
-      this.managerLive(prepared, live.nativeGame)
+      this.managerLive({ prepared, game: live.nativeGame })
+
       return result
     } finally {
       this.accounts.releaseManager(prepared)
@@ -460,11 +581,13 @@ export class UnmountedPhoneAuthority {
 
   async issue(token: string, input: IssueInput): Promise<SecretAttempt> {
     const prepared = await this.accounts.prepareManager(token, input.game)
+
     try {
       this.provider(input.provider)
       identifier(input.requestId)
       const live = this.accounts.revalidateManager(prepared),
         initial = canonicalActions(input.initialActions)
+
       // The first experimental profile is precisely the four phone actions;
       // no account/admin authority or transparent expiry renewal is granted.
       if (
@@ -473,19 +596,21 @@ export class UnmountedPhoneAuthority {
         input.expiresAt <= Date.now() ||
         input.expiresAt > Date.now() + MAX_LEASE_MS ||
         input.expiresAt > live.expiresAt
-      )
+      ) {
         serviceDenied()
+      }
+
       const facade = this.pin(live.nativeGame)
       const binding = {
         owner: live.owner,
         game: input.game,
         provider: input.provider,
-        service: deriveServiceId(
-          live.owner,
-          input.game,
-          input.provider,
-          input.requestId,
-        ),
+        service: deriveServiceId({
+          owner: live.owner,
+          game: input.game,
+          provider: input.provider,
+          requestId: input.requestId,
+        }),
         version: 1,
         issuerSid: live.issuerSid,
         executorId: facade.executorId,
@@ -493,60 +618,75 @@ export class UnmountedPhoneAuthority {
         initialActions: initial,
       }
       const result = await withAccount(live.owner, () => {
-        const result = this.writer.issue(
+        const issuedResult = this.writer.issue({
           binding,
-          { requestId: input.requestId, expectedVersion: 0 },
-          live.issuerSid,
-          () => {
-            this.managerCheck(
+          input: { requestId: input.requestId, expectedVersion: 0 },
+          actorSid: live.issuerSid,
+          check: () => {
+            this.managerCheck({
               prepared,
-              live.nativeGame,
-              facade.executorId,
-              live.issuerSid,
-            )
+              game: live.nativeGame,
+              executorId: facade.executorId,
+              issuerSid: live.issuerSid,
+            })
           },
-        )
-        this.managerCheck(
+        })
+        this.managerCheck({
           prepared,
-          live.nativeGame,
-          facade.executorId,
-          live.issuerSid,
-        )
-        return result
+          game: live.nativeGame,
+          executorId: facade.executorId,
+          issuerSid: live.issuerSid,
+        })
+
+        return issuedResult
       })
-      this.managerLive(
+      this.managerLive({
         prepared,
-        live.nativeGame,
-        facade.executorId,
-        live.issuerSid,
-      )
+        game: live.nativeGame,
+        executorId: facade.executorId,
+        issuerSid: live.issuerSid,
+      })
       this.credentialDisclosure(result, binding)
-      this.ticket(
+      this.ticket({
         result,
-        live.nativeGame,
-        binding,
-        input.requestId,
-        live.issuerSid,
-      )
+        game: live.nativeGame,
+        address: binding,
+        requestId: input.requestId,
+        issuerSid: live.issuerSid,
+      })
+
       return result
     } finally {
       this.accounts.releaseManager(prepared)
     }
   }
 
-  private controlRecord(
-    prepared: PreparedManagerAuthority,
-    target: ControlTarget,
-    expectedVersion: number,
-    sameIssuer: boolean,
-  ) {
+  private controlRecord({
+    prepared,
+    target,
+    expectedVersion,
+    sameIssuer,
+  }: {
+    prepared: PreparedManagerAuthority
+    target: ControlTarget
+    expectedVersion: number
+    sameIssuer: boolean
+  }) {
     this.provider(target.provider)
     identifier(target.service)
-    if (!Number.isSafeInteger(expectedVersion) || expectedVersion < 1)
+
+    if (!Number.isSafeInteger(expectedVersion) || expectedVersion < 1) {
       serviceDenied()
+    }
+
     const live = this.accounts.revalidateManager(prepared)
     const facade = this.facades.get(live.nativeGame)
-    if (!facade) serviceDenied() // Never reconstruct a durable executor on retry/restart.
+    // Never reconstruct a durable executor on retry/restart.
+
+    if (!facade) {
+      serviceDenied()
+    }
+
     const address: ServiceAddress = {
       owner: live.owner,
       game: live.game,
@@ -555,12 +695,15 @@ export class UnmountedPhoneAuthority {
       version: expectedVersion,
     }
     const record = this.reader.readCurrent(address)
+
     if (
       !record ||
       record.executorId !== facade.executorId ||
       (sameIssuer && record.issuerSid !== live.issuerSid)
-    )
+    ) {
       serviceDenied()
+    }
+
     return { live, facade, record }
   }
 
@@ -570,44 +713,52 @@ export class UnmountedPhoneAuthority {
     input: ControlRequest,
   ): Promise<SecretAttempt> {
     const prepared = await this.accounts.prepareManager(token, target.game)
+
     try {
-      const { live, facade, record } = this.controlRecord(
+      const { live, facade, record } = this.controlRecord({
         prepared,
         target,
-        input.expectedVersion,
-        true,
-      )
-      const result = await withAccount(live.owner, () => {
-        const result = this.writer.rotate(record, input, live.issuerSid, () => {
-          this.managerCheck(
-            prepared,
-            live.nativeGame,
-            facade.executorId,
-            record.issuerSid,
-          )
-        })
-        this.managerCheck(
-          prepared,
-          live.nativeGame,
-          facade.executorId,
-          record.issuerSid,
-        )
-        return result
+        expectedVersion: input.expectedVersion,
+        sameIssuer: true,
       })
-      this.managerLive(
+      const result = await withAccount(live.owner, () => {
+        const rotatedResult = this.writer.rotate({
+          binding: record,
+          input,
+          actorSid: live.issuerSid,
+          check: () => {
+            this.managerCheck({
+              prepared,
+              game: live.nativeGame,
+              executorId: facade.executorId,
+              issuerSid: record.issuerSid,
+            })
+          },
+        })
+        this.managerCheck({
+          prepared,
+          game: live.nativeGame,
+          executorId: facade.executorId,
+          issuerSid: record.issuerSid,
+        })
+
+        return rotatedResult
+      })
+      this.managerLive({
         prepared,
-        live.nativeGame,
-        facade.executorId,
-        record.issuerSid,
-      )
+        game: live.nativeGame,
+        executorId: facade.executorId,
+        issuerSid: record.issuerSid,
+      })
       this.credentialDisclosure(result, record)
-      this.ticket(
+      this.ticket({
         result,
-        live.nativeGame,
-        record,
-        input.requestId,
-        record.issuerSid,
-      )
+        game: live.nativeGame,
+        address: record,
+        requestId: input.requestId,
+        issuerSid: record.issuerSid,
+      })
+
       return result
     } finally {
       this.accounts.releaseManager(prepared)
@@ -620,23 +771,43 @@ export class UnmountedPhoneAuthority {
     input: ControlRequest,
   ): Promise<SecretAttempt> {
     const prepared = await this.accounts.prepareManager(token, target.game)
+
     try {
       // A fresh verified owner session may revoke, but cannot replace/renew, the
       // old issuer. The actual Game/executor must still be the exact live pin.
-      const { live, facade, record } = this.controlRecord(
+      const { live, facade, record } = this.controlRecord({
         prepared,
         target,
-        input.expectedVersion,
-        false,
-      )
-      const result = await withAccount(live.owner, () => {
-        const result = this.writer.revoke(record, input, live.issuerSid, () => {
-          this.managerCheck(prepared, live.nativeGame, facade.executorId)
-        })
-        this.managerCheck(prepared, live.nativeGame, facade.executorId)
-        return result
+        expectedVersion: input.expectedVersion,
+        sameIssuer: false,
       })
-      this.managerLive(prepared, live.nativeGame, facade.executorId)
+      const result = await withAccount(live.owner, () => {
+        const revokedResult = this.writer.revoke({
+          binding: record,
+          input,
+          actorSid: live.issuerSid,
+          check: () => {
+            this.managerCheck({
+              prepared,
+              game: live.nativeGame,
+              executorId: facade.executorId,
+            })
+          },
+        })
+        this.managerCheck({
+          prepared,
+          game: live.nativeGame,
+          executorId: facade.executorId,
+        })
+
+        return revokedResult
+      })
+      this.managerLive({
+        prepared,
+        game: live.nativeGame,
+        executorId: facade.executorId,
+      })
+
       return result
     } finally {
       this.accounts.releaseManager(prepared)
@@ -665,25 +836,31 @@ export class UnmountedPhoneAuthority {
         },
         proof.nativeGame,
       )
+
       if (
         this.facades.get(proof.nativeGame) !== proof.facade ||
         proof.facade.executorId !== proof.lease.executorId
-      )
+      ) {
         serviceDenied()
+      }
     }
     const check = () => {
       live()
-      if (scopedAccount() !== proof.lease.owner) serviceDenied()
+
+      if (scopedAccount() !== proof.lease.owner) {
+        serviceDenied()
+      }
     }
     const result = await withAccount(proof.lease.owner, () => {
-      const result = this.writer.activate(
-        proof.address,
+      const activatedResult = this.writer.activate({
+        inputAddress: proof.address,
         capability,
         input,
         check,
-      )
+      })
       check()
-      return result
+
+      return activatedResult
     })
     live()
     const current = this.verifier.authorizeActivation(
@@ -691,11 +868,14 @@ export class UnmountedPhoneAuthority {
       capability,
       (game) => this.facades.get(game),
     )
+
     if (
       current.nativeGame !== proof.nativeGame ||
       current.facade !== proof.facade
-    )
+    ) {
       serviceDenied()
+    }
+
     return result
   }
 
@@ -708,22 +888,32 @@ export class UnmountedPhoneAuthority {
       expiresAt: context.expiresAt,
     })
     const facade = this.facades.get(live.nativeGame)
+
     if (
       !facade ||
       facade.executorId !== context.executorId ||
       !this.verifier.verifyCurrent(context, "register")
-    )
+    ) {
       serviceDenied()
+    }
+
     let cache = this.coordinators.get(live.nativeGame)
+
     if (!cache) {
       cache = new Map()
       this.coordinators.set(live.nativeGame, cache)
     }
+
     let coordinator = cache.get(context.service)
+
     if (!coordinator) {
       // First lifecycle root/DB access is strictly after successful ACTIVE proof.
       const root = this.rootResolver(context.owner, context.game)
-      if (typeof root !== "string") serviceDenied()
+
+      if (typeof root !== "string") {
+        serviceDenied()
+      }
+
       const store = new PrototypeStore(
         root,
         context,
@@ -737,27 +927,37 @@ export class UnmountedPhoneAuthority {
       )
       cache.set(context.service, coordinator)
     }
+
     return coordinator
   }
 
-  private async dispatch(
-    address: ServiceAddress,
-    capability: string,
-    action: Action,
-    input: RegistrationInput | OperationInput,
-  ): Promise<Receipt> {
+  private async dispatch({
+    address,
+    capability,
+    action,
+    input,
+  }: {
+    address: ServiceAddress
+    capability: string
+    action: Action
+    input: RegistrationInput | OperationInput
+  }): Promise<Receipt> {
     this.provider(address.provider)
     const context = this.verifier.begin(address, capability, action, (game) =>
       this.facades.get(game),
     )
+
     try {
       const result = await withAccount(context.owner, () => {
         this.assertOpen()
+
         if (
           scopedAccount() !== context.owner ||
           !this.verifier.verifyCurrent(context, action)
-        )
+        ) {
           serviceDenied()
+        }
+
         const coordinator = this.coordinator(context)
         // No await/Promise/native reconstruction inside this owning turn.
         const work = () =>
@@ -769,23 +969,33 @@ export class UnmountedPhoneAuthority {
               this.accounts.assertLiveOwner(context).nativeGame,
               () => {
                 this.assertOpen()
+
                 if (
                   scopedAccount() !== context.owner ||
                   !this.verifier.verifyCurrent(context, action)
-                )
+                ) {
                   serviceDenied()
+                }
               },
               work,
             )
           : work()
         this.assertOpen()
-        if (!this.verifier.verifyCurrent(context, action)) serviceDenied()
+
+        if (!this.verifier.verifyCurrent(context, action)) {
+          serviceDenied()
+        }
+
         return receipt
       })
       // Async owner-scope completion is also a revalidation boundary before
       // returning a secret-free receipt. An earlier effect is never rolled back.
       this.assertOpen()
-      if (!this.verifier.verifyCurrent(context, action)) serviceDenied()
+
+      if (!this.verifier.verifyCurrent(context, action)) {
+        serviceDenied()
+      }
+
       return result
     } finally {
       this.verifier.release(context)
@@ -796,17 +1006,25 @@ export class UnmountedPhoneAuthority {
     capability: string,
     input: RegistrationInput,
   ) {
-    return this.dispatch(address, capability, "register", input)
+    return this.dispatch({ address, capability, action: "register", input })
   }
   operate(address: ServiceAddress, capability: string, input: OperationInput) {
-    if (!["poll", "answer", "hangup"].includes(input.action)) serviceDenied()
-    return this.dispatch(address, capability, input.action, input)
+    if (!["poll", "answer", "hangup"].includes(input.action)) {
+      serviceDenied()
+    }
+
+    return this.dispatch({ address, capability, action: input.action, input })
   }
   close() {
-    if (this.closed) return
+    if (this.closed) {
+      return
+    }
+
     this.closed = true
     this.adoption?.close()
-    for (const store of this.stores) store.close()
+    for (const store of this.stores) {
+      store.close()
+    }
     this.stores.clear()
   }
 }

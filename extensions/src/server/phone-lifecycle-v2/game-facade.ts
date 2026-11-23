@@ -72,20 +72,26 @@ export class RealGameFacade {
 
   private game(context: VerifiedServiceContext) {
     const game = this.resolveGame(context.game, context.owner)
+
     return game === this.owningGame &&
-      game?.gameId === context.game &&
+      game.gameId === context.game &&
       game.manager.clientId === context.owner &&
       context.executorId === this.executorId
       ? game
       : undefined
   }
 
-  private bound(game: PublicPhoneGame, row: RegistrationRow) {
+  private static bound(
+    game: PublicPhoneGame,
+    row: RegistrationRow,
+  ): row is RegistrationRow & { roster_id: string } {
     const entry = row.roster_id ? game.getRosterEntry(row.roster_id) : null
+
     return (
-      !!entry &&
+      entry !== null &&
       entry.clientId === row.client_id &&
-      !!entry.phoneE164 &&
+      typeof entry.phoneE164 === "string" &&
+      entry.phoneE164.length > 0 &&
       digest(entry.phoneE164) === row.caller_hash &&
       entry.activeCallId === row.registration_id &&
       entry.status === "connected" &&
@@ -94,12 +100,13 @@ export class RealGameFacade {
   }
 
   exists(context: VerifiedServiceContext) {
-    return !!this.game(context)
+    return this.game(context) !== undefined
   }
 
   matches(context: VerifiedServiceContext, row: RegistrationRow) {
     const game = this.game(context)
-    return !!game && this.bound(game, row)
+
+    return game !== undefined && RealGameFacade.bound(game, row)
   }
 
   admit(
@@ -108,27 +115,47 @@ export class RealGameFacade {
     phone: string,
   ): Receipt {
     const game = this.game(context)
-    if (!game) return fail("game_unavailable")
+
+    if (!game) {
+      return fail("game_unavailable")
+    }
+
     const previous = reservation.predecessor
-    if (previous && !this.bound(game, previous))
+
+    if (previous && !RealGameFacade.bound(game, previous)) {
       return fail("game_binding_changed")
-    if (!previous && game.findRosterByPhone(phone)?.clientId)
+    }
+
+    if (!previous && game.findRosterByPhone(phone)?.clientId) {
       return fail("untracked_existing_binding")
+    }
+
     const result = game.joinOrRebindPhoneCaller({
       rosterPlayerId: previous?.roster_id ?? undefined,
       phoneRaw: phone,
       callId: reservation.row.registration_id,
     })
+
     // Billing admission may have run a joining callback before returning an
     // error. Never certify no-effect from this generic result.
-    if (!result.ok) return fail("admission_outcome_unknown")
+    if (!result.ok) {
+      return fail("admission_outcome_unknown")
+    }
+
     const row = {
       ...reservation.row,
       roster_id: result.rosterPlayerId ?? null,
       client_id: result.clientId ?? null,
     }
-    if (!result.rosterPlayerId || !result.clientId || !this.bound(game, row))
+
+    if (
+      !result.rosterPlayerId ||
+      !result.clientId ||
+      !RealGameFacade.bound(game, row)
+    ) {
       return fail("projection_outcome_unknown")
+    }
+
     return {
       ok: true,
       status: "active",
@@ -145,11 +172,19 @@ export class RealGameFacade {
     input: OperationInput,
   ): Receipt {
     const game = this.game(context)
-    if (!game) return fail("game_unavailable")
-    if (!this.bound(game, row)) return fail("game_binding_changed")
-    const rosterId = row.roster_id!
+
+    if (!game) {
+      return fail("game_unavailable")
+    }
+
+    if (!RealGameFacade.bound(game, row)) {
+      return fail("game_binding_changed")
+    }
+
+    const rosterId = row.roster_id
     const state = game.getQuestionStateForGateway(rosterId)
-    if (input.action === "poll")
+
+    if (input.action === "poll") {
       return {
         ok: true,
         status: "observed",
@@ -157,13 +192,27 @@ export class RealGameFacade {
         points: state.points,
         answered: state.answeredCurrentQuestion,
       }
+    }
+
     if (input.action === "answer") {
-      if (input.epoch !== state.epoch) return fail("stale_epoch")
+      if (input.epoch !== state.epoch) {
+        return fail("stale_epoch")
+      }
+
+      const { answerIndex } = input
+
+      if (answerIndex === undefined) {
+        throw new Error(
+          "Phone answer reached the facade without an admitted index",
+        )
+      }
+
       const answer = game.submitPhoneAnswerByRosterId(
         rosterId,
-        input.answerIndex!,
+        answerIndex,
         row.registration_id,
       )
+
       return {
         ok: answer.accepted,
         status: answerStatus(answer, state.isSupportedOnPstn),
@@ -171,11 +220,13 @@ export class RealGameFacade {
         epoch: answer.epoch,
       }
     }
+
     const disconnected = game.disconnectPhoneCallerByRosterId(
       rosterId,
       false,
       row.registration_id,
     )
+
     return {
       ok: disconnected,
       status: disconnected ? "disconnected" : "disconnect_outcome_unknown",

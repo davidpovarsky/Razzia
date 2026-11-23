@@ -21,15 +21,15 @@ The diagnostics used the real issuer, MCP client, AppBridge, widget and native r
 
 ## Observed scheduling distinction
 
-| Observation | Tadazz Classic | Razzia Original |
-| --- | --- | --- |
-| Last native RAF in both host and widget | 18:22:46.187Z | 18:23:12.021Z |
-| Native RAF age at failure snapshot | Widget 9,998 ms; host 10,103 ms | Widget 9,784 ms; host 9,875 ms |
-| Native RAF age at completion snapshot | Widget 12,183 ms; host 12,238 ms | Widget 11,476 ms; host 11,563 ms |
-| Native timer behavior during failure interval | Timers continued; latest callbacks 85/76 ms old at capture | Both documents also recorded a roughly 9.7-second timer gap, then resumed |
-| Native scene commit evidence | Committed at 18:22:46.260Z, 73 ms after the final RAF | Initial scene committed before the stall; a queued update committed at 18:23:21.646Z after timers resumed |
-| Visibility | Both documents visible; no visibility changes | Both documents visible; no visibility changes |
-| Input delivery | No pause pointerdown/up/click events reached the button | No pause pointerdown/up/click events reached the button |
+| Observation                                   | Tadazz Classic                                             | Razzia Original                                                                                           |
+| --------------------------------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| Last native RAF in both host and widget       | 18:22:46.187Z                                              | 18:23:12.021Z                                                                                             |
+| Native RAF age at failure snapshot            | Widget 9,998 ms; host 10,103 ms                            | Widget 9,784 ms; host 9,875 ms                                                                            |
+| Native RAF age at completion snapshot         | Widget 12,183 ms; host 12,238 ms                           | Widget 11,476 ms; host 11,563 ms                                                                          |
+| Native timer behavior during failure interval | Timers continued; latest callbacks 85/76 ms old at capture | Both documents also recorded a roughly 9.7-second timer gap, then resumed                                 |
+| Native scene commit evidence                  | Committed at 18:22:46.260Z, 73 ms after the final RAF      | Initial scene committed before the stall; a queued update committed at 18:23:21.646Z after timers resumed |
+| Visibility                                    | Both documents visible; no visibility changes              | Both documents visible; no visibility changes                                                             |
+| Input delivery                                | No pause pointerdown/up/click events reached the button    | No pause pointerdown/up/click events reached the button                                                   |
 
 Both cases had the expected manual results chapter and native question/answer content. The Classic stage was ready and visible. The Original viewport's fit work remained unfinished as frame delivery stalled. The plain host document has no native React scene, yet its RAF stream stopped at the identical wall-clock instant as the widget. A React-only remount or delayed initial native-root commit therefore cannot explain the observed pause failures.
 

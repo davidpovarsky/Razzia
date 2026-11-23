@@ -348,6 +348,7 @@ export function authoredShowToNativeBundleDraft(
             id: sceneId,
             kind: "answerRecap",
             title: card.title,
+            subtitle: card.subtitle,
             ...(resolvedStartQId
               ? {
                   startQuestionId: resolvedStartQId,
@@ -1080,6 +1081,7 @@ export function nativeBundleToAuthoredShow(
             key: sKey,
             kind: "answerRecap",
             title: scene.title,
+            subtitle: scene.subtitle,
             ...(startQuestionKey
               ? {
                   startQuestionKey,

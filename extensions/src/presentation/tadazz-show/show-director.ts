@@ -5,7 +5,11 @@ import {
   type FullShowInput,
   type FullShowScene,
 } from "../tadazz-v4/FullShowScenes"
-import type { ShowScene, SceneDescriptor } from "./presentation-scene"
+import {
+  isShowSceneContentPending,
+  type ShowScene,
+  type SceneDescriptor,
+} from "./presentation-scene"
 import type {
   StageLeaderEntry,
   StageMode,
@@ -23,6 +27,16 @@ export function hasAuthoredCinematicContent(
     scene.mediaUrl ||
     scene.lottieUrl ||
     (scene.overlayAnimations?.length ?? 0) > 0,
+  )
+}
+
+/** Foreground audio and authored Lottie keep their existing shared media owner. */
+export function usesSharedScenePresenter(scene: SceneDescriptor): boolean {
+  return (
+    (scene.kind === "media" && scene.mediaType === "audio") ||
+    (scene.kind === "animation" &&
+      Boolean(scene.lottieUrl) &&
+      !isFullShowScene(scene.preset ?? ""))
   )
 }
 
@@ -59,10 +73,12 @@ export type StageStep =
   | {
       op: "showLeaderboard"
       entries: StageLeaderEntry[]
+      title?: string
     }
   | {
       op: "updateLeaderboard"
       entries: StageLeaderEntry[]
+      title?: string
     }
   | {
       op: "playZZWipe"
@@ -96,6 +112,7 @@ export type StageStep =
         alt?: string
       }>
       round?: number | null
+      title?: string
       subtitle?: string
     }
   | {
@@ -175,6 +192,10 @@ function planTransition(
   stage: StageSnapshot,
   now = Date.now(),
 ): StageStep[] {
+  if (isShowSceneContentPending(next)) {
+    return []
+  }
+
   const leavingQuestion =
     prev !== null &&
     (QUESTION_EXIT_KINDS.has(prev.kind) ||
@@ -420,10 +441,12 @@ function planScene(
           ? {
               op: "updateLeaderboard",
               entries,
+              title: scene.title,
             }
           : {
               op: "showLeaderboard",
               entries,
+              title: scene.title,
             },
       ]
     }
@@ -490,6 +513,7 @@ function planScene(
       steps.push({
         op: "revealResults",
         reveal: {
+          title: scene.title,
           counts: r.options.map((o) => o.count),
           percentages: r.options.map((o) => o.percentage),
           mode: "survey",
@@ -551,7 +575,8 @@ function planScene(
         {
           op: "showRoundRecap",
           winners,
-          subtitle: scene.subtitle,
+          title: scene.title,
+          subtitle: scene.subtitle ?? recap?.subtitle,
         },
       ]
     }
@@ -589,7 +614,7 @@ function planScene(
 
       // The existing ScenePresenter owns an explicitly authored Lottie. Keep
       // Creating Worlds' full-show choreography on its original native path.
-      if (scene.lottieUrl && !(preset && isFullShowScene(preset))) {
+      if (usesSharedScenePresenter(scene)) {
         return [{ op: "custom" }]
       }
 
@@ -709,6 +734,8 @@ function planScene(
         return [
           {
             op: "showRoundRecap",
+            title: scene.title,
+            subtitle: scene.subtitle,
             round: (
               scene as {
                 round?: number
@@ -1004,12 +1031,12 @@ export async function runSteps(
         break
 
       case "showLeaderboard":
-        await handle.showLeaderboard(step.entries)
+        await handle.showLeaderboard(step.entries, step.title)
 
         break
 
       case "updateLeaderboard":
-        await handle.updateLeaderboard(step.entries)
+        await handle.updateLeaderboard(step.entries, step.title)
 
         break
 

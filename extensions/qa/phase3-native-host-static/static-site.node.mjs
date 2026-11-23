@@ -14,7 +14,7 @@ writeFileSync(
 writeFileSync(join(root, "assets", "app.js"), "/* synthetic bundle */")
 const mediaBytes = Buffer.from([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
 for (const extension of ["mp3", "wav", "mp4"]) {
-  writeFileSync(join(root, "assets", "media." + extension), mediaBytes)
+  writeFileSync(join(root, "assets", `media.${extension}`), mediaBytes)
 }
 writeFileSync(join(root, "assets", "empty.mp3"), "")
 mkdirSync(join(root, "oauth"))
@@ -132,8 +132,8 @@ test("media GET and HEAD advertise byte seeking with accurate audio/video types"
     ["wav", "audio/wav"],
     ["mp4", "video/mp4"],
   ]) {
-    const get = serve(request("/assets/media." + extension))
-    const head = serve(request("/assets/media." + extension, "HEAD"))
+    const get = serve(request(`/assets/media.${extension}`))
+    const head = serve(request(`/assets/media.${extension}`, "HEAD"))
 
     for (const response of [get, head]) {
       assert.equal(response.status, 200)
@@ -168,7 +168,8 @@ test("single byte ranges return exact closed, open-ended and suffix slices", asy
     assert.equal(response.headers.get("content-type"), "audio/mpeg", header)
     assert.equal(
       response.headers.get("content-range"),
-      "bytes " + start + "-" + end + "/10",
+
+      `bytes ${start}-${end}/10`,
       header,
     )
     assert.equal(

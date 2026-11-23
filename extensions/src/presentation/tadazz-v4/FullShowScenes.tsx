@@ -316,6 +316,7 @@ export function Directory({ data }: { data: FullShowInput }) {
 
 export function PhoneInstructions({ data }: { data: FullShowInput }) {
   const text = useFullShowText()
+
   return (
     <>
       <Head
@@ -385,12 +386,12 @@ export function PhoneInstructions({ data }: { data: FullShowInput }) {
               "One vote per table, using the phone keypad.",
             ),
           ],
-        ].map(([n, title, text]) => (
+        ].map(([n, title, stepText]) => (
           <div className="full-step" key={n}>
             <span className="full-step-num">{n}</span>
             <div className="full-step-info">
               <div className="full-step-head">{title}</div>
-              <div className="full-step-text">{text}</div>
+              <div className="full-step-text">{stepText}</div>
             </div>
           </div>
         ))}

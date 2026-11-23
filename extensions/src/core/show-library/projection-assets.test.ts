@@ -14,8 +14,10 @@ import {
   demoPresentationSnapshotSchema,
   showProjectionSchema,
 } from "./projection-schema"
-import { projectShowBindings } from "./projection"
-import type { PreviewProjectionBinding } from "./projection"
+import {
+  projectShowBindings,
+  type PreviewProjectionBinding,
+} from "./projection"
 
 const foreign = { assetId: "foreign-asset", sha256: "a".repeat(64) }
 const bundled = showThemeRegistry.list().flatMap((theme) => theme.assets)
@@ -40,16 +42,23 @@ function fixture(
           ],
         }
       : authored
-  if (asset && slot === "current-choice")
+
+  if (asset && slot === "current-choice") {
     Object.assign(authored.cards[0].answers[0], { imageUrl: asset.url })
+  }
+
   expect(tadaShowV1Schema.safeParse(show).success).toBe(true)
   const input = previewInputFixture(show)
   input.context.role = "player"
   input.assets = asset ? [ref(asset)] : []
   const draft = normalizePreviewDraft(input),
     plan = resolvePreviewPlan(draft)
-  const card = draft.show.cards[0]
-  if (card.kind !== "quiz") throw new Error("fixture")
+  const [card] = draft.show.cards
+
+  if (card.kind !== "quiz") {
+    throw new Error("fixture")
+  }
+
   const id = getPreviewIdentityId(
     draft.input.identityMap,
     "questions",
@@ -81,6 +90,7 @@ function fixture(
     phase: "voting",
     clock: snapshot.clock,
   }
+
   return { snapshot, context: input.context, binding }
 }
 function withRef(
@@ -114,10 +124,11 @@ describe("resource-free preview projection until compiled authored-slot asset bi
       expect(demoPresentationSnapshotSchema.safeParse(forged).success).toBe(
         true,
       )
-      for (const evidence of [undefined, binding])
+      for (const evidence of [undefined, binding]) {
         expect(() => projectShowBindings(forged, context, evidence)).toThrow(
           "visual-assets-unavailable",
         )
+      }
     },
   )
   it.each(["question", "choice"] as const)(
@@ -186,7 +197,7 @@ describe("resource-free preview projection until compiled authored-slot asset bi
         { bytes: 1 },
         { url: "https://private.invalid/resource" },
         { url: "file:///private/asset" },
-      ])
+      ]) {
         expect(() =>
           projectShowBindings(
             withRef(snapshot, slot, { ...foreign, ...claim }),
@@ -194,6 +205,7 @@ describe("resource-free preview projection until compiled authored-slot asset bi
             binding,
           ),
         ).toThrow()
+      }
     },
   )
   it.each(RUNTIME_PHASES)(

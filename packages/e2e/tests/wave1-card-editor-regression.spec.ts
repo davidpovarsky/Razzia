@@ -8,7 +8,6 @@ import {
   openQuizzTab,
   quizzRow,
   seedQuizz,
-  selectOption,
 } from "@razzia/e2e/utils/editor"
 import { expect, test } from "@razzia/e2e/utils/fixtures"
 import { t } from "@razzia/e2e/utils/i18n"
@@ -29,6 +28,12 @@ const saveScreenshot = async (page: Page, filename: string) => {
   const filepath = join(SCREENSHOT_DIR, filename)
   await page.screenshot({ path: filepath })
 }
+
+const headerCardTypeBar = (page: Page) =>
+  page.locator('[data-testid="studio-card-type-bar"][data-embedded="false"]')
+
+const editCardTypeBar = (page: Page) =>
+  page.getByTestId("editor-panel-edit").getByTestId("studio-card-type-bar")
 
 interface TelemetryCollector {
   assertClean: () => void
@@ -118,9 +123,9 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
     await expect(page.getByTestId("editor-exit-btn")).toBeVisible()
 
     // Row 2: Card type ToggleGroup in Questions tab
-    const cardTypeBar = page.getByTestId("studio-card-type-bar")
+    const cardTypeBar = headerCardTypeBar(page)
     await expect(cardTypeBar).toBeVisible()
-    const quizToggle = page.getByTestId("toggle-kind-quiz")
+    const quizToggle = headerCardTypeBar(page).getByTestId("toggle-kind-quiz")
     await expect(quizToggle).toBeVisible()
     await expect(quizToggle).toHaveAttribute("data-state", "on")
 
@@ -181,7 +186,7 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
 
     // Verify top row and bottom selector bar
     await expect(page.getByTestId("studio-tab-questions")).toBeVisible()
-    await expect(page.getByTestId("studio-card-type-bar")).toBeVisible()
+    await expect(headerCardTypeBar(page)).toBeVisible()
     await expect(page.getByTestId("editor-save-btn")).toBeVisible()
 
     // Verify question 1 is active and its content is loaded
@@ -208,6 +213,7 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
     await loginManager(page)
     await page.goto("/manager/quizz")
     await expect(page).toHaveURL(/\/manager\/quizz$/u)
+    await page.getByTestId("editor-mode-advanced").click()
 
     const viewports = [
       {
@@ -264,8 +270,17 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
         expect(exitBox.y + exitBox.height).toBeLessThanOrEqual(vp.height)
       }
 
-      // Lower row: last toggle (closing) is reachable
-      const closingToggle = page.getByTestId("toggle-kind-closing")
+      // The compact layout moves card controls into the Edit panel below 1100px.
+      const headerBar = headerCardTypeBar(page)
+      const kindBar = vp.width < 1100 ? editCardTypeBar(page) : headerBar
+
+      if (vp.width < 1100) {
+        await expect(headerBar).toBeHidden()
+      } else {
+        await expect(headerBar).toBeVisible()
+      }
+
+      const closingToggle = kindBar.getByTestId("toggle-kind-closing")
       await closingToggle.scrollIntoViewIfNeeded()
       await expect(closingToggle).toBeVisible()
 
@@ -314,7 +329,7 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
     await expect(aside.getByText("3").first()).toBeVisible()
 
     // Card 3 should be Survey
-    const surveyToggle = page.getByTestId("toggle-kind-survey")
+    const surveyToggle = editCardTypeBar(page).getByTestId("toggle-kind-survey")
     await expect(surveyToggle).toHaveAttribute("data-state", "on")
 
     // Verify Question 1 is still intact
@@ -322,10 +337,9 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
     await expect(
       page.getByPlaceholder(t("quizz:question.placeholder")),
     ).toHaveValue("Initial Question Card 1")
-    await expect(page.getByTestId("toggle-kind-quiz")).toHaveAttribute(
-      "data-state",
-      "on",
-    )
+    await expect(
+      editCardTypeBar(page).getByTestId("toggle-kind-quiz"),
+    ).toHaveAttribute("data-state", "on")
 
     await saveScreenshot(page, "added_quiz_and_survey_cards.png")
     telemetry.assertClean()
@@ -338,6 +352,7 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
     await loginManager(page)
     await page.goto("/manager/quizz")
     await expect(page).toHaveURL(/\/manager\/quizz$/u)
+    await page.getByTestId("editor-mode-advanced").click()
 
     const nonQuestionKinds = [
       {
@@ -393,15 +408,17 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
       await addBtn.click()
 
       // Assert newly added card is selected in ToggleGroup row 2
-      const toggle = page.getByTestId(`toggle-kind-${item.kind}`)
+      const toggle = editCardTypeBar(page).getByTestId(
+        `toggle-kind-${item.kind}`,
+      )
       await expect(toggle).toHaveAttribute("data-state", "on")
 
       // Assert Scene Editor settings panel is visible on the right
       await expect(
         page.getByText(
           t("extensions:studio.scene.kindSettings", {
-            kind: item.kind,
-            defaultValue: `${item.kind} Settings`,
+            kind: item.label,
+            defaultValue: `${item.label} Settings`,
           }),
         ),
       ).toBeVisible()
@@ -412,10 +429,9 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
       .locator("div.cursor-pointer", { hasText: "Transition" })
       .first()
       .click()
-    await expect(page.getByTestId("toggle-kind-transition")).toHaveAttribute(
-      "data-state",
-      "on",
-    )
+    await expect(
+      editCardTypeBar(page).getByTestId("toggle-kind-transition"),
+    ).toHaveAttribute("data-state", "on")
 
     await saveScreenshot(page, "added_transition_card_editor.png")
     telemetry.assertClean()
@@ -428,8 +444,17 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
     await loginManager(page)
     await page.goto("/manager/quizz")
     await expect(page).toHaveURL(/\/manager\/quizz$/u)
+    await page.getByTestId("editor-mode-advanced").click()
 
     const aside = page.locator("aside").first()
+    const editPanel = page.getByTestId("editor-panel-edit")
+    const questionInput = editPanel.getByPlaceholder(
+      t("quizz:question.placeholder"),
+    )
+    const retainedQuestion = "The final question must remain intact"
+    const convertedQuestion = "Authored question requiring confirmation"
+
+    await questionInput.fill(retainedQuestion)
 
     // 1. Add a second question so we have 2 questions
     await page.getByTestId("studio-add-card-btn").click()
@@ -437,13 +462,19 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
 
     // Select card 2 (which is a question)
     await aside.getByText("2").first().click()
-    await expect(page.getByTestId("toggle-kind-quiz")).toHaveAttribute(
-      "data-state",
-      "on",
-    )
+    await expect(
+      editCardTypeBar(page).getByTestId("toggle-kind-quiz"),
+    ).toHaveAttribute("data-state", "on")
+
+    // Blank questions convert immediately. Author content to exercise confirmation.
+    await questionInput.fill(convertedQuestion)
+    const answers = editPanel.getByPlaceholder(t("quizz:addAnswerPlaceholder"))
+    await expect(answers).toHaveCount(2)
+    await answers.nth(0).fill("First authored answer")
+    await answers.nth(1).fill("Second authored answer")
 
     // Try converting to Transition: click toggle-kind-transition
-    await page.getByTestId("toggle-kind-transition").click()
+    await editCardTypeBar(page).getByTestId("toggle-kind-transition").click()
 
     // Assert Confirmation dialog appears
     const dialogTitle = page.getByText(
@@ -458,16 +489,16 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
     await expect(dialogTitle).not.toBeVisible()
 
     // Verify card 2 is still a question!
-    await expect(page.getByTestId("toggle-kind-quiz")).toHaveAttribute(
-      "data-state",
-      "on",
-    )
     await expect(
-      page.getByPlaceholder(t("quizz:question.placeholder")),
-    ).toBeVisible()
+      editCardTypeBar(page).getByTestId("toggle-kind-quiz"),
+    ).toHaveAttribute("data-state", "on")
+    await expect(questionInput).toBeVisible()
+    await expect(questionInput).toHaveValue(convertedQuestion)
+    await expect(answers.nth(0)).toHaveValue("First authored answer")
+    await expect(answers.nth(1)).toHaveValue("Second authored answer")
 
     // Try again and Confirm conversion
-    await page.getByTestId("toggle-kind-transition").click()
+    await editCardTypeBar(page).getByTestId("toggle-kind-transition").click()
     await expect(dialogTitle).toBeVisible()
     await page
       .getByRole("button", {
@@ -478,10 +509,9 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
       .click()
 
     // Assert card 2 is now a Transition scene and Scene Editor is displayed without crash
-    await expect(page.getByTestId("toggle-kind-transition")).toHaveAttribute(
-      "data-state",
-      "on",
-    )
+    await expect(
+      editCardTypeBar(page).getByTestId("toggle-kind-transition"),
+    ).toHaveAttribute("data-state", "on")
     await expect(
       page.getByText(
         t("extensions:studio.scene.kindSettings", {
@@ -494,31 +524,25 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
     // Now verify that converting the LAST remaining question is blocked
     // Card 1 is the only remaining question
     await aside.getByText("1").first().click()
-    await expect(page.getByTestId("toggle-kind-quiz")).toHaveAttribute(
-      "data-state",
-      "on",
-    )
+    await expect(
+      editCardTypeBar(page).getByTestId("toggle-kind-quiz"),
+    ).toHaveAttribute("data-state", "on")
 
-    await page.getByTestId("toggle-kind-transition").click()
-    await expect(dialogTitle).toBeVisible()
-    await page
-      .getByRole("button", {
-        name: t("extensions:studio.convert.confirm", {
-          defaultValue: "Convert to Scene",
-        }),
-      })
-      .click()
+    await editCardTypeBar(page).getByTestId("toggle-kind-transition").click()
+    await expect(dialogTitle).not.toBeVisible()
 
+    // The last-question guard rejects immediately, before opening confirmation.
     // Toast error: cannot delete last question
     await expect(
       page.getByText(t("extensions:timeline.cannotDeleteLastQuestion")),
     ).toBeVisible()
 
     // Card 1 remains a question!
-    await expect(page.getByTestId("toggle-kind-quiz")).toHaveAttribute(
-      "data-state",
-      "on",
-    )
+    await expect(
+      editCardTypeBar(page).getByTestId("toggle-kind-quiz"),
+    ).toHaveAttribute("data-state", "on")
+
+    await expect(questionInput).toHaveValue(retainedQuestion)
 
     await saveScreenshot(page, "converted_card_no_crash.png")
     telemetry.assertClean()
@@ -531,6 +555,7 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
     await loginManager(page)
     await page.goto("/manager/quizz")
     await expect(page).toHaveURL(/\/manager\/quizz$/u)
+    await page.getByTestId("editor-mode-advanced").click()
 
     // Add a scene card directly (e.g. countdown)
     await page.getByTestId("studio-card-kind-select").click()
@@ -544,19 +569,17 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
     await page.getByTestId("studio-add-card-btn").click()
 
     // Countdown card is selected
-    await expect(page.getByTestId("toggle-kind-countdown")).toHaveAttribute(
-      "data-state",
-      "on",
-    )
+    await expect(
+      editCardTypeBar(page).getByTestId("toggle-kind-countdown"),
+    ).toHaveAttribute("data-state", "on")
 
     // Convert this scene card to Quiz: click toggle-kind-quiz
-    await page.getByTestId("toggle-kind-quiz").click()
+    await editCardTypeBar(page).getByTestId("toggle-kind-quiz").click()
 
     // Card is now a Question
-    await expect(page.getByTestId("toggle-kind-quiz")).toHaveAttribute(
-      "data-state",
-      "on",
-    )
+    await expect(
+      editCardTypeBar(page).getByTestId("toggle-kind-quiz"),
+    ).toHaveAttribute("data-state", "on")
 
     // QuestionEditor is mounted with valid fields
     const questionInput = page.getByPlaceholder(t("quizz:question.placeholder"))
@@ -600,13 +623,13 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
       .fill("Card 2 Question")
 
     // Card 2 is selected -> toggle to Survey
-    const surveyToggle = page.getByTestId("toggle-kind-survey")
+    const surveyToggle = editCardTypeBar(page).getByTestId("toggle-kind-survey")
     await surveyToggle.click()
     await expect(surveyToggle).toHaveAttribute("data-state", "on")
 
     // Select Card 1 -> should STILL be Quiz!
     await aside.getByText("1").first().click()
-    const quizToggle = page.getByTestId("toggle-kind-quiz")
+    const quizToggle = editCardTypeBar(page).getByTestId("toggle-kind-quiz")
     await expect(quizToggle).toHaveAttribute("data-state", "on")
 
     // Switch Card 1 to Survey as well
@@ -631,6 +654,7 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
     await loginManager(page)
     await page.goto("/manager/quizz")
     await expect(page).toHaveURL(/\/manager\/quizz$/u)
+    await page.getByTestId("editor-mode-advanced").click()
 
     const aside = page.locator("aside").first()
 
@@ -699,6 +723,7 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
     await loginManager(page)
     await page.goto("/manager/quizz")
     await expect(page).toHaveURL(/\/manager\/quizz$/u)
+    await page.getByTestId("editor-mode-advanced").click()
 
     const aside = page.locator("aside").first()
 
@@ -770,6 +795,7 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
     await loginManager(page)
     await page.goto("/manager/quizz")
     await expect(page).toHaveURL(/\/manager\/quizz$/u)
+    await page.getByTestId("editor-mode-advanced").click()
 
     // Set quiz title
     await page.getByPlaceholder(t("quizz:titleQuizzPlaceholder")).fill(subject)
@@ -838,20 +864,18 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
     await expect(
       page.getByPlaceholder(t("quizz:question.placeholder")),
     ).toHaveValue("Persistent Question 1")
-    await expect(page.getByTestId("toggle-kind-quiz")).toHaveAttribute(
-      "data-state",
-      "on",
-    )
+    await expect(
+      editCardTypeBar(page).getByTestId("toggle-kind-quiz"),
+    ).toHaveAttribute("data-state", "on")
 
     // Verify Transition card content
     await aside
       .locator("div.cursor-pointer", { hasText: "Transition" })
       .first()
       .click()
-    await expect(page.getByTestId("toggle-kind-transition")).toHaveAttribute(
-      "data-state",
-      "on",
-    )
+    await expect(
+      editCardTypeBar(page).getByTestId("toggle-kind-transition"),
+    ).toHaveAttribute("data-state", "on")
     await expect(
       page.getByPlaceholder(
         t("extensions:studio.scene.titlePlaceholder", {
@@ -865,10 +889,9 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
     await expect(
       page.getByPlaceholder(t("quizz:question.placeholder")),
     ).toHaveValue("Persistent Survey Question 2")
-    await expect(page.getByTestId("toggle-kind-survey")).toHaveAttribute(
-      "data-state",
-      "on",
-    )
+    await expect(
+      editCardTypeBar(page).getByTestId("toggle-kind-survey"),
+    ).toHaveAttribute("data-state", "on")
 
     await saveScreenshot(page, "saved_and_reopened_mixed_timeline.png")
     telemetry.assertClean()
@@ -883,11 +906,12 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
     await expect(page).toHaveURL(/\/manager\/quizz$/u)
 
     // Change question 1 to estimation
-    await selectOption(
-      page,
-      t("quizz:question.config.answerMode"),
-      t("quizz:questionType.estimation"),
-    )
+    await page.getByTestId("editor-panel-toggle-settings").click()
+    const settings = page.getByTestId("editor-panel-settings")
+    await expect(settings).toBeVisible()
+    await settings.getByTestId("answer-type-estimation").click()
+    await page.getByTestId("editor-panel-close-settings").click()
+    await expect(settings).toBeHidden()
     await page
       .getByPlaceholder(t("quizz:question.placeholder"))
       .fill("Estimation Rapid Test")
@@ -949,18 +973,16 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
     await expect(
       page.getByPlaceholder(t("quizz:question.placeholder")),
     ).toHaveValue("Legacy Pre-V2 Question")
-    await expect(page.getByTestId("toggle-kind-quiz")).toHaveAttribute(
-      "data-state",
-      "on",
-    )
+    await expect(
+      editCardTypeBar(page).getByTestId("toggle-kind-quiz"),
+    ).toHaveAttribute("data-state", "on")
 
     // Switch tabs and ensure no gameMode mutation occurs
     await page.getByTestId("studio-tab-participants").click()
     await page.getByTestId("studio-tab-questions").click()
-    await expect(page.getByTestId("toggle-kind-quiz")).toHaveAttribute(
-      "data-state",
-      "on",
-    )
+    await expect(
+      editCardTypeBar(page).getByTestId("toggle-kind-quiz"),
+    ).toHaveAttribute("data-state", "on")
 
     // Save quiz
     await page.getByTestId("editor-save-btn").click()
@@ -1081,7 +1103,7 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
     await page.goto("/manager/quizz")
     await expect(page).toHaveURL(/\/manager\/quizz$/u)
 
-    const cardTypeBar = page.getByTestId("studio-card-type-bar")
+    const cardTypeBar = headerCardTypeBar(page)
     const saveBtn = page.getByTestId("editor-save-btn")
     const exitBtn = page.getByTestId("editor-exit-btn")
 
@@ -1119,10 +1141,9 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
     // 5. Click back to Questions tab
     await page.getByTestId("studio-tab-questions").click()
     await expect(cardTypeBar).toBeVisible()
-    await expect(page.getByTestId("toggle-kind-quiz")).toHaveAttribute(
-      "data-state",
-      "on",
-    )
+    await expect(
+      headerCardTypeBar(page).getByTestId("toggle-kind-quiz"),
+    ).toHaveAttribute("data-state", "on")
 
     await saveScreenshot(page, "settings_and_launch_nav.png")
     telemetry.assertClean()

@@ -59,13 +59,19 @@ function modelQuestionRefs(record: DraftRecord) {
     }))
 }
 
-export async function dispatch(
-  name: ToolName,
-  raw: unknown,
-  p: VerifiedPrincipal,
-  deps: Dependencies,
-  config: ServerConfig,
-): Promise<CallToolResult> {
+export async function dispatch({
+  name,
+  raw,
+  p,
+  deps,
+  config,
+}: {
+  name: ToolName
+  raw: unknown
+  p: VerifiedPrincipal
+  deps: Dependencies
+  config: ServerConfig
+}): Promise<CallToolResult> {
   const correlationId = randomUUID()
 
   try {
@@ -77,8 +83,9 @@ export async function dispatch(
       throw new ToolError("VALIDATION_FAILED")
     }
 
-    let data: unknown
-    let meta: Record<string, unknown> | undefined
+    let data: unknown = undefined
+
+    let meta: Record<string, unknown> | undefined = undefined
 
     if (isPackageTool(name)) {
       if (!deps.packages) {
@@ -121,11 +128,19 @@ export async function dispatch(
         "receivedBytes" in packaged
       ) {
         const chunk = packageInputs.write_package_upload_chunk.parse(raw)
-        const padding = chunk.bytesBase64.endsWith("==")
-          ? 2
-          : chunk.bytesBase64.endsWith("=")
-            ? 1
-            : 0
+        const getBase64Padding = () => {
+          if (chunk.bytesBase64.endsWith("==")) {
+            return 2
+          }
+
+          if (chunk.bytesBase64.endsWith("=")) {
+            return 1
+          }
+
+          return 0
+        }
+
+        const padding = getBase64Padding()
         const chunkBytes = (chunk.bytesBase64.length / 4) * 3 - padding
 
         if (packaged.receivedBytes < chunk.offset + chunkBytes) {
@@ -136,19 +151,22 @@ export async function dispatch(
       if ("uploadUrl" in packaged && packaged.uploadUrl) {
         firstPartyUrl(packaged.uploadUrl, config)
       }
+
       if ("previewUrl" in packaged) {
         firstPartyUrl(packaged.previewUrl, config)
       }
+
       if ("studioUrl" in packaged && packaged.studioUrl) {
         firstPartyUrl(packaged.studioUrl, config)
       }
+
       if ("downloadUrl" in packaged && packaged.downloadUrl) {
         firstPartyUrl(packaged.downloadUrl, config)
       }
 
       data = packaged
-      meta = result.meta
-    } else
+      ;({ meta } = result)
+    } else {
       switch (name) {
         case "list_game_templates": {
           if (!deps.catalog) {
@@ -227,7 +245,12 @@ export async function dispatch(
           data = deps.semanticDrafts
             ? await deps.semanticDrafts.state(p, a)
             : publicDraft(
-                await readDraft(deps, p, a.draftId, a.expectedRevision),
+                await readDraft({
+                  deps,
+                  p,
+                  id: a.draftId,
+                  expected: a.expectedRevision,
+                }),
               )
 
           break
@@ -235,7 +258,7 @@ export async function dispatch(
 
         case "get_game_draft": {
           const a = inputs[name].parse(raw)
-          const record = await readDraft(deps, p, a.draftId)
+          const record = await readDraft({ deps, p, id: a.draftId })
 
           if (utf8Bytes(record.authoredShowJson) > LIMITS.authored) {
             throw new ToolError("INTERNAL")
@@ -351,12 +374,12 @@ export async function dispatch(
           }
 
           const a = inputs[name].parse(raw)
-          const original = await readDraft(
+          const original = await readDraft({
             deps,
             p,
-            a.draftId,
-            a.expectedRevision,
-          )
+            id: a.draftId,
+            expected: a.expectedRevision,
+          })
           const normalized = normalizeDraft(
             JSON.stringify({
               ...JSON.parse(original.authoredShowJson),
@@ -433,7 +456,12 @@ export async function dispatch(
 
         case "preview_game": {
           const a = inputs[name].parse(raw)
-          const record = await readDraft(deps, p, a.draftId, a.expectedRevision)
+          const record = await readDraft({
+            deps,
+            p,
+            id: a.draftId,
+            expected: a.expectedRevision,
+          })
 
           if (!deps.preview && deps.previewCandidateV2) {
             const candidate = previewCandidateV2Schema.parse(
@@ -448,12 +476,12 @@ export async function dispatch(
               throw new ToolError("PREVIEW_UNAVAILABLE")
             }
 
-            const failure = failureResult(
+            const failure = failureResult({
               name,
-              new ToolError("PREVIEW_UNAVAILABLE"),
+              error: new ToolError("PREVIEW_UNAVAILABLE"),
               config,
               correlationId,
-            )
+            })
             const result = {
               ...failure,
               _meta: { [PREVIEW_CANDIDATE_META_V2]: candidate },
@@ -466,9 +494,14 @@ export async function dispatch(
             return result
           }
 
-          const result = await renderPreview(deps, p, record, a.locale)
-          data = result.data
-          meta = result.meta
+          const result = await renderPreview({
+            deps,
+            principal: p,
+            record,
+            locale: a.locale,
+          })
+          ;({ data } = result)
+          ;({ meta } = result)
 
           break
         }
@@ -539,6 +572,7 @@ export async function dispatch(
           break
         }
       }
+    }
 
     const structuredContent = jsonObject.parse(
       outputs[name].parse({
@@ -573,6 +607,6 @@ export async function dispatch(
 
     return result
   } catch (error) {
-    return failureResult(name, error, config, correlationId)
+    return failureResult({ name, error, config, correlationId })
   }
 }

@@ -1,5 +1,6 @@
 import NativeButton from "../../../../packages/web/src/components/Button"
 import { SeatingPlan } from "../tadazz-v4/reference-story/SeatingPlan"
+import { STORY_ASSETS } from "../tadazz-v4/reference-story/assets"
 import { useRef, useState, type ReactNode } from "react"
 import { useTranslation } from "react-i18next"
 import { AlertDialog } from "radix-ui"
@@ -142,6 +143,7 @@ export function NativeClassicLobbyPanel({
     roster?: Array<{ id: string; label: string; connected: boolean }>
     representatives?: Array<{ table: number; name: string }>
     connectedTables?: number[]
+    seatingPlan?: boolean
   }
   players?: ReadonlyArray<{ id: string; username: string; connected: boolean }>
   onKick?: (id: string) => void
@@ -288,7 +290,7 @@ export function NativeClassicLobbyPanel({
     )
   }
 
-  if (representatives?.length) {
+  if (representatives?.length && fullShowData?.seatingPlan === true) {
     const tables = [
       ...new Set(
         representatives
@@ -296,7 +298,7 @@ export function NativeClassicLobbyPanel({
           .filter((table) => table >= 1 && table <= 31),
       ),
     ].sort((a, b) => a - b)
-    const connected = (fullShowData?.connectedTables ?? []).filter((table) =>
+    const connected = (fullShowData.connectedTables ?? []).filter((table) =>
       tables.includes(table),
     )
 
@@ -338,6 +340,133 @@ export function NativeClassicLobbyPanel({
           ),
         }}
       />
+    )
+  }
+
+  if (representatives?.length) {
+    const connected = new Set(fullShowData?.connectedTables ?? [])
+    const columnCount = Math.min(4, representatives.length)
+    const rowsPerColumn = Math.ceil(representatives.length / columnCount)
+    const columns = Array.from({ length: columnCount }, (_, column) =>
+      representatives.slice(
+        column * rowsPerColumn,
+        (column + 1) * rowsPerColumn,
+      ),
+    )
+
+    return (
+      <div
+        className="tz-x-fill tz-lobby-show"
+        data-testid="tadazz-screen-lobby"
+        data-directory-layout="representatives"
+      >
+        <div className="tz-lobby-show-brand">
+          <img src={STORY_ASSETS.logo} alt="TADAZZ!" />
+          <span>{tx("lobbyEyebrow", "JOIN THE SHOW")}</span>
+        </div>
+        <div className="tz-lobby-show-main">
+          <section className="tz-lobby-show-join tz-x-panel">
+            <div className="tz-lobby-show-small">
+              {t("game:joinInstruction")}
+            </div>
+            <div className="tz-lobby-show-url" data-testid="tadazz-lobby-url">
+              {host || webUrl}
+            </div>
+            <div className="tz-lobby-show-small">{t("game:gamePinLabel")}</div>
+            <div className="tz-lobby-show-pin" data-testid="tadazz-lobby-pin">
+              {(() => {
+                if (inviteCode) {
+                  if (isLocked) {
+                    return inviteCode.replace(/./g, "#")
+                  }
+
+                  return inviteCode
+                }
+
+                return "—"
+              })()}
+            </div>
+            <div className="tz-lobby-show-qr" data-testid="tadazz-lobby-qr">
+              {inviteCode && !isLocked ? (
+                <QRCodeSVG value={join.qrUrl ?? webUrl} />
+              ) : (
+                <Lock />
+              )}
+            </div>
+            {join.dialNumber && (
+              <>
+                <div className="tz-lobby-show-small">
+                  {tx("seating.call", "CALL TO JOIN")}
+                </div>
+                <div className="tz-lobby-show-phone" dir="ltr">
+                  {join.dialNumber}
+                </div>
+              </>
+            )}
+            <RoomJoinMetadata join={join} />
+            <div
+              className="tz-lobby-show-connected"
+              data-testid="tadazz-lobby-count"
+            >
+              {tx(
+                "lobbyRegisteredConnected",
+                "{{connected}} / {{total}} CONNECTED",
+                {
+                  connected: representatives.filter((rep) =>
+                    connected.has(rep.table),
+                  ).length,
+                  total: representatives.length,
+                },
+              )}
+            </div>
+          </section>
+          <section
+            className="tz-lobby-show-roster"
+            data-testid="tadazz-full-directory"
+            style={{ display: "flex", flexDirection: "column", minHeight: 0 }}
+          >
+            <h2
+              className="tz-lobby-show-roster-title"
+              style={{ flexShrink: 0 }}
+            >
+              {tx("representatives", "REPRESENTATIVES")}
+            </h2>
+            <div
+              className="tz-lobby-show-grid"
+              tabIndex={0}
+              style={{
+                gridTemplateColumns: `repeat(${columnCount}, minmax(0, 1fr))`,
+                minHeight: 0,
+                overflowY: "auto",
+                pointerEvents: "auto",
+              }}
+            >
+              {columns.map((column, columnIndex) => (
+                <div className="tz-lobby-show-col" key={columnIndex}>
+                  {column.map((rep, rowIndex) => (
+                    <div
+                      className={[
+                        "tz-lobby-show-rep",
+                        connected.has(rep.table) && "connected",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
+                      key={`${rep.table}:${columnIndex}:${rowIndex}`}
+                      data-table={rep.table}
+                      data-connected={connected.has(rep.table)}
+                      style={{ height: "auto", minHeight: 57 }}
+                    >
+                      <strong aria-hidden="true">{rep.table}</strong>
+                      <span>{rep.name}</span>
+                      <i aria-hidden="true" />
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+      </div>
     )
   }
 

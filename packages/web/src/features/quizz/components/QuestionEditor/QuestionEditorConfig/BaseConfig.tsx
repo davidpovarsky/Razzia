@@ -16,6 +16,7 @@ import ConfigSection from "@razzia/web/features/quizz/components/QuestionEditor/
 import CardAudioConfig from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/CardAudioConfig"
 import CardBackgroundConfig from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/CardBackgroundConfig"
 import QuestionEntranceConfig from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/QuestionEntranceConfig"
+import QuestionRevealConfig from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/QuestionRevealConfig"
 import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 import {
   ArrowBigDownDash,
@@ -228,6 +229,7 @@ const BaseConfig = () => {
             <CardBackgroundConfig />
             <CardAudioConfig kind="question" />
             <QuestionEntranceConfig kind="question" />
+            <QuestionRevealConfig />
           </div>
         )}
       </div>

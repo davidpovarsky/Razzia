@@ -6,6 +6,8 @@ import {
   computeCanonicalBaseDigest,
 } from "../../../extensions/src/core"
 import { join } from "node:path"
+import { skipPlatformOpening } from "@razzia/e2e/utils/manager"
+import { setManualProgression } from "@razzia/e2e/utils/extension-manager"
 
 async function command(page: Page, gameId: string, action: string) {
   const result = await page.evaluate(
@@ -125,7 +127,9 @@ test("legacy adapters retain picture voting, multi percentages and zero votes", 
     token,
   )
   await page.goto(`/party/manager/${gameId}`)
+  await skipPlatformOpening(page)
   await expect(page.getByTestId("manager-control-toolbar")).toBeVisible()
+  await setManualProgression(page)
   const context = await browser.newContext({
     viewport: { width: 390, height: 844 },
     hasTouch: true,
@@ -135,7 +139,7 @@ test("legacy adapters retain picture voting, multi percentages and zero votes", 
 
   try {
     const player = await context.newPage()
-    await player.goto(`http://127.0.0.1:3170/game?pin=${inviteCode}`)
+    await player.goto(new URL(`/game?pin=${inviteCode}`, page.url()).href)
     await player.getByPlaceholder("Username here").fill("Legacy proof player")
     await player.getByRole("button", { name: "Submit", exact: true }).click()
     await expect(page.getByTestId("host-connected-counter")).toHaveText("1 / 1")

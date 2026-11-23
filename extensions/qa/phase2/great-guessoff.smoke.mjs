@@ -7,6 +7,7 @@ const browser = await chromium.launch({
   executablePath: "C:/Program Files/Google/Chrome/Application/chrome.exe",
 })
 const errors = []
+
 try {
   const page = await browser.newPage({
     viewport: { width: 1366, height: 900 },
@@ -67,6 +68,7 @@ try {
   assert.equal(
     await page.locator(".ggo-choice img").evaluateAll(async (images) => {
       await Promise.all(images.map((element) => element.decode()))
+
       return images.every((element) => element.naturalWidth > 0)
     }),
     true,

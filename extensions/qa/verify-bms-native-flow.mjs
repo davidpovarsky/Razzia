@@ -7,10 +7,13 @@ const deps = process.env.FLOW_DEPS
 const evidence = process.env.FLOW_EVIDENCE
 const tenant = process.env.FLOW_TENANT
 const directorOverride = process.env.FLOW_DIRECTOR_OVERRIDE
-if (!source || !deps || !evidence || !tenant)
+
+if (!source || !deps || !evidence || !tenant) {
   throw new Error(
     "Explicit read-only source, dependencies, tenant and own evidence required",
   )
+}
+
 const require = createRequire(path.join(deps, "extensions/package.json"))
 const { build } = require("esbuild")
 const resolveModule = createRequire(
@@ -94,7 +97,7 @@ const plugins = [
   {
     name: "actual-read-only-workspace",
     setup(builder) {
-      if (directorOverride)
+      if (directorOverride) {
         builder.onLoad({ filter: /show-director\.ts$/ }, async (args) =>
           args.path ===
           path.join(
@@ -108,6 +111,8 @@ const plugins = [
               }
             : undefined,
         )
+      }
+
       builder.onResolve({ filter: /^@razzia\// }, async (args) => {
         const [, scope, ...parts] = args.path.split("/")
         const base =
@@ -117,17 +122,33 @@ const plugins = [
         const requested = path.join(base, ...parts)
         for (const suffix of ["", ".ts", ".tsx", "/index.ts", "/index.tsx"]) {
           const candidate = requested + suffix
+
           try {
-            if ((await fs.stat(candidate)).isFile()) return { path: candidate }
-          } catch {}
+            if ((await fs.stat(candidate)).isFile()) {
+              return { path: candidate }
+            }
+          } catch {
+            // Try the remaining supported suffixes; unresolved imports fail after this loop.
+          }
         }
-        throw new Error("Unresolved workspace import " + args.path)
+        throw new Error(`Unresolved workspace import ${args.path}`)
       })
       builder.onResolve({ filter: /^[^./]/ }, (args) => {
-        if (args.path.startsWith("node:") || builtinModules.includes(args.path))
+        if (
+          args.path.startsWith("node:") ||
+          builtinModules.includes(args.path)
+        ) {
           return { path: args.path, external: true }
-        if (args.path.startsWith("@razzia/")) return
-        if (args.importer.startsWith(deps + "/")) return
+        }
+
+        if (args.path.startsWith("@razzia/")) {
+          return
+        }
+
+        if (args.importer.startsWith(`${deps}/`)) {
+          return
+        }
+
         try {
           return { path: resolveModule.resolve(args.path) }
         } catch {

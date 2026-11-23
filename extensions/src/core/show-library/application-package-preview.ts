@@ -18,6 +18,7 @@ const runtimeUrl = z
   .refine((value) => {
     try {
       const url = new URL(value)
+
       return (
         (url.protocol === "https:" ||
           (url.protocol === "http:" &&
@@ -57,30 +58,37 @@ export const applicationPackagePreviewSchema = z
     const identities = new Set<string>()
     const assets = new Map(value.assets.map((asset) => [asset.url, asset]))
     const issue = (message: string) => ctx.addIssue({ code: "custom", message })
+
     if (
       assets.size !== value.assets.length ||
       value.assets.reduce((sum, item) => sum + item.bytes, 0) > 200_000_000
     ) {
       issue("Invalid package preview asset inventory")
     }
+
     for (const definition of value.definitions) {
       const key = `${definition.id}@${definition.version}`
+
       if (
         identities.has(key) ||
         !["declarative", "sandboxed-react"].includes(definition.kind)
       ) {
         issue("Invalid package preview theme")
       }
+
       identities.add(key)
+
       if (definition.kind === "sandboxed-react") {
         const pin = definition.runtime
         const url = value.runtimeUrls[definition.id]
         let urlTheme: string | null = null
+
         try {
           urlTheme = url ? new URL(url).searchParams.get("theme") : null
         } catch {
           /* Report the receipt mismatch below. */
         }
+
         if (
           !pin ||
           pin.sourceDigest !== value.sourceDigest ||
@@ -91,8 +99,10 @@ export const applicationPackagePreviewSchema = z
           issue("Package runtime receipt does not match theme")
         }
       }
+
       for (const asset of definition.assets) {
         const admitted = assets.get(asset.url)
+
         if (
           !admitted ||
           admitted.sha256 !== asset.sha256 ||

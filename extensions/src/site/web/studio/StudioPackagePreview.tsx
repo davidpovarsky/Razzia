@@ -6,6 +6,7 @@ import { SiteLink } from "../shared/SiteLink"
 
 function PackagePage({ children }: { children: import("react").ReactNode }) {
   const { t } = useTranslation()
+
   return (
     <main
       className="font-display min-h-dvh p-4 md:p-8"
@@ -37,6 +38,7 @@ export function StudioPackagePreview() {
     /^[A-Za-z0-9._-]{1,160}$/u.test(gameId) &&
     Number.isSafeInteger(revision) &&
     revision > 0
+
   return (
     <PackagePage>
       {valid ? (
@@ -62,6 +64,7 @@ export function StudioPackageSaveConsent() {
     string | undefined
   >
   const { t } = useTranslation()
+
   return (
     <PackagePage>
       {requestId && /^[A-Za-z0-9_-]{1,160}$/u.test(requestId) ? (

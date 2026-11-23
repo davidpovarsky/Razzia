@@ -12,11 +12,13 @@ const responses = [],
   errors = [],
   checks = []
 page.on("response", (r) => {
-  if (/lottie|overlay|wasm|Opening-4/.test(r.url()))
+  if (/lottie|overlay|wasm|Opening-4/.test(r.url())) {
     responses.push({ url: r.url(), status: r.status() })
+  }
 })
 page.on("pageerror", (e) => errors.push(e.message))
 let result = {}
+
 try {
   await page.addInitScript(() => localStorage.setItem("i18nextLng", "en"))
   await page.goto("http://127.0.0.1:3180/manager?lng=en")
@@ -30,6 +32,7 @@ try {
   await page.getByTestId("studio-add-card-btn").click()
   await page.getByTestId("scene-preview-mode-layers").click()
   await page.getByTestId("studio-overlay-add-btn").click()
+
   if (
     (await page.locator('[data-testid^="studio-overlay-asset-"]').count()) === 0
   ) {
@@ -43,6 +46,7 @@ try {
         ),
       )
   }
+
   const asset = page.locator('[data-testid^="studio-overlay-asset-"]').last()
   await asset.waitFor()
   const id = (await asset.getAttribute("data-testid")).replace(
@@ -50,7 +54,7 @@ try {
     "",
   )
   const initial = await asset.inputValue()
-  const player = page.getByTestId("cinematic-overlay-player-" + id)
+  const player = page.getByTestId(`cinematic-overlay-player-${id}`)
   await expect(player).toHaveAttribute("data-lottie-ready", "true", {
     timeout: 25000,
   })
@@ -69,7 +73,7 @@ try {
   checks.push("Controlled scrub advances actual rendered frames")
   await asset.fill("/media/deliberately-missing-editor-lottie.json")
   const err = page
-    .getByTestId("cinematic-overlay-" + id)
+    .getByTestId(`cinematic-overlay-${id}`)
     .locator("[data-lottie-error]")
   await expect(err).toHaveAttribute("data-lottie-error", /deliberately-missing/)
   const before = await err.getAttribute("data-lottie-error")
@@ -81,9 +85,9 @@ try {
   checks.push("Bad source recovers immediately after valid source correction")
   await page.evaluate(async () => {
     await document.fonts.ready
-    await new Promise((r) =>
-      requestAnimationFrame(() => requestAnimationFrame(r)),
-    )
+    await new Promise((r) => {
+      requestAnimationFrame(() => requestAnimationFrame(r))
+    })
   })
   await page
     .getByTestId("studio-scene-preview-stage")
@@ -107,7 +111,9 @@ try {
       path: path.join(out, "after-fix-failure.png"),
       fullPage: true,
     })
-    .catch(() => {})
+    .catch(() => {
+      /* Keep the recorded audit outcome if its diagnostic screenshot is unavailable. */
+    })
   process.exitCode = 1
 } finally {
   fs.writeFileSync(

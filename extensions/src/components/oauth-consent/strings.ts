@@ -163,6 +163,7 @@ const translations: Record<PreviewLocale, readonly string[]> = {
     "Không thể ủy quyền trên trang này.",
   ],
 }
+
 export function consentText(locale: PreviewLocale) {
   const instance = createInstance()
   void instance.init({
@@ -180,5 +181,6 @@ export function consentText(locale: PreviewLocale) {
       },
     },
   })
-  return (key: Key) => String(instance.t(key))
+
+  return (key: Key) => instance.t(key)
 }

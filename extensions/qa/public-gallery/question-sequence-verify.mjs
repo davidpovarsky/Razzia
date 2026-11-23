@@ -6,43 +6,98 @@ const require = createRequire("/cleanup/extensions/package.json")
 const { expect } = require("@playwright/test")
 
 export async function watchQuestionSequence(root, options = {}) {
-  await root.evaluate((element, options) => {
+  await root.evaluate((element, receivedOptions) => {
     element.__questionSequence?.stop()
-    const phaseAttribute = options.phaseAttribute ?? "data-game-phase"
-    const votingPhase = options.votingPhase ?? "voting"
+    const phaseAttribute = receivedOptions.phaseAttribute ?? "data-game-phase"
+    const votingPhase = receivedOptions.votingPhase ?? "voting"
     const records = []
     let current = null
+    // Keep original RAF-based assertions intact; separately record passive timing evidence.
+    const installedAt = performance.now()
+    const recentPhases = []
+    const recentFrames = []
+    let previousFrameAt = null
+    const phaseObserver = new MutationObserver((changes) => {
+      const at = performance.now()
+      const phases = changes.filter(
+        (change) => change.attributeName === phaseAttribute,
+      )
+      for (let index = 0; index < phases.length; index += 1) {
+        const event = {
+          at,
+          oldPhase: phases[index].oldValue,
+          phase:
+            phases[index + 1]?.oldValue ?? element.getAttribute(phaseAttribute),
+          batchIndex: index,
+          batchSize: phases.length,
+        }
+        recentPhases.push(event)
+
+        if (recentPhases.length > 8) {
+          recentPhases.shift()
+        }
+
+        // The question mutation precedes the next RAF's new round record.
+        if (current && event.phase !== "question") {
+          if (current.diagnostic.phaseTransitions.length < 16) {
+            current.diagnostic.phaseTransitions.push(event)
+          } else {
+            current.diagnostic.phaseOverflow = true
+          }
+        }
+      }
+    })
+    phaseObserver.observe(element, {
+      attributes: true,
+      attributeFilter: [phaseAttribute],
+      attributeOldValue: true,
+    })
     let previousPhase = ""
-    let frame
+    let frame = undefined
+
     let stopped = false
-    let armed = !options.startAction
+    let armed = !receivedOptions.startAction
     let pendingExplicitReplay = false
     let roots = [element]
     const discover = () => {
       roots = [element]
-      for (let index = 0; index < roots.length; index++) {
+      for (let index = 0; index < roots.length; index += 1) {
         for (const child of roots[index].querySelectorAll("*")) {
-          if (child.shadowRoot) roots.push(child.shadowRoot)
+          if (child.shadowRoot) {
+            roots.push(child.shadowRoot)
+          }
         }
       }
     }
     const all = (selector) =>
       roots.flatMap((scope) => [...scope.querySelectorAll(selector)])
     const visible = (node) => {
-      if (!node?.isConnected) return false
+      if (!node?.isConnected) {
+        return false
+      }
+
       const box = node.getBoundingClientRect()
-      if (box.width <= 0 || box.height <= 0) return false
+
+      if (box.width <= 0 || box.height <= 0) {
+        return false
+      }
+
       let parent = node
+
       while (parent instanceof Element) {
         const style = getComputedStyle(parent)
+
         if (
           style.display === "none" ||
           style.visibility === "hidden" ||
           Number(style.opacity) <= 0.01
-        )
+        ) {
           return false
+        }
+
         parent = parent.parentElement ?? parent.getRootNode().host
       }
+
       return true
     }
     const geometry = (node) => {
@@ -52,6 +107,7 @@ export async function watchQuestionSequence(root, options = {}) {
         style.transform === "none" ? undefined : style.transform,
       )
       const transform = matrix.isIdentity ? "identity" : matrix.toString()
+
       return {
         x: box.x,
         y: box.y,
@@ -66,7 +122,8 @@ export async function watchQuestionSequence(root, options = {}) {
     }
     const layout = (panel) => {
       const stage = panel.closest(".tzv4-stage")
-      const dialog = all(".game-viewer-dialog")[0]
+      const [dialog] = all(".game-viewer-dialog")
+
       return {
         stage: stage ? geometry(stage) : null,
         root: geometry(element),
@@ -103,6 +160,31 @@ export async function watchQuestionSequence(root, options = {}) {
       explicitReplay: record.explicitReplay,
       identityLockedAt: record.identityLockedAt,
       initialReplayRemounts: record.initialReplayRemounts,
+      diagnostic: {
+        clock: "performance.now",
+        installedAt,
+        phaseTransitions: record.diagnostic.phaseTransitions,
+        phaseOverflow: record.diagnostic.phaseOverflow,
+        leadingFrames: record.diagnostic.leadingFrames,
+        frames: [
+          ...record.diagnostic.firstFrames,
+          ...record.diagnostic.lastFrames,
+        ],
+        firstFrameByPhase: record.diagnostic.firstFrameByPhase,
+        observedFrameCount: record.diagnostic.observedFrameCount,
+        omittedFrameCount: Math.max(
+          0,
+          record.diagnostic.observedFrameCount - 240,
+        ),
+        largestRafGapMs: record.diagnostic.largestRafGapMs,
+        limits: {
+          phaseTransitions: 16,
+          leadingFrames: 8,
+          firstFrames: 192,
+          lastFrames: 48,
+          resultsFrames: 4,
+        },
+      },
     })
     const startAction = (event) => {
       if (
@@ -110,21 +192,41 @@ export async function watchQuestionSequence(root, options = {}) {
           .composedPath()
           .some(
             (node) =>
-              node instanceof Element && node.matches(options.startAction),
+              node instanceof Element &&
+              node.matches(receivedOptions.startAction),
           )
       ) {
         armed = true
-        pendingExplicitReplay = options.allowInitialReplayRemount === true
+        pendingExplicitReplay =
+          receivedOptions.allowInitialReplayRemount === true
         current = null
         previousPhase = ""
       }
     }
-    if (options.startAction)
+
+    if (receivedOptions.startAction) {
       element.addEventListener("click", startAction, true)
-    const tick = () => {
-      if (stopped || !element.isConnected) return
+    }
+
+    const tick = (frameTimestamp) => {
+      if (stopped || !element.isConnected) {
+        return
+      }
+
       const phase = element.getAttribute(phaseAttribute)
       const now = performance.now()
+      const diagnosticFrame = {
+        at: now,
+        frameTimestamp,
+        phase,
+        gap: previousFrameAt === null ? null : now - previousFrameAt,
+        headingVisible: null,
+        answers: null,
+        timer: null,
+        endAt: null,
+      }
+      previousFrameAt = now
+
       if (
         armed &&
         phase === "question" &&
@@ -162,19 +264,39 @@ export async function watchQuestionSequence(root, options = {}) {
           explicitReplay: pendingExplicitReplay,
           identityLockedAt: null,
           initialReplayRemounts: [],
+          diagnostic: {
+            phaseTransitions: recentPhases.slice(-2),
+            phaseOverflow: false,
+            leadingFrames: [...recentFrames],
+            firstFrames: [],
+            lastFrames: [],
+            firstFrameByPhase: {},
+            observedFrameCount: 0,
+            largestRafGapMs: 0,
+          },
         }
         pendingExplicitReplay = false
         records.push(current)
       }
+
       if (current && ["question", votingPhase, "results"].includes(phase)) {
-        if (!current.heading && now - current.questionAt < 1500) discover()
+        if (!current.heading && now - current.questionAt < 1500) {
+          discover()
+        }
+
         const panels = all('[data-testid="tadazz-question-panel"]').filter(
           visible,
         )
-        const panel = panels[0]
+        const [panel] = panels
         const heading = panel?.querySelector(".q-text, .photo-question-head")
-        if (panels.length > 1) current.duplicateHeadings = true
+
+        if (panels.length > 1) {
+          current.duplicateHeadings = true
+        }
+
         if (heading && visible(heading)) {
+          diagnosticFrame.headingVisible = true
+
           if (!current.heading) {
             current.panel = panel
             current.heading = heading
@@ -185,6 +307,7 @@ export async function watchQuestionSequence(root, options = {}) {
               current.explicitReplay &&
               phase === "question" &&
               current.identityLockedAt === null
+
             if (initialReplayCommit) {
               if (panel !== current.panel || heading !== current.heading) {
                 current.initialReplayRemounts.push({
@@ -193,15 +316,18 @@ export async function watchQuestionSequence(root, options = {}) {
                   headingChanged: heading !== current.heading,
                 })
               }
+
               current.panel = panel
               current.heading = heading
             } else {
               current.retainedPanel &&= panel === current.panel
               current.retainedHeading &&= heading === current.heading
             }
+
             current.headingChanged ||=
               heading.textContent.trim() !== current.question
           }
+
           if (
             current.explicitReplay &&
             phase === "question" &&
@@ -210,24 +336,32 @@ export async function watchQuestionSequence(root, options = {}) {
           ) {
             current.identityLockedAt = now
           }
+
           for (const animation of panel.getAnimations({ subtree: true })) {
             const target = animation.effect?.target
-            if (target !== panel && target !== heading) continue
+
+            if (target !== panel && target !== heading) {
+              continue
+            }
+
             if (
               phase !== "question" &&
               !current.animations.has(animation) &&
               animation.playState === "running"
             ) {
-              current.newQuestionAnimations++
+              current.newQuestionAnimations += 1
             }
+
             current.animations.add(animation)
           }
+
           if (phase === "question" && now - current.questionAt >= 1600) {
             current.baseline = geometry(heading)
             current.baselineAt = now
             current.panelBaseline = geometry(panel)
             current.layoutBaseline = layout(panel)
           }
+
           if (phase !== "question" && current.baseline) {
             const actual = geometry(heading)
             for (const key of [
@@ -237,8 +371,9 @@ export async function watchQuestionSequence(root, options = {}) {
               "transform",
               "opacity",
             ]) {
-              if (actual[key] !== current.baseline[key])
+              if (actual[key] !== current.baseline[key]) {
                 current.stableTypography = false
+              }
             }
             const changedGeometry = []
             for (const key of ["x", "y", "width", "height"]) {
@@ -247,6 +382,7 @@ export async function watchQuestionSequence(root, options = {}) {
                 changedGeometry.push(key)
               }
             }
+
             if (changedGeometry.length > 0 && !current.geometryEvidence) {
               current.geometryEvidence = {
                 phase,
@@ -267,7 +403,9 @@ export async function watchQuestionSequence(root, options = {}) {
                 },
               }
             }
+
             const actualPanel = geometry(panel)
+
             if (
               actualPanel.transform !== current.panelBaseline.transform ||
               actualPanel.opacity !== current.panelBaseline.opacity
@@ -278,20 +416,41 @@ export async function watchQuestionSequence(root, options = {}) {
         } else if (current.heading && phase !== "question") {
           current.retainedHeading = false
         }
+
+        if (diagnosticFrame.headingVisible === null) {
+          diagnosticFrame.headingVisible = false
+        }
+
         const answers = all("[data-v4-choice]").some(visible)
         const timer = all(".countdown-floater").some(visible)
+        diagnosticFrame.answers = answers
+        diagnosticFrame.timer = timer
+
         if (phase === "question") {
           current.earlyAnswers ||= answers
           current.earlyTimer ||= timer
         }
-        if (phase === votingPhase && current.votingAt === null)
+
+        if (phase === votingPhase && current.votingAt === null) {
           current.votingAt = now
-        if (answers && current.answersAt === null) current.answersAt = now
-        if (timer && current.timerAt === null) current.timerAt = now
-        if (phase === "results") {
-          if (current.resultsAt === null) current.resultsAt = now
-          current.resultsFrames++
         }
+
+        if (answers && current.answersAt === null) {
+          current.answersAt = now
+        }
+
+        if (timer && current.timerAt === null) {
+          current.timerAt = now
+        }
+
+        if (phase === "results") {
+          if (current.resultsAt === null) {
+            current.resultsAt = now
+          }
+
+          current.resultsFrames += 1
+        }
+
         if (
           current.samples.length < 8 &&
           (current.samples.length === 0 ||
@@ -306,6 +465,39 @@ export async function watchQuestionSequence(root, options = {}) {
           })
         }
       }
+
+      diagnosticFrame.endAt = performance.now()
+
+      if (
+        current &&
+        ["question", votingPhase, "results"].includes(phase) &&
+        (phase !== "results" || current.resultsFrames <= 4)
+      ) {
+        const evidence = current.diagnostic
+        evidence.observedFrameCount += 1
+        evidence.largestRafGapMs = Math.max(
+          evidence.largestRafGapMs,
+          diagnosticFrame.gap ?? 0,
+        )
+        evidence.firstFrameByPhase[phase] ??= diagnosticFrame
+
+        if (evidence.firstFrames.length < 192) {
+          evidence.firstFrames.push(diagnosticFrame)
+        } else {
+          evidence.lastFrames.push(diagnosticFrame)
+
+          if (evidence.lastFrames.length > 48) {
+            evidence.lastFrames.shift()
+          }
+        }
+      }
+
+      recentFrames.push(diagnosticFrame)
+
+      if (recentFrames.length > 8) {
+        recentFrames.shift()
+      }
+
       previousPhase = phase
       frame = requestAnimationFrame(tick)
     }
@@ -314,6 +506,7 @@ export async function watchQuestionSequence(root, options = {}) {
       stop: () => {
         stopped = true
         cancelAnimationFrame(frame)
+        phaseObserver.disconnect()
         element.removeEventListener("click", startAction, true)
       },
     }
@@ -331,10 +524,17 @@ export async function readQuestionSequence(
     .poll(
       () =>
         root.evaluate(
-          (element, { index, throughResults }) => {
-            const record = element.__questionSequence?.read()[index]
-            if (!record) return false
-            return throughResults
+          (
+            element,
+            { index: sequenceIndex, throughResults: includeResults },
+          ) => {
+            const record = element.__questionSequence?.read()[sequenceIndex]
+
+            if (!record) {
+              return false
+            }
+
+            return includeResults
               ? record.resultsFrames >= 2
               : record.votingAt !== null &&
                   record.answersAt !== null &&
@@ -346,23 +546,28 @@ export async function readQuestionSequence(
     )
     .toBe(true)
   const result = await root.evaluate(
-    (element, index) => element.__questionSequence.read()[index],
+    (element, receivedIndex) =>
+      element.__questionSequence.read()[receivedIndex],
     index,
   )
-  if (evidencePath)
-    writeFileSync(evidencePath, JSON.stringify(result, null, 2) + "\n")
+
+  if (evidencePath) {
+    writeFileSync(evidencePath, `${JSON.stringify(result, null, 2)}\n`)
+  }
+
   assert(result.question, "Observed the actual question heading")
   const lead = result.votingAt - result.questionAt
   assert(
     lead >= 1800 && lead <= 2500,
-    "Question-only phase lasts 2s within frame/scheduling tolerance: " + lead,
+
+    `Question-only phase lasts 2s within frame/scheduling tolerance: ${lead}`,
   )
   for (const kind of ["answers", "timer"]) {
-    assert(result[kind + "At"] !== null, kind + " actually became visible")
-    const delay = result[kind + "At"] - result.questionAt
+    assert(result[`${kind}At`] !== null, `${kind} actually became visible`)
+    const delay = result[`${kind}At`] - result.questionAt
     assert(
       delay >= 1800 && delay <= 2600,
-      kind + " first paint follows the 2s lead-in: " + delay,
+      `${kind} first paint follows the 2s lead-in: ${delay}`,
     )
   }
   assert(
@@ -379,6 +584,7 @@ export async function readQuestionSequence(
     false,
     "No timer during question-only lead-in",
   )
+
   if (result.explicitReplay) {
     assert(
       result.identityLockedAt !== null &&
@@ -387,6 +593,7 @@ export async function readQuestionSequence(
       "Explicit Replay locks its settled question node before voting",
     )
   }
+
   assert.equal(
     result.retainedPanel,
     true,
@@ -418,11 +625,16 @@ export async function readQuestionSequence(
   assert.equal(
     result.stableGeometry,
     true,
-    "Question geometry remains stable: " +
-      JSON.stringify(result.geometryEvidence),
+
+    `Question geometry remains stable: ${JSON.stringify(
+      result.geometryEvidence,
+    )}`,
   )
-  if (photo)
+
+  if (photo) {
     assert.equal(result.photo, true, "Actual question-image layout exercised")
+  }
+
   return {
     ...result,
     observedThrough: throughResults ? "results" : "first-voting-paint",

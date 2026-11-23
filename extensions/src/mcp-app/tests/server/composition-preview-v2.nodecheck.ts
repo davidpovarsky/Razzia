@@ -1,6 +1,7 @@
 import assert from "node:assert/strict"
 import { createHash } from "node:crypto"
 import test from "node:test"
+import { requireObservedRecord, requireObservedValue } from "./fixtures.ts"
 import {
   prepareCompositionPreviewV2,
   getCompositionPreviewDigestContentV2,
@@ -79,7 +80,10 @@ test("V2 uses the full genuine prepared D content in the sole MCP digest", () =>
     previewIdentityDigest(identity),
     content.compositionDocumentSha256,
   )
-  assert.deepEqual(JSON.parse(encoded).compositionPreviewContent, content)
+  assert.deepEqual(
+    requireObservedRecord(JSON.parse(encoded)).compositionPreviewContent,
+    content,
+  )
   assert.throws(
     () => createCompositionPreviewIdentityV2({ ...prepared }, "draft-v2"),
     /unprepared/,
@@ -127,13 +131,15 @@ test("V2 binds revision, role, authored content, selected theme and native setti
       { draftRevision: 4 },
     ),
   ]
-  for (const variant of variants) assert.notEqual(digest(variant), expected)
+  for (const variant of variants) {
+    assert.notEqual(digest(variant), expected)
+  }
   assert.equal(input.authoredShowJson, previewInputFixture().authoredShowJson)
 })
 
 test("V2 retains explicit scope/card associations and rejects guessed or cloned preparation", () => {
   const show = authoredFixture()
-  show.cards[0]!.key = "constructor"
+  requireObservedValue(show.cards.at(0)).key = "constructor"
   const input = previewInputFixture(show)
   const doc = document("razzia-original", true)
   const prepared = prepareCompositionPreviewV2(input, doc, {
@@ -193,11 +199,12 @@ test("V2 preserves and orders same-ID native family assets by their exact SHA pa
       createCompositionPreviewIdentityV2(prepared, "draft-v2", assets.slice(1)),
     ),
   )
+  const firstAssetDigest = requireObservedValue(assets.at(0))
   assert.throws(
     () =>
       serializePreviewIdentity({
         ...identity,
-        assetDigests: [assets[0]!, assets[0]!],
+        assetDigests: [firstAssetDigest, firstAssetDigest],
       }),
     /duplicate/,
   )

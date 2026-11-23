@@ -1,4 +1,5 @@
 import { joinGame } from "../utils/player"
+import { CONFIG_PATH } from "../utils/constants"
 import {
   expect,
   test,
@@ -21,8 +22,13 @@ fs.mkdirSync(evidenceDir, { recursive: true })
 async function openRoom(
   host: Page,
   request: APIRequestContext,
-  theme: "tadazz-classic" | "razzia-original" | "legacy",
-  terminalFinale = false,
+  {
+    theme,
+    terminalFinale = false,
+  }: {
+    theme: "tadazz-classic" | "razzia-original" | "legacy"
+    terminalFinale?: boolean
+  },
 ) {
   const legacy = theme === "legacy"
   const selectedTheme = legacy ? "razzia-original" : theme
@@ -119,8 +125,9 @@ test("shared product curtain, video, pause and reconnect return to the selected 
     ;(
       window as Window & { __platformAudio?: HTMLMediaElement[] }
     ).__platformAudio = media
-    const play = HTMLMediaElement.prototype.play
-    HTMLMediaElement.prototype.play = function () {
+    // oxlint-disable-next-line typescript/unbound-method -- Rebound to the actual media element with call below.
+    const { play } = HTMLMediaElement.prototype
+    HTMLMediaElement.prototype.play = function recordPlatformMedia() {
       if (this instanceof HTMLAudioElement && !media.includes(this)) {
         media.push(this)
       }
@@ -128,7 +135,7 @@ test("shared product curtain, video, pause and reconnect return to the selected 
       return play.call(this)
     }
   })
-  const { gameId } = await openRoom(host, request, "tadazz-classic")
+  const { gameId } = await openRoom(host, request, { theme: "tadazz-classic" })
   const displayContext = await browser.newContext({
     viewport: { width: 1280, height: 720 },
   })
@@ -267,7 +274,7 @@ test("original theme receives the same product opening and a failed video never 
     "**/Animate_gameshow_stage_loop_c01e8a8a_1080p.mp4",
     (route) => route.abort(),
   )
-  await openRoom(host, request, "razzia-original")
+  await openRoom(host, request, { theme: "razzia-original" })
   const overflow = await host.evaluate(() => ({
     x: document.documentElement.scrollWidth - innerWidth,
     y: document.documentElement.scrollHeight - innerHeight,
@@ -299,10 +306,8 @@ test("legacy imports get an in-memory original-theme launch and reduced motion k
   request,
 }) => {
   await host.emulateMedia({ reducedMotion: "reduce" })
-  const { quizId } = await openRoom(host, request, "legacy")
-  const configPath =
-    process.env.PLATFORM_OPENING_QA_CONFIG ??
-    join(import.meta.dirname, "../../../work/platform-opening-qa-20261119")
+  const { quizId } = await openRoom(host, request, { theme: "legacy" })
+  const configPath = process.env.PLATFORM_OPENING_QA_CONFIG ?? CONFIG_PATH
   const quizDir = join(configPath, "quizz")
   const baseName = fs.readdirSync(quizDir).find((name) => {
     if (!name.endsWith(".json")) {
@@ -353,12 +358,10 @@ for (const theme of ["razzia-original", "tadazz-classic"] as const) {
     test.setTimeout(120000)
     const errors: string[] = []
     host.on("pageerror", (error) => errors.push(error.message))
-    const { gameId, inviteCode } = await openRoom(
-      host,
-      request,
+    const { gameId, inviteCode } = await openRoom(host, request, {
       theme,
-      theme === "tadazz-classic",
-    )
+      terminalFinale: theme === "tadazz-classic",
+    })
     const playerContext = await browser.newContext()
     const displayContext = await browser.newContext()
     const player = await playerContext.newPage()
@@ -371,6 +374,14 @@ for (const theme of ["razzia-original", "tadazz-classic"] as const) {
       await expect(host.getByTestId("platform-game-opening")).toHaveCount(0)
       await joinGame(player, inviteCode, "Closing participant")
       await display.goto(`/display/${gameId}`)
+      await host
+        .getByTestId("manager-control-toolbar")
+        .getByRole("button", { name: "Start", exact: true })
+        .click()
+      const stage = host.getByTestId("tadazz-show")
+      await expect(stage).toHaveAttribute("data-show-theme", theme)
+      await expect(stage).toHaveAttribute("data-role", "manager")
+      await expect(stage).toHaveAttribute("data-show-scene", "results")
       await host.getByTestId("host-next-screen-btn").click()
       const curtain = host.getByTestId("platform-game-closing")
       await expect(curtain).toBeVisible({ timeout: 60000 })

@@ -8,26 +8,26 @@ The user explicitly authorized editor changes, full Hebrew/RTL, executions, buil
 
 ## Editor surface and visibility map
 
-| Surface or state | Correct behavior now |
-| --- | --- |
-| Header navigation | Questions, Participants, Settings and Launch; active state announced; all four visible in a two-column mobile grid. |
-| Card type toolbar | Only on Questions, after metadata is ready and a real timeline item is selected. |
-| Text-only answer | Text editor and visible display-mode selector; no image upload, image removal or alternative-text field. |
-| Image / text-and-image answer | Actual image chooser, thumbnail, removal and alternative text; switching back to text preserves dormant media without rendering it. |
-| Single / multiple / estimation | Visible native toggles; only relevant scoring, choices, estimates, margins and input modes. |
-| Quiz / survey | Per-card mode controls correctness and scoring; survey previews and thumbnails do not imply a correct answer. |
-| Authored type conversion | Confirmation before replacing content; cancellation preserves it. Empty draft conversion is immediate. Only the selected item changes. |
-| Question media | Upload, library and URL input; logical RTL placement and accessible controls; no fabricated asset URL. |
-| Scene media / animation | Draft values and real asset picker; type-specific media, playback and overlay controls. |
-| Background | Slot options follow the selected theme and card type; resets appear only where an override exists. |
-| Audio | Events follow card/theme capabilities; no mute/playback control without playable source; Stop only while playing. |
-| Participants | Localized roster/import/validation, phone fields LTR and surrounding layout RTL. |
-| Settings | Visible mode and advance selectors, original native theme cards with readable mobile copy. |
-| Launch | Requires a saved valid game, loaded metadata and no unsaved form or sidecar changes. |
-| Loading / failure | Editing and saving wait for sidecar metadata. Failure shows an explicit retry, without overwriting unknown server state. |
-| Leaving editor | Exit and browser Back require confirmation for unsaved form or sidecar changes. |
-| Timeline | Mouse and keyboard sorting, localized announcements, active selection reconciled after metadata load, stable question IDs after save/reopen. |
-| Media deletion | Referenced media shows a conflict confirmation; explicit detach-and-delete completes and leaves the editor usable. |
+| Surface or state               | Correct behavior now                                                                                                                         |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Header navigation              | Questions, Participants, Settings and Launch; active state announced; all four visible in a two-column mobile grid.                          |
+| Card type toolbar              | Only on Questions, after metadata is ready and a real timeline item is selected.                                                             |
+| Text-only answer               | Text editor and visible display-mode selector; no image upload, image removal or alternative-text field.                                     |
+| Image / text-and-image answer  | Actual image chooser, thumbnail, removal and alternative text; switching back to text preserves dormant media without rendering it.          |
+| Single / multiple / estimation | Visible native toggles; only relevant scoring, choices, estimates, margins and input modes.                                                  |
+| Quiz / survey                  | Per-card mode controls correctness and scoring; survey previews and thumbnails do not imply a correct answer.                                |
+| Authored type conversion       | Confirmation before replacing content; cancellation preserves it. Empty draft conversion is immediate. Only the selected item changes.       |
+| Question media                 | Upload, library and URL input; logical RTL placement and accessible controls; no fabricated asset URL.                                       |
+| Scene media / animation        | Draft values and real asset picker; type-specific media, playback and overlay controls.                                                      |
+| Background                     | Slot options follow the selected theme and card type; resets appear only where an override exists.                                           |
+| Audio                          | Events follow card/theme capabilities; no mute/playback control without playable source; Stop only while playing.                            |
+| Participants                   | Localized roster/import/validation, phone fields LTR and surrounding layout RTL.                                                             |
+| Settings                       | Visible mode and advance selectors, original native theme cards with readable mobile copy.                                                   |
+| Launch                         | Requires a saved valid game, loaded metadata and no unsaved form or sidecar changes.                                                         |
+| Loading / failure              | Editing and saving wait for sidecar metadata. Failure shows an explicit retry, without overwriting unknown server state.                     |
+| Leaving editor                 | Exit and browser Back require confirmation for unsaved form or sidecar changes.                                                              |
+| Timeline                       | Mouse and keyboard sorting, localized announcements, active selection reconciled after metadata load, stable question IDs after save/reopen. |
+| Media deletion                 | Referenced media shows a conflict confirmation; explicit detach-and-delete completes and leaves the editor usable.                           |
 
 ## Preview architecture
 

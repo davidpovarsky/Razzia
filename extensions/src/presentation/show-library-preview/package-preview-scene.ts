@@ -20,10 +20,17 @@ export function packagePreviewScene(
   frame: ApplicationPreviewFrame,
   chapter: AuthoredPreviewChapter,
 ): ShowScene {
-  if (frame.stagePhase === "lobby")
+  if (frame.stagePhase === "lobby") {
     return { kind: "lobby", key: "package-preview-lobby" }
-  const card = frame.show.cards[chapter.cardIndex]
-  if (!card) throw new Error("Package preview chapter unavailable")
+  }
+
+  const card = frame.show.cards[chapter.cardIndex] as
+    (typeof frame.show.cards)[number] | undefined
+
+  if (!card) {
+    throw new Error("Package preview chapter unavailable")
+  }
+
   if (card.kind !== "quiz" && card.kind !== "survey") {
     return {
       kind: "scene",
@@ -46,6 +53,7 @@ export function packagePreviewScene(
         : {}),
     }
   }
+
   const question: StageQuestion = {
     key: card.key,
     question: card.question,
@@ -66,6 +74,7 @@ export function packagePreviewScene(
           })),
     ...(card.media?.type === "image" ? { questionImage: card.media.url } : {}),
   }
+
   if (chapter.phase === "results") {
     if (frame.role === "player") {
       return {
@@ -79,6 +88,7 @@ export function packagePreviewScene(
         aheadOfMe: null,
       }
     }
+
     return {
       kind: "results",
       key: card.key,
@@ -94,6 +104,7 @@ export function packagePreviewScene(
       },
     }
   }
+
   if (["answerCards", "voting", "voteLocked"].includes(chapter.phase)) {
     return {
       kind: "voting",
@@ -110,5 +121,6 @@ export function packagePreviewScene(
       answersOnly: chapter.phase === "answerCards",
     }
   }
+
   return { kind: "question", key: card.key, question }
 }

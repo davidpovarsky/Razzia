@@ -18,6 +18,40 @@ function directoryScene(extras: AnyQuizExtras | null) {
   return scene?.kind === "animation" ? scene : undefined
 }
 
+/** Recognize the existing legacy lobby only from saved, complete table assignments. */
+function usesSeatingPlan(
+  extras: AnyQuizExtras | null,
+  directory: ReturnType<typeof directoryScene>,
+): boolean {
+  if (directory?.seatingPlan === true) {
+    return true
+  }
+
+  if (
+    !extras ||
+    !isQuizExtrasV2(extras) ||
+    !directory ||
+    directory.seatingPlan !== undefined ||
+    directory.representatives !== undefined ||
+    extras.defaults.lobby !== undefined ||
+    extras.questionIds.length !== 10
+  ) {
+    return false
+  }
+
+  const { participants } = extras.roster
+
+  return (
+    participants.every(
+      ({ tableNumber }) =>
+        tableNumber !== undefined &&
+        Number.isInteger(tableNumber) &&
+        tableNumber >= 1 &&
+        tableNumber <= 31,
+    ) && new Set(participants.map(({ tableNumber }) => tableNumber)).size === 31
+  )
+}
+
 /** Only a show that opts into a public register publishes these three fields. */
 function attendanceRows(
   extras: AnyQuizExtras | null,
@@ -54,12 +88,11 @@ export function buildFullShowDirectory(
   entries: readonly RosterEntry[],
 ): PublicFullShowData {
   const directory = directoryScene(extras)
+  const seatingPlan = usesSeatingPlan(extras, directory)
   const lobby =
     extras && isQuizExtrasV2(extras) ? extras.defaults.lobby : undefined
   const roster = attendanceRows(extras, entries)
-  const authored = directory?.seatingPlan
-    ? (directory.representatives ?? [])
-    : []
+  const authored = seatingPlan ? (directory?.representatives ?? []) : []
   const connectedTables = new Set<number>()
   const normalize = (name: string) =>
     name.trim().replace(/\s+/gu, " ").toLocaleLowerCase("en-GB")
@@ -85,7 +118,7 @@ export function buildFullShowDirectory(
     isLive: true,
     dialNumber: lobby?.dialNumber ?? directory?.dialNumber,
     ...(roster ? { roster } : {}),
-    ...(directory?.seatingPlan === true ? { seatingPlan: true } : {}),
+    ...(seatingPlan ? { seatingPlan: true } : {}),
     connectedTables: [...connectedTables],
     representatives:
       authored.length > 0
@@ -97,7 +130,7 @@ export function buildFullShowDirectory(
   }
 }
 
-/** Keep the current ten-question lobby rule; old seating metadata is an explicit opt-in. */
+/** Keep the current ten-question lobby rule and recognize its complete legacy seating data. */
 export function buildLobbyDirectory(
   extras: AnyQuizExtras | null,
   getLive?: () => PublicFullShowData | undefined,
@@ -107,6 +140,7 @@ export function buildLobbyDirectory(
   }
 
   const directory = directoryScene(extras)
+  const seatingPlan = usesSeatingPlan(extras, directory)
   const { lobby } = extras.defaults
 
   if (lobby) {
@@ -125,7 +159,7 @@ export function buildLobbyDirectory(
 
   if (
     !directory ||
-    (!directory.seatingPlan &&
+    (!seatingPlan &&
       (extras.questionIds.length !== 10 ||
         extras.roster.participants.length === 0))
   ) {
@@ -133,9 +167,7 @@ export function buildLobbyDirectory(
   }
 
   const live = getLive?.()
-  const authored = directory.seatingPlan
-    ? (directory.representatives ?? [])
-    : []
+  const authored = seatingPlan ? (directory.representatives ?? []) : []
   const fallback =
     authored.length > 0
       ? authored
@@ -153,7 +185,7 @@ export function buildLobbyDirectory(
 
   return {
     isLive: live?.isLive ?? false,
-    ...(directory.seatingPlan === true ? { seatingPlan: true } : {}),
+    ...(seatingPlan ? { seatingPlan: true } : {}),
     representatives,
     connectedTables: live?.connectedTables ?? [],
     dialNumber: live?.dialNumber ?? directory.dialNumber,

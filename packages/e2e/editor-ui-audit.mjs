@@ -2,9 +2,11 @@ import { chromium, expect } from "@playwright/test"
 import fs from "node:fs"
 import path from "node:path"
 const evidenceName = process.env.TADAZZ_EDITOR_AUDIT_EVIDENCE ?? "visual"
+
 if (!/^[a-z0-9][a-z0-9-]{0,79}$/.test(evidenceName)) {
   throw new Error("Invalid editor audit evidence basename")
 }
+
 const out = path.resolve(
   "../../docs/extensions/plans/editor-hebrew-20261118",
   evidenceName,
@@ -21,16 +23,18 @@ const errors = [],
   metrics = []
 page.on("pageerror", (e) => errors.push(e.message))
 page.on("response", (r) => {
-  if (r.status() >= 400)
+  if (r.status() >= 400) {
     httpErrors.push({ status: r.status(), path: new URL(r.url()).pathname })
+  }
 })
 const settle = () =>
   page.evaluate(async () => {
     await document.fonts.ready
-    await new Promise((r) =>
-      requestAnimationFrame(() => requestAnimationFrame(r)),
-    )
+    await new Promise((r) => {
+      requestAnimationFrame(() => requestAnimationFrame(r))
+    })
   })
+
 try {
   await page.addInitScript(() => localStorage.setItem("i18nextLng", "en"))
   await page.goto("http://127.0.0.1:3180/manager?lng=en")
@@ -63,9 +67,9 @@ try {
   })
   await page.getByTestId("answer-mode-0-text").click()
   for (const tab of ["participants", "settings", "launch"]) {
-    await page.getByTestId("studio-tab-" + tab).click()
+    await page.getByTestId(`studio-tab-${tab}`).click()
     await expect(page.getByTestId("studio-card-type-bar")).toHaveCount(0)
-    checks.push(tab + " hides unrelated card-kind bar")
+    checks.push(`${tab} hides unrelated card-kind bar`)
   }
   for (const [width, height] of [
     [1920, 1080],
@@ -83,6 +87,7 @@ try {
       .evaluateAll((nodes) =>
         nodes.map((n) => {
           const r = n.getBoundingClientRect()
+
           return {
             id: n.getAttribute("data-testid"),
             left: r.left,
@@ -106,7 +111,7 @@ try {
     ).toBeTruthy()
     metrics.push({ width, height, navigation })
     for (const tab of ["questions", "participants", "settings", "launch"]) {
-      await page.getByTestId("studio-tab-" + tab).click()
+      await page.getByTestId(`studio-tab-${tab}`).click()
       await settle()
       const m = await page.evaluate(() => ({
         scroll: document.documentElement.scrollWidth,
@@ -114,15 +119,18 @@ try {
         font: getComputedStyle(document.body).fontFamily,
         dir: document.documentElement.dir,
       }))
-      if (m.scroll > m.width + 1)
-        throw Error("Overflow " + tab + " " + JSON.stringify(m))
+
+      if (m.scroll > m.width + 1) {
+        throw Error(`Overflow ${tab} ${JSON.stringify(m)}`)
+      }
+
       await page.screenshot({
-        path: path.join(out, tab + "-en-" + width + "x" + height + ".png"),
+        path: path.join(out, `${tab}-en-${width}x${height}.png`),
         fullPage: true,
       })
       metrics.push({ tab, width, height, ...m })
     }
-    checks.push("Four tabs fit " + width + "x" + height)
+    checks.push(`Four tabs fit ${width}x${height}`)
   }
   await page.getByTestId("studio-tab-settings").click()
   const themeCards = page
@@ -152,7 +160,9 @@ try {
 } catch (error) {
   await page
     .screenshot({ path: path.join(out, "failure.png"), fullPage: true })
-    .catch(() => {})
+    .catch(() => {
+      /* Keep the recorded audit outcome if its diagnostic screenshot is unavailable. */
+    })
   fs.writeFileSync(
     path.join(out, "audit.json"),
     JSON.stringify(

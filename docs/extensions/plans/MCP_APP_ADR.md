@@ -36,7 +36,7 @@ Its product schemas are input constraints around existing validators, not a
 second game format. A breaking envelope/tool change increments the contract
 version; breaking widget bytes use a new resource URI.
 
-~~~mermaid
+```mermaid
 flowchart LR
   H["ChatGPT / Claude / tools-only host"] -->|"OAuth-bound MCP /mcp"| M["Tadazz MCP adapter"]
   H <-->|"MCP Apps bridge"| W["Shared preview widget in host sandbox"]
@@ -47,7 +47,7 @@ flowchart LR
   W --> R["Adopted SB preview port → trusted scene/theme renderer"]
   A --> C["Existing composite storage + approved injections"]
   S["First-party authenticated save consent"] --> P
-~~~
+```
 
 ## Evidence boundary and current source findings
 
@@ -61,23 +61,23 @@ Remote branch freshness and deployed SHA remain unverified. A public
 `https://tadazz.com` fetch failed in the web tool; no authenticated production
 access or live correctness claim follows.
 
-| Source at this HEAD | Observed behavior | Required downstream decision |
-| --- | --- | --- |
-| `packages/socket/src/services/account-scope.ts`, withAccount/resolveTenantFile | AsyncLocalStorage account scope; account mode disabled **or missing owner** resolves the global base path | Private MCP operations require enabled account mode and nonempty verified account UUID before any storage call; never pass an empty account |
-| `packages/socket/src/api/middleware.ts`, requireManager | Verifies a session, checks manager role, then runs withAccount(claims.sub, next) | Preserve this authorization behavior; OAuth tokens cannot simply be treated as existing manager sessions |
-| `packages/socket/src/services/auth.ts`, mintToken/verifyToken | Existing HS256 session claims include sub/role/iat/exp, plus account sid checks when enabled | Not an OAuth authorization server; no audience/scoped OAuth bridge is established by this code |
-| `packages/socket/src/api/routes/accounts.ts` | Account login/verification/reset and manager /me; media cookie scoped to /media | No password entry, manager token or media cookie in the widget; do not reuse /login as OAuth token endpoint |
-| `packages/socket/src/services/config.ts`, getQuizz/saveQuizz | Legacy read may write IDs for ID-less files; save uses a normalized subject filename | Do not wrap legacy reads as a harmless MCP listing; title collisions must never overwrite account data |
-| `extensions/src/server/storage/service.ts`, CompositeStorageService | Existing composite import/create/save/export, native validators and revision checks through injected storage | Reuse composite persistence semantics with explicit verified-account injections; collision-safe create and crash/idempotency reconciliation need proof |
-| `extensions/src/server/api/routes.ts`, createExtensionRoutes | Injected storage, optional manager middleware, composite /quizzes and /export endpoints | A detached MCP service must supply mandatory auth; never mount this factory without guards and assume authentication |
-| `extensions/src/core/show-authoring-schema.ts` | strict tadaShowV1Schema, stable tada-show/version 1, 1-based authored answer references | Reuse exact schema and refinements; preserve persisted discriminators and question/card identities |
-| `extensions/src/core/show-import-preflight.ts` | Pure preflight; validates/converts JSON/XLSX; .tadazz requires the package importer | Call preflightShowImport and actual converters; do not route portable packs through generic JSON tools |
-| `extensions/src/core/show-authoring-convert.ts` | authoredShowToNativeBundleDraft and nativeBundleToAuthoredShow | Reuse normalized native quizz/extras; retain mapping across revisions rather than regenerate random IDs on every preview |
-| `extensions/src/core/show-themes/resolve.ts` | Deterministic role/scope resolution; unknown theme falls back with diagnostics | Preserve requested IDs/versions and expose fallback diagnostics; do not label Classic fallback as requested-theme parity |
-| `extensions/src/presentation/tadazz-show/presentation-scene.ts` | computeShowScene maps actual server envelope/status to the authoritative scene | SB owner supplies embeddable adapter; MCP owns neither state engine nor timing |
-| `extensions/src/core/packages/protocol.ts` | runtimeSnapshotSchema is strict but permits large image data URLs and live room fields | Not an unrestricted MCP result format; project only demo data with additional bounds and no real room/join data |
-| `packages/web/src/features/quizz/components/studio/show-theme-preview.tsx` | Existing preview uses TadazzV4Stage | A convenient preview is not evidence of all-theme parity; no protected-source edit or full editor embedding |
-| `packages/socket/src/services/theme-installation.ts` | Workspace grants are server-assigned; platform scope needs platform grant | Never infer tenant/workspace/grants from a manifest, host context or tool argument |
+| Source at this HEAD                                                            | Observed behavior                                                                                            | Required downstream decision                                                                                                                           |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `packages/socket/src/services/account-scope.ts`, withAccount/resolveTenantFile | AsyncLocalStorage account scope; account mode disabled **or missing owner** resolves the global base path    | Private MCP operations require enabled account mode and nonempty verified account UUID before any storage call; never pass an empty account            |
+| `packages/socket/src/api/middleware.ts`, requireManager                        | Verifies a session, checks manager role, then runs withAccount(claims.sub, next)                             | Preserve this authorization behavior; OAuth tokens cannot simply be treated as existing manager sessions                                               |
+| `packages/socket/src/services/auth.ts`, mintToken/verifyToken                  | Existing HS256 session claims include sub/role/iat/exp, plus account sid checks when enabled                 | Not an OAuth authorization server; no audience/scoped OAuth bridge is established by this code                                                         |
+| `packages/socket/src/api/routes/accounts.ts`                                   | Account login/verification/reset and manager /me; media cookie scoped to /media                              | No password entry, manager token or media cookie in the widget; do not reuse /login as OAuth token endpoint                                            |
+| `packages/socket/src/services/config.ts`, getQuizz/saveQuizz                   | Legacy read may write IDs for ID-less files; save uses a normalized subject filename                         | Do not wrap legacy reads as a harmless MCP listing; title collisions must never overwrite account data                                                 |
+| `extensions/src/server/storage/service.ts`, CompositeStorageService            | Existing composite import/create/save/export, native validators and revision checks through injected storage | Reuse composite persistence semantics with explicit verified-account injections; collision-safe create and crash/idempotency reconciliation need proof |
+| `extensions/src/server/api/routes.ts`, createExtensionRoutes                   | Injected storage, optional manager middleware, composite /quizzes and /export endpoints                      | A detached MCP service must supply mandatory auth; never mount this factory without guards and assume authentication                                   |
+| `extensions/src/core/show-authoring-schema.ts`                                 | strict tadaShowV1Schema, stable tada-show/version 1, 1-based authored answer references                      | Reuse exact schema and refinements; preserve persisted discriminators and question/card identities                                                     |
+| `extensions/src/core/show-import-preflight.ts`                                 | Pure preflight; validates/converts JSON/XLSX; .tadazz requires the package importer                          | Call preflightShowImport and actual converters; do not route portable packs through generic JSON tools                                                 |
+| `extensions/src/core/show-authoring-convert.ts`                                | authoredShowToNativeBundleDraft and nativeBundleToAuthoredShow                                               | Reuse normalized native quizz/extras; retain mapping across revisions rather than regenerate random IDs on every preview                               |
+| `extensions/src/core/show-themes/resolve.ts`                                   | Deterministic role/scope resolution; unknown theme falls back with diagnostics                               | Preserve requested IDs/versions and expose fallback diagnostics; do not label Classic fallback as requested-theme parity                               |
+| `extensions/src/presentation/tadazz-show/presentation-scene.ts`                | computeShowScene maps actual server envelope/status to the authoritative scene                               | SB owner supplies embeddable adapter; MCP owns neither state engine nor timing                                                                         |
+| `extensions/src/core/packages/protocol.ts`                                     | runtimeSnapshotSchema is strict but permits large image data URLs and live room fields                       | Not an unrestricted MCP result format; project only demo data with additional bounds and no real room/join data                                        |
+| `packages/web/src/features/quizz/components/studio/show-theme-preview.tsx`     | Existing preview uses TadazzV4Stage                                                                          | A convenient preview is not evidence of all-theme parity; no protected-source edit or full editor embedding                                            |
+| `packages/socket/src/services/theme-installation.ts`                           | Workspace grants are server-assigned; platform scope needs platform grant                                    | Never infer tenant/workspace/grants from a manifest, host context or tool argument                                                                     |
 
 Audit also read the existing theme-creator SKILL and live-contract, portable
 package and QA/security references, plus SHOW_FILE_FORMAT_V1. These are authoring
@@ -189,16 +189,16 @@ Every input requires contractVersion 0.1.0 and rejects unknown envelope fields.
 IDs are random opaque server IDs, 22–64 ASCII URL-safe characters.
 Revisions are positive 32-bit integers. Clients never choose account/tenant IDs.
 
-| Tool | Required scopes | Result/policy |
-| --- | --- | --- |
-| list_game_templates | tadazz.catalog.read | Paginated licensed trusted templates only; no account library scan |
-| list_themes | tadazz.catalog.read | Visible/installed authorized versions, rights and preview availability; never manufacture Creating Worlds availability |
-| create_game_draft | tadazz.drafts.write | Validated authoredShowJson; idempotency key; starts revision 1, no library save |
-| get_game_draft | tadazz.drafts.read | Same-owner canonical authored JSON, bounded summary, current revision |
-| update_game_draft | tadazz.drafts.read + tadazz.drafts.write | Full validated replacement with expectedRevision and idempotency key; CAS |
-| preview_game | tadazz.drafts.read | Exact revision projection, compact summary; sole render tool |
-| save_game | tadazz.drafts.read + tadazz.library.write | createNew only, exact-revision first-party consent and idempotent composite commit |
-| export_game | tadazz.drafts.read + tadazz.exports.read | Requested format, revision, rights checked; idempotent temporary export |
+| Tool                | Required scopes                           | Result/policy                                                                                                          |
+| ------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| list_game_templates | tadazz.catalog.read                       | Paginated licensed trusted templates only; no account library scan                                                     |
+| list_themes         | tadazz.catalog.read                       | Visible/installed authorized versions, rights and preview availability; never manufacture Creating Worlds availability |
+| create_game_draft   | tadazz.drafts.write                       | Validated authoredShowJson; idempotency key; starts revision 1, no library save                                        |
+| get_game_draft      | tadazz.drafts.read                        | Same-owner canonical authored JSON, bounded summary, current revision                                                  |
+| update_game_draft   | tadazz.drafts.read + tadazz.drafts.write  | Full validated replacement with expectedRevision and idempotency key; CAS                                              |
+| preview_game        | tadazz.drafts.read                        | Exact revision projection, compact summary; sole render tool                                                           |
+| save_game           | tadazz.drafts.read + tadazz.library.write | createNew only, exact-revision first-party consent and idempotent composite commit                                     |
+| export_game         | tadazz.drafts.read + tadazz.exports.read  | Requested format, revision, rights checked; idempotent temporary export                                                |
 
 No delete/overwrite/import-file/theme-build/publish/room control tool is
 registered in 0.1.0. An export is annotated as a mutation because it creates a
@@ -479,19 +479,19 @@ Legend: **D** documented capability; **T** actual Tadazz test required;
 **U** not established for the named surface; **N** outside tools-only surface.
 All Tadazz cells remain T/NOT RUN. This is not a device PASS matrix.
 
-| Capability | ChatGPT web | ChatGPT iPad | Claude web | Claude desktop | Tool-only API |
-| --- | --- | --- | --- | --- | --- |
-| Remote authenticated tools/Streamable HTTP | D/T | U/T account/build | D/T | D/T | client-dependent T |
-| UI resource + host-initiated render | D/T | U/T | D/T rollout | D/T rollout | N; text/links |
-| ui initialize/input/result + direct tools/call | D/T | U/T | D/T | D/T | N |
-| UI → message / model editing refresh | D/T | U/T | D/T capability | D/T capability | model tools T |
-| Inline interactive answers/pause/replay | Proposed T | Proposed T | Proposed T | Proposed T | N |
-| Fullscreen/side panel / entry points | feature-detect T | U/T | D/T access gates | D/T access gates | N |
-| App tools / embedded production website | not used | not used | preview/listing gates; not used | preview/listing gates; not used | N |
-| Audio/video/autoplay | gesture/permissions T | U/T actual iPad | gesture/permissions T | gesture/permissions T | N |
-| Nested sandboxed package renderer | U/T; disabled MVP | U/T | U/T | U/T | N |
-| CSP, media loading, download and logout | T | T device | T | T build | T client |
-| OAuth callback/client metadata | copy actual values T | U/T | actual registration T | actual registration T | client-specific T |
+| Capability                                     | ChatGPT web           | ChatGPT iPad      | Claude web                      | Claude desktop                  | Tool-only API      |
+| ---------------------------------------------- | --------------------- | ----------------- | ------------------------------- | ------------------------------- | ------------------ |
+| Remote authenticated tools/Streamable HTTP     | D/T                   | U/T account/build | D/T                             | D/T                             | client-dependent T |
+| UI resource + host-initiated render            | D/T                   | U/T               | D/T rollout                     | D/T rollout                     | N; text/links      |
+| ui initialize/input/result + direct tools/call | D/T                   | U/T               | D/T                             | D/T                             | N                  |
+| UI → message / model editing refresh           | D/T                   | U/T               | D/T capability                  | D/T capability                  | model tools T      |
+| Inline interactive answers/pause/replay        | Proposed T            | Proposed T        | Proposed T                      | Proposed T                      | N                  |
+| Fullscreen/side panel / entry points           | feature-detect T      | U/T               | D/T access gates                | D/T access gates                | N                  |
+| App tools / embedded production website        | not used              | not used          | preview/listing gates; not used | preview/listing gates; not used | N                  |
+| Audio/video/autoplay                           | gesture/permissions T | U/T actual iPad   | gesture/permissions T           | gesture/permissions T           | N                  |
+| Nested sandboxed package renderer              | U/T; disabled MVP     | U/T               | U/T                             | U/T                             | N                  |
+| CSP, media loading, download and logout        | T                     | T device          | T                               | T build                         | T client           |
+| OAuth callback/client metadata                 | copy actual values T  | U/T               | actual registration T           | actual registration T           | client-specific T  |
 
 Installation sequence for a future authorized test: allocate private synthetic
 environment and canonical URL/issuer; manager reviews metadata/scopes/CSP and
@@ -528,6 +528,7 @@ Initial performance targets for manager agreement: cold widget interactive
 absolute timings. No latency target is a measured result in M1.
 
 Asana mapping:
+
 - Parent 1220539632193783: PARTIAL planning foundation; OPEN through actual host,
   persistence/roundtrip, security and release acceptance.
 - MCP-01 1220539611687955: ADR candidate delivered in the **leased HQ paths**,
@@ -537,17 +538,17 @@ Asana mapping:
   SDK compile or UI resource test; OPEN.
 - MCP-03 1220539632251971: security design/fixtures only; no identity bridge or
   executed security suite; OPEN.
-HQ task 1220541896328314 tracks M1 handoff, never substitutes for source completion.
+  HQ task 1220541896328314 tracks M1 handoff, never substitutes for source completion.
 
 ## Next disjoint leases — proposed, not activated
 
-| Lane / sole writer | Proposed exact ownership | Read-only dependency / gate |
-| --- | --- | --- |
-| M2 backend (Sol/high) | extensions/src/mcp-app/contracts/**, extensions/src/mcp-app/server/**, extensions/src/mcp-app/tests/server/** | Own schemas/serializer/errors, transport/OAuth/resource registration, scoped draft and composite adapter; read widget dist artifact only |
-| M3 widget (Terra/high) | extensions/src/mcp-app/widget/**, extensions/src/mcp-app/tests/widget/** | Read adopted M2 schemas and SB port; cannot edit server/contracts or stage engine |
-| Integrator / manager | approved isolated package/tooling manifests, lockfile, entrypoint/feature flag and packaging files listed in a new lease | Only after M2 SDK compatibility and M3 build receipts; no worker edits shared manifests implicitly |
-| SB engine owner | existing separately assigned registry/renderer/preview port paths | M2/M3 request versioned port; no duplicate engine or opportunistic changes |
-| QA | separate manager-allocated evidence directory, immutable receipts | Independent A/B, host/device, payload and rollback/security review |
+| Lane / sole writer     | Proposed exact ownership                                                                                                 | Read-only dependency / gate                                                                                                              |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| M2 backend (Sol/high)  | extensions/src/mcp-app/contracts/**, extensions/src/mcp-app/server/**, extensions/src/mcp-app/tests/server/**            | Own schemas/serializer/errors, transport/OAuth/resource registration, scoped draft and composite adapter; read widget dist artifact only |
+| M3 widget (Terra/high) | extensions/src/mcp-app/widget/**, extensions/src/mcp-app/tests/widget/**                                                 | Read adopted M2 schemas and SB port; cannot edit server/contracts or stage engine                                                        |
+| Integrator / manager   | approved isolated package/tooling manifests, lockfile, entrypoint/feature flag and packaging files listed in a new lease | Only after M2 SDK compatibility and M3 build receipts; no worker edits shared manifests implicitly                                       |
+| SB engine owner        | existing separately assigned registry/renderer/preview port paths                                                        | M2/M3 request versioned port; no duplicate engine or opportunistic changes                                                               |
+| QA                     | separate manager-allocated evidence directory, immutable receipts                                                        | Independent A/B, host/device, payload and rollback/security review                                                                       |
 
 M2 may first implement an injected standalone factory with fake account/storage
 test adapters. It cannot claim private integration complete until the real

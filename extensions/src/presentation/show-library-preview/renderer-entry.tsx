@@ -12,6 +12,7 @@ import type { TadazzStageHandle } from "../tadazz-show/TadazzStage"
 restoreNativeCspConfiguration()
 
 export type RendererInput = NativePreviewRendererInputV1
+
 const handleIds = new WeakMap<TadazzStageHandle, number>()
 let nextHandleId = 0
 
@@ -20,8 +21,10 @@ export function mountPreviewCandidate(
   element: HTMLElement,
   onUnavailable: () => void,
 ) {
-  if (!(element.getRootNode() instanceof ShadowRoot))
+  if (!(element.getRootNode() instanceof ShadowRoot)) {
     throw new Error("show-preview:isolated-root-required")
+  }
+
   const root = createRoot(element)
   let disposed = false
   let revision = 0
@@ -31,22 +34,39 @@ export function mountPreviewCandidate(
     []
   const observeHandle = (handle: TadazzStageHandle | null) => {
     if (!handle) {
-      if (handleId !== null) lifecycle.push({ event: "disposed", handleId })
+      if (handleId !== null) {
+        lifecycle.push({ event: "disposed", handleId })
+      }
+
       handleId = null
-      if (lifecycle.length > 64) lifecycle.splice(0, lifecycle.length - 64)
+
+      if (lifecycle.length > 64) {
+        lifecycle.splice(0, lifecycle.length - 64)
+      }
+
       return
     }
+
     let id = handleIds.get(handle)
+
     if (id === undefined) {
-      id = ++nextHandleId
+      nextHandleId += 1
+      id = nextHandleId
       handleIds.set(handle, id)
     }
+
     handleId = id
     lifecycle.push({ event: "mounted", handleId: id })
-    if (lifecycle.length > 64) lifecycle.splice(0, lifecycle.length - 64)
+
+    if (lifecycle.length > 64) {
+      lifecycle.splice(0, lifecycle.length - 64)
+    }
   }
   const render = () => {
-    if (disposed || !current) return
+    if (disposed || !current) {
+      return
+    }
+
     const { frame, locale, reducedMotion } = current
     // Commit this admitted snapshot at the existing imperative host boundary.
     flushSync(() =>
@@ -68,15 +88,22 @@ export function mountPreviewCandidate(
     render()
   })
   resize.observe(element)
+
   return {
     update(input: RendererInput) {
-      if (disposed) throw new Error("show-preview:disposed")
+      if (disposed) {
+        throw new Error("show-preview:disposed")
+      }
+
       const copy = nativePreviewRendererInputV1Schema.parse(input)
       current = copy
       render()
     },
     dispose() {
-      if (disposed) return
+      if (disposed) {
+        return
+      }
+
       disposed = true
       resize.disconnect()
       root.unmount()
@@ -92,6 +119,7 @@ export function mountPreviewCandidate(
     },
   }
 }
+
 const sharedMountCompatibility: NativePreviewCandidateMountV1 =
   mountPreviewCandidate
 void sharedMountCompatibility

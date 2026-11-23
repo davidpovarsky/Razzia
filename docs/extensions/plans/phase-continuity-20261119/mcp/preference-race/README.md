@@ -26,12 +26,12 @@ Each engine/theme case exercises both the ordinary motion-checkbox click and lan
 
 All four cases passed, covering eight preference races:
 
-| Engine | Theme | Motion and language |
-|---|---|---|
-| Chromium / Edge 157.0.4341.60 | Tadazz Classic | PASS |
-| Chromium / Edge 157.0.4341.60 | Razzia Original | PASS |
-| WebKit 27.2 | Tadazz Classic | PASS |
-| WebKit 27.2 | Razzia Original | PASS |
+| Engine                        | Theme           | Motion and language |
+| ----------------------------- | --------------- | ------------------- |
+| Chromium / Edge 157.0.4341.60 | Tadazz Classic  | PASS                |
+| Chromium / Edge 157.0.4341.60 | Razzia Original | PASS                |
+| WebKit 27.2                   | Tadazz Classic  | PASS                |
+| WebKit 27.2                   | Razzia Original | PASS                |
 
 The matrix finished in 55.4 seconds with source hashes unchanged and no errors or outbound denials. The fixed build audited 2,694 physical modules and found no off-worktree product modules. Its renderer source binding is 3769b213b9cb98919fcc15564ec37769ee451e548bb0b8cba8d4f01c42e2ad17; widget HTML SHA256 is fba454780cce5225421ac0281c9e8478b0652499a781c4ed428bdcd328c89839.
 

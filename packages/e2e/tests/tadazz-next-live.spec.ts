@@ -1,64 +1,170 @@
-import { test, expect } from "@playwright/test"
+import { test, expect, type Page } from "@playwright/test"
 import { createDefaultQuizExtrasV2 } from "../../../extensions/src/core/studio-timeline-schema"
-import { loginManager, startGame, next } from "../utils/manager"
-import { endTimer } from "../utils/extension-manager"
-import { joinGame } from "../utils/player"
+import { computeCanonicalBaseDigest } from "@razzia/extensions/core"
+import { createGame, startGame } from "../utils/manager"
+import { answer, joinGame } from "../utils/player"
 import fs from "node:fs"
 import { join } from "node:path"
+import { randomUUID } from "node:crypto"
+import { EVENTS } from "@razzia/common/constants"
+import { STATUS } from "@razzia/common/types/game/status"
+import { t } from "../utils/i18n"
+
+interface RoundObservation {
+  name: string
+  ordinal: number
+  questionNumber?: number
+  answeredCount?: number
+}
+
+const observeRounds = (page: Page) => {
+  const rows: RoundObservation[] = []
+  page.on("websocket", (socket) => {
+    socket.on("framereceived", ({ payload }) => {
+      const raw = typeof payload === "string" ? payload : payload.toString()
+
+      if (!raw.startsWith("42")) {
+        return
+      }
+
+      let packet: unknown = undefined
+
+      try {
+        packet = JSON.parse(raw.slice(raw.indexOf("[")))
+      } catch {
+        return
+      }
+
+      if (!Array.isArray(packet)) {
+        return
+      }
+
+      const [event, data] = packet as unknown[]
+
+      if (event === EVENTS.GAME.PLAYER_ANSWER && typeof data === "number") {
+        rows.push({ name: event, ordinal: rows.length, answeredCount: data })
+
+        return
+      }
+
+      if (
+        event !== EVENTS.GAME.STATUS ||
+        !data ||
+        typeof data !== "object" ||
+        Array.isArray(data)
+      ) {
+        return
+      }
+
+      const status = data as Record<string, unknown>
+
+      if (typeof status.name !== "string") {
+        return
+      }
+
+      const value = status.data
+      const number =
+        value && typeof value === "object" && "questionNumber" in value
+          ? value.questionNumber
+          : undefined
+      rows.push({
+        name: status.name,
+        ordinal: rows.length,
+        ...(typeof number === "number" ? { questionNumber: number } : {}),
+      })
+    })
+  })
+
+  return rows
+}
+
+const next = async (page: Page) => {
+  const control = page.getByTestId("host-next-screen-btn")
+  await expect(control).toHaveCount(1)
+  await expect(control).toBeVisible()
+  await expect(control).toBeEnabled()
+  await control.click()
+}
+
+const configureManualCompletion = async (host: Page) => {
+  await host.getByRole("button", { name: t("game:settings.title") }).click()
+  const settings = host.getByRole("dialog")
+  const completion = settings.getByTestId("settings-end-on-all-answered")
+
+  if ((await completion.getAttribute("aria-checked")) === "true") {
+    await completion.click()
+  }
+
+  await expect(completion).toHaveAttribute("aria-checked", "false")
+  const auto = settings.getByRole("switch", {
+    name: t("game:settings.autoAdvance.label"),
+    exact: true,
+  })
+
+  if ((await auto.getAttribute("aria-checked")) === "true") {
+    await auto.click()
+  }
+
+  await expect(auto).toHaveAttribute("aria-checked", "false")
+  await settings
+    .getByRole("button", { name: t("common:save"), exact: true })
+    .click()
+  await expect(settings).toBeHidden()
+}
+
+const endRecordedVote = async (
+  host: Page,
+  rows: RoundObservation[],
+  count: number,
+) => {
+  const renderer = host.getByTestId("tadazz-show")
+  await expect(renderer).toHaveAttribute("data-role", "manager")
+  await expect(renderer).toHaveAttribute("data-show-scene", "voting")
+  const voting = rows.filter((row) => row.name === STATUS.SELECT_ANSWER).at(-1)
+  expect(voting).toBeDefined()
+
+  if (!voting) {
+    throw new Error("An actual voting status is required")
+  }
+
+  await expect
+    .poll(() =>
+      rows.some(
+        (row) =>
+          row.ordinal > voting.ordinal &&
+          row.name === EVENTS.GAME.PLAYER_ANSWER &&
+          row.answeredCount === count,
+      ),
+    )
+    .toBe(true)
+  const end = host.getByTestId("host-end-timer-btn")
+  await expect(end).toHaveCount(1)
+  await expect(end).toBeVisible()
+  await expect(end).toBeEnabled()
+  await end.click()
+  await expect
+    .poll(() =>
+      rows.some(
+        (row) =>
+          row.ordinal > voting.ordinal && row.name === STATUS.SHOW_RESPONSES,
+      ),
+    )
+    .toBe(true)
+  await expect(renderer).toHaveAttribute("data-show-scene", "results")
+}
 
 test("server timeline: host/display round banners, ten photo votes, results, stories, refresh and curtains", async ({
   page: host,
   browser,
   request,
-}) => {
-  host.on("websocket", (ws) => {
-    ws.on("framesent", (frame) => {
-      const s = String(frame.payload)
-
-      if (s.includes("RESOLVE_STORY_TIE")) {
-        console.log("TIE COMMAND", s)
-      }
-    })
-    ws.on("framereceived", (frame) => {
-      const s = String(frame.payload)
-
-      if (s.includes("errorMessage")) {
-        console.log("SERVER ERROR", s)
-      }
-
-      if (s.startsWith("42") && s.includes("extensions:state")) {
-        try {
-          const [, data] = JSON.parse(s.slice(2)) as [
-            unknown,
-            {
-              seq: number
-              extras?: {
-                activeSceneData?: {
-                  fullShow?: {
-                    tieCandidates?: unknown[]
-                    tieResolvedIndex?: number
-                  }
-                }
-              }
-            },
-          ]
-          const f = data.extras?.activeSceneData?.fullShow
-
-          if (f?.tieCandidates?.length) {
-            console.log("TIE STATE", data.seq, f.tieResolvedIndex)
-          }
-        } catch {
-          /* Non-state diagnostic frames need no handling. */
-        }
-      }
-    })
-  })
+}, info) => {
+  const hostWire = observeRounds(host)
   const auth = await request.post("/api/auth/manager", {
     data: { password: "e2e-password" },
   })
   expect(auth.ok()).toBeTruthy()
   const { token } = (await auth.json()) as { token: string }
-  const title = `Next acceptance ${Date.now()}`
+  const title = `Next acceptance ${randomUUID()}`
   const names = [
     "Pirate",
     "Shadchan",
@@ -71,9 +177,9 @@ test("server timeline: host/display round banners, ten photo votes, results, sto
   const quizz = {
     id: crypto.randomUUID(),
     subject: title,
-    gameMode: "survey",
+    gameMode: "survey" as const,
     questions: ids.map((_, i) => ({
-      type: "single",
+      type: "single" as const,
       question: `Story question ${i + 1}`,
       answers: names,
       solutions: [],
@@ -81,7 +187,11 @@ test("server timeline: host/display round banners, ten photo votes, results, sto
       time: 60,
     })),
   }
-  const extras = createDefaultQuizExtrasV2(quizz.id, ids, "0".repeat(64))
+  const extras = createDefaultQuizExtrasV2(
+    quizz.id,
+    ids,
+    computeCanonicalBaseDigest(quizz),
+  )
   const scene = (preset: string, round = 1) => {
     const id = crypto.randomUUID()
     extras.scenes[id] = {
@@ -133,24 +243,21 @@ test("server timeline: host/display round banners, ten photo votes, results, sto
     data: { quizz, extras },
   })
   expect(save.ok(), await save.text()).toBeTruthy()
-  await loginManager(host)
-  await host.getByRole("button", { name: title, exact: true }).click()
-  await host.getByRole("button", { name: "Start game", exact: true }).click()
-  await expect(host.getByTestId("tadazz-lobby-pin")).toHaveText(/^\d{6}$/)
-  const pin = (await host.getByTestId("tadazz-lobby-pin").textContent())!
-  console.log(
-    "STAGE",
-    await host.getByTestId("tadazz-stage").evaluate((el) => ({
-      rect: el.getBoundingClientRect().toJSON() as unknown,
-      parent: el.parentElement!.getBoundingClientRect().toJSON() as unknown,
-      scale: getComputedStyle(el).getPropertyValue("--scale"),
-    })),
+  const pin = await createGame(host, title)
+  const room = /\/party\/manager\/([0-9a-f-]{36})/u.exec(
+    new URL(host.url()).pathname,
   )
-  const { 1: gameId } = /manager\/([^/?#]+)/.exec(host.url())!
+
+  if (!room) {
+    throw new Error("Actual native manager room is required")
+  }
+
+  const [, gameId] = room
+  await configureManualCompletion(host)
   const ctx = await browser.newContext({
     viewport: { width: 1920, height: 1080 },
     recordVideo: {
-      dir: join(import.meta.dirname, "../../../work/next-videos"),
+      dir: info.outputPath("next-videos"),
     },
   })
   const display = await ctx.newPage()
@@ -201,19 +308,8 @@ test("server timeline: host/display round banners, ten photo votes, results, sto
   for (let i = 0; i < 3; i += 1) {
     await joinGame(otherPlayers[i], pin, `QA voter ${i + 2}`)
   }
-  for (const pg of [host, display]) {
-    const skip = pg.getByTestId("tadazz-opening-skip")
-
-    if (await skip.isVisible()) {
-      await skip.click({ timeout: 1500 }).catch(async (error: unknown) => {
-        if (await skip.isVisible()) {
-          throw error
-        }
-      })
-    }
-  }
   await startGame(host)
-  const out = join(import.meta.dirname, "../../../work/next-live-evidence")
+  const out = info.outputPath("next-live-evidence")
   fs.mkdirSync(out, { recursive: true })
   async function shot(name: string) {
     console.log("CAPTURE", name)
@@ -274,11 +370,9 @@ test("server timeline: host/display round banners, ten photo votes, results, sto
 
         return i % 5
       })()
-      const pad = voter.getByTestId(`tadazz-pad-option-${index}`)
-      await expect(pad).toBeVisible()
-      await pad.click()
+      await answer(voter, names[index])
     }
-    await endTimer(host)
+    await endRecordedVote(host, hostWire, 4)
     for (const pg of [host, display]) {
       await expect(
         pg.locator(".tzv4-stage .result-percentage").nth(i % 5),
@@ -319,10 +413,39 @@ test("server timeline: host/display round banners, ten photo votes, results, sto
     if (i === 4 || i === 9) {
       await full("story-assembly")
       for (const pg of [host, display]) {
-        await expect(pg.locator(".full-story-image")).toHaveCount(5)
+        const cards = pg
+          .getByTestId("tadazz-story-mixer")
+          .locator(".card-col img.card-photo")
+        await expect(cards).toHaveCount(5)
+        await expect
+          .poll(() =>
+            cards.evaluateAll((images) =>
+              images.every(
+                (image) =>
+                  image instanceof HTMLImageElement && image.naturalWidth > 0,
+              ),
+            ),
+          )
+          .toBe(true)
       }
       await next(host)
       await full("story-live")
+      for (const pg of [host, display]) {
+        const cards = pg
+          .getByTestId("tadazz-story-reveal")
+          .locator(".story-card img.card-image")
+        await expect(cards).toHaveCount(5)
+        await expect
+          .poll(() =>
+            cards.evaluateAll((images) =>
+              images.every(
+                (image) =>
+                  image instanceof HTMLImageElement && image.naturalWidth > 0,
+              ),
+            ),
+          )
+          .toBe(true)
+      }
       await host.waitForTimeout(1200)
       await expect(
         display.locator('[data-v4-scene="story-live"]'),
@@ -337,6 +460,25 @@ test("server timeline: host/display round banners, ten photo votes, results, sto
   }
   await full("grand-finale")
   expect(errors).toEqual([])
+  const proof = info.outputPath("next-live-contract.json")
+  fs.writeFileSync(
+    proof,
+    JSON.stringify(
+      {
+        questionCount: 10,
+        actualPlayerCount: 4,
+        expectedDistribution: [75, 50, 75, 75, 75, 75, 75, 75, 75, 75],
+        hostWire,
+        mediaErrors: errors,
+      },
+      null,
+      2,
+    ),
+  )
+  await info.attach("next-live-contract", {
+    path: proof,
+    contentType: "application/json",
+  })
   await playerCtx.close()
   for (const c of otherContexts) {
     await c.close()

@@ -153,13 +153,20 @@ export class PresentationLaunch {
   }
 
   snapshot(running: boolean): PlatformOpeningSnapshot {
+    const getVisibleStage = (): PlatformOpeningSnapshot["stage"] => {
+      if (this.stage === "closing" || this.stage === "closed") {
+        return this.stage
+      }
+
+      if (running) {
+        return "running"
+      }
+
+      return this.stage
+    }
+
     return {
-      stage:
-        this.stage === "closing" || this.stage === "closed"
-          ? this.stage
-          : running
-            ? "running"
-            : this.stage,
+      stage: getVisibleStage(),
       startedAt: this.startedAt,
     }
   }

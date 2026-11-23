@@ -16,6 +16,7 @@ const VOTING =
   "/tadazz-show/music/platform/tzila-determined-pursuit-20261105.mp3"
 const LOBBY = "/tadazz-show/music/platform/tadazz-exploration-20261106.mp3"
 const RESULTS = "/tadazz-show/music/cutie-patootie.mp3"
+const FINALE = "/tadazz-show/music/platform/tadazz-epic-endgame-20261106.mp3"
 const CONFIRM = "/sounds/tadazz-confirm-20261108.mp3"
 const TRANSITION = "/sounds/tadazz-silky-transition-20261108.mp3"
 const REVEAL = "/sounds/tadazz-reveal-bright-20261108.mp3"
@@ -39,11 +40,15 @@ function recordMedia() {
       ? { code: element.error.code, message: element.error.message }
       : null,
   })
-  const play = HTMLMediaElement.prototype.play
-  HTMLMediaElement.prototype.play = function () {
-    let attempt
+  const { play } = HTMLMediaElement.prototype
+  HTMLMediaElement.prototype.play = function observePlatformAudioPlay() {
+    let attempt = undefined
+
     if (this instanceof HTMLAudioElement) {
-      if (!trace.elements.includes(this)) trace.elements.push(this)
+      if (!trace.elements.includes(this)) {
+        trace.elements.push(this)
+      }
+
       attempt = {
         url: new URL(this.currentSrc || this.src, location.href).pathname,
         requestedUrl: new URL(this.src || location.href, location.href)
@@ -57,8 +62,10 @@ function recordMedia() {
       }
       trace.plays.push(attempt)
     }
+
     try {
       const result = play.call(this)
+
       if (attempt) {
         result.then(
           () => {
@@ -74,6 +81,7 @@ function recordMedia() {
           },
         )
       }
+
       return result
     } catch (error) {
       if (attempt) {
@@ -81,6 +89,7 @@ function recordMedia() {
         attempt.error = { name: error?.name, message: error?.message }
         attempt.after = snapshot(this)
       }
+
       throw error
     }
   }
@@ -121,6 +130,7 @@ const mediaState = (page) =>
         ? { code: element.error.code, message: element.error.message }
         : null,
     }))
+
     return {
       active: elements.filter(
         (element) => !element.paused && !element.ended && element.volume > 0,
@@ -131,7 +141,8 @@ const mediaState = (page) =>
     }
   })
 
-/** options: the same browser/context/token/origin/evidence as verifyGalleryEditor. */
+/** Options: the same browser/context/token/origin/evidence as verifyGalleryEditor. */
+
 export async function verifyPlatformDefaults(options) {
   assert.equal(process.platform, "linux", "Run acceptance on the Linux server")
   const { origin, token, browser, context } = options
@@ -143,7 +154,7 @@ export async function verifyPlatformDefaults(options) {
   assert(token && browser && context, "Existing authenticated fixture required")
   const evidence = join(options.evidence, "platform-refinement")
   mkdirSync(evidence, { recursive: true })
-  const headers = { Authorization: "Bearer " + token }
+  const headers = { Authorization: `Bearer ${token}` }
   const results = []
   const created = []
   const errors = []
@@ -164,8 +175,9 @@ export async function verifyPlatformDefaults(options) {
     assert.equal(
       response.status(),
       201,
-      path + ": " + (await response.text()).slice(0, 500),
+      `${path}: ${(await response.text()).slice(0, 500)}`,
     )
+
     return response.json()
   }
   const watch = async (page, role) => {
@@ -173,19 +185,21 @@ export async function verifyPlatformDefaults(options) {
     pageRoles.set(page, role)
     await page.addInitScript(recordMedia)
     await page.emulateMedia({ reducedMotion: "no-preference" })
-    page.on("pageerror", (error) => errors.push(role + ": " + error.message))
+    page.on("pageerror", (error) => errors.push(`${role}: ${error.message}`))
     page.on("response", (response) => {
       const path = new URL(response.url()).pathname
+
       if (/^\/(?:sounds|tadazz-show\/music)\//u.test(path)) {
-        const headers = response.headers()
+        const responseHeaders = response.headers()
         mediaResponses.push({
           role,
           path,
           status: response.status(),
-          contentType: headers["content-type"],
-          contentLength: headers["content-length"],
+          contentType: responseHeaders["content-type"],
+          contentLength: responseHeaders["content-length"],
         })
       }
+
       if (
         response.status() >= 400 &&
         /^\/(?:sounds|tadazz-show\/music)\//u.test(path)
@@ -195,6 +209,7 @@ export async function verifyPlatformDefaults(options) {
     })
     page.on("requestfailed", (request) => {
       const path = new URL(request.url()).pathname
+
       if (/^\/(?:sounds|tadazz-show\/music)\//u.test(path)) {
         mediaResponses.push({
           role,
@@ -203,6 +218,7 @@ export async function verifyPlatformDefaults(options) {
         })
       }
     })
+
     return page
   }
   const anonymous = async (role, viewport = { width: 1280, height: 720 }) => {
@@ -214,6 +230,7 @@ export async function verifyPlatformDefaults(options) {
     })
     contexts.push(owned)
     await owned.addInitScript(() => localStorage.setItem("i18nextLng", "en"))
+
     return watch(await owned.newPage(), role)
   }
   const fixture = async ({
@@ -223,7 +240,7 @@ export async function verifyPlatformDefaults(options) {
     opening,
   }) => {
     const quizz = {
-      subject: "Platform acceptance " + theme + " " + randomUUID(),
+      subject: `Platform acceptance ${theme} ${randomUUID()}`,
       gameMode: "quiz",
       questions: [
         {
@@ -251,6 +268,7 @@ export async function verifyPlatformDefaults(options) {
         leaderboardPolicy: "disabled",
       },
     }
+
     if (finale) {
       const sceneId = randomUUID()
       extras.scenes[sceneId] = {
@@ -262,6 +280,7 @@ export async function verifyPlatformDefaults(options) {
       }
       extras.timeline.push({ id: randomUUID(), kind: "animation", sceneId })
     }
+
     if (opening === "custom") {
       const ids = [
         "start",
@@ -299,11 +318,13 @@ export async function verifyPlatformDefaults(options) {
         },
       }
     }
+
     if (opening === "mute") {
       extras.defaults.showTheme.overrides = {
         audio: { opening: { muted: true } },
       }
     }
+
     const saved = await post(
       legacy ? "/api/quizz" : "/api/extensions/quizzes",
       legacy ? quizz : { quizz, extras },
@@ -312,7 +333,7 @@ export async function verifyPlatformDefaults(options) {
     assert(quizId, "Saved disposable quiz ID")
     const room = await post("/api/games", { quizzId: quizId })
     const settings = await context.request.patch(
-      origin + "/api/games/" + room.gameId + "/settings",
+      `${origin}/api/games/${room.gameId}/settings`,
       {
         headers,
         data: {
@@ -327,7 +348,7 @@ export async function verifyPlatformDefaults(options) {
       "Bounded progression in this disposable room",
     )
     const policy = await context.request.patch(
-      origin + "/api/games/" + room.gameId + "/roster/settings",
+      `${origin}/api/games/${room.gameId}/roster/settings`,
       { headers, data: { allowUnregisteredPlayers: true } },
     )
     assert.equal(policy.status(), 200, "Open only this disposable room")
@@ -339,18 +360,19 @@ export async function verifyPlatformDefaults(options) {
       finale,
       opening,
     })
-    const host = await watch(await context.newPage(), "host-" + theme)
-    await host.goto(origin + "/party/manager/" + room.gameId + "?lng=en")
+    const host = await watch(await context.newPage(), `host-${theme}`)
+    await host.goto(`${origin}/party/manager/${room.gameId}?lng=en`)
     await expect(host.getByTestId("platform-opening-start")).toBeEnabled({
       timeout: 30_000,
     })
     await expect(host.getByTestId("host-guest-join-toggle")).toHaveCount(1)
+
     return { host, room, quizId }
   }
   const enter = async (room, name) => {
     const player = await anonymous(name, { width: 390, height: 844 })
     await player.goto(
-      origin + "/game?pin=" + encodeURIComponent(room.inviteCode),
+      `${origin}/game?pin=${encodeURIComponent(room.inviteCode)}`,
     )
     await expect(player.getByPlaceholder("Username here")).toBeVisible({
       timeout: 30_000,
@@ -363,7 +385,8 @@ export async function verifyPlatformDefaults(options) {
     )
     await player.getByRole("button", { name: "Submit", exact: true }).click()
     assert.equal((await joined).status(), 200, "Disposable player joins")
-    await expect(player).toHaveURL(origin + "/party/" + room.gameId)
+    await expect(player).toHaveURL(`${origin}/party/${room.gameId}`)
+
     return player
   }
   const activeUrls = async (page) =>
@@ -377,6 +400,58 @@ export async function verifyPlatformDefaults(options) {
       .poll(() => activeUrls(host), { timeout: 10_000 })
       .toEqual([url])
   }
+  const readFinalePlayback = async (page) => {
+    const owner = page.getByTestId("audio-cue-player-state")
+    await expect(owner).toHaveCount(1)
+    for (const [name, value] of Object.entries({
+      "data-soundtrack-slot": "finale",
+      "data-audio-url": FINALE,
+      "data-should-play": "true",
+      "data-audio-loop": "true",
+      "data-audio-blocked": "false",
+      "data-audio-error": "false",
+      "data-audio-paused": "false",
+    })) {
+      await expect(owner).toHaveAttribute(name, value)
+    }
+    await expect.poll(() => activeUrls(page)).toEqual([FINALE])
+    const state = await mediaState(page)
+    assert.equal(state.active.length, 1, "Exactly one active finale element")
+    const [audio] = state.active
+    assert.equal(audio.url, FINALE)
+    assert.equal(audio.loop, true)
+    assert.equal(audio.muted, false)
+    assert.equal(audio.error, null)
+    const identity = await owner.getAttribute("data-audio-identity")
+    assert(identity, "Finale has an authoritative playback identity")
+
+    return {
+      identity,
+      element: audio.element,
+      url: audio.url,
+      time: audio.time,
+      loop: audio.loop,
+      plays: state.plays.filter(
+        (item) => item.url === FINALE || item.requestedUrl === FINALE,
+      ).length,
+    }
+  }
+  const assertFinaleContinues = (before, after) => {
+    assert.equal(after.identity, before.identity, "Finale identity is retained")
+    assert.equal(
+      after.element,
+      before.element,
+      "The same audio element continues",
+    )
+    assert.equal(after.url, before.url)
+    assert.equal(
+      after.plays,
+      before.plays,
+      "Closing must not replay the finale",
+    )
+    assert(after.time > before.time + 0.1, "Real finale playback time advances")
+    assert.equal(after.loop, true)
+  }
 
   try {
     for (const [theme, legacy, finale] of [
@@ -384,8 +459,8 @@ export async function verifyPlatformDefaults(options) {
       ["tadazz-classic", false, true],
     ]) {
       const { host, room } = await fixture({ theme, legacy, finale })
-      const display = await anonymous("display-" + theme)
-      await display.goto(origin + "/display/" + room.gameId + "?lng=en")
+      const display = await anonymous(`display-${theme}`)
+      await display.goto(`${origin}/display/${room.gameId}?lng=en`)
       await expect(
         display.getByTestId("platform-game-opening"),
       ).toHaveAttribute("data-platform-opening-stage", "standby")
@@ -444,7 +519,7 @@ export async function verifyPlatformDefaults(options) {
         await expect(host.getByTestId("platform-game-opening")).toHaveCount(0)
       }
 
-      const player = await enter(room, "Platform " + theme)
+      const player = await enter(room, `Platform ${theme}`)
 
       if (legacy) {
         const previousPlays = (await mediaState(host)).plays.length
@@ -457,7 +532,7 @@ export async function verifyPlatformDefaults(options) {
               new CustomEvent("tadazz:sfx", {
                 detail: {
                   name,
-                  identity: "platform-qa-interruption-" + suffix,
+                  identity: `platform-qa-interruption-${suffix}`,
                 },
               }),
             )
@@ -484,11 +559,13 @@ export async function verifyPlatformDefaults(options) {
         await expect.poll(() => activeUrls(host)).toEqual([LOBBY])
         record("interrupted-stale-effect-keeps-live-background-audio-unblocked")
       }
+
       if (legacy) {
         await watchNativeQuestionSequence(host)
         await watchNativeQuestionSequence(display)
         await watchNativeQuestionSequence(player)
       }
+
       await host
         .getByTestId("manager-control-toolbar")
         .getByRole("button", { name: "Start", exact: true })
@@ -507,9 +584,10 @@ export async function verifyPlatformDefaults(options) {
         const phaseCues = (await mediaState(host)).events
           .filter((event) => event.name === "phase-showQuestion")
           .map((event) => event.identity)
-        assert.deepEqual(phaseCues, [room.gameId + ":1:phase:showQuestion"])
+        assert.deepEqual(phaseCues, [`${room.gameId}:1:phase:showQuestion`])
         record("native-question-handoff-emits-one-authoritative-phase-cue")
       }
+
       if (legacy) {
         for (const [role, surface] of [
           ["host", host],
@@ -518,16 +596,17 @@ export async function verifyPlatformDefaults(options) {
         ]) {
           const sequence = await readNativeQuestionSequence(surface)
           writeFileSync(
-            join(evidence, "native-question-" + role + "-voting.json"),
+            join(evidence, `native-question-${role}-voting.json`),
             JSON.stringify(sequence, null, 2) + String.fromCharCode(10),
           )
           record(
-            "native-" +
-              role +
-              "-question-2s-then-answers-and-timer-with-stable-heading",
+            `native-${
+              role
+            }-question-2s-then-answers-and-timer-with-stable-heading`,
           )
         }
       }
+
       await choice.click()
       await expect
         .poll(
@@ -554,6 +633,7 @@ export async function verifyPlatformDefaults(options) {
         RESULTS,
         { timeout: 15_000 },
       )
+
       if (legacy) {
         for (const [role, surface] of [
           ["host", host],
@@ -566,13 +646,14 @@ export async function verifyPlatformDefaults(options) {
             results: true,
           })
           writeFileSync(
-            join(evidence, "native-question-" + role + "-results.json"),
+            join(evidence, `native-question-${role}-results.json`),
             JSON.stringify(sequence, null, 2) + String.fromCharCode(10),
           )
-          record("native-" + role + "-question-heading-remains-through-results")
+          record(`native-${role}-question-heading-remains-through-results`)
         }
       }
-      record(theme + "-shared-voting-results-and-single-accepted-answer-effect")
+
+      record(`${theme}-shared-voting-results-and-single-accepted-answer-effect`)
 
       const curtain = host.getByTestId("platform-game-closing")
       await expect(curtain).toBeVisible({ timeout: 60_000 })
@@ -598,19 +679,52 @@ export async function verifyPlatformDefaults(options) {
       ).toBeLessThan(250)
       await expect(display.locator(".full-curtain")).toHaveCount(0)
       await host.screenshot({
-        path: join(evidence, theme + "-paused-curtain.png"),
+        path: join(evidence, `${theme}-paused-curtain.png`),
       })
       await host.getByTestId("host-pause-resume-btn").click()
+      const finaleSurfaces = [
+        ["host", host],
+        ["display", display],
+      ]
+      const finaleContinuity = {}
+      for (const [role, surface] of finaleSurfaces) {
+        await expect(
+          surface.getByTestId("platform-closing-boundary"),
+        ).toHaveAttribute("data-closing-stage", "closing")
+        finaleContinuity[role] = { before: await readFinalePlayback(surface) }
+      }
       await expect(
         host.getByTestId("platform-closing-boundary"),
       ).toHaveAttribute("data-closing-stage", "closed", { timeout: 15_000 })
+      for (const [role, surface] of finaleSurfaces) {
+        await expect(
+          surface.getByTestId("platform-closing-boundary"),
+        ).toHaveAttribute("data-closing-stage", "closed")
+        finaleContinuity[role].closed = await readFinalePlayback(surface)
+      }
       // Let an authored finale's 9.2-second timeline finish as well: its onFinish
       // must retain the existing closed curtain rather than start a second one.
       await host.waitForTimeout(900)
       await expect(
         host.getByTestId("platform-closing-boundary"),
       ).toHaveAttribute("data-closing-stage", "closed")
-      await expect.poll(() => activeUrls(host)).toEqual([])
+      for (const [role, surface] of finaleSurfaces) {
+        await expect(
+          surface.getByTestId("platform-closing-boundary"),
+        ).toHaveAttribute("data-closing-stage", "closed")
+        await expect(surface.getByTestId("platform-game-closing")).toHaveCount(
+          1,
+        )
+        finaleContinuity[role].after = await readFinalePlayback(surface)
+      }
+      writeFileSync(
+        join(evidence, `${theme}-finale-continuity.json`),
+        `${JSON.stringify(finaleContinuity, null, 2)}\n`,
+      )
+      for (const state of Object.values(finaleContinuity)) {
+        assertFinaleContinues(state.before, state.closed)
+        assertFinaleContinues(state.closed, state.after)
+      }
       await host.reload()
       await expect(
         host.getByTestId("platform-closing-boundary"),
@@ -618,13 +732,15 @@ export async function verifyPlatformDefaults(options) {
       await expect(host.getByTestId("platform-game-opening")).toHaveCount(0)
       await expect(host.getByTestId("platform-game-closing")).toHaveCount(1)
       await host.screenshot({
-        path: join(evidence, theme + "-closed-reconnect.png"),
+        path: join(evidence, `${theme}-closed-reconnect.png`),
       })
       writeFileSync(
-        join(evidence, theme + "-accepted-audio.json"),
-        JSON.stringify(accepted, null, 2) + "\n",
+        join(evidence, `${theme}-accepted-audio.json`),
+        `${JSON.stringify(accepted, null, 2)}\n`,
       )
-      record(theme + "-one-final-curtain-pause-reconnect-and-no-second-close")
+      record(`${theme}-one-final-curtain-pause-reconnect-and-no-second-close`, {
+        finaleContinuity,
+      })
       await host.close()
       await display.close()
       await player.close()
@@ -633,9 +749,10 @@ export async function verifyPlatformDefaults(options) {
     for (const opening of ["custom", "mute"]) {
       const { host } = await fixture({ theme: "tadazz-classic", opening })
       await host.getByTestId("platform-opening-start").click()
+
       if (opening === "custom") {
         await assertSingleIntro(host, LOBBY)
-        const state = (await mediaState(host)).active[0]
+        const [state] = (await mediaState(host)).active
         expect(state.volume).toBeCloseTo(0.11, 2)
         assert.equal(state.loop, true)
         expect(state.time).toBeGreaterThanOrEqual(0.35)
@@ -650,10 +767,11 @@ export async function verifyPlatformDefaults(options) {
         assert.deepEqual(await activeUrls(host), [])
         assert.equal((await mediaState(host)).plays.length, 0)
       }
+
       await host.screenshot({
-        path: join(evidence, "opening-" + opening + ".png"),
+        path: join(evidence, `opening-${opening}.png`),
       })
-      record("explicit-opening-" + opening + "-overrides-platform-default")
+      record(`explicit-opening-${opening}-overrides-platform-default`)
       await host.close()
     }
 
@@ -667,13 +785,17 @@ export async function verifyPlatformDefaults(options) {
     const output = { passed: true, results, created, failedMedia }
     writeFileSync(
       join(evidence, "report.json"),
-      JSON.stringify(output, null, 2) + "\n",
+      `${JSON.stringify(output, null, 2)}\n`,
     )
+
     return output
   } catch (error) {
     const diagnosticPages = []
     for (const [index, page] of pages.entries()) {
-      if (page.isClosed()) continue
+      if (page.isClosed()) {
+        continue
+      }
+
       const role = pageRoles.get(page) ?? "unknown"
       const media = await mediaState(page).catch((failure) => ({
         error: String(failure),
@@ -707,15 +829,15 @@ export async function verifyPlatformDefaults(options) {
           })),
         }))
         .catch((failure) => ({ error: String(failure) }))
-      const screenshot = "failure-page-" + index + ".png"
-      await page
-        .screenshot({ path: join(evidence, screenshot) })
-        .catch(() => {})
+      const screenshot = `failure-page-${index}.png`
+      await page.screenshot({ path: join(evidence, screenshot) }).catch(() => {
+        /* Keep the recorded audit outcome if its diagnostic screenshot is unavailable. */
+      })
       diagnosticPages.push({ role, url: page.url(), screenshot, media, state })
     }
     writeFileSync(
       join(evidence, "failure.json"),
-      JSON.stringify(
+      `${JSON.stringify(
         {
           passed: false,
           message: String(error),
@@ -731,12 +853,21 @@ export async function verifyPlatformDefaults(options) {
         },
         null,
         2,
-      ) + "\n",
+      )}\n`,
     )
     throw error
   } finally {
-    for (const page of pages)
-      if (!page.isClosed()) await page.close().catch(() => {})
-    for (const owned of contexts) await owned.close().catch(() => {})
+    for (const page of pages) {
+      if (!page.isClosed()) {
+        await page.close().catch(() => {
+          /* Continue the remaining owned browser cleanup if this close fails. */
+        })
+      }
+    }
+    for (const owned of contexts) {
+      await owned.close().catch(() => {
+        /* Continue the remaining owned browser cleanup if this close fails. */
+      })
+    }
   }
 }

@@ -279,10 +279,10 @@ export const ScenePresenter = ({
     return () => clearInterval(interval)
   }, [effectiveServerStartedAt, durationMs, controlledTimeMs])
 
-  // A readonly preview supplies its existing sole clock. Legacy foreground
-  // media follows it just as the cinematic layer already does.
+  // Preview media follows its existing sole clock. Live media receives only
+  // the authoritative pause state and retains its current playback position.
   useEffect(() => {
-    if (controlledTimeMs === undefined) {
+    if (controlledTimeMs === undefined && controlledPaused === undefined) {
       return
     }
 
@@ -292,21 +292,23 @@ export const ScenePresenter = ({
           continue
         }
 
-        const elapsed = Math.max(0, controlledTimeMs / 1000)
-        let target = elapsed
+        if (controlledTimeMs !== undefined) {
+          const elapsed = Math.max(0, controlledTimeMs / 1000)
+          let target = elapsed
 
-        if (Number.isFinite(media.duration) && media.duration > 0) {
-          target = media.loop
-            ? elapsed % media.duration
-            : Math.min(elapsed, media.duration)
-        }
+          if (Number.isFinite(media.duration) && media.duration > 0) {
+            target = media.loop
+              ? elapsed % media.duration
+              : Math.min(elapsed, media.duration)
+          }
 
-        if (
-          Number.isFinite(media.duration) &&
-          media.duration > 0 &&
-          Math.abs(media.currentTime - target) > 0.25
-        ) {
-          media.currentTime = target
+          if (
+            Number.isFinite(media.duration) &&
+            media.duration > 0 &&
+            Math.abs(media.currentTime - target) > 0.25
+          ) {
+            media.currentTime = target
+          }
         }
 
         if (controlledPaused ?? true) {
@@ -1039,7 +1041,12 @@ export const ScenePresenter = ({
           )}
 
           {kind === "interimResults" && (
-            <div className="flex flex-col items-center gap-1">
+            <div
+              className={clsx(
+                "flex items-center justify-center gap-1",
+                isUltraCompact ? "flex-wrap" : "flex-col",
+              )}
+            >
               <div className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-0.5 text-xs font-bold text-white shadow-xs backdrop-blur-md sm:px-4 sm:py-1 sm:text-sm">
                 <BarChart3 className="text-primary size-3.5 sm:size-4" />
                 <span>{getKindLabel("interimResults", "Interim Results")}</span>
@@ -1141,7 +1148,14 @@ export const ScenePresenter = ({
         (activeScene &&
           "mediaType" in activeScene &&
           activeScene.mediaType === "audio")) && (
-        <div className="relative z-10 my-2 flex min-h-0 w-full flex-1 flex-col items-center justify-center overflow-hidden sm:my-3">
+        <div
+          className={clsx(
+            "relative z-10 flex min-h-0 w-full flex-1 flex-col items-center justify-center overflow-hidden",
+            kind === "interimResults" && isUltraCompact
+              ? "my-0"
+              : "my-2 sm:my-3",
+          )}
+        >
           {labels?.sampleDataNotice && (
             <span className="border-primary/40 bg-primary/20 text-primary mb-1.5 shrink-0 rounded-full border px-3 py-0.5 text-xs font-semibold">
               {labels.sampleDataNotice}
@@ -1339,6 +1353,8 @@ export const ScenePresenter = ({
                   const ranking = computePollRanking(pollOptions)
                   const { isZeroVotes, isTie, winners, runnersUp, allSorted } =
                     ranking
+                  const useCompactRows =
+                    isNarrowMobile && isUltraCompact && winners.length === 1
                   const getCardColor = (idx: number) =>
                     CANONICAL_ANSWER_COLORS[idx] ?? "#334155"
 
@@ -1442,7 +1458,11 @@ export const ScenePresenter = ({
                           <div
                             data-testid="results-hero-section"
                             className={clsx(
-                              "flex w-full max-w-4xl flex-wrap items-center justify-center",
+                              "grid min-h-0 w-full max-w-4xl auto-rows-fr items-stretch justify-items-center",
+                              useCompactRows && "shrink-0",
+                              winners.length === 1
+                                ? "grid-cols-1"
+                                : "grid-cols-2",
                               isUltraCompact || availableHeight <= 600
                                 ? "mb-1 gap-1.5"
                                 : "mb-2 gap-2 sm:gap-4",
@@ -1470,18 +1490,28 @@ export const ScenePresenter = ({
                                     },
                                   )}
                                   className={clsx(
-                                    "relative flex flex-col items-center justify-between overflow-hidden rounded-xl border-2 border-amber-300 text-center shadow-2xl ring-2 shadow-amber-500/30 ring-amber-400 transition-all duration-500 sm:rounded-2xl",
+                                    "relative min-h-0 w-full items-center justify-between overflow-hidden rounded-xl border-2 border-amber-300 text-center shadow-2xl ring-2 shadow-amber-500/30 ring-amber-400 transition-all duration-500 sm:rounded-2xl",
+                                    useCompactRows
+                                      ? "grid grid-cols-[56px_minmax(0,1fr)] grid-rows-[auto_auto_4px] gap-x-2 gap-y-0.5"
+                                      : "flex flex-col",
                                     isUltraCompact || availableHeight <= 600
                                       ? "p-1 sm:p-1.5"
                                       : "p-2 sm:p-3 sm:ring-4",
                                     resultsSlot.preset !== "none" &&
                                       `tada-entrance-${resultsSlot.preset}`,
                                     winners.length === 1
-                                      ? "w-full max-w-xs sm:max-w-sm md:max-w-md"
-                                      : "w-[calc(50%-0.5rem)] max-w-xs sm:max-w-sm",
+                                      ? "max-w-xs sm:max-w-sm md:max-w-md"
+                                      : "max-w-xs sm:max-w-sm",
                                   )}
                                 >
-                                  <div className="z-10 mb-0.5 flex w-full items-center justify-between gap-1">
+                                  <div
+                                    className={clsx(
+                                      "z-10 flex w-full items-center justify-between gap-1",
+                                      useCompactRows
+                                        ? "col-start-2 row-start-1 min-w-0"
+                                        : "mb-0.5",
+                                    )}
+                                  >
                                     <span
                                       className={clsx(
                                         "flex shrink-0 items-center justify-center rounded-lg border border-white/25 bg-black/35 font-black text-white shadow-md",
@@ -1524,10 +1554,18 @@ export const ScenePresenter = ({
                                   </div>
 
                                   <div
-                                    className="relative flex w-full items-center justify-center overflow-hidden rounded-lg border border-black/20 shadow-inner sm:rounded-xl"
+                                    className={clsx(
+                                      "relative flex min-h-6 w-full items-center justify-center overflow-hidden rounded-lg border border-black/20 shadow-inner sm:min-h-8 sm:rounded-xl md:min-h-9",
+                                      useCompactRows &&
+                                        "col-start-1 row-span-3 row-start-1",
+                                    )}
                                     style={{
                                       backgroundColor: cardBg,
                                       height: (() => {
+                                        if (useCompactRows) {
+                                          return "56px"
+                                        }
+
                                         if (isUltraCompact) {
                                           return "clamp(28px, 6vh, 44px)"
                                         }
@@ -1542,6 +1580,10 @@ export const ScenePresenter = ({
                                         return "clamp(48px, 14vh, 140px)"
                                       })(),
                                       maxHeight: (() => {
+                                        if (useCompactRows) {
+                                          return "56px"
+                                        }
+
                                         if (isUltraCompact) {
                                           return "clamp(28px, 6vh, 44px)"
                                         }
@@ -1586,7 +1628,10 @@ export const ScenePresenter = ({
                                   <span
                                     data-testid="winner-caption"
                                     className={clsx(
-                                      "mt-0.5 w-full text-center leading-tight font-black break-words text-white drop-shadow-md",
+                                      "w-full text-center leading-tight font-black break-words text-white drop-shadow-md",
+                                      useCompactRows
+                                        ? "col-start-2 row-start-2 min-w-0"
+                                        : "mt-0.5",
                                       isUltraCompact || availableHeight <= 600
                                         ? "text-[10px] sm:text-xs"
                                         : "text-xs sm:text-sm md:text-base",
@@ -1595,7 +1640,14 @@ export const ScenePresenter = ({
                                     {winner.label}
                                   </span>
 
-                                  <div className="mt-0.5 h-1 w-full overflow-hidden rounded-full bg-white/25 sm:h-1.5">
+                                  <div
+                                    className={clsx(
+                                      "h-1 w-full overflow-hidden rounded-full bg-white/25 sm:h-1.5",
+                                      useCompactRows
+                                        ? "col-start-2 row-start-3 self-end"
+                                        : "mt-0.5",
+                                    )}
+                                  >
                                     <div
                                       className="h-full rounded-full bg-amber-400 transition-all duration-700 ease-out"
                                       style={{
@@ -1613,7 +1665,8 @@ export const ScenePresenter = ({
                             <div
                               data-testid="results-runners-up-section"
                               className={clsx(
-                                "grid w-full max-w-4xl grid-cols-2 sm:grid-cols-4",
+                                "grid min-h-0 w-full max-w-4xl auto-rows-fr grid-cols-2 sm:grid-cols-4",
+                                useCompactRows && "shrink-0",
                                 isUltraCompact || availableHeight <= 600
                                   ? "gap-1"
                                   : "gap-1.5 sm:gap-2.5",
@@ -1642,7 +1695,10 @@ export const ScenePresenter = ({
                                       },
                                     )}
                                     className={clsx(
-                                      "relative flex flex-col items-center justify-between overflow-hidden rounded-lg border border-black/20 text-center opacity-95 shadow-lg transition-all duration-300 sm:rounded-xl",
+                                      "relative min-h-0 items-center justify-between overflow-hidden rounded-lg border border-black/20 text-center opacity-95 shadow-lg transition-all duration-300 sm:rounded-xl",
+                                      useCompactRows
+                                        ? "grid grid-cols-[40px_minmax(0,1fr)] grid-rows-[auto_auto_4px] gap-x-1 gap-y-0.5"
+                                        : "flex flex-col",
                                       isUltraCompact || availableHeight <= 600
                                         ? "p-1"
                                         : "p-1.5 sm:p-2",
@@ -1650,7 +1706,14 @@ export const ScenePresenter = ({
                                         `tada-entrance-${resultsSlot.preset}`,
                                     )}
                                   >
-                                    <div className="z-10 mb-0.5 flex w-full items-center justify-between gap-1">
+                                    <div
+                                      className={clsx(
+                                        "z-10 flex w-full items-center justify-between gap-1",
+                                        useCompactRows
+                                          ? "col-start-2 row-start-1 min-w-0"
+                                          : "mb-0.5",
+                                      )}
+                                    >
                                       <span
                                         className={clsx(
                                           "flex shrink-0 items-center justify-center rounded-md border border-white/20 bg-black/35 font-black text-white shadow-md",
@@ -1674,10 +1737,18 @@ export const ScenePresenter = ({
                                     </div>
 
                                     <div
-                                      className="relative flex w-full items-center justify-center overflow-hidden rounded-md border border-black/15 shadow-inner sm:rounded-lg"
+                                      className={clsx(
+                                        "relative flex min-h-5 w-full items-center justify-center overflow-hidden rounded-md border border-black/15 shadow-inner sm:rounded-lg",
+                                        useCompactRows &&
+                                          "col-start-1 row-span-3 row-start-1",
+                                      )}
                                       style={{
                                         backgroundColor: cardBg,
                                         height: (() => {
+                                          if (useCompactRows) {
+                                            return "40px"
+                                          }
+
                                           if (isUltraCompact) {
                                             return "clamp(18px, 4.5vh, 28px)"
                                           }
@@ -1692,6 +1763,10 @@ export const ScenePresenter = ({
                                           return "clamp(36px, 9vh, 80px)"
                                         })(),
                                         maxHeight: (() => {
+                                          if (useCompactRows) {
+                                            return "40px"
+                                          }
+
                                           if (isUltraCompact) {
                                             return "clamp(18px, 4.5vh, 28px)"
                                           }
@@ -1722,11 +1797,25 @@ export const ScenePresenter = ({
                                       </div>
                                     </div>
 
-                                    <span className="mt-0.5 w-full text-center text-[10px] leading-tight font-bold break-words text-white drop-shadow-md sm:text-[11px]">
+                                    <span
+                                      className={clsx(
+                                        "w-full text-center text-[10px] leading-tight font-bold break-words text-white drop-shadow-md sm:text-[11px]",
+                                        useCompactRows
+                                          ? "col-start-2 row-start-2 min-w-0"
+                                          : "mt-0.5",
+                                      )}
+                                    >
                                       {runner.label}
                                     </span>
 
-                                    <div className="mt-0.5 h-1 w-full overflow-hidden rounded-full bg-white/20">
+                                    <div
+                                      className={clsx(
+                                        "h-1 w-full overflow-hidden rounded-full bg-white/20",
+                                        useCompactRows
+                                          ? "col-start-2 row-start-3 self-end"
+                                          : "mt-0.5",
+                                      )}
+                                    >
                                       <div
                                         className="h-full rounded-full bg-white transition-all duration-700 ease-out"
                                         style={{

@@ -11,6 +11,33 @@ const config: OxlintConfig = defineConfig({
     // Supplied canvas choreography is vendored with @ts-nocheck; adapters stay checked.
     "extensions/src/presentation/tadazz-v4/reference-story/mixer-renderer.ts",
     "extensions/src/presentation/tadazz-v4/reference-story/reveal-renderer.ts",
+    // Retain exact historical reproduction scripts; active counterparts stay checked.
+    "docs/extensions/plans/editor-hebrew-20261118/host-roster/browser.mjs",
+    "docs/extensions/plans/editor-hebrew-20261118/host-roster/fixture.tsx",
+    "docs/extensions/plans/editor-hebrew-20261118/media-picker-audio/browser-configs.mjs",
+    "docs/extensions/plans/editor-hebrew-20261118/media-picker-audio/browser.mjs",
+    "docs/extensions/plans/editor-hebrew-20261118/media-picker-audio/fixture.tsx",
+    "docs/extensions/plans/editor-hebrew-20261118/native-he-scenes.config.ts",
+    "docs/extensions/plans/editor-hebrew-20261118/native-he-scenes.fixture.test.ts",
+    "docs/extensions/plans/phase-continuity-20261119/ggo/20261119T172039Z-d4b213df/executed-warmup.mjs",
+    "docs/extensions/plans/phase-continuity-20261119/mcp/failure-diagnostic/scheduling-browser-verify.mjs",
+    "docs/extensions/plans/phase-continuity-20261119/mcp/failure-diagnostic/tadazz-phase-continuity-diagnostic-730cb4579d22-12eccf07/browser-verify.overlay.mjs",
+    "docs/extensions/plans/phase-continuity-20261119/mcp/failure-diagnostic/tadazz-phase-continuity-scheduling-730cb4579d22-56930064/browser-verify.overlay.mjs",
+    "docs/extensions/plans/phase-continuity-20261119/mcp/preference-race/baseline/browser-verify.original.mjs",
+    "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/baseline/browser-verify.mjs",
+    "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/baseline/preference-race.mjs",
+    "docs/extensions/plans/phase-continuity-20261119/mcp/transport-race/baseline/transport-race.mjs",
+    "docs/extensions/plans/phase3-takeover-20261117/operator-capabilities-fix-20261118-25557ce6/synthetic-clone.cjs",
+    "docs/extensions/plans/phase3-takeover-20261117/operator-capabilities-fix-20261118-25557ce6/synthetic-stage.cjs",
+    "docs/extensions/plans/ux-followup-20261119/billing/harness/public-browser-check.mjs",
+    "docs/extensions/plans/ux-followup-20261119/production-public-smoke-policy-fix/original-production-public-smoke.mjs",
+    "docs/extensions/plans/ux-followup-20261119/release-tools/production-public-smoke.mjs",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/context/provenance/verify-and-build.mjs",
+    "docs/extensions/plans/ux-followup-20261119/theme-worker/reviewed-tools/replacement/prepare-source-pins.mjs",
+    // Preserve exact historical producer bytes; active counterparts stay checked.
+    "extensions/src/mcp-app/tests/first-party/ad895-producer/first-party/schema.ts",
+    "extensions/src/mcp-app/tests/first-party/ad895-producer/server/errors.ts",
+    "extensions/src/mcp-app/tests/first-party/ad895-producer/contracts/schemas.ts",
     "**/dist/**",
     "**/test-results/**",
   ],
@@ -27,9 +54,19 @@ const config: OxlintConfig = defineConfig({
   plugins: ["typescript"],
   overrides: [
     {
+      files: ["**/*.{ts,tsx,mts,cts}"],
+      rules: {
+        // The typed extension understands returned promises and replaces this base rule.
+        "require-await": "off",
+        // The typed extension checks thrown values; keep the base rule for JavaScript.
+        "no-throw-literal": "off",
+      },
+    },
+    {
       files: [
         "**/*.spec.ts",
         "**/*.test.ts",
+        "**/*.nodecheck.ts",
         "extensions/qa/**",
         "extensions/scripts/**",
         "packages/e2e/**",

@@ -1,5 +1,9 @@
 import { defineConfig, devices } from "@playwright/test"
-import { CONFIG_PATH, MANAGER_PASSWORD } from "./utils/constants"
+import {
+  CONFIG_PATH,
+  MANAGER_PASSWORD,
+  TZILA_PILOT_SECRET,
+} from "./utils/constants"
 import fs from "fs"
 import { join } from "path"
 
@@ -17,36 +21,10 @@ if (!process.env.TEST_WORKER_INDEX) {
     join(CONFIG_PATH, "quizz"),
     { recursive: true },
   )
-
-  // Copy Tzila quiz & sidecar & media
-  const repoConfig = join(root, "config")
-
-  if (fs.existsSync(join(repoConfig, "quizz/build-our-FcsLmJBP.json"))) {
-    fs.cpSync(
-      join(repoConfig, "quizz/build-our-FcsLmJBP.json"),
-      join(CONFIG_PATH, "quizz/build-our-FcsLmJBP.json"),
-    )
-  }
-
-  if (
-    fs.existsSync(
-      join(repoConfig, "extensions/quizzes/0KTcUgc0uvF_vGWYHrpTJ.json"),
-    )
-  ) {
-    fs.cpSync(
-      join(repoConfig, "extensions/quizzes/0KTcUgc0uvF_vGWYHrpTJ.json"),
-      join(CONFIG_PATH, "extensions/quizzes/0KTcUgc0uvF_vGWYHrpTJ.json"),
-    )
-  }
-
-  if (fs.existsSync(join(repoConfig, "media"))) {
-    fs.cpSync(join(repoConfig, "media"), join(CONFIG_PATH, "media"), {
-      recursive: true,
-    })
-  }
 }
 
 export default defineConfig({
+  globalSetup: "./utils/seed-tzila-show.ts",
   testDir: "tests",
   testMatch:
     /(p0-tzila-acceptance|tzila-public-stage-and-toolbar|tzila-exact-player-screen|media-appearance-stage-acceptance|cinematic-video-overlays)\.spec\.ts$/,
@@ -72,7 +50,9 @@ export default defineConfig({
       timeout: 120_000,
       env: {
         CONFIG_PATH,
+        TADAZZ_ACCOUNTS_ENABLED: "false",
         MANAGER_PASSWORD,
+        TADA_PILOT_SECRET: TZILA_PILOT_SECRET,
         SOCKET_PORT: "3011",
         JWT_SECRET: "e2e-p0-tzila-secret-at-least-32-chars",
         GAME_SPEED: "1",
@@ -87,6 +67,7 @@ export default defineConfig({
       timeout: 120_000,
       env: {
         CONFIG_PATH,
+        TADAZZ_ACCOUNTS_ENABLED: "false",
         NODE_OPTIONS: "--experimental-strip-types",
         WEB_PORT: "3010",
         SOCKET_PORT: "3011",

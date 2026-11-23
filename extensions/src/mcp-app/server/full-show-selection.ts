@@ -73,12 +73,12 @@ export function createFullShowSelectionPortV3(
       throw new ToolError("PREVIEW_UNAVAILABLE")
     }
 
-    const current = await readDraft(
+    const current = await readDraft({
       deps,
       p,
-      source.record.draftId,
-      source.record.revision,
-    )
+      id: source.record.draftId,
+      expected: source.record.revision,
+    })
     active(signal)
 
     if (
@@ -106,12 +106,12 @@ export function createFullShowSelectionPortV3(
 
       const request = parsed.data
       const owner = ownerIdentity(p)
-      const record = await readDraft(
+      const record = await readDraft({
         deps,
         p,
-        request.draftId,
-        request.expectedRevision,
-      )
+        id: request.draftId,
+        expected: request.expectedRevision,
+      })
       active(signal)
 
       if (owner !== ownerIdentity(p)) {

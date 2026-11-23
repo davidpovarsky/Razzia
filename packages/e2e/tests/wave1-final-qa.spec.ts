@@ -1,11 +1,13 @@
+import { EVENTS } from "@razzia/common/constants"
+import { STATUS } from "@razzia/common/types/game/status"
 import fs from "node:fs"
 import { join } from "node:path"
 import { CONFIG_PATH } from "@razzia/e2e/utils/constants"
 import { openQuizzTab, quizzRow, seedQuizz } from "@razzia/e2e/utils/editor"
 import { expect, test } from "@razzia/e2e/utils/fixtures"
 import { t } from "@razzia/e2e/utils/i18n"
-import { createGame, next, startGame } from "@razzia/e2e/utils/manager"
-import { joinGame } from "@razzia/e2e/utils/player"
+import { createGame, startGame } from "@razzia/e2e/utils/manager"
+import { answer, joinGame } from "@razzia/e2e/utils/player"
 import {
   computeCanonicalBaseDigest,
   createDefaultQuizExtrasV2,
@@ -22,6 +24,120 @@ const saveScreenshot = async (page: Page, filename: string) => {
   fs.mkdirSync(SCREENSHOT_DIR, { recursive: true })
   const filepath = join(SCREENSHOT_DIR, filename)
   await page.screenshot({ path: filepath })
+}
+
+interface LiveObservation {
+  name: string
+  observedAt: number
+  data: Record<string, unknown>
+}
+
+const liveRecord = (value: unknown): Record<string, unknown> => {
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    return {}
+  }
+
+  return value as Record<string, unknown>
+}
+
+// Observe the real browser connection; never emit events or change the clock.
+const observeLiveFlow = (page: Page) => {
+  const rows: LiveObservation[] = []
+
+  page.on("websocket", (socket) => {
+    socket.on("framereceived", ({ payload }) => {
+      const raw = typeof payload === "string" ? payload : payload.toString()
+
+      if (!raw.startsWith("42")) {
+        return
+      }
+
+      let packet: unknown = null
+
+      try {
+        packet = JSON.parse(raw.slice(raw.indexOf("[")))
+      } catch {
+        return
+      }
+
+      if (!Array.isArray(packet)) {
+        return
+      }
+
+      const event: unknown = packet[0]
+      const value: unknown = packet[1]
+      const observedAt = Date.now()
+
+      if (event === EVENTS.GAME.PLAYER_ANSWER && typeof value === "number") {
+        rows.push({ name: event, observedAt, data: { count: value } })
+
+        return
+      }
+
+      const data = liveRecord(value)
+
+      if (event === EVENTS.GAME.STATUS && typeof data.name === "string") {
+        rows.push({ name: data.name, observedAt, data: liveRecord(data.data) })
+      }
+
+      if (event === EVENTS.EXTENSIONS.STATE) {
+        const extras = liveRecord(data.extras)
+
+        rows.push({
+          name: event,
+          observedAt,
+          data: {
+            step: liveRecord(extras.activeTimelineStep),
+            sceneData: liveRecord(extras.activeSceneData),
+          },
+        })
+      }
+    })
+  })
+
+  return rows
+}
+
+const observedScene = (rows: LiveObservation[], sceneId: string) =>
+  rows.findLast(
+    (row) =>
+      row.name === EVENTS.EXTENSIONS.STATE &&
+      liveRecord(row.data.step).sceneId === sceneId,
+  )
+
+const endRecordedVote = async (
+  manager: Page,
+  input: { rows: LiveObservation[]; questionId: string },
+) => {
+  const stage = manager.getByTestId("tadazz-show")
+  await expect(stage).toHaveAttribute("data-show-scene", "voting")
+  const voting = input.rows.findLast(
+    (row) =>
+      row.name === STATUS.SELECT_ANSWER &&
+      row.data.questionId === input.questionId,
+  )
+
+  expect(voting).toBeDefined()
+
+  if (!voting) {
+    throw new Error("The expected authoritative voting status was not received")
+  }
+
+  // RoundManager emits this count only after recording the real player answers.
+  await expect
+    .poll(() =>
+      input.rows.some(
+        (row) =>
+          row.name === EVENTS.GAME.PLAYER_ANSWER &&
+          row.observedAt >= voting.observedAt &&
+          row.data.count === 2,
+      ),
+    )
+    .toBe(true)
+  const endTimer = manager.getByTestId("host-end-timer-btn")
+  await expect(endTimer).toHaveCount(1)
+  await expect(endTimer).toBeEnabled()
+  await endTimer.click()
 }
 
 test.describe("Wave 1 Final Acceptance: UI Reachability, Settings Width, UI Workflow & Live Scenes", () => {
@@ -49,6 +165,7 @@ test.describe("Wave 1 Final Acceptance: UI Reachability, Settings Width, UI Work
     fs.mkdirSync(sidecarDir, { recursive: true })
     const baseDigest = computeCanonicalBaseDigest({
       subject,
+      gameMode: "quiz",
       questions: [
         {
           type: "single",
@@ -188,7 +305,11 @@ test.describe("Wave 1 Final Acceptance: UI Reachability, Settings Width, UI Work
 
     const sidecarDir = join(CONFIG_PATH, "extensions", "quizzes")
     fs.mkdirSync(sidecarDir, { recursive: true })
-    const baseDigest = computeCanonicalBaseDigest({ subject, questions })
+    const baseDigest = computeCanonicalBaseDigest({
+      subject,
+      gameMode: "quiz",
+      questions,
+    })
     const defaultV2 = createDefaultQuizExtrasV2(
       quizId,
       [q1Id, q2Id],
@@ -211,13 +332,16 @@ test.describe("Wave 1 Final Acceptance: UI Reachability, Settings Width, UI Work
     await page.locator("aside").getByText("2").first().click()
 
     // 4. In header ToggleGroup, click Survey to switch this card from Quiz -> Survey
-    const surveyToggle = page.getByTestId("toggle-kind-survey")
+    const kindBar = page.locator(
+      '[data-testid="studio-card-type-bar"][data-embedded="false"]',
+    )
+    const surveyToggle = kindBar.getByTestId("toggle-kind-survey")
     await surveyToggle.click()
     await expect(surveyToggle).toHaveAttribute("data-state", "on")
 
     // Verify card 1 remains Quiz
     await page.locator("aside").getByText("1").first().click()
-    const quizToggle = page.getByTestId("toggle-kind-quiz")
+    const quizToggle = kindBar.getByTestId("toggle-kind-quiz")
     await expect(quizToggle).toHaveAttribute("data-state", "on")
 
     // 5. Click Save button via UI
@@ -239,14 +363,14 @@ test.describe("Wave 1 Final Acceptance: UI Reachability, Settings Width, UI Work
 
     // Card 2 should still be Survey!
     await page.locator("aside").getByText("2").first().click()
-    await expect(page.getByTestId("toggle-kind-survey")).toHaveAttribute(
+    await expect(kindBar.getByTestId("toggle-kind-survey")).toHaveAttribute(
       "data-state",
       "on",
     )
 
     // Card 1 should still be Quiz!
     await page.locator("aside").getByText("1").first().click()
-    await expect(page.getByTestId("toggle-kind-quiz")).toHaveAttribute(
+    await expect(kindBar.getByTestId("toggle-kind-quiz")).toHaveAttribute(
       "data-state",
       "on",
     )
@@ -280,7 +404,11 @@ test.describe("Wave 1 Final Acceptance: UI Reachability, Settings Width, UI Work
 
     const sidecarDir = join(CONFIG_PATH, "extensions", "quizzes")
     fs.mkdirSync(sidecarDir, { recursive: true })
-    const baseDigest = computeCanonicalBaseDigest({ subject, questions })
+    const baseDigest = computeCanonicalBaseDigest({
+      subject,
+      gameMode: "quiz",
+      questions,
+    })
     const defaultV2 = createDefaultQuizExtrasV2(quizId, [q1Id], baseDigest)
     const extras: QuizExtrasV2 = {
       ...defaultV2,
@@ -336,7 +464,7 @@ test.describe("Wave 1 Final Acceptance: UI Reachability, Settings Width, UI Work
   test("QA-04: Authoritative Live Game Scenes — Real Leaderboard Scores and Interim Results with 2 Players", async ({
     page: manager,
     newPage,
-  }) => {
+  }, testInfo) => {
     const subject = `Live Data Scenes Acceptance ${Date.now()}`
     const quizId = subject.toLowerCase().replace(/\W+/gu, "-")
     const q1Id = crypto.randomUUID()
@@ -352,7 +480,7 @@ test.describe("Wave 1 Final Acceptance: UI Reachability, Settings Width, UI Work
         answers: ["Three", "Four", "Five", "Six"],
         solutions: [1],
         cooldown: 3,
-        time: 20,
+        time: 120,
       },
       {
         type: "single" as const,
@@ -361,7 +489,7 @@ test.describe("Wave 1 Final Acceptance: UI Reachability, Settings Width, UI Work
         answers: ["Red", "Blue"],
         solutions: [],
         cooldown: 3,
-        time: 20,
+        time: 120,
       },
     ]
 
@@ -373,7 +501,11 @@ test.describe("Wave 1 Final Acceptance: UI Reachability, Settings Width, UI Work
     const sidecarDir = join(CONFIG_PATH, "extensions", "quizzes")
     fs.mkdirSync(sidecarDir, { recursive: true })
 
-    const baseDigest = computeCanonicalBaseDigest({ subject, questions })
+    const baseDigest = computeCanonicalBaseDigest({
+      subject,
+      gameMode: "quiz",
+      questions,
+    })
     const defaultV2 = createDefaultQuizExtrasV2(
       quizId,
       [q1Id, q2Id],
@@ -416,110 +548,318 @@ test.describe("Wave 1 Final Acceptance: UI Reachability, Settings Width, UI Work
       "utf-8",
     )
 
-    // 1. Manager creates game
-    const pin = await createGame(manager, subject)
-
-    // 2. Alice and Bob join
+    // This scenario checks live data and manual progression, not accelerated expiry.
+    // Keep a finite clock while allowing both real browser players to answer.
+    const hostWire = observeLiveFlow(manager)
     const alice = await newPage()
-    await joinGame(alice, pin, "Alice")
-
+    const aliceWire = observeLiveFlow(alice)
     const bob = await newPage()
-    await joinGame(bob, pin, "Bob")
+    const bobWire = observeLiveFlow(bob)
+    const observations: Array<Record<string, unknown>> = []
 
-    await expect(
-      manager.getByRole("button", { name: /2.*Players/i }),
-    ).toBeVisible()
+    try {
+      const pin = await createGame(manager, subject)
+      await joinGame(alice, pin, "Alice")
+      await joinGame(bob, pin, "Bob")
 
-    // 3. Start Game
-    await startGame(manager)
+      const presence = manager.getByTestId("host-bottom-players-btn")
+      await expect(presence).toBeVisible()
+      await expect(presence.getByTestId("host-connected-counter")).toHaveText(
+        /^2(?:\s*\/\s*2)?$/u,
+      )
+      const stage = manager.getByTestId("tadazz-show")
+      await expect(stage).toHaveAttribute("data-show-theme", "tadazz-classic")
+      await startGame(manager)
 
-    // 4. Question 1 (Quiz) starts: Alice answers correct ("Four"), Bob answers wrong ("Three")
-    await expect(alice.getByText("Four", { exact: true })).toBeVisible({
-      timeout: 15000,
-    })
-    await expect(bob.getByText("Three", { exact: true })).toBeVisible({
-      timeout: 15000,
-    })
+      await Promise.all([answer(alice, "Four"), answer(bob, "Three")])
+      await endRecordedVote(manager, { rows: hostWire, questionId: q1Id })
+      await expect
+        .poll(() =>
+          hostWire.some(
+            (row) =>
+              row.name === STATUS.SHOW_RESPONSES &&
+              row.data.questionId === q1Id,
+          ),
+        )
+        .toBe(true)
+      await expect(stage).toHaveAttribute("data-show-scene", "results")
+      await expect
+        .poll(() => aliceWire.some((row) => row.name === STATUS.SHOW_RESULT))
+        .toBe(true)
+      await expect
+        .poll(() => bobWire.some((row) => row.name === STATUS.SHOW_RESULT))
+        .toBe(true)
 
-    await alice.getByText("Four", { exact: true }).click()
-    await bob.getByText("Three", { exact: true }).click()
+      const aliceResult =
+        aliceWire.find((row) => row.name === STATUS.SHOW_RESULT)?.data ?? {}
+      const bobResult =
+        bobWire.find((row) => row.name === STATUS.SHOW_RESULT)?.data ?? {}
+      const aliceScore =
+        typeof aliceResult.myPoints === "number" ? aliceResult.myPoints : NaN
+      expect(Number.isInteger(aliceScore)).toBe(true)
+      expect(aliceScore).toBeGreaterThan(0)
+      expect(aliceScore).toBeLessThanOrEqual(1000)
+      expect(aliceResult).toMatchObject({
+        correct: true,
+        points: aliceScore,
+        myPoints: aliceScore,
+        rank: 1,
+      })
+      expect(bobResult).toMatchObject({
+        correct: false,
+        points: 0,
+        myPoints: 0,
+        rank: 2,
+      })
+      const reveal = hostWire.find(
+        (row) =>
+          row.name === STATUS.SHOW_RESPONSES && row.data.questionId === q1Id,
+      )
+      expect(reveal?.data.responses).toEqual({ 0: 1, 1: 1 })
+      await manager.getByTestId("host-next-screen-btn").click()
 
-    // Manager advances from question reveal
-    await next(manager)
+      await expect.poll(() => observedScene(hostWire, lbSceneId)).toBeDefined()
+      await expect.poll(() => observedScene(aliceWire, lbSceneId)).toBeDefined()
+      const ranks = [
+        { rank: 1, displayName: "Alice", points: aliceScore },
+        { rank: 2, displayName: "Bob", points: 0 },
+      ]
+      for (const rows of [hostWire, aliceWire]) {
+        const scene = observedScene(rows, lbSceneId)
+        expect(liveRecord(scene?.data.step)).toMatchObject({
+          sceneId: lbSceneId,
+          kind: "leaderboard",
+          advance: "manual",
+        })
+        const sceneData = liveRecord(scene?.data.sceneData)
+        expect(liveRecord(sceneData.leaderboard).entries).toEqual(ranks)
+      }
 
-    // 5. Step 1: Live Leaderboard Scene!
-    // Assert real Leaderboard is displayed with Alice (1st place) and Bob (2nd place)
-    await expect(manager.getByText("Mid-Game Leaderboard")).toBeVisible({
-      timeout: 15000,
-    })
-    await expect(alice.getByText("Mid-Game Leaderboard")).toBeVisible({
-      timeout: 15000,
-    })
+      await expect(manager.getByTestId("host-end-timer-btn")).toHaveCount(0)
+      await expect(manager.getByTestId("host-skip-question-btn")).toHaveCount(0)
+      await expect(
+        manager.getByTestId("host-restart-question-btn"),
+      ).toHaveCount(0)
+      const managerRows = manager
+        .getByTestId("tadazz-leaderboard-screen")
+        .locator(".tz-leader-row")
+      const playerScene = alice.getByTestId("studio-scene-presenter")
+      const playerRows = playerScene.locator(
+        '[data-testid="tadazz-leaderboard-row"], [data-testid="leaderboard-scene-row"]',
+      )
+      await expect(managerRows).toHaveCount(2)
+      await expect(playerRows).toHaveCount(2)
 
-    // Assert real rank rows exist in the leaderboard scene (LIVE-01)
-    await expect(
-      manager.getByTestId("leaderboard-scene-row").getByText("Alice"),
-    ).toBeVisible()
-    await expect(
-      manager.getByTestId("leaderboard-scene-row").getByText("Bob"),
-    ).toBeVisible()
-    await expect(
-      alice.getByTestId("leaderboard-scene-row").getByText("Alice"),
-    ).toBeVisible()
-    await expect(
-      alice.getByTestId("leaderboard-scene-row").getByText("Bob"),
-    ).toBeVisible()
+      for (const entry of ranks) {
+        const hostRow = managerRows.filter({
+          has: manager.getByText(entry.displayName, { exact: true }),
+        })
+        const playerRow = playerRows.filter({
+          has: alice.getByText(entry.displayName, { exact: true }),
+        })
+        await expect(hostRow).toHaveCount(1)
+        await expect(playerRow).toHaveCount(1)
+        await expect(hostRow).toBeVisible()
+        await expect(playerRow).toBeVisible()
+        await expect
+          .poll(async () =>
+            Number(await hostRow.locator(".tz-rank").textContent()),
+          )
+          .toBe(entry.rank)
+        await expect
+          .poll(async () =>
+            Number.parseFloat(
+              (await hostRow.locator(".tz-team-score").textContent()) ?? "",
+            ),
+          )
+          .toBe(entry.points)
 
-    // Input suppression: Alice does not see question answers during scene
-    await expect(alice.getByText("Four")).not.toBeVisible()
+        const fallback =
+          (await playerRow.getAttribute("data-testid")) ===
+          "leaderboard-scene-row"
+        const playerRank = playerRow.locator(
+          fallback ? ":scope > div > span:first-child" : ".tdz-rank-number",
+        )
+        const playerScore = playerRow.locator(
+          fallback ? ":scope > span" : ".tdz-rank-score",
+        )
+        await expect(playerRank).toHaveText(String(entry.rank))
+        await expect
+          .poll(async () =>
+            Number.parseFloat((await playerScore.textContent()) ?? ""),
+          )
+          .toBe(entry.points)
+      }
 
-    await saveScreenshot(manager, "live_leaderboard_real_scores_manager.png")
-    await saveScreenshot(alice, "live_leaderboard_real_scores_player.png")
+      observations.push({
+        phase: "leaderboard",
+        managerRows: await managerRows.allTextContents(),
+        playerRows: await playerRows.allTextContents(),
+      })
+      // These titles are public authored content; a missing title still fails the case.
+      await Promise.all([
+        expect
+          .soft(manager.getByText("Mid-Game Leaderboard", { exact: true }))
+          .toBeVisible({ timeout: 15000 }),
+        expect
+          .soft(playerScene.getByText("Mid-Game Leaderboard", { exact: true }))
+          .toBeVisible({ timeout: 15000 }),
+      ])
+      await expect(alice.getByText("Four", { exact: true })).not.toBeVisible()
+      await saveScreenshot(manager, "live_leaderboard_real_scores_manager.png")
+      await saveScreenshot(alice, "live_leaderboard_real_scores_player.png")
 
-    // 6. Manager advances past Leaderboard Scene -> Question 2 (Survey) begins
-    const advanceSceneBtn = manager.getByTestId("scene-skip-button")
-    await advanceSceneBtn.click()
+      await manager.getByTestId("host-next-screen-btn").click()
+      await Promise.all([answer(alice, "Red"), answer(bob, "Blue")])
+      await endRecordedVote(manager, { rows: hostWire, questionId: q2Id })
 
-    // 7. Question 2 (Survey) starts: Alice votes "Red", Bob votes "Blue"
-    await expect(alice.getByText("Red", { exact: true })).toBeVisible({
-      timeout: 15000,
-    })
-    await expect(bob.getByText("Blue", { exact: true })).toBeVisible({
-      timeout: 15000,
-    })
+      // The immediately authored interim scene owns Q2's reveal. No extra Next.
+      await expect
+        .poll(() => observedScene(hostWire, interimSceneId))
+        .toBeDefined()
+      await expect
+        .poll(() => observedScene(aliceWire, interimSceneId))
+        .toBeDefined()
+      for (const rows of [hostWire, aliceWire]) {
+        const scene = observedScene(rows, interimSceneId)
+        expect(liveRecord(scene?.data.step)).toMatchObject({
+          sceneId: interimSceneId,
+          kind: "interimResults",
+          advance: "manual",
+        })
+        const sceneData = liveRecord(scene?.data.sceneData)
+        const poll = liveRecord(sceneData.interimResults)
+        expect(poll).toMatchObject({
+          sourceQuestionId: q2Id,
+          questionText: "What is your favorite color?",
+        })
+        expect(poll.options).toEqual([
+          expect.objectContaining({ label: "Red", count: 1, percentage: 50 }),
+          expect.objectContaining({ label: "Blue", count: 1, percentage: 50 }),
+        ])
+      }
+      expect(
+        hostWire.some(
+          (row) =>
+            row.name === STATUS.SHOW_RESPONSES && row.data.questionId === q2Id,
+        ),
+      ).toBe(false)
+      await expect(
+        manager
+          .getByTestId("tadazz-question-panel")
+          .getByText("What is your favorite color?", { exact: true }),
+      ).toBeVisible()
+      const pollRows = playerScene.getByTestId("interim-option-row")
+      await expect(pollRows).toHaveCount(2)
+      for (const [index, label] of ["Red", "Blue"].entries()) {
+        const hostOption = manager.getByTestId(`tadazz-card-${index}`)
+        const playerOption = pollRows.filter({
+          has: alice.getByText(label, { exact: true }),
+        })
+        await expect(hostOption.getByText(label, { exact: true })).toBeVisible()
+        await expect(hostOption.locator(".tz-result-number")).toHaveText("50%")
+        await expect(playerOption).toHaveCount(1)
+        // The winner card shows a compact summary and the large percentage.
+        const percentages = playerOption.getByText("50%", { exact: true })
+        await expect(percentages).toHaveText(["50%", "50%"])
+        await Promise.all(
+          (await percentages.all()).map((percentage) =>
+            expect(percentage).toBeVisible(),
+          ),
+        )
+        const voteLabel = `(${t("extensions:reveal.votes", { count: 1, defaultValue: "1 vote" })})`
+        const voteCounts = playerOption.getByText(voteLabel, { exact: true })
+        await expect(voteCounts).toHaveText([voteLabel, voteLabel])
+        await Promise.all(
+          (await voteCounts.all()).map((count) => expect(count).toBeVisible()),
+        )
+      }
+      await expect(
+        alice.getByRole("button", { name: "1 Red", exact: true }),
+      ).toHaveCount(0)
+      observations.push({
+        phase: "interimResults",
+        playerRows: await pollRows.allTextContents(),
+        managerStatus: hostWire
+          .filter((row) => row.name !== EVENTS.EXTENSIONS.STATE)
+          .at(-1),
+        endTimerVisible: await manager
+          .getByTestId("host-end-timer-btn")
+          .isVisible(),
+        nextVisible: await manager
+          .getByTestId("host-next-screen-btn")
+          .isVisible(),
+      })
+      await Promise.all([
+        expect
+          .soft(manager.getByText("Audience Poll Overview", { exact: true }))
+          .toBeVisible({ timeout: 15000 }),
+        expect
+          .soft(
+            playerScene.getByText("Audience Poll Overview", { exact: true }),
+          )
+          .toBeVisible({ timeout: 15000 }),
+      ])
+      await saveScreenshot(
+        manager,
+        "live_interim_results_real_poll_manager.png",
+      )
+      await saveScreenshot(alice, "live_interim_results_real_poll_player.png")
 
-    await alice.getByText("Red", { exact: true }).click()
-    await bob.getByText("Blue", { exact: true }).click()
-
-    // Manager advances from survey reveal
-    await next(manager)
-
-    // 8. Step 3: Live Interim Results Scene!
-    // Assert real question summary and options are displayed (LIVE-02)
-    await expect(manager.getByText("Audience Poll Overview")).toBeVisible({
-      timeout: 15000,
-    })
-    await expect(alice.getByText("Audience Poll Overview")).toBeVisible({
-      timeout: 15000,
-    })
-
-    // Assert question text and options appear with real percentages (50% each)
-    await expect(
-      manager.getByText("What is your favorite color?"),
-    ).toBeVisible()
-    await expect(manager.getByText("Red", { exact: true })).toBeVisible()
-    await expect(manager.getByText("Blue", { exact: true })).toBeVisible()
-
-    await saveScreenshot(manager, "live_interim_results_real_poll_manager.png")
-    await saveScreenshot(alice, "live_interim_results_real_poll_player.png")
-
-    // 9. Manager advances past Interim Results Scene -> Game Finish
-    await advanceSceneBtn.click()
-
-    // 10. Verify podium finishes with Alice as winner
-    await expect(manager.getByText(/Alice/u).first()).toBeVisible({
-      timeout: 15000,
-    })
-    await saveScreenshot(manager, "live_finish_podium.png")
+      await expect(manager.getByTestId("host-end-timer-btn")).toHaveCount(0)
+      await expect(manager.getByTestId("host-skip-question-btn")).toHaveCount(0)
+      await expect(
+        manager.getByTestId("host-restart-question-btn"),
+      ).toHaveCount(0)
+      await manager.getByTestId("host-next-screen-btn").click()
+      await expect
+        .poll(() => hostWire.some((row) => row.name === STATUS.FINISHED))
+        .toBe(true)
+      await expect
+        .poll(() => aliceWire.some((row) => row.name === STATUS.FINISHED))
+        .toBe(true)
+      await expect
+        .poll(() => bobWire.some((row) => row.name === STATUS.FINISHED))
+        .toBe(true)
+      const finalTop = [
+        { username: "Alice", points: aliceScore },
+        { username: "Bob", points: 0 },
+      ]
+      expect(
+        hostWire.find((row) => row.name === STATUS.FINISHED)?.data.top,
+      ).toEqual(finalTop)
+      expect(
+        aliceWire.find((row) => row.name === STATUS.FINISHED)?.data,
+      ).toMatchObject({ top: finalTop, rank: 1 })
+      expect(
+        bobWire.find((row) => row.name === STATUS.FINISHED)?.data,
+      ).toMatchObject({ top: finalTop, rank: 2 })
+      await expect(stage).toHaveAttribute("data-show-scene", "finale")
+      const finale = manager.getByTestId("tadazz-finale-screen")
+      await expect(finale).toBeVisible()
+      await expect(finale.getByTestId("tadazz-winner-name")).toHaveText("Alice")
+      await expect(finale.locator(".tz-win-score")).toContainText(
+        String(aliceScore),
+      )
+      const observedStepIds = hostWire
+        .filter((row) => row.name === EVENTS.EXTENSIONS.STATE)
+        .map((row) => liveRecord(row.data.step).id)
+        .filter((id): id is string => typeof id === "string")
+      expect(
+        observedStepIds.filter(
+          (id, index) => id !== observedStepIds[index - 1],
+        ),
+      ).toEqual(extras.timeline.map((item) => item.id))
+      await saveScreenshot(manager, "live_finish_podium.png")
+    } finally {
+      await testInfo.attach("qa04-live-flow.json", {
+        body: JSON.stringify(
+          { hostWire, aliceWire, bobWire, observations },
+          null,
+          2,
+        ),
+        contentType: "application/json",
+      })
+    }
   })
 })

@@ -1,6 +1,10 @@
 import { runSteps, type StageStep } from "../tadazz-show/show-director"
 import type { TadazzStageHandle } from "../tadazz-show/TadazzStage"
 
+function isCallable(value: unknown): value is (...args: unknown[]) => unknown {
+  return typeof value === "function"
+}
+
 /** Owns one mounted stage. Invalidation must precede unmount or replacement. */
 export function createPreviewTransitionOwner(
   stage: TadazzStageHandle,
@@ -18,6 +22,7 @@ export function createPreviewTransitionOwner(
       () => unsafe.delete(promise),
       () => unsafe.delete(promise),
     )
+
     return promise
   }
 
@@ -41,10 +46,19 @@ export function createPreviewTransitionOwner(
     ) {
       throw new Error("show-preview:unsupported-step")
     }
-    const captured = ++generation
+
+    generation += 1
+
+    const captured = generation
     const current = () => !disposed && captured === generation
-    if (unsafe.size) await Promise.allSettled([...unsafe])
-    if (!current()) return false
+
+    if (unsafe.size) {
+      await Promise.allSettled([...unsafe])
+    }
+
+    if (!current()) {
+      return false
+    }
 
     // The proxy captures this stage instance, never a mutable React ref. A wipe
     // callback can execute after runSteps has checked its generation.
@@ -74,9 +88,12 @@ export function createPreviewTransitionOwner(
               })(),
             )
         }
+
         if (property === "openVoting" && latestVoting) {
           return (...args: Parameters<TadazzStageHandle["openVoting"]>) => {
-            if (!current()) return Promise.resolve()
+            if (!current()) {
+              return Promise.resolve()
+            }
 
             const [, , question] = args
             const timing = latestVoting(question?.key ?? target.questionKey)
@@ -86,31 +103,46 @@ export function createPreviewTransitionOwner(
               : Promise.resolve()
           }
         }
-        const value = Reflect.get(target, property, target)
-        if (typeof value !== "function") return value
+
+        const value: unknown = Reflect.get(target, property, target)
+
+        if (!isCallable(value)) {
+          return value
+        }
+
         return (...args: unknown[]) => {
-          if (!current()) return undefined
+          if (!current()) {
+            return undefined
+          }
+
           const safeArgs = args.map((arg) =>
-            typeof arg === "function"
+            isCallable(arg)
               ? (...callbackArgs: unknown[]) => {
-                  if (current()) return arg(...callbackArgs)
+                  if (current()) {
+                    return arg(...callbackArgs)
+                  }
+
                   return undefined
                 }
               : arg,
           )
-          const result = Reflect.apply(value, target, safeArgs)
+          const result: unknown = Reflect.apply(value, target, safeArgs)
 
           return (property === "lockVoting" || property === "playZZWipe") &&
             result instanceof Promise
-            ? track(result)
+            ? track<unknown>(result)
             : result
         }
       },
     })
+
     try {
       return await runSteps(guarded, steps, current)
     } catch (error) {
-      if (!current()) return false
+      if (!current()) {
+        return false
+      }
+
       throw error
     }
   }
@@ -124,6 +156,7 @@ export function createPreviewTransitionOwner(
     },
     capture() {
       const captured = generation
+
       return () => !disposed && captured === generation
     },
     dispose() {

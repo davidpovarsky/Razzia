@@ -4,6 +4,15 @@ import {
   nativeSaveRequestIdFromPath,
   NATIVE_SAVE_CONSENT_PATH,
 } from "./client"
+import { synchronousPromise } from "../../core/synchronous-promise.ts"
+
+function requireNativeConsentString(value: unknown, label: string): string {
+  if (typeof value !== "string") {
+    throw new Error(`Expected native consent ${label} to be a string`)
+  }
+
+  return value
+}
 
 const accountId = "d8c27613-c6b8-49bf-9f92-c333f38beb3a"
 const requestId = "a".repeat(54),
@@ -57,18 +66,25 @@ async function fixture() {
   let requestFailure: Error | null = null
   let waitForApproval: Promise<void> | null = null
   const request: typeof fetch = async (input, init) => {
-    const path = String(input)
-    calls.push({ path, init: init!, body: JSON.parse(String(init?.body)) })
+    const path = requireNativeConsentString(input, "request URL")
+    calls.push({
+      path,
+      init: init!,
+      body: JSON.parse(requireNativeConsentString(init?.body, "JSON body")),
+    })
 
     if (requestFailure) {
       throw requestFailure
     }
+
     if (path.endsWith("/inspect")) {
       return json(success(inspected))
     }
+
     if (waitForApproval) {
       await waitForApproval
     }
+
     return json(
       success(
         approvalResponse ?? {
@@ -239,7 +255,12 @@ describe("separate native exact-revision consent client", () => {
   it("consumes before in-flight approval and never retries an unknown outcome", async () => {
     const f = await fixture()
     const inspected = await f.client.inspect(requestId)
-    let release!: () => void
+    let release: () => void = () => {
+      throw new Error(
+        "Promise resolver release was used before executor initialization",
+      )
+    }
+
     f.approvalWait(
       new Promise<void>((resolve) => {
         release = resolve
@@ -300,23 +321,24 @@ describe("separate native exact-revision consent client", () => {
     )
     expect(f.calls).toHaveLength(0)
     const calls: string[] = []
-    const request: typeof fetch = async (input) => {
-      calls.push(String(input))
+    const request: typeof fetch = (input) =>
+      synchronousPromise(() => {
+        calls.push(requireNativeConsentString(input, "request URL"))
 
-      return json(
-        {
-          contractVersion: "0.1.0",
-          ok: false,
-          error: {
-            code: "CONSENT_REQUIRED",
-            messageKey: "safe",
-            retryable: false,
-            consentUrl: "https://untrusted.invalid/never-follow",
+        return json(
+          {
+            contractVersion: "0.1.0",
+            ok: false,
+            error: {
+              code: "CONSENT_REQUIRED",
+              messageKey: "safe",
+              retryable: false,
+              consentUrl: "https://untrusted.invalid/never-follow",
+            },
           },
-        },
-        403,
-      )
-    }
+          403,
+        )
+      })
     await expect(
       createNativeSaveConsentClient({ ...f.options, request }).inspect(
         requestId,

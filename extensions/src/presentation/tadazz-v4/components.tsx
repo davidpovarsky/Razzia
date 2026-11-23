@@ -85,7 +85,12 @@ export function QuestionFrameV4({
   const tx = labelsFor(data)
   const question = data.question ?? ""
   const note = presentationNote(data.note)
+  const hasResultNote = results && Boolean(note)
   const size = (() => {
+    if (hasResultNote) {
+      return 42
+    }
+
     if (question.length > 65) {
       return 49
     }
@@ -100,6 +105,7 @@ export function QuestionFrameV4({
   return (
     <div
       className="q-frame"
+      data-has-result-note={hasResultNote ? "true" : undefined}
       data-v4="question-frame"
       data-testid="tadazz-question-panel"
     >
@@ -109,6 +115,7 @@ export function QuestionFrameV4({
       <div
         className="q-text"
         dir="auto"
+        tabIndex={hasResultNote ? 0 : undefined}
         style={
           size
             ? {
@@ -120,7 +127,12 @@ export function QuestionFrameV4({
         {question}
       </div>
       {note && results && (
-        <div className="q-note" data-testid="tadazz-question-note" dir="auto">
+        <div
+          className="q-note"
+          data-testid="tadazz-question-note"
+          dir="auto"
+          tabIndex={0}
+        >
           {note}
         </div>
       )}
@@ -637,7 +649,10 @@ export function LeaderboardV4({ data }: { data: TadazzV4Data }) {
     >
       <header className="leader-head">
         <div className="scene-kicker">{tx.liveStandings}</div>
-        <h2>{data.teamMode === false ? tx.leaderboard : tx.teamLeaderboard}</h2>
+        <h2>
+          {data.title ||
+            (data.teamMode === false ? tx.leaderboard : tx.teamLeaderboard)}
+        </h2>
       </header>
       <div className="leader-board">
         {visibleTeams.map((team, i) => {
@@ -678,12 +693,27 @@ export function LeaderboardV4({ data }: { data: TadazzV4Data }) {
 
 export function RoundRecapV4({ data }: { data: TadazzV4Data }) {
   const tx = labelsFor(data)
+  const title = data.title || data.subtitle || tx.storyBegin
+  const subtitle = data.title ? data.subtitle : undefined
 
   return (
-    <div data-testid="tadazz-screen-recap">
+    <div className="round-recap" data-testid="tadazz-screen-recap">
       <FivePictureAnswersV4 data={data} recap />
       <div className="story-connection" />
-      <div className="story-finale">{data.subtitle || tx.storyBegin}</div>
+      <div className="story-finale">
+        <h2 className="story-title" data-testid="tadazz-recap-title" dir="auto">
+          {title}
+        </h2>
+        {subtitle && (
+          <p
+            className="story-subtitle"
+            data-testid="tadazz-recap-subtitle"
+            dir="auto"
+          >
+            {subtitle}
+          </p>
+        )}
+      </div>
     </div>
   )
 }
