@@ -281,8 +281,34 @@ def validate_managed_client_proxy(args):
     return managed_client_proxy_config_proof(json.loads(raw), options)
 
 
-def deployment_env_overrides(origin=None, managed_proxy=None):
+def contact_email_to(args):
+    value = getattr(args, "contact_email_to", None)
+    if value is None:
+        return None
+    # A single bare ASCII mailbox; reject display names, lists and header injection.
+    atom = r"[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+"
+    label = r"[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?"
+    require(isinstance(value, str) and len(value) <= 254 and
+            re.fullmatch(atom + r"(?:\." + atom + r")*@" +
+                         label + r"(?:\." + label + r")*\.[A-Za-z]{2,63}", value) and
+            len(value.split("@")[0]) <= 64, "CONTACT_EMAIL_TO_INVALID")
+    return value
+
+
+def contact_mail_proof(recipient):
+    return {"recipient": recipient, "available": True}
+
+
+def contact_mail_probe(origin):
+    _, response = json_probe(origin, "/api/contact/config", expected={"available": True})
+    require(response["headers"].get("cache-control") == "no-store", "CONTACT_CONFIG_CACHE_POLICY")
+    return {"available": True, "noStore": True, "messageSent": False}
+
+
+def deployment_env_overrides(origin=None, managed_proxy=None, contact_recipient=None):
     result = dict(ENV_OVERRIDES)
+    if contact_recipient is not None:
+        result["TADAZZ_CONTACT_EMAIL_TO"] = contact_email_to(argparse.Namespace(contact_email_to=contact_recipient))
     if managed_proxy is not None:
         result.update(TADAZZ_MANAGED_CLIENT_TRUST_PROXY=managed_proxy["trust"],
                       TADAZZ_MANAGED_CLIENT_PROXY_HOST=managed_proxy["host"])
@@ -300,14 +326,19 @@ def package_runtime_policy(container):
             "parentOrigin": environment.get("TADAZZ_PACKAGE_PARENT_ORIGIN")}
 
 
-def desired_package_container(original, origin=None, managed_proxy=None):
+def desired_package_container(original, origin=None, managed_proxy=None, contact_recipient=None):
     previous = env_map(original["Config"].get("Env"))
+    if contact_recipient is not None:
+        require(previous.get("RESEND_API_KEY") and
+                (previous.get("TADAZZ_CONTACT_EMAIL_FROM", "").strip() or
+                 previous.get("TADAZZ_AUTH_EMAIL_FROM", "").strip()),
+                "CONTACT_MAIL_TRANSPORT_REQUIRED")
     if origin is not None:
         require(previous.get("TADAZZ_ACCOUNTS_ENABLED") == "true" and
                 previous.get("TADAZZ_PACKAGE_INSTALLER_ENABLED") == "true",
                 "PACKAGE_RUNTIME_REQUIRES_ACCOUNTS_INSTALLER")
     return {"Config": {"Env": [name + "=" + value for name, value in
-                               {**previous, **deployment_env_overrides(origin, managed_proxy)}.items()]}}
+                               {**previous, **deployment_env_overrides(origin, managed_proxy, contact_recipient)}.items()]}}
 
 
 def package_runtime_identity(args):
@@ -421,14 +452,14 @@ def safe_probe_routes(value):
     return result
 
 
-def replacement_payload(original, image, revision, run_id, runtime_origin=None, managed_proxy=None):
+def replacement_payload(original, image, revision, run_id, runtime_origin=None, managed_proxy=None, contact_recipient=None):
     payload = copy.deepcopy(original["Config"])
     previous = env_map(payload.get("Env"))
     for name in ("TMPDIR", "TEMP", "TMP"):
         value = previous.get(name)
         if value:
             require(value.startswith("/") and value != "/app/config" and not value.startswith("/app/config/"), "TEMP_INSIDE_CUSTOMER_CONFIG")
-    merged = env_map(desired_package_container(original, runtime_origin, managed_proxy)["Config"]["Env"])
+    merged = env_map(desired_package_container(original, runtime_origin, managed_proxy, contact_recipient)["Config"]["Env"])
     payload["Env"] = [name + "=" + value for name, value in merged.items()]
     payload["Image"] = image["Id"]
     payload["Labels"] = {
@@ -940,7 +971,7 @@ def clone_boot(args, original, image, work, run_id, result):
     native_files = native_preview_files(work.parent)
     runtime_options = package_runtime_options(args)
     runtime_origin = runtime_options["origin"] if runtime_options else None
-    payload = replacement_payload(original, image, args.revision, run_id, runtime_origin, managed_client_proxy_options(args))
+    payload = replacement_payload(original, image, args.revision, run_id, runtime_origin, managed_client_proxy_options(args), contact_email_to(args))
     payload["HostConfig"] = {
         "NetworkMode": "none", "Binds": [str(restored) + ":/app/config:rw"],
         "PortBindings": {}, "RestartPolicy": {"Name": "no"}, "Memory": 1024**3,
@@ -973,7 +1004,7 @@ const expectedScopes = EXPECTED_MCP_SCOPES, expectedChallenge = EXPECTED_MCP_CHA
 const nativeFiles = NATIVE_PREVIEW_FILES;
 const publicEnabled = PUBLIC_PREVIEW_ENABLED, publicCatalogueIds = PUBLIC_CATALOGUE_IDS;
 const packagePolicy = PACKAGE_PROBE_POLICY, routes = {};
-const packageRuntimePolicy = PACKAGE_RUNTIME_POLICY;
+const packageRuntimePolicy = PACKAGE_RUNTIME_POLICY, contactRecipient = CONTACT_RECIPIENT;
 const crypto = require("node:crypto");
 let failureCode = "RESTORED_CANDIDATE_PROBE_FAILED";
 const fail = (code="RESTORED_CANDIDATE_PROBE_FAILED") => { failureCode=code; throw new Error("clone probe failed"); };
@@ -1002,6 +1033,13 @@ function req(path, status=200, limit=1048576) {
   if(!healthy)fail();
   if((await (await req("/api/auth/mode")).json()).accountsEnabled!==true)fail();
   if((await (await req("/api/billing/config")).json()).enabled!==false)fail();
+  if(contactRecipient!==null){
+    if(process.env.TADAZZ_CONTACT_EMAIL_TO!==contactRecipient)fail();
+    const contact=await req("/api/contact/config");
+    if(!contact.headers.get("content-type")?.startsWith("application/json")||
+       contact.headers.get("cache-control")!=="no-store"||
+       JSON.stringify(await contact.json())!==JSON.stringify({available:true}))fail();
+  }
   await req("/api/billing",401);await req("/api/accounts/me",401);
   if(packagePolicy.accountsEnabled!==true||process.env.TADAZZ_ACCOUNTS_ENABLED!=="true"||
      packagePolicy.installerEnabled!==(process.env.TADAZZ_PACKAGE_INSTALLER_ENABLED==="true")||
@@ -1053,9 +1091,10 @@ function req(path, status=200, limit=1048576) {
   }
   const nativeApplicationPreview={files:nativeFiles,inlinePreviewEnabled:true,packagedHttpBytes:true,privateRuntimeUnauthorized:true,publicRuntimeEnabled:publicEnabled,publicRuntimeBytesVerified:publicEnabled,publicRuntimeInvalidDigestDenied:true,publicRuntimeInvalidNameDenied:true,publicCatalogueIds:publicEnabled?publicCatalogueIds:[],publicCatalogueUnknownIdDenied:true,authenticatedStudioRender:false};
   process.stdout.write(JSON.stringify({ok:true,nativeApplicationPreview,packageCapabilities,routes,
-    ...(packageRuntimePolicy===null?{}:{packageRuntimePolicy})}));
+    ...(packageRuntimePolicy===null?{}:{packageRuntimePolicy}),
+    ...(contactRecipient===null?{}:{contactMail:{recipient:contactRecipient,available:true}})}));
 })().catch(()=>{process.stdout.write(JSON.stringify({ok:false,routes,failureCode}));process.exitCode=1;});
-'''.replace("EXPECTED_PUBLIC_X", json.dumps(args.expected_jwk_x)).replace("NATIVE_PREVIEW_FILES", json.dumps(native_files)).replace("PUBLIC_PREVIEW_ENABLED", json.dumps(public_enabled)).replace("PUBLIC_CATALOGUE_IDS", json.dumps(PUBLIC_CATALOGUE_IDS)).replace("PACKAGE_PROBE_POLICY", json.dumps(package_policy)).replace("PACKAGE_RUNTIME_POLICY", json.dumps(runtime_policy)).replace("EXPECTED_MCP_SCOPES", json.dumps(MCP_SCOPES)).replace("EXPECTED_MCP_CHALLENGE", json.dumps(MCP_CHALLENGE))
+'''.replace("EXPECTED_PUBLIC_X", json.dumps(args.expected_jwk_x)).replace("NATIVE_PREVIEW_FILES", json.dumps(native_files)).replace("PUBLIC_PREVIEW_ENABLED", json.dumps(public_enabled)).replace("PUBLIC_CATALOGUE_IDS", json.dumps(PUBLIC_CATALOGUE_IDS)).replace("PACKAGE_PROBE_POLICY", json.dumps(package_policy)).replace("PACKAGE_RUNTIME_POLICY", json.dumps(runtime_policy)).replace("CONTACT_RECIPIENT", json.dumps(contact_email_to(args))).replace("EXPECTED_MCP_SCOPES", json.dumps(MCP_SCOPES)).replace("EXPECTED_MCP_CHALLENGE", json.dumps(MCP_CHALLENGE))
         execution = docker_api("POST", "/containers/" + container_id + "/exec", {
             "AttachStdout": True, "AttachStderr": True, "Tty": False, "Cmd": ["node", "-e", program],
         })
@@ -1075,6 +1114,12 @@ function req(path, status=200, limit=1048576) {
             result["probeFailureCode"] = proof["failureCode"]
         require(not status["Running"] and status["ExitCode"] == 0, "RESTORED_CANDIDATE_BOOT_FAILED")
         expected_keys = {"ok", "nativeApplicationPreview", "packageCapabilities", "routes"}
+        recipient = contact_email_to(args)
+        if recipient is not None:
+            expected_keys.add("contactMail")
+            require(proof.get("contactMail") == contact_mail_proof(recipient),
+                    "CONTACT_MAIL_RESTORE_PROOF_MISMATCH")
+            result["contactMail"] = contact_mail_proof(recipient)
         if runtime_options:
             expected_keys.add("packageRuntimePolicy")
             require(proof.get("packageRuntimePolicy") == runtime_policy,
@@ -1101,7 +1146,7 @@ def validate_qualification(args, original, image):
     receipt = read_json(file)
     runtime_options = package_runtime_options(args)
     runtime_origin = runtime_options["origin"] if runtime_options else None
-    desired = desired_package_container(original, runtime_origin, managed_client_proxy_options(args))
+    desired = desired_package_container(original, runtime_origin, managed_client_proxy_options(args), contact_email_to(args))
     require(receipt.get("success") is True and receipt.get("candidateCloneBoot", {}).get("passed") is True, "CANDIDATE_RESTORE_QUALIFICATION_NOT_PASSED")
     require(receipt.get("candidateCloneBoot", {}).get("nativeApplicationPreview") ==
             native_preview_proof(native_preview_files(Path(args.release_dir)),
@@ -1117,6 +1162,14 @@ def validate_qualification(args, original, image):
         require("packageRuntime" not in receipt and "packageRuntimePolicy" not in receipt.get("candidateCloneBoot", {}),
                 "PACKAGE_RUNTIME_RESTORE_QUALIFICATION_UNEXPECTED")
     require(receipt.get("revision") == args.revision and receipt.get("image") == image["Id"] and receipt.get("sourceImage") == original["Image"] and receipt.get("sourceContainer") == original["Id"] and receipt.get("configSha256") == args.expected_config_sha256, "RESTORE_QUALIFICATION_IDENTITY")
+    recipient = contact_email_to(args)
+    require(receipt.get("contactEmailTo") == recipient, "CONTACT_EMAIL_QUALIFICATION_MISMATCH")
+    if recipient is not None:
+        require(receipt.get("candidateCloneBoot", {}).get("contactMail") == contact_mail_proof(recipient),
+                "CONTACT_MAIL_RESTORE_QUALIFICATION_MISSING")
+    else:
+        require("contactMail" not in receipt.get("candidateCloneBoot", {}),
+                "CONTACT_MAIL_RESTORE_QUALIFICATION_UNEXPECTED")
     proxy_options = managed_client_proxy_options(args)
     require(receipt.get("managedClientProxy") == proxy_options, "MANAGED_CLIENT_PROXY_QUALIFICATION_MISMATCH")
     if proxy_options:
@@ -1137,7 +1190,8 @@ def qualify_backup(args, stage, original, image, others):
               "sourceContainer": original["Id"], "sourceImage": original["Image"], "success": False,
               "configSha256": args.expected_config_sha256, "candidateCloneBoot": {"passed": False},
               "productionDataRestored": False, "deploymentPerformed": False, "phase": "pre-stop",
-              "managedClientProxy": managed_client_proxy_options(args)}
+              "managedClientProxy": managed_client_proxy_options(args),
+              **({"contactEmailTo": contact_email_to(args)} if contact_email_to(args) is not None else {})}
     stop_requested = False
     handlers = {}
     for sig in (signal.SIGTERM, signal.SIGINT):
@@ -1434,12 +1488,13 @@ def deploy(args, stage, config, original, image, others):
     failed_name = "tadazz-failed-mcp-" + args.revision[:12] + "-" + run_id
     runtime_options = package_runtime_options(args)
     runtime_origin = runtime_options["origin"] if runtime_options else None
-    payload = replacement_payload(original, image, args.revision, run_id, runtime_origin, managed_client_proxy_options(args))
+    payload = replacement_payload(original, image, args.revision, run_id, runtime_origin, managed_client_proxy_options(args), contact_email_to(args))
     report = {"version": 1, "revision": args.revision, "image": image["Id"], "previousImage": original["Image"],
               "previousContainer": original["Id"], "rollbackContainer": backup_name, "success": False,
               "customerContentPrinted": False, "dataRestorePerformed": False, "phase": "pre-stop",
               "priorRestoreBootQualification": qualification,
-              "managedClientProxy": managed_client_proxy_options(args)}
+              "managedClientProxy": managed_client_proxy_options(args),
+              **({"contactEmailTo": contact_email_to(args)} if contact_email_to(args) is not None else {})}
     replacement_id, stop_requested = None, False
     handlers = {}
     for sig in (signal.SIGTERM, signal.SIGINT):
@@ -1481,7 +1536,7 @@ def deploy(args, stage, config, original, image, others):
         verify_replacement(original, inspect(replacement_id), payload)
         candidate = inspect(replacement_id)
         if runtime_options:
-            require(package_runtime_policy(candidate) == package_runtime_policy(desired_package_container(original, runtime_origin, managed_client_proxy_options(args))),
+            require(package_runtime_policy(candidate) == package_runtime_policy(desired_package_container(original, runtime_origin, managed_client_proxy_options(args), contact_email_to(args))),
                     "PACKAGE_RUNTIME_REPLACEMENT_POLICY_MISMATCH")
             report["packageRuntimeAfterStartup"] = package_runtime_probes(args)
         validate_managed_client_proxy(args)
@@ -1490,11 +1545,13 @@ def deploy(args, stage, config, original, image, others):
         for origin, label in ((LOCAL_ORIGIN, "loopback"), (PUBLIC_ORIGIN, "publicHttps")):
             report[label] = {"baseProbes": base_probes(origin, package_policy)}
             report[label].update(mcp_probes(origin, stage, config, args.expected_jwk_x, public_enabled))
+            if contact_email_to(args) is not None:
+                report[label]["contactMail"] = contact_mail_probe(origin)
         report["phase"] = "fresh-private-restore-check-after-startup"
         qualify_private_archive(work, expected, report["backup"])
         validate_config(args)
         other_containers_unchanged(others, replacement_id, args)
-        report.update(success=True, phase="verified", environmentPreservedExcept=sorted(deployment_env_overrides(runtime_origin, managed_client_proxy_options(args))),
+        report.update(success=True, phase="verified", environmentPreservedExcept=sorted(deployment_env_overrides(runtime_origin, managed_client_proxy_options(args), contact_email_to(args))),
                       hostConfigurationUnchanged=True,
                       hostConfigurationComparison="exact-except-present-null-OomKillDisable-equals-false",
                       mountsUnchanged=True, otherContainersUnchanged=True,
@@ -2269,8 +2326,10 @@ def main():
     parser.add_argument("--expected-package-runtime-container", help="Exact running read-only sandbox container ID, required with --package-runtime-origin")
     parser.add_argument("--expected-package-runtime-image", help="Immutable sandbox image sha256, required with --package-runtime-origin")
     parser.add_argument("--expected-package-runtime-revision", help="Independent qualified 40-hex sandbox source revision, required with --package-runtime-origin")
+    parser.add_argument("--contact-email-to", help="Explicit contact-form recipient; preserves existing sender and mail credentials, and requires matching restored-candidate proof")
     parser.add_argument("--managed-client-proxy-config-sha256", help="Explicit opt-in for the exact active Caddy config that overwrites the client IP header on tadazz.com")
     args = parser.parse_args()
+    contact_email_to(args)
     runtime_options = package_runtime_options(args)
     runtime_origin = runtime_options["origin"] if runtime_options else None
     os.umask(0o077)
@@ -2282,7 +2341,7 @@ def main():
     stage = validate_stage(args)
     config = validate_config(args) if args.action != "qualify-backup" or args.qualify_candidate else None
     original, image, others = baseline(args)
-    desired = replacement_payload(original, image, args.revision, "preflight", runtime_origin, managed_client_proxy_options(args))
+    desired = replacement_payload(original, image, args.revision, "preflight", runtime_origin, managed_client_proxy_options(args), contact_email_to(args))
     room = game_count_evidence(original)
     package_policy = package_probe_policy(original)
     base_results = {"loopback": base_probes(LOCAL_ORIGIN, package_policy),
@@ -2295,6 +2354,7 @@ def main():
                           "productionChanged": False, "roomGate": room, "runningContainers": len(others) + 1,
                           "configPinnedAndPrivate": True, "candidateStagePinned": True,
                           "baseProbes": base_results, "managedClientProxy": managed_client_proxy_options(args),
+                          **({"contactEmailTo": contact_email_to(args)} if contact_email_to(args) is not None else {}),
                           **({"packageRuntime": runtime_proof,
                               "desiredPackageRuntimePolicy": package_runtime_policy({"Config": desired})} if runtime_options else {}),
                           "backupRestoreProof": "performed-only-after-stop-in-deploy", "installedHostVerified": False}))
