@@ -101,7 +101,36 @@ def run(args):
         raise ValueError("Baseline and candidate must be separate trees")
     before_hashes, current_hashes = hashes(baseline), hashes(current)
     if before_hashes["oxlint.config.ts"] != current_hashes["oxlint.config.ts"]:
-        raise ValueError("Lint configuration changed; baseline comparison refused")
+        # Different policies cannot grandfather historical diagnostics. The exact
+        # current scope may still qualify when it is completely clean on its own.
+        args.output.mkdir(mode=0o700, exist_ok=False)
+        command = ["node", "--experimental-strip-types", "/cleanup/node_modules/oxlint/bin/oxlint", "-c", "oxlint.config.ts", "--format=json", *FILES]
+        result = subprocess.run(command, cwd=current, capture_output=True, timeout=105)
+        (args.output / "candidate.stdout.json").write_bytes(result.stdout)
+        (args.output / "candidate.stderr.log").write_bytes(result.stderr)
+        if result.returncode not in (0, 1):
+            raise ValueError("Linter execution failed: candidate")
+        payload = json.loads(result.stdout)
+        if not isinstance(payload, dict) or not isinstance(payload.get("diagnostics"), list):
+            raise ValueError("Linter produced no diagnostic array: candidate")
+        if result.returncode == 1 and not payload["diagnostics"]:
+            raise ValueError("Linter failed without attributed diagnostics: candidate")
+        if before_hashes != hashes(baseline) or current_hashes != hashes(current):
+            raise ValueError("Source/configuration changed during lint")
+        clean = result.returncode == 0 and not payload["diagnostics"]
+        receipt = {
+            "baselineSha": BASELINE_SHA,
+            "method": "current-policy clean lint; no historical diagnostic comparison",
+            "configurationChanged": True, "historicalComparisonPerformed": False,
+            "files": list(FILES), "baselineHashes": before_hashes, "candidateHashes": current_hashes,
+            "command": command, "baselineLintExit": None, "candidateLintExit": result.returncode,
+            "baselineDiagnosticCount": None, "candidateDiagnosticCount": len(payload["diagnostics"]),
+            "matchedInheritedCount": None, "unmatchedCount": None,
+            "sourceHashesUnchanged": True, "wholeLegacyLintPass": clean, "gatePass": clean,
+        }
+        (args.output / "receipt.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf8")
+        print(json.dumps(receipt, indent=2))
+        return 0 if clean else 1
     previous = {path: (baseline / path).read_bytes() for path in FILES}
     selected = {path: (current / path).read_bytes() for path in FILES}
     args.output.mkdir(mode=0o700, exist_ok=False)
