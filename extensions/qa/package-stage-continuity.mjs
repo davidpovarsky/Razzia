@@ -29,6 +29,7 @@ const stage =
     "packages/web/src/features/game/components/tadazz-show/PackageStage.tsx",
   )
 const runtime = path.join(source, "extensions/src/presentation/package-runtime")
+const requestAuth = path.join(source, "packages/web/src/lib/request-auth.ts")
 const js = JSON.stringify
 const result = {
   fixture: "actual PackageStage, ThemeSandboxHost, SDK and BMS source",
@@ -76,6 +77,15 @@ const aliases = {
 const plugin = {
   name: "isolated-platform-services",
   setup(builder) {
+    builder.onResolve({ filter: /^@razzia\/web\/lib\/request-auth$/ }, () => ({
+      path: requestAuth,
+    }))
+    builder.onResolve({ filter: /^\.\/session$/ }, (args) => {
+      if (args.importer === requestAuth) {
+        return { path: "@razzia/web/lib/session", namespace: "service" }
+      }
+    })
+
     builder.onResolve(
       { filter: /^(?:react(?:-dom)?(?:\/.*)?|zod)$/ },
       (args) => ({

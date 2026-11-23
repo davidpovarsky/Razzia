@@ -66,6 +66,9 @@ await build({
             resolveDir: componentDirectory,
           }),
         )
+        builder.onResolve({ filter: /^@razzia\/common\/constants$/ }, () => ({
+          path: path.join(source, "packages/common/src/constants.ts"),
+        }))
         builder.onResolve({ filter: /^@razzia\/web\/lib\/session$/ }, () => ({
           path: fixture,
         }))
@@ -87,12 +90,9 @@ await build({
             loader: "ts",
           }),
         )
-        builder.onResolve(
-          { filter: /^(?:react(?:-dom)?(?:\/.*)?|@razzia\/common\/.*)$/ },
-          (args) => ({
-            path: requireWeb.resolve(args.path),
-          }),
-        )
+        builder.onResolve({ filter: /^react(?:-dom)?(?:\/.*)?$/ }, (args) => ({
+          path: requireWeb.resolve(args.path),
+        }))
       },
     },
   ],
