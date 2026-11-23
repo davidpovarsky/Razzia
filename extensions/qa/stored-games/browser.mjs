@@ -1086,7 +1086,10 @@ export async function verifyStoredGameBrowser(options) {
               }
 
               try {
-                if ((await current.isVisible()) && (await current.isEnabled())) {
+                if (
+                  (await current.isVisible()) &&
+                  (await current.isEnabled())
+                ) {
                   nextButton = current
                   return true
                 }
@@ -1200,7 +1203,9 @@ export async function verifyStoredGameBrowser(options) {
           await expect(
             leaderboard.getByRole("heading", { level: 2 }),
           ).toBeVisible()
-          await expect(leaderboard.locator(".tz-leader-row").first()).toBeVisible()
+          await expect(
+            leaderboard.locator(".tz-leader-row").first(),
+          ).toBeVisible()
         }
 
         await paintedFrames(stage)
@@ -1464,9 +1469,13 @@ export async function verifyStoredGameBrowser(options) {
     )
     const expectedTerminalStatus = hasScoredQuestions ? "FINISHED" : "SUMMARY"
     const expectedTerminalScene = hasScoredQuestions ? "finale" : "summary"
-    await expect(stage).toHaveAttribute("data-show-scene", expectedTerminalScene, {
-      timeout: 30_000,
-    })
+    await expect(stage).toHaveAttribute(
+      "data-show-scene",
+      expectedTerminalScene,
+      {
+        timeout: 30_000,
+      },
+    )
     assert.equal(
       snapshot().status,
       expectedTerminalStatus,

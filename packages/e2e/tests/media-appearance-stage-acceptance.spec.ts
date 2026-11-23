@@ -33,7 +33,10 @@ const saveScreenshot = async (page: Page, filename: string) => {
   })
 }
 
-async function openStudioPanel(page: Page, id: "edit" | "settings") {
+async function openStudioPanel(
+  page: Page,
+  id: "edit" | "preview" | "settings",
+) {
   const drawer = page.locator("[data-editor-drawer-close]:visible")
   const count = await drawer.count()
   expect(count).toBeLessThanOrEqual(1)
@@ -1944,11 +1947,19 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       editorStage.locator("[data-editor-preview-fallback]"),
     ).toHaveCount(0)
     const stableRecap = await editorRecap.elementHandle()
+    // Aspect controls live in the preview panel, separate from the visible stage.
+    const previewPanel = await openStudioPanel(managerPage, "preview")
     // Layout changes allocate equivalent scene data without replaying the scene.
     for (const aspect of ["4-3", "16-9"]) {
-      const control = managerPage.getByTestId(`studio-preview-aspect-${aspect}`)
+      const control = previewPanel.getByTestId(
+        `studio-preview-aspect-${aspect}`,
+      )
       await control.click()
       await expect(control).toHaveAttribute("aria-pressed", "true")
+      await expect(editorStage).toHaveAttribute(
+        "data-preview-aspect",
+        aspect.replace("-", ":"),
+      )
       await managerPage.evaluate(
         () =>
           new Promise<void>((resolve) => {
