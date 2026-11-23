@@ -128,9 +128,10 @@ before(async () => {
     config,
     configRoot: requireInitializedF().root,
     keyId: "synthetic-export-issuer",
-    signingPrivateKeyPem: pair.privateKey
-      .export({ type: "pkcs8", format: "pem" })
-      .toString(),
+    signingPrivateKeyPem: pair.privateKey.export({
+      type: "pkcs8",
+      format: "pem",
+    }),
     ticketEncryptionKey: randomBytes(32),
     consentPageUrl: `${origin}/studio/oauth-consent`,
     clients: [{ clientId, redirectUris: [redirectUri], scopes: allowed }],
@@ -176,10 +177,12 @@ const grantFile = (owner: string) =>
     "extensions/mcp-oauth/grants.sqlite",
   )
 function api(
-  path: string,
-  body?: Record<string, string>,
-  session?: Session,
-  instance = requireInitializedIssuer(),
+  ...[path, body, session, instance = requireInitializedIssuer()]: [
+    path: string,
+    body?: Record<string, string>,
+    session?: Session,
+    instance?: ReturnType<typeof requireInitializedIssuer>,
+  ]
 ) {
   const json = path === "/oauth/inspect" || path === "/oauth/approve"
 

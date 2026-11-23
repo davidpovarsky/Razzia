@@ -4,12 +4,14 @@ import { produceNativePreviewFrameV1 } from "../../core/show-library/native-prev
 
 /** Host-only adapter. Authored duration and bound projection come from the sole producer. */
 export function projectedFrame(
-  snapshot: unknown,
-  context: unknown,
-  binding: PreviewProjectionBinding,
-  metadata: ValidatedPreviewStageMetadata,
-  revision: number,
-  expectedSeconds?: number | null,
+  ...[snapshot, context, binding, metadata, revision, expectedSeconds]: [
+    snapshot: unknown,
+    context: unknown,
+    binding: PreviewProjectionBinding,
+    metadata: ValidatedPreviewStageMetadata,
+    revision: number,
+    expectedSeconds?: number | null,
+  ]
 ) {
   const frame = produceNativePreviewFrameV1(
     snapshot,

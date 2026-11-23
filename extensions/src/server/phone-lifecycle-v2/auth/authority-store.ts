@@ -1,6 +1,6 @@
 import { randomBytes } from "node:crypto"
 import type { DatabaseSync } from "node:sqlite"
-import { identifier, type Action } from "../contracts"
+import { identifier } from "../contracts"
 import {
   authorityDenied,
   canonicalActions,
@@ -19,10 +19,17 @@ import type {
   ServiceCredentialBinding,
   ServiceLeaseRecord,
   SynchronousReauthorize,
-  SynchronousServiceLeaseReader,
 } from "./contracts"
 
-const WHERE = "owner=? AND game=? AND provider=? AND service=?"
+import {
+  LEASE_WHERE as WHERE,
+  leaseAddressValues as scope,
+  readServiceLease as row,
+  ReadonlyServiceLeaseReader,
+} from "./service-lease-reader"
+
+export { ReadonlyServiceLeaseReader }
+
 const SCHEMA = `
 CREATE TABLE authority_meta(singleton INTEGER PRIMARY KEY CHECK(singleton=1),schema_version INTEGER NOT NULL,store_id TEXT NOT NULL);
 CREATE TABLE leases(
@@ -37,87 +44,6 @@ CREATE TABLE control_receipts(
  metadata TEXT NOT NULL,created_at INTEGER NOT NULL,
  PRIMARY KEY(owner,game,provider,service,request_id));`
 
-const scope = (address: ServiceAddress) => [
-  address.owner,
-  address.game,
-  address.provider,
-  address.service,
-]
-type SqlRow = Record<string, unknown>
-
-function decode(leaseRow: SqlRow | undefined): ServiceLeaseRecord | undefined {
-  if (!leaseRow) {
-    return undefined
-  }
-
-  const text = (key: string) => {
-    if (typeof leaseRow[key] !== "string") {
-      authorityDenied()
-    }
-
-    return leaseRow[key]
-  }
-  const integer = (key: string) => {
-    if (!Number.isSafeInteger(leaseRow[key])) {
-      authorityDenied()
-    }
-
-    return leaseRow[key] as number
-  }
-  const initial = canonicalActions(
-    JSON.parse(text("initial_actions")) as Action[],
-  )
-  const current = canonicalActions(
-    JSON.parse(text("current_actions")) as Action[],
-  )
-  const address = copyAddress({
-    owner: text("owner"),
-    game: text("game"),
-    provider: text("provider"),
-    service: text("service"),
-    version: integer("version"),
-  })
-  const issuerSid = text("issuer_sid"),
-    executorId = text("executor_id"),
-    expiresAt = integer("expires_at")
-  identifier(issuerSid)
-  identifier(executorId)
-  const state = text("state"),
-    revoked = leaseRow.revoked_at,
-    hash = text("capability_hash")
-
-  if (
-    !initial.includes("register") ||
-    current.some((action) => !initial.includes(action)) ||
-    expiresAt <= 0 ||
-    !["PENDING_DELIVERY", "ACTIVE", "REVOKED"].includes(state) ||
-    (revoked !== null &&
-      (!Number.isSafeInteger(revoked) || (revoked as number) <= 0)) ||
-    !/^[0-9a-f]{64}$/u.test(hash) ||
-    (state === "REVOKED"
-      ? revoked === null || current.length !== 0
-      : revoked !== null)
-  ) {
-    authorityDenied()
-  }
-
-  return Object.freeze({
-    ...address,
-    issuerSid,
-    executorId,
-    expiresAt,
-    initialActions: initial,
-    currentActions: current,
-    state: state as ServiceLeaseRecord["state"],
-    revokedAt: revoked as number | null,
-    capabilityHash: hash,
-  })
-}
-function row(db: DatabaseSync, address: ServiceAddress) {
-  return decode(
-    db.prepare(`SELECT * FROM leases WHERE ${WHERE}`).get(...scope(address)),
-  )
-}
 function request(input: ControlRequest) {
   identifier(input.requestId)
 
@@ -143,12 +69,17 @@ function immutable(binding: ServiceCredentialBinding) {
 function sameBinding(a: ServiceCredentialBinding, b: ServiceCredentialBinding) {
   return JSON.stringify(immutable(a)) === JSON.stringify(immutable(b))
 }
-function metadata(
-  ok: boolean,
-  status: string,
-  address: ServiceAddress,
-  lease?: ServiceLeaseRecord,
-): ControlReceipt {
+function metadata({
+  ok,
+  status,
+  address,
+  lease,
+}: {
+  ok: boolean
+  status: string
+  address: ServiceAddress
+  lease?: ServiceLeaseRecord
+}): ControlReceipt {
   return Object.freeze({
     ok,
     status,
@@ -215,12 +146,17 @@ function parseReceipt(raw: unknown): ControlReceipt {
 
   return Object.freeze(data) as unknown as ControlReceipt
 }
-function prior(
-  db: DatabaseSync,
-  address: ServiceAddress,
-  input: ControlRequest,
-  fp: string,
-): ControlReceipt | undefined {
+function prior({
+  db,
+  address,
+  input,
+  fp,
+}: {
+  db: DatabaseSync
+  address: ServiceAddress
+  input: ControlRequest
+  fp: string
+}): ControlReceipt | undefined {
   const found = db
     .prepare(
       `SELECT fingerprint,metadata FROM control_receipts WHERE ${WHERE} AND request_id=?`,
@@ -232,7 +168,7 @@ function prior(
   }
 
   if (found.fingerprint !== fp) {
-    return metadata(false, "request_conflict", address)
+    return metadata({ ok: false, status: "request_conflict", address })
   }
 
   const receipt = parseReceipt(found.metadata)
@@ -243,14 +179,21 @@ function prior(
 
   return receipt
 }
-function finish(
-  db: DatabaseSync,
-  address: ServiceAddress,
-  input: ControlRequest,
-  action: string,
-  fp: string,
-  receipt: ControlReceipt,
-): SecretAttempt {
+function finish({
+  db,
+  address,
+  input,
+  action,
+  fp,
+  receipt,
+}: {
+  db: DatabaseSync
+  address: ServiceAddress
+  input: ControlRequest
+  action: string
+  fp: string
+  receipt: ControlReceipt
+}): SecretAttempt {
   // Explicit whitelist construction: never serialize a SecretAttempt/lease/credential.
   const safe = {
     ok: receipt.ok,
@@ -276,15 +219,6 @@ function finish(
   return { receipt: Object.freeze(safe) }
 }
 
-export class ReadonlyServiceLeaseReader implements SynchronousServiceLeaseReader {
-  constructor(private readonly files: PrivateAuthorityFiles) {}
-  readCurrent(input: ServiceAddress): ServiceLeaseRecord | undefined {
-    const address = copyAddress(input)
-
-    return this.files.read((db) => row(db, address))
-  }
-}
-
 export class ServiceAuthorityWriter {
   constructor(private readonly files: PrivateAuthorityFiles) {}
   initialize(check: SynchronousReauthorize) {
@@ -292,11 +226,29 @@ export class ServiceAuthorityWriter {
   }
 
   issue(
-    binding: ServiceCredentialBinding,
-    input: ControlRequest,
-    actorSid: string,
-    check: SynchronousReauthorize,
+    ...args: [
+      binding: ServiceCredentialBinding,
+      input: ControlRequest,
+      actorSid: string,
+      check: SynchronousReauthorize,
+    ]
   ): SecretAttempt {
+    const [binding, input, actorSid, check] = args
+
+    return this.issueRequest({ binding, input, actorSid, check })
+  }
+
+  private issueRequest({
+    binding,
+    input,
+    actorSid,
+    check,
+  }: {
+    binding: ServiceCredentialBinding
+    input: ControlRequest
+    actorSid: string
+    check: SynchronousReauthorize
+  }): SecretAttempt {
     const address = copyAddress(binding),
       initial = canonicalActions(binding.initialActions)
     request(input)
@@ -334,21 +286,26 @@ export class ServiceAuthorityWriter {
         serviceDenied()
       }
 
-      const cached = prior(db, address, input, fp)
+      const cached = prior({ db, address, input, fp })
 
       if (cached) {
         return { receipt: cached }
       }
 
       if (current) {
-        return finish(
+        return finish({
           db,
           address,
           input,
-          "issue",
+          action: "issue",
           fp,
-          metadata(false, "authority_exists", address, current),
-        )
+          receipt: metadata({
+            ok: false,
+            status: "authority_exists",
+            address,
+            lease: current,
+          }),
+        })
       }
 
       const credential = randomBytes(32).toString("hex")
@@ -369,14 +326,18 @@ export class ServiceAuthorityWriter {
         )
 
       if (Number(inserted.changes) !== 1) {
-        return finish(
+        return finish({
           db,
           address,
           input,
-          "issue",
+          action: "issue",
           fp,
-          metadata(false, "game_authority_conflict", address),
-        )
+          receipt: metadata({
+            ok: false,
+            status: "game_authority_conflict",
+            address,
+          }),
+        })
       }
 
       const completed = row(db, address)
@@ -385,25 +346,48 @@ export class ServiceAuthorityWriter {
         authorityDenied()
       }
 
-      const result = finish(
+      const result = finish({
         db,
         address,
         input,
-        "issue",
+        action: "issue",
         fp,
-        metadata(true, "pending_delivery", address, completed),
-      )
+        receipt: metadata({
+          ok: true,
+          status: "pending_delivery",
+          address,
+          lease: completed,
+        }),
+      })
 
       return { ...result, credential }
     })
   }
 
   rotate(
-    binding: ServiceCredentialBinding,
-    input: ControlRequest,
-    actorSid: string,
-    check: SynchronousReauthorize,
+    ...args: [
+      binding: ServiceCredentialBinding,
+      input: ControlRequest,
+      actorSid: string,
+      check: SynchronousReauthorize,
+    ]
   ): SecretAttempt {
+    const [binding, input, actorSid, check] = args
+
+    return this.rotateRequest({ binding, input, actorSid, check })
+  }
+
+  private rotateRequest({
+    binding,
+    input,
+    actorSid,
+    check,
+  }: {
+    binding: ServiceCredentialBinding
+    input: ControlRequest
+    actorSid: string
+    check: SynchronousReauthorize
+  }): SecretAttempt {
     const address = copyAddress(binding)
     request(input)
     identifier(actorSid)
@@ -427,7 +411,7 @@ export class ServiceAuthorityWriter {
         serviceDenied()
       }
 
-      const cached = prior(db, address, input, fp)
+      const cached = prior({ db, address, input, fp })
 
       if (cached) {
         return { receipt: cached }
@@ -438,14 +422,19 @@ export class ServiceAuthorityWriter {
         current.version !== input.expectedVersion ||
         current.version >= Number.MAX_SAFE_INTEGER
       ) {
-        return finish(
+        return finish({
           db,
           address,
           input,
-          "rotate",
+          action: "rotate",
           fp,
-          metadata(false, "version_conflict", address, current),
-        )
+          receipt: metadata({
+            ok: false,
+            status: "version_conflict",
+            address,
+            lease: current,
+          }),
+        })
       }
 
       const next = { ...current, version: current.version + 1 }
@@ -461,25 +450,48 @@ export class ServiceAuthorityWriter {
         authorityDenied()
       }
 
-      const result = finish(
+      const result = finish({
         db,
         address,
         input,
-        "rotate",
+        action: "rotate",
         fp,
-        metadata(true, "pending_delivery", address, row(db, address)),
-      )
+        receipt: metadata({
+          ok: true,
+          status: "pending_delivery",
+          address,
+          lease: row(db, address),
+        }),
+      })
 
       return { ...result, credential }
     })
   }
 
   activate(
-    inputAddress: ServiceAddress,
-    capability: string,
-    input: ControlRequest,
-    check: SynchronousReauthorize,
+    ...args: [
+      inputAddress: ServiceAddress,
+      capability: string,
+      input: ControlRequest,
+      check: SynchronousReauthorize,
+    ]
   ): SecretAttempt {
+    const [inputAddress, capability, input, check] = args
+
+    return this.activateRequest({ inputAddress, capability, input, check })
+  }
+
+  private activateRequest({
+    inputAddress,
+    capability,
+    input,
+    check,
+  }: {
+    inputAddress: ServiceAddress
+    capability: string
+    input: ControlRequest
+    check: SynchronousReauthorize
+  }): SecretAttempt {
     const address = copyAddress(inputAddress)
     request(input)
 
@@ -512,7 +524,7 @@ export class ServiceAuthorityWriter {
         immutable(current),
         current.capabilityHash,
       ])
-      const cached = prior(db, address, input, fp)
+      const cached = prior({ db, address, input, fp })
 
       if (cached) {
         return { receipt: cached }
@@ -528,23 +540,46 @@ export class ServiceAuthorityWriter {
         authorityDenied()
       }
 
-      return finish(
+      return finish({
         db,
         address,
         input,
-        "activate",
+        action: "activate",
         fp,
-        metadata(true, "active", address, row(db, address)),
-      )
+        receipt: metadata({
+          ok: true,
+          status: "active",
+          address,
+          lease: row(db, address),
+        }),
+      })
     })
   }
 
   revoke(
-    binding: ServiceCredentialBinding,
-    input: ControlRequest,
-    actorSid: string,
-    check: SynchronousReauthorize,
+    ...args: [
+      binding: ServiceCredentialBinding,
+      input: ControlRequest,
+      actorSid: string,
+      check: SynchronousReauthorize,
+    ]
   ): SecretAttempt {
+    const [binding, input, actorSid, check] = args
+
+    return this.revokeRequest({ binding, input, actorSid, check })
+  }
+
+  private revokeRequest({
+    binding,
+    input,
+    actorSid,
+    check,
+  }: {
+    binding: ServiceCredentialBinding
+    input: ControlRequest
+    actorSid: string
+    check: SynchronousReauthorize
+  }): SecretAttempt {
     const address = copyAddress(binding)
     request(input)
     identifier(actorSid)
@@ -563,7 +598,7 @@ export class ServiceAuthorityWriter {
         serviceDenied()
       }
 
-      const cached = prior(db, address, input, fp)
+      const cached = prior({ db, address, input, fp })
 
       if (cached) {
         return { receipt: cached }
@@ -573,14 +608,19 @@ export class ServiceAuthorityWriter {
         current.version !== input.expectedVersion ||
         current.version >= Number.MAX_SAFE_INTEGER
       ) {
-        return finish(
+        return finish({
           db,
           address,
           input,
-          "revoke",
+          action: "revoke",
           fp,
-          metadata(false, "version_conflict", address, current),
-        )
+          receipt: metadata({
+            ok: false,
+            status: "version_conflict",
+            address,
+            lease: current,
+          }),
+        })
       }
 
       if (current.state !== "REVOKED") {
@@ -595,14 +635,19 @@ export class ServiceAuthorityWriter {
         }
       }
 
-      return finish(
+      return finish({
         db,
         address,
         input,
-        "revoke",
+        action: "revoke",
         fp,
-        metadata(true, "revoked", address, row(db, address)),
-      )
+        receipt: metadata({
+          ok: true,
+          status: "revoked",
+          address,
+          lease: row(db, address),
+        }),
+      })
     })
   }
 }

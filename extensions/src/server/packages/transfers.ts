@@ -249,13 +249,42 @@ export class PackageTransferStore {
     return result
   }
   operation<T>(
-    owner: string,
-    kind: string,
-    key: string,
-    digest: string,
-    action: () => T,
-    precondition?: () => void,
+    ...args: [
+      owner: string,
+      kind: string,
+      key: string,
+      digest: string,
+      action: () => T,
+      precondition?: () => void,
+    ]
   ): T {
+    const [owner, kind, key, digest, action, precondition] = args
+
+    return this.operationRequest({
+      owner,
+      kind,
+      key,
+      digest,
+      action,
+      precondition,
+    })
+  }
+
+  private operationRequest<T>({
+    owner,
+    kind,
+    key,
+    digest,
+    action,
+    precondition,
+  }: {
+    owner: string
+    kind: string
+    key: string
+    digest: string
+    action: () => T
+    precondition?: () => void
+  }): T {
     if (!keyPattern.test(key) || !hex.test(digest)) {
       throw new PackageError("PACKAGE_TRANSFER_INPUT", 422)
     }
@@ -285,19 +314,15 @@ export class PackageTransferStore {
       .prepare("INSERT INTO package_tool_operations VALUES(?,?,?,?,NULL)")
       .run(owner, kind, key, digest)
 
-    try {
-      const result = action()
-      this.db
-        .prepare(
-          "UPDATE package_tool_operations SET outcome=? WHERE owner=? AND kind=? AND request_key=?",
-        )
-        .run(JSON.stringify(result), owner, kind, key)
+    // Keep the intent if action or persistence throws: the mutation may be uncertain.
+    const result = action()
+    this.db
+      .prepare(
+        "UPDATE package_tool_operations SET outcome=? WHERE owner=? AND kind=? AND request_key=?",
+      )
+      .run(JSON.stringify(result), owner, kind, key)
 
-      return result
-    } catch (error) {
-      // Keep the intent: callers must inspect status after any uncertain mutation.
-      throw error
-    }
+    return result
   }
   private file(id: string) {
     if (!/^[a-f0-9-]{36}$/u.test(id)) {
@@ -347,7 +372,11 @@ export class PackageTransferStore {
       input.totalBytes > PACKAGE_LIMITS.archiveBytes ||
       input.filename.length < 8 ||
       input.filename.length > 160 ||
-      !/^[^/\\:\u0000-\u001f\u007f]+\.tadazz$/u.test(input.filename)
+      !/^[^/\\:]+\.tadazz$/u.test(input.filename) ||
+      Array.from(input.filename).some(
+        (character) =>
+          character.charCodeAt(0) < 32 || character.charCodeAt(0) === 127,
+      )
     ) {
       throw new PackageError("PACKAGE_TRANSFER_INPUT", 422)
     }
@@ -366,7 +395,7 @@ export class PackageTransferStore {
         throw new PackageError("PACKAGE_IDEMPOTENCY_CONFLICT", 409)
       }
 
-      return this.describe(previous)
+      return PackageTransferStore.describe(previous)
     }
 
     const count = this.db
@@ -413,9 +442,9 @@ export class PackageTransferStore {
       throw error
     }
 
-    return this.describe(row)
+    return PackageTransferStore.describe(row)
   }
-  private describe(row: TransferRow) {
+  private static describe(row: TransferRow) {
     return {
       transferId: row.id,
       totalBytes: row.bytes,
@@ -700,11 +729,29 @@ export class PackageTransferStore {
     }
   }
   complete<T extends { uploadId: string }>(
-    owner: string,
-    id: string,
-    upload: (bytes: Buffer, key: string) => T,
-    read: (uploadId: string) => T,
+    ...args: [
+      owner: string,
+      id: string,
+      upload: (bytes: Buffer, key: string) => T,
+      read: (uploadId: string) => T,
+    ]
   ): T {
+    const [owner, id, upload, read] = args
+
+    return this.completeRequest({ owner, id, upload, read })
+  }
+
+  private completeRequest<T extends { uploadId: string }>({
+    owner,
+    id,
+    upload,
+    read,
+  }: {
+    owner: string
+    id: string
+    upload: (bytes: Buffer, key: string) => T
+    read: (uploadId: string) => T
+  }): T {
     const row = this.row(owner, id)
 
     if (row.upload) {

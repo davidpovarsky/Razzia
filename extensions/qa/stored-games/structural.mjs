@@ -136,8 +136,10 @@ export function verifyStoredStructure(games) {
         check(
           "unused scene definitions remain outside the timeline",
           same(
-            [...unusedScenes].sort(),
-            [...fixture.expected.unusedSceneIds].sort(),
+            [...unusedScenes].sort((left, right) => left.localeCompare(right)),
+            [...fixture.expected.unusedSceneIds].sort((left, right) =>
+              left.localeCompare(right),
+            ),
           ),
         )
       }

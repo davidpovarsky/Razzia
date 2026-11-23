@@ -119,7 +119,8 @@ export class PrototypeStore {
     let opened: DatabaseSync | undefined = undefined
 
     try {
-      this.sql = opened = new DatabaseSync(path, { timeout: 2000 })
+      opened = new DatabaseSync(path, { timeout: 2000 })
+      this.sql = opened
       this.sql.exec(`PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL;
         PRAGMA foreign_keys=ON;
         CREATE TABLE IF NOT EXISTS game_authorities (

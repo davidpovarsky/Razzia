@@ -6,6 +6,7 @@ import { stripTypeScriptTypes } from "node:module"
 import test from "node:test"
 import { SourceTextModule, SyntheticModule } from "node:vm"
 import { computeCanonicalBaseDigest as digest } from "../../src/core/digest.ts"
+import { createStorageError } from "./save-normalization.fixture.mjs"
 
 const source = stripTypeScriptTypes(
   fs.readFileSync(
@@ -29,12 +30,7 @@ async function fixture(schemaVersion = 2) {
   }
   const schema = { safeParse: () => state.result }
 
-  class StorageError extends Error {
-    constructor(message, status) {
-      super(message)
-      this.status = status
-    }
-  }
+  const StorageError = createStorageError()
 
   class RevisionError extends Error {}
 
@@ -88,15 +84,18 @@ async function fixture(schemaVersion = 2) {
     },
   }
   const module = new SourceTextModule(source)
-  await module.link(async (specifier) => {
+  await module.link((specifier) => {
     const values = modules[specifier]
     assert.ok(values, `Unexpected dependency ${specifier}`)
 
-    return new SyntheticModule(Object.keys(values), function () {
-      for (const [key, value] of Object.entries(values)) {
-        this.setExport(key, value)
-      }
-    })
+    return new SyntheticModule(
+      Object.keys(values),
+      function exposeFixtureExports() {
+        for (const [key, value] of Object.entries(values)) {
+          this.setExport(key, value)
+        }
+      },
+    )
   })
   await module.evaluate()
   const service = new module.namespace.CompositeStorageService({

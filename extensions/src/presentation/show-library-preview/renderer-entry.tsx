@@ -50,7 +50,8 @@ export function mountPreviewCandidate(
     let id = handleIds.get(handle)
 
     if (id === undefined) {
-      id = ++nextHandleId
+      nextHandleId += 1
+      id = nextHandleId
       handleIds.set(handle, id)
     }
 

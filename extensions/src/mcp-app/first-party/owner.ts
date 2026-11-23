@@ -15,6 +15,12 @@ import {
 } from "./bindings.ts"
 import { ToolError } from "../server/errors.ts"
 
+const noFollowFlag = () => {
+  const value: unknown = Reflect.get(constants, "O_NOFOLLOW")
+
+  return typeof value === "number" ? value : 0
+}
+
 const unavailable = () => new ToolError("DEPENDENCY_UNAVAILABLE")
 const missing = (error: unknown) =>
   error instanceof Error && "code" in error && error.code === "ENOENT"
@@ -31,7 +37,7 @@ export class OwnedStorePath {
   check(p: FirstPartySessionPrincipal) {
     this.auth.assertActive(p)
   }
-  private ancestry(target: string, createFrom?: string) {
+  private static ancestry(target: string, createFrom?: string) {
     const absolute = resolve(target)
     let current = parse(absolute).root
     for (const component of absolute
@@ -81,14 +87,19 @@ export class OwnedStorePath {
       throw unavailable()
     }
 
-    if (!this.ancestry(root)) {
+    if (!OwnedStorePath.ancestry(root)) {
       throw unavailable()
     }
 
     const owned = join(root, "tenants", p.accountId)
     const dir = join(owned, "extensions", "mcp-first-party")
 
-    if (!this.ancestry(dir, mutation ? join(root, "tenants") : undefined)) {
+    if (
+      !OwnedStorePath.ancestry(
+        dir,
+        mutation ? join(root, "tenants") : undefined,
+      )
+    ) {
       return undefined
     }
 
@@ -113,10 +124,7 @@ export class OwnedStorePath {
         throw unavailable()
       }
 
-      const fd = openSync(
-        file,
-        constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0),
-      )
+      const fd = openSync(file, constants.O_RDONLY | noFollowFlag())
 
       try {
         const actual = fstatSync(fd)

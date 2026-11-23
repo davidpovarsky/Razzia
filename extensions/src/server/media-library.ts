@@ -48,7 +48,7 @@ const sameBinary = (
   expected: BinarySnapshot | undefined,
   objectIdentity = true,
 ) =>
-  Boolean(expected) &&
+  expected !== undefined &&
   actual.sha256 === expected.sha256 &&
   actual.length === expected.length &&
   (!objectIdentity ||
@@ -420,8 +420,9 @@ export function executeMediaDeleteTransaction(
       )
 
       if (
-        copied.sha256 !== originalBinary!.sha256 ||
-        copied.length !== originalBinary!.length
+        !originalBinary ||
+        copied.sha256 !== originalBinary.sha256 ||
+        copied.length !== originalBinary.length
       ) {
         throw new Error("Quarantine does not match original binary")
       }
@@ -686,6 +687,15 @@ export function executeMediaDeleteTransaction(
 
     return allSucceeded
   }
+  function requireJournalShow(quizId: string) {
+    const record = journalShows.find((entry) => entry.quizId === quizId)
+
+    if (!record) {
+      throw new Error("Missing staged physical binding")
+    }
+
+    return record
+  }
   const detachedFromShows: string[] = []
 
   try {
@@ -715,16 +725,13 @@ export function executeMediaDeleteTransaction(
       if (fs.existsSync(show.filePath)) {
         publishPhysicalTarget(
           getPath,
-          journalShows.find((record) => record.quizId === show.id)!.bindings
-            .base,
+          requireJournalShow(show.id).bindings.base,
         )
       }
 
       if (detached.extras) {
         assertPhysicalGroup(getPath, physicalBindings)
-        const binding = journalShows.find(
-          (record) => record.quizId === show.id,
-        )!.bindings.sidecar
+        const binding = requireJournalShow(show.id).bindings.sidecar
 
         if (!binding.original) {
           publishPhysicalTarget(getPath, binding)

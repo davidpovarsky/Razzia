@@ -1,3 +1,4 @@
+import { promiseFrom } from "../shared/promise-operation.ts"
 import {
   McpServer,
   createMcpHandler,
@@ -60,8 +61,10 @@ export function createTadazzMcpServer(
   connection = guardedConnection(server, deps, config)
 
   return {
-    connect: requireGuardedConnection().connect,
-    close: requireGuardedConnection().close,
+    connect: (
+      ...args: Parameters<ReturnType<typeof guardedConnection>["connect"]>
+    ) => requireGuardedConnection().connect(...args),
+    close: () => requireGuardedConnection().close(),
   }
 }
 
@@ -172,20 +175,21 @@ function registeredServer(
           },
         },
       },
-      async () => ({
-        contents: [
-          {
-            uri: PREVIEW_RESOURCE,
-            mimeType: RESOURCE_MIME_TYPE,
-            text: previewResource.read(),
-            _meta: {
-              ui: {
-                csp: previewResource.csp,
+      () =>
+        promiseFrom(() => ({
+          contents: [
+            {
+              uri: PREVIEW_RESOURCE,
+              mimeType: RESOURCE_MIME_TYPE,
+              text: previewResource.read(),
+              _meta: {
+                ui: {
+                  csp: previewResource.csp,
+                },
               },
             },
-          },
-        ],
-      }),
+          ],
+        })),
     )
   }
 
@@ -216,34 +220,36 @@ function registeredServer(
     "tadazz-authoring-schema",
     "tadazz://authoring/v1/schema.json",
     { mimeType: "application/schema+json" },
-    async (uri) => ({
-      contents: [
-        {
-          uri: uri.href,
-          mimeType: "application/schema+json",
-          text: JSON.stringify({
-            ...z.toJSONSchema(tadaShowV1Schema, { unrepresentable: "any" }),
-            $id: "tadazz://authoring/v1/schema.json",
-            $comment:
-              "Generated from approved source8a43c99 tadaShowV1Schema. Source refinements and narrower MCP policy always execute; schema is guidance only. MVP: empty settings,50 cards,25 questions,32768 UTF8 bytes.",
-          }),
-        },
-      ],
-    }),
+    (uri) =>
+      promiseFrom(() => ({
+        contents: [
+          {
+            uri: uri.href,
+            mimeType: "application/schema+json",
+            text: JSON.stringify({
+              ...z.toJSONSchema(tadaShowV1Schema, { unrepresentable: "any" }),
+              $id: "tadazz://authoring/v1/schema.json",
+              $comment:
+                "Generated from approved source8a43c99 tadaShowV1Schema. Source refinements and narrower MCP policy always execute; schema is guidance only. MVP: empty settings,50 cards,25 questions,32768 UTF8 bytes.",
+            }),
+          },
+        ],
+      })),
   )
   server.registerResource(
     "tadazz-authoring-guide",
     "tadazz://authoring/v1/guide.md",
     { mimeType: "text/markdown" },
-    async (uri) => ({
-      contents: [
-        {
-          uri: uri.href,
-          mimeType: "text/markdown",
-          text: "# Tadazz authored-show v1\nUse format tada-show/version 1; unique stable card keys; 1-based answer indices; empty settings; no arbitrary media URLs or raw theme/audio overrides. Use apply_game_edit for bounded native theme/audio/background/picture edits and list_editing_assets for exact authorized asset references. Existing authored-schema refinements and preflight are authoritative. Preview is a demo with no live room. Durable account save/download and real preview adapters may be unavailable.\n",
-        },
-      ],
-    }),
+    (uri) =>
+      promiseFrom(() => ({
+        contents: [
+          {
+            uri: uri.href,
+            mimeType: "text/markdown",
+            text: "# Tadazz authored-show v1\nUse format tada-show/version 1; unique stable card keys; 1-based answer indices; empty settings; no arbitrary media URLs or raw theme/audio overrides. Use apply_game_edit for bounded native theme/audio/background/picture edits and list_editing_assets for exact authorized asset references. Existing authored-schema refinements and preflight are authoritative. Preview is a demo with no live room. Durable account save/download and real preview adapters may be unavailable.\n",
+          },
+        ],
+      })),
   )
 
   return server

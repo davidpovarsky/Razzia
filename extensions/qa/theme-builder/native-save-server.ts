@@ -187,7 +187,7 @@ app.post("/api/qa/oauth/native-save/approve", async (c) => {
     )
   }
 
-  record.approve++
+  record.approve += 1
 
   return c.json({
     contractVersion: "0.1.0",
@@ -263,7 +263,16 @@ app.get("*", (c) => {
     return c.notFound()
   }
 })
-const server = createServer(getRequestListener(app.fetch))
+const requestListener = getRequestListener(app.fetch)
+const server = createServer((request, response) => {
+  void requestListener(request, response).catch((error: unknown) => {
+    response.destroy(
+      error instanceof Error
+        ? error
+        : new Error("qa:request-failed", { cause: error }),
+    )
+  })
+})
 server.listen(0, "127.0.0.1", () => {
   const address = server.address()
 

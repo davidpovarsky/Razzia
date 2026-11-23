@@ -14,7 +14,17 @@ let ownerToken = ""
 let otherOwnerToken = ""
 let guestToken = ""
 
-function request(path: string, token: string, body: unknown, method = "POST") {
+function request({
+  path,
+  token,
+  body,
+  method = "POST",
+}: {
+  path: string
+  token: string
+  body: unknown
+  method?: string
+}) {
   return app.request(`/api${path}`, {
     method,
     headers: {
@@ -27,7 +37,11 @@ function request(path: string, token: string, body: unknown, method = "POST") {
 
 async function createRoom() {
   const { id: quizzId } = saveQuizz(createQuizz([createQuestion()]))
-  const response = await request("/games", ownerToken, { quizzId })
+  const response = await request({
+    path: "/games",
+    token: ownerToken,
+    body: { quizzId },
+  })
   expect(response.status).toBe(201)
 
   return (await response.json()) as { gameId: string; inviteCode: string }
@@ -60,23 +74,23 @@ describe("owner-controlled event-roster admission", () => {
     const before = game.getHostPresenceSnapshot()
 
     for (const token of ["", guestToken, otherOwnerToken]) {
-      const response = await request(
-        `/games/${gameId}/roster/settings`,
+      const response = await request({
+        path: `/games/${gameId}/roster/settings`,
         token,
-        { allowUnregisteredPlayers: false },
-        "PATCH",
-      )
+        body: { allowUnregisteredPlayers: false },
+        method: "PATCH",
+      })
       expect(response.status).toBeGreaterThanOrEqual(400)
       expect(response.status).toBeLessThan(500)
       expect(game.getHostPresenceSnapshot()).toEqual(before)
     }
 
-    const empty = await request(
-      `/games/${gameId}/roster/settings`,
-      ownerToken,
-      {},
-      "PATCH",
-    )
+    const empty = await request({
+      path: `/games/${gameId}/roster/settings`,
+      token: ownerToken,
+      body: {},
+      method: "PATCH",
+    })
     expect(empty.status).toBe(400)
     expect(game.getHostPresenceSnapshot()).toEqual(before)
   })
@@ -85,21 +99,21 @@ describe("owner-controlled event-roster admission", () => {
     const { gameId } = await createRoom()
     expect(
       (
-        await request(
-          `/games/${gameId}/roster/settings`,
-          ownerToken,
-          { phoneInviteOnly: true },
-          "PATCH",
-        )
+        await request({
+          path: `/games/${gameId}/roster/settings`,
+          token: ownerToken,
+          body: { phoneInviteOnly: true },
+          method: "PATCH",
+        })
       ).status,
     ).toBe(200)
 
-    const enabled = await request(
-      `/games/${gameId}/roster/settings`,
-      ownerToken,
-      { allowUnregisteredPlayers: true, phoneInviteOnly: true },
-      "PATCH",
-    )
+    const enabled = await request({
+      path: `/games/${gameId}/roster/settings`,
+      token: ownerToken,
+      body: { allowUnregisteredPlayers: true, phoneInviteOnly: true },
+      method: "PATCH",
+    })
     expect(enabled.status).toBe(200)
     expect(await enabled.json()).toMatchObject({
       presence: {
@@ -116,26 +130,37 @@ describe("owner-controlled event-roster admission", () => {
 
   it("keeps the entry screen available but denies new guests and stale tickets", async () => {
     const { gameId, inviteCode } = await createRoom()
-    const issued = await request("/games/join", guestToken, {
-      inviteCode,
-      username: "Guest",
+    const issued = await request({
+      path: "/games/join",
+      token: guestToken,
+      body: {
+        inviteCode,
+        username: "Guest",
+      },
     })
     expect(issued.status).toBe(200)
     const { ticket } = (await issued.json()) as { ticket: string }
     const claims = await verifyJoinTicket(ticket)
 
-    const closed = await request(
-      `/games/${gameId}/roster/settings`,
-      ownerToken,
-      { allowUnregisteredPlayers: false },
-      "PATCH",
-    )
+    const closed = await request({
+      path: `/games/${gameId}/roster/settings`,
+      token: ownerToken,
+      body: { allowUnregisteredPlayers: false },
+      method: "PATCH",
+    })
     expect(closed.status).toBe(200)
 
-    expect((await request("/games/check", "", { inviteCode })).status).toBe(200)
-    const rejected = await request("/games/join", guestToken, {
-      inviteCode,
-      username: "Guest",
+    expect(
+      (await request({ path: "/games/check", token: "", body: { inviteCode } }))
+        .status,
+    ).toBe(200)
+    const rejected = await request({
+      path: "/games/join",
+      token: guestToken,
+      body: {
+        inviteCode,
+        username: "Guest",
+      },
     })
     expect(rejected.status).toBe(403)
     expect(await rejected.json()).toMatchObject({ reason: "roster_only" })
@@ -150,16 +175,24 @@ describe("owner-controlled event-roster admission", () => {
     ).toBe("errors:game.locked")
     expect(game.players).toHaveLength(0)
 
-    const registered = await request(`/games/${gameId}/roster`, ownerToken, {
-      displayName: "Registered",
+    const registered = await request({
+      path: `/games/${gameId}/roster`,
+      token: ownerToken,
+      body: {
+        displayName: "Registered",
+      },
     })
     expect(registered.status).toBe(200)
     const registeredToken = (
       await mintToken("registered", SESSION_ROLES.PLAYER)
     ).token
-    const admitted = await request("/games/join", registeredToken, {
-      inviteCode,
-      username: "Registered",
+    const admitted = await request({
+      path: "/games/join",
+      token: registeredToken,
+      body: {
+        inviteCode,
+        username: "Registered",
+      },
     })
     expect(admitted.status).toBe(200)
     const registeredClaims = await verifyJoinTicket(

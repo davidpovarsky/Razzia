@@ -160,7 +160,7 @@ export const demoClockSnapshotSchema = z.strictObject({
   epoch: z.number().int().nonnegative(),
   sequence: z.number().int().nonnegative(),
   elapsedMs: z.number().min(0).max(86400000),
-  deadlineMs: z.number().finite().nullable(),
+  deadlineMs: z.number().nullable(),
   paused: z.boolean(),
 })
 
@@ -182,7 +182,7 @@ export const demoIntentSchema = z.discriminatedUnion("type", [
   z.strictObject({
     type: z.literal("submit-estimation"),
     questionId: identifierSchema,
-    value: z.number().finite(),
+    value: z.number(),
   }),
 ])
 

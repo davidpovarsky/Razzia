@@ -44,10 +44,12 @@ export function parseCanonicalCompiledIndex<T>(
  */
 
 export function diagnoseCompiledArtifactBytes(
-  artifactInput: unknown,
-  resourceInput: unknown,
-  evidence: ReadonlyMap<string, Uint8Array>,
-  descriptorInput?: unknown,
+  ...[artifactInput, resourceInput, evidence, descriptorInput]: [
+    artifactInput: unknown,
+    resourceInput: unknown,
+    evidence: ReadonlyMap<string, Uint8Array>,
+    descriptorInput?: unknown,
+  ]
 ) {
   const artifact = rendererArtifactIndexV2Schema.parse(artifactInput)
   const resources = nativeResourceIndexV2Schema.parse(resourceInput)
@@ -55,10 +57,16 @@ export function diagnoseCompiledArtifactBytes(
   let entries: IterableIterator<[unknown, unknown]> | undefined = undefined
 
   try {
-    const size = Object.getOwnPropertyDescriptor(
+    const sizeDescriptor = Object.getOwnPropertyDescriptor(
       Map.prototype,
       "size",
-    )!.get!.call(evidence) as number
+    )
+
+    if (!sizeDescriptor?.get) {
+      throw new Error("map-size-unavailable")
+    }
+
+    const size = sizeDescriptor.get.call(evidence) as number
 
     if (size > 256) {
       throw new Error("budget")

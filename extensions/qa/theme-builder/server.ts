@@ -162,7 +162,7 @@ app.post("/api/qa/oauth/approve", async (c) => {
     return c.json({ error: "invalid" }, 400)
   }
 
-  record.approve++
+  record.approve += 1
 
   return c.json({
     grantId: "synthetic-ui-only-grant",
@@ -228,7 +228,16 @@ app.get("*", (c) => {
     return c.notFound()
   }
 })
-const server = createServer(getRequestListener(app.fetch))
+const requestListener = getRequestListener(app.fetch)
+const server = createServer((request, response) => {
+  void requestListener(request, response).catch((error: unknown) => {
+    response.destroy(
+      error instanceof Error
+        ? error
+        : new Error("qa:request-failed", { cause: error }),
+    )
+  })
+})
 server.listen(0, "127.0.0.1", () => {
   const address = server.address()
 

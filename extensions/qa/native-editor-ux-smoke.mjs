@@ -85,7 +85,7 @@ async function closePanel(id, escape = false) {
   await expect(panel(id)).toBeHidden()
   await expect(toggle(id)).toBeFocused()
 }
-async function measure(label, width, height, aspect) {
+async function measure({ label, width, height, aspect }) {
   await settle()
   const value = await page.evaluate(() => {
     const rect = (selector) => {
@@ -218,7 +218,12 @@ try {
         await expect(
           page.getByTestId("editor-preview-viewport"),
         ).toHaveAttribute("data-preview-aspect", aspect)
-        await measure("question", width, height, aspect)
+        await measure({
+          label: "question",
+          width,
+          height,
+          aspect,
+        })
 
         if (width === 320 || width === 390) {
           const toolbar = await page
@@ -426,7 +431,12 @@ try {
       }
 
       await expect(page.getByTestId("studio-scene-preview-stage")).toBeVisible()
-      await measure("opening-scene", 390, 844, "16:9")
+      await measure({
+        label: "opening-scene",
+        width: 390,
+        height: 844,
+        aspect: "16:9",
+      })
       await shot("opening-scene-390x844")
     },
   )
@@ -604,7 +614,12 @@ try {
         timeout: 30000,
       })
       await page.setViewportSize({ width: 320, height: 640 })
-      await measure("rtl-question", 320, 640, "16:9")
+      await measure({
+        label: "rtl-question",
+        width: 320,
+        height: 640,
+        aspect: "16:9",
+      })
       await shot("rtl-question-320x640")
       await openPanel("edit")
       await closePanel("edit", true)

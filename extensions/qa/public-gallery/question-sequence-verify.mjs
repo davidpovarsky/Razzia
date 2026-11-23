@@ -349,7 +349,7 @@ export async function watchQuestionSequence(root, options = {}) {
               !current.animations.has(animation) &&
               animation.playState === "running"
             ) {
-              current.newQuestionAnimations++
+              current.newQuestionAnimations += 1
             }
 
             current.animations.add(animation)
@@ -448,7 +448,7 @@ export async function watchQuestionSequence(root, options = {}) {
             current.resultsAt = now
           }
 
-          current.resultsFrames++
+          current.resultsFrames += 1
         }
 
         if (
@@ -474,7 +474,7 @@ export async function watchQuestionSequence(root, options = {}) {
         (phase !== "results" || current.resultsFrames <= 4)
       ) {
         const evidence = current.diagnostic
-        evidence.observedFrameCount++
+        evidence.observedFrameCount += 1
         evidence.largestRafGapMs = Math.max(
           evidence.largestRafGapMs,
           diagnosticFrame.gap ?? 0,

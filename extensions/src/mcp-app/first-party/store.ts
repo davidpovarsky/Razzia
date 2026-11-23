@@ -174,13 +174,19 @@ export class FirstPartyDraftStore {
       db?.close()
     }
   }
-  private mutate<T extends Outcome>(
-    p: FirstPartySessionPrincipal,
-    kind: Kind,
-    key: string,
-    request: unknown,
-    run: (db: DatabaseSync) => T,
-  ): T {
+  private mutate<T extends Outcome>({
+    p,
+    kind,
+    key,
+    request,
+    run,
+  }: {
+    p: FirstPartySessionPrincipal
+    kind: Kind
+    key: string
+    request: unknown
+    run: (db: DatabaseSync) => T
+  }): T {
     this.auth.assertActive(p)
     const inputDigest = hashJson(request)
     let db: DatabaseSync | undefined = undefined
@@ -282,31 +288,37 @@ export class FirstPartyDraftStore {
     const input = parsed.data
     const normalized = normalizeDraft(input.authoredShowJson, this.policy)
 
-    return this.mutate(p, "create", input.idempotencyKey, input, (db) => {
-      const count = db.prepare("SELECT count(*) AS n FROM drafts").get()
+    return this.mutate({
+      p,
+      kind: "create",
+      key: input.idempotencyKey,
+      request: input,
+      run: (db) => {
+        const count = db.prepare("SELECT count(*) AS n FROM drafts").get()
 
-      if (typeof count?.n !== "number" || count.n >= limits.drafts) {
-        throw new ToolError("QUOTA_EXCEEDED")
-      }
+        if (typeof count?.n !== "number" || count.n >= limits.drafts) {
+          throw new ToolError("QUOTA_EXCEEDED")
+        }
 
-      const result = this.checked({
-        ...normalized,
-        draftId: randomBytes(18).toString("base64url"),
-        revision: 1,
-        ...(input.locale ? { locale: input.locale } : {}),
-      })
-      db.prepare(
-        "INSERT INTO drafts(id,owner,revision,authored,summary,locale) VALUES(?,?,?,?,?,?)",
-      ).run(
-        result.draftId,
-        p.accountId,
-        result.revision,
-        result.authoredShowJson,
-        canonicalJson(result.summary),
-        result.locale ?? null,
-      )
+        const result = this.checked({
+          ...normalized,
+          draftId: randomBytes(18).toString("base64url"),
+          revision: 1,
+          ...(input.locale ? { locale: input.locale } : {}),
+        })
+        db.prepare(
+          "INSERT INTO drafts(id,owner,revision,authored,summary,locale) VALUES(?,?,?,?,?,?)",
+        ).run(
+          result.draftId,
+          p.accountId,
+          result.revision,
+          result.authoredShowJson,
+          canonicalJson(result.summary),
+          result.locale ?? null,
+        )
 
-      return result
+        return result
+      },
     })
   }
   replace(p: FirstPartySessionPrincipal, raw: Replace): DraftRecord {
@@ -320,46 +332,52 @@ export class FirstPartyDraftStore {
     const input = parsed.data
     const normalized = normalizeDraft(input.authoredShowJson, this.policy)
 
-    return this.mutate(p, "replace", input.idempotencyKey, input, (db) => {
-      const current = this.row(db, p, input.draftId)
+    return this.mutate({
+      p,
+      kind: "replace",
+      key: input.idempotencyKey,
+      request: input,
+      run: (db) => {
+        const current = this.row(db, p, input.draftId)
 
-      if (current.revision !== input.expectedRevision) {
-        throw new ToolError("REVISION_CONFLICT", {
-          currentRevision: current.revision,
-        })
-      }
+        if (current.revision !== input.expectedRevision) {
+          throw new ToolError("REVISION_CONFLICT", {
+            currentRevision: current.revision,
+          })
+        }
 
-      const preserved = normalizeStoredDraft(
-        preserveSemanticState(
-          current.authoredShowJson,
-          normalized.authoredShowJson,
+        const preserved = normalizeStoredDraft(
+          preserveSemanticState(
+            current.authoredShowJson,
+            normalized.authoredShowJson,
+            this.policy,
+          ),
           this.policy,
-        ),
-        this.policy,
-      )
-      const result = this.checked({
-        ...current,
-        ...preserved,
-        revision: current.revision + 1,
-      })
-      const changed = db
-        .prepare(
-          "UPDATE drafts SET revision=?,authored=?,summary=? WHERE owner=? AND id=? AND revision=?",
         )
-        .run(
-          result.revision,
-          result.authoredShowJson,
-          canonicalJson(result.summary),
-          p.accountId,
-          input.draftId,
-          input.expectedRevision,
-        )
+        const result = this.checked({
+          ...current,
+          ...preserved,
+          revision: current.revision + 1,
+        })
+        const changed = db
+          .prepare(
+            "UPDATE drafts SET revision=?,authored=?,summary=? WHERE owner=? AND id=? AND revision=?",
+          )
+          .run(
+            result.revision,
+            result.authoredShowJson,
+            canonicalJson(result.summary),
+            p.accountId,
+            input.draftId,
+            input.expectedRevision,
+          )
 
-      if (changed.changes !== 1) {
-        throw new ToolError("REVISION_CONFLICT")
-      }
+        if (changed.changes !== 1) {
+          throw new ToolError("REVISION_CONFLICT")
+        }
 
-      return result
+        return result
+      },
     })
   }
   prepareSave(p: FirstPartySessionPrincipal, raw: Prepare): PendingSaveIntent {
@@ -372,21 +390,27 @@ export class FirstPartyDraftStore {
 
     const input = parsed.data
 
-    return this.mutate(p, "prepare-save", input.idempotencyKey, input, (db) => {
-      const current = this.row(db, p, input.draftId)
+    return this.mutate({
+      p,
+      kind: "prepare-save",
+      key: input.idempotencyKey,
+      request: input,
+      run: (db) => {
+        const current = this.row(db, p, input.draftId)
 
-      if (current.revision !== input.expectedRevision) {
-        throw new ToolError("REVISION_CONFLICT", {
-          currentRevision: current.revision,
+        if (current.revision !== input.expectedRevision) {
+          throw new ToolError("REVISION_CONFLICT", {
+            currentRevision: current.revision,
+          })
+        }
+
+        return pending.parse({
+          state: "PENDING_C1",
+          draftId: current.draftId,
+          revision: current.revision,
+          authoredDigest: hashJson(JSON.parse(current.authoredShowJson)),
         })
-      }
-
-      return pending.parse({
-        state: "PENDING_C1",
-        draftId: current.draftId,
-        revision: current.revision,
-        authoredDigest: hashJson(JSON.parse(current.authoredShowJson)),
-      })
+      },
     })
   }
 }

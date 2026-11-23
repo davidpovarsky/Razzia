@@ -20,7 +20,7 @@ async function scene(page, name, key) {
 
   await page.locator(selector).waitFor({ timeout: 30000 })
 }
-async function results(page, key, choice, kind) {
+async function results({ page, key, choice, kind }) {
   await page.getByTestId(`tadazz-card-${choice}`).click()
   await scene(page, "survey-results", key)
   await page.locator('[data-ggo-phase="results"]').waitFor({ timeout: 30000 })
@@ -104,29 +104,34 @@ try {
       .length,
   }))
   assert.deepEqual(textGrid, { columns: 2, rows: 2 })
-  await results(page, "family-fun", 0, "survey")
+  await results({ page, key: "family-fun", choice: 0, kind: "survey" })
   await page.screenshot({
     path: resolve("qa/phase2/ggo-one-survey-reveal.png"),
     fullPage: true,
   })
   await next(page)
   await scene(page, "countdown", "picture-trivia")
-  await results(page, "picture-trivia", 0, "quiz")
+  await results({ page, key: "picture-trivia", choice: 0, kind: "quiz" })
   await page.screenshot({
     path: resolve("qa/phase2/ggo-one-trivia-reveal.png"),
     fullPage: true,
   })
   await next(page)
   await scene(page, "countdown", "at-work")
-  await results(page, "at-work", 1, "survey")
+  await results({ page, key: "at-work", choice: 1, kind: "survey" })
   await next(page)
   await scene(page, "leaderboard")
   await next(page)
   await scene(page, "countdown", "quick-trivia")
-  await results(page, "quick-trivia", 2, "quiz")
+  await results({ page, key: "quick-trivia", choice: 2, kind: "quiz" })
   await next(page)
   await scene(page, "countdown", "party-personality")
-  await results(page, "party-personality", 3, "survey")
+  await results({
+    page,
+    key: "party-personality",
+    choice: 3,
+    kind: "survey",
+  })
   await next(page)
   await page.getByTestId("tadazz-finale-screen").waitFor({ timeout: 30000 })
   await page.locator('[data-ggo-phase="winner"]').waitFor({ timeout: 30000 })
@@ -157,7 +162,7 @@ try {
   )
   const trace = await page
     .getByTestId("tadazz-stage")
-    .evaluate((el) => window.ggoTrace || [])
+    .evaluate(() => window.ggoTrace || [])
   assert.equal(
     trace.filter((x) => x === "leaderboard").length,
     1,
@@ -200,7 +205,7 @@ try {
   await mobile.locator(".full-opening-logo").waitFor()
   await mobile.getByTestId("ggo-main-action").click()
   await scene(mobile, "countdown", "family-fun")
-  await results(mobile, "family-fun", 0, "survey")
+  await results({ page: mobile, key: "family-fun", choice: 0, kind: "survey" })
   assert.deepEqual(
     errors.filter((e) => e !== "errors:auth.sessionFailed"),
     [],

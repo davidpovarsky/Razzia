@@ -66,8 +66,14 @@ export function PackageApplicationPreviewStage({
     () => compileFullShowPreviewTimeline(frame.show),
     [frame.show],
   )
-  const chapter = chapters[frame.chapterIndex]
-  const card = chapter ? frame.show.cards[chapter.cardIndex] : undefined
+  const chapter =
+    Number.isSafeInteger(frame.chapterIndex) && frame.chapterIndex >= 0
+      ? chapters.at(frame.chapterIndex)
+      : undefined
+  const card =
+    chapter && Number.isSafeInteger(chapter.cardIndex) && chapter.cardIndex >= 0
+      ? frame.show.cards.at(chapter.cardIndex)
+      : undefined
   const phase =
     frame.stagePhase ??
     applicationChapterPhase(chapter?.phase ?? "question", frame.role)
@@ -192,7 +198,8 @@ export function PackageApplicationPreviewStage({
             typeof reader.result === "string"
               ? resolve(reader.result)
               : reject(new Error("Preview image invalid"))
-          reader.onerror = () => reject(reader.error)
+          reader.onerror = () =>
+            reject(reader.error ?? new Error("Preview image read failed"))
           reader.readAsDataURL(new Blob([bytes], { type: mime }))
         })
 

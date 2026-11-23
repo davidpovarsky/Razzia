@@ -142,7 +142,7 @@ export function observeQuestionPresentation(
       root.querySelectorAll(
         '[data-native-question-heading], [data-testid="native-razzia-question"], .q-text, .photo-question-head',
       ),
-    ).filter((heading) => Boolean(heading.textContent?.trim()))
+    ).filter((heading) => Boolean(heading.textContent.trim()))
 
     // A visible panel must never bypass a nonempty title's opacity-zero entrance.
     if (headings.length > 0) {

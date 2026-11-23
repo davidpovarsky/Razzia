@@ -1,3 +1,4 @@
+import { promiseFrom } from "../../shared/promise-operation.ts"
 import assert from "node:assert/strict"
 import { before, after, test } from "node:test"
 import { generateKeyPairSync, randomBytes, createHash } from "node:crypto"
@@ -133,9 +134,10 @@ before(async () => {
     config,
     configRoot: requireInitializedF().root,
     keyId: "synthetic-preview-key",
-    signingPrivateKeyPem: pair.privateKey
-      .export({ type: "pkcs8", format: "pem" })
-      .toString(),
+    signingPrivateKeyPem: pair.privateKey.export({
+      type: "pkcs8",
+      format: "pem",
+    }),
     ticketEncryptionKey: randomBytes(32),
     consentPageUrl: `${origin}/studio/oauth-consent`,
     clients: [
@@ -187,58 +189,58 @@ before(async () => {
               cards: [],
             },
           ),
-          async project(prepared) {
-            const card = requirePreviewPresent(
-              prepared.draft.show.cards.find(
-                (c) => c.kind === "quiz" || c.kind === "survey",
-              ),
-            )
+          project(prepared) {
+            return promiseFrom(() => {
+              const card = requirePreviewPresent(
+                prepared.draft.show.cards.find(
+                  (c) => c.kind === "quiz" || c.kind === "survey",
+                ),
+              )
 
-            if (card.kind !== "quiz" && card.kind !== "survey") {
-              throw Error("fixture card")
-            }
+              assert.ok(["quiz", "survey"].includes(card.kind), "fixture card")
 
-            const id = getPreviewIdentityId(
-              prepared.draft.input.identityMap,
-              "questions",
-              card.key,
-            )
-            const clock = {
-              epoch: 1,
-              sequence: 1,
-              elapsedMs: 5000,
-              deadlineMs: 20000,
-              paused: true,
-            }
+              const id = getPreviewIdentityId(
+                prepared.draft.input.identityMap,
+                "questions",
+                card.key,
+              )
+              const clock = {
+                epoch: 1,
+                sequence: 1,
+                elapsedMs: 5000,
+                deadlineMs: 20000,
+                paused: true,
+              }
 
-            return {
-              binding: {
-                draft: prepared.draft,
-                plan: prepared.plan,
-                currentQuestionId: id,
-                phase: "voting",
-                clock,
-              },
-              snapshot: {
-                portVersion: 3,
-                identityRuleVersion: 2,
-                source: "deterministic-fixture",
-                phase: "voting",
-                clock,
-                canAnswer: false,
-                question: {
-                  id,
-                  text: foreign ? "Foreign question" : card.question,
-                  questionType: card.questionType,
-                  playMode: card.kind,
-                  choices: card.answers.map((a, i) => ({
-                    id: `${id}.choice.${i + 1}`,
-                    label: a.text,
-                  })),
-                  solutionAnswerIds: [],
+              return {
+                binding: {
+                  draft: prepared.draft,
+                  plan: prepared.plan,
+                  currentQuestionId: id,
+                  phase: "voting",
+                  clock,
                 },
-              },
-            }
+                snapshot: {
+                  portVersion: 3,
+                  identityRuleVersion: 2,
+                  source: "deterministic-fixture",
+                  phase: "voting",
+                  clock,
+                  canAnswer: false,
+                  question: {
+                    id,
+                    text: foreign ? "Foreign question" : card.question,
+                    questionType: card.questionType,
+                    playMode: card.kind,
+                    choices: card.answers.map((a, i) => ({
+                      id: `${id}.choice.${i + 1}`,
+                      label: a.text,
+                    })),
+                    solutionAnswerIds: [],
+                  },
+                },
+              }
+            })
           },
         }
       },

@@ -1,8 +1,11 @@
 // Synthetic signed native session + exact F DTO component checks. This is not
 // the actual B/F native-save consumer, root route/login or development replay.
-import playwright from "../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
-import type * as Playwright from "../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
-const { test, expect } = playwright as unknown as typeof Playwright
+import playwright, {
+  type APIRequestContext,
+  type Page,
+} from "../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
+const { test, expect } =
+  playwright as unknown as typeof import("../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js")
 
 declare global {
   interface Window {
@@ -39,16 +42,21 @@ const id = (prefix = "P") =>
     .slice(0, 54)
 const path = (requestId: string) => `/studio/native-save-consent/${requestId}`
 const stats = async (
-  request: Playwright.APIRequestContext,
+  request: APIRequestContext,
   requestId: string,
 ): Promise<unknown> =>
   (await request.get(`/qa/native-save/stats?id=${requestId}`)).json()
-const open = async (
-  page: Playwright.Page,
-  requestId: string,
+const open = async ({
+  page,
+  requestId,
   locale = "en",
   suffix = "",
-) => {
+}: {
+  page: Page
+  requestId: string
+  locale?: string
+  suffix?: string
+}) => {
   await page.addInitScript(
     (value) => sessionStorage.setItem("qa.native-save.locale", value),
     locale,
@@ -126,7 +134,7 @@ for (const [locale, title, approve, cancel] of [
     request,
   }, info) => {
     const requestId = id()
-    await open(page, requestId, locale)
+    await open({ page, requestId, locale })
     await expect(
       page.getByRole("heading", { name: title, exact: true }),
     ).toBeVisible()
@@ -182,7 +190,7 @@ test("only a trusted native click records one exact-revision approval and never 
       operations.push(new URL(observedRequest.url()).pathname)
     }
   })
-  await open(page, requestId)
+  await open({ page, requestId })
   const button = page.getByRole("button", {
     name: "Approve this revision",
     exact: true,
@@ -207,7 +215,7 @@ test("cancel discards the inspected proof without submitting approval", async ({
   request,
 }) => {
   const requestId = id()
-  await open(page, requestId)
+  await open({ page, requestId })
   await expect(
     page.getByRole("button", { name: "Approve this revision", exact: true }),
   ).toBeEnabled()
@@ -247,7 +255,7 @@ test("cancel during inspection rejects its late result", async ({
     await held
     await route.fulfill({ response }).catch(() => undefined)
   })
-  await open(page, requestId)
+  await open({ page, requestId })
   await inspected
   await page.getByRole("button", { name: "Cancel", exact: true }).click()
   release()
@@ -261,7 +269,7 @@ test("real cross-tab session replacement clears the private snapshot and approva
   request,
 }) => {
   const requestId = id()
-  await open(page, requestId)
+  await open({ page, requestId })
   await expect(
     page.getByRole("button", { name: "Approve this revision", exact: true }),
   ).toBeEnabled()
@@ -290,7 +298,7 @@ test("pending consent expires without an approval call", async ({
 }) => {
   const requestId = id()
   await page.clock.install()
-  await open(page, requestId)
+  await open({ page, requestId })
   await expect(
     page.getByRole("button", { name: "Approve this revision", exact: true }),
   ).toBeEnabled()
@@ -307,7 +315,7 @@ test("approved/publishing/saved/expired are read-only statuses, never a new appr
 }) => {
   for (const prefix of ["A", "B", "S", "E"]) {
     const requestId = id(prefix)
-    await open(page, requestId)
+    await open({ page, requestId })
     await expect(page.getByTestId("native-save-client")).toHaveText(
       "synthetic-native-save-client",
     )
@@ -322,7 +330,12 @@ test("query/hash input and missing real HEAD no-store policy fail closed", async
   request,
 }) => {
   const requestId = id()
-  await open(page, requestId, "en", "?anything=forbidden")
+  await open({
+    page,
+    requestId,
+    locale: "en",
+    suffix: "?anything=forbidden",
+  })
   await expect(page.getByRole("alert")).toHaveText(
     "Save approval is unavailable on this page.",
   )
@@ -338,7 +351,7 @@ test("query/hash input and missing real HEAD no-store policy fail closed", async
         })
       : route.continue(),
   )
-  await open(page, requestId)
+  await open({ page, requestId })
   await expect(page.getByRole("alert")).toHaveText(
     "This revision could not be approved. Reopen the save request.",
   )

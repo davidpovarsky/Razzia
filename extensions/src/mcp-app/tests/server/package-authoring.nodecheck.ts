@@ -1,3 +1,4 @@
+import { promiseFrom } from "../../shared/promise-operation.ts"
 import assert from "node:assert/strict"
 import test from "node:test"
 import {
@@ -95,14 +96,16 @@ test("package capability results retain actual disabled native features", async 
   let calls = 0
   const h = await harness({
     packages: {
-      async call(p, name, input) {
-        calls += 1
+      call(p, name, input) {
+        return promiseFrom(() => {
+          calls += 1
 
-        assert.equal(p.accountId, h.account.accountId)
-        assert.equal(name, "get_authoring_capabilities")
-        assert.deepEqual(input, { contractVersion: "0.1.0" })
+          assert.equal(p.accountId, h.account.accountId)
+          assert.equal(name, "get_authoring_capabilities")
+          assert.deepEqual(input, { contractVersion: "0.1.0" })
 
-        return { data: capabilities }
+          return { data: capabilities }
+        })
       },
     },
   })
@@ -251,19 +254,21 @@ test("maximum valid chunk delegates exact bytes and idempotency once, without li
   let calls = 0
   const h = await harness({
     packages: {
-      async call(_p, name, input) {
-        calls += 1
+      call(_p, name, input) {
+        return promiseFrom(() => {
+          calls += 1
 
-        assert.equal(name, "write_package_upload_chunk")
-        assert.deepEqual(input, { contractVersion: "0.1.0", ...sent })
+          assert.equal(name, "write_package_upload_chunk")
+          assert.deepEqual(input, { contractVersion: "0.1.0", ...sent })
 
-        return {
-          data: {
-            transferId: sent.transferId,
-            receivedBytes: 48_000,
-            complete: false,
-          },
-        }
+          return {
+            data: {
+              transferId: sent.transferId,
+              receivedBytes: 48_000,
+              complete: false,
+            },
+          }
+        })
       },
     },
   })
@@ -315,8 +320,8 @@ test("package preview is exact-revision and validates its first-party destinatio
   ]) {
     const h = await harness({
       packages: {
-        async call() {
-          return {
+        call() {
+          return promiseFrom(() => ({
             data: {
               uploadId,
               revision: 2,
@@ -324,7 +329,7 @@ test("package preview is exact-revision and validates its first-party destinatio
               previewUrl: `https://studio.example.invalid/studio/package-preview/${uploadId}`,
               ...override,
             },
-          }
+          }))
         },
       },
     })
@@ -351,32 +356,34 @@ test("native build may advance revision while preview and installation retain th
   const consentRequestId = newKey()
   const names: string[] = []
   const port: PackageAuthoringPort = {
-    async call(_p, name) {
-      names.push(name)
+    call(_p, name) {
+      return promiseFrom(() => {
+        names.push(name)
 
-      if (name === "build_package") {
-        return { data: status(uploadId) }
-      }
-
-      if (name === "preview_package") {
-        return {
-          data: {
-            uploadId,
-            revision: 2,
-            gameId: "bms-game",
-            previewUrl: `https://studio.example.invalid/studio/package-preview/${uploadId}`,
-          },
+        if (name === "build_package") {
+          return { data: status(uploadId) }
         }
-      }
 
-      if (name === "install_package") {
-        throw new ToolError("CONSENT_REQUIRED", {
-          consentRequestId,
-          consentUrl: `${config.firstPartyOrigins[0]}/studio/package-save-consent/${consentRequestId}`,
-        })
-      }
+        if (name === "preview_package") {
+          return {
+            data: {
+              uploadId,
+              revision: 2,
+              gameId: "bms-game",
+              previewUrl: `https://studio.example.invalid/studio/package-preview/${uploadId}`,
+            },
+          }
+        }
 
-      throw new Error("Unexpected package operation")
+        if (name === "install_package") {
+          throw new ToolError("CONSENT_REQUIRED", {
+            consentRequestId,
+            consentUrl: `${config.firstPartyOrigins[0]}/studio/package-save-consent/${consentRequestId}`,
+          })
+        }
+
+        throw new Error("Unexpected package operation")
+      })
     },
   }
   const h = await harness({ packages: port })
@@ -411,7 +418,8 @@ test("native build may advance revision while preview and installation retain th
     })
     assert.equal(code(install), "CONSENT_REQUIRED")
     const visible = install.content.find((item) => item.type === "text")
-    assert(visible?.type === "text")
+    assert(visible)
+    assert.equal(visible.type, "text")
     assert.deepEqual(JSON.parse(visible.text), {
       ok: false,
       code: "CONSENT_REQUIRED",
@@ -433,10 +441,12 @@ test("package consent text exposes only its exact package-save route", async () 
   const consentRequestId = newKey()
   const h = await harness({
     packages: {
-      async call() {
-        throw new ToolError("CONSENT_REQUIRED", {
-          consentRequestId,
-          consentUrl: `${config.firstPartyOrigins[0]}/studio/native-save-consent/${consentRequestId}`,
+      call() {
+        return promiseFrom(() => {
+          throw new ToolError("CONSENT_REQUIRED", {
+            consentRequestId,
+            consentUrl: `${config.firstPartyOrigins[0]}/studio/native-save-consent/${consentRequestId}`,
+          })
         })
       },
     },
@@ -445,7 +455,8 @@ test("package consent text exposes only its exact package-save route", async () 
   try {
     const result = await h.call("install_package", args("install_package"))
     const visible = result.content.find((item) => item.type === "text")
-    assert(visible?.type === "text")
+    assert(visible)
+    assert.equal(visible.type, "text")
     assert.deepEqual(JSON.parse(visible.text), {
       ok: false,
       code: "CONSENT_REQUIRED",

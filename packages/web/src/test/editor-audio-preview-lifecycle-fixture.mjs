@@ -20,7 +20,7 @@ class ControlledAudio {
     audios.push(this)
   }
   play() {
-    this.playCalls++
+    this.playCalls += 1
     this.paused = false
 
     return new Promise((resolve, reject) => {
@@ -29,7 +29,7 @@ class ControlledAudio {
     })
   }
   pause() {
-    this.pauseCalls++
+    this.pauseCalls += 1
     this.paused = true
   }
 }

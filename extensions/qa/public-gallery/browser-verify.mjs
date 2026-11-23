@@ -304,7 +304,13 @@ const chooseNative = async (page, index) => {
 
 // Inspect the real native answer pad while voting is open. Capturing only this
 // stable element avoids spending the short voting window decoding the whole page.
-const verifyActiveMobileQuestion = async (page, question, id, mode, index) => {
+const verifyActiveMobileQuestion = async ({
+  page,
+  question,
+  id,
+  mode,
+  index,
+}) => {
   const companion = page.getByTestId("catalogue-mobile-question")
   const heading = companion.getByTestId("catalogue-mobile-question-heading")
   const frame = page.getByTestId(
@@ -637,7 +643,12 @@ try {
       await page.keyboard.press("ArrowRight")
       await expect(slider).toHaveValue("2")
       await readyPreview(page, 2, firstQuestion.question)
-      await verifyNativePalette(page, game.themeId, "preview", evidence)
+      await verifyNativePalette({
+        page,
+        themeId: game.themeId,
+        context: "preview",
+        evidence,
+      })
       await page.keyboard.press("Home")
       await expect(slider).toHaveValue("0")
       await readyPreview(page, 0)
@@ -730,13 +741,13 @@ try {
             ).not.toHaveAttribute("aria-hidden", "true")
 
             if (votingRounds === 0) {
-              await verifyNativePalette(
+              await verifyNativePalette({
                 page,
-                "tadazz-classic",
-                "solo",
+                themeId: "tadazz-classic",
+                context: "solo",
                 evidence,
-                false,
-              )
+                captureScreenshot: false,
+              })
             }
 
             const unanswered = votingRounds < 2
@@ -831,7 +842,12 @@ try {
           questionSequences.push(await readQuestionSequence(gameRoot, index))
 
           if (index === 0) {
-            await verifyNativePalette(page, game.themeId, "solo", evidence)
+            await verifyNativePalette({
+              page,
+              themeId: game.themeId,
+              context: "solo",
+              evidence,
+            })
             await imageDecode(page)
             await screenshot(page, `play-${game.id}`)
           }
@@ -857,7 +873,7 @@ try {
     })
   }
 
-  for (const mode of ["mobile", "hebrew"]) {
+  async function verifyResponsiveMode(mode) {
     await attempt(`responsive-${mode}`, async () => {
       const responsiveContext = await browser.newContext({
         viewport: { width: 390, height: 844 },
@@ -929,13 +945,13 @@ try {
               await expect(gameRoot).toHaveAttribute(phaseAttribute, "voting", {
                 timeout: 30_000,
               })
-              const metrics = await verifyActiveMobileQuestion(
-                responsivePage,
+              const metrics = await verifyActiveMobileQuestion({
+                page: responsivePage,
                 question,
                 id,
                 mode,
                 index,
-              )
+              })
               const selected = question.correctAnswers[0]
                 ? question.correctAnswers[0] - 1
                 : 0
@@ -974,6 +990,9 @@ try {
         await responsiveContext.close()
       }
     })
+  }
+  for (const mode of ["mobile", "hebrew"]) {
+    await verifyResponsiveMode(mode)
   }
   await verifyPublicViewers({
     browser,
@@ -1029,7 +1048,9 @@ try {
     if (activePage) {
       await screenshot(activePage, "failure")
     }
-  } catch {}
+  } catch {
+    // Preserve the original failure even when its diagnostic screenshot fails.
+  }
 
   writeFileSync(
     join(evidence, "receipt.json"),

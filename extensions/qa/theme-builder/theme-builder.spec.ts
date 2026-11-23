@@ -1,8 +1,8 @@
 import playwright from "../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
-import type * as Playwright from "../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
 import { writeFile } from "node:fs/promises"
 import { builderText } from "../../src/components/theme-builder/strings"
-const { test, expect } = playwright as unknown as typeof Playwright
+const { test, expect } =
+  playwright as unknown as typeof import("../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js")
 function isObservedRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value)
 }
@@ -16,7 +16,7 @@ function requireObservedRecord(value: unknown): Record<string, unknown> {
 }
 
 const logs = new WeakMap<object, unknown[]>()
-test.beforeEach(async ({ page }) => {
+test.beforeEach(({ page }) => {
   const log: unknown[] = []
   logs.set(page, log)
   page.on("pageerror", (error) =>

@@ -1,3 +1,4 @@
+import { promiseFrom } from "../../shared/promise-operation.ts"
 import assert from "node:assert/strict"
 import test from "node:test"
 import { CallToolResultSchema } from "@modelcontextprotocol/core"
@@ -141,11 +142,12 @@ test("denied or missing ingress guard fails closed before token verification and
     let auth = 0
     const h = await harness({
       prevalidationLimit,
-      authorize: async () => {
-        auth += 1
+      authorize: () =>
+        promiseFrom(() => {
+          auth += 1
 
-        return principal()
-      },
+          return principal()
+        }),
     })
 
     try {

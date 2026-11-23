@@ -1,5 +1,5 @@
 import assert from "node:assert/strict"
-import { before, after, test } from "node:test"
+import { before as beforeAll, after, test } from "node:test"
 import fs from "node:fs"
 import path from "node:path"
 import { createHash, generateKeyPairSync, randomBytes } from "node:crypto"
@@ -113,7 +113,7 @@ const count = () =>
       ),
     )
     .filter((n) => n.endsWith(".json")).length
-before(async () => {
+beforeAll(async () => {
   assert.equal(process.platform, "linux")
   f = await fixture()
   assert.equal(
@@ -156,9 +156,10 @@ before(async () => {
     config,
     configRoot: requireInitializedF().root,
     keyId: "synthetic-native-client-key",
-    signingPrivateKeyPem: pair.privateKey
-      .export({ type: "pkcs8", format: "pem" })
-      .toString(),
+    signingPrivateKeyPem: pair.privateKey.export({
+      type: "pkcs8",
+      format: "pem",
+    }),
     ticketEncryptionKey: randomBytes(32),
     consentPageUrl: `${origin}/studio/oauth-consent`,
     clients: [{ clientId, redirectUris: [callback], scopes }],
@@ -427,14 +428,15 @@ function bridge(
       input === "/oauth/native-save/inspect" ||
         input === "/oauth/native-save/approve",
     )
-    assert.equal(init?.credentials, "same-origin")
-    assert.equal(init?.cache, "no-store")
-    assert.equal(init?.redirect, "error")
-    assert.equal(init?.referrerPolicy, "no-referrer")
-    const headers = new Headers(init?.headers)
+    assert.ok(init)
+    assert.equal(init.credentials, "same-origin")
+    assert.equal(init.cache, "no-store")
+    assert.equal(init.redirect, "error")
+    assert.equal(init.referrerPolicy, "no-referrer")
+    const headers = new Headers(init.headers)
     headers.set("host", new URL(origin).host)
     headers.set("origin", origin)
-    calls.push(String(input))
+    calls.push(input)
     const response = await requireInitializedIssuer().fetch(
       new Request(origin + input, { ...init, headers }),
     )

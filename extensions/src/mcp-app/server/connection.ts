@@ -50,7 +50,7 @@ export function guardedConnection(
         throw new ToolError("SCOPE_REQUIRED")
       }
 
-      op.work++
+      op.work += 1
       const aborted = () => lives.cancel(op)
       context.mcpReq.signal.addEventListener("abort", aborted, { once: true })
       op.dispose.push(() =>
@@ -100,7 +100,7 @@ export function guardedConnection(
 
         transport.onclose?.()
       }
-      closeInner = () => {
+      const closeTransport = () => {
         // Terminal BEFORE awaiting the underlying transport.
 
         end()
@@ -113,11 +113,12 @@ export function guardedConnection(
 
         return closePromise
       }
+      closeInner = closeTransport
       const terminate = (message: string) => {
         report(message)
         // Failure is already reported safely.
 
-        void closeInner!().catch(() => {
+        void closeTransport().catch(() => {
           /* The close path already reports its failure through the guarded transport. */
         })
       }
@@ -186,7 +187,7 @@ export function guardedConnection(
             )
           } catch {
             report("Transport send failed")
-            await closeInner!().catch(() => {
+            await closeTransport().catch(() => {
               /* Preserve the original send failure after the close attempt settles. */
             })
             throw new Error("Transport send failed")
@@ -198,7 +199,7 @@ export function guardedConnection(
             releaseSend()
           }
         },
-        close: () => closeInner!(),
+        close: () => closeTransport(),
         async start() {
           inner.onclose = end
           inner.onerror = () => terminate("Transport failure")
@@ -273,15 +274,16 @@ export function guardedConnection(
               params?: { name?: unknown }
             }
             const name = toolNames.find((n) => n === incoming.params?.name)
+            const isCurrent = () => lives.current(op) && !op.cancelled
             void (async () => {
               try {
-                if (!lives.current(op) || op.cancelled) {
+                if (!isCurrent()) {
                   return
                 }
 
                 const principal = await authorize(name, extra, deps, config)
 
-                if (!lives.current(op) || op.cancelled) {
+                if (!isCurrent()) {
                   return
                 }
 
@@ -300,7 +302,7 @@ export function guardedConnection(
                 op.principal = principal
                 forward()
               } catch (error) {
-                if (!lives.current(op) || op.cancelled) {
+                if (!isCurrent()) {
                   return
                 }
 

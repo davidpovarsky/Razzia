@@ -178,7 +178,7 @@ try {
       assert(["GET", "HEAD"].includes(request.method))
       url.pathname = `/api/media/raw/${media[1]}`
       const { app } = await import("@razzia/socket/app")
-      mediaIngress.rewrittenRequests++
+      mediaIngress.rewrittenRequests += 1
 
       return app.fetch(new Request(url, request))
     },
@@ -273,7 +273,7 @@ try {
           "The media rewrite must retain native anonymous denial",
         )
         await anonymous.arrayBuffer()
-        mediaIngress.anonymousDeniedRequests++
+        mediaIngress.anonymousDeniedRequests += 1
       }
       writeFileSync(
         join(tenantRoot, "quizz", `${fixture.quizz.id}.json`),

@@ -90,8 +90,8 @@ const server = createServer((request, response) => {
 let browser = null
 
 try {
-  await new Promise((resolve) => {
-    server.listen(0, "127.0.0.1", resolve)
+  await new Promise((listening) => {
+    server.listen(0, "127.0.0.1", listening)
   })
   const address = server.address()
 
@@ -369,8 +369,8 @@ try {
   })
 } finally {
   await browser?.close()
-  await new Promise((resolve) => {
-    server.close(resolve)
+  await new Promise((closed) => {
+    server.close(closed)
   })
   report.ownBrowserAndLoopbackClosed = true
   await writeFile(

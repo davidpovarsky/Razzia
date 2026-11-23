@@ -61,7 +61,7 @@ function fixtureBytes(fixtureRoot, media) {
   return bytes
 }
 
-function copyVerified(root, relative, bytes, expectedSha256) {
+function copyVerified({ root, relative, bytes, expectedSha256 }) {
   const target = checkedPath(root, relative)
   mkdirSync(path.dirname(target), { recursive: true, mode: 0o700 })
 
@@ -86,7 +86,7 @@ function summary(media, status) {
   }
 }
 
-function seedExternalMirror(fixtureRoot, config, tenantRelative, media) {
+function seedExternalMirror({ fixtureRoot, config, tenantRelative, media }) {
   const manifestPath = checkedPath(fixtureRoot, "external-assets.json")
 
   if (!existsSync(manifestPath)) {
@@ -146,12 +146,12 @@ function seedExternalMirror(fixtureRoot, config, tenantRelative, media) {
       bytes.readUInt32BE(20) === asset.height,
     "EXTERNAL_IMAGE_FORMAT",
   )
-  copyVerified(
-    config,
-    `${tenantRelative}/${asset.targetRelativePath}`,
+  copyVerified({
+    root: config,
+    relative: `${tenantRelative}/${asset.targetRelativePath}`,
     bytes,
-    asset.sha256,
-  )
+    expectedSha256: asset.sha256,
+  })
 
   return {
     ...summary(media, "offline-mirror-seeded"),
@@ -176,7 +176,15 @@ function seedExternalMirror(fixtureRoot, config, tenantRelative, media) {
  * This exercises installed-media playback, not upload/review/install approval.
  * Private fixture contents and production account identities never enter Git.
  */
-export async function seedStoredGameMedia({
+export function seedStoredGameMedia(options) {
+  try {
+    return Promise.resolve(seedStoredGameMediaSync(options))
+  } catch (error) {
+    return Promise.reject(error)
+  }
+}
+
+function seedStoredGameMediaSync({
   fixtureRoot,
   fixture,
   packageRecords = [],
@@ -219,7 +227,12 @@ export async function seedStoredGameMedia({
   for (const media of fixture.sourceSummary.media) {
     if (media.kind === "external") {
       result.externalAssets.push(
-        seedExternalMirror(fixtures, config, tenantRelative, media),
+        seedExternalMirror({
+          fixtureRoot: fixtures,
+          config,
+          tenantRelative,
+          media,
+        }),
       )
 
       continue
@@ -239,12 +252,12 @@ export async function seedStoredGameMedia({
           media.targetRelativePath.startsWith("media/"),
         "TENANT_MEDIA_PATH",
       )
-      copyVerified(
-        config,
-        `${tenantRelative}/${media.targetRelativePath}`,
+      copyVerified({
+        root: config,
+        relative: `${tenantRelative}/${media.targetRelativePath}`,
         bytes,
-        media.sha256,
-      )
+        expectedSha256: media.sha256,
+      })
       result.copiedMedia.push(summary(media, "copied-and-verified"))
     } else if (media.kind === "public") {
       // The browser must request the candidate's actual public asset route.
@@ -327,7 +340,12 @@ export async function seedStoredGameMedia({
         .relative(config, store.tenantRoot(accountId))
         .split(path.sep)
         .join("/")}/objects/${media.sha256}`
-      copyVerified(config, relative, bytes, media.sha256)
+      copyVerified({
+        root: config,
+        relative,
+        bytes,
+        expectedSha256: media.sha256,
+      })
     }
 
     store.db.exec("BEGIN IMMEDIATE")
@@ -339,7 +357,8 @@ export async function seedStoredGameMedia({
           JSON.stringify(record.games ?? []),
           JSON.stringify(record.targets ?? []),
           JSON.stringify(record.report),
-          record.installedSelection == null
+          record.installedSelection === null ||
+          record.installedSelection === undefined
             ? null
             : JSON.stringify(record.installedSelection),
         ]

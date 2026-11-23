@@ -16,7 +16,9 @@ if (location.pathname === "/studio/oauth-consent") {
   }
 
   const token = (await (await fetch("/qa/session")).json()) as { token: string }
-  const client = createBuilderClient("tenant-a", async () => token.token)
+  const client = createBuilderClient("tenant-a", () =>
+    Promise.resolve(token.token),
+  )
   const document = builderDocumentFixture()
   document.id = params.get("draft") ?? document.id
   const initial =
@@ -24,7 +26,13 @@ if (location.pathname === "/studio/oauth-consent") {
       ? await client.read(document.id, AbortSignal.timeout(15_000))
       : { document, revision: 0 }
   globalThis.document.documentElement.lang = locale
-  createRoot(globalThis.document.getElementById("root")!).render(
+  const mount = globalThis.document.getElementById("root")
+
+  if (!mount) {
+    throw new Error("qa:missing-root")
+  }
+
+  createRoot(mount).render(
     <ThemeBuilderShell
       locale={locale as PreviewLocale}
       initialDocument={initial.document}

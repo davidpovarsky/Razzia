@@ -84,33 +84,37 @@ export async function fixture() {
   const db = database.getAccountDb()
   const owners = [randomUUID(), randomUUID()]
   const sessions: Session[] = []
-  for (const [i, owner] of owners.entries()) {
-    db.prepare(
-      "INSERT INTO accounts(id,email,salt,hash,verified_at,created_at) VALUES(?,?,?,?,?,?)",
-    ).run(
-      owner,
-      `synthetic-${i}@example.invalid`,
-      "fixture-unused",
-      "fixture-unused",
-      Date.now(),
-      Date.now(),
-    )
-    const result = await tokens.mintToken(owner, "manager")
-    const claims = await tokens.verifyToken(result.token)
+  await owners.reduce(
+    (pending, owner, i) =>
+      pending.then(async () => {
+        db.prepare(
+          "INSERT INTO accounts(id,email,salt,hash,verified_at,created_at) VALUES(?,?,?,?,?,?)",
+        ).run(
+          owner,
+          `synthetic-${i}@example.invalid`,
+          "fixture-unused",
+          "fixture-unused",
+          Date.now(),
+          Date.now(),
+        )
+        const result = await tokens.mintToken(owner, "manager")
+        const claims = await tokens.verifyToken(result.token)
 
-    if (!claims.sid) {
-      throw new Error("Actual manager mint did not create sid")
-    }
+        if (!claims.sid) {
+          throw new Error("Actual manager mint did not create sid")
+        }
 
-    sessions.push({ token: result.token, owner, sid: claims.sid })
-    mkdirSync(join(root, "tenants", owner, "native-sentinels"), {
-      recursive: true,
-    })
-    writeFileSync(
-      join(root, "tenants", owner, "native-sentinels", "quiz.json"),
-      '{"sentinel":"synthetic-native-do-not-touch"}\n',
-    )
-  }
+        sessions.push({ token: result.token, owner, sid: claims.sid })
+        mkdirSync(join(root, "tenants", owner, "native-sentinels"), {
+          recursive: true,
+        })
+        writeFileSync(
+          join(root, "tenants", owner, "native-sentinels", "quiz.json"),
+          '{"sentinel":"synthetic-native-do-not-touch"}\n',
+        )
+      }),
+    Promise.resolve(),
+  )
   mkdirSync(join(root, "native-sentinels"))
   writeFileSync(
     join(root, "native-sentinels", "quiz.json"),
@@ -124,21 +128,22 @@ export async function fixture() {
     operation: (p: FirstPartySessionPrincipal) => T | Promise<T>,
   ): Promise<T> {
     const app = new Hono<ApiEnv>()
-    let value: T | undefined = undefined
-
-    let error: unknown = undefined
-
-    let called = false
+    const outcome: { value?: T; error?: Error; called: boolean } = {
+      called: false,
+    }
     app.use("*", auth.requireManager)
     app.get("/", async (c) => {
       try {
         const p = await auth.principal(c)
-        value = await operation(p)
-        called = true
+        outcome.value = await operation(p)
+        outcome.called = true
 
         return c.body(null, 204)
       } catch (caught) {
-        error = caught
+        outcome.error =
+          caught instanceof Error
+            ? caught
+            : new Error("Fixture operation failed", { cause: caught })
 
         return c.body(null, 500)
       }
@@ -147,15 +152,15 @@ export async function fixture() {
       headers: { authorization: `Bearer ${session.token}` },
     })
 
-    if (error) {
-      throw error
+    if (outcome.error) {
+      throw outcome.error
     }
 
-    if (!called || response.status !== 204) {
+    if (!outcome.called || response.status !== 204) {
       throw new Error("Actual fixture manager authorization rejected")
     }
 
-    return value as T
+    return outcome.value as T
   }
   const app = await createFirstPartyApp({
     origin,
@@ -163,11 +168,13 @@ export async function fixture() {
     authoring: policy,
   })
   function request(
-    session: Session | undefined,
-    path: string,
-    method = "GET",
-    body?: unknown,
-    headers: Record<string, string> = {},
+    ...[session, path, method = "GET", body, headers = {}]: [
+      session: Session | undefined,
+      path: string,
+      method?: string,
+      body?: unknown,
+      headers?: Record<string, string>,
+    ]
   ) {
     return app.fetch(
       new Request(origin + path, {
@@ -212,7 +219,7 @@ export async function fixture() {
       database.closeAccountDb()
       for (const [name, value] of Object.entries(previous)) {
         if (value === undefined) {
-          delete process.env[name]
+          Reflect.deleteProperty(process.env, name)
         } else {
           process.env[name] = value
         }

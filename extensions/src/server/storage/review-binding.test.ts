@@ -268,12 +268,17 @@ function assertFresh(
     expect(run.pid).toBe(run.process.pid)
   }
 }
-function stageQuiz(
-  root: string,
-  id: string,
+function stageQuiz({
+  root,
+  id,
   wrapperFree = false,
   firstSidecar = false,
-) {
+}: {
+  root: string
+  id: string
+  wrapperFree?: boolean
+  firstSidecar?: boolean
+}) {
   const relative = resolvePhysicalBase(native.getPath, id)!
   const original = requireReviewRecord(
     JSON.parse(fs.readFileSync(path.join(root, relative), "utf8")),
@@ -355,7 +360,7 @@ describe("R2 independent review native replay regressions", () => {
     await fixtureCase(
       "missing-nonnull-sidecar",
       async ({ root, descriptor }, receipt) => {
-        stageQuiz(root, descriptor.quizId)
+        stageQuiz({ root, id: descriptor.quizId })
         fs.unlinkSync(
           native.getPath(`extensions/quizzes/${descriptor.quizId}.json`),
         )
@@ -383,7 +388,7 @@ describe("R2 independent review native replay regressions", () => {
       await fixtureCase(
         `ambiguous-${JSON.stringify(idValue)}`,
         async ({ root, descriptor }, receipt) => {
-          stageQuiz(root, descriptor.quizId)
+          stageQuiz({ root, id: descriptor.quizId })
           fs.writeFileSync(
             native.getPath(`quizz/${descriptor.quizId}.json`),
             JSON.stringify({
@@ -410,7 +415,7 @@ describe("R2 independent review native replay regressions", () => {
     await fixtureCase(
       "string-foreign-positive",
       async ({ root, descriptor }, receipt) => {
-        const staged = stageQuiz(root, descriptor.quizId)
+        const staged = stageQuiz({ root, id: descriptor.quizId })
         const sentinel = native.getPath(`quizz/${descriptor.quizId}.json`)
         fs.writeFileSync(
           sentinel,
@@ -441,7 +446,12 @@ describe("R2 independent review native replay regressions", () => {
     await fixtureCase(
       "null-sidecar-backup-positive",
       async ({ root, descriptor }, receipt) => {
-        const staged = stageQuiz(root, descriptor.quizId, false, true)
+        const staged = stageQuiz({
+          root,
+          id: descriptor.quizId,
+          wrapperFree: false,
+          firstSidecar: true,
+        })
         const runs = await replays(root, descriptor.token)
         receipt.runs = runs
         assertFresh(runs)
@@ -462,7 +472,11 @@ describe("R2 independent review native replay regressions", () => {
     await fixtureCase(
       "default-wrapper-positive",
       async ({ root, descriptor }, receipt) => {
-        const staged = stageQuiz(root, descriptor.quizId, true)
+        const staged = stageQuiz({
+          root,
+          id: descriptor.quizId,
+          wrapperFree: true,
+        })
         const runs = await replays(root, descriptor.token, "default")
         Object.assign(receipt, { staged, runs })
         assertFresh(runs)

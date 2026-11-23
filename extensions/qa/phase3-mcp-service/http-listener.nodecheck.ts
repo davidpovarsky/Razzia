@@ -469,7 +469,7 @@ test("loopback TCP listener enforces pre-Request header/Host/URL limits and exec
     const approvalText = pendingSaveResponse.content.find(
       (item) => item.type === "text",
     )
-    assert.ok(approvalText?.type === "text")
+    assert.ok(approvalText)
     assert.deepEqual(JSON.parse(approvalText.text), {
       ok: false,
       code: "CONSENT_REQUIRED",

@@ -1,3 +1,4 @@
+import { promiseFrom } from "../../shared/promise-operation.ts"
 import assert from "node:assert/strict"
 import { test } from "node:test"
 import { assertCurrentToolDiscovery } from "./discovery-fixture.ts"
@@ -36,15 +37,16 @@ function setup(overrides: Dependencies = {}, responseTimeoutMs?: number) {
     config,
     ...(responseTimeoutMs === undefined ? {} : { responseTimeoutMs }),
     allowedOrigins: ["https://chat.example.invalid"],
-    verifyAccessToken: async (token) => {
-      const p = tokens.get(token)
+    verifyAccessToken: (token) =>
+      promiseFrom(() => {
+        const p = tokens.get(token)
 
-      if (!p) {
-        throw new Error("private backend detail must not escape")
-      }
+        if (!p) {
+          throw new Error("private backend detail must not escape")
+        }
 
-      return p
-    },
+        return p
+      }),
     dependencies: {
       rateLimit: () => Promise.resolve(true),
       drafts: new MemoryDrafts(),
@@ -53,11 +55,13 @@ function setup(overrides: Dependencies = {}, responseTimeoutMs?: number) {
     },
   })
   const request = (
-    body?: unknown,
-    headers: Record<string, string> = {},
-    path = config.resource,
-    method = "POST",
-    signal?: AbortSignal,
+    ...[body, headers = {}, path = config.resource, method = "POST", signal]: [
+      body?: unknown,
+      headers?: Record<string, string>,
+      path?: typeof config.resource,
+      method?: string,
+      signal?: AbortSignal,
+    ]
   ) =>
     new Request(path, {
       method,
@@ -105,7 +109,8 @@ test("official HTTP client discovers twenty-five strict tools without a missing 
     assertCurrentToolDiscovery(tools.tools)
     assert.equal(
       tools.tools.filter(
-        (t) => (t._meta?.ui as { resourceUri?: string })?.resourceUri,
+        (t) =>
+          (t._meta?.ui as { resourceUri?: string } | undefined)?.resourceUri,
       ).length,
       0,
     )
@@ -339,7 +344,9 @@ test("aborted unsettled authorization keeps all 32 HTTP slots occupied until rea
     })
   const pending = controllers.map((c) => app.fetch(request(c.signal)))
   await allEntered
-  controllers.forEach((c) => c.abort())
+  controllers.forEach((c) => {
+    c.abort()
+  })
   await new Promise<void>((resolve) => {
     setImmediate(resolve)
   })
@@ -408,7 +415,9 @@ test("legacy SSE retains all32 cancelled handler admissions until actual depende
     ),
   )
   await allEntered
-  controllers.forEach((controller) => controller.abort())
+  controllers.forEach((controller) => {
+    controller.abort()
+  })
   await new Promise<void>((resolve) => {
     setImmediate(resolve)
   })

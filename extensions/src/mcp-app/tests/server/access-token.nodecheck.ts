@@ -1,3 +1,4 @@
+import { promiseFrom } from "../../shared/promise-operation.ts"
 import assert from "node:assert/strict"
 import { test } from "node:test"
 import { generateKeyPairSync, randomUUID, sign } from "node:crypto"
@@ -31,27 +32,29 @@ function fixture() {
       {
         kid: "synthetic-test-key",
         algorithm: "EdDSA",
-        pem: publicKey.export({ type: "spki", format: "pem" }).toString(),
+        pem: publicKey.export({ type: "spki", format: "pem" }),
       },
     ],
-    activeGrant: async (id) => {
-      grantReads += 1
+    activeGrant: (id) =>
+      promiseFrom(() => {
+        grantReads += 1
 
-      if (grantFailure) {
-        throw new Error("private-sql-path-secret")
-      }
+        if (grantFailure) {
+          throw new Error("private-sql-path-secret")
+        }
 
-      return id === grant.grantId ? active : undefined
-    },
-    activeAccount: async (id) => {
-      accountReads += 1
+        return id === grant.grantId ? active : undefined
+      }),
+    activeAccount: (id) =>
+      promiseFrom(() => {
+        accountReads += 1
 
-      if (revokeDuringAccountCheck) {
-        active = undefined
-      }
+        if (revokeDuringAccountCheck) {
+          active = undefined
+        }
 
-      return id === grant.accountId && accountEnabled
-    },
+        return id === grant.accountId && accountEnabled
+      }),
   })
   const claims = {
     iss: config.issuer,

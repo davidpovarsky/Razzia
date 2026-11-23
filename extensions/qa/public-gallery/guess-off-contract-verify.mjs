@@ -227,7 +227,7 @@ export async function verifyGuessOffResult(root, expect, unanswered) {
   }
 }
 
-export async function readGuessOffContract(root) {
+export function readGuessOffContract(root) {
   return root.evaluate((element) => element.__guessOffContract.stop())
 }
 

@@ -178,9 +178,15 @@ describe("quiz-save deterministic recovery", () => {
       .spyOn(fs, "writeFileSync")
       .mockImplementation((file, data, options) => {
         if (String(file) === original.sidecarPath) {
-          const parsed = requireJournalObservationRecord(
-            JSON.parse(String(data)),
-          )
+          const serialized =
+            typeof data === "string"
+              ? data
+              : Buffer.from(
+                  data.buffer,
+                  data.byteOffset,
+                  data.byteLength,
+                ).toString("utf8")
+          const parsed = requireJournalObservationRecord(JSON.parse(serialized))
           requireJournalObservationRecord(parsed.authoring).showNote =
             "silently corrupted, same revision"
 

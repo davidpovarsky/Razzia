@@ -39,8 +39,8 @@ export const mountCompositionPreviewCandidateV2: NativePreviewCandidateMountV2 =
       const next =
         value === null ? null : (identities.get(value) ?? (nextIdentity += 1))
 
-      if (value !== null) {
-        identities.set(value, next!)
+      if (value !== null && next !== null) {
+        identities.set(value, next)
       }
 
       if (handleId === next) {
@@ -67,7 +67,8 @@ export const mountCompositionPreviewCandidateV2: NativePreviewCandidateMountV2 =
       }
 
       const input = current
-      const { definition } = theme
+      const resolvedTheme = theme
+      const { definition } = resolvedTheme
       const key = `${input.frame.role}:${input.frame.revision}:${input.frame.epoch}:${input.themeBinding.theme.id}:${input.themeBinding.compositionDocumentSha256}`
       // This is the imperative host boundary. Commit the admitted snapshot before
       // returning so a deferred React task cannot leave a previous card visible.
@@ -84,13 +85,13 @@ export const mountCompositionPreviewCandidateV2: NativePreviewCandidateMountV2 =
               fitRevision={fitRevision}
               onUnavailable={onUnavailable}
               onStageHandle={observe}
-              resolvedTheme={theme!}
+              resolvedTheme={resolvedTheme}
             />
           ) : (
-            <ShowThemeScope key={key} theme={theme!}>
+            <ShowThemeScope key={key} theme={resolvedTheme}>
               <NativeRazziaPreviewV2
                 input={input}
-                theme={theme!}
+                theme={resolvedTheme}
                 rootRef={observe}
               />
             </ShowThemeScope>

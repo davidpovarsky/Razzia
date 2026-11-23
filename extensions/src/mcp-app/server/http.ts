@@ -1,3 +1,5 @@
+import { promiseFrom } from "../shared/promise-operation.ts"
+import { interruptibleChunks } from "../shared/stream-chunks.ts"
 import type {
   Dependencies,
   ServerConfig,
@@ -65,8 +67,6 @@ async function completeLegacyResponse(
   const reader = response.body.getReader()
   const chunks: Uint8Array[] = []
   let size = 0
-  let complete = false
-  let reading: ReturnType<typeof reader.read> | undefined = undefined
   let interrupt: (error: Error) => void = () => {
     throw new Error(
       "Promise resolver interrupt was used before executor initialization",
@@ -76,6 +76,7 @@ async function completeLegacyResponse(
   const interrupted = new Promise<never>((_, reject) => {
     interrupt = reject
   })
+  const stream = interruptibleChunks(reader, interrupted)
   const abort = () => interrupt(new HttpRejection(400))
   signal.addEventListener("abort", abort, { once: true })
 
@@ -84,24 +85,14 @@ async function completeLegacyResponse(
       abort()
     }
 
-    while (true) {
-      reading = reader.read()
-      const part = await Promise.race([reading, interrupted])
-      reading = undefined
-
-      if (part.done) {
-        complete = true
-
-        break
-      }
-
-      size += part.value.byteLength
+    for await (const chunk of stream) {
+      size += chunk.byteLength
 
       if (size > limit + 4096) {
         throw new Error("Response limit exceeded")
       }
 
-      chunks.push(part.value.slice())
+      chunks.push(chunk.slice())
     }
 
     return new Response(Buffer.concat(chunks), {
@@ -112,9 +103,9 @@ async function completeLegacyResponse(
   } finally {
     signal.removeEventListener("abort", abort)
 
-    if (!complete) {
+    if (!stream.complete) {
       await Promise.allSettled([
-        reading,
+        stream.pendingRead,
         reader.cancel().catch(() => {
           /* Cancellation rejection still settles before the owned reader is released. */
         }),
@@ -164,8 +155,9 @@ class RequestWork {
     })
   }
   async drain() {
-    while (this.pending.size) {
+    if (this.pending.size) {
       await Promise.allSettled([...this.pending])
+      await this.drain()
     }
   }
 }
@@ -191,7 +183,7 @@ export function createRemoteMcpApp(options: RemoteMcpOptions) {
       throw new Error("Exact HTTPS browser origins required")
     }
   }
-  const verifyToken = options.verifyAccessToken
+  const verifyToken = options.verifyAccessToken.bind(options)
   const deps = Object.freeze({ ...options.dependencies })
   const budget = new IngressBudget()
   const responseTimeout = options.responseTimeoutMs ?? 30_000
@@ -295,7 +287,7 @@ export function createRemoteMcpApp(options: RemoteMcpOptions) {
           let headerBytes = 0
           let headerCount = 0
           let invalidHeaders = false
-          request.headers.forEach((value, name) => {
+          for (const [name, value] of request.headers) {
             headerBytes += Buffer.byteLength(name + value)
 
             headerCount += 1
@@ -309,7 +301,7 @@ export function createRemoteMcpApp(options: RemoteMcpOptions) {
             ) {
               invalidHeaders = true
             }
-          })
+          }
 
           if (invalidHeaders) {
             return rejected(400)
@@ -536,7 +528,8 @@ export function createRemoteMcpApp(options: RemoteMcpOptions) {
 
               return p
             },
-            prevalidationLimit: async () => !request.signal.aborted,
+            prevalidationLimit: () =>
+              promiseFrom(() => !request.signal.aborted),
             ...(deps.drafts ? { drafts: work.wrap(deps.drafts) } : {}),
             ...(deps.semanticDrafts
               ? { semanticDrafts: work.wrap(deps.semanticDrafts) }
@@ -619,6 +612,7 @@ export function createRemoteMcpApp(options: RemoteMcpOptions) {
         removeAbort()
 
         if (release) {
+          const releaseSlot = release
           const retire = async () => {
             await Promise.allSettled([
               Promise.resolve().then(() => server?.close()),
@@ -633,7 +627,7 @@ export function createRemoteMcpApp(options: RemoteMcpOptions) {
             }
 
             await work.drain()
-            release!()
+            releaseSlot()
             active.delete(lifetime)
             finish()
           }

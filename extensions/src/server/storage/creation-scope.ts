@@ -103,7 +103,9 @@ export function assertCreationScope(
   }
 }
 
-export function creationFamily(scope: CreationScope) {
+export function creationFamily(
+  scope: Omit<CreationScope, "mode"> & { mode: unknown },
+) {
   if (
     path.resolve(scope.configuredRoot) !== scope.configuredRoot ||
     (scope.mode === "tenant"

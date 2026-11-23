@@ -1,5 +1,8 @@
 import { assertBoundedJson } from "./primitives"
 
+const stringifyJson = (value: unknown): string | undefined =>
+  JSON.stringify(value)
+
 /** Canonical JSON v1: sorted object keys, ordered arrays, finite numbers, UTF-8. */
 export function canonicalJson(value: unknown): string {
   assertBoundedJson(value)
@@ -38,7 +41,7 @@ export function canonicalJson(value: unknown): string {
         .join(",")}}`
     }
 
-    const encoded = JSON.stringify(item)
+    const encoded = stringifyJson(item)
 
     if (encoded === undefined) {
       throw new Error("show-library:non-json-value")

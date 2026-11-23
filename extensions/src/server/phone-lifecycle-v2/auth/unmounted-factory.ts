@@ -188,7 +188,11 @@ export class UnmountedPhoneAuthority {
       serviceDenied()
     }
 
-    this.adoption!.adopt(game)
+    if (!this.adoption) {
+      serviceDenied()
+    }
+
+    this.adoption.adopt(game)
     this.staged.add(game)
     this.pin(game)
   }
@@ -220,7 +224,7 @@ export class UnmountedPhoneAuthority {
 
     return record
   }
-  private gatewayDescriptor(record: ServiceLeaseRecord): GatewayBinding {
+  private static gatewayDescriptor(record: ServiceLeaseRecord): GatewayBinding {
     return gatewayBinding({
       protocol: 1,
       purpose: GATEWAY_DELIVERY_PURPOSE,
@@ -235,13 +239,19 @@ export class UnmountedPhoneAuthority {
       initialActions: record.initialActions,
     })
   }
-  private ticket(
-    result: SecretAttempt,
-    game: Game,
-    address: ServiceAddress,
-    requestId: string,
-    issuerSid: string,
-  ) {
+  private ticket({
+    result,
+    game,
+    address,
+    requestId,
+    issuerSid,
+  }: {
+    result: SecretAttempt
+    game: Game
+    address: ServiceAddress
+    requestId: string
+    issuerSid: string
+  }) {
     if (!this.gatewayEnabled || result.credential === undefined) {
       return
     }
@@ -254,7 +264,7 @@ export class UnmountedPhoneAuthority {
 
     this.deliveries.set(result, {
       game,
-      binding: this.gatewayDescriptor(record),
+      binding: UnmountedPhoneAuthority.gatewayDescriptor(record),
       requestId,
     })
   }
@@ -283,7 +293,7 @@ export class UnmountedPhoneAuthority {
         capability: string,
         action?: Action,
       ) => {
-        const expected = this.gatewayDescriptor(current())
+        const expected = UnmountedPhoneAuthority.gatewayDescriptor(current())
 
         if (bindingText(gatewayBinding(input)) !== bindingText(expected)) {
           serviceDenied()
@@ -297,8 +307,9 @@ export class UnmountedPhoneAuthority {
 
         if (
           proof.nativeGame !== live.nativeGame ||
-          bindingText(this.gatewayDescriptor(proof.lease)) !==
-            bindingText(expected)
+          bindingText(
+            UnmountedPhoneAuthority.gatewayDescriptor(proof.lease),
+          ) !== bindingText(expected)
         ) {
           serviceDenied()
         }
@@ -333,7 +344,7 @@ export class UnmountedPhoneAuthority {
           }
 
           return Object.freeze({
-            binding: this.gatewayDescriptor(record),
+            binding: UnmountedPhoneAuthority.gatewayDescriptor(record),
             state: record.state,
             allowedActions: canonicalActions(record.currentActions),
           })
@@ -382,12 +393,35 @@ export class UnmountedPhoneAuthority {
     }
   }
 
-  async deliverGatewayAttempt(
-    token: string,
-    attempt: SecretAttempt,
-    destination: GatewayDeliveryDestination,
-    expectedStoredVersion: number,
+  deliverGatewayAttempt(
+    ...args: [
+      token: string,
+      attempt: SecretAttempt,
+      destination: GatewayDeliveryDestination,
+      expectedStoredVersion: number,
+    ]
   ): Promise<GatewayDeliveryAck> {
+    const [token, attempt, destination, expectedStoredVersion] = args
+
+    return this.deliverGatewayRequest({
+      token,
+      attempt,
+      destination,
+      expectedStoredVersion,
+    })
+  }
+
+  private async deliverGatewayRequest({
+    token,
+    attempt,
+    destination,
+    expectedStoredVersion,
+  }: {
+    token: string
+    attempt: SecretAttempt
+    destination: GatewayDeliveryDestination
+    expectedStoredVersion: number
+  }): Promise<GatewayDeliveryAck> {
     const ticket = this.deliveries.get(attempt)
     // Consume before the first await, including failures.
 
@@ -407,12 +441,12 @@ export class UnmountedPhoneAuthority {
 
     try {
       const check = () => {
-        this.managerLive(
+        this.managerLive({
           prepared,
-          ticket.game,
-          ticket.binding.executorId,
-          ticket.binding.issuerSid,
-        )
+          game: ticket.game,
+          executorId: ticket.binding.executorId,
+          issuerSid: ticket.binding.issuerSid,
+        })
         const record = this.gatewayRecord(
           ticket.game,
           ticket.binding,
@@ -420,7 +454,7 @@ export class UnmountedPhoneAuthority {
         )
 
         if (
-          bindingText(this.gatewayDescriptor(record)) !==
+          bindingText(UnmountedPhoneAuthority.gatewayDescriptor(record)) !==
             bindingText(ticket.binding) ||
           !sameHash(
             serviceCapabilityHash(record, capability),
@@ -467,12 +501,17 @@ export class UnmountedPhoneAuthority {
       this.accounts.releaseManager(prepared)
     }
   }
-  private managerLive(
-    prepared: PreparedManagerAuthority,
-    game: Game,
-    executorId?: string,
-    issuerSid?: string,
-  ): void {
+  private managerLive({
+    prepared,
+    game,
+    executorId,
+    issuerSid,
+  }: {
+    prepared: PreparedManagerAuthority
+    game: Game
+    executorId?: string
+    issuerSid?: string
+  }): void {
     this.assertOpen()
     const live = this.accounts.revalidateManager(prepared)
 
@@ -485,13 +524,18 @@ export class UnmountedPhoneAuthority {
       serviceDenied()
     }
   }
-  private managerCheck(
-    prepared: PreparedManagerAuthority,
-    game: Game,
-    executorId?: string,
-    issuerSid?: string,
-  ): void {
-    this.managerLive(prepared, game, executorId, issuerSid)
+  private managerCheck({
+    prepared,
+    game,
+    executorId,
+    issuerSid,
+  }: {
+    prepared: PreparedManagerAuthority
+    game: Game
+    executorId?: string
+    issuerSid?: string
+  }): void {
+    this.managerLive({ prepared, game, executorId, issuerSid })
 
     if (scopedAccount() !== this.accounts.revalidateManager(prepared).owner) {
       serviceDenied()
@@ -537,13 +581,13 @@ export class UnmountedPhoneAuthority {
       const live = this.accounts.revalidateManager(prepared)
       const result = await withAccount(live.owner, () => {
         this.writer.initialize(() => {
-          this.managerCheck(prepared, live.nativeGame)
+          this.managerCheck({ prepared, game: live.nativeGame })
         })
-        this.managerCheck(prepared, live.nativeGame)
+        this.managerCheck({ prepared, game: live.nativeGame })
 
         return { status: "ready" as const }
       })
-      this.managerLive(prepared, live.nativeGame)
+      this.managerLive({ prepared, game: live.nativeGame })
 
       return result
     } finally {
@@ -595,37 +639,37 @@ export class UnmountedPhoneAuthority {
           { requestId: input.requestId, expectedVersion: 0 },
           live.issuerSid,
           () => {
-            this.managerCheck(
+            this.managerCheck({
               prepared,
-              live.nativeGame,
-              facade.executorId,
-              live.issuerSid,
-            )
+              game: live.nativeGame,
+              executorId: facade.executorId,
+              issuerSid: live.issuerSid,
+            })
           },
         )
-        this.managerCheck(
+        this.managerCheck({
           prepared,
-          live.nativeGame,
-          facade.executorId,
-          live.issuerSid,
-        )
+          game: live.nativeGame,
+          executorId: facade.executorId,
+          issuerSid: live.issuerSid,
+        })
 
         return issuedResult
       })
-      this.managerLive(
+      this.managerLive({
         prepared,
-        live.nativeGame,
-        facade.executorId,
-        live.issuerSid,
-      )
+        game: live.nativeGame,
+        executorId: facade.executorId,
+        issuerSid: live.issuerSid,
+      })
       this.credentialDisclosure(result, binding)
-      this.ticket(
+      this.ticket({
         result,
-        live.nativeGame,
-        binding,
-        input.requestId,
-        live.issuerSid,
-      )
+        game: live.nativeGame,
+        address: binding,
+        requestId: input.requestId,
+        issuerSid: live.issuerSid,
+      })
 
       return result
     } finally {
@@ -633,12 +677,17 @@ export class UnmountedPhoneAuthority {
     }
   }
 
-  private controlRecord(
-    prepared: PreparedManagerAuthority,
-    target: ControlTarget,
-    expectedVersion: number,
-    sameIssuer: boolean,
-  ) {
+  private controlRecord({
+    prepared,
+    target,
+    expectedVersion,
+    sameIssuer,
+  }: {
+    prepared: PreparedManagerAuthority
+    target: ControlTarget
+    expectedVersion: number
+    sameIssuer: boolean
+  }) {
     this.provider(target.provider)
     identifier(target.service)
 
@@ -682,49 +731,49 @@ export class UnmountedPhoneAuthority {
     const prepared = await this.accounts.prepareManager(token, target.game)
 
     try {
-      const { live, facade, record } = this.controlRecord(
+      const { live, facade, record } = this.controlRecord({
         prepared,
         target,
-        input.expectedVersion,
-        true,
-      )
+        expectedVersion: input.expectedVersion,
+        sameIssuer: true,
+      })
       const result = await withAccount(live.owner, () => {
         const rotatedResult = this.writer.rotate(
           record,
           input,
           live.issuerSid,
           () => {
-            this.managerCheck(
+            this.managerCheck({
               prepared,
-              live.nativeGame,
-              facade.executorId,
-              record.issuerSid,
-            )
+              game: live.nativeGame,
+              executorId: facade.executorId,
+              issuerSid: record.issuerSid,
+            })
           },
         )
-        this.managerCheck(
+        this.managerCheck({
           prepared,
-          live.nativeGame,
-          facade.executorId,
-          record.issuerSid,
-        )
+          game: live.nativeGame,
+          executorId: facade.executorId,
+          issuerSid: record.issuerSid,
+        })
 
         return rotatedResult
       })
-      this.managerLive(
+      this.managerLive({
         prepared,
-        live.nativeGame,
-        facade.executorId,
-        record.issuerSid,
-      )
+        game: live.nativeGame,
+        executorId: facade.executorId,
+        issuerSid: record.issuerSid,
+      })
       this.credentialDisclosure(result, record)
-      this.ticket(
+      this.ticket({
         result,
-        live.nativeGame,
-        record,
-        input.requestId,
-        record.issuerSid,
-      )
+        game: live.nativeGame,
+        address: record,
+        requestId: input.requestId,
+        issuerSid: record.issuerSid,
+      })
 
       return result
     } finally {
@@ -742,26 +791,38 @@ export class UnmountedPhoneAuthority {
     try {
       // A fresh verified owner session may revoke, but cannot replace/renew, the
       // old issuer. The actual Game/executor must still be the exact live pin.
-      const { live, facade, record } = this.controlRecord(
+      const { live, facade, record } = this.controlRecord({
         prepared,
         target,
-        input.expectedVersion,
-        false,
-      )
+        expectedVersion: input.expectedVersion,
+        sameIssuer: false,
+      })
       const result = await withAccount(live.owner, () => {
         const revokedResult = this.writer.revoke(
           record,
           input,
           live.issuerSid,
           () => {
-            this.managerCheck(prepared, live.nativeGame, facade.executorId)
+            this.managerCheck({
+              prepared,
+              game: live.nativeGame,
+              executorId: facade.executorId,
+            })
           },
         )
-        this.managerCheck(prepared, live.nativeGame, facade.executorId)
+        this.managerCheck({
+          prepared,
+          game: live.nativeGame,
+          executorId: facade.executorId,
+        })
 
         return revokedResult
       })
-      this.managerLive(prepared, live.nativeGame, facade.executorId)
+      this.managerLive({
+        prepared,
+        game: live.nativeGame,
+        executorId: facade.executorId,
+      })
 
       return result
     } finally {
@@ -886,12 +947,17 @@ export class UnmountedPhoneAuthority {
     return coordinator
   }
 
-  private async dispatch(
-    address: ServiceAddress,
-    capability: string,
-    action: Action,
-    input: RegistrationInput | OperationInput,
-  ): Promise<Receipt> {
+  private async dispatch({
+    address,
+    capability,
+    action,
+    input,
+  }: {
+    address: ServiceAddress
+    capability: string
+    action: Action
+    input: RegistrationInput | OperationInput
+  }): Promise<Receipt> {
     this.provider(address.provider)
     const context = this.verifier.begin(address, capability, action, (game) =>
       this.facades.get(game),
@@ -956,14 +1022,14 @@ export class UnmountedPhoneAuthority {
     capability: string,
     input: RegistrationInput,
   ) {
-    return this.dispatch(address, capability, "register", input)
+    return this.dispatch({ address, capability, action: "register", input })
   }
   operate(address: ServiceAddress, capability: string, input: OperationInput) {
     if (!["poll", "answer", "hangup"].includes(input.action)) {
       serviceDenied()
     }
 
-    return this.dispatch(address, capability, input.action, input)
+    return this.dispatch({ address, capability, action: input.action, input })
   }
   close() {
     if (this.closed) {

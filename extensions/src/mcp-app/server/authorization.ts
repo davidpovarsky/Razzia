@@ -10,14 +10,14 @@ import { ToolError } from "./errors.ts"
 
 const nonempty = z.string().min(1).max(256)
 const principalSchema = z.strictObject({
-  issuer: z.string().url().max(2048),
-  audience: z.string().url().max(2048),
+  issuer: z.url().max(2048),
+  audience: z.url().max(2048),
   subject: nonempty,
   clientId: nonempty,
   grantId: nonempty,
   accountId: z.uuid(),
   scopes: z.array(z.string().min(1).max(100)).max(20),
-  expiresAt: z.number().finite(),
+  expiresAt: z.number(),
   active: z.literal(true),
   accountsEnabled: z.literal(true),
 })
@@ -32,7 +32,12 @@ export function validateConfig(config: ServerConfig): ServerConfig {
 
     if (
       value.length > 2048 ||
-      /[\u0000-\u0020"\\]/u.test(value) ||
+      Array.from(value).some(
+        (character) =>
+          character.charCodeAt(0) <= 0x20 ||
+          character === '"' ||
+          character === "\\",
+      ) ||
       url.protocol !== "https:" ||
       url.username ||
       url.password ||
@@ -57,10 +62,12 @@ export function validateConfig(config: ServerConfig): ServerConfig {
 }
 
 export async function authorize(
-  name: ToolName | undefined,
-  extra: MessageExtraInfo | undefined,
-  deps: Dependencies,
-  config: ServerConfig,
+  ...[name, extra, deps, config]: [
+    name: ToolName | undefined,
+    extra: MessageExtraInfo | undefined,
+    deps: Dependencies,
+    config: ServerConfig,
+  ]
 ): Promise<VerifiedPrincipal> {
   if (!deps.prevalidationLimit) {
     throw new ToolError("DEPENDENCY_UNAVAILABLE")

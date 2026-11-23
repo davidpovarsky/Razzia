@@ -35,13 +35,13 @@ const append = (evidence, filename, row) => {
   writeFileSync(path, `${JSON.stringify(rows, null, 2)}\n`)
 }
 
-export async function verifyNativePalette(
+export async function verifyNativePalette({
   page,
   themeId,
   context,
   evidence,
   captureScreenshot = true,
-) {
+}) {
   if (themeId !== "tadazz-classic" && !expected[themeId]) {
     return null
   }

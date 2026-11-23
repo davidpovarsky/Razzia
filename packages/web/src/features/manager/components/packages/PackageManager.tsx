@@ -45,18 +45,17 @@ export function PackageManager({
   const [useClassic, setUseClassic] = useState(false)
   const input = useRef<HTMLInputElement>(null)
   const running = useRef(false)
-  const reload = () =>
-    packageJson<{ packages: CatalogEntry[] }>("").then((r) =>
-      setCatalog(r.packages),
-    )
+  const reload = (signal?: AbortSignal) =>
+    packageJson<{ packages: CatalogEntry[] }>("", { signal }).then((r) => {
+      if (!signal?.aborted) {
+        setCatalog(r.packages)
+      }
+    })
   useEffect(() => {
-    let active = true
-    void packageJson("/capabilities")
+    const controller = new AbortController()
+    void packageJson("/capabilities", { signal: controller.signal })
       .then(async () => {
-        if (!active) {
-          return
-        }
-
+        controller.signal.throwIfAborted()
         setEnabled(true)
         setCapabilityError(false)
         const initial =
@@ -66,11 +65,10 @@ export function PackageManager({
         if (initial && !themesOnly) {
           const result = await packageJson<PackageReceipt>(
             `/uploads/${encodeURIComponent(initial)}`,
+            { signal: controller.signal },
           )
 
-          if (!active) {
-            return
-          }
+          controller.signal.throwIfAborted()
 
           if (
             result.uploadId !== initial ||
@@ -93,17 +91,17 @@ export function PackageManager({
         }
 
         if (!themesOnly) {
-          return reload()
+          return reload(controller.signal)
         }
       })
       .catch(() => {
-        if (active) {
+        if (!controller.signal.aborted) {
           setCapabilityError(true)
         }
       })
 
     return () => {
-      active = false
+      controller.abort()
     }
   }, [
     themesOnly,

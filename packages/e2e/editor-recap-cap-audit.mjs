@@ -29,7 +29,7 @@ async function theme(id) {
 
   await page.getByTestId("studio-tab-questions").click()
 }
-async function cap(id, max, value, name) {
+async function cap({ id, max, value, name }) {
   await theme(id)
   const input = page.getByTestId("recap-max-items-input")
   await expect(input).toHaveAttribute("max", String(max))
@@ -57,13 +57,28 @@ try {
   await page.getByRole("option", { name: "Answer Recap", exact: true }).click()
   await page.getByTestId("studio-add-card-btn").click()
   await page.getByTestId("recap-max-items-input").fill("8")
-  await cap("razzia-original", 8, 8, "original-eight")
-  await cap("tadazz-classic", 6, 6, "classic-six-effective")
-  await cap("razzia-original", 8, 8, "original-eight-preserved")
-  await cap("tadazz-classic", 6, 6, "classic-limit")
+  await cap({ id: "razzia-original", max: 8, value: 8, name: "original-eight" })
+  await cap({
+    id: "tadazz-classic",
+    max: 6,
+    value: 6,
+    name: "classic-six-effective",
+  })
+  await cap({
+    id: "razzia-original",
+    max: 8,
+    value: 8,
+    name: "original-eight-preserved",
+  })
+  await cap({ id: "tadazz-classic", max: 6, value: 6, name: "classic-limit" })
   await page.getByTestId("recap-max-items-input").fill("8")
   await expect(page.getByTestId("recap-max-items-input")).toHaveValue("6")
-  await cap("razzia-original", 8, 6, "explicit-edit-persists-six")
+  await cap({
+    id: "razzia-original",
+    max: 8,
+    value: 6,
+    name: "explicit-edit-persists-six",
+  })
   expect(errors).toEqual([])
   result = { ok: true, checks, errors }
 } catch (e) {

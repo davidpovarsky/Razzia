@@ -161,7 +161,7 @@ export function mount(
             root.render(
               <ApplicationPreviewStage
                 frame={frame}
-                onCommitted={commit.acknowledge}
+                onCommitted={() => commit.acknowledge()}
                 onUnavailable={unavailable}
               />,
             ),

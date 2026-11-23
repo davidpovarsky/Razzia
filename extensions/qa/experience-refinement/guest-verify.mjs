@@ -89,7 +89,7 @@ export async function verifyGuestAdmission(options) {
       (row) => row.displayName === name && row.status === "connected",
     )
   }
-  const reconnect = async (room, page, row, label) => {
+  const reconnect = async ({ room, page, row, label }) => {
     const before = await presence(room)
     const original = before.players.find(
       (entry) => entry.rosterPlayerId === row.rosterPlayerId,
@@ -133,7 +133,7 @@ export async function verifyGuestAdmission(options) {
     return restored
   }
 
-  async function verifyRoom(host, room, label, existingPlayer) {
+  async function verifyRoom({ host, room, label, existingPlayer }) {
     track(host)
     const original = await presence(room)
     assert.equal(typeof original.allowUnregisteredPlayers, "boolean")
@@ -278,25 +278,30 @@ export async function verifyGuestAdmission(options) {
       const guestRow = await joinedRow(room, guestName)
       ownedRosterIds.add(guestRow.rosterPlayerId)
       await keyboardToggle(false)
-      await reconnect(room, guest.page, guestRow, `${label} admitted guest`)
-      await reconnect(
+      await reconnect({
         room,
-        registered.page,
-        registeredRow,
-        `${label} registered player`,
-      )
+        page: guest.page,
+        row: guestRow,
+        label: `${label} admitted guest`,
+      })
+      await reconnect({
+        room,
+        page: registered.page,
+        row: registeredRow,
+        label: `${label} registered player`,
+      })
 
       if (existingPlayer) {
         const existing = (await presence(room)).players.find(
           (row) => row.displayName === "Gallery QA player",
         )
         assert(existing, "Original voted gallery player remains present")
-        await reconnect(
+        await reconnect({
           room,
-          existingPlayer,
-          existing,
-          "Original voted gallery player",
-        )
+          page: existingPlayer,
+          row: existing,
+          label: "Original voted gallery player",
+        })
       }
 
       results.push({
@@ -393,7 +398,12 @@ export async function verifyGuestAdmission(options) {
 
   try {
     await expect(options.page.getByTestId("tadazz-show")).toBeVisible()
-    await verifyRoom(options.page, options.room, "cinematic", options.player)
+    await verifyRoom({
+      host: options.page,
+      room: options.room,
+      label: "cinematic",
+      existingPlayer: options.player,
+    })
 
     const originalQuiz = await options.readQuiz()
     const nativeCopy = {
@@ -439,7 +449,7 @@ export async function verifyGuestAdmission(options) {
     await expect(
       nativeHost.locator('[data-native-layout="true"]'),
     ).toBeVisible()
-    await verifyRoom(nativeHost, room, "native")
+    await verifyRoom({ host: nativeHost, room, label: "native" })
     assert.deepEqual(errors, [], "No guest policy browser JavaScript errors")
 
     return { passed: true, results, createdFixtures: created }

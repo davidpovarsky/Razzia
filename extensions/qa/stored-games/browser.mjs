@@ -81,7 +81,7 @@ async function installPlaybackAudit(page) {
       return { identity, sequence: identitySequence }
     }
     const originalPlay = HTMLMediaElement.prototype.play
-    const observedPlay = function observedPlay(...args) {
+    function observedPlay(...args) {
       let attempt = undefined
 
       if (this instanceof HTMLAudioElement) {
@@ -293,7 +293,7 @@ const paintedFrames = (stage) =>
   )
 
 /** Compare actual coordinator transitions, permitting only its real conditional tie policy. */
-function orderedTimelineReceipt(trace, timeline, scenes, terminal) {
+function orderedTimelineReceipt({ trace, timeline, scenes, terminal }) {
   const observed = []
   for (const entry of trace) {
     if (!entry.id) {
@@ -332,7 +332,8 @@ function orderedTimelineReceipt(trace, timeline, scenes, terminal) {
     )
 
     while (expectedIndex < entry.stepIndex) {
-      allowConditionalSkip(expectedIndex++, entry)
+      expectedIndex += 1
+      allowConditionalSkip(expectedIndex - 1, entry)
     }
 
     const expected = timeline[expectedIndex]
@@ -356,7 +357,8 @@ function orderedTimelineReceipt(trace, timeline, scenes, terminal) {
   }
 
   while (expectedIndex < timeline.length) {
-    allowConditionalSkip(expectedIndex++, terminal)
+    expectedIndex += 1
+    allowConditionalSkip(expectedIndex - 1, terminal)
   }
 
   return {
@@ -500,7 +502,7 @@ export async function verifyStoredGameBrowser(options) {
       const exact = (url) => url.href === mirror.sourceUrl
       const handler = async (route) => {
         assert.equal(route.request().method(), "GET")
-        check.requests++
+        check.requests += 1
         await route.fulfill({ status: 200, body, contentType: "image/png" })
       }
       await browserContext.route(exact, handler)
@@ -1317,12 +1319,12 @@ export async function verifyStoredGameBrowser(options) {
     await expect(stage).toHaveAttribute("data-show-scene", "finale", {
       timeout: 30_000,
     })
-    timelineReceipt = orderedTimelineReceipt(
+    timelineReceipt = orderedTimelineReceipt({
       trace,
-      nativeTimeline,
-      savedExtras.scenes ?? {},
-      snapshot(),
-    )
+      timeline: nativeTimeline,
+      scenes: savedExtras.scenes ?? {},
+      terminal: snapshot(),
+    })
     sceneVisits.splice(0, sceneVisits.length, ...timelineReceipt.scenes)
     // Scene IDs stay private; the receipt records ordered hashes and counts.
     delete timelineReceipt.scenes
@@ -1334,8 +1336,12 @@ export async function verifyStoredGameBrowser(options) {
     )
     fragmentAudio.expectedActive = expectedFragmentSteps.length
     assert.deepEqual(
-      [...qualifiedFragmentSteps].map(digest).sort(),
-      expectedFragmentSteps.map(digest).sort(),
+      [...qualifiedFragmentSteps]
+        .map(digest)
+        .sort((left, right) => left.localeCompare(right)),
+      expectedFragmentSteps
+        .map(digest)
+        .sort((left, right) => left.localeCompare(right)),
       "Every active authored fragment-audio scene has actual playback proof",
     )
     assert.equal(

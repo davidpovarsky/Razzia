@@ -20,12 +20,17 @@ const evidence = join(
 )
 fs.mkdirSync(evidence, { recursive: true })
 
-async function fixture(
-  page: Page,
-  request: APIRequestContext,
-  theme: string,
-  language: string,
-) {
+async function fixture({
+  page,
+  request,
+  theme,
+  language,
+}: {
+  page: Page
+  request: APIRequestContext
+  theme: string
+  language: string
+}) {
   const quizz = {
     subject: `Guest policy ${theme} ${Date.now()}`,
     gameMode: "quiz" as const,
@@ -109,7 +114,12 @@ for (const variant of [
     const errors: string[] = []
     page.on("pageerror", (error) => errors.push(error.message))
     await page.setViewportSize({ width: variant.width, height: 900 })
-    const room = await fixture(page, request, variant.theme, variant.language)
+    const room = await fixture({
+      page,
+      request,
+      theme: variant.theme,
+      language: variant.language,
+    })
     const toggle = page.getByTestId("host-guest-join-toggle")
     await expect(toggle).toBeVisible()
     await expect(toggle).toBeEnabled()

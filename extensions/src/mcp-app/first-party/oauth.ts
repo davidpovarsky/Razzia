@@ -1,3 +1,4 @@
+import { promiseFrom } from "../shared/promise-operation.ts"
 import { createPublicKey } from "node:crypto"
 import { Hono } from "hono"
 import type { ApiEnv } from "@razzia/socket/api/factory"
@@ -67,14 +68,14 @@ const codeBody = z.strictObject({
   client_id: z.string().min(1).max(256),
   code: z.string().min(40).max(8192),
   code_verifier: z.string().min(43).max(128),
-  redirect_uri: z.string().url().max(2048),
-  resource: z.string().url().max(2048),
+  redirect_uri: z.url().max(2048),
+  resource: z.url().max(2048),
 })
 const refreshBody = z.strictObject({
   grant_type: z.literal("refresh_token"),
   client_id: z.string().min(1).max(256),
   refresh_token: z.string().min(40).max(8192),
-  resource: z.string().url().max(2048),
+  resource: z.url().max(2048),
 })
 const revokeBody = z.strictObject({
   client_id: z.string().min(1).max(256),
@@ -203,9 +204,10 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
         }),
       },
     ],
-    activeGrant: async (grantId, accountId) =>
-      grants.activeGrant(accountId, grantId),
-    activeAccount: async (accountId) => auth.delegatedAccountActive(accountId),
+    activeGrant: (grantId, accountId) =>
+      promiseFrom(() => grants.activeGrant(accountId, grantId)),
+    activeAccount: (accountId) =>
+      promiseFrom(() => auth.delegatedAccountActive(accountId)),
     maxLifetimeSeconds: 300,
   })
   const verifyAccessToken = async (token: string, signal?: AbortSignal) => {
@@ -274,7 +276,7 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
         let bytes = 0
         let count = 0
         let badHeaders = false
-        request.headers.forEach((value, name) => {
+        for (const [name, value] of request.headers) {
           bytes += Buffer.byteLength(name + value)
           count += 1
 
@@ -287,7 +289,7 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
           ) {
             badHeaders = true
           }
-        })
+        }
 
         if (badHeaders) {
           throw new OAuthError("invalid_request")

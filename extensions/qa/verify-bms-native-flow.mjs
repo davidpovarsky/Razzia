@@ -127,7 +127,9 @@ const plugins = [
             if ((await fs.stat(candidate)).isFile()) {
               return { path: candidate }
             }
-          } catch {}
+          } catch {
+            // A candidate path may be absent; try the remaining extensions.
+          }
         }
         throw new Error(`Unresolved workspace import ${args.path}`)
       })

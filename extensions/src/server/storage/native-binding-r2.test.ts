@@ -28,12 +28,17 @@ const installed = createRequire(import.meta.url)
 const childPath = fileURLToPath(
   new URL("./native-binding-child.ts", import.meta.url),
 )
-function child(
-  mode: "interrupt" | "recover",
-  root: string,
-  token: string,
+function child({
+  mode,
+  root,
+  token,
   sequence = "",
-) {
+}: {
+  mode: "interrupt" | "recover"
+  root: string
+  token: string
+  sequence?: string
+}) {
   return new Promise<{
     pid?: number
     code: number | null
@@ -95,7 +100,12 @@ function retain(name: string, data: unknown) {
 async function recoverTwice(root: string, token: string) {
   const runs: unknown[] = []
   for (const sequence of ["1", "2"]) {
-    const processResult = await child("recover", root, token, sequence)
+    const processResult = await child({
+      mode: "recover",
+      root,
+      token,
+      sequence,
+    })
     const state = requireNativeRecord(
       JSON.parse(
         fs.readFileSync(
@@ -142,7 +152,11 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
 
       try {
         const before = nativeFixtureState(root)
-        const killed = await child("interrupt", root, descriptor.token)
+        const killed = await child({
+          mode: "interrupt",
+          root,
+          token: descriptor.token,
+        })
         receipt.interrupted = killed
         expect(killed.timedOut, killed.stderr).toBe(false)
 
@@ -220,7 +234,11 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
 
     try {
       const before = nativeFixtureState(root)
-      const killed = await child("interrupt", root, descriptor.token)
+      const killed = await child({
+        mode: "interrupt",
+        root,
+        token: descriptor.token,
+      })
       receipt.interrupted = killed
       expect(killed.timedOut).toBe(false)
 
@@ -294,7 +312,11 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
       const receipt: Record<string, unknown> = { fault, state: "STARTED" }
 
       try {
-        const killed = await child("interrupt", root, descriptor.token)
+        const killed = await child({
+          mode: "interrupt",
+          root,
+          token: descriptor.token,
+        })
         receipt.interrupted = killed
         expect(killed.timedOut, killed.stderr).toBe(false)
 

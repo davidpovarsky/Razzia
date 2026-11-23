@@ -1,4 +1,8 @@
 import { ToolError } from "../server/errors.ts"
+import { HttpRejection } from "./http-rejection.ts"
+import { interruptibleChunks } from "../shared/stream-chunks.ts"
+
+export { HttpRejection } from "./http-rejection.ts"
 
 export const HTTP_LIMITS = Object.freeze({
   bytes: 65_536,
@@ -9,12 +13,6 @@ export const HTTP_LIMITS = Object.freeze({
 
 export type Route =
   { kind: "create" } | { kind: "get" | "replace" | "prepare-save"; id: string }
-
-export class HttpRejection extends Error {
-  constructor(readonly status: 400 | 403 | 404 | 405 | 413 | 415 | 429) {
-    super("HTTP_REJECTED")
-  }
-}
 
 /**
  * Observe cancellation at explicit request/authorization boundaries. This
@@ -50,7 +48,7 @@ export function route(request: Request, origin: URL): Route {
   let headerCount = 0
   let headerBytes = 0
   let forwarded = false
-  request.headers.forEach((value, name) => {
+  for (const [name, value] of request.headers) {
     headerCount += 1
 
     if (headerCount > 32 || name.length > 128 || value.length > 4096) {
@@ -66,7 +64,7 @@ export function route(request: Request, origin: URL): Route {
     if (name === "forwarded" || name.startsWith("x-forwarded-")) {
       forwarded = true
     }
-  })
+  }
   const url = new URL(request.url)
 
   if (
@@ -166,19 +164,19 @@ export class IngressBudget {
     }
 
     if (
-      ++this.used > HTTP_LIMITS.perMinute ||
+      (this.used += 1) > HTTP_LIMITS.perMinute ||
       this.inFlight >= HTTP_LIMITS.inFlight
     ) {
       throw new HttpRejection(429)
     }
 
-    this.inFlight++
+    this.inFlight += 1
     let released = false
 
     return () => {
       if (!released) {
         released = true
-        this.inFlight--
+        this.inFlight -= 1
       }
     }
   }
@@ -199,8 +197,6 @@ export async function bodyText(request: Request): Promise<string> {
   const reader = request.body.getReader()
   const chunks: Uint8Array[] = []
   let size = 0
-  let timer: ReturnType<typeof setTimeout> | undefined = undefined
-
   let rejectInterrupted: (error: Error) => void = () => {
     /* The following Promise executor installs this callback synchronously. */
   }
@@ -209,33 +205,22 @@ export async function bodyText(request: Request): Promise<string> {
   })
   const abort = () => rejectInterrupted(new HttpRejection(400))
   request.signal.addEventListener("abort", abort, { once: true })
-  timer = setTimeout(abort, HTTP_LIMITS.bodyMs)
-  let reading: ReturnType<typeof reader.read> | undefined = undefined
-  let complete = false
+  const timer = setTimeout(abort, HTTP_LIMITS.bodyMs)
+  const stream = interruptibleChunks(reader, interrupted)
 
   try {
     if (request.signal.aborted) {
       abort()
     }
 
-    while (true) {
-      reading = reader.read()
-      const part = await Promise.race([reading, interrupted])
-      reading = undefined
-
-      if (part.done) {
-        complete = true
-
-        break
-      }
-
-      size += part.value.byteLength
+    for await (const chunk of stream) {
+      size += chunk.byteLength
 
       if (size > HTTP_LIMITS.bytes) {
         throw new HttpRejection(413)
       }
 
-      chunks.push(part.value)
+      chunks.push(chunk)
     }
 
     const bytes = new Uint8Array(size)
@@ -251,18 +236,16 @@ export async function bodyText(request: Request): Promise<string> {
       throw new ToolError("VALIDATION_FAILED")
     }
   } finally {
-    if (timer) {
-      clearTimeout(timer)
-    }
+    clearTimeout(timer)
 
     request.signal.removeEventListener("abort", abort)
 
-    if (!complete) {
+    if (!stream.complete) {
       // Keep ownership through BOTH the pending read and public cancel promise.
       const cancellation = reader.cancel().catch(() => {
         /* Cancellation rejection still settles before the owned reader is released. */
       })
-      await Promise.allSettled([reading, cancellation])
+      await Promise.allSettled([stream.pendingRead, cancellation])
     }
 
     reader.releaseLock()

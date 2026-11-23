@@ -87,7 +87,7 @@ try {
     tls,
     attachSocketServer: true,
   })
-  const request = async (path, token, init = {}) =>
+  const request = (path, token, init = {}) =>
     fetchImpl(origin + path, {
       ...init,
       headers: {

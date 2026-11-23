@@ -83,12 +83,12 @@ export async function verifyGalleryEditor(options) {
       "tadazz-midnight-club",
     )
     await page.getByTestId("editor-question-card-0").click()
-    const initialGeometry = await verifyNativePalette(
+    const initialGeometry = await verifyNativePalette({
       page,
-      "tadazz-midnight-club",
-      "editor",
-      options.evidence,
-    )
+      themeId: "tadazz-midnight-club",
+      context: "editor",
+      evidence: options.evidence,
+    })
     let panel = await openThemes()
     assert.equal(options.themeDefinitions.length, GLOBAL_THEME_COUNT)
     await expect
@@ -181,12 +181,12 @@ export async function verifyGalleryEditor(options) {
       await expect(
         page.locator('input[name="questions.0.question"]'),
       ).toHaveValue(options.expectedQuestions[0].question)
-      const geometry = await verifyNativePalette(
+      const geometry = await verifyNativePalette({
         page,
         themeId,
-        "editor",
-        options.evidence,
-      )
+        context: "editor",
+        evidence: options.evidence,
+      })
       assert.deepEqual(
         geometry,
         initialGeometry,
@@ -429,12 +429,12 @@ export async function verifyGalleryEditor(options) {
       passed: true,
       acceptedVotes: 1,
     })
-    await verifyNativePalette(
+    await verifyNativePalette({
       page,
-      "tadazz-discovery-lab",
-      "host",
-      options.evidence,
-    )
+      themeId: "tadazz-discovery-lab",
+      context: "host",
+      evidence: options.evidence,
+    })
     await page.evaluate(() => window.scrollTo(0, 0))
     await page.screenshot({
       path: join(options.evidence, "native-host-gallery-theme-started.png"),

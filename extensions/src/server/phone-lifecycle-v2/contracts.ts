@@ -32,7 +32,10 @@ export function identifier(value: unknown): asserts value is string {
 }
 
 export function validateContext(
-  context: VerifiedServiceContext,
+  context:
+    | (Omit<VerifiedServiceContext, "verified"> & { verified?: unknown })
+    | null
+    | undefined,
   action: Action,
   now = Date.now(),
 ) {

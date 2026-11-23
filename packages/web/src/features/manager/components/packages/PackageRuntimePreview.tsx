@@ -21,7 +21,8 @@ export function PackageRuntimePreview({
     (content) => content.kind === "game",
   )
   const [gameId, setGameId] = useState(
-    () => games.find((game) => game.id === initialGameId)?.id ?? games[0]?.id,
+    () =>
+      games.find((game) => game.id === initialGameId)?.id ?? games.at(0)?.id,
   )
   const [lobby, setLobby] = useState(false)
   const accountId = getClientId()

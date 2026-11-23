@@ -24,6 +24,18 @@ import type { RuntimeSnapshot } from "@razzia/extensions/core"
 import { requestAuthHeaders } from "@razzia/web/lib/request-auth"
 import type { PublicLobbyDirectory } from "./lobby-directory"
 
+interface CapabilityIdentity {
+  key: string
+  lifetime: string
+  boundaryAt: number
+}
+
+type CapabilityState = CapabilityIdentity &
+  (
+    | { status: "pending" | "unavailable" }
+    | { status: "ready"; url: string; issuedAt: number }
+  )
+
 /** Public fields are copied explicitly; never post raw status/envelope/extras. */
 export function PackageStage({
   scene: incomingScene,
@@ -118,22 +130,42 @@ export function PackageStage({
   const capabilityLifetime = questionFamily
     ? `question:${questionId}`
     : scene.key
-  const [url, setUrl] = useState("")
-  const capability = useRef<{
-    key: string
-    issuedAt: number
-    lifetime: string
-  } | null>(null)
-  const [capabilityState, setCapabilityState] = useState<{
-    key: string
-    unavailable: boolean
-  } | null>(null)
+  const capabilityKey = `${roomId}/${sourceDigest}/${theme.definition.id}`
+  const [capabilityState, setCapability] = useState<CapabilityState>(() => ({
+    key: capabilityKey,
+    lifetime: capabilityLifetime,
+    boundaryAt: serverTime,
+    status: "pending",
+  }))
+  let capability = capabilityState
+
+  if (
+    capability.key !== capabilityKey ||
+    capability.lifetime !== capabilityLifetime
+  ) {
+    const nextIdentity = {
+      key: capabilityKey,
+      lifetime: capabilityLifetime,
+      boundaryAt: serverTime,
+    }
+    // A boundary is observed before committing a new document. Clock changes
+    // inside that lifetime never expire or replace its already-loaded iframe.
+    const reusable =
+      capability.key === capabilityKey &&
+      capability.status === "ready" &&
+      serverTime - capability.issuedAt < 240_000
+    capability = reusable
+      ? { ...capability, ...nextIdentity }
+      : { ...nextIdentity, status: "pending" }
+    // Admission also sees the new identity during React's discarded render.
+    setCapability(capability)
+  }
+
   const [images, setImages] = useState<Record<string, string>>({})
   const [assetState, setAssetState] = useState<{
     key: string
     unavailable: boolean
   } | null>(null)
-  const capabilityKey = `${roomId}/${sourceDigest}/${theme.definition.id}`
   const question = "question" in scene ? scene.question : null
   const questionImage =
     question?.questionImage ??
@@ -158,26 +190,20 @@ export function PackageStage({
   )
   const assetKey = JSON.stringify([sourceDigest, imageKey])
   useEffect(() => {
-    if (!sourceDigest) {
+    if (!sourceDigest || capability.status !== "pending") {
       return
     }
 
-    if (
-      capability.current?.key === capabilityKey &&
-      Date.now() - capability.current.issuedAt < 240_000
-    ) {
-      capability.current.lifetime = capabilityLifetime
-
-      return
-    }
-
-    let alive = true
+    const controller = new AbortController()
+    const requestedAt = Date.now()
     void requestAuthHeaders()
       .then(async (headers) => {
+        controller.signal.throwIfAborted()
         const response = await fetch(
           `/api/packages/runtime/${sourceDigest}/${theme.definition.id}?roomId=${encodeURIComponent(roomId)}`,
           {
             headers,
+            signal: controller.signal,
             redirect: "error",
             cache: "no-store",
           },
@@ -189,35 +215,29 @@ export function PackageStage({
 
         return response.json() as Promise<{ url: string }>
       })
-      .then((r) => {
-        if (alive) {
-          capability.current = {
-            key: capabilityKey,
-            issuedAt: Date.now(),
-            lifetime: capabilityLifetime,
-          }
-          setUrl(r.url)
-          setCapabilityState({ key: capabilityKey, unavailable: false })
+      .then((result) => {
+        if (!controller.signal.aborted) {
+          // Keep ticket age on the same server-adjusted clock as the boundary.
+          const issuedAt = capability.boundaryAt + Date.now() - requestedAt
+          setCapability((current) =>
+            current === capability
+              ? { ...capability, status: "ready", url: result.url, issuedAt }
+              : current,
+          )
         }
       })
       .catch(() => {
-        if (alive) {
-          capability.current = null
-          setUrl("")
-          setCapabilityState({ key: capabilityKey, unavailable: true })
+        if (!controller.signal.aborted) {
+          setCapability((current) =>
+            current === capability
+              ? { ...capability, status: "unavailable" }
+              : current,
+          )
         }
       })
 
-    return () => {
-      alive = false
-    }
-  }, [
-    sourceDigest,
-    theme.definition.id,
-    roomId,
-    capabilityLifetime,
-    capabilityKey,
-  ])
+    return () => controller.abort()
+  }, [sourceDigest, theme.definition.id, roomId, capability])
   useEffect(() => {
     if (!sourceDigest) {
       return
@@ -293,13 +313,9 @@ export function PackageStage({
     packageUsesSandboxForPhase(theme.definition.sandbox?.slots, phase) &&
     theme.definition.sandbox?.roles.includes(role),
   )
-  const capabilityPending =
-    capabilityState?.key !== capabilityKey ||
-    (capability.current?.key === capabilityKey &&
-      capability.current.lifetime !== capabilityLifetime &&
-      Date.now() - capability.current.issuedAt >= 240_000)
-  const capabilityUnavailable =
-    capabilityState?.key === capabilityKey && capabilityState.unavailable
+  const capabilityPending = capability.status === "pending"
+  const capabilityUnavailable = capability.status === "unavailable"
+  const url = capability.status === "ready" ? capability.url : ""
   const assetsPending = imageUrls.length > 0 && assetState?.key !== assetKey
   const assetsUnavailable =
     assetState?.key === assetKey && assetState.unavailable

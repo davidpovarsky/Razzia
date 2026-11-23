@@ -1,3 +1,4 @@
+import { promiseFrom } from "../../shared/promise-operation.ts"
 import { randomUUID } from "node:crypto"
 import { Client } from "@modelcontextprotocol/client"
 import type { Transport } from "@modelcontextprotocol/server"
@@ -59,16 +60,23 @@ export class MemoryDrafts {
   records = new Map<string, DraftRecord>()
   outcomes = new Map<string, { digest: string; result: DraftRecord }>()
   audit: string[] = []
-  private owner(p: VerifiedPrincipal) {
+  private static owner(p: VerifiedPrincipal) {
     return `${p.accountId}:${p.subject}`
   }
-  private replay(
-    p: VerifiedPrincipal,
-    tool: string,
-    m: MutationIdentity,
-    run: () => DraftRecord,
-  ) {
-    const key = [this.owner(p), p.grantId, tool, m.idempotencyKey].join(":")
+  private replay({
+    p,
+    tool,
+    m,
+    run,
+  }: {
+    p: VerifiedPrincipal
+    tool: string
+    m: MutationIdentity
+    run: () => DraftRecord
+  }) {
+    const key = [MemoryDrafts.owner(p), p.grantId, tool, m.idempotencyKey].join(
+      ":",
+    )
     const prior = this.outcomes.get(key)
 
     if (prior) {
@@ -88,57 +96,71 @@ export class MemoryDrafts {
 
     return structuredClone(result)
   }
-  async create(
-    p: VerifiedPrincipal,
-    value: NormalizedDraft,
-    m: MutationIdentity,
-  ) {
-    return this.replay(p, "create", m, () => {
-      const result = { ...value, draftId: randomUUID(), revision: 1 }
-      this.records.set(
-        `${this.owner(p)}:${result.draftId}`,
-        structuredClone(result),
-      )
+  create(p: VerifiedPrincipal, value: NormalizedDraft, m: MutationIdentity) {
+    return promiseFrom(() =>
+      this.replay({
+        p,
+        tool: "create",
+        m,
+        run: () => {
+          const result = { ...value, draftId: randomUUID(), revision: 1 }
+          this.records.set(
+            `${MemoryDrafts.owner(p)}:${result.draftId}`,
+            structuredClone(result),
+          )
 
-      return result
+          return result
+        },
+      }),
+    )
+  }
+  get(p: VerifiedPrincipal, id: string) {
+    return promiseFrom(() => {
+      const found = this.records.get(`${MemoryDrafts.owner(p)}:${id}`)
+
+      return found ? structuredClone(found) : undefined
     })
   }
-  async get(p: VerifiedPrincipal, id: string) {
-    const found = this.records.get(`${this.owner(p)}:${id}`)
-
-    return found ? structuredClone(found) : undefined
-  }
-  async replace(
-    p: VerifiedPrincipal,
-    id: string,
-    revision: number,
-    value: NormalizedDraft,
-    m: MutationIdentity,
+  replace(
+    ...[p, id, revision, value, m]: [
+      p: VerifiedPrincipal,
+      id: string,
+      revision: number,
+      value: NormalizedDraft,
+      m: MutationIdentity,
+    ]
   ) {
-    return this.replay(p, "replace", m, () => {
-      const key = `${this.owner(p)}:${id}`
-      const current = this.records.get(key)
+    return promiseFrom(() =>
+      this.replay({
+        p,
+        tool: "replace",
+        m,
+        run: () => {
+          const key = `${MemoryDrafts.owner(p)}:${id}`
+          const current = this.records.get(key)
 
-      if (!current) {
-        throw new ToolError("NOT_FOUND")
-      }
+          if (!current) {
+            throw new ToolError("NOT_FOUND")
+          }
 
-      if (current.revision !== revision) {
-        throw new ToolError("REVISION_CONFLICT", {
-          currentRevision: current.revision,
-        })
-      }
+          if (current.revision !== revision) {
+            throw new ToolError("REVISION_CONFLICT", {
+              currentRevision: current.revision,
+            })
+          }
 
-      const result = {
-        ...current,
-        ...value,
-        draftId: id,
-        revision: revision + 1,
-      }
-      this.records.set(key, structuredClone(result))
+          const result = {
+            ...current,
+            ...value,
+            draftId: id,
+            revision: revision + 1,
+          }
+          this.records.set(key, structuredClone(result))
 
-      return result
-    })
+          return result
+        },
+      }),
+    )
   }
 }
 
@@ -147,23 +169,27 @@ function linkedTransportPair(): [Transport, Transport] {
     start: async () => {
       /* This synthetic transport is connected in memory and needs no startup work. */
     },
-    send: async (message) => {
-      queueMicrotask(() => b.onmessage?.(structuredClone(message)))
-    },
-    close: async () => {
-      a.onclose?.()
-    },
+    send: (message) =>
+      promiseFrom(() => {
+        queueMicrotask(() => b.onmessage?.(structuredClone(message)))
+      }),
+    close: () =>
+      promiseFrom(() => {
+        a.onclose?.()
+      }),
   }
   const b: Transport = {
     start: async () => {
       /* This synthetic transport is connected in memory and needs no startup work. */
     },
-    send: async (message) => {
-      queueMicrotask(() => a.onmessage?.(structuredClone(message)))
-    },
-    close: async () => {
-      b.onclose?.()
-    },
+    send: (message) =>
+      promiseFrom(() => {
+        queueMicrotask(() => a.onmessage?.(structuredClone(message)))
+      }),
+    close: () =>
+      promiseFrom(() => {
+        b.onclose?.()
+      }),
   }
 
   return [a, b]

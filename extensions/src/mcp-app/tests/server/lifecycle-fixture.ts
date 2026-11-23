@@ -1,3 +1,4 @@
+import { promiseFrom } from "../../shared/promise-operation.ts"
 import { Client } from "@modelcontextprotocol/client"
 import {
   McpServer,
@@ -35,21 +36,29 @@ export function deferred<T = void>() {
   return { promise, resolve, reject }
 }
 
-export async function drain() {
-  for (let i = 0; i < 8; i += 1) {
-    await immediate()
+export async function drain(remaining = 8): Promise<void> {
+  if (remaining === 0) {
+    return
   }
+
+  await immediate()
+  await drain(remaining - 1)
 }
 
-export async function until(check: () => boolean) {
-  for (let i = 0; i < 500; i += 1) {
-    if (check()) {
-      return
-    }
-
-    await immediate()
+export async function until(
+  check: () => boolean,
+  remaining = 500,
+): Promise<void> {
+  if (remaining === 0) {
+    throw new Error("Expected lifecycle state")
   }
-  throw new Error("Expected lifecycle state")
+
+  if (check()) {
+    return
+  }
+
+  await immediate()
+  await until(check, remaining - 1)
 }
 
 /**
@@ -96,7 +105,10 @@ export async function lifecycleHarness(
       { inputSchema: inputs.get_game_draft },
       (_args, context) => guarded.run(context, () => work(context)),
     )
-    server = { connect: guarded.connect, close: guarded.close }
+    server = {
+      connect: (...args) => guarded.connect(...args),
+      close: () => guarded.close(),
+    }
   } else {
     server = createTadazzMcpServer(config, deps)
   }
@@ -129,18 +141,19 @@ export async function lifecycleHarness(
     start: async () => {
       /* This synthetic transport is connected in memory and needs no startup work. */
     },
-    send: async (message) => {
-      clientMessages.push(structuredClone(message))
-      queueMicrotask(() => st.onmessage?.(structuredClone(message)))
-    },
-    close: async () => closeBoth(),
+    send: (message) =>
+      promiseFrom(() => {
+        clientMessages.push(structuredClone(message))
+        queueMicrotask(() => st.onmessage?.(structuredClone(message)))
+      }),
+    close: () => promiseFrom(() => closeBoth()),
   }
   const st: Transport = {
     start: async () => {
       /* This synthetic transport is connected in memory and needs no startup work. */
     },
     send: async (message, options) => {
-      flags.sends++
+      flags.sends += 1
 
       if (flags.failSend) {
         throw new Error("synthetic-secret-send")
@@ -150,15 +163,16 @@ export async function lifecycleHarness(
       serverMessages.push(structuredClone(message))
       queueMicrotask(() => ct.onmessage?.(structuredClone(message)))
     },
-    close: async () => {
-      flags.closes++
+    close: () =>
+      promiseFrom(() => {
+        flags.closes += 1
 
-      if (flags.failClose) {
-        throw new Error("synthetic-secret-close")
-      }
+        if (flags.failClose) {
+          throw new Error("synthetic-secret-close")
+        }
 
-      closeBoth()
-    },
+        closeBoth()
+      }),
   }
   await server.connect(st)
   await client.connect(ct)

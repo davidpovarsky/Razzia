@@ -79,18 +79,15 @@ function answerReadiness(
     ) {
       throw new Error("show-library:projection-estimation-mismatch")
     }
-  } else {
-    if (
-      q.estimation ||
-      q.choices.length !== card.answers.length ||
-      q.choices.some(
-        (c, i) =>
-          c.id !== `${q.id}.choice.${i + 1}` ||
-          c.label !== card.answers[i].text,
-      )
-    ) {
-      throw new Error("show-library:projection-choice-mismatch")
-    }
+  } else if (
+    q.estimation ||
+    q.choices.length !== card.answers.length ||
+    q.choices.some(
+      (c, i) =>
+        c.id !== `${q.id}.choice.${i + 1}` || c.label !== card.answers[i].text,
+    )
+  ) {
+    throw new Error("show-library:projection-choice-mismatch")
   }
 
   if (

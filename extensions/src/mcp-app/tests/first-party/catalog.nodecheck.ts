@@ -1,7 +1,6 @@
 import assert from "node:assert/strict"
 import { before, after, test } from "node:test"
 import fs from "node:fs"
-import path from "node:path"
 import { createHash, generateKeyPairSync, randomBytes } from "node:crypto"
 import i18next from "i18next"
 import {
@@ -136,9 +135,10 @@ before(async () => {
     config,
     configRoot: requireInitializedF().root,
     keyId: "synthetic-catalog-key",
-    signingPrivateKeyPem: pair.privateKey
-      .export({ type: "pkcs8", format: "pem" })
-      .toString(),
+    signingPrivateKeyPem: pair.privateKey.export({
+      type: "pkcs8",
+      format: "pem",
+    }),
     ticketEncryptionKey: randomBytes(32),
     consentPageUrl: `${origin}/studio/oauth-consent`,
     clients: [
@@ -155,7 +155,7 @@ before(async () => {
     translate: (name, lang) => {
       translationEffect?.()
 
-      return String(translator.t(name, { lng: lang }))
+      return translator.t(name, { lng: lang })
     },
   })
   remote = requireInitializedIssuer().remote({
@@ -444,7 +444,7 @@ test("all eight existing i18next/D locales resolve real family names; locale cha
             family.definition,
             family.definition.nameKey,
             lang,
-            (name) => String(translator.t(name, { lng: lang })),
+            (name) => translator.t(name, { lng: lang }),
           ),
         ),
       )
@@ -483,7 +483,9 @@ test("cursor proof cannot be altered or transplanted to another real grant or ac
       )
     }
     const changed =
-      cursor.slice(0, -2) + (cursor.at(-2) === "a" ? "b" : "a") + cursor.at(-1)
+      cursor.slice(0, -2) +
+      (cursor.at(-2) === "a" ? "b" : "a") +
+      cursor.slice(-1)
     assert.equal(
       body(await call(a, { cursor: changed })).error.code,
       "VALIDATION_FAILED",
@@ -542,7 +544,7 @@ test("actual revoked grant denies cached principal and its cursor; stable issuer
   const reopened = await createFirstPartyOAuth(requireInitializedOptions()),
     again = reopened.catalog({
       locale: () => "en",
-      translate: (name, lang) => String(translator.t(name, { lng: lang })),
+      translate: (name, lang) => translator.t(name, { lng: lang }),
     }),
     fresh = await reopened.verifyAccessToken(token)
   const continuation = (await again.listThemes(fresh, {
@@ -642,13 +644,10 @@ test("an actual unconfigured i18next translator cannot expose a stripped transla
     resources: {},
     initAsync: false,
   })
-  assert.equal(
-    String(empty.t("extensions:themes.classicName")),
-    "themes.classicName",
-  )
+  assert.equal(empty.t("extensions:themes.classicName"), "themes.classicName")
   const missing = requireInitializedIssuer().catalog({
     locale: () => "en",
-    translate: (name) => String(empty.t(name)),
+    translate: (name) => empty.t(name),
   })
   const p = await requireInitializedIssuer().verifyAccessToken(await linked())
   const priorSnapshot3 = snapshot(requireInitializedF().root)

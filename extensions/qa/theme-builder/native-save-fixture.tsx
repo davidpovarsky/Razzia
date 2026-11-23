@@ -28,7 +28,13 @@ await instance.init({
   resources: { [locale]: { translation: {} } },
 })
 document.documentElement.lang = locale
-createRoot(document.getElementById("root")!).render(
+const mount = document.getElementById("root")
+
+if (!mount) {
+  throw new Error("qa:missing-root")
+}
+
+createRoot(mount).render(
   <StrictMode>
     <I18nextProvider i18n={instance}>
       <NativeSaveConsentPage

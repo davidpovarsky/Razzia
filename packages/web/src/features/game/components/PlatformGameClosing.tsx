@@ -37,11 +37,7 @@ function HostClosing({ children, extensionState }: Props) {
   if (enabled) {
     if (launch?.stage === "closed") {
       elapsedMs = PLATFORM_CLOSING_DURATION_MS
-    } else if (
-      ending &&
-      launch?.startedAt !== null &&
-      launch?.startedAt !== undefined
-    ) {
+    } else if (ending && launch.startedAt !== null) {
       elapsedMs =
         paused && typeof extensionState?.pause?.remainingMs === "number"
           ? PLATFORM_CLOSING_DURATION_MS - extensionState.pause.remainingMs

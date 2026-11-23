@@ -90,10 +90,23 @@ export function previewSteps(
       answers: [],
     }
   } else {
-    const results = frame.results!
-    const ordered = frame.choices.map((choice) =>
-      results.find((r) => r.answerId === choice.id)!,
-    )
+    const { results } = frame
+
+    if (!results) {
+      throw new Error("show-preview:missing-results")
+    }
+
+    const ordered = frame.choices.map((choice) => {
+      const result = results.find(
+        (candidate) => candidate.answerId === choice.id,
+      )
+
+      if (!result) {
+        throw new Error("show-preview:missing-choice-result")
+      }
+
+      return result
+    })
     scene = {
       kind: "results",
       key: `results:${q.key}`,
@@ -135,7 +148,7 @@ export function pausedPreviewSteps(
       wallNow,
       presentation,
     )
-    const [step] = cards.steps
+    const step = cards.steps.at(0)
 
     if (step?.op !== "presentOptions") {
       throw new Error("show-preview:invalid-resume")

@@ -113,11 +113,24 @@ export const fingerprint = (values: readonly unknown[]) =>
 
 // Public, deterministic server selector; its secrecy is never authorization.
 export function deriveServiceId(
-  owner: string,
-  game: string,
-  provider: string,
-  requestId: string,
+  ...args: [owner: string, game: string, provider: string, requestId: string]
 ) {
+  const [owner, game, provider, requestId] = args
+
+  return deriveServiceIdFromRequest({ owner, game, provider, requestId })
+}
+
+function deriveServiceIdFromRequest({
+  owner,
+  game,
+  provider,
+  requestId,
+}: {
+  owner: string
+  game: string
+  provider: string
+  requestId: string
+}) {
   for (const value of [owner, game, provider, requestId]) {
     identifier(value)
   }

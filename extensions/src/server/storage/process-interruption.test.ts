@@ -42,12 +42,17 @@ interface ChildResult {
   messages: unknown[]
 }
 
-function runChild(
-  mode: "interrupt" | "recover",
-  root: string,
-  token: string,
-  boundaryOrSequence: string,
-): Promise<ChildResult> {
+function runChild({
+  mode,
+  root,
+  token,
+  boundaryOrSequence,
+}: {
+  mode: "interrupt" | "recover"
+  root: string
+  token: string
+  boundaryOrSequence: string
+}): Promise<ChildResult> {
   return new Promise((resolve, reject) => {
     const child = fork(childFile, [mode, root, token, boundaryOrSequence], {
       cwd: repository,
@@ -139,12 +144,12 @@ describe("real process interruption and fresh-process recovery", () => {
         const before = processFixtureState(fixture.root)
         receipt.before = before
         expect(references(before)).toHaveLength(3)
-        const interrupted = await runChild(
-          "interrupt",
-          fixture.root,
+        const interrupted = await runChild({
+          mode: "interrupt",
+          root: fixture.root,
           token,
-          boundary,
-        )
+          boundaryOrSequence: boundary,
+        })
         receipt.interrupted = interrupted
         expect(interrupted.timedOut, interrupted.stderr).toBe(false)
 
@@ -245,7 +250,12 @@ describe("real process interruption and fresh-process recovery", () => {
           ).toBe(boundary === "quiz-sidecar-write" ? 2 : 1)
         }
 
-        const recovery1 = await runChild("recover", fixture.root, token, "1")
+        const recovery1 = await runChild({
+          mode: "recover",
+          root: fixture.root,
+          token,
+          boundaryOrSequence: "1",
+        })
         receipt.recovery1Process = recovery1
         expect(recovery1.timedOut, recovery1.stderr).toBe(false)
         expect(recovery1.code, recovery1.stderr).toBe(0)
@@ -328,7 +338,12 @@ describe("real process interruption and fresh-process recovery", () => {
           expect(references(firstState)).toHaveLength(3)
         }
 
-        const recovery2 = await runChild("recover", fixture.root, token, "2")
+        const recovery2 = await runChild({
+          mode: "recover",
+          root: fixture.root,
+          token,
+          boundaryOrSequence: "2",
+        })
         receipt.recovery2Process = recovery2
         expect(recovery2.timedOut, recovery2.stderr).toBe(false)
         expect(recovery2.code, recovery2.stderr).toBe(0)

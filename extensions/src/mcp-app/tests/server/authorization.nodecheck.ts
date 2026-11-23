@@ -1,3 +1,4 @@
+import { promiseFrom } from "../../shared/promise-operation.ts"
 import assert from "node:assert/strict"
 import test from "node:test"
 import {
@@ -54,7 +55,7 @@ for (const invalid of [
 ]) {
   test(`invalid principal fails before account store: ${Object.keys(invalid).join()}`, async () => {
     const h = await harness({
-      authorize: async () => ({ ...principal(), ...invalid }),
+      authorize: () => promiseFrom(() => ({ ...principal(), ...invalid })),
     })
 
     try {

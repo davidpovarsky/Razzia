@@ -142,12 +142,14 @@ function createTransportPair(): [AppTransport, AppTransport] {
         await this.peer.close()
       }
     },
-    async send(message: TransportMessage) {
+    send(message: TransportMessage) {
       queueMicrotask(() => {
         if (!this.closed) {
           this.peer?.onmessage?.(message)
         }
       })
+
+      return Promise.resolve()
     },
   })
   const appTransport = createHalf()
@@ -262,29 +264,30 @@ test("candidate-first handling on preview() avoids intermediate unavailable stat
     args: Record<string, unknown> | undefined
   }> = []
   const h = await createConnectedHarness({
-    onCallTool: async ({ name, arguments: args }) => {
-      calls.push({ name, args })
+    onCallTool: ({ name, arguments: args }) =>
+      asPromise(() => {
+        calls.push({ name, args })
 
-      if (name === "get_game_draft") {
-        return makeResult({
-          draftId,
-          revision: 1,
-          summary,
-          authoredShowJson: '{"title":"Original"}',
-        })
-      }
+        if (name === "get_game_draft") {
+          return makeResult({
+            draftId,
+            revision: 1,
+            summary,
+            authoredShowJson: '{"title":"Original"}',
+          })
+        }
 
-      if (
-        name === "preview_game" &&
-        args?.draftId === draftId &&
-        args?.expectedRevision === 1 &&
-        args?.locale === "en"
-      ) {
-        return structuredClone(retainedEn.result)
-      }
+        if (
+          name === "preview_game" &&
+          args?.draftId === draftId &&
+          args.expectedRevision === 1 &&
+          args.locale === "en"
+        ) {
+          return structuredClone(retainedEn.result)
+        }
 
-      return makeConflict(2)
-    },
+        return makeConflict(2)
+      }),
   })
 
   try {
@@ -327,30 +330,31 @@ test("non-candidate REVISION_CONFLICT and V1 ready preview_game responses are no
   const { draftId } = retainedEn.selection
   let mode: "conflict" | "v1-ready" = "conflict"
   const h = await createConnectedHarness({
-    onCallTool: async ({ name }) => {
-      if (name === "get_game_draft") {
+    onCallTool: ({ name }) =>
+      asPromise(() => {
+        if (name === "get_game_draft") {
+          return makeResult({
+            draftId,
+            revision: 1,
+            summary,
+            authoredShowJson: '{"title":"Original"}',
+          })
+        }
+
+        if (mode === "conflict") {
+          return makeConflict(4)
+        }
+
         return makeResult({
           draftId,
           revision: 1,
           summary,
-          authoredShowJson: '{"title":"Original"}',
+          previewVersion: 1,
+          rendererStatus: "ready",
+          projectionDigest: "a".repeat(64),
+          sbRegistryVersion: "1.0.0",
         })
-      }
-
-      if (mode === "conflict") {
-        return makeConflict(4)
-      }
-
-      return makeResult({
-        draftId,
-        revision: 1,
-        summary,
-        previewVersion: 1,
-        rendererStatus: "ready",
-        projectionDigest: "a".repeat(64),
-        sbRegistryVersion: "1.0.0",
-      })
-    },
+      }),
   })
 
   try {
@@ -457,7 +461,7 @@ test("duplicate in-flight preview() coalesces to a single preview_game tool call
     await new Promise((resolve) => {
       setTimeout(resolve, 20)
     })
-    await h.host.setHostContext({ locale: "ja" })
+    h.host.setHostContext({ locale: "ja" })
     await new Promise((resolve) => {
       setTimeout(resolve, 20)
     })
@@ -482,7 +486,7 @@ test("concurrent refresh and edit invalidate in-flight preview via existing gene
   let serverRevision = 1
   let pendingPreview = deferred<ToolResult>()
   const h = await createConnectedHarness({
-    onCallTool: async ({ name, arguments: args }) => {
+    onCallTool: async ({ name }) => {
       if (name === "get_game_draft") {
         return makeResult({
           draftId,
@@ -551,33 +555,34 @@ test("preview after edit sends expectedRevision + 1 and disposes prior candidate
   let serverRevision = 1
   const previewRevisions: number[] = []
   const h = await createConnectedHarness({
-    onCallTool: async ({ name, arguments: args }) => {
-      if (name === "get_game_draft") {
-        return makeResult({
-          draftId,
-          revision: serverRevision,
-          summary,
-          authoredShowJson: '{"title":"Original"}',
-        })
-      }
+    onCallTool: ({ name, arguments: args }) =>
+      asPromise(() => {
+        if (name === "get_game_draft") {
+          return makeResult({
+            draftId,
+            revision: serverRevision,
+            summary,
+            authoredShowJson: '{"title":"Original"}',
+          })
+        }
 
-      if (name === "update_game_draft") {
-        serverRevision += 1
+        if (name === "update_game_draft") {
+          serverRevision += 1
 
-        return makeResult({ draftId, revision: serverRevision, summary })
-      }
+          return makeResult({ draftId, revision: serverRevision, summary })
+        }
 
-      if (name === "preview_game") {
-        const rev = Number(args?.expectedRevision)
-        previewRevisions.push(rev)
+        if (name === "preview_game") {
+          const rev = Number(args?.expectedRevision)
+          previewRevisions.push(rev)
 
-        return rev === 1
-          ? structuredClone(retainedEn.result)
-          : cloneForRevision(retainedEn.result, rev)
-      }
+          return rev === 1
+            ? structuredClone(retainedEn.result)
+            : cloneForRevision(retainedEn.result, rev)
+        }
 
-      return makeConflict(serverRevision)
-    },
+        return makeConflict(serverRevision)
+      }),
   })
 
   try {
@@ -604,8 +609,8 @@ test("preview after edit sends expectedRevision + 1 and disposes prior candidate
 
 test("adversarial tamper, stale candidate, toolcancelled, toolInfo, and plain unavailable fail closed", async () => {
   const { draftId } = retainedEn.selection
-  let nextPreview: () => Promise<ToolResult> = async () =>
-    makePlainUnavailable()
+  let nextPreview: () => Promise<ToolResult> = () =>
+    asPromise(() => makePlainUnavailable())
   const h = await createConnectedHarness({
     onCallTool: async ({ name }) => {
       if (name === "get_game_draft") {
@@ -626,24 +631,27 @@ test("adversarial tamper, stale candidate, toolcancelled, toolInfo, and plain un
     await h.widget.controller.refresh()
 
     // 1. Tampered inputDigest
-    nextPreview = async () => {
-      const tampered = cloneForRevision(retainedEn.result, 2)
-      tampered._meta["tadazz/preview-candidate-v2"].inputDigest = "0".repeat(64)
+    nextPreview = () =>
+      asPromise(() => {
+        const tampered = cloneForRevision(retainedEn.result, 2)
+        tampered._meta["tadazz/preview-candidate-v2"].inputDigest = "0".repeat(
+          64,
+        )
 
-      return tampered
-    }
+        return tampered
+      })
     await h.widget.preview()
     assert.equal(h.widget.controller.snapshot().status, "unavailable")
     assert.equal(h.mounts.length, 0)
 
     // 2. Stale revision (host sends rev 1 for expectedRevision 2)
-    nextPreview = async () => structuredClone(retainedEn.result)
+    nextPreview = () => asPromise(() => structuredClone(retainedEn.result))
     await h.widget.preview()
     assert.equal(h.widget.controller.snapshot().status, "unavailable")
     assert.equal(h.mounts.length, 0)
 
     // 3. Wrong locale
-    nextPreview = async () => cloneForRevision(retainedJa.result, 2)
+    nextPreview = () => asPromise(() => cloneForRevision(retainedJa.result, 2))
     await h.widget.preview()
     assert.equal(h.widget.controller.snapshot().status, "unavailable")
     assert.equal(h.mounts.length, 0)
@@ -666,7 +674,7 @@ test("adversarial tamper, stale candidate, toolcancelled, toolInfo, and plain un
     assert.equal(h.mounts.length, 0)
 
     // 5. Async renderer failure callback transitions to unavailable
-    nextPreview = async () => cloneForRevision(retainedEn.result, 2)
+    nextPreview = () => asPromise(() => cloneForRevision(retainedEn.result, 2))
     await h.widget.preview()
     assert.equal(h.widget.controller.snapshot().status, "candidate")
     assert.equal(h.mounts.length, 1)
@@ -676,7 +684,7 @@ test("adversarial tamper, stale candidate, toolcancelled, toolInfo, and plain un
     // 6. hostcontextchanged with toolInfo closes and disposes
     await h.widget.preview()
     assert.equal(h.widget.controller.snapshot().status, "candidate")
-    await h.host.setHostContext({
+    h.host.setHostContext({
       toolInfo: {
         id: "next-invocation",
         tool: { name: "preview_game", inputSchema: { type: "object" } },
@@ -691,3 +699,8 @@ test("adversarial tamper, stale candidate, toolcancelled, toolInfo, and plain un
     await h.cleanup()
   }
 })
+
+// Preserve the immediate work and Promise rejection semantics of synchronous host doubles.
+function asPromise<T>(action: () => T): Promise<Awaited<T>> {
+  return Promise.try(action)
+}

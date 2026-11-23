@@ -1,3 +1,4 @@
+import { promiseFrom } from "../../shared/promise-operation.ts"
 import assert from "node:assert/strict"
 import test from "node:test"
 import {
@@ -148,7 +149,9 @@ test(
       const pending = controllers.map((c) => h.read(c.signal))
       const rejections = pending.map((p) => assert.rejects(p))
       await until(() => entered === 32)
-      controllers.forEach((c) => c.abort())
+      controllers.forEach((c) => {
+        c.abort()
+      })
       await Promise.all(rejections)
       await drain()
       const before = h.flags.sends
@@ -276,10 +279,12 @@ test(
         return auth === 1 ? first.promise : b
       },
       drafts: {
-        async get(p) {
-          readers.push(p.accountId)
+        get(p) {
+          return promiseFrom(() => {
+            readers.push(p.accountId)
 
-          return undefined
+            return undefined
+          })
         },
         create() {
           return Promise.reject(

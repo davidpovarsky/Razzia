@@ -122,7 +122,7 @@ async function native(theme) {
 
   return preview
 }
-async function state(preview, theme) {
+function state(preview, theme) {
   const target =
     theme === "tadazz-classic"
       ? preview.getByTestId("tadazz-backdrop")

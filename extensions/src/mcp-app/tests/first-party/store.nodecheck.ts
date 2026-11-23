@@ -1,3 +1,4 @@
+import { captureMethod } from "../method-snapshot.ts"
 import { after, before, test } from "node:test"
 import assert from "node:assert/strict"
 import { DatabaseSync } from "node:sqlite"
@@ -232,8 +233,9 @@ test("replace and pending save replay precede current revision; pending never co
   const operation = rows(
     requireInitializedF().sessions[0].owner,
   ).operations.find((row) => row.request_key === intent.idempotencyKey)
-  assert.equal(operation?.state, "PENDING_C1")
-  assert.equal(operation?.native_id, null)
+  assert.ok(operation)
+  assert.equal(operation.state, "PENDING_C1")
+  assert.equal(operation.native_id, null)
   assert.equal(
     (
       await requireInitializedF().as(requireInitializedF().sessions[0], (p) =>
@@ -245,7 +247,7 @@ test("replace and pending save replay precede current revision; pending never co
 })
 test("SQLite audit failure rolls draft and operation back together", async () => {
   const priorRows3 = rows(requireInitializedF().sessions[0].owner)
-  const original = DatabaseSync.prototype.prepare
+  const original = captureMethod(DatabaseSync.prototype, "prepare")
   let attemptedAfterDraftAndOperation = false
   DatabaseSync.prototype.prepare = function prepare(
     this: DatabaseSync,
@@ -283,7 +285,7 @@ test("SQLite audit failure rolls draft and operation back together", async () =>
 test("revoke between precommit check and COMMIT hides outcome but honestly preserves committed rows", async () => {
   const session = await freshSession(requireInitializedF().sessions[0].owner)
   const priorRows4 = rows(session.owner)
-  const original = DatabaseSync.prototype.exec
+  const original = captureMethod(DatabaseSync.prototype, "exec")
   let committed = false
   DatabaseSync.prototype.exec = function exec(this: DatabaseSync, sql: string) {
     if (sql === "COMMIT" && !committed) {
@@ -362,9 +364,12 @@ test("real crashed hot journal is rejected without recovery or any private-famil
       )
       child.stdout.once("data", (data) => {
         clearTimeout(timer)
-        String(data).includes("READY")
-          ? resolve()
-          : reject(new Error("Synthetic worker did not reach journal state"))
+
+        if (String(data).includes("READY")) {
+          resolve()
+        } else {
+          reject(new Error("Synthetic worker did not reach journal state"))
+        }
       })
       child.once("error", (error) => {
         clearTimeout(timer)

@@ -37,10 +37,12 @@ export function checkedDraft(raw: unknown, deps: Dependencies) {
 }
 
 export async function readDraft(
-  deps: Dependencies,
-  p: VerifiedPrincipal,
-  id: string,
-  expected?: number,
+  ...[deps, p, id, expected]: [
+    deps: Dependencies,
+    p: VerifiedPrincipal,
+    id: string,
+    expected?: number,
+  ]
 ) {
   if (!deps.drafts) {
     throw unavailable()

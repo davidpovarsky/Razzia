@@ -59,6 +59,7 @@ export interface AccessTokenOptions {
 }
 
 const denied = () => new ToolError("SCOPE_REQUIRED")
+const isActive = (value: unknown): value is true => value === true
 const decode = (part: string) => {
   if (!/^[A-Za-z0-9_-]+$/u.test(part)) {
     throw denied()
@@ -202,7 +203,8 @@ export function createAccessTokenVerifier(options: AccessTokenOptions) {
         current()
 
         if (
-          grant?.active !== true ||
+          !grant ||
+          !isActive(grant.active) ||
           grant.grantId !== claims.grant_id ||
           grant.subject !== claims.sub ||
           grant.clientId !== claims.client_id ||

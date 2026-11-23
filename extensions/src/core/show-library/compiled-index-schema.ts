@@ -24,11 +24,24 @@ const packageName = z
   .string()
   .max(214)
   .regex(/^(?:@[a-z0-9][a-z0-9._-]*\/)?[a-z0-9][a-z0-9._-]*$/u)
+function hasForbiddenCodePoint(value: string, includeSpace = false): boolean {
+  return Array.from(value).some((character) => {
+    const point = character.codePointAt(0)
+
+    return (
+      point !== undefined &&
+      (point <= (includeSpace ? 0x20 : 0x1f) ||
+        point === 0x7f ||
+        (point >= 0xd800 && point <= 0xdfff))
+    )
+  })
+}
+
 const text = z
   .string()
   .min(1)
   .max(1000)
-  .refine((s) => !/[\u0000-\u001f\u007f\ud800-\udfff]/u.test(s))
+  .refine((s) => !hasForbiddenCodePoint(s))
 const relativePath = z
   .string()
   .min(1)
@@ -36,7 +49,8 @@ const relativePath = z
   .refine(
     (s) =>
       !s.startsWith("/") &&
-      !/[\\:%?#\u0000-\u0020\u007f\ud800-\udfff]/u.test(s) &&
+      !/[\\:%?#]/u.test(s) &&
+      !hasForbiddenCodePoint(s, true) &&
       s
         .split("/")
         .every(
@@ -85,9 +99,9 @@ function bounded<T extends z.ZodType>(schema: T) {
               continue
             }
 
-            const d = Object.getOwnPropertyDescriptor(item, key)!
+            const d = Object.getOwnPropertyDescriptor(item, key)
 
-            if (!d.enumerable) {
+            if (!d?.enumerable) {
               throw new Error("hidden-field")
             }
 
@@ -689,7 +703,7 @@ export const previewTypographyEnvironmentV2Schema = bounded(
       pixelQualification: z.literal("environment-specific-non-hermetic"),
       os: text,
       browser: text,
-      deviceScale: z.number().finite().min(0.25).max(8),
+      deviceScale: z.number().min(0.25).max(8),
       viewport: z.strictObject({
         width: positive.max(32768),
         height: positive.max(32768),

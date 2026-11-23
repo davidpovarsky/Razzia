@@ -113,9 +113,10 @@ before(async () => {
     configRoot: requireInitializedF().root,
     consentPageUrl: `${origin}/studio/oauth-consent`,
     keyId: "synthetic-oauth-issuer",
-    signingPrivateKeyPem: pair.privateKey
-      .export({ type: "pkcs8", format: "pem" })
-      .toString(),
+    signingPrivateKeyPem: pair.privateKey.export({
+      type: "pkcs8",
+      format: "pem",
+    }),
     ticketEncryptionKey: randomBytes(32),
     clients: [
       { clientId, redirectUris: [redirectUri], scopes: scope.split(" ") },
@@ -137,12 +138,21 @@ const file = (owner: string) =>
     "extensions/mcp-oauth/grants.sqlite",
   )
 function request(
-  path: string,
-  method = "GET",
-  body?: Record<string, string>,
-  session?: Session,
-  extra: Record<string, string> = {},
-  instance = requireInitializedIssuer(),
+  ...[
+    path,
+    method = "GET",
+    body,
+    session,
+    extra = {},
+    instance = requireInitializedIssuer(),
+  ]: [
+    path: string,
+    method?: string,
+    body?: Record<string, string>,
+    session?: Session,
+    extra?: Record<string, string>,
+    instance?: ReturnType<typeof requireInitializedIssuer>,
+  ]
 ) {
   const firstParty = path === "/oauth/inspect" || path === "/oauth/approve"
 

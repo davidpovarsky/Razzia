@@ -237,7 +237,8 @@ export function editBuilderDocument(
             )
           }
         }
-        const siblings = (parent.children[edit.port] ??= [])
+        const siblings = parent.children[edit.port] ?? []
+        parent.children[edit.port] = siblings
 
         if (edit.index > siblings.length) {
           throw new Error("theme-builder:invalid-move")
@@ -327,7 +328,7 @@ export function undoBuilderEdit(history: BuilderHistory): BuilderHistory {
 }
 
 export function redoBuilderEdit(history: BuilderHistory): BuilderHistory {
-  const present = history.future[0]
+  const present = history.future.at(0)
 
   return present
     ? {

@@ -36,12 +36,17 @@ const cases: NativeBindingScenario[] = [
   "quiz-foreign",
 ]
 
-function child(
-  mode: "interrupt" | "recover",
-  root: string,
-  token: string,
+function child({
+  mode,
+  root,
+  token,
   sequence = "",
-) {
+}: {
+  mode: "interrupt" | "recover"
+  root: string
+  token: string
+  sequence?: string
+}) {
   return new Promise<{
     pid?: number
     code: number | null
@@ -139,7 +144,11 @@ describe("R1 actual native storage bindings and logical digest", () => {
         expect(descriptor.baseName).not.toBe(`${descriptor.quizId}.json`)
         const before = nativeFixtureState(root)
         receipt.before = before
-        const killed = await child("interrupt", root, descriptor.token)
+        const killed = await child({
+          mode: "interrupt",
+          root,
+          token: descriptor.token,
+        })
         receipt.interruptedProcess = killed
         expect(killed.timedOut, killed.stderr).toBe(false)
 
@@ -164,12 +173,12 @@ describe("R1 actual native storage bindings and logical digest", () => {
         fs.writeFileSync(path.join(root, idlessPath), idlessBytes)
         const runs: unknown[] = []
         for (const sequence of ["1", "2"]) {
-          const result = await child(
-            "recover",
+          const result = await child({
+            mode: "recover",
             root,
-            descriptor.token,
+            token: descriptor.token,
             sequence,
-          )
+          })
           const recovery = requireNativeRecord(
             JSON.parse(
               fs.readFileSync(
@@ -204,23 +213,21 @@ describe("R1 actual native storage bindings and logical digest", () => {
             expect(run.state.files[sentinel]).toEqual(before.files[sentinel])
           }
 
-          {
-            expect(run.process.code, run.process.stderr).toBe(0)
-            expect(nativeRecoveryReport(run).unresolvedCount).toBe(0)
+          expect(run.process.code, run.process.stderr).toBe(0)
+          expect(nativeRecoveryReport(run).unresolvedCount).toBe(0)
 
-            if (!descriptor.foreignName) {
-              expect(
-                run.state.files[`quizz/${descriptor.quizId}.json`],
-              ).toBeUndefined()
-            }
-
-            expect(run.state.files[baseKey]).toEqual(before.files[baseKey])
-            expect(run.state.files[extrasKey]).toEqual(before.files[extrasKey])
-            expect(run.state.files["media/r1-native.png"]).toEqual(
-              before.files["media/r1-native.png"],
-            )
-            expect(run.state.journals).toHaveLength(0)
+          if (!descriptor.foreignName) {
+            expect(
+              run.state.files[`quizz/${descriptor.quizId}.json`],
+            ).toBeUndefined()
           }
+
+          expect(run.state.files[baseKey]).toEqual(before.files[baseKey])
+          expect(run.state.files[extrasKey]).toEqual(before.files[extrasKey])
+          expect(run.state.files["media/r1-native.png"]).toEqual(
+            before.files["media/r1-native.png"],
+          )
+          expect(run.state.journals).toHaveLength(0)
         }
         expect(nativeRecoveryReport(runs[1]).status).toBe("clean")
         expect(runs[1].state.files).toEqual(runs[0].state.files)

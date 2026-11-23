@@ -66,12 +66,17 @@ function failure(error: unknown) {
     },
   )
 }
-async function dispatch(
-  c: Context<ApiEnv>,
-  auth: FirstPartyBindings,
-  selected: Route,
-  policy: AuthoringPolicy,
-) {
+async function dispatch({
+  c,
+  auth,
+  selected,
+  policy,
+}: {
+  c: Context<ApiEnv>
+  auth: FirstPartyBindings
+  selected: Route
+  policy: AuthoringPolicy
+}) {
   const { signal } = c.req.raw
   assertRequestActive(signal)
 
@@ -187,7 +192,7 @@ export async function createFirstPartyApp(options: FirstPartyAppOptions) {
         auth.configured()
         const app = new Hono<ApiEnv>()
         app.use("*", auth.requireManager)
-        app.all("*", (c) => dispatch(c, auth, selected, policy))
+        app.all("*", (c) => dispatch({ c, auth, selected, policy }))
         app.onError((error) => failure(error))
         const response = await app.fetch(request)
         // Withhold disclosure after completion; committed effects may remain.

@@ -59,6 +59,24 @@ export type PublicPhoneGame = Pick<
   | "disconnectPhoneCallerByRosterId"
 >
 
+function hasBoundRegistration(
+  game: PublicPhoneGame,
+  row: RegistrationRow,
+): row is RegistrationRow & { roster_id: string } {
+  const entry = row.roster_id ? game.getRosterEntry(row.roster_id) : null
+
+  return (
+    entry !== null &&
+    entry.clientId === row.client_id &&
+    typeof entry.phoneE164 === "string" &&
+    entry.phoneE164.length > 0 &&
+    digest(entry.phoneE164) === row.caller_hash &&
+    entry.activeCallId === row.registration_id &&
+    entry.status === "connected" &&
+    game.players.some((p) => p.clientId === row.client_id && p.connected)
+  )
+}
+
 // This facade calls the real Game. It has no substitute roster/scoring engine.
 export class RealGameFacade {
   readonly executorId = randomUUID()
@@ -74,25 +92,11 @@ export class RealGameFacade {
     const game = this.resolveGame(context.game, context.owner)
 
     return game === this.owningGame &&
-      game?.gameId === context.game &&
+      game.gameId === context.game &&
       game.manager.clientId === context.owner &&
       context.executorId === this.executorId
       ? game
       : undefined
-  }
-
-  private bound(game: PublicPhoneGame, row: RegistrationRow) {
-    const entry = row.roster_id ? game.getRosterEntry(row.roster_id) : null
-
-    return (
-      Boolean(entry) &&
-      entry.clientId === row.client_id &&
-      Boolean(entry.phoneE164) &&
-      digest(entry.phoneE164) === row.caller_hash &&
-      entry.activeCallId === row.registration_id &&
-      entry.status === "connected" &&
-      game.players.some((p) => p.clientId === row.client_id && p.connected)
-    )
   }
 
   exists(context: VerifiedServiceContext) {
@@ -102,7 +106,7 @@ export class RealGameFacade {
   matches(context: VerifiedServiceContext, row: RegistrationRow) {
     const game = this.game(context)
 
-    return Boolean(game) && this.bound(game, row)
+    return game !== undefined && hasBoundRegistration(game, row)
   }
 
   admit(
@@ -118,7 +122,7 @@ export class RealGameFacade {
 
     const previous = reservation.predecessor
 
-    if (previous && !this.bound(game, previous)) {
+    if (previous && !hasBoundRegistration(game, previous)) {
       return fail("game_binding_changed")
     }
 
@@ -144,7 +148,11 @@ export class RealGameFacade {
       client_id: result.clientId ?? null,
     }
 
-    if (!result.rosterPlayerId || !result.clientId || !this.bound(game, row)) {
+    if (
+      !result.rosterPlayerId ||
+      !result.clientId ||
+      !hasBoundRegistration(game, row)
+    ) {
       return fail("projection_outcome_unknown")
     }
 
@@ -169,11 +177,11 @@ export class RealGameFacade {
       return fail("game_unavailable")
     }
 
-    if (!this.bound(game, row)) {
+    if (!hasBoundRegistration(game, row)) {
       return fail("game_binding_changed")
     }
 
-    const rosterId = row.roster_id!
+    const rosterId = row.roster_id
     const state = game.getQuestionStateForGateway(rosterId)
 
     if (input.action === "poll") {
@@ -191,9 +199,15 @@ export class RealGameFacade {
         return fail("stale_epoch")
       }
 
+      const { answerIndex } = input
+
+      if (answerIndex === undefined) {
+        return fail("invalid_answer")
+      }
+
       const answer = game.submitPhoneAnswerByRosterId(
         rosterId,
-        input.answerIndex!,
+        answerIndex,
         row.registration_id,
       )
 

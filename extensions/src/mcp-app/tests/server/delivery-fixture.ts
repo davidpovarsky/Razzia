@@ -20,13 +20,19 @@ export class MemoryDeliveries {
   exports = 0
   consent = true
   constructor(private drafts: DraftRepository) {}
-  private run(
-    p: VerifiedPrincipal,
-    tool: string,
-    selected: DraftSelection,
-    m: MutationIdentity,
-    format?: "tada-json" | "enhanced-bundle",
-  ) {
+  private run({
+    p,
+    tool,
+    selected,
+    m,
+    format,
+  }: {
+    p: VerifiedPrincipal
+    tool: string
+    selected: DraftSelection
+    m: MutationIdentity
+    format?: "tada-json" | "enhanced-bundle"
+  }) {
     const operation = this.tail.then(async () => {
       const key = JSON.stringify([
         p.issuer,
@@ -85,9 +91,9 @@ export class MemoryDeliveries {
       })
 
       if (format) {
-        this.exports++
+        this.exports += 1
       } else {
-        this.saves++
+        this.saves += 1
       }
 
       return result
@@ -102,11 +108,13 @@ export class MemoryDeliveries {
     p: VerifiedPrincipal,
     s: DraftSelection,
     m: MutationIdentity,
-  ) => this.run(p, "save_game", s, m)
+  ) => this.run({ p, tool: "save_game", selected: s, m })
   createAuthorizedDownload = (
-    p: VerifiedPrincipal,
-    s: DraftSelection,
-    format: "tada-json" | "enhanced-bundle",
-    m: MutationIdentity,
-  ) => this.run(p, "export_game", s, m, format)
+    ...[p, s, format, m]: [
+      p: VerifiedPrincipal,
+      s: DraftSelection,
+      format: "tada-json" | "enhanced-bundle",
+      m: MutationIdentity,
+    ]
+  ) => this.run({ p, tool: "export_game", selected: s, m, format })
 }

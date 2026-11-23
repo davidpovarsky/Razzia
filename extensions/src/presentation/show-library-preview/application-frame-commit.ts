@@ -29,10 +29,10 @@ export function createApplicationFrameCommitOwner() {
 
       const ownChapter = chapter
       const ownGeneration = generation
-      const result = Promise.withResolvers<void>()
+      const result = Promise.withResolvers<undefined>()
       const settle = () => {
         pending.delete(settle)
-        result.resolve()
+        result.resolve(undefined)
       }
       pending.add(settle)
       const ownsChapter = () => !disposed && chapter === ownChapter

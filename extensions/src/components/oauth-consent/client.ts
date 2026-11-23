@@ -47,13 +47,19 @@ export function createOAuthConsentClient(options: {
       throw new Error("oauth-consent:session-changed")
     }
   }
-  async function post(
-    path: string,
-    body: unknown,
-    token: string,
-    expectedGeneration: number,
-    signal?: AbortSignal,
-  ) {
+  async function post({
+    path,
+    body,
+    token,
+    expectedGeneration,
+    signal,
+  }: {
+    path: string
+    body: unknown
+    token: string
+    expectedGeneration: number
+    signal?: AbortSignal
+  }) {
     active(token, expectedGeneration)
     const response = await request(`${base}/${path}`, {
       method: "POST",
@@ -96,7 +102,13 @@ export function createOAuthConsentClient(options: {
       const token = options.getNativeToken() ?? ""
       const expected = generation
       const value = inspectionSchema.parse(
-        await post("inspect", { ticket }, token, expected, signal),
+        await post({
+          path: "inspect",
+          body: { ticket },
+          token,
+          expectedGeneration: expected,
+          signal,
+        }),
       )
 
       if (
@@ -137,13 +149,13 @@ export function createOAuthConsentClient(options: {
           grantId: z.string().min(1).max(256),
         })
         .parse(
-          await post(
-            "approve",
-            { ticket, decision: "allow", proof: inspection.proof },
-            bound.token,
-            bound.generation,
+          await post({
+            path: "approve",
+            body: { ticket, decision: "allow", proof: inspection.proof },
+            token: bound.token,
+            expectedGeneration: bound.generation,
             signal,
-          ),
+          }),
         )
       const url = new URL(response.redirectUrl)
 

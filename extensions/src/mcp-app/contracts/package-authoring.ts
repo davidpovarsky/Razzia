@@ -25,7 +25,6 @@ const receivedBytes = z
   .min(0)
   .max(PACKAGE_TOOL_LIMITS.archiveBytes)
 const httpsUrl = z
-  .string()
   .url()
   .regex(/^https:\/\//u)
   .max(2048)

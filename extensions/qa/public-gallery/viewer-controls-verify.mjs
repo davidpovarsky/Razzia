@@ -45,7 +45,7 @@ function observeMedia() {
   const refs = []
   let nextId = 0
   const original = HTMLMediaElement.prototype.play
-  HTMLMediaElement.prototype.play = function play() {
+  HTMLMediaElement.prototype.play = function play(...args) {
     let state = states.get(this)
 
     if (!state) {
@@ -54,9 +54,9 @@ function observeMedia() {
       refs.push(new WeakRef(this))
     }
 
-    state.attempts++
+    state.attempts += 1
 
-    return original.apply(this, arguments)
+    return original.apply(this, args)
   }
   window.__viewerMedia = () =>
     refs.flatMap((reference) => {
@@ -307,7 +307,7 @@ const demoRoot = (page, id) =>
   )
 const phaseAttribute = (id) =>
   id === "great-guessoff" ? "data-ggo-phase" : "data-game-phase"
-async function gotoDemo(page, origin, id, locale) {
+async function gotoDemo({ page, origin, id, locale }) {
   const response = await page.goto(
     `${origin}/?view=demo&game=${encodeURIComponent(id)}&lng=${locale}`,
     { waitUntil: "domcontentloaded" },
@@ -327,7 +327,13 @@ async function gotoDemo(page, origin, id, locale) {
   await page.mouse.move(0, 0)
 }
 
-async function verifyActiveLandscape(page, id, locale, question, directory) {
+async function verifyActiveLandscape({
+  page,
+  id,
+  locale,
+  question,
+  directory,
+}) {
   assert(question, "The landscape case uses the actual first authored question")
   const root = demoRoot(page, id)
   const dialog = openDialog(page)
@@ -533,7 +539,7 @@ export async function verifyPublicViewers({
     try {
       for (const id of ids) {
         await page.setViewportSize({ width: 1366, height: 768 })
-        await gotoDemo(page, origin, id, locale)
+        await gotoDemo({ page, origin, id, locale })
         const dialog = openDialog(page)
         const controls = await controlSnapshot(dialog, locale)
 
@@ -653,7 +659,7 @@ export async function verifyPublicViewers({
       ]) {
         for (const id of ["great-guessoff", "family"]) {
           await page.setViewportSize(viewport)
-          await gotoDemo(page, origin, id, locale)
+          await gotoDemo({ page, origin, id, locale })
           const dialog = openDialog(page)
           await controlSnapshot(dialog, locale)
           await dialog.getByTestId("game-viewer-expand").click()
@@ -674,13 +680,13 @@ export async function verifyPublicViewers({
               .show.cards.find(
                 (card) => card.kind === "quiz" || card.kind === "survey",
               )
-            detail.activeLandscape = await verifyActiveLandscape(
+            detail.activeLandscape = await verifyActiveLandscape({
               page,
               id,
               locale,
               question,
               directory,
-            )
+            })
           }
 
           record(
@@ -693,7 +699,7 @@ export async function verifyPublicViewers({
       if (locale === "en") {
         await page.setViewportSize({ width: 1440, height: 900 })
         for (const id of ["family", "picture"]) {
-          await gotoDemo(page, origin, id, locale)
+          await gotoDemo({ page, origin, id, locale })
           const dialog = openDialog(page)
           await dialog.getByTestId("game-viewer-expand").click()
           await verifyViewerGeometry(page, {

@@ -58,10 +58,12 @@ export function derivePreviewStageMetadata(
 
 /** Call at the trusted host boundary before handing only public fields to the renderer. */
 export function assertBoundPreviewStageMetadata(
-  draft: ValidatedPreviewDraft,
-  plan: Readonly<PreviewPlan>,
-  currentQuestionId: string,
-  metadata: ValidatedPreviewStageMetadata,
+  ...[draft, plan, currentQuestionId, metadata]: [
+    draft: ValidatedPreviewDraft,
+    plan: Readonly<PreviewPlan>,
+    currentQuestionId: string,
+    metadata: ValidatedPreviewStageMetadata,
+  ]
 ): void {
   assertBoundPreviewPlan(draft, plan)
   const binding = bindings.get(metadata)

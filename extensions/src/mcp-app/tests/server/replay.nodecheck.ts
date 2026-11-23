@@ -1,3 +1,4 @@
+import { promiseFrom } from "../../shared/promise-operation.ts"
 import assert from "node:assert/strict"
 import test from "node:test"
 import {
@@ -23,7 +24,8 @@ for (const tool of ["save_game", "export_game"] as const) {
     const h = await harness(
       {
         ...adapters,
-        authorize: async () => (revoked ? { ...p, active: false } : p),
+        authorize: () =>
+          promiseFrom(() => (revoked ? { ...p, active: false } : p)),
       },
       p,
     )

@@ -1,3 +1,4 @@
+import { promiseFrom } from "../../mcp-app/shared/promise-operation.ts"
 import { describe, expect, it, vi } from "vitest"
 import { consentIssuerPath, createOAuthConsentClient } from "./client"
 const ticket = "encrypted-ticket-".repeat(4)
@@ -67,7 +68,7 @@ describe("same-origin native OAuth consent client", () => {
     expect(await client.approve(ticket, result)).toBe(
       "https://client.invalid/callback?code=exact%2Fcode&state=original",
     )
-    const [path, options] = request.mock.calls[1]
+    const [, [path, options]] = request.mock.calls
     expect(path).toBe("/oauth/approve")
     expect(options).toMatchObject({
       credentials: "same-origin",
@@ -99,7 +100,7 @@ describe("same-origin native OAuth consent client", () => {
   it("rejects copied, foreign-ticket and invalidated proofs before approval IO", async () => {
     const request = vi
       .fn<typeof fetch>()
-      .mockImplementation(async () => json(inspection()))
+      .mockImplementation(() => promiseFrom(() => json(inspection())))
     const client = createOAuthConsentClient({
       issuerBasePath: "/oauth",
       getNativeToken: () => "session-a",

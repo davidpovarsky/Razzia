@@ -82,7 +82,7 @@ export const errorSchema = z.strictObject({
   retryable: z.boolean(),
   currentRevision: revision.optional(),
   consentRequestId: opaqueId.optional(),
-  consentUrl: z.string().url().max(2048).optional(),
+  consentUrl: z.url().max(2048).optional(),
 })
 
 export function outputSchema(data: z.ZodType) {
@@ -132,7 +132,6 @@ export const previewMetaSchema = z.strictObject({
         assetId: text(160),
         sha256: digest,
         url: z
-          .string()
           .url()
           .regex(/^https:\/\//u)
           .max(2048),

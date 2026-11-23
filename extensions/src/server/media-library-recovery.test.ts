@@ -166,12 +166,17 @@ describe("media-delete deterministic restart snapshots", () => {
         ),
     }
   }
-  function recordTransactionFault(
-    fault: string,
-    before: ReturnType<typeof transactionState>,
-    result: ReturnType<typeof transaction>,
-    evidence?: unknown,
-  ) {
+  function recordTransactionFault({
+    fault,
+    before,
+    result,
+    evidence,
+  }: {
+    fault: string
+    before: ReturnType<typeof transactionState>
+    result: ReturnType<typeof transaction>
+    evidence?: unknown
+  }) {
     if (process.env.RECOVERY_TRANSACTION_RECEIPT_PATH) {
       fs.appendFileSync(
         process.env.RECOVERY_TRANSACTION_RECEIPT_PATH,
@@ -738,7 +743,11 @@ describe("media-delete deterministic restart snapshots", () => {
       unlink(file)
     })
     const result = transaction()
-    recordTransactionFault("committed-quarantine-unlink-EACCES", before, result)
+    recordTransactionFault({
+      fault: "committed-quarantine-unlink-EACCES",
+      before,
+      result,
+    })
     expect(journals()).toHaveLength(1)
     expect(result.allowed).toBe(true)
     expect(result.journalId).toBeTruthy()
@@ -849,12 +858,12 @@ describe("media-delete deterministic restart snapshots", () => {
           faultInjection: { failBeforeCommittedWrite: true },
         },
       )
-      recordTransactionFault(
-        `immediate-rollback-silent-${fault}`,
+      recordTransactionFault({
+        fault: `immediate-rollback-silent-${fault}`,
         before,
         result,
-        { injected },
-      )
+        evidence: { injected },
+      })
       expect(injected).toBeGreaterThan(0)
       expect(journals()).toHaveLength(1)
       expect(result.allowed).toBe(false)
@@ -943,11 +952,11 @@ describe("media-delete deterministic restart snapshots", () => {
         faultInjection: { failBeforeCommittedWrite: true },
       },
     )
-    recordTransactionFault(
-      "immediate-rollback-permission-denied",
+    recordTransactionFault({
+      fault: "immediate-rollback-permission-denied",
       before,
       result,
-    )
+    })
     expect(chmod).not.toHaveBeenCalled()
     expect(journals()).toHaveLength(1)
     expect(result.error).toMatch(/journal preserved/i)
@@ -990,11 +999,11 @@ describe("media-delete deterministic restart snapshots", () => {
           faultInjection: { failBeforeCommittedWrite: true },
         },
       )
-      recordTransactionFault(
-        `immediate-rollback-${fault}-cleanup`,
+      recordTransactionFault({
+        fault: `immediate-rollback-${fault}-cleanup`,
         before,
         result,
-      )
+      })
       expect(result.journalId).toBeTruthy()
       expect(result.error).toMatch(/journal preserved/i)
       expect(journals()).toHaveLength(1)

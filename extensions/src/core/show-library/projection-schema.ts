@@ -45,12 +45,12 @@ const resultSchema = z.strictObject({
 })
 const leaderSchema = z.strictObject({
   label: plainTextSchema,
-  score: z.number().finite(),
+  score: z.number(),
   rank: z.number().int().positive(),
 })
 const personalSchema = z.strictObject({
   correct: z.boolean(),
-  points: z.number().finite(),
+  points: z.number(),
   rank: z.number().int().nonnegative(),
 })
 

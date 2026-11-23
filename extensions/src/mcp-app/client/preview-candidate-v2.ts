@@ -91,13 +91,13 @@ export function createPreviewCandidateConsumerV2(
         }
 
         clear()
-        let failed = false
+        const status = { failed: false }
         const next = mount(element, () => {
-          failed = true
+          status.failed = true
           unavailable()
         })
 
-        if (failed) {
+        if (status.failed) {
           next.dispose()
 
           return false
@@ -106,7 +106,7 @@ export function createPreviewCandidateConsumerV2(
         renderer = next
         next.update(candidate.input)
 
-        return !failed
+        return !status.failed
       } catch {
         return unavailable()
       }

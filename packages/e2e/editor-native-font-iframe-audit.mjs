@@ -51,7 +51,7 @@ const frame = {
   mediaRevealed: false,
   appearanceRevision: 0,
 }
-const frameScript = `(${async function () {
+const frameScript = `(${async function inspectNativeFrame() {
   const { mount } = await import("/renderer.mjs")
   const rendererCss = await fetch("/renderer.css").then((r) => r.text())
   const rendererFrame = await fetch("/frame.json").then((r) => r.json())

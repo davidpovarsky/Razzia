@@ -19,9 +19,6 @@ const { build } = require("esbuild")
 const { chromium } = createRequire(
   path.join(deps, "packages/e2e/package.json"),
 )("@playwright/test")
-const resolveModule = createRequire(
-  path.join(deps, "packages/web/package.json"),
-)
 const adapter = path.join(
   source,
   "extensions/src/presentation/tadazz-show/TadazzV4StageAdapter.tsx",
@@ -129,7 +126,9 @@ const plugins = [
             if ((await fs.stat(file)).isFile()) {
               return { path: file }
             }
-          } catch {}
+          } catch {
+            // A candidate path may be absent; try the remaining extensions.
+          }
         }
         throw new Error(`Unresolved actual workspace ${args.path}`)
       })
@@ -311,9 +310,9 @@ try {
       )
     }, c)
     await page.locator(".q-text").waitFor({ state: "visible" })
-    await page.evaluate(
-      () => (window.originalQuestionNode = document.querySelector(".q-text")),
-    )
+    await page.evaluate(() => {
+      window.originalQuestionNode = document.querySelector(".q-text")
+    })
     await page.evaluate(() => window.languageStage.answers())
     await page.locator('[data-testid="tadazz-card-0"]').click()
     const voting = await page.evaluate(() => ({

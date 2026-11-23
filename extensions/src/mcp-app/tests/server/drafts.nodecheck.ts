@@ -93,7 +93,9 @@ test("concurrent CAS produces one winner without silently replacing another revi
       h.call("update_game_draft", { ...args, idempotencyKey: newKey() }),
     ])
     assert.equal(results.filter((r) => !r.isError).length, 1)
-    assert.equal(code(results.find((r) => r.isError)!), "REVISION_CONFLICT")
+    const conflict = results.find((r) => r.isError)
+    assert.ok(conflict)
+    assert.equal(code(conflict), "REVISION_CONFLICT")
   } finally {
     await h.close()
   }

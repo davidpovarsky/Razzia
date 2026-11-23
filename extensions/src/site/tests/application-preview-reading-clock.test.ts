@@ -80,7 +80,7 @@ function fixture(withPreviousScene = false) {
   sessions.push(session)
   const holdNext = (matches: (frame: ApplicationPreviewFrame) => boolean) => {
     const entered = Promise.withResolvers<ApplicationPreviewFrame>()
-    const released = Promise.withResolvers<void>()
+    const released = Promise.withResolvers<undefined>()
     waitForFrame = (frame) => {
       if (!matches(frame)) {
         return undefined
@@ -92,7 +92,10 @@ function fixture(withPreviousScene = false) {
       return released.promise
     }
 
-    return { entered: entered.promise, release: released.resolve }
+    return {
+      entered: entered.promise,
+      release: () => released.resolve(undefined),
+    }
   }
   const phase = () =>
     session.chapters.find(

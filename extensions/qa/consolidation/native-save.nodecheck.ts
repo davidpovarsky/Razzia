@@ -290,9 +290,10 @@ if (!childMode) {
       config,
       configRoot: requireInitializedF().root,
       keyId: "synthetic-native-save-key",
-      signingPrivateKeyPem: pair.privateKey
-        .export({ type: "pkcs8", format: "pem" })
-        .toString(),
+      signingPrivateKeyPem: pair.privateKey.export({
+        type: "pkcs8",
+        format: "pem",
+      }),
       ticketEncryptionKey: randomBytes(32),
       consentPageUrl: `${origin}/studio/oauth-consent`,
       clients: [{ clientId, redirectUris: [callback], scopes }],
@@ -369,12 +370,17 @@ if (!childMode) {
   })
 }
 
-function api(
-  route: string,
-  body?: Record<string, string>,
-  session?: Session,
-  extra: Record<string, string> = {},
-) {
+function api({
+  route,
+  body,
+  session,
+  extra = {},
+}: {
+  route: string
+  body?: Record<string, string>
+  session?: Session
+  extra?: Record<string, string>
+}) {
   const json = route.includes("/inspect") || route.includes("/approve")
 
   return requireInitializedIssuer().fetch(
@@ -402,8 +408,8 @@ function api(
 async function linked(session = requireInitializedF().sessions[0]) {
   const verifier = randomBytes(32).toString("base64url")
   const { createHash } = await import("node:crypto")
-  const started = await api(
-    `/oauth/authorize?${new URLSearchParams({
+  const started = await api({
+    route: `/oauth/authorize?${new URLSearchParams({
       response_type: "code",
       client_id: clientId,
       redirect_uri: callback,
@@ -413,7 +419,7 @@ async function linked(session = requireInitializedF().sessions[0]) {
       code_challenge: createHash("sha256").update(verifier).digest("base64url"),
       code_challenge_method: "S256",
     })}`,
-  )
+  })
   assert.equal(started.status, 302)
   const ticket = requireNativeSavePresent(
     new URL(
@@ -422,35 +428,40 @@ async function linked(session = requireInitializedF().sessions[0]) {
   )
 
   const inspected = requireNativeSaveRecord(
-    await (await api("/oauth/inspect", { ticket }, session)).json(),
+    await (
+      await api({ route: "/oauth/inspect", body: { ticket }, session })
+    ).json(),
   )
 
   const approved = requireNativeSaveRecord(
     await (
-      await api(
-        "/oauth/approve",
-        {
+      await api({
+        route: "/oauth/approve",
+        body: {
           ticket,
           decision: "allow",
           proof: requireNativeSaveString(inspected.proof),
         },
         session,
-      )
+      })
     ).json(),
   )
 
   assert.ok(requireNativeSaveString(approved.redirectUrl))
-  const response = await api("/oauth/token", {
-    grant_type: "authorization_code",
-    client_id: clientId,
-    code: requireNativeSavePresent(
-      new URL(requireNativeSaveString(approved.redirectUrl)).searchParams.get(
-        "code",
+  const response = await api({
+    route: "/oauth/token",
+    body: {
+      grant_type: "authorization_code",
+      client_id: clientId,
+      code: requireNativeSavePresent(
+        new URL(requireNativeSaveString(approved.redirectUrl)).searchParams.get(
+          "code",
+        ),
       ),
-    ),
-    code_verifier: verifier,
-    redirect_uri: callback,
-    resource: config.resource,
+      code_verifier: verifier,
+      redirect_uri: callback,
+      resource: config.resource,
+    },
   })
   assert.equal(response.status, 200)
   const tokens = requireNativeSaveRecord(await response.json())
@@ -542,22 +553,22 @@ async function inspectAndApprove(
   prepared: Awaited<ReturnType<typeof pending>>,
   session = requireInitializedF().sessions[0],
 ) {
-  const inspected = await api(
-    "/oauth/native-save/inspect",
-    { consentRequestId: prepared.consentRequestId },
+  const inspected = await api({
+    route: "/oauth/native-save/inspect",
+    body: { consentRequestId: prepared.consentRequestId },
     session,
-  )
+  })
   assert.equal(inspected.status, 200, await inspected.clone().text())
   const { data } = requireNativeSaveRecord(await inspected.json())
-  const approved = await api(
-    "/oauth/native-save/approve",
-    {
+  const approved = await api({
+    route: "/oauth/native-save/approve",
+    body: {
       consentRequestId: prepared.consentRequestId,
       decision: "allow",
       proof: requireNativeSaveString(requireNativeSaveRecord(data).proof),
     },
     session,
-  )
+  })
   assert.equal(approved.status, 200, await approved.clone().text())
 
   return data
@@ -572,12 +583,17 @@ function writeDurable(file: string, value: unknown) {
     fs.closeSync(fd)
   }
 }
-function savedRow(
-  root: string,
-  owner: string,
-  grantId: string,
-  requestKey: string,
-) {
+function savedRow({
+  root,
+  owner,
+  grantId,
+  requestKey,
+}: {
+  root: string
+  owner: string
+  grantId: string
+  requestKey: string
+}) {
   const db = new DatabaseSync(ledgerFile(root, owner), { readOnly: true })
 
   try {
@@ -651,7 +667,12 @@ async function runChild() {
   const { operations } = port
   assert.ok(operations)
   const checkpoint = (result?: unknown): never => {
-    const record = savedRow(d.root, d.owner, d.grantId, d.input.idempotencyKey)
+    const record = savedRow({
+      root: d.root,
+      owner: d.owner,
+      grantId: d.grantId,
+      requestKey: d.input.idempotencyKey,
+    })
     writeDurable(d.checkpoint, {
       phase,
       pid: process.pid,
@@ -665,7 +686,11 @@ async function runChild() {
   }
 
   if (phase === "after-f-outcome") {
-    const original = DatabaseSync.prototype.exec
+    const original = Object.getOwnPropertyDescriptor(
+      DatabaseSync.prototype,
+      "exec",
+    )?.value as ((this: DatabaseSync, sql: string) => void) | undefined
+    assert.ok(typeof original === "function")
     DatabaseSync.prototype.exec = function exec(sql: string) {
       const result = original.call(this, sql)
 
@@ -742,11 +767,11 @@ if (childMode) {
   test("real F manager consent publishes through actual B bound native C1 and reopens the same native game", async () => {
     const token = await linked()
     const prepared = await pending(token)
-    const inspectedResponse = await api(
-      "/oauth/native-save/inspect",
-      { consentRequestId: prepared.consentRequestId },
-      requireInitializedF().sessions[0],
-    )
+    const inspectedResponse = await api({
+      route: "/oauth/native-save/inspect",
+      body: { consentRequestId: prepared.consentRequestId },
+      session: requireInitializedF().sessions[0],
+    })
     assert.equal(
       inspectedResponse.status,
       200,
@@ -770,17 +795,17 @@ if (childMode) {
       ).title,
       "Synthetic exact native save",
     )
-    const approved = await api(
-      "/oauth/native-save/approve",
-      {
+    const approved = await api({
+      route: "/oauth/native-save/approve",
+      body: {
         consentRequestId: prepared.consentRequestId,
         decision: "allow",
         proof: requireNativeSaveString(
           requireNativeSaveRecord(inspected).proof,
         ),
       },
-      requireInitializedF().sessions[0],
-    )
+      session: requireInitializedF().sessions[0],
+    })
     assert.equal(approved.status, 200, await approved.clone().text())
     assert.equal(
       requireNativeSaveRecord(
@@ -839,12 +864,12 @@ if (childMode) {
         requireNativeSaveRecord(
           JSON.parse(
             requireNativeSaveString(
-              savedRow(
-                requireInitializedF().root,
-                requireInitializedF().sessions[0].owner,
-                principal.grantId,
-                prepared.input.idempotencyKey,
-              ).nativeSnapshot,
+              savedRow({
+                root: requireInitializedF().root,
+                owner: requireInitializedF().sessions[0].owner,
+                grantId: principal.grantId,
+                requestKey: prepared.input.idempotencyKey,
+              }).nativeSnapshot,
             ),
           ),
         ).extras,
@@ -882,42 +907,42 @@ if (childMode) {
     )
     assert.notEqual(
       (
-        await api(
-          "/oauth/native-save/inspect",
-          { consentRequestId: prepared.consentRequestId },
-          { ...requireInitializedF().sessions[0], token },
-        )
+        await api({
+          route: "/oauth/native-save/inspect",
+          body: { consentRequestId: prepared.consentRequestId },
+          session: { ...requireInitializedF().sessions[0], token },
+        })
       ).status,
       200,
     )
     assert.notEqual(
       (
-        await api(
-          "/oauth/native-save/inspect",
-          { consentRequestId: prepared.consentRequestId },
-          requireInitializedF().sessions[1],
-        )
+        await api({
+          route: "/oauth/native-save/inspect",
+          body: { consentRequestId: prepared.consentRequestId },
+          session: requireInitializedF().sessions[1],
+        })
       ).status,
       200,
     )
     assert.notEqual(
       (
-        await api(
-          "/oauth/native-save/inspect",
-          { consentRequestId: prepared.consentRequestId },
-          requireInitializedF().sessions[0],
-          { origin: "https://foreign.invalid" },
-        )
+        await api({
+          route: "/oauth/native-save/inspect",
+          body: { consentRequestId: prepared.consentRequestId },
+          session: requireInitializedF().sessions[0],
+          extra: { origin: "https://foreign.invalid" },
+        })
       ).status,
       200,
     )
     const inspected = requireNativeSaveRecord(
       await (
-        await api(
-          "/oauth/native-save/inspect",
-          { consentRequestId: prepared.consentRequestId },
-          requireInitializedF().sessions[0],
-        )
+        await api({
+          route: "/oauth/native-save/inspect",
+          body: { consentRequestId: prepared.consentRequestId },
+          session: requireInitializedF().sessions[0],
+        })
       ).json(),
     ).data
     const newer = await requireInitializedF().tokens.mintToken(
@@ -938,15 +963,15 @@ if (childMode) {
     ] as const) {
       assert.notEqual(
         (
-          await api(
-            "/oauth/native-save/approve",
-            {
+          await api({
+            route: "/oauth/native-save/approve",
+            body: {
               consentRequestId: prepared.consentRequestId,
               decision: "allow",
               proof,
             },
             session,
-          )
+          })
         ).status,
         200,
       )
@@ -960,28 +985,28 @@ if (childMode) {
       const prepared = await pending(token, "Original approved snapshot")
       const inspected = requireNativeSaveRecord(
         await (
-          await api(
-            "/oauth/native-save/inspect",
-            { consentRequestId: prepared.consentRequestId },
-            requireInitializedF().sessions[0],
-          )
+          await api({
+            route: "/oauth/native-save/inspect",
+            body: { consentRequestId: prepared.consentRequestId },
+            session: requireInitializedF().sessions[0],
+          })
         ).json(),
       ).data
 
       if (approveFirst) {
         assert.equal(
           (
-            await api(
-              "/oauth/native-save/approve",
-              {
+            await api({
+              route: "/oauth/native-save/approve",
+              body: {
                 consentRequestId: prepared.consentRequestId,
                 decision: "allow",
                 proof: requireNativeSaveString(
                   requireNativeSaveRecord(inspected).proof,
                 ),
               },
-              requireInitializedF().sessions[0],
-            )
+              session: requireInitializedF().sessions[0],
+            })
           ).status,
           200,
         )
@@ -1011,17 +1036,17 @@ if (childMode) {
           "REVISION_CONFLICT",
         )
       } else {
-        const response = await api(
-          "/oauth/native-save/approve",
-          {
+        const response = await api({
+          route: "/oauth/native-save/approve",
+          body: {
             consentRequestId: prepared.consentRequestId,
             decision: "allow",
             proof: requireNativeSaveString(
               requireNativeSaveRecord(inspected).proof,
             ),
           },
-          requireInitializedF().sessions[0],
-        )
+          session: requireInitializedF().sessions[0],
+        })
         assert.equal(response.status, 409)
         assert.equal(
           requireNativeSaveRecord(
@@ -1061,11 +1086,11 @@ if (childMode) {
       requireNativeSaveRecord(
         requireNativeSaveRecord(
           await (
-            await api(
-              "/oauth/native-save/inspect",
-              { consentRequestId: prepared.consentRequestId },
-              requireInitializedF().sessions[0],
-            )
+            await api({
+              route: "/oauth/native-save/inspect",
+              body: { consentRequestId: prepared.consentRequestId },
+              session: requireInitializedF().sessions[0],
+            })
           ).json(),
         ).data,
       ).state,
@@ -1106,9 +1131,12 @@ if (childMode) {
     assert.equal(nativeCount(), nativeCountBefore5)
     assert.equal(
       (
-        await api("/oauth/revoke", {
-          client_id: clientId,
-          token: requireNativeSavePresent(refreshTokens.get(token)),
+        await api({
+          route: "/oauth/revoke",
+          body: {
+            client_id: clientId,
+            token: requireNativeSavePresent(refreshTokens.get(token)),
+          },
         })
       ).status,
       200,
@@ -1116,15 +1144,15 @@ if (childMode) {
     await assert.rejects(requireInitializedIssuer().verifyAccessToken(token))
     assert.notEqual(
       (
-        await api(
-          "/oauth/native-save/approve",
-          {
+        await api({
+          route: "/oauth/native-save/approve",
+          body: {
             consentRequestId: prepared.consentRequestId,
             decision: "allow",
             proof: "0".repeat(64),
           },
-          requireInitializedF().sessions[0],
-        )
+          session: requireInitializedF().sessions[0],
+        })
       ).status,
       200,
     )
@@ -1181,174 +1209,177 @@ if (childMode) {
     assert.equal(nativeCount(), nativeCountAfter2)
   })
 
-  for (const phase of [
-    "before-native",
-    "after-native",
-    "after-f-outcome",
-  ] as const) {
-    test(`fresh real F/C1 retry after genuine SIGKILL ${phase} retains one operation and target`, async () => {
-      const token = await linked()
-      const prepared = await pending(token, `Crash snapshot ${phase}`)
-      await inspectAndApprove(prepared)
-      const principal =
-        await requireInitializedIssuer().verifyAccessToken(token)
-      const nativeCountBefore7 = nativeCount()
-      const name = `actor-${phase}-${key()}`
-      const descriptor = path.join(requireInitializedF().root, `${name}.json`)
-      const checkpoint = path.join(
-        requireInitializedF().root,
-        `${name}.checkpoint.json`,
-      )
-      const reply = path.join(requireInitializedF().root, `${name}.reply.json`)
-      const { nativeSave: _native, ...publicOptions } =
-        requireInitializedOptions()
-      writeDurable(descriptor, {
-        root: requireInitializedF().root,
-        nonce: fixtureNonce,
-        owner: requireInitializedF().sessions[0].owner,
-        syntheticSecret: requireInitializedF().syntheticSecret,
-        grantId: principal.grantId,
-        token,
-        input: prepared.input,
-        options: publicOptions,
-        encryptionKey: Buffer.from(
-          requireInitializedOptions().ticketEncryptionKey,
-        ).toString("base64"),
-        checkpoint,
-        reply,
-      })
-      const bundle = fileURLToPath(import.meta.url)
-      const lost = spawnSync(
-        process.execPath,
-        [bundle, "native-child", phase, descriptor],
-        { encoding: "utf8", timeout: 20000 },
-      )
-      assert.equal(lost.signal, "SIGKILL", lost.stdout + lost.stderr)
-      assert.equal(fs.existsSync(reply), false)
-      const observed = requireNativeSaveRecord(
-        JSON.parse(fs.readFileSync(checkpoint, "utf8")),
-      )
-      assert.equal(observed.phase, phase)
-      assert.equal(
-        observed.state,
-        phase === "after-f-outcome" ? "saved" : "publishing",
-      )
-
-      if (phase === "after-native") {
+  ;(["before-native", "after-native", "after-f-outcome"] as const).forEach(
+    (phase) => {
+      test(`fresh real F/C1 retry after genuine SIGKILL ${phase} retains one operation and target`, async () => {
+        const token = await linked()
+        const prepared = await pending(token, `Crash snapshot ${phase}`)
+        await inspectAndApprove(prepared)
+        const principal =
+          await requireInitializedIssuer().verifyAccessToken(token)
+        const nativeCountBefore7 = nativeCount()
+        const name = `actor-${phase}-${key()}`
+        const descriptor = path.join(requireInitializedF().root, `${name}.json`)
+        const checkpoint = path.join(
+          requireInitializedF().root,
+          `${name}.checkpoint.json`,
+        )
+        const reply = path.join(
+          requireInitializedF().root,
+          `${name}.reply.json`,
+        )
+        const { nativeSave: _native, ...publicOptions } =
+          requireInitializedOptions()
+        writeDurable(descriptor, {
+          root: requireInitializedF().root,
+          nonce: fixtureNonce,
+          owner: requireInitializedF().sessions[0].owner,
+          syntheticSecret: requireInitializedF().syntheticSecret,
+          grantId: principal.grantId,
+          token,
+          input: prepared.input,
+          options: publicOptions,
+          encryptionKey: Buffer.from(
+            requireInitializedOptions().ticketEncryptionKey,
+          ).toString("base64"),
+          checkpoint,
+          reply,
+        })
+        const bundle = fileURLToPath(import.meta.url)
+        const lost = spawnSync(
+          process.execPath,
+          [bundle, "native-child", phase, descriptor],
+          { encoding: "utf8", timeout: 20000 },
+        )
+        assert.equal(lost.signal, "SIGKILL", lost.stdout + lost.stderr)
+        assert.equal(fs.existsSync(reply), false)
+        const observed = requireNativeSaveRecord(
+          JSON.parse(fs.readFileSync(checkpoint, "utf8")),
+        )
+        assert.equal(observed.phase, phase)
         assert.equal(
-          (
-            await rpc(token, "update_game_draft", {
-              contractVersion: "0.1.0",
-              draftId: prepared.input.draftId,
-              expectedRevision: 1,
-              authoredShowJson: requireNativeSaveString(
-                createInput("Later current draft").authoredShowJson,
-              ),
-              idempotencyKey: key(),
-            })
-          ).ok,
+          observed.state,
+          phase === "after-f-outcome" ? "saved" : "publishing",
+        )
+
+        if (phase === "after-native") {
+          assert.equal(
+            (
+              await rpc(token, "update_game_draft", {
+                contractVersion: "0.1.0",
+                draftId: prepared.input.draftId,
+                expectedRevision: 1,
+                authoredShowJson: requireNativeSaveString(
+                  createInput("Later current draft").authoredShowJson,
+                ),
+                idempotencyKey: key(),
+              })
+            ).ok,
+            true,
+          )
+        }
+
+        const replay = spawnSync(
+          process.execPath,
+          [bundle, "native-child", "replay", descriptor],
+          { encoding: "utf8", timeout: 20000 },
+        )
+        assert.equal(replay.status, 0, replay.stdout + replay.stderr)
+        const completed = requireNativeSaveRecord(
+          JSON.parse(fs.readFileSync(reply, "utf8")),
+        )
+
+        assert.equal(
+          requireNativeSaveRecord(completed.result).ok,
           true,
+          JSON.stringify(completed),
         )
-      }
+        assert.equal(nativeCount(), nativeCountBefore7 + 1)
 
-      const replay = spawnSync(
-        process.execPath,
-        [bundle, "native-child", "replay", descriptor],
-        { encoding: "utf8", timeout: 20000 },
-      )
-      assert.equal(replay.status, 0, replay.stdout + replay.stderr)
-      const completed = requireNativeSaveRecord(
-        JSON.parse(fs.readFileSync(reply, "utf8")),
-      )
-
-      assert.equal(
-        requireNativeSaveRecord(completed.result).ok,
-        true,
-        JSON.stringify(completed),
-      )
-      assert.equal(nativeCount(), nativeCountBefore7 + 1)
-
-      if (observed.result) {
-        assert.equal(
-          requireNativeSaveString(
-            requireNativeSaveRecord(
-              requireNativeSaveRecord(completed.result).data,
-            ).quizId,
-          ),
-          requireNativeSaveString(
-            requireNativeSaveRecord(observed.result).quizId,
-          ),
-        )
-      }
-
-      if (observed.outcome) {
-        assert.deepEqual(
-          requireNativeSaveRecord(completed.result).data,
-          observed.outcome,
-        )
-      }
-
-      const loaded = await requireInitializedF().as(
-        requireInitializedF().sessions[0],
-        () =>
-          requireInitializedNative().getQuizzById(
+        if (observed.result) {
+          assert.equal(
             requireNativeSaveString(
               requireNativeSaveRecord(
                 requireNativeSaveRecord(completed.result).data,
               ).quizId,
             ),
-          ),
-      )
-      assert.equal(loaded.subject, `Crash snapshot ${phase}`)
-
-      if (phase === "after-f-outcome") {
-        await requireInitializedF().as(requireInitializedF().sessions[0], () =>
-          requireInitializedNative().deleteQuizz(
             requireNativeSaveString(
-              requireNativeSaveRecord(
-                requireNativeSaveRecord(completed.result).data,
-              ).quizId,
+              requireNativeSaveRecord(observed.result).quizId,
             ),
-          ),
-        )
-        fs.unlinkSync(
-          path.join(
-            requireInitializedF().root,
-            "tenants",
-            requireInitializedF().sessions[0].owner,
-            "extensions/quizzes",
-            `${requireNativeSaveString(requireNativeSaveRecord(requireNativeSaveRecord(completed.result).data).quizId)}.json`,
-          ),
-        )
-        const afterDelete = nativeCount()
-        assert.deepEqual(
-          (await rpc(token, "save_game", prepared.input)).data,
-          requireNativeSaveRecord(completed.result).data,
-        )
-        assert.equal(nativeCount(), afterDelete)
-      }
+          )
+        }
 
-      writeDurable(
-        path.join(requireInitializedF().root, `${name}.verified.json`),
-        {
-          phase,
-          killedPid: observed.pid,
-          signal: lost.signal,
-          replayPid: completed.pid,
-          replayExit: replay.status,
-          result: requireNativeSaveRecord(completed.result).data,
-          nativeCountBefore: nativeCountBefore7,
-          nativeCountAfter: nativeCount(),
-          finalState: savedRow(
-            requireInitializedF().root,
-            requireInitializedF().sessions[0].owner,
-            principal.grantId,
-            prepared.input.idempotencyKey,
-          ).state,
-        },
-      )
-    })
-  }
+        if (observed.outcome) {
+          assert.deepEqual(
+            requireNativeSaveRecord(completed.result).data,
+            observed.outcome,
+          )
+        }
+
+        const loaded = await requireInitializedF().as(
+          requireInitializedF().sessions[0],
+          () =>
+            requireInitializedNative().getQuizzById(
+              requireNativeSaveString(
+                requireNativeSaveRecord(
+                  requireNativeSaveRecord(completed.result).data,
+                ).quizId,
+              ),
+            ),
+        )
+        assert.equal(loaded.subject, `Crash snapshot ${phase}`)
+
+        if (phase === "after-f-outcome") {
+          await requireInitializedF().as(
+            requireInitializedF().sessions[0],
+            () =>
+              requireInitializedNative().deleteQuizz(
+                requireNativeSaveString(
+                  requireNativeSaveRecord(
+                    requireNativeSaveRecord(completed.result).data,
+                  ).quizId,
+                ),
+              ),
+          )
+          fs.unlinkSync(
+            path.join(
+              requireInitializedF().root,
+              "tenants",
+              requireInitializedF().sessions[0].owner,
+              "extensions/quizzes",
+              `${requireNativeSaveString(requireNativeSaveRecord(requireNativeSaveRecord(completed.result).data).quizId)}.json`,
+            ),
+          )
+          const afterDelete = nativeCount()
+          assert.deepEqual(
+            (await rpc(token, "save_game", prepared.input)).data,
+            requireNativeSaveRecord(completed.result).data,
+          )
+          assert.equal(nativeCount(), afterDelete)
+        }
+
+        writeDurable(
+          path.join(requireInitializedF().root, `${name}.verified.json`),
+          {
+            phase,
+            killedPid: observed.pid,
+            signal: lost.signal,
+            replayPid: completed.pid,
+            replayExit: replay.status,
+            result: requireNativeSaveRecord(completed.result).data,
+            nativeCountBefore: nativeCountBefore7,
+            nativeCountAfter: nativeCount(),
+            finalState: savedRow({
+              root: requireInitializedF().root,
+              owner: requireInitializedF().sessions[0].owner,
+              grantId: principal.grantId,
+              requestKey: prepared.input.idempotencyKey,
+            }).state,
+          },
+        )
+      })
+    },
+  )
 
   test("an uncertain private ledger journal is preserved and cannot authorize another native save", async () => {
     const token = await linked()

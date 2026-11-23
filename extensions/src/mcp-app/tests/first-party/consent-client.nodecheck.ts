@@ -46,9 +46,10 @@ before(async () => {
       resourceMetadataUrl: `${origin}/.well-known/oauth-protected-resource/mcp`,
     },
     keyId: "synthetic-consent-boundary",
-    signingPrivateKeyPem: pair.privateKey
-      .export({ type: "pkcs8", format: "pem" })
-      .toString(),
+    signingPrivateKeyPem: pair.privateKey.export({
+      type: "pkcs8",
+      format: "pem",
+    }),
     ticketEncryptionKey: randomBytes(32),
     consentPageUrl: `${origin}/studio/oauth-consent`,
     clients: [{ clientId, redirectUris: [redirectUri], scopes }],
@@ -82,7 +83,9 @@ async function begin() {
     }),
   )
   assert.equal(response.status, 302)
-  const target = new URL(response.headers.get("location")!)
+  const location = response.headers.get("location")
+  assert.ok(location)
+  const target = new URL(location)
   assert.equal(
     target.origin + target.pathname,
     `${origin}/studio/oauth-consent`,
@@ -106,13 +109,14 @@ function bridge(
   const request: typeof fetch = async (input, init) => {
     assert.equal(typeof input, "string")
     assert.ok(input === "/oauth/inspect" || input === "/oauth/approve")
-    assert.equal(init?.credentials, "same-origin")
-    assert.equal(init?.redirect, "error")
-    assert.equal(init?.referrerPolicy, "no-referrer")
-    const headers = new Headers(init?.headers)
+    assert.ok(init)
+    assert.equal(init.credentials, "same-origin")
+    assert.equal(init.redirect, "error")
+    assert.equal(init.referrerPolicy, "no-referrer")
+    const headers = new Headers(init.headers)
     headers.set("host", new URL(origin).host)
     headers.set("origin", origin)
-    calls.push(String(input))
+    calls.push(input)
     const response = await requireInitializedIssuer().fetch(
       new Request(origin + input, { ...init, headers }),
     )
@@ -232,7 +236,7 @@ test("real native inspect response is discarded when the browser's native sessio
   const pending = client.inspect(begun.ticket)
   await ready
   assert.equal(requireInspectedResponse().status, 200)
-  ;({ token } = requireInitializedF().sessions[1])
+  ;[, { token }] = requireInitializedF().sessions
 
   release(requireInspectedResponse())
   await assert.rejects(pending, /session-changed/)

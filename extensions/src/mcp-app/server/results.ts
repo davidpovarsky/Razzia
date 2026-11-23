@@ -21,10 +21,12 @@ export function firstPartyUrl(value: string, config: ServerConfig) {
 }
 
 export function failureResult(
-  name: ToolName | undefined,
-  error: unknown,
-  config: ServerConfig,
-  correlationId = randomUUID(),
+  ...[name, error, config, correlationId = randomUUID()]: [
+    name: ToolName | undefined,
+    error: unknown,
+    config: ServerConfig,
+    correlationId?: string,
+  ]
 ) {
   const failure = safeError(error)
 

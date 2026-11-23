@@ -342,7 +342,10 @@ try {
     errors.filter((x) => x !== "errors:auth.sessionFailed"),
     [],
   )
-  console.log("NATIVE_SOUND_ASSETS_REQUESTED", [...soundRequests].sort())
+  console.log(
+    "NATIVE_SOUND_ASSETS_REQUESTED",
+    [...soundRequests].sort((left, right) => left.localeCompare(right)),
+  )
   console.log(
     "NATIVE_FULL_SHOW_PASS",
     JSON.stringify({

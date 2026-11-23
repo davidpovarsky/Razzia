@@ -1,9 +1,22 @@
+import { promiseFrom } from "../../mcp-app/shared/promise-operation.ts"
 import { describe, expect, it } from "vitest"
 import {
   createNativeSaveConsentClient,
   nativeSaveRequestIdFromPath,
   NATIVE_SAVE_CONSENT_PATH,
 } from "./client"
+
+function requestUrl(input: Parameters<typeof fetch>[0]): string {
+  if (typeof input === "string") {
+    return input
+  }
+
+  if (input instanceof URL) {
+    return input.href
+  }
+
+  return input.url
+}
 
 const accountId = "d8c27613-c6b8-49bf-9f92-c333f38beb3a"
 const requestId = "a".repeat(54),
@@ -57,8 +70,13 @@ async function fixture() {
   let requestFailure: Error | null = null
   let waitForApproval: Promise<void> | null = null
   const request: typeof fetch = async (input, init) => {
-    const path = String(input)
-    calls.push({ path, init: init!, body: JSON.parse(String(init?.body)) })
+    const path = requestUrl(input)
+
+    if (!init || typeof init.body !== "string") {
+      throw new Error("Native save fixture requires a JSON request body")
+    }
+
+    calls.push({ path, init, body: JSON.parse(init.body) })
 
     if (requestFailure) {
       throw requestFailure
@@ -308,23 +326,25 @@ describe("separate native exact-revision consent client", () => {
     )
     expect(f.calls).toHaveLength(0)
     const calls: string[] = []
-    const request: typeof fetch = async (input) => {
-      calls.push(String(input))
+    const request: typeof fetch = (input) =>
+      promiseFrom(() => {
+        calls.push(requestUrl(input))
 
-      return json(
-        {
-          contractVersion: "0.1.0",
-          ok: false,
-          error: {
-            code: "CONSENT_REQUIRED",
-            messageKey: "safe",
-            retryable: false,
-            consentUrl: "https://untrusted.invalid/never-follow",
+        return json(
+          {
+            contractVersion: "0.1.0",
+            ok: false,
+            error: {
+              code: "CONSENT_REQUIRED",
+              messageKey: "safe",
+              retryable: false,
+              consentUrl: "https://untrusted.invalid/never-follow",
+            },
           },
-        },
-        403,
-      )
-    }
+          403,
+        )
+      })
+
     await expect(
       createNativeSaveConsentClient({ ...f.options, request }).inspect(
         requestId,

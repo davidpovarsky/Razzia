@@ -56,11 +56,13 @@ export function OAuthConsentPage({
   }, [issuerBasePath])
   const ticket = useMemo(() => {
     const values = new URLSearchParams(search).getAll("oauth_request")
+    const value = values.at(0)
 
     return values.length === 1 &&
-      values[0].length >= 40 &&
-      values[0].length <= 8192
-      ? values[0]
+      value !== undefined &&
+      value.length >= 40 &&
+      value.length <= 8192
+      ? value
       : null
   }, [search])
   const [inspection, setInspection] = useState<ConsentInspection | null>(null)
@@ -121,7 +123,7 @@ export function OAuthConsentPage({
       inspectionRequest.current = null
     }
 
-    if (!validSession()) {
+    if (!token || !validSession()) {
       browserConsentLoginHandoff().clear()
       setState("expired")
 
@@ -179,7 +181,7 @@ export function OAuthConsentPage({
       }
 
       proof.current = {
-        token: token!,
+        token,
         accountId: live.id,
         email: live.email,
         ticket,
@@ -266,6 +268,8 @@ export function OAuthConsentPage({
 
     const abort = new AbortController()
     approval.current = abort
+    const isCurrentApproval = () =>
+      approval.current === abort && !abort.signal.aborted
     setState("pending")
 
     try {
@@ -279,7 +283,7 @@ export function OAuthConsentPage({
         throw new Error("oauth-consent:session-changed")
       }
 
-      if (approval.current !== abort || abort.signal.aborted) {
+      if (!isCurrentApproval()) {
         return
       }
 
@@ -289,7 +293,7 @@ export function OAuthConsentPage({
         abort.signal,
       )
 
-      if (approval.current !== abort || abort.signal.aborted) {
+      if (!isCurrentApproval()) {
         return
       }
 

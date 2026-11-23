@@ -44,8 +44,8 @@ const seconds = z
 const requestSchema = z.object({
   response_type: z.literal("code"),
   client_id: bounded,
-  redirect_uri: z.string().url().max(2048),
-  resource: z.string().url().max(2048),
+  redirect_uri: z.url().max(2048),
+  resource: z.url().max(2048),
   scope: z.string().min(1).max(1024),
   state: z.string().min(16).max(1024),
   code_challenge: z.string().regex(/^[A-Za-z0-9_-]{43}$/u),
@@ -437,10 +437,12 @@ export function createOAuthProtocol(options: OAuthCryptoOptions) {
         .digest("hex")
     },
     checkConsentProof(
-      accountId: string,
-      sid: string,
-      ticket: string,
-      proof: string,
+      ...[accountId, sid, ticket, proof]: [
+        accountId: string,
+        sid: string,
+        ticket: string,
+        proof: string,
+      ]
     ) {
       if (!/^[a-f0-9]{64}$/u.test(proof)) {
         return fail("access_denied")

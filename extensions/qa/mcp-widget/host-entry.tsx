@@ -147,7 +147,7 @@ bridge.oncalltool = async ({ name, arguments: args }) => {
   if (
     name === "update_game_draft" &&
     args?.draftId === id &&
-    args?.expectedRevision === revision &&
+    args.expectedRevision === revision &&
     !conflict
   ) {
     text = String(args.authoredShowJson)
@@ -159,8 +159,8 @@ bridge.oncalltool = async ({ name, arguments: args }) => {
   if (name === "preview_game") {
     if (
       args?.contractVersion !== "0.1.0" ||
-      args?.draftId !== id ||
-      args?.expectedRevision !== revision ||
+      args.draftId !== id ||
+      args.expectedRevision !== revision ||
       conflict
     ) {
       return errorResult("REVISION_CONFLICT", { currentRevision: revision })
@@ -171,7 +171,7 @@ bridge.oncalltool = async ({ name, arguments: args }) => {
     }
 
     const entries = await loadRetainedEntries()
-    const locale = typeof args?.locale === "string" ? args.locale : "en"
+    const locale = typeof args.locale === "string" ? args.locale : "en"
     const entry = entries?.find(
       (item) => (item.selection.locale ?? "en") === locale,
     )

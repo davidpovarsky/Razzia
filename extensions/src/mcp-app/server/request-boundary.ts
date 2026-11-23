@@ -46,9 +46,10 @@ export class RequestLifetimes {
       throw new Error("Invalid request lifetime")
     }
 
+    this.next += 1
     const op: Operation = {
       wireId: id,
-      sdkId: this.prefix + ++this.next,
+      sdkId: `${this.prefix}${this.next}`,
       tool,
       work: tool ? 1 : 0,
       sdkPending: false,
@@ -79,7 +80,7 @@ export class RequestLifetimes {
     this.settle(op)
   }
   settledWork(op: Operation) {
-    op.work--
+    op.work -= 1
     this.settle(op)
   }
   /** Hold each owner once through PUBLIC send completion, not remote receipt. */
@@ -93,7 +94,7 @@ export class RequestLifetimes {
     }
 
     for (const op of unique) {
-      op.work++
+      op.work += 1
     }
     let held = true
 

@@ -137,12 +137,17 @@ function imageValid(image: unknown) {
     throw new Error("Invalid creation byte image")
   }
 }
-function validateIntent(
-  value: unknown,
-  scope: CreationScope,
-  slot: string,
-  resolved: boolean,
-): Intent {
+function validateIntent({
+  value,
+  scope,
+  slot,
+  resolved,
+}: {
+  value: unknown
+  scope: CreationScope
+  slot: string
+  resolved: boolean
+}): Intent {
   const entry = value as Intent
 
   if (
@@ -266,7 +271,12 @@ function readIntent(scope: CreationScope, slot: string, resolved = false) {
   }
 
   return {
-    intent: validateIntent(JSON.parse(record.raw), scope, slot, resolved),
+    intent: validateIntent({
+      value: JSON.parse(record.raw),
+      scope,
+      slot,
+      resolved,
+    }),
     record,
   }
 }
@@ -433,12 +443,17 @@ function updateIntent(
  * never restored/deleted. A consumed witness is an idempotent cleanup retry.
  */
 
-function cleanupResolved(
-  scope: CreationScope,
-  slot: string,
-  intent: Intent,
-  record: DurableImage,
-) {
+function cleanupResolved({
+  scope,
+  slot,
+  intent,
+  record,
+}: {
+  scope: CreationScope
+  slot: string
+  intent: Intent
+  record: DurableImage
+}) {
   settleIntentOperation(intent)
   privateDirectory(slot)
 
@@ -446,7 +461,12 @@ function cleanupResolved(
     throw new Error("Resolved slot ownership changed")
   }
 
-  fenceResolvedMove(scope, slot, intent.quizId, intent.phaseParents)
+  fenceResolvedMove({
+    scope,
+    slot,
+    quizId: intent.quizId,
+    expected: intent.phaseParents,
+  })
   const allowed = new Set(["intent.json", "base.record", "sidecar.record"])
 
   if (fs.readdirSync(slot).some((name) => !allowed.has(name))) {
@@ -483,12 +503,17 @@ function cleanupResolved(
   syncDirectory(path.dirname(slot))
   creationFamily(scope)
 }
-function fenceResolvedMove(
-  scope: CreationScope,
-  slot: string,
-  quizId: string,
-  expected?: Intent["phaseParents"],
-) {
+function fenceResolvedMove({
+  scope,
+  slot,
+  quizId,
+  expected,
+}: {
+  scope: CreationScope
+  slot: string
+  quizId: string
+  expected?: Intent["phaseParents"]
+}) {
   const family = creationFamily(scope)
   const active = path.join(family, "active")
   const resolved = path.join(family, "resolved")
@@ -537,7 +562,12 @@ function resolveSlot(state: State) {
   syncDirectory(path.dirname(state.slot))
   syncDirectory(resolvedParent)
   state.slot = destination
-  cleanupResolved(state.intent.scope, destination, state.intent, state.record)
+  cleanupResolved({
+    scope: state.intent.scope,
+    slot: destination,
+    intent: state.intent,
+    record: state.record,
+  })
 }
 function rollback(state: State) {
   if (state.intent.phase !== "ready") {
@@ -735,7 +765,7 @@ export function createNativeCreationPort(
           )
         : null
       updateIntent(state, { phase: "ready", base, sidecar })
-      validateIntent(state.intent, scope, slot, false)
+      validateIntent({ value: state.intent, scope, slot, resolved: false })
       assertCreationScope(environment, scope)
       classifyPair(state.intent, slot, state.record)
 
@@ -1073,7 +1103,7 @@ export function recoverCreationReservations(configuredRoot: string) {
               throw new Error("Ambiguous resolved creation residue")
             }
 
-            fenceResolvedMove(scope, slot, name.slice(0, 21))
+            fenceResolvedMove({ scope, slot, quizId: name.slice(0, 21) })
             syncDirectory(slot)
             syncDirectory(parent)
             fs.rmdirSync(slot)
@@ -1090,7 +1120,7 @@ export function recoverCreationReservations(configuredRoot: string) {
                 throw new Error("Unresolved intent in resolved family")
               }
 
-              cleanupResolved(scope, slot, intent, record)
+              cleanupResolved({ scope, slot, intent, record })
             } else {
               const state: State = {
                 intent,

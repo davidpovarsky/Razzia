@@ -1,3 +1,4 @@
+import { promiseFrom } from "../../shared/promise-operation.ts"
 import assert from "node:assert/strict"
 import { after, before, test } from "node:test"
 import { createHash, generateKeyPairSync, randomBytes } from "node:crypto"
@@ -74,9 +75,10 @@ before(async () => {
     config,
     configRoot: requireInitializedF().root,
     keyId: "synthetic-package-key",
-    signingPrivateKeyPem: pair.privateKey
-      .export({ type: "pkcs8", format: "pem" })
-      .toString(),
+    signingPrivateKeyPem: pair.privateKey.export({
+      type: "pkcs8",
+      format: "pem",
+    }),
     ticketEncryptionKey: randomBytes(32),
     consentPageUrl: `${origin}/studio/oauth-consent`,
     clients: [{ clientId, redirectUris: [callback], scopes: allScopes }],
@@ -232,18 +234,20 @@ test("real issuer and SDK derive each package owner from the verified account", 
   ])
   const seen: string[] = []
   const adapter: PackageAuthoringPort = {
-    async call(p, name, input) {
-      assert.equal(name, "get_package_status")
-      seen.push(p.accountId)
+    call(p, name, input) {
+      return promiseFrom(() => {
+        assert.equal(name, "get_package_status")
+        seen.push(p.accountId)
 
-      if (
-        !("uploadId" in input) ||
-        uploads.get(p.accountId) !== input.uploadId
-      ) {
-        throw new ToolError("NOT_FOUND")
-      }
+        if (
+          !("uploadId" in input) ||
+          uploads.get(p.accountId) !== input.uploadId
+        ) {
+          throw new ToolError("NOT_FOUND")
+        }
 
-      return { data: packageStatus(input.uploadId) }
+        return { data: packageStatus(input.uploadId) }
+      })
     },
   }
   const remote = requireInitializedIssuer().remote({
@@ -417,18 +421,20 @@ test("revoked authority cannot replay an earlier package mutation or reach cache
   }
   let calls = 0
   const port = requireInitializedIssuer().packages({
-    async call() {
-      calls += 1
+    call() {
+      return promiseFrom(() => {
+        calls += 1
 
-      return {
-        data: {
-          transferId,
-          totalBytes: 22,
-          receivedBytes: 0,
-          chunkBytes: 24_000,
-          expiresAt: new Date(Date.now() + 60_000).toISOString(),
-        },
-      }
+        return {
+          data: {
+            transferId,
+            totalBytes: 22,
+            receivedBytes: 0,
+            chunkBytes: 24_000,
+            expiresAt: new Date(Date.now() + 60_000).toISOString(),
+          },
+        }
+      })
     },
   })
   await port.call(linkedAccount.principal, "begin_package_upload", input)

@@ -182,5 +182,5 @@ export function consentText(locale: PreviewLocale) {
     },
   })
 
-  return (key: Key) => String(instance.t(key))
+  return (key: Key) => instance.t(key)
 }

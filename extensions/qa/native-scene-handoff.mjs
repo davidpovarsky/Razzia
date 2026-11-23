@@ -274,7 +274,9 @@ const plugins = [
             if ((await fs.stat(candidate)).isFile()) {
               return { path: candidate }
             }
-          } catch {}
+          } catch {
+            // A candidate path may be absent; try the remaining extensions.
+          }
         }
         throw new Error(`Unresolved candidate workspace import ${args.path}`)
       })
@@ -557,7 +559,7 @@ try {
   await page.addInitScript(() => {
     window.animationStarts = 0
     const { animate } = Element.prototype
-    Element.prototype.animate = function (...args) {
+    Element.prototype.animate = function observedAnimate(...args) {
       window.animationStarts += 1
 
       return animate.apply(this, args)
@@ -566,7 +568,7 @@ try {
     window.audioEvents = []
     window.startAudioElements = []
     const { play } = HTMLMediaElement.prototype
-    HTMLMediaElement.prototype.play = function (...args) {
+    HTMLMediaElement.prototype.play = function observedPlay(...args) {
       let attempt = undefined
 
       if (this instanceof HTMLAudioElement) {
@@ -848,14 +850,14 @@ try {
       }
 
       const n = document.querySelector('[data-testid="handoff-prepared"]')
-      window.gapFrames.total++
+      window.gapFrames.total += 1
 
       if (!n || n.getBoundingClientRect().width === 0) {
-        window.gapFrames.empty++
+        window.gapFrames.empty += 1
       }
 
       if (n !== window.preparedNode) {
-        window.gapFrames.changed++
+        window.gapFrames.changed += 1
       }
 
       requestAnimationFrame(sample)

@@ -60,7 +60,7 @@ const relativeFile = (root, relative) => {
   return result
 }
 // Every old authored property must survive, apart from the two reviewed URLs.
-function preserveOriginal(original, result, allowed, pointer = "") {
+function preserveOriginal({ original, result, allowed, pointer = "" }) {
   if (allowed.has(pointer)) {
     return
   }
@@ -70,9 +70,14 @@ function preserveOriginal(original, result, allowed, pointer = "") {
       Array.isArray(result) && original.length === result.length,
       "AUTHORED_ARRAY_CHANGED",
     )
-    original.forEach((value, index) =>
-      preserveOriginal(value, result[index], allowed, `${pointer}/${index}`),
-    )
+    original.forEach((value, index) => {
+      preserveOriginal({
+        original: value,
+        result: result[index],
+        allowed,
+        pointer: `${pointer}/${index}`,
+      })
+    })
   } else if (original && typeof original === "object") {
     requireGate(
       result && typeof result === "object" && !Array.isArray(result),
@@ -80,7 +85,12 @@ function preserveOriginal(original, result, allowed, pointer = "") {
     )
     for (const [key, value] of Object.entries(original)) {
       requireGate(Object.hasOwn(result, key), "AUTHORED_PROPERTY_REMOVED")
-      preserveOriginal(value, result[key], allowed, `${pointer}/${key}`)
+      preserveOriginal({
+        original: value,
+        result: result[key],
+        allowed,
+        pointer: `${pointer}/${key}`,
+      })
     }
   } else {
     requireGate(isDeepStrictEqual(original, result), "AUTHORED_VALUE_CHANGED")
@@ -227,7 +237,11 @@ try {
       const normalized = validators.quizzValidator.parse(
         validators.normalizeLegacyQuizz(stored),
       )
-      preserveOriginal(stored, { id: stored.id, ...normalized }, new Set())
+      preserveOriginal({
+        original: stored,
+        result: { id: stored.id, ...normalized },
+        allowed: new Set(),
+      })
       requireGate(
         normalized.questions.length === 4 &&
           isDeepStrictEqual(target.questionIndices, [1, 2]),
@@ -327,7 +341,11 @@ try {
       const allowed = new Set(
         target.questionIndices.map((index) => `/questions/${index}/media/url`),
       )
-      preserveOriginal(stored, { id: stored.id, ...next }, allowed)
+      preserveOriginal({
+        original: stored,
+        result: { id: stored.id, ...next },
+        allowed,
+      })
       const targetExtras = {
         ...structuredClone(extras),
         baseDigest: core.computeCanonicalBaseDigest(next),
@@ -346,7 +364,7 @@ try {
       const physical = JSON.parse(
         readRegular(relativeFile(configRoot, target.baseRelative), 1_048_576),
       )
-      preserveOriginal(stored, physical, allowed)
+      preserveOriginal({ original: stored, result: physical, allowed })
       requireGate(
         isDeepStrictEqual(physical, { id: target.quizId, ...next }),
         "SAVED_BASE_CHANGED",

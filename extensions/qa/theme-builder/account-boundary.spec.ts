@@ -1,5 +1,4 @@
 import playwright from "../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
-import type * as Playwright from "../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
 import { writeFile } from "node:fs/promises"
 import { isDeepStrictEqual } from "node:util"
 import { builderDocumentFixture } from "../../src/components/theme-builder/document.fixture"
@@ -8,7 +7,8 @@ import {
   parseBuilderDocument,
   type BuilderDocument,
 } from "../../src/components/theme-builder/document"
-const { test, expect } = playwright as unknown as typeof Playwright
+const { test, expect } =
+  playwright as unknown as typeof import("../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js")
 
 function isRawBoundaryDocument(value: unknown): value is BuilderDocument {
   return isDeepStrictEqual(parseBuilderDocument(value), value)

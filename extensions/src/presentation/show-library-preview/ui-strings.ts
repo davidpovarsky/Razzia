@@ -160,7 +160,7 @@ const resources = {
 export type PreviewTextKey = keyof typeof resources.en
 
 export function previewText(locale: PreviewLocale) {
-  if (!resources[locale]) {
+  if (!Object.hasOwn(resources, locale)) {
     throw new Error("show-preview:unsupported-locale")
   }
 
@@ -172,5 +172,5 @@ export function previewText(locale: PreviewLocale) {
     resources: { [locale]: { translation: resources[locale] } },
   })
 
-  return (key: PreviewTextKey) => String(instance.t(key))
+  return (key: PreviewTextKey) => instance.t(key)
 }

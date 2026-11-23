@@ -150,12 +150,17 @@ export function readPhysicalFile(getPath: GetPath, relative: string) {
   }
 }
 
-function validateKind(
-  raw: string,
-  kind: RecordKind,
-  id: string,
-  relative: string,
-) {
+function validateKind({
+  raw,
+  kind,
+  id,
+  relative,
+}: {
+  raw: string
+  kind: RecordKind
+  id: string
+  relative: string
+}) {
   const record: unknown = JSON.parse(raw)
 
   if (!isRecord(record)) {
@@ -242,7 +247,7 @@ export function resolvePhysicalBase(
       record.id === id ||
       (typeof record.id !== "string" && name === `${id}.json`)
     ) {
-      validateKind(JSON.stringify(record), "base", id, relative)
+      validateKind({ raw: JSON.stringify(record), kind: "base", id, relative })
       matches.push(relative)
     }
   }
@@ -255,12 +260,38 @@ export function resolvePhysicalBase(
 }
 
 export function preparePhysicalBinding(
-  getPath: GetPath,
-  quizId: string,
-  kind: RecordKind,
-  relativePath: string,
-  target: unknown,
+  ...args: [
+    getPath: GetPath,
+    quizId: string,
+    kind: RecordKind,
+    relativePath: string,
+    target: unknown,
+  ]
 ): PhysicalBinding {
+  const [getPath, quizId, kind, relativePath, target] = args
+
+  return preparePhysicalBindingFromRequest({
+    getPath,
+    quizId,
+    kind,
+    relativePath,
+    target,
+  })
+}
+
+function preparePhysicalBindingFromRequest({
+  getPath,
+  quizId,
+  kind,
+  relativePath,
+  target,
+}: {
+  getPath: GetPath
+  quizId: string
+  kind: RecordKind
+  relativePath: string
+  target: unknown
+}): PhysicalBinding {
   const prefix = kind === "base" ? "quizz/" : "extensions/quizzes/"
 
   if (
@@ -274,7 +305,12 @@ export function preparePhysicalBinding(
   const original = readPhysicalFile(getPath, relativePath)
 
   if (original) {
-    validateKind(original.raw, kind, quizId, relativePath)
+    validateKind({
+      raw: original.raw,
+      kind,
+      id: quizId,
+      relative: relativePath,
+    })
   }
 
   let physicalTarget = target
@@ -300,7 +336,7 @@ export function preparePhysicalBinding(
   }
 
   for (const raw of rawTargets) {
-    validateKind(raw, kind, quizId, relativePath)
+    validateKind({ raw, kind, id: quizId, relative: relativePath })
   }
   const privateDir = getPath("extensions/quizzes/.journal/.bindings")
   fs.mkdirSync(privateDir, { recursive: true, mode: 0o700 })
@@ -393,16 +429,21 @@ export function assertPhysicalBinding(
   }
 
   if (binding.original) {
-    validateKind(
-      binding.original.raw,
-      binding.kind,
-      binding.quizId,
-      binding.relativePath,
-    )
+    validateKind({
+      raw: binding.original.raw,
+      kind: binding.kind,
+      id: binding.quizId,
+      relative: binding.relativePath,
+    })
   }
 
   for (const target of binding.targets) {
-    validateKind(target.raw, binding.kind, binding.quizId, binding.relativePath)
+    validateKind({
+      raw: target.raw,
+      kind: binding.kind,
+      id: binding.quizId,
+      relative: binding.relativePath,
+    })
   }
 
   if (
@@ -429,7 +470,12 @@ export function assertPhysicalBinding(
     return null
   }
 
-  validateKind(current.raw, binding.kind, binding.quizId, binding.relativePath)
+  validateKind({
+    raw: current.raw,
+    kind: binding.kind,
+    id: binding.quizId,
+    relative: binding.relativePath,
+  })
   const identities = [
     binding.original,
     binding.preparedTarget,

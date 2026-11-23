@@ -1,3 +1,4 @@
+import { promiseFrom } from "../../shared/promise-operation.ts"
 import assert from "node:assert/strict"
 import test from "node:test"
 import {
@@ -128,11 +129,12 @@ test(
 
     const h = await lifecycleHarness(
       {
-        authorize: async () => {
-          auth += 1
+        authorize: () =>
+          promiseFrom(() => {
+            auth += 1
 
-          return auth === 1 ? a : b
-        },
+            return auth === 1 ? a : b
+          }),
         prevalidationLimit: () => {
           ingress += 1
 
@@ -144,10 +146,12 @@ test(
           return Promise.resolve(true)
         },
         drafts: {
-          async get(p) {
-            readers.push(p.accountId)
+          get(p) {
+            return promiseFrom(() => {
+              readers.push(p.accountId)
 
-            return undefined
+              return undefined
+            })
           },
           create() {
             return Promise.reject(
@@ -289,18 +293,19 @@ for (const duplicate of [true, false]) {
             return Promise.resolve(p)
           },
         },
-        async (context) => {
-          const write = context.mcpReq.notify({
-            method: "notifications/progress",
-            params: { progressToken: "synthetic-progress", progress: 1 },
-          })
-          writes.push(write)
-          void write.catch(() => {
-            /* The original write promise is retained for the later settlement assertions. */
-          })
+        (context) =>
+          promiseFrom(() => {
+            const write = context.mcpReq.notify({
+              method: "notifications/progress",
+              params: { progressToken: "synthetic-progress", progress: 1 },
+            })
+            writes.push(write)
+            void write.catch(() => {
+              /* The original write promise is retained for the later settlement assertions. */
+            })
 
-          return { content: [{ type: "text", text: "synthetic read" }] }
-        },
+            return { content: [{ type: "text", text: "synthetic read" }] }
+          }),
         async (message, options) => {
           if (
             !held &&

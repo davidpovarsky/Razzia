@@ -60,11 +60,13 @@ function modelQuestionRefs(record: DraftRecord) {
 }
 
 export async function dispatch(
-  name: ToolName,
-  raw: unknown,
-  p: VerifiedPrincipal,
-  deps: Dependencies,
-  config: ServerConfig,
+  ...[name, raw, p, deps, config]: [
+    name: ToolName,
+    raw: unknown,
+    p: VerifiedPrincipal,
+    deps: Dependencies,
+    config: ServerConfig,
+  ]
 ): Promise<CallToolResult> {
   const correlationId = randomUUID()
 

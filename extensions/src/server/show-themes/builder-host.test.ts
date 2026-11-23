@@ -98,7 +98,7 @@ afterAll(async () => {
     const value = previous[key]
 
     if (value === undefined) {
-      delete process.env[key]
+      Reflect.deleteProperty(process.env, key)
     } else {
       process.env[key] = value
     }

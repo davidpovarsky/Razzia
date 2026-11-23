@@ -32,7 +32,7 @@ export function createPreviewCoordinator() {
     try {
       void Promise.resolve(previous.close()).then(
         () => barrier.resolve(undefined),
-        barrier.reject,
+        (error: unknown) => barrier.reject(error),
       )
     } catch (error) {
       barrier.reject(error)
