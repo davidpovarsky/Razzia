@@ -63,7 +63,8 @@ function derSet(items: readonly Buffer[]): Buffer {
 }
 
 function derInteger(bytes: Buffer): Buffer {
-  const trimmed = bytes.byteLength === 0 ? Buffer.from([0]) : bytes
+  const firstNonzero = bytes.findIndex((byte) => byte !== 0)
+  const trimmed = firstNonzero < 0 ? Buffer.from([0]) : bytes.subarray(firstNonzero)
   const needsZero = trimmed.readUInt8(0) >= 0x80
 
   return derTag(
