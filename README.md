@@ -1,3 +1,29 @@
+# Tadazz Gameshow
+
+## Licensing
+
+This repository contains the Razzia upstream project and Tadazz-specific
+additions.
+
+- Razzia upstream code remains under its existing [MIT license](LICENSE).
+- Original Tadazz-specific material is provided under the
+  [Tadazz proprietary rights notice](TADAZZ_LICENSE.md), subject to the
+  third-party rights and previously granted permissions described there.
+  Redistribution, republication, resale, sublicensing, commercial reuse
+  and public hosting of that material require prior written permission
+  unless another applicable license or law already permits them.
+- Third-party software, fonts, media and other materials retain their own
+  licenses and notices.
+- Public availability on GitHub permits viewing and forking as required
+  by GitHub's terms. It does not establish an unrestricted license for
+  Tadazz-specific material or revoke rights granted in earlier versions.
+
+The upstream Razzia README is preserved below. Its open-source description
+and upstream installation instructions refer to Razzia; the Tadazz-specific
+licensing terms above also apply to this repository.
+
+---
+
 <p align="center">
   <img width="450" height="120" align="center" src=".github/logo.svg">
   <br>
