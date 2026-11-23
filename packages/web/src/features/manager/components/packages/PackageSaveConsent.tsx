@@ -68,7 +68,8 @@ function parseOutcome(value: unknown): SaveOutcome {
     !Array.isArray(value.installedGameIds) ||
     value.installedGameIds.length > 32 ||
     !value.installedGameIds.every(
-      (id) => typeof id === "string" && /^[A-Za-z0-9_-]{1,128}$/u.test(id),
+      (id: unknown): id is string =>
+        typeof id === "string" && /^[A-Za-z0-9_-]{1,128}$/u.test(id),
     )
   ) {
     throw new Error("PACKAGE_SAVE_RESPONSE")
@@ -77,7 +78,7 @@ function parseOutcome(value: unknown): SaveOutcome {
   return {
     uploadId: value.uploadId,
     revision: value.revision,
-    installedGameIds: [...value.installedGameIds] as string[],
+    installedGameIds: [...value.installedGameIds],
   }
 }
 
@@ -120,6 +121,7 @@ function parseInspection(value: unknown, requestId: string): SaveInspection {
   ) {
     throw new Error("PACKAGE_SAVE_RESPONSE")
   }
+
   const contents = value.contents.map(
     (item): SaveInspection["contents"][number] => {
       if (
@@ -137,10 +139,13 @@ function parseInspection(value: unknown, requestId: string): SaveInspection {
       return { id: item.id, kind: item.kind }
     },
   )
+
   if (new Set(contents.map((item) => item.id)).size !== contents.length) {
     throw new Error("PACKAGE_SAVE_RESPONSE")
   }
+
   const outcome = value.outcome === null ? null : parseOutcome(value.outcome)
+
   if (
     outcome &&
     (outcome.uploadId !== value.uploadId || outcome.revision !== value.revision)
@@ -164,13 +169,12 @@ function parseInspection(value: unknown, requestId: string): SaveInspection {
 }
 
 function sameSession(bound: SessionBinding | null, requestId: string) {
-  return Boolean(
-    bound &&
-    bound.requestId === requestId &&
+  return (
+    bound?.requestId === requestId &&
     getToken() === bound.token &&
     getClientId() === bound.owner &&
     getRole() === SESSION_ROLES.MANAGER &&
-    !isExpired(),
+    !isExpired()
   )
 }
 
@@ -219,6 +223,7 @@ export function PackageSaveConsent({ requestId }: { requestId: string }) {
       setInspection(null)
       setState(saving ? "uncertain" : "expired")
     }
+
     if (
       !opaque.test(requestId) ||
       window.location.search ||
@@ -229,6 +234,7 @@ export function PackageSaveConsent({ requestId }: { requestId: string }) {
 
       return () => controller.abort()
     }
+
     if (!sameSession(bound, requestId)) {
       setState("expired")
 
@@ -240,28 +246,40 @@ export function PackageSaveConsent({ requestId }: { requestId: string }) {
       referrerPolicy: "no-referrer",
     })
       .then((raw) => {
-        if (controller.signal.aborted) return
+        if (controller.signal.aborted) {
+          return
+        }
+
         if (!sameSession(bound, requestId)) {
           invalidate()
 
           return
         }
+
         const value = parseInspection(raw, requestId)
+
         if (Date.parse(value.expiresAt) <= Date.now()) {
           invalidate()
 
           return
         }
+
         snapshot.current = value
         setInspection(value)
         setState(value.outcome ? "saved" : "ready")
       })
       .catch(() => {
-        if (!controller.signal.aborted) setState("failed")
+        if (!controller.signal.aborted) {
+          setState("failed")
+        }
       })
     const check = () => {
-      if (controller.signal.aborted) return
-      const current = snapshot.current
+      if (controller.signal.aborted) {
+        return
+      }
+
+      const { current } = snapshot
+
       if (
         !sameSession(bound, requestId) ||
         (current &&
@@ -272,8 +290,11 @@ export function PackageSaveConsent({ requestId }: { requestId: string }) {
       }
     }
     const onStorage = (event: StorageEvent) => {
-      if (event.key === "token" || event.key === null) invalidate()
-      else check()
+      if (event.key === "token" || event.key === null) {
+        invalidate()
+      } else {
+        check()
+      }
     }
     const interval = window.setInterval(check, 1000)
     window.addEventListener("focus", check)
@@ -292,15 +313,18 @@ export function PackageSaveConsent({ requestId }: { requestId: string }) {
   }, [requestId, refresh])
 
   const save = async () => {
-    const current = snapshot.current
+    const { current } = snapshot
     const bound = session.current
+
     if (
       approval.current ||
       state !== "ready" ||
       !current?.canInstall ||
       current.outcome
-    )
+    ) {
       return
+    }
+
     if (
       !sameSession(bound, requestId) ||
       Date.parse(current.expiresAt) <= Date.now()
@@ -309,9 +333,11 @@ export function PackageSaveConsent({ requestId }: { requestId: string }) {
 
       return
     }
+
     const controller = new AbortController()
     approval.current = controller
     setState("saving")
+
     try {
       const result = parseOutcome(
         await packageJson<unknown>(`/save-consents/${requestId}/approve`, {
@@ -326,13 +352,18 @@ export function PackageSaveConsent({ requestId }: { requestId: string }) {
           referrerPolicy: "no-referrer",
         }),
       )
-      if (controller.signal.aborted || !sameSession(bound, requestId)) return
+
+      if (controller.signal.aborted || !sameSession(bound, requestId)) {
+        return
+      }
+
       if (
         result.uploadId !== current.uploadId ||
         result.revision !== current.revision
       ) {
         throw new Error("PACKAGE_SAVE_RESPONSE")
       }
+
       const saved = { ...current, outcome: result }
       snapshot.current = saved
       setInspection(saved)
@@ -340,9 +371,13 @@ export function PackageSaveConsent({ requestId }: { requestId: string }) {
       window.dispatchEvent(new Event("tadazz:packages-changed"))
     } catch {
       // A lost response is reconciled with a read; never retry approval automatically.
-      if (!controller.signal.aborted) setState("uncertain")
+      if (!controller.signal.aborted) {
+        setState("uncertain")
+      }
     } finally {
-      if (approval.current === controller) approval.current = null
+      if (approval.current === controller) {
+        approval.current = null
+      }
     }
   }
 
@@ -351,12 +386,10 @@ export function PackageSaveConsent({ requestId }: { requestId: string }) {
     inspection && game
       ? `/studio/package-preview/${inspection.uploadId}/${inspection.revision}/${game.id}`
       : null
-  const status =
-    state === "ready"
-      ? inspection?.canInstall
-        ? text.ready
-        : text.notReady
-      : text[state]
+  const readyStatus = inspection?.canInstall ? text.ready : text.notReady
+  const status = state === "ready" ? readyStatus : text[state]
+  const unsavedTone =
+    state === "ready" && inspection?.canInstall ? "info" : "neutral"
 
   return (
     <PlatformScope
@@ -411,15 +444,7 @@ export function PackageSaveConsent({ requestId }: { requestId: string }) {
               }
               data-testid="package-save-status"
             >
-              <Badge
-                tone={
-                  state === "saved"
-                    ? "success"
-                    : state === "ready" && inspection?.canInstall
-                      ? "info"
-                      : "neutral"
-                }
-              >
+              <Badge tone={state === "saved" ? "success" : unsavedTone}>
                 {status}
               </Badge>
             </div>
@@ -438,7 +463,9 @@ export function PackageSaveConsent({ requestId }: { requestId: string }) {
                   disabled={state !== "ready" || !inspection?.canInstall}
                   loading={state === "saving"}
                   onClick={(event) => {
-                    if (event.isTrusted) void save()
+                    if (event.isTrusted) {
+                      void save()
+                    }
                   }}
                 >
                   {state === "saving" ? text.saving : text.save}

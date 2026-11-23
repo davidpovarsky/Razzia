@@ -1041,7 +1041,12 @@ export const ScenePresenter = ({
           )}
 
           {kind === "interimResults" && (
-            <div className="flex flex-col items-center gap-1">
+            <div
+              className={clsx(
+                "flex items-center justify-center gap-1",
+                isUltraCompact ? "flex-wrap" : "flex-col",
+              )}
+            >
               <div className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-0.5 text-xs font-bold text-white shadow-xs backdrop-blur-md sm:px-4 sm:py-1 sm:text-sm">
                 <BarChart3 className="text-primary size-3.5 sm:size-4" />
                 <span>{getKindLabel("interimResults", "Interim Results")}</span>
@@ -1143,7 +1148,14 @@ export const ScenePresenter = ({
         (activeScene &&
           "mediaType" in activeScene &&
           activeScene.mediaType === "audio")) && (
-        <div className="relative z-10 my-2 flex min-h-0 w-full flex-1 flex-col items-center justify-center overflow-hidden sm:my-3">
+        <div
+          className={clsx(
+            "relative z-10 flex min-h-0 w-full flex-1 flex-col items-center justify-center overflow-hidden",
+            kind === "interimResults" && isUltraCompact
+              ? "my-0"
+              : "my-2 sm:my-3",
+          )}
+        >
           {labels?.sampleDataNotice && (
             <span className="border-primary/40 bg-primary/20 text-primary mb-1.5 shrink-0 rounded-full border px-3 py-0.5 text-xs font-semibold">
               {labels.sampleDataNotice}

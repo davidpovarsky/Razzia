@@ -2649,9 +2649,12 @@ try {
                     "0",
                   )
                   title = list.getByRole("heading", { level: 2 })
-                  expectedNativeTitle = labels.v4Labels.teamLeaderboard
+                  expectedNativeTitle =
+                    expected.sceneTitle || labels.v4Labels.teamLeaderboard
                   nativeScene = "leaderboard"
-                  titleContract = "native-family-heading"
+                  titleContract = expected.sceneTitle
+                    ? "authored-scene-title"
+                    : "native-family-heading"
                   emptyCounts.teamRows = await list.locator(".team-row").count()
                   assert.equal(emptyCounts.teamRows, 0)
                 } else if (classic && fixture.id === "animation-spotlight") {
@@ -2792,7 +2795,8 @@ try {
                 }
 
                 // Await the actual native component's title, not only the outer
-                // chapter wrapper. Classic intentionally owns two scene headings.
+                // chapter wrapper. Classic preserves authored leaderboard titles;
+                // its spotlight fixture retains the localized native heading.
                 await title.waitFor({ state: "visible" })
                 const visibleTitle = (await title.innerText()).trim()
                 assert.equal(visibleTitle, expectedNativeTitle)

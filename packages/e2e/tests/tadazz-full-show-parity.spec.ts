@@ -173,6 +173,9 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
     browser,
     browserName,
   }, testInfo) => {
+    // The complete 23-card flow includes ten real preparation/reveal cycles.
+    // Keep per-operation waits unchanged while allowing its measured WebKit cadence.
+    test.setTimeout(180_000)
     await managerPage.setViewportSize(
       browserName === "webkit"
         ? {
@@ -241,7 +244,6 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
       installZeroLegacyFlickerProbe(alice),
     ])
     const verifyExistingDisplayLobby = async () => {
-      await spectator.bringToFront()
       await spectator.goto(`http://127.0.0.1:3010/display/${gameId}`)
       await expect(spectator.getByTestId("tadazz-show")).toBeVisible()
       await expect(spectator.locator("iframe")).toHaveCount(0)
@@ -271,17 +273,14 @@ test.describe("TADAZZ Full Show 1:1 Native Port â€” Acceptance Gates A01â�
     await expect(managerPage.getByTestId("tadazz-screen-lobby")).toBeVisible()
     await expect(managerPage.getByTestId("tadazz-lobby-pin")).toHaveText(pin)
     await expect(managerPage.getByTestId("tadazz-lobby-qr")).toBeVisible()
-    await verifyExistingDisplayLobby()
-    // These pages represent separate foreground devices. Focus each user's
-    // real controls in sequence; no parallel task changes the active page.
-    for (const [player, name] of [
-      [alice, "Alice"],
-      [bob, "Bob"],
-      [dana, "Dana"],
-    ] as const) {
-      await player.bringToFront()
-      await joinGame(player, pin, name)
-    }
+    // The display and three player contexts are independent lobby clients.
+    // Finish every real join/check before the host inspects the roster or starts.
+    await Promise.all([
+      verifyExistingDisplayLobby(),
+      joinGame(alice, pin, "Alice"),
+      joinGame(bob, pin, "Bob"),
+      joinGame(dana, pin, "Dana"),
+    ])
     await managerPage.bringToFront()
     await expect(managerPage.getByTestId("host-connected-counter")).toHaveText(
       /^3(?:\s*\/\s*3)?$/u,
