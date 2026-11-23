@@ -642,7 +642,7 @@ export async function verifyStoredGameBrowser(options) {
       200,
       "Stored game saves through native editor",
     )
-    await host.waitForURL(/\/(studio\/games|manager\/config)$/)
+    await host.waitForURL(`${origin}/studio/games`)
     let savedBase = await read(`/api/quizz/${quizId}`)
     let savedExtras = (await read(`/api/extensions/quizzes/${quizId}`)).extras
     const savedPreview = await context.request.get(
