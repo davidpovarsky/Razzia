@@ -3,8 +3,11 @@ import assert from "node:assert/strict"
 import { createHash } from "node:crypto"
 import { createRequire } from "node:module"
 import { readFileSync } from "node:fs"
+import { join } from "node:path"
+import { isDeepStrictEqual } from "node:util"
 import { usernameValidator } from "@razzia/common/validators/auth"
 import { CREATING_WORLDS_PRESETS } from "../../src/core/creating-worlds-show.ts"
+import { resolveQuestionPlayMode } from "../../src/core/question-play-mode.ts"
 import { qualifyOwnerImageRepair } from "./external-media-repair.mjs"
 import {
   readQuestionSequence,
@@ -407,11 +410,14 @@ export async function verifyStoredGameBrowser(options) {
   const checks = []
   const faults = []
   const assetFailures = new Set()
+  const optionalBrandingAbsences = []
+  const optionalBrandingUrl = new URL("/branding/theme.json", origin).href
   const trace = []
   const starts = []
   const accepted = []
   const sceneVisits = []
   const sequences = []
+  const advanceActions = []
   const fragmentAudio = {
     authored: 0,
     expectedActive: null,
@@ -535,7 +541,22 @@ export async function verifyStoredGameBrowser(options) {
       }
     })
     page.on("response", (response) => {
-      if (response.status() >= 400 && isAsset(response.request())) {
+      // The default-look contract permits absent instance branding metadata.
+      if (
+        response.status() === 404 &&
+        response.url() === optionalBrandingUrl &&
+        response.request().method() === "GET" &&
+        response.request().resourceType() === "fetch"
+      ) {
+        optionalBrandingAbsences.push({
+          role: page === host ? "host" : "player",
+          path: "/branding/theme.json",
+          status: response.status(),
+          method: response.request().method(),
+          resourceType: response.request().resourceType(),
+          eventDigest: digest({ path: "/branding/theme.json", status: 404 }),
+        })
+      } else if (response.status() >= 400 && isAsset(response.request())) {
         assetFailures.add(
           digest({
             path: new URL(response.url()).pathname,
@@ -650,8 +671,8 @@ export async function verifyStoredGameBrowser(options) {
         "audio",
       ]) {
         assert.equal(
-          digest(savedExtras[key]),
-          digest(beforeExtras[key]),
+          isDeepStrictEqual(savedExtras[key], beforeExtras[key]),
+          true,
 
           `Editor preserves authored ${key}`,
         )
@@ -761,6 +782,9 @@ export async function verifyStoredGameBrowser(options) {
         stepIndex: step?.stepIndex ?? null,
         questionOrdinal: step?.questionOrdinal ?? null,
         durationMs: step?.durationMs ?? null,
+        advance: step?.advance ?? null,
+        startedAt: step?.startedAt ?? null,
+        roundAutoAdvance: game.settings.autoAdvance.enable,
         epoch: step?.epoch ?? null,
         unresolvedStoryTie:
           game.extensionSession?.hasUnresolvedStoryTie() ?? false,
@@ -997,24 +1021,121 @@ export async function verifyStoredGameBrowser(options) {
     const seenQuestions = new Set()
     const next = async (expected) => {
       const button = host.getByTestId("host-next-screen-btn")
-      const advanced = () =>
-        snapshot().id !== expected.id ||
-        snapshot().questionIndex !== expected.questionIndex
-      await expect
-        .poll(
-          async () =>
-            advanced() ||
-            (Boolean(await button.count()) && (await button.isEnabled())),
-          { timeout: sceneTimeout(expected) },
+      const advanced = () => {
+        const current = snapshot()
+        return (
+          current.id !== expected.id ||
+          current.questionIndex !== expected.questionIndex ||
+          current.phase === "finished" ||
+          current.status === "FINISHED" ||
+          (automaticResults && current.status !== expected.status)
         )
-        .toBe(true)
+      }
+      const automaticScene =
+        expected.phase === "scene" &&
+        (expected.advance === "auto" || expected.advance === "onMediaEnd")
+      const automaticResults =
+        expected.phase !== "scene" &&
+        expected.roundAutoAdvance === true &&
+        ["SHOW_RESPONSES", "SHOW_LEADERBOARD"].includes(expected.status)
+      const action = {
+        stepDigest: expected.id ? digest(expected.id) : null,
+        phase: expected.phase,
+        questionIndex: expected.questionIndex,
+        advance: expected.advance,
+        authoritativeStartedAt: expected.startedAt,
+        policy: automaticScene
+          ? "observe-automatic-scene"
+          : automaticResults
+            ? "observe-automatic-results"
+            : "native-next-click",
+        startedAt: Date.now(),
+        clickStartedAt: null,
+        clickCompletedAt: null,
+      }
+      advanceActions.push(action)
 
-      if (
-        !advanced() &&
-        (await button.isVisible()) &&
-        (await button.isEnabled())
-      ) {
-        await button.click()
+      try {
+        if (automaticScene || automaticResults) {
+          // The same keyed toolbar button later becomes End Timer. Let the
+          // authoritative automatic owner advance instead of awaiting a click.
+          await expect
+            .poll(advanced, { timeout: sceneTimeout(expected) })
+            .toBe(true)
+          return
+        }
+
+        if (expected.phase === "scene") {
+          assert.equal(expected.advance, "manual", "Declared manual scene")
+        }
+
+        let nextButton
+        await expect
+          .poll(
+            async () => {
+              if (advanced()) {
+                return true
+              }
+
+              const buttons = await button.elementHandles()
+              assert(buttons.length <= 1, "One native next control")
+              const current = buttons[0]
+
+              if (!current) {
+                return false
+              }
+
+              try {
+                if ((await current.isVisible()) && (await current.isEnabled())) {
+                  nextButton = current
+                  return true
+                }
+              } finally {
+                if (nextButton !== current) {
+                  await current.dispose()
+                }
+              }
+
+              return advanced()
+            },
+            { timeout: sceneTimeout(expected) },
+          )
+          .toBe(true)
+
+        if (!nextButton) {
+          return
+        }
+
+        try {
+          if (!advanced()) {
+            assert.equal(
+              await nextButton.getAttribute("data-testid"),
+              "host-next-screen-btn",
+              "The captured control still represents Next",
+            )
+
+            if (!advanced()) {
+              action.clickStartedAt = Date.now()
+              await nextButton.click({ timeout: 1000 })
+              action.clickCompletedAt = Date.now()
+            }
+          }
+        } catch (error) {
+          // Do not retry this reusable slot. Only an already observed
+          // authoritative advance permits returning after a click error.
+          if (!advanced()) {
+            throw error
+          }
+        } finally {
+          await nextButton.dispose()
+        }
+      } finally {
+        const after = snapshot()
+        action.completedAt = Date.now()
+        action.afterStepDigest = after.id ? digest(after.id) : null
+        action.afterQuestionIndex = after.questionIndex
+        action.afterPhase = after.phase
+        action.afterStatus = after.status
       }
     }
     for (
@@ -1072,9 +1193,14 @@ export async function verifyStoredGameBrowser(options) {
             active.sceneId,
           )
         } else if (active.kind === "leaderboard") {
+          const leaderboard = stage.getByTestId("tadazz-leaderboard-screen")
+          await expect(leaderboard).toHaveCount(1)
+          // The classic wrapper has absolutely positioned children and no box.
+          // Check the actual displayed title and score rows, not that wrapper.
           await expect(
-            stage.getByTestId("tadazz-leaderboard-screen"),
+            leaderboard.getByRole("heading", { level: 2 }),
           ).toBeVisible()
+          await expect(leaderboard.locator(".tz-leader-row").first()).toBeVisible()
         }
 
         await paintedFrames(stage)
@@ -1123,6 +1249,7 @@ export async function verifyStoredGameBrowser(options) {
 
       if (!seenQuestions.has(index)) {
         const question = savedBase.questions[index]
+        const timerExpected = question.time !== -1
         await expect
           .poll(() => game.round.isCurrentlyAcceptingAnswers, {
             timeout: 30_000,
@@ -1145,7 +1272,14 @@ export async function verifyStoredGameBrowser(options) {
         // Observe the actual host's answer/timer paint before the participant can
         // answer immediately and complete a one-player round in the same tick.
         if (question.type !== "estimation") {
-          await readQuestionSequence(stage, index, { throughResults: false })
+          await readQuestionSequence(stage, index, {
+            throughResults: false,
+            timerExpected,
+            evidencePath: join(
+              options.evidenceDirectory,
+              `${fixture.fixtureId}-question-${index}-first-voting.json`,
+            ),
+          })
         } else {
           await paintedFrames(stage)
         }
@@ -1171,19 +1305,18 @@ export async function verifyStoredGameBrowser(options) {
         }
 
         const answer = async (answerIndex) => {
-          const pad = player.getByTestId(`tadazz-pad-option-${answerIndex}`)
-
-          if (await pad.isVisible()) {
-            await expect(pad).toBeEnabled()
-            await pad.click()
-          } else {
-            const native = player.locator("button").filter({
-              has: player.getByTestId(`answer-badge-${answerIndex}`),
-            })
-            await expect(native).toHaveCount(1)
-            await expect(native).toBeEnabled()
-            await native.click()
-          }
+          const native = player.locator("button").filter({
+            has: player.getByTestId(`answer-badge-${answerIndex}`),
+          })
+          const choice = player
+            .getByTestId(`tadazz-pad-option-${answerIndex}`)
+            .or(player.getByTestId(`tadazz-answer-choice-${answerIndex}`))
+            .or(player.getByTestId(`photo-card-choice-${answerIndex}`))
+            .or(native)
+            .filter({ visible: true })
+          await expect(choice).toHaveCount(1)
+          await expect(choice).toBeEnabled()
+          await choice.click()
         }
 
         if (question.type === "estimation") {
@@ -1265,11 +1398,20 @@ export async function verifyStoredGameBrowser(options) {
           const throughResults = !authoredResults
           const sequence = await readQuestionSequence(stage, index, {
             throughResults,
+            timerExpected,
+            evidencePath: join(
+              options.evidenceDirectory,
+              `${fixture.fixtureId}-question-${index}-results.json`,
+            ),
           })
           sequences.push({
             index,
             throughResults,
             leadMs: sequence.leadMs,
+            timerExpected,
+            timerObserved: sequence.timerAt !== null,
+            timerAt: sequence.timerAt,
+            answersTimerDeltaMs: sequence.answersTimerDeltaMs,
             retainedPanel: sequence.retainedPanel,
             retainedHeading: sequence.retainedHeading,
             duplicateHeadings: sequence.duplicateHeadings,
@@ -1316,9 +1458,20 @@ export async function verifyStoredGameBrowser(options) {
       snapshot().phase === "finished" || snapshot().status === "FINISHED",
       "Game reaches terminal state",
     )
-    await expect(stage).toHaveAttribute("data-show-scene", "finale", {
+    const hasScoredQuestions = savedBase.questions.some(
+      (question) =>
+        resolveQuestionPlayMode(question, savedBase.gameMode) === "quiz",
+    )
+    const expectedTerminalStatus = hasScoredQuestions ? "FINISHED" : "SUMMARY"
+    const expectedTerminalScene = hasScoredQuestions ? "finale" : "summary"
+    await expect(stage).toHaveAttribute("data-show-scene", expectedTerminalScene, {
       timeout: 30_000,
     })
+    assert.equal(
+      snapshot().status,
+      expectedTerminalStatus,
+      "Native terminal status follows the saved questions' authored play modes",
+    )
     timelineReceipt = orderedTimelineReceipt({
       trace,
       timeline: nativeTimeline,
@@ -1454,6 +1607,7 @@ export async function verifyStoredGameBrowser(options) {
       checks,
       trace: safeTrace(),
       sequences,
+      advanceActions,
       audio,
       fragmentAudio,
       mediaErrors,
@@ -1463,6 +1617,7 @@ export async function verifyStoredGameBrowser(options) {
       externalMediaRepair,
       mirrorChecks,
       assetFailures: [...assetFailures],
+      optionalBrandingAbsences,
       faults,
     }
   } catch (error) {
@@ -1481,6 +1636,7 @@ export async function verifyStoredGameBrowser(options) {
       accepted: accepted.length,
       sceneVisits: safeSceneVisits(),
       sequences,
+      advanceActions,
       audio,
       fragmentAudio,
       mediaErrors,
@@ -1490,6 +1646,7 @@ export async function verifyStoredGameBrowser(options) {
       externalMediaRepair,
       mirrorChecks,
       assetFailures: [...assetFailures],
+      optionalBrandingAbsences,
       faults,
       error: `${checkpoint}: ${error?.name ?? "Error"}`,
       errorDigest: digest(String(error?.message ?? error)),

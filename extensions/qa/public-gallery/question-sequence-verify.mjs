@@ -544,7 +544,12 @@ export async function watchQuestionSequence(root, options = {}) {
 export async function readQuestionSequence(
   root,
   index,
-  { photo = false, throughResults = true, evidencePath } = {},
+  {
+    photo = false,
+    throughResults = true,
+    timerExpected = true,
+    evidencePath,
+  } = {},
 ) {
   await expect
     .poll(
@@ -552,7 +557,11 @@ export async function readQuestionSequence(
         root.evaluate(
           (
             element,
-            { index: sequenceIndex, throughResults: includeResults },
+            {
+              index: sequenceIndex,
+              throughResults: includeResults,
+              timerExpected: includeTimer,
+            },
           ) => {
             const record = element.__questionSequence?.read()[sequenceIndex]
 
@@ -564,9 +573,9 @@ export async function readQuestionSequence(
               ? record.resultsFrames >= 2
               : record.votingAt !== null &&
                   record.answersAt !== null &&
-                  record.timerAt !== null
+                  (!includeTimer || record.timerAt !== null)
           },
-          { index, throughResults },
+          { index, throughResults, timerExpected },
         ),
       { timeout: 10_000 },
     )
@@ -602,7 +611,7 @@ export async function readQuestionSequence(
 
     `Question-only phase lasts 2s within frame/scheduling tolerance: ${lead}`,
   )
-  for (const kind of ["answers", "timer"]) {
+  for (const kind of timerExpected ? ["answers", "timer"] : ["answers"]) {
     assert(result[`${kind}At`] !== null, `${kind} actually became visible`)
     const delay = result[`${kind}At`] - questionClockAt
     assert(
@@ -610,10 +619,18 @@ export async function readQuestionSequence(
       `${kind} first paint follows the 2s lead-in: ${delay}`,
     )
   }
-  assert(
-    Math.abs(result.answersAt - result.timerAt) <= 34,
-    "Answers and timer first paint in the same or adjacent 60Hz frame",
-  )
+  if (timerExpected) {
+    assert(
+      Math.abs(result.answersAt - result.timerAt) <= 34,
+      "Answers and timer first paint in the same or adjacent 60Hz frame",
+    )
+  } else {
+    assert.equal(
+      result.timerAt,
+      null,
+      "An authored untimed question never paints a timer",
+    )
+  }
   assert.equal(
     result.earlyAnswers,
     false,
@@ -682,7 +699,10 @@ export async function readQuestionSequence(
     timingBasis: result.explicitReplay
       ? "explicit-replay-raf"
       : "observed-presented-phase",
-    answersTimerDeltaMs: Math.abs(result.answersAt - result.timerAt),
+    timerExpected,
+    answersTimerDeltaMs: timerExpected
+      ? Math.abs(result.answersAt - result.timerAt)
+      : null,
   }
 }
 
