@@ -17,6 +17,14 @@ const bundledThemeIds = [
   "tadazz-family-fiesta",
   "tadazz-discovery-lab",
   "tadazz-team-together",
+  "royal-quiz",
+  "neon-arcade",
+  "retro-tv",
+  "magic-storybook",
+  "crystal-future",
+  "carnival-pop",
+  "sports-arena",
+  "mystery-noir",
 ]
 
 const app = new Hono().route("/api/themes", themeRoutes)
