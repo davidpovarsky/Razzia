@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { flushSync } from "react-dom"
+import { useTranslation } from "react-i18next"
 import { PresentationControls } from "../../../platform-ui"
 import { GameViewer } from "../../components/game-viewer/GameViewer"
 import { getPublicDemo } from "../../../core/show-library/public-demo-catalogue"
@@ -79,6 +80,7 @@ function CataloguePlayer({
 }: {
   demo: NonNullable<ReturnType<typeof getPublicDemo>>
 }) {
+  const { i18n } = useTranslation()
   const show = useMemo(() => tadaShowV1Schema.parse(demo.show), [demo])
   const questions = useMemo(
     () =>
@@ -587,7 +589,7 @@ function CataloguePlayer({
                   data-testid="catalogue-mobile-recap"
                   data-phase={phase}
                   aria-label={t("Your story choices")}
-                  dir="auto"
+                  dir={i18n.dir()}
                 >
                   <style>{mobileQuestionCss}</style>
                   <h2 data-testid="catalogue-mobile-recap-heading" dir="auto">
